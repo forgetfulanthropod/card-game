@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module",
+        "project": "./tsconfig.json"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/no-use-before-define": [
+            "warn",
+            {
+                "functions": false,
+                "classes": false,
+                "variables": true
+            }
+        ],
+        "consistent-return": "warn",
+        "react/no-unused-prop-types": "warn",
+        "@typescript-eslint/ban-ts-comment": "warn",
+        "@typescript-eslint/no-empty-function": "off",
+        "no-debugger": "warn",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_"
+            }
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "ignorePatterns": [
+        "scripts/"
+    ]
+}
