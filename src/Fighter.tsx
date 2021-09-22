@@ -6,7 +6,7 @@ import startPng from "./assets/start.png"
 
 const positions = makePositions()
 
-function makePositions(): [string, string][] {
+function makePositions(): [number, number][] {
     const hGap = 18
     const vGap = 15
     const [x0, y0] = [70, 35]
@@ -17,7 +17,7 @@ function makePositions(): [string, string][] {
         [x0 + hGap / 2, y0 + vGap],
         [x0, y0 + vGap * 2],
         [x0 + hGap, y0 + vGap * 2],
-    ].map(([x, y]) => [x + "%", y + "%"])
+    ]//.map(([x, y]) => [x + "%", y + "%"])
 }
 
 export default function Fighter(): JSX.Element {
@@ -34,7 +34,7 @@ export default function Fighter(): JSX.Element {
     </div>
 }
 
-function Skeleton(props: { x: string, y: string }) {
+function Skeleton(props: { x: number, y: number }) {
     const [shake, setShake] = useState(false)
     useEffect(() => {
         if (!shake) return () => { }
@@ -42,7 +42,9 @@ function Skeleton(props: { x: string, y: string }) {
         return () => clearTimeout(t)
     }, [shake])
 
-    return <div style={{ transform: "translate (-50%, -50%)", position: 'absolute', left: props.x, top: props.y, width: '200px' }}>
+    return <div>
+        <SkeletonImg shake={shake} x={props.x + .3} y={props.y} color="red" />
+        <SkeletonImg shake={shake} x={props.x + .6} y={props.y} blur={true} />
         <SkeletonImg shake={shake} x={props.x} y={props.y} onClick={() => setShake(true)} />
     </div>
 }
@@ -56,8 +58,16 @@ const Start = styled.img.attrs({ src: startPng })`
 `
 
 const SkeletonImg = styled.img.attrs({ src: skeletonPng, width: 200 })
-    <{ shake: boolean, x: string, y: string }>`
+    <{ shake: boolean, x: number, y: number, color?: string, blur?: boolean }>`
     ${p => p.shake && css`animation: ${shake} 0.5s;`}
+
+    position: absolute;
+    left: ${p => p.x}%;
+    top: ${p => p.y}%;
+    width: 200px;
+    ${p => p.blur === true && `filter: blur(2px);`}
+    ${p => p.color != null && css`filter: opacity(0.5) drop-shadow(0 0 0 ${p.color});`}
+    /* box-shadow: 5px 6px 7px black; */
 `
 
 const shake = keyframes`
