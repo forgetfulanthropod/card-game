@@ -1,8 +1,7 @@
 import React, { useRef } from "react"
-import styles from "./Fighter.module.css"
-import Skeleton from "./assets/Skeleton_Warrior_sprite.png"
 import Cave from './assets/cave_main_1.mp4'
-import { addInteractionCallback } from "doOnInteraction"
+import Skeleton from "./assets/Skeleton_Warrior_sprite.png"
+import styles from "./Fighter.module.css"
 
 
 export default function Fighter(): JSX.Element {
@@ -22,8 +21,7 @@ export default function Fighter(): JSX.Element {
 
 function Autoplay(props: { width: number, src: string, type?: string }) {
     const type = props.type ?? "video/mp4"
-    // TODO: remove callback if node disappears?
-    return <video ref={node => { if (node != null) addInteractionCallback(() => node.play()) }} width={props.width}>
+    return <video autoPlay muted loop width={props.width}>
         <source src={props.src} type={type} />
     </video>
 }
