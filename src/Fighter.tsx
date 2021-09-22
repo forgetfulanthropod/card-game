@@ -3,21 +3,47 @@ import styled, { keyframes, css } from "styled-components"
 import skeletonPng from "./assets/Skeleton_Warrior_sprite.png"
 import startPng from "./assets/start.png"
 
+
+const positions = makePositions()
+
+function makePositions(): [string, string][] {
+    const hGap = 18
+    const vGap = 15
+    const [x0, y0] = [70, 35]
+    return [
+        [x0, y0],
+        [x0 + hGap, y0],
+        [x0 - hGap / 2, y0 + vGap],
+        [x0 + hGap / 2, y0 + vGap],
+        [x0, y0 + vGap * 2],
+        [x0 + hGap, y0 + vGap * 2],
+    ].map(([x, y]) => [x + "%", y + "%"])
+}
+
 export default function Fighter(): JSX.Element {
-    const [shake, setShake] = useState(false)
-    const [width, setWidth] = useState(200)
-    useEffect(() => {
-        const t = setTimeout(() => setShake(false), 500)
-        return () => clearTimeout(t)
-    }, [shake])
+    // const [width, setWidth] = useState(200)
     return <div>
         <Start />
-        <Skeleton shake={shake} width={width} />
-        <div>
+        {positions.map(([x, y]) =>
+            <Skeleton key={x + y} x={x} y={y} />)}
+        {/* <div>
             <button onClick={() => setShake(true)}>Punch</button>
             <button onClick={() => setWidth(400)}>Kick</button>
             <button onClick={() => setWidth(500)}>Dodge</button>
-        </div>
+        </div> */}
+    </div>
+}
+
+function Skeleton(props: { x: string, y: string }) {
+    const [shake, setShake] = useState(false)
+    useEffect(() => {
+        if (!shake) return () => { }
+        const t = setTimeout(() => setShake(false), 500)
+        return () => clearTimeout(t)
+    }, [shake])
+
+    return <div style={{ transform: "translate (-50%, -50%)", position: 'absolute', left: props.x, top: props.y, width: '200px' }}>
+        <SkeletonImg shake={shake} x={props.x} y={props.y} onClick={() => setShake(true)} />
     </div>
 }
 
@@ -29,7 +55,8 @@ const Start = styled.img.attrs({ src: startPng })`
     top: 25%;
 `
 
-const Skeleton = styled.img.attrs({ src: skeletonPng }) <{ shake: boolean }>`
+const SkeletonImg = styled.img.attrs({ src: skeletonPng, width: 200 })
+    <{ shake: boolean, x: string, y: string }>`
     ${p => p.shake && css`animation: ${shake} 0.5s;`}
 `
 
