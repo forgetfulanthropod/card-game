@@ -13,18 +13,22 @@ const Root = styled.video`
     height: 100%;
 `
 
-const Span = styled.span`
-    position: absolute;
-    left: 25%;
-    top: 25%;
-    background: orange;
-`
 
 export default function Background(): JSX.Element {
     return <>
-        <Span>Hello</Span>
+        {/* <Span>Hello</Span> */}
         <Root autoPlay muted loop>
             <source src={Cave} type="video/mp4" />
         </Root>
     </>
 }
+
+// const Span = styled.span`
+//     position: absolute;
+//     left: 25%;
+//     top: 25%;
+//     width: 10%;
+//     height: 10%;
+//     background: orange;
+//     font-size: 5vw;
+// `
