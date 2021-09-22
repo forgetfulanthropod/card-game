@@ -1,8 +1,9 @@
 import React from "react"
 import styled from "styled-components"
-import Cave from './assets/cave_main_1.mp4'
+import CaveMp4 from './assets/cave_main_1.mp4'
+import CaveJpg from './assets/cave_main_1.jpg'
 
-const Root = styled.video`
+const Video = styled.video.attrs({ autoPlay: true, muted: true, loop: true })`
     position: absolute;
     left: 0;
     right: 0;
@@ -13,22 +14,10 @@ const Root = styled.video`
     height: 100%;
 `
 
-
 export default function Background(): JSX.Element {
-    return <>
-        {/* <Span>Hello</Span> */}
-        <Root autoPlay muted loop>
-            <source src={Cave} type="video/mp4" />
-        </Root>
-    </>
+    return <Video>
+        <source src={CaveMp4} type="video/mp4" />
+        <img src={CaveJpg} />
+        {/* TODO: make image display until video loads */}
+    </Video>
 }
-
-// const Span = styled.span`
-//     position: absolute;
-//     left: 25%;
-//     top: 25%;
-//     width: 10%;
-//     height: 10%;
-//     background: orange;
-//     font-size: 5vw;
-// `

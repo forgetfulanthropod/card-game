@@ -1,29 +1,36 @@
-import React, { useRef } from "react"
-import Skeleton from "./assets/Skeleton_Warrior_sprite.png"
+import React, { useEffect, useState } from "react"
 import styled from "styled-components"
+import skeletonPng from "./assets/Skeleton_Warrior_sprite.png"
+import startPng from "./assets/start.png"
 
 export default function Fighter(): JSX.Element {
-    const ref = useRef<HTMLImageElement>(null)
+    const [shake, setShake] = useState(false)
+    const [width, setWidth] = useState(200)
+    useEffect(() => {
+        const t = setTimeout(() => setShake(false), 500)
+        return () => clearTimeout(t)
+    }, [shake])
     return <div>
-        {/* <Autoplay width={300} src={Cave} /> */}
-        <Shaker ref={ref} src={Skeleton} width={200} />
+        <Start />
+        <Skeleton shake={shake} width={width} />
         <div>
-            <button onClick={() => {
-                if (ref.current) ref.current.classList.add(".shaker") //TODO
-            }}>Punch</button>
-            <button onClick={() => { if (ref.current) ref.current.width = 400 }}>Kick</button>
-            <button onClick={() => { if (ref.current) ref.current.width = 500 }}>Dodge</button>
+            <button onClick={() => setShake(true)}>Punch</button>
+            <button onClick={() => setWidth(400)}>Kick</button>
+            <button onClick={() => setWidth(500)}>Dodge</button>
         </div>
     </div>
 }
 
-const Shaker = styled.img`
-    &:hover {
-        /* Start the shake animation and make the animation last for 0.5 seconds */
-        animation: shake 0.5s;
-        /* When the animation is finished, start again */
-        animation-iteration-count: infinite;
-    }
+const Start = styled.img.attrs({ src: startPng })`
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 20%;
+    left: 50%;
+    top: 25%;
+`
+
+const Skeleton = styled.img.attrs({ src: skeletonPng }) <{ shake: boolean }>`
+    ${p => p.shake && "animation: shake 0.5s;"}
 
     @keyframes shake {
         0% { transform: translate(1px, 1px) rotate(0deg); }
