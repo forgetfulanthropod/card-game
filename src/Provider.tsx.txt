@@ -1,0 +1,21 @@
+import React, { createContext, useContext, useState } from "react"
+
+type ContextT = ReturnType<typeof useValue>
+
+const Context = createContext<ContextT>(null as unknown as ContextT)
+
+export function useAppContext(): ContextT {
+    return useContext(Context)
+}
+
+export function Provider(props: { children: Children }): JSX.Element {
+    const value = useValue()
+    return <Context.Provider value={value}>
+        {props.children}
+    </Context.Provider>
+}
+
+function useValue() {
+    const [callbacks, setCallbacks] = useState<Callback[]>([])
+    return { callbacks, setCallbacks }
+}

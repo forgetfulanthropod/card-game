@@ -1,0 +1,9 @@
+import { addInteractionCallback, removeInteractionCallback } from "doOnInteraction"
+import { useEffect } from "react"
+
+export function useOnInteraction(cb: Callback): void {
+    useEffect(() => {
+        addInteractionCallback(cb)
+        return () => { removeInteractionCallback(cb) }
+    }, [cb])
+}
