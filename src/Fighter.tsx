@@ -23,9 +23,9 @@ export default function Fighter(): JSX.Element {
     return <div>
         <Start />
         {skeletonPositions.map(([x, y]) =>
-            <Character key={x + y} x={x} y={y} Thing={SkeletonImg} direction={1} />)}
+            <Skeleton key={x + y} x={x} y={y} />)}
         {frogknightPositions.map(([x, y]) =>
-            <Character key={x + y} x={x} y={y} Thing={FrognightImg} direction={-1} />)}
+            <Frogknight key={x + y} x={x} y={y} />)}
         {/* <div>
             <button onClick={() => setShake(true)}>Punch</button>
             <button onClick={() => setWidth(400)}>Kick</button>
@@ -34,26 +34,38 @@ export default function Fighter(): JSX.Element {
     </div>
 }
 
-function Character(props: { x: number, y: number, Thing: typeof Sprite, direction: -1 | 1 }): JSX.Element {
-    const Thing = props.Thing
+function Frogknight(props: { x: number, y: number }) {
+    return <Character x={props.x} y={props.y} src={frogknightPng} direction={-1} color="green" />
+}
+
+function Skeleton(props: { x: number, y: number }) {
+    return <Character x={props.x} y={props.y} src={skeletonPng} direction={-1} color="red" />
+}
+
+function Character(props: { x: number, y: number, src: string, direction: -1 | 1, color: string }): JSX.Element {
+    const [health, setHealth] = useState(~~(Math.random() * 100))
     const [hasEffect, setHasEffect] = useState(false)
     useEffect(() => {
         if (!hasEffect) return () => { }
         const t = setTimeout(() => setHasEffect(false), 500)
         return () => clearTimeout(t)
     }, [hasEffect])
-    return <div onClick={() => setHasEffect(true)}>
-        {hasEffect
-            ?
-            <>
-                <Thing shake={hasEffect} x={props.x + .5 * props.direction} y={props.y} blur={true} />
-                <Thing shake={hasEffect} x={props.x} y={props.y} color="red" />
-            </>
-            :
-            <Thing shake={hasEffect} x={props.x} y={props.y} />
-        }
-
-    </div>
+    return <>
+        {health > 0 ?
+            <div onClick={() => { setHasEffect(true); setHealth(h => h - ~~(Math.random() * 10)) }}>
+                {hasEffect
+                    ?
+                    <>
+                        <Sprite src={props.src} shake={hasEffect} x={props.x + .5 * props.direction} y={props.y} blur={true} />
+                        <Sprite src={props.src} shake={hasEffect} x={props.x} y={props.y} color="red" />
+                    </>
+                    :
+                    <Sprite src={props.src} shake={hasEffect} x={props.x} y={props.y} />
+                }
+                <div style={{ fontFamily: 'monospace', fontWeight: 'bold', position: 'absolute', fontSize: '5em', color: props.color, left: props.x + '%', top: props.y + '%' }}>{health}</div>
+            </div> :
+            <></>}
+    </>
 }
 
 const Start = styled.img.attrs({ src: startPng })`
@@ -65,7 +77,7 @@ const Start = styled.img.attrs({ src: startPng })`
 `
 
 
-const Sprite = styled.img.attrs({ src: skeletonPng, width: 200 })
+const Sprite = styled.img.attrs({ width: 200 })
     <{ shake: boolean, x: number, y: number, color?: string, blur?: boolean }>`
     ${p => p.shake && css`animation: ${shake} 0.5s;`}
 
@@ -79,7 +91,7 @@ const Sprite = styled.img.attrs({ src: skeletonPng, width: 200 })
     `}
     /* box-shadow: 5px 6px 7px black; */
 `
-const FrognightImg = styled(Sprite).attrs({ src: frogknightPng, width: 200 })``
+const FrogknightImg = styled(Sprite).attrs({ src: frogknightPng, width: 200 })``
 const SkeletonImg = styled(Sprite).attrs({ src: skeletonPng })``
 
 

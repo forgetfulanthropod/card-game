@@ -10,9 +10,9 @@ const publicDir = "public"
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 
-const isProduction = envFile.parsed.ESBUILD_NODE_ENV === "production"
+const isProduction = envFile?.parsed?.ESBUILD_NODE_ENV === "production"
 const envObj = {
-    "process.env.NODE_ENV": `"${envFile.parsed.ESBUILD_NODE_ENV}"`
+    "process.env.NODE_ENV": `"${isProduction ? 'production' : 'development'}"`
 }
 console.log(envObj)
 
