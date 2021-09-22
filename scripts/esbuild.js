@@ -36,6 +36,7 @@ async function main() {
             '.css': 'css',
             '.png': 'file',
             '.jpg': 'file',
+            '.mp4': 'file',
         },
         define: envObj,
         watch: !shouldWatch ? null : {
