@@ -2,6 +2,7 @@ const esbuild = require('esbuild')
 const fs = require('fs')
 const { copyFolderRecursiveSync } = require('./copy')
 const envFile = require("dotenv").config()
+const cssModulesPlugin = require('esbuild-css-modules-plugin')
 
 const buildDir = "build"
 const publicDir = "public"
@@ -43,7 +44,11 @@ async function main() {
                     console.log(`watch build at ${new Date()} succeeded:`, result)
                 }
             }
-        }
+        },
+        plugins: [
+            cssModulesPlugin()
+        ]
+
     })
         .then(() => {
             console.log("built at " + new Date())
