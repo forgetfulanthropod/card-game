@@ -9,7 +9,6 @@ export default function App(): JSX.Element {
     return <AppWrap>
         <Background />
         <Toaster />
-        <h2>Hello, world</h2>
         <Fighter />
     </AppWrap>
 }

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import styled, { keyframes, css } from "styled-components"
 import skeletonPng from "./assets/Skeleton_Warrior_sprite-200.png"
 import frogknightPng from "./assets/Frog_Knight_sprite-200.png"
 import startPng from "./assets/start.png"
+import { useSize } from "ahooks"
 
 
-const skeletonPositions = makePositions(70, 35, 18, 15)
-const frogknightPositions = makePositions(10, 35, 18, 15)
+const skeletonPositions = makePositions(70, 25, 18, 15)
+const frogknightPositions = makePositions(10, 25, 18, 15)
 function makePositions(x0: number, y0: number, hGap: number, vGap: number): [number, number][] {
     return [
         [x0, y0],
@@ -43,30 +44,49 @@ function Skeleton(props: { x: number, y: number }) {
 }
 
 function Character(props: { x: number, y: number, src: string, direction: -1 | 1, color: string }): JSX.Element {
-    const [health, setHealth] = useState(~~(Math.random() * 100))
+    const [health, setHealth] = useState(~~(Math.random() * 100) + 1)
     const [hasEffect, setHasEffect] = useState(false)
     useEffect(() => {
         if (!hasEffect) return () => { }
         const t = setTimeout(() => setHasEffect(false), 500)
         return () => clearTimeout(t)
     }, [hasEffect])
+    const ref = useRef()
+    const size = useSize(ref)
     return <>
         {health > 0 ?
-            <div onClick={() => { setHasEffect(true); setHealth(h => h - ~~(Math.random() * 10)) }}>
-                {hasEffect
-                    ?
-                    <>
-                        <Sprite src={props.src} shake={hasEffect} x={props.x + .5 * props.direction} y={props.y} blur={true} />
-                        <Sprite src={props.src} shake={hasEffect} x={props.x} y={props.y} color="red" />
-                    </>
-                    :
-                    <Sprite src={props.src} shake={hasEffect} x={props.x} y={props.y} />
-                }
-                <div style={{ fontFamily: 'monospace', fontWeight: 'bold', position: 'absolute', fontSize: '5em', color: props.color, left: props.x + '%', top: props.y + '%' }}>{health}</div>
+            <div onClick={() => { setHasEffect(true); setHealth(h => h - ~~(Math.random() * 10)) }}
+                style={{ position: 'absolute', left: props.x + '%', top: props.y + '%' }}
+            >
+                <div style={{ position: 'relative' }}>
+                    {hasEffect
+                        ?
+                        <>
+                            <Sprite ref={ref} src={props.src} shake={hasEffect} x={0} y={0} blur={true} />
+                            <Sprite src={props.src} shake={hasEffect} x={0} y={0} absolute={true} color="red" />
+                        </>
+                        :
+                        <Sprite ref={ref} src={props.src} shake={hasEffect} x={0} y={0} />
+                    }
+                    <Health color={props.color}>{health}</Health>
+                    {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
+                </div>
             </div> :
             <></>}
     </>
 }
+
+const Health = styled.div<{ color: string }>`
+    font-family: monospace;
+    font-weight: bold;
+    position: absolute;
+    /* position: relative; */
+    font-size: 5em;
+    color: ${p => p.color};
+    left: 50%;
+    transform: translateX(-50%) translateY(-15%);
+    /* top: ${p => p.y}px; */
+`
 
 const Start = styled.img.attrs({ src: startPng })`
     position: absolute;
@@ -78,10 +98,10 @@ const Start = styled.img.attrs({ src: startPng })`
 
 
 const Sprite = styled.img.attrs({ width: 200 })
-    <{ shake: boolean, x: number, y: number, color?: string, blur?: boolean }>`
+    <{ shake: boolean, x: number, y: number, color?: string, blur?: boolean, absolute?: boolean }>`
     ${p => p.shake && css`animation: ${shake} 0.5s;`}
 
-    position: absolute;
+    position: ${p => p.absolute === true ? 'absolute' : 'relative'};
     left: ${p => p.x}%;
     top: ${p => p.y}%;
     width: 200px;
@@ -91,9 +111,6 @@ const Sprite = styled.img.attrs({ width: 200 })
     `}
     /* box-shadow: 5px 6px 7px black; */
 `
-const FrogknightImg = styled(Sprite).attrs({ src: frogknightPng, width: 200 })``
-const SkeletonImg = styled(Sprite).attrs({ src: skeletonPng })``
-
 
 const shake = keyframes`
     0% { transform: translate(1px, 1px) rotate(0deg); }
