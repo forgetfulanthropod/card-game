@@ -3,6 +3,7 @@
     "build": "node scripts/esbuild.js",
     "start": "bash scripts/start.sh",
     "lint": "eslint src",
+    "fmt": "eslint src --fix",
     "serve": "npx serve -s ./build -p 3000"
   },
   "dependencies": {
