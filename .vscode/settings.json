@@ -9,5 +9,6 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
-    "gitlens.blame.ignoreWhitespace": true
+    "gitlens.blame.ignoreWhitespace": true,
+    "editor.tabSize": 4,
 }

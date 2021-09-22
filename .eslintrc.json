@@ -23,14 +23,7 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "@typescript-eslint/no-use-before-define": [
-            "warn",
-            {
-                "functions": false,
-                "classes": false,
-                "variables": true
-            }
-        ],
+        // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
         "consistent-return": "warn",
         "react/no-unused-prop-types": "warn",
         "react/jsx-props-no-multi-spaces": "warn",
