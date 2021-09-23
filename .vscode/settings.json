@@ -11,4 +11,6 @@
     "files.trimTrailingWhitespace": true,
     "gitlens.blame.ignoreWhitespace": true,
     "editor.tabSize": 4,
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
 }

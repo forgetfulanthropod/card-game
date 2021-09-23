@@ -1,4 +1,4 @@
-import { moveTypeMetaMap, stanceTypeMetaMap } from '../util/constants'
+import { useEventEmitter } from 'ahooks'
 import produce from 'immer'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -6,13 +6,15 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
 import { attackBus } from '../util/attackBus'
+import { moveTypeMetaMap } from '../util/constants'
+import { initialPlayerCharacters } from '../util/factories'
+import { checkWinner, getPCTarget, getRandomMove, getUnmovedNpc, getUnmovedPc, getId } from '../util/misc'
+import { EnemyHoverDiv, Health, IdleScreenOverlay, PCHoverDiv, Sprite, Start } from './Styles'
 import Table from './Table'
-import { useEventEmitter } from 'ahooks'
-import { PCHoverDiv, EnemyHoverDiv, Health, IdleScreenOverlay, Sprite, Start } from './Styles'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
-const X_AGGRESSIVE_THRESH = 11
-const X_NEUTRAL_THRESH = 9
+export const X_AGGRESSIVE_THRESH = 11
+export const X_NEUTRAL_THRESH = 9
 
 const tl = (x: string) => { toast(x); console.log(x) }
 
@@ -287,167 +289,3 @@ function Hover(props: { characterMeta: CharacterMeta }) {
     }
     </>
 }
-
-
-function initialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(70, 25, 18, 15)
-    const frogknightPositions = makePositions(10, 25, 18, 15)
-    const result = [
-        ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
-        ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
-    ]
-    return result
-}
-
-
-function makePositions(x0: number, y0: number, hGap: number, vGap: number): [number, number][] {
-    return [
-        [x0, y0],
-        [x0 + hGap, y0],
-        [x0 - hGap / 2, y0 + vGap],
-        [x0 + hGap / 2, y0 + vGap],
-        [x0, y0 + vGap * 2],
-        [x0 + hGap, y0 + vGap * 2],
-    ]
-}
-
-
-function getId(x: number, y: number): string { return `${x}-${y}` }
-
-
-function newFrogknightMeta(args: { x: number, y: number }): CharacterMeta {
-    const stance: StanceType = args.x > X_AGGRESSIVE_THRESH ?
-        'aggressive' :
-        (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
-    return {
-        id: getId(args.x, args.y),
-        type: 'Frogknight',
-        level: 1,
-        damage: 8,
-        isPlayerCharacter: true,
-        x: args.x,
-        y: args.y,
-        stance,
-        hasMoved: false,
-        health: 72,
-        moves: [
-            {
-                name: 'Dutiful Stab',
-                type: 'BA',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
-        ]
-    }
-}
-
-
-function newSkeletonMeta(args: { x: number, y: number }): CharacterMeta {
-    return {
-        id: getId(args.x, args.y),
-        type: 'Skeleton',
-        level: 1,
-        damage: 8,
-        isPlayerCharacter: false,
-        x: args.x,
-        y: args.y,
-        stance: 'neutral',
-        hasMoved: false,
-        health: 10,
-        moves: [
-            {
-                name: 'Sword Whack',
-                type: 'BA',
-            },
-            {
-                name: 'Rusty Poke',
-                type: 'DOT2',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
-        ]
-    }
-}
-
-function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
-    if (chars.length === 0) { return null }
-    return randomEl(chars)
-}
-
-
-function getUnmovedPc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
-    if (chars.length === 0) { return null }
-    return randomEl(chars)
-}
-
-function getPCTarget(ac: CharacterMeta[]) {
-    const allLivingPlayerCharacters = ac
-        .filter(c => c.isPlayerCharacter && c.health > 0)
-
-    const targetIndex = weightedRandom(
-        allLivingPlayerCharacters
-            .map(c => stanceTypeMetaMap[c.stance].targetLikelihood)
-    )
-
-    return allLivingPlayerCharacters[targetIndex]
-}
-
-function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
-    if (ac.every(c => c.isPlayerCharacter || c.health <= 0))
-        return 'PC'
-    if (ac.every(c => !c.isPlayerCharacter || c.health <= 0))
-        return 'NPC'
-    return null
-}
-
-
-function getRandomMove(attacker: CharacterMeta) {
-    return randomEl(attacker.moves)
-}
-
-
-function randomEl<T>(arr: T[]): T {
-    return arr[Math.random() * arr.length | 0]
-}
-
-
-/** Returns index of chosen element */
-function weightedRandom(probabilites: number[]): number {
-    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        console.error('array contains NaN or Inf or negative numbers')
-        return 0
-    }
-    let runningTotal = 0
-    const runningTotals = []
-    for (let i = 0; i < probabilites.length; i++) {
-        runningTotal += probabilites[i]
-        runningTotals[i] = runningTotal
-    }
-    const total = runningTotal
-    const x = Math.random() * total
-    const index = runningTotals.findIndex(t => t > x)
-    if (index !== -1) return index
-    // hits e.g. when all probabilities are 0
-    return Math.random() * probabilites.length | 0
-}
-
-
-// TODO: jest/mocha?
-// function test(A) {
-//     const counts = A.map(() => 0)
-//     const n = 10000
-//     for (let i = 0; i < n; i++) {
-//         counts[weightedRandom(A)] += 1
-//     }
-//     return counts.map(x => x / n)
-// }
