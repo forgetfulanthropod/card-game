@@ -2,14 +2,13 @@ import { moveTypeMetaMap, stanceTypeMetaMap } from '../util/constants'
 import produce from 'immer'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import styled, { css, keyframes } from 'styled-components'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
-import startPng from '../assets/start.png'
 import { getDamage } from '../util/attack'
 import { attackBus } from '../util/attackBus'
 import Table from './Table'
 import { useEventEmitter } from 'ahooks'
+import { PCHoverDiv, EnemyHoverDiv, Health, IdleScreenOverlay, Sprite, Start } from './Styles'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const X_AGGRESSIVE_THRESH = 11
@@ -290,38 +289,6 @@ function Hover(props: { characterMeta: CharacterMeta }) {
 }
 
 
-const HoverDiv = styled.div`
-    background: black;
-    opacity: 0.5;
-    font-size: 2em;
-    padding: 1%;
-    border-radius: .4vw;
-    z-index: 10;
-    position: absolute;
-    bottom: 15vw;
-    color: white;
-    font-size: 1vw;
-    font-family: monospace;
-    font-weight: bold;
-    padding: 8px;
-
-
-`
-
-const EnemyHoverDiv = styled(HoverDiv)`
-    box-shadow: 0 0 2px 4px red;
-    right: 3vw;
-    width: 18vw;
-`
-
-const PCHoverDiv = styled(HoverDiv)`
-    box-shadow: 0 0 2px 4px skyblue;
-    width: 12vw;
-    left: 0;
-    text-align: center;
-`
-
-
 function initialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(70, 25, 18, 15)
     const frogknightPositions = makePositions(10, 25, 18, 15)
@@ -409,82 +376,6 @@ function newSkeletonMeta(args: { x: number, y: number }): CharacterMeta {
         ]
     }
 }
-
-
-const Health = styled.div<{ color: string }>`
-    font-family: monospace;
-    font-weight: bold;
-    position: absolute;
-    /* position: relative; */
-    font-size: 3vw;
-    color: ${p => p.color};
-    left: 50%;
-    transform: translateX(-50%) translateY(-15%);
-`
-
-
-const IdleScreenOverlay = styled.div`
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    background: rgba(0,0,0,.4);
-`
-
-
-const Start = styled.img.attrs({ src: startPng })`
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 20%;
-    left: 50%;
-    top: 25%;
-    z-index: 1001;
-    user-select: none;
-`
-
-
-const Sprite = styled.img.attrs({ width: 200 })
-    <{
-        isAttacking: boolean,
-        isDefending: boolean,
-        x: number,
-        y: number,
-        color?: string,
-        blur?: boolean,
-        glow?: boolean,
-        absolute?: boolean,
-    }>`
-    ${p => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
-    user-select: none;
-    position: ${p => p.absolute === true ? 'absolute' : 'relative'};
-    left: ${p => p.x}%;
-    top: ${p => p.y}%;
-    width: 100%;
-    z-index: 5;
-    ${p => p.blur === true && 'filter: blur(8px);'}
-    ${p => p.color != null && css`
-        filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
-    `}
-    /* box-shadow: 5px 6px 7px black; */
-`
-
-
-const shake = keyframes`
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
-`
-
 
 function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
