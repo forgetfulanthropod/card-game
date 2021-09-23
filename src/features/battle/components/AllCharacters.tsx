@@ -1,4 +1,4 @@
-import { stanceTypeMetaMap } from '../util/constants'
+import { moveTypeMetaMap, stanceTypeMetaMap } from '../util/constants'
 import produce from 'immer'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -165,6 +165,7 @@ function Character(props: CharacterProps): JSX.Element {
     const { x, y, health } = props.characterMeta
     const [isAttacking, setIsAttacking] = useState(false)
     const [isDefending, setIsDefending] = useState(false)
+    const [isHovering, setIsHovering] = useState(false)
     useEffect(() => {
         if (!isAttacking && !isDefending) return () => { }
         const t = setTimeout(() => {
@@ -204,8 +205,11 @@ function Character(props: CharacterProps): JSX.Element {
             <div
                 onClick={() => props.onClick(props.characterMeta)}
                 style={{ position: 'absolute', left: x + '%', top: y + '%', width: '13%' }}
+                onPointerEnter={() => setIsHovering(true)}
+                onPointerLeave={() => setIsHovering(false)}
             >
-                <div style={{ position: 'relative', width: '100%', height: '100%', }}>
+                <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
+                    {isHovering && <Hover characterMeta={props.characterMeta} />}
                     {(isAttacking || isDefending)
                         ?
                         <>
@@ -230,6 +234,84 @@ function Character(props: CharacterProps): JSX.Element {
             <></>}
     </>
 }
+
+function Hover(props: { characterMeta: CharacterMeta }) {
+    const cm = props.characterMeta
+    const moveAt = (i: number) => `${cm.moves[i].name} ${moveTypeMetaMap[cm.moves[i].type].multiplier * cm.damage | 0}`
+    return <>{
+        cm.isPlayerCharacter ?
+            <PCHoverDiv>
+                stance: {cm.stance}
+            </PCHoverDiv> :
+            <EnemyHoverDiv>
+                <Table
+                    header={cm.type}
+                    rows={
+                        [[`LVL ${cm.level}`, moveAt(0)],
+                        [`HP ${cm.health}`, moveAt(1)],
+                        [`ATK ${cm.damage}`, moveAt(2)]]
+                    }
+                />
+            </EnemyHoverDiv>
+    }
+    </>
+}
+
+function Table(props: { rows: string[][], header?: string }) {
+    return <table>
+        {props.header && <thead><tr><th colSpan={2}>{props.header}</th></tr></thead>}
+        <tbody>
+            {props.rows.map((r, i) =>
+                <tr key={i}>
+                    <td>{r[0]}</td>
+                    <td>{r[1]}</td>
+                </tr>
+            )}
+        </tbody>
+    </table>
+}
+
+const HoverDiv = styled.div`
+    background: black;
+    opacity: 0.8;
+    font-size: 2em;
+    padding: 1%;
+    border-radius: .4vw;
+    z-index: 10;
+    position: absolute;
+    top: 0;
+    color: white;
+    font-family: monospace;
+    font-weight: bold;
+    padding: 8px;
+
+    table {
+        width: 100%;
+    }
+    thead th {
+        text-align: center;
+        text-decoration: underline;
+        padding-bottom: 12px;
+    }
+    tr td:first-child {
+        text-align: left;
+    }
+    tr td:last-child {
+        text-align: right;
+    }
+`
+
+const EnemyHoverDiv = styled(HoverDiv)`
+    box-shadow: 0 0 2px 4px red;
+    right: 3vw;
+    width: 18vw;
+`
+
+const PCHoverDiv = styled(HoverDiv)`
+    box-shadow: 0 0 2px 4px skyblue;
+    width: 12vw;
+    left: 0;
+`
 
 const attackBus = {
     subscribers: [(d: AttackData) => { d }],
@@ -293,6 +375,10 @@ function newFrogknightMeta(args: { x: number, y: number }): CharacterMeta {
                 name: 'Slash',
                 type: 'SL',
             },
+            {
+                name: 'Slash',
+                type: 'SL',
+            },
         ]
     }
 }
@@ -314,6 +400,10 @@ function newSkeletonMeta(args: { x: number, y: number }): CharacterMeta {
             {
                 name: 'Sword Whack',
                 type: 'BA',
+            },
+            {
+                name: 'Rusty Poke',
+                type: 'DOT2',
             },
             {
                 name: 'Slash',
@@ -359,13 +449,23 @@ const Start = styled.img.attrs({ src: startPng })`
 
 
 const Sprite = styled.img.attrs({ width: 200 })
-    <{ isAttacking: boolean, isDefending: boolean, x: number, y: number, color?: string, blur?: boolean, glow?: boolean, absolute?: boolean }>`
+    <{
+        isAttacking: boolean,
+        isDefending: boolean,
+        x: number,
+        y: number,
+        color?: string,
+        blur?: boolean,
+        glow?: boolean,
+        absolute?: boolean,
+    }>`
     ${p => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
     user-select: none;
     position: ${p => p.absolute === true ? 'absolute' : 'relative'};
     left: ${p => p.x}%;
     top: ${p => p.y}%;
     width: 100%;
+    z-index: 5;
     ${p => p.blur === true && 'filter: blur(8px);'}
     ${p => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
