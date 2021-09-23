@@ -10,9 +10,9 @@ const publicDir = "public"
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 
-const isProduction = envFile?.parsed?.ESBUILD_NODE_ENV === "production"
+const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === "development"
 const envObj = {
-    "process.env.NODE_ENV": `"${isProduction ? 'production' : 'development'}"`
+    "process.env.NODE_ENV": `"${isDevelopment ? 'development' : "production"}"`
 }
 console.log(envObj)
 
@@ -23,8 +23,8 @@ async function main() {
     fs.mkdirSync(buildDir)
     copyFolderRecursiveSync(publicDir, buildDir, makeSubdir = false)
     esbuild.build({
-        minify: isProduction,
-        sourcemap: !isProduction,
+        minify: !isDevelopment,
+        sourcemap: isDevelopment,
         entryPoints: ['src/index.tsx'],
         bundle: true,
         outfile: buildDir + '/out.js',
