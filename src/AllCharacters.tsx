@@ -1,13 +1,13 @@
-import { stanceTypeMetaMap } from "battleFunctions/battleConstants"
-import produce from "immer"
-import React, { useCallback, useEffect, useState } from "react"
-import toast from "react-hot-toast"
+import { stanceTypeMetaMap } from 'battleFunctions/battleConstants'
+import produce from 'immer'
+import React, { useCallback, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 // import toast from "react-hot-toast"
-import styled, { css, keyframes } from "styled-components"
-import frogknightPng from "./assets/Frog_Knight_sprite-200.png"
-import skeletonPng from "./assets/Skeleton_Warrior_sprite-200.png"
-import startPng from "./assets/start.png"
-import { getDamage } from "./battleFunctions/attack"
+import styled, { css, keyframes } from 'styled-components'
+import frogknightPng from './assets/Frog_Knight_sprite-200.png'
+import skeletonPng from './assets/Skeleton_Warrior_sprite-200.png'
+import startPng from './assets/start.png'
+import { getDamage } from './battleFunctions/attack'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const X_AGGRESSIVE_THRESH = 11
@@ -54,10 +54,10 @@ export default function AllCharacters(): JSX.Element {
                     console.log(JSON.stringify({ allCharacters }))
                     const attacker = getUnmovedNpc(ac)
                     if (attacker == null) {
-                        toast("congratulations, you've won! 🎉")
+                        toast('congratulations, you\'ve won! 🎉')
                         return ac
                     }
-                    console.log("attacker:", JSON.stringify(attacker))
+                    console.log('attacker:', JSON.stringify(attacker))
                     const defender = getPCTarget(ac)
                     const move = getRandomMove(attacker)
                     attackBus.emit({ attacker, defender, move })
@@ -354,7 +354,7 @@ const Sprite = styled.img.attrs({ width: 200 })
     left: ${p => p.x}%;
     top: ${p => p.y}%;
     width: 100%;
-    ${p => p.blur === true && `filter: blur(8px);`}
+    ${p => p.blur === true && 'filter: blur(8px);'}
     ${p => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
     `}
@@ -411,7 +411,7 @@ function randomEl<T>(arr: T[]): T {
 /** Returns index of chosen element */
 function weightedRandom(probabilites: number[]): number {
     if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        console.error("array contains NaN or Inf or negative numbers")
+        console.error('array contains NaN or Inf or negative numbers')
         return 0
     }
     let runningTotal = 0
