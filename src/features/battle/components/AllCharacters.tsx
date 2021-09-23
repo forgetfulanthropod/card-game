@@ -16,6 +16,7 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
+const tl = (x: string) => { toast(x); console.log(x) }
 
 export default function AllCharacters(): JSX.Element {
     const [isPlayerTurn, setIsPlayerTurn] = useState(true)
@@ -27,52 +28,47 @@ export default function AllCharacters(): JSX.Element {
     event$.useSubscription(
 
         function npcRebuttal() {
-            const tl = (x: unknown) => { toast(x); console.log(x) }
-            // NOTE: using setter here gets us an up-to-date-value
-            // TODO: find more robust way to use timeouts
-            console.log('outside of setter...')
-            // setAllCharacters(ac => {
+
             const ac = allCharacters
-            console.log('start of setter...')
-            // console.log(JSON.stringify({ allCharacters }))
+
             const attacker = getUnmovedNpc(ac)
             if (attacker == null) {
-                // todo: make sure player characters have moved
-                setAllCharacters(cs => produce(cs, draft => {
-                    draft.forEach(c => c.hasMoved = false)
-                }))
-                // tl('congratulations, you\'ve won! 🎉')
-                // return ac
+                clearAllUsed()
+                // trigger again so fires after state update
+                event$.emit()
                 return
             }
-            // console.log('attacker:', JSON.stringify(attacker))
+
             const defender = getPCTarget(ac)
             const move = getRandomMove(attacker)
-            tl(`${attacker.id} will attack ${defender.id} with ${move.name}`)
+            // tl(`${attacker.id} will attack ${defender.id} with ${move.name}`)
             attackBus.emit({ attacker, defender, move })
             if (move.type === 'SL')
                 attackBus.emit({ attacker, defender: getClosest(defender), move })
 
             setIsPlayerTurn(true)
-            // return ac
-            // })
         }
     )
 
+    function clearAllUsed() {
+        setAllCharacters(cs => produce(cs, draft => {
+            draft.forEach(c => c.hasMoved = false)
+        }))
+    }
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
+
         if (!isPlayerTurn) return
 
         if (character.isPlayerCharacter) {
-            if (character.hasMoved) return
+            if (character.hasMoved) { return }
             // if (unmovedAttackers.find(p => p.id === character.id) == null) return
 
             setSelectedCharacter(character)
-            // toast("you selected someone")
         } else if (!character.isPlayerCharacter) {
             // setIsDefending?
             if (!selectedCharacter) {
-                // toast("must select pc to attack with first")
+                clearAllUsed()
                 return
             }
             attackBus.emit({
@@ -85,7 +81,6 @@ export default function AllCharacters(): JSX.Element {
             })
             setIsPlayerTurn(false)
             setSelectedCharacter(getUnmovedPc(allCharacters))
-            // tl('setting new timeout')
             setTimeout(() => event$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
         // else if (!isPlayerTurn && c.isPlayerCharacter) {
