@@ -2,7 +2,6 @@ import { moveTypeMetaMap, stanceTypeMetaMap } from '../util/constants'
 import produce from 'immer'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-// import toast from "react-hot-toast"
 import styled, { css, keyframes } from 'styled-components'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
@@ -19,23 +18,39 @@ const X_NEUTRAL_THRESH = 9
 const tl = (x: string) => { toast(x); console.log(x) }
 
 export default function AllCharacters(): JSX.Element {
-    const [isPlayerTurn, setIsPlayerTurn] = useState(true)
+    const [isPlayerTurn, setIsPlayerTurn] = useState(Math.random() < .5)
     const [battleHasBegun, setBattleHasBegun] = useState(false)
-    const [selectedCharacter, setSelectedCharacter] = useState<CharacterMeta | null>(null)
     const [allCharacters, setAllCharacters] = useState(() => initialPlayerCharacters())
+    const [selectedCharacter, setSelectedCharacter] = useState<CharacterMeta>(() => {
+        const c = allCharacters.find(c => c.isPlayerCharacter)
+        if (c == null) { throw Error('no player characters!') }
+        return c
+    })
 
-    const event$ = useEventEmitter()
-    event$.useSubscription(
+    useEffect(() => {
+        if (!battleHasBegun) return
+
+        toast(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
+        if (!isPlayerTurn) npcMove$.emit()
+    }, [battleHasBegun])
+
+
+    const npcMove$ = useEventEmitter()
+    npcMove$.useSubscription(
 
         function npcRebuttal() {
 
             const ac = allCharacters
+            if (isGameOver(ac)) {
+                toast('Game over')
+                return
+            }
 
             const attacker = getUnmovedNpc(ac)
             if (attacker == null) {
                 clearAllUsed()
                 // trigger again so fires after state update
-                event$.emit()
+                npcMove$.emit()
                 return
             }
 
@@ -57,12 +72,14 @@ export default function AllCharacters(): JSX.Element {
     }
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
-
+        if (isGameOver(allCharacters)) {
+            toast('Game over')
+            return
+        }
         if (!isPlayerTurn) return
 
         if (character.isPlayerCharacter) {
             if (character.hasMoved) { return }
-            // if (unmovedAttackers.find(p => p.id === character.id) == null) return
 
             setSelectedCharacter(character)
         } else if (!character.isPlayerCharacter) {
@@ -80,14 +97,11 @@ export default function AllCharacters(): JSX.Element {
                 }
             })
             setIsPlayerTurn(false)
-            setSelectedCharacter(getUnmovedPc(allCharacters))
-            setTimeout(() => event$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+            const newPc = getUnmovedPc(allCharacters)
+            if (newPc == null) { throw Error('no unmoved PC RIP') }
+            setSelectedCharacter(newPc)
+            setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
-        // else if (!isPlayerTurn && c.isPlayerCharacter) {
-        //     // do nothing?
-        // } else if (!isPlayerTurn && !c.isPlayerCharacter) {
-        //     // do nothing?
-        // }
     }
 
     const setStat = useCallback(
@@ -103,7 +117,7 @@ export default function AllCharacters(): JSX.Element {
 
     function getClosest(character: CharacterMeta): CharacterMeta {
 
-        return allCharacters
+        return [...allCharacters]
             .filter(c => c.isPlayerCharacter === character.isPlayerCharacter)
             .sort((a, b) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y]))[1]
 
@@ -185,7 +199,6 @@ function Character(props: CharacterProps): JSX.Element {
 
     useEffect(() => {
         attackBus.subscribe((d: AttackData) => {
-            // console.log('attackbus subscriber')
 
             if (d.attacker.id === props.characterMeta.id) {
                 setIsAttacking(true)
@@ -303,7 +316,6 @@ function initialPlayerCharacters(): CharacterMeta[] {
         ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
         ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
     ]
-    // console.log(result)
     return result
 }
 
@@ -475,7 +487,6 @@ function getUnmovedPc(ac: CharacterMeta[]): CharacterMeta | null {
 }
 
 function getPCTarget(ac: CharacterMeta[]) {
-    // c.stance
     const allLivingPlayerCharacters = ac
         .filter(c => c.isPlayerCharacter && c.health > 0)
 
@@ -485,6 +496,11 @@ function getPCTarget(ac: CharacterMeta[]) {
     )
 
     return allLivingPlayerCharacters[targetIndex]
+}
+
+function isGameOver(ac: CharacterMeta[]) {
+    return ac.every(c => c.isPlayerCharacter || c.health <= 0)
+        || ac.every(c => !c.isPlayerCharacter || c.health <= 0)
 }
 
 
