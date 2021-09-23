@@ -51,7 +51,7 @@ function Character(props: { x: number, y: number, src: string, direction: -1 | 1
         const t = setTimeout(() => setHasEffect(false), 500)
         return () => clearTimeout(t)
     }, [hasEffect])
-    const ref = useRef()
+    const ref = useRef(null)
     const size = useSize(ref)
     return <>
         {health > 0 ?
