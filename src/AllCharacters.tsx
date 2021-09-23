@@ -1,6 +1,7 @@
 import { stanceTypeMetaMap } from "battleFunctions/battleConstants"
 import produce from "immer"
 import React, { useCallback, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 // import toast from "react-hot-toast"
 import styled, { css, keyframes } from "styled-components"
 import frogknightPng from "./assets/Frog_Knight_sprite-200.png"
@@ -19,27 +20,7 @@ export default function AllCharacters(): JSX.Element {
     const [selectedCharacter, setSelectedCharacter] = useState<CharacterMeta | null>(null)
     const [allCharacters, setAllCharacters] = useState(() => initialPlayerCharacters())
 
-    function getUnmovedNPC() {
-        return randomEl(
-            allCharacters
-                .filter(c => !c.isPlayerCharacter && !c.hasMoved)
-        )
-    }
-    function getPCTarget() {
-        // c.stance
-        const allLivingPlayerCharacters = allCharacters
-            .filter(c => c.isPlayerCharacter && c.health > 0)
 
-        const targetIndex = weightedRandom(
-            allLivingPlayerCharacters
-                .map(c => stanceTypeMetaMap[c.stance].targetLikelihood)
-        )
-
-        return allLivingPlayerCharacters[targetIndex]
-    }
-    function getRandomMove(attacker: CharacterMeta) {
-        return randomEl(attacker.moves)
-    }
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
         if (!isPlayerTurn) return
@@ -65,17 +46,28 @@ export default function AllCharacters(): JSX.Element {
                 }
             })
             setIsPlayerTurn(false)
-            // Skeleton attacks back:
-            // setTimeout(() => {
-            //     const attacker = getUnmovedNPC()
-            //     const defender = getPCTarget()
-            //     const move = getRandomMove(attacker)
-            //     attackBus.emit({ attacker, defender, move })
-            //     if (move.type === 'SL')
-            //         attackBus.emit({ attacker, defender: getClosest(defender), move })
 
-            //     setIsPlayerTurn(true)
-            // }, TIME_AFTER_PLAYER_MOVE)
+            setTimeout(function npcRebuttal() {
+                // NOTE: using setter here gets us an up-to-date-value
+                // TODO: find more robust way to use timeouts
+                setAllCharacters(ac => {
+                    console.log(JSON.stringify({ allCharacters }))
+                    const attacker = getUnmovedNpc(ac)
+                    if (attacker == null) {
+                        toast("congratulations, you've won! 🎉")
+                        return ac
+                    }
+                    console.log("attacker:", JSON.stringify(attacker))
+                    const defender = getPCTarget(ac)
+                    const move = getRandomMove(attacker)
+                    attackBus.emit({ attacker, defender, move })
+                    if (move.type === 'SL')
+                        attackBus.emit({ attacker, defender: getClosest(defender), move })
+
+                    setIsPlayerTurn(true)
+                    return ac
+                })
+            }, TIME_AFTER_PLAYER_MOVE + 500)
         }
         // else if (!isPlayerTurn && c.isPlayerCharacter) {
         //     // do nothing?
@@ -87,8 +79,10 @@ export default function AllCharacters(): JSX.Element {
     const setStat = useCallback(function setStat(id, property: keyof CharacterMeta, x: unknown) {
         setAllCharacters(cs => produce(cs, draft => {
             const c = draft.find(c => c.id === id)
+            if (c == null) {
+                throw new Error(`cannot find character ${id}`)
+            }
             c[property] = x
-            // toast(`${property} set to ${x}`)
             return
         }))
     }, [])
@@ -177,11 +171,12 @@ function Character(props: CharacterProps): JSX.Element {
             }
 
             if (d.defender.id === props.characterMeta.id) {
-                // console.log('emitting setHealth')
                 setIsDefending(true)
-                // console.log(`damage: ${getDamage(d)}`)
-                // toast(`${props.characterMeta.id} is calling setHealth to ${health - getDamage(d)}`)
-                props.setHealth(health - getDamage(d))
+
+                //todo: setHasMoved
+                //todo: setSelectedMove
+
+                setTimeout(() => props.setHealth(health - getDamage(d)), 500)
             }
         })
     }, [])
@@ -206,7 +201,15 @@ function Character(props: CharacterProps): JSX.Element {
                             <Sprite {...spriteProps} x={5} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
                         </>
                         :
-                        <Sprite {...spriteProps} x={0} y={0} />
+                        (props.isSelected
+                            ?
+                            <>
+                                <Sprite {...spriteProps} x={0} y={0} glow={true} color={'white'} />
+                                <Sprite {...spriteProps} x={0} y={0} absolute={true} />
+                            </>
+                            :
+                            <Sprite {...spriteProps} x={0} y={0} />
+                        )
                     }
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
@@ -243,10 +246,10 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number): [num
     return [
         [x0, y0],
         [x0 + hGap, y0],
-        [x0 - hGap / 2, y0 + vGap],
-        [x0 + hGap / 2, y0 + vGap],
-        [x0, y0 + vGap * 2],
-        [x0 + hGap, y0 + vGap * 2],
+        // [x0 - hGap / 2, y0 + vGap],
+        // [x0 + hGap / 2, y0 + vGap],
+        // [x0, y0 + vGap * 2],
+        // [x0 + hGap, y0 + vGap * 2],
     ]
 }
 
@@ -344,16 +347,16 @@ const Start = styled.img.attrs({ src: startPng })`
 
 
 const Sprite = styled.img.attrs({ width: 200 })
-    <{ isAttacking: boolean, isDefending: boolean, x: number, y: number, color?: string, blur?: boolean, absolute?: boolean }>`
+    <{ isAttacking: boolean, isDefending: boolean, x: number, y: number, color?: string, blur?: boolean, glow?: boolean, absolute?: boolean }>`
     ${p => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
     user-select: none;
     position: ${p => p.absolute === true ? 'absolute' : 'relative'};
     left: ${p => p.x}%;
     top: ${p => p.y}%;
     width: 100%;
-    ${p => p.blur === true && `filter: blur(2px);`}
+    ${p => p.blur === true && `filter: blur(8px);`}
     ${p => p.color != null && css`
-        filter: opacity(0.5) drop-shadow(0 0 0 ${p.color});
+        filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
     `}
     /* box-shadow: 5px 6px 7px black; */
 `
@@ -374,6 +377,32 @@ const shake = keyframes`
 `
 
 
+function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
+    const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0)
+    if (chars.length === 0) { return null }
+    return randomEl(chars)
+}
+
+
+function getPCTarget(ac: CharacterMeta[]) {
+    // c.stance
+    const allLivingPlayerCharacters = ac
+        .filter(c => c.isPlayerCharacter && c.health > 0)
+
+    const targetIndex = weightedRandom(
+        allLivingPlayerCharacters
+            .map(c => stanceTypeMetaMap[c.stance].targetLikelihood)
+    )
+
+    return allLivingPlayerCharacters[targetIndex]
+}
+
+
+function getRandomMove(attacker: CharacterMeta) {
+    return randomEl(attacker.moves)
+}
+
+
 function randomEl<T>(arr: T[]): T {
     return arr[Math.random() * arr.length | 0]
 }
@@ -381,7 +410,7 @@ function randomEl<T>(arr: T[]): T {
 
 /** Returns index of chosen element */
 function weightedRandom(probabilites: number[]): number {
-    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x)) || x < 0) {
+    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
         console.error("array contains NaN or Inf or negative numbers")
         return 0
     }
