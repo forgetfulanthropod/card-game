@@ -76,16 +76,16 @@ export default function AllCharacters(): JSX.Element {
         // }
     }
 
-    const setStat = useCallback(function setStat(id, property: keyof CharacterMeta, x: unknown) {
-        setAllCharacters(cs => produce(cs, draft => {
-            const c = draft.find(c => c.id === id)
-            if (c == null) {
-                throw new Error(`cannot find character ${id}`)
-            }
-            c[property] = x
-            return
-        }))
-    }, [])
+    const setStat = useCallback(
+        function setStat<P extends keyof CharacterMeta>(id: string, property: P, value: CharacterMeta[P]) {
+            setAllCharacters(cs => produce(cs, draft => {
+                const c = draft.find(c => c.id === id)
+                if (c == null) {
+                    throw new Error(`cannot find character ${id}`)
+                }
+                c[property] = value
+            }))
+        }, [])
 
     function getClosest(character: CharacterMeta): CharacterMeta {
 
@@ -246,10 +246,10 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number): [num
     return [
         [x0, y0],
         [x0 + hGap, y0],
-        // [x0 - hGap / 2, y0 + vGap],
-        // [x0 + hGap / 2, y0 + vGap],
-        // [x0, y0 + vGap * 2],
-        // [x0 + hGap, y0 + vGap * 2],
+        [x0 - hGap / 2, y0 + vGap],
+        [x0 + hGap / 2, y0 + vGap],
+        [x0, y0 + vGap * 2],
+        [x0 + hGap, y0 + vGap * 2],
     ]
 }
 
