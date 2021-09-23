@@ -19,7 +19,7 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number): [num
     ]
 }
 
-export default function Fighter(): JSX.Element {
+export default function AllCharacters(): JSX.Element {
     // const [width, setWidth] = useState(200)
     return <div>
         <Start />
