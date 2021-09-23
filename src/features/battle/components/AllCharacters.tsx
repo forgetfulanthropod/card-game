@@ -8,6 +8,8 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import startPng from '../assets/start.png'
 import { getDamage } from '../util/attack'
+import { attackBus } from '../util/attackBus'
+import Table from './Table'
 import { useEventEmitter } from 'ahooks'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -257,19 +259,6 @@ function Hover(props: { characterMeta: CharacterMeta }) {
     </>
 }
 
-function Table(props: { rows: string[][], header?: string }) {
-    return <table>
-        {props.header && <thead><tr><th colSpan={2}>{props.header}</th></tr></thead>}
-        <tbody>
-            {props.rows.map((r, i) =>
-                <tr key={i}>
-                    <td>{r[0]}</td>
-                    <td>{r[1]}</td>
-                </tr>
-            )}
-        </tbody>
-    </table>
-}
 
 const HoverDiv = styled.div`
     background: black;
@@ -285,20 +274,7 @@ const HoverDiv = styled.div`
     font-weight: bold;
     padding: 8px;
 
-    table {
-        width: 100%;
-    }
-    thead th {
-        text-align: center;
-        text-decoration: underline;
-        padding-bottom: 12px;
-    }
-    tr td:first-child {
-        text-align: left;
-    }
-    tr td:last-child {
-        text-align: right;
-    }
+
 `
 
 const EnemyHoverDiv = styled(HoverDiv)`
@@ -312,16 +288,6 @@ const PCHoverDiv = styled(HoverDiv)`
     width: 12vw;
     left: 0;
 `
-
-const attackBus = {
-    subscribers: [(d: AttackData) => { d }],
-    emit(d: AttackData) {
-        this.subscribers.forEach(s => s(d))
-    },
-    subscribe(callback: (d: AttackData) => void) {
-        this.subscribers.push(callback)
-    }
-}
 
 
 function initialPlayerCharacters(): CharacterMeta[] {
