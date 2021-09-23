@@ -1,8 +1,8 @@
 import React from 'react'
 import { Toaster } from 'react-hot-toast'
-import CharacterManager from './CharacterManager'
+import CharacterManager from 'features/battle/components/CharacterManager'
 import AppWrap from './AppWrap'
-import Background from './Background'
+import Background from '../features/battle/components/Background'
 
 
 export default function App(): JSX.Element {

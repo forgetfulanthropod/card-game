@@ -1,13 +1,13 @@
-import { stanceTypeMetaMap } from 'battleFunctions/battleConstants'
+import { stanceTypeMetaMap } from '../util/constants'
 import produce from 'immer'
 import React, { useCallback, useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 // import toast from "react-hot-toast"
 import styled, { css, keyframes } from 'styled-components'
-import frogknightPng from './assets/Frog_Knight_sprite-200.png'
-import skeletonPng from './assets/Skeleton_Warrior_sprite-200.png'
-import startPng from './assets/start.png'
-import { getDamage } from './battleFunctions/attack'
+import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
+import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
+import startPng from '../assets/start.png'
+import { getDamage } from '../util/attack'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const X_AGGRESSIVE_THRESH = 11

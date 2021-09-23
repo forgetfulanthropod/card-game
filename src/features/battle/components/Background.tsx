@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import CaveMp4 from './assets/cave_main_1.mp4'
-import CaveJpg from './assets/cave_main_1.jpg'
+import CaveMp4 from '../assets/cave_main_1.mp4'
+import CaveJpg from '../assets/cave_main_1.jpg'
 
 const Video = styled.video.attrs({ autoPlay: true, muted: true, loop: true })`
     position: absolute;

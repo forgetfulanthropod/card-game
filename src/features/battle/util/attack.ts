@@ -1,4 +1,4 @@
-import { stanceTypeMetaMap } from './battleConstants'
+import { stanceTypeMetaMap } from './constants'
 
 
 // NPCs do not have stances
