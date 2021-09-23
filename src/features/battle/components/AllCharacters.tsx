@@ -17,6 +17,8 @@ const X_NEUTRAL_THRESH = 9
 
 const tl = (x: string) => { toast(x); console.log(x) }
 
+type Set<T> = T | ((old: T) => T)
+
 export default function AllCharacters(): JSX.Element {
     const [isPlayerTurn, setIsPlayerTurn] = useState(Math.random() < .5)
     const [battleHasBegun, setBattleHasBegun] = useState(false)
@@ -26,6 +28,9 @@ export default function AllCharacters(): JSX.Element {
         if (c == null) { throw Error('no player characters!') }
         return c
     })
+
+    const winner = checkWinner(allCharacters)
+    useEffect(() => { winner != null && tl(winner === 'PC' ? 'You win' : 'Computer wins') }, [winner])
 
     useEffect(() => {
         if (!battleHasBegun) return
@@ -41,14 +46,13 @@ export default function AllCharacters(): JSX.Element {
         function npcRebuttal() {
 
             const ac = allCharacters
-            if (isGameOver(ac)) {
-                toast('Game over')
+            if (checkWinner(ac) != null) {
                 return
             }
 
             const attacker = getUnmovedNpc(ac)
             if (attacker == null) {
-                clearAllUsed()
+                clearAllMoved()
                 // trigger again so fires after state update
                 npcMove$.emit()
                 return
@@ -65,15 +69,14 @@ export default function AllCharacters(): JSX.Element {
         }
     )
 
-    function clearAllUsed() {
+    function clearAllMoved() {
         setAllCharacters(cs => produce(cs, draft => {
             draft.forEach(c => c.hasMoved = false)
         }))
     }
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
-        if (isGameOver(allCharacters)) {
-            toast('Game over')
+        if (checkWinner(allCharacters) != null) {
             return
         }
         if (!isPlayerTurn) return
@@ -82,36 +85,45 @@ export default function AllCharacters(): JSX.Element {
             if (character.hasMoved) { return }
 
             setSelectedCharacter(character)
-        } else if (!character.isPlayerCharacter) {
-            // setIsDefending?
-            if (!selectedCharacter) {
-                clearAllUsed()
-                return
-            }
-            attackBus.emit({
-                attacker: selectedCharacter,
-                defender: character,
-                move: {
-                    name: 'Dutiful Stab',
-                    type: 'BA',
-                }
-            })
-            setIsPlayerTurn(false)
-            const newPc = getUnmovedPc(allCharacters)
-            if (newPc == null) { throw Error('no unmoved PC RIP') }
-            setSelectedCharacter(newPc)
-            setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+            return
         }
+        // clicked on NPC
+        if (!selectedCharacter || selectedCharacter.hasMoved) {
+            clearAllMoved()
+            return
+        }
+        attackBus.emit({
+            attacker: selectedCharacter,
+            defender: character,
+            move: {
+                name: 'Dutiful Stab',
+                type: 'BA',
+            }
+        })
+        const newPc = getUnmovedPc(allCharacters)
+        if (newPc == null) {
+            console.error('no player characters')
+            clearAllMoved()
+            return
+        }
+        setIsPlayerTurn(false)
+        setSelectedCharacter(newPc)
+        setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+
     }
 
     const setStat = useCallback(
-        function setStat<P extends keyof CharacterMeta>(id: string, property: P, value: CharacterMeta[P]) {
+        function setStat<P extends keyof CharacterMeta>(id: string, property: P, update: Set<CharacterMeta[P]>) {
             setAllCharacters(cs => produce(cs, draft => {
                 const c = draft.find(c => c.id === id)
                 if (c == null) {
                     throw new Error(`cannot find character ${id}`)
                 }
-                c[property] = value
+                if (typeof update === 'function') {
+                    c[property] = update(c[property])
+                } else {
+                    c[property] = update
+                }
             }))
         }, [])
 
@@ -137,8 +149,8 @@ export default function AllCharacters(): JSX.Element {
         {allCharacters.map(characterMeta => {
             const { x, y } = characterMeta
             const id = getId(x, y)
-            const setHealth = (h: number) => setStat(id, 'health', h)
-            const setHasMoved = (has: boolean) => setStat(id, 'hasMoved', has)
+            const setHealth = (update: Set<number>) => setStat(id, 'health', update)
+            const setHasMoved = (update: Set<boolean>) => setStat(id, 'hasMoved', update)
 
             const characterProps = { setHealth, setHasMoved, characterMeta, onClick, key: id }
 
@@ -171,7 +183,7 @@ function Skeleton(props: KnownCharacterProps) {
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
-    setHealth: (health: number) => void
+    setHealth: (update: Set<number>) => void
     setHasMoved: (has: boolean) => void
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
@@ -213,7 +225,8 @@ function Character(props: CharacterProps): JSX.Element {
                 //todo setSelectedMove
 
                 props.setHasMoved(true)
-                setTimeout(() => props.setHealth(health - getDamage(d)), 500)
+                const damage = getDamage(d)
+                setTimeout(() => props.setHealth(health => health - damage), 500)
             }
         })
     }, [])
@@ -279,7 +292,7 @@ function Hover(props: { characterMeta: CharacterMeta }) {
 
 const HoverDiv = styled.div`
     background: black;
-    opacity: 0.8;
+    opacity: 0.5;
     font-size: 2em;
     padding: 1%;
     border-radius: .4vw;
@@ -498,9 +511,12 @@ function getPCTarget(ac: CharacterMeta[]) {
     return allLivingPlayerCharacters[targetIndex]
 }
 
-function isGameOver(ac: CharacterMeta[]) {
-    return ac.every(c => c.isPlayerCharacter || c.health <= 0)
-        || ac.every(c => !c.isPlayerCharacter || c.health <= 0)
+function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
+    if (ac.every(c => c.isPlayerCharacter || c.health <= 0))
+        return 'PC'
+    if (ac.every(c => !c.isPlayerCharacter || c.health <= 0))
+        return 'NPC'
+    return null
 }
 
 
