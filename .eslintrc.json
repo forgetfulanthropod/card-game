@@ -24,11 +24,13 @@
     ],
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
+        // auto-fixable stuff for formatter:
         "quotes": [
             "warn",
             "single"
         ],
         "consistent-return": "warn",
+        "no-useless-return": "warn",
         "react/no-unused-prop-types": "warn",
         "react/jsx-props-no-multi-spaces": "warn",
         "react/jsx-tag-spacing": [
