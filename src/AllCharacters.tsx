@@ -3,7 +3,6 @@ import styled, { keyframes, css } from "styled-components"
 import skeletonPng from "./assets/Skeleton_Warrior_sprite-200.png"
 import frogknightPng from "./assets/Frog_Knight_sprite-200.png"
 import startPng from "./assets/start.png"
-import { useSize } from "ahooks"
 
 
 const skeletonPositions = makePositions(70, 25, 18, 15)
@@ -52,18 +51,18 @@ function Character(props: { x: number, y: number, src: string, direction: -1 | 1
         return () => clearTimeout(t)
     }, [hasEffect])
     const ref = useRef(null)
-    const size = useSize(ref)
+
     return <>
         {health > 0 ?
             <div onClick={() => { setHasEffect(true); setHealth(h => h - ~~(Math.random() * 10)) }}
-                style={{ position: 'absolute', left: props.x + '%', top: props.y + '%' }}
+                style={{ position: 'absolute', left: props.x + '%', top: props.y + '%', width: '13%' }}
             >
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', width: '100%', height: '100%', }}>
                     {hasEffect
                         ?
                         <>
-                            <Sprite ref={ref} src={props.src} shake={hasEffect} x={0} y={0} blur={true} />
-                            <Sprite src={props.src} shake={hasEffect} x={0} y={0} absolute={true} color="red" />
+                            <Sprite ref={ref} src={props.src} shake={hasEffect} x={5} y={0} blur={true} />
+                            <Sprite src={props.src} shake={hasEffect} x={5} y={0} absolute={true} color="red" blur={true} />
                         </>
                         :
                         <Sprite ref={ref} src={props.src} shake={hasEffect} x={0} y={0} />
@@ -81,7 +80,7 @@ const Health = styled.div<{ color: string }>`
     font-weight: bold;
     position: absolute;
     /* position: relative; */
-    font-size: 5em;
+    font-size: 4vw;
     color: ${p => p.color};
     left: 50%;
     transform: translateX(-50%) translateY(-15%);
@@ -100,11 +99,11 @@ const Start = styled.img.attrs({ src: startPng })`
 const Sprite = styled.img.attrs({ width: 200 })
     <{ shake: boolean, x: number, y: number, color?: string, blur?: boolean, absolute?: boolean }>`
     ${p => p.shake && css`animation: ${shake} 0.5s;`}
-
+    user-select: none;
     position: ${p => p.absolute === true ? 'absolute' : 'relative'};
     left: ${p => p.x}%;
     top: ${p => p.y}%;
-    width: 200px;
+    width: 100%;
     ${p => p.blur === true && `filter: blur(2px);`}
     ${p => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 0 ${p.color});
