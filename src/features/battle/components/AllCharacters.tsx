@@ -37,7 +37,11 @@ export default function AllCharacters(): JSX.Element {
             // console.log(JSON.stringify({ allCharacters }))
             const attacker = getUnmovedNpc(ac)
             if (attacker == null) {
-                tl('congratulations, you\'ve won! 🎉')
+                // todo: make sure player characters have moved
+                setAllCharacters(cs => produce(cs, draft => {
+                    draft.forEach(c => c.hasMoved = false)
+                }))
+                // tl('congratulations, you\'ve won! 🎉')
                 // return ac
                 return
             }
@@ -80,6 +84,7 @@ export default function AllCharacters(): JSX.Element {
                 }
             })
             setIsPlayerTurn(false)
+            setSelectedCharacter(getUnmovedPc(allCharacters))
             // tl('setting new timeout')
             setTimeout(() => event$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
@@ -123,9 +128,14 @@ export default function AllCharacters(): JSX.Element {
         {allCharacters.map(characterMeta => {
             const { x, y } = characterMeta
             const id = getId(x, y)
+            const setHealth = (h: number) => setStat(id, 'health', h)
+            const setHasMoved = (has: boolean) => setStat(id, 'hasMoved', has)
+
+            const characterProps = { setHealth, setHasMoved, characterMeta, onClick, key: id }
+
             return characterMeta.isPlayerCharacter ?
-                <Frogknight setHealth={(h) => setStat(id, 'health', h)} key={id} {...{ characterMeta, onClick }} isSelected={selectedCharacter?.id === id} /> :
-                <Skeleton setHealth={(h) => setStat(id, 'health', h)} key={id} {...{ characterMeta, onClick }} />
+                <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
+                <Skeleton {...characterProps} />
         })}
         {/* {skeletonPositions.map(([x, y]) =>
             <Skeleton key={getId(x, y)} {...{ x, y, onClick }} />)}
@@ -152,7 +162,8 @@ function Skeleton(props: KnownCharacterProps) {
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
-    setHealth: (h: number) => void
+    setHealth: (health: number) => void
+    setHasMoved: (has: boolean) => void
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -183,14 +194,17 @@ function Character(props: CharacterProps): JSX.Element {
 
             if (d.attacker.id === props.characterMeta.id) {
                 setIsAttacking(true)
+                props.setHasMoved(true)
+
             }
 
             if (d.defender.id === props.characterMeta.id) {
                 setIsDefending(true)
 
-                //todo: setHasMoved
-                //todo: setSelectedMove
 
+                //todo setSelectedMove
+
+                props.setHasMoved(true)
                 setTimeout(() => props.setHealth(health - getDamage(d)), 500)
             }
         })
@@ -202,6 +216,17 @@ function Character(props: CharacterProps): JSX.Element {
         isDefending
     }
 
+    const midAttack = () => <>
+        <Sprite {...spriteProps} x={5} y={0} blur={true} />
+        <Sprite {...spriteProps} x={5} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
+    </>
+    const selected = () => <>
+        <Sprite {...spriteProps} x={0} y={0} glow={true} color={'white'} />
+        <Sprite {...spriteProps} x={0} y={0} absolute={true} />
+    </>
+    const regular = () => <Sprite {...spriteProps} x={0} y={0} />
+
+    const sprite = () => (isAttacking || isDefending) ? midAttack() : props.isSelected ? selected() : regular()
     return <>
         {health > 0 ?
             <div
@@ -212,23 +237,7 @@ function Character(props: CharacterProps): JSX.Element {
             >
                 <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
                     {isHovering && <Hover characterMeta={props.characterMeta} />}
-                    {(isAttacking || isDefending)
-                        ?
-                        <>
-                            <Sprite {...spriteProps} x={5} y={0} blur={true} />
-                            <Sprite {...spriteProps} x={5} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
-                        </>
-                        :
-                        (props.isSelected
-                            ?
-                            <>
-                                <Sprite {...spriteProps} x={0} y={0} glow={true} color={'white'} />
-                                <Sprite {...spriteProps} x={0} y={0} absolute={true} />
-                            </>
-                            :
-                            <Sprite {...spriteProps} x={0} y={0} />
-                        )
-                    }
+                    {sprite()}
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
                 </div>
@@ -268,8 +277,9 @@ const HoverDiv = styled.div`
     border-radius: .4vw;
     z-index: 10;
     position: absolute;
-    top: 0;
+    bottom: 15vw;
     color: white;
+    font-size: 1vw;
     font-family: monospace;
     font-weight: bold;
     padding: 8px;
@@ -287,6 +297,7 @@ const PCHoverDiv = styled(HoverDiv)`
     box-shadow: 0 0 2px 4px skyblue;
     width: 12vw;
     left: 0;
+    text-align: center;
 `
 
 
@@ -456,11 +467,17 @@ const shake = keyframes`
 
 
 function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0)
+    const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
 
+
+function getUnmovedPc(ac: CharacterMeta[]): CharacterMeta | null {
+    const chars = ac.filter(c => c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
+    if (chars.length === 0) { return null }
+    return randomEl(chars)
+}
 
 function getPCTarget(ac: CharacterMeta[]) {
     // c.stance
