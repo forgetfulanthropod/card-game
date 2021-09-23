@@ -8,6 +8,7 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import startPng from '../assets/start.png'
 import { getDamage } from '../util/attack'
+import { useEventEmitter } from 'ahooks'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const X_AGGRESSIVE_THRESH = 11
@@ -20,6 +21,37 @@ export default function AllCharacters(): JSX.Element {
     const [selectedCharacter, setSelectedCharacter] = useState<CharacterMeta | null>(null)
     const [allCharacters, setAllCharacters] = useState(() => initialPlayerCharacters())
 
+    const event$ = useEventEmitter()
+    event$.useSubscription(
+
+        function npcRebuttal() {
+            const tl = (x: unknown) => { toast(x); console.log(x) }
+            // NOTE: using setter here gets us an up-to-date-value
+            // TODO: find more robust way to use timeouts
+            console.log('outside of setter...')
+            // setAllCharacters(ac => {
+            const ac = allCharacters
+            console.log('start of setter...')
+            // console.log(JSON.stringify({ allCharacters }))
+            const attacker = getUnmovedNpc(ac)
+            if (attacker == null) {
+                tl('congratulations, you\'ve won! 🎉')
+                // return ac
+                return
+            }
+            // console.log('attacker:', JSON.stringify(attacker))
+            const defender = getPCTarget(ac)
+            const move = getRandomMove(attacker)
+            tl(`${attacker.id} will attack ${defender.id} with ${move.name}`)
+            attackBus.emit({ attacker, defender, move })
+            if (move.type === 'SL')
+                attackBus.emit({ attacker, defender: getClosest(defender), move })
+
+            setIsPlayerTurn(true)
+            // return ac
+            // })
+        }
+    )
 
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
@@ -46,28 +78,8 @@ export default function AllCharacters(): JSX.Element {
                 }
             })
             setIsPlayerTurn(false)
-
-            setTimeout(function npcRebuttal() {
-                // NOTE: using setter here gets us an up-to-date-value
-                // TODO: find more robust way to use timeouts
-                setAllCharacters(ac => {
-                    console.log(JSON.stringify({ allCharacters }))
-                    const attacker = getUnmovedNpc(ac)
-                    if (attacker == null) {
-                        toast('congratulations, you\'ve won! 🎉')
-                        return ac
-                    }
-                    console.log('attacker:', JSON.stringify(attacker))
-                    const defender = getPCTarget(ac)
-                    const move = getRandomMove(attacker)
-                    attackBus.emit({ attacker, defender, move })
-                    if (move.type === 'SL')
-                        attackBus.emit({ attacker, defender: getClosest(defender), move })
-
-                    setIsPlayerTurn(true)
-                    return ac
-                })
-            }, TIME_AFTER_PLAYER_MOVE + 500)
+            // tl('setting new timeout')
+            setTimeout(() => event$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
         // else if (!isPlayerTurn && c.isPlayerCharacter) {
         //     // do nothing?
