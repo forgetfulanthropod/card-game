@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkWinner, getNpcMove, getUnmovedPc, getId, checkMoveAvailable } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
-import { IdleScreenOverlay, Start } from './Styles'
+import { IdleScreenOverlay, Lose, Reset, Start } from './Styles'
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -18,24 +18,36 @@ const tl = (x: string) => { toast(x); console.log(x) }
 type Set<T> = T | ((old: T) => T)
 
 
-export default function AllCharacters(): JSX.Element {
+export default function AllCharacters(props: { reset: () => void }): JSX.Element {
     const move$: MoveEmitter = useEventEmitter()
     const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
     const [isPlayerFirstTurn] = useState(state.isPlayerTurn)
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
+    const [showLose, setShowLose] = useState(false)
 
     move$.useSubscription(ad => {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
     })
 
     const winner = checkWinner(allCharacters)
-    useEffect(() => { winner != null && tl(winner === 'PC' ? 'You win' : 'Computer wins') }, [winner])
+    useEffect(() => {
+        console.log(winner === 'PC' ? 'You win' : 'Computer wins')
+        if (winner === 'NPC') {
+            const st = setTimeout(() => setShowLose(true), 1000)
+            return () => clearTimeout(st)
+        }
+        return () => { }
+    }, [winner])
 
     useEffect(() => {
-        if (!battleHasBegun) return
+        if (!battleHasBegun) return () => { }
         tl(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
-        if (!isPlayerTurn) npcMove$.emit()
+        if (!isPlayerTurn) {
+            const t = setTimeout(() => npcMove$.emit(), 1000)
+            return () => clearTimeout(t)
+        }
+        return () => { }
     }, [battleHasBegun])
 
 
@@ -109,11 +121,13 @@ export default function AllCharacters(): JSX.Element {
 
     return <div>
         {
-            !battleHasBegun ?
-                <IdleScreenOverlay>
-                    <Start onClick={() => dispatch({ type: 'setBattleHasBegun' })} />
-                </IdleScreenOverlay> :
-                <></>
+            !battleHasBegun &&
+            <IdleScreenOverlay>
+                <Start onClick={() => dispatch({ type: 'setBattleHasBegun' })} />
+            </IdleScreenOverlay>
+        }
+        {
+            showLose && <LoseScreen reset={props.reset} />
         }
         {allCharacters.map(characterMeta => {
             const { x, y } = characterMeta
@@ -186,4 +200,11 @@ function makeInitialState() {
         allCharacters,
         selectedCharacter,
     })
+}
+
+function LoseScreen(props: { reset: () => void }): JSX.Element {
+    return <IdleScreenOverlay>
+        <Lose />
+        <Reset onClick={props.reset}>Reset</Reset>
+    </IdleScreenOverlay>
 }

@@ -3,7 +3,7 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
 import { Health, Sprite } from './Styles'
-import { Action, MoveEmitter, DEBUG } from './AllCharacters'
+import { Action, MoveEmitter } from './AllCharacters'
 import { Hover } from './Hover'
 
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
