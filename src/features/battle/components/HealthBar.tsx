@@ -1,5 +1,5 @@
 import React from 'react'
-//ts-ignore
+//@ts-ignore
 import styled from 'styled-components'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
 
