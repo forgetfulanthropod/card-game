@@ -41,27 +41,10 @@ export default function AllCharacters(): JSX.Element {
         dispatch({ type: 'clearHasMoved' })
     }, [isMoveAvailable])
 
-    // move$.useSubscription(attack => {
-    //     if (target !== 'manager') { return }
-    //     if (checkWinner(allCharacters) != null) {
-    //         return
-    //     }
-    //     if (attack.type === 'makeRandomNpcAttack') {
-    //         return
-    //     }
-
-    //     move$.emit([{ ...attack }, 'character'])
-    //     if (attack.move.type === 'SL')
-    //         move$.emit([{ type: 'chosen', attacker: attack.attacker, defender: getClosest(state.allCharacters, attack.defender), move: attack.move }, 'character'])
-
-    // })
     npcMove$.useSubscription(() => {
-        dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
-
         move$.emit(getNpcMove(allCharacters))
+        setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
     })
-
-
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
         if (checkWinner(allCharacters) != null) return
