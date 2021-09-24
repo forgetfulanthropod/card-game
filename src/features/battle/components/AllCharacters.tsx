@@ -169,12 +169,12 @@ function makeInitialState() {
     const allCharacters = initialPlayerCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
     if (selectedCharacter == null) throw Error('no player characters!')
-    return {
+    return Object.freeze({
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: false,
         allCharacters,
         selectedCharacter,
-    }
+    })
 }
 
 
