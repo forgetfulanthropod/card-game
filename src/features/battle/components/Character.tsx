@@ -5,6 +5,11 @@ import { getDamage } from '../util/attack'
 import { Health, Sprite } from './Styles'
 import { Action, MoveEmitter } from './AllCharacters'
 import { Hover } from './Hover'
+import HealthBar from './HealthBar'
+
+const config = {
+    isHealthNumber: false
+}
 
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
     return <Character src={frogknightPng} direction={-1} {...props} />
@@ -67,7 +72,7 @@ function Character(props: CharacterProps): JSX.Element {
         {health > 0 ?
             <div
                 onClick={() => props.onClick(props.characterMeta)}
-                style={{ position: 'absolute', left: x + '%', top: y + '%', width: '13%' }}
+                style={{ position: 'absolute', left: x + '%', top: y + '%', width: '10%' }}
                 onPointerEnter={() => setIsHovering(true)}
                 onPointerLeave={() => setIsHovering(false)}
             >
@@ -85,8 +90,12 @@ function Character(props: CharacterProps): JSX.Element {
                                 <Sprite {...spriteProps} x={0} y={0} absolute={true} />
                             </>
                             : null}
-                    <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
-                    {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
+                    {config.isHealthNumber ?
+                        <div style={{ position: 'absolute', bottom: '-3vw' }}>
+                            <HealthBar value={health} max={props.characterMeta.maxHealth} />
+                        </div> :
+                        <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
+                    }
                 </div>
             </div> :
             <></>}

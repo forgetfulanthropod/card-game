@@ -159,3 +159,9 @@ export const Reset = styled.button`
         font-weight: bold;
     }
 `
+
+export const MoveMenu = styled.div`
+    background: rgba(0,0,0,.6);
+    color: white;
+    font-family: monospace;
+`

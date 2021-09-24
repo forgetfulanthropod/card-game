@@ -11,6 +11,7 @@ declare global {
         isPlayerCharacter: boolean
         hasMoved: boolean
         health: number
+        maxHealth: number
         x: number
         y: number
         stance: StanceType

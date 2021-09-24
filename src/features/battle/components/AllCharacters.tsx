@@ -4,9 +4,9 @@ import produce from 'immer'
 import React, { useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
 import { makeInitialPlayerCharacters } from '../util/factories'
-import { checkWinner, getNpcMove, getUnmovedPc, getId, checkMoveAvailable } from '../util/misc'
+import { checkMoveAvailable, checkWinner, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
-import { IdleScreenOverlay, Lose, Reset, Start } from './Styles'
+import { IdleScreenOverlay, Lose, MoveMenu, Reset, Start } from './Styles'
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -138,6 +138,14 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                 <Skeleton {...characterProps} />
         })}
+        {isPlayerTurn && <MoveMenu>
+            {selectedCharacter.moves.map(
+                (m, i) => <div
+                    key={i}
+                    onClick={() => dispatch({ type: 'setSelectedMove', selectedMove: m })
+                    }>{m.name}</div>
+            )}
+        </MoveMenu>}
     </div>
 }
 
@@ -152,6 +160,7 @@ export type Action =
     | { type: 'setHealth', characterId: string, health: Set<number> }
     | { type: 'clearHasMoved' }
     | { type: 'setSelectedCharacter', character: CharacterMeta }
+    | { type: 'setSelectedMove', selectedMove: MoveMeta }
 
 
 function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
@@ -183,6 +192,9 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
             } case 'setSelectedCharacter': {
                 draft.selectedCharacter = action.character
                 return
+            } case 'setSelectedMove': {
+                draft.selectedMove = action.selectedMove
+                return
             } default:
                 throw new Error(`unknown action ${action}`)
         }
@@ -193,12 +205,14 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
 function makeInitialState() {
     const allCharacters = makeInitialPlayerCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
+    const selectedMove = selectedCharacter?.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: false,
         allCharacters,
         selectedCharacter,
+        selectedMove,
     })
 }
 
