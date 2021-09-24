@@ -86,7 +86,7 @@ function Character(props: CharacterProps): JSX.Element {
                             </>
                             : null}
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
-                    {DEBUG && <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>}
+                    {DEBUG && <Health color='white'>{props.characterMeta.hasMoved ? 'X' : ''}</Health>}
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
                 </div>
             </div> :

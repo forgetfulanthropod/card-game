@@ -8,7 +8,7 @@ import { checkWinner, getNpcMove, getUnmovedPc, getId, checkMoveAvailable } from
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Start } from './Styles'
 
-export const DEBUG = false
+export const DEBUG = true
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
@@ -43,7 +43,12 @@ export default function AllCharacters(): JSX.Element {
 
     npcMove$.useSubscription(() => {
         move$.emit(getNpcMove(allCharacters))
-        setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
+        if (allCharacters.some(c => c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
+            setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
+        }
+        else if (allCharacters.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
+            setTimeout(() => npcMove$.emit())
+        }
     })
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
@@ -72,9 +77,12 @@ export default function AllCharacters(): JSX.Element {
         if (newPc == null) {
             throw Error('no player characters')
         }
-        dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
         dispatch({ type: 'setSelectedCharacter', character: newPc })
-        setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+        if (allCharacters.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
+            debugger
+            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
+            setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+        }
     }
 
     return <div>
