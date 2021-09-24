@@ -87,14 +87,15 @@ export const Start = styled.img.attrs({ src: startPng })`
 
 
 interface SP {
-    isAttacking: boolean,
-    isDefending: boolean,
-    x: number,
-    y: number,
-    color?: string,
-    blur?: boolean,
-    glow?: boolean,
-    absolute?: boolean,
+    isAttacking: boolean
+    isDefending: boolean
+    x: number
+    y: number
+    color?: string
+    blur?: boolean
+    glow?: boolean
+    absolute?: boolean
+    hasMoved: boolean
 }
 export const Sprite = styled.img.attrs({ width: 200 })`
     ${(p: SP) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
@@ -104,6 +105,7 @@ export const Sprite = styled.img.attrs({ width: 200 })`
     top: ${(p: SP) => p.y}%;
     width: 100%;
     z-index: 5;
+    ${(p: SP) => p.hasMoved && 'filter: grayscale(50%) drop-shadow(0 0 1vw black)'}
     ${(p: SP) => p.blur === true && 'filter: blur(8px);'}
     ${(p: SP) => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});

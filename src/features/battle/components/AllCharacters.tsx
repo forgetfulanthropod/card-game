@@ -1,14 +1,14 @@
 import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import produce from 'immer'
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkWinner, getNpcMove, getUnmovedPc, getId, checkMoveAvailable } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Start } from './Styles'
 
-export const DEBUG = true
+export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
@@ -22,14 +22,19 @@ export default function AllCharacters(): JSX.Element {
     const move$: MoveEmitter = useEventEmitter()
     const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
+    const [isPlayerFirstTurn] = useState(state.isPlayerTurn)
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
+
+    move$.useSubscription(ad => {
+        DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
+    })
 
     const winner = checkWinner(allCharacters)
     useEffect(() => { winner != null && tl(winner === 'PC' ? 'You win' : 'Computer wins') }, [winner])
 
     useEffect(() => {
         if (!battleHasBegun) return
-        toast(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
+        tl(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
         if (!isPlayerTurn) npcMove$.emit()
     }, [battleHasBegun])
 
@@ -37,17 +42,32 @@ export default function AllCharacters(): JSX.Element {
     const isMoveAvailable = checkMoveAvailable(allCharacters)
     useEffect(() => {
         if (isMoveAvailable) return
-        if (DEBUG) toast('resetting moves')
+        if (DEBUG) tl('resetting moves')
         dispatch({ type: 'clearHasMoved' })
+        dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: isPlayerFirstTurn })
+        tl(isPlayerTurn ? 'You start' : 'Enemy starts')
+        if (!isPlayerFirstTurn) {
+            npcMove$.emit()
+        }
     }, [isMoveAvailable])
 
     npcMove$.useSubscription(() => {
+        if (!allCharacters.some(c => c.isPlayerCharacter && c.health > 0)) {
+            // all PCs dead
+            return
+        }
+        if (!allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+            // TODO: this should never occur
+            // no NPCs with moves, give the turn back
+            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
+            return
+        }
         move$.emit(getNpcMove(allCharacters))
-        if (allCharacters.some(c => c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
+        if (allCharacters.some(c => c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
             setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
         }
-        else if (allCharacters.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
-            setTimeout(() => npcMove$.emit())
+        else if (allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+            setTimeout(() => npcMove$.emit(), 1000)
         }
     })
 
@@ -75,11 +95,13 @@ export default function AllCharacters(): JSX.Element {
         }) // TODO: right target?
         const newPc = getUnmovedPc(allCharacters)
         if (newPc == null) {
-            throw Error('no player characters')
+            // TODO: this should never occur
+            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
+            return
+            // throw Error('no player characters')
         }
         dispatch({ type: 'setSelectedCharacter', character: newPc })
-        if (allCharacters.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)) {
-            debugger
+        if (allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
             dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
             setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
