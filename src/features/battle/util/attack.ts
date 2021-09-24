@@ -4,7 +4,7 @@ import { stanceTypeMetaMap } from './constants'
 // NPCs do not have stances
 // PCs must have stances
 export function getDamage(d: AttackData): number {
-    if (d.attacker.isPlayerCharacter)
+    if (d.attacker.isPc)
         return getAttackMultiplier(d.attacker) * d.attacker.damage | 0
 
     return d.attacker.damage * getDefenseMultiplier(d.defenders[0]) | 0

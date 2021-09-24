@@ -65,11 +65,12 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     }, [isMoveAvailable])
 
     npcMove$.useSubscription(() => {
-        if (!allCharacters.some(c => c.isPlayerCharacter && c.health > 0)) {
+        if (!allCharacters.some(c => c.isPc && c.health > 0)) {
             // all PCs dead
+            tl('all PC dead')
             return
         }
-        if (!allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+        if (!allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
             console.warn('xKK9M')
             // TODO: this should never occur
             // no NPCs with moves, give the turn back
@@ -77,10 +78,11 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             return
         }
         move$.emit(getNpcMove(allCharacters))
-        if (allCharacters.some(c => c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+        if (allCharacters.some(c => c.isPc && c.health > 0 && !c.hasMoved)) {
+            tl('no unmoved PC')
             setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
         }
-        else if (allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+        else if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
             setTimeout(() => npcMove$.emit(), 1000)
         }
     })
@@ -89,7 +91,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         if (checkWinner(allCharacters) != null) return
         if (!isPlayerTurn) return
 
-        if (character.isPlayerCharacter) {
+        if (character.isPc) {
             if (character.hasMoved) { return }
             dispatch({ type: 'setSelectedCharacter', character })
             return
@@ -117,7 +119,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             // throw Error('no player characters')
         }
         dispatch({ type: 'setSelectedCharacter', character: newPc })
-        if (allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+        if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
             dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
             setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
@@ -138,7 +140,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             const id = getId(x, y)
             const characterProps = { move$, dispatch, characterMeta, onClick, key: id }
 
-            return characterMeta.isPlayerCharacter ?
+            return characterMeta.isPc ?
                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                 <Skeleton {...characterProps} />
         })}
@@ -214,7 +216,7 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
 
 function makeInitialState() {
     const allCharacters = makeInitialPlayerCharacters()
-    const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
+    const selectedCharacter = allCharacters.find(c => c.isPc)
     const selectedMove = selectedCharacter?.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({

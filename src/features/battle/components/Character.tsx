@@ -95,7 +95,7 @@ function Character(props: CharacterProps): JSX.Element {
                         <div style={{ position: 'absolute', bottom: '-3vw' }}>
                             <HealthBar value={health} max={props.characterMeta.maxHealth} />
                         </div> :
-                        <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
+                        <Health color={props.characterMeta.isPc ? '#53C541' : 'red'}>{health}</Health>
                     }
                 </div>
             </div> :
