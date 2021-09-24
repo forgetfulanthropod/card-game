@@ -26,6 +26,9 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
     const [showLose, setShowLose] = useState(false)
 
+    const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
+    const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
+
     move$.useSubscription(ad => {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         tl(ad.move.name)
@@ -56,8 +59,8 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     useEffect(() => {
         if (isMoveAvailable) return
         if (DEBUG) tl('resetting moves')
-        dispatch({ type: 'clearHasMoved' })
-        dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: isPlayerFirstTurn })
+        dispatch({ a: 'clearHasMoved' })
+        dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
         tl(isPlayerTurn ? 'You start' : 'Enemy starts')
         if (!isPlayerFirstTurn) {
             npcMove$.emit()
@@ -65,24 +68,25 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     }, [isMoveAvailable])
 
     npcMove$.useSubscription(() => {
-        if (!allCharacters.some(c => c.isPc && c.health > 0)) {
+        if (alivePcs.length === 0) {
             // all PCs dead
             tl('all PC dead')
             return
         }
-        if (!allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
+        if (!aliveNpcs.some(c => !c.hasMoved)) {
             console.warn('xKK9M')
             // TODO: this should never occur
             // no NPCs with moves, give the turn back
-            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
+            dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
         move$.emit(getNpcMove(allCharacters))
-        if (allCharacters.some(c => c.isPc && c.health > 0 && !c.hasMoved)) {
-            tl('no unmoved PC')
-            setTimeout(() => dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true }), 500)
+        if (alivePcs.some(c => !c.hasMoved)) {
+            tl('found unmoved PC, setting turn')
+            setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
         }
         else if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
+            tl('no unmoved PC taking another NPC turn')
             setTimeout(() => npcMove$.emit(), 1000)
         }
     })
@@ -93,7 +97,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
 
         if (character.isPc) {
             if (character.hasMoved) { return }
-            dispatch({ type: 'setSelectedCharacter', character })
+            dispatch({ a: 'setSelectedCharacter', c: character })
             return
         }
 
@@ -114,13 +118,13 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         if (newPc == null) {
             // TODO: this should never occur
             console.warn('WhcgK')
-            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
+            dispatch({ a: 'setIsPlayerTurn', v: false })
             return
             // throw Error('no player characters')
         }
-        dispatch({ type: 'setSelectedCharacter', character: newPc })
+        dispatch({ a: 'setSelectedCharacter', c: newPc })
         if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
-            dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
+            dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
@@ -129,7 +133,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         {
             !battleHasBegun &&
             <IdleScreenOverlay>
-                <Start onClick={() => dispatch({ type: 'setBattleHasBegun' })} />
+                <Start onClick={() => dispatch({ a: 'setBattleHasBegun' })} />
             </IdleScreenOverlay>
         }
         {
@@ -153,7 +157,7 @@ function MoveMenu(props: { character: CharacterMeta, dispatch: React.Dispatch<Ac
         {props.character.moves.map(m =>
             <MoveButton
                 key={m.type}
-                onClick={() => props.dispatch({ type: 'setSelectedMove', selectedMove: m })}
+                onClick={() => props.dispatch({ a: 'setSelectedMove', m: m })}
                 isSelected={props.selectedMove === m.type}
             >
                 {m.name}
@@ -166,46 +170,46 @@ export type MoveEmitter = EventEmitter<AttackData>
 export type NpcMoveEmitter = EventEmitter<void>
 
 export type Action =
-    | { type: 'setIsPlayerTurn', isPlayerTurn: boolean }
-    | { type: 'setBattleHasBegun' }
-    | { type: 'setHasMoved', characterId: string, hasMoved: boolean }
-    | { type: 'setHealth', characterId: string, health: Set<number> }
-    | { type: 'clearHasMoved' }
-    | { type: 'setSelectedCharacter', character: CharacterMeta }
-    | { type: 'setSelectedMove', selectedMove: MoveMeta }
+    | { a: 'setIsPlayerTurn', v: boolean }
+    | { a: 'setBattleHasBegun' }
+    | { a: 'setHasMoved', id: string, v: boolean }
+    | { a: 'setHealth', id: string, h: Set<number> }
+    | { a: 'clearHasMoved' }
+    | { a: 'setSelectedCharacter', c: CharacterMeta }
+    | { a: 'setSelectedMove', m: MoveMeta }
 
 
 function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
     return produce(state, draft => {
-        switch (action.type) {
+        switch (action.a) {
             case 'setIsPlayerTurn': {
-                draft.isPlayerTurn = action.isPlayerTurn
+                draft.isPlayerTurn = action.v
                 return
             } case 'setBattleHasBegun': {
                 draft.battleHasBegun = true
                 return
             } case 'setHasMoved': {
-                const c = draft.allCharacters.find(c => c.id === action.characterId)
-                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
+                const c = draft.allCharacters.find(c => c.id === action.id)
+                if (c == null) { console.error(`couldn't find character with id ${action.id}`); return }
                 c.hasMoved = true
                 return
             } case 'setHealth': {
-                const c = draft.allCharacters.find(c => c.id === action.characterId)
-                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
-                if (typeof action.health === 'function') {
-                    c.health = action.health(c.health)
+                const c = draft.allCharacters.find(c => c.id === action.id)
+                if (c == null) { console.error(`couldn't find character with id ${action.id}`); return }
+                if (typeof action.h === 'function') {
+                    c.health = action.h(c.health)
                 } else {
-                    c.health = action.health
+                    c.health = action.h
                 }
                 return
             } case 'clearHasMoved': {
                 draft.allCharacters.forEach(c => c.hasMoved = false)
                 return
             } case 'setSelectedCharacter': {
-                draft.selectedCharacter = action.character
+                draft.selectedCharacter = action.c
                 return
             } case 'setSelectedMove': {
-                draft.selectedMove = action.selectedMove
+                draft.selectedMove = action.m
                 return
             } default:
                 throw new Error(`unknown action ${action}`)
