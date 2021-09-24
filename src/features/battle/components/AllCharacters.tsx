@@ -1,18 +1,14 @@
 import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import produce from 'immer'
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import toast from 'react-hot-toast'
-import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
-import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
-import { getDamage } from '../util/attack'
-import { moveTypeMetaMap } from '../util/constants'
 import { initialPlayerCharacters } from '../util/factories'
 import { checkWinner, getNpcAttack, getUnmovedPc, getId, getClosest, checkMoveAvailable } from '../util/misc'
-import { EnemyHoverDiv, Health, IdleScreenOverlay, PCHoverDiv, Sprite, Start } from './Styles'
-import Table from './Table'
+import { Frogknight, Skeleton } from './Character'
+import { IdleScreenOverlay, Start } from './Styles'
 
-const DEBUG = false
+export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
@@ -116,11 +112,11 @@ export default function AllCharacters(): JSX.Element {
 }
 
 
-type AttackEmitter = EventEmitter<[
+export type AttackEmitter = EventEmitter<[
     { type: 'random' } | { type: 'chosen' } & AttackData,
     'manager' | 'character']>
 
-type Action =
+export type Action =
     | { type: 'setIsPlayerTurn', isPlayerTurn: boolean }
     | { type: 'setBattleHasBegun' }
     | { type: 'setHasMoved', characterId: string, hasMoved: boolean }
@@ -175,119 +171,4 @@ function makeInitialState() {
         allCharacters,
         selectedCharacter,
     })
-}
-
-
-function Frogknight(props: KnownPlayerCharacterProps) {
-    return <Character src={frogknightPng} direction={-1} {...props} />
-}
-
-
-function Skeleton(props: KnownCharacterProps) {
-    return <Character src={skeletonPng} direction={-1} {...props} />
-}
-
-interface KnownCharacterProps {
-    characterMeta: CharacterMeta
-    onClick: (c: CharacterMeta) => void
-    dispatch: React.Dispatch<Action>
-    attack$: AttackEmitter
-}
-interface KnownPlayerCharacterProps extends KnownCharacterProps {
-    isSelected: boolean
-}
-interface CharacterProps extends KnownCharacterProps {
-    isSelected?: boolean
-    src: string
-    direction: -1 | 1
-    characterMeta: CharacterMeta
-}
-function Character(props: CharacterProps): JSX.Element {
-    const { x, y, health } = props.characterMeta
-    const [isAttacking, setIsAttacking] = useState(false)
-    const [isDefending, setIsDefending] = useState(false)
-    const [isHovering, setIsHovering] = useState(false)
-    useEffect(() => {
-        if (!isAttacking && !isDefending) return () => { }
-        const t = setTimeout(() => {
-            setIsAttacking(false)
-            setIsDefending(false)
-        }, 500)
-        return () => clearTimeout(t)
-    }, [isAttacking, isDefending])
-
-
-    props.attack$.useSubscription(([d, target]) => {
-        if (target !== 'character' || d.type === 'random') { return }
-        const myId = props.characterMeta.id
-        if (d.attacker.id === myId) {
-            setIsAttacking(true)
-            props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
-        }
-
-        if (d.defender.id === myId) {
-            setIsDefending(true)
-            //todo setSelectedMove
-            // props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
-            const damage = getDamage(d)
-            setTimeout(() => props.dispatch({ type: 'setHealth', characterId: myId, health: h => (h - damage) }), 300)
-        }
-    })
-
-    const spriteProps = {
-        src: props.src,
-        isAttacking,
-        isDefending
-    }
-    return <>
-        {health > 0 ?
-            <div
-                onClick={() => props.onClick(props.characterMeta)}
-                style={{ position: 'absolute', left: x + '%', top: y + '%', width: '13%' }}
-                onPointerEnter={() => setIsHovering(true)}
-                onPointerLeave={() => setIsHovering(false)}
-            >
-                <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
-                    {isHovering && <Hover characterMeta={props.characterMeta} />}
-                    <Sprite {...spriteProps} x={0} y={0} />
-                    {(isAttacking || isDefending) ?
-                        <>
-                            <Sprite {...spriteProps} x={0} y={0} absolute={true} blur={true} />
-                            <Sprite {...spriteProps} x={0} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
-                        </>
-                        : props.isSelected ?
-                            <>
-                                <Sprite {...spriteProps} x={0} y={0} absolute={true} glow={true} color={'white'} />
-                                <Sprite {...spriteProps} x={0} y={0} absolute={true} />
-                            </>
-                            : null}
-                    <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
-                    {DEBUG && <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>}
-                    {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
-                </div>
-            </div> :
-            <></>}
-    </>
-}
-
-function Hover(props: { characterMeta: CharacterMeta }) {
-    const cm = props.characterMeta
-    const moveAt = (i: number) => `${cm.moves[i].name} ${moveTypeMetaMap[cm.moves[i].type].multiplier * cm.damage | 0}`
-    return <>{
-        cm.isPlayerCharacter ?
-            <PCHoverDiv>
-                stance: {cm.stance}
-            </PCHoverDiv> :
-            <EnemyHoverDiv>
-                <Table
-                    header={cm.type}
-                    rows={
-                        [[`LVL ${cm.level}`, moveAt(0)],
-                        [`HP ${cm.health}`, moveAt(1)],
-                        [`ATK ${cm.damage}`, moveAt(2)]]
-                    }
-                />
-            </EnemyHoverDiv>
-    }
-    </>
 }
