@@ -22,67 +22,6 @@ const tl = (x: string) => { toast(x); console.log(x) }
 type Set<T> = T | ((old: T) => T)
 
 
-type AttackEmitter = EventEmitter<[
-    { type: 'random' } | { type: 'chosen' } & AttackData,
-    'manager' | 'character']>
-
-function makeInitialState() {
-    const allCharacters = initialPlayerCharacters()
-    const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
-    if (selectedCharacter == null) throw Error('no player characters!')
-    return {
-        isPlayerTurn: Math.random() < .5,
-        battleHasBegun: false,
-        allCharacters,
-        selectedCharacter,
-    }
-}
-
-type Action =
-    | { type: 'setIsPlayerTurn', isPlayerTurn: boolean }
-    | { type: 'setBattleHasBegun' }
-    | { type: 'setHasMoved', characterId: string, hasMoved: boolean }
-    | { type: 'setHealth', characterId: string, health: Set<number> }
-    | { type: 'clearHasMoved' }
-    | { type: 'setSelectedCharacter', character: CharacterMeta }
-
-function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
-    return produce(state, draft => {
-        switch (action.type) {
-            case 'setIsPlayerTurn': {
-                draft.isPlayerTurn = action.isPlayerTurn
-                return
-            } case 'setBattleHasBegun': {
-                draft.battleHasBegun = true
-                return
-            } case 'setHasMoved': {
-                const c = draft.allCharacters.find(c => c.id === action.characterId)
-                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
-                c.hasMoved = true
-                return
-            } case 'setHealth': {
-                const c = draft.allCharacters.find(c => c.id === action.characterId)
-                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
-                if (typeof action.health === 'function') {
-                    c.health = action.health(c.health)
-                } else {
-                    c.health = action.health
-                }
-                return
-            } case 'clearHasMoved': {
-                draft.allCharacters.forEach(c => c.hasMoved = false)
-                return
-            } case 'setSelectedCharacter': {
-                draft.selectedCharacter = action.character
-                return
-            } default:
-                throw new Error(`unknown action ${action}`)
-        }
-    })
-}
-
-
-
 export default function AllCharacters(): JSX.Element {
     const attack$: AttackEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
@@ -174,6 +113,68 @@ export default function AllCharacters(): JSX.Element {
                 <Skeleton {...characterProps} />
         })}
     </div>
+}
+
+
+type AttackEmitter = EventEmitter<[
+    { type: 'random' } | { type: 'chosen' } & AttackData,
+    'manager' | 'character']>
+
+type Action =
+    | { type: 'setIsPlayerTurn', isPlayerTurn: boolean }
+    | { type: 'setBattleHasBegun' }
+    | { type: 'setHasMoved', characterId: string, hasMoved: boolean }
+    | { type: 'setHealth', characterId: string, health: Set<number> }
+    | { type: 'clearHasMoved' }
+    | { type: 'setSelectedCharacter', character: CharacterMeta }
+
+
+function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
+    return produce(state, draft => {
+        switch (action.type) {
+            case 'setIsPlayerTurn': {
+                draft.isPlayerTurn = action.isPlayerTurn
+                return
+            } case 'setBattleHasBegun': {
+                draft.battleHasBegun = true
+                return
+            } case 'setHasMoved': {
+                const c = draft.allCharacters.find(c => c.id === action.characterId)
+                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
+                c.hasMoved = true
+                return
+            } case 'setHealth': {
+                const c = draft.allCharacters.find(c => c.id === action.characterId)
+                if (c == null) { console.error(`couldn't find character with id ${action.characterId}`); return }
+                if (typeof action.health === 'function') {
+                    c.health = action.health(c.health)
+                } else {
+                    c.health = action.health
+                }
+                return
+            } case 'clearHasMoved': {
+                draft.allCharacters.forEach(c => c.hasMoved = false)
+                return
+            } case 'setSelectedCharacter': {
+                draft.selectedCharacter = action.character
+                return
+            } default:
+                throw new Error(`unknown action ${action}`)
+        }
+    })
+}
+
+
+function makeInitialState() {
+    const allCharacters = initialPlayerCharacters()
+    const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
+    if (selectedCharacter == null) throw Error('no player characters!')
+    return {
+        isPlayerTurn: Math.random() < .5,
+        battleHasBegun: false,
+        allCharacters,
+        selectedCharacter,
+    }
 }
 
 
