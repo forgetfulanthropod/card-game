@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "node scripts/esbuild.js",
+    "build": "node scripts/esbuild.js && echo 'checking for problems' && tsc",
     "start": "bash scripts/start.sh",
     "lint": "eslint src",
     "fmt": "eslint src --fix",
