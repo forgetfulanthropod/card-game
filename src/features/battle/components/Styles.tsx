@@ -1,5 +1,7 @@
-import styled, { css, keyframes } from 'styled-components'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import startPng from '../assets/start.png'
+// @ts-ignore
+import styled, { css, keyframes } from 'styled-components'
 
 
 export const HoverDiv = styled.div`
@@ -16,8 +18,6 @@ export const HoverDiv = styled.div`
     font-family: monospace;
     font-weight: bold;
     padding: 8px;
-
-
 `
 
 
@@ -57,7 +57,7 @@ export const Health = styled.div<{ color: string }>`
     position: absolute;
     /* position: relative; */
     font-size: 3vw;
-    color: ${p => p.color};
+    color: ${(p: any) => p.color};
     left: 50%;
     transform: translateX(-50%) translateY(-15%);
 `
@@ -96,15 +96,15 @@ export const Sprite = styled.img.attrs({ width: 200 })
         glow?: boolean,
         absolute?: boolean,
     }>`
-    ${p => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
+    ${(p: any) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
     user-select: none;
-    position: ${p => p.absolute === true ? 'absolute' : 'relative'};
-    left: ${p => p.x}%;
-    top: ${p => p.y}%;
+    position: ${(p: any) => p.absolute === true ? 'absolute' : 'relative'};
+    left: ${(p: any) => p.x}%;
+    top: ${(p: any) => p.y}%;
     width: 100%;
     z-index: 5;
-    ${p => p.blur === true && 'filter: blur(8px);'}
-    ${p => p.color != null && css`
+    ${(p: any) => p.blur === true && 'filter: blur(8px);'}
+    ${(p: any) => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
     `}
     /* box-shadow: 5px 6px 7px black; */
