@@ -8,10 +8,10 @@ const Root = styled.div`
     width: 8vw;
     user-select: none;
     img {
-        width: 103%;
-        position: relative;
+        width: 8.1vw;
+        position: absolute;
         left: 0;
-        top: 0;
+        bottom: calc(8vw * .7 / 20);
     }
     .bar {
         position: absolute;
@@ -22,10 +22,12 @@ const Root = styled.div`
         height: calc(8vw * 1.2 / 20);
     }
     .number {
+        position: absolute;
+        bottom: 2vw;
         font-family: monospace;
         font-size: 2vw;
         letter-spacing: -.2vw;
-        line-height: 0;
+        line-height: 1vw;
     }
 `
 

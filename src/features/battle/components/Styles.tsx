@@ -110,3 +110,9 @@ export const Sprite = styled.img.attrs({ width: 200 })`
     `}
     /* box-shadow: 5px 6px 7px black; */
 `
+
+export const MoveMenu = styled.div`
+    background: rgba(0,0,0,.6);
+    color: white;
+    font-family: monospace;
+`

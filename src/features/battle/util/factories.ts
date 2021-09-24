@@ -45,10 +45,6 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
                 name: 'Slash',
                 type: 'SL',
             },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
         ]
     }
 }
