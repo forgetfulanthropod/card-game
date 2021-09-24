@@ -12,7 +12,7 @@ import { checkWinner, getNpcAttack, getUnmovedPc, getId, getClosest, checkMoveAv
 import { EnemyHoverDiv, Health, IdleScreenOverlay, PCHoverDiv, Sprite, Start } from './Styles'
 import Table from './Table'
 
-const DEBUG = true
+const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
@@ -239,18 +239,6 @@ function Character(props: CharacterProps): JSX.Element {
         isAttacking,
         isDefending
     }
-
-    const midAttack = () => <>
-        <Sprite {...spriteProps} x={5} y={0} blur={true} />
-        <Sprite {...spriteProps} x={5} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
-    </>
-    const selected = () => <>
-        <Sprite {...spriteProps} x={0} y={0} glow={true} color={'white'} />
-        <Sprite {...spriteProps} x={0} y={0} absolute={true} />
-    </>
-    const regular = () => <Sprite {...spriteProps} x={0} y={0} />
-
-    const sprite = () => (isAttacking || isDefending) ? midAttack() : props.isSelected ? selected() : regular()
     return <>
         {health > 0 ?
             <div
@@ -261,9 +249,20 @@ function Character(props: CharacterProps): JSX.Element {
             >
                 <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
                     {isHovering && <Hover characterMeta={props.characterMeta} />}
-                    {sprite()}
+                    <Sprite {...spriteProps} x={0} y={0} />
+                    {(isAttacking || isDefending) ?
+                        <>
+                            <Sprite {...spriteProps} x={0} y={0} absolute={true} blur={true} />
+                            <Sprite {...spriteProps} x={0} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
+                        </>
+                        : props.isSelected ?
+                            <>
+                                <Sprite {...spriteProps} x={0} y={0} absolute={true} glow={true} color={'white'} />
+                                <Sprite {...spriteProps} x={0} y={0} absolute={true} />
+                            </>
+                            : null}
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
-                    <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>
+                    {DEBUG && <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>}
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
                 </div>
             </div> :
