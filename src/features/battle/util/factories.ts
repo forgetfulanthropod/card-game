@@ -1,7 +1,7 @@
 import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacters'
 import { getId } from './misc'
 
-export function initialPlayerCharacters(): CharacterMeta[] {
+export function makeInitialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(70, 25, 18, 15)
     const frogknightPositions = makePositions(10, 25, 18, 15)
     const result = [

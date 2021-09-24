@@ -3,7 +3,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import produce from 'immer'
 import React, { useEffect, useReducer } from 'react'
 import toast from 'react-hot-toast'
-import { initialPlayerCharacters } from '../util/factories'
+import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkWinner, getNpcAttack, getUnmovedPc, getId, getClosest, checkMoveAvailable } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Start } from './Styles'
@@ -162,7 +162,7 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
 
 
 function makeInitialState() {
-    const allCharacters = initialPlayerCharacters()
+    const allCharacters = makeInitialPlayerCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPlayerCharacter)
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
