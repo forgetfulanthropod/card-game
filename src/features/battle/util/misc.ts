@@ -3,9 +3,11 @@ import { stanceTypeMetaMap, moveTypeMetaMap } from './constants'
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
 export function getClosest(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta {
+    const charDist = (a: CharacterMeta, b: CharacterMeta) =>
+        dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
     return [...allCharacters]
         .filter(c => c.isPlayerCharacter === character.isPlayerCharacter)
-        .sort((a, b) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y]))[nthClosest]
+        .sort((a, b) => charDist(a, b))[nthClosest]
 }
 
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
@@ -65,10 +67,11 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const move = getRandomMove(attacker)
     const defenders = [getPCTarget(ac)]
 
-    if (moveTypeMetaMap[move.type].numTargets > defenders.length) {
-        getClosest(ac, defenders[0], defenders.length)
+    if (moveTypeMetaMap[move.type].numTargets > 1) {
+        defenders.push(getClosest(ac, defenders[0], 1))
     }
 
+    // console.log('defenders:', defenders)
     return { attacker, defenders, move }
 }
 

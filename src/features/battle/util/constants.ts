@@ -35,7 +35,7 @@ export const moveTypeMetaMap: Record<MoveType, MoveTypeMeta> = {
     },
     SL: {
         id: 'SL',
-        numTargets: 1,
+        numTargets: 2,
         multiplier: .5,
     },
     DOT1: {

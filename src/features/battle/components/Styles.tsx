@@ -160,8 +160,19 @@ export const Reset = styled.button`
     }
 `
 
-export const MoveMenu = styled.div`
-    background: rgba(0,0,0,.6);
+export const MoveMenuDiv = styled.div`
+    position: absolute;
+    bottom: calc(8vw * 1.4 / 20);
+    left: 1vw;
+`
+
+interface ABP { isSelected: boolean }
+export const MoveButton = styled.button<ABP>`
+    background: ${(p: ABP) => p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)'};
     color: white;
     font-family: monospace;
+    display: block;
+    width: 100%;
+    font-size: 1vw;
+    padding: 1vw;
 `

@@ -3,7 +3,7 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
 import { Health, Sprite } from './Styles'
-import { Action, MoveEmitter } from './AllCharacters'
+import { Action, MoveEmitter, tl } from './AllCharacters'
 import { Hover } from './Hover'
 import HealthBar from './HealthBar'
 
@@ -57,6 +57,7 @@ function Character(props: CharacterProps): JSX.Element {
         }
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
+            // tl(`hit defender ${myId}`)
             setIsDefending(true)
             const damage = getDamage(d)
             setTimeout(() => props.dispatch({ type: 'setHealth', characterId: myId, health: h => (h - damage) }), 300)

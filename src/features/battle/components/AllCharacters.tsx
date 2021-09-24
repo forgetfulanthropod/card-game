@@ -6,14 +6,14 @@ import toast from 'react-hot-toast'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkMoveAvailable, checkWinner, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
-import { IdleScreenOverlay, Lose, MoveMenu, Reset, Start } from './Styles'
+import { MoveButton, IdleScreenOverlay, Lose, MoveMenuDiv, Reset, Start } from './Styles'
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
 
-const tl = (x: string) => { toast(x); console.log(x) }
+export const tl = (x: string): void => { toast(x); console.log(x) }
 
 type Set<T> = T | ((old: T) => T)
 
@@ -28,6 +28,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
 
     move$.useSubscription(ad => {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
+        tl(ad.move.name)
     })
 
     const winner = checkWinner(allCharacters)
@@ -69,6 +70,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             return
         }
         if (!allCharacters.some(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)) {
+            console.warn('xKK9M')
             // TODO: this should never occur
             // no NPCs with moves, give the turn back
             dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
@@ -97,17 +99,19 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         if (!selectedCharacter || selectedCharacter.hasMoved) {
             return
         }
-        move$.emit({
-            attacker: selectedCharacter,
-            defenders: [character],
-            move: {
-                name: 'Dutiful Stab',
-                type: 'BA',
-            }
-        }) // TODO: right target?
+        if (state.selectedMove == null) {
+            console.error('no selected move')
+        } else {
+            move$.emit({
+                attacker: selectedCharacter,
+                defenders: [character], // TODO: slash
+                move: state.selectedMove,
+            }) // TODO: right target?
+        }
         const newPc = getUnmovedPc(allCharacters)
         if (newPc == null) {
             // TODO: this should never occur
+            console.warn('WhcgK')
             dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
             return
             // throw Error('no player characters')
@@ -138,17 +142,23 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                 <Skeleton {...characterProps} />
         })}
-        {isPlayerTurn && <MoveMenu>
-            {selectedCharacter.moves.map(
-                (m, i) => <div
-                    key={i}
-                    onClick={() => dispatch({ type: 'setSelectedMove', selectedMove: m })
-                    }>{m.name}</div>
-            )}
-        </MoveMenu>}
+        {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
     </div>
 }
 
+function MoveMenu(props: { character: CharacterMeta, dispatch: React.Dispatch<Action>, selectedMove: string | undefined }) {
+    return <MoveMenuDiv>
+        {props.character.moves.map(m =>
+            <MoveButton
+                key={m.type}
+                onClick={() => props.dispatch({ type: 'setSelectedMove', selectedMove: m })}
+                isSelected={props.selectedMove === m.type}
+            >
+                {m.name}
+            </MoveButton>
+        )}
+    </MoveMenuDiv>
+}
 
 export type MoveEmitter = EventEmitter<AttackData>
 export type NpcMoveEmitter = EventEmitter<void>
@@ -209,7 +219,7 @@ function makeInitialState() {
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         isPlayerTurn: Math.random() < .5,
-        battleHasBegun: false,
+        battleHasBegun: true,
         allCharacters,
         selectedCharacter,
         selectedMove,
