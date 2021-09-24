@@ -13,4 +13,8 @@
     "editor.tabSize": 4,
     "javascript.preferences.quoteStyle": "single",
     "typescript.preferences.quoteStyle": "single",
+    "eslint.format.enable": true,
+    "eslint.options": {
+        "cache": true,
+    },
 }
