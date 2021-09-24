@@ -51,13 +51,14 @@ export const shake = keyframes`
 `
 
 
-export const Health = styled.div<{ color: string }>`
+interface HealthProps { color: string }
+export const Health = styled.div`
     font-family: monospace;
     font-weight: bold;
     position: absolute;
     /* position: relative; */
     font-size: 3vw;
-    color: ${(p: any) => p.color};
+    color: ${(p: HealthProps) => p.color};
     left: 50%;
     transform: translateX(-50%) translateY(-15%);
 `
@@ -85,26 +86,26 @@ export const Start = styled.img.attrs({ src: startPng })`
 `
 
 
-export const Sprite = styled.img.attrs({ width: 200 })
-    <{
-        isAttacking: boolean,
-        isDefending: boolean,
-        x: number,
-        y: number,
-        color?: string,
-        blur?: boolean,
-        glow?: boolean,
-        absolute?: boolean,
-    }>`
-    ${(p: any) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
+interface SP {
+    isAttacking: boolean,
+    isDefending: boolean,
+    x: number,
+    y: number,
+    color?: string,
+    blur?: boolean,
+    glow?: boolean,
+    absolute?: boolean,
+}
+export const Sprite = styled.img.attrs({ width: 200 })`
+    ${(p: SP) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
     user-select: none;
-    position: ${(p: any) => p.absolute === true ? 'absolute' : 'relative'};
-    left: ${(p: any) => p.x}%;
-    top: ${(p: any) => p.y}%;
+    position: ${(p: SP) => p.absolute === true ? 'absolute' : 'relative'};
+    left: ${(p: SP) => p.x}%;
+    top: ${(p: SP) => p.y}%;
     width: 100%;
     z-index: 5;
-    ${(p: any) => p.blur === true && 'filter: blur(8px);'}
-    ${(p: any) => p.color != null && css`
+    ${(p: SP) => p.blur === true && 'filter: blur(8px);'}
+    ${(p: SP) => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
     `}
     /* box-shadow: 5px 6px 7px black; */
