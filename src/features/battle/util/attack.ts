@@ -7,7 +7,7 @@ export function getDamage(d: AttackData): number {
     if (d.attacker.isPlayerCharacter)
         return getAttackMultiplier(d.attacker) * d.attacker.damage | 0
 
-    return d.attacker.damage * getDefenseMultiplier(d.defender) | 0
+    return d.attacker.damage * getDefenseMultiplier(d.defenders[0]) | 0
 }
 
 

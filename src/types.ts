@@ -37,7 +37,7 @@ declare global {
     }
     type AttackData = {
         attacker: CharacterMeta
-        defender: CharacterMeta
+        defenders: CharacterMeta[]
         move: MoveMeta
     }
 }

@@ -1,15 +1,15 @@
 {
   "scripts": {
-    "build": "node scripts/esbuild.js",
+    "build": "node scripts/esbuild.js && echo 'checking for problems' && tsc",
     "start": "bash scripts/start.sh",
     "lint": "eslint src",
     "fmt": "eslint src --fix",
+    "tsc": "tsc",
     "serve": "npx serve -s ./build -p 3000"
   },
   "dependencies": {
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
-    "@types/styled-components": "^5.1.14",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "ahooks": "^2.10.9",
