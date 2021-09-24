@@ -2,6 +2,16 @@ import { stanceTypeMetaMap } from './constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
+export function getClosest(allCharacters: CharacterMeta[], character: CharacterMeta): CharacterMeta {
+    return [...allCharacters]
+        .filter(c => c.isPlayerCharacter === character.isPlayerCharacter)
+        .sort((a, b) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y]))[1]
+}
+
+function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
+    return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+}
+
 export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
