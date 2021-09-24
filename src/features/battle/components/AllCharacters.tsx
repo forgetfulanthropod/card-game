@@ -4,7 +4,7 @@ import produce from 'immer'
 import React, { useEffect, useReducer } from 'react'
 import toast from 'react-hot-toast'
 import { makeInitialPlayerCharacters } from '../util/factories'
-import { checkWinner, getNpcAttack, getUnmovedPc, getId, getClosest, checkMoveAvailable } from '../util/misc'
+import { checkWinner, getNpcMove, getUnmovedPc, getId, checkMoveAvailable } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Start } from './Styles'
 
@@ -19,7 +19,8 @@ type Set<T> = T | ((old: T) => T)
 
 
 export default function AllCharacters(): JSX.Element {
-    const attack$: AttackEmitter = useEventEmitter()
+    const move$: MoveEmitter = useEventEmitter()
+    const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
@@ -29,7 +30,7 @@ export default function AllCharacters(): JSX.Element {
     useEffect(() => {
         if (!battleHasBegun) return
         toast(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
-        if (!isPlayerTurn) attack$.emit([{ type: 'random' }, 'manager'])
+        if (!isPlayerTurn) npcMove$.emit()
     }, [battleHasBegun])
 
 
@@ -40,21 +41,24 @@ export default function AllCharacters(): JSX.Element {
         dispatch({ type: 'clearHasMoved' })
     }, [isMoveAvailable])
 
-    attack$.useSubscription(([attack, target]) => {
-        if (target !== 'manager') { return }
-        if (checkWinner(allCharacters) != null) {
-            return
-        }
-        if (attack.type === 'random') {
-            attack$.emit([{ type: 'chosen', ...getNpcAttack(allCharacters) }, 'manager'])
-            return
-        }
+    // move$.useSubscription(attack => {
+    //     if (target !== 'manager') { return }
+    //     if (checkWinner(allCharacters) != null) {
+    //         return
+    //     }
+    //     if (attack.type === 'makeRandomNpcAttack') {
+    //         return
+    //     }
 
-        attack$.emit([{ ...attack }, 'character'])
-        if (attack.move.type === 'SL')
-            attack$.emit([{ type: 'chosen', attacker: attack.attacker, defender: getClosest(state.allCharacters, attack.defender), move: attack.move }, 'character'])
+    //     move$.emit([{ ...attack }, 'character'])
+    //     if (attack.move.type === 'SL')
+    //         move$.emit([{ type: 'chosen', attacker: attack.attacker, defender: getClosest(state.allCharacters, attack.defender), move: attack.move }, 'character'])
 
+    // })
+    npcMove$.useSubscription(() => {
         dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
+
+        move$.emit(getNpcMove(allCharacters))
     })
 
 
@@ -73,22 +77,21 @@ export default function AllCharacters(): JSX.Element {
         if (!selectedCharacter || selectedCharacter.hasMoved) {
             return
         }
-        attack$.emit([{
-            type: 'chosen',
+        move$.emit({
             attacker: selectedCharacter,
-            defender: character,
+            defenders: [character],
             move: {
                 name: 'Dutiful Stab',
                 type: 'BA',
             }
-        }, 'manager']) // TODO: right target?
+        }) // TODO: right target?
         const newPc = getUnmovedPc(allCharacters)
         if (newPc == null) {
             throw Error('no player characters')
         }
         dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
         dispatch({ type: 'setSelectedCharacter', character: newPc })
-        setTimeout(() => attack$.emit([{ type: 'random' }, 'manager']), TIME_AFTER_PLAYER_MOVE + 500)
+        setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
     }
 
     return <div>
@@ -102,7 +105,7 @@ export default function AllCharacters(): JSX.Element {
         {allCharacters.map(characterMeta => {
             const { x, y } = characterMeta
             const id = getId(x, y)
-            const characterProps = { attack$, dispatch, characterMeta, onClick, key: id }
+            const characterProps = { move$, dispatch, characterMeta, onClick, key: id }
 
             return characterMeta.isPlayerCharacter ?
                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
@@ -112,9 +115,8 @@ export default function AllCharacters(): JSX.Element {
 }
 
 
-export type AttackEmitter = EventEmitter<[
-    { type: 'random' } | { type: 'chosen' } & AttackData,
-    'manager' | 'character']>
+export type MoveEmitter = EventEmitter<AttackData>
+export type NpcMoveEmitter = EventEmitter<void>
 
 export type Action =
     | { type: 'setIsPlayerTurn', isPlayerTurn: boolean }

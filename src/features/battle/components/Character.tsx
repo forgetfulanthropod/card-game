@@ -3,7 +3,7 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
 import { Health, Sprite } from './Styles'
-import { Action, AttackEmitter, DEBUG } from './AllCharacters'
+import { Action, MoveEmitter, DEBUG } from './AllCharacters'
 import { Hover } from './Hover'
 
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
@@ -16,7 +16,7 @@ interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
     dispatch: React.Dispatch<Action>
-    attack$: AttackEmitter
+    move$: MoveEmitter
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -39,22 +39,20 @@ function Character(props: CharacterProps): JSX.Element {
             setIsAttacking(false)
             setIsDefending(false)
         }, 500)
+
         return () => clearTimeout(t)
     }, [isAttacking, isDefending])
 
 
-    props.attack$.useSubscription(([d, target]) => {
-        if (target !== 'character' || d.type === 'random') { return}
+    props.move$.useSubscription(d => {
         const myId = props.characterMeta.id
         if (d.attacker.id === myId) {
             setIsAttacking(true)
             props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
         }
 
-        if (d.defender.id === myId) {
+        if (d.defenders.findIndex(d => d.id === myId) > -1) {
             setIsDefending(true)
-            //todo setSelectedMove
-            // props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
             const damage = getDamage(d)
             setTimeout(() => props.dispatch({ type: 'setHealth', characterId: myId, health: h => (h - damage) }), 300)
         }
