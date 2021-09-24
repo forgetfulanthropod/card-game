@@ -1,17 +1,18 @@
 import { useEventEmitter } from 'ahooks'
+import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import produce from 'immer'
 import React, { useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
-import { attackBus } from '../util/attackBus'
 import { moveTypeMetaMap } from '../util/constants'
 import { initialPlayerCharacters } from '../util/factories'
-import { checkWinner, getPCTarget, getRandomMove, getUnmovedNpc, getUnmovedPc, getId, getClosest } from '../util/misc'
+import { checkWinner, getNpcAttack, getUnmovedPc, getId, getClosest, checkMoveAvailable } from '../util/misc'
 import { EnemyHoverDiv, Health, IdleScreenOverlay, PCHoverDiv, Sprite, Start } from './Styles'
 import Table from './Table'
 
+const DEBUG = true
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
@@ -20,6 +21,10 @@ const tl = (x: string) => { toast(x); console.log(x) }
 
 type Set<T> = T | ((old: T) => T)
 
+
+type AttackEmitter = EventEmitter<[
+    { type: 'random' } | { type: 'chosen' } & AttackData,
+    'manager' | 'character']>
 
 function makeInitialState() {
     const allCharacters = initialPlayerCharacters()
@@ -30,7 +35,6 @@ function makeInitialState() {
         battleHasBegun: false,
         allCharacters,
         selectedCharacter,
-        npcMove$: useEventEmitter(),
     }
 }
 
@@ -79,10 +83,10 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
 
 
 
-
 export default function AllCharacters(): JSX.Element {
+    const attack$: AttackEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
-    const { npcMove$, allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
+    const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
     const winner = checkWinner(allCharacters)
     useEffect(() => { winner != null && tl(winner === 'PC' ? 'You win' : 'Computer wins') }, [winner])
@@ -90,29 +94,30 @@ export default function AllCharacters(): JSX.Element {
     useEffect(() => {
         if (!battleHasBegun) return
         toast(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
-        if (!isPlayerTurn) npcMove$.emit()
+        if (!isPlayerTurn) attack$.emit([{ type: 'random' }, 'manager'])
     }, [battleHasBegun])
 
 
-    npcMove$.useSubscription(function npcRebuttal() {
+    const isMoveAvailable = checkMoveAvailable(allCharacters)
+    useEffect(() => {
+        if (isMoveAvailable) return
+        if (DEBUG) toast('resetting moves')
+        dispatch({ type: 'clearHasMoved' })
+    }, [isMoveAvailable])
+
+    attack$.useSubscription(([attack, target]) => {
+        if (target !== 'manager') { return }
         if (checkWinner(allCharacters) != null) {
             return
         }
-
-        const attacker = getUnmovedNpc(allCharacters)
-        if (attacker == null) {
-            dispatch({ type: 'clearHasMoved' })
-            // trigger again so fires after state update
-            npcMove$.emit()
+        if (attack.type === 'random') {
+            attack$.emit([{ type: 'chosen', ...getNpcAttack(allCharacters) }, 'manager'])
             return
         }
 
-        const defender = getPCTarget(allCharacters)
-        const move = getRandomMove(attacker)
-        // tl(`${attacker.id} will attack ${defender.id} with ${move.name}`)
-        attackBus.emit({ attacker, defender, move })
-        if (move.type === 'SL')
-            attackBus.emit({ attacker, defender: getClosest(state.allCharacters, defender), move })
+        attack$.emit([{ ...attack }, 'character'])
+        if (attack.move.type === 'SL')
+            attack$.emit([{ type: 'chosen', attacker: attack.attacker, defender: getClosest(state.allCharacters, attack.defender), move: attack.move }, 'character'])
 
         dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: true })
     })
@@ -120,40 +125,35 @@ export default function AllCharacters(): JSX.Element {
 
 
     const onClick = function doCharacterAction(character: CharacterMeta) {
-        if (checkWinner(allCharacters) != null) {
-            return
-        }
+        if (checkWinner(allCharacters) != null) return
         if (!isPlayerTurn) return
 
         if (character.isPlayerCharacter) {
             if (character.hasMoved) { return }
-
             dispatch({ type: 'setSelectedCharacter', character })
             return
         }
-        // clicked on NPC
+
+        // clicked on NPC but no selected character
         if (!selectedCharacter || selectedCharacter.hasMoved) {
-            dispatch({ type: 'clearHasMoved' })
             return
         }
-        attackBus.emit({
+        attack$.emit([{
+            type: 'chosen',
             attacker: selectedCharacter,
             defender: character,
             move: {
                 name: 'Dutiful Stab',
                 type: 'BA',
             }
-        })
+        }, 'manager']) // TODO: right target?
         const newPc = getUnmovedPc(allCharacters)
         if (newPc == null) {
-            console.error('no player characters')
-            dispatch({ type: 'clearHasMoved' })
-            return
+            throw Error('no player characters')
         }
         dispatch({ type: 'setIsPlayerTurn', isPlayerTurn: false })
         dispatch({ type: 'setSelectedCharacter', character: newPc })
-        setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
-
+        setTimeout(() => attack$.emit([{ type: 'random' }, 'manager']), TIME_AFTER_PLAYER_MOVE + 500)
     }
 
     return <div>
@@ -167,7 +167,7 @@ export default function AllCharacters(): JSX.Element {
         {allCharacters.map(characterMeta => {
             const { x, y } = characterMeta
             const id = getId(x, y)
-            const characterProps = { dispatch, characterMeta, onClick, key: id }
+            const characterProps = { attack$, dispatch, characterMeta, onClick, key: id }
 
             return characterMeta.isPlayerCharacter ?
                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
@@ -190,6 +190,7 @@ interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
     dispatch: React.Dispatch<Action>
+    attack$: AttackEmitter
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -215,29 +216,22 @@ function Character(props: CharacterProps): JSX.Element {
     }, [isAttacking, isDefending])
 
 
-    useEffect(() => {
-        attackBus.subscribe((d: AttackData) => {
-            const myId = props.characterMeta.id
-            if (d.attacker.id === myId) {
-                setIsAttacking(true)
-                props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
+    props.attack$.useSubscription(([d, target]) => {
+        if (target !== 'character' || d.type === 'random') { return }
+        const myId = props.characterMeta.id
+        if (d.attacker.id === myId) {
+            setIsAttacking(true)
+            props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
+        }
 
-            }
-
-            if (d.defender.id === myId) {
-                setIsDefending(true)
-
-
-                //todo setSelectedMove
-
-                props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
-                const damage = getDamage(d)
-                // setTimeout(() => props.setHealth(health => health - damage), 500)
-                setTimeout(() => props.dispatch({ type: 'setHealth', characterId: myId, health: h => (h - damage) }), 500)
-
-            }
-        })
-    }, [])
+        if (d.defender.id === myId) {
+            setIsDefending(true)
+            //todo setSelectedMove
+            // props.dispatch({ type: 'setHasMoved', characterId: myId, hasMoved: true })
+            const damage = getDamage(d)
+            setTimeout(() => props.dispatch({ type: 'setHealth', characterId: myId, health: h => (h - damage) }), 300)
+        }
+    })
 
     const spriteProps = {
         src: props.src,
@@ -268,6 +262,7 @@ function Character(props: CharacterProps): JSX.Element {
                     {isHovering && <Hover characterMeta={props.characterMeta} />}
                     {sprite()}
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
+                    <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
                 </div>
             </div> :

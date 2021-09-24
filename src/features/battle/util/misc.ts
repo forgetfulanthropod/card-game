@@ -45,9 +45,25 @@ export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     return null
 }
 
+export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
+    return ac.some(c => c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)
+        && ac.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)
+}
+
 
 export function getRandomMove(attacker: CharacterMeta): MoveMeta {
     return randomEl(attacker.moves)
+}
+
+export function getNpcAttack(ac: CharacterMeta[]): AttackData {
+    const attacker = getUnmovedNpc(ac)
+    if (attacker == null) {
+        throw Error('no unmoved NPC')
+    }
+
+    const defender = getPCTarget(ac)
+    const move = getRandomMove(attacker)
+    return { attacker, defender, move }
 }
 
 

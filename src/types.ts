@@ -40,6 +40,7 @@ declare global {
         defender: CharacterMeta
         move: MoveMeta
     }
+
 }
 
 export default null
