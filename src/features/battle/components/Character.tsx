@@ -73,20 +73,19 @@ function Character(props: CharacterProps): JSX.Element {
             >
                 <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
                     {isHovering && <Hover characterMeta={props.characterMeta} />}
-                    <Sprite {...spriteProps} x={0} y={0} />
+                    <Sprite {...spriteProps} x={0} y={0} hasMoved={props.characterMeta.hasMoved} />
                     {(isAttacking || isDefending) ?
                         <>
                             <Sprite {...spriteProps} x={0} y={0} absolute={true} blur={true} />
                             <Sprite {...spriteProps} x={0} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
                         </>
-                        : props.isSelected ?
+                        : (props.isSelected && !props.characterMeta.hasMoved) ?
                             <>
                                 <Sprite {...spriteProps} x={0} y={0} absolute={true} glow={true} color={'white'} />
                                 <Sprite {...spriteProps} x={0} y={0} absolute={true} />
                             </>
                             : null}
                     <Health color={props.characterMeta.isPlayerCharacter ? '#53C541' : 'red'}>{health}</Health>
-                    {DEBUG && <Health color='white'>{props.characterMeta.hasMoved ? 'moved' : 'open'}</Health>}
                     {/* <Health x={size?.width == null ? 10 : size.width / 2} y={size?.height == null ? 10 : size.height} color={props.color}>{health}</Health> */}
                 </div>
             </div> :
