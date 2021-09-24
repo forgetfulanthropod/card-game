@@ -29,7 +29,7 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         id: getId(args.x, args.y),
         type: 'Frogknight',
         level: 1,
-        damage: 6,
+        damage: 4,
         isPc: true,
         x: args.x,
         y: args.y,

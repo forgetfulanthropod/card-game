@@ -6,9 +6,8 @@ export default function CharacterManager(): JSX.Element {
 
     const reset = useCallback(() => {
         setShown(false)
-        setTimeout(() => setShown(true), 500)
+        setTimeout(() => setShown(true), 1000)
     }, [])
-    return <>
-        {shown && <AllCharacters reset={reset} />}
-    </>
+    if (!shown) { return <></> }
+    return <AllCharacters reset={reset} />
 }

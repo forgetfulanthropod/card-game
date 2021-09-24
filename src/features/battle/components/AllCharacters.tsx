@@ -1,26 +1,26 @@
 import { useEventEmitter } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import produce from 'immer'
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
+import { moveTypeMetaMap } from '../util/constants'
 import { makeInitialPlayerCharacters } from '../util/factories'
-import { checkMoveAvailable, checkWinner, getId, getNpcMove, getUnmovedPc } from '../util/misc'
+import { checkMoveAvailable, checkWinner, getClosest, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
-import { MoveButton, IdleScreenOverlay, Lose, MoveMenuDiv, Reset, Start } from './Styles'
+import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11
 export const X_NEUTRAL_THRESH = 9
 
-export const tl = (x: string): void => { toast(x); console.log(x) }
+export const tl = (x: string): void => { console.log(x); toast(x) }
 
 type Set<T> = T | ((old: T) => T)
 
 
 export default function AllCharacters(props: { reset: () => void }): JSX.Element {
     const move$: MoveEmitter = useEventEmitter()
-    const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
     const [isPlayerFirstTurn] = useState(state.isPlayerTurn)
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
@@ -33,6 +33,8 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         tl(ad.move.name)
     })
+
+    // useEffect(() => { tl(`is player turn: ${isPlayerTurn}`) }, [isPlayerTurn])
 
     const winner = checkWinner(allCharacters)
     useEffect(() => {
@@ -48,7 +50,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         if (!battleHasBegun) return () => { }
         tl(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
         if (!isPlayerTurn) {
-            const t = setTimeout(() => npcMove$.emit(), 1000)
+            const t = setTimeout(() => doNpcMove(), 1000)
             return () => clearTimeout(t)
         }
         return () => { }
@@ -63,11 +65,12 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
         tl(isPlayerTurn ? 'You start' : 'Enemy starts')
         if (!isPlayerFirstTurn) {
-            npcMove$.emit()
+            doNpcMove()
         }
     }, [isMoveAvailable])
 
-    npcMove$.useSubscription(() => {
+    const doNpcMove = useCallback((): void => {
+        // tl('npcMove()')
         if (alivePcs.length === 0) {
             // all PCs dead
             tl('all PC dead')
@@ -82,50 +85,72 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         }
         move$.emit(getNpcMove(allCharacters))
         if (alivePcs.some(c => !c.hasMoved)) {
-            tl('found unmoved PC, setting turn')
+            // tl('found unmoved PC, setting turn to true')
+            // dispatch({ a: 'setIsPlayerTurn', v: true })
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
         }
         else if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
-            tl('no unmoved PC taking another NPC turn')
-            setTimeout(() => npcMove$.emit(), 1000)
+            // tl('no unmoved PC taking another NPC turn')
+            setTimeout(() => doNpcMove(), 1000)
         }
-    })
+    }, [aliveNpcs, alivePcs, allCharacters, move$])
 
-    const onClick = function doCharacterAction(character: CharacterMeta) {
+    const onClick = function doCharacterAction(clicked: CharacterMeta) {
         if (checkWinner(allCharacters) != null) return
-        if (!isPlayerTurn) return
+        if (!isPlayerTurn) {
+            // tl('not your turn')
+            return
+        }
 
-        if (character.isPc) {
-            if (character.hasMoved) { return }
-            dispatch({ a: 'setSelectedCharacter', c: character })
+        // click to choose selected Pc:
+        if (clicked.isPc) {
+            if (clicked.hasMoved) {
+                // tl('moved already')
+                return
+            }
+            // tl('changing PC')
+            dispatch({ a: 'setSelectedCharacter', c: clicked })
             return
         }
 
         // clicked on NPC but no selected character
         if (!selectedCharacter || selectedCharacter.hasMoved) {
+            // should be unreachable
+            // tl('oops')
             return
         }
         if (state.selectedMove == null) {
             console.error('no selected move')
         } else {
+            // tl('sending attack')
+            const defenders = [clicked]
+            if (moveTypeMetaMap[state.selectedMove.type].numTargets > 1) {
+                defenders.push(getClosest(allCharacters, clicked, 1))
+            }
             move$.emit({
                 attacker: selectedCharacter,
-                defenders: [character], // TODO: slash
+                defenders: defenders, // TODO: slash
                 move: state.selectedMove,
             }) // TODO: right target?
         }
+
+        // change to unmoved PC if there is one
         const newPc = getUnmovedPc(allCharacters)
         if (newPc == null) {
             // TODO: this should never occur
-            console.warn('WhcgK')
+            console.error('no unmoved PC')
             dispatch({ a: 'setIsPlayerTurn', v: false })
+            // TODO: check if unmoved NPC
+            setTimeout(() => doNpcMove(), TIME_AFTER_PLAYER_MOVE + 500)
             return
             // throw Error('no player characters')
         }
         dispatch({ a: 'setSelectedCharacter', c: newPc })
-        if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
+
+        // if there's another unmoved NPC then make it strike
+        if (aliveNpcs.some(c => !c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => npcMove$.emit(), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => doNpcMove(), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
 
@@ -180,9 +205,11 @@ export type Action =
 
 
 function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
+    // tl(`reducer received action ${JSON.stringify(action)}`)
     return produce(state, draft => {
         switch (action.a) {
             case 'setIsPlayerTurn': {
+                // tl(`setting player turn to ${action.v}`)
                 draft.isPlayerTurn = action.v
                 return
             } case 'setBattleHasBegun': {
@@ -212,7 +239,7 @@ function reducer(state: ReturnType<typeof makeInitialState>, action: Action) {
                 draft.selectedMove = action.m
                 return
             } default:
-                throw new Error(`unknown action ${action}`)
+                throw new Error(`unknown action ${JSON.stringify(action)}`)
         }
     })
 }
