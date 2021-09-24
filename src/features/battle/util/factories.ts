@@ -2,8 +2,8 @@ import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacte
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(65, 22, 18, 15)
-    const frogknightPositions = makePositions(10, 25, 18, 15)
+    const skeletonPositions = makePositions(65, 22, 18, 13)
+    const frogknightPositions = makePositions(10, 25, 18, 13)
     const result = [
         ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
         ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
@@ -35,6 +35,7 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         stance,
         hasMoved: false,
         health: 72,
+        maxHealth: 72,
         moves: [
             {
                 name: 'Dutiful Stab',
@@ -63,6 +64,7 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
         stance: 'neutral',
         hasMoved: false,
         health: 10,
+        maxHealth: 10,
         moves: [
             {
                 name: 'Sword Whack',

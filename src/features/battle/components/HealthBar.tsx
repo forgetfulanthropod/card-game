@@ -1,31 +1,31 @@
 import React from 'react'
+//ts-ignore
 import styled from 'styled-components'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
 
 const Root = styled.div`
     position: relative;
-    width: 20vw;
+    width: 8vw;
     user-select: none;
     img {
         width: 103%;
         position: relative;
-        /* position: absolute; */
-        /* top: 0; */
-        /* left: 0; */
+        left: 0;
+        top: 0;
     }
     .bar {
         position: absolute;
         left:0;
-        bottom: .7vw;
-        border-radius: 3vw;
-        margin-left: .3vw;
-        height: 1.2vw;
+        bottom: calc(8vw * 1.4 / 20);
+        border-radius: calc(8vw * 3 / 20);
+        margin-left: calc(8vw * .3 / 20);
+        height: calc(8vw * 1.2 / 20);
     }
     .number {
         font-family: monospace;
-        font-size: 3vw;
-        left: 0;
+        font-size: 2vw;
         letter-spacing: -.2vw;
+        line-height: 0;
     }
 `
 
