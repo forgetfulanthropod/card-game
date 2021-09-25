@@ -5,19 +5,19 @@
         "lint": "eslint src",
         "fmt": "eslint src --fix",
         "tsc": "tsc",
-        "serve": "npx serve -s ./build -p 3000",
+        "serve": "serve -s ./build -p 3000",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook"
     },
     "dependencies": {
         "ahooks": "^2.10.9",
         "dotenv": "^10.0.0",
-        "esbuild-css-modules-plugin": "^2.0.9",
         "esbuild": "^0.13.0",
+        "esbuild-css-modules-plugin": "^2.0.9",
         "immer": "^9.0.6",
+        "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-hot-toast": "^2.1.1",
-        "react": "^17.0.2",
         "styled-components": "^5.3.1"
     },
     "devDependencies": {
@@ -26,14 +26,14 @@
         "@storybook/addon-essentials": "^6.3.8",
         "@storybook/addon-links": "^6.3.8",
         "@storybook/react": "^6.3.8",
-        "@types/react-dom": "^17.0.9",
         "@types/react": "^17.0.24",
+        "@types/react-dom": "^17.0.9",
         "@typescript-eslint/eslint-plugin": "^4.31.2",
         "@typescript-eslint/parser": "^4.31.2",
-        "babel-loader": "^8.2.2",
-        "eslint-plugin-react-hooks": "^4.2.0",
-        "eslint-plugin-react": "^7.26.0",
         "eslint": "^7.32.0",
+        "eslint-plugin-react": "^7.26.0",
+        "eslint-plugin-react-hooks": "^4.2.0",
+        "serve": "^12.0.1",
         "typescript": "^4.4.3"
     }
 }
