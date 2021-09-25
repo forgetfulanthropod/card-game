@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
-import { Health, Sprite } from './Styles'
+import { DamageDiv, Health, Sprite } from './Styles'
 import { Action, MoveEmitter } from './AllCharacters'
 import { Hover } from './Hover'
 import HealthBar from './HealthBar'
@@ -37,6 +37,7 @@ function Character(props: CharacterProps): JSX.Element {
     const [isAttacking, setIsAttacking] = useState(false)
     const [isDefending, setIsDefending] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
+    const [damageShown, setDamageShown] = useState<number | null>(null)
     useEffect(() => {
         if (!isAttacking && !isDefending)
             return () => { }
@@ -47,6 +48,12 @@ function Character(props: CharacterProps): JSX.Element {
 
         return () => clearTimeout(t)
     }, [isAttacking, isDefending])
+
+    useEffect(() => {
+        if (damageShown == null) return () => { }
+        const t = setTimeout(() => setDamageShown(null), 800)
+        return () => clearTimeout(t)
+    }, [damageShown])
 
 
     props.move$.useSubscription(d => {
@@ -60,6 +67,8 @@ function Character(props: CharacterProps): JSX.Element {
             // tl(`hit defender ${myId}`)
             setIsDefending(true)
             const damage = getDamage(d)
+            setDamageShown(damage)
+            // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
         }
     })
@@ -79,6 +88,7 @@ function Character(props: CharacterProps): JSX.Element {
             >
                 <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
                     {isHovering && <Hover characterMeta={props.characterMeta} />}
+                    {damageShown != null && <DamageDiv>-{damageShown}</DamageDiv>}
                     <Sprite {...spriteProps} x={0} y={0} hasMoved={props.characterMeta.hasMoved} />
                     {(isAttacking || isDefending) ?
                         <>

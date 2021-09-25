@@ -62,6 +62,12 @@ export const fadeIn = keyframes`
   100% { opacity: 0.8; }
 `
 
+export const popup = keyframes`
+  0% { transform: translateY(100%); }
+  50% { transform: translateY(20%); }
+  100% { transform: translateY(0%);; }
+`
+
 
 interface HealthProps { color: string }
 export const Health = styled.div`
@@ -175,4 +181,16 @@ export const MoveButton = styled.button<ABP>`
     width: 100%;
     font-size: 1vw;
     padding: 1vw;
+`
+
+interface DTP { left: number; top: number }
+export const DamageDiv = styled.div<DTP>`
+    position: absolute;
+    color: red;
+    font-size: 1.5vw;
+    left: ${(p: DTP) => p.left}%;
+    top: ${(p: DTP) => p.top}%;
+    padding: 5%;
+    font-family: monospace;
+    animation: ${css`${popup} .4s`};
 `
