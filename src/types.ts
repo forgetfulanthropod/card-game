@@ -8,9 +8,10 @@ declare global {
         level: number
         damage: number
         moves: MoveMeta[]
-        isPlayerCharacter: boolean
+        isPc: boolean
         hasMoved: boolean
         health: number
+        maxHealth: number
         x: number
         y: number
         stance: StanceType

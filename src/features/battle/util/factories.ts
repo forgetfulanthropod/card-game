@@ -2,16 +2,16 @@ import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacte
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(65, 22, 18, 15)
-    const frogknightPositions = makePositions(10, 25, 18, 15)
+    const skeletonPositions = makePositions(65, 22, 18, 13)
+    const frogknightPositions = makePositions(10, 25, 18, 13)
     const result = [
         ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
         ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
     ]
     return result
 }
-function makePositions(x0: number, y0: number, hGap: number, vGap: number): [number, number][] {
-    return [
+function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+    const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
         [x0 - hGap / 2, y0 + vGap],
@@ -19,6 +19,7 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number): [num
         [x0, y0 + vGap * 2],
         [x0 + hGap, y0 + vGap * 2],
     ]
+    return A.slice(0, n)
 }
 function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
     const stance: StanceType = args.x > X_AGGRESSIVE_THRESH ?
@@ -29,20 +30,17 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         type: 'Frogknight',
         level: 1,
         damage: 4,
-        isPlayerCharacter: true,
+        isPc: true,
         x: args.x,
         y: args.y,
         stance,
         hasMoved: false,
         health: 72,
+        maxHealth: 72,
         moves: [
             {
                 name: 'Dutiful Stab',
                 type: 'BA',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
             },
             {
                 name: 'Slash',
@@ -57,12 +55,13 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
         type: 'Skeleton',
         level: 1,
         damage: 8,
-        isPlayerCharacter: false,
+        isPc: false,
         x: args.x,
         y: args.y,
         stance: 'neutral',
         hasMoved: false,
         health: 10,
+        maxHealth: 10,
         moves: [
             {
                 name: 'Sword Whack',

@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import AllCharacters from './AllCharacters'
 
 export default function CharacterManager(): JSX.Element {
-    return <>
-        <AllCharacters />
-    </>
+    const [shown, setShown] = useState(true)
+
+    const reset = useCallback(() => {
+        setShown(false)
+        setTimeout(() => setShown(true), 1000)
+    }, [])
+    if (!shown) { return <></> }
+    return <AllCharacters reset={reset} />
 }

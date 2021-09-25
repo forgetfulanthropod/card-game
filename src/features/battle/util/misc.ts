@@ -3,9 +3,11 @@ import { stanceTypeMetaMap, moveTypeMetaMap } from './constants'
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
 export function getClosest(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta {
+    const charDist = (a: CharacterMeta, b: CharacterMeta) =>
+        dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
     return [...allCharacters]
-        .filter(c => c.isPlayerCharacter === character.isPlayerCharacter)
-        .sort((a, b) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y]))[nthClosest]
+        .filter(c => c.isPc === character.isPc)
+        .sort((a, b) => charDist(a, b))[nthClosest]
 }
 
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
@@ -13,21 +15,21 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
 }
 
 export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => !c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
+    const chars = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
 
 
 export function getUnmovedPc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => c.isPlayerCharacter && c.health > 0 && !c.hasMoved)
+    const chars = ac.filter(c => c.isPc && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
 
 export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const allLivingPlayerCharacters = ac
-        .filter(c => c.isPlayerCharacter && c.health > 0)
+        .filter(c => c.isPc && c.health > 0)
 
     const targetIndex = weightedRandom(
         allLivingPlayerCharacters
@@ -38,17 +40,17 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
 }
 
 export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
-    if (ac.every(c => c.isPlayerCharacter || c.health <= 0))
+    if (ac.every(c => c.isPc || c.health <= 0))
         return 'PC'
-    if (ac.every(c => !c.isPlayerCharacter || c.health <= 0))
+    if (ac.every(c => !c.isPc || c.health <= 0))
         return 'NPC'
     return null
 }
 
 // TODO: should be at least one person...
 export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
-    return ac.some(c => c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)
-        && ac.some(c => !c.isPlayerCharacter && c.health >= 0 && !c.hasMoved)
+    return ac.some(c => c.isPc && c.health > 0 && !c.hasMoved)
+        || ac.some(c => !c.isPc && c.health > 0 && !c.hasMoved)
 }
 
 
@@ -65,10 +67,11 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const move = getRandomMove(attacker)
     const defenders = [getPCTarget(ac)]
 
-    if (moveTypeMetaMap[move.type].numTargets > defenders.length) {
-        getClosest(ac, defenders[0], defenders.length)
+    if (moveTypeMetaMap[move.type].numTargets > 1) {
+        defenders.push(getClosest(ac, defenders[0], 1))
     }
 
+    // console.log('defenders:', defenders)
     return { attacker, defenders, move }
 }
 

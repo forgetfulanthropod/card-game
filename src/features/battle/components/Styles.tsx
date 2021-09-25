@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import startPng from '../assets/start.png'
+import losePng from '../assets/fainted.png'
 // @ts-ignore
 import styled, { css, keyframes } from 'styled-components'
 
@@ -50,6 +51,17 @@ export const shake = keyframes`
     100% { transform: translate(1px, -2px) rotate(-1deg); }
 `
 
+export const zoom = keyframes`
+    0% {transform: scale(1.0)}
+    100% {transform: scale(2.0)}
+`
+
+export const fadeIn = keyframes`
+  0% { opacity: 0; }
+  50% {opacity: 0;}
+  100% { opacity: 0.8; }
+`
+
 
 interface HealthProps { color: string }
 export const Health = styled.div`
@@ -85,16 +97,33 @@ export const Start = styled.img.attrs({ src: startPng })`
     user-select: none;
 `
 
+export const Lose = styled.img.attrs({ src: losePng })`
+    position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 50%;
+    height: 50%;
+    /* transition: transform 2.0s; */
+    /* &:hover { */
+        /* transform: scale(2.0); */
+    /* } */
+    animation: ${css`${zoom} .5s`};
+    animation-fill-mode: forwards;
+`
 
 interface SP {
-    isAttacking: boolean,
-    isDefending: boolean,
-    x: number,
-    y: number,
-    color?: string,
-    blur?: boolean,
-    glow?: boolean,
-    absolute?: boolean,
+    isAttacking: boolean
+    isDefending: boolean
+    x: number
+    y: number
+    color?: string
+    blur?: boolean
+    glow?: boolean
+    absolute?: boolean
+    hasMoved: boolean
 }
 export const Sprite = styled.img.attrs({ width: 200 })`
     ${(p: SP) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
@@ -104,9 +133,46 @@ export const Sprite = styled.img.attrs({ width: 200 })`
     top: ${(p: SP) => p.y}%;
     width: 100%;
     z-index: 5;
+    ${(p: SP) => p.hasMoved && 'filter: grayscale(50%) drop-shadow(0 0 1vw black)'}
     ${(p: SP) => p.blur === true && 'filter: blur(8px);'}
     ${(p: SP) => p.color != null && css`
         filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
     `}
     /* box-shadow: 5px 6px 7px black; */
+`
+
+export const Reset = styled.button`
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 75%;
+    background: #e3dcb9;
+    border: 1px solid black;
+    border-radius: 10%;
+    color: white;
+    font-size: 4vw;
+    padding: 10px 10px 2px 10px;
+    font-family: fantasy;
+    animation: ${css`${fadeIn}`} 3s;
+    animation-fill-mode: forwards;
+    &:hover {
+        font-weight: bold;
+    }
+`
+
+export const MoveMenuDiv = styled.div`
+    position: absolute;
+    bottom: calc(8vw * 1.4 / 20);
+    left: 1vw;
+`
+
+interface ABP { isSelected: boolean }
+export const MoveButton = styled.button<ABP>`
+    background: ${(p: ABP) => p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)'};
+    color: white;
+    font-family: monospace;
+    display: block;
+    width: 100%;
+    font-size: 1vw;
+    padding: 1vw;
 `
