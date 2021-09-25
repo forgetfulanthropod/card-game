@@ -31,7 +31,14 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
 
     move$.useSubscription(ad => {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
-        tl(ad.move.name)
+        toast(ad.move.name, {
+            style: {
+                backgroundColor: ad.attacker.isPc ? 'green' : 'red',
+                color: 'white'
+            }
+        })
+        console.log(ad.move.name)
+        // tl(ad.move.name)
     })
 
     // useEffect(() => { tl(`is player turn: ${isPlayerTurn}`) }, [isPlayerTurn])
