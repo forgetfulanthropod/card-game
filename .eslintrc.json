@@ -39,8 +39,16 @@
                 "beforeClosing": "never"
             }
         ],
-        "react-hooks/rules-of-hooks": "error",
-        "react-hooks/exhaustive-deps": "warn",
+        "react-hooks/rules-of-hooks": [
+            "error",
+            {
+                "additionalHooks": "(useEventEmitter|useSubscription)"
+            }
+        ],
+        "react-hooks/exhaustive-deps": [
+            "warn"
+            // { "additionalHooks": "()" }
+        ],
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-function": "off",
         "no-debugger": "warn",
