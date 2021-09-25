@@ -1,10 +1,11 @@
 {
     "scripts": {
-        "build": "node scripts/esbuild.js && echo 'checking for problems' && tsc",
+        "build": "bash scripts/build.sh",
         "start": "bash scripts/start.sh",
         "lint": "eslint src",
         "fmt": "eslint src --fix",
         "tsc": "tsc",
+        "tsc-watch": "tsc --watch --preserveWatchOutput",
         "serve": "serve -s ./build -p 3000",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook"

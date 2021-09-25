@@ -1,5 +1,6 @@
 const esbuild = require('esbuild')
 const fs = require('fs')
+const { spawn } = require("child_process")
 const { copyFolderRecursiveSync } = require('./copy')
 const envFile = require("dotenv").config()
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
@@ -9,6 +10,8 @@ const publicDir = "public"
 
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
+const shouldLint = envFile?.parsed?.ESBUILD_SHOULD_LINT === 'yes'
+console.log({ shouldWatch, shouldLint })
 
 const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === "development"
 const envObj = {
@@ -41,8 +44,14 @@ async function main() {
         define: envObj,
         watch: !shouldWatch ? null : {
             onRebuild(error, result) {
-                if (error) { console.error(`ERROR watch at ${new Date()} failed:`, error) } else {
+                if (error) {
+                    console.error(`ERROR watch at ${new Date()} failed:`, error)
+                } else {
                     console.log(`watch build at ${new Date()} succeeded:`, result)
+                    if (shouldLint) {
+                        console.log("linting...")
+                        spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
+                    }
                 }
             }
         },
@@ -53,6 +62,10 @@ async function main() {
     })
         .then(() => {
             console.log("built at " + new Date())
+            if (shouldLint) {
+                console.log("linting...")
+                spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
+            }
         })
         .catch((err) => { console.error(err) })
 }

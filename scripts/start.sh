@@ -1,7 +1,13 @@
+[ -f .env ] && source .env
 echo $(pwd)
-if [ "$ESBUILD_DONT_SERVE" = "yes" ];
-then
-    node scripts/esbuild.js watch
-else
-    bash scripts/run-parallel.sh "npm run serve" "node scripts/esbuild.js watch"
-fi
+# lint=$([ "$b" == 5 ] && echo "$c" || echo "$d")
+serveString=$([ "$SHOULD_SERVE" = "yes" ] && echo "npm run serve" || echo "")
+tscString=$([ "$SHOULD_TSC_WATCH" = "yes" ] && echo "npm run tsc-watch" || echo "")
+
+echo serveString is $serveString
+echo tscString is $tscString
+
+bash scripts/run-parallel.sh \
+    "node scripts/esbuild.js watch" \
+    "$serveString" \
+    "$tscString"
