@@ -23,9 +23,9 @@
   },
   "include": [
     "src",
-    "stories"
+    "src/stories"
   ],
   "exclude": [
-    "scripts"
+    "scriptss"
   ]
 }
