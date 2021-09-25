@@ -22,9 +22,10 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src/"
+    "src",
+    "stories"
   ],
   "exclude": [
-    "scripts/"
+    "scripts"
   ]
 }

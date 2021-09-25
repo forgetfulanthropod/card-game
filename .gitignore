@@ -8,3 +8,4 @@
 
 .vercel
 .pnpm-debug.log
+/storybook-static
