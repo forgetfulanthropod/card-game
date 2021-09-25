@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
 import { moveTypeMetaMap } from '../util/constants'
 import { makeInitialPlayerCharacters } from '../util/factories'
-import { checkMoveAvailable, checkWinner, getClosest, getId, getNpcMove, getUnmovedPc } from '../util/misc'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 
@@ -132,7 +132,9 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             // tl('sending attack')
             const defenders = [clicked]
             if (moveTypeMetaMap[state.selectedMove.type].numTargets > 1) {
-                defenders.push(getClosest(allCharacters, clicked, 1))
+                const closest = getClosestAlive(allCharacters, clicked, 1)
+                if (closest != null)
+                    defenders.push(closest)
             }
             move$.emit({
                 attacker: selectedCharacter,
