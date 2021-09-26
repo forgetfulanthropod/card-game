@@ -1,13 +1,11 @@
-import { useRef, useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { useEffect, useCallback } from 'react'
 
+/* BUGGY:
 type Subscription<T> = (val: T) => void
-
 export interface EventEmitter<T> {
     emit(val: T): void
     useSubscription(callback: Subscription<T>): void
 }
-
 export function useEventEmitter<T = void>(): EventEmitter<T> {
     const subscriptions = useRef(new Set<Subscription<T>>())
 
@@ -26,4 +24,16 @@ export function useEventEmitter<T = void>(): EventEmitter<T> {
         }, [callback])
     }
     return Object.freeze({ emit, useSubscription })
+}
+*/
+
+export function useEffectWhen(effect: React.EffectCallback, deps: unknown[], watchedVals: unknown[]): void {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(useCallback(effect, deps), watchedVals)
+}
+
+export function useLog(stuff: Record<string, unknown>): void {
+    const A = Object.values(stuff)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect(() => { console.log(JSON.stringify(stuff)) }, A)
 }

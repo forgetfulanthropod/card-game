@@ -38,7 +38,7 @@ function Character(props: CharacterProps): JSX.Element {
     const [isDefending, setIsDefending] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
     const [damageShown, setDamageShown] = useState<number | null>(null)
-    useEffect(() => {
+    useEffect(function clearAD() {
         if (!isAttacking && !isDefending)
             return () => { }
         const t = setTimeout(() => {
@@ -49,14 +49,14 @@ function Character(props: CharacterProps): JSX.Element {
         return () => clearTimeout(t)
     }, [isAttacking, isDefending])
 
-    useEffect(() => {
+    useEffect(function clearDamageShown() {
         if (damageShown == null) return () => { }
         const t = setTimeout(() => setDamageShown(null), 800)
         return () => clearTimeout(t)
     }, [damageShown])
 
 
-    props.move$.useSubscription(function charMove(d) {
+    props.move$.useSubscription(function doCharMove(d) {
         const myId = props.characterMeta.id
         if (d.attacker.id === myId) {
             setIsAttacking(true)

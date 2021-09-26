@@ -2,15 +2,15 @@ import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacte
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(65, 22, 18, 13)
-    const frogknightPositions = makePositions(10, 25, 18, 13)
+    const skeletonPositions = makePositions(65, 22, 18, 13, 1)
+    const frogknightPositions = makePositions(10, 25, 18, 13, 6)
     const result = [
         ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
         ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
     ]
     return result
 }
-function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 1): [number, number][] {
+function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
@@ -35,7 +35,7 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         y: args.y,
         stance,
         hasMoved: false,
-        health: 72,
+        health: 10,
         maxHealth: 72,
         moves: [
             {
@@ -54,7 +54,7 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
         id: getId(args.x, args.y),
         type: 'Skeleton',
         level: 1,
-        damage: 8,
+        damage: 3,
         isPc: false,
         x: args.x,
         y: args.y,
