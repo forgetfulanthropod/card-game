@@ -25,8 +25,8 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
     const [isPlayerFirstTurn] = useState(() => state.isPlayerTurn)
-    const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
     const [showLose, setShowLose] = useState(false)
+    const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
     // useLog({ isPlayerFirstTurn })
     const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
@@ -52,7 +52,6 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         }
         return () => { }
     }, [battleHasBegun, isPlayerTurn, npcMove$], [battleHasBegun])
-
 
     const isMoveAvailable = checkMoveAvailable(allCharacters)
     useEffectWhen(function resetRound() {

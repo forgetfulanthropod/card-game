@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
@@ -6,6 +6,7 @@ import { DamageDiv, Health, Sprite } from './Styles'
 import { Action, MoveEmitter } from './AllCharacters'
 import { Hover } from './Hover'
 import HealthBar from './HealthBar'
+import { useResetState } from 'hooks'
 
 const config = {
     isHealthNumber: false
@@ -34,27 +35,10 @@ interface CharacterProps extends KnownCharacterProps {
 }
 function Character(props: CharacterProps): JSX.Element {
     const { x, y, health } = props.characterMeta
-    const [isAttacking, setIsAttacking] = useState(false)
-    const [isDefending, setIsDefending] = useState(false)
+    const [isAttacking, setIsAttacking] = useResetState(false, 500)
+    const [isDefending, setIsDefending] = useResetState(false, 500)
+    const [damageShown, setDamageShown] = useResetState<number | null>(null, 800)
     const [isHovering, setIsHovering] = useState(false)
-    const [damageShown, setDamageShown] = useState<number | null>(null)
-    useEffect(function clearAD() {
-        if (!isAttacking && !isDefending)
-            return () => { }
-        const t = setTimeout(() => {
-            setIsAttacking(false)
-            setIsDefending(false)
-        }, 500)
-
-        return () => clearTimeout(t)
-    }, [isAttacking, isDefending])
-
-    useEffect(function clearDamageShown() {
-        if (damageShown == null) return () => { }
-        const t = setTimeout(() => setDamageShown(null), 800)
-        return () => clearTimeout(t)
-    }, [damageShown])
-
 
     props.move$.useSubscription(function doCharMove(d) {
         const myId = props.characterMeta.id
