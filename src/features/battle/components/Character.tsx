@@ -56,7 +56,7 @@ function Character(props: CharacterProps): JSX.Element {
     }, [damageShown])
 
 
-    props.move$.useSubscription(d => {
+    props.move$.useSubscription(function charMove(d) {
         const myId = props.characterMeta.id
         if (d.attacker.id === myId) {
             setIsAttacking(true)

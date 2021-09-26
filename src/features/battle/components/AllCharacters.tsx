@@ -21,6 +21,7 @@ type Set<T> = T | ((old: T) => T)
 
 export default function AllCharacters(props: { reset: () => void }): JSX.Element {
     const move$: MoveEmitter = useEventEmitter()
+    const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [state, dispatch] = useReducer(reducer, makeInitialState())
     const [isPlayerFirstTurn] = useState(state.isPlayerTurn)
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
@@ -29,7 +30,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
     const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
 
-    move$.useSubscription(ad => {
+    move$.useSubscription(function move(ad) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         toast(ad.move.name, {
             style: {
@@ -57,7 +58,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         if (!battleHasBegun) return () => { }
         tl(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
         if (!isPlayerTurn) {
-            const t = setTimeout(() => doNpcMove(), 1000)
+            const t = setTimeout(() => npcMove$.emit('first move of game'), 1000)
             return () => clearTimeout(t)
         }
         return () => { }
@@ -67,17 +68,18 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     const isMoveAvailable = checkMoveAvailable(allCharacters)
     useEffect(() => {
         if (isMoveAvailable) return
+        if (!battleHasBegun) return
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })
         dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
         tl(isPlayerTurn ? 'You start' : 'Enemy starts')
         if (!isPlayerFirstTurn) {
-            doNpcMove()
+            npcMove$.emit('first move of round')
         }
     }, [isMoveAvailable])
 
-    const doNpcMove = useCallback((): void => {
-        // tl('npcMove()')
+    npcMove$.useSubscription(useCallback(function npcMove(reason: string): void {
+        tl(`npcMove(reason: ${reason})`)
         if (alivePcs.length === 0) {
             // all PCs dead
             tl('all PC dead')
@@ -98,9 +100,9 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         }
         else if (allCharacters.some(c => !c.isPc && c.health > 0 && !c.hasMoved)) {
             // tl('no unmoved PC taking another NPC turn')
-            setTimeout(() => doNpcMove(), 1000)
+            setTimeout(() => npcMove$.emit('no unmoved PC and NPC turn'), 1000)
         }
-    }, [aliveNpcs, alivePcs, allCharacters, move$])
+    }, [aliveNpcs, alivePcs, allCharacters, move$, npcMove$]))
 
     const onClick = function doCharacterAction(clicked: CharacterMeta) {
         if (checkWinner(allCharacters) != null) return
@@ -150,7 +152,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
             console.error('no unmoved PC')
             dispatch({ a: 'setIsPlayerTurn', v: false })
             // TODO: check if unmoved NPC
-            setTimeout(() => doNpcMove(), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => npcMove$.emit('attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
             // throw Error('no player characters')
         }
@@ -159,7 +161,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => doNpcMove(), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => npcMove$.emit('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
 
@@ -201,7 +203,7 @@ function MoveMenu(props: { character: CharacterMeta, dispatch: React.Dispatch<Ac
 }
 
 export type MoveEmitter = EventEmitter<AttackData>
-export type NpcMoveEmitter = EventEmitter<void>
+export type NpcMoveEmitter = EventEmitter<string>
 
 export type Action =
     | { a: 'setIsPlayerTurn', v: boolean }

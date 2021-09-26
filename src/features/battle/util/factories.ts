@@ -10,7 +10,7 @@ export function makeInitialPlayerCharacters(): CharacterMeta[] {
     ]
     return result
 }
-function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 1): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],

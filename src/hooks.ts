@@ -1,4 +1,5 @@
 import { useRef, useEffect } from 'react'
+import toast from 'react-hot-toast'
 
 type Subscription<T> = (val: T) => void
 
@@ -17,8 +18,10 @@ export function useEventEmitter<T = void>(): EventEmitter<T> {
     function useSubscription(callback: Subscription<T>) {
         useEffect(() => {
             subscriptions.current.add(callback)
+            toast(`added listener ${subscriptions.current.size} ${callback.name}`)
             return () => {
                 subscriptions.current.delete(callback)
+                toast(`removed listener ${callback.name}`)
             }
         }, [callback])
     }
