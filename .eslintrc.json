@@ -42,12 +42,14 @@
         "react-hooks/rules-of-hooks": [
             "error",
             {
-                "additionalHooks": "(useEventEmitter|useSubscription)"
+                "additionalHooks": "(useEventEmitter|useSubscription|useEffectWhen)"
             }
         ],
         "react-hooks/exhaustive-deps": [
-            "warn"
-            // { "additionalHooks": "()" }
+            "warn",
+            {
+                "additionalHooks": "(useEffectWhen)"
+            }
         ],
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-function": "off",
