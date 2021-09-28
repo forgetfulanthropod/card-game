@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { Sprite, Stage } from '@inlet/react-pixi'
 
 import { useEventEmitter, useSize } from 'ahooks'

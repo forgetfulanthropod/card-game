@@ -68,7 +68,7 @@ function Character(props: CharacterProps): JSX.Element {
     return <>
         {health > 0 ?
             <Container x={x} y={y}>
-                <Sprite image={props.src} />
+                <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
             </Container> :
             <></>
         }
