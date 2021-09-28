@@ -16,6 +16,9 @@ const config = {
     isHealthNumber: false
 }
 
+const RED = 0xFF0000
+const BLUE = 0x0000FF
+
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
     return <Character src={frogknightPng} direction={-1} {...props} />
 }
@@ -68,10 +71,14 @@ function Character(props: CharacterProps): JSX.Element {
     }
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 10
+    const redFilter = new filters.ColorMatrixFilter()
+    redFilter.hue(180, false)
     return <>
         {health > 0 ?
             <Container x={x} y={y}>
-                {(isAttacking || isDefending) && <Sprite image={props.src} filters={[blurFilter]} />}
+                {isAttacking && <Sprite image={props.src} filters={[blurFilter]} tint={BLUE} />}
+                {isDefending && <Sprite image={props.src} filters={[blurFilter]} tint={RED} />}
+                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite image={props.src} filters={[blurFilter]} />}
                 <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
             </Container> :
             <></>
