@@ -23,5 +23,4 @@
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
-    "editor.detectIndentation": false,
 }

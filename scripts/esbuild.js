@@ -40,6 +40,7 @@ async function main() {
             '.png': 'file',
             '.jpg': 'file',
             '.mp4': 'file',
+            '.webm': 'file',
         },
         define: envObj,
         watch: !shouldWatch ? null : {

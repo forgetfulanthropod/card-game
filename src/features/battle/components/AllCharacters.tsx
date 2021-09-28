@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react'
-import { Stage } from '@inlet/react-pixi'
+import { Sprite, Stage } from '@inlet/react-pixi'
 
 import { useEventEmitter, useSize } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
@@ -11,6 +11,8 @@ import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
+import PixiBackground from './PixiBackground'
+
 
 
 
@@ -170,6 +172,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         {
             width != null && height != null &&
             <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
+                <PixiBackground />
                 {allCharacters.map(characterMeta => {
                     const { x, y } = characterMeta
                     const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }

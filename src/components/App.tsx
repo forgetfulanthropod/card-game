@@ -7,7 +7,7 @@ import Background from '../features/battle/components/Background'
 
 export default function App(): JSX.Element {
     return <AppWrap>
-        <Background />
+        {/* <Background /> */}
         <Toaster />
         <CharacterManager />
     </AppWrap>
