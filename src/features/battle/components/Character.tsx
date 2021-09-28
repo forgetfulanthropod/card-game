@@ -9,6 +9,7 @@ import { Action, MoveEmitter } from './AllCharacters'
 import { useResetState } from 'hooks'
 
 import { Container, Sprite } from '@inlet/react-pixi'
+import { filters } from 'pixi.js'
 
 
 const config = {
@@ -65,9 +66,12 @@ function Character(props: CharacterProps): JSX.Element {
         isAttacking,
         isDefending
     }
+    const blurFilter = new filters.BlurFilter()
+    blurFilter.blur = 10
     return <>
         {health > 0 ?
             <Container x={x} y={y}>
+                {(isAttacking || isDefending) && <Sprite image={props.src} filters={[blurFilter]} />}
                 <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
             </Container> :
             <></>
