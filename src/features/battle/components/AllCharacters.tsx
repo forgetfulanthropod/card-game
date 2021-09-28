@@ -1,14 +1,18 @@
-import { useEventEmitter } from 'ahooks'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
+import { Stage } from '@inlet/react-pixi'
+
+import { useEventEmitter, useSize } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { useEffectWhen } from 'hooks'
 import produce from 'immer'
-import React, { useEffect, useReducer, useState } from 'react'
 import toast from 'react-hot-toast'
 import { moveTypeMetaMap } from '../util/constants'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
+
+
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -149,7 +153,11 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         }
     }
 
-    return <div>
+    const ref = useRef(null)
+    const { width, height } = useSize(ref)
+    console.log({ width, height })
+
+    return <div ref={ref} style={{ width: '100%', height: '100%' }}>
         {
             !battleHasBegun &&
             <IdleScreenOverlay>
@@ -159,15 +167,21 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         {
             showLose && <LoseScreen reset={props.reset} />
         }
-        {allCharacters.map(characterMeta => {
-            const { x, y } = characterMeta
-            const id = getId(x, y)
-            const characterProps = { move$, dispatch, characterMeta, onClick, key: id }
+        {
+            width != null && height != null &&
+            <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
+                {allCharacters.map(characterMeta => {
+                    const { x, y } = characterMeta
+                    const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }
+                    const id = getId(x, y)
+                    const characterProps = { move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
 
-            return characterMeta.isPc ?
-                <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
-                <Skeleton {...characterProps} />
-        })}
+                    return characterMeta.isPc ?
+                        <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
+                        <Skeleton {...characterProps} />
+                })}
+            </Stage>
+        }
         {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
     </div>
 }

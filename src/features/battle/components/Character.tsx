@@ -2,11 +2,14 @@ import React, { useState } from 'react'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
-import { DamageDiv, Health, Sprite } from './Styles'
+// import { DamageDiv, Health } from './Styles'
 import { Action, MoveEmitter } from './AllCharacters'
-import { Hover } from './Hover'
-import HealthBar from './HealthBar'
+// import { Hover } from './Hover'
+// import HealthBar from './HealthBar'
 import { useResetState } from 'hooks'
+
+import { Container, Sprite } from '@inlet/react-pixi'
+
 
 const config = {
     isHealthNumber: false
@@ -64,7 +67,16 @@ function Character(props: CharacterProps): JSX.Element {
     }
     return <>
         {health > 0 ?
-            <div
+            <Container x={x} y={y}>
+                <Sprite image={props.src} />
+            </Container> :
+            <></>
+        }
+    </>
+}
+
+
+{/* <div
                 onClick={() => props.onClick(props.characterMeta)}
                 style={{ position: 'absolute', left: x + '%', top: y + '%', width: '10%' }}
                 onPointerEnter={() => setIsHovering(true)}
@@ -92,7 +104,4 @@ function Character(props: CharacterProps): JSX.Element {
                         <Health color={props.characterMeta.isPc ? '#53C541' : 'red'}>{health}</Health>
                     }
                 </div>
-            </div> :
-            <></>}
-    </>
-}
+            </div> */}
