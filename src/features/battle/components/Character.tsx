@@ -65,22 +65,23 @@ function Character(props: CharacterProps): JSX.Element {
         }
     })
 
-    const spriteProps = {
-        src: props.src,
-        isAttacking,
-        isDefending
-    }
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 10
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
+
+    const charSpriteProps = {
+        image: props.src,
+        anchor: { x: 0, y: 1 },
+    }
+
     return <>
         {health > 0 ?
             <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
-                {isAttacking && <Sprite image={props.src} filters={[blurFilter]} tint={BLUE} />}
-                {isDefending && <Sprite image={props.src} filters={[blurFilter]} tint={RED} />}
-                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite image={props.src} filters={[blurFilter]} />}
-                <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
+                {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
+                {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
+                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
+                <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
 
                 <HealthBar value={health} max={props.characterMeta.maxHealth} />
             </Container> :
