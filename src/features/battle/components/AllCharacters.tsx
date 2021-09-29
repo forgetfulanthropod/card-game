@@ -14,8 +14,8 @@ import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from '
 import PixiBackground from './PixiBackground'
 import { Action, Dispatcher, State } from './CharacterManager'
 
-import ChestPng from '../assets/CHEST_BODY.png'
 import losePng from '../assets/fainted.png'
+import Chest from './Chest'
 
 
 
@@ -82,7 +82,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
             return () => clearTimeout(st)
         }
         if (winner === 'PC') {
-            const st = setTimeout(() => setEndScreen('win'), 1000)
+            const st = setTimeout(() => setEndScreen('win'), 0) // MARK
             return () => clearTimeout(st)
         }
         return () => { }
@@ -159,7 +159,8 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     }
 
     const ref = useRef(null)
-    const { width, height } = useSize(ref)
+    const size = useSize(ref)
+    const { width, height } = size
     console.log({ width, height })
     const scale = width != null ? width / BASE_WIDTH : 1.0
 
@@ -173,7 +174,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         {
             endScreen == null ? null :
                 endScreen === 'lose' ? <LoseScreen reset={props.reset} /> :
-                    <WinScreen reset={props.reset} />
+                    <WinScreen reset={props.reset} size={size} />
         }
         {
             width != null && height != null &&
@@ -220,9 +221,21 @@ function LoseScreen(props: { reset: () => void }): JSX.Element {
     </IdleScreenOverlay>
 }
 
-function WinScreen(props: { reset: () => void }): JSX.Element {
-    return <IdleScreenOverlay>
-        <Lose src={ChestPng} />
-        <Reset onClick={props.reset}>Reset</Reset>
-    </IdleScreenOverlay>
+function WinScreen(props: { reset: () => void, size: SizeQ }): JSX.Element {
+    return <Chest size={props.size} />
+    // return <Stage
+    //     // width={width}
+    //     // height={height}
+    //     style={{
+    //         position: 'absolute',
+    //         width: '100%',
+    //         height: '100%'
+    //     }}
+    //     options={{ backgroundAlpha: 0 }}
+    // >
+    //     <Sprite image={ChestBodyPng} />
+    //     <Sprite image={ChestLidPng} x={0} />
+    // </Stage>
+    // <Reset onClick={props.reset}>Reset</Reset>
+
 }

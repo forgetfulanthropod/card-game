@@ -41,6 +41,15 @@ declare global {
         defenders: CharacterMeta[]
         move: MoveMeta
     }
+    type Size = {
+        width: number
+        height: number
+    }
+    type SizeQ = {
+        width?: number
+        height?: number
+    }
+
 }
 
 export default null
