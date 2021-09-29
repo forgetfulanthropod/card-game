@@ -3,13 +3,15 @@ import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
 // import { DamageDiv, Health } from './Styles'
-import { Action, MoveEmitter } from './AllCharacters'
+import { MoveEmitter } from './AllCharacters'
+import type Action from './CharacterManager'
 // import { Hover } from './Hover'
 // import HealthBar from './HealthBar'
 import { useResetState } from 'hooks'
 
 import { Container, Sprite } from '@inlet/react-pixi'
 import { filters } from 'pixi.js'
+import { Dispatcher } from './CharacterManager'
 
 
 const config = {
@@ -28,7 +30,7 @@ export function Skeleton(props: KnownCharacterProps): JSX.Element {
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
-    dispatch: React.Dispatch<Action>
+    dispatch: Dispatcher
     move$: MoveEmitter
     scale: number
 }
