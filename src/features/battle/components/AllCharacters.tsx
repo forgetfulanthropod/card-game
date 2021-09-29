@@ -14,6 +14,8 @@ import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from '
 import PixiBackground from './PixiBackground'
 import { Action, Dispatcher, State } from './CharacterManager'
 
+import ChestPng from '../assets/CHEST_BODY.png'
+import losePng from '../assets/fainted.png'
 
 
 
@@ -31,7 +33,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     const move$: MoveEmitter = useEventEmitter()
     const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [isPlayerFirstTurn] = useState(() => state.isPlayerTurn)
-    const [showLose, setShowLose] = useState(false)
+    const [endScreen, setEndScreen] = useState<null | 'lose' | 'win'>(null)
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
     // useLog({ isPlayerFirstTurn })
@@ -76,11 +78,12 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     useEffect(function endGame() {
         console.log(winner === 'PC' ? 'You win' : 'Computer wins')
         if (winner === 'NPC') {
-            const st = setTimeout(() => setShowLose(true), 1000)
+            const st = setTimeout(() => setEndScreen('lose'), 1000)
             return () => clearTimeout(st)
         }
         if (winner === 'PC') {
-            toast('YOU WIN')
+            const st = setTimeout(() => setEndScreen('win'), 1000)
+            return () => clearTimeout(st)
         }
         return () => { }
     }, [winner])
@@ -168,7 +171,9 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
             </IdleScreenOverlay>
         }
         {
-            showLose && <LoseScreen reset={props.reset} />
+            endScreen == null ? null :
+                endScreen === 'lose' ? <LoseScreen reset={props.reset} /> :
+                    <WinScreen reset={props.reset} />
         }
         {
             width != null && height != null &&
@@ -210,7 +215,14 @@ export type NpcMoveEmitter = EventEmitter<string>
 
 function LoseScreen(props: { reset: () => void }): JSX.Element {
     return <IdleScreenOverlay>
-        <Lose />
+        <Lose src={losePng} />
+        <Reset onClick={props.reset}>Reset</Reset>
+    </IdleScreenOverlay>
+}
+
+function WinScreen(props: { reset: () => void }): JSX.Element {
+    return <IdleScreenOverlay>
+        <Lose src={ChestPng} />
         <Reset onClick={props.reset}>Reset</Reset>
     </IdleScreenOverlay>
 }

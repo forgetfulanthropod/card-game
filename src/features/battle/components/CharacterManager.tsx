@@ -9,6 +9,7 @@ export default function CharacterManager(): JSX.Element {
 
     const reset = useCallback(() => {
         setShown(false)
+        dispatch({ a: 'fullReset' })
         setTimeout(() => setShown(true), 1000)
     }, [])
     if (!shown) { return <></> }
@@ -25,6 +26,7 @@ export type Action =
     | { a: 'clearHasMoved' }
     | { a: 'setSelectedCharacter', c: CharacterMeta }
     | { a: 'setSelectedMove', m: MoveMeta }
+    | { a: 'fullReset' }
 
 
 function reducer(state: State, action: Action) {
@@ -60,6 +62,10 @@ function reducer(state: State, action: Action) {
                 return
             } case 'setSelectedMove': {
                 draft.selectedMove = action.m
+                return
+            } case 'fullReset': {
+                const newState = makeInitialState()
+                Object.assign(draft, newState)
                 return
             } default:
                 throw new Error(`unknown action ${JSON.stringify(action)}`)
