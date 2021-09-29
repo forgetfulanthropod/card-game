@@ -6,7 +6,7 @@ import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { useEffectWhen } from 'hooks'
 import produce from 'immer'
 import toast from 'react-hot-toast'
-import { moveTypeMetaMap } from '../util/constants'
+import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Frogknight, Skeleton } from './Character'
@@ -158,6 +158,7 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
     const ref = useRef(null)
     const { width, height } = useSize(ref)
     console.log({ width, height })
+    const scale = width != null ? width / BASE_WIDTH : 1.0
 
     return <div ref={ref} style={{ width: '100%', height: '100%' }}>
         {
@@ -172,12 +173,12 @@ export default function AllCharacters(props: { reset: () => void }): JSX.Element
         {
             width != null && height != null &&
             <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-                <PixiBackground />
+                <PixiBackground scale={scale} />
                 {allCharacters.map(characterMeta => {
                     const { x, y } = characterMeta
                     const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }
                     const id = getId(x, y)
-                    const characterProps = { move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
+                    const characterProps = { scale, move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
 
                     return characterMeta.isPc ?
                         <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :

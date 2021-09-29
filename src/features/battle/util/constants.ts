@@ -81,3 +81,5 @@ export const moveTypeMetaMap: Record<MoveType, MoveTypeMeta> = {
 // Heal: Heals target for 75% of attack damage.
 // Life steal: Deals 50% of attack damage.  Heals for 25%.
 // Stable: No ⅓ Modifier
+
+export const BASE_WIDTH = 1920

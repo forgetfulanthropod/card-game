@@ -30,6 +30,7 @@ interface KnownCharacterProps {
     onClick: (c: CharacterMeta) => void
     dispatch: React.Dispatch<Action>
     move$: MoveEmitter
+    scale: number
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -75,7 +76,7 @@ function Character(props: CharacterProps): JSX.Element {
     redFilter.hue(180, false)
     return <>
         {health > 0 ?
-            <Container x={x} y={y}>
+            <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
                 {isAttacking && <Sprite image={props.src} filters={[blurFilter]} tint={BLUE} />}
                 {isDefending && <Sprite image={props.src} filters={[blurFilter]} tint={RED} />}
                 {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite image={props.src} filters={[blurFilter]} />}
