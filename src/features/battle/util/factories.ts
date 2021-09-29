@@ -35,7 +35,7 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         y: args.y,
         stance,
         hasMoved: false,
-        health: 10,
+        health: 72,
         maxHealth: 72,
         moves: [
             {

@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
-import { Graphics as PixiGraphics } from 'pixi.js'
+import { Graphics as PixiGraphics, TextStyle, utils } from 'pixi.js'
 import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
+import healthBorderPng from '../assets/HEALTH_BORDER.png'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {
@@ -16,9 +17,19 @@ export default function PixiHealthBar(
         numberColor?: string
     }
 ): JSX.Element {
+    const DISPLAY_WIDTH = 140
+    const RAW_WIDTH = 1841
+    const RAW_HEIGHT = 161
+    const WIDTH_TO_HEIGHT = RAW_HEIGHT / RAW_WIDTH
+    const DISPLAY_HEIGHT = DISPLAY_WIDTH * WIDTH_TO_HEIGHT
+    const X_MARGIN = .01869158878
+    const Y_MARGIN = .16883116883
     const portion = props.value / props.max
     // const width = `${portion * 100}%`
-    const width = portion * 100
+    const rectWidth = portion * DISPLAY_WIDTH * (1 - 2 * X_MARGIN)
+    const rectHeight = DISPLAY_HEIGHT * (1 - 2 * Y_MARGIN)
+    const rectXOffset = DISPLAY_WIDTH * X_MARGIN
+    const rectYOffset = DISPLAY_HEIGHT * Y_MARGIN
 
     const colorStops = props.colorStops ?? [
         { color: 'red', stop: .2 },
@@ -33,14 +44,36 @@ export default function PixiHealthBar(
 
     const draw = useCallback(function drawHealthBar(g: PixiGraphics) {
         g.clear()
-        g.beginFill(0xFF0000)
-        g.drawRect(0, 0, width, 20)
+        g.beginFill(utils.string2hex(background))
+        g.drawRect(rectXOffset, rectYOffset, rectWidth, rectHeight)
         g.endFill()
-    }, [width, color, background])
+    }, [rectWidth, color, background])
 
     return <Container x={0} y={10}>
         <Graphics {...{ draw }} />
-        {/* <Sprite /> */}
-        <Text text="Lo and Behold" />
+        <Sprite image={healthBorderPng} width={DISPLAY_WIDTH} height={DISPLAY_HEIGHT} />
+        <Text
+            text={props.value.toString()}
+            anchor={{ x: 0, y: 1 }}
+            style={
+                new TextStyle({
+                    fontFamily: 'monospace',
+                    fontSize: 30,
+                    //   fontWeight: 400,
+                    fill: ['#ffeaab', '#f2b600'], // gradient
+                    // stroke: '#01d27e',
+                    // strokeThickness: 5,
+                    letterSpacing: -5,
+                    // dropShadow: true,
+                    // dropShadowColor: '#ccced2',
+                    // dropShadowBlur: 4,
+                    // dropShadowAngle: Math.PI / 6,
+                    // dropShadowDistance: 6,
+                    // wordWrap: true,
+                    // wordWrapWidth: 440,
+                })
+            }
+        />
+        {/* <Text text="Lo and Behold" /> */}
     </Container>
 }
