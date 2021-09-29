@@ -5,7 +5,7 @@ import { getDamage } from '../util/attack'
 // import { DamageDiv, Health } from './Styles'
 import { Action, MoveEmitter } from './AllCharacters'
 // import { Hover } from './Hover'
-// import HealthBar from './HealthBar'
+import HealthBar from './PixiHealthBar'
 import { useResetState } from 'hooks'
 
 import { Container, Sprite } from '@inlet/react-pixi'
@@ -81,6 +81,8 @@ function Character(props: CharacterProps): JSX.Element {
                 {isDefending && <Sprite image={props.src} filters={[blurFilter]} tint={RED} />}
                 {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite image={props.src} filters={[blurFilter]} />}
                 <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
+
+                <HealthBar value={health} max={props.characterMeta.maxHealth} />
             </Container> :
             <></>
         }
