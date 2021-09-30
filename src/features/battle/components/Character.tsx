@@ -6,7 +6,7 @@ import { getDamage } from '../util/attack'
 import { MoveEmitter } from './AllCharacters'
 import type Action from './CharacterManager'
 // import { Hover } from './Hover'
-import HealthBar from './PixiHealthBar'
+import HealthBar from './HealthBar'
 import { useResetState } from 'hooks'
 
 import { Container, Sprite } from '@inlet/react-pixi'
