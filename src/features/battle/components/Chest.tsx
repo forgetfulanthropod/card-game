@@ -1,11 +1,11 @@
 import { Container, PixiComponent, Sprite, useApp as usePixiApp } from '@inlet/react-pixi'
 // import type { Graphics as PixiGraphics } from 'pixi.js'
-import { Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js'
+import { Loader, Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
-import chestBodyPng from '../assets/CHEST_BODY.png'
-import chestLidPng from '../assets/CHEST_LID.png'
+import { useLoaderContext } from '../providers/LoaderContext'
 
 
+const dataOf = (assetId: string) => Loader.shared.resources?.[assetId]?.data
 
 export default function Chest(props: { size: SizeQ }): JSX.Element {
     const { ticker, screen } = usePixiApp()
@@ -13,6 +13,7 @@ export default function Chest(props: { size: SizeQ }): JSX.Element {
     const [body, setBody] = useState<PixiSprite | null>(null)
     console.log('chest render')
 
+    const { isBasicLoaded } = useLoaderContext()
 
     useEffect((): void | Callback => {
         if (lid == null) return undefined
@@ -27,6 +28,7 @@ export default function Chest(props: { size: SizeQ }): JSX.Element {
 
     const baseSize = 500
     const scale = props.size.width == null ? 1 : baseSize / props.size.width
+    if (!isBasicLoaded) return <></>
     return <>
         {props.size.width != null && <NewOverlay size={props.size as Size} />}
         <Container scale={scale} position={{ x: screen.width / 2, y: screen.height / 2 }}>
@@ -35,10 +37,10 @@ export default function Chest(props: { size: SizeQ }): JSX.Element {
                 // anchor={0.5}
                 anchor={{ x: 1, y: .3 }}
                 ref={setBody}
-                image={chestBodyPng} />
+                image={dataOf('chestBody')} />
             <Sprite
                 ref={s => setLid(s)}
-                image={chestLidPng}
+                image={dataOf('chestLid')}
                 // pivot={{ x: 100, y: 1 }}
                 pivot={{ x: -50, y: 0 }}
                 // anchor={{ x: 0, y: 0 }}
