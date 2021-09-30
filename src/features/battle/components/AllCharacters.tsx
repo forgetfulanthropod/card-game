@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { Sprite, Stage } from '@inlet/react-pixi'
+import { AppProvider, Sprite, Stage } from '@inlet/react-pixi'
 
 import { useEventEmitter, useSize } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
@@ -174,7 +174,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         {
             endScreen == null ? null :
                 endScreen === 'lose' ? <LoseScreen reset={props.reset} /> :
-                    <WinScreen reset={props.reset} size={size} />
+                    <Reset onClick={props.reset}>Reset</Reset>
         }
         {
             width != null && height != null &&
@@ -223,19 +223,15 @@ function LoseScreen(props: { reset: () => void }): JSX.Element {
 
 function WinScreen(props: { reset: () => void, size: SizeQ }): JSX.Element {
     return <Chest size={props.size} />
-    // return <Stage
-    //     // width={width}
-    //     // height={height}
-    //     style={{
-    //         position: 'absolute',
-    //         width: '100%',
-    //         height: '100%'
-    //     }}
-    //     options={{ backgroundAlpha: 0 }}
-    // >
-    //     <Sprite image={ChestBodyPng} />
-    //     <Sprite image={ChestLidPng} x={0} />
-    // </Stage>
-    // <Reset onClick={props.reset}>Reset</Reset>
-
+    /* <Stage
+       width={props.size.width}
+       height={props.size.height}
+       style={{
+           position: 'absolute',
+           width: '100%',
+           height: '100%'
+       }}
+       options={{ backgroundAlpha: 0 }}
+   >
+   </Stage> */
 }
