@@ -1,11 +1,19 @@
-import React, { createContext, useContext, useReducer } from 'react'
 import produce from 'immer'
+import type { WritableDraft } from 'immer/dist/internal'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {
-    const [state, dispatch] = useReducer(reducer, initialValues)
+    const [state, setState] = useState(initialState)
+    const callbacks = useMemo(() => {
+        const update = (mutate: (d: WritableDraft<State>) => void) => setState(produce(mutate))
+        return {
+            basicLoaded() { update(d => { d.isBasicLoaded = true }) },
+            deluxeLoaded() { update(d => { d.isDeluxeLoaded = true }) },
+        }
+    }, [])
 
     return <context.Provider
-        value={{ ...state, dispatch }}>
+        value={{ ...state, ...callbacks }}>
         {props.children}
     </context.Provider>
 }
@@ -15,34 +23,14 @@ export function useLoaderContext(): Value {
 }
 
 
-type State = typeof initialValues
-const initialValues = {
+const initialState = {
     isBasicLoaded: false,
     isDeluxeLoaded: false,
 }
+type State = typeof initialState
 
 interface Value extends State {
-    dispatch: React.Dispatch<Action>
+    basicLoaded(): void
+    deluxeLoaded(): void
 }
 const context = createContext<Value>(null as unknown as Value)
-
-
-type Action =
-    | { a: 'basicLoaded' }
-    | { a: 'deluxeLoaded' }
-
-function reducer(state: State, action: Action) {
-    return produce(state, draft => {
-        switch (action.a) {
-            case 'basicLoaded': {
-                draft.isBasicLoaded = true
-                return
-            } case 'deluxeLoaded': {
-                draft.isDeluxeLoaded = true
-                return
-            } default: {
-                throw Error(`unknown action ${JSON.stringify(action)}`)
-            }
-        }
-    })
-}

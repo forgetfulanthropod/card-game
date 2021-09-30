@@ -1,21 +1,36 @@
-import React, { createContext, useContext, useState } from "react"
+import produce from 'immer'
+import type { WritableDraft } from 'immer/dist/internal'
+import React, { createContext, useContext, useMemo, useState } from 'react'
 
-type ContextT = ReturnType<typeof useValue>
+export function LoaderProvider(props: { children: Children }): JSX.Element {
+    const [state, setState] = useState(initialState)
+    const callbacks = useMemo(() => {
+        const update = (mutate: (d: WritableDraft<State>) => void) => setState(s => produce(s, draft => mutate(draft)))
+        return {
+            basicLoaded() { update(d => d.isBasicLoaded = true) },
+            deluxeLoaded() { update(d => d.isDeluxeLoaded = true) },
+        }
+    }, [])
 
-const Context = createContext<ContextT>(null as unknown as ContextT)
-
-export function useAppContext(): ContextT {
-    return useContext(Context)
-}
-
-export function Provider(props: { children: Children }): JSX.Element {
-    const value = useValue()
-    return <Context.Provider value={value}>
+    return <context.Provider
+        value={{ ...state, ...callbacks }}>
         {props.children}
-    </Context.Provider>
+    </context.Provider>
 }
 
-function useValue() {
-    const [callbacks, setCallbacks] = useState<Callback[]>([])
-    return { callbacks, setCallbacks }
+export function useLoaderContext(): Value {
+    return useContext(context)
 }
+
+
+const initialState = {
+    isBasicLoaded: false,
+    isDeluxeLoaded: false,
+}
+type State = typeof initialState
+
+interface Value extends State {
+    basicLoaded(): void
+    deluxeLoaded(): void
+}
+const context = createContext<Value>(null as unknown as Value)

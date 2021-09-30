@@ -17,7 +17,7 @@ const assets = {
 }
 export default function AssetLoader(): JSX.Element {
     // const app = useApp()
-    const { dispatch } = useLoaderContext()
+    const { basicLoaded } = useLoaderContext()
 
     useEffect(() => {
 
@@ -29,15 +29,15 @@ export default function AssetLoader(): JSX.Element {
             }
         }
         if (!anyNewLoaded) {
-            dispatch({ a: 'basicLoaded' })
+            basicLoaded()
             return
         }
         Loader.shared.load()
             .onComplete.add(() => {
-                dispatch({ a: 'basicLoaded' })
+                basicLoaded()
             })
 
-    }, [dispatch])
+    }, [basicLoaded])
 
     return <></>
 }
