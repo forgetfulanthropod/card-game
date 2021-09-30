@@ -2,34 +2,46 @@ import React, { useState } from 'react'
 import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
 import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
 import { getDamage } from '../util/attack'
-import { DamageDiv, Health, Sprite } from './Styles'
-import { Action, MoveEmitter } from './AllCharacters'
-import { Hover } from './Hover'
-import HealthBar from './HealthBar'
+// import { DamageDiv, Health } from './Styles'
+import { MoveEmitter } from './AllCharacters'
+import type Action from './CharacterManager'
+// import { Hover } from './Hover'
+import HealthBar from './PixiHealthBar'
 import { useResetState } from 'hooks'
+
+import { Container, Sprite } from '@inlet/react-pixi'
+import { Dispatcher } from './CharacterManager'
+import { filters, Loader } from 'pixi.js'
+import HitInfo from './HitInfo'
+import { useLoaderContext } from '../providers/LoaderContext'
+
 
 const config = {
     isHealthNumber: false
 }
 
+const RED = 0xFF0000
+const BLUE = 0x0000FF
+
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
-    return <Character src={frogknightPng} direction={-1} {...props} />
+    return <Character assetId={'frogknight'} direction={-1} {...props} />
 }
 export function Skeleton(props: KnownCharacterProps): JSX.Element {
-    return <Character src={skeletonPng} direction={-1} {...props} />
+    return <Character assetId={'skeleton'} direction={-1} {...props} />
 }
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
-    dispatch: React.Dispatch<Action>
+    dispatch: Dispatcher
     move$: MoveEmitter
+    scale: number
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
 }
 interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
-    src: string
+    assetId: string
     direction: -1 | 1
     characterMeta: CharacterMeta
 }
@@ -39,6 +51,8 @@ function Character(props: CharacterProps): JSX.Element {
     const [isDefending, setIsDefending] = useResetState(false, 500)
     const [damageShown, setDamageShown] = useResetState<number | null>(null, 800)
     const [isHovering, setIsHovering] = useState(false)
+
+    const { isBasicLoaded } = useLoaderContext()
 
     props.move$.useSubscription(function doCharMove(d) {
         const myId = props.characterMeta.id
@@ -57,14 +71,38 @@ function Character(props: CharacterProps): JSX.Element {
         }
     })
 
-    const spriteProps = {
-        src: props.src,
-        isAttacking,
-        isDefending
+    const blurFilter = new filters.BlurFilter()
+    blurFilter.blur = 10
+    const grayFilter = new filters.ColorMatrixFilter()
+    grayFilter.saturate(-.7, false)
+    const redFilter = new filters.ColorMatrixFilter()
+    redFilter.hue(180, false)
+
+    const charSpriteProps = {
+        image: Loader.shared.resources?.[props.assetId]?.data,
+        anchor: { x: 0, y: 1 },
     }
+
+    if (!isBasicLoaded) return <></>
     return <>
         {health > 0 ?
-            <div
+            <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
+                {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
+                {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
+                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
+                <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
+                {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
+
+                <HealthBar value={health} max={props.characterMeta.maxHealth} />
+                {damageShown != null && <HitInfo damage={damageShown} />}
+            </Container> :
+            <></>
+        }
+    </>
+}
+
+
+{/* <div
                 onClick={() => props.onClick(props.characterMeta)}
                 style={{ position: 'absolute', left: x + '%', top: y + '%', width: '10%' }}
                 onPointerEnter={() => setIsHovering(true)}
@@ -92,7 +130,4 @@ function Character(props: CharacterProps): JSX.Element {
                         <Health color={props.characterMeta.isPc ? '#53C541' : 'red'}>{health}</Health>
                     }
                 </div>
-            </div> :
-            <></>}
-    </>
-}
+            </div> */}

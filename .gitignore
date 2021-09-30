@@ -9,3 +9,4 @@
 .vercel
 .pnpm-debug.log
 /storybook-static
+pnpm-lock.yaml

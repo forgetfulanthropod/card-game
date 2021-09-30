@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import startPng from '../assets/start.png'
-import losePng from '../assets/fainted.png'
 // @ts-ignore
 import styled, { css, keyframes } from 'styled-components'
 
@@ -103,7 +102,7 @@ export const Start = styled.img.attrs({ src: startPng })`
     user-select: none;
 `
 
-export const Lose = styled.img.attrs({ src: losePng })`
+export const Lose = styled.img`
     position: absolute;
     margin: auto;
     top: 0;
