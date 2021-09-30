@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react'
-import { Graphics as PixiGraphics, TextStyle, utils } from 'pixi.js'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Graphics as PixiGraphics, TextStyle, Texture, utils } from 'pixi.js'
 import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
+import goodHealthTexturePng from '../assets/HEALTH_TEXTURE_GOOD.png'
+import badHealthTexturePng from '../assets/HEALTH_TEXTURE_BAD.png'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {
@@ -17,6 +19,15 @@ export default function PixiHealthBar(
         numberColor?: string
     }
 ): JSX.Element {
+    const [goodTexture, setGoodTexture] = useState<Texture>()
+    const [badTexture, setBadTexture] = useState<Texture>()
+
+    useEffect(() => {
+        setGoodTexture(Texture.from(goodHealthTexturePng))
+        setBadTexture(Texture.from(badHealthTexturePng))
+    }, [])
+
+
     const DISPLAY_WIDTH = 140
     const RAW_WIDTH = 1841
     const RAW_HEIGHT = 161
@@ -42,9 +53,19 @@ export default function PixiHealthBar(
 
     const color = props.numberColor ?? background
 
+
     const draw = useCallback(function drawHealthBar(g: PixiGraphics) {
         g.clear()
-        g.beginFill(utils.string2hex(background))
+        const color = utils.string2hex(background)
+        if (goodTexture != null && badTexture != null) {
+            console.log('using texture')
+            g.beginTextureFill({
+                texture: portion < colorStops[0].stop ? goodTexture : badTexture,
+                color
+            })
+        } else {
+            g.beginFill(color)
+        }
         g.drawRect(rectXOffset, rectYOffset, rectWidth, rectHeight)
         g.endFill()
     }, [rectWidth, color, background])
@@ -74,6 +95,5 @@ export default function PixiHealthBar(
                 })
             }
         />
-        {/* <Text text="Lo and Behold" /> */}
     </Container>
 }
