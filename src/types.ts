@@ -1,5 +1,5 @@
 declare global {
-    type Children = JSX.Element[] | JSX.Element
+    type Children = JSX.Element | Children[]
     type Callback = () => void
     type Setter<T> = React.Dispatch<React.SetStateAction<T>>
     type CharacterMeta = {

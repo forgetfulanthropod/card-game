@@ -78,7 +78,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         if (!isPlayerFirstTurn) {
             setTimeout(() => npcMove$.emit('first move of round'), 500)
         }
-    }, [battleHasBegun, isMoveAvailable, isPlayerFirstTurn, npcMove$], [isMoveAvailable])
+    }, [battleHasBegun, dispatch, isMoveAvailable, isPlayerFirstTurn, npcMove$], [isMoveAvailable])
 
     const winner = checkWinner(allCharacters)
     useEffect(function endGame() {
@@ -167,7 +167,6 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     const ref = useRef(null)
     const size = useSize(ref)
     const { width, height } = size
-    console.log({ width, height })
     const scale = width != null ? width / BASE_WIDTH : 1.0
 
     return <div ref={ref} style={{ width: '100%', height: '100%' }}>
@@ -185,7 +184,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         {
             width != null && height != null &&
             <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-                <LoaderProvider><>
+                <LoaderProvider>
                     <AssetLoader />
                     <PixiBackground scale={scale} />
                     {allCharacters.map(characterMeta => {
@@ -198,7 +197,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
                             <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                             <Skeleton {...characterProps} />
                     })}
-                </></LoaderProvider>
+                </LoaderProvider>
             </Stage>
         }
         {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
