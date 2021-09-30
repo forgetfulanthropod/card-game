@@ -1,15 +1,21 @@
 import { Container, PixiComponent, Sprite, useApp as usePixiApp } from '@inlet/react-pixi'
+import { useTimeout } from 'ahooks'
 // import type { Graphics as PixiGraphics } from 'pixi.js'
 import { Loader, Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
 import { useLoaderContext } from '../providers/LoaderContext'
+import type { AssetKey } from './AssetLoader'
 
 
-const dataOf = (assetId: string) => Loader.shared.resources?.[assetId]?.data
+const dataOf = (assetId: AssetKey) => Loader.shared.resources?.[assetId]?.data
 
 export default function Chest(props: { size: SizeQ }): JSX.Element {
     const { ticker, screen } = usePixiApp()
     const [lid, setLid] = useState<PixiSprite | null>(null)
+    const [showItems, setShowItems] = useState(false)
+    useTimeout(() => {
+        setShowItems(true)
+    }, 1000)
     // const [body, setBody] = useState<PixiSprite | null>(null)
     console.log('chest render')
 
@@ -37,6 +43,10 @@ export default function Chest(props: { size: SizeQ }): JSX.Element {
                 anchor={{ x: 1, y: .3 }}
                 // ref={setBody}
                 image={dataOf('chestBody')} />
+            {showItems && <>
+                <Sprite image={dataOf('fishstick')} />
+                <Sprite image={dataOf('potion')} />
+            </>}
             <Sprite
                 ref={s => setLid(s)}
                 image={dataOf('chestLid')}

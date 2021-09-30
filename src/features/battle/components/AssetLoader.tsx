@@ -11,7 +11,7 @@ import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 
 
-const assets = {
+const assetMap = {
     frogknight,
     skeleton,
     fishstick,
@@ -20,6 +20,7 @@ const assets = {
     chestBody,
     chestLid,
 }
+export type AssetKey = keyof typeof assetMap
 export default function AssetLoader(): JSX.Element {
     // const app = useApp()
     const { basicLoaded } = useLoaderContext()
@@ -27,7 +28,7 @@ export default function AssetLoader(): JSX.Element {
     useEffect(() => {
 
         let anyNewLoaded = false
-        for (const [name, url] of Object.entries(assets)) {
+        for (const [name, url] of Object.entries(assetMap)) {
             if (Loader.shared.resources[name]?.data == null) {
                 Loader.shared.add(name, url)
                 anyNewLoaded = true
