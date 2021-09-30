@@ -6,12 +6,14 @@ import { getDamage } from '../util/attack'
 import { MoveEmitter } from './AllCharacters'
 import type Action from './CharacterManager'
 // import { Hover } from './Hover'
-// import HealthBar from './HealthBar'
+import HealthBar from './PixiHealthBar'
 import { useResetState } from 'hooks'
 
 import { Container, Sprite } from '@inlet/react-pixi'
-import { filters } from 'pixi.js'
 import { Dispatcher } from './CharacterManager'
+import { filters, Loader } from 'pixi.js'
+import HitInfo from './HitInfo'
+import { useLoaderContext } from '../providers/LoaderContext'
 
 
 const config = {
@@ -22,10 +24,10 @@ const RED = 0xFF0000
 const BLUE = 0x0000FF
 
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
-    return <Character src={frogknightPng} direction={-1} {...props} />
+    return <Character assetId={'frogknight'} direction={-1} {...props} />
 }
 export function Skeleton(props: KnownCharacterProps): JSX.Element {
-    return <Character src={skeletonPng} direction={-1} {...props} />
+    return <Character assetId={'skeleton'} direction={-1} {...props} />
 }
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
@@ -39,7 +41,7 @@ interface KnownPlayerCharacterProps extends KnownCharacterProps {
 }
 interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
-    src: string
+    assetId: string
     direction: -1 | 1
     characterMeta: CharacterMeta
 }
@@ -49,6 +51,8 @@ function Character(props: CharacterProps): JSX.Element {
     const [isDefending, setIsDefending] = useResetState(false, 500)
     const [damageShown, setDamageShown] = useResetState<number | null>(null, 800)
     const [isHovering, setIsHovering] = useState(false)
+
+    const { isBasicLoaded } = useLoaderContext()
 
     props.move$.useSubscription(function doCharMove(d) {
         const myId = props.characterMeta.id
@@ -67,22 +71,30 @@ function Character(props: CharacterProps): JSX.Element {
         }
     })
 
-    const spriteProps = {
-        src: props.src,
-        isAttacking,
-        isDefending
-    }
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 10
+    const grayFilter = new filters.ColorMatrixFilter()
+    grayFilter.saturate(-.7, false)
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
+
+    const charSpriteProps = {
+        image: Loader.shared.resources?.[props.assetId]?.data,
+        anchor: { x: 0, y: 1 },
+    }
+
+    if (!isBasicLoaded) return <></>
     return <>
         {health > 0 ?
             <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
-                {isAttacking && <Sprite image={props.src} filters={[blurFilter]} tint={BLUE} />}
-                {isDefending && <Sprite image={props.src} filters={[blurFilter]} tint={RED} />}
-                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite image={props.src} filters={[blurFilter]} />}
-                <Sprite image={props.src} click={() => props.onClick(props.characterMeta)} interactive={true} />
+                {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
+                {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
+                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
+                <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
+                {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
+
+                <HealthBar value={health} max={props.characterMeta.maxHealth} />
+                {damageShown != null && <HitInfo damage={damageShown} />}
             </Container> :
             <></>
         }

@@ -13,6 +13,8 @@ import { Frogknight, Skeleton } from './Character'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 import PixiBackground from './PixiBackground'
 import { Action, Dispatcher, State } from './CharacterManager'
+import AssetLoader from './AssetLoader'
+import { LoaderProvider } from '../providers/LoaderContext'
 
 import losePng from '../assets/fainted.png'
 import Chest from './Chest'
@@ -39,6 +41,10 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     // useLog({ isPlayerFirstTurn })
     const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
     const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
+
+    useEffect(() => {
+
+    }, [])
 
     move$.useSubscription(function showMove(ad) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
@@ -179,17 +185,20 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         {
             width != null && height != null &&
             <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-                <PixiBackground scale={scale} />
-                {allCharacters.map(characterMeta => {
-                    const { x, y } = characterMeta
-                    const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }
-                    const id = getId(x, y)
-                    const characterProps = { scale, move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
+                <LoaderProvider><>
+                    <AssetLoader />
+                    <PixiBackground scale={scale} />
+                    {allCharacters.map(characterMeta => {
+                        const { x, y } = characterMeta
+                        const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }
+                        const id = getId(x, y)
+                        const characterProps = { scale, move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
 
-                    return characterMeta.isPc ?
-                        <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
-                        <Skeleton {...characterProps} />
-                })}
+                        return characterMeta.isPc ?
+                            <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
+                            <Skeleton {...characterProps} />
+                    })}
+                </></LoaderProvider>
             </Stage>
         }
         {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
