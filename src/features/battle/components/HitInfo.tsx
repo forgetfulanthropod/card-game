@@ -15,7 +15,7 @@ export default function HitInfo(
     }
 ): JSX.Element {
 
-    return <Container x={30} y={-200}>
+    return <Container x={0} y={0}>
         <Text
             text={`-${props.damage}`}
             anchor={{ x: 0, y: 1 }}

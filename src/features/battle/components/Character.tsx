@@ -81,11 +81,16 @@ function Character(props: CharacterProps): JSX.Element {
     const charSpriteProps = {
         image: Loader.shared.resources?.[props.assetId]?.data,
         anchor: { x: 0, y: 1 },
+        height: Loader.shared.resources?.[props.assetId]?.data?.height
     }
+    console.log('height of ', props.assetId, ' is ', charSpriteProps.height * props.scale)
 
     if (!isBasicLoaded) return <></>
     return <>
-        {health > 0 ?
+        {health > 0 ? <>
+            <Container x={x} y={y - charSpriteProps.height * props.scale * .8}>
+                {damageShown != null && <HitInfo damage={damageShown} />}
+            </Container>
             <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
                 {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
                 {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
@@ -94,8 +99,8 @@ function Character(props: CharacterProps): JSX.Element {
                 {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
 
                 <HealthBar value={health} max={props.characterMeta.maxHealth} />
-                {damageShown != null && <HitInfo damage={damageShown} />}
-            </Container> :
+            </Container>
+        </> :
             <></>
         }
     </>

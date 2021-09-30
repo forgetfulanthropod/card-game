@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Graphics as PixiGraphics, TextStyle, Texture, utils } from 'pixi.js'
+import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, Texture, utils } from 'pixi.js'
 import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
-import goodHealthTexturePng from '../assets/HEALTH_TEXTURE_GOOD.png'
-import badHealthTexturePng from '../assets/HEALTH_TEXTURE_BAD.png'
+import { useLoaderContext } from '../providers/LoaderContext'
 
 
 export default function HealthBar(
@@ -14,13 +13,14 @@ export default function HealthBar(
         numberColor?: string
     }
 ): JSX.Element {
-    const [goodTexture, setGoodTexture] = useState<Texture>()
-    const [badTexture, setBadTexture] = useState<Texture>()
+    const { isDeluxeLoaded } = useLoaderContext()
+    // const [goodTexture, setGoodTexture] = useState<Texture>()
+    // const [badTexture, setBadTexture] = useState<Texture>()
 
-    useEffect(() => {
-        setGoodTexture(Texture.from(goodHealthTexturePng))
-        setBadTexture(Texture.from(badHealthTexturePng))
-    }, [])
+    // useEffect(() => {
+    //     setGoodTexture(Texture.from(goodHealthTexturePng))
+    //     setBadTexture(Texture.from(badHealthTexturePng))
+    // }, [])
 
 
     const DISPLAY_WIDTH = 140
@@ -38,9 +38,9 @@ export default function HealthBar(
     const rectYOffset = DISPLAY_HEIGHT * Y_MARGIN
 
     const colorStops = props.colorStops ?? [
-        { color: 'red', stop: .2 },
-        { color: 'goldenrod', stop: .4 },
-        { color: 'lightgreen', stop: 1 },
+        { color: '#98040c', stop: .2 },
+        { color: '#fff133', stop: .4 },
+        { color: '#91ff85', stop: 1 },
     ]
     const background = ([...colorStops]
         .sort((cs1, cs2) => cs1.stop - cs2.stop)
@@ -52,19 +52,21 @@ export default function HealthBar(
     const draw = useCallback(function drawHealthBar(g: PixiGraphics) {
         g.clear()
         const color = utils.string2hex(background)
-        if (goodTexture != null && badTexture != null) {
-            console.log('using texture')
-            g.beginTextureFill({
-                texture: portion < colorStops[0].stop ? goodTexture : badTexture,
-                color,
-                alpha: .5
-            })
-        } else {
-            g.beginFill(color)
-        }
+        g.beginFill(color)
         g.drawRect(rectXOffset, rectYOffset, rectWidth, rectHeight)
+        const goodHealthTexture = Loader.shared.resources?.goodHealthTexture?.texture
+        const badHealthTexture = Loader.shared.resources?.badHealthTexture?.texture
+        if (goodHealthTexture != null && badHealthTexture != null) {
+            g.beginTextureFill({
+                texture: portion > colorStops[0].stop ? goodHealthTexture : badHealthTexture,
+                color,
+                alpha: 1,
+                matrix: new Matrix(.1, 0, 0, .1, 0, 0)
+            })
+            g.drawRect(rectXOffset, rectYOffset, rectWidth, rectHeight)
+        }
         g.endFill()
-    }, [rectWidth, color, background])
+    }, [rectWidth, color, background, isDeluxeLoaded])
 
     return <Container x={0} y={10}>
         <Graphics {...{ draw }} />
