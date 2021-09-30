@@ -1,24 +1,19 @@
-import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react'
-import { AppProvider, Sprite, Stage } from '@inlet/react-pixi'
-
+import { Stage } from '@inlet/react-pixi'
 import { useEventEmitter, useSize } from 'ahooks'
 import { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { useEffectWhen } from 'hooks'
-import produce from 'immer'
+import React, { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
-import { makeInitialPlayerCharacters } from '../util/factories'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
-import { Frogknight, Skeleton } from './Character'
-import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
-import PixiBackground from './PixiBackground'
-import { Action, Dispatcher, State } from './CharacterManager'
-import AssetLoader from './AssetLoader'
-import { LoaderProvider } from '../providers/LoaderContext'
-
 import losePng from '../assets/fainted.png'
+import { LoaderProvider } from '../providers/LoaderContext'
+import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
+import AssetLoader from './AssetLoader'
+import { Frogknight, Skeleton } from './Character'
+import { Action, Dispatcher, State } from './CharacterManager'
 import Chest from './Chest'
-
+import PixiBackground from './PixiBackground'
+import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 
 
 export const DEBUG = false
@@ -197,6 +192,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
                             <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                             <Skeleton {...characterProps} />
                     })}
+                    {endScreen === 'win' && <Chest size={size} />}
                 </LoaderProvider>
             </Stage>
         }

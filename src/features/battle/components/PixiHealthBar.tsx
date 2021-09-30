@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import { Container, Graphics, Sprite, Text } from '@inlet/react-pixi'
 import { Graphics as PixiGraphics, TextStyle, Texture, utils } from 'pixi.js'
-import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
+import React, { useCallback, useEffect, useState } from 'react'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
-import goodHealthTexturePng from '../assets/HEALTH_TEXTURE_GOOD.png'
 import badHealthTexturePng from '../assets/HEALTH_TEXTURE_BAD.png'
+import goodHealthTexturePng from '../assets/HEALTH_TEXTURE_GOOD.png'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {

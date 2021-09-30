@@ -1,19 +1,16 @@
+import { Container, Sprite } from '@inlet/react-pixi'
+import { useResetState } from 'hooks'
+import { filters, Loader } from 'pixi.js'
 import React, { useState } from 'react'
-import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
-import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
+import { useLoaderContext } from '../providers/LoaderContext'
 import { getDamage } from '../util/attack'
 // import { DamageDiv, Health } from './Styles'
 import { MoveEmitter } from './AllCharacters'
-import type Action from './CharacterManager'
+import { Dispatcher } from './CharacterManager'
+import HitInfo from './HitInfo'
 // import { Hover } from './Hover'
 import HealthBar from './PixiHealthBar'
-import { useResetState } from 'hooks'
 
-import { Container, Sprite } from '@inlet/react-pixi'
-import { Dispatcher } from './CharacterManager'
-import { filters, Loader } from 'pixi.js'
-import HitInfo from './HitInfo'
-import { useLoaderContext } from '../providers/LoaderContext'
 
 
 const config = {

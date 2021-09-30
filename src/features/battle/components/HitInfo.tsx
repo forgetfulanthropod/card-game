@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react'
-import { Graphics as PixiGraphics, TextStyle, utils } from 'pixi.js'
-import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
-import healthBorderPng from '../assets/HEALTH_BORDER.png'
+import { Container, Text } from '@inlet/react-pixi'
+import { TextStyle } from 'pixi.js'
+import React from 'react'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {
