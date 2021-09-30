@@ -10,7 +10,7 @@ const dataOf = (assetId: string) => Loader.shared.resources?.[assetId]?.data
 export default function Chest(props: { size: SizeQ }): JSX.Element {
     const { ticker, screen } = usePixiApp()
     const [lid, setLid] = useState<PixiSprite | null>(null)
-    const [body, setBody] = useState<PixiSprite | null>(null)
+    // const [body, setBody] = useState<PixiSprite | null>(null)
     console.log('chest render')
 
     const { isBasicLoaded } = useLoaderContext()
@@ -30,37 +30,32 @@ export default function Chest(props: { size: SizeQ }): JSX.Element {
     const scale = props.size.width == null ? 1 : baseSize / props.size.width
     if (!isBasicLoaded) return <></>
     return <>
-        {props.size.width != null && <NewOverlay size={props.size as Size} />}
-        <Container scale={scale} position={{ x: screen.width / 2, y: screen.height / 2 }}>
+        {props.size.width != null && <Overlay size={props.size as Size} />}
+        <Container scale={scale} position={{ x: screen.width * .65, y: screen.height * .4 }}>
 
             <Sprite
-                // anchor={0.5}
                 anchor={{ x: 1, y: .3 }}
-                ref={setBody}
+                // ref={setBody}
                 image={dataOf('chestBody')} />
             <Sprite
                 ref={s => setLid(s)}
                 image={dataOf('chestLid')}
-                // pivot={{ x: 100, y: 1 }}
                 pivot={{ x: -50, y: 0 }}
-                // anchor={{ x: 0, y: 0 }}
                 anchor={{ x: .95, y: .4 }}
-            // position={1}
             />
             {/* <Graphics draw={g => {
-            if (lid == null) return
-            drawCircle(g, 'red', lid.pivot.x, lid.pivot.y, 40)
-            drawCircle(g, 'green', lid.anchor.x, lid.anchor.y, 20)
-            if (body == null) return
-            drawCircle(g, 'orange', body.anchor.x, body.anchor.y, 10)
-        }}
-        /> */}
+                if (lid == null) return
+                drawCircle(g, 'red', lid.pivot.x, lid.pivot.y, 40)
+                drawCircle(g, 'green', lid.anchor.x, lid.anchor.y, 20)
+                if (body == null) return
+                drawCircle(g, 'orange', body.anchor.x, body.anchor.y, 10)
+            }} /> */}
         </Container>
     </>
 }
 
 
-const NewOverlay = PixiComponent<{ size: Size }, PixiSprite>('NewOverlay', {
+const Overlay = PixiComponent<{ size: Size }, PixiSprite>('Overlay', {
     create: (props) => {
         console.log('new overlay createad')
         const bg = new PixiSprite(PixiTexture.WHITE)
