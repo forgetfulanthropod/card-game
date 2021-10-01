@@ -1,20 +1,18 @@
-import React, { useState } from 'react'
-import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
-import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
+import { Container, Sprite } from '@inlet/react-pixi'
+import { useResetState } from 'hooks'
+import { filters, Loader } from 'pixi.js'
+import React, { useEffect, useState } from 'react'
+import { useLoaderContext } from '../providers/LoaderContext'
 import { getDamage } from '../util/attack'
-// import { DamageDiv, Health } from './Styles'
 import { MoveEmitter } from './AllCharacters'
-import type Action from './CharacterManager'
+import { Dispatcher } from './CharacterManager'
+import FlyingContainer from './FlyingContainer'
 // import { Hover } from './Hover'
 import HealthBar from './HealthBar'
-import { useResetState } from 'hooks'
-
-import { Container, Sprite } from '@inlet/react-pixi'
-import { Dispatcher } from './CharacterManager'
-import { filters, Loader } from 'pixi.js'
 import HitInfo from './HitInfo'
-import { useLoaderContext } from '../providers/LoaderContext'
 import MoveInfo from './MoveInfo'
+
+
 
 
 const config = {
@@ -51,6 +49,7 @@ interface CharacterProps extends KnownCharacterProps {
 function Character(props: CharacterProps): JSX.Element {
     const { x, y, health } = props.characterMeta
     const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
+    const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
     const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
@@ -64,8 +63,10 @@ function Character(props: CharacterProps): JSX.Element {
             setIsAttacking(true)
             setCurrentMove(d.move)
             props.dispatch({ a: 'setHasMoved', id: myId, v: true })
+            setFlyTo({ x: d.defenders[0].x, y: d.defenders[0].y, })
         } else {
             setCurrentMove(null)
+            setFlyTo(undefined)
         }
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
@@ -95,52 +96,23 @@ function Character(props: CharacterProps): JSX.Element {
     if (!isBasicLoaded) return <></>
     return <>
         {health > 0 ? <>
-            <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
-                {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
-                {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
-                {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
-                <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
-                {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
+            <FlyingContainer {...{ start: { x, y }, flyTo }}>
+                <Container x={0} y={0} scale={{ x: props.scale, y: props.scale }}>
+                    {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
+                    {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
+                    {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
+                    <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
+                    {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
 
-                <HealthBar value={health} max={props.characterMeta.maxHealth} />
-            </Container>
-            <Container x={x} y={y - charSpriteProps.height * props.scale * .8}>
-                {damageShown != null && <HitInfo damage={damageShown} />}
-                {currentMove != null && <MoveInfo move={currentMove} />}
-            </Container>
+                    <HealthBar value={health} max={props.characterMeta.maxHealth} />
+                </Container>
+                <Container x={0} y={- charSpriteProps.height * props.scale * .8}>
+                    {damageShown != null && <HitInfo damage={damageShown} />}
+                    {currentMove != null && <MoveInfo move={currentMove} />}
+                </Container>
+            </FlyingContainer>
         </> :
             <></>
         }
     </>
 }
-
-
-{/* <div
-                onClick={() => props.onClick(props.characterMeta)}
-                style={{ position: 'absolute', left: x + '%', top: y + '%', width: '10%' }}
-                onPointerEnter={() => setIsHovering(true)}
-                onPointerLeave={() => setIsHovering(false)}
-            >
-                <div style={{ position: 'relative', width: '100%', height: '100%', zIndex: 2 }}>
-                    {isHovering && <Hover characterMeta={props.characterMeta} />}
-                    {damageShown != null && <DamageDiv>-{damageShown}</DamageDiv>}
-                    <Sprite {...spriteProps} x={0} y={0} hasMoved={props.characterMeta.hasMoved} />
-                    {(isAttacking || isDefending) ?
-                        <>
-                            <Sprite {...spriteProps} x={0} y={0} absolute={true} blur={true} />
-                            <Sprite {...spriteProps} x={0} y={0} absolute={true} color={isAttacking ? 'blue' : (isDefending ? 'red' : '')} blur={true} />
-                        </>
-                        : (props.isSelected && !props.characterMeta.hasMoved) ?
-                            <>
-                                <Sprite {...spriteProps} x={0} y={0} absolute={true} glow={true} color={'white'} />
-                                <Sprite {...spriteProps} x={0} y={0} absolute={true} />
-                            </>
-                            : null}
-                    {config.isHealthNumber ?
-                        <div style={{ position: 'absolute', bottom: '-3vw' }}>
-                            <HealthBar value={health} max={props.characterMeta.maxHealth} />
-                        </div> :
-                        <Health color={props.characterMeta.isPc ? '#53C541' : 'red'}>{health}</Health>
-                    }
-                </div>
-            </div> */}

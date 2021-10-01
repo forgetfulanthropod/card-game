@@ -68,19 +68,6 @@ export const popup = keyframes`
 `
 
 
-interface HealthProps { color: string }
-export const Health = styled.div`
-    font-family: monospace;
-    font-weight: bold;
-    position: absolute;
-    /* position: relative; */
-    font-size: 3vw;
-    color: ${(p: HealthProps) => p.color};
-    left: 50%;
-    transform: translateX(-50%) translateY(-15%);
-`
-
-
 export const IdleScreenOverlay = styled.div`
     position: absolute;
     top: 0;
@@ -180,16 +167,4 @@ export const MoveButton = styled.button<ABP>`
     width: 100%;
     font-size: 1vw;
     padding: 1vw;
-`
-
-interface DTP { left: number; top: number }
-export const DamageDiv = styled.div<DTP>`
-    position: absolute;
-    color: red;
-    font-size: 1.5vw;
-    left: ${(p: DTP) => p.left}%;
-    top: ${(p: DTP) => p.top}%;
-    padding: 5%;
-    font-family: monospace;
-    animation: ${css`${popup} .4s`};
 `
