@@ -195,7 +195,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
                             <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
                             <Skeleton {...characterProps} />
                     })}
-                    {endScreen === 'win' && <Chest size={size} />}
+                    {endScreen === 'win' && <Chest size={{ width, height }} />}
                 </LoaderProvider>
             </Stage>
         }

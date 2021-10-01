@@ -10,7 +10,7 @@ import FlyingContainer from './FlyingContainer'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 // import { Hover } from './Hover'
-import HealthBar from './PixiHealthBar'
+import HealthBar from './HealthBar'
 
 
 

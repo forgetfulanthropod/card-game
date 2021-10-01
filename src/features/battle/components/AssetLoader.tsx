@@ -1,6 +1,6 @@
 import { Loader } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
-import orcWarrior from '../assets/chars/orcWarrior.png'
+import orcWarrior from '../assets/chars/orcWarrior-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 import frogknight from '../assets/Frog_Knight_sprite-200.png'
