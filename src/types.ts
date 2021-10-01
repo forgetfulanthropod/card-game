@@ -14,6 +14,8 @@ declare global {
         maxHealth: number
         x: number
         y: number
+        screenX: number
+        screenY: number
         stance: StanceType
     }
     type StanceType = 'defensive' | 'neutral' | 'aggressive'

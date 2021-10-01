@@ -1,58 +1,70 @@
-import { Container, render, useApp as usePixiApp } from '@inlet/react-pixi'
-import { Container as PixiContainer, Ticker } from 'pixi.js'
-import React, { useEffect } from 'react'
+import { Container, useApp as usePixiApp } from '@inlet/react-pixi'
+import { Container as PixiContainer } from 'pixi.js'
+import React, { useEffect, useState } from 'react'
+import { Start } from './Styles'
 
 
-let x: number, y: number
-let start: { x: number, y: number }
-let stage: PixiContainer
-let ticker: Ticker
-let children: Children
 
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
 
-const flyTo = (flyToCoords: { x: number, y: number }): () => void => {
-
-    const fly = (elapsed: number) => {
-        if (elapsed < FLY_TO_TIME) {
-            x = start.x + (flyToCoords.x - start.x) * elapsed / FLY_TO_TIME
-            y = start.y + (flyToCoords.y - start.y) * elapsed / FLY_TO_TIME
-        } else {
-            x = flyToCoords.x + (start.x - flyToCoords.x) * (elapsed - FLY_TO_TIME) / FLY_BACK_TIME
-            y = flyToCoords.y + (start.y - flyToCoords.y) * (elapsed - FLY_TO_TIME) / FLY_BACK_TIME
-        }
-
-        console.log('rendering at ', x, y)
-        render(<FlyingContainer />, stage)
-    }
-    ticker.add(fly)
-
-    return () => ticker.remove(fly)
-}
-
 export default function FlyingContainer(
     props: {
-        children?: Children,
-        start?: { x: number, y: number },
+        children: Children,
+        scale: number,
+        start: { x: number, y: number },
         flyTo?: { x: number, y: number },
     }
 ): JSX.Element {
-    ({ stage, ticker } = usePixiApp())
-    if (props.children) children = props.children
-    if (props.start) {
-        start = props.start;
-        ({ x, y } = start)
-    }
 
+    const [ref, setRef] = useState<PixiContainer | null>(null)
+
+    const { ticker } = usePixiApp()
+
+    const { x: flyToX = 1, y: flyToY = 1 } = props.flyTo ?? {}
+    const { x: startX, y: startY } = props.start
     useEffect(() => {
-        if (!props.flyTo) return undefined
+        if (ref == null) return () => { }
 
-        return flyTo(props.flyTo)
-    }, [props.flyTo])
+        ref.x = props.start.x
+        ref.y = props.start.y
 
-    return <Container x={x} y={y}>
-        {children}
+        if (
+            props.flyTo == null ||
+            props.start == null ||
+            ticker == null
+        ) return () => { }
+
+        const flyTo = props.flyTo
+        const start = props.start
+        // console.log('starting animation', { flyTo, start })
+        let timeElapsed = 0
+        const fly = (elapsed: number) => {
+            // const deltaTimeMs = elapsed * 1000 / 60
+            timeElapsed += elapsed * 16.66
+            let x: number, y: number
+            if (timeElapsed < FLY_TO_TIME) {
+                x = start.x + (flyTo.x - start.x) * timeElapsed / FLY_TO_TIME
+                y = start.y + (flyTo.y - start.y) * timeElapsed / FLY_TO_TIME
+            } else if (timeElapsed < FLY_TIME) {
+                x = flyTo.x + (start.x - flyTo.x) * (timeElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+                y = flyTo.y + (start.y - flyTo.y) * (timeElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            } else {
+                x = start.x
+                y = start.y
+                ticker.remove(fly)
+            }
+
+            ref.x = x
+            ref.y = y
+        }
+        ticker.add(fly)
+
+        return () => ticker.remove(fly)
+    }, [flyToX, flyToY, startX, startY, ref, ticker])
+
+    return <Container ref={r => setRef(r)} scale={props.scale}>
+        {props.children}
     </Container>
 }

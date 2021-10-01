@@ -47,13 +47,14 @@ interface CharacterProps extends KnownCharacterProps {
     characterMeta: CharacterMeta
 }
 function Character(props: CharacterProps): JSX.Element {
-    const { x, y, health } = props.characterMeta
+    const { screenX, screenY, health } = props.characterMeta
     const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
     const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
     const [isHovering, setIsHovering] = useState(false)
+    // useEffect(() => { if (props.characterMeta.id === '65-50') { console.log('character render') } })
 
     const { isBasicLoaded } = useLoaderContext()
 
@@ -63,7 +64,8 @@ function Character(props: CharacterProps): JSX.Element {
             setIsAttacking(true)
             setCurrentMove(d.move)
             props.dispatch({ a: 'setHasMoved', id: myId, v: true })
-            setFlyTo({ x: d.defenders[0].x, y: d.defenders[0].y, })
+            setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
+            console.log({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
         } else {
             setCurrentMove(null)
             setFlyTo(undefined)
@@ -91,13 +93,12 @@ function Character(props: CharacterProps): JSX.Element {
         anchor: { x: 0, y: 1 },
         height: Loader.shared.resources?.[props.assetId]?.data?.height
     }
-    console.log('height of ', props.assetId, ' is ', charSpriteProps.height * props.scale)
 
     if (!isBasicLoaded) return <></>
     return <>
         {health > 0 ? <>
-            <FlyingContainer {...{ start: { x, y }, flyTo }}>
-                <Container x={0} y={0} scale={{ x: props.scale, y: props.scale }}>
+            <FlyingContainer {...{ start: { x: screenX, y: screenY }, flyTo, scale: props.scale }}>
+                <Container x={0} y={0}>
                     {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
                     {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
                     {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
@@ -106,7 +107,7 @@ function Character(props: CharacterProps): JSX.Element {
 
                     <HealthBar value={health} max={props.characterMeta.maxHealth} />
                 </Container>
-                <Container x={0} y={- charSpriteProps.height * props.scale * .8}>
+                <Container x={0} y={- charSpriteProps.height * .8}>
                     {damageShown != null && <HitInfo damage={damageShown} />}
                     {currentMove != null && <MoveInfo move={currentMove} />}
                 </Container>

@@ -27,6 +27,7 @@ export type Action =
     | { a: 'setSelectedCharacter', c: CharacterMeta }
     | { a: 'setSelectedMove', m: MoveMeta }
     | { a: 'fullReset' }
+    | { a: 'updateScreenSize', size: Size }
 
 
 function reducer(state: State, action: Action) {
@@ -66,6 +67,12 @@ function reducer(state: State, action: Action) {
             } case 'fullReset': {
                 const newState = makeInitialState()
                 Object.assign(draft, newState)
+                return
+            } case 'updateScreenSize': {
+                draft.allCharacters.forEach(c => {
+                    c.screenX = c.x * action.size.width / 100
+                    c.screenY = c.y * action.size.height / 100
+                })
                 return
             } default:
                 throw new Error(`unknown action ${JSON.stringify(action)}`)
