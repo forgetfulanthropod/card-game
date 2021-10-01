@@ -1,30 +1,29 @@
 import { Container, Text } from '@inlet/react-pixi'
-import { TextStyle } from 'pixi.js'
+import { TextStyle, Transform } from 'pixi.js'
 import React from 'react'
-
 
 export default function HitInfo(
     props: {
-        damage: number,
+        move: MoveMeta,
+        offset: number,
     }
 ): JSX.Element {
 
     return <Text
-        text={`-${props.damage}`}
+        y={props.offset}
+        text={props.move.name}
         anchor={{ x: 0, y: 1 }}
         style={
             new TextStyle({
                 fontFamily: 'monospace',
-                fontSize: 60,
-                //   fontWeight: 400,
-                fill: ['#bf040e', '#98040c'], // gradient
+                fontSize: 40,
+                fontWeight: '900',
+                fill: ['#333', '#000'], // gradient
                 // stroke: '#01d27e',
                 // strokeThickness: 5,
-                letterSpacing: -5,
-                dropShadow: true,
-                dropShadowColor: '#eeeeee',
-                // dropShadowBlur: 4,
-                // dropShadowAngle: Math.PI / 6,
+                letterSpacing: -2,
+                stroke: '#aaa',
+                strokeThickness: 4,
                 // dropShadowDistance: 6,
                 // wordWrap: true,
                 // wordWrapWidth: 440,
