@@ -3,7 +3,7 @@ import { useTimeout } from 'ahooks'
 // import type { Graphics as PixiGraphics } from 'pixi.js'
 import { Loader, Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
-import { useLoaderContext } from '../providers/LoaderContext'
+import { useLoaderContext } from '../providers/LoaderProvider'
 import type { AssetKey } from './AssetLoader'
 
 

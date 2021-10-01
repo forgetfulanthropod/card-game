@@ -9,7 +9,7 @@ import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import skeleton from '../assets/Skeleton_Warrior_sprite-200.png'
-import { useLoaderContext } from '../providers/LoaderContext'
+import { useLoaderContext } from '../providers/LoaderProvider'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {

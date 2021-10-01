@@ -2,7 +2,7 @@ import { Container, Graphics, Sprite, Text } from '@inlet/react-pixi'
 import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, utils } from 'pixi.js'
 import React, { useCallback } from 'react'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
-import { useLoaderContext } from '../providers/LoaderContext'
+import { useLoaderContext } from '../providers/LoaderProvider'
 
 
 export default function HealthBar(
