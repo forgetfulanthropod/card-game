@@ -1,10 +1,10 @@
 // HealthBar.stories.ts | HealthBar.stories.tsx
 
-import React from 'react'
-
 import { ComponentStory, Meta } from '@storybook/react'
-
+import React from 'react'
 import HealthBar from '../components/HealthBar'
+
+
 
 export default {
     component: HealthBar,

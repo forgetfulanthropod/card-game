@@ -1,5 +1,5 @@
-import { Container, Text } from '@inlet/react-pixi'
-import { TextStyle, Transform } from 'pixi.js'
+import { Text } from '@inlet/react-pixi'
+import { TextStyle } from 'pixi.js'
 import React from 'react'
 
 export default function HitInfo(

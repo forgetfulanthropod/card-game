@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 /* BUGGY:
 type Subscription<T> = (val: T) => void

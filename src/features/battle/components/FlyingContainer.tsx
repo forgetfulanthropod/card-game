@@ -1,7 +1,6 @@
 import { Container, useApp as usePixiApp } from '@inlet/react-pixi'
 import { Container as PixiContainer } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
-import { Start } from './Styles'
 
 
 

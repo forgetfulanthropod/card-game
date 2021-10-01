@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import startPng from '../assets/start.png'
 // @ts-ignore
 import styled, { css, keyframes } from 'styled-components'
+import startPng from '../assets/start.png'
 
 
 export const HoverDiv = styled.div`

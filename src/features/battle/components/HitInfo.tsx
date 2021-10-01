@@ -1,4 +1,4 @@
-import { Container, Text } from '@inlet/react-pixi'
+import { Text } from '@inlet/react-pixi'
 import { TextStyle } from 'pixi.js'
 import React from 'react'
 

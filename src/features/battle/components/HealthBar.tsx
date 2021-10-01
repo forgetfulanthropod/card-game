@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, Texture, utils } from 'pixi.js'
-import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
+import { Container, Graphics, Sprite, Text } from '@inlet/react-pixi'
+import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, utils } from 'pixi.js'
+import React, { useCallback } from 'react'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
 import { useLoaderContext } from '../providers/LoaderContext'
-import toast from 'react-hot-toast'
 
 
 export default function HealthBar(

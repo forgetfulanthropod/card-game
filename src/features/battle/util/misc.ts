@@ -1,4 +1,4 @@
-import { stanceTypeMetaMap, moveTypeMetaMap } from './constants'
+import { moveTypeMetaMap, stanceTypeMetaMap } from './constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 

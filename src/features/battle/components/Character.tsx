@@ -7,10 +7,10 @@ import { getDamage } from '../util/attack'
 import { MoveEmitter } from './AllCharacters'
 import { Dispatcher } from './CharacterManager'
 import FlyingContainer from './FlyingContainer'
-import HitInfo from './HitInfo'
-import MoveInfo from './MoveInfo'
 // import { Hover } from './Hover'
 import HealthBar from './HealthBar'
+import HitInfo from './HitInfo'
+import MoveInfo from './MoveInfo'
 
 
 
