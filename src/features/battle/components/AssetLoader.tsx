@@ -49,11 +49,8 @@ export default function AssetLoader(): JSX.Element {
         }
         Loader.shared.load()
 
-        const cb = (_, { name }) => {
-            console.log(name, "is loaded")
-            setLoaded(s => new Set([...Array.from(s), name]))
-        }
-        Loader.shared.onLoad.add(cb)
+        // @ts-ignore
+        Loader.shared.onLoad.add((_, { name }) => { setLoaded(s => new Set([...Array.from(s), name])) })
         // return () => Loader.shared.onLoad.detach(cb)
     }, [basicLoaded, deluxeLoaded, isBasicLoaded])
 
