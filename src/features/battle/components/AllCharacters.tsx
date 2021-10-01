@@ -160,9 +160,13 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     }
 
     const ref = useRef(null)
-    const size = useSize(ref)
-    const { width, height } = size
-    const scale = width != null ? width / BASE_WIDTH : 1.0
+    // const size = useSize(ref)
+    const { width = 1920, height = 1080 } = useSize(ref)
+    const scale = width / BASE_WIDTH
+
+    useEffect(() => {
+        dispatch({ a: 'updateScreenSize', size: { width, height } })
+    }, [dispatch, width, height])
 
     return <div ref={ref} style={{ width: '100%', height: '100%' }}>
         {
@@ -184,9 +188,8 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
                     <PixiBackground scale={scale} />
                     {allCharacters.map(characterMeta => {
                         const { x, y } = characterMeta
-                        const pxCharacterMeta = { ...characterMeta, x: x * width / 100, y: y * height / 100 }
                         const id = getId(x, y)
-                        const characterProps = { scale, move$, dispatch, characterMeta: pxCharacterMeta, onClick, key: id }
+                        const characterProps = { scale, move$, dispatch, characterMeta, onClick, key: id }
 
                         return characterMeta.isPc ?
                             <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :

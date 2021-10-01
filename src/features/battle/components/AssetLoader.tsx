@@ -1,17 +1,24 @@
 import { Loader } from 'pixi.js'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import orcWarrior from '../assets/chars/orcWarrior.png'
+import chestBody from '../assets/CHEST_BODY.png'
+import chestLid from '../assets/CHEST_LID.png'
 import frogknight from '../assets/Frog_Knight_sprite-200.png'
-import skeleton from '../assets/Skeleton_Warrior_sprite-200.png'
-import { useLoaderContext } from '../providers/LoaderContext'
-
+import healthTexture from '../assets/HEALTH_TEXTURE.png'
 import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
-import chestBody from '../assets/CHEST_BODY.png'
-import chestLid from '../assets/CHEST_LID.png'
-import orcWarrior from '../assets/chars/orcWarrior.png'
+import skeleton from '../assets/Skeleton_Warrior_sprite-200.png'
+import { useLoaderContext } from '../providers/LoaderContext'
 
-const assetMap = {
+
+// export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {
+//     create: (props) => {
+
+//     },
+// })
+
+const basicAssets = {
     frogknight,
     skeleton,
     fishstick,
@@ -21,32 +28,40 @@ const assetMap = {
     chestLid,
     orcWarrior,
 }
-export type AssetKey = keyof typeof assetMap
+const deluxeAssets = {
+    healthTexture,
+}
+const allAssets = { ...basicAssets, ...deluxeAssets }
+export type AssetKey = keyof typeof allAssets
 export default function AssetLoader(): JSX.Element {
     // const app = useApp()
-    const { basicLoaded } = useLoaderContext()
+    const { deluxeLoaded, basicLoaded, isBasicLoaded } = useLoaderContext()
+    const [loaded, setLoaded] = useState(new Set(
+        Object.keys(allAssets).filter(name => Loader.shared.resources[name]?.data != null)
+    ))
 
     useEffect(() => {
+        console.log(loaded)
+        if (Object.keys(basicAssets).every(k => loaded.has(k))) {
+            basicLoaded()
+        }
+        if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
+            deluxeLoaded()
+        }
+    }, [basicLoaded, deluxeLoaded, loaded])
 
-        let anyNewLoaded = false
-        for (const [name, url] of Object.entries(assetMap)) {
+    useEffect(() => {
+        for (const [name, url] of Object.entries({ ...basicAssets, ...deluxeAssets })) {
             if (Loader.shared.resources[name]?.data == null) {
                 Loader.shared.add(name, url)
-                console.log("gonna load", name)
-                anyNewLoaded = true
             }
         }
-        if (!anyNewLoaded) {
-            basicLoaded()
-            return
-        }
         Loader.shared.load()
-            .onComplete.add(() => {
-                console.log('everything is loaded')
-                basicLoaded()
-            })
 
-    }, [basicLoaded])
+        // @ts-ignore
+        Loader.shared.onLoad.add((_, { name }) => { setLoaded(s => new Set([...Array.from(s), name])) })
+        // return () => Loader.shared.onLoad.detach(cb)
+    }, [basicLoaded, deluxeLoaded, isBasicLoaded])
 
     return <></>
 }
