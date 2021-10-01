@@ -1,5 +1,5 @@
 declare global {
-    type Children = JSX.Element[] | JSX.Element
+    type Children = JSX.Element | null | false | Children[]
     type Callback = () => void
     type Setter<T> = React.Dispatch<React.SetStateAction<T>>
     type CharacterMeta = {
@@ -51,7 +51,7 @@ declare global {
         width?: number
         height?: number
     }
-
+    type EmptyObject = Record<string, never>
 }
 
 export default null

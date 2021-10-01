@@ -1,16 +1,16 @@
 import { Container, Sprite } from '@inlet/react-pixi'
 import { useResetState } from 'hooks'
 import { filters, Loader } from 'pixi.js'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useLoaderContext } from '../providers/LoaderContext'
 import { getDamage } from '../util/attack'
 import { MoveEmitter } from './AllCharacters'
 import { Dispatcher } from './CharacterManager'
 import FlyingContainer from './FlyingContainer'
-// import { Hover } from './Hover'
-import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
+// import { Hover } from './Hover'
+import HealthBar from './HealthBar'
 
 
 
@@ -28,7 +28,7 @@ export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
     return <Character assetId={'frogknight'} direction={-1} {...props} />
 }
 export function Skeleton(props: KnownCharacterProps): JSX.Element {
-    return <Character assetId={'skeleton'} direction={-1} {...props} />
+    return <Character assetId={'orcWarrior'} direction={-1} {...props} />
 }
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
@@ -94,6 +94,9 @@ function Character(props: CharacterProps): JSX.Element {
         anchor: { x: 0, y: 1 },
         height: Loader.shared.resources?.[props.assetId]?.data?.height
     }
+    // if (props.assetId === 'orcWarrior') {
+    //     debugger
+    // }
 
     if (!isBasicLoaded) return <></>
     return <>

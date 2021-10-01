@@ -1,13 +1,15 @@
-import { IAddOptions, Loader } from 'pixi.js'
+import { Loader } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
+import orcWarrior from '../assets/chars/orcWarrior-200.png'
+import chestBody from '../assets/CHEST_BODY.png'
+import chestLid from '../assets/CHEST_LID.png'
+import frogknight from '../assets/Frog_Knight_sprite-200.png'
+import healthTexture from '../assets/HEALTH_TEXTURE.png'
+import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
+import potion from '../assets/misc-png/INVENTORY_POTION.png'
+import bread from '../assets/misc-png/ITEM_BREAD.png'
+import skeleton from '../assets/Skeleton_Warrior_sprite-200.png'
 import { useLoaderContext } from '../providers/LoaderContext'
-
-import frogknightPng from '../assets/Frog_Knight_sprite-200.png'
-import skeletonPng from '../assets/Skeleton_Warrior_sprite-200.png'
-
-import healthTexturePng from '../assets/HEALTH_TEXTURE.png'
-import produce from 'immer'
-import { from } from '.pnpm/form-data@3.0.1/node_modules/form-data'
 
 
 // export default Pixi<{ scale: number }, Graphics>('PixiHealthBar', {
@@ -17,18 +19,25 @@ import { from } from '.pnpm/form-data@3.0.1/node_modules/form-data'
 // })
 
 const basicAssets = {
-    'frogknight': frogknightPng,
-    'skeleton': skeletonPng,
+    frogknight,
+    skeleton,
+    fishstick,
+    potion,
+    bread,
+    chestBody,
+    chestLid,
+    orcWarrior,
 }
 const deluxeAssets = {
-    'healthTexture': healthTexturePng,
+    healthTexture,
 }
-const allAssets = [...Object.keys(basicAssets), ...Object.keys(deluxeAssets)]
+const allAssets = { ...basicAssets, ...deluxeAssets }
+export type AssetKey = keyof typeof allAssets
 export default function AssetLoader(): JSX.Element {
     // const app = useApp()
     const { deluxeLoaded, basicLoaded, isBasicLoaded } = useLoaderContext()
     const [loaded, setLoaded] = useState(new Set(
-        allAssets.filter(name => Loader.shared.resources[name]?.data != null)
+        Object.keys(allAssets).filter(name => Loader.shared.resources[name]?.data != null)
     ))
 
     useEffect(() => {

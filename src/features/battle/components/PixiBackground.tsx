@@ -1,5 +1,5 @@
-import { Sprite, BaseTexture, VideoResource, Texture } from 'pixi.js'
-import { Stage, Container, PixiComponent } from '@inlet/react-pixi'
+import { PixiComponent } from '@inlet/react-pixi'
+import { Sprite, Texture, VideoResource } from 'pixi.js'
 import CaveVideo from '../assets/cave_main_1.webm'
 
 
