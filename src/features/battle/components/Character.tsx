@@ -14,6 +14,7 @@ import { Dispatcher } from './CharacterManager'
 import { filters, Loader } from 'pixi.js'
 import HitInfo from './HitInfo'
 import { useLoaderContext } from '../providers/LoaderContext'
+import MoveInfo from './MoveInfo'
 
 
 const config = {
@@ -22,6 +23,8 @@ const config = {
 
 const RED = 0xFF0000
 const BLUE = 0x0000FF
+const SHOW_HIT_TIME = 1000
+const ATTACK_ANIMATION_TIME = 1000
 
 export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
     return <Character assetId={'frogknight'} direction={-1} {...props} />
@@ -47,9 +50,10 @@ interface CharacterProps extends KnownCharacterProps {
 }
 function Character(props: CharacterProps): JSX.Element {
     const { x, y, health } = props.characterMeta
-    const [isAttacking, setIsAttacking] = useResetState(false, 500)
-    const [isDefending, setIsDefending] = useResetState(false, 500)
-    const [damageShown, setDamageShown] = useResetState<number | null>(null, 800)
+    const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
+    const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
+    const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
+    const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
     const [isHovering, setIsHovering] = useState(false)
 
     const { isBasicLoaded } = useLoaderContext()
@@ -58,7 +62,10 @@ function Character(props: CharacterProps): JSX.Element {
         const myId = props.characterMeta.id
         if (d.attacker.id === myId) {
             setIsAttacking(true)
+            setCurrentMove(d.move)
             props.dispatch({ a: 'setHasMoved', id: myId, v: true })
+        } else {
+            setCurrentMove(null)
         }
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
@@ -88,9 +95,6 @@ function Character(props: CharacterProps): JSX.Element {
     if (!isBasicLoaded) return <></>
     return <>
         {health > 0 ? <>
-            <Container x={x} y={y - charSpriteProps.height * props.scale * .8}>
-                {damageShown != null && <HitInfo damage={damageShown} />}
-            </Container>
             <Container x={x} y={y} scale={{ x: props.scale, y: props.scale }}>
                 {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
                 {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
@@ -99,6 +103,10 @@ function Character(props: CharacterProps): JSX.Element {
                 {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
 
                 <HealthBar value={health} max={props.characterMeta.maxHealth} />
+            </Container>
+            <Container x={x} y={y - charSpriteProps.height * props.scale * .8}>
+                {damageShown != null && <HitInfo damage={damageShown} />}
+                {currentMove != null && <MoveInfo move={currentMove} />}
             </Container>
         </> :
             <></>
