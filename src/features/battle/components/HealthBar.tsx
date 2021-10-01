@@ -3,6 +3,7 @@ import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, Texture, utils } f
 import { Sprite, Container, Graphics, Text } from '@inlet/react-pixi'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
 import { useLoaderContext } from '../providers/LoaderContext'
+import toast from 'react-hot-toast'
 
 
 export default function HealthBar(
@@ -14,6 +15,7 @@ export default function HealthBar(
     }
 ): JSX.Element {
     const { isDeluxeLoaded } = useLoaderContext()
+    // toast(`isDeluxLoaded: ${isDeluxeLoaded}`)
     // const [goodTexture, setGoodTexture] = useState<Texture>()
     // const [badTexture, setBadTexture] = useState<Texture>()
 
@@ -54,11 +56,13 @@ export default function HealthBar(
         const color = utils.string2hex(background)
         g.beginFill(color)
         g.drawRect(rectXOffset, rectYOffset, rectWidth, rectHeight)
-        const goodHealthTexture = Loader.shared.resources?.goodHealthTexture?.texture
-        const badHealthTexture = Loader.shared.resources?.badHealthTexture?.texture
-        if (goodHealthTexture != null && badHealthTexture != null) {
+        // const healthTexture =
+        if (isDeluxeLoaded) {
+            const texture = Loader.shared.resources?.healthTexture?.texture
+            const data = Loader.shared.resources?.healthTexture?.data
+            console.log({ texture, data })
             g.beginTextureFill({
-                texture: portion > colorStops[0].stop ? goodHealthTexture : badHealthTexture,
+                texture,
                 color,
                 alpha: 1,
                 matrix: new Matrix(.1, 0, 0, .1, 0, 0)
