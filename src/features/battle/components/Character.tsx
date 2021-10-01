@@ -62,12 +62,10 @@ function Character(props: CharacterProps): JSX.Element {
         const myId = props.characterMeta.id
         if (d.attacker.id === myId) {
             setIsAttacking(true)
-            setCurrentMove(d.move)
             props.dispatch({ a: 'setHasMoved', id: myId, v: true })
             setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
             console.log({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
         } else {
-            setCurrentMove(null)
             setFlyTo(undefined)
         }
 
@@ -78,6 +76,9 @@ function Character(props: CharacterProps): JSX.Element {
             setDamageShown(damage)
             // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
+            setCurrentMove(d.move)
+        } else {
+            setCurrentMove(null)
         }
     })
 
@@ -109,7 +110,7 @@ function Character(props: CharacterProps): JSX.Element {
                 </Container>
                 <Container x={0} y={- charSpriteProps.height * .8}>
                     {damageShown != null && <HitInfo damage={damageShown} />}
-                    {currentMove != null && <MoveInfo move={currentMove} />}
+                    {currentMove != null && <MoveInfo move={currentMove} offset={damageShown != null ? -70 : 0} />}
                 </Container>
             </FlyingContainer>
         </> :

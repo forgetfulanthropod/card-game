@@ -5,10 +5,12 @@ import React from 'react'
 export default function HitInfo(
     props: {
         move: MoveMeta,
+        offset: number,
     }
 ): JSX.Element {
 
     return <Text
+        y={props.offset}
         text={props.move.name}
         anchor={{ x: 0, y: 1 }}
         style={
