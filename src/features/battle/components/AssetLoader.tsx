@@ -9,7 +9,7 @@ import potion from '../assets/misc-png/INVENTORY_POTION.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
-
+import orcWarrior from '../assets/chars/orcWarrior.png'
 
 const assetMap = {
     frogknight,
@@ -19,6 +19,7 @@ const assetMap = {
     bread,
     chestBody,
     chestLid,
+    orcWarrior,
 }
 export type AssetKey = keyof typeof assetMap
 export default function AssetLoader(): JSX.Element {
@@ -31,6 +32,7 @@ export default function AssetLoader(): JSX.Element {
         for (const [name, url] of Object.entries(assetMap)) {
             if (Loader.shared.resources[name]?.data == null) {
                 Loader.shared.add(name, url)
+                console.log("gonna load", name)
                 anyNewLoaded = true
             }
         }
@@ -40,6 +42,7 @@ export default function AssetLoader(): JSX.Element {
         }
         Loader.shared.load()
             .onComplete.add(() => {
+                console.log('everything is loaded')
                 basicLoaded()
             })
 

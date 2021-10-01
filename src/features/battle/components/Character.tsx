@@ -24,7 +24,7 @@ export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
     return <Character assetId={'frogknight'} direction={-1} {...props} />
 }
 export function Skeleton(props: KnownCharacterProps): JSX.Element {
-    return <Character assetId={'skeleton'} direction={-1} {...props} />
+    return <Character assetId={'orcWarrior'} direction={-1} {...props} />
 }
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
@@ -79,6 +79,9 @@ function Character(props: CharacterProps): JSX.Element {
         image: Loader.shared.resources?.[props.assetId]?.data,
         anchor: { x: 0, y: 1 },
     }
+    // if (props.assetId === 'orcWarrior') {
+    //     debugger
+    // }
 
     if (!isBasicLoaded) return <></>
     return <>
