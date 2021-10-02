@@ -24,4 +24,7 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "npm.packageManager": "pnpm",
+    "files.exclude": {
+        "**/.keep": true
+    },
 }
