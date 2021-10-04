@@ -1,6 +1,25 @@
 import produce from 'immer'
 import { makeInitialPlayerCharacters } from './util/factories'
 
+let state = makeInitialState()
+export function dispatch(action: Action) {
+    state = reducer(state, action)
+
+}
+
+// QUESTION: How does a deeply nested sprite receive state updates, e.g. to color
+
+// listeners in sprites and : {
+// channel: instance of eventemitter 3 specific to this Reducer/Dispatcher/Context.
+// AKA an event bus
+// option 1: use direct reference to state object
+// option 2: reducer calls channel.publish() to channel.subscribe() in sprites
+// option 2.1: a getContextValue() or something is passed as arg to sprites
+// option 2.2: **a modified channel that also has the most recent value**
+//              const {color, size} = channel.lastMessage
+// option 3: dispatch("getSize")
+// }
+
 type Set<T> = T | ((old: T) => T)
 export type Action =
     | { a: 'setIsPlayerTurn', v: boolean }
@@ -16,7 +35,7 @@ export type Action =
 
 function reducer(state: State, action: Action) {
     // tl(`reducer received action ${JSON.stringify(action)}`)
-    return produce(state, draft => {
+    const result = produce(state, draft => {
         switch (action.a) {
             case 'setIsPlayerTurn': {
                 // tl(`setting player turn to ${action.v}`)
@@ -62,6 +81,7 @@ function reducer(state: State, action: Action) {
                 throw new Error(`unknown action ${JSON.stringify(action)}`)
         }
     })
+    return Object.freeze(result)
 }
 
 export type State = ReturnType<typeof makeInitialState>
