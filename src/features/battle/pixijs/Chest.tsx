@@ -2,11 +2,10 @@ import { Container, PixiComponent, Sprite, useApp as usePixiApp } from '@inlet/r
 import { useTimeout } from 'ahooks'
 // import type { Graphics as PixiGraphics } from 'pixi.js'
 import { Loader, Sprite as PixiSprite, Texture as PixiTexture } from 'pixi.js'
-import Preact, { JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
+import type { AssetKey } from '../components/AssetLoader'
 import { useLoaderContext } from '../providers/LoaderProvider'
-import type { AssetKey } from './AssetLoader'
-
+import { JSX } from 'preact'
 
 const dataOf = (assetId: AssetKey) => Loader.shared.resources?.[assetId]?.data
 

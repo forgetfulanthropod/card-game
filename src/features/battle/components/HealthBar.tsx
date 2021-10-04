@@ -1,6 +1,6 @@
+import type { h, JSX } from 'preact'
 import { Container, Graphics, Sprite, Text } from '@inlet/react-pixi'
 import { Graphics as PixiGraphics, Loader, Matrix, TextStyle, utils } from 'pixi.js'
-import Preact, { JSX } from 'preact'
 import { useCallback } from 'preact/hooks'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
 import { useLoaderContext } from '../providers/LoaderProvider'

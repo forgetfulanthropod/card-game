@@ -1,5 +1,4 @@
-import Preact from 'preact'
-import { StateUpdater, useCallback, useEffect, useState, EffectCallback } from 'preact/hooks'
+import { EffectCallback, StateUpdater, useCallback, useEffect, useState } from 'preact/hooks'
 
 /* BUGGY:
 type Subscription<T> = (val: T) => void

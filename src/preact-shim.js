@@ -1,2 +1,2 @@
-import { h, Fragment } from 'preact'
+import { Fragment, h } from 'preact'
 export { h, Fragment }

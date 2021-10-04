@@ -1,5 +1,5 @@
+import type { h, JSX } from 'preact'
 import produce from 'immer'
-import Preact, { JSX } from 'preact'
 import { useCallback, useReducer, useState } from 'preact/hooks'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import AllCharacters from './AllCharacters'

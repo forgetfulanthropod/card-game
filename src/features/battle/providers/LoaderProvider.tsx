@@ -1,6 +1,7 @@
+import type { h, JSX } from 'preact'
 import produce from 'immer'
 import type { WritableDraft } from 'immer/dist/internal'
-import Preact, { createContext, JSX } from 'preact'
+import { createContext } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {

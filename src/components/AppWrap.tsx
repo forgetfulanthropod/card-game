@@ -1,6 +1,6 @@
-import { JSX } from 'preact/jsx-runtime'
 //@ts-ignore
 import styled from 'styled-components'
+import type { h, JSX } from 'preact'
 
 const Root = styled.div`
     width: 100vw;

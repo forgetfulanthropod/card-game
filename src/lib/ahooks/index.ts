@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'preact/hooks'
 import Preact from 'preact'
+import { useEffect, useRef } from 'preact/hooks'
 type Subscription<T> = (val: T) => void
 
 export class EventEmitter<T> {

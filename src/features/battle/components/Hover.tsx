@@ -1,4 +1,4 @@
-import Preact, { JSX } from 'preact'
+import type { h, JSX } from 'preact'
 import { moveTypeMetaMap } from '../util/constants'
 import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 import Table from './Table'

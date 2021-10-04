@@ -1,20 +1,14 @@
-import { Stage } from '@inlet/react-pixi'
-import { EventEmitter, useEventEmitter, useSize } from 'lib/ahooks'
+import type { h, JSX } from 'preact'
 import { useEffectWhen } from 'hooks'
-import Preact, { JSX } from 'preact'
+import { EventEmitter, useEventEmitter, useSize } from 'lib/ahooks'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import losePng from '../assets/fainted.png'
-import { LoaderProvider } from '../providers/LoaderProvider'
-import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getId, getNpcMove, getUnmovedPc } from '../util/misc'
-import AssetLoader from './AssetLoader'
-import { Frogknight, Skeleton } from './Character'
-import { Action, Dispatcher, State } from './CharacterManager'
-import Chest from './Chest'
-import PixiBackground from './PixiBackground'
-import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 import toast from 'react-hot-toast'
-
+import losePng from '../assets/fainted.png'
+import Chest from '../pixijs/Chest'
+import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '../util/misc'
+import { Action, Dispatcher, State } from './CharacterManager'
+import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 export const X_AGGRESSIVE_THRESH = 11

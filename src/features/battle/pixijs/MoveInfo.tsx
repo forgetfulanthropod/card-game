@@ -1,6 +1,5 @@
 import { Text } from '@inlet/react-pixi'
 import { TextStyle } from 'pixi.js'
-import Preact, { JSX } from 'preact'
 
 export default function HitInfo(
     props: {

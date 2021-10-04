@@ -1,7 +1,7 @@
-import { Application, PixiApplication, Container, Sprite } from './mypixi'
 import { styled } from '../util'
 import frogKnight from './assets/Frog_Knight_sprite.png'
 import background from './background'
+import { Application, Container, PixiApplication, Sprite } from './mypixi'
 import styles from './styles.module.css'
 export function Canvas(): HTMLCanvasElement {
     const c = styled('canvas', styles.gameCanvas)

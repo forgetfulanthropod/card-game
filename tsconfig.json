@@ -23,12 +23,18 @@
     "baseUrl": "src",
     "allowJs": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    // "paths": {
+    //   "react": [
+    //     "node_modules/preact/compat/"
+    //   ],
+    //   "react-dom": [
+    //     "node_modules/preact/compat/"
+    //   ]
+    // }
   },
   "include": [
     "src",
-    "src-ignore/stories",
-    "src-ignore/stories2"
   ],
   "exclude": [
     "scripts",

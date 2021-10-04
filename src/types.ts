@@ -1,7 +1,13 @@
-import Preact, { JSX as PJSX } from 'preact'
+import Preact from 'preact'
+// import Preact, {JSX} from 'preact'
 import { StateUpdater } from 'preact/hooks'
+
+// const o : {x: typeof JSX} = {x: Preact.JSX}
+// type JSX = typeof Preact.JSX
+
 declare global {
-    type Children = PJSX.Element | null | false | Children[]
+    // type JSX.Element = PJSX.Element
+    type Children = Preact.JSX.Element | null | false | Children[]
     type Callback = () => void
     type Setter<T> = StateUpdater<T | undefined>
     type CharacterMeta = {

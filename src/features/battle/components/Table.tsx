@@ -1,9 +1,8 @@
-import Preact, { JSX } from 'preact'
+import type { h, JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
-
 export default function Table(props: { rows: string[][], header?: string }): JSX.Element {
-    return <StyledTable>
+    const contents = <>
         {props.header && <thead><tr><th colSpan={2}>{props.header}</th></tr></thead>}
         <tbody>
             {props.rows.map((r, i) =>
@@ -13,6 +12,9 @@ export default function Table(props: { rows: string[][], header?: string }): JSX
                 </tr>
             )}
         </tbody>
+    </>
+    return <StyledTable>
+        {contents}
     </StyledTable>
 }
 

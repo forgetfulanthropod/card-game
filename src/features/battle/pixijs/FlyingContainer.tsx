@@ -1,9 +1,8 @@
 import { Container, useApp as usePixiApp } from '@inlet/react-pixi'
 import { Container as PixiContainer } from 'pixi.js'
-import preact, { JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
-
-
+import { JSX } from 'preact'
+import preact from 'preact'
 
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
@@ -68,3 +67,5 @@ export default function FlyingContainer(
         {props.children}
     </Container>
 }
+
+const X = (words: string): preact.JSX.Element => <p>{words}</p>
