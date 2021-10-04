@@ -1,4 +1,4 @@
-import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacters'
+import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
