@@ -13,8 +13,7 @@ import { Action, Dispatcher, State } from './CharacterManager'
 import Chest from './Chest'
 import PixiBackground from './PixiBackground'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
-
-const toast = (s: string) => console.log(s)
+import toast from 'react-hot-toast'
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -181,25 +180,6 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
             endScreen == null ? null :
                 endScreen === 'lose' ? <LoseScreen reset={props.reset} /> :
                     <Reset onClick={props.reset}>Reset</Reset>
-        }
-        {
-            // width != null && height != null &&
-            // <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-            //     <LoaderProvider>
-            //         <AssetLoader />
-            //         <PixiBackground scale={scale} />
-            //         {allCharacters.map(characterMeta => {
-            //             const { x, y } = characterMeta
-            //             const id = getId(x, y)
-            //             const characterProps = { scale, move$, dispatch, characterMeta, onClick, key: id }
-
-            //             return characterMeta.isPc ?
-            //                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
-            //                 <Skeleton {...characterProps} />
-            //         })}
-            //         {endScreen === 'win' && <Chest size={{ width, height }} />}
-            //     </LoaderProvider>
-            // </Stage>
         }
         {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
     </div>
