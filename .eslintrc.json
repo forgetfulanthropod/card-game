@@ -5,6 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
+        "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
@@ -17,6 +18,8 @@
         "project": "./tsconfig.json"
     },
     "plugins": [
+        "react",
+        "react-hooks",
         "@typescript-eslint"
     ],
     "rules": {
@@ -28,6 +31,26 @@
         ],
         "consistent-return": "warn",
         "no-useless-return": "warn",
+        "react/no-unused-prop-types": "warn",
+        "react/jsx-props-no-multi-spaces": "warn",
+        "react/jsx-tag-spacing": [
+            "warn",
+            {
+                "beforeClosing": "never"
+            }
+        ],
+        "react-hooks/rules-of-hooks": [
+            "error",
+            {
+                "additionalHooks": "(useEventEmitter|useSubscription|useEffectWhen)"
+            }
+        ],
+        "react-hooks/exhaustive-deps": [
+            "warn",
+            {
+                "additionalHooks": "(useEffectWhen)"
+            }
+        ],
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-function": "off",
         "no-debugger": "warn",
@@ -45,6 +68,11 @@
                 "varsIgnorePattern": "^_"
             }
         ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
     },
     "ignorePatterns": [
         "scripts/"
