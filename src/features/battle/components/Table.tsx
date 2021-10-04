@@ -1,4 +1,4 @@
-import React from 'react'
+import Preact, { JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
 

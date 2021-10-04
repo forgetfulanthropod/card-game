@@ -1,4 +1,4 @@
-import React from 'react'
+import Preact from 'preact'
 import { Button } from './Button'
 import './header.css'
 

@@ -15,8 +15,11 @@
     "noFallthroughCasesInSwitch": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
+    // "jsx": "react-jsx",
+    // "jsxImportSource": "preact",
+    "jsx": "preserve",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
     "baseUrl": "src",
     "allowJs": true,
     "skipLibCheck": true,
@@ -24,9 +27,11 @@
   },
   "include": [
     "src",
-    "src/stories"
+    "src-ignore/stories",
+    "src-ignore/stories2"
   ],
   "exclude": [
-    "scriptss"
+    "scripts",
+    "src-ignore"
   ]
 }

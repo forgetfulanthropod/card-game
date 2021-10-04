@@ -1,5 +1,6 @@
 import { Loader } from 'pixi.js'
-import React, { useEffect, useState } from 'react'
+import Preact, { JSX } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 import orcWarrior from '../assets/chars/orcWarrior-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'

@@ -1,4 +1,4 @@
-import React from 'react'
+import Preact, { JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
 import CaveJpg from '../assets/cave_main_1.jpg'

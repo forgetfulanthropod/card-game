@@ -1,7 +1,9 @@
+import Preact, { JSX as PJSX } from 'preact'
+import { StateUpdater } from 'preact/hooks'
 declare global {
-    type Children = JSX.Element | null | false | Children[]
+    type Children = PJSX.Element | null | false | Children[]
     type Callback = () => void
-    type Setter<T> = React.Dispatch<React.SetStateAction<T>>
+    type Setter<T> = StateUpdater<T | undefined>
     type CharacterMeta = {
         id: string
         type: 'Frogknight' | 'Penguin Knight' | 'Skeleton' | 'Matcha'

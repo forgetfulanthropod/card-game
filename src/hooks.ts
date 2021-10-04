@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import Preact from 'preact'
+import { StateUpdater, useCallback, useEffect, useState, EffectCallback } from 'preact/hooks'
 
 /* BUGGY:
 type Subscription<T> = (val: T) => void
@@ -27,8 +28,9 @@ export function useEventEmitter<T = void>(): EventEmitter<T> {
 }
 */
 
-export function useEffectWhen(effect: React.EffectCallback, deps: unknown[], watchedVals: unknown[]): void {
+export function useEffectWhen(effect: EffectCallback, deps: unknown[], watchedVals: unknown[]): void {
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    useEffect
     useEffect(useCallback(effect, deps), watchedVals)
 }
 
@@ -39,7 +41,7 @@ export function useLog(stuff: Record<string, unknown>): void {
 }
 
 
-export function useResetState<T>(initial: T, delay?: number): [T, Setter<T>] {
+export function useResetState<T>(initial: T, delay?: number): [T, StateUpdater<T>] {
     const [t, setT] = useState(initial)
     useEffect(() => {
         if (t !== initial) {

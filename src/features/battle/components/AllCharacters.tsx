@@ -1,9 +1,8 @@
 import { Stage } from '@inlet/react-pixi'
-import { useEventEmitter, useSize } from 'ahooks'
-import { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import { EventEmitter, useEventEmitter, useSize } from 'lib/ahooks'
 import { useEffectWhen } from 'hooks'
-import React, { useEffect, useRef, useState } from 'react'
-import toast from 'react-hot-toast'
+import Preact, { JSX } from 'preact'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import losePng from '../assets/fainted.png'
 import { LoaderProvider } from '../providers/LoaderProvider'
 import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
@@ -15,6 +14,7 @@ import Chest from './Chest'
 import PixiBackground from './PixiBackground'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 
+const toast = (s: string) => console.log(s)
 
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -43,12 +43,14 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
 
     move$.useSubscription(function showMove(ad) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
-        toast(ad.move.name, {
-            style: {
-                backgroundColor: ad.attacker.isPc ? 'green' : 'red',
-                color: 'white'
-            }
-        })
+        toast(ad.move.name,
+            //     {
+            //     style: {
+            //         backgroundColor: ad.attacker.isPc ? 'green' : 'red',
+            //         color: 'white'
+            //     }
+            // }
+        )
         console.log(ad.move.name)
     })
 
@@ -159,7 +161,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
         }
     }
 
-    const ref = useRef(null)
+    const ref = useRef<HTMLDivElement>(null)
     // const size = useSize(ref)
     const { width = 1920, height = 1080 } = useSize(ref)
     const scale = width / BASE_WIDTH
@@ -181,30 +183,30 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
                     <Reset onClick={props.reset}>Reset</Reset>
         }
         {
-            width != null && height != null &&
-            <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-                <LoaderProvider>
-                    <AssetLoader />
-                    <PixiBackground scale={scale} />
-                    {allCharacters.map(characterMeta => {
-                        const { x, y } = characterMeta
-                        const id = getId(x, y)
-                        const characterProps = { scale, move$, dispatch, characterMeta, onClick, key: id }
+            // width != null && height != null &&
+            // <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
+            //     <LoaderProvider>
+            //         <AssetLoader />
+            //         <PixiBackground scale={scale} />
+            //         {allCharacters.map(characterMeta => {
+            //             const { x, y } = characterMeta
+            //             const id = getId(x, y)
+            //             const characterProps = { scale, move$, dispatch, characterMeta, onClick, key: id }
 
-                        return characterMeta.isPc ?
-                            <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
-                            <Skeleton {...characterProps} />
-                    })}
-                    {endScreen === 'win' && <Chest size={{ width, height }} />}
-                </LoaderProvider>
-            </Stage>
+            //             return characterMeta.isPc ?
+            //                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
+            //                 <Skeleton {...characterProps} />
+            //         })}
+            //         {endScreen === 'win' && <Chest size={{ width, height }} />}
+            //     </LoaderProvider>
+            // </Stage>
         }
         {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
     </div>
 }
 
 
-function MoveMenu(props: { character: CharacterMeta, dispatch: React.Dispatch<Action>, selectedMove: string | undefined }) {
+function MoveMenu(props: { character: CharacterMeta, dispatch: (a: Action) => void, selectedMove: string | undefined }) {
     return <MoveMenuDiv>
         {props.character.moves.map(m =>
             <MoveButton

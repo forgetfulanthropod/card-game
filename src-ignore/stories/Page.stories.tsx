@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from '@storybook/react'
-import React from 'react'
+import Preact from 'preact'
 import * as HeaderStories from './Header.stories'
 import { Page } from './Page'
 

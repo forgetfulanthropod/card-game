@@ -1,6 +1,7 @@
 import produce from 'immer'
 import type { WritableDraft } from 'immer/dist/internal'
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import Preact, { createContext, JSX } from 'preact'
+import { useContext, useMemo, useState } from 'preact/hooks'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {
     const [state, setState] = useState(initialState)
@@ -19,6 +20,7 @@ export function LoaderProvider(props: { children: Children }): JSX.Element {
 }
 
 export function useLoaderContext(): Value {
+    console.log("useLoaderContext")
     return useContext(context)
 }
 

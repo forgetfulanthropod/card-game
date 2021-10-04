@@ -1,4 +1,4 @@
-import React from 'react'
+import Preact from 'preact'
 import { Header } from './Header'
 import './page.css'
 

@@ -18,6 +18,7 @@ const envObj = {
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`
 }
 console.log(envObj)
+const alias = require('esbuild-plugin-alias')
 
 // const preactSubs = {
 //     '"react"': '"preact/compat"',
@@ -37,9 +38,12 @@ async function main() {
     fs.mkdirSync(buildDir)
     copyFolderRecursiveSync(publicDir, buildDir, makeSubdir = false)
     esbuild.build({
-        minify: !isDevelopment,
-        sourcemap: isDevelopment,
+        minify: false, //!isDevelopment,
+        sourcemap: true, //isDevelopment,
         entryPoints: ['src/index.tsx'],
+        jsxFactory: 'h',
+        jsxFragment: 'Fragment',
+        inject: ['./src/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',
@@ -68,7 +72,11 @@ async function main() {
             }
         },
         plugins: [
-            cssModulesPlugin()
+            cssModulesPlugin(),
+            alias({
+                'react': '/Users/l/git/kaiju/node_modules/preact/compat/dist/compat.js',
+                'react-dom': '/Users/l/git/kaiju/node_modules/preact/compat/dist/compat.js',
+            })
         ]
 
     })

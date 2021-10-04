@@ -1,4 +1,4 @@
-import React from 'react'
+import Preact from 'preact'
 import './button.css'
 
 interface ButtonProps {

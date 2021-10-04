@@ -1,5 +1,6 @@
 import produce from 'immer'
-import React, { useCallback, useReducer, useState } from 'react'
+import Preact, { JSX } from 'preact'
+import { useCallback, useReducer, useState } from 'preact/hooks'
 import { makeInitialPlayerCharacters } from '../util/factories'
 import AllCharacters from './AllCharacters'
 
@@ -95,4 +96,4 @@ function makeInitialState() {
     })
 }
 
-export type Dispatcher = React.Dispatch<Action>
+export type Dispatcher = (a: Action) => void

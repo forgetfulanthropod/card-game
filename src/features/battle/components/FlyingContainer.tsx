@@ -1,6 +1,7 @@
 import { Container, useApp as usePixiApp } from '@inlet/react-pixi'
 import { Container as PixiContainer } from 'pixi.js'
-import React, { useEffect, useState } from 'react'
+import preact, { JSX } from 'preact'
+import { useEffect, useState } from 'preact/hooks'
 
 
 

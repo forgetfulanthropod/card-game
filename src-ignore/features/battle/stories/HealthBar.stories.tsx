@@ -1,8 +1,8 @@
 // HealthBar.stories.ts | HealthBar.stories.tsx
 
 import { ComponentStory, Meta } from '@storybook/react'
-import React from 'react'
-import HealthBar from '../components/HealthBar'
+import Preact from 'preact'
+import HealthBar from '../../../../src/features/battle/components/HealthBar'
 
 
 
@@ -39,5 +39,5 @@ Half.args = {
     max: 100
 };
 
-// export const Mid: React.VFC<typeof HealthBar> = () => <HealthBar value={70} max={100} />
-// export const Low: React.VFC<typeof HealthBar> = () => <HealthBar value={20} max={100} />
+// export const Mid: Preact.VFC<typeof HealthBar> = () => <HealthBar value={70} max={100} />
+// export const Low: Preact.VFC<typeof HealthBar> = () => <HealthBar value={20} max={100} />
