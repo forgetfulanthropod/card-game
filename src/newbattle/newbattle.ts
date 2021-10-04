@@ -1,6 +1,7 @@
 import { Application, Sprite } from 'pixi.js'
 import { styled } from '../util'
 import frogKnight from './assets/Frog_Knight_sprite.png'
+import { MySprite } from './mypixi'
 import styles from './styles.module.css'
 export function Canvas(): HTMLCanvasElement {
     return styled('canvas', styles.gameCanvas)
@@ -15,14 +16,12 @@ export function start(canvas: HTMLCanvasElement): Application {
         height: 480
     })
 
-    const fk: Sprite = Sprite.from(frogKnight)
-
-    fk.anchor.set(0.5)
-    fk.x = app.screen.width / 2
-    fk.y = app.screen.height / 2
-    fk.scale.x = 0.3
-    fk.scale.y = 0.3
-
+    const fk: Sprite = MySprite({
+        src: frogKnight,
+        anchor: 0.5,
+        position: [app.screen.width / 2, app.screen.height / 2],
+        scale: 0.3
+    })
     app.stage.addChild(fk)
     return app
 }
