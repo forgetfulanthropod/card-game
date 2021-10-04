@@ -1,4 +1,4 @@
-import { Application, Sprite, Texture, VideoResource } from 'pixi.js'
+import { Application, Container, Sprite, Texture, VideoResource } from 'pixi.js'
 export { Application, Sprite, Texture, VideoResource }
 type Pair = [x: number, y: number]
 
@@ -40,4 +40,21 @@ export function MySprite(args: {
         }
     }
     return s
+}
+
+export function MyApplication(args: {
+    canvas: HTMLCanvasElement,
+    children: (Sprite | Container)[]
+}): Application {
+    const app = new Application({
+        view: args.canvas,
+        resolution: window.devicePixelRatio || 1,
+        // backgroundColor: 0x6495ed,
+        width: 1920,
+        height: 1080,
+    })
+    for (const c of args.children) {
+        app.stage.addChild(c)
+    }
+    return app
 }
