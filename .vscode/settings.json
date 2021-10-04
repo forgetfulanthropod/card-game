@@ -27,4 +27,5 @@
     "files.exclude": {
         "**/.keep": true
     },
+    "prettier.tabWidth": 4,
 }

@@ -28,7 +28,7 @@ async function main() {
     esbuild.build({
         minify: !isDevelopment,
         sourcemap: isDevelopment,
-        entryPoints: ['src/index.tsx'],
+        entryPoints: ['src/index.ts'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',
