@@ -1,5 +1,5 @@
-import { Sprite } from 'pixi.js'
-
+import { Application, Sprite, Texture, VideoResource } from 'pixi.js'
+export { Application, Sprite, Texture, VideoResource }
 type Pair = [x: number, y: number]
 
 export function MySprite(args: {
