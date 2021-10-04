@@ -1,8 +1,7 @@
-import { Application, MyApplication, MyContainer } from './mypixi'
+import { Application, PixiApplication, Container, Sprite } from './mypixi'
 import { styled } from '../util'
 import frogKnight from './assets/Frog_Knight_sprite.png'
 import background from './background'
-import { MySprite } from './mypixi'
 import styles from './styles.module.css'
 export function Canvas(): HTMLCanvasElement {
     const c = styled('canvas', styles.gameCanvas)
@@ -11,19 +10,19 @@ export function Canvas(): HTMLCanvasElement {
     return c
 }
 
-export function start(canvas: HTMLCanvasElement): Application {
-    const fk = MySprite({
+export function start(canvas: HTMLCanvasElement): PixiApplication {
+    const fk = Sprite({
         src: frogKnight,
         anchor: 0.5,
         position: [canvas.width / 2, canvas.height / 2],
         scale: 0.3
     })
-    const c = MyContainer({
+    const c = Container({
         position: [canvas.width / 4, canvas.height / 4],
         children: [fk],
     })
     const bg = background({ scale: 1 })
-    return MyApplication({
+    return Application({
         canvas,
         children: [
             bg, c

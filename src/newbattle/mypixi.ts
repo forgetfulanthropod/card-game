@@ -1,5 +1,11 @@
-import { Application, Container, Sprite, Texture, VideoResource } from 'pixi.js'
-export { Application, Sprite, Texture, VideoResource }
+import {
+    Application as PixiApplication,
+    Container as PixiContainer,
+    Sprite as PixiSprite,
+    Texture as PixiTexture,
+    VideoResource as PixiVideoResource
+} from 'pixi.js'
+export { PixiApplication, PixiSprite, PixiTexture, PixiVideoResource }
 type Pair = [x: number, y: number]
 
 interface GenericArgs {
@@ -18,11 +24,11 @@ interface SpriteArgs extends GenericArgs {
 }
 
 interface ContainerArgs extends GenericArgs {
-    children: (Sprite | Container)[]
+    children: (PixiSprite | PixiContainer)[]
 }
 
-export function MySprite(args: SpriteArgs): Sprite {
-    const s = Sprite.from(args.src)
+export function Sprite(args: SpriteArgs): PixiSprite {
+    const s = PixiSprite.from(args.src)
 
     if (args.anchor) {
         if (Array.isArray(args.anchor)) {
@@ -36,7 +42,7 @@ export function MySprite(args: SpriteArgs): Sprite {
     return s
 }
 
-function applyArgs(x: Container | Sprite, args: GenericArgs) {
+function applyArgs(x: PixiContainer | PixiSprite, args: GenericArgs) {
     if (args.position) { x.position.set(...args.position) }
     if (args.scale) {
         if (Array.isArray(args.scale)) {
@@ -59,11 +65,11 @@ function applyArgs(x: Container | Sprite, args: GenericArgs) {
     if (args.y) { x.y = args.y }
 }
 
-export function MyApplication(args: {
+export function Application(args: {
     canvas: HTMLCanvasElement,
-    children: (Sprite | Container)[]
-}): Application {
-    const app = new Application({
+    children: (PixiSprite | PixiContainer)[]
+}): PixiApplication {
+    const app = new PixiApplication({
         view: args.canvas,
         resolution: window.devicePixelRatio || 1,
         // backgroundColor: 0x6495ed,
@@ -76,11 +82,22 @@ export function MyApplication(args: {
     return app
 }
 
-export function MyContainer(args: ContainerArgs): Container {
-    const c = new Container()
+export function Container(args: ContainerArgs): PixiContainer {
+    const c = new PixiContainer()
     applyArgs(c, args)
     for (const ch of args.children) {
         c.addChild(ch)
     }
     return c
+}
+
+
+export function VideoBackground(args: { scale: number, src: string }): Sprite {
+    const r = new PixiVideoResource(args.src, { updateFPS: 24 })
+    const source = r.source as HTMLVideoElement
+    source.muted = true
+    source.loop = true
+    const sprite = PixiSprite.from(PixiTexture.from(r.source))
+    sprite.width = 1920 * args.scale
+    return sprite
 }
