@@ -2,15 +2,26 @@ import { Application, Container, Sprite, Texture, VideoResource } from 'pixi.js'
 export { Application, Sprite, Texture, VideoResource }
 type Pair = [x: number, y: number]
 
-export function MySprite(args: {
-    src: string,
-    anchor?: number | Pair
+interface GenericArgs {
     position?: Pair
     scale?: number | Pair
     width?: number
     height?: number
     pivot?: number | Pair
-}): Sprite {
+    x?: number
+    y?: number
+    anchor?: number | Pair
+}
+
+interface SpriteArgs extends GenericArgs {
+    src: string
+}
+
+interface ContainerArgs extends GenericArgs {
+    children: (Sprite | Container)[]
+}
+
+export function MySprite(args: SpriteArgs): Sprite {
     const s = Sprite.from(args.src)
 
     if (args.anchor) {
@@ -21,25 +32,31 @@ export function MySprite(args: {
         }
     }
 
-    if (args.position) { s.position.set(...args.position) }
+    applyArgs(s, args)
+    return s
+}
+
+function applyArgs(x: Container | Sprite, args: GenericArgs) {
+    if (args.position) { x.position.set(...args.position) }
     if (args.scale) {
         if (Array.isArray(args.scale)) {
-            s.scale.set(...args.scale)
+            x.scale.set(...args.scale)
         } else {
-            s.scale.set(args.scale)
+            x.scale.set(args.scale)
         }
     }
 
-    if (args.width) { s.width = args.width }
-    if (args.height) { s.height = args.height }
+    if (args.width) { x.width = args.width }
+    if (args.height) { x.height = args.height }
     if (args.pivot) {
         if (Array.isArray(args.pivot)) {
-            s.pivot.set(...args.pivot)
+            x.pivot.set(...args.pivot)
         } else {
-            s.pivot.set(args.pivot)
+            x.pivot.set(args.pivot)
         }
     }
-    return s
+    if (args.x) { x.x = args.x }
+    if (args.y) { x.y = args.y }
 }
 
 export function MyApplication(args: {
@@ -57,4 +74,13 @@ export function MyApplication(args: {
         app.stage.addChild(c)
     }
     return app
+}
+
+export function MyContainer(args: ContainerArgs): Container {
+    const c = new Container()
+    applyArgs(c, args)
+    for (const ch of args.children) {
+        c.addChild(ch)
+    }
+    return c
 }

@@ -1,4 +1,4 @@
-import { Application, MyApplication } from './mypixi'
+import { Application, MyApplication, MyContainer } from './mypixi'
 import { styled } from '../util'
 import frogKnight from './assets/Frog_Knight_sprite.png'
 import background from './background'
@@ -18,11 +18,15 @@ export function start(canvas: HTMLCanvasElement): Application {
         position: [canvas.width / 2, canvas.height / 2],
         scale: 0.3
     })
+    const c = MyContainer({
+        position: [canvas.width / 4, canvas.height / 4],
+        children: [fk],
+    })
     const bg = background({ scale: 1 })
     return MyApplication({
         canvas,
         children: [
-            bg, fk
+            bg, c
         ]
     })
 }
