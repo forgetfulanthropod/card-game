@@ -24,11 +24,11 @@ const BLUE = 0x0000FF
 const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
 
-export function Frogknight(props: KnownPlayerCharacterProps): JSX.Element {
-    return <Character assetId={'frogknight'} direction={-1} {...props} />
+export function Frogknight(props: KnownPlayerCharacterProps): Container {
+    return Character({ assetId: 'frogknight', direction: -1, ...props })
 }
-export function Skeleton(props: KnownCharacterProps): JSX.Element {
-    return <Character assetId={'orcWarrior'} direction={-1} {...props} />
+export function Skeleton(props: KnownCharacterProps): Container {
+    return Character({ assetId: 'orcWarrior', direction: -1, ...props })
 }
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
@@ -46,7 +46,7 @@ interface CharacterProps extends KnownCharacterProps {
     direction: -1 | 1
     characterMeta: CharacterMeta
 }
-function Character(props: CharacterProps): JSX.Element {
+function Character(props: CharacterProps): Container {
     const { screenX, screenY, health } = props.characterMeta
     const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
@@ -100,24 +100,24 @@ function Character(props: CharacterProps): JSX.Element {
 
     if (!isBasicLoaded) return <></>
     return <>
-        {health > 0 ? <>
-            <FlyingContainer {...{ start: { x: screenX, y: screenY }, flyTo, scale: props.scale }}>
-                <Container x={0} y={0}>
-                    {isAttacking && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={BLUE} />}
-                    {isDefending && <Sprite {...charSpriteProps} filters={[blurFilter]} tint={RED} />}
-                    {(props.isSelected && !props.characterMeta.hasMoved) && <Sprite {...charSpriteProps} filters={[blurFilter]} />}
-                    <Sprite {...charSpriteProps} click={() => props.onClick(props.characterMeta)} interactive={true} />
-                    {props.characterMeta.hasMoved && <Sprite {...charSpriteProps} filters={[grayFilter]} />}
+        { health > 0 ? <>
+        <FlyingContainer { ...{ start: { x: screenX, y: screenY }, flyTo, scale: props.scale } } >
+    <Container x={ 0 } y = { 0} >
+        { isAttacking && <Sprite { ...charSpriteProps } filters = { [blurFilter]} tint = { BLUE } />}
+{ isDefending && <Sprite { ...charSpriteProps } filters = { [blurFilter]} tint = { RED } />}
+{ (props.isSelected && !props.characterMeta.hasMoved) && <Sprite { ...charSpriteProps } filters = { [blurFilter]} />}
+<Sprite { ...charSpriteProps } click = {() => props.onClick(props.characterMeta)} interactive = { true} />
+    { props.characterMeta.hasMoved && <Sprite { ...charSpriteProps } filters={ [grayFilter]} />}
 
-                    <HealthBar value={health} max={props.characterMeta.maxHealth} />
-                </Container>
-                <Container x={0} y={- charSpriteProps.height * .8}>
-                    {damageShown != null && <HitInfo damage={damageShown} />}
-                    {currentMove != null && <MoveInfo move={currentMove} offset={damageShown != null ? -70 : 0} />}
-                </Container>
-            </FlyingContainer>
-        </> :
-            <></>
+    < HealthBar value = { health } max = { props.characterMeta.maxHealth } />
+        </Container>
+        < Container x = { 0} y = {- charSpriteProps.height * .8}>
+            { damageShown != null && <HitInfo damage={ damageShown } />}
+{ currentMove != null && <MoveInfo move={ currentMove } offset = { damageShown != null ? -70 : 0 } />}
+    < /Container>
+    < /FlyingContainer>
+    < /> :
+    <> </>
         }
-    </>
+</>
 }

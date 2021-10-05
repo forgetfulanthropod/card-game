@@ -1,7 +1,7 @@
 import CaveVideo from '../assets/cave_main_1.webm'
-import { VideoBackground } from './mypixi'
+import { PixiSprite, VideoBackground } from './mypixi'
 
-export default ({ scale }: { scale: number }) => VideoBackground({
+export default ({ scale }: { scale: number }): PixiSprite => VideoBackground({
     src: CaveVideo,
     scale
 })

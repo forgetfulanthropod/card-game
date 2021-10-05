@@ -10,6 +10,7 @@ import {
     ITextStyle
 } from 'pixi.js'
 // export { PixiLoader }
+// TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
 
 // export type Sprite = PixiSprite
