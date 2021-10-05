@@ -22,14 +22,22 @@
             left: 0;
             right: 0;
         }
+        
+        .relwrap {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
 <body>
     <noscript>JS is disabled</noscript>
     <div class="wrap">
-        <canvas id="pixi-root"></canvas>
-        <div id="preact-root"></div>
+        <div class="relwrap">
+            <canvas id="pixi-root"></canvas>
+            <div id="preact-root"></div>
+        </div>
     </div>
     <script src="/out.js"></script>
 </body>
