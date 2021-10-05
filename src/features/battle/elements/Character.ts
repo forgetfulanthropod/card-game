@@ -111,8 +111,8 @@ function Character(props: CharacterProps): PixiContainer {
         children: [
             Container({
                 name: FlyingContainer.name,
-                x: 0,
-                y: 0,
+                x: 300,
+                y: 300,
                 children: [
                     Container({
                         children: [

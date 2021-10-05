@@ -3,10 +3,11 @@ import EventEmitter from 'eventemitter3'
 import { Frogknight } from './Character'
 import { Container, PixiContainer } from './mypixi'
 
-
+import { allCharactersLogic } from '../logic/allCharactersLogic'
 const allCharacterMeta = makeInitialPlayerCharacters()
 
 export function AllCharacters(props: { scale: number }): PixiContainer {
+    // TODO: use allCharactersLogic
     return Container({
         name: AllCharacters.name,
         children: [

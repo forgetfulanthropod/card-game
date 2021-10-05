@@ -1,27 +1,23 @@
-import type { h, JSX } from 'preact'
-import { useEffectWhen } from 'hooks'
+import { EventEmitter } from 'eventemitter3'
 import { useEventEmitter, useSize } from 'ahooks'
-import type { EventEmitter } from 'eventemitter3'
+import { BASE_WIDTH, moveTypeMetaMap } from 'data/battle/constants'
+import { Dispatcher } from 'data/battle/dispatch'
+import { BattleState } from 'data/battle/factories'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
+import { useEffectWhen } from 'hooks'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
-import losePng from '../assets/fainted.png'
-// import Chest from '../pixijs/Chest'
-import { BASE_WIDTH, moveTypeMetaMap } from 'data/battle/constants'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
-import { BattleState } from 'data/battle/factories'
-import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
-import { Action, Dispatcher } from 'data/battle/dispatch'
-export const DEBUG = false
+import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
+export const tl = (x: string): void => { console.log(x); toast(x) }
 const TIME_AFTER_PLAYER_MOVE = 1000
 
-export const tl = (x: string): void => { console.log(x); toast(x) }
+const DEBUG = true
+// TODO
+export function allCharactersLogic(props: { reset: () => void, state: BattleState, dispatch: Dispatcher }) {
 
-
-
-export default function AllCharacters(props: { reset: () => void, state: BattleState, dispatch: Dispatcher }): JSX.Element {
     const { state, dispatch } = props
-    const move$: MoveEmitter = useEventEmitter()
-    const npcMove$: NpcMoveEmitter = useEventEmitter()
+    const move$: MoveEmitter = new EventEmitter()
+    const npcMove$: NpcMoveEmitter = new EventEmitter()
     const [isPlayerFirstTurn] = useState(() => state.isPlayerTurn)
     const [endScreen, setEndScreen] = useState<null | 'lose' | 'win'>(null)
     console.log({ state })
@@ -31,11 +27,7 @@ export default function AllCharacters(props: { reset: () => void, state: BattleS
     const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
     const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
 
-    useEffect(() => {
-
-    }, [])
-
-    move$.useSubscription(function showMove(ad) {
+    move$.on('move', function showMove(ad: AttackData) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         toast(ad.move.name,
             //     {
@@ -85,7 +77,7 @@ export default function AllCharacters(props: { reset: () => void, state: BattleS
         return () => { }
     }, [winner])
 
-    npcMove$.useSubscription(function doNpcMove(_reason) {
+    npcMove$.on('npcMove', function doNpcMove(_reason) {
         // tl(`npcMove(reason: ${reason})`)
         if (checkWinner(allCharacters) != null) { return }
         if (isPlayerTurn) { return }
@@ -94,7 +86,7 @@ export default function AllCharacters(props: { reset: () => void, state: BattleS
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
-        move$.emit(getNpcMove(allCharacters))
+        move$.emit('move', getNpcMove(allCharacters))
         if (alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
@@ -131,7 +123,7 @@ export default function AllCharacters(props: { reset: () => void, state: BattleS
             const closest = getClosestAlive(allCharacters, clicked, 1)
             if (closest != null) defenders.push(closest)
         }
-        move$.emit({
+        move$.emit('move', {
             attacker: selectedCharacter,
             defenders: defenders,
             move: state.selectedMove,
@@ -163,59 +155,4 @@ export default function AllCharacters(props: { reset: () => void, state: BattleS
     useEffect(() => {
         dispatch({ a: 'updateScreenSize', size: { width, height } })
     }, [dispatch, width, height])
-
-    return <div ref={ref} style={{ width: '100%', height: '100%' }}>
-        {
-            !battleHasBegun &&
-            <IdleScreenOverlay>
-                <Start onClick={() => dispatch({ a: 'setBattleHasBegun' })} />
-            </IdleScreenOverlay>
-        }
-        {
-            endScreen == null ? null :
-                endScreen === 'lose' ? <LoseScreen reset={props.reset} /> :
-                    <Reset onClick={props.reset}>Reset</Reset>
-        }
-        {isPlayerTurn && <MoveMenu character={selectedCharacter} dispatch={dispatch} selectedMove={state.selectedMove?.type} />}
-    </div>
-}
-
-
-function MoveMenu(props: { character: CharacterMeta, dispatch: (a: Action) => void, selectedMove: string | undefined }) {
-    return <MoveMenuDiv>
-        {props.character.moves.map(m =>
-            <MoveButton
-                key={m.type}
-                onClick={() => props.dispatch({ a: 'setSelectedMove', m: m })}
-                isSelected={props.selectedMove === m.type}
-            >
-                {m.name}
-            </MoveButton>
-        )}
-    </MoveMenuDiv>
-}
-
-
-function LoseScreen(props: { reset: () => void }): JSX.Element {
-    return <IdleScreenOverlay>
-        <Lose src={losePng} />
-        <Reset onClick={props.reset}>Reset</Reset>
-    </IdleScreenOverlay>
-}
-
-function WinScreen(props: { reset: () => void, size: SizeQ }): JSX.Element {
-    // TODO: pixiPreactChannel.emit("showChest")
-    return <></>
-    // return <Chest size={props.size} />
-    /* <Stage
-       width={props.size.width}
-       height={props.size.height}
-       style={{
-           position: 'absolute',
-           width: '100%',
-           height: '100%'
-       }}
-       options={{ backgroundAlpha: 0 }}
-   >
-   </Stage> */
 }
