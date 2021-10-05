@@ -5,11 +5,13 @@ import { Application, PixiApplication } from './mypixi'
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     const scale = window.innerWidth / BASE_WIDTH
     const bg = background({ scale: scale / 2 })
+    const characters = allCharacters({ scale: scale / 2 })
 
     return Application({
         canvas,
         children: [
-            bg
+            bg,
+            characters,
         ]
     })
 

@@ -137,9 +137,9 @@ function Character(props: CharacterProps): PixiContainer {
     })
 }
 
-function useResetState() {
-    const ee = new EventEmitter()
-    // ee.
+function useResetState<T>(default_: T, ms: number) {
+    const result = { current: default_ }
+    setTimeout()
 }
 
 // class StateEmitter extends EventEmitter {

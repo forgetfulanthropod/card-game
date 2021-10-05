@@ -1,4 +1,5 @@
-import { MyBaobab } from 'config/myBaobab'
+import Baobab from 'baobab'
+// import { MyBaobab  from 'myBaobab'
 import { battle } from './battle'
 // import { State } from './battle/factories'
 
