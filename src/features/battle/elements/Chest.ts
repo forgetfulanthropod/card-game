@@ -1,4 +1,4 @@
-import type { AssetKey } from '../components/AssetLoader'
+import type { AssetKey } from '../logic/AssetLoader'
 import { Container, PixiContainer, PixiLoader, PixiSprite, PixiTexture, Sprite } from './mypixi'
 import EventEmitter from 'eventemitter3'
 

@@ -12,6 +12,8 @@ export type Action =
     | { a: 'setSelectedMove', m: MoveMeta }
     | { a: 'fullReset' }
     | { a: 'updateScreenSize', size: Size }
+    | { a: 'setIsBasicLoaded', v: boolean }
+    | { a: 'setIsDeluxeLoaded', v: boolean }
 
 
 export default function dispatch(action: Action): void {
@@ -72,6 +74,12 @@ export default function dispatch(action: Action): void {
                     screenY: c.y * action.size.height / 100,
                 }))
             })
+            return
+        } case 'setIsBasicLoaded': {
+            scene.set('isBasicLoaded', action.v)
+            return
+        } case 'setIsDeluxeLoaded': {
+            scene.set('isDeluxeLoaded', action.v)
             return
         } default:
             throw new Error(`unknown action ${JSON.stringify(action)}`)

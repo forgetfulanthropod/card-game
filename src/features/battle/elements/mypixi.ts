@@ -13,6 +13,7 @@ import {
     ITextStyle
 } from 'pixi.js'
 import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
+import { registerPixiInspector } from 'util/pixiInspector'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
@@ -133,6 +134,7 @@ export function Application(args: {
     for (const c of args.children) {
         app.stage.addChild(c)
     }
+    registerPixiInspector()
     return app
 }
 

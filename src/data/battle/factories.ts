@@ -18,6 +18,8 @@ export interface BattleState {
     allCharacters: CharacterMeta[]
     selectedCharacter: CharacterMeta
     selectedMove: MoveMeta | undefined
+    isBasicLoaded: boolean
+    isDeluxeLoaded: boolean
 }
 export function makeInitialState(): BattleState {
     const allCharacters = makeInitialPlayerCharacters()
@@ -31,6 +33,8 @@ export function makeInitialState(): BattleState {
         allCharacters,
         selectedCharacter,
         selectedMove,
+        isBasicLoaded: false,
+        isDeluxeLoaded: false,
     })
 }
 
