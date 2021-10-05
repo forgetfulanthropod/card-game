@@ -2,13 +2,18 @@ import {
     Application as PixiApplication,
     Container as PixiContainer,
     Sprite as PixiSprite,
+    Loader as PixiLoader,
     Text as PixiText,
     Texture as PixiTexture,
     VideoResource as PixiVideoResource,
     Ticker as PixiTicker,
     ITextStyle
 } from 'pixi.js'
-export { PixiTicker, PixiApplication, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
+// export { PixiLoader }
+export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
+
+// export type Sprite = PixiSprite
+
 type Pair = [x: number, y: number]
 
 interface Positioning {
@@ -22,14 +27,17 @@ interface Positioning {
     anchor?: number | Pair
 }
 
+export type OnSpriteTick = (self: PixiSprite, delta: number) => void | 'remove'
 interface SpriteArgs extends Positioning {
-    src: string
-    onTick?: (self: PixiSprite, delta: number) => void | 'remove'
+    src: string | PixiTexture
+    onTick?: OnSpriteTick
+    tint?: number
+    alpha?: number
 }
-
+export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends Positioning {
     children: (PixiSprite | PixiContainer)[]
-    onTick?: (self: PixiContainer, delta: number) => void | 'remove'
+    onTick?: OnContainerTick
 }
 
 interface TextArgs extends Positioning {
@@ -40,27 +48,35 @@ interface TextArgs extends Positioning {
 export function Sprite(args: SpriteArgs): PixiSprite {
     const s = PixiSprite.from(args.src)
 
-    if (args.anchor) {
+    if (args.anchor != null) {
         if (Array.isArray(args.anchor)) {
             s.anchor.set(...args.anchor)
         } else {
             s.anchor.set(args.anchor)
         }
     }
-    if (args.onTick) {
+    if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick(s, dt)
             if (result === 'remove')
                 PixiTicker.shared.remove(cb)
         })
     }
+    if (args.tint != null) {
+        s.tint = args.tint
+    }
+
+    if (args.alpha != null) {
+        s.alpha = args.alpha
+    }
+
     applyPositioningArgs(s, args)
     return s
 }
 
 function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) {
-    if (args.position) { x.position.set(...args.position) }
-    if (args.scale) {
+    if (args.position != null) { x.position.set(...args.position) }
+    if (args.scale != null) {
         if (Array.isArray(args.scale)) {
             x.scale.set(...args.scale)
         } else {
@@ -68,17 +84,17 @@ function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) 
         }
     }
 
-    if (args.width) { x.width = args.width }
-    if (args.height) { x.height = args.height }
-    if (args.pivot) {
+    if (args.width != null) { x.width = args.width }
+    if (args.height != null) { x.height = args.height }
+    if (args.pivot != null) {
         if (Array.isArray(args.pivot)) {
             x.pivot.set(...args.pivot)
         } else {
             x.pivot.set(args.pivot)
         }
     }
-    if (args.x) { x.x = args.x }
-    if (args.y) { x.y = args.y }
+    if (args.x != null) { x.x = args.x }
+    if (args.y != null) { x.y = args.y }
 }
 
 export function Application(args: {
@@ -104,7 +120,7 @@ export function Container(args: ContainerArgs): PixiContainer {
     for (const ch of args.children) {
         c.addChild(ch)
     }
-    if (args.onTick) {
+    if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick(s, dt)
             if (result === 'remove')
