@@ -11,7 +11,6 @@
         "build-storybook": "build-storybook"
     },
     "dependencies": {
-        "@inlet/react-pixi": "^6.6.5",
         "ahooks": "^2.10.9",
         "dotenv": "^10.0.0",
         "esbuild": "^0.13.0",

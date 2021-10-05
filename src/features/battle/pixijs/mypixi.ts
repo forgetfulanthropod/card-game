@@ -2,13 +2,16 @@ import {
     Application as PixiApplication,
     Container as PixiContainer,
     Sprite as PixiSprite,
+    Text as PixiText,
     Texture as PixiTexture,
-    VideoResource as PixiVideoResource
+    VideoResource as PixiVideoResource,
+    Ticker as PixiTicker,
+    ITextStyle
 } from 'pixi.js'
-export { PixiApplication, PixiSprite, PixiTexture, PixiVideoResource }
+export { PixiTicker, PixiApplication, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
 type Pair = [x: number, y: number]
 
-interface GenericArgs {
+interface Positioning {
     position?: Pair
     scale?: number | Pair
     width?: number
@@ -19,12 +22,19 @@ interface GenericArgs {
     anchor?: number | Pair
 }
 
-interface SpriteArgs extends GenericArgs {
+interface SpriteArgs extends Positioning {
     src: string
+    onTick?: (self: PixiSprite, delta: number) => void | 'remove'
 }
 
-interface ContainerArgs extends GenericArgs {
+interface ContainerArgs extends Positioning {
     children: (PixiSprite | PixiContainer)[]
+    onTick?: (self: PixiContainer, delta: number) => void | 'remove'
+}
+
+interface TextArgs extends Positioning {
+    text: string
+    style: Partial<ITextStyle>
 }
 
 export function Sprite(args: SpriteArgs): PixiSprite {
@@ -37,12 +47,18 @@ export function Sprite(args: SpriteArgs): PixiSprite {
             s.anchor.set(args.anchor)
         }
     }
-
-    applyArgs(s, args)
+    if (args.onTick) {
+        PixiTicker.shared.add(function cb(dt) {
+            const result = args.onTick(s, dt)
+            if (result === 'remove')
+                PixiTicker.shared.remove(cb)
+        })
+    }
+    applyPositioningArgs(s, args)
     return s
 }
 
-function applyArgs(x: PixiContainer | PixiSprite, args: GenericArgs) {
+function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) {
     if (args.position) { x.position.set(...args.position) }
     if (args.scale) {
         if (Array.isArray(args.scale)) {
@@ -84,15 +100,27 @@ export function Application(args: {
 
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
-    applyArgs(c, args)
+    applyPositioningArgs(c, args)
     for (const ch of args.children) {
         c.addChild(ch)
+    }
+    if (args.onTick) {
+        PixiTicker.shared.add(function cb(dt) {
+            const result = args.onTick(s, dt)
+            if (result === 'remove')
+                PixiTicker.shared.remove(cb)
+        })
     }
     return c
 }
 
+export function Text(args: TextArgs): PixiText {
+    const c = new PixiText(args.text, args.style)
+    applyPositioningArgs(c, args)
+    return c
+}
 
-export function VideoBackground(args: { scale: number, src: string }): Sprite {
+export function VideoBackground(args: { scale: number, src: string }): PixiSprite {
     const r = new PixiVideoResource(args.src, { updateFPS: 24 })
     const source = r.source as HTMLVideoElement
     source.muted = true
