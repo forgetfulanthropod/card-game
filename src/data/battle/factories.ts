@@ -1,5 +1,5 @@
-import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../../features/battle/util/constants'
-import { getId } from '../../features/battle/util/misc'
+import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(65, 50, 18, 13, 1)
@@ -10,6 +10,23 @@ export function makeInitialPlayerCharacters(): CharacterMeta[] {
     ]
     return result
 }
+
+export type State = ReturnType<typeof makeInitialState>
+export function makeInitialState(): any {
+    const allCharacters = makeInitialPlayerCharacters()
+    const selectedCharacter = allCharacters.find(c => c.isPc)
+    const selectedMove = selectedCharacter?.moves[0]
+    if (selectedCharacter == null) throw Error('no player characters!')
+    return Object.freeze({
+        type: 'battle', // TODO: type is not used yet...
+        isPlayerTurn: Math.random() < .5,
+        battleHasBegun: true,
+        allCharacters,
+        selectedCharacter,
+        selectedMove,
+    })
+}
+
 function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],

@@ -9,12 +9,28 @@
     <!-- <meta name="description" content="" /> -->
     <link rel="stylesheet" href="/out.css">
     <title>Kaiju Cards battle demo</title>
+    <style>
+        .wrap {
+            width: 100vw;
+            height: 56.25vw;
+            max-height: 100vh;
+            max-width: 177.78vh;
+            margin: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
 </head>
 
 <body>
     <noscript>JS is disabled</noscript>
-    <div id="preact-root"></div>
-    <canvas id="pixi-root"></canvas>
+    <div class="wrap">
+        <canvas id="pixi-root"></canvas>
+        <div id="preact-root"></div>
+    </div>
     <script src="/out.js"></script>
 </body>
 

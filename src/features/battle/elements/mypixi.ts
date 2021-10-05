@@ -11,7 +11,7 @@ import {
     InteractionEvent,
     ITextStyle
 } from 'pixi.js'
-import { BASE_HEIGHT, BASE_WIDTH } from '../util/constants'
+import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }

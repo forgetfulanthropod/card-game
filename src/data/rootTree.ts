@@ -1,16 +1,18 @@
-import Baobab from 'baobab'
+import Baobab, { Cursor } from 'baobab'
 
+import { battle } from './battle'
+import { State } from './battle/factories'
+
+// interface Tree {
+//     scene: typeof battle,
+//     characters: [],
+//     items: [],
+// }
 const tree = new Baobab({
-    palette: {
-        colors: ['yellow', 'purple'],
-        name: 'Glorious colors'
-    }
+    scene: battle,
+    characters: [],
+    items: [],
 })
 
-const colorsCursor = tree.select('palette', 'colors')
-
-colorsCursor.on('update', function () {
-    console.log('Selected colors have updated!')
-})
-
-colorsCursor.push('orange')
+export const scene = tree.select('scene')
+export const sceneData = scene.get()

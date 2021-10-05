@@ -1,4 +1,4 @@
-import { BASE_WIDTH } from '../util/constants'
+import { BASE_WIDTH } from 'data/battle/constants'
 import background from './background'
 import { Application, PixiApplication } from './mypixi'
 

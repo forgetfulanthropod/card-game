@@ -1,4 +1,4 @@
-import { styled } from '../util'
+import { styled } from 'data/battle'
 import frogKnight from './assets/Frog_Knight_sprite.png'
 import background from './background'
 import { Application, Container, PixiApplication, Sprite } from './mypixi'

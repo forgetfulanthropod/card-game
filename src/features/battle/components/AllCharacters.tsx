@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import losePng from '../assets/fainted.png'
 // import Chest from '../pixijs/Chest'
-import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '../util/misc'
+import { BASE_WIDTH, moveTypeMetaMap } from 'data/battle/constants'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
 import { Action, Dispatcher, State } from './CharacterManager'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 export const DEBUG = false
@@ -22,6 +22,7 @@ export default function AllCharacters(props: { reset: () => void, state: State, 
     const npcMove$: NpcMoveEmitter = useEventEmitter()
     const [isPlayerFirstTurn] = useState(() => state.isPlayerTurn)
     const [endScreen, setEndScreen] = useState<null | 'lose' | 'win'>(null)
+    console.log({ state })
     const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
     // useLog({ isPlayerFirstTurn })

@@ -1,4 +1,4 @@
-// import { start } from 'newbattle/newbattle'
+import { start } from 'newbattle/newbattle'
 import App from 'components/App'
 import { start } from 'features/battle/elements/main'
 import { render } from 'preact'
