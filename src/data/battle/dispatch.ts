@@ -1,4 +1,4 @@
-import { makeInitialState, State } from './factories'
+import { makeInitialState } from './factories'
 import { scene } from 'data/rootTree'
 
 type Set<T> = T | ((old: T) => T)

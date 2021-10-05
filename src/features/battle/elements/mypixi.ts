@@ -69,7 +69,7 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     }
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick(s, dt)
+            const result = args.onTick && args.onTick(s, dt)
             if (result === 'remove')
                 PixiTicker.shared.remove(cb)
         })
@@ -146,7 +146,7 @@ export function Container(args: ContainerArgs): PixiContainer {
     }
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick(s, dt)
+            const result = args.onTick && args.onTick(c, dt)
             if (result === 'remove')
                 PixiTicker.shared.remove(cb)
         })

@@ -47,6 +47,8 @@ export class MyBaobab<T extends EmptyInterface> extends Baobab {
     apply(getNew: (state: T) => T): T { return super.apply(path, getNew) }
     apply<K extends keyof T>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): MyCursor<T[K]>
     apply<K extends AllPaths<T>>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): DeepIndex<T, K> { return super.apply(path, getNew) }
+    // apply<K extends keyof T>(path: K, getNew: (state: T[K]) => T[K]): MyCursor<T[K]>
+    // apply<K extends AllPaths<T>>(path: K, getNew: (state: T[K]) => T[K]): DeepIndex<T, K> { return super.apply(path, getNew) }
 
     select<K extends keyof T>(path: K): MyCursor<T[K]>
     select<K extends AllPaths<T>>(path: K): MyCursor<DeepIndex<T, K>> { return super.select(path) }

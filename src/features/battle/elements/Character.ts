@@ -11,6 +11,8 @@ import FlyingContainer from './FlyingContainer'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 import { EventEmitter } from 'eventemitter3'
+import { Dispatcher } from 'data/battle/dispatch'
+import { MoveEmitter } from '../components/AllCharacters'
 
 const config = {
     isHealthNumber: false
@@ -51,7 +53,7 @@ function Character(props: CharacterProps): PixiContainer {
     const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
-    const [isHovering, setIsHovering] = useState(false)
+    // const [isHovering, setIsHovering] = useState(false)
     // useEffect(() => { if (props.characterMeta.id === '65-50') { console.log('character render') } })
 
     // const { isBasicLoaded } = useLoaderContext()
@@ -137,10 +139,10 @@ function Character(props: CharacterProps): PixiContainer {
     })
 }
 
-function useResetState<T>(default_: T, ms: number) {
-    const result = { current: default_ }
-    setTimeout()
-}
+// function useResetState<T>(default_: T, ms: number) {
+//     const result = { current: default_ }
+//     setTimeout()
+// }
 
 // class StateEmitter extends EventEmitter {
 //     lastSents: <string, S> = {} // OR: array

@@ -8,8 +8,9 @@ import losePng from '../assets/fainted.png'
 // import Chest from '../pixijs/Chest'
 import { BASE_WIDTH, moveTypeMetaMap } from 'data/battle/constants'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
-import { Action, Dispatcher, State } from './CharacterManager'
+import { BattleState } from 'data/battle/factories'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
+import { Action, Dispatcher } from 'data/battle/dispatch'
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
 
@@ -17,7 +18,7 @@ export const tl = (x: string): void => { console.log(x); toast(x) }
 
 
 
-export default function AllCharacters(props: { reset: () => void, state: State, dispatch: Dispatcher }): JSX.Element {
+export default function AllCharacters(props: { reset: () => void, state: BattleState, dispatch: Dispatcher }): JSX.Element {
     const { state, dispatch } = props
     const move$: MoveEmitter = useEventEmitter()
     const npcMove$: NpcMoveEmitter = useEventEmitter()
@@ -206,7 +207,8 @@ function LoseScreen(props: { reset: () => void }): JSX.Element {
 
 function WinScreen(props: { reset: () => void, size: SizeQ }): JSX.Element {
     // TODO: pixiPreactChannel.emit("showChest")
-    return <Chest size={props.size} />
+    return <></>
+    // return <Chest size={props.size} />
     /* <Stage
        width={props.size.width}
        height={props.size.height}
