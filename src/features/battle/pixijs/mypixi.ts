@@ -8,6 +8,7 @@ import {
     Texture as PixiTexture,
     VideoResource as PixiVideoResource,
     Ticker as PixiTicker,
+    InteractionEvent,
     ITextStyle
 } from 'pixi.js'
 // export { PixiLoader }
@@ -36,6 +37,7 @@ interface SpriteArgs extends Positioning {
     tint?: number
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
+    onClick?: (e: InteractionEvent) => void
 }
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
 export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
@@ -74,10 +76,16 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         s.alpha = args.alpha
     }
 
-    if (args.filters) {
+    if (args.filters != null) {
         const filters = args.filters.filter(Boolean) as PixiFilter[]
         s.filters = filters
     }
+
+    if (args.onClick != null) {
+        s.interactive = true
+        s.on('onClick', args.onClick)
+    }
+
     applyPositioningArgs(s, args)
     return s
 }

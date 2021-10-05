@@ -4,7 +4,7 @@ import { EventEmitter, useEventEmitter, useSize } from 'lib/ahooks'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import losePng from '../assets/fainted.png'
-import Chest from '../pixijs/Chest'
+// import Chest from '../pixijs/Chest'
 import { BASE_WIDTH, moveTypeMetaMap } from '../util/constants'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '../util/misc'
 import { Action, Dispatcher, State } from './CharacterManager'
@@ -205,6 +205,7 @@ function LoseScreen(props: { reset: () => void }): JSX.Element {
 }
 
 function WinScreen(props: { reset: () => void, size: SizeQ }): JSX.Element {
+    // TODO: pixiPreactChannel.emit("showChest")
     return <Chest size={props.size} />
     /* <Stage
        width={props.size.width}
