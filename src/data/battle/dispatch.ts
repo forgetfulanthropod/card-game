@@ -29,10 +29,10 @@ export default function dispatch(action: Action): void {
             let notFound = true
             // scene.set('sdfdsf', scene.select('allCharacters').map((cursor, index) => {}) use this? (no)
             scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => {
-                if (c.id !== action.id) return
+                if (c.id !== action.id) return c
 
                 notFound = false
-                c.hasMoved = true
+                return { ...c, hasMoved: true }
             }))
 
             if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
@@ -40,14 +40,9 @@ export default function dispatch(action: Action): void {
         } case 'setHealth': {
             let notFound = true
             scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => {
-                if (c.id !== action.id) return
-
+                if (c.id !== action.id) return c
                 notFound = false
-                if (typeof action.h === 'function') {
-                    c.health = action.h(c.health)
-                } else {
-                    c.health = action.h
-                }
+                return { ...c, health: typeof action.h === 'function' ? action.h(c.health) : action.h }
             }))
 
             // .allCharacters.find(c => c.id === action.id)
@@ -55,7 +50,7 @@ export default function dispatch(action: Action): void {
 
             return
         } case 'clearHasMoved': {
-            scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => c.hasMoved = false))
+            scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => ({ ...c, hasMoved: false })))
             return
         } case 'setSelectedCharacter': {
             scene.set('selectedCharacter', action.c)
