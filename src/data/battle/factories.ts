@@ -1,5 +1,5 @@
-import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../components/AllCharacters'
-import { getId } from './misc'
+import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '../../features/battle/util/constants'
+import { getId } from '../../features/battle/util/misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(65, 50, 18, 13, 1)

@@ -83,3 +83,6 @@ export const moveTypeMetaMap: Record<MoveType, MoveTypeMeta> = {
 // Stable: No ⅓ Modifier
 
 export const BASE_WIDTH = 1920
+
+export const X_AGGRESSIVE_THRESH = 11
+export const X_NEUTRAL_THRESH = 9

@@ -1,6 +1,6 @@
 // import { start } from 'newbattle/newbattle'
 import App from 'components/App'
-import { start } from 'features/battle/pixijs/main'
+import { start } from 'features/battle/elements/main'
 import { render } from 'preact'
 import './global.css'
 

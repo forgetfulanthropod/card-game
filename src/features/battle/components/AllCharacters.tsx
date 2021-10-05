@@ -11,8 +11,6 @@ import { Action, Dispatcher, State } from './CharacterManager'
 import { IdleScreenOverlay, Lose, MoveButton, MoveMenuDiv, Reset, Start } from './Styles'
 export const DEBUG = false
 const TIME_AFTER_PLAYER_MOVE = 1000
-export const X_AGGRESSIVE_THRESH = 11
-export const X_NEUTRAL_THRESH = 9
 
 export const tl = (x: string): void => { console.log(x); toast(x) }
 
