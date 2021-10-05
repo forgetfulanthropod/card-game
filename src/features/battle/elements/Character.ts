@@ -12,8 +12,7 @@ import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 import { EventEmitter } from 'eventemitter3'
 import { Dispatcher } from 'data/battle/dispatch'
-import { MoveEmitter } from '../components/AllCharacters'
-
+import { MoveEmitter } from './AllCharacters'
 const config = {
     isHealthNumber: false
 }
@@ -32,7 +31,7 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
 interface KnownCharacterProps {
     characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
-    dispatch: Dispatcher
+    // dispatch: Dispatcher
     move$: MoveEmitter
     scale: number
 }
@@ -48,38 +47,43 @@ interface CharacterProps extends KnownCharacterProps {
 function Character(props: CharacterProps): PixiContainer {
     const { screenX, screenY, health } = props.characterMeta
     // TODO: all this needs to be converted to event emitters
-    const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
-    const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
-    const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
-    const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
-    const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
+    // const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
+    // const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
+    // const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
+    // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
+    // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
     // const [isHovering, setIsHovering] = useState(false)
     // useEffect(() => { if (props.characterMeta.id === '65-50') { console.log('character render') } })
-
+    const isAttacking = false
+    const flyTo = { x: 100, y: 100 }
+    const isDefending = false
+    const currentMove = props.characterMeta.moves[0]
+    const damageShown = 10
+    const isHovering = false
     // const { isBasicLoaded } = useLoaderContext()
 
-    props.move$.useSubscription(function doCharMove(d) {
-        const myId = props.characterMeta.id
-        if (d.attacker.id === myId) {
-            setIsAttacking(true)
-            props.dispatch({ a: 'setHasMoved', id: myId, v: true })
-            setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
-            console.log({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
-        } else {
-            setFlyTo(undefined)
-        }
+    props.move$.addListener('move', function doCharMove(d) {
+        // const myId = props.characterMeta.id
+        // if (d.attacker.id === myId) {
+        //     setIsAttacking(true)
+        //     props.dispatch({ a: 'setHasMoved', id: myId, v: true })
+        //     setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
+        //     console.log({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
+        // } else {
+        //     setFlyTo(undefined)
+        // }
 
-        if (d.defenders.findIndex(d => d.id === myId) > -1) {
-            // tl(`hit defender ${myId}`)
-            setIsDefending(true)
-            const damage = getDamage(d)
-            setDamageShown(damage)
-            // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
-            setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
-            setCurrentMove(d.move)
-        } else {
-            setCurrentMove(null)
-        }
+        // if (d.defenders.findIndex(d => d.id === myId) > -1) {
+        //     // tl(`hit defender ${myId}`)
+        //     setIsDefending(true)
+        //     const damage = getDamage(d)
+        //     setDamageShown(damage)
+        //     // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
+        //     setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
+        //     setCurrentMove(d.move)
+        // } else {
+        //     setCurrentMove(null)
+        // }
     })
 
     const blurFilter = new filters.BlurFilter()
@@ -111,17 +115,18 @@ function Character(props: CharacterProps): PixiContainer {
                 children: [
                     Container({
                         children: [
-                            isAttacking && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE }),
-                            isDefending && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED }),
-                            props.isSelected && !props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [blurFilter] }),
-                            Sprite({
-                                ...charSpriteProps, onClick: () => {
-                                    //  pixiPreactChannel.emit("showAttackInfo")
-                                    props.onClick(props.characterMeta)
-                                }
-                            }),
-                            props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
-                            HealthBar({ value: health, max: props.characterMeta.maxHealth })
+                            Sprite(charSpriteProps),
+                            // isAttacking && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE }),
+                            // isDefending && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED }),
+                            // props.isSelected && !props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [blurFilter] }),
+                            // Sprite({
+                            //     ...charSpriteProps, onClick: () => {
+                            //         //  pixiPreactChannel.emit("showAttackInfo")
+                            //         props.onClick(props.characterMeta)
+                            //     }
+                            // }),
+                            // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
+                            // HealthBar({ value: health, max: props.characterMeta.maxHealth })
                         ]
                     }),
                     Container({

@@ -1,7 +1,7 @@
 import type { h, JSX } from 'preact'
 import { useEffectWhen } from 'hooks'
 import { useEventEmitter, useSize } from 'ahooks'
-import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
+import type { EventEmitter } from 'eventemitter3'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import losePng from '../assets/fainted.png'
@@ -195,8 +195,6 @@ function MoveMenu(props: { character: CharacterMeta, dispatch: (a: Action) => vo
     </MoveMenuDiv>
 }
 
-export type MoveEmitter = EventEmitter<AttackData>
-export type NpcMoveEmitter = EventEmitter<string>
 
 function LoseScreen(props: { reset: () => void }): JSX.Element {
     return <IdleScreenOverlay>

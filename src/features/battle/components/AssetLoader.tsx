@@ -53,6 +53,10 @@ export default function AssetLoader(): JSX.Element {
     }, [basicLoaded, deluxeLoaded, loaded])
 
     useEffect(() => {
+
+    }, [basicLoaded])
+
+    useEffect(() => {
         for (const [name, url] of Object.entries({ ...basicAssets, ...deluxeAssets })) {
             if (Loader.shared.resources[name]?.data == null) {
                 Loader.shared.add(name, url)
