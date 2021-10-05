@@ -74,8 +74,8 @@ async function main() {
         plugins: [
             cssModulesPlugin(),
             alias({
-                'react': '/Users/l/git/kaiju/node_modules/preact/compat/dist/compat.js',
-                'react-dom': '/Users/l/git/kaiju/node_modules/preact/compat/dist/compat.js',
+                'react': `${process.env.ROOT}/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.ROOT}/node_modules/preact/compat/dist/compat.js`,
             })
         ]
 
