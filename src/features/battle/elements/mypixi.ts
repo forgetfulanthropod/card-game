@@ -41,12 +41,14 @@ interface SpriteArgs extends Positioning {
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
     onClick?: (e: InteractionEvent) => void
+    name?: string
 }
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
 export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends Positioning {
     children: PixiChildren
     onTick?: OnContainerTick
+    name?: string
 }
 
 interface TextArgs extends Positioning {
@@ -91,6 +93,10 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     if (args.onClick != null) {
         s.interactive = true
         s.on('onClick', args.onClick)
+    }
+
+    if (args.name != null) {
+        s.name = args.name
     }
 
     applyPositioningArgs(s, args)
@@ -153,6 +159,10 @@ export function Container(args: ContainerArgs): PixiContainer {
                 PixiTicker.shared.remove(cb)
         })
     }
+    if (args.name != null) {
+        c.name = args.name
+    }
+
     return c
 }
 
@@ -170,7 +180,7 @@ export function Graphics(args: GraphicsArgs): PixiGraphics {
     return g
 }
 
-export function VideoBackground(args: { scale: number, src: string }): PixiSprite {
+export function VideoBackground(args: { name?: string, scale: number, src: string }): PixiSprite {
     const r = new PixiVideoResource(args.src, { updateFPS: 24 })
     const source = r.source as HTMLVideoElement
     source.muted = true
@@ -178,5 +188,6 @@ export function VideoBackground(args: { scale: number, src: string }): PixiSprit
     const sprite = PixiSprite.from(PixiTexture.from(r.source))
     sprite.width = BASE_WIDTH * args.scale
     sprite.height = BASE_HEIGHT * args.scale
+    if (args.name) { sprite.name = args.name }
     return sprite
 }

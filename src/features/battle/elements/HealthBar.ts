@@ -71,6 +71,7 @@ export default function HealthBar(
     }
 
     return Container({
+        name: HealthBar.name,
         x: 0,
         y: 0,
         children: [

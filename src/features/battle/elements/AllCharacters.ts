@@ -8,6 +8,7 @@ const allCharacterMeta = makeInitialPlayerCharacters()
 
 export function AllCharacters(props: { scale: number }): PixiContainer {
     return Container({
+        name: AllCharacters.name,
         children: [
             Frogknight({
                 isSelected: true,

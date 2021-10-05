@@ -16,6 +16,7 @@ export default function Chest(args: { size: Size }): PixiContainer {
         children: [
             Overlay({ size: args.size }),
             Sprite({
+                name: 'Chest',
                 anchor: [1, .3],
                 src: dataOf('chestBody'),
                 onTick: (lid, elapsed) => {
@@ -27,8 +28,8 @@ export default function Chest(args: { size: Size }): PixiContainer {
 
     setTimeout(() => EE.emit('showItems'), 1000)
     EE.on('showItems', () => {
-        c.addChild(Sprite({ src: dataOf('fishstick') }))
-        c.addChild(Sprite({ src: dataOf('potion') }))
+        c.addChild(Sprite({ name: 'fishstick', src: dataOf('fishstick') }))
+        c.addChild(Sprite({ name: 'potion', src: dataOf('potion') }))
 
     })
     return c
@@ -45,6 +46,7 @@ export default function Chest(args: { size: Size }): PixiContainer {
 
 function Overlay(args: { size: Size }): PixiSprite {
     return Sprite({
+        name: 'Overlay',
         src: PixiTexture.WHITE,
         width: args.size.width,
         height: args.size.height,

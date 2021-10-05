@@ -8,7 +8,9 @@ render(<App />, document.getElementById('preact-root') as HTMLDivElement)
 
 loadAssets(
     function onBasic() {
-        start(document.getElementById('pixi-root') as HTMLCanvasElement)
     },
-    function onDeluxe() { }
+    function onDeluxe() {
+        start(document.getElementById('pixi-root') as HTMLCanvasElement)
+
+    }
 )
