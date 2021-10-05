@@ -83,3 +83,4 @@ export const moveTypeMetaMap: Record<MoveType, MoveTypeMeta> = {
 // Stable: No ⅓ Modifier
 
 export const BASE_WIDTH = 1920
+export const BASE_HEIGHT = 1080

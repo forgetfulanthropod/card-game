@@ -1,8 +1,10 @@
+import { BASE_WIDTH } from '../util/constants'
 import background from './background'
 import { Application, PixiApplication } from './mypixi'
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
-    const bg = background({ scale: 1 })
+    const scale = window.innerWidth / BASE_WIDTH
+    const bg = background({ scale: scale / 2 })
 
     return Application({
         canvas,

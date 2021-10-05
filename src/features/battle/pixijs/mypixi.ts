@@ -10,6 +10,7 @@ import {
     Ticker as PixiTicker,
     ITextStyle
 } from 'pixi.js'
+import { BASE_HEIGHT, BASE_WIDTH } from '../util/constants'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
@@ -152,6 +153,7 @@ export function VideoBackground(args: { scale: number, src: string }): PixiSprit
     source.muted = true
     source.loop = true
     const sprite = PixiSprite.from(PixiTexture.from(r.source))
-    sprite.width = 1920 * args.scale
+    sprite.width = BASE_WIDTH * args.scale
+    sprite.height = BASE_HEIGHT * args.scale
     return sprite
 }
