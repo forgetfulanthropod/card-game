@@ -1,14 +1,14 @@
-import Baobab, { Cursor } from 'baobab'
-
+import Baobab from 'baobab'
+import { MyBaobab } from 'config/myBaobab'
 import { battle } from './battle'
-import { State } from './battle/factories'
+// import { State } from './battle/factories'
 
 // interface Tree {
 //     scene: typeof battle,
 //     characters: [],
 //     items: [],
 // }
-const tree = new Baobab({
+const tree = new MyBaobab({
     scene: battle,
     characters: [],
     items: [],

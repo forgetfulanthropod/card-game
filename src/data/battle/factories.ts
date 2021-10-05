@@ -11,8 +11,15 @@ export function makeInitialPlayerCharacters(): CharacterMeta[] {
     return result
 }
 
-export type State = ReturnType<typeof makeInitialState>
-export function makeInitialState(): any {
+export interface State {
+    type: 'battle'
+    isPlayerTurn: boolean
+    battleHasBegun: boolean
+    allCharacters: CharacterMeta[]
+    selectedCharacter: CharacterMeta
+    selectedMove: MoveMeta | undefined
+}
+export function makeInitialState(): State {
     const allCharacters = makeInitialPlayerCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPc)
     const selectedMove = selectedCharacter?.moves[0]
