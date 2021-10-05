@@ -6,10 +6,11 @@ import { Sprite, Container, PixiContainer } from './mypixi'
 // import { Hover } from './Hover'
 import HealthBar from './HealthBar'
 // import { useLoaderContext } from '../providers/LoaderProvider'
-import { getDamage } from '../util/attack'
+import { getDamage } from '../../../data/battle/attack'
 import FlyingContainer from './FlyingContainer'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
+import { EventEmitter } from 'eventemitter3'
 
 const config = {
     isHealthNumber: false
@@ -111,7 +112,12 @@ function Character(props: CharacterProps): PixiContainer {
                             isAttacking && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE }),
                             isDefending && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED }),
                             props.isSelected && !props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [blurFilter] }),
-                            Sprite({ ...charSpriteProps, click: () => props.onClick(props.characterMeta), interactive: true }),
+                            Sprite({
+                                ...charSpriteProps, onClick: () => {
+                                    //  pixiPreactChannel.emit("showAttackInfo")
+                                    props.onClick(props.characterMeta)
+                                }
+                            }),
                             props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
                             HealthBar({ value: health, max: props.characterMeta.maxHealth })
                         ]
@@ -130,3 +136,20 @@ function Character(props: CharacterProps): PixiContainer {
         ]
     })
 }
+
+function useResetState() {
+    const ee = new EventEmitter()
+    // ee.
+}
+
+// class StateEmitter extends EventEmitter {
+//     lastSents: <string, S> = {} // OR: array
+//     emit<T>(event, context?) {
+//         const result = fn()
+//         lastSents[event] = result
+//         super.emit(event, context)
+//     }
+//     lastSent(event) {
+//         return this.lastSents?.[event]
+//     }
+// }

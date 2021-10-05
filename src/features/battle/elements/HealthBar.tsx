@@ -25,6 +25,7 @@ export default function HealthBar(
     // }, [])
 
 
+
     const DISPLAY_WIDTH = 140
     const RAW_WIDTH = 1841
     const RAW_HEIGHT = 161
