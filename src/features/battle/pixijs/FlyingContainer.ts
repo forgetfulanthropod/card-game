@@ -1,4 +1,4 @@
-import { Container, PixiContainer, PixiSprite } from './mypixi'
+import { Container, PixiChildren, PixiContainer } from './mypixi'
 
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
@@ -6,7 +6,7 @@ const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
 
 type Point = { x: number, y: number }
 export default function FlyingContainer(args: {
-    children: (PixiSprite | PixiContainer)[],
+    children: PixiChildren,
     scale: number,
     start: Point,
     flyTo: Point,

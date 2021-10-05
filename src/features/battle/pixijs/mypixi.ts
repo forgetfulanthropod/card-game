@@ -1,6 +1,7 @@
 import {
     Application as PixiApplication,
     Container as PixiContainer,
+    Filter as PixiFilter,
     Sprite as PixiSprite,
     Loader as PixiLoader,
     Text as PixiText,
@@ -34,10 +35,12 @@ interface SpriteArgs extends Positioning {
     onTick?: OnSpriteTick
     tint?: number
     alpha?: number
+    filters?: (PixiFilter | null | false | undefined)[]
 }
+export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
 export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends Positioning {
-    children: (PixiSprite | PixiContainer)[]
+    children: PixiChildren
     onTick?: OnContainerTick
 }
 
@@ -71,6 +74,10 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         s.alpha = args.alpha
     }
 
+    if (args.filters) {
+        const filters = args.filters.filter(Boolean) as PixiFilter[]
+        s.filters = filters
+    }
     applyPositioningArgs(s, args)
     return s
 }
@@ -119,7 +126,9 @@ export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
     applyPositioningArgs(c, args)
     for (const ch of args.children) {
-        c.addChild(ch)
+        if (ch != null && ch !== false) {
+            c.addChild(ch)
+        }
     }
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {

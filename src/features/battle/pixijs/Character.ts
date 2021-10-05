@@ -1,19 +1,15 @@
-import { Container, Sprite } from '@inlet/react-pixi'
 import { useResetState } from 'hooks'
 import { filters, Loader } from 'pixi.js'
-import { useState } from 'preact/hooks'
-import { MoveEmitter } from '../components/AllCharacters'
-import { Dispatcher } from '../components/CharacterManager'
+import { Sprite, Container, PixiContainer } from './mypixi'
+// import { MoveEmitter } from '../components/AllCharacters'
+// import { Dispatcher } from '../components/CharacterManager'
 // import { Hover } from './Hover'
-import HealthBar from '../components/HealthBar'
-import { useLoaderContext } from '../providers/LoaderProvider'
+import HealthBar from './HealthBar'
+// import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../util/attack'
 import FlyingContainer from './FlyingContainer'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
-
-
-
 
 const config = {
     isHealthNumber: false
@@ -24,10 +20,10 @@ const BLUE = 0x0000FF
 const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
 
-export function Frogknight(props: KnownPlayerCharacterProps): Container {
+export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
     return Character({ assetId: 'frogknight', direction: -1, ...props })
 }
-export function Skeleton(props: KnownCharacterProps): Container {
+export function Skeleton(props: KnownCharacterProps): PixiContainer {
     return Character({ assetId: 'orcWarrior', direction: -1, ...props })
 }
 interface KnownCharacterProps {
@@ -46,8 +42,9 @@ interface CharacterProps extends KnownCharacterProps {
     direction: -1 | 1
     characterMeta: CharacterMeta
 }
-function Character(props: CharacterProps): Container {
+function Character(props: CharacterProps): PixiContainer {
     const { screenX, screenY, health } = props.characterMeta
+    // TODO: all this needs to be converted to event emitters
     const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
     const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
     const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
@@ -56,7 +53,7 @@ function Character(props: CharacterProps): Container {
     const [isHovering, setIsHovering] = useState(false)
     // useEffect(() => { if (props.characterMeta.id === '65-50') { console.log('character render') } })
 
-    const { isBasicLoaded } = useLoaderContext()
+    // const { isBasicLoaded } = useLoaderContext()
 
     props.move$.useSubscription(function doCharMove(d) {
         const myId = props.characterMeta.id
@@ -90,34 +87,46 @@ function Character(props: CharacterProps): Container {
     redFilter.hue(180, false)
 
     const charSpriteProps = {
-        image: Loader.shared.resources?.[props.assetId]?.data,
-        anchor: { x: 0, y: 1 },
+        src: Loader.shared.resources?.[props.assetId]?.data,
+        anchor: [0, 1] as [number, number],
         height: Loader.shared.resources?.[props.assetId]?.data?.height
     }
     // if (props.assetId === 'orcWarrior') {
     //     debugger
     // }
 
-    if (!isBasicLoaded) return <></>
-    return <>
-        { health > 0 ? <>
-        <FlyingContainer { ...{ start: { x: screenX, y: screenY }, flyTo, scale: props.scale } } >
-    <Container x={ 0 } y = { 0} >
-        { isAttacking && <Sprite { ...charSpriteProps } filters = { [blurFilter]} tint = { BLUE } />}
-{ isDefending && <Sprite { ...charSpriteProps } filters = { [blurFilter]} tint = { RED } />}
-{ (props.isSelected && !props.characterMeta.hasMoved) && <Sprite { ...charSpriteProps } filters = { [blurFilter]} />}
-<Sprite { ...charSpriteProps } click = {() => props.onClick(props.characterMeta)} interactive = { true} />
-    { props.characterMeta.hasMoved && <Sprite { ...charSpriteProps } filters={ [grayFilter]} />}
+    // if (!isBasicLoaded) return <></>
+    // {health > 0 ? <>
+    return FlyingContainer({
+        start: { x: screenX, y: screenY },
+        flyTo,
+        scale: props.scale,
+        children: [
+            Container({
+                x: 0,
+                y: 0,
+                children: [
+                    Container({
+                        children: [
+                            isAttacking && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE }),
+                            isDefending && Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED }),
+                            props.isSelected && !props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [blurFilter] }),
+                            Sprite({ ...charSpriteProps, click: () => props.onClick(props.characterMeta), interactive: true }),
+                            props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
+                            HealthBar({ value: health, max: props.characterMeta.maxHealth })
+                        ]
+                    }),
+                    Container({
+                        x: 0,
+                        y: -charSpriteProps.height * .8,
+                        children: [
+                            damageShown != null && HitInfo({ damage: damageShown }),
+                            currentMove != null && MoveInfo({ move: currentMove, offset: damageShown != null ? -70 : 0 }),
+                        ],
+                    })
+                ]
+            })
 
-    < HealthBar value = { health } max = { props.characterMeta.maxHealth } />
-        </Container>
-        < Container x = { 0} y = {- charSpriteProps.height * .8}>
-            { damageShown != null && <HitInfo damage={ damageShown } />}
-{ currentMove != null && <MoveInfo move={ currentMove } offset = { damageShown != null ? -70 : 0 } />}
-    < /Container>
-    < /FlyingContainer>
-    < /> :
-    <> </>
-        }
-</>
+        ]
+    })
 }
