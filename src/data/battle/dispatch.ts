@@ -28,7 +28,7 @@ export default function dispatch(action: Action): void {
         } case 'setHasMoved': {
             let notFound = true
             // scene.set('sdfdsf', scene.select('allCharacters').map((cursor, index) => {}) use this? (no)
-            scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => {
+            scene.apply('allCharacters', (ac) => ac.map(c => {
                 if (c.id !== action.id) return c
 
                 notFound = false
@@ -39,7 +39,7 @@ export default function dispatch(action: Action): void {
             return
         } case 'setHealth': {
             let notFound = true
-            scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => {
+            scene.apply('allCharacters', (ac) => ac.map(c => {
                 if (c.id !== action.id) return c
                 notFound = false
                 return { ...c, health: typeof action.h === 'function' ? action.h(c.health) : action.h }
@@ -50,7 +50,7 @@ export default function dispatch(action: Action): void {
 
             return
         } case 'clearHasMoved': {
-            scene.apply('allCharacters', (ac: CharacterMeta[]) => ac.map(c => ({ ...c, hasMoved: false })))
+            scene.apply('allCharacters', (ac) => ac.map(c => ({ ...c, hasMoved: false })))
             return
         } case 'setSelectedCharacter': {
             scene.set('selectedCharacter', action.c)
@@ -63,7 +63,7 @@ export default function dispatch(action: Action): void {
             return
         } case 'updateScreenSize': {
             // debugger
-            scene.apply('allCharacters', (ac: CharacterMeta[]) => {
+            scene.apply('allCharacters', (ac) => {
                 // debugger
                 return ac.map(c =>
                 ({
