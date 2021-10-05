@@ -1,6 +1,7 @@
 import type { h, JSX } from 'preact'
 import { useEffectWhen } from 'hooks'
-import { EventEmitter, useEventEmitter, useSize } from 'lib/ahooks'
+import { useEventEmitter, useSize } from 'ahooks'
+import type { EventEmitter } from 'ahooks/lib/useEventEmitter'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import losePng from '../assets/fainted.png'
