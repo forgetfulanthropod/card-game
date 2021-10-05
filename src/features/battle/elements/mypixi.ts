@@ -2,6 +2,7 @@ import {
     Application as PixiApplication,
     Container as PixiContainer,
     Filter as PixiFilter,
+    Graphics as PixiGraphics,
     Sprite as PixiSprite,
     Loader as PixiLoader,
     Text as PixiText,
@@ -14,7 +15,7 @@ import {
 import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
-export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource }
+export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
 
 // export type Sprite = PixiSprite
 
@@ -49,7 +50,11 @@ interface ContainerArgs extends Positioning {
 
 interface TextArgs extends Positioning {
     text: string
-    style: Partial<ITextStyle>
+    style?: Partial<ITextStyle>
+}
+
+interface GraphicsArgs extends Positioning {
+    draw: (g: PixiGraphics) => void
 }
 
 export function Sprite(args: SpriteArgs): PixiSprite {
@@ -153,6 +158,14 @@ export function Text(args: TextArgs): PixiText {
     const c = new PixiText(args.text, args.style)
     applyPositioningArgs(c, args)
     return c
+}
+
+
+export function Graphics(args: GraphicsArgs): PixiGraphics {
+    const g = new PixiGraphics()
+    args.draw(g)
+    applyPositioningArgs(g, args)
+    return g
 }
 
 export function VideoBackground(args: { scale: number, src: string }): PixiSprite {
