@@ -2,7 +2,7 @@ import { BASE_HEIGHT, BASE_WIDTH, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from '
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(65, 50, 18, 13, 1)
+    const skeletonPositions = makePositions(65, 50, 18, 13, 6)
     const frogknightPositions = makePositions(10, 50, 18, 13, 6)
     const result = [
         ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),

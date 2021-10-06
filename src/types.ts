@@ -10,9 +10,24 @@ declare global {
     type Children = Preact.JSX.Element | null | false | Children[]
     type Callback = () => void
     type Setter<T> = StateUpdater<T | undefined>
+    type CharacterName =
+        | 'Frogknight'
+        | 'Penguin Knight'
+        | 'Skeleton'
+        | 'Matcha'
+        | 'Notorious B.E.A.N'
+        | 'Warhog'
+        | 'Green Jester'
+        | 'Penguin Knight'
+        | 'Mimic'
+        | 'Dragon'
+        | 'Bloat Demon'
+        | 'Orc Warrior'
+        | 'Bookle'
+
     type CharacterMeta = {
         id: string
-        type: 'Frogknight' | 'Penguin Knight' | 'Skeleton' | 'Matcha'
+        type: CharacterName
         level: number
         damage: number
         moves: MoveMeta[]

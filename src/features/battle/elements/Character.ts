@@ -15,6 +15,7 @@ import dispatch from 'data/battle/dispatch'
 import { MoveEmitter } from './AllCharacters'
 import { tl } from '../logic/allCharactersLogic'
 import { MyCursor } from 'config/myBaobab'
+import { characterAssetKeys } from '../logic/AssetLoader'
 const config = {
     isHealthNumber: false
 }
@@ -71,7 +72,8 @@ function Character(args: CharacterProps): PixiContainer {
 
 
     const charSpriteProps = {
-        src: Loader.shared.resources?.[args.assetId]?.data,
+        // src: Loader.shared.resources?.[args.assetId]?.data,
+        src: Loader.shared.resources?.[characterAssetKeys[Math.random() * characterAssetKeys.length | 0]]?.data,
         anchor: [0, 1] as [number, number],
         height: Loader.shared.resources?.[args.assetId]?.data?.height,
     }

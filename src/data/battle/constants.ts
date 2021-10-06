@@ -1,3 +1,95 @@
+import { CharacterAssetKey } from 'features/battle/logic/AssetLoader'
+
+// export const characterMetaMap: Record<CharacterAssetKey, CharacterStats> ={
+//     bloatDemon: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Bloat Demon"
+//     },
+//     bogSpirit: {},
+//     bookle: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Bookle"
+//     },
+//     bumbit: {},
+//     dragon: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Dragon"
+//     },
+//     frogknight: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Frogknight"
+//     },
+//     gnomeHooligan: {},
+//     goblinDragon: {},
+//     greenJester: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Green Jester"
+//     },
+//     jerry: {},
+//     lichLord: {},
+//     matchaGelatinCube: {},
+//     mimic: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Mimic"
+//     },
+//     mushroomFarmer: {},
+//     notoriousBEAN: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Notorious B.E.A.N"
+//     },
+//     orcWarrior: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Orc Warrior"
+//     },
+//     penguinKnight: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Penguin Knight"
+//     },
+//     skeleton: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Skeleton"
+//     },
+//     snacky: {},
+//     theHatefly: {},
+//     trioOfFools: {},
+//     warhog: {
+//         damage: 0,
+//         level: 0,
+//         moves: [],
+//         type: "Warhog"
+//     },
+//     wimpyGuard: {}
+// }
+
+interface CharacterStats {
+    type: CharacterName
+    level: number
+    damage: number // AKA base attack
+    moves: MoveMeta[]
+    points: number
+    maxHealth: number // AKA base health
+}
+
 export const stanceTypeMetaMap: Record<StanceType, StanceTypeMeta> = {
     defensive: {
         id: 'defensive',
