@@ -50,7 +50,8 @@ function Character(args: CharacterProps): PixiContainer {
     args.cursor.on('update', () => {
         Object.assign(characterMeta, args.cursor.get())
     })
-    const { screenX, screenY, health } = characterMeta
+    const { screenX, screenY } = characterMeta
+    // NEXT: HEALTH
 
     // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)

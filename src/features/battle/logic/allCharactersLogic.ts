@@ -10,7 +10,7 @@ import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
 export const tl = (x: string): void => { console.log(x); toast(x) }
 const TIME_AFTER_PLAYER_MOVE = 1000
 
-const DEBUG = true
+const DEBUG = false
 // TODO
 // interface Bindings  {
 //     startGame: any,
@@ -42,7 +42,7 @@ export function getBindings() {
 
 
 
-    move$.on('move', function showMove(ad: AttackData) {
+    move$.on('', function showMove(ad: AttackData) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         toast(ad.move.name,
             {
@@ -99,7 +99,7 @@ export function getBindings() {
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
-        move$.emit('move', getNpcMove(state.allCharacters))
+        move$.emit('', getNpcMove(state.allCharacters))
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
@@ -137,7 +137,7 @@ export function getBindings() {
             const closest = getClosestAlive(state.allCharacters, clicked, 1)
             if (closest != null) defenders.push(closest)
         }
-        move$.emit('move', {
+        move$.emit('', {
             attacker: state.selectedCharacter,
             defenders: defenders,
             move: state.selectedMove,
