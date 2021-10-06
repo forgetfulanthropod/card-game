@@ -58,7 +58,7 @@ export function getBindings() {
     function startGame() {
         tl(state.isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
         if (!state.isPlayerTurn) {
-            const t = setTimeout(() => npcMove$.emit('first move of game'), 1000)
+            const t = setTimeout(() => npcMove$.emit('', 'first move of game'), 1000)
             return () => clearTimeout(t)
         }
         return () => { }
@@ -71,7 +71,7 @@ export function getBindings() {
         dispatch({ a: 'setIsPlayerTurn', v: state.isPlayerFirstTurn })
         tl(state.isPlayerFirstTurn ? 'You start' : 'Enemy starts')
         if (!state.isPlayerFirstTurn) {
-            setTimeout(() => npcMove$.emit('first move of round'), 500)
+            setTimeout(() => npcMove$.emit('', 'first move of round'), 500)
         }
     }
 
@@ -105,10 +105,10 @@ export function getBindings() {
             return
         }
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
-            setTimeout(() => npcMove$.emit('no unmoved PC and NPC turn'), 1000)
+            setTimeout(() => npcMove$.emit('', 'no unmoved PC and NPC turn'), 1000)
         }
     }
-    npcMove$.on('npcMove', doNpcMove)
+    npcMove$.on('', doNpcMove)
 
     function doCharacterAction(clicked: CharacterMeta) {
         if (checkWinner(state.allCharacters) != null) return
@@ -149,7 +149,7 @@ export function getBindings() {
             // should be unreachable
             tl('no unmoved PC')
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => npcMove$.emit('attack back'), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
         dispatch({ a: 'setSelectedCharacter', c: newPc })
@@ -157,7 +157,7 @@ export function getBindings() {
         // if there's another unmoved NPC then make it strike
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => npcMove$.emit('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => npcMove$.emit('', 'NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
     return {
