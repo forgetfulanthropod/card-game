@@ -92,7 +92,7 @@ export function Sprite(args: SpriteArgs): PixiSprite {
 
     if (args.onClick != null) {
         s.interactive = true
-        s.on('onClick', args.onClick)
+        s.on('click', args.onClick)
     }
 
     if (args.name != null) {
