@@ -48,11 +48,24 @@ interface CharacterProps extends KnownCharacterProps {
 }
 function Character(args: CharacterProps): PixiContainer {
     const characterMeta = args.cursor.get()
-    args.cursor.on('update', () => {
-        Object.assign(characterMeta, args.cursor.get())
-    })
+    // args.cursor.on('update', () => {
+    //     Object.assign(characterMeta, args.cursor.get())
+    // })
     const { screenX, screenY } = characterMeta
     // NEXT: HEALTH
+
+    args.cursor.select('health').on('update', () => {
+        const value = args.cursor.select('health').get()
+        mainContainer.removeChild(healthBar)
+
+        if (value <= 0) {
+            flyingContainer.removeChildren()
+        } else {
+            healthBar = HealthBar({ value, max: characterMeta.maxHealth })
+            mainContainer.addChild(healthBar)
+        }
+
+    })
 
     // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
@@ -113,39 +126,31 @@ function Character(args: CharacterProps): PixiContainer {
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
             const damage = getDamage(d)
-            flashSprite(mainContainer, MoveInfo({ move: d.move, offset: -70 }), { destroy: true })
-            flashSprite(flyingContainer, HitInfo({ damage: damage }), { destroy: true })
+            flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true })
+            flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true })
             // setDamageShown(damage)
             // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             // TODO: should characters update their own health?
-            // dispatch
-            // setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
-            // setCurrentMove(d.move)
+            setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
         }
-        // else {
-        //     setCurrentMove(null)
-        // }
     })
-    // if (props.assetId === 'orcWarrior') {
-    //     debugger
-    // }
 
-    // if (!isBasicLoaded) return <></>
-    // {health > 0 ? <>
-    // return Sprite(charSpriteProps)
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
+
     const mainContainer = Container({
         children: [
             // attackSprite,
             mainSprite,
-            // Sprite({
-            //     ...charSpriteProps, onClick: () => {
-            //         //  pixiPreactChannel.emit("showAttackInfo")
-            //         props.onClick(props.characterMeta)
-            //     }
-            // }),
+            healthBar,
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
-            // HealthBar({ value: health, max: props.characterMeta.maxHealth })
+
         ]
+    })
+
+    const aboveCharacterContainer = Container({
+        x: 0,
+        y: -charSpriteProps.height,
+        children: [],
     })
 
     const flyingContainer = Container({
@@ -154,13 +159,7 @@ function Character(args: CharacterProps): PixiContainer {
         y: screenY,
         children: [
             mainContainer,
-            Container({
-                x: 0,
-                y: -charSpriteProps.height * .8,
-                children: [
-                    mainContainer,
-                ],
-            })
+            aboveCharacterContainer,
         ]
     })
 

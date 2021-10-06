@@ -58,7 +58,7 @@ export default function HealthBar(
         // if (isDeluxeLoaded) {
         const texture = PixiLoader.shared.resources?.healthTexture?.texture
         const data = PixiLoader.shared.resources?.healthTexture?.data
-        console.log({ texture, data })
+
         g.beginTextureFill({
             texture,
             color,

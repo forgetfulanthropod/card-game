@@ -35,7 +35,7 @@ interface Positioning {
 
 export type OnSpriteTick = (self: PixiSprite, delta: number) => void | 'remove'
 interface SpriteArgs extends Positioning {
-    src: string | PixiTexture
+    src?: string | PixiTexture
     onTick?: OnSpriteTick
     tint?: number
     alpha?: number
@@ -52,7 +52,7 @@ interface ContainerArgs extends Positioning {
     name?: string
 }
 
-interface TextArgs extends Positioning {
+interface TextArgs extends SpriteArgs {
     text: string
     style?: Partial<ITextStyle>
 }
@@ -64,13 +64,12 @@ interface GraphicsArgs extends Positioning {
 export function Sprite(args: SpriteArgs): PixiSprite {
     const s = PixiSprite.from(args.src)
 
-    if (args.anchor != null) {
-        if (Array.isArray(args.anchor)) {
-            s.anchor.set(...args.anchor)
-        } else {
-            s.anchor.set(args.anchor)
-        }
-    }
+    applySpriteArgs(s, args)
+    applyPositioningArgs(s, args)
+    return s
+}
+
+function applySpriteArgs(s: PixiSprite, args: SpriteArgs) {
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick && args.onTick(s, dt)
@@ -104,8 +103,13 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         s.zIndex = args.zIndex
     }
 
-    applyPositioningArgs(s, args)
-    return s
+    if (args.anchor != null) {
+        if (Array.isArray(args.anchor)) {
+            s.anchor.set(...args.anchor)
+        } else {
+            s.anchor.set(args.anchor)
+        }
+    }
 }
 
 function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) {
@@ -174,9 +178,10 @@ export function Container(args: ContainerArgs): PixiContainer {
 }
 
 export function Text(args: TextArgs): PixiText {
-    const c = new PixiText(args.text, args.style)
-    applyPositioningArgs(c, args)
-    return c
+    const text = new PixiText(args.text, args.style)
+    applySpriteArgs(text, args)
+    applyPositioningArgs(text, args)
+    return text
 }
 
 
