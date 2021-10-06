@@ -8,98 +8,106 @@ import { useEffectWhen } from 'hooks'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
+import { MyCursor } from 'config/myBaobab'
 export const tl = (x: string): void => { console.log(x); toast(x) }
 const TIME_AFTER_PLAYER_MOVE = 1000
 
 const DEBUG = true
 // TODO
-export function allCharactersLogic(props: { reset: () => void, state: BattleState, dispatch: Dispatcher }) {
+export function allCharactersLogic(props: { reset: () => void, battleCursor: MyCursor<BattleState>, dispatch: Dispatcher }) {
 
-    const { state, dispatch } = props
+    const { battleCursor: battleState, dispatch } = props
     const move$: MoveEmitter = new EventEmitter()
     const npcMove$: NpcMoveEmitter = new EventEmitter()
-    const [isPlayerFirstTurn] = useState(() => state.isPlayerTurn)
-    const [endScreen, setEndScreen] = useState<null | 'lose' | 'win'>(null)
-    console.log({ state })
-    const { allCharacters, battleHasBegun, isPlayerTurn, selectedCharacter } = state
 
-    // useLog({ isPlayerFirstTurn })
-    const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
-    const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
+    const cursorToState = (cursor: MyCursor<BattleState>) => {
+        const value = cursor.get()
+        const isPlayerFirstTurn = value.isPlayerTurn
+        const alivePcs = value.allCharacters.filter(c => c.isPc && c.health > 0)
+        const aliveNpcs = value.allCharacters.filter(c => !c.isPc && c.health > 0)
+        const isMoveAvailable = checkMoveAvailable(value.allCharacters)
+        return { ...value, isPlayerFirstTurn, alivePcs, aliveNpcs, isMoveAvailable }
+    }
+
+    const state = cursorToState(battleState)
+    battleState.on('update', function () {
+        Object.assign(state, battleState)
+    })
+
+
 
     move$.on('move', function showMove(ad: AttackData) {
         DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         toast(ad.move.name,
-            //     {
-            //     style: {
-            //         backgroundColor: ad.attacker.isPc ? 'green' : 'red',
-            //         color: 'white'
-            //     }
-            // }
+            {
+                style: {
+                    backgroundColor: ad.attacker.isPc ? 'green' : 'red',
+                    color: 'white'
+                }
+            }
         )
         console.log(ad.move.name)
     })
 
-    useEffectWhen(function startGame() {
-        if (!battleHasBegun) return () => { }
-        tl(isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
-        if (!isPlayerTurn) {
+    function startGame() {
+        tl(state.isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
+        if (!state.isPlayerTurn) {
             const t = setTimeout(() => npcMove$.emit('first move of game'), 1000)
             return () => clearTimeout(t)
         }
         return () => { }
-    }, [battleHasBegun, isPlayerTurn, npcMove$], [battleHasBegun])
-
-    const isMoveAvailable = checkMoveAvailable(allCharacters)
-    useEffectWhen(function resetRound() {
-        if (isMoveAvailable) return
-        if (!battleHasBegun) return
+    }
+    function resetRound() {
+        if (state.isMoveAvailable) return
+        if (!state.battleHasBegun) return
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })
-        dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
-        tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
-        if (!isPlayerFirstTurn) {
+        dispatch({ a: 'setIsPlayerTurn', v: state.isPlayerFirstTurn })
+        tl(state.isPlayerFirstTurn ? 'You start' : 'Enemy starts')
+        if (!state.isPlayerFirstTurn) {
             setTimeout(() => npcMove$.emit('first move of round'), 500)
         }
-    }, [battleHasBegun, dispatch, isMoveAvailable, isPlayerFirstTurn, npcMove$], [isMoveAvailable])
+    }
 
-    const winner = checkWinner(allCharacters)
-    useEffect(function endGame() {
+    const winner = checkWinner(state.allCharacters)
+    function endGame() {
         console.log(winner === 'PC' ? 'You win' : 'Computer wins')
         if (winner === 'NPC') {
-            const st = setTimeout(() => setEndScreen('lose'), 1000)
+            // TODO
+            const st = setTimeout(() => showEndScreen('lose'), 1000)
             return () => clearTimeout(st)
         }
         if (winner === 'PC') {
-            const st = setTimeout(() => setEndScreen('win'), 0) // MARK
+            const st = setTimeout(() => showEndScreen('win'), 0) // MARK
             return () => clearTimeout(st)
         }
         return () => { }
-    }, [winner])
+    }
 
-    npcMove$.on('npcMove', function doNpcMove(_reason) {
+    function doNpcMove(_reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
-        if (checkWinner(allCharacters) != null) { return }
-        if (isPlayerTurn) { return }
-        if (alivePcs.length === 0) { return }
-        if (aliveNpcs.every(c => c.hasMoved)) {
+        if (checkWinner(state.allCharacters) != null) { return }
+        if (state.isPlayerTurn) { return }
+        if (state.alivePcs.length === 0) { return }
+        if (state.aliveNpcs.every(c => c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
-        move$.emit('move', getNpcMove(allCharacters))
-        if (alivePcs.some(c => !c.hasMoved)) {
+        move$.emit('move', getNpcMove(state.allCharacters))
+        if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
         }
-        if (aliveNpcs.some(c => !c.hasMoved)) {
+        if (state.aliveNpcs.some(c => !c.hasMoved)) {
             setTimeout(() => npcMove$.emit('no unmoved PC and NPC turn'), 1000)
         }
-    })
+    }
+    npcMove$.on('npcMove', doNpcMove)
 
-    const onClick = function doCharacterAction(clicked: CharacterMeta) {
-        if (checkWinner(allCharacters) != null) return
-        if (!isPlayerTurn) return
-        if (alivePcs.every(c => c.hasMoved)) return
+    function doCharacterAction(clicked: CharacterMeta) {
+        if (checkWinner(state.allCharacters) != null) return
+        if (!state.isPlayerTurn) return
+        if (state.alivePcs.every(c => c.hasMoved)) return
         // click to choose selected Pc:
         if (clicked.isPc) {
             if (clicked.hasMoved) return
@@ -108,7 +116,7 @@ export function allCharactersLogic(props: { reset: () => void, state: BattleStat
         }
 
         // clicked on NPC but no selected character
-        if (!selectedCharacter || selectedCharacter.hasMoved) {
+        if (!state.selectedCharacter || state.selectedCharacter.hasMoved) {
             // should be unreachable
             tl('select attacker first')
             return
@@ -120,17 +128,17 @@ export function allCharactersLogic(props: { reset: () => void, state: BattleStat
         }
         const defenders = [clicked]
         if (moveTypeMetaMap[state.selectedMove.type].numTargets > 1) {
-            const closest = getClosestAlive(allCharacters, clicked, 1)
+            const closest = getClosestAlive(state.allCharacters, clicked, 1)
             if (closest != null) defenders.push(closest)
         }
         move$.emit('move', {
-            attacker: selectedCharacter,
+            attacker: state.selectedCharacter,
             defenders: defenders,
             move: state.selectedMove,
         })
 
         // change to unmoved PC if there is one
-        const newPc = getUnmovedPc(allCharacters)
+        const newPc = getUnmovedPc(state.allCharacters)
         if (newPc == null) {
             // should be unreachable
             tl('no unmoved PC')
@@ -141,18 +149,15 @@ export function allCharactersLogic(props: { reset: () => void, state: BattleStat
         dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike
-        if (aliveNpcs.some(c => !c.hasMoved)) {
+        if (state.aliveNpcs.some(c => !c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => npcMove$.emit('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
-
-    const ref = useRef<HTMLDivElement>(null)
-    // const size = useSize(ref)
-    const { width = 1920, height = 1080 } = useSize(ref)
-    const scale = width / BASE_WIDTH
-
-    useEffect(() => {
-        dispatch({ a: 'updateScreenSize', size: { width, height } })
-    }, [dispatch, width, height])
+    return {
+        startGame,
+        resetRound,
+        endGame,
+        doCharacterAction,
+    }
 }
