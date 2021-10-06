@@ -54,8 +54,16 @@ function Character(args: CharacterProps): PixiContainer {
     // NEXT: HEALTH
 
     args.cursor.select('health').on('update', () => {
+        const value = args.cursor.select('health').get()
         mainContainer.removeChild(healthBar)
-        mainContainer.addChild(HealthBar({ value: args.cursor.select('health').get(), max: characterMeta.maxHealth }))
+
+        if (value < 0) {
+            flyingContainer.removeChildren()
+        } else {
+            healthBar = HealthBar({ value, max: characterMeta.maxHealth })
+            mainContainer.addChild(healthBar)
+        }
+
     })
 
     // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
@@ -122,7 +130,7 @@ function Character(args: CharacterProps): PixiContainer {
             // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             // TODO: should characters update their own health?
             // dispatch
-            // setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
+            setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
             // setCurrentMove(d.move)
         }
         // else {
@@ -136,7 +144,7 @@ function Character(args: CharacterProps): PixiContainer {
     // if (!isBasicLoaded) return <></>
     // {health > 0 ? <>
     // return Sprite(charSpriteProps)
-    const healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
 
     const mainContainer = Container({
         children: [
