@@ -35,7 +35,7 @@ interface Positioning {
 
 export type OnSpriteTick = (self: PixiSprite, delta: number) => void | 'remove'
 interface SpriteArgs extends Positioning {
-    src: string | PixiTexture
+    src?: string | PixiTexture
     onTick?: OnSpriteTick
     tint?: number
     alpha?: number

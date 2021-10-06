@@ -57,7 +57,7 @@ function Character(args: CharacterProps): PixiContainer {
         const value = args.cursor.select('health').get()
         mainContainer.removeChild(healthBar)
 
-        if (value < 0) {
+        if (value <= 0) {
             flyingContainer.removeChildren()
         } else {
             healthBar = HealthBar({ value, max: characterMeta.maxHealth })
@@ -124,26 +124,15 @@ function Character(args: CharacterProps): PixiContainer {
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
             const damage = getDamage(d)
-            flashSprite(mainContainer, MoveInfo({ move: d.move, offset: -70 }), { destroy: true })
-            flashSprite(flyingContainer, HitInfo({ damage: damage }), { destroy: true })
+            flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true })
+            flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true })
             // setDamageShown(damage)
             // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             // TODO: should characters update their own health?
-            // dispatch
             setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
-            // setCurrentMove(d.move)
         }
-        // else {
-        //     setCurrentMove(null)
-        // }
     })
-    // if (props.assetId === 'orcWarrior') {
-    //     debugger
-    // }
 
-    // if (!isBasicLoaded) return <></>
-    // {health > 0 ? <>
-    // return Sprite(charSpriteProps)
     let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
 
     const mainContainer = Container({
@@ -151,15 +140,15 @@ function Character(args: CharacterProps): PixiContainer {
             // attackSprite,
             mainSprite,
             healthBar,
-            // Sprite({
-            //     ...charSpriteProps, onClick: () => {
-            //         //  pixiPreactChannel.emit("showAttackInfo")
-            //         props.onClick(props.characterMeta)
-            //     }
-            // }),
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
 
         ]
+    })
+
+    const aboveCharacterContainer = Container({
+        x: 0,
+        y: -charSpriteProps.height,
+        children: [],
     })
 
     const flyingContainer = Container({
@@ -168,13 +157,7 @@ function Character(args: CharacterProps): PixiContainer {
         y: screenY,
         children: [
             mainContainer,
-            Container({
-                x: 0,
-                y: -charSpriteProps.height * .8,
-                children: [
-                    mainContainer,
-                ],
-            })
+            aboveCharacterContainer,
         ]
     })
 
