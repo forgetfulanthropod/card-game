@@ -1,26 +1,40 @@
 import { makeInitialPlayerCharacters } from 'data/battle/factories'
 import EventEmitter from 'eventemitter3'
-import { Frogknight } from './Character'
+import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
 
-import { allCharactersLogic } from '../logic/allCharactersLogic'
-const allCharacterMeta = makeInitialPlayerCharacters()
+import { getBindings } from '../logic/allCharactersLogic'
 
 export function AllCharacters(props: { scale: number }): PixiContainer {
     // TODO: use allCharactersLogic
+    const allCharacterMeta = makeInitialPlayerCharacters()
+    const {
+        // startGame,
+        // resetRound,
+        // endGame,
+        doCharacterAction,
+        move$,
+    } = getBindings()
     return Container({
-        name: AllCharacters.name,
-        children: [
-            Frogknight({
-                isSelected: true,
-                characterMeta: allCharacterMeta[0],
-                onClick: (c: CharacterMeta) => { console.log('clicked ', c.id) },
-                move$: new EventEmitter(),
-                scale: props.scale,
-
-            }),
-        ]
+        // name: AllCharacters.name,
+        children: allCharacterMeta.map(
+            characterMeta => getCharacterFn(characterMeta)({
+                characterMeta,
+                onClick: doCharacterAction,
+                move$,
+                scale: props.scale
+                // isSelected: true,
+                // onClick: (c: CharacterMeta) => { console.log('clicked ', c.id) },
+                // move$: new EventEmitter(),
+                // scale: props.scale,
+            })
+        )
     })
+}
+
+function getCharacterFn(characterMeta: CharacterMeta): (_) => PixiContainer {
+    if (characterMeta.isPc) return Frogknight
+    else return Skeleton
 }
 
 export type MoveEmitter = EventEmitter<AttackData>

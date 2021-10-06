@@ -104,15 +104,16 @@ function Character(props: CharacterProps): PixiContainer {
 
     // if (!isBasicLoaded) return <></>
     // {health > 0 ? <>
+    // return Sprite(charSpriteProps)
+
     return FlyingContainer({
         start: { x: screenX, y: screenY },
-        flyTo,
+        flyTo: { x: screenX + 1, y: screenY + 1 },
+        // flyTo: null,
         scale: props.scale,
         children: [
             Container({
                 name: FlyingContainer.name,
-                x: 300,
-                y: 300,
                 children: [
                     Container({
                         children: [

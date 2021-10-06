@@ -1,3 +1,4 @@
+import { start } from './main'
 import { Container, PixiChildren, PixiContainer } from './mypixi'
 
 const FLY_TIME = 800
@@ -11,8 +12,13 @@ export default function FlyingContainer(args: {
     start: Point,
     flyTo: Point,
 }): PixiContainer {
-
+    console.log({
+        x: args.start.x,
+        y: args.start.y,
+    })
     return Container({
+        x: args.start.x,
+        y: args.start.y,
         scale: args.scale,
         children: args.children,
         onTick: makeOnTick(args.start, args.flyTo)

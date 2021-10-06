@@ -140,6 +140,8 @@ export function Application(args: {
     for (const c of args.children) {
         app.stage.addChild(c)
     }
+    // @ts-ignore
+    window.app = app
     registerPixiInspector()
     return app
 }

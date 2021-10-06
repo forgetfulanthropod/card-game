@@ -1,4 +1,4 @@
-import { X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { BASE_HEIGHT, BASE_WIDTH, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
@@ -50,6 +50,8 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     return A.slice(0, n)
 }
 function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
+    // const scale = window.innerWidth / BASE_WIDTH
+    const scale = 1
     const stance: StanceType = args.x > X_AGGRESSIVE_THRESH ?
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
@@ -61,8 +63,8 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         isPc: true,
         x: args.x,
         y: args.y,
-        screenX: 0,
-        screenY: 0,
+        screenX: scale * BASE_WIDTH * args.x / 100,
+        screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
         health: 72,
@@ -80,6 +82,12 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
     }
 }
 function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
+    // const scale = window.innerWidth / BASE_WIDTH
+    const scale = 1
+    console.log('skeleton x y', {
+        x: args.x,
+        y: args.y,
+    })
     return {
         id: getId(args.x, args.y),
         type: 'Skeleton',
@@ -88,8 +96,8 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
         isPc: false,
         x: args.x,
         y: args.y,
-        screenX: 0,
-        screenY: 0,
+        screenX: scale * BASE_WIDTH * args.x / 100,
+        screenY: scale * BASE_HEIGHT * args.y / 100,
         stance: 'neutral',
         hasMoved: false,
         health: 10,

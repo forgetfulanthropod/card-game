@@ -1,22 +1,26 @@
-import { EventEmitter } from 'eventemitter3'
-import { useEventEmitter, useSize } from 'ahooks'
-import { BASE_WIDTH, moveTypeMetaMap } from 'data/battle/constants'
-import { Dispatcher } from 'data/battle/dispatch'
+import { MyCursor } from 'config/myBaobab'
+import { moveTypeMetaMap } from 'data/battle/constants'
+import dispatch from 'data/battle/dispatch'
 import { BattleState } from 'data/battle/factories'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
-import { useEffectWhen } from 'hooks'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { scene as battleState } from 'data/rootTree'
+import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
 import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
-import { MyCursor } from 'config/myBaobab'
 export const tl = (x: string): void => { console.log(x); toast(x) }
 const TIME_AFTER_PLAYER_MOVE = 1000
 
 const DEBUG = true
 // TODO
-export function allCharactersLogic(props: { reset: () => void, battleCursor: MyCursor<BattleState>, dispatch: Dispatcher }) {
+export function getBindings(): {
+    startGame: any,
+    resetRound: any,
+    endGame: any,
+    doCharacterAction: any,
+    move$: any,
+} {
 
-    const { battleCursor: battleState, dispatch } = props
+    // const { battleCursor: battleState, dispatch } = props
     const move$: MoveEmitter = new EventEmitter()
     const npcMove$: NpcMoveEmitter = new EventEmitter()
 
@@ -159,5 +163,6 @@ export function allCharactersLogic(props: { reset: () => void, battleCursor: MyC
         resetRound,
         endGame,
         doCharacterAction,
+        move$,
     }
 }
