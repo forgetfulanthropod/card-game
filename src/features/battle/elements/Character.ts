@@ -91,7 +91,7 @@ function Character(args: CharacterProps): PixiContainer {
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter] })
 
 
-    args.move$.addListener('move', function doCharMove(d: AttackData) {
+    args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
             flashSprite(mainContainer, attackSprite)
