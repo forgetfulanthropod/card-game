@@ -12,13 +12,15 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 
 const DEBUG = true
 // TODO
-export function getBindings(): {
-    startGame: any,
-    resetRound: any,
-    endGame: any,
-    doCharacterAction: any,
-    move$: any,
-} {
+// interface Bindings  {
+//     startGame: any,
+//     resetRound: any,
+//     endGame: any,
+//     doCharacterAction: any,
+//     move$: any,
+// }
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getBindings() {
 
     // const { battleCursor: battleState, dispatch } = props
     const move$: MoveEmitter = new EventEmitter()
@@ -35,7 +37,7 @@ export function getBindings(): {
 
     const state = cursorToState(battleState)
     battleState.on('update', function () {
-        Object.assign(state, battleState)
+        Object.assign(state, cursorToState(battleState))
     })
 
 

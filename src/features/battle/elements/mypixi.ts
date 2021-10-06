@@ -42,6 +42,7 @@ interface SpriteArgs extends Positioning {
     filters?: (PixiFilter | null | false | undefined)[]
     onClick?: (e: InteractionEvent) => void
     name?: string
+    zIndex?: number
 }
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
 export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
@@ -97,6 +98,10 @@ export function Sprite(args: SpriteArgs): PixiSprite {
 
     if (args.name != null) {
         s.name = args.name
+    }
+
+    if (args.zIndex != null) {
+        s.zIndex = args.zIndex
     }
 
     applyPositioningArgs(s, args)
@@ -191,5 +196,6 @@ export function VideoBackground(args: { name?: string, scale: number, src: strin
     sprite.width = BASE_WIDTH * args.scale
     sprite.height = BASE_HEIGHT * args.scale
     if (args.name) { sprite.name = args.name }
+    sprite.zIndex = -1
     return sprite
 }

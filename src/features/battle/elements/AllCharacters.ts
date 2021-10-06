@@ -9,12 +9,14 @@ export function AllCharacters(props: { scale: number }): PixiContainer {
     // TODO: use allCharactersLogic
     const allCharacterMeta = makeInitialPlayerCharacters()
     const {
-        // startGame,
+        startGame,
         // resetRound,
         // endGame,
         doCharacterAction,
         move$,
     } = getBindings()
+
+    setTimeout(startGame, 100)
     return Container({
         // name: AllCharacters.name,
         children: allCharacterMeta.map(
