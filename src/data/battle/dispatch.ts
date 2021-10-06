@@ -17,7 +17,7 @@ export type Action =
 
 
 export default function dispatch(action: Action): void {
-    console.log({ scene, action, data: scene.get() })
+    // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
     switch (action.a) {
         case 'setIsPlayerTurn': {

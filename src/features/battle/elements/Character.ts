@@ -47,11 +47,16 @@ interface CharacterProps extends KnownCharacterProps {
 }
 function Character(args: CharacterProps): PixiContainer {
     const characterMeta = args.cursor.get()
-    args.cursor.on('update', () => {
-        Object.assign(characterMeta, args.cursor.get())
-    })
+    // args.cursor.on('update', () => {
+    //     Object.assign(characterMeta, args.cursor.get())
+    // })
     const { screenX, screenY } = characterMeta
     // NEXT: HEALTH
+
+    args.cursor.select('health').on('update', () => {
+        mainContainer.removeChild(healthBar)
+        mainContainer.addChild(HealthBar({ value: args.cursor.select('health').get(), max: characterMeta.maxHealth }))
+    })
 
     // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
@@ -131,10 +136,13 @@ function Character(args: CharacterProps): PixiContainer {
     // if (!isBasicLoaded) return <></>
     // {health > 0 ? <>
     // return Sprite(charSpriteProps)
+    const healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
+
     const mainContainer = Container({
         children: [
             // attackSprite,
             mainSprite,
+            healthBar,
             // Sprite({
             //     ...charSpriteProps, onClick: () => {
             //         //  pixiPreactChannel.emit("showAttackInfo")
@@ -142,7 +150,7 @@ function Character(args: CharacterProps): PixiContainer {
             //     }
             // }),
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
-            // HealthBar({ value: health, max: props.characterMeta.maxHealth })
+
         ]
     })
 

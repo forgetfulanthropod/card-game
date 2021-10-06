@@ -84,10 +84,6 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
 function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    console.log('skeleton x y', {
-        x: args.x,
-        y: args.y,
-    })
     return {
         id: getId(args.x, args.y),
         type: 'Skeleton',
