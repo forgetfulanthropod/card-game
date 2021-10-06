@@ -1,13 +1,15 @@
-import { makeInitialPlayerCharacters } from 'data/battle/factories'
 import EventEmitter from 'eventemitter3'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
 
 import { getBindings } from '../logic/allCharactersLogic'
+import { MyCursor } from 'config/myBaobab'
 
-export function AllCharacters(props: { scale: number }): PixiContainer {
+export function AllCharacters(props: {
+    scale: number,
+    cursor: MyCursor<CharacterMeta[]>
+}): PixiContainer {
     // TODO: use allCharactersLogic
-    const allCharacterMeta = makeInitialPlayerCharacters()
     const {
         startGame,
         // resetRound,
@@ -19,22 +21,18 @@ export function AllCharacters(props: { scale: number }): PixiContainer {
     setTimeout(startGame, 100)
     return Container({
         // name: AllCharacters.name,
-        children: allCharacterMeta.map(
-            characterMeta => getCharacterFn(characterMeta)({
-                characterMeta,
+        children: props.cursor.map(childCursor =>
+            getCharacterFn(childCursor.get())({
+                cursor: childCursor,
                 onClick: doCharacterAction,
                 move$,
-                scale: props.scale
-                // isSelected: true,
-                // onClick: (c: CharacterMeta) => { console.log('clicked ', c.id) },
-                // move$: new EventEmitter(),
-                // scale: props.scale,
-            })
-        )
+                scale: props.scale,
+                isSelected: false,
+            }))
     })
 }
 
-function getCharacterFn(characterMeta: CharacterMeta): (_) => PixiContainer {
+function getCharacterFn(characterMeta: CharacterMeta) {
     if (characterMeta.isPc) return Frogknight
     else return Skeleton
 }

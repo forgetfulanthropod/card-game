@@ -2,11 +2,11 @@ import { BASE_WIDTH } from 'data/battle/constants'
 import { AllCharacters } from './AllCharacters'
 import background from './background'
 import { Application, PixiApplication } from './mypixi'
-
+import { scene } from 'data/rootTree'
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     const scale = window.innerWidth / BASE_WIDTH
     const bg = background({ scale: 1 })
-    const characters = AllCharacters({ scale: 1 })
+    const characters = AllCharacters({ scale: 1, cursor: scene.select('allCharacters') })
 
     return Application({
         canvas,

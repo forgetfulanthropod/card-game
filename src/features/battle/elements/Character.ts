@@ -11,9 +11,10 @@ import FlyingContainer from './FlyingContainer'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 import { EventEmitter } from 'eventemitter3'
-import { Dispatcher } from 'data/battle/dispatch'
+import dispatch from 'data/battle/dispatch'
 import { MoveEmitter } from './AllCharacters'
 import { tl } from '../logic/allCharactersLogic'
+import { MyCursor } from 'config/myBaobab'
 const config = {
     isHealthNumber: false
 }
@@ -30,11 +31,11 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
     return Character({ assetId: 'orcWarrior', direction: -1, ...props })
 }
 interface KnownCharacterProps {
-    characterMeta: CharacterMeta
     onClick: (c: CharacterMeta) => void
     // dispatch: Dispatcher
     move$: MoveEmitter
     scale: number
+    cursor: MyCursor<CharacterMeta>
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -43,27 +44,21 @@ interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
     assetId: string
     direction: -1 | 1
-    characterMeta: CharacterMeta
 }
 function Character(args: CharacterProps): PixiContainer {
-    const { screenX, screenY, health } = args.characterMeta
+    const characterMeta = args.cursor.get()
+    args.cursor.on('update', () => {
+        Object.assign(characterMeta, args.cursor.get())
+    })
+    const { screenX, screenY, health } = characterMeta
 
-    // TODO: all this needs to be converted to event emitters
-    // const [isAttacking, setIsAttacking] = useResetState(false, ATTACK_ANIMATION_TIME)
-    // const [flyTo, setFlyTo] = useResetState<{ x: number, y: number } | undefined>(undefined, ATTACK_ANIMATION_TIME)
-    // const [isDefending, setIsDefending] = useResetState(false, ATTACK_ANIMATION_TIME)
     // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
     // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
     // const [isHovering, setIsHovering] = useState(false)
-    // useEffect(() => { if (props.characterMeta.id === '65-50') { console.log('character render') } })
 
-
-    const isAttacking = false
-    const flyTo = { x: 100, y: 100 }
-    const isDefending = false
-    const currentMove = args.characterMeta.moves[0]
+    const currentMove = characterMeta.moves[0]
     const damageShown = 10
-    const isHovering = false
+    // const isHovering = false
     // const { isBasicLoaded } = useLoaderContext()
 
     const blurFilter = new filters.BlurFilter()
@@ -83,7 +78,7 @@ function Character(args: CharacterProps): PixiContainer {
     const mainSprite = Sprite({
         ...charSpriteProps,
         onClick: () => {
-            args.onClick(args.characterMeta)
+            args.onClick(characterMeta)
         },
         zIndex: 1
     })
@@ -95,12 +90,11 @@ function Character(args: CharacterProps): PixiContainer {
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter] })
 
 
-    args.move$.addListener('move', function doCharMove(d) {
-        const myId = args.characterMeta.id
+    args.move$.addListener('move', function doCharMove(d: AttackData) {
+        const myId = characterMeta.id
         if (d.attacker.id === myId) {
             flashSprite(mainContainer, attackSprite)
-            // setIsAttacking(true)
-            // props.dispatch({ a: 'setHasMoved', id: myId, v: true })
+            dispatch({ a: 'setHasMoved', id: myId, v: true })
             // setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
@@ -109,23 +103,23 @@ function Character(args: CharacterProps): PixiContainer {
                     PixiTicker.shared.remove(cb)
             })
 
-            // PixiTicker.shared.add(makeFlyToOnTick())
-            // setTimeout(() => PixiTicker.shared.remove(cb), 1000)
-            // console.log({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
         }
         // else {
         //     setFlyTo(undefined)
         // }
 
-        // if (d.defenders.findIndex(d => d.id === myId) > -1) {
-        //     // tl(`hit defender ${myId}`)
-        //     setIsDefending(true)
-        //     const damage = getDamage(d)
-        //     setDamageShown(damage)
-        //     // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
-        //     setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
-        //     setCurrentMove(d.move)
-        // } else {
+        if (d.defenders.findIndex(d => d.id === myId) > -1) {
+            const damage = getDamage(d)
+            flashSprite(mainContainer, MoveInfo({ move: d.move, offset: -70 }), { destroy: true })
+            flashSprite(flyingContainer, HitInfo({ damage: damage }), { destroy: true })
+            // setDamageShown(damage)
+            // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
+            // TODO: should characters update their own health?
+            // dispatch
+            // setTimeout(() => props.dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
+            // setCurrentMove(d.move)
+        }
+        // else {
         //     setCurrentMove(null)
         // }
     })
@@ -162,8 +156,6 @@ function Character(args: CharacterProps): PixiContainer {
                 y: -charSpriteProps.height * .8,
                 children: [
                     mainContainer,
-                    damageShown != null && HitInfo({ damage: damageShown }),
-                    currentMove != null && MoveInfo({ move: currentMove, offset: damageShown != null ? -70 : 0 }),
                 ],
             })
         ]
@@ -173,13 +165,18 @@ function Character(args: CharacterProps): PixiContainer {
 }
 
 
-function flashSprite(parent: PixiContainer, sprite: PixiSprite, durationMs = 500,) {
-    tl('flashing')
+function flashSprite(parent: PixiContainer, sprite: PixiSprite, { durationMs = 500, destroy = false } = {}) {
+    // tl('flashing')
     parent.addChild(sprite)
 
     parent.sortChildren()
     setTimeout(() => {
-        parent.removeChild(sprite)
+        if (parent != null) {
+            parent.removeChild(sprite)
+            if (destroy) {
+                sprite.destroy()
+            }
+        }
     }, durationMs)
 }
 
