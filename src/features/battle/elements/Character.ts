@@ -71,51 +71,10 @@ function Character(args: CharacterProps): PixiContainer {
     const currentMove = characterMeta.moves[0]
     const damageShown = 10
 
-    const blurFilter = new filters.BlurFilter()
-    blurFilter.blur = 10
-    const grayFilter = new filters.ColorMatrixFilter()
-    grayFilter.saturate(-.7, false)
-    const redFilter = new filters.ColorMatrixFilter()
-    redFilter.hue(180, false)
-
-    const assetIdCursor = args.cursor.select('assetId')
-    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
-    const charSpriteProps = {
-        src: assetIdToSrc(assetIdCursor.get()),
-        anchor: [0, 1] as [number, number],
-        height: assetIdToSrc(assetIdCursor.get()).height,
+    const onHeight = (height: number) => {
+        aboveCharacterContainer.y = -height
     }
-    assetIdCursor.on('update', () => {
-        const texture = assetIdToSrc(assetIdCursor.get())
-        const height = assetIdToSrc(assetIdCursor.get()).height
-        const update = (s: PixiSprite) => {
-            s.texture = texture
-            s.height = height
-        }
-        update(selectedSprite)
-        update(mainSprite)
-        update(defendSprite)
-        update(attackSprite)
-    })
-
-
-    const mainSprite = Sprite({
-        ...charSpriteProps,
-        name: 'mainCharacterSprite',
-        onClick: () => {
-            args.onClick(characterMeta)
-        },
-        zIndex: 1
-    })
-    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
-    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
-    // props.isSelected && !props.characterMeta.hasMoved
-    const selectedId = getScene().select('selectedCharacter').select('id')
-    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
-
-    selectedId.on('update', () => {
-        selectedSprite.visible = selectedId.get() === characterMeta.id
-    })
+    const { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
     args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
@@ -149,15 +108,13 @@ function Character(args: CharacterProps): PixiContainer {
             attackSprite,
             defendSprite,
             healthBar,
-            // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
-
         ]
     })
     mainContainer.sortChildren()
 
     const aboveCharacterContainer = Container({
         x: 0,
-        y: -charSpriteProps.height,
+        y: -initialHeight,
         children: [],
     })
 
@@ -173,6 +130,57 @@ function Character(args: CharacterProps): PixiContainer {
 
     return flyingContainer
 }
+
+function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
+    const blurFilter = new filters.BlurFilter()
+    blurFilter.blur = 10
+    const grayFilter = new filters.ColorMatrixFilter()
+    grayFilter.saturate(-.7, false)
+    const redFilter = new filters.ColorMatrixFilter()
+    redFilter.hue(180, false)
+
+    const assetIdCursor = args.cursor.select('assetId')
+    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+    const charSpriteProps = {
+        src: assetIdToSrc(assetIdCursor.get()),
+        anchor: [0, 1] as [number, number],
+        height: assetIdToSrc(assetIdCursor.get()).height,
+    }
+    assetIdCursor.on('update', () => {
+        const texture = assetIdToSrc(assetIdCursor.get())
+        const height = assetIdToSrc(assetIdCursor.get()).height
+        const update = (s: PixiSprite) => {
+            s.texture = texture
+            s.height = height
+        }
+        update(selectedSprite)
+        update(mainSprite)
+        update(defendSprite)
+        update(attackSprite)
+        onHeight(height)
+    })
+
+
+    const mainSprite = Sprite({
+        ...charSpriteProps,
+        name: 'mainCharacterSprite',
+        onClick: () => {
+            args.onClick(characterMeta)
+        },
+        zIndex: 1
+    })
+    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
+    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
+    // props.isSelected && !props.characterMeta.hasMoved
+    const selectedId = getScene().select('selectedCharacter').select('id')
+    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
+
+    selectedId.on('update', () => {
+        selectedSprite.visible = selectedId.get() === characterMeta.id
+    })
+    return { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight: charSpriteProps.height }
+}
+
 
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
