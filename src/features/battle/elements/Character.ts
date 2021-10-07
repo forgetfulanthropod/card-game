@@ -114,7 +114,6 @@ function Character(args: CharacterProps): PixiContainer {
         ...charSpriteProps,
         name: 'mainCharacterSprite',
         onClick: () => {
-            tl('click')
             args.onClick(characterMeta)
         },
         zIndex: 1

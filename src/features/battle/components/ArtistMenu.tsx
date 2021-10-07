@@ -120,6 +120,7 @@ function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
                                 const stats = statsMap[newChoice]
                                 return { ...c, ...stats, health: stats.maxHealth }
                             })
+                            scene.set('selectedMove', statsMap[newChoice].moves[0])
                         }
                     })}
                 />
