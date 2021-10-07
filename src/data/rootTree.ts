@@ -8,6 +8,8 @@ const tree = new MyBaobab({
     items: [],
 })
 
+// export const commitTree = () => tree.commit()
+
 // @ts-ignore
 window.tree = tree
 
