@@ -63,7 +63,6 @@ interface GraphicsArgs extends ShownArgs {
 export function Sprite(args: SpriteArgs): PixiSprite {
     const s = PixiSprite.from(args.src)
 
-    applyPositioningArgs(s, args)
     applyShownArgs(s, args)
     return s
 }
