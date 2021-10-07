@@ -6,7 +6,7 @@
         "fmt": "eslint src --fix",
         "tsc": "tsc",
         "tsc-watch": "tsc --watch --preserveWatchOutput",
-        "serve": "live-server --port=3000 build/",
+        "serve": "live-server --quiet --port=3000 build/",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook"
     },
