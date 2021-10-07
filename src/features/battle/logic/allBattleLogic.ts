@@ -72,8 +72,8 @@ export function getBindings() {
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })
         dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
-        tl(state.isPlayerFirstTurn ? 'You start' : 'Enemy starts')
-        if (!state.isPlayerFirstTurn) {
+        tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
+        if (!isPlayerFirstTurn) {
             setTimeout(() => npcMove$.emit('', 'first move of round'), 1000)
         }
     }

@@ -8,7 +8,8 @@ const tree = new MyBaobab({
     items: [],
 })
 
-// window.tree = tree
+// @ts-ignore
+window.tree = tree
 
 export const getScene = () => tree.select('scene')
 export const getSceneData = () => tree.select('scene').get()

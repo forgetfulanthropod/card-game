@@ -1,6 +1,5 @@
 // @ts-nocheck
 import Baobab, { BaobabOptions, Cursor } from 'baobab'
-import type Immutable from './immutable'
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type MyObject = object
@@ -50,6 +49,7 @@ export class MyBaobab<T extends MyObject> extends Baobab {
 
     select<K extends keyof T>(path: K): MyCursor<T[K]>
     select<K extends AllPaths<T>>(path: K): MyCursor<DeepIndex<T, K>> { return super.select(path) }
+    // select<K extends AllPaths<T>>(...path: K): MyCursor<DeepIndex<T, K>> { return super.select(path) }
 
     set(value: T): T { return super.set(value) }
     set<K extends keyof T>(path: K, value: T[K]): T[K]
@@ -69,6 +69,7 @@ export class MyCursor<T extends MyObject> extends Cursor {
 
     select<K extends keyof T>(path: K): MyCursor<T[K]>
     select<K extends AllPaths<T>>(path: K): MyCursor<DeepIndex<T, K>> { return super.select(path) }
+    // select<K extends AllPaths<T>>(...path: K): MyCursor<DeepIndex<T, K>> { return super.select(path) }
 
     set(value: T): T { return super.set(value) }
     set<K extends keyof T>(path: K, value: T[K]): T[K]
