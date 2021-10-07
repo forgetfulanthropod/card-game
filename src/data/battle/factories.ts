@@ -4,7 +4,6 @@ import { getId } from './misc'
 export function makeInitialCharacters(): CharacterMeta[] {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
-
     return [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
         ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
@@ -24,6 +23,15 @@ export interface BattleState {
 }
 export function makeInitialState(): BattleState {
     const allCharacters = makeInitialCharacters()
+
+    // kill most of the characters
+    // for (let i = 0; i < 12; i++) {
+    //     if (i === 0 || i === 6) continue
+    //     allCharacters[i].health = -1
+    //     // allCharacters
+    // }
+
+
     const selectedCharacter = allCharacters.find(c => c.isPc)
     const selectedMove = selectedCharacter!.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')

@@ -92,15 +92,17 @@ function Radio<T extends string>(props: { options: readonly T[], choice: T | nul
     </div>
 }
 
+/** Assumes equal number PC & NPC! */
 function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
     const cursor = scene.select('allCharacters')
+    const numEachSide = cursor.get().length / 2 | 0
     const idCursor = scene.select('selectedCharacter').select('id')
     // TODO: have root state store selected character ID instead of the JSON itself, rendering the below lines unnecessary
     const [selectedIndex, setSelectedIndex] = useState(cursor.get().findIndex(c => c.id === idCursor.get()))
     idCursor.on('update', () => setSelectedIndex(cursor.get().findIndex(c => c.id === idCursor.get())))
     const allCharacters = cursor.get()
-    const offset = props.type === 'NPC' ? 0 : 6
-    const [choices, setChoices] = useState<CharacterAssetKey[]>(Array(6).fill(null).map((_, i) => allCharacters[i + offset].assetId))
+    const offset = props.type === 'NPC' ? 0 : numEachSide
+    const [choices, setChoices] = useState<CharacterAssetKey[]>(Array(numEachSide).fill(null).map((_, i) => allCharacters[i + offset].assetId))
     return <Dropdown
         top={`Choose ${props.type}s`}
         rest={choices.map((c, i) =>

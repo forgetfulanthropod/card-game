@@ -9,9 +9,12 @@ import toast from 'react-hot-toast'
 import { MoveEmitter, NpcMoveEmitter } from 'types'
 
 export const tl = (x: string): void => { console.log(x); toast(x) }
-const TIME_AFTER_PLAYER_MOVE = 1000
 
+const TIME_AFTER_PLAYER_MOVE = 1000
 const DEBUG = false
+
+const scene = getScene()
+
 // TODO
 // interface Bindings  {
 //     startGame: any,
@@ -29,23 +32,23 @@ export function getBindings() {
 
     const cursorToState = (cursor: MyCursor<BattleState>) => {
         const value = cursor.get()
-        const isPlayerFirstTurn = value.isPlayerTurn
         const alivePcs = value.allCharacters.filter(c => c.isPc && c.health > 0)
         const aliveNpcs = value.allCharacters.filter(c => !c.isPc && c.health > 0)
         const isMoveAvailable = checkMoveAvailable(value.allCharacters)
-        return { ...value, isPlayerFirstTurn, alivePcs, aliveNpcs, isMoveAvailable }
+        if (!isMoveAvailable) { resetRound() }
+        return { ...value, alivePcs, aliveNpcs, isMoveAvailable }
     }
 
-    const scene = getScene()
     const state = cursorToState(scene)
     scene.on('update', function () {
         Object.assign(state, cursorToState(scene))
     })
-
+    const isPlayerFirstTurn = scene.select('isPlayerTurn').get()
+    // debugger
 
 
     move$.on('', function showMove(ad: AttackData) {
-        DEBUG && tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
+        if (DEBUG) tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
         toast(ad.move.name,
             {
                 style: {
@@ -66,14 +69,12 @@ export function getBindings() {
         return () => { }
     }
     function resetRound() {
-        if (state.isMoveAvailable) return
-        if (!state.battleHasBegun) return
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })
-        dispatch({ a: 'setIsPlayerTurn', v: state.isPlayerFirstTurn })
-        tl(state.isPlayerFirstTurn ? 'You start' : 'Enemy starts')
-        if (!state.isPlayerFirstTurn) {
-            setTimeout(() => npcMove$.emit('', 'first move of round'), 500)
+        dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
+        tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
+        if (!isPlayerFirstTurn) {
+            setTimeout(() => npcMove$.emit('', 'first move of round'), 1000)
         }
     }
 
