@@ -1,8 +1,9 @@
+
 import { CharacterMove as CharacterMove_, CharacterStats as CharacterStats_, MoveMeta as MoveMeta_ } from 'data/battle/constants'
 import Preact from 'preact'
 // import Preact, {JSX} from 'preact'
 import { StateUpdater } from 'preact/hooks'
-
+import EventEmitter from 'eventemitter3'
 
 // const o : {x: typeof JSX} = {x: Preact.JSX}
 // type JSX = typeof Preact.JSX
@@ -58,3 +59,6 @@ declare global {
 }
 
 export default null
+
+export type MoveEmitter = EventEmitter<{ '': AttackData }>
+export type NpcMoveEmitter = EventEmitter<{ '': string }>

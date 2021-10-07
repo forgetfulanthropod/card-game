@@ -6,7 +6,7 @@ import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmove
 import { getScene } from 'data/rootTree'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
-import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
+import { MoveEmitter, NpcMoveEmitter } from '../elements/BattleScene'
 export const tl = (x: string): void => { console.log(x); toast(x) }
 const TIME_AFTER_PLAYER_MOVE = 1000
 

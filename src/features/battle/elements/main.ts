@@ -1,13 +1,52 @@
-import App from 'components/App'
 import { getScene } from 'data/rootTree'
-import { AllCharacters } from './AllCharacters'
+import { BattleScene } from './BattleScene'
 import background from './background'
 import Chest from './Chest'
 import { Application, PixiApplication } from './mypixi'
+import { DungeonEntryScene } from './DungeonEntryScene'
+
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     // const scale = window.innerWidth / BASE_WIDTH
     const bg = background({ scale: 1 })
-    const characters = AllCharacters({ scale: 1, cursor: getScene().select('allCharacters') })
+
+    const app = Application({
+        canvas,
+        children: [
+            bg,
+        ]
+    })
+
+    bindGamestate(app)
+
+    bindBattleState(app)
+
+    return app
+}
+
+
+function bindGamestate(app: PixiApplication) {
+    const battleScene = BattleScene()
+    const dungeonEntryScene = DungeonEntryScene()
+
+    const sceneTypeCursor = getScene().select('type')
+    sceneTypeCursor.on('update', () => {
+        setScene()
+    })
+    setScene()
+
+    function setScene() {
+        if (sceneTypeCursor.get() === 'battle') {
+            app.stage.removeChild(dungeonEntryScene)
+            app.stage.addChild(battleScene)
+        }
+        if (sceneTypeCursor.get() === 'dungeon entry') {
+            app.stage.removeChild(battleScene)
+            app.stage.addChild(dungeonEntryScene)
+        }
+    }
+}
+
+function bindBattleState(app: PixiApplication) {
 
     const stateCursor = getScene().select('state')
     stateCursor.on('update', () => {
@@ -16,30 +55,4 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
                 Chest({ size: { width: app.stage.width, height: app.stage.height } })
             )
     })
-
-    const app = Application({
-        canvas,
-        children: [
-            bg,
-            characters,
-        ]
-    })
-
-    return app
 }
-            // <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
-            //     <LoaderProvider>
-            //         <AssetLoader />
-            //         <PixiBackground scale={scale} />
-            //         {allCharacters.map(characterMeta => {
-            //             const { x, y } = characterMeta
-            //             const id = getId(x, y)
-            //             const characterProps = { scale, move$, dispatch, characterMeta, onClick, key: id }
-
-            //             return characterMeta.isPc ?
-            //                 <Frogknight {...characterProps} isSelected={selectedCharacter?.id === id} /> :
-            //                 <Skeleton {...characterProps} />
-            //         })}
-            //         {endScreen === 'win' && <Chest size={{ width, height }} />}
-            //     </LoaderProvider>
-            // </Stage>
