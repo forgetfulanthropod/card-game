@@ -48,10 +48,48 @@ interface CharacterProps extends KnownCharacterProps {
 function Character(args: CharacterProps): PixiContainer {
     // NOTE: necessary so the onClick sends the correct data after a character change.
     const characterMeta = { ...args.cursor.get() }
-    args.cursor.on('update', () => {
-        Object.assign(characterMeta, args.cursor.get())
-    })
+    args.cursor.on('update', () => { Object.assign(characterMeta, args.cursor.get()) })
     const { screenX, screenY } = characterMeta
+
+
+    // ---Sprites and containers---
+
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
+
+    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
+
+    const mainContainer = Container({
+        children: [
+            mainSprite,
+            selectedSprite,
+            attackSprite,
+            defendSprite,
+            hasMovedSprite,
+            healthBar,
+        ]
+    })
+    mainContainer.sortChildren()
+
+    const aboveCharacterContainer = Container({
+        x: 0,
+        y: -initialHeight,
+        children: [],
+    })
+
+    const flyingContainer = Container({
+        name: 'FlyingContainer',
+        x: screenX,
+        y: screenY,
+        children: [
+            mainContainer,
+            aboveCharacterContainer,
+        ]
+    })
+
+
+    // ---Functions and listeners---
+
+    function onHeight(height: number) { aboveCharacterContainer.y = -height }
 
     args.cursor.select('health').on('update', () => {
         const value = args.cursor.select('health').get()
@@ -68,13 +106,6 @@ function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    const currentMove = characterMeta.moves[0]
-    const damageShown = 10
-
-    const onHeight = (height: number) => {
-        aboveCharacterContainer.y = -height
-    }
-    const { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
     args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
@@ -99,35 +130,6 @@ function Character(args: CharacterProps): PixiContainer {
         }
     })
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
-
-    const mainContainer = Container({
-        children: [
-            mainSprite,
-            selectedSprite,
-            attackSprite,
-            defendSprite,
-            healthBar,
-        ]
-    })
-    mainContainer.sortChildren()
-
-    const aboveCharacterContainer = Container({
-        x: 0,
-        y: -initialHeight,
-        children: [],
-    })
-
-    const flyingContainer = Container({
-        name: 'FlyingContainer',
-        x: screenX,
-        y: screenY,
-        children: [
-            mainContainer,
-            aboveCharacterContainer,
-        ]
-    })
-
     return flyingContainer
 }
 
@@ -139,6 +141,8 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
 
+    const hasMovedCursor = args.cursor.select('hasMoved')
+
     const assetIdCursor = args.cursor.select('assetId')
     const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
     const charSpriteProps = {
@@ -146,20 +150,6 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         anchor: [0, 1] as [number, number],
         height: assetIdToSrc(assetIdCursor.get()).height,
     }
-    assetIdCursor.on('update', () => {
-        const texture = assetIdToSrc(assetIdCursor.get())
-        const height = assetIdToSrc(assetIdCursor.get()).height
-        const update = (s: PixiSprite) => {
-            s.texture = texture
-            s.height = height
-        }
-        update(selectedSprite)
-        update(mainSprite)
-        update(defendSprite)
-        update(attackSprite)
-        onHeight(height)
-    })
-
 
     const mainSprite = Sprite({
         ...charSpriteProps,
@@ -171,14 +161,35 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     })
     const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
     const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
+    const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedId = getScene().select('selectedCharacter').select('id')
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
 
+    hasMovedCursor.on('update', () => {
+        hasMovedSprite.visible = hasMovedCursor.get()
+    })
+
+    assetIdCursor.on('update', () => {
+        const texture = assetIdToSrc(assetIdCursor.get())
+        const height = texture.height
+        const update = (s: PixiSprite) => {
+            s.texture = texture
+            s.height = height
+        }
+        update(selectedSprite)
+        update(mainSprite)
+        update(defendSprite)
+        update(attackSprite)
+        update(hasMovedSprite)
+        onHeight(height)
+    })
+
     selectedId.on('update', () => {
         selectedSprite.visible = selectedId.get() === characterMeta.id
     })
-    return { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight: charSpriteProps.height }
+
+    return { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight: charSpriteProps.height }
 }
 
 
