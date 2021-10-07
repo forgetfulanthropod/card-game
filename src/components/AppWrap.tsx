@@ -1,5 +1,5 @@
-//@ts-ignore
 import type { h, JSX } from 'preact'
+//@ts-ignore
 import styled from 'styled-components'
 
 const Relative = styled.div`
