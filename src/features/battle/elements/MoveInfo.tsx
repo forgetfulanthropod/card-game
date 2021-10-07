@@ -1,4 +1,4 @@
-import { Text, PixiText } from './mypixi'
+import { PixiText, Text } from './mypixi'
 
 export default function (args: {
     move: CharacterMove,

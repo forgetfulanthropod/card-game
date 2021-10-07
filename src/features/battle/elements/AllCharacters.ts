@@ -1,9 +1,9 @@
+import { MyCursor } from 'config/myBaobab'
 import EventEmitter from 'eventemitter3'
+import { getBindings } from '../logic/allCharactersLogic'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
 
-import { getBindings } from '../logic/allCharactersLogic'
-import { MyCursor } from 'config/myBaobab'
 
 export function AllCharacters(props: {
     scale: number,

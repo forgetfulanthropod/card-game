@@ -1,5 +1,5 @@
-import { BASE_HEIGHT, BASE_WIDTH, MoveMeta, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
-import { getId, randomEl } from './misc'
+import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { getId } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(65, 50, 18, 13, 6)

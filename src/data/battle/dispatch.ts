@@ -1,5 +1,5 @@
-import { makeInitialState } from './factories'
 import { getScene } from 'data/rootTree'
+import { makeInitialState } from './factories'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =

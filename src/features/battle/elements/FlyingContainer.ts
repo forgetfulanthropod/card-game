@@ -1,4 +1,3 @@
-import { start } from './main'
 import { Container, PixiChildren, PixiContainer } from './mypixi'
 
 const FLY_TIME = 800

@@ -1,18 +1,12 @@
+import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
     Filter as PixiFilter,
-    Graphics as PixiGraphics,
-    Sprite as PixiSprite,
-    Loader as PixiLoader,
-    Text as PixiText,
-    Texture as PixiTexture,
-    VideoResource as PixiVideoResource,
-    Ticker as PixiTicker,
-    InteractionEvent,
-    ITextStyle
+    Graphics as PixiGraphics, InteractionEvent,
+    ITextStyle, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
+    Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource
 } from 'pixi.js'
-import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
 import { registerPixiInspector } from 'util/pixiInspector'
 // export { PixiLoader }
 // TODO: export the types instead of constructors

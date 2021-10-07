@@ -1,9 +1,8 @@
-import dispatch, { Action } from '../../../data/battle/dispatch'
-import preact, { h, JSX } from 'preact'
-import { MoveButton, MoveMenuDiv } from './Styles'
 import { getScene } from 'data/rootTree'
+import { h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
-import { tl } from '../logic/allCharactersLogic'
+import dispatch from '../../../data/battle/dispatch'
+import { MoveButton, MoveMenuDiv } from './Styles'
 const scene = getScene()
 const selectedMove = scene.select('selectedMove')
 const moves = scene.select('selectedCharacter').select('moves')

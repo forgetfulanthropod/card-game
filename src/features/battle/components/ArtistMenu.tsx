@@ -1,11 +1,11 @@
+import { statsMap } from 'data/battle/constants'
+import { getScene } from 'data/rootTree'
 import { h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
 //@ts-ignore
 import styled from 'styled-components'
 import { set } from 'util'
 import { CharacterAssetKey, characterAssetKeys } from '../logic/AssetLoader'
-import { getScene } from 'data/rootTree'
-import { statsMap } from 'data/battle/constants'
 
 const scene = getScene()
 

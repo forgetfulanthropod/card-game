@@ -1,7 +1,6 @@
-import { Container, Sprite, Text, Graphics, PixiContainer } from './mypixi'
 import { Matrix, utils } from 'pixi.js'
 import healthBorderPng from '../assets/HEALTH_BORDER.png'
-import { PixiGraphics, PixiLoader } from './mypixi'
+import { Container, Graphics, PixiContainer, PixiGraphics, PixiLoader, Sprite, Text } from './mypixi'
 
 type Rect = [
     number, // x

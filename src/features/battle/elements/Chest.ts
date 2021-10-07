@@ -1,6 +1,6 @@
+import EventEmitter from 'eventemitter3'
 import type { AssetKey } from '../logic/AssetLoader'
 import { Container, PixiContainer, PixiLoader, PixiSprite, PixiTexture, Sprite } from './mypixi'
-import EventEmitter from 'eventemitter3'
 
 const dataOf = (assetId: AssetKey) => PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
 

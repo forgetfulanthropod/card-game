@@ -1,4 +1,3 @@
-import type { h, JSX } from 'preact'
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-ignore
 import styled from 'styled-components'

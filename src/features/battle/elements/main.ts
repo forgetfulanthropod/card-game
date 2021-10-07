@@ -1,8 +1,8 @@
 import { BASE_WIDTH } from 'data/battle/constants'
+import { getScene } from 'data/rootTree'
 import { AllCharacters } from './AllCharacters'
 import background from './background'
 import { Application, PixiApplication } from './mypixi'
-import { getScene } from 'data/rootTree'
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     const scale = window.innerWidth / BASE_WIDTH
     const bg = background({ scale: 1 })

@@ -1,6 +1,6 @@
 //@ts-ignore
-import styled from 'styled-components'
 import type { h, JSX } from 'preact'
+import styled from 'styled-components'
 
 const Relative = styled.div`
     position: relative;
