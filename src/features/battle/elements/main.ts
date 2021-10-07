@@ -9,10 +9,12 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
     const bg = background({ scale: 1 })
     const characters = AllCharacters({ scale: 1, cursor: getScene().select('allCharacters') })
 
-    getScene().select('state').on('update', () => {
-        app.stage.addChild(
-            Chest({ size: { width: app.stage.width, height: app.stage.height } })
-        )
+    const stateCursor = getScene().select('state')
+    stateCursor.on('update', () => {
+        if (stateCursor.get() === 'won')
+            app.stage.addChild(
+                Chest({ size: { width: app.stage.width, height: app.stage.height } })
+            )
     })
 
     const app = Application({
