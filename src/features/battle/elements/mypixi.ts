@@ -30,6 +30,7 @@ interface DisplayObjectArgs {
     onClick?: (e: InteractionEvent) => void
     name?: string
     zIndex?: number
+    visible?: boolean
 }
 
 // text and sprite but not graphics
@@ -67,7 +68,7 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     return s
 }
 
-function applyPositioningArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
+function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
     if (args.position != null) { x.position.set(...args.position) }
     if (args.scale != null) {
         if (Array.isArray(args.scale)) {
@@ -118,11 +119,13 @@ function applyPositioningArgs(x: PixiContainer | PixiSprite | PixiText | PixiGra
     if (args.zIndex != null) {
         x.zIndex = args.zIndex
     }
-
+    if (args.visible != null) {
+        x.visible = args.visible
+    }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
-    applyPositioningArgs(x, args)
+    applyDisplayObjectArgs(x, args)
     if (args.tint != null) {
         x.tint = args.tint
     }
@@ -158,7 +161,7 @@ export function Application(args: {
 
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
-    applyPositioningArgs(c, args)
+    applyDisplayObjectArgs(c, args)
     for (const ch of args.children) {
         if (ch != null && ch !== false) {
             c.addChild(ch)
@@ -188,7 +191,7 @@ export function Text(args: TextArgs): PixiText {
 export function Graphics(args: GraphicsArgs): PixiGraphics {
     const g = new PixiGraphics()
     args.draw(g)
-    applyPositioningArgs(g, args)
+    applyDisplayObjectArgs(g, args)
     return g
 }
 
