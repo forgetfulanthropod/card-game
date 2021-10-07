@@ -1,5 +1,5 @@
-import { BASE_HEIGHT, BASE_WIDTH, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
-import { getId } from './misc'
+import { BASE_HEIGHT, BASE_WIDTH, MoveMeta, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { getId, randomEl } from './misc'
 
 export function makeInitialPlayerCharacters(): CharacterMeta[] {
     const skeletonPositions = makePositions(65, 50, 18, 13, 6)
@@ -17,14 +17,14 @@ export interface BattleState {
     battleHasBegun: boolean
     allCharacters: CharacterMeta[]
     selectedCharacter: CharacterMeta
-    selectedMove: MoveMeta | undefined
+    selectedMove: CharacterMove
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
 }
 export function makeInitialState(): BattleState {
     const allCharacters = makeInitialPlayerCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPc)
-    const selectedMove = selectedCharacter?.moves[0]
+    const selectedMove = selectedCharacter!.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         type: 'battle', // TODO: type is not used yet...
@@ -56,10 +56,9 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     return {
+        ...statsMap.frogKnight,
         id: getId(args.x, args.y),
         type: 'Frogknight',
-        level: 1,
-        damage: 4,
         isPc: true,
         x: args.x,
         y: args.y,
@@ -68,27 +67,14 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         stance,
         hasMoved: false,
         health: 72,
-        maxHealth: 72,
-        moves: [
-            {
-                name: 'Dutiful Stab',
-                type: 'BA',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
-        ]
     }
 }
 function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     return {
+        ...statsMap[randomEl(Object.keys(statsMap))],
         id: getId(args.x, args.y),
-        type: 'Skeleton',
-        level: 1,
-        damage: 3,
         isPc: false,
         x: args.x,
         y: args.y,
@@ -97,20 +83,5 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
         stance: 'neutral',
         hasMoved: false,
         health: 10,
-        maxHealth: 10,
-        moves: [
-            {
-                name: 'Sword Whack',
-                type: 'BA',
-            },
-            {
-                name: 'Rusty Poke',
-                type: 'DOT2',
-            },
-            {
-                name: 'Slash',
-                type: 'SL',
-            },
-        ]
     }
 }

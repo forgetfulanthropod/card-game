@@ -133,7 +133,7 @@ export function getBindings() {
             return
         }
         const defenders = [clicked]
-        if (moveTypeMetaMap[state.selectedMove.type].numTargets > 1) {
+        if (moveTypeMetaMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
             const closest = getClosestAlive(state.allCharacters, clicked, 1)
             if (closest != null) defenders.push(closest)
         }

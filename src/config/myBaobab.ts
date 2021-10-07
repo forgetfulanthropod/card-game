@@ -1,11 +1,13 @@
 // @ts-nocheck
 import Baobab, { BaobabOptions, Cursor } from 'baobab'
 import type Immutable from './immutable'
-interface EmptyInterface { }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type MyObject = object
 
 // https://stackoverflow.com/a/65963590
 type PathTree<T> = {
-    [P in keyof T]-?: T[P] extends object
+    [P in keyof T]-?: T[P] extends MyObject
     ? [P] | [P, ...AllPaths<T[P]>]
     : [P]
 }
@@ -20,10 +22,6 @@ type DeepIndex<T, KS extends Keys, Fail = undefined> =
 
 type Keys = readonly PropertyKey[]
 
-
-// https://stackoverflow.com/a/58993872/4941530
-type ImmutablePrimitive = undefined | null | boolean | string | number | Function
-
 type Immutable<T> =
     T extends ImmutablePrimitive ? T :
     T extends Array<infer U> ? ImmutableArray<U> :
@@ -36,7 +34,7 @@ type ImmutableSet<T> = ReadonlySet<Immutable<T>>
 type ImmutableObject<T> = { readonly [K in keyof T]: Immutable<T[K]> }
 
 
-export class MyBaobab<T extends EmptyInterface> extends Baobab {
+export class MyBaobab<T extends MyObject> extends Baobab {
     constructor(initialState?: T, options?: Partial<BaobabOptions>) {
         super(initialState, options)
     }
@@ -63,7 +61,7 @@ export class MyBaobab<T extends EmptyInterface> extends Baobab {
 }
 
 
-export class MyCursor<T extends EmptyInterface> extends Cursor {
+export class MyCursor<T extends MyObject> extends Cursor {
     constructor() { super() }
     apply(getNew: (state: T) => T): T { return super.apply(path, getNew) }
     apply<K extends keyof T>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): MyCursor<T[K]>

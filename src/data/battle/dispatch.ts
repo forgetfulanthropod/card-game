@@ -9,7 +9,7 @@ export type Action =
     | { a: 'setHealth', id: string, h: Set<number> }
     | { a: 'clearHasMoved' }
     | { a: 'setSelectedCharacter', c: CharacterMeta }
-    | { a: 'setSelectedMove', m: MoveMeta }
+    | { a: 'setSelectedMove', m: CharacterMove }
     | { a: 'fullReset' }
     | { a: 'updateScreenSize', size: Size }
     | { a: 'setIsBasicLoaded', v: boolean }

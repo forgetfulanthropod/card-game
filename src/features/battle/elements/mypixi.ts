@@ -22,7 +22,7 @@ export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, Pix
 
 type Pair = [x: number, y: number]
 
-interface Positioning {
+interface DisplayObjectArgs {
     position?: Pair
     scale?: number | Pair
     width?: number
@@ -30,89 +30,51 @@ interface Positioning {
     pivot?: number | Pair
     x?: number
     y?: number
-    anchor?: number | Pair
-}
-
-export type OnSpriteTick = (self: PixiSprite, delta: number) => void | 'remove'
-interface SpriteArgs extends Positioning {
-    src?: string | PixiTexture
-    onTick?: OnSpriteTick
-    tint?: number
+    onTick?: OnPixiTick
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
     onClick?: (e: InteractionEvent) => void
     name?: string
     zIndex?: number
 }
+
+// text and sprite but not graphics
+interface ShownArgs extends DisplayObjectArgs {
+    tint?: number
+    anchor?: number | Pair
+}
+
+
+export type OnPixiTick = (self: PixiSprite | PixiContainer, delta: number) => void | 'remove'
+interface SpriteArgs extends ShownArgs {
+    src: string | PixiTexture
+}
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
 export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
-interface ContainerArgs extends Positioning {
+interface ContainerArgs extends DisplayObjectArgs {
     children: PixiChildren
     onTick?: OnContainerTick
     name?: string
 }
 
-interface TextArgs extends SpriteArgs {
+interface TextArgs extends ShownArgs {
     text: string
     style?: Partial<ITextStyle>
 }
 
-interface GraphicsArgs extends Positioning {
+interface GraphicsArgs extends ShownArgs {
     draw: (g: PixiGraphics) => void
 }
 
 export function Sprite(args: SpriteArgs): PixiSprite {
     const s = PixiSprite.from(args.src)
 
-    applySpriteArgs(s, args)
     applyPositioningArgs(s, args)
+    applyShownArgs(s, args)
     return s
 }
 
-function applySpriteArgs(s: PixiSprite, args: SpriteArgs) {
-    if (args.onTick != null) {
-        PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick && args.onTick(s, dt)
-            if (result === 'remove')
-                PixiTicker.shared.remove(cb)
-        })
-    }
-    if (args.tint != null) {
-        s.tint = args.tint
-    }
-
-    if (args.alpha != null) {
-        s.alpha = args.alpha
-    }
-
-    if (args.filters != null) {
-        const filters = args.filters.filter(Boolean) as PixiFilter[]
-        s.filters = filters
-    }
-
-    if (args.onClick != null) {
-        s.interactive = true
-        s.on('click', args.onClick)
-    }
-
-    if (args.name != null) {
-        s.name = args.name
-    }
-
-    if (args.zIndex != null) {
-        s.zIndex = args.zIndex
-    }
-
-    if (args.anchor != null) {
-        if (Array.isArray(args.anchor)) {
-            s.anchor.set(...args.anchor)
-        } else {
-            s.anchor.set(args.anchor)
-        }
-    }
-}
-
-function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) {
+function applyPositioningArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
     if (args.position != null) { x.position.set(...args.position) }
     if (args.scale != null) {
         if (Array.isArray(args.scale)) {
@@ -133,8 +95,54 @@ function applyPositioningArgs(x: PixiContainer | PixiSprite, args: Positioning) 
     }
     if (args.x != null) { x.x = args.x }
     if (args.y != null) { x.y = args.y }
+
+    if (args.onTick != null) {
+        PixiTicker.shared.add(function cb(dt) {
+            const result = args.onTick && args.onTick(x, dt)
+            if (result === 'remove')
+                PixiTicker.shared.remove(cb)
+        })
+    }
+
+    if (args.alpha != null) {
+        x.alpha = args.alpha
+    }
+
+    if (args.filters != null) {
+        const filters = args.filters.filter(Boolean) as PixiFilter[]
+        x.filters = filters
+    }
+
+    if (args.onClick != null) {
+        x.interactive = true
+        x.on('click', args.onClick)
+    }
+
+    if (args.name != null) {
+        x.name = args.name
+    }
+
+    if (args.zIndex != null) {
+        x.zIndex = args.zIndex
+    }
+
 }
 
+function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
+    applyPositioningArgs(x, args)
+    if (args.tint != null) {
+        x.tint = args.tint
+    }
+
+
+    if (args.anchor != null) {
+        if (Array.isArray(args.anchor)) {
+            x.anchor.set(...args.anchor)
+        } else {
+            x.anchor.set(args.anchor)
+        }
+    }
+}
 export function Application(args: {
     canvas: HTMLCanvasElement,
     children: (PixiSprite | PixiContainer)[]
@@ -179,8 +187,7 @@ export function Container(args: ContainerArgs): PixiContainer {
 
 export function Text(args: TextArgs): PixiText {
     const text = new PixiText(args.text, args.style)
-    applySpriteArgs(text, args)
-    applyPositioningArgs(text, args)
+    applyShownArgs(text, args)
     return text
 }
 

@@ -1,7 +1,7 @@
 import { Text, PixiText } from './mypixi'
 
 export default function (args: {
-    move: MoveMeta,
+    move: CharacterMove,
     offset: number,
 }
 ): PixiText {

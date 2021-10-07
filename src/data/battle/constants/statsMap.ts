@@ -1,4 +1,8 @@
-export const stats = {
+import { Immutable } from 'config/immutable'
+import { CharacterAssetKey } from 'features/battle/logic/AssetLoader'
+import { deepFreeze } from 'util'
+import { CharacterStats } from '.'
+export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = deepFreeze({
     bloatDemon: {
         type: 'Bloat Demon',
         points: 40,
@@ -46,7 +50,7 @@ export const stats = {
         damage: 18,
         moves: [
             { name: 'Maniacal Scream', types: ['SP', 'ROD3'] },
-            { name: 'Marked By Death', types: ['DOT 2'] },
+            { name: 'Marked By Death', types: ['DOT2'] },
             { name: 'Targeted Tantrum', types: ['BA'] },
         ],
         modifier: 2,
@@ -84,7 +88,7 @@ export const stats = {
         damage: 14,
         moves: [
             { name: 'Bombs Away!', types: ['ROD3'] },
-            { name: 'Bang Snap Inferno', types: ['Slash', 'ROD2'] },
+            { name: 'Bang Snap Inferno', types: ['SL', 'ROD2'] },
         ],
         modifier: 1,
         level: 1,
@@ -109,7 +113,7 @@ export const stats = {
         damage: 34,
         moves: [
             { name: 'Oh God Oh No Oh God', types: ['ROD3', 'SL'] },
-            { name: 'There Is No Punchline', types: ['SPL', 'DOT1'] },
+            { name: 'There Is No Punchline', types: ['SP', 'DOT1'] },
             { name: 'Whisper Scream', types: ['ROD2'] },
         ],
         modifier: 3,
@@ -134,8 +138,8 @@ export const stats = {
         maxHealth: 250,
         damage: 27,
         moves: [
-            { name: 'Death Comes For All', types: [] }, //TODO: subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
-            { name: 'Inhale Soul', types: ['SP'] }, //TODO: heals for +1 per target
+            { name: 'Death Comes For All', types: ['DC4A'] },
+            { name: 'Inhale Soul', types: ['INHSO'] },
             { name: 'Waiting Around To Die', types: ['DOT1', 'ROD2'] },
             { name: 'Magic Missile', types: ['ROD1'] },
         ],
@@ -148,7 +152,7 @@ export const stats = {
         maxHealth: 78,
         damage: 7,
         moves: [
-            { name: 'Itchy Ooze', types: ['DOT 1'] },
+            { name: 'Itchy Ooze', types: ['DOT1'] },
             { name: 'Surprise Allergy', types: ['ROD2'] },
         ],
         modifier: 1,
@@ -160,7 +164,7 @@ export const stats = {
         maxHealth: 130,
         damage: 12,
         moves: [
-            { name: 'Mimic', types: [] }, // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
+            { name: 'Mimic', types: ['MIM'] }, // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
             { name: 'Chomp', types: ['BA'] },
             { name: 'Infectious Bite', types: ['ROD1', 'DOT1'] },
         ],
@@ -187,7 +191,7 @@ export const stats = {
         damage: 14,
         moves: [
             { name: 'Rapid Fire Bolts', types: ['SL'] },
-            { name: 'Hunted By The B.E.A.N', types: ['DOT 2'] },
+            { name: 'Hunted By The B.E.A.N', types: ['DOT2'] },
             { name: 'B.E.A.N Never Misses', types: ['ST'] },
         ],
         modifier: 2,
@@ -225,7 +229,7 @@ export const stats = {
         damage: 11,
         moves: [
             { name: 'Sword Whack', types: ['BA'] },
-            { name: 'Rusty Poke', types: ['DOT 2'] },
+            { name: 'Rusty Poke', types: ['DOT2'] },
         ],
         modifier: 1,
         level: 1,
@@ -263,7 +267,7 @@ export const stats = {
         maxHealth: 110,
         damage: 15,
         moves: [
-            { name: 'Horrifying Maim', types: ['DOT 2'] },
+            { name: 'Horrifying Maim', types: ['DOT2'] },
             { name: 'Endless Riddle', types: ['SL'] },
             { name: 'Three Fools Are Better Than One', types: ['SP'] },
         ],
@@ -295,4 +299,4 @@ export const stats = {
         modifier: 3,
         level: 1,
     },
-}
+})

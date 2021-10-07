@@ -86,6 +86,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     const charSpriteProps = {
         // src: Loader.shared.resources?.[args.assetId]?.data,
+        // TODO
         src: Loader.shared.resources?.[characterAssetKeys[Math.random() * characterAssetKeys.length | 0]]?.data,
         anchor: [0, 1] as [number, number],
         height: Loader.shared.resources?.[args.assetId]?.data?.height,

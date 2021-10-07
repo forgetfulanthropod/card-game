@@ -54,8 +54,10 @@ export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
 }
 
 
-export function getRandomMove(attacker: CharacterMeta): MoveMeta {
-    return randomEl(attacker.moves)
+export function getRandomMove(attacker: CharacterMeta): CharacterMove {
+    const moves = attacker.moves
+    const result = randomEl(moves)
+    return result
 }
 
 export function getNpcMove(ac: CharacterMeta[]): AttackData {
@@ -67,7 +69,7 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const move = getRandomMove(attacker)
     const defenders = [getPCTarget(ac)]
 
-    if (moveTypeMetaMap[move.type].numTargets > 1) {
+    if (moveTypeMetaMap[move.types[0]].numTargets > 1) {
         const closest = getClosestAlive(ac, defenders[0], 1)
         if (closest != null)
             defenders.push(closest)
