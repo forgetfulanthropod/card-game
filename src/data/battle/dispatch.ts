@@ -1,5 +1,5 @@
 import { makeInitialState } from './factories'
-import { scene } from 'data/rootTree'
+import { getScene } from 'data/rootTree'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =
@@ -19,6 +19,7 @@ export type Action =
 export default function dispatch(action: Action): void {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
+    const scene = getScene()
     switch (action.a) {
         case 'setIsPlayerTurn': {
             // tl(`setting player turn to ${action.v}`)

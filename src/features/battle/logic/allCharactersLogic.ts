@@ -3,7 +3,7 @@ import { moveTypeMetaMap } from 'data/battle/constants'
 import dispatch from 'data/battle/dispatch'
 import { BattleState } from 'data/battle/factories'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
-import { scene as battleState } from 'data/rootTree'
+import { getScene } from 'data/rootTree'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
 import { MoveEmitter, NpcMoveEmitter } from '../elements/AllCharacters'
@@ -35,9 +35,10 @@ export function getBindings() {
         return { ...value, isPlayerFirstTurn, alivePcs, aliveNpcs, isMoveAvailable }
     }
 
-    const state = cursorToState(battleState)
-    battleState.on('update', function () {
-        Object.assign(state, cursorToState(battleState))
+    const scene = getScene()
+    const state = cursorToState(scene)
+    scene.on('update', function () {
+        Object.assign(state, cursorToState(scene))
     })
 
 
@@ -167,4 +168,8 @@ export function getBindings() {
         doCharacterAction,
         move$,
     }
+}
+
+function showEndScreen(_kind: 'win' | 'lose') {
+    // TODO
 }
