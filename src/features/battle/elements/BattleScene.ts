@@ -1,5 +1,5 @@
 import { getScene } from 'data/rootTree'
-import { getBindings } from '../logic/allCharactersLogic'
+import { getBindings } from '../logic/allBattleLogic'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
 

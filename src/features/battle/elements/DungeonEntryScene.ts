@@ -1,4 +1,4 @@
-import { getBindings } from '../logic/allCharactersLogic'
+import { getBindings } from '../logic/allBattleLogic'
 import { Container, PixiContainer } from './mypixi'
 
 
