@@ -102,6 +102,7 @@ function Character(args: CharacterProps): PixiContainer {
         mainContainer.removeChild(lastMainSprite)
         lastMainSprite = mainSprite()
         mainContainer.addChild(lastMainSprite)
+        mainContainer.sortChildren()
     })
 
 
@@ -174,8 +175,8 @@ function Character(args: CharacterProps): PixiContainer {
             // attackSprite,
             // mainSprite,
             lastMainSprite,
-            isInitiallySelected && selectedSprite(),
             healthBar,
+            isInitiallySelected && selectedSprite(),
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
 
         ]

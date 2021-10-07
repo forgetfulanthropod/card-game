@@ -73,6 +73,7 @@ export default function HealthBar(
         name: HealthBar.name,
         x: 0,
         y: 0,
+        zIndex: 2,
         children: [
             Graphics({ draw: drawHealthBar }),
             Sprite({
