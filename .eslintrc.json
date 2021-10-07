@@ -29,6 +29,7 @@
             "warn",
             "single"
         ],
+        "no-unused-expressions": "warn",
         "consistent-return": "warn",
         "no-useless-return": "warn",
         "react/no-unused-prop-types": "warn",
