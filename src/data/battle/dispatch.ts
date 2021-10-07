@@ -50,7 +50,9 @@ export default function dispatch(action: Action): void {
                 return { ...c, health: typeof action.h === 'function' ? action.h(c.health) : action.h }
             }))
 
-            if (checkWinner(scene.select('allCharacters').get())) scene.set('state', 'won')
+            const winner = checkWinner(scene.select('allCharacters').get())
+            if (winner === 'PC') scene.set('state', 'won')
+            if (winner === 'NPC') scene.set('state', 'lost')
 
             // .allCharacters.find(c => c.id === action.id)
             if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
