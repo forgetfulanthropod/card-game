@@ -2,8 +2,8 @@ import { BASE_HEIGHT, BASE_WIDTH, CharacterMove, statsMap, X_AGGRESSIVE_THRESH, 
 import { getId } from './misc'
 
 export function makeInitialCharacters(): CharacterMeta[] {
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, 2)
+    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
     return [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
         ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
