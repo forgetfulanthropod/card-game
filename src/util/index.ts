@@ -25,3 +25,10 @@ export function deepFreeze<T extends object>(obj: T): Immutable<T> {
 
     return Object.freeze(obj) as Immutable<T>
 }
+
+// returns
+export function set<T>(arr: readonly T[], i: number, t: T): T[] {
+    const newArr = [...arr]
+    newArr[i] = t
+    return newArr
+}

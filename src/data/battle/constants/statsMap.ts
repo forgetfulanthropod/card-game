@@ -1,3 +1,5 @@
+// TODO: better name for this file and export?
+
 import { Immutable } from 'config/immutable'
 import { CharacterAssetKey } from 'features/battle/logic/AssetLoader'
 import { deepFreeze } from 'util'

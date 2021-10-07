@@ -15,7 +15,7 @@ import dispatch from 'data/battle/dispatch'
 import { MoveEmitter } from './AllCharacters'
 import { tl } from '../logic/allCharactersLogic'
 import { MyCursor } from 'config/myBaobab'
-import { characterAssetKeys } from '../logic/AssetLoader'
+import { CharacterAssetKey, characterAssetKeys } from '../logic/AssetLoader'
 const config = {
     isHealthNumber: false
 }
@@ -26,10 +26,10 @@ const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
 
 export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
-    return Character({ assetId: 'frogknight', direction: -1, ...props })
+    return Character({ direction: -1, ...props })
 }
 export function Skeleton(props: KnownCharacterProps): PixiContainer {
-    return Character({ assetId: 'orcWarrior', direction: -1, ...props })
+    return Character({ direction: -1, ...props })
 }
 interface KnownCharacterProps {
     onClick: (c: CharacterMeta) => void
@@ -43,7 +43,6 @@ interface KnownPlayerCharacterProps extends KnownCharacterProps {
 }
 interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
-    assetId: string
     direction: -1 | 1
 }
 function Character(args: CharacterProps): PixiContainer {
@@ -83,34 +82,48 @@ function Character(args: CharacterProps): PixiContainer {
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
 
-
+    const assetIdCursor = args.cursor.select('assetId')
+    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.data
     const charSpriteProps = {
         // src: Loader.shared.resources?.[args.assetId]?.data,
-        // TODO
-        src: Loader.shared.resources?.[characterAssetKeys[Math.random() * characterAssetKeys.length | 0]]?.data,
+        src: assetIdToSrc(assetIdCursor.get()),
         anchor: [0, 1] as [number, number],
-        height: Loader.shared.resources?.[args.assetId]?.data?.height,
+        height: assetIdToSrc(assetIdCursor.get()).height,
     }
+    assetIdCursor.on('update', () => {
+        // tl('asset id updated')
+        // TODO: better pattern for this?
+        charSpriteProps.src = assetIdToSrc(assetIdCursor.get())
+        charSpriteProps.height = assetIdToSrc(assetIdCursor.get()).height
+        mainContainer.removeChild(lastMainSprite)
+        lastMainSprite = mainSprite()
+        mainContainer.addChild(lastMainSprite)
+    })
 
-    const mainSprite = Sprite({
+
+    const mainSprite = () => Sprite({
+        // const mainSprite = Sprite({
         ...charSpriteProps,
+        name: 'mainCharacterSprite',
         onClick: () => {
+            tl('click')
             args.onClick(characterMeta)
         },
         zIndex: 1
     })
+    let lastMainSprite = mainSprite()
 
-    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 1 })
+    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 1 })
 
-    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
+    const attackSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
     // props.isSelected && !props.characterMeta.hasMoved
-    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter] })
+    const selectedSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter] })
 
 
     args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
-            flashSprite(mainContainer, attackSprite)
+            flashSprite(mainContainer, attackSprite(), { destroy: true })
             dispatch({ a: 'setHasMoved', id: myId, v: true })
             // setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
@@ -127,6 +140,7 @@ function Character(args: CharacterProps): PixiContainer {
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
             const damage = getDamage(d)
+            flashSprite(mainContainer, defendSprite(), { destroy: true })
             flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true })
             flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true })
             // setDamageShown(damage)
@@ -141,7 +155,8 @@ function Character(args: CharacterProps): PixiContainer {
     const mainContainer = Container({
         children: [
             // attackSprite,
-            mainSprite,
+            // mainSprite,
+            lastMainSprite,
             healthBar,
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
 

@@ -1,6 +1,5 @@
 import App from 'components/App'
 import { start } from 'features/battle/elements/main'
-import { tl } from 'features/battle/logic/allCharactersLogic'
 import loadAssets from 'features/battle/logic/AssetLoader'
 import { render } from 'preact'
 import './global.css'

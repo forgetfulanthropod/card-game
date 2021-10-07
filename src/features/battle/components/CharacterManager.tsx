@@ -1,4 +1,5 @@
 import type { h, JSX } from 'preact'
+import ArtistMenu from './ArtistMenu'
 // import produce from 'immer'
 // import { useCallback, useReducer, useState } from 'preact/hooks'
 // import { makeInitialPlayerCharacters } from 'data/battle/factories'
@@ -7,7 +8,9 @@ import type { h, JSX } from 'preact'
 // import { dispatch } from 'data/battle'
 
 export default function CharacterManager(): JSX.Element {
-    return <></>
+    return <>
+        <ArtistMenu />
+    </>
     // const [shown, setShown] = useState(true)
     // // const [state, dispatch] = useReducer(reducer,)
 
