@@ -13,6 +13,7 @@ export function makeInitialPlayerCharacters(): CharacterMeta[] {
 
 export interface BattleState {
     type: 'battle'
+    state: 'in battle' | 'won' | 'lost'
     isPlayerTurn: boolean
     battleHasBegun: boolean
     allCharacters: CharacterMeta[]
@@ -28,6 +29,7 @@ export function makeInitialState(): BattleState {
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         type: 'battle', // TODO: type is not used yet...
+        state: 'in battle',
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: true,
         allCharacters,

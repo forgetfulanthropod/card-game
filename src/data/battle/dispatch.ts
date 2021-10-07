@@ -1,5 +1,7 @@
 import { getScene } from 'data/rootTree'
 import { makeInitialState } from './factories'
+import { checkWinner } from './misc'
+import { CharacterMove } from './constants'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =
@@ -47,6 +49,8 @@ export default function dispatch(action: Action): void {
                 notFound = false
                 return { ...c, health: typeof action.h === 'function' ? action.h(c.health) : action.h }
             }))
+
+            if (checkWinner(scene.select('allCharacters').get())) scene.set('state', 'won')
 
             // .allCharacters.find(c => c.id === action.id)
             if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }

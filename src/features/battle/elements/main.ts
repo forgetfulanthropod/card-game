@@ -1,21 +1,28 @@
-import { BASE_WIDTH } from 'data/battle/constants'
 import { getScene } from 'data/rootTree'
 import { AllCharacters } from './AllCharacters'
 import background from './background'
+import Chest from './Chest'
 import { Application, PixiApplication } from './mypixi'
 export function start(canvas: HTMLCanvasElement): PixiApplication {
-    const scale = window.innerWidth / BASE_WIDTH
+    // const scale = window.innerWidth / BASE_WIDTH
     const bg = background({ scale: 1 })
     const characters = AllCharacters({ scale: 1, cursor: getScene().select('allCharacters') })
 
-    return Application({
+    getScene().select('state').on('update', () => {
+        app.stage.addChild(
+            Chest({ size: { width: 800, height: 800 } })
+        )
+    })
+
+    const app = Application({
         canvas,
         children: [
             bg,
-            characters,
+            characters
         ]
     })
 
+    return app
 }
             // <Stage width={width} height={height} options={{ backgroundAlpha: 0 }}>
             //     <LoaderProvider>

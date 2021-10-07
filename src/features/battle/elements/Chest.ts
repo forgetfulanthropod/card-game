@@ -9,10 +9,8 @@ const baseSize = 500
 
 
 export default function Chest(args: { size: Size }): PixiContainer {
-    const EE = new EventEmitter<'showItems'>()
-
     const c = Container({
-        scale: baseSize / args.size.width,
+        scale: 1,
         children: [
             Overlay({ size: args.size }),
             Sprite({
@@ -26,12 +24,11 @@ export default function Chest(args: { size: Size }): PixiContainer {
         ]
     })
 
-    setTimeout(() => EE.emit('showItems'), 1000)
-    EE.on('showItems', () => {
+    setTimeout(() => {
         c.addChild(Sprite({ name: 'fishstick', src: dataOf('fishstick') }))
         c.addChild(Sprite({ name: 'potion', src: dataOf('potion') }))
+    }, 1000)
 
-    })
     return c
 
     // <Graphics draw={g => {
