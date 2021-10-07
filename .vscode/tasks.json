@@ -18,10 +18,10 @@
 			"type": "npm",
 			"script": "start",
 			"problemMatcher": [],
-			"label": "npm: start",
+			"label": "start-esbuild-watch",
 			"detail": "build and watch src",
 			"runOptions": {
-				"runOn": "folderOpen"
+				"runOn": "folderOpen",
 			}
 		}
 	]
