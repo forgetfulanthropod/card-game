@@ -21,8 +21,12 @@ export default function ArtistMenu(): JSX.Element {
                 <Row onClick={() => stuff.toggleHealthType()}>Toggle health indicator</Row>
                 <Row onClick={() => stuff.toggleOpponentType()}>Toggle opponent</Row>
                 */}
-                <Row><ChooseCharacters type="PC" /></Row>
-                <Row><ChooseCharacters type="NPC" /></Row>
+                <Row>
+                    <ChooseCharacters type="PC" />
+                </Row>
+                <Row>
+                    <ChooseCharacters type="NPC" />
+                </Row>
             </>
             }
         />
@@ -39,11 +43,7 @@ function Dropdown(props: { top: JSX.Element | string, rest: Children }): JSX.Ele
 }
 
 const DropdownDiv = styled.div`
-    // position: absolute;
-    /* top: 5%;
-    right: 5%; */
     font-size: 2vw;
-    // border-radius: 5%;
     background-color: darkgreen;
     color: white;
     .top {
@@ -55,11 +55,14 @@ const DropdownDiv = styled.div`
     &:hover > .dropdown {
         display: block;
     }
+    border: 1px solid black;
 `
 
 const Row = styled.div`
-    // max-width: 100%;
+    max-width: 100vw;
+    overflow: scroll;
     padding: 1vw;
+    margin: 1vw
     background-color: #008e00;
     :hover {
         background-color: #00b600;
@@ -67,14 +70,18 @@ const Row = styled.div`
 `
 
 function Radio<T extends string>(props: { options: readonly T[], choice: T | null, setChoice: (s: T) => void }): JSX.Element {
-    return <div style={{ overflowWrap: 'break-word', width: '80vw' }}>
+    return <div
+        style={{
+            // overflowWrap: 'break-word'
+        }}
+    >
         {props.options.map(c =>
             <span
                 key={c}
                 style={{
                     backgroundColor: c === props.choice ? '#22e822' : '#058e05',
-                    padding: '5px',
-                    margin: '5px',
+                    padding: '1vw',
+                    margin: '1vw',
                     border: '1px solid black',
                     // borderRadius: '5px',
                 }}
@@ -97,24 +104,26 @@ function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
     return <Dropdown
         top={`Choose ${props.type}s`}
         rest={choices.map((c, i) =>
-            <Radio
-                key={i}
-                options={characterAssetKeys}
-                choice={c}
-                setChoice={(newChoice => {
-                    setChoices(cs => set(cs, i, newChoice))
-                    // TODO
-                    cursor.apply(i + offset, cm => {
-                        const stats = statsMap[newChoice]
-                        return { ...cm, ...stats, health: stats.maxHealth }
-                    })
-                    if (selectedIndex === i + offset) {
-                        scene.apply('selectedCharacter', c => {
+            <Row key={i}>
+                <Radio
+                    options={characterAssetKeys}
+                    choice={c}
+                    setChoice={(newChoice => {
+                        setChoices(cs => set(cs, i, newChoice))
+                        // TODO
+                        cursor.apply(i + offset, cm => {
                             const stats = statsMap[newChoice]
-                            return { ...c, ...stats, health: stats.maxHealth }
+                            return { ...cm, ...stats, health: stats.maxHealth }
                         })
-                    }
-                })}
-            />)}
+                        if (selectedIndex === i + offset) {
+                            scene.apply('selectedCharacter', c => {
+                                const stats = statsMap[newChoice]
+                                return { ...c, ...stats, health: stats.maxHealth }
+                            })
+                        }
+                    })}
+                />
+            </Row>
+        )}
     />
 }
