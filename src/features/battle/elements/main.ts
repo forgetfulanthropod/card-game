@@ -1,3 +1,4 @@
+import App from 'components/App'
 import { getScene } from 'data/rootTree'
 import { AllCharacters } from './AllCharacters'
 import background from './background'
@@ -10,7 +11,7 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
 
     getScene().select('state').on('update', () => {
         app.stage.addChild(
-            Chest({ size: { width: 800, height: 800 } })
+            Chest({ size: { width: app.stage.width, height: app.stage.height } })
         )
     })
 
@@ -18,7 +19,7 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
         canvas,
         children: [
             bg,
-            characters
+            characters,
         ]
     })
 
