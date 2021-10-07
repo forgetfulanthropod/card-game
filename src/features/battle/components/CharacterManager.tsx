@@ -1,5 +1,6 @@
 import type { h, JSX } from 'preact'
 import ArtistMenu from './ArtistMenu'
+import MoveMenu from './MoveMenu'
 // import produce from 'immer'
 // import { useCallback, useReducer, useState } from 'preact/hooks'
 // import { makeInitialPlayerCharacters } from 'data/battle/factories'
@@ -10,6 +11,7 @@ import ArtistMenu from './ArtistMenu'
 export default function CharacterManager(): JSX.Element {
     return <>
         <ArtistMenu />
+        <MoveMenu />
     </>
     // const [shown, setShown] = useState(true)
     // // const [state, dispatch] = useReducer(reducer,)

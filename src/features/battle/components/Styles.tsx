@@ -155,6 +155,7 @@ export const Reset = styled.button`
 // animation: ${css`${fadeIn}`} 3s;
 
 export const MoveMenuDiv = styled.div`
+    pointer-events: auto;
     position: absolute;
     bottom: calc(8vw * 1.4 / 20);
     left: 1vw;

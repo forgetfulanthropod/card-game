@@ -16,12 +16,14 @@ import { MoveEmitter } from './AllCharacters'
 import { tl } from '../logic/allCharactersLogic'
 import { MyCursor } from 'config/myBaobab'
 import { CharacterAssetKey, characterAssetKeys } from '../logic/AssetLoader'
+import { getScene } from 'data/rootTree'
 const config = {
     isHealthNumber: false
 }
 
 const RED = 0xFF0000
 const BLUE = 0x0000FF
+const YELLOW = 0xe4e42d
 const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
 
@@ -46,7 +48,13 @@ interface CharacterProps extends KnownCharacterProps {
     direction: -1 | 1
 }
 function Character(args: CharacterProps): PixiContainer {
-    const characterMeta = args.cursor.get()
+    // NOTE: necessary so the onClick sends the correct data after a character change.
+    const characterMeta = { ...args.cursor.get() }
+    args.cursor.on('update', () => {
+        Object.assign(characterMeta, args.cursor.get())
+    })
+
+    // const characterMeta = args.cursor.get()
     // args.cursor.on('update', () => {
     //     Object.assign(characterMeta, args.cursor.get())
     // })
@@ -113,17 +121,31 @@ function Character(args: CharacterProps): PixiContainer {
     })
     let lastMainSprite = mainSprite()
 
-    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 1 })
+    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0 })
 
     const attackSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
     // props.isSelected && !props.characterMeta.hasMoved
-    const selectedSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter] })
-
-
+    const selectedSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0 })
+    const scCursor = getScene().select('selectedCharacter').select('id')
+    const isInitiallySelected = scCursor.get() === characterMeta.id
+    // tl(`I, ${characterMeta.id}, am selected`)
+    scCursor.on('update', () => {
+        // TODO: abstract or refactor
+        if (scCursor.get() === characterMeta.id) {
+            mainContainer.addChild(selectedSprite())
+            mainContainer.sortChildren()
+        } else {
+            const expiredGlowSprite = mainContainer.children.find(c => c.name === 'glow')
+            if (expiredGlowSprite != null) {
+                mainContainer.removeChild(expiredGlowSprite)
+                expiredGlowSprite.destroy()
+            }
+        }
+    })
     args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
-            flashSprite(mainContainer, attackSprite(), { destroy: true })
+            flashSprite(mainContainer, attackSprite(), { destroy: true, durationMs: 500 })
             dispatch({ a: 'setHasMoved', id: myId, v: true })
             // setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
@@ -141,8 +163,8 @@ function Character(args: CharacterProps): PixiContainer {
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
             const damage = getDamage(d)
             flashSprite(mainContainer, defendSprite(), { destroy: true })
-            flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true })
-            flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true })
+            flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true, durationMs: 1000 })
+            flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true, durationMs: 1000 })
             // setDamageShown(damage)
             // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
             // TODO: should characters update their own health?
@@ -157,11 +179,13 @@ function Character(args: CharacterProps): PixiContainer {
             // attackSprite,
             // mainSprite,
             lastMainSprite,
+            isInitiallySelected && selectedSprite(),
             healthBar,
             // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
 
         ]
     })
+    mainContainer.sortChildren()
 
     const aboveCharacterContainer = Container({
         x: 0,

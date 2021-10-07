@@ -87,6 +87,10 @@ function Radio<T extends string>(props: { options: readonly T[], choice: T | nul
 
 function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
     const cursor = scene.select('allCharacters')
+    const idCursor = scene.select('selectedCharacter').select('id')
+    // TODO: have root state store selected character ID instead of the JSON itself, rendering the below lines unnecessary
+    const [selectedIndex, setSelectedIndex] = useState(cursor.get().findIndex(c => c.id === idCursor.get()))
+    idCursor.on('update', () => setSelectedIndex(cursor.get().findIndex(c => c.id === idCursor.get())))
     const allCharacters = cursor.get()
     const offset = props.type === 'NPC' ? 0 : 6
     const [choices, setChoices] = useState<CharacterAssetKey[]>(Array(6).fill(null).map((_, i) => allCharacters[i + offset].assetId))
@@ -104,6 +108,12 @@ function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
                         const stats = statsMap[newChoice]
                         return { ...cm, ...stats, health: stats.maxHealth }
                     })
+                    if (selectedIndex === i + offset) {
+                        scene.apply('selectedCharacter', c => {
+                            const stats = statsMap[newChoice]
+                            return { ...c, ...stats, health: stats.maxHealth }
+                        })
+                    }
                 })}
             />)}
     />
