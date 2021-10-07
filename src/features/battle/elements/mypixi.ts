@@ -207,3 +207,15 @@ export function VideoBackground(args: { name?: string, scale: number, src: strin
     sprite.zIndex = -1
     return sprite
 }
+
+export function PngLayersBackground(args: { name?: string, scale: number, srcs: string[] }): PixiContainer {
+    return Container({
+        children: args.srcs.map(src =>
+            Sprite({
+                src,
+                width: BASE_WIDTH,
+                height: BASE_HEIGHT,
+                zIndex: -1
+            }))
+    })
+}

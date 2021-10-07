@@ -28,7 +28,7 @@ export function makeInitialState(): BattleState {
     const selectedMove = selectedCharacter!.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
-        type: 'battle',
+        type: 'dungeon entry',
         state: 'in battle',
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: true,

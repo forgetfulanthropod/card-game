@@ -7,14 +7,8 @@ import { DungeonEntryScene } from './DungeonEntryScene'
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     // const scale = window.innerWidth / BASE_WIDTH
-    const bg = background({ scale: 1 })
 
-    const app = Application({
-        canvas,
-        children: [
-            bg,
-        ]
-    })
+    const app = Application({ canvas, children: [] })
 
     bindGamestate(app)
 
