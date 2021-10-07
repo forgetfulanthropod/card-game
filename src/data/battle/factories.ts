@@ -1,14 +1,14 @@
-import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { BASE_HEIGHT, BASE_WIDTH, CharacterMove, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from './misc'
 
-export function makeInitialPlayerCharacters(): CharacterMeta[] {
-    const skeletonPositions = makePositions(65, 50, 18, 13, 6)
-    const frogknightPositions = makePositions(10, 50, 18, 13, 6)
-    const result = [
-        ...skeletonPositions.map(([x, y]) => newSkeletonMeta({ x, y })),
-        ...frogknightPositions.map(([x, y]) => newFrogknightMeta({ x, y })),
+export function makeInitialCharacters(): CharacterMeta[] {
+    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
+
+    return [
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
+        ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
     ]
-    return result
 }
 
 export interface BattleState {
@@ -23,12 +23,12 @@ export interface BattleState {
     isDeluxeLoaded: boolean
 }
 export function makeInitialState(): BattleState {
-    const allCharacters = makeInitialPlayerCharacters()
+    const allCharacters = makeInitialCharacters()
     const selectedCharacter = allCharacters.find(c => c.isPc)
     const selectedMove = selectedCharacter!.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
-        type: 'battle', // TODO: type is not used yet...
+        type: 'battle',
         state: 'in battle',
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: true,
@@ -51,7 +51,7 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     ]
     return A.slice(0, n)
 }
-function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
+function newPCMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceType = args.x > X_AGGRESSIVE_THRESH ?
@@ -71,7 +71,7 @@ function newFrogknightMeta(args: { x: number; y: number }): CharacterMeta {
         health: 72,
     }
 }
-function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
+function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     return {
