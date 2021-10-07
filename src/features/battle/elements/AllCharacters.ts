@@ -37,5 +37,5 @@ function getCharacterFn(characterMeta: CharacterMeta) {
     else return Skeleton
 }
 
-export type MoveEmitter = EventEmitter<''> // data: AttackData
-export type NpcMoveEmitter = EventEmitter<''> // data: null
+export type MoveEmitter = EventEmitter<{ '': AttackData }> // data: AttackData
+export type NpcMoveEmitter = EventEmitter<{ '': string }> // data: string

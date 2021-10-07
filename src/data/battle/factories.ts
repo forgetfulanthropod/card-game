@@ -60,7 +60,6 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
     return {
         ...statsMap.frogKnight,
         id: getId(args.x, args.y),
-        type: 'Frogknight',
         isPc: true,
         x: args.x,
         y: args.y,
@@ -68,7 +67,7 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
-        health: 72,
+        health: statsMap.frogKnight.maxHealth,
     }
 }
 function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
@@ -84,6 +83,6 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance: 'neutral',
         hasMoved: false,
-        health: 10,
+        health: statsMap.skeletonWarrior.maxHealth,
     }
 }

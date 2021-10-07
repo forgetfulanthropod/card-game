@@ -91,7 +91,7 @@ export function getBindings() {
         return () => { }
     }
 
-    function doNpcMove(_reason?: string) {
+    function doNpcMove(reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
         if (checkWinner(state.allCharacters) != null) { return }
         if (state.isPlayerTurn) { return }
@@ -109,7 +109,8 @@ export function getBindings() {
             setTimeout(() => npcMove$.emit('', 'no unmoved PC and NPC turn'), 1000)
         }
     }
-    npcMove$.on('', doNpcMove)
+    // tl('adding listiner')
+    npcMove$.on('', e => doNpcMove(e))
 
     function doCharacterAction(clicked: CharacterMeta) {
         if (checkWinner(state.allCharacters) != null) return
