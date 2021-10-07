@@ -19,7 +19,7 @@
 			"script": "start",
 			"problemMatcher": [],
 			"label": "npm: start",
-			"detail": "bash scripts/build.sh",
+			"detail": "build and watch src",
 			"runOptions": {
 				"runOn": "folderOpen"
 			}
