@@ -159,8 +159,8 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         },
         zIndex: 1
     })
-    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
-    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
+    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
+    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
     const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedId = getScene().select('selectedCharacter').select('id')
