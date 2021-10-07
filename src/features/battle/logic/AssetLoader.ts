@@ -2,12 +2,12 @@ import { Loader } from 'pixi.js'
 import orcWarrior from '../assets/chars/orcWarrior-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
-import frogknight from '../assets/Frog_Knight_sprite-200.png'
+import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import healthTexture from '../assets/HEALTH_TEXTURE.png'
 import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
-import skeleton from '../assets/Skeleton_Warrior_sprite-200.png'
+import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 import { dispatch } from 'data/battle'
 import notoriousBEAN from '../assets/chars/NotoriousBEAN200.png'
 import warhog from '../assets/chars/warhog-200.png'
@@ -29,62 +29,41 @@ import gnomeHooligan from '../assets/cards/Gnome_hooligan-200.png'
 import jerry from '../assets/cards/Jerry-200.png'
 import mushroomFarmer from '../assets/cards/Mushroom_Farmer2-200.png'
 import matchaGelatinCube from '../assets/cards/matcha_gelatin_cube-200.png'
-export const characterAssetKeys = [
-    'bloatDemon',
-    'bogSpirit',
-    'bookle',
-    'bumbit',
-    'frogknight',
-    'frogWizard',
-    'gnomeHooligan',
-    'goblinDragon',
-    'greenJester',
-    'jerry',
-    'lichLord',
-    'matchaGelatinCube',
-    'mimic',
-    'mushroomFarmer',
-    'notoriousBEAN',
-    'orcWarrior',
-    'penguinKnight',
-    'skeleton',
-    'snacky',
-    'theHatefly',
-    'trioOfFools',
-    'warhog',
-    'wimpyGuard',
-]
-export type CharacterAssetKey = typeof characterAssetKeys[number]
-
-const basicAssets = {
-    fishstick,
-    potion,
-    bread,
-    chestBody,
-    chestLid,
-    orcWarrior,
+const characterAssets = {
     bloatDemon,
     bogSpirit,
     bookle,
     bumbit,
-    goblinDragon,
-    frogknight,
+    frogKnight,
     frogWizard,
+    gnomeHooligan,
+    goblinDragon,
     greenJester,
+    jerry,
     lichLord,
-    mimic,
-    notoriousBEAN,
     matchaGelatinCube,
+    mimic,
+    mushroomFarmer,
+    notoriousBEAN,
+    orcWarrior,
     penguinKnight,
-    skeleton,
+    skeletonWarrior,
     snacky,
     theHatefly,
     trioOfFools,
     warhog,
     wimpyGuard,
-    gnomeHooligan,
-    jerry,
-    mushroomFarmer,
+}
+export type CharacterAssetKey = keyof typeof characterAssets
+export const characterAssetKeys = Object.keys(characterAssets) as CharacterAssetKey[]
+
+const basicAssets = {
+    ...characterAssets,
+    fishstick,
+    potion,
+    bread,
+    chestBody,
+    chestLid,
 }
 const deluxeAssets = {
     healthTexture,

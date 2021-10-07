@@ -4,6 +4,7 @@ import { deepFreeze } from 'util'
 import { CharacterStats } from '.'
 export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = deepFreeze({
     bloatDemon: {
+        assetId: 'bloatDemon',
         type: 'Bloat Demon',
         points: 40,
         maxHealth: 160,
@@ -18,6 +19,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     bogSpirit: {
+        assetId: 'bogSpirit',
         type: 'Bog Spirit',
         points: 40,
         maxHealth: 224,
@@ -32,6 +34,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     bookle: {
+        assetId: 'bookle',
         type: 'Bookle',
         points: 15,
         maxHealth: 60,
@@ -44,6 +47,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     bumbit: {
+        assetId: 'bumbit',
         type: 'Bumbit',
         points: 20,
         maxHealth: 58,
@@ -57,6 +61,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     frogKnight: {
+        assetId: 'frogKnight',
         type: 'Frog Knight',
         points: 15,
         maxHealth: 72,
@@ -69,6 +74,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     frogWizard: {
+        assetId: 'frogWizard',
         type: 'Frog Wizard',
         points: 25,
         maxHealth: 66,
@@ -82,6 +88,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     gnomeHooligan: {
+        assetId: 'gnomeHooligan',
         type: 'Gnome Hooligan',
         points: 15,
         maxHealth: 43,
@@ -94,6 +101,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     goblinDragon: {
+        assetId: 'goblinDragon',
         type: 'Goblin Dragon',
         points: 25,
         maxHealth: 120,
@@ -107,6 +115,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     greenJester: {
+        assetId: 'greenJester',
         type: 'Green Jester',
         points: 40,
         maxHealth: 120,
@@ -120,6 +129,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     jerry: {
+        assetId: 'jerry',
         type: 'Jerry',
         points: 25,
         maxHealth: 86,
@@ -133,6 +143,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     lichLord: {
+        assetId: 'lichLord',
         type: 'Lich Lord',
         points: 50,
         maxHealth: 250,
@@ -147,6 +158,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     matchaGelatinCube: {
+        assetId: 'matchaGelatinCube',
         type: 'Matcha Gelatin Cube',
         points: 15,
         maxHealth: 78,
@@ -159,6 +171,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     mimic: {
+        assetId: 'mimic',
         type: 'Mimic',
         points: 25,
         maxHealth: 130,
@@ -172,6 +185,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     mushroomFarmer: {
+        assetId: 'mushroomFarmer',
         type: 'Mushroom Farmer',
         points: 20,
         maxHealth: 112,
@@ -185,6 +199,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     notoriousBEAN: {
+        assetId: 'notoriousBEAN',
         type: 'Notorious B.E.A.N',
         points: 20,
         maxHealth: 75,
@@ -198,6 +213,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     orcWarrior: {
+        assetId: 'orcWarrior',
         type: 'Orc Warrior',
         points: 20,
         maxHealth: 88,
@@ -211,6 +227,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     penguinKnight: {
+        assetId: 'penguinKnight',
         type: 'Penguin Knight',
         points: 15,
         maxHealth: 66,
@@ -223,6 +240,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     skeletonWarrior: {
+        assetId: 'skeletonWarrior',
         type: 'Skeleton Warrior',
         points: 15,
         maxHealth: 54,
@@ -235,6 +253,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     snacky: {
+        assetId: 'snacky',
         type: 'Snacky',
         points: 20,
         maxHealth: 67,
@@ -248,6 +267,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     theHatefly: {
+        assetId: 'theHatefly',
         type: 'The Hatefly',
         points: 50,
         maxHealth: 300,
@@ -262,6 +282,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     trioOfFools: {
+        assetId: 'trioOfFools',
         type: 'Trio of Fools',
         points: 25,
         maxHealth: 110,
@@ -275,6 +296,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     warhog: {
+        assetId: 'warhog',
         type: 'Warhog',
         points: 15,
         maxHealth: 84,
@@ -287,6 +309,7 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         level: 1,
     },
     wimpyGuard: {
+        assetId: 'wimpyGuard',
         type: 'Wimpy Guard',
         points: 40,
         maxHealth: 170,

@@ -73,7 +73,7 @@ function newSkeletonMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     return {
-        ...statsMap[randomEl(Object.keys(statsMap))],
+        ...statsMap.skeletonWarrior,
         id: getId(args.x, args.y),
         isPc: false,
         x: args.x,

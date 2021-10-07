@@ -22,7 +22,8 @@ interface CharacterMoveI {
 export type CharacterMove = Immutable<CharacterMoveI>
 
 interface CharacterStatsI {
-    type: CharacterAssetKey
+    assetId: CharacterAssetKey
+    type: string
     points: number
     maxHealth: number // AKA base health
     damage: number // AKA base attack
