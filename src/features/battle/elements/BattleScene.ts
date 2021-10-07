@@ -1,14 +1,10 @@
-import { MyCursor } from 'config/myBaobab'
-import EventEmitter from 'eventemitter3'
+import { getScene } from 'data/rootTree'
 import { getBindings } from '../logic/allCharactersLogic'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
 
 
-export function AllCharacters(props: {
-    scale: number,
-    cursor: MyCursor<CharacterMeta[]>
-}): PixiContainer {
+export function BattleScene(): PixiContainer {
     // TODO: use allCharactersLogic
     const {
         startGame,
@@ -21,12 +17,12 @@ export function AllCharacters(props: {
     setTimeout(startGame, 100)
     return Container({
         // name: AllCharacters.name,
-        children: props.cursor.map(childCursor =>
+        children: getScene().select('allCharacters').map(childCursor =>
             getCharacterFn(childCursor.get())({
                 cursor: childCursor,
                 onClick: doCharacterAction,
                 move$,
-                scale: props.scale,
+                scale: 1,
                 isSelected: false,
             }))
     })
@@ -36,6 +32,3 @@ function getCharacterFn(characterMeta: CharacterMeta) {
     if (characterMeta.isPc) return Frogknight
     else return Skeleton
 }
-
-export type MoveEmitter = EventEmitter<{ '': AttackData }> // data: AttackData
-export type NpcMoveEmitter = EventEmitter<{ '': string }> // data: string

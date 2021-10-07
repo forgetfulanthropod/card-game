@@ -5,7 +5,7 @@ import { filters, Loader } from 'pixi.js'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../../../data/battle/attack'
 import { CharacterAssetKey } from '../logic/AssetLoader'
-import { MoveEmitter } from './AllCharacters'
+import { MoveEmitter } from './BattleScene'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'
 // import { Hover } from './Hover'
@@ -117,9 +117,9 @@ function Character(args: CharacterProps): PixiContainer {
     })
     let lastMainSprite = mainSprite()
 
-    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0 })
+    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
 
-    const attackSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
+    const attackSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0 })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0 })
     const scCursor = getScene().select('selectedCharacter').select('id')

@@ -12,7 +12,7 @@ export function makeInitialCharacters(): CharacterMeta[] {
 }
 
 export interface BattleState {
-    type: 'battle'
+    type: 'battle' | 'dungeon entry'
     state: 'in battle' | 'won' | 'lost'
     isPlayerTurn: boolean
     battleHasBegun: boolean
