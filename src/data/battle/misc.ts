@@ -80,7 +80,7 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
 }
 
 
-export function randomEl<T>(arr: T[]): T {
+export function randomEl<T>(arr: readonly T[]): T {
     return arr[Math.random() * arr.length | 0]
 }
 
