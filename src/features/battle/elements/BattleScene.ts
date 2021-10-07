@@ -1,7 +1,9 @@
 import { getScene } from 'data/rootTree'
 import { getBindings } from '../logic/allBattleLogic'
+import background from './background'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
+import CaveVideo from '../assets/cave_main_1.webm'
 
 
 export function BattleScene(): PixiContainer {
@@ -17,14 +19,18 @@ export function BattleScene(): PixiContainer {
     setTimeout(startGame, 100)
     return Container({
         // name: AllCharacters.name,
-        children: getScene().select('allCharacters').map(childCursor =>
-            getCharacterFn(childCursor.get())({
-                cursor: childCursor,
-                onClick: doCharacterAction,
-                move$,
-                scale: 1,
-                isSelected: false,
-            }))
+        children: [
+            background({ scale: 1, src: CaveVideo }),
+            ...getScene().select('allCharacters').map(childCursor =>
+                getCharacterFn(childCursor.get())({
+                    cursor: childCursor,
+                    onClick: doCharacterAction,
+                    move$,
+                    scale: 1,
+                    isSelected: false,
+                }))
+        ]
+
     })
 }
 

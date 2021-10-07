@@ -1,8 +1,22 @@
-import CaveVideo from '../assets/cave_main_1.webm'
-import { PixiSprite, VideoBackground } from './mypixi'
+import { PixiContainer, PixiSprite, PngLayersBackground, VideoBackground } from './mypixi'
 
-export default ({ scale }: { scale: number }): PixiSprite => VideoBackground({
-    name: 'CaveVideo',
-    src: CaveVideo,
-    scale
-})
+export default ({ scale, src, srcs }: { scale: number, src?: string, srcs?: string[] }): PixiSprite | PixiContainer => {
+    if (src != null) {
+        return VideoBackground({
+            name: 'Background',
+            src,
+            scale
+        })
+    }
+
+    if (srcs != null) {
+        return PngLayersBackground({
+            name: 'Background',
+            srcs,
+            scale,
+        })
+    }
+
+    throw new Error('must have src or srcs')
+
+}
