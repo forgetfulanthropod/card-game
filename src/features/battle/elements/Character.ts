@@ -2,6 +2,7 @@ import { MyCursor } from 'config/myBaobab'
 import dispatch from 'data/battle/dispatch'
 import { getScene } from 'data/rootTree'
 import { filters, Loader } from 'pixi.js'
+import { doFlashSprite, flashSprite } from 'util/pixiUtils'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../../../data/battle/attack'
 import { CharacterAssetKey } from '../logic/AssetLoader'
@@ -12,7 +13,7 @@ import { MoveEmitter } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
-import { Container, PixiContainer, PixiSprite, PixiTicker, Sprite } from './mypixi'
+import { Container, PixiContainer, PixiSprite, PixiTexture, PixiTicker, Sprite } from './mypixi'
 const config = {
     isHealthNumber: false
 }
@@ -22,6 +23,7 @@ const BLUE = 0x0000FF
 const YELLOW = 0xe4e42d
 const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
+const HEALTH_CHANGE_WAIT_TIME = 300
 
 export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
@@ -49,13 +51,7 @@ function Character(args: CharacterProps): PixiContainer {
     args.cursor.on('update', () => {
         Object.assign(characterMeta, args.cursor.get())
     })
-
-    // const characterMeta = args.cursor.get()
-    // args.cursor.on('update', () => {
-    //     Object.assign(characterMeta, args.cursor.get())
-    // })
     const { screenX, screenY } = characterMeta
-    // NEXT: HEALTH
 
     args.cursor.select('health').on('update', () => {
         const value = args.cursor.select('health').get()
@@ -70,80 +66,20 @@ function Character(args: CharacterProps): PixiContainer {
 
     })
 
-    // const [currentMove, setCurrentMove] = useResetState<MoveMeta | null>(null, SHOW_HIT_TIME)
-    // const [damageShown, setDamageShown] = useResetState<number | null>(null, SHOW_HIT_TIME)
     // const [isHovering, setIsHovering] = useState(false)
 
     const currentMove = characterMeta.moves[0]
     const damageShown = 10
-    // const isHovering = false
-    // const { isBasicLoaded } = useLoaderContext()
 
-    const blurFilter = new filters.BlurFilter()
-    blurFilter.blur = 10
-    const grayFilter = new filters.ColorMatrixFilter()
-    grayFilter.saturate(-.7, false)
-    const redFilter = new filters.ColorMatrixFilter()
-    redFilter.hue(180, false)
-
-    const assetIdCursor = args.cursor.select('assetId')
-    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.data
-    const charSpriteProps = {
-        // src: Loader.shared.resources?.[args.assetId]?.data,
-        src: assetIdToSrc(assetIdCursor.get()),
-        anchor: [0, 1] as [number, number],
-        height: assetIdToSrc(assetIdCursor.get()).height,
+    const onHeight = (height: number) => {
+        aboveCharacterContainer.y = -height
     }
-    assetIdCursor.on('update', () => {
-        // tl('asset id updated')
-        // TODO: better pattern for this?
-        charSpriteProps.src = assetIdToSrc(assetIdCursor.get())
-        charSpriteProps.height = assetIdToSrc(assetIdCursor.get()).height
-        mainContainer.removeChild(lastMainSprite)
-        lastMainSprite = mainSprite()
-        mainContainer.addChild(lastMainSprite)
-        mainContainer.sortChildren()
-    })
-
-
-    const mainSprite = () => Sprite({
-        // const mainSprite = Sprite({
-        ...charSpriteProps,
-        name: 'mainCharacterSprite',
-        onClick: () => {
-            args.onClick(characterMeta)
-        },
-        zIndex: 1
-    })
-    let lastMainSprite = mainSprite()
-
-    const defendSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0 })
-
-    const attackSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0 })
-    // props.isSelected && !props.characterMeta.hasMoved
-    const selectedSprite = () => Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0 })
-    const scCursor = getScene().select('selectedCharacter').select('id')
-    const isInitiallySelected = scCursor.get() === characterMeta.id
-    // tl(`I, ${characterMeta.id}, am selected`)
-    scCursor.on('update', () => {
-        // TODO: abstract or refactor
-        if (scCursor.get() === characterMeta.id) {
-            mainContainer.addChild(selectedSprite())
-            mainContainer.sortChildren()
-        } else {
-            const expiredGlowSprite = mainContainer.children.find(c => c.name === 'glow')
-            if (expiredGlowSprite != null) {
-                mainContainer.removeChild(expiredGlowSprite)
-                expiredGlowSprite.destroy()
-            }
-        }
-    })
+    const { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
     args.move$.on('', function doCharMove(d: AttackData) {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
-            flashSprite(mainContainer, attackSprite(), { destroy: true, durationMs: 500 })
+            flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             dispatch({ a: 'setHasMoved', id: myId, v: true })
-            // setFlyTo({ x: d.defenders[0].screenX, y: d.defenders[0].screenY, })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
@@ -152,19 +88,14 @@ function Character(args: CharacterProps): PixiContainer {
             })
 
         }
-        // else {
-        //     setFlyTo(undefined)
-        // }
 
         if (d.defenders.findIndex(d => d.id === myId) > -1) {
             const damage = getDamage(d)
-            flashSprite(mainContainer, defendSprite(), { destroy: true })
-            flashSprite(aboveCharacterContainer, MoveInfo({ move: d.move, offset: - 70 }), { destroy: true, durationMs: 1000 })
-            flashSprite(aboveCharacterContainer, HitInfo({ damage: damage }), { destroy: true, durationMs: 1000 })
-            // setDamageShown(damage)
-            // toast.custom(<DamageToast left={x} top={y}>damage: {damage}</DamageToast>)
+            flashSprite(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
+            doFlashSprite(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
+            doFlashSprite(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
-            setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), 300)
+            setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
     })
 
@@ -172,20 +103,18 @@ function Character(args: CharacterProps): PixiContainer {
 
     const mainContainer = Container({
         children: [
-            // attackSprite,
-            // mainSprite,
-            lastMainSprite,
+            mainSprite,
+            selectedSprite,
+            attackSprite,
+            defendSprite,
             healthBar,
-            isInitiallySelected && selectedSprite(),
-            // props.characterMeta.hasMoved && Sprite({ ...charSpriteProps, filters: [grayFilter] }),
-
         ]
     })
     mainContainer.sortChildren()
 
     const aboveCharacterContainer = Container({
         x: 0,
-        y: -charSpriteProps.height,
+        y: -initialHeight,
         children: [],
     })
 
@@ -202,22 +131,55 @@ function Character(args: CharacterProps): PixiContainer {
     return flyingContainer
 }
 
+function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
+    const blurFilter = new filters.BlurFilter()
+    blurFilter.blur = 10
+    const grayFilter = new filters.ColorMatrixFilter()
+    grayFilter.saturate(-.7, false)
+    const redFilter = new filters.ColorMatrixFilter()
+    redFilter.hue(180, false)
 
-function flashSprite(parent: PixiContainer, sprite: PixiSprite, { durationMs = 500, destroy = false } = {}) {
-    // tl('flashing')
-    parent.addChild(sprite)
-
-    parent.sortChildren()
-    setTimeout(() => {
-        if (parent != null) {
-            parent.removeChild(sprite)
-            if (destroy) {
-                sprite.destroy()
-            }
+    const assetIdCursor = args.cursor.select('assetId')
+    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+    const charSpriteProps = {
+        src: assetIdToSrc(assetIdCursor.get()),
+        anchor: [0, 1] as [number, number],
+        height: assetIdToSrc(assetIdCursor.get()).height,
+    }
+    assetIdCursor.on('update', () => {
+        const texture = assetIdToSrc(assetIdCursor.get())
+        const height = assetIdToSrc(assetIdCursor.get()).height
+        const update = (s: PixiSprite) => {
+            s.texture = texture
+            s.height = height
         }
-    }, durationMs)
-}
+        update(selectedSprite)
+        update(mainSprite)
+        update(defendSprite)
+        update(attackSprite)
+        onHeight(height)
+    })
 
+
+    const mainSprite = Sprite({
+        ...charSpriteProps,
+        name: 'mainCharacterSprite',
+        onClick: () => {
+            args.onClick(characterMeta)
+        },
+        zIndex: 1
+    })
+    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
+    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
+    // props.isSelected && !props.characterMeta.hasMoved
+    const selectedId = getScene().select('selectedCharacter').select('id')
+    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
+
+    selectedId.on('update', () => {
+        selectedSprite.visible = selectedId.get() === characterMeta.id
+    })
+    return { attackSprite, defendSprite, mainSprite, selectedSprite, initialHeight: charSpriteProps.height }
+}
 
 
 const FLY_TIME = 800
@@ -226,23 +188,20 @@ const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
 type Point = { x: number, y: number }
 function makeFlyToOnTick(start: Point, flyTo: Point) {
     let totalElapsed = 0
-    return (self: PixiContainer, elapsed: number): void | 'remove' => {
+    return (container: PixiContainer, elapsed: number): void | 'remove' => {
         // const deltaTimeMs = elapsed * 1000 / 60
         totalElapsed += elapsed * 16.66
-        let x: number, y: number
         if (totalElapsed < FLY_TO_TIME) {
-            x = start.x + (flyTo.x - start.x) * totalElapsed / FLY_TO_TIME
-            y = start.y + (flyTo.y - start.y) * totalElapsed / FLY_TO_TIME
+            container.x = start.x + (flyTo.x - start.x) * totalElapsed / FLY_TO_TIME
+            container.y = start.y + (flyTo.y - start.y) * totalElapsed / FLY_TO_TIME
         } else if (totalElapsed < FLY_TIME) {
-            x = flyTo.x + (start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
-            y = flyTo.y + (start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            container.x = flyTo.x + (start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            container.y = flyTo.y + (start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
         } else {
-            x = start.x
-            y = start.y
+            container.x = start.x
+            container.y = start.y
             return 'remove'
         }
-        self.x = x
-        self.y = y
         return undefined
     }
 }
