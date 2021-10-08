@@ -102,7 +102,9 @@ export function getBindings() {
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
-        move$.emit('', getNpcMove(state.allCharacters))
+        const move = getNpcMove(state.allCharacters)
+        move$.emit('', move)
+        dispatch({ a: 'setHasMoved', id: move.attacker.id, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
@@ -136,6 +138,7 @@ export function getBindings() {
             tl('select move first')
             return
         }
+        dispatch({ a: 'setHasMoved', id: state.selectedCharacter.id, v: true })
         const defenders = [clicked]
         if (moveTypeMetaMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
             const closest = getClosestAlive(state.allCharacters, clicked, 1)
@@ -148,7 +151,7 @@ export function getBindings() {
         })
 
         // change to unmoved PC if there is one
-        const newPc = getUnmovedPc(state.allCharacters)
+        const newPc = getUnmovedPc(state.allCharacters, state.selectedCharacter.id)
         if (newPc == null) {
             // should be unreachable
             tl('no unmoved PC')
@@ -156,6 +159,7 @@ export function getBindings() {
             setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
+        tl(`selecting character ${newPc.id}`)
         dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike

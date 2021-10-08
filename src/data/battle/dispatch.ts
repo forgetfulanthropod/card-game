@@ -31,35 +31,32 @@ export default function dispatch(action: Action): void {
             scene.set('battleHasBegun', true)
             return
         } case 'setHasMoved': {
-            let notFound = true
-            // scene.set('sdfdsf', scene.select('allCharacters').map((cursor, index) => {}) use this? (no)
-            scene.apply('allCharacters', (ac) => ac.map(c => {
-                if (c.id !== action.id) return c
-
-                notFound = false
-                return { ...c, hasMoved: true }
-            }))
-
-            if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
+            // let notFound = true
+            //@ts-ignore
+            const charCursor = scene.select('allCharacters', { id: action.id }).set('hasMoved', true)
+            // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
+            // rootTree.commit()
             return
         } case 'setHealth': {
-            let notFound = true
-            scene.apply('allCharacters', (ac) => ac.map(c => {
-                if (c.id !== action.id) return c
-                notFound = false
-                return { ...c, health: typeof action.h === 'function' ? action.h(c.health) : action.h }
-            }))
-
+            // let notFound = true
+            //@ts-ignore
+            const charCursor = scene.select('allCharacters', { id: action.id })
+            //@ts-ignore
+            charCursor.set('health', typeof action.h === 'function' ? action.h(charCursor.get('health')) : action.h)
             const winner = checkWinner(scene.select('allCharacters').get())
             if (winner === 'PC') scene.set('state', 'won')
             if (winner === 'NPC') scene.set('state', 'lost')
 
             // .allCharacters.find(c => c.id === action.id)
-            if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
+            // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
 
             return
         } case 'clearHasMoved': {
-            scene.apply('allCharacters', (ac) => ac.map(c => ({ ...c, hasMoved: false })))
+            const cursor = scene.select('allCharacters')
+            const n = cursor.get().length
+            for (let i = 0; i < n; i++) {
+                cursor.select(i).set('hasMoved', false)
+            }
             return
         } case 'setSelectedCharacter': {
             scene.set('selectedCharacter', action.c)
@@ -71,16 +68,16 @@ export default function dispatch(action: Action): void {
             scene.set(makeInitialState())
             return
         } case 'updateScreenSize': {
-            // debugger
-            scene.apply('allCharacters', (ac) => {
-                // debugger
-                return ac.map(c =>
-                ({
-                    ...c,
-                    screenX: c.x * action.size.width / 100,
-                    screenY: c.y * action.size.height / 100,
-                }))
-            })
+            const cursor = scene.select('allCharacters')
+            const n = cursor.get().length
+            for (let i = 0; i < n; i++) {
+                const cu = cursor.select(i)
+                const ch = cu.get()
+                cu.merge({
+                    screenX: ch.x * action.size.width / 100,
+                    screenY: ch.y * action.size.height / 100,
+                })
+            }
             return
         } case 'setIsBasicLoaded': {
             scene.set('isBasicLoaded', action.v)

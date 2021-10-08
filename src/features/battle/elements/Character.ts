@@ -14,6 +14,7 @@ import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 import { Container, PixiContainer, PixiSprite, PixiTexture, PixiTicker, Sprite } from './mypixi'
+import { tl } from '../logic/allBattleLogic'
 const config = {
     isHealthNumber: false
 }
@@ -110,7 +111,6 @@ function Character(args: CharacterProps): PixiContainer {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
             flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            dispatch({ a: 'setHasMoved', id: myId, v: true })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
@@ -171,6 +171,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     })
 
     assetIdCursor.on('update', () => {
+        // tl('asset update')
         const texture = assetIdToSrc(assetIdCursor.get())
         const height = texture.height
         const update = (s: PixiSprite) => {

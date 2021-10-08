@@ -17,6 +17,8 @@ export const tree = new MyBaobab({
     // isDeluxeLoaded: false,
 })
 
+// export const commitTree = () => tree.commit()
+
 // @ts-ignore
 window.tree = tree
 
