@@ -85,11 +85,12 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
     Loader.shared.onLoad.add((_, { name }) => {
         loaded.add(name)
         if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
-            dispatch({ a: 'setIsBasicLoaded', v: true })
+            // TODO:
+            // dispatch({ a: 'setIsBasicLoaded', v: true })
             onBasicLoaded()
         }
         if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
-            dispatch({ a: 'setIsDeluxeLoaded', v: true })
+            // dispatch({ a: 'setIsDeluxeLoaded', v: true })
             onDeluxeLoaded()
         }
     })

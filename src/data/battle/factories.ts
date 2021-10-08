@@ -1,5 +1,6 @@
 import { BASE_HEIGHT, BASE_WIDTH, CharacterMove, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from './misc'
+import { SceneName } from '../types'
 
 export function makeInitialCharacters(): CharacterMeta[] {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
@@ -11,7 +12,7 @@ export function makeInitialCharacters(): CharacterMeta[] {
 }
 
 export interface BattleState {
-    type: 'battle' | 'dungeon entry'
+    type: SceneName
     state: 'in battle' | 'won' | 'lost'
     isPlayerTurn: boolean
     battleHasBegun: boolean
@@ -21,7 +22,7 @@ export interface BattleState {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
 }
-export function makeInitialState(): BattleState {
+export function makeInitialState(chosenCharacters: CharacterName[]): BattleState {
     const allCharacters = makeInitialCharacters()
 
     // kill most of the characters
@@ -36,7 +37,7 @@ export function makeInitialState(): BattleState {
     const selectedMove = selectedCharacter!.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
-        type: 'dungeon entry',
+        type: 'battle',
         state: 'in battle',
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: true,

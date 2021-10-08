@@ -1,4 +1,4 @@
-import { getScene } from 'data/rootTree'
+import { getBattleScene } from 'data/rootTree'
 import { getBindings } from '../logic/allBattleLogic'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
@@ -21,7 +21,7 @@ export function BattleScene(): PixiContainer {
         // name: AllCharacters.name,
         children: [
             background({ scale: 1, src: CaveVideo }),
-            ...getScene().select('allCharacters').map(childCursor =>
+            ...getBattleScene().select('allCharacters').map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
                     onClick: doCharacterAction,

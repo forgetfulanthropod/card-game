@@ -1,6 +1,6 @@
 import { MyCursor } from 'config/myBaobab'
 import dispatch from 'data/battle/dispatch'
-import { getScene } from 'data/rootTree'
+import { getBattleScene } from 'data/rootTree'
 import { filters, Loader } from 'pixi.js'
 import { doFlashSprite, flashSprite } from 'util/pixiUtils'
 // import { useLoaderContext } from '../providers/LoaderProvider'
@@ -163,7 +163,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
     const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
     // props.isSelected && !props.characterMeta.hasMoved
-    const selectedId = getScene().select('selectedCharacter').select('id')
+    const selectedId = getBattleScene().select('selectedCharacter').select('id')
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
 
     hasMovedCursor.on('update', () => {

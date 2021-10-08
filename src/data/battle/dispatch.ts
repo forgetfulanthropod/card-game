@@ -1,4 +1,4 @@
-import { getScene } from 'data/rootTree'
+import { getBattleScene } from 'data/rootTree'
 import { makeInitialState } from './factories'
 import { checkWinner } from './misc'
 import { CharacterMove } from './constants'
@@ -21,7 +21,7 @@ export type Action =
 export default function dispatch(action: Action): void {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
-    const scene = getScene()
+    const scene = getBattleScene()
     switch (action.a) {
         case 'setIsPlayerTurn': {
             // tl(`setting player turn to ${action.v}`)

@@ -1,8 +1,7 @@
-import { getScene } from 'data/rootTree'
+import { getBattleScene, getScene } from 'data/rootTree'
 import { BattleScene } from './BattleScene'
-import background from './background'
 import Chest from './Chest'
-import { Application, PixiApplication } from './mypixi'
+import { Application, PixiApplication, PixiContainer } from './mypixi'
 import { DungeonEntryScene } from './DungeonEntryScene'
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
@@ -12,15 +11,12 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
 
     bindGamestate(app)
 
-    bindBattleState(app)
-
     return app
 }
 
 
 function bindGamestate(app: PixiApplication) {
-    const battleScene = BattleScene()
-    const dungeonEntryScene = DungeonEntryScene()
+    let lastScene: PixiContainer | null = null
 
     const sceneTypeCursor = getScene().select('type')
     sceneTypeCursor.on('update', () => {
@@ -29,20 +25,24 @@ function bindGamestate(app: PixiApplication) {
     setScene()
 
     function setScene() {
-        if (sceneTypeCursor.get() === 'battle') {
-            app.stage.removeChild(dungeonEntryScene)
-            app.stage.addChild(battleScene)
+        if (lastScene !== null) app.stage.removeChild(lastScene)
+
+        const sceneType = sceneTypeCursor.get()
+        if (sceneType === 'battle') {
+            lastScene = BattleScene()
+            bindBattleState(app)
+        } else if (sceneType === 'dungeon entry') {
+            lastScene = DungeonEntryScene()
+        } else {
+            throw new Error('what!')
         }
-        if (sceneTypeCursor.get() === 'dungeon entry') {
-            app.stage.removeChild(battleScene)
-            app.stage.addChild(dungeonEntryScene)
-        }
+        app.stage.addChild(lastScene)
     }
 }
 
 function bindBattleState(app: PixiApplication) {
 
-    const stateCursor = getScene().select('state')
+    const stateCursor = getBattleScene().select('state')
     stateCursor.on('update', () => {
         if (stateCursor.get() === 'won')
             app.stage.addChild(
