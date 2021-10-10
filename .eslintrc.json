@@ -29,6 +29,7 @@
             "warn",
             "single"
         ],
+        "no-unused-expressions": "warn",
         "consistent-return": "warn",
         "no-useless-return": "warn",
         "react/no-unused-prop-types": "warn",
@@ -51,6 +52,7 @@
                 "additionalHooks": "(useEffectWhen)"
             }
         ],
+        "react/react-in-jsx-scope": "off",
         "@typescript-eslint/ban-ts-comment": "off",
         "@typescript-eslint/no-empty-function": "off",
         "no-debugger": "warn",
@@ -75,6 +77,7 @@
         }
     },
     "ignorePatterns": [
-        "scripts/"
+        "scripts/",
+        "api/"
     ]
 }

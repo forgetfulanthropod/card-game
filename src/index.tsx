@@ -1,12 +1,18 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './components/App'
+import App from 'components/App'
+import { start } from 'features/battle/elements/main'
+import loadAssets from 'features/battle/logic/AssetLoader'
+import { render } from 'preact'
 import './global.css'
 
+render(<App />, document.getElementById('preact-root') as HTMLDivElement)
 
-ReactDOM.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
-    document.getElementById('root')
+let started = false
+loadAssets(
+    function onBasic() {
+    },
+    function onDeluxe() {
+        if (!started)
+            start(document.getElementById('pixi-root') as HTMLCanvasElement)
+        started = true
+    }
 )

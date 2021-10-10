@@ -1,14 +1,13 @@
-import produce from 'immer'
-import type { WritableDraft } from 'immer/dist/internal'
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import type { h, JSX } from 'preact'
+import { createContext } from 'preact'
+import { useContext, useMemo, useState } from 'preact/hooks'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {
     const [state, setState] = useState(initialState)
     const callbacks = useMemo(() => {
-        const update = (mutate: (d: WritableDraft<State>) => void) => setState(produce(mutate))
         return {
-            basicLoaded() { update(d => { d.isBasicLoaded = true }) },
-            deluxeLoaded() { update(d => { d.isDeluxeLoaded = true }) },
+            basicLoaded() { setState(d => ({ ...d, isBasicLoaded: true })) },
+            deluxeLoaded() { setState(d => ({ ...d, isDeluxeLoaded: true })) },
         }
     }, [])
 
@@ -19,6 +18,7 @@ export function LoaderProvider(props: { children: Children }): JSX.Element {
 }
 
 export function useLoaderContext(): Value {
+    console.log("useLoaderContext")
     return useContext(context)
 }
 

@@ -1,0 +1,221 @@
+import { BASE_HEIGHT, BASE_WIDTH } from 'data/battle/constants'
+import {
+    Application as PixiApplication,
+    Container as PixiContainer,
+    Filter as PixiFilter,
+    Graphics as PixiGraphics, InteractionEvent,
+    ITextStyle, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
+    Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource
+} from 'pixi.js'
+import { registerPixiInspector } from 'util/pixiInspector'
+// export { PixiLoader }
+// TODO: export the types instead of constructors
+export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
+
+// export type Sprite = PixiSprite
+
+type Pair = [x: number, y: number]
+
+interface DisplayObjectArgs {
+    position?: Pair
+    scale?: number | Pair
+    width?: number
+    height?: number
+    pivot?: number | Pair
+    x?: number
+    y?: number
+    onTick?: OnPixiTick
+    alpha?: number
+    filters?: (PixiFilter | null | false | undefined)[]
+    onClick?: (e: InteractionEvent) => void
+    name?: string
+    zIndex?: number
+    visible?: boolean
+}
+
+// text and sprite but not graphics
+interface ShownArgs extends DisplayObjectArgs {
+    tint?: number
+    anchor?: number | Pair
+}
+
+
+export type OnPixiTick = (self: PixiSprite | PixiContainer, delta: number) => void | 'remove'
+interface SpriteArgs extends ShownArgs {
+    src: string | PixiTexture
+}
+export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
+export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
+interface ContainerArgs extends DisplayObjectArgs {
+    children: PixiChildren
+    onTick?: OnContainerTick
+    name?: string
+}
+
+interface TextArgs extends ShownArgs {
+    text: string
+    style?: Partial<ITextStyle>
+}
+
+interface GraphicsArgs extends ShownArgs {
+    draw: (g: PixiGraphics) => void
+}
+
+export function Sprite(args: SpriteArgs): PixiSprite {
+    const s = PixiSprite.from(args.src)
+
+    applyShownArgs(s, args)
+    return s
+}
+
+function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
+    if (args.position != null) { x.position.set(...args.position) }
+    if (args.scale != null) {
+        if (Array.isArray(args.scale)) {
+            x.scale.set(...args.scale)
+        } else {
+            x.scale.set(args.scale)
+        }
+    }
+
+    if (args.width != null) { x.width = args.width }
+    if (args.height != null) { x.height = args.height }
+    if (args.pivot != null) {
+        if (Array.isArray(args.pivot)) {
+            x.pivot.set(...args.pivot)
+        } else {
+            x.pivot.set(args.pivot)
+        }
+    }
+    if (args.x != null) { x.x = args.x }
+    if (args.y != null) { x.y = args.y }
+
+    if (args.onTick != null) {
+        PixiTicker.shared.add(function cb(dt) {
+            const result = args.onTick && args.onTick(x, dt)
+            if (result === 'remove')
+                PixiTicker.shared.remove(cb)
+        })
+    }
+
+    if (args.alpha != null) {
+        x.alpha = args.alpha
+    }
+
+    if (args.filters != null) {
+        const filters = args.filters.filter(Boolean) as PixiFilter[]
+        x.filters = filters
+    }
+
+    if (args.onClick != null) {
+        x.interactive = true
+        x.on('click', args.onClick)
+    }
+
+    if (args.name != null) {
+        x.name = args.name
+    }
+
+    if (args.zIndex != null) {
+        x.zIndex = args.zIndex
+    }
+    if (args.visible != null) {
+        x.visible = args.visible
+    }
+}
+
+function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
+    applyDisplayObjectArgs(x, args)
+    if (args.tint != null) {
+        x.tint = args.tint
+    }
+
+
+    if (args.anchor != null) {
+        if (Array.isArray(args.anchor)) {
+            x.anchor.set(...args.anchor)
+        } else {
+            x.anchor.set(args.anchor)
+        }
+    }
+}
+export function Application(args: {
+    canvas: HTMLCanvasElement,
+    children: (PixiSprite | PixiContainer)[]
+}): PixiApplication {
+    const app = new PixiApplication({
+        view: args.canvas,
+        resolution: window.devicePixelRatio || 1,
+        // backgroundColor: 0x6495ed,
+        width: 1920,
+        height: 1080,
+    })
+    for (const c of args.children) {
+        app.stage.addChild(c)
+    }
+    // @ts-ignore
+    window.app = app
+    registerPixiInspector()
+    return app
+}
+
+export function Container(args: ContainerArgs): PixiContainer {
+    const c = new PixiContainer()
+    applyDisplayObjectArgs(c, args)
+    for (const ch of args.children) {
+        if (ch != null && ch !== false) {
+            c.addChild(ch)
+        }
+    }
+    if (args.onTick != null) {
+        PixiTicker.shared.add(function cb(dt) {
+            const result = args.onTick && args.onTick(c, dt)
+            if (result === 'remove')
+                PixiTicker.shared.remove(cb)
+        })
+    }
+    if (args.name != null) {
+        c.name = args.name
+    }
+
+    return c
+}
+
+export function Text(args: TextArgs): PixiText {
+    const text = new PixiText(args.text, args.style)
+    applyShownArgs(text, args)
+    return text
+}
+
+
+export function Graphics(args: GraphicsArgs): PixiGraphics {
+    const g = new PixiGraphics()
+    args.draw(g)
+    applyDisplayObjectArgs(g, args)
+    return g
+}
+
+export function VideoBackground(args: { name?: string, scale: number, src: string }): PixiSprite {
+    const r = new PixiVideoResource(args.src, { updateFPS: 24 })
+    const source = r.source as HTMLVideoElement
+    source.muted = true
+    source.loop = true
+    const sprite = PixiSprite.from(PixiTexture.from(r.source))
+    sprite.width = BASE_WIDTH * args.scale
+    sprite.height = BASE_HEIGHT * args.scale
+    if (args.name) { sprite.name = args.name }
+    sprite.zIndex = -1
+    return sprite
+}
+
+export function PngLayersBackground(args: { name?: string, scale: number, srcs: string[] }): PixiContainer {
+    return Container({
+        children: args.srcs.map(src =>
+            Sprite({
+                src,
+                width: BASE_WIDTH,
+                height: BASE_HEIGHT,
+                zIndex: -1
+            }))
+    })
+}
