@@ -1,4 +1,4 @@
-import { moveTypeMetaMap } from 'data/battle/constants'
+import { moveTypeMetaMap } from '@/data/battle/constants'
 import type { h, JSX } from 'preact'
 import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 import Table from './Table'

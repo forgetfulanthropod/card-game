@@ -1,4 +1,4 @@
-import { deepFreeze } from 'util'
+import { deepFreeze } from '@/util'
 import { MoveMeta } from '.'
 
 

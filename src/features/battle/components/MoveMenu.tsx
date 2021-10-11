@@ -1,4 +1,4 @@
-import { getBattleScene } from 'data/rootTree'
+import { getBattleScene } from '@/data/rootTree'
 import { h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
 import dispatch from '../../../data/battle/dispatch'

@@ -1,12 +1,11 @@
-import { statsMap } from 'data/battle/constants'
-import { allCharacters } from 'data/rootTree'
+import { statsMap } from '@/data/battle/constants'
+import { getBattleScene } from '@/data/rootTree'
+import { set } from '@/util'
 import { h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
 //@ts-ignore
 import styled from 'styled-components'
-import { set } from 'util'
 import { CharacterAssetKey, characterAssetKeys } from './features/battle/logic/AssetLoader'
-
 
 export default function ArtistMenu(): JSX.Element {
     // const [x, setX] = useState<string | null>(null)
@@ -93,8 +92,8 @@ function Radio<T extends string>(props: { options: readonly T[], choice: T | nul
 
 /** Assumes equal number PC & NPC! */
 function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
-    const scene = getScene()
-    const cursor = allCharacters
+    const battle = getBattleScene()
+    const cursor = battle.select('allCharacters')
     const numEachSide = cursor.get().length / 2 | 0
     // const idCursor = scene.select('selectedCharacter').select('id')
     // TODO: have root state store selected character ID instead of the JSON itself, rendering the below lines unnecessary

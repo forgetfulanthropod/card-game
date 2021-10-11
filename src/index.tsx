@@ -1,7 +1,7 @@
-import { helloWorld } from 'api'
-import App from 'components/App'
-import { start } from 'features/battle/elements/main'
-import loadAssets from 'features/battle/logic/AssetLoader'
+import { helloWorld } from '@/api'
+import App from '@/components/App'
+import { start } from '@/features/battle/elements/main'
+import loadAssets from '@/features/battle/logic/AssetLoader'
 import { render } from 'preact'
 import './global.css'
 

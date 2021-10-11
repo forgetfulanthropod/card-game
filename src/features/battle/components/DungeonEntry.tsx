@@ -1,5 +1,4 @@
 import type { h, JSX } from 'preact'
-import ArtistMenu from '../../../ArtistMenu'
 import StartButton from './StartButton'
 
 

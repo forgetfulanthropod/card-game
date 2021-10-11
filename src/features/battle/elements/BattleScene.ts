@@ -1,9 +1,9 @@
-import { getBattleScene } from 'data/rootTree'
+import { getBattleScene } from '@/data/rootTree'
+import CaveVideo from '../assets/cave_main_1.webm'
 import { getBindings } from '../logic/allBattleLogic'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
 import { Container, PixiContainer } from './mypixi'
-import CaveVideo from '../assets/cave_main_1.webm'
 
 
 export function BattleScene(): PixiContainer {

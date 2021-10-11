@@ -1,4 +1,4 @@
-import { PixiContainer, PixiSprite } from 'features/battle/elements/mypixi'
+import { PixiContainer, PixiSprite } from '@/features/battle/elements/mypixi'
 import type { Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
