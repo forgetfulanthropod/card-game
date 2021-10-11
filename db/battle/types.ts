@@ -1,6 +1,6 @@
 import { Immutable } from '@/config/immutable'
 import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
-import { SceneName } from 'temp/types'
+import { SceneName } from '../types'
 
 export interface BattleState {
     type: SceneName

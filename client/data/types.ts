@@ -1,1 +1,1 @@
-export * from '@/../temp/types'
+export * from '@@/db/types'

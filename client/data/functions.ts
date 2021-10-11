@@ -1,7 +1,7 @@
-import { initialState as initialBattleState } from '@/../temp/battle/state'
-import { initialState as initialEntryState } from '@/../temp/entry/state'
+import { initialState as initialBattleState } from '@@/db/battle/state'
+import { initialState as initialEntryState } from '@@/db/entry/state'
 import { tree } from './rootTree'
-import { SceneName } from '../../temp/types'
+import { SceneName } from '@@/db/types'
 
 const nameToState = {
     'battle': initialBattleState,

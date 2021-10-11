@@ -1,4 +1,4 @@
-import { moveTypeMetaMap, stanceTypeMetaMap } from '../../../temp/battle/constants'
+import { moveTypeMetaMap, stanceTypeMetaMap } from '@@/db/battle/constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 

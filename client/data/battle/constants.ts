@@ -1,1 +1,1 @@
-export * from '@/../temp/battle/constants'
+export * from '@@/db/battle/constants'
