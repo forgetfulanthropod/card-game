@@ -1,43 +1,51 @@
-import { Immutable } from '@/config/immutable'
-import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
-import { SceneName } from '../types'
+import { CharacterMove, CharacterName, CharacterStats, CharacterUid, MoveUid, SceneHas } from '../datamodel'
 
-export interface BattleState {
-    type: SceneName
-    state: 'in battle' | 'won' | 'lost'
+export interface BattleScene extends SceneHas {
+    name: 'battle'
+    state: 'not started' | 'in battle' | 'won' | 'lost'
     isPlayerTurn: boolean
-    battleHasBegun: boolean
-    allCharacters: CharacterMeta[]
-    selectedCharacter: CharacterMeta
-    selectedMove: CharacterMove
+    allCharacters: Record<CharacterUid, CharacterMeta>
+    selectedCharacter: CharacterUid
+    selectedMove: MoveUid
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
+    turnCount: number
 }
 
-
-interface MoveMetaI {
-    id: MoveType
+export interface MoveModifier {
+    name: MoveModifierName
     numTargets: number
     multiplier: number
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
-export type MoveMeta = Immutable<MoveMetaI>
 
-interface CharacterMoveI {
-    name: string
-    types: MoveType[]
-}
-export type CharacterMove = Immutable<CharacterMoveI>
 
-interface CharacterStatsI {
-    assetId: CharacterAssetKey
-    type: string
-    points: number
-    maxHealth: number // AKA base health
-    damage: number // AKA base attack
-    moves: CharacterMove[]
-    level: number
-    modifier: number
+
+export interface CharacterMeta extends CharacterStats {
+    name: CharacterName
+    uid: CharacterUid
+    isPc: boolean
+    hasMoved: boolean
+    health: number
+    x: number
+    y: number
+    screenX: number
+    screenY: number
+    stance: StanceName
 }
-export type CharacterStats = Immutable<CharacterStatsI>
+
+export type StanceName = 'defensive' | 'neutral' | 'aggressive'
+export type StanceMultiplier = .75 | 1 | 1.25
+export type StanceStats = {
+    name: StanceName
+    attackMultiplier: StanceMultiplier
+    defenseMultiplier: StanceMultiplier
+    targetLikelihood: 0 | 1 | 2
+}
+export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'DOT3' | 'ST' | 'INHSO' | 'DC4A' | 'MIM'
+export type AttackData = {
+    attacker: CharacterMeta
+    defenders: CharacterMeta[]
+    move: CharacterMove
+}

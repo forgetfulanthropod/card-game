@@ -1,5 +1,5 @@
-import { deepFreeze } from '@/util'
-import { MoveMeta } from '../types'
+// import { deepFreeze } from '@/util'
+import { MoveModifier, MoveModifierName } from '../types'
 
 
 // Basic Attack: 100% of attack damage, no modifiers
@@ -21,74 +21,74 @@ import { MoveMeta } from '../types'
 
 // DOT effects applied by multiple characters can stack, but a character cannot stack DOT with itself.
 
-export const moveTypeMetaMap: Record<MoveType, MoveMeta> = deepFreeze({
+export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
     BA: {
-        id: 'BA',
+        name: 'BA',
         numTargets: 1,
         multiplier: .5,
     },
     SL: {
-        id: 'SL',
+        name: 'SL',
         numTargets: 2,
         multiplier: .5,
     },
     SP: {
-        id: 'SP',
+        name: 'SP',
         numTargets: 2,
         multiplier: .5,
     },
     DOT1: {
-        id: 'DOT1',
+        name: 'DOT1',
         numTargets: 1,
         multiplier: 1.1,
     },
     DOT2: {
-        id: 'DOT2',
+        name: 'DOT2',
         numTargets: 1,
         multiplier: 1.1,
     },
     DOT3: {
-        id: 'DOT2',
+        name: 'DOT2',
         numTargets: 1,
         multiplier: 1.1,
     },
     ROD1: {
-        id: 'ROD1',
+        name: 'ROD1',
         numTargets: 1,
         multiplier: 1.25,
     },
     ROD2: {
-        id: 'ROD2',
+        name: 'ROD2',
         numTargets: 1,
         multiplier: 1.25,
     },
     ROD3: {
-        id: 'ROD3',
+        name: 'ROD3',
         numTargets: 1,
         multiplier: 1.25,
     },
     ST: {
-        id: 'ST',
+        name: 'ST',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
     INHSO: {//TODO: heals for +1 per target
-        id: 'INHSO',
+        name: 'INHSO',
         numTargets: 2,
         multiplier: 1,
         isSpecial: true,
     },
     DC4A: {//TODO: subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
-        id: 'DC4A',
+        name: 'DC4A',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
     MIM: {
-        id: 'MIM',
+        name: 'MIM',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     }
-})
+}

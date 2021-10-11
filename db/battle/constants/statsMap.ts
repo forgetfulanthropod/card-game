@@ -1,10 +1,10 @@
 // TODO: better name for this file and export?
 
-import { Immutable } from '@/config/immutable'
+// import { Immutable } from '@/config/immutable'
 import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
-import { deepFreeze } from '@/util'
-import { CharacterStats } from '../types'
-export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = deepFreeze({
+// import { deepFreeze } from '@/util'
+import { CharacterStats } from '@@/db/datamodel'
+export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
     bloatDemon: {
         assetId: 'bloatDemon',
         type: 'Bloat Demon',
@@ -324,4 +324,4 @@ export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = de
         modifier: 3,
         level: 1,
     },
-})
+}
