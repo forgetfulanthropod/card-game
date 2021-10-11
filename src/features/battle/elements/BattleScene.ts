@@ -7,7 +7,6 @@ import { Container, PixiContainer } from './mypixi'
 
 
 export function BattleScene(): PixiContainer {
-    // TODO: use allCharactersLogic
     const {
         startGame,
         // resetRound,
@@ -18,7 +17,6 @@ export function BattleScene(): PixiContainer {
 
     setTimeout(startGame, 100)
     return Container({
-        // name: AllCharacters.name,
         children: [
             background({ scale: 1, src: CaveVideo }),
             ...getBattleScene().select('allCharacters').map(childCursor =>
@@ -30,7 +28,6 @@ export function BattleScene(): PixiContainer {
                     isSelected: false,
                 }))
         ]
-
     })
 }
 

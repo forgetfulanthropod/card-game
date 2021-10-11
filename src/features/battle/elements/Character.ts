@@ -2,7 +2,7 @@ import { MyCursor } from '@/config/myBaobab'
 import dispatch from '@/data/battle/dispatch'
 import { getBattleScene } from '@/data/rootTree'
 import { MoveEmitter } from '@/types'
-import { doFlashSprite, flashSprite } from '@/util/pixiUtils'
+import { doFlashSprite, flashSprite, hideElement } from '@/util/pixiUtils'
 import { filters, Loader } from 'pixi.js'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../../../data/battle/attack'
@@ -110,6 +110,7 @@ function Character(args: CharacterProps): PixiContainer {
         const myId = characterMeta.id
         if (d.attacker.id === myId) {
             flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
+            hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)

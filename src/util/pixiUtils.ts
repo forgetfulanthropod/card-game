@@ -15,6 +15,14 @@ export function flashSprite(sprite: PixiSprite, { durationMs = 500 } = {}): void
     }, durationMs)
 }
 
+export function hideElement(sprite: PixiSprite | PixiContainer, { durationMs = 500 } = {}): void {
+    console.log('hiding el')
+    sprite.visible = false
+    setTimeout(() => {
+        sprite.visible = true
+    }, durationMs)
+}
+
 export function doFlashSprite(
     parent: PixiContainer,
     makeSprite: () => PixiSprite,
