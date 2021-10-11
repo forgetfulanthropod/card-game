@@ -60,7 +60,7 @@ export default function HealthBar(
         if (isDeluxeLoaded) {
             const texture = Loader.shared.resources?.healthTexture?.texture
             const data = Loader.shared.resources?.healthTexture?.data
-            console.log({ texture, data })
+            // console.log({ texture, data })
             g.beginTextureFill({
                 texture,
                 color,
