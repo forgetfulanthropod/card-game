@@ -1,4 +1,4 @@
-import { Immutable } from 'config/immutable'
+import { Immutable } from '@/config/immutable'
 
 export function styled<T extends keyof HTMLElementTagNameMap>(kind: T, className: string): HTMLElementTagNameMap[T] {
     const elm = document.createElement(kind)

@@ -1,4 +1,4 @@
-// import { PixiApplication } from 'features/battle/elements/mypixi'
+// import { PixiApplication } from '@/features/battle/elements/mypixi'
 import * as PIXI from 'pixi.js'
 
 // export class PixiAppManager {

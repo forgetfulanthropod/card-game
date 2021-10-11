@@ -1,12 +1,12 @@
-import { MyCursor } from 'config/myBaobab'
-import { moveTypeMetaMap } from 'data/battle/constants'
-import dispatch from 'data/battle/dispatch'
-import { BattleState } from 'data/battle/factories'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from 'data/battle/misc'
-import { getBattleScene } from 'data/rootTree'
+import { MyCursor } from '@/config/myBaobab'
+import { moveTypeMetaMap } from '@/data/battle/constants'
+import dispatch from '@/data/battle/dispatch'
+import { BattleState } from '@/data/battle/factories'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
+import { getBattleScene } from '@/data/rootTree'
+import { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
-import { MoveEmitter, NpcMoveEmitter } from 'types'
 
 export const tl = (x: string): void => { console.log(x); toast(x) }
 

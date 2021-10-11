@@ -1,5 +1,5 @@
 /** Exports all the API routes as functions */
-import { maybeInitializeFirebase } from 'fire'
+import { maybeInitializeFirebase } from '@/fire'
 import { httpsCallable } from 'firebase/functions'
 
 const { functions } = maybeInitializeFirebase()

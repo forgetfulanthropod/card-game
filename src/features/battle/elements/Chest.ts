@@ -1,5 +1,3 @@
-import { useSize } from 'ahooks'
-import EventEmitter from 'eventemitter3'
 import type { AssetKey } from '../logic/AssetLoader'
 import { Container, PixiContainer, PixiLoader, PixiSprite, PixiTexture, Sprite } from './mypixi'
 

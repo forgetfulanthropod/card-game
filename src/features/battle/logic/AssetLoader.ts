@@ -1,4 +1,3 @@
-import { dispatch } from 'data/battle'
 import { Loader } from 'pixi.js'
 import bloatDemon from '../assets/cards/bloat_demon-200.png'
 import bogSpirit from '../assets/cards/BogSpirit-200.png'

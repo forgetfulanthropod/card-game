@@ -1,7 +1,7 @@
-import { getBattleScene } from 'data/rootTree'
+import { getBattleScene } from '@/data/rootTree'
+import { CharacterMove } from './constants'
 import { makeInitialState } from './factories'
 import { checkWinner } from './misc'
-import { CharacterMove } from './constants'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =
@@ -33,7 +33,7 @@ export default function dispatch(action: Action): void {
         } case 'setHasMoved': {
             // let notFound = true
             //@ts-ignore
-            const charCursor = scene.select('allCharacters', { id: action.id }).set('hasMoved', true)
+            scene.select('allCharacters', { id: action.id }).set('hasMoved', true)
             // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
             // rootTree.commit()
             return

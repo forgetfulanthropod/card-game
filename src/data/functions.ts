@@ -1,7 +1,7 @@
-import { SceneName } from './types'
-import { tree } from './rootTree'
 import { makeInitialState as makeBattle } from './battle/factories'
 import { makeInitialState as makeEntry } from './entry/factories'
+import { tree } from './rootTree'
+import { SceneName } from './types'
 
 const nameToFactory = {
     'battle': makeBattle,

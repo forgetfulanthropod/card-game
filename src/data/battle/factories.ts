@@ -1,6 +1,6 @@
+import { SceneName } from '../types'
 import { BASE_HEIGHT, BASE_WIDTH, CharacterMove, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from './misc'
-import { SceneName } from '../types'
 
 export function makeInitialCharacters(): CharacterMeta[] {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
@@ -22,7 +22,10 @@ export interface BattleState {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
 }
-export function makeInitialState(chosenCharacters: CharacterName[]): BattleState {
+export function makeInitialState(
+    // TODO
+    // chosenCharacters: CharacterName[]
+): BattleState {
     const allCharacters = makeInitialCharacters()
 
     // kill most of the characters
@@ -34,7 +37,10 @@ export function makeInitialState(chosenCharacters: CharacterName[]): BattleState
 
 
     const selectedCharacter = allCharacters.find(c => c.isPc)
-    const selectedMove = selectedCharacter!.moves[0]
+    if (!selectedCharacter) {
+        throw Error('could not find any initial player characters')
+    }
+    const selectedMove = selectedCharacter.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         type: 'battle',

@@ -1,8 +1,8 @@
-import { getBattleScene, getScene } from 'data/rootTree'
+import { getBattleScene, getScene } from '@/data/rootTree'
 import { BattleScene } from './BattleScene'
 import Chest from './Chest'
-import { Application, PixiApplication, PixiContainer } from './mypixi'
 import { DungeonEntryScene } from './DungeonEntryScene'
+import { Application, PixiApplication, PixiContainer } from './mypixi'
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     // const scale = window.innerWidth / BASE_WIDTH

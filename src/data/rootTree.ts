@@ -29,14 +29,14 @@ window.tree = tree
 //     }
 //     tree.select('scene') as BattleState
 // }
-export const getBattleScene = () => {
+export const getBattleScene = (): MyCursor<BattleState> => {
     const curType = tree.select('scene').select('type').get()
-    if (curType != 'battle') {
+    if (curType !== 'battle') {
         throw new Error(`tried to get battle scene when you\'re in ${curType}`)
     }
     return tree.select('scene') as MyCursor<BattleState>
 }
-export const getScene = () => tree.select('scene')
+export const getScene = (): MyCursor<SceneData> => tree.select('scene')
 export const scene = tree.select('scene')
 export const allCharacters = tree.select('characters')
-export const getBattleSceneData = () => getBattleScene().get()
+export const getBattleSceneData = (): BattleState => getBattleScene().get()
