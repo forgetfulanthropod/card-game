@@ -1,5 +1,5 @@
 import { deepFreeze } from '@/util'
-import { MoveMeta } from '.'
+import { MoveMeta } from '../types'
 
 
 // Basic Attack: 100% of attack damage, no modifiers

@@ -1,7 +1,7 @@
 import { MyCursor } from '@/config/myBaobab'
 import { moveTypeMetaMap } from '@/data/battle/constants'
 import dispatch from '@/data/battle/dispatch'
-import { BattleState } from '@/data/battle/factories'
+import { BattleState } from '@/data/types'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
 import { getBattleScene } from '@/data/rootTree'
 import { MoveEmitter, NpcMoveEmitter } from '@/types'

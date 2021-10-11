@@ -3,7 +3,7 @@
 import { Immutable } from '@/config/immutable'
 import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
 import { deepFreeze } from '@/util'
-import { CharacterStats } from '.'
+import { CharacterStats } from '../types'
 export const statsMap: Immutable<Record<CharacterAssetKey, CharacterStats>> = deepFreeze({
     bloatDemon: {
         assetId: 'bloatDemon',

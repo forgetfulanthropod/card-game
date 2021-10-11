@@ -1,32 +1,21 @@
-import { SceneName } from '../types'
-import { BASE_HEIGHT, BASE_WIDTH, CharacterMove, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
-import { getId } from './misc'
+import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { getId } from '../../client/data/battle/misc'
+import { BattleState } from './types'
 
-export function makeInitialCharacters(): CharacterMeta[] {
+export const initialCharacters = (function makeInitialCharacters(): CharacterMeta[] {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
     return [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
         ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
     ]
-}
+})()
 
-export interface BattleState {
-    type: SceneName
-    state: 'in battle' | 'won' | 'lost'
-    isPlayerTurn: boolean
-    battleHasBegun: boolean
-    allCharacters: CharacterMeta[]
-    selectedCharacter: CharacterMeta
-    selectedMove: CharacterMove
-    isBasicLoaded: boolean
-    isDeluxeLoaded: boolean
-}
-export function makeInitialState(
+export const initialState = (function makeInitialState(
     // TODO
     // chosenCharacters: CharacterName[]
 ): BattleState {
-    const allCharacters = makeInitialCharacters()
+    const allCharacters = initialCharacters
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -53,7 +42,7 @@ export function makeInitialState(
         isBasicLoaded: false,
         isDeluxeLoaded: false,
     })
-}
+})()
 
 function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [

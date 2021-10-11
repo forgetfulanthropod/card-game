@@ -40,6 +40,7 @@
   },
   "include": [
     "client",
+    "temp/battle",
   ],
   "exclude": [
     "scripts",

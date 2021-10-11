@@ -1,10 +1,19 @@
 import { Immutable } from '@/config/immutable'
 import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
+import { SceneName } from 'temp/types'
 
-export * from './moveTypeMetaMap'
-export * from './numbers'
-export * from './stanceTypeMetaMap'
-export * from './statsMap'
+export interface BattleState {
+    type: SceneName
+    state: 'in battle' | 'won' | 'lost'
+    isPlayerTurn: boolean
+    battleHasBegun: boolean
+    allCharacters: CharacterMeta[]
+    selectedCharacter: CharacterMeta
+    selectedMove: CharacterMove
+    isBasicLoaded: boolean
+    isDeluxeLoaded: boolean
+}
+
 
 interface MoveMetaI {
     id: MoveType

@@ -1,13 +1,13 @@
 import { MyBaobab, MyCursor } from '../config/myBaobab'
-import { BattleState } from './battle/factories'
-import { makeInitialState } from './entry/factories'
+import { initialState } from '../../temp/battle/state'
+import { BattleState } from "../../temp/battle/types"
 import { SceneData } from './types'
 // import { settings } from './settings'
 // type Foo =
 // |{sceneName: 'battle', scene: BattleState}
 // | {sceneName: 'dungeon entry', scene: Entry}
 export const tree = new MyBaobab({
-    scene: makeInitialState() as SceneData,
+    scene: initialState as SceneData,
     // battleScene: stuff,
     // entryScene: stuff,
     //settings,
