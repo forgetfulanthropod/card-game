@@ -1,28 +1,20 @@
-import { getApp, initializeApp } from 'firebase/app'
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
-import { Functions, getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions'
+import { initializeApp } from 'firebase/app'
+import { connectFirestoreEmulator, Firestore, getFirestore } from 'firebase/firestore'
+import { connectFunctionsEmulator, Functions, getFunctions } from 'firebase/functions'
 
-console.log('initializing app but not storing result -- not sure if that works')
-initializeApp({
-    projectId: 'kaiju-75e84',
-})
 
-const db = getFirestore()
-type FunctionName =
-    | 'makeUppercase'
-    | 'helloWorld'
 
-const functions = getFunctions(getApp())
-function getFunction(fs: Functions, name: FunctionName) {
-    return httpsCallable(functions, name)
-}
-
-export function makeCall(): void {
+type Result = { functions: Functions, db: Firestore }
+let result: Result | null = null
+export function maybeInitializeFirebase(): Result {
+    if (result != null) return result
+    const app = initializeApp({
+        projectId: 'kaiju-75e84',
+    })
+    const functions = getFunctions(app)
+    const db = getFirestore()
     connectFunctionsEmulator(functions, 'localhost', 5001)
-    const helloWorld = getFunction(functions, 'helloWorld')
-    helloWorld().then(result => console.log('FIREBASE CLOUD FUNCTION:', result))
-
-
-    // firebaseApps previously initialized using initializeApp()
     connectFirestoreEmulator(db, 'localhost', 8080)
+    result = { functions, db }
+    return result
 }
