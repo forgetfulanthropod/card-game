@@ -1,6 +1,8 @@
-import { Gamestate } from './datamodel'
+import { Gamestate } from '../../shared/datamodel'
 
-export function initialize(userCredentials) { }
-export function getFromRulebook(key) { }
-export function getFromGameState<K extends keyof Gamestate>(key: K): Gamestate[K] { }
+export function initialize(userCredentials: string) { }
+export function getFromRulebook(key: string) { }
+export function getFromGameState<K extends keyof Gamestate>(key: K): Gamestate[K] {
+    return null as unknown as Gamestate[K]
+}
 export function setInGameState<K extends keyof Gamestate>(key: K, value: Gamestate[K]) { }

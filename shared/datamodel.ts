@@ -47,19 +47,24 @@ export interface Gamestate {
     ownedCharacters: Record<CharacterUid, CharacterName>
     inventory: Record<ItemUid, ItemName>
 }
-interface BattleScene {
+export interface BattleScene {
     name: 'battle'
-    necessaryPartsOfRulebook?: Rulebook
-    characters: {
-        name: CharacterName
-        uid: CharacterUid
-        health: number
-        isNpc: boolean
-        hasMoved: boolean
-    }
+    state: 'not started' | 'in battle' | 'won' | 'lost'
+    isPlayerTurn: boolean
+    allCharacters: Record<CharacterUid, CharacterState>
+    selectedCharacter: CharacterUid
+    selectedMove: MoveUid
+    isBasicLoaded: boolean
+    isDeluxeLoaded: boolean
     turnCount: number
-    isNpcTurn: boolean
-    roomLevel: number
+
+}
+export interface CharacterState {
+    name: CharacterName
+    uid: CharacterUid
+    health: number
+    isNpc: boolean
+    hasMoved: boolean
 }
 interface MapScene {
     name: 'map'

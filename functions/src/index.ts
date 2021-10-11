@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions"
+import { https } from "firebase-functions"
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -24,6 +24,6 @@ import * as functions from "firebase-functions"
 //     })
 
 // http://localhost:5001/kaiju-75e84/us-central1/helloWorld
-export const helloWorld = functions.https.onCall((data, context) => {
+export const helloWorld = https.onCall((data, context) => {
     return 'hello'
 })

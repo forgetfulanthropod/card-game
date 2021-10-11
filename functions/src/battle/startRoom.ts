@@ -1,18 +1,21 @@
+import { CharacterState } from '../../../shared/datamodel'
 import { getFromGameState, setInGameState } from '../dbwrap'
 export default function startRoom(dungeonName: string, roomLevel: number) {
     const pcs = getFromGameState('ownedCharacters')
-    const enemies = makeEnemies()
     setInGameState('currentScene',
         {
-            type: 'battle',
-            battleHasBegun: true,
-            isNpcTurn: Math.random() < 0.5,
+            name: 'battle',
+            state: 'not started',
+            isPlayerTurn: false,
+            allCharacters: {},
+            selectedCharacter: '123',
+            selectedMove: '456',
+            isBasicLoaded: true,
+            isDeluxeLoaded: true,
             turnCount: 0,
-            characters: [...enemies, ...pcs],
-            roomLevel: roomLevel
         })
 }
 
 function makeEnemies() {
-    return []
+    return {}
 }
