@@ -1,5 +1,5 @@
-import { EntryState } from './entry/types'
 import { BattleState } from './battle/types'
+import { EntryState } from './entry/types'
 
 export * from './battle/types'
 

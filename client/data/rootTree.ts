@@ -1,6 +1,6 @@
-import { MyBaobab, MyCursor } from '../config/myBaobab'
 import { initialState } from '@@/db/battle/state'
 import { BattleState } from "@@/db/battle/types"
+import { MyBaobab, MyCursor } from '../config/myBaobab'
 import { SceneData } from './types'
 // import { settings } from './settings'
 // type Foo =

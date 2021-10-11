@@ -1,5 +1,5 @@
-import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { getId } from '../../client/data/battle/misc'
+import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { BattleState } from './types'
 
 export const initialCharacters = (function makeInitialCharacters(): CharacterMeta[] {
