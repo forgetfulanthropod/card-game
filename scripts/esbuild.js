@@ -41,10 +41,10 @@ async function main() {
     esbuild.build({
         minify: false, //!isDevelopment,
         sourcemap: true, //isDevelopment,
-        entryPoints: ['src/index.tsx'],
+        entryPoints: ['client/index.tsx'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
-        inject: ['./src/preact-shim.js'],
+        inject: ['./client/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',
