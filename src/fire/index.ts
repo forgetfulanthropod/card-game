@@ -1,11 +1,14 @@
 import { getApp, initializeApp } from 'firebase/app'
 import { Functions, getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions'
 
-console.log("initializing app but not storing result -- not sure if that works")
+console.log('initializing app but not storing result -- not sure if that works')
 initializeApp({
+    apiKey: 'AIzaSyDavWqGtoB5JavUmkz_l4EdtFhxETFkB2o',
+    authDomain: 'kaiju-75e84.firebaseapp.com',
     projectId: 'kaiju-75e84',
-    // apiKey: '### FIREBASE API KEY ###',
-    // authDomain: '### FIREBASE AUTH DOMAIN ###',
+    storageBucket: 'kaiju-75e84.appspot.com',
+    messagingSenderId: '1004107907735',
+    appId: '1:1004107907735:web:d180cfa470b5b5c6365fd2'
 })
 
 type FunctionName =
