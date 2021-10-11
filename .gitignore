@@ -10,5 +10,6 @@
 .pnpm-debug.log
 /storybook-static
 pnpm-lock.yaml
+/*.log
 *-800.png
 *.zip
