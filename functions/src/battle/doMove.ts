@@ -1,5 +1,5 @@
 import { getFromGameState } from '../dbwrap'
-import { BattleScene } from '../../../shared/datamodel'
+import { BattleScene } from '../../../db/datamodel'
 
 export default function doMove({ from }: { from: string }) {
     const scene = getFromGameState('currentScene') as BattleScene

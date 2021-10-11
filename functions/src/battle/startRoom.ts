@@ -1,4 +1,4 @@
-import { CharacterState } from '../../../shared/datamodel'
+import { CharacterState } from '../../../db/datamodel'
 import { getFromGameState, setInGameState } from '../dbwrap'
 export default function startRoom(dungeonName: string, roomLevel: number) {
     const pcs = getFromGameState('ownedCharacters')
