@@ -11,7 +11,7 @@
 			"group": "build",
 			"label": "tsc: watch - tsconfig.json",
 			"runOptions": {
-				"runOn": "folderOpen"
+				// "runOn": "folderOpen"
 			}
 		},
 		{
@@ -21,7 +21,7 @@
 			"label": "start-esbuild-watch",
 			"detail": "build and watch src",
 			"runOptions": {
-				"runOn": "folderOpen",
+				// "runOn": "folderOpen",
 			}
 		}
 	]
