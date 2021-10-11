@@ -17,6 +17,9 @@
     "eslint.options": {
         "cache": true,
     },
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
@@ -24,4 +27,8 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "npm.packageManager": "pnpm",
+    "files.exclude": {
+        "**/.keep": true
+    },
+    "prettier.tabWidth": 4,
 }

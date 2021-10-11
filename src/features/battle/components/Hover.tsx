@@ -1,5 +1,5 @@
-import React from 'react'
-import { moveTypeMetaMap } from '../util/constants'
+import { moveTypeMetaMap } from 'data/battle/constants'
+import type { h, JSX } from 'preact'
 import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 import Table from './Table'
 
@@ -7,7 +7,7 @@ import Table from './Table'
 
 export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
     const cm = props.characterMeta
-    const moveAt = (i: number) => `${cm.moves[i].name} ${moveTypeMetaMap[cm.moves[i].type].multiplier * cm.damage | 0}`
+    const moveAt = (i: number) => `${cm.moves[i].name} ${moveTypeMetaMap[cm.moves[i].types[0]].multiplier * cm.damage | 0}`
     return <>{cm.isPc ?
         <PCHoverDiv>
             stance: {cm.stance}

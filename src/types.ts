@@ -1,17 +1,26 @@
+
+import { CharacterMove as CharacterMove_, CharacterStats as CharacterStats_, MoveMeta as MoveMeta_ } from 'data/battle/constants'
+import Preact from 'preact'
+// import Preact, {JSX} from 'preact'
+import { StateUpdater } from 'preact/hooks'
+import EventEmitter from 'eventemitter3'
+
+// const o : {x: typeof JSX} = {x: Preact.JSX}
+// type JSX = typeof Preact.JSX
+
 declare global {
-    type Children = JSX.Element[] | JSX.Element
+    // type JSX.Element = PJSX.Element
+    type MoveMeta = MoveMeta_
+    type Children = Preact.JSX.Element | null | false | Children[]
     type Callback = () => void
-    type Setter<T> = React.Dispatch<React.SetStateAction<T>>
-    type CharacterMeta = {
+    type Setter<T> = StateUpdater<T | undefined>
+    type CharacterStats = CharacterStats_
+    type CharacterMove = CharacterMove_
+    interface CharacterMeta extends CharacterStats {
         id: string
-        type: 'Frogknight' | 'Penguin Knight' | 'Skeleton' | 'Matcha'
-        level: number
-        damage: number
-        moves: MoveMeta[]
         isPc: boolean
         hasMoved: boolean
         health: number
-        maxHealth: number
         x: number
         y: number
         screenX: number
@@ -26,12 +35,7 @@ declare global {
         defenseMultiplier: StanceMultiplier
         targetLikelihood: 0 | 1 | 2
     }
-    type MoveMeta = {
-        type: MoveType
-        name: string
-        spriteUrl?: string
-    }
-    type MoveType = 'BA' | 'SL' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'DOT3'
+    type MoveType = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'DOT3' | 'ST' | 'INHSO' | 'DC4A' | 'MIM'
     type MoveTypeMeta = {
         id: MoveType
         numTargets: number
@@ -41,7 +45,7 @@ declare global {
     type AttackData = {
         attacker: CharacterMeta
         defenders: CharacterMeta[]
-        move: MoveMeta
+        move: CharacterMove
     }
     type Size = {
         width: number
@@ -51,7 +55,10 @@ declare global {
         width?: number
         height?: number
     }
-
+    type EmptyObject = Record<string, never>
 }
 
 export default null
+
+export type MoveEmitter = EventEmitter<{ '': AttackData }>
+export type NpcMoveEmitter = EventEmitter<{ '': string }>

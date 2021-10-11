@@ -1,6 +1,6 @@
 import produce from 'immer'
 import type { WritableDraft } from 'immer/dist/internal'
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, { createContext, useContext, useMemo, useState } from 'preact'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {
     const [state, setState] = useState(initialState)

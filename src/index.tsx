@@ -1,16 +1,21 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './components/App'
-import _Export from './types'
-
+import App from 'components/App'
+import { start } from 'features/battle/elements/main'
+import loadAssets from 'features/battle/logic/AssetLoader'
+import { render } from 'preact'
 import './global.css'
 import { makeCall } from 'fire'
 
-ReactDOM.render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
-    document.getElementById('root')
+render(<App />, document.getElementById('preact-root') as HTMLDivElement)
+
+let started = false
+loadAssets(
+    function onBasic() {
+    },
+    function onDeluxe() {
+        if (!started)
+            start(document.getElementById('pixi-root') as HTMLCanvasElement)
+        started = true
+    }
 )
 
 makeCall()

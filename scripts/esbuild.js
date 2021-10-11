@@ -1,34 +1,50 @@
 const esbuild = require('esbuild')
 const fs = require('fs')
-const { spawn } = require("child_process")
+const { spawn } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
-const envFile = require("dotenv").config()
+const envFile = require('dotenv').config()
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
 
-const buildDir = "build"
-const publicDir = "public"
+const buildDir = 'build'
+const publicDir = 'public'
 
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 const shouldLint = envFile?.parsed?.ESBUILD_SHOULD_LINT === 'yes'
 console.log({ shouldWatch, shouldLint })
 
-const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === "development"
+const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === 'development'
 const envObj = {
-    "process.env.NODE_ENV": `"${isDevelopment ? 'development' : "production"}"`
+    'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`
 }
 console.log(envObj)
+const alias = require('esbuild-plugin-alias')
+
+// const preactSubs = {
+//     '"react"': '"preact/compat"',
+//     '"react-dom/test-utils"': '"preact/test-utils"',
+//     '"react-dom"': '"preact/compat"',
+//     '"react/jsx-runtime"': '"preact/jsx-runtime"'
+// }
+const substitions = {
+    ...envObj,
+    "global": "window" // node_modules/baobab/dist/helpers.js:203
+    // ...preactSubs,
+}
 
 main()
 
 async function main() {
-    fs.rmSync(buildDir, { "recursive": true, force: true })
+    fs.rmSync(buildDir, { 'recursive': true, force: true })
     fs.mkdirSync(buildDir)
     copyFolderRecursiveSync(publicDir, buildDir, makeSubdir = false)
     esbuild.build({
-        minify: !isDevelopment,
-        sourcemap: isDevelopment,
+        minify: false, //!isDevelopment,
+        sourcemap: true, //isDevelopment,
         entryPoints: ['src/index.tsx'],
+        jsxFactory: 'h',
+        jsxFragment: 'Fragment',
+        inject: ['./src/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',
@@ -42,7 +58,7 @@ async function main() {
             '.mp4': 'file',
             '.webm': 'file',
         },
-        define: envObj,
+        define: substitions,
         watch: !shouldWatch ? null : {
             onRebuild(error, result) {
                 if (error) {
@@ -50,21 +66,25 @@ async function main() {
                 } else {
                     console.log(`watch build at ${new Date()} succeeded:`, result)
                     if (shouldLint) {
-                        console.log("linting...")
+                        console.log('linting...')
                         spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
                     }
                 }
             }
         },
         plugins: [
-            cssModulesPlugin()
+            cssModulesPlugin(),
+            alias({
+                'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            })
         ]
 
     })
         .then(() => {
-            console.log("built at " + new Date())
+            console.log('built at ' + new Date())
             if (shouldLint) {
-                console.log("linting...")
+                console.log('linting...')
                 spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
             }
         })
