@@ -18,7 +18,7 @@ export function LoaderProvider(props: { children: Children }): JSX.Element {
 }
 
 export function useLoaderContext(): Value {
-    console.log("useLoaderContext")
+    console.log('useLoaderContext')
     return useContext(context)
 }
 

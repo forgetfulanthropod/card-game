@@ -29,7 +29,6 @@ export function useEventEmitter<T = void>(): EventEmitter<T> {
 
 export function useEffectWhen(effect: EffectCallback, deps: unknown[], watchedVals: unknown[]): void {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    useEffect
     useEffect(useCallback(effect, deps), watchedVals)
 }
 
