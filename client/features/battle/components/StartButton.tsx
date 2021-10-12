@@ -1,4 +1,4 @@
-import { changeScene } from '@/data/functions'
+import { changeScene } from '@@/logic/functions'
 import { h, JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'

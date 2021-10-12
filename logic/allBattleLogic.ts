@@ -1,6 +1,6 @@
 import { MyCursor } from '@/config/myBaobab'
 import { moveModiferMap } from '@/data/battle/constants'
-import dispatch from '@/data/battle/dispatch'
+import dispatch from '@@/logic/dispatch'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
 import { getBattleScene } from '@/data/rootTree'
 import { AttackData, BattleScene, CharacterMeta } from '@/data/types'

@@ -105,6 +105,7 @@ function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
                     choice={choices[k]}
                     setChoice={(newChoice => {
                         setChoices(cs => ({ ...cs, k: newChoice }))
+                        // TODO?: needs to be an API call
                         cursor.apply(k, cm => {
                             const stats = statsMap[newChoice]
                             return { ...cm, ...stats, health: stats.maxHealth }
