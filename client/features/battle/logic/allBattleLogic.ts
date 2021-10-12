@@ -5,6 +5,7 @@ import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmove
 import { getBattleScene } from '@/data/rootTree'
 import { AttackData, BattleScene, CharacterMeta } from '@/data/types'
 import { MoveEmitter, NpcMoveEmitter } from '@/types'
+import { vals } from '@/util'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
 
@@ -32,9 +33,10 @@ export function getBindings() {
 
     const cursorToState = (cursor: MyCursor<BattleScene>) => {
         const value = cursor.get()
-        const alivePcs = value.allCharacters.filter(c => c.isPc && c.health > 0)
-        const aliveNpcs = value.allCharacters.filter(c => !c.isPc && c.health > 0)
-        const isMoveAvailable = checkMoveAvailable(value.allCharacters)
+        const allCharacters = vals(value.allCharacters)
+        const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
+        const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
+        const isMoveAvailable = checkMoveAvailable(allCharacters)
         if (!isMoveAvailable) { resetRound() }
         return { ...value, alivePcs, aliveNpcs, isMoveAvailable }
     }
@@ -48,7 +50,7 @@ export function getBindings() {
 
 
     move$.on('', function showMove(ad: AttackData) {
-        if (DEBUG) tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
+        if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
         toast(ad.move.name,
             {
                 style: {
@@ -104,7 +106,7 @@ export function getBindings() {
         }
         const move = getNpcMove(state.allCharacters)
         move$.emit('', move)
-        dispatch({ a: 'setHasMoved', id: move.attacker.id, v: true })
+        dispatch({ a: 'setHasMoved', id: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
@@ -138,7 +140,7 @@ export function getBindings() {
             tl('select move first')
             return
         }
-        dispatch({ a: 'setHasMoved', id: state.selectedCharacter.id, v: true })
+        dispatch({ a: 'setHasMoved', id: state.selectedCharacter.uid, v: true })
         const defenders = [clicked]
         if (moveModiferMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
             const closest = getClosestAlive(state.allCharacters, clicked, 1)
@@ -151,7 +153,7 @@ export function getBindings() {
         })
 
         // change to unmoved PC if there is one
-        const newPc = getUnmovedPc(state.allCharacters, state.selectedCharacter.id)
+        const newPc = getUnmovedPc(state.allCharacters, state.selectedCharacter.uid)
         if (newPc == null) {
             // should be unreachable
             tl('no unmoved PC')
@@ -159,7 +161,7 @@ export function getBindings() {
             setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
-        tl(`selecting character ${newPc.id}`)
+        tl(`selecting character ${newPc.uid}`)
         dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike

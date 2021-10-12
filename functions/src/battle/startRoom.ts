@@ -2,7 +2,7 @@ import { CharacterMeta } from '../../../db/datamodel'
 import { getFromGameState, setInGameState } from '../dbwrap'
 export default function startRoom(dungeonName: string, roomLevel: number) {
     const pcs = getFromGameState('ownedCharacters')
-    setInGameState('currentScene',
+    setInGameState('scene',
         {
             name: 'battle',
             state: 'not started',

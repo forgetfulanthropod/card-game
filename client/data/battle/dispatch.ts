@@ -1,5 +1,6 @@
 import { getBattleScene } from '@/data/rootTree'
-import { initialState } from '@@/db/battle/state'
+import { keys, vals } from '@/util'
+import { initialBattleState } from '@@/db/battle/state'
 import { CharacterMeta, CharacterMove } from '../types'
 import { checkWinner } from './misc'
 
@@ -28,7 +29,7 @@ export default function dispatch(action: Action): void {
             scene.set('isPlayerTurn', action.v)
             return
         } case 'setBattleHasBegun': {
-            scene.set('battleHasBegun', true)
+            scene.set('state', 'in battle')
             return
         } case 'setHasMoved': {
             // let notFound = true
@@ -43,7 +44,7 @@ export default function dispatch(action: Action): void {
             const charCursor = scene.select('allCharacters', { id: action.id })
             //@ts-ignore
             charCursor.set('health', typeof action.h === 'function' ? action.h(charCursor.get('health')) : action.h)
-            const winner = checkWinner(scene.select('allCharacters').get())
+            const winner = checkWinner(vals(scene.select('allCharacters').get()))
             if (winner === 'PC') scene.set('state', 'won')
             if (winner === 'NPC') scene.set('state', 'lost')
 
@@ -53,25 +54,23 @@ export default function dispatch(action: Action): void {
             return
         } case 'clearHasMoved': {
             const cursor = scene.select('allCharacters')
-            const n = cursor.get().length
-            for (let i = 0; i < n; i++) {
-                cursor.select(i).set('hasMoved', false)
+            for (const k of keys(cursor.get())) {
+                cursor.select(k).set('hasMoved', false)
             }
             return
         } case 'setSelectedCharacter': {
-            scene.set('selectedCharacter', action.c)
+            scene.set('selectedCharacter', action.c.uid)
             return
         } case 'setSelectedMove': {
-            scene.set('selectedMove', action.m)
+            scene.set('selectedMove', action.m.name)
             return
         } case 'fullReset': {
-            scene.set(initialState)
+            scene.set(initialBattleState)
             return
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')
-            const n = cursor.get().length
-            for (let i = 0; i < n; i++) {
-                const cu = cursor.select(i)
+            for (const k of keys(cursor.get())) {
+                const cu = cursor.select(k)
                 const ch = cu.get()
                 cu.merge({
                     screenX: ch.x * action.size.width / 100,

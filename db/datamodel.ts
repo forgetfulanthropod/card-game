@@ -33,7 +33,7 @@ export interface Rulebook {
     }>
 }
 export interface Gamestate {
-    currentScene: Scene
+    scene: Scene
     ownedCharacters: Record<CharacterUid, CharacterName>
     inventory: Record<ItemUid, ItemName>
 }

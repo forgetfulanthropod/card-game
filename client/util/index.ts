@@ -33,6 +33,17 @@ export function set<T>(arr: readonly T[], i: number, t: T): T[] {
     return newArr
 }
 
+export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
+    return Object.values(obj)
+}
+export function keys<K extends string | number, V>(obj: Record<K, V>): string[] {
+    return Object.keys(obj)
+}
+export function entries<K extends string | number, V>(obj: Record<K, V>): [string, V][] {
+    return Object.entries(obj)
+}
+
+
 export function length<K extends string | number>(obj: Record<K, unknown>): number {
     return Object.keys(obj).length
 }

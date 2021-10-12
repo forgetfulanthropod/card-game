@@ -17,7 +17,7 @@ export const initialCharacters = (function makeInitialCharacters(): Record<Chara
     return o
 })()
 
-export const initialState = (function makeInitialState(
+export const initialBattleState: BattleScene = (function makeInitialState(
     // TODO
     // chosenCharacters: CharacterName[]
 ): BattleScene {

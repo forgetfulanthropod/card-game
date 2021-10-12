@@ -1,5 +1,5 @@
 import { EntryState } from './types'
 
-export const initialState: EntryState = {
+export const initialEntryState: EntryState = {
     name: 'entry'
 }

@@ -23,7 +23,7 @@ export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
 
 
 export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterMeta | null {
-    const chars = ac.filter(c => c.isPc && c.health > 0 && !c.hasMoved && c.id !== excludeId)
+    const chars = ac.filter(c => c.isPc && c.health > 0 && !c.hasMoved && c.uid !== excludeId)
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
