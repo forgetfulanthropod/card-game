@@ -11,9 +11,7 @@ export function GameMenuItem(noun: 'characters' | 'items' | 'materials', index: 
         materials: 'fishstick',
     } as const
 
-    type Keys = keyof typeof nounMap
-    type Values = typeof nounMap[Keys]
-    const nounSrc = dataOf(nounMap[noun] as Values)
+    const nounSrc = dataOf(nounMap[noun] as typeof nounMap[(keyof typeof nounMap)])
 
     const onClick = () => {
         root.addChild(OwnedCharacters())
