@@ -1,3 +1,4 @@
+import { dataOf } from '@/util/pixiUtils'
 import { Container, PixiContainer, PixiSprite, PixiTexture, Sprite } from './mypixi'
 
 const rotationRate = 1.0
