@@ -23,7 +23,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": [
-        "./src/*"
+        "./client/*"
+      ],
+      "@@/*": [
+        "./*"
       ]
     },
     "allowJs": true,
@@ -39,10 +42,10 @@
     // }
   },
   "include": [
-    "src",
+    "client",
+    "db",
   ],
   "exclude": [
     "scripts",
-    "src-ignore"
   ]
 }
