@@ -22,7 +22,7 @@ export const rulebook: Rulebook = {
 }
 
 export const initialGameState: Gamestate = {
-    scene: rulebook.initialScenes.battle,
+    scene: rulebook.initialScenes.entry,
     ownedCharacters: {},
     inventory: {},
 }

@@ -29,4 +29,5 @@ export const getBattleScene = (): MyCursor<BattleScene> => {
 }
 export const getScene = (): MyCursor<Scene> => tree.select('scene')
 export const scene = tree.select('scene')
+export const ownedCharacters = tree.select('ownedCharacters')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()

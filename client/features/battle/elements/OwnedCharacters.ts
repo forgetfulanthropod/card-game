@@ -1,7 +1,15 @@
+// import { ownedCharacters } from '@/data/rootTree'
 import { Container, PixiContainer } from './mypixi'
 
 export function OwnedCharacters(): PixiContainer {
+    const ownedCharacters = [
+        { type: 'frogKnight' },
+        { type: 'gnomeHooligan' },
+    ]
 
+    // const characters = ownedCharacters.get().map(c => {
+
+    // })
 
     // const nounMap = {
     //     characters: 'swordShield',
