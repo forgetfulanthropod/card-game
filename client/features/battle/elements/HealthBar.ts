@@ -9,6 +9,8 @@ type Rect = [
     number, // height
 ]
 
+type StanceType = 'defensive' | 'neutral' | 'aggressive'
+
 export default function HealthBar(
     args: {
         value: number,

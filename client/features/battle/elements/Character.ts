@@ -111,7 +111,7 @@ function Character(args: CharacterProps): PixiContainer {
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
         if (d.attacker.uid === myId) {
-            flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
+            flashElement(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
