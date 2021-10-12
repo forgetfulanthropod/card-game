@@ -1,5 +1,6 @@
 import { SceneHas } from '@/data/types'
-
+import { OwnedCharacter } from '@@/db/datamodel'
 export interface EntryState extends SceneHas {
-    name: 'entry'
+    name: 'entry',
+    selectedCharacters: OwnedCharacter[],
 }

@@ -50,7 +50,8 @@ export interface Gamestate {
     inventory: Record<ItemUid, ItemName>
 }
 
-interface OwnedCharacter extends CharacterStats {
+export interface OwnedCharacter extends CharacterStats {
+    uid: string
     tokenId: string
     nftName: string
 }

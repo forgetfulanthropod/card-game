@@ -1,5 +1,5 @@
 import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle/constants'
-import { initialBattleState, numbers } from './battle/state'
+import { makeBattleState, numbers } from './battle/state'
 import { Gamestate, Rulebook } from './datamodel'
 import { initialEntryState } from './entry/state'
 
@@ -11,7 +11,7 @@ export const rulebook: Rulebook = {
     locations: {},
     items: {},
     initialScenes: {
-        battle: initialBattleState,
+        battle: makeBattleState(),
         entry: initialEntryState,
         map: { name: 'map', coordinates: [-1, -1], unlockedLocations: [] },
         craft: { name: 'craft', onTable: {}, selectedRecipe: '' },

@@ -1,4 +1,4 @@
-import { CharacterName, CharacterUid, StanceName } from '@/data/types'
+import { CharacterName, CharacterUid, OwnedCharacter, StanceName } from '@/data/types'
 import { initialOwnedCharacters } from '../data'
 import { statsMap } from './constants'
 import { BattleScene, CharacterMeta } from './types'
@@ -10,14 +10,14 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
-export const initialCharacters = (function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
-    const ownedCharacters = initialOwnedCharacters()
+function makeCharacters(chosen?: OwnedCharacter[]): Record<CharacterUid, CharacterMeta> {
+    const ownedCharacters = chosen ?? vals(initialOwnedCharacters())
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, length(ownedCharacters))
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, ownedCharacters.length)
 
     const all = [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
-        ...vals(ownedCharacters).map((c, i) => {
+        ...ownedCharacters.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
         }),
@@ -27,13 +27,10 @@ export const initialCharacters = (function makeInitialCharacters(): Record<Chara
         o[c.uid] = c
     }
     return o
-})()
+}
 
-export const initialBattleState: BattleScene = (function makeInitialState(
-    // TODO
-    // chosenCharacters: CharacterName[]
-): BattleScene {
-    const allCharacters = initialCharacters
+export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
+    const allCharacters = makeCharacters(chosen)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -61,7 +58,7 @@ export const initialBattleState: BattleScene = (function makeInitialState(
         isBasicLoaded: false,
         isDeluxeLoaded: false,
     })
-})()
+}
 
 function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [

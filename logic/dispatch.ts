@@ -1,7 +1,7 @@
 import { getBattleScene } from '@/data/rootTree'
 import { keys, vals } from '@/util'
 import { CharacterMeta, CharacterMove } from '@@/db/datamodel'
-import { initialBattleState } from '@@/db/battle/state'
+import { makeBattleState } from '@@/db/battle/state'
 import { checkWinner } from '@@/client/data/battle/misc'
 
 type Set<T> = T | ((old: T) => T)
@@ -64,7 +64,7 @@ export default function dispatch(action: Action): void {
             scene.set('selectedMove', action.m)
             return
         } case 'fullReset': {
-            scene.set(initialBattleState)
+            scene.set(makeBattleState())
             return
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')
