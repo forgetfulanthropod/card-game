@@ -1,6 +1,6 @@
-import { CharacterUid, StanceName } from '@/data/types'
 import { statsMap } from './constants'
-import { BattleScene, CharacterMeta } from './types'
+import { BattleScene, CharacterMeta, StanceName } from './types'
+import { CharacterUid } from '../datamodel'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
