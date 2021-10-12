@@ -1,3 +1,4 @@
+import { CharacterMove } from '@/data/types'
 import { PixiText, Text } from './mypixi'
 
 export default function (args: {

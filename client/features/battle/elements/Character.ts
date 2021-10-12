@@ -1,6 +1,7 @@
 import { MyCursor } from '@/config/myBaobab'
 import dispatch from '@/data/battle/dispatch'
 import { getBattleScene } from '@/data/rootTree'
+import { AttackData, CharacterMeta } from '@/data/types'
 import { MoveEmitter } from '@/types'
 import { doFlashSprite, flashSprite } from '@/util/pixiUtils'
 import { filters, Loader } from 'pixi.js'

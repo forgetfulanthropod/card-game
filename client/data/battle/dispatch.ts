@@ -1,5 +1,6 @@
 import { getBattleScene } from '@/data/rootTree'
 import { initialState } from '@@/db/battle/state'
+import { CharacterMeta, CharacterMove } from '../types'
 import { checkWinner } from './misc'
 
 type Set<T> = T | ((old: T) => T)

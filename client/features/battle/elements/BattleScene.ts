@@ -1,4 +1,5 @@
 import { getBattleScene } from '@/data/rootTree'
+import { CharacterMeta } from '@/data/types'
 import CaveVideo from '../assets/cave_main_1.webm'
 import { getBindings } from '../logic/allBattleLogic'
 import background from './background'

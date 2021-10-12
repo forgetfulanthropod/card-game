@@ -1,9 +1,9 @@
 import { MyCursor } from '@/config/myBaobab'
-import { moveTypeMetaMap } from '@/data/battle/constants'
+import { moveModiferMap } from '@/data/battle/constants'
 import dispatch from '@/data/battle/dispatch'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
 import { getBattleScene } from '@/data/rootTree'
-import { BattleState } from '@/data/types'
+import { AttackData, BattleScene, CharacterMeta } from '@/data/types'
 import { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
@@ -30,7 +30,7 @@ export function getBindings() {
     const move$: MoveEmitter = new EventEmitter()
     const npcMove$: NpcMoveEmitter = new EventEmitter()
 
-    const cursorToState = (cursor: MyCursor<BattleState>) => {
+    const cursorToState = (cursor: MyCursor<BattleScene>) => {
         const value = cursor.get()
         const alivePcs = value.allCharacters.filter(c => c.isPc && c.health > 0)
         const aliveNpcs = value.allCharacters.filter(c => !c.isPc && c.health > 0)
@@ -140,7 +140,7 @@ export function getBindings() {
         }
         dispatch({ a: 'setHasMoved', id: state.selectedCharacter.id, v: true })
         const defenders = [clicked]
-        if (moveTypeMetaMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
+        if (moveModiferMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
             const closest = getClosestAlive(state.allCharacters, clicked, 1)
             if (closest != null) defenders.push(closest)
         }

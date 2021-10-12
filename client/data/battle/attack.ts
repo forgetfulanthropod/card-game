@@ -1,4 +1,5 @@
 import { stanceTypeMetaMap } from '@@/db/battle/constants'
+import { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
 
 
 // NPCs do not have stances
@@ -21,8 +22,8 @@ function getDefenseMultiplier(defender: CharacterMeta): StanceMultiplier {
 }
 
 
-function getStanceTypeMeta(stance: StanceType | undefined) {
+function getStanceTypeMeta(stance: StanceName | undefined) {
     if (stance == null) throw new Error('invalid stance!')
 
-    return stanceTypeMetaMap[stance as StanceType]
+    return stanceTypeMetaMap[stance as StanceName]
 }

@@ -1,11 +1,11 @@
 import { initialState as initialBattleState } from '@@/db/battle/state'
 import { initialState as initialEntryState } from '@@/db/entry/state'
-import { SceneName } from '@@/db/types'
 import { tree } from './rootTree'
+import { SceneName } from './types'
 
 const nameToState = {
     'battle': initialBattleState,
-    'dungeon entry': initialEntryState,
+    'entry': initialEntryState,
 }
 
 export function changeScene(newSceneName: SceneName): void {
