@@ -1,6 +1,13 @@
 import { CharacterUid, StanceName } from '@/data/types'
-import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
+import { statsMap } from './constants'
 import { BattleScene, CharacterMeta } from './types'
+
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
+const X_AGGRESSIVE_THRESH = 11
+const X_NEUTRAL_THRESH = 9
+
+export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
 export const initialCharacters = (function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
