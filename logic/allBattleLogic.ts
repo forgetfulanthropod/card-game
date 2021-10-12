@@ -51,14 +51,14 @@ export function getBindings() {
 
     move$.on('', function showMove(ad: AttackData) {
         if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
-        toast(ad.move.name,
-            {
-                style: {
-                    backgroundColor: ad.attacker.isPc ? 'green' : 'red',
-                    color: 'white'
-                }
-            }
-        )
+        // toast(ad.move.name,
+        //     {
+        //         style: {
+        //             backgroundColor: ad.attacker.isPc ? 'green' : 'red',
+        //             color: 'white'
+        //         }
+        //     }
+        // )
         console.log(ad.move.name)
     })
 
@@ -73,9 +73,10 @@ export function getBindings() {
     function resetRound() {
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })
-        dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
-        tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
-        if (!isPlayerFirstTurn) {
+        const isPlayerTurn = Math.random() < .5
+        dispatch({ a: 'setIsPlayerTurn', v: isPlayerTurn })
+        tl(isPlayerTurn ? 'You start' : 'Enemy starts')
+        if (!isPlayerTurn) {
             setTimeout(() => npcMove$.emit('', 'first move of round'), 1000)
         }
     }
@@ -157,12 +158,12 @@ export function getBindings() {
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)
         if (newPc == null) {
             // should be unreachable
-            tl('no unmoved PC')
+            // tl('no unmoved PC')
             dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
-        tl(`selecting character ${newPc.uid}`)
+        // tl(`selecting character ${newPc.uid}`)
         dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike

@@ -21,6 +21,8 @@ import { MoveModifier, MoveModifierName } from '../types'
 
 // DOT effects applied by multiple characters can stack, but a character cannot stack DOT with itself.
 
+// TODO: fill in this data
+
 export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
     BA: {
         name: 'BA',

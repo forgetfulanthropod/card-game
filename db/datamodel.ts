@@ -46,10 +46,14 @@ export interface Rulebook {
 }
 export interface Gamestate {
     scene: Scene
-    ownedCharacters: Record<CharacterUid, CharacterName>
+    ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
 }
 
+interface OwnedCharacter extends CharacterStats {
+    tokenId: string
+    nftName: string
+}
 export interface SceneHas {
     name: SceneName
 }

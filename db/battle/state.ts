@@ -1,7 +1,8 @@
-import { CharacterUid, StanceName } from '@/data/types'
+import { CharacterName, CharacterUid, StanceName } from '@/data/types'
+import { initialOwnedCharacters } from '../data'
 import { statsMap } from './constants'
 import { BattleScene, CharacterMeta } from './types'
-
+import { length, vals } from '@@/db/objUtils'
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
@@ -10,17 +11,20 @@ const X_NEUTRAL_THRESH = 9
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
 export const initialCharacters = (function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
+    const ownedCharacters = initialOwnedCharacters()
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, length(ownedCharacters))
+
     const all = [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
-        ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
+        ...vals(ownedCharacters).map((c, i) => {
+            const [x, y] = playerCharacterPositions[i]
+            return newPCMeta({ uid: c.uid, name: c.name, x, y })
+        }),
     ]
     const o: Record<CharacterUid, CharacterMeta> = {}
     for (const c of all) {
-        const uid = Math.random().toString().slice(2)
-        o[uid] = c
-        c.uid = uid
+        o[c.uid] = c
     }
     return o
 })()
@@ -70,15 +74,16 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     ]
     return A.slice(0, n)
 }
-function newPCMeta(args: { x: number; y: number }): CharacterMeta {
+function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterName }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceName = args.x > X_AGGRESSIVE_THRESH ?
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
+    const stats = statsMap[args.name]
     return {
-        ...statsMap.frogKnight,
-        uid: '', // being set in makeInitialCharacters rn
+        ...stats,
+        uid: args.uid,
         isPc: true,
         x: args.x,
         y: args.y,
@@ -86,7 +91,7 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
-        health: statsMap.frogKnight.maxHealth,
+        health: stats.maxHealth,
     }
 }
 function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
@@ -94,7 +99,7 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
     const scale = 1
     return {
         ...statsMap.skeletonWarrior,
-        uid: '', // being set in makeInitialCharacters rn
+        uid: `char-uid-${randString()}`,
         isPc: false,
         x: args.x,
         y: args.y,
@@ -104,4 +109,8 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
         hasMoved: false,
         health: statsMap.skeletonWarrior.maxHealth,
     }
+}
+
+function randString(): string {
+    return Math.random().toString().slice(2)
 }

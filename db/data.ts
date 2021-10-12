@@ -21,8 +21,16 @@ export const rulebook: Rulebook = {
     moveModiferMap,
 }
 
+export function initialOwnedCharacters() {
+    return {
+        'char-uid-8W2mG': { uid: 'char-uid-8W2mG', tokenId: '1234', nftName: 'Frog Knight #1234', ...statsMap.frogKnight }, // has everything for each character
+        'char-uid-TLO0B': { uid: 'char-uid-TLO0B', tokenId: '1234', nftName: 'Mushroom Farmer #1234', ...statsMap.mushroomFarmer },
+    }
+}
+
 export const initialGameState: Gamestate = {
     scene: rulebook.initialScenes.entry,
-    ownedCharacters: {},
+    // ownedCharacters: {},
+    ownedCharacters: initialOwnedCharacters(),
     inventory: {},
 }
