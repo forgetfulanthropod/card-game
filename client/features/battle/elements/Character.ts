@@ -3,7 +3,7 @@ import dispatch from '@/data/battle/dispatch'
 import { getBattleScene } from '@/data/rootTree'
 import { AttackData, CharacterMeta } from '@/data/types'
 import { MoveEmitter } from '@/types'
-import { doFlashSprite, flashSprite } from '@/util/pixiUtils'
+import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 import { filters, Loader } from 'pixi.js'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../../../data/battle/attack'
@@ -55,7 +55,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     // ---Sprites and containers---
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth })
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance })
 
     const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
 
@@ -99,7 +99,7 @@ function Character(args: CharacterProps): PixiContainer {
         if (value <= 0) {
             flyingContainer.removeChildren()
         } else {
-            healthBar = HealthBar({ value, max: characterMeta.maxHealth })
+            healthBar = HealthBar({ value, max: characterMeta.maxHealth, stance: characterMeta.stance })
             mainContainer.addChild(healthBar)
         }
 
@@ -112,6 +112,7 @@ function Character(args: CharacterProps): PixiContainer {
         const myId = characterMeta.uid
         if (d.attacker.uid === myId) {
             flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
+            hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
@@ -124,9 +125,9 @@ function Character(args: CharacterProps): PixiContainer {
         if (d.defenders.findIndex(d => d.uid === myId) > -1) {
             // debugger
             const damage = getDamage(d)
-            flashSprite(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            doFlashSprite(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
-            doFlashSprite(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
+            flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
+            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
             setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
