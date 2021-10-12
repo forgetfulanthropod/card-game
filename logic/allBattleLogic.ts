@@ -1,5 +1,5 @@
 import { MyCursor } from '@/config/myBaobab'
-import { moveModiferMap } from '@/data/battle/constants'
+import { moveModifiers } from '@/data/battle/constants'
 import dispatch from '@@/logic/dispatch'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
 import { getBattleScene } from '@/data/rootTree'
@@ -142,7 +142,7 @@ export function getBindings() {
         }
         dispatch({ a: 'setHasMoved', uid: state.selectedCharacter, v: true })
         const defenders = [clicked]
-        if (moveModiferMap[state.selectedMove.types[0]].numTargets > 1) {
+        if (moveModifiers[state.selectedMove.types[0]].numTargets > 1) {
             const closest = getClosestAlive(vals(state.allCharacters), clicked, 1)
             if (closest != null) defenders.push(closest)
         }

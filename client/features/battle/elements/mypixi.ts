@@ -1,4 +1,5 @@
-import { BASE_HEIGHT, BASE_WIDTH } from '@/data/battle/constants'
+import { numbers } from '@/data/battle/constants'
+const { BASE_HEIGHT, BASE_WIDTH } = numbers
 import { registerPixiInspector } from '@/util/pixiInspector'
 import {
     Application as PixiApplication,
