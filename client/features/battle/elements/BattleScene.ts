@@ -9,7 +9,6 @@ import { Container, PixiContainer } from './mypixi'
 
 
 export function BattleScene(): PixiContainer {
-    // TODO: use allCharactersLogic
     const {
         startGame,
         // resetRound,
@@ -22,7 +21,6 @@ export function BattleScene(): PixiContainer {
     const allCharsCursor = getBattleScene().select('allCharacters')
     const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
     return Container({
-        // name: AllCharacters.name,
         children: [
             background({ scale: 1, src: CaveVideo }),
             ...childCursors.map(childCursor =>
@@ -34,7 +32,6 @@ export function BattleScene(): PixiContainer {
                     isSelected: false,
                 }))
         ]
-
     })
 }
 

@@ -1,5 +1,4 @@
 import { CharacterUid, StanceName } from '@/data/types'
-import { getId } from '../../client/data/battle/misc'
 import { BASE_HEIGHT, BASE_WIDTH, statsMap, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH } from './constants'
 import { BattleScene, CharacterMeta } from './types'
 
@@ -72,7 +71,7 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     return {
         ...statsMap.frogKnight,
-        uid: getId(args.x, args.y),
+        uid: '', // being set in makeInitialCharacters rn
         isPc: true,
         x: args.x,
         y: args.y,
@@ -88,7 +87,7 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
     const scale = 1
     return {
         ...statsMap.skeletonWarrior,
-        uid: getId(args.x, args.y),
+        uid: '', // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
         y: args.y,

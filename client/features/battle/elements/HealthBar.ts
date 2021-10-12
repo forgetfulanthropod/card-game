@@ -1,5 +1,5 @@
 import { Matrix, utils } from 'pixi.js'
-import healthBorderPng from '../assets/HEALTH_BORDER.png'
+
 import { Container, Graphics, PixiContainer, PixiGraphics, PixiLoader, Sprite, Text } from './mypixi'
 
 type Rect = [
@@ -9,17 +9,20 @@ type Rect = [
     number, // height
 ]
 
+type StanceType = 'defensive' | 'neutral' | 'aggressive'
+
 export default function HealthBar(
-    props: {
+    args: {
         value: number,
         max: number,
         colorStops?: { color: string, stop: number }[],
         numberColor?: string
+        stance?: StanceType
     }
 ): PixiContainer {
     // TODO:
     // const { isDeluxeLoaded } = useLoaderContext()
-    const portion = props.value / props.max
+    const portion = args.value / args.max
 
     const displayWidth = 140
     const rawWidth = 1841
@@ -36,7 +39,7 @@ export default function HealthBar(
         displayHeight * (1 - 2 * yMargin),
     ]
 
-    const colorStops = props.colorStops ?? [
+    const colorStops = args.colorStops ?? [
         { color: '#98040c', stop: .2 },
         { color: '#fff133', stop: .4 },
         { color: '#91ff85', stop: 1 },
@@ -45,7 +48,7 @@ export default function HealthBar(
         .sort((cs1, cs2) => cs1.stop - cs2.stop)
         .find(cs => portion <= cs.stop) || { color: 'pink' }).color
 
-    const color = props.numberColor ?? background
+    const color = args.numberColor ?? background
 
 
     function drawHealthBar(g: PixiGraphics) {
@@ -56,7 +59,6 @@ export default function HealthBar(
         // const healthTexture =
         // if (isDeluxeLoaded) {
         const texture = PixiLoader.shared.resources?.healthTexture?.texture
-        const data = PixiLoader.shared.resources?.healthTexture?.data
 
         g.beginTextureFill({
             texture,
@@ -65,11 +67,12 @@ export default function HealthBar(
             matrix: new Matrix(.1, 0, 0, .1, 0, 0)
         })
         g.drawRect(...rect)
-        // }
+
         g.endFill()
     }
 
-    return Container({
+
+    const mainEl = Container({
         name: HealthBar.name,
         x: 0,
         y: 0,
@@ -77,12 +80,12 @@ export default function HealthBar(
         children: [
             Graphics({ draw: drawHealthBar }),
             Sprite({
-                src: healthBorderPng,
+                src: PixiLoader.shared.resources?.healthBorder?.data,
                 width: displayWidth,
                 height: displayHeight
             }),
             Text({
-                text: props.value.toString(),
+                text: args.value.toString(),
                 anchor: [0, 1],
                 style: {
                     fontFamily: 'monospace',
@@ -90,7 +93,25 @@ export default function HealthBar(
                     fill: ['#ffeaab', '#f2b600'], // gradient
                     letterSpacing: -5,
                 },
-            })
+            }),
         ]
     })
+
+    const stanceSrc = args.stance == null ? null :
+        args.stance === 'neutral' ? PixiLoader.shared.resources?.stanceNeutral?.data :
+            args.stance === 'aggressive' ? PixiLoader.shared.resources?.stanceAggressive?.data :
+                args.stance === 'defensive' ? PixiLoader.shared.resources?.stanceDefensive?.data : null
+
+    if (stanceSrc != null) {
+        mainEl.addChild(Sprite({
+            src: stanceSrc,
+            x: displayWidth,
+            y: displayHeight * 1.1,
+            anchor: [1, 0],
+            width: displayWidth / 3,
+            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height
+        }))
+    }
+
+    return mainEl
 }
