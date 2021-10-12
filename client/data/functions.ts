@@ -1,5 +1,5 @@
-import { initialBattleState as initialBattleState } from '@@/db/battle/state'
-import { initialEntryState as initialEntryState } from '@@/db/entry/state'
+import { initialBattleState } from '@@/db/battle/state'
+import { initialEntryState } from '@@/db/entry/state'
 import { tree } from './rootTree'
 import { Scene, SceneName } from './types'
 

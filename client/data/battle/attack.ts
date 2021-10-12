@@ -1,5 +1,5 @@
-import { stanceTypeMetaMap } from '@@/db/battle/constants'
 import { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
+import { stanceTypeMetaMap } from './constants'
 
 
 // NPCs do not have stances

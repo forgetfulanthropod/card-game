@@ -1,5 +1,5 @@
-import { moveModiferMap, stanceTypeMetaMap } from '@@/db/battle/constants'
 import { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
+import { moveModiferMap, stanceTypeMetaMap } from './constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
