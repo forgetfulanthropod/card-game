@@ -19,7 +19,7 @@
 			"script": "start",
 			"problemMatcher": [],
 			"label": "start-esbuild-watch",
-			"detail": "build and watch src",
+			"detail": "build and watch client",
 			"runOptions": {
 				// "runOn": "folderOpen",
 			}
