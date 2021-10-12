@@ -31,8 +31,15 @@ import healthBorder from '../assets/HEALTH_BORDER.png'
 import healthTexture from '../assets/HEALTH_TEXTURE.png'
 import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
+import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+
+//entry scene
+// import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+// import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+
+
 const characterAssets = {
     bloatDemon,
     bogSpirit,
@@ -65,6 +72,7 @@ const basicAssets = {
     ...characterAssets,
     fishstick,
     potion,
+    swordShield,
     bread,
     chestBody,
     chestLid,

@@ -1,4 +1,5 @@
-import { PixiContainer, PixiSprite } from '@/features/battle/elements/mypixi'
+import { PixiContainer, PixiLoader, PixiSprite } from '@/features/battle/elements/mypixi'
+import { AssetKey } from '@/features/battle/logic/AssetLoader'
 import type { Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
@@ -41,3 +42,5 @@ export function doFlashElement(
         }
     }, durationMs)
 }
+
+export const dataOf = (assetId: AssetKey) => PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture

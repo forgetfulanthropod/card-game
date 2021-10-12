@@ -1,11 +1,6 @@
-import type { AssetKey } from '../logic/AssetLoader'
-import { Container, PixiContainer, PixiLoader, PixiSprite, PixiTexture, Sprite } from './mypixi'
-
-const dataOf = (assetId: AssetKey) => PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
+import { Container, PixiContainer, PixiSprite, PixiTexture, Sprite } from './mypixi'
 
 const rotationRate = 1.0
-const baseSize = 500
-
 
 export default function Chest(args: { size: Size }): PixiContainer {
     const c = Container({
