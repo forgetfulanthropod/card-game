@@ -1,11 +1,11 @@
 import { statsMap } from '@/data/battle/constants'
 import { getBattleScene } from '@/data/rootTree'
-import { length, set } from '@/util'
+import { keys, objFilter, objMap } from '@/util'
 import { h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
 //@ts-ignore
 import styled from 'styled-components'
-import { CharacterAssetKey, characterAssetKeys } from './features/battle/logic/AssetLoader'
+import { characterAssetKeys } from './features/battle/logic/AssetLoader'
 export default function ArtistMenu(): JSX.Element {
     // const [x, setX] = useState<string | null>(null)
     // const stuff = useSettingsContext()
@@ -93,35 +93,22 @@ function Radio<T extends string>(props: { options: readonly T[], choice: T | nul
 function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
     const battle = getBattleScene()
     const cursor = battle.select('allCharacters')
-    const numEachSide = length(cursor.get()) / 2 | 0
-    // const idCursor = scene.select('selectedCharacter').select('id')
-    // TODO: have root state store selected character ID instead of the JSON itself, rendering the below lines unnecessary
-    // const [selectedIndex, setSelectedIndex] = useState(cursor.get().findIndex(c => c.id === idCursor.get()))
-    // idCursor.on('update', () => setSelectedIndex(cursor.get().findIndex(c => c.id === idCursor.get())))
     const allCharacters = cursor.get()
-    const offset = props.type === 'NPC' ? 0 : numEachSide
-    const [choices, setChoices] = useState<CharacterAssetKey[]>(Array(numEachSide).fill(null).map((_, i) => allCharacters[i + offset].assetId))
+    const chars = objFilter(allCharacters, (_k, v) => v.isPc === (props.type === 'PC'))
+    const [choices, setChoices] = useState(objMap(chars, (_k, v) => v.name))
     return <Dropdown
         top={`Choose ${props.type}s`}
-        rest={choices.map((c, i) =>
-            <Row key={i}>
+        rest={keys(choices).map(k =>
+            <Row key={k}>
                 <Radio
                     options={characterAssetKeys}
-                    choice={c}
+                    choice={choices[k]}
                     setChoice={(newChoice => {
-                        setChoices(cs => set(cs, i, newChoice))
-                        // TODO
-                        cursor.apply(i + offset, cm => {
+                        setChoices(cs => ({ ...cs, k: newChoice }))
+                        cursor.apply(k, cm => {
                             const stats = statsMap[newChoice]
                             return { ...cm, ...stats, health: stats.maxHealth }
                         })
-                        // if (selectedIndex === i + offset) {
-                        //     scene.apply('selectedCharacter', c => {
-                        //         const stats = statsMap[newChoice]
-                        //         return { ...c, ...stats, health: stats.maxHealth }
-                        //     })
-                        //     scene.set('selectedMove', statsMap[newChoice].moves[0])
-                        // }
                     })}
                 />
             </Row>

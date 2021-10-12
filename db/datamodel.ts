@@ -1,19 +1,17 @@
-import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
+import { CharacterName } from '@/features/battle/logic/AssetLoader'
 // A name is something like "Skeleton" or "Frogknight"
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import { BattleScene, MoveModifier } from './battle/types'
+import { BattleScene, MoveModifier, MoveModifierName } from './battle/types'
 import { EntryState } from './entry/types'
-
 export * from './battle/types'
+export type { CharacterName }
 
-export type MoveUid = string
+
 export type CharacterUid = string
-export type CharacterName = string
 
 type ItemName = string
-type MoveModifierName = string
 type ItemUid = string
 type LocationName = string
 type RecipeName = string
@@ -60,8 +58,8 @@ export type Scene = MapScene | BattleScene | CraftingScene | EntryState
 
 
 export interface CharacterStats {
-    assetId: CharacterAssetKey
-    type: CharacterName
+    name: CharacterName
+    displayName: string
     points: number
     maxHealth: number // AKA base health
     damage: number // AKA base attack

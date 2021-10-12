@@ -1,11 +1,13 @@
 import { initialBattleState as initialBattleState } from '@@/db/battle/state'
 import { initialEntryState as initialEntryState } from '@@/db/entry/state'
 import { tree } from './rootTree'
-import { SceneName } from './types'
+import { Scene, SceneName } from './types'
 
-const nameToState = {
+const nameToState: Record<SceneName, Scene> = {
     'battle': initialBattleState,
     'entry': initialEntryState,
+    'map': { name: 'map', coordinates: [-1, -1], unlockedLocations: [] },
+    'craft': { name: 'craft', onTable: {}, selectedRecipe: '' },
 }
 
 export function changeScene(newSceneName: SceneName): void {

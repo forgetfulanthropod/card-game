@@ -12,7 +12,9 @@ export const initialCharacters = (function makeInitialCharacters(): Record<Chara
     ]
     const o: Record<CharacterUid, CharacterMeta> = {}
     for (const c of all) {
-        o[Math.random().toString().slice(2)] = c
+        const uid = Math.random().toString().slice(2)
+        o[uid] = c
+        c.uid = uid
     }
     return o
 })()
@@ -35,7 +37,7 @@ export const initialBattleState: BattleScene = (function makeInitialState(
     if (!selectedCharacter) {
         throw Error('could not find any initial player characters')
     }
-    const selectedMove = selectedCharacter.moves[0].name
+    const selectedMove = selectedCharacter.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         name: 'battle',
@@ -70,7 +72,6 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     return {
         ...statsMap.frogKnight,
-        name: statsMap.frogKnight.type,
         uid: getId(args.x, args.y),
         isPc: true,
         x: args.x,
@@ -87,7 +88,6 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
     const scale = 1
     return {
         ...statsMap.skeletonWarrior,
-        name: statsMap.frogKnight.type,
         uid: getId(args.x, args.y),
         isPc: false,
         x: args.x,

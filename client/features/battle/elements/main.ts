@@ -18,7 +18,7 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
 function bindGamestate(app: PixiApplication) {
     let lastScene: PixiContainer | null = null
 
-    const sceneTypeCursor = getScene().select('type')
+    const sceneTypeCursor = getScene().select('name')
     sceneTypeCursor.on('update', () => {
         setScene()
     })
@@ -31,7 +31,7 @@ function bindGamestate(app: PixiApplication) {
         if (sceneType === 'battle') {
             lastScene = BattleScene()
             bindBattleState(app)
-        } else if (sceneType === 'dungeon entry') {
+        } else if (sceneType === 'entry') {
             lastScene = DungeonEntryScene()
         } else {
             throw new Error('what!')

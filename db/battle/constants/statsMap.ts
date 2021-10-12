@@ -1,13 +1,13 @@
 // TODO: better name for this file and export?
 
 // import { Immutable } from '@/config/immutable'
-import { CharacterAssetKey } from '@/features/battle/logic/AssetLoader'
+import { CharacterName } from '@/features/battle/logic/AssetLoader'
 // import { deepFreeze } from '@/util'
 import { CharacterStats } from '@@/db/datamodel'
-export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
+export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
-        assetId: 'bloatDemon',
-        type: 'Bloat Demon',
+        name: 'bloatDemon',
+        displayName: 'Bloat Demon',
         points: 40,
         maxHealth: 160,
         damage: 27,
@@ -21,8 +21,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     bogSpirit: {
-        assetId: 'bogSpirit',
-        type: 'Bog Spirit',
+        name: 'bogSpirit',
+        displayName: 'Bog Spirit',
         points: 40,
         maxHealth: 224,
         damage: 16,
@@ -36,8 +36,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     bookle: {
-        assetId: 'bookle',
-        type: 'Bookle',
+        name: 'bookle',
+        displayName: 'Bookle',
         points: 15,
         maxHealth: 60,
         damage: 10,
@@ -49,8 +49,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     bumbit: {
-        assetId: 'bumbit',
-        type: 'Bumbit',
+        name: 'bumbit',
+        displayName: 'Bumbit',
         points: 20,
         maxHealth: 58,
         damage: 18,
@@ -63,8 +63,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     frogKnight: {
-        assetId: 'frogKnight',
-        type: 'Frog Knight',
+        name: 'frogKnight',
+        displayName: 'Frog Knight',
         points: 15,
         maxHealth: 72,
         damage: 8,
@@ -76,8 +76,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     frogWizard: {
-        assetId: 'frogWizard',
-        type: 'Frog Wizard',
+        name: 'frogWizard',
+        displayName: 'Frog Wizard',
         points: 25,
         maxHealth: 66,
         damage: 24,
@@ -90,8 +90,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     gnomeHooligan: {
-        assetId: 'gnomeHooligan',
-        type: 'Gnome Hooligan',
+        name: 'gnomeHooligan',
+        displayName: 'Gnome Hooligan',
         points: 15,
         maxHealth: 43,
         damage: 14,
@@ -103,8 +103,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     goblinDragon: {
-        assetId: 'goblinDragon',
-        type: 'Goblin Dragon',
+        name: 'goblinDragon',
+        displayName: 'Goblin Dragon',
         points: 25,
         maxHealth: 120,
         damage: 13,
@@ -117,8 +117,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     greenJester: {
-        assetId: 'greenJester',
-        type: 'Green Jester',
+        name: 'greenJester',
+        displayName: 'Green Jester',
         points: 40,
         maxHealth: 120,
         damage: 34,
@@ -131,8 +131,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     jerry: {
-        assetId: 'jerry',
-        type: 'Jerry',
+        name: 'jerry',
+        displayName: 'Jerry',
         points: 25,
         maxHealth: 86,
         damage: 19,
@@ -145,8 +145,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     lichLord: {
-        assetId: 'lichLord',
-        type: 'Lich Lord',
+        name: 'lichLord',
+        displayName: 'Lich Lord',
         points: 50,
         maxHealth: 250,
         damage: 27,
@@ -160,8 +160,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     matchaGelatinCube: {
-        assetId: 'matchaGelatinCube',
-        type: 'Matcha Gelatin Cube',
+        name: 'matchaGelatinCube',
+        displayName: 'Matcha Gelatin Cube',
         points: 15,
         maxHealth: 78,
         damage: 7,
@@ -173,8 +173,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     mimic: {
-        assetId: 'mimic',
-        type: 'Mimic',
+        name: 'mimic',
+        displayName: 'Mimic',
         points: 25,
         maxHealth: 130,
         damage: 12,
@@ -187,8 +187,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     mushroomFarmer: {
-        assetId: 'mushroomFarmer',
-        type: 'Mushroom Farmer',
+        name: 'mushroomFarmer',
+        displayName: 'Mushroom Farmer',
         points: 20,
         maxHealth: 112,
         damage: 8,
@@ -201,8 +201,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     notoriousBEAN: {
-        assetId: 'notoriousBEAN',
-        type: 'Notorious B.E.A.N',
+        name: 'notoriousBEAN',
+        displayName: 'Notorious B.E.A.N',
         points: 20,
         maxHealth: 75,
         damage: 14,
@@ -215,8 +215,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     orcWarrior: {
-        assetId: 'orcWarrior',
-        type: 'Orc Warrior',
+        name: 'orcWarrior',
+        displayName: 'Orc Warrior',
         points: 20,
         maxHealth: 88,
         damage: 12,
@@ -229,8 +229,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     penguinKnight: {
-        assetId: 'penguinKnight',
-        type: 'Penguin Knight',
+        name: 'penguinKnight',
+        displayName: 'Penguin Knight',
         points: 15,
         maxHealth: 66,
         damage: 9,
@@ -242,8 +242,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     skeletonWarrior: {
-        assetId: 'skeletonWarrior',
-        type: 'Skeleton Warrior',
+        name: 'skeletonWarrior',
+        displayName: 'Skeleton Warrior',
         points: 15,
         maxHealth: 54,
         damage: 11,
@@ -255,8 +255,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     snacky: {
-        assetId: 'snacky',
-        type: 'Snacky',
+        name: 'snacky',
+        displayName: 'Snacky',
         points: 20,
         maxHealth: 67,
         damage: 16,
@@ -269,8 +269,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     theHatefly: {
-        assetId: 'theHatefly',
-        type: 'The Hatefly',
+        name: 'theHatefly',
+        displayName: 'The Hatefly',
         points: 50,
         maxHealth: 300,
         damage: 22,
@@ -284,8 +284,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     trioOfFools: {
-        assetId: 'trioOfFools',
-        type: 'Trio of Fools',
+        name: 'trioOfFools',
+        displayName: 'Trio of Fools',
         points: 25,
         maxHealth: 110,
         damage: 15,
@@ -298,8 +298,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     warhog: {
-        assetId: 'warhog',
-        type: 'Warhog',
+        name: 'warhog',
+        displayName: 'Warhog',
         points: 15,
         maxHealth: 84,
         damage: 6,
@@ -311,8 +311,8 @@ export const statsMap: Record<CharacterAssetKey, CharacterStats> = {
         level: 1,
     },
     wimpyGuard: {
-        assetId: 'wimpyGuard',
-        type: 'Wimpy Guard',
+        name: 'wimpyGuard',
+        displayName: 'Wimpy Guard',
         points: 40,
         maxHealth: 170,
         damage: 24,

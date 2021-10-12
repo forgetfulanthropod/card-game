@@ -15,7 +15,7 @@ export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
         </PCHoverDiv> :
         <EnemyHoverDiv>
             <Table
-                header={cm.type}
+                header={cm.displayName}
                 rows={[[`LVL ${cm.level}`, moveAt(0)],
                 [`HP ${cm.health}`, moveAt(1)],
                 [`ATK ${cm.damage}`, moveAt(2)]]} />

@@ -7,7 +7,7 @@ import { doFlashSprite, flashSprite } from '@/util/pixiUtils'
 import { filters, Loader } from 'pixi.js'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '../../../data/battle/attack'
-import { CharacterAssetKey } from '../logic/AssetLoader'
+import { CharacterName } from '../logic/AssetLoader'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'
 // import { Hover } from './Hover'
@@ -108,8 +108,9 @@ function Character(args: CharacterProps): PixiContainer {
     // const [isHovering, setIsHovering] = useState(false)
 
     args.move$.on('', function doCharMove(d: AttackData) {
-        const myId = characterMeta.id
-        if (d.attacker.id === myId) {
+        // console.log("doCharMove of", JSON.stringify(d))
+        const myId = characterMeta.uid
+        if (d.attacker.uid === myId) {
             flashSprite(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
@@ -120,13 +121,14 @@ function Character(args: CharacterProps): PixiContainer {
 
         }
 
-        if (d.defenders.findIndex(d => d.id === myId) > -1) {
+        if (d.defenders.findIndex(d => d.uid === myId) > -1) {
+            // debugger
             const damage = getDamage(d)
             flashSprite(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
             doFlashSprite(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
             doFlashSprite(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
-            setTimeout(() => dispatch({ a: 'setHealth', id: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
+            setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
     })
 
@@ -143,8 +145,8 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
 
     const hasMovedCursor = args.cursor.select('hasMoved')
 
-    const assetIdCursor = args.cursor.select('assetId')
-    const assetIdToSrc = (assetId: CharacterAssetKey) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+    const assetIdCursor = args.cursor.select('name')
+    const assetIdToSrc = (assetId: CharacterName) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
     const charSpriteProps = {
         src: assetIdToSrc(assetIdCursor.get()),
         anchor: [0, 1] as [number, number],
@@ -163,8 +165,8 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
     const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
     // props.isSelected && !props.characterMeta.hasMoved
-    const selectedId = getBattleScene().select('selectedCharacter').select('id')
-    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.id })
+    const selectedId = getBattleScene().select('selectedCharacter')
+    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.uid })
 
     hasMovedCursor.on('update', () => {
         hasMovedSprite.visible = hasMovedCursor.get()
@@ -187,7 +189,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     })
 
     selectedId.on('update', () => {
-        selectedSprite.visible = selectedId.get() === characterMeta.id
+        selectedSprite.visible = selectedId.get() === characterMeta.uid
     })
 
     return { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight: charSpriteProps.height }

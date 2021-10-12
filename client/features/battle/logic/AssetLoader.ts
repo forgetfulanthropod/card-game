@@ -53,8 +53,8 @@ const characterAssets = {
     warhog,
     wimpyGuard,
 }
-export type CharacterAssetKey = keyof typeof characterAssets
-export const characterAssetKeys = Object.keys(characterAssets) as CharacterAssetKey[]
+export type CharacterName = keyof typeof characterAssets
+export const characterAssetKeys = Object.keys(characterAssets) as CharacterName[]
 
 const basicAssets = {
     ...characterAssets,

@@ -9,11 +9,11 @@ import AppWrap from './AppWrap'
 
 
 export default function App(): JSX.Element {
-    const sceneType = useCursor(scene.select('type'))
+    const sceneType = useCursor(scene.select('name'))
 
     return <AppWrap>
         <Toaster />
-        {sceneType === 'dungeon entry' && <DungeonEntry />}
+        {sceneType === 'entry' && <DungeonEntry />}
         {sceneType === 'battle' && <Battle />}
     </AppWrap>
 }

@@ -8,8 +8,8 @@ type Set<T> = T | ((old: T) => T)
 export type Action =
     | { a: 'setIsPlayerTurn', v: boolean }
     | { a: 'setBattleHasBegun' }
-    | { a: 'setHasMoved', id: string, v: boolean }
-    | { a: 'setHealth', id: string, h: Set<number> }
+    | { a: 'setHasMoved', uid: string, v: boolean }
+    | { a: 'setHealth', uid: string, h: Set<number> }
     | { a: 'clearHasMoved' }
     | { a: 'setSelectedCharacter', c: CharacterMeta }
     | { a: 'setSelectedMove', m: CharacterMove }
@@ -33,16 +33,15 @@ export default function dispatch(action: Action): void {
             return
         } case 'setHasMoved': {
             // let notFound = true
-            //@ts-ignore
-            scene.select('allCharacters', { id: action.id }).set('hasMoved', true)
+            scene.select('allCharacters').select(action.uid).set('hasMoved', true)
             // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
             // rootTree.commit()
             return
         } case 'setHealth': {
+            console.log('setting health of', action.uid)
+            // debugger
             // let notFound = true
-            //@ts-ignore
-            const charCursor = scene.select('allCharacters', { id: action.id })
-            //@ts-ignore
+            const charCursor = scene.select('allCharacters').select(action.uid)
             charCursor.set('health', typeof action.h === 'function' ? action.h(charCursor.get('health')) : action.h)
             const winner = checkWinner(vals(scene.select('allCharacters').get()))
             if (winner === 'PC') scene.set('state', 'won')
@@ -62,7 +61,7 @@ export default function dispatch(action: Action): void {
             scene.set('selectedCharacter', action.c.uid)
             return
         } case 'setSelectedMove': {
-            scene.set('selectedMove', action.m.name)
+            scene.set('selectedMove', action.m)
             return
         } case 'fullReset': {
             scene.set(initialBattleState)

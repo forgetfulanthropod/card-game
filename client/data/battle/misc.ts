@@ -1,5 +1,5 @@
 import { moveModiferMap, stanceTypeMetaMap } from '@@/db/battle/constants'
-import { AttackData, CharacterMeta, CharacterMove } from '../types'
+import { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
@@ -70,7 +70,8 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const move = getRandomMove(attacker)
     const defenders = [getPCTarget(ac)]
 
-    if (moveModiferMap[move.types[0]].numTargets > 1) {
+    const mainType: MoveModifierName = move.types[0]
+    if (moveModiferMap[mainType].numTargets > 1) {
         const closest = getClosestAlive(ac, defenders[0], 1)
         if (closest != null)
             defenders.push(closest)

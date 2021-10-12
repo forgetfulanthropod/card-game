@@ -80,7 +80,7 @@ export function getBindings() {
         }
     }
 
-    const winner = checkWinner(state.allCharacters)
+    const winner = checkWinner(vals(state.allCharacters))
     function endGame() {
         console.log(winner === 'PC' ? 'You win' : 'Computer wins')
         if (winner === 'NPC') {
@@ -97,16 +97,16 @@ export function getBindings() {
 
     function doNpcMove(reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
-        if (checkWinner(state.allCharacters) != null) { return }
+        if (checkWinner(vals(state.allCharacters)) != null) { return }
         if (state.isPlayerTurn) { return }
         if (state.alivePcs.length === 0) { return }
         if (state.aliveNpcs.every(c => c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
-        const move = getNpcMove(state.allCharacters)
+        const move = getNpcMove(vals(state.allCharacters))
         move$.emit('', move)
-        dispatch({ a: 'setHasMoved', id: move.attacker.uid, v: true })
+        dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
@@ -119,7 +119,7 @@ export function getBindings() {
     npcMove$.on('', e => doNpcMove(e))
 
     function doCharacterAction(clicked: CharacterMeta) {
-        if (checkWinner(state.allCharacters) != null) return
+        if (checkWinner(vals(state.allCharacters)) != null) return
         if (!state.isPlayerTurn) return
         if (state.alivePcs.every(c => c.hasMoved)) return
         // click to choose selected Pc:
@@ -130,7 +130,7 @@ export function getBindings() {
         }
 
         // clicked on NPC but no selected character
-        if (!state.selectedCharacter || state.selectedCharacter.hasMoved) {
+        if (!state.selectedCharacter || state.allCharacters[state.selectedCharacter].hasMoved) {
             // should be unreachable
             tl('select attacker first')
             return
@@ -140,20 +140,21 @@ export function getBindings() {
             tl('select move first')
             return
         }
-        dispatch({ a: 'setHasMoved', id: state.selectedCharacter.uid, v: true })
+        dispatch({ a: 'setHasMoved', uid: state.selectedCharacter, v: true })
         const defenders = [clicked]
-        if (moveModiferMap[state?.selectedMove?.types?.[0]].numTargets > 1) {
-            const closest = getClosestAlive(state.allCharacters, clicked, 1)
+        if (moveModiferMap[state.selectedMove.types[0]].numTargets > 1) {
+            const closest = getClosestAlive(vals(state.allCharacters), clicked, 1)
             if (closest != null) defenders.push(closest)
         }
-        move$.emit('', {
-            attacker: state.selectedCharacter,
+        const ad: AttackData = {
+            attacker: state.allCharacters[state.selectedCharacter],
             defenders: defenders,
             move: state.selectedMove,
-        })
+        }
+        move$.emit('', ad)
 
         // change to unmoved PC if there is one
-        const newPc = getUnmovedPc(state.allCharacters, state.selectedCharacter.uid)
+        const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)
         if (newPc == null) {
             // should be unreachable
             tl('no unmoved PC')

@@ -1,4 +1,4 @@
-import { CharacterMove, CharacterName, CharacterStats, CharacterUid, MoveUid, SceneHas } from '../datamodel'
+import { CharacterMove, CharacterName, CharacterStats, CharacterUid, SceneHas } from '../datamodel'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
@@ -6,7 +6,7 @@ export interface BattleScene extends SceneHas {
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
     selectedCharacter: CharacterUid
-    selectedMove: MoveUid
+    selectedMove: CharacterMove
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
