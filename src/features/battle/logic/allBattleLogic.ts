@@ -49,14 +49,14 @@ export function getBindings() {
 
     move$.on('', function showMove(ad: AttackData) {
         if (DEBUG) tl(`${ad.attacker.id} attacks ${ad.defenders.map(d => d.id)} with ${ad.move.name}`)
-        toast(ad.move.name,
-            {
-                style: {
-                    backgroundColor: ad.attacker.isPc ? 'green' : 'red',
-                    color: 'white'
-                }
-            }
-        )
+        // toast(ad.move.name,
+        //     {
+        //         style: {
+        //             backgroundColor: ad.attacker.isPc ? 'green' : 'red',
+        //             color: 'white'
+        //         }
+        //     }
+        // )
         console.log(ad.move.name)
     })
 
@@ -159,7 +159,7 @@ export function getBindings() {
             setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
-        tl(`selecting character ${newPc.id}`)
+        // tl(`selecting character ${newPc.id}`)
         dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike
