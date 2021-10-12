@@ -1,3 +1,13 @@
-export { initialBattleState } from '@@/db/battle/state'
+import { rulebook } from '@@/db/data'
 
-export * from '@@/db/battle/constants'
+export const {
+    characters,
+    initialScenes,
+    items,
+    locations,
+    moveModifiers,
+    recipes,
+    numbers,
+    stanceTypeMetaMap,
+    moveModiferMap,
+} = rulebook

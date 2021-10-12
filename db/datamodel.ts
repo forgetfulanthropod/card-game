@@ -3,7 +3,7 @@ import { CharacterName } from '@/features/battle/logic/AssetLoader'
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import { BattleScene, MoveModifier, MoveModifierName } from './battle/types'
+import { BattleScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from './battle/types'
 import { EntryState } from './entry/types'
 export * from './battle/types'
 export type { CharacterName }
@@ -29,6 +29,20 @@ export interface Rulebook {
         displayName: string
         description: string
     }>
+    initialScenes: {
+        map: MapScene,
+        entry: EntryState,
+        battle: BattleScene,
+        craft: CraftingScene,
+    }
+    numbers: {
+        BASE_WIDTH: number
+        BASE_HEIGHT: number
+        X_AGGRESSIVE_THRESH: number
+        X_NEUTRAL_THRESH: number
+    }
+    stanceTypeMetaMap: Record<StanceName, StanceStats>
+    moveModiferMap: Record<MoveModifierName, MoveModifier>
 }
 export interface Gamestate {
     scene: Scene

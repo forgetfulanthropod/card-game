@@ -1,5 +1,5 @@
 import { MyCursor } from '@/config/myBaobab'
-import dispatch from '@/data/battle/dispatch'
+import dispatch from '@@/logic/dispatch'
 import { getBattleScene } from '@/data/rootTree'
 import { AttackData, CharacterMeta } from '@/data/types'
 import { MoveEmitter } from '@/types'
