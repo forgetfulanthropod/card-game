@@ -32,7 +32,7 @@ export interface Rulebook {
     initialScenes: {
         map: MapScene,
         entry: EntryState,
-        battle: BattleScene,
+        // battle: BattleScene,
         craft: CraftingScene,
     }
     numbers: {

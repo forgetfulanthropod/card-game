@@ -15,7 +15,9 @@ export function GameMenuItem(noun: 'characters' | 'items' | 'materials', index: 
 
     const container = OwnedCharacters()
     const onClick = () => {
-        if (noun === 'characters') root.addChild(container)
+        if (noun === 'characters' && root.removeChild(container) == null) {
+            root.addChild(container)
+        }
     }
 
     const root = Container({

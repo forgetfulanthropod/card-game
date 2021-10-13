@@ -15,5 +15,11 @@ export function changeScene(newSceneName: SceneName): void {
 
 export function addSelected(c: OwnedCharacter): void {
     const scene = tree.select('scene') as MyCursor<EntryState>
-    scene.apply('selectedCharacters', sel => [...sel, c])
+
+    const indexInselected = scene.select('selectedCharacters').get().findIndex(character => c === character)
+    if (indexInselected === -1)
+        scene.apply('selectedCharacters', sel => [...sel, c])
+    else
+        scene.apply('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
+
 }

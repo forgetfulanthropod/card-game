@@ -10,14 +10,14 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
-function makeCharacters(chosen?: OwnedCharacter[]): Record<CharacterUid, CharacterMeta> {
-    const ownedCharacters = chosen ?? vals(initialOwnedCharacters())
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, ownedCharacters.length)
+function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
+    // const chosen = chosen ?? vals(initialOwnedCharacters())
+    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
     const all = [
         ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
-        ...ownedCharacters.map((c, i) => {
+        ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
         }),

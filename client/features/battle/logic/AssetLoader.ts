@@ -13,6 +13,7 @@ import mimic from '../assets/cards/mimic-200.png'
 import mushroomFarmer from '../assets/cards/Mushroom_Farmer2-200.png'
 import penguinKnight from '../assets/cards/PenguinKnight-200.png'
 
+import check from '../../../assets/check.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import stanceDefensive from '../assets/defensive stance.png'
 import stanceAggressive from '../assets/aggressive stance.png'
@@ -74,6 +75,7 @@ const basicAssets = {
     potion,
     swordShield,
     bread,
+    check,
     chestBody,
     chestLid,
 }
