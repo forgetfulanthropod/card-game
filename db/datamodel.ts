@@ -75,6 +75,7 @@ export interface CharacterStats {
     name: CharacterName
     displayName: string
     points: number
+    isPc: boolean
     maxHealth: number // AKA base health
     damage: number // AKA base attack
     moves: CharacterMove[]
