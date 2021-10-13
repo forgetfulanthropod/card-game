@@ -25,7 +25,7 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
     BA: {
         name: 'BA',
         numTargets: 1,
-        multiplier: .5,
+        multiplier: 1,
     },
     SL: {
         name: 'SL',
@@ -33,59 +33,60 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         multiplier: .5,
     },
     SP: {
+        // TODO: If only two targets are present, it does 40% damage to both.
         name: 'SP',
-        numTargets: 2,
-        multiplier: .5,
+        numTargets: 3,
+        multiplier: .33,
     },
     DOT1: {
+        // TODO: subsequent damage is inflited before that character activates
         name: 'DOT1',
         numTargets: 1,
-        multiplier: 1.1,
+        multipliers: [.5, .33, .33, .33],
     },
     DOT2: {
         name: 'DOT2',
         numTargets: 1,
-        multiplier: 1.1,
-    },
-    DOT3: {
-        name: 'DOT2',
-        numTargets: 1,
-        multiplier: 1.1,
+        multipliers: [.5, .25, .25, .25],
     },
     ROD1: {
         name: 'ROD1',
         numTargets: 1,
-        multiplier: 1.25,
+        multiplierRange: [.75, 1.25],
     },
     ROD2: {
         name: 'ROD2',
         numTargets: 1,
-        multiplier: 1.25,
+        multiplierRange: [.67, 1.33],
     },
     ROD3: {
         name: 'ROD3',
         numTargets: 1,
-        multiplier: 1.25,
+        multiplierRange: [.50, 1.50],
     },
     ST: {
+        // TODO: no 1/3 modifier
         name: 'ST',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
-    INHSO: {//TODO: heals for +1 per target
+    INHSO: {
+        // TODO: heals for +1 per target
         name: 'INHSO',
-        numTargets: 2,
+        numTargets: 2, // ?
         multiplier: 1,
         isSpecial: true,
     },
-    DC4A: {//TODO: subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
+    DC4A: {
+        // TODO: subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
         name: 'DC4A',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
     MIM: {
+        // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
         name: 'MIM',
         numTargets: 1,
         multiplier: 1,

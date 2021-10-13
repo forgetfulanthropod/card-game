@@ -15,7 +15,9 @@ export interface BattleScene extends SceneHas {
 export interface MoveModifier {
     name: MoveModifierName
     numTargets: number
-    multiplier: number
+    multiplier?: number
+    multiplierRange?: [number, number]
+    multipliers?: number[] // for damage over time
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
@@ -43,7 +45,7 @@ export type StanceStats = {
     defenseMultiplier: StanceMultiplier
     targetLikelihood: 0 | 1 | 2
 }
-export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'DOT3' | 'ST' | 'INHSO' | 'DC4A' | 'MIM'
+export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM'
 export type AttackData = {
     attacker: CharacterMeta
     defenders: CharacterMeta[]
