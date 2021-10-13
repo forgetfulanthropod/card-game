@@ -1,7 +1,6 @@
-import type { AssetKey } from '../logic/AssetLoader'
-import { Container, PixiContainer, PixiLoader, PixiSprite, PixiTexture, Sprite } from './mypixi'
+import { dataOf } from '@/util/pixiUtils'
+import { Container, PixiContainer, PixiSprite, PixiTexture, Sprite } from './mypixi'
 
-const dataOf = (assetId: AssetKey) => PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
 
 const rotationRate = 1.0
 const baseSize = 500

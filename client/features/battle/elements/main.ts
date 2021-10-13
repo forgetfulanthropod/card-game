@@ -1,12 +1,20 @@
 import { getBattleScene, getScene } from '@/data/rootTree'
 import { BattleScene } from './BattleScene'
 import Chest from './Chest'
+import Doors from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
 import { Application, PixiApplication, PixiContainer } from './mypixi'
+
+const config = {
+    showOneThing: Doors,
+}
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     // const scale = window.innerWidth / BASE_WIDTH
 
+    if (config.showOneThing != null) {
+        return Application({ canvas, children: [config.showOneThing()] })
+    }
     const app = Application({ canvas, children: [] })
 
     bindGamestate(app)

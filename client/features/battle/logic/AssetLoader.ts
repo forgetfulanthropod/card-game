@@ -33,6 +33,7 @@ import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+import door from '../assets/temp-door.png'
 const characterAssets = {
     bloatDemon,
     bogSpirit,
@@ -68,6 +69,7 @@ const basicAssets = {
     bread,
     chestBody,
     chestLid,
+    door,
 }
 const deluxeAssets = {
     stanceNeutral,

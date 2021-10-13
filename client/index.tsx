@@ -1,4 +1,4 @@
-import { helloWorld } from '@/api'
+// import { helloWorld } from '@/api'
 import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
@@ -18,4 +18,4 @@ loadAssets(
     }
 )
 
-helloWorld()
+// helloWorld()
