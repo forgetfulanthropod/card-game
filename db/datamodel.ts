@@ -79,11 +79,15 @@ export interface CharacterStats {
     maxHealth: number // AKA base health
     damage: number // AKA base attack
     moves: CharacterMove[]
-    learnableMoves?: CharacterMove[]
+    learnableMoves?: LearnableCharacterMove[]
     level: number
     modifier: number
 }
 export interface CharacterMove {
     name: string
     types: MoveModifierName[]
+}
+
+export interface LearnableCharacterMove extends CharacterMove {
+    minLevel: number
 }

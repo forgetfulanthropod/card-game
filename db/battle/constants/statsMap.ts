@@ -77,7 +77,10 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Dutiful Stab', types: ['BA'] },
             { name: 'Sword Slash', types: ['SL'] },
         ],
-        learnableMoves: [{ name: 'Parry', types: ['DBF2'] }, { name: 'Shield', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Parry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Shield', types: ['BLK'] }
+        ],
         modifier: 1,
         level: 1,
     },
@@ -93,7 +96,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Vanishing Act', types: ['ROD2'] },
             { name: 'Sparks, Sparks Everywhere!', types: ['SP'] },
         ],
-        learnableMoves: [{ name: 'Magical Barrier', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Magical Barrier', types: ['BLK'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -123,7 +128,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Chomp', types: ['BA'] },
             { name: 'Burn It Down', types: ['DOT2'] },
         ],
-        learnableMoves: [{ name: 'Wall of Fire', types: ['DBF2'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Wall of Fire', types: ['DBF2'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -154,7 +161,10 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Extended Eye Contact', types: ['ROD1', 'DOT2'] },
             { name: 'Jerry Knows The Names of All', types: ['SP'] },
         ],
-        learnableMoves: [{ name: 'The Curse of Jerry', types: ['DBF2'] }, { name: 'Mental Interrogation', types: ['DBF1'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'The Curse of Jerry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Mental Interrogation', types: ['DBF1'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -171,7 +181,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Waiting Around To Die', types: ['DOT1', 'ROD2'] },
             { name: 'Magic Missile', types: ['ROD1'] },
         ],
-        learnableMoves: [{ name: 'Essence Drain', types: ['DBF2'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Essence Drain', types: ['DBF2'] }
+        ],
         modifier: 3,
         level: 1,
     },
@@ -186,7 +198,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Itchy Ooze', types: ['DOT1'] },
             { name: 'Surprise Allergy', types: ['ROD2'] },
         ],
-        learnableMoves: [{ name: 'Engulf in Jello', types: ['DBF1'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Engulf in Jello', types: ['DBF1'] }
+        ],
         modifier: 1,
         level: 1,
     },
@@ -217,7 +231,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Cloud of Spores', types: ['DOT1', 'ROD3'] },
             { name: 'Bash', types: ['BA'] },
         ],
-        learnableMoves: [{ name: 'Tighten Fibers', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Tighten Fibers', types: ['BLK'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -248,7 +264,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Bellow and Sing', types: ['ROD2', 'SP'] },
             { name: 'Slash', types: ['SL'] },
         ],
-        learnableMoves: [{ name: 'Shield', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Shield', types: ['BLK'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -263,7 +281,10 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Valiant Jab', types: ['BA'] },
             { name: 'Sword Slash', types: ['SL'] },
         ],
-        learnableMoves: [{ name: 'Parry', types: ['DBF2'] }, { name: 'Shield', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Parry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Shield', types: ['BLK'] }
+        ],
         modifier: 1,
         level: 1,
     },
@@ -278,7 +299,10 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Sword Whack', types: ['BA'] },
             { name: 'Rusty Poke', types: ['DOT2'] },
         ],
-        learnableMoves: [{ name: 'Parry', types: ['DBF2'] }, { name: 'Shield', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Parry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Shield', types: ['BLK'] }
+        ],
         modifier: 1,
         level: 1,
     },
@@ -310,7 +334,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Chomp', types: ['BA'] },
             { name: 'Cloud of Flies', types: ['SP'] },
         ],
-        learnableMoves: [{ name: 'Mutilate', types: ['DBF2'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Mutilate', types: ['DBF2'] }
+        ],
         modifier: 3,
         level: 1,
     },
@@ -326,7 +352,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Endless Riddle', types: ['SL'] },
             { name: 'Three Fools Are Better Than One', types: ['SP'] },
         ],
-        learnableMoves: [{ name: 'Cripple', types: ['DBF2'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Cripple', types: ['DBF2'] }
+        ],
         modifier: 2,
         level: 1,
     },
@@ -341,7 +369,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Belly Flop', types: ['ROD2'] },
             { name: 'Roll Around', types: ['SL'] },
         ],
-        learnableMoves: [{ name: 'Very Thick Tummy', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Very Thick Tummy', types: ['BLK'] }
+        ],
         modifier: 1,
         level: 1,
     },
@@ -357,7 +387,9 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
             { name: 'Valiant Whomp', types: ['ROD1', 'SL'] },
             { name: 'Whirling Baton', types: ['SP'] },
         ],
-        learnableMoves: [{ name: 'Protective Little Guy', types: ['BLK'] }],
+        learnableMoves: [
+            { minLevel: 2, name: 'Protective Little Guy', types: ['BLK'] }
+        ],
         modifier: 3,
         level: 1,
     },
