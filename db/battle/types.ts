@@ -1,8 +1,9 @@
+import { Door } from '@@/actions/doors'
 import { CharacterMove, CharacterName, CharacterStats, CharacterUid, SceneHas } from '../datamodel'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
-    state: 'not started' | 'in battle' | 'won' | 'lost'
+    state: BattleWinState
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
     selectedCharacter: CharacterUid
@@ -10,7 +11,9 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
+    doors: null | Door[]
 }
+export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
 export interface MoveModifier {
     name: MoveModifierName

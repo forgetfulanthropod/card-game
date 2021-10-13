@@ -1,4 +1,8 @@
 import { Immutable } from '@/config/immutable'
+import toast from 'react-hot-toast'
+
+export const tl = (x: string): void => { console.log(x); toast(x) }
+
 
 export function styled<T extends keyof HTMLElementTagNameMap>(kind: T, className: string): HTMLElementTagNameMap[T] {
     const elm = document.createElement(kind)

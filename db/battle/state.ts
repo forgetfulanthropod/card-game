@@ -1,6 +1,7 @@
 import { statsMap } from './constants'
 import { BattleScene, CharacterMeta, StanceName } from './types'
 import { CharacterUid } from '../datamodel'
+import { CharacterName } from '@/data/types'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -10,10 +11,10 @@ const X_NEUTRAL_THRESH = 9
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
 export const initialCharacters = (function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 6)
+    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 1)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: '' })),
         ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
     ]
     const o: Record<CharacterUid, CharacterMeta> = {}
@@ -56,6 +57,7 @@ export const initialBattleState: BattleScene = (function makeInitialState(
         selectedMove,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
+        doors: null,
     })
 })()
 
@@ -89,12 +91,12 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         health: statsMap.frogKnight.maxHealth,
     }
 }
-function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
+export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     return {
-        ...statsMap.skeletonWarrior,
-        uid: '', // being set in makeInitialCharacters rn
+        ...statsMap[args.name],
+        uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
         y: args.y,
@@ -102,6 +104,6 @@ function newNPCMeta(args: { x: number; y: number }): CharacterMeta {
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance: 'neutral',
         hasMoved: false,
-        health: statsMap.skeletonWarrior.maxHealth,
+        health: statsMap[args.name].maxHealth,
     }
 }

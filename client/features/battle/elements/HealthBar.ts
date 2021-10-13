@@ -72,6 +72,10 @@ export default function HealthBar(
     }
 
 
+    if (args.value == null) {
+        // TODO: see TODO BqUPq
+        return Container({ children: [] })
+    }
     const mainEl = Container({
         name: HealthBar.name,
         x: 0,

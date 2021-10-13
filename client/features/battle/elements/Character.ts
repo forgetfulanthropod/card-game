@@ -176,6 +176,15 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     assetIdCursor.on('update', () => {
         // tl('asset update')
         const texture = assetIdToSrc(assetIdCursor.get())
+        if (texture == null) {
+            // TODO: this occurs when allCharacters gets new characters and this character is no longer defined.
+            // (Unique ID: BqUPq)
+            // The parent destroys the child but not before this listener fires.
+            // Or perhaps tree listeners are not destroyed when a child is destroyed.
+            // In that case, the mypixi/Sprite thing needs to take an onDestroy argument that removes the listeners.
+            // Anyway, for now we can just return.
+            return
+        }
         const height = texture.height
         const update = (s: PixiSprite) => {
             s.texture = texture

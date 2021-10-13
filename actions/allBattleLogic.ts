@@ -3,13 +3,13 @@ import { moveModifiers } from '@/data/battle/constants'
 import dispatch from '@@/actions/dispatch'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
 import { getBattleScene } from '@/data/rootTree'
-import { AttackData, BattleScene, CharacterMeta } from '@/data/types'
+import { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@/data/types'
 import { MoveEmitter, NpcMoveEmitter } from '@/types'
-import { vals } from '@/util'
+import { tl, vals } from '@/util'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
+import { putUpDoors } from './functions'
 
-export const tl = (x: string): void => { console.log(x); toast(x) }
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEBUG = false
@@ -80,20 +80,31 @@ export function getBindings() {
         }
     }
 
-    const winner = checkWinner(vals(state.allCharacters))
-    function endGame() {
-        console.log(winner === 'PC' ? 'You win' : 'Computer wins')
-        if (winner === 'NPC') {
-            // TODO
-            const st = setTimeout(() => showEndScreen('lose'), 1000)
-            return () => clearTimeout(st)
+    // const winner = checkWinner(vals(state.allCharacters))
+    function endGame(s: BattleWinState) {
+        tl(s === 'won' ? 'You win' : 'Computer wins')
+        if (s === 'won') {
+            putUpDoors()
         }
-        if (winner === 'PC') {
-            const st = setTimeout(() => showEndScreen('win'), 0) // MARK
-            return () => clearTimeout(st)
-        }
+        // if (winner === 'NPC') {
+        //     // TODO
+        //     const st = setTimeout(() => showEndScreen('lose'), 1000)
+        //     return () => clearTimeout(st)
+        // }
+        // if (winner === 'PC') {
+        //     const st = setTimeout(() => showEndScreen('win'), 0) // MARK
+        //     return () => clearTimeout(st)
+        // }
         return () => { }
     }
+    const winStateCursor = scene.select('state')
+    winStateCursor.on('update', () => {
+        const s = winStateCursor.get()
+        if (s === 'won' || s === 'lost') {
+            endGame(s)
+        }
+    })
+
 
     function doNpcMove(reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
@@ -174,7 +185,6 @@ export function getBindings() {
     return {
         startGame,
         resetRound,
-        endGame,
         doCharacterAction,
         move$,
     }
