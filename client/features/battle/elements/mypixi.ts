@@ -63,6 +63,11 @@ interface GraphicsArgs extends ShownArgs {
 }
 
 export function Sprite(args: SpriteArgs): PixiSprite {
+    if (args.src == null) {
+        console.error(`Sprite named '${args.name}' received null src arg`)
+        console.trace()
+        return PixiSprite.from(PixiTexture.WHITE)
+    }
     const s = PixiSprite.from(args.src)
 
     applyShownArgs(s, args)
