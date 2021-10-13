@@ -1,12 +1,12 @@
 import { getBattleScene, getScene } from '@/data/rootTree'
 import { BattleScene } from './BattleScene'
 import Chest from './Chest'
-import Doors from './Doors'
+import Doors, { DoorsStories } from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
 import { Application, PixiApplication, PixiContainer } from './mypixi'
 
 const config = {
-    showOneThing: Doors,
+    showOneThing: () => DoorsStories('log'),
 }
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
