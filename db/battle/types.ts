@@ -45,7 +45,7 @@ export type StanceStats = {
     defenseMultiplier: StanceMultiplier
     targetLikelihood: 0 | 1 | 2
 }
-export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM'
+export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM' | 'DBF1' | 'DBF2' | 'BLK'
 export type AttackData = {
     attacker: CharacterMeta
     defenders: CharacterMeta[]

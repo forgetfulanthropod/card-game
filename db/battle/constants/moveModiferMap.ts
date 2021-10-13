@@ -91,5 +91,26 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
-    }
+    },
+
+    // Learnable moves:
+
+    DBF1: {
+        name: 'DBF1',
+        numTargets: 1,
+        multiplier: 1,
+        isSpecial: true,
+    },
+    DBF2: {
+        name: 'DBF2',
+        numTargets: 1,
+        multiplier: 1,
+        isSpecial: true,
+    },
+    BLK: {
+        name: 'BLK',
+        numTargets: 1,
+        multiplier: 1,
+        isSpecial: true,
+    },
 }

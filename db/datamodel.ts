@@ -78,6 +78,7 @@ export interface CharacterStats {
     maxHealth: number // AKA base health
     damage: number // AKA base attack
     moves: CharacterMove[]
+    learnableMoves?: CharacterMove[]
     level: number
     modifier: number
 }
