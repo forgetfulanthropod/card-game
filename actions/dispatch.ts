@@ -1,8 +1,8 @@
 import { getBattleScene } from '@/data/rootTree'
 import { keys, vals } from '@/util'
-import { CharacterMeta, CharacterMove } from '@@/db/datamodel'
-import { initialBattleState } from '@@/db/battle/state'
 import { checkWinner } from '@@/client/data/battle/misc'
+import { initialBattleState } from '@@/db/battle/state'
+import type { CharacterMeta, CharacterMove } from '@@/db/datamodel'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =

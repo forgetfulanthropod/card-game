@@ -1,20 +1,23 @@
-import { MyCursor } from '@/config/myBaobab'
-import dispatch from '@@/actions/dispatch'
-import { getBattleScene } from '@/data/rootTree'
-import { AttackData, CharacterMeta } from '@/data/types'
-import { MoveEmitter } from '@/types'
-import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
-import { filters, Loader } from 'pixi.js'
+import { filters,Loader } from 'pixi.js'
+
+import type { MyCursor } from '@/config/myBaobab'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '@/data/battle/attack'
-import { CharacterName } from '../logic/AssetLoader'
+import { getBattleScene } from '@/data/rootTree'
+import type { AttackData, CharacterMeta } from '@/data/types'
+import type { MoveEmitter } from '@/types'
+import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
+import dispatch from '@@/actions/dispatch'
+
+import type { CharacterName } from '../logic/AssetLoader'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'
 // import { Hover } from './Hover'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
-import { Container, PixiContainer, PixiSprite, PixiTexture, PixiTicker, Sprite } from './mypixi'
+import type { PixiContainer, PixiSprite, PixiTexture} from './mypixi';
+import { Container, PixiTicker, Sprite } from './mypixi'
 const config = {
     isHealthNumber: false
 }

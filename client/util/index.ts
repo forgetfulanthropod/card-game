@@ -1,5 +1,6 @@
-import { Immutable } from '@/config/immutable'
 import toast from 'react-hot-toast'
+
+import type { Immutable } from '@/config/immutable'
 
 export const tl = (x: string): void => { console.log(x); toast(x) }
 

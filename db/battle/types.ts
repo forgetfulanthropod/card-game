@@ -1,5 +1,6 @@
-import { Door } from '@@/actions/doors'
-import { CharacterMove, CharacterName, CharacterStats, CharacterUid, SceneHas } from '../datamodel'
+import type { Door } from '@@/actions/doors'
+
+import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, SceneHas } from '../datamodel'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'

@@ -20,7 +20,9 @@
     "plugins": [
         "react",
         "react-hooks",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        // "unused-imports"
+        "simple-import-sort"
     ],
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
@@ -69,7 +71,22 @@
                 "argsIgnorePattern": "^_",
                 "varsIgnorePattern": "^_"
             }
-        ]
+        ],
+        // for import organizing:
+        // "sort-imports": [
+        //     "warn"
+        // ],
+        "@typescript-eslint/consistent-type-imports": [
+            "warn",
+            {
+                "prefer": "type-imports"
+            }
+        ],
+        // "@typescript-eslint/no-unused-vars": "off",
+        // "unused-imports/no-unused-imports": "error",
+        // "unused-imports/no-unused-vars": [ "warn", { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" } ]
+        "simple-import-sort/imports": "error"
+        // "simple-import-sort/exports": "error",
     },
     "settings": {
         "react": {

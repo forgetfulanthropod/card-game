@@ -1,4 +1,6 @@
-import { h, JSX } from 'preact'
+import type { JSX } from 'preact';
+import { h } from 'preact'
+
 import losePng from '../assets/fainted.png'
 import { IdleScreenOverlay, Lose, Reset } from './Styles'
 

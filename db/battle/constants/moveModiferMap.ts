@@ -1,5 +1,5 @@
 // import { deepFreeze } from '@/util'
-import { MoveModifier, MoveModifierName } from '../types'
+import type { MoveModifier, MoveModifierName } from '../types'
 
 
 // Basic Attack: 100% of attack damage, no modifiers

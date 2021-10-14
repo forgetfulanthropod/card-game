@@ -1,4 +1,5 @@
-import { Container, PixiChildren, PixiContainer } from './mypixi'
+import type { PixiChildren, PixiContainer } from './mypixi';
+import { Container } from './mypixi'
 
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6

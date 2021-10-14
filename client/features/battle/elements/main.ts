@@ -1,10 +1,11 @@
 import { getBattleScene, getScene } from '@/data/rootTree'
 import { chooseDoor } from '@@/actions/functions'
+
 import { BattleScene } from './BattleScene'
-import Chest from './Chest'
-import Doors, { DoorsStories } from './Doors'
+import Doors from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
-import { Application, PixiApplication, PixiContainer } from './mypixi'
+import type { PixiApplication, PixiContainer } from './mypixi';
+import { Application } from './mypixi'
 
 const config = {
     showOneThing: null as (null | (() => PixiContainer))

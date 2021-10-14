@@ -1,4 +1,5 @@
-import type { h, JSX } from 'preact'
+import type { JSX } from 'preact'
+import { h} from 'preact';
 //@ts-ignore
 import styled from 'styled-components'
 export default function Table(props: { rows: string[][], header?: string }): JSX.Element {

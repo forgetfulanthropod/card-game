@@ -1,4 +1,4 @@
-import { EntryState } from './types'
+import type { EntryState } from './types'
 
 export const initialEntryState: EntryState = {
     name: 'entry'

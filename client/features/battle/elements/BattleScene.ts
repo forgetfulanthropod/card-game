@@ -1,12 +1,15 @@
+import isEqual from 'lodash/isEqual'
+
 import { getBattleScene } from '@/data/rootTree'
-import { CharacterMeta } from '@/data/types'
+import type { CharacterMeta } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
-import CaveVideo from '../assets/cave_main_1.webm'
 import { getBindings } from '@@/actions/allBattleLogic'
+
+import CaveVideo from '../assets/cave_main_1.webm'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
-import { Container, PixiContainer } from './mypixi'
-import isEqual from 'lodash/isEqual'
+import type { PixiContainer } from './mypixi';
+import { Container } from './mypixi'
 
 export function BattleScene(): PixiContainer {
     const {

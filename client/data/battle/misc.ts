@@ -1,4 +1,4 @@
-import { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
+import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
 import { moveModifiers, stanceTypeMetaMap } from './constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }

@@ -1,4 +1,4 @@
-import { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
+import type { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
 import { stanceTypeMetaMap } from './constants'
 
 

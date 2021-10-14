@@ -1,10 +1,13 @@
-import { characters } from '@/data/battle/constants'
-import { getBattleScene } from '@/data/rootTree'
-import { keys, objFilter, objMap } from '@/util'
-import { h, JSX } from 'preact'
+import type { JSX } from 'preact';
+import { h } from 'preact'
 import { useState } from 'preact/hooks'
 //@ts-ignore
 import styled from 'styled-components'
+
+import { characters } from '@/data/battle/constants'
+import { getBattleScene } from '@/data/rootTree'
+import { keys, objFilter, objMap } from '@/util'
+
 import { characterAssetKeys } from './features/battle/logic/AssetLoader'
 export default function ArtistMenu(): JSX.Element {
     // const [x, setX] = useState<string | null>(null)
