@@ -19,6 +19,7 @@ import check from '../../../assets/check.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import stanceDefensive from '../assets/defensive stance.png'
 import stanceAggressive from '../assets/aggressive stance.png'
+import gemButton from '../assets/BUTTON_GEMS.png'
 import snacky from '../assets/cards/Snacky-200.png'
 import theHatefly from '../assets/cards/TheHatefly-200.png'
 import trioOfFools from '../assets/cards/TrioOfFools-200.png'
@@ -39,6 +40,7 @@ import bread from '../assets/misc-png/ITEM_BREAD.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 
 import font from '../../../assets/VT323-Regular.ttf'
+// import font from '../../../assets/ARCADE_R.ttf'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -84,6 +86,7 @@ const deluxeAssets = {
     stanceNeutral,
     stanceDefensive,
     stanceAggressive,
+    gemButton,
     healthBorder,
     healthTexture,
 }

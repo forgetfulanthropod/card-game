@@ -24,7 +24,9 @@ export function addSelected(c: OwnedCharacter): void {
             return acc + curr.points
         }, 0)
 
-        if (totalPoints < scene.select('pointLimit').get())
+        const pointLimit = scene.select('pointLimit').get()
+
+        if (totalPoints <= pointLimit)
             scene.apply('selectedCharacters', sel => [...sel, c])
     }
 

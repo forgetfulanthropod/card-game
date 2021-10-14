@@ -1,7 +1,6 @@
 import { MyCursor } from '@/config/myBaobab'
 import { scene } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
-import DungeonEntry from '@/features/battle/components/DungeonEntry'
 import type { h, JSX } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
@@ -13,7 +12,6 @@ export default function App(): JSX.Element {
 
     return <AppWrap>
         <Toaster />
-        {sceneType === 'entry' && <DungeonEntry />}
         {sceneType === 'battle' && <Battle />}
     </AppWrap>
 }

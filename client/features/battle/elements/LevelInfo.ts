@@ -1,6 +1,6 @@
 import { numbers } from '@/data/battle/constants'
 import { getEntryScene } from '@/data/rootTree'
-import { Container, PixiContainer, PixiText, Text } from './mypixi'
+import { Container, PixiContainer, Text } from './mypixi'
 
 
 export function LevelInfo(): PixiContainer {
@@ -20,6 +20,7 @@ export function LevelInfo(): PixiContainer {
         const level = levels[levelIndex]
 
         levelNumText.text = `Level ${selectedLevel}`
+        levelNameText.text = level.name
         pointLimitText.text = `point limit: ${level.pointLimit}`
     })
 
@@ -44,7 +45,6 @@ export function LevelInfo(): PixiContainer {
             fontFamily: 'VT323',
             fontSize: 80,
             fill: ['#fff', '#eee'], // gradient
-            // letterSpacing: -5,
             stroke: '#999',
             strokeThickness: 5,
         },
@@ -57,6 +57,7 @@ export function LevelInfo(): PixiContainer {
                 l -= 1
             }
 
+            scene.select('selectedCharacters').set([])
             scene.select('selectedLevel').set(l)
             scene.select('pointLimit').set(levels[l - 1].pointLimit)
         }
@@ -69,28 +70,40 @@ export function LevelInfo(): PixiContainer {
             fontFamily: 'VT323',
             fontSize: 80,
             fill: ['#fff', '#eee'], // gradient
-            // letterSpacing: -5,
             stroke: '#999',
             strokeThickness: 5,
         },
         onClick() {
             const l = scene.select('selectedLevel').get()
 
+            scene.select('selectedCharacters').set([])
             scene.select('selectedLevel').set(l % levels.length + 1)
             scene.select('pointLimit').set(levels[l - 1].pointLimit)
         }
     })
 
+    const levelNameText = Text({
+        text: 'Hooligan’s Bluff',
+        anchor: [.5, 0],
+        y: 20,
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 60,
+            fill: '#fff',
+        },
+    })
+
     const pointLimitText = Text({
         text: 'point limit: 20',
         anchor: [.5, 0],
-        y: 20,
+        y: 80,
         style: {
             fontFamily: 'VT323',
             fontSize: 30,
             fill: '#fff',
         },
     })
+
 
     const root = Container({
         x: numbers.BASE_WIDTH / 2,
@@ -99,6 +112,7 @@ export function LevelInfo(): PixiContainer {
             leftButton,
             levelNumText,
             rightButton,
+            levelNameText,
             pointLimitText,
         ],
     })

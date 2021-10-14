@@ -5,7 +5,7 @@ import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
 import { EntryScene } from '@@/db/entry/types'
 import { addSelected } from '@@/logic/functions'
-import { Container, PixiContainer, Sprite } from './mypixi'
+import { Container, PixiContainer, PixiText, Sprite, Text } from './mypixi'
 
 export function OwnedCharacters(): PixiContainer {
     const selectedCharacters = (scene as MyCursor<EntryScene>).select('selectedCharacters')
@@ -29,23 +29,43 @@ export function OwnedCharacters(): PixiContainer {
 
     const characters = vals(ownedCharacters.get()).map((c, i) =>
         Container({
-            x: i % 5 * 100,
-            y: Math.floor(i / 5) * 100,
+            x: i % 5 * 110,
+            y: Math.floor(i / 5) * 150,
             children: [
                 Sprite({
                     src: dataOf(c.name),
-                    scale: .4,
+                    scale: .45,
                     onClick: () => addSelected(c),
                 })
             ],
         })
     )
 
-    characters.map(c => c.children[0].on('mouseover', () => { console.log('mouseover') }))
-    characters.map(c => c.children[0].on('mouseout', () => { console.log('mouseout') }))
+    const hoverTexts = vals(ownedCharacters.get()).map((c, i) => {
+        return Text({
+            text: `${c.points}`,
+            anchor: [0, 0],
+            y: 5,
+            style: {
+                fontFamily: 'VT323',
+                fontSize: 60,
+                fill: '#fff',
+                stroke: '#333',
+                strokeThickness: 5,
+            },
+        })
+    })
+
+    characters.forEach((c, i) => c.children[0].on('mouseover', () => {
+        c.addChild(hoverTexts[i])
+    }))
+    characters.forEach((c, i) => c.children[0].on('mouseout', () => {
+        c.removeChild(hoverTexts[i])
+    }))
 
     const root = Container({
         x: 200,
+        y: -200,
         children: characters
     })
 
