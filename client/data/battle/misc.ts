@@ -1,7 +1,7 @@
 // TODO: do not replicate this file
 
+import { moveModifiers, stanceTypeMetaMap } from '..'
 import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
-import { moveModifiers, stanceTypeMetaMap } from './constants'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 

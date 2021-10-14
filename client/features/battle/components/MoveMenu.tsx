@@ -1,11 +1,13 @@
-import type { JSX } from 'preact';
+import type { JSX } from 'preact'
 import { h } from 'preact'
 import { useState } from 'preact/hooks'
 
+import { dispatch } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import dispatch from '@@/actions/dispatch'
 
 import { MoveButton, MoveMenuDiv } from './Styles'
+
+
 export default function MoveMenu(): JSX.Element {
     const scene = getBattleScene()
     const selectedMove = scene.select('selectedMove')

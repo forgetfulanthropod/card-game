@@ -1,5 +1,5 @@
+import { chooseDoor } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
-import { chooseDoor } from '@@/actions/functions'
 
 import { BattleScene } from './BattleScene'
 import Doors from './Doors'

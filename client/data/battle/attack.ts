@@ -1,6 +1,6 @@
+// import { stanceTypeMetaMap } from './constants'
+import { stanceTypeMetaMap } from '..'
 import type { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
-import { stanceTypeMetaMap } from './constants'
-
 
 // NPCs do not have stances
 // PCs must have stances

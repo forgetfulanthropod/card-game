@@ -1,16 +1,16 @@
 /* eslint-disable simple-import-sort/imports */
+import { getGameState } from '@/fire/firestoreListener'
 import type { BattleScene } from '@shared/battleTypes'
-import { initialGameState } from '@@/db/data'
+// import { initialGameState } from '@@/db/data'
 
-import type { MyCursor } from '../config/myBaobab'
-import { MyBaobab } from '../config/myBaobab'
+import type { MyCursor } from '@shared/index'
+import { MyBaobab } from '@shared/index'
 import type { Scene } from './types'
 // import { settings } from './settings'
 // type Foo =
 // |{sceneName: 'battle', scene: BattleScene}
 // | {sceneName: 'dungeon entry', scene: Entry}
-export const tree = new MyBaobab(initialGameState)
-
+export const tree = new MyBaobab(getGameState())
 // export const commitTree = () => tree.commit()
 
 // @ts-ignore

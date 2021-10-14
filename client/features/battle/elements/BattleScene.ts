@@ -1,9 +1,10 @@
+import { EventEmitter } from 'eventemitter3'
 import isEqual from 'lodash/isEqual'
 
+import { doCharacterAction,startGame } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { CharacterMeta } from '@/data/types'
+import type { AttackData, CharacterMeta } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
-import { getBindings } from '@@/actions/allBattleLogic'
 
 import CaveVideo from '../assets/cave_main_1.webm'
 import background from './background'
@@ -12,13 +13,9 @@ import type { PixiContainer } from './mypixi';
 import { Container } from './mypixi'
 
 export function BattleScene(): PixiContainer {
-    const {
-        startGame,
-        // resetRound,
-        // endGame,
-        doCharacterAction,
-        move$,
-    } = getBindings()
+    // TODO
+    const move$ = new EventEmitter<{ '': AttackData }>()
+    // const { move$, } = getBindings()
 
     const container = Container({ children: [] })
 

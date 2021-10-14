@@ -8,7 +8,7 @@ import type { AttackData, CharacterMeta } from '@/data/types'
 import type { MoveEmitter } from '@/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
-// import dispatch from '@@/actions/dispatch'
+// import dispatch from '@/actions'
 import type { CharacterName } from '../logic/AssetLoader'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'

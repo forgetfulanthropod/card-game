@@ -1,4 +1,4 @@
-import { numbers } from '@/data/battle/constants'
+import { numbers } from '@/data'
 const { BASE_HEIGHT, BASE_WIDTH } = numbers
 import type {
     Filter as PixiFilter,InteractionEvent,

@@ -1,9 +1,9 @@
-import type { JSX } from 'preact';
+import type { JSX } from 'preact'
 import { h } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
 
-import { changeScene } from '@@/actions/functions'
+import { changeScene } from '@/actions'
 
 const Root = styled.button`
     position: absolute;

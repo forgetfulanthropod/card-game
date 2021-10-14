@@ -1,7 +1,7 @@
 import type { JSX } from 'preact'
-import { h} from 'preact';
+import { h } from 'preact'
 
-import { moveModiferMap } from '@/data/battle/constants'
+import { moveModiferMap } from '@/data'
 import type { CharacterMeta } from '@/data/types'
 
 import { EnemyHoverDiv, PCHoverDiv } from './Styles'
