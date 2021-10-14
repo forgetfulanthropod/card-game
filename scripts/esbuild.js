@@ -57,6 +57,7 @@ async function main() {
             '.jpg': 'file',
             '.mp4': 'file',
             '.webm': 'file',
+            '.ttf': 'file',
         },
         define: substitions,
         watch: !shouldWatch ? null : {

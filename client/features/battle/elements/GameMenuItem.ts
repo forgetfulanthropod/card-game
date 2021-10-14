@@ -13,10 +13,10 @@ export function GameMenuItem(noun: 'characters' | 'items' | 'materials', index: 
 
     const nounSrc = dataOf(nounMap[noun] as typeof nounMap[(keyof typeof nounMap)])
 
-    const container = OwnedCharacters()
+    const ownedCharacters = OwnedCharacters()
     const onClick = () => {
-        if (noun === 'characters' && root.removeChild(container) == null) {
-            root.addChild(container)
+        if (noun === 'characters' && root.removeChild(ownedCharacters) == null) {
+            root.addChild(ownedCharacters)
         }
     }
 

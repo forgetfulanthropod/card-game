@@ -17,9 +17,15 @@ export function addSelected(c: OwnedCharacter): void {
     const scene = tree.select('scene') as MyCursor<EntryState>
 
     const indexInselected = scene.select('selectedCharacters').get().findIndex(character => c === character)
-    if (indexInselected === -1)
-        scene.apply('selectedCharacters', sel => [...sel, c])
-    else
+    if (indexInselected !== -1)
         scene.apply('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
+    else {
+        const totalPoints = [...scene.select('selectedCharacters').get(), c].reduce((acc, curr) => {
+            return acc + curr.points
+        }, 0)
+
+        if (totalPoints < 20)
+            scene.apply('selectedCharacters', sel => [...sel, c])
+    }
 
 }
