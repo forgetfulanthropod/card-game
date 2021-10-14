@@ -2,8 +2,8 @@
     "scripts": {
         "build": "bash scripts/build.sh",
         "start": "bash scripts/start.sh",
-        "lint": "eslint client shared functions/src",
-        "fmt": "eslint client shared functions/src --fix",
+        "lint": "eslint client shared actions/src",
+        "fmt": "eslint client shared actions/src --fix",
         "tsc": "tsc",
         "tsc-watch": "tsc --watch --preserveWatchOutput",
         "serve": "live-server --quiet --port=3000 build/",

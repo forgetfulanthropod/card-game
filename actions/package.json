@@ -1,5 +1,6 @@
 {
-    "name": "functions",
+    "name": "actions-api",
+    "description": "firebase cloud functions",
     "scripts": {
         "build": "tsc",
         "watch": "tsc -w",

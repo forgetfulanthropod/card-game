@@ -1,6 +1,6 @@
 {
   "functions": {
-    "source": "functions"
+    "source": "actions"
   },
   "firestore": {
     "rules": "firebase-config/firestore.rules",

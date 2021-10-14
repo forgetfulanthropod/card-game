@@ -1,4 +1,4 @@
--   This folder, `/functions`, is for firebase cloud functions.
+-   This folder, `/actions`, is for firebase cloud functions.
 -   It has a separate package.json and stuff because that was done automatically by the `firebase init emulators` command.
 -   We could make this a second build target & build source in the parent tsconfig etc but there's not much point. Better to leave it as a separate package.
 -   **You need to remember to re-build this folder when you change it.** You can `npm run watch` to rebuild as you go.
