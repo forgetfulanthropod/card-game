@@ -1,8 +1,10 @@
-import { getBattleScene } from '@/data/rootTree'
+// import { getBattleScene } from '@/data/rootTree'
+// import { checkWinner } from '@@/client/data/battle/misc'
+import type { CharacterMeta, CharacterMove } from '@shared/index'
+
 import { keys, vals } from '@/util'
-import { checkWinner } from '@@/client/data/battle/misc'
-import { initialBattleState } from '@@/db/battle/state'
-import type { CharacterMeta, CharacterMove } from '@@/db/datamodel'
+
+import { initialBattleState } from './rulebook/battle'
 
 type Set<T> = T | ((old: T) => T)
 export type Action =

@@ -1,14 +1,14 @@
-import { filters,Loader } from 'pixi.js'
+import type { MyCursor } from '@shared/myBaobab'
+import { filters, Loader } from 'pixi.js'
 
-import type { MyCursor } from '@/config/myBaobab'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '@/data/battle/attack'
 import { getBattleScene } from '@/data/rootTree'
 import type { AttackData, CharacterMeta } from '@/data/types'
 import type { MoveEmitter } from '@/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
-import dispatch from '@@/actions/dispatch'
 
+// import dispatch from '@@/actions/dispatch'
 import type { CharacterName } from '../logic/AssetLoader'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'
@@ -16,7 +16,7 @@ import type { CharacterName } from '../logic/AssetLoader'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
-import type { PixiContainer, PixiSprite, PixiTexture} from './mypixi';
+import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
 import { Container, PixiTicker, Sprite } from './mypixi'
 const config = {
     isHealthNumber: false
@@ -132,7 +132,8 @@ function Character(args: CharacterProps): PixiContainer {
             doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
             doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
-            setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
+            // **TODO**: convert to API call
+            // setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
     })
 

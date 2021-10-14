@@ -1,8 +1,9 @@
-import type { Gamestate, Rulebook } from '../../../shared/datamodel'
+/* eslint-disable simple-import-sort/imports */
+import type { Gamestate, Rulebook } from '@shared/datamodel'
 import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle'
 import { initialBattleState, numbers } from './battle/state'
 import { initialEntryState } from './entry/state'
-
+import initializeDb from '@/rulebook/initializeDb'
 
 export const rulebook: Rulebook = {
     characters: statsMap,

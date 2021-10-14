@@ -1,11 +1,11 @@
-import type { MyCursor } from '@/config/myBaobab'
-import { objFilter } from '@/util'
-import { tree } from '@@/client/data/rootTree'
-import { rulebook } from '@@/db/data'
-import type { BattleScene, SceneName } from '@@/db/datamodel'
+import type { BattleScene, Door, MyCursor,SceneName } from '@shared/index'
 
-import type { Door} from './doors';
+import { objFilter } from '@/util'
+
+// import { tree } from '@@/client/data/rootTree'
+import type {  } from './doors'
 import { getDoorChoices, makeRoom } from './doors'
+import { rulebook } from './rulebook/index'
 
 export function changeScene(newSceneName: SceneName): void {
     tree.set('scene', rulebook.initialScenes[newSceneName])

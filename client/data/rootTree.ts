@@ -1,7 +1,8 @@
-import type { BattleScene } from '@@/db/battle/types'
+/* eslint-disable simple-import-sort/imports */
+import type { BattleScene } from '@shared/battleTypes'
 import { initialGameState } from '@@/db/data'
 
-import type { MyCursor } from '../config/myBaobab';
+import type { MyCursor } from '../config/myBaobab'
 import { MyBaobab } from '../config/myBaobab'
 import type { Scene } from './types'
 // import { settings } from './settings'

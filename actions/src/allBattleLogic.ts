@@ -1,21 +1,22 @@
+// TODO: getBattleScene
+import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
+import type { MyCursor } from '@shared/myBaobab'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
 
-import type { MyCursor } from '@/config/myBaobab'
-import { moveModifiers } from '@/data/battle/constants'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from '@/data/battle/misc'
-import { getBattleScene } from '@/data/rootTree'
-import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@/data/types'
-import type { MoveEmitter, NpcMoveEmitter } from '@/types'
-import { tl, vals } from '@/util'
-import dispatch from '@@/actions/dispatch'
+// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
+import { vals } from '@/util'
 
+import dispatch from './dispatch'
 import { putUpDoors } from './functions'
+import { moveModiferMap as moveModifiers } from './rulebook/battle'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc }from './rulebook/battle/misc'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEBUG = false
 
+const tl = (x: string) => console.log(x)
 
 // TODO
 // interface Bindings  {

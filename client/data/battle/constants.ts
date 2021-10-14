@@ -1,3 +1,5 @@
+// TODO: no rulebook at all?
+// Intermediate step: load in whole rulebook from thing
 import { rulebook } from '@@/db/data'
 
 export const {

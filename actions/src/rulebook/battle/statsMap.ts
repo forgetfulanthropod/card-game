@@ -1,9 +1,8 @@
 // TODO: better name for this file and export?
 
 // import { Immutable } from '@/config/immutable'
-import type { CharacterName } from '@/features/battle/logic/AssetLoader'
 // import { deepFreeze } from '@/util'
-import type { CharacterStats } from '@@/db/datamodel'
+import type { CharacterName,CharacterStats } from '@shared/index'
 export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
         name: 'bloatDemon',

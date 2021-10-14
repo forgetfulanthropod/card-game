@@ -1,6 +1,6 @@
-import { newNPCMeta } from '@@/db/battle/state'
-import type { CharacterMeta, CharacterUid } from '@@/db/datamodel'
-import { CharacterName } from '@@/db/datamodel'
+import type { CharacterMeta, CharacterUid, Door } from '@shared/index'
+
+import { newNPCMeta } from './rulebook/battle'
 
 
 // type CharacterModifer = string

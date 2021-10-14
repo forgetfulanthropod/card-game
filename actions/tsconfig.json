@@ -8,13 +8,14 @@
     "strict": false,
     "target": "es2017",
     "baseUrl": "..",
+    "skipLibCheck": true,
     "paths": {
       "@/*": [
         "./actions/src/*"
       ],
       "@shared/*": [
         "./shared/*"
-      ]
+      ],
     },
   },
   "compileOnSave": true,

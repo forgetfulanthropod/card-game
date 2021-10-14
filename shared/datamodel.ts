@@ -1,13 +1,10 @@
-import type { CharacterName } from '@/features/battle/logic/AssetLoader'
-
 // A name is something like "Skeleton" or "Frogknight"
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from '../db/battle/types'
+import type { BattleScene, CharacterName,MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
+
 import type { EntryState } from './entryTypes'
-export * from '../db/battle/types'
-export type { CharacterName }
 
 
 export type CharacterUid = string
