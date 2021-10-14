@@ -2,8 +2,12 @@ import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
 import type { Firestore } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
-import {firestore} from 'firebase-admin'
+import {firestore, initializeApp} from 'firebase-admin'
 import { https, logger } from 'firebase-functions'
+
+const app = initializeApp({
+  projectId: 'kaiju-75e84',
+})
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
