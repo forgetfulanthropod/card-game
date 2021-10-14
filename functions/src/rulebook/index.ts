@@ -1,6 +1,6 @@
-import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle/constants'
+import type { Gamestate, Rulebook } from '../../../shared/datamodel'
+import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle'
 import { initialBattleState, numbers } from './battle/state'
-import type { Gamestate, Rulebook } from './datamodel'
 import { initialEntryState } from './entry/state'
 
 

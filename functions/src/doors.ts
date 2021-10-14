@@ -1,8 +1,7 @@
 import { newNPCMeta } from '@@/db/battle/state'
-import type { CharacterMeta, CharacterUid } from '@@/db/datamodel';
+import type { CharacterMeta, CharacterUid } from '@@/db/datamodel'
 import { CharacterName } from '@@/db/datamodel'
 
-export type Door = 'ordinary' | 'easier' | 'harder' | 'etc'
 
 // type CharacterModifer = string
 

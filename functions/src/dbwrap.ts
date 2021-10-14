@@ -1,4 +1,4 @@
-import { Gamestate } from '../../db/datamodel'
+import type { Gamestate } from './rulebook/datamodel'
 
 export function initialize(userCredentials: string) { }
 export function getFromRulebook(key: string) { }

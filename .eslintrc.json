@@ -14,8 +14,8 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
+        "sourceType": "module"
+        // "project": "./tsconfig.json"
     },
     "plugins": [
         "react",
@@ -69,7 +69,7 @@
             "warn",
             {
                 "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_"
+                "varsIgnorePattern": "^h$|^_"
             }
         ],
         // for import organizing:
@@ -94,7 +94,17 @@
         }
     },
     "ignorePatterns": [
-        "scripts/",
-        "api/"
+        "scripts/"
     ]
+    // "overrides": [
+    //     {
+    //         "files": [
+    //             "client/**/*.ts",
+    //             "client/**/*.tsx",
+    //             "client/**/*.d.ts",
+    //             "shared/**/*.d.ts",
+    //             "functions/src/**/*.ts"
+    //         ]
+    //     }
+    // ]
 }
