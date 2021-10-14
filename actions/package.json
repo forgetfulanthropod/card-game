@@ -15,7 +15,7 @@
     "engines": {
         "node": "14"
     },
-    "main": "lib/actions/src/index.js",
+    "main": "lib/actions/index.js",
     "dependencies": {
         "eventemitter3": "^4.0.7",
         "firebase": "^9.1.3",

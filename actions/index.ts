@@ -73,5 +73,5 @@ export const addMessage = https.onRequest(async (req, res) => {
 
   export const helloAgain = https.onRequest(async (req, res) => {
     const original = req.query.text;
-    res.json({result: `Why hello there. You said ${original}`});
+    res.json({result: `Oh hello there. You said ${original}`});
   });

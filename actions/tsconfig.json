@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     "paths": {
       "@/*": [
-        "./actions/src/*"
+        "./actions/*"
       ],
       "@shared/*": [
         "./shared/*"
@@ -23,7 +23,8 @@
   },
   "compileOnSave": true,
   "include": [
-    "src",
-    "../shared"
+    ".",
+    "../shared",
+    "rulebook"
   ]
 }
