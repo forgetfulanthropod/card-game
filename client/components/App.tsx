@@ -1,9 +1,8 @@
+import type { MyCursor } from '@shared/myBaobab'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
 
-import type { MyCursor } from '@shared/myBaobab'
 import { scene } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 import DungeonEntry from '@/features/battle/components/DungeonEntry'

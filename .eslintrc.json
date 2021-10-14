@@ -21,7 +21,7 @@
         "react",
         "react-hooks",
         "@typescript-eslint",
-        // "unused-imports"
+        "unused-imports",
         "simple-import-sort"
     ],
     "rules": {
@@ -65,13 +65,7 @@
                 "null": "ignore"
             }
         ],
-        "@typescript-eslint/no-unused-vars": [
-            "warn",
-            {
-                "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^h$|^_"
-            }
-        ],
+        // "@typescript-eslint/no-unused-vars": [ "warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$|^_" } ],
         // for import organizing:
         // "sort-imports": [
         //     "warn"
@@ -82,9 +76,17 @@
                 "prefer": "type-imports"
             }
         ],
-        // "@typescript-eslint/no-unused-vars": "off",
-        // "unused-imports/no-unused-imports": "error",
-        // "unused-imports/no-unused-vars": [ "warn", { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" } ]
+        "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^h$|^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ],
         "simple-import-sort/imports": "error"
         // "simple-import-sort/exports": "error",
     },

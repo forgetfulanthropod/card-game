@@ -1,5 +1,5 @@
 import type { JSX } from 'preact'
-import { createContext , h} from 'preact'
+import { createContext } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {
