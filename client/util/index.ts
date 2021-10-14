@@ -1,7 +1,9 @@
 // TODO: do not replicate this file
 import type { Immutable } from '@shared/immutable'
+import isEqual from 'lodash/isEqual'
+import isObject from 'lodash/isObject'
+import transform from 'lodash/transform'
 import toast from 'react-hot-toast'
-
 export const tl = (x: string): void => { console.log(x); toast(x) }
 
 
@@ -76,3 +78,30 @@ export function objFilter<K extends string | number, V>(obj: Record<K, V>, f: (k
     (Object.entries(obj) as [K, V][]).forEach(([k, v]) => { if (f(k as string, v)) o[k] = v })
     return o
 }
+
+type Objectish = Record<string, unknown>
+// difference({1:2,3:4,5:{6:7,8:9,10:{}},11:12},{1:3,5:{6:7,10:{13:14}},11:12,15:16}) = {1:2,3:4,5:{8:9,10:{}}}
+// https://gist.github.com/Yimiprod/7ee176597fef230d1451
+/** Won't work for our purposes I think */
+export function objDiff<T extends Objectish >(object: T, base: T): Objectish {
+	function changes<S extends Objectish>(object: S, base: S) {
+		return transform(object, function(result: Objectish, value, key) {
+			if (!isEqual(value, base[key])) {
+				result[key] = (isObject(value) && isObject(base[key])) ? changes(value as Objectish, base[key] as Objectish) : value;
+			}
+		});
+	}
+	return changes(object, base);
+}
+
+// TODO:
+// type ObjPath = string[]
+// type PathsAndValues = [ObjPath, unknown][]
+/** returns the paths of changed values */
+// function pathDiff<T extends Objectish >(object: T, base: T): PathsAndValues {
+//     const stack = ldUnion(Object.keys(object), Object.keys(base)).map(k=>[k])
+//     const result: PathsAndValues = []
+//     while (stack.length > 0) {
+//         if (getAt()) {}
+//     }
+// }
