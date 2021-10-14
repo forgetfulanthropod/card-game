@@ -2,7 +2,7 @@
 
 import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '@shared/index'
 
-import { stanceTypeMetaMap } from '.'
+import { moveModiferMap, stanceTypeMetaMap } from '.'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
@@ -74,7 +74,7 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const defenders = [getPCTarget(ac)]
 
     const mainType: MoveModifierName = move.types[0]
-    if (moveModifiers[mainType].numTargets > 1) {
+    if (moveModiferMap[mainType].numTargets > 1) {
         const closest = getClosestAlive(ac, defenders[0], 1)
         if (closest != null)
             defenders.push(closest)

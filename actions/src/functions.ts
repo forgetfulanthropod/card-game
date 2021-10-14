@@ -2,6 +2,7 @@ import type { BattleScene, Door, MyCursor,SceneName } from '@shared/index'
 
 import { objFilter } from '@/util'
 
+import { tree } from '.'
 // import { tree } from '@@/client/data/rootTree'
 import type {  } from './doors'
 import { getDoorChoices, makeRoom } from './doors'

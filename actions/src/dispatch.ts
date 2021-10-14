@@ -4,14 +4,21 @@ import type { CharacterMeta, CharacterMove } from '@shared/index'
 
 import { keys, vals } from '@/util'
 
+import { getBattleScene } from '.'
 import { initialBattleState } from './rulebook/battle'
+import { checkWinner } from './rulebook/battle/misc'
 
-type Set<T> = T | ((old: T) => T)
+type Size = {
+    width: number
+    height: number
+}
+
+type Setter<T> = T | ((old: T) => T)
 export type Action =
     | { a: 'setIsPlayerTurn', v: boolean }
     | { a: 'setBattleHasBegun' }
     | { a: 'setHasMoved', uid: string, v: boolean }
-    | { a: 'setHealth', uid: string, h: Set<number> }
+    | { a: 'setHealth', uid: string, h: Setter<number> }
     | { a: 'clearHasMoved' }
     | { a: 'setSelectedCharacter', c: CharacterMeta }
     | { a: 'setSelectedMove', m: CharacterMove }
@@ -73,10 +80,8 @@ export default function dispatch(action: Action): void {
             for (const k of keys(cursor.get())) {
                 const cu = cursor.select(k)
                 const ch = cu.get()
-                cu.merge({
-                    screenX: ch.x * action.size.width / 100,
-                    screenY: ch.y * action.size.height / 100,
-                })
+                cu.set('screenX', ch.x * action.size.width / 100)
+                cu.set('screenY', ch.y * action.size.height / 100)
             }
             return
         } case 'setIsBasicLoaded': {

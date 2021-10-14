@@ -1,3 +1,7 @@
+import type { BattleScene } from '@shared/battleTypes'
+import type { Gamestate } from '@shared/datamodel'
+import type { Firestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { https } from 'firebase-functions'
 
 // // Start writing Firebase Functions
@@ -24,6 +28,30 @@ import { https } from 'firebase-functions'
 //     })
 
 // http://localhost:5001/kaiju-75e84/us-central1/helloWorld
-export const helloWorld = https.onCall((data, context) => {
+export const helloWorld = https.onCall((_data, _context) => {
     return 'hello'
 })
+
+let db: null | Firestore = null
+export function maybeInitializeFirebase(): Firestore {
+    if (db != null) return db
+    db = getFirestore()
+    connectFirestoreEmulator(db, 'localhost', 8080)
+    return db
+}
+
+export interface FBCursor<T> {
+    select<K extends keyof T>(k: K): FBCursor<T[K]>
+    get(): T
+    get<K extends keyof T>(k: K): T[K]
+    set(v: T): void
+    set<K extends keyof T>(k: K, v: T[K]): void
+    apply<K extends keyof T>(k: K, f: (prev: T[K]) => T[K]): FBCursor<T[K]>
+    on(eventName: 'update', cb: () => void): void
+}
+
+export function getBattleScene(): FBCursor<BattleScene> {
+    return null as unknown as FBCursor<BattleScene>
+}
+
+export const tree = null as unknown as FBCursor<Gamestate>

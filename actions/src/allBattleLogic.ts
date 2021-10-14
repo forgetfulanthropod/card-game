@@ -1,12 +1,13 @@
 // TODO: getBattleScene
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
-import type { MyCursor } from '@shared/myBaobab'
 import { EventEmitter } from 'eventemitter3'
 import toast from 'react-hot-toast'
 
 // import type { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { vals } from '@/util'
 
+import type { FBCursor} from '.';
+import { getBattleScene } from '.'
 import dispatch from './dispatch'
 import { putUpDoors } from './functions'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
@@ -31,10 +32,10 @@ export function getBindings() {
     const scene = getBattleScene()
 
     // const { battleCursor: battleState, dispatch } = props
-    const move$: MoveEmitter = new EventEmitter()
-    const npcMove$: NpcMoveEmitter = new EventEmitter()
+    const move$ = new EventEmitter<{ '': AttackData }>()
+    const npcMove$ = new EventEmitter<{ '': string }>()
 
-    const cursorToState = (cursor: MyCursor<BattleScene>) => {
+    const cursorToState = (cursor: FBCursor<BattleScene>) => {
         const value = cursor.get()
         const allCharacters = vals(value.allCharacters)
         const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
@@ -45,10 +46,10 @@ export function getBindings() {
     }
 
     const state = cursorToState(scene)
-    scene.on('update', function () {
-        Object.assign(state, cursorToState(scene))
-    })
-    const isPlayerFirstTurn = scene.select('isPlayerTurn').get()
+    // scene.on('update', function () {
+    //     Object.assign(state, sceneToState(scene))
+    // })
+    const isPlayerFirstTurn = scene.get('isPlayerTurn')
     // debugger
 
 
@@ -100,7 +101,7 @@ export function getBindings() {
         // }
         return () => { }
     }
-    const winStateCursor = scene.select('state')
+    const winStateCursor =  scene.select('state')
     winStateCursor.on('update', () => {
         const s = winStateCursor.get()
         if (s === 'won' || s === 'lost') {
@@ -109,7 +110,7 @@ export function getBindings() {
     })
 
 
-    function doNpcMove(reason?: string) {
+    function doNpcMove(_reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
         if (checkWinner(vals(state.allCharacters)) != null) { return }
         if (state.isPlayerTurn) { return }
