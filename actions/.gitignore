@@ -9,3 +9,5 @@ typings/
 node_modules/
 
 package-lock.json
+
+/*.log

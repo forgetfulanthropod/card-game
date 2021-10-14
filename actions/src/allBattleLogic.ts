@@ -1,8 +1,8 @@
 // TODO: getBattleScene
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
 import { EventEmitter } from 'eventemitter3'
-import toast from 'react-hot-toast'
 
+// import toast from 'react-hot-toast'
 // import type { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { vals } from '@/util'
 
@@ -55,14 +55,7 @@ export function getBindings() {
 
     move$.on('', function showMove(ad: AttackData) {
         if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
-        toast(ad.move.name,
-            {
-                style: {
-                    backgroundColor: ad.attacker.isPc ? 'green' : 'red',
-                    color: 'white'
-                }
-            }
-        )
+        // toast(ad.move.name, { style: { backgroundColor: ad.attacker.isPc ? 'green' : 'red', color: 'white' } } )
         console.log(ad.move.name)
     })
 
