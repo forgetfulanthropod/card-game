@@ -3,18 +3,18 @@ import { tree } from '@@/client/data/rootTree'
 import { OwnedCharacter, SceneName } from '@@/client/data/types'
 import { makeBattleState } from '@@/db/battle/state'
 import { rulebook } from '@@/db/data'
-import { EntryState } from '@@/db/entry/types'
+import { EntryScene } from '@@/db/entry/types'
 
 export function changeScene(newSceneName: SceneName): void {
     if (newSceneName === 'battle') {
-        tree.set('scene', makeBattleState((tree.select('scene') as MyCursor<EntryState>).select('selectedCharacters').get()))
+        tree.set('scene', makeBattleState((tree.select('scene') as MyCursor<EntryScene>).select('selectedCharacters').get()))
         return
     }
     tree.set('scene', rulebook.initialScenes[newSceneName])
 }
 
 export function addSelected(c: OwnedCharacter): void {
-    const scene = tree.select('scene') as MyCursor<EntryState>
+    const scene = tree.select('scene') as MyCursor<EntryScene>
 
     const indexInselected = scene.select('selectedCharacters').get().findIndex(character => c === character)
     if (indexInselected !== -1)
@@ -24,7 +24,7 @@ export function addSelected(c: OwnedCharacter): void {
             return acc + curr.points
         }, 0)
 
-        if (totalPoints < 20)
+        if (totalPoints < scene.select('pointLimit').get())
             scene.apply('selectedCharacters', sel => [...sel, c])
     }
 

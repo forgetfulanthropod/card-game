@@ -4,7 +4,7 @@ import { CharacterName } from '@/features/battle/logic/AssetLoader'
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
 import { BattleScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from './battle/types'
-import { EntryState } from './entry/types'
+import { EntryScene } from './entry/types'
 export * from './battle/types'
 export type { CharacterName }
 
@@ -31,7 +31,7 @@ export interface Rulebook {
     }>
     initialScenes: {
         map: MapScene,
-        entry: EntryState,
+        entry: EntryScene,
         // battle: BattleScene,
         craft: CraftingScene,
     }
@@ -73,7 +73,7 @@ interface CraftingScene extends SceneHas {
 
 
 export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
-export type Scene = MapScene | BattleScene | CraftingScene | EntryState
+export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
 export interface CharacterStats {

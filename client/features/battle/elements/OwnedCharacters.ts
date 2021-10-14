@@ -3,12 +3,12 @@ import { ownedCharacters, scene } from '@/data/rootTree'
 // import { OwnedCharacter } from '@/data/types'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
-import { EntryState } from '@@/db/entry/types'
+import { EntryScene } from '@@/db/entry/types'
 import { addSelected } from '@@/logic/functions'
 import { Container, PixiContainer, Sprite } from './mypixi'
 
 export function OwnedCharacters(): PixiContainer {
-    const selectedCharacters = (scene as MyCursor<EntryState>).select('selectedCharacters')
+    const selectedCharacters = (scene as MyCursor<EntryScene>).select('selectedCharacters')
 
     selectedCharacters.on('update', () => {
         characters.forEach(characterContainer => {
@@ -37,9 +37,12 @@ export function OwnedCharacters(): PixiContainer {
                     scale: .4,
                     onClick: () => addSelected(c),
                 })
-            ]
+            ],
         })
     )
+
+    characters.map(c => c.children[0].on('mouseover', () => { console.log('mouseover') }))
+    characters.map(c => c.children[0].on('mouseout', () => { console.log('mouseout') }))
 
     const root = Container({
         x: 200,

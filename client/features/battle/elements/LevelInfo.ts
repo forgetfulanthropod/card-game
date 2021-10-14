@@ -1,5 +1,5 @@
 import { numbers } from '@/data/battle/constants'
-import { scene } from '@/data/rootTree'
+import { getEntryScene } from '@/data/rootTree'
 import { Container, PixiContainer, PixiText, Text } from './mypixi'
 
 
@@ -12,18 +12,59 @@ export function LevelInfo(): PixiContainer {
         { name: 'The Ninth Trash Hole of Hell', pointLimit: 100, modifier: 5, },
     ]
 
+    const scene = getEntryScene()
+
     scene.on('update', () => {
         const selectedLevel = scene.get().selectedLevel
         const levelIndex = selectedLevel - 1
         const level = levels[levelIndex]
 
-        levelNumText.text = `◀ Level ${selectedLevel} ▶`
+        levelNumText.text = `Level ${selectedLevel}`
         pointLimitText.text = `point limit: ${level.pointLimit}`
     })
 
     const levelNumText = Text({
-        text: '◀ Level 1 ▶',
+        text: 'Level 1',
         anchor: [.5, 1],
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 80,
+            fill: ['#fff', '#eee'], // gradient
+            // letterSpacing: -5,
+            stroke: '#999',
+            strokeThickness: 5,
+        },
+    })
+
+    const leftButton = Text({
+        text: '◀',
+        anchor: [.5, 1],
+        x: -300,
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 80,
+            fill: ['#fff', '#eee'], // gradient
+            // letterSpacing: -5,
+            stroke: '#999',
+            strokeThickness: 5,
+        },
+        onClick() {
+            let l = scene.select('selectedLevel').get()
+
+            if (l === 1) {
+                l = levels.length
+            } else {
+                l -= 1
+            }
+
+            scene.select('selectedLevel').set(l)
+            scene.select('pointLimit').set(levels[l - 1].pointLimit)
+        }
+    })
+    const rightButton = Text({
+        text: '▶',
+        anchor: [.5, 1],
+        x: 300,
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
@@ -34,8 +75,9 @@ export function LevelInfo(): PixiContainer {
         },
         onClick() {
             const l = scene.select('selectedLevel').get()
-            console.log({ l })
+
             scene.select('selectedLevel').set(l % levels.length + 1)
+            scene.select('pointLimit').set(levels[l - 1].pointLimit)
         }
     })
 
@@ -54,7 +96,9 @@ export function LevelInfo(): PixiContainer {
         x: numbers.BASE_WIDTH / 2,
         y: numbers.BASE_HEIGHT / 10,
         children: [
+            leftButton,
             levelNumText,
+            rightButton,
             pointLimitText,
         ],
     })
