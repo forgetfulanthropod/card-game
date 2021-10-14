@@ -6,7 +6,16 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": false,
-    "target": "es2017"
+    "target": "es2017",
+    "baseUrl": "..",
+    "paths": {
+      "@/*": [
+        "./actions/src/*"
+      ],
+      "@shared/*": [
+        "./shared/*"
+      ]
+    },
   },
   "compileOnSave": true,
   "include": [
