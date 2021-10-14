@@ -2,20 +2,23 @@ import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
 import type { Firestore } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
-import {firestore, initializeApp} from 'firebase-admin'
+import { firestore, initializeApp } from 'firebase-admin'
 import { https, logger } from 'firebase-functions'
+import ldGet from 'lodash/get'
 
+import type { FBCursor} from './FBCursor';
+import { makeFBCursor } from './FBCursor'
 const app = initializeApp({
-  projectId: 'kaiju-75e84',
+    projectId: 'kaiju-75e84',
 })
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
 export const helloWorld = https.onRequest((request, response) => {
-  logger.info('Hello logs!', {structuredData: true});
-  response.send('Hello from Firebase!');
-});
+    logger.info('Hello logs!', { structuredData: true })
+    response.send('Hello from Firebase!')
+})
 // export const makeUppercase = functions.firestore.document('/messages/{documentId}')
 //     .onCreate((snap, context) => {
 //         // Grab the current value of what was written to Firestore.
@@ -45,18 +48,9 @@ export function maybeInitializeFirebase(): Firestore {
     return db
 }
 
-export interface FBCursor<T> {
-    select<K extends keyof T>(k: K): FBCursor<T[K]>
-    get(): T
-    get<K extends keyof T>(k: K): T[K]
-    set(v: T): void
-    set<K extends keyof T>(k: K, v: T[K]): void
-    apply<K extends keyof T>(k: K, f: (prev: T[K]) => T[K]): FBCursor<T[K]>
-    on(eventName: 'update', cb: () => void): void
-}
-
 export function getBattleScene(): FBCursor<BattleScene> {
-    return null as unknown as FBCursor<BattleScene>
+    const scene = null as unknown as BattleScene
+    return makeFBCursor(scene)
 }
 
 export const tree = null as unknown as FBCursor<Gamestate>
@@ -67,15 +61,19 @@ export const tree = null as unknown as FBCursor<Gamestate>
 // Firestore under the path /messages/:documentId/original
 export const addMessage = https.onRequest(async (req, res) => {
     // Grab the text parameter.
-    const original = req.query.text;
+    const original = req.query.text
     // Push the new message into Firestore using the Firebase Admin SDK.
-    const writeResult = await firestore().collection('messages').add({original: original});
+    const writeResult = await firestore().collection('messages').add({ original: original })
     // Send back a message that we've successfully written the message
-    res.json({result: `Message with ID: ${writeResult.id} added.`});
+    res.json({ result: `Message with ID: ${writeResult.id} added.` })
 
-  });
+})
 
-  export const helloAgain = https.onRequest(async (req, res) => {
-    const original = req.query.text;
-    res.json({result: `Oh hello there. You said ${original}`});
-  });
+export const helloAgain = https.onRequest(async (req, res) => {
+    const original = req.query.text
+    res.json({ result: `Oh hello there. You said ${original}` })
+})
+
+
+const o = {x: {y: {z: 5}}}
+const x = ldGet(o, ['x','y','z'])

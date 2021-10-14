@@ -28,7 +28,7 @@ export type Action =
     | { a: 'setIsDeluxeLoaded', v: boolean }
 
 
-export default function dispatch(action: Action): void {
+export default async function dispatch(action: Action): Promise<void> {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
     const scene = getBattleScene()
@@ -51,7 +51,8 @@ export default function dispatch(action: Action): void {
             // debugger
             // let notFound = true
             const charCursor = scene.select('allCharacters').select(action.uid)
-            charCursor.set('health', typeof action.h === 'function' ? action.h(charCursor.get('health')) : action.h)
+            const prevHealth = await charCursor.get('health')
+            charCursor.set('health', typeof action.h === 'function' ? action.h(prevHealth) : action.h)
             const winner = checkWinner(vals(scene.select('allCharacters').get()))
             if (winner === 'PC') scene.set('state', 'won')
             if (winner === 'NPC') scene.set('state', 'lost')

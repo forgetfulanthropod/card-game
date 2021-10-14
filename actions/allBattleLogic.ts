@@ -1,12 +1,12 @@
 // TODO: getBattleScene
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
 import { EventEmitter } from 'eventemitter3'
+import type { FBCursor } from 'KeyAt'
 
 // import toast from 'react-hot-toast'
 // import type { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { vals } from '@/util'
 
-import type { FBCursor} from '.';
 import { getBattleScene } from '.'
 import dispatch from './dispatch'
 import { putUpDoors } from './functions'
@@ -28,15 +28,15 @@ const tl = (x: string) => console.log(x)
 //     move$: any,
 // }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getBindings() {
+export async function getBindings() {
     const scene = getBattleScene()
 
     // const { battleCursor: battleState, dispatch } = props
     const move$ = new EventEmitter<{ '': AttackData }>()
     const npcMove$ = new EventEmitter<{ '': string }>()
 
-    const cursorToState = (cursor: FBCursor<BattleScene>) => {
-        const value = cursor.get()
+    const cursorToState = async (cursor: FBCursor<BattleScene>) => {
+        const value = await cursor.get()
         const allCharacters = vals(value.allCharacters)
         const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)
         const aliveNpcs = allCharacters.filter(c => !c.isPc && c.health > 0)
@@ -45,11 +45,11 @@ export function getBindings() {
         return { ...value, alivePcs, aliveNpcs, isMoveAvailable }
     }
 
-    const state = cursorToState(scene)
+    const state = await cursorToState(scene)
     // scene.on('update', function () {
     //     Object.assign(state, sceneToState(scene))
     // })
-    const isPlayerFirstTurn = scene.get('isPlayerTurn')
+    const isPlayerFirstTurn = await scene.select('isPlayerTurn').get()
     // debugger
 
 
@@ -95,8 +95,8 @@ export function getBindings() {
         return () => { }
     }
     const winStateCursor =  scene.select('state')
-    winStateCursor.on('update', () => {
-        const s = winStateCursor.get()
+    winStateCursor.on('update', async () => {
+        const s = await winStateCursor.get()
         if (s === 'won' || s === 'lost') {
             endGame(s)
         }
