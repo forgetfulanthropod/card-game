@@ -3,17 +3,20 @@ import type { Gamestate } from '@shared/datamodel'
 import type { Firestore } from 'firebase/firestore'
 import { doc } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
-import { firestore, initializeApp } from 'firebase-admin'
-import { https, logger } from 'firebase-functions'
+import { initializeApp } from 'firebase-admin'
+import { https } from 'firebase-functions'
 
 import type { FBCursor } from './FBCursor'
 import { makeFBCursor } from './FBCursor'
-
+import { changeScene_, chooseDoor_, putUpDoors_, } from './functions'
 initializeApp({
     projectId: 'kaiju-75e84',
 })
 
 const wrapper = onRequestWrapper
+export const changeScene = wrapper(changeScene_)
+export const putUpDoors = wrapper(putUpDoors_)
+export const chooseDoor = wrapper(chooseDoor_)
 
 function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
     return https.onRequest(async (request, response) => {
@@ -39,26 +42,7 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
 
 
 type Empty = Record<string, never> | null | undefined
-export const helloWithLogs = wrapper(function helloWithLogs(_args: Empty) {
-    logger.info('Hello logs!', { structuredData: true })
-    return 'Hello from Firebase!'
-})
 
-export const justHello = wrapper(function justHello(_args: Empty) {
-    return 'hello'
-})
-
-export const square = wrapper(function square(args: { n: string }) {
-    const m = Number(args.n)
-    return m * m
-})
-
-export const helloWithFirestore = wrapper(async function helloWithFirestore(args: { text: string }) {
-    const original = args.text
-    const writeResult = await firestore().collection('messages').add({ original: original })
-    // Send back a message that we've successfully written the message
-    return { result: `Message with ID: ${writeResult.id} added.` }
-})
 
 let db: null | Firestore = null
 export function maybeInitializeFirebase(): Firestore {

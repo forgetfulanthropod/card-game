@@ -29,7 +29,8 @@
     },
     "npm.packageManager": "pnpm",
     "files.exclude": {
-        "**/.keep": true
+        "**/.keep": true,
+        "actions/lib": true,
     },
     "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {

@@ -9,7 +9,7 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
-export const initialCharacters = (function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
+function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 1)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
     const all = [
@@ -23,13 +23,13 @@ export const initialCharacters = (function makeInitialCharacters(): Record<Chara
         c.uid = uid
     }
     return o
-})()
+}
 
-export const initialBattleState: BattleScene = (function makeInitialState(
+export function makeInitialBattleState(
     // TODO
     // chosenCharacters: CharacterName[]
 ): BattleScene {
-    const allCharacters = initialCharacters
+    const allCharacters = makeInitialCharacters()
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -58,7 +58,7 @@ export const initialBattleState: BattleScene = (function makeInitialState(
         isDeluxeLoaded: false,
         doors: null,
     })
-})()
+}
 
 function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
@@ -93,6 +93,9 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
+    console.log('args.name', args.name)
+    console.log('statsMap[args.name]', statsMap[args.name])
+    // console.log('statsMap', statsMap)
     return {
         ...statsMap[args.name],
         uid: args.uid, // being set in makeInitialCharacters rn

@@ -2,16 +2,15 @@
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
 import { EventEmitter } from 'eventemitter3'
 
-// import toast from 'react-hot-toast'
-// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
-import { vals } from '@/util'
-
 import { getBattleScene } from '.'
 import dispatch from './dispatch'
 import type { FBCursor } from './FBCursor'
-import { putUpDoors } from './functions'
+import { putUpDoors_ } from './functions'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './rulebook/battle/misc'
+// import toast from 'react-hot-toast'
+// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
+import { vals } from './util'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -81,7 +80,7 @@ export async function getBindings() {
     function endGame(s: BattleWinState) {
         tl(s === 'won' ? 'You win' : 'Computer wins')
         if (s === 'won') {
-            putUpDoors()
+            putUpDoors_()
         }
         // if (winner === 'NPC') {
         //     // TODO

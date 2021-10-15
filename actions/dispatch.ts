@@ -2,11 +2,10 @@
 // import { checkWinner } from '@@/client/data/battle/misc'
 import type { CharacterMeta, CharacterMove } from '@shared/index'
 
-import { keys, vals } from '@/util'
-
 import { getBattleScene } from '.'
-import { initialBattleState } from './rulebook/battle'
+import { makeInitialBattleState } from './rulebook/battle'
 import { checkWinner } from './rulebook/battle/misc'
+import { keys, vals } from './util'
 
 type Size = {
     width: number
@@ -74,7 +73,7 @@ export default async function dispatch(action: Action): Promise<void> {
             scene.set('selectedMove', action.m)
             return
         } case 'fullReset': {
-            scene.set(initialBattleState)
+            scene.set(makeInitialBattleState())
             return
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')
