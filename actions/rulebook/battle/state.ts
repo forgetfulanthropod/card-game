@@ -93,8 +93,8 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    console.log('args.name', args.name)
-    console.log('statsMap[args.name]', statsMap[args.name])
+    // console.log('args.name', args.name)
+    // console.log('statsMap[args.name]', statsMap[args.name])
     // console.log('statsMap', statsMap)
     return {
         ...statsMap[args.name],

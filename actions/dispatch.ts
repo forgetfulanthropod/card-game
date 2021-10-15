@@ -1,33 +1,15 @@
 // import { getBattleScene } from '@/data/rootTree'
 // import { checkWinner } from '@@/client/data/battle/misc'
-import type { CharacterMeta, CharacterMove } from '@shared/index'
+import { dispatch } from '@shared/actions'
 
 import { getBattleScene } from '.'
 import { makeInitialBattleState } from './rulebook/battle'
 import { checkWinner } from './rulebook/battle/misc'
 import { keys, vals } from './util'
 
-type Size = {
-    width: number
-    height: number
-}
-
-type Setter<T> = T | ((old: T) => T)
-export type Action =
-    | { a: 'setIsPlayerTurn', v: boolean }
-    | { a: 'setBattleHasBegun' }
-    | { a: 'setHasMoved', uid: string, v: boolean }
-    | { a: 'setHealth', uid: string, h: Setter<number> }
-    | { a: 'clearHasMoved' }
-    | { a: 'setSelectedCharacter', c: CharacterMeta }
-    | { a: 'setSelectedMove', m: CharacterMove }
-    | { a: 'fullReset' }
-    | { a: 'updateScreenSize', size: Size }
-    | { a: 'setIsBasicLoaded', v: boolean }
-    | { a: 'setIsDeluxeLoaded', v: boolean }
 
 
-export default async function dispatch(action: Action): Promise<void> {
+const dispatch: dispatch = async (action) => {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
     const scene = getBattleScene()
@@ -94,6 +76,4 @@ export default async function dispatch(action: Action): Promise<void> {
             throw new Error(`unknown action ${JSON.stringify(action)}`)
     }
 }
-
-
-export type Dispatcher = (a: Action) => void
+export default dispatch

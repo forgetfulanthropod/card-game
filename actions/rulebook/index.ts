@@ -3,7 +3,6 @@ import type { Gamestate, Rulebook } from '@shared/datamodel'
 import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle'
 import { makeInitialBattleState, numbers } from './battle/state'
 import { initialEntryState } from './entry/state'
-
 export const rulebook: Rulebook = {
     characters: statsMap,
     moveModifiers: moveModiferMap,

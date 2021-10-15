@@ -6,6 +6,7 @@ import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { initializeApp } from 'firebase-admin'
 import { https } from 'firebase-functions'
 
+import { dispatch as dispatch_ } from './'
 import type { FBCursor } from './FBCursor'
 import { makeFBCursor } from './FBCursor'
 import { changeScene_, chooseDoor_, putUpDoors_, } from './functions'
@@ -17,7 +18,7 @@ const wrapper = onRequestWrapper
 export const changeScene = wrapper(changeScene_)
 export const putUpDoors = wrapper(putUpDoors_)
 export const chooseDoor = wrapper(chooseDoor_)
-
+export const dispatch = wrapper(dispatch_)
 function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
     return https.onRequest(async (request, response) => {
         try {
