@@ -1,5 +1,5 @@
 import type { MyCursor } from '@shared/myBaobab'
-import type { JSX } from 'preact'
+import { h, JSX } from 'preact' // eslint-disable-line
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
 
