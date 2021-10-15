@@ -1,5 +1,5 @@
 import { CharacterName, CharacterUid, OwnedCharacter, StanceName } from '@/data/types'
-import { initialOwnedCharacters } from '../data'
+import { initialOwnedCharacters } from '../rulebook'
 import { statsMap } from './constants'
 import { BattleScene, CharacterMeta } from './types'
 import { length, vals } from '@@/db/objUtils'

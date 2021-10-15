@@ -1,4 +1,4 @@
-import { rulebook } from '@@/db/data'
+import { rulebook } from '@@/db/rulebook'
 
 export const {
     characters,

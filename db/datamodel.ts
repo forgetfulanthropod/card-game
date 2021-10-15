@@ -24,6 +24,12 @@ export interface Rulebook {
         displayName: string
         name: LocationName
     }>
+    dungeonLevels: {
+        name: string
+        num: number
+        pointLimit: number
+        modifier: number
+    }[]
     items: Record<ItemName, {
         name: ItemName
         displayName: string
@@ -31,7 +37,7 @@ export interface Rulebook {
     }>
     initialScenes: {
         map: MapScene,
-        entry: EntryScene,
+        // entry: EntryScene,
         // battle: BattleScene,
         craft: CraftingScene,
     }

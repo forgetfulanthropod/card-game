@@ -4,7 +4,8 @@ import { ownedCharacters, scene } from '@/data/rootTree'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
 import { EntryScene } from '@@/db/entry/types'
-import { addSelected } from '@@/logic/functions'
+import { addSelected } from '@@/logic/dungeonEntry'
+
 import { Container, PixiContainer, PixiText, Sprite, Text } from './mypixi'
 
 export function OwnedCharacters(): PixiContainer {

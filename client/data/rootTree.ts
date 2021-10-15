@@ -1,6 +1,7 @@
 import { BattleScene } from '@@/db/battle/types'
-import { initialGameState } from '@@/db/data'
+
 import { EntryScene } from '@@/db/entry/types'
+import { initialGameState } from '@@/db/gameState'
 import { MyBaobab, MyCursor } from '../config/myBaobab'
 import { Scene } from './types'
 
