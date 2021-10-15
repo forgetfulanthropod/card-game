@@ -4,7 +4,7 @@ import type { BattleScene } from '@shared/battleTypes'
 // import { initialGameState } from '@@/db/data'
 
 import type { MyCursor } from '@shared/index'
-import { MyBaobab } from '@shared/index'
+import { MyBaobab } from '@shared/myBaobab'
 import type { Scene } from './types'
 // import { settings } from './settings'
 // type Foo =
