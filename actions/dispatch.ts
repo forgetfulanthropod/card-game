@@ -1,5 +1,3 @@
-// import { getBattleScene } from '@/data/rootTree'
-// import { checkWinner } from '@@/client/data/battle/misc'
 import type { Dispatch } from '@shared/actions'
 
 import { getBattleScene } from '.'
@@ -8,11 +6,10 @@ import { checkWinner } from './rulebook/battle/misc'
 import { keys, vals } from './util'
 
 
-
 const dispatch: Dispatch = async (action) => {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
-    const scene = getBattleScene()
+    const scene = await getBattleScene('alice')
     switch (action.a) {
         case 'setIsPlayerTurn': {
             // tl(`setting player turn to ${action.v}`)

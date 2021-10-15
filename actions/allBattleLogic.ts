@@ -28,7 +28,7 @@ const tl = (x: string) => console.log(x)
 // }
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function getBindings() {
-    const scene = getBattleScene()
+    const scene = await getBattleScene('alice')
 
     // const { battleCursor: battleState, dispatch } = props
     const move$ = new EventEmitter<{ '': AttackData }>()
@@ -66,6 +66,7 @@ export async function getBindings() {
         }
         return () => { }
     }
+
     function resetRound() {
         if (DEBUG) tl('resetting moves')
         dispatch({ a: 'clearHasMoved' })

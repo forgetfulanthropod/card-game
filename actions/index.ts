@@ -1,6 +1,7 @@
 import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
 import type { Firestore } from 'firebase/firestore'
+import { getDoc } from 'firebase/firestore'
 import { doc } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { initializeApp } from 'firebase-admin'
@@ -46,6 +47,7 @@ function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
         }
     })
 }
+
 function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableContext) => ReturnType) {
     startFirebaseApp()
     return https.onCall(async (data, context) => {
@@ -67,9 +69,18 @@ export function getDb(): Firestore {
     return db
 }
 
-export function getBattleScene(): FBCursor<BattleScene> {
-    const docRef = doc(db, 'users', 'alice')
-    return makeFBCursor(docRef, [])
+export async function getBattleScene(username: 'alice'): Promise<FBCursor<Gamestate, BattleScene>> {
+    const scene = (await getGameStateCursor(username)).select('scene')
+    if (await scene.get('name') !== 'battle') {
+        throw Error('getBattleScene called when not in battle scene')
+    }
+    return scene as FBCursor<Gamestate, BattleScene>
 }
 
-export const tree = null as unknown as FBCursor<Gamestate>
+export async function getGameStateCursor(username: 'alice'): Promise<FBCursor<Gamestate>> {
+    const docRef = doc(db, 'users', username)
+    if (!(await getDoc(docRef)).exists) {
+        throw Error('could not find user doc')
+    }
+    return makeFBCursor(docRef, [])
+}

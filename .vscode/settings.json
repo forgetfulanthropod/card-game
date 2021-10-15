@@ -1,13 +1,8 @@
 {
     "workbench.colorCustomizations": {
         "titleBar.inactiveForeground": "#b8b8b8",
-        "sideBar.background": "#28002b",
-        "sideBar.foreground": "#F8FBF2",
-        "tab.activeBorder": "#000088",
-        "titleBar.activeBackground": "#000088",
-        "titleBar.activeForeground": "#ffffff",
-        "statusBar.background": "#000088",
-        "statusBar.foreground": "#ffffff"
+        "sideBar.background": "#fde2ff",
+        "sideBar.foreground": "#000000"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
@@ -70,5 +65,4 @@
     "colorTabs.titleBackground": true,
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
-    "window.title": "~[SERVER]~${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${activeEditorShort}${separator}${rootName}",
 }

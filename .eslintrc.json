@@ -87,8 +87,17 @@
                 "argsIgnorePattern": "^_"
             }
         ],
-        "simple-import-sort/imports": "error"
+        "simple-import-sort/imports": "error",
         // "simple-import-sort/exports": "error",
+        "no-multiple-empty-lines": "warn",
+        "padding-line-between-statements": [
+            "warn",
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "function"
+            }
+        ]
     },
     "settings": {
         "react": {
