@@ -1,11 +1,11 @@
 import type { Rulebook } from '@shared/datamodel'
 
-import { getRulebook } from '@/actions'
+import { failIfError, getRulebook } from '@/actions'
 
 // TODO
 let rulebook = null as unknown as Rulebook
 (async function f() {
-    rulebook = await getRulebook()
+    rulebook = failIfError(await getRulebook())
 })()
 
 const { characters, moveModifiers, recipes, locations, items, initialScenes, numbers, stanceTypeMetaMap, moveModiferMap, } = rulebook

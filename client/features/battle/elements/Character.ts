@@ -4,7 +4,7 @@ import { filters, Loader } from 'pixi.js'
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '@/data/battle/attack'
 import { getBattleScene } from '@/data/rootTree'
-import type { AttackData, CharacterMeta } from '@/data/types'
+import type { AttackData, CharacterMeta, CharacterUid } from '@/data/types'
 import type { MoveEmitter } from '@/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
@@ -36,7 +36,7 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
 }
 interface KnownCharacterProps {
-    onClick: (c: CharacterMeta) => void
+    onClick: (c: CharacterUid) => void
     // dispatch: Dispatcher
     move$: MoveEmitter
     scale: number
@@ -162,7 +162,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         ...charSpriteProps,
         name: 'mainCharacterSprite',
         onClick: () => {
-            args.onClick(characterMeta)
+            args.onClick(characterMeta.uid)
         },
         zIndex: 1
     })

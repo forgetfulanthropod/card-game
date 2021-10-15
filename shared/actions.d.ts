@@ -1,13 +1,19 @@
-import type { CharacterMeta, CharacterMove, Door, SceneName } from '.'
+import type { CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
+
+// export interface AllActions { // used by server to check if it implemented them all
+// }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Func = (...args: any[]) => any
 export type Caller<F extends Func> = (...args: Parameters<F>) => Promise<CallReturn<F>>
-export type CallReturn<F extends Func> = { status: 'success', result: ReturnType<F> } | { status: 'error', message: string }
+export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
+export type ServerResult<T> = { status: 'success', result: T } | { status: 'error', message: string }
 export type ChangeScene = (newSceneName: SceneName) => void
-export type PutUpDoors = () => void
 export type ChooseDoor = (door: Door) => void
-
+export type Hello = () => 'hello'
+export type GetRulebook = () => Rulebook
+export type StartGame = () => void
+export type DoCharacterAction = (uid: CharacterUid) => void
 
 // Dispatch:
 
