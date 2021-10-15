@@ -14,7 +14,7 @@ initializeApp({
     projectId: 'kaiju-75e84',
 })
 
-const wrapper = onRequestWrapper
+const wrapper = onRequestWrapper // or onCallWrapper
 export const changeScene = wrapper(changeScene_)
 export const putUpDoors = wrapper(putUpDoors_)
 export const chooseDoor = wrapper(chooseDoor_)
@@ -39,11 +39,6 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
         }
     })
 }
-
-
-
-type Empty = Record<string, never> | null | undefined
-
 
 let db: null | Firestore = null
 export function maybeInitializeFirebase(): Firestore {

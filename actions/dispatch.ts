@@ -1,6 +1,6 @@
 // import { getBattleScene } from '@/data/rootTree'
 // import { checkWinner } from '@@/client/data/battle/misc'
-import { dispatch } from '@shared/actions'
+import type { Dispatch } from '@shared/actions'
 
 import { getBattleScene } from '.'
 import { makeInitialBattleState } from './rulebook/battle'
@@ -9,7 +9,7 @@ import { keys, vals } from './util'
 
 
 
-const dispatch: dispatch = async (action) => {
+const dispatch: Dispatch = async (action) => {
     // console.log({ scene, action, data: scene.get() })
     // tl(`reducer received action ${JSON.stringify(action)}`)
     const scene = getBattleScene()
