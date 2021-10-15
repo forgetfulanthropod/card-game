@@ -21,8 +21,8 @@
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[typescript]": {
-        // "editor.defaultFormatter": "vscode.typescript-language-features"
-        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+        // "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
@@ -32,4 +32,7 @@
         "**/.keep": true
     },
     "prettier.tabWidth": 4,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
 }
