@@ -2,7 +2,9 @@
 import type { Caller, CallReturn, Func } from '@shared/actions'
 import { httpsCallable } from 'firebase/functions'
 
-import { maybeInitializeFirebase } from '@/fire'
+import { getDbAndFunctions } from '@/fire'
+
+const { functions } = getDbAndFunctions()
 
 export function callWrap<F extends Func>(name: string): Caller<F> {
     const doCall: Caller<F> = async (...args) => {
@@ -16,6 +18,3 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
     }
     return doCall
 }
-
-
-const { functions } = maybeInitializeFirebase()

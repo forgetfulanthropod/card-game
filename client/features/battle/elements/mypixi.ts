@@ -1,5 +1,3 @@
-import { numbers } from '@/data'
-const { BASE_HEIGHT, BASE_WIDTH } = numbers
 import type {
     Filter as PixiFilter, InteractionEvent,
     ITextStyle
@@ -15,6 +13,9 @@ import { registerPixiInspector } from '@/util/pixiInspector'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
+
+const BASE_HEIGHT = 1080
+const BASE_WIDTH = 1920
 
 // export type Sprite = PixiSprite
 

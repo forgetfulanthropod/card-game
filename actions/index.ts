@@ -14,6 +14,7 @@ import { makeFBCursor } from './FBCursor'
 import { changeScene_, chooseDoor_, doCharacterAction_, getRulebook_, hello_, makeNewUser_, putUpDoors_, startGame_, } from './functions'
 
 let app: null | App = null
+
 function startFirebaseApp() {
     if (app != null) return app
     app = initializeApp({

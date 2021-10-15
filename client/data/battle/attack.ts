@@ -1,7 +1,9 @@
 // import { stanceTypeMetaMap } from './constants'
-import { stanceTypeMetaMap } from '..'
+
+import { getRulebook } from '../rootTree'
 import type { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
 
+const { stanceTypeMetaMap } = getRulebook()
 // NPCs do not have stances
 // PCs must have stances
 export function getDamage(d: AttackData): number {

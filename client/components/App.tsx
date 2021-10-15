@@ -3,7 +3,7 @@ import { h, JSX } from 'preact' // eslint-disable-line
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
 
-import { scene } from '@/data/rootTree'
+import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 import DungeonEntry from '@/features/battle/components/DungeonEntry'
 
@@ -11,7 +11,7 @@ import AppWrap from './AppWrap'
 
 
 export default function App(): JSX.Element {
-    const sceneType = useCursor(scene.select('name'))
+    const sceneType = useCursor(getTree().select('scene').select('name'))
 
     return <AppWrap>
         <Toaster />

@@ -1,4 +1,5 @@
 import type { ChangeScene, ChooseDoor, Dispatch, DoCharacterAction, GetRulebook, Hello, MakeNewUser, ServerResult, StartGame, } from '@shared/actions'
+import type { Rulebook } from '@shared/index'
 
 import { callWrap } from './call'
 
@@ -10,7 +11,20 @@ export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
 }
 
 export const hello = callWrap<Hello>('hello')
-export const getRulebook = callWrap<GetRulebook>('getRulebook')
+
+/** This function is more complex cuz I really wanted to check return type.
+ *  Can make this simpler if we use some run-time type checking library such as woutervh-/typescript-is.
+ */
+export const getRulebookAsync = async (): Promise<Rulebook> => {
+    const response = await callWrap<GetRulebook>('getRulebook')()
+    if (response.status === 'error') {
+        throw Error(`error getting rulebook from server: ${response.message}`)
+    }
+    if (response.result.characters == null) {
+        throw Error('got rulebook from server but had null characters property so there was probably a server error')
+    }
+    return response.result
+}
 export const startGame = callWrap<StartGame>('startGame')
 export const doCharacterAction = callWrap<DoCharacterAction>('doCharacterAction')
 export const changeScene = callWrap<ChangeScene>('changeScene')

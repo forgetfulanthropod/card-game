@@ -3,21 +3,31 @@ import type { Gamestate, MyBaobab, MyCursor } from '@shared/index'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
 import type { DocumentData } from 'firebase/firestore'
+import { getDoc } from 'firebase/firestore'
 import { doc, onSnapshot } from 'firebase/firestore'
 
-import { tree } from '@/data/rootTree'
+import { getTree } from '@/data/rootTree'
 
-import { maybeInitializeFirebase } from '.'
+import { getDbAndFunctions } from '.'
 
 
-export function getGameState(): Gamestate {
-    return null as unknown as Gamestate
+export async function getGameState(): Promise<Gamestate> {
+    const { db } = getDbAndFunctions()
+    const d = await getDoc(doc(db, 'users', 'alice'))
+    if (!d.exists) {
+        throw Error('game state d does not exist')
+    }
+    const data = d.data() as Gamestate
+    if (data.inventory == null) {
+        throw Error('document has no inventory key. Likely doc does not exist.')
+    }
+    return data as Gamestate
 }
 
 // https://firebase.google.com/docs/firestore/query-data/listen
 export function attachFirestoreListener(): void {
     //firestore.onChange(change => updateBaobab(change))
-    const { db } = maybeInitializeFirebase()
+    const { db } = getDbAndFunctions()
     const _unsub = onSnapshot(doc(db, 'users', 'alice'),
         function onNext(doc) {
             const data = doc.data()
@@ -33,7 +43,7 @@ export function attachFirestoreListener(): void {
 /** UNTESTED */
 function updateBoabab(data: DocumentData): void {
     const newState = data as unknown as Gamestate
-    const oldState = tree.get()
+    const oldState = getTree().get()
     const differences = calcDiff(oldState, newState)
     if (differences == null) {
         console.warn('no differences')
@@ -44,13 +54,14 @@ function updateBoabab(data: DocumentData): void {
             console.warn('entire thing changed:', JSON.stringify(change))
             continue
         }
-        applyChange(change, tree)
+        applyChange(change, getTree())
     }
     // TODO: deep diff update. see pathDiff in client/util/index
     //const key = firestoreEvent.path
     //const data = firestoreEvent.newData
-    //tree.apply(key, data)
+    //getTree().apply(key, data)
 }
+
 function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
     switch (change.kind) {
         case 'N': { // new property

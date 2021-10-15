@@ -5,10 +5,9 @@ import type { Functions } from 'firebase/functions'
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
 
 
-
 type Result = { functions: Functions, db: Firestore }
 let result: Result | null = null
-export function maybeInitializeFirebase(): Result {
+export function getDbAndFunctions(): Result {
     if (result != null) return result
     const app = initializeApp({
         projectId: 'kaiju-75e84',
