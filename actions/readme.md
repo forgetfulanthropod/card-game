@@ -1,3 +1,6 @@
+**You can test functions in an interactive shell with `npm run shell`.**
+For example, use `square.get('?n=10')` for `onRequest` or `square({n:10})` for `onCall`.
+
 -   This folder, `/actions`, is for firebase cloud functions.
 -   It has a separate package.json and stuff because that was done automatically by the `firebase init emulators` command.
 -   We could make this a second build target & build source in the parent tsconfig etc but there's not much point. Better to leave it as a separate package.
