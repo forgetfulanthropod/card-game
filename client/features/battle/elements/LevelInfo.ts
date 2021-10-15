@@ -1,22 +1,14 @@
 import { numbers } from '@/data/battle/constants'
 import { getEntryScene } from '@/data/rootTree'
-import dispatch from '@@/logic/dispatch'
 import { changeDungeon } from '@@/logic/dungeonEntry'
 import { Container, PixiContainer, Text } from './mypixi'
 
 
 export function LevelInfo(): PixiContainer {
 
-    // const levels = [
-    //     { name: 'Hooligan’s Bluff', pointLimit: 20, modifier: 1, },
-    //     { name: 'The Matcha Caves', pointLimit: 40, modifier: 2, },
-    //     { name: 'Fort Skeleton', pointLimit: 65, modifier: 3, },
-    //     { name: 'The Ninth Trash Hole of Hell', pointLimit: 100, modifier: 5, },
-    // ]
-
     const scene = getEntryScene()
 
-    scene.on('update', () => {
+    scene.select('selectedLevel').on('update', () => {
         const selectedLevel = scene.get().selectedLevel
 
         levelNumText.text = `Level ${selectedLevel.num}`
@@ -64,7 +56,7 @@ export function LevelInfo(): PixiContainer {
             strokeThickness: 5,
         },
         onClick() {
-            changeDungeon(1)
+            changeDungeon(+1)
         }
     })
 
