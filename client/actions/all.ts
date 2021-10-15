@@ -1,6 +1,6 @@
-import type { Caller, ChangeScene, ChooseDoor, Dispatch, DoCharacterAction, GetRulebook, Hello, ServerResult, StartGame, } from '@shared/actions'
+import type { ChangeScene, ChooseDoor, Dispatch, DoCharacterAction, GetRulebook, Hello, MakeNewUser, ServerResult, StartGame, } from '@shared/actions'
 
-import { call } from './call'
+import { callWrap } from './call'
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
     if (serverResult.status === 'error') {
@@ -9,15 +9,11 @@ export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
     return serverResult.result
 }
 
-export const hello: Caller<Hello> = async () => await call<Hello>('hello')
-
-export const getRulebook: Caller<GetRulebook> = async () => {
-    return await call<GetRulebook>('getRulebook')
-}
-
-export const startGame: Caller<StartGame> = async () => await call<StartGame>('startGame')
-export const doCharacterAction: Caller<DoCharacterAction> = async (uid) => await call<DoCharacterAction>('DoCharacterAction', uid)
-
-export const changeScene: Caller<ChangeScene> = async (newSceneName) => call<ChangeScene>('changeScene', newSceneName)
-export const chooseDoor: Caller<ChooseDoor> = async (door) => call<ChooseDoor>('chooseDoor', door)
-export const dispatch: Caller<Dispatch> = async (action) => call<Dispatch>('dispatch', action)
+export const hello = callWrap<Hello>('hello')
+export const getRulebook = callWrap<GetRulebook>('getRulebook')
+export const startGame = callWrap<StartGame>('startGame')
+export const doCharacterAction = callWrap<DoCharacterAction>('doCharacterAction')
+export const changeScene = callWrap<ChangeScene>('changeScene')
+export const chooseDoor = callWrap<ChooseDoor>('chooseDoor')
+export const dispatch = callWrap<Dispatch>('dispatch')
+export const makeNewUser = callWrap<MakeNewUser>('makeNewUser')

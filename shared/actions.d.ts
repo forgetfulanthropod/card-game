@@ -14,7 +14,7 @@ export type Hello = () => 'hello'
 export type GetRulebook = () => Rulebook
 export type StartGame = () => void
 export type DoCharacterAction = (uid: CharacterUid) => void
-
+export type MakeNewUser = (username: 'alice') => void
 // Dispatch:
 
 type Size = {
