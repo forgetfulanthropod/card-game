@@ -15,7 +15,8 @@ console.log({ shouldWatch, shouldLint })
 
 const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === 'development'
 const envObj = {
-    'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`
+    'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
+    'process.env.buildTime': `"${new Date().toLocaleDateString()} ${time()}"`,
 }
 console.log(envObj)
 const alias = require('esbuild-plugin-alias')
