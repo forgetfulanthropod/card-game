@@ -62,9 +62,9 @@ async function main() {
         watch: !shouldWatch ? null : {
             onRebuild(error, result) {
                 if (error) {
-                    console.error(`ERROR watch at ${new Date()} failed:`, error)
+                    console.error(`!!${time()}: ERROR watch build failed:`, error)
                 } else {
-                    console.log(`watch build at ${new Date()} succeeded:`, result)
+                    console.log(`${time}: watch build succeeded:`, result)
                     if (shouldLint) {
                         console.log('linting...')
                         spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
@@ -82,11 +82,15 @@ async function main() {
 
     })
         .then(() => {
-            console.log('built at ' + new Date())
+            console.log(`${time()}: initial build succeeded`)
             if (shouldLint) {
                 console.log('linting...')
                 spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
             }
         })
         .catch((err) => { console.error(err) })
+}
+
+function time() {
+    return new Date().toLocaleTimeString()
 }
