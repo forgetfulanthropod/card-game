@@ -1,6 +1,6 @@
 import DungeonEntryPng from '../assets/temple_background.png'
 import background from './background'
-import type { PixiContainer } from './mypixi';
+import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
 

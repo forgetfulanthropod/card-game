@@ -4,7 +4,7 @@ import { getBattleScene, getScene } from '@/data/rootTree'
 import { BattleScene } from './BattleScene'
 import Doors from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
-import type { PixiApplication, PixiContainer } from './mypixi';
+import type { PixiApplication, PixiContainer } from './mypixi'
 import { Application } from './mypixi'
 
 const config = {

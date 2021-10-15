@@ -1,6 +1,6 @@
 import { dataOf } from '@/util/pixiUtils'
 
-import type { PixiContainer, PixiSprite} from './mypixi';
+import type { PixiContainer, PixiSprite } from './mypixi'
 import { Container, PixiTexture, Sprite } from './mypixi'
 
 

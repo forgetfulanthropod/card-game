@@ -14,8 +14,8 @@ export function dispatch(args: Record<string, unknown>): void {
 
 }
 
-export function changeScene(newScene: string): void {}
+export function changeScene(newScene: string): void { }
 
-export function startGame(): void{}
-export function doCharacterAction(): void{}
-export function chooseDoor(door: string): void{}
+export function startGame(): void { }
+export function doCharacterAction(): void { }
+export function chooseDoor(door: string): void { }

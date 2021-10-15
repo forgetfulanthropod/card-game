@@ -1,10 +1,10 @@
-import type { BattleScene, Door,SceneName } from '@shared/index'
+import type { BattleScene, Door, SceneName } from '@shared/index'
 
 import { objFilter } from '@/util'
 
 import { tree } from '.'
 // import { tree } from '@@/client/data/rootTree'
-import type {  } from './doors'
+import type { } from './doors'
 import { getDoorChoices, makeRoom } from './doors'
 import type { FBCursor } from './FBCursor'
 import { rulebook } from './rulebook/index'

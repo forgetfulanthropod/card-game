@@ -1,4 +1,4 @@
-import type { PixiChildren, PixiContainer } from './mypixi';
+import type { PixiChildren, PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
 const FLY_TIME = 800

@@ -35,4 +35,13 @@
     "editor.codeActionsOnSave": {
         "source.fixAll.eslint": true
     },
+    "formatFiles.excludedFolders": [
+        "node_modules",
+        ".vscode",
+        ".git",
+        "dist",
+        ".chrome",
+        "build"
+    ],
+    "formatFiles.excludePattern": "**/*.json",
 }

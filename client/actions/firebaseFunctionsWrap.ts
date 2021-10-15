@@ -6,10 +6,10 @@ import { maybeInitializeFirebase } from '@/fire'
 export async function call(args: unknown) {
     try {
         const res = await httpsCallable(functions, 'helloWorld')()
-    return res.data
+        return res.data
     } catch (e) {
-        console.error(`server error: ${e}`);
-        return null;
+        console.error(`server error: ${e}`)
+        return null
     }
 }
 

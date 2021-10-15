@@ -1,4 +1,4 @@
-import type { EffectCallback, StateUpdater} from 'preact/hooks';
+import type { EffectCallback, StateUpdater } from 'preact/hooks'
 import { useCallback, useEffect, useState } from 'preact/hooks'
 
 /* BUGGY:

@@ -11,7 +11,7 @@ import dispatch from './dispatch'
 import type { FBCursor } from './FBCursor'
 import { putUpDoors } from './functions'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc }from './rulebook/battle/misc'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './rulebook/battle/misc'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -94,7 +94,7 @@ export async function getBindings() {
         // }
         return () => { }
     }
-    const winStateCursor =  scene.select('state')
+    const winStateCursor = scene.select('state')
     winStateCursor.on('update', async () => {
         const s = await winStateCursor.get()
         if (s === 'won' || s === 'lost') {

@@ -1,4 +1,4 @@
-import type { BattleScene, CharacterMeta, CharacterName, CharacterUid,StanceName} from '@shared/index'
+import type { BattleScene, CharacterMeta, CharacterName, CharacterUid, StanceName } from '@shared/index'
 
 import { statsMap } from '.'
 

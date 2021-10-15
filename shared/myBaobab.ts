@@ -1,5 +1,5 @@
 // @ts-nocheck
-import type { BaobabOptions} from 'baobab';
+import type { BaobabOptions } from 'baobab'
 import Baobab, { Cursor } from 'baobab'
 
 // eslint-disable-next-line @typescript-eslint/ban-types

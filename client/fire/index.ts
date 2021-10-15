@@ -1,7 +1,7 @@
 import { initializeApp } from 'firebase/app'
-import type { Firestore} from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
-import type { Functions} from 'firebase/functions';
+import type { Functions } from 'firebase/functions'
 import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
 
 

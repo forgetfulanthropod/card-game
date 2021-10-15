@@ -1,8 +1,9 @@
 import { numbers } from '@/data'
 const { BASE_HEIGHT, BASE_WIDTH } = numbers
 import type {
-    Filter as PixiFilter,InteractionEvent,
-    ITextStyle} from 'pixi.js';
+    Filter as PixiFilter, InteractionEvent,
+    ITextStyle
+} from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,

@@ -4,9 +4,9 @@ import { getRulebook } from '@/actions'
 
 // TODO
 let rulebook = null as unknown as Rulebook
-(async function f(){
+(async function f() {
     rulebook = await getRulebook()
 })()
 
-const {characters, moveModifiers, recipes, locations, items, initialScenes, numbers, stanceTypeMetaMap, moveModiferMap,} = rulebook
-export {characters, moveModifiers, recipes, locations, items, initialScenes, numbers, stanceTypeMetaMap, moveModiferMap,}
+const { characters, moveModifiers, recipes, locations, items, initialScenes, numbers, stanceTypeMetaMap, moveModiferMap, } = rulebook
+export { characters, moveModifiers, recipes, locations, items, initialScenes, numbers, stanceTypeMetaMap, moveModiferMap, }

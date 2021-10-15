@@ -1,7 +1,7 @@
 import { EventEmitter } from 'eventemitter3'
 import isEqual from 'lodash/isEqual'
 
-import { doCharacterAction,startGame } from '@/actions'
+import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { AttackData, CharacterMeta } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
@@ -9,7 +9,7 @@ import { keyMap, keys, tl } from '@/util'
 import CaveVideo from '../assets/cave_main_1.webm'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
-import type { PixiContainer } from './mypixi';
+import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
 export function BattleScene(): PixiContainer {

@@ -1,6 +1,6 @@
 import { dataOf } from '@/util/pixiUtils'
 
-import type { PixiContainer} from './mypixi';
+import type { PixiContainer } from './mypixi'
 import { Container, Sprite } from './mypixi'
 
 export default function Doors(args: { callbacks: Callback[] }): PixiContainer {

@@ -1,13 +1,13 @@
 import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
-import type { Firestore } from 'firebase/firestore';
+import type { Firestore } from 'firebase/firestore'
 import { doc } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { firestore, initializeApp } from 'firebase-admin'
 import { https, logger } from 'firebase-functions'
 import ldGet from 'lodash/get'
 
-import type { FBCursor} from './FBCursor';
+import type { FBCursor } from './FBCursor'
 import { makeFBCursor } from './FBCursor'
 const app = initializeApp({
     projectId: 'kaiju-75e84',
@@ -52,7 +52,7 @@ export function maybeInitializeFirebase(): Firestore {
 export function getBattleScene(): FBCursor<BattleScene> {
     const scene = null as unknown as BattleScene
     const docRef = doc(db, 'users', 'alice')
-    return makeFBCursor(docRef,[])
+    return makeFBCursor(docRef, [])
 }
 
 export const tree = null as unknown as FBCursor<Gamestate>
@@ -77,5 +77,5 @@ export const helloAgain = https.onRequest(async (req, res) => {
 })
 
 
-const o = {x: {y: {z: 5}}}
-const x = ldGet(o, ['x','y','z'])
+const o = { x: { y: { z: 5 } } }
+const x = ldGet(o, ['x', 'y', 'z'])

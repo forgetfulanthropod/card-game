@@ -1,6 +1,6 @@
 import { Matrix, utils } from 'pixi.js'
 
-import type { PixiContainer, PixiGraphics} from './mypixi';
+import type { PixiContainer, PixiGraphics } from './mypixi'
 import { Container, Graphics, PixiLoader, Sprite, Text } from './mypixi'
 
 type Rect = [

@@ -1,4 +1,4 @@
-import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, Door, SceneHas} from '@shared/index'
+import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, Door, SceneHas } from '@shared/index'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
