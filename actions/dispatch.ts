@@ -53,7 +53,7 @@ export default async function dispatch(action: Action): Promise<void> {
             const charCursor = scene.select('allCharacters').select(action.uid)
             const prevHealth = await charCursor.get('health')
             charCursor.set('health', typeof action.h === 'function' ? action.h(prevHealth) : action.h)
-            const winner = checkWinner(vals(scene.select('allCharacters').get()))
+            const winner = checkWinner(vals(await scene.get('allCharacters')))
             if (winner === 'PC') scene.set('state', 'won')
             if (winner === 'NPC') scene.set('state', 'lost')
 
@@ -63,7 +63,7 @@ export default async function dispatch(action: Action): Promise<void> {
             return
         } case 'clearHasMoved': {
             const cursor = scene.select('allCharacters')
-            for (const k of keys(cursor.get())) {
+            for (const k of keys(await cursor.get())) {
                 cursor.select(k).set('hasMoved', false)
             }
             return
@@ -78,9 +78,9 @@ export default async function dispatch(action: Action): Promise<void> {
             return
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')
-            for (const k of keys(cursor.get())) {
+            for (const k of keys(await cursor.get())) {
                 const cu = cursor.select(k)
-                const ch = cu.get()
+                const ch = await cu.get()
                 cu.set('screenX', ch.x * action.size.width / 100)
                 cu.set('screenY', ch.y * action.size.height / 100)
             }

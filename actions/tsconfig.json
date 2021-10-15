@@ -10,6 +10,7 @@
     "sourceMap": true,
     "strict": false,
     "target": "es2017",
+    "esModuleInterop": true,
     "baseUrl": "..",
     "skipLibCheck": true,
     "paths": {

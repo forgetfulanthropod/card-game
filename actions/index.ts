@@ -1,6 +1,7 @@
 import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
-import type { Firestore } from 'firebase/firestore'
+import type { Firestore } from 'firebase/firestore';
+import { doc } from 'firebase/firestore'
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
 import { firestore, initializeApp } from 'firebase-admin'
 import { https, logger } from 'firebase-functions'
@@ -50,7 +51,8 @@ export function maybeInitializeFirebase(): Firestore {
 
 export function getBattleScene(): FBCursor<BattleScene> {
     const scene = null as unknown as BattleScene
-    return makeFBCursor(scene)
+    const docRef = doc(db, 'users', 'alice')
+    return makeFBCursor(docRef,[])
 }
 
 export const tree = null as unknown as FBCursor<Gamestate>

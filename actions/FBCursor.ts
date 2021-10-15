@@ -1,4 +1,3 @@
-import type { AllPaths, DeepIndex } from '@shared/myBaobab'
 import type { DocumentReference, UpdateData } from 'firebase/firestore'
 import { updateDoc } from 'firebase/firestore'
 import { onSnapshot } from 'firebase/firestore'
@@ -7,61 +6,66 @@ import ldGet from 'lodash/get'
 
 // type Objectish = Record<string, unknown>
 // type PathsOf<Root, Path extends AllPaths<Root>> = AllPaths<DeepIndex<Root, Path>>
-type KeyAt<Root, Path extends AllPaths<Root>> = keyof DeepIndex<Root, Path>
-export interface FBCursor<Root, Path extends AllPaths<Root> = []> {
-    select<K extends KeyAt<Root, Path>>(k: K): FBCursor<Root, [...Path, K]>
-    get(): Promise<DeepIndex<Root, Path>>
-    get<K extends KeyAt<Root, Path>>(k: K): Promise<DeepIndex<Root, [...Path, K]>>
-    set(v: DeepIndex<Root, Path>): void
-    set<K extends KeyAt<Root, Path>>(k: K, v: DeepIndex<Root, [...Path, K]>): void
-    apply<K extends KeyAt<Root, Path>>(k: K, f: (prev: DeepIndex<Root, Path>) => DeepIndex<Root, Path>): void
-    on(eventName: 'update', cb: (v: T) => void): void
+export interface FBCursor<Root, Sub = Root> {
+    select<K extends keyof Sub>(k: K): FBCursor<Root, Sub[K]>
+    get(): Promise<Sub>
+    get<K extends keyof Sub>(k: K): Promise<Sub[K]>
+    set(v: Sub): void
+    set<K extends keyof Sub>(k: K, v: Sub[K]): void
+    apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): void
+    on(eventName: 'update', cb: (v: Sub) => void): void
 }
-export function makeFBCursor<Root, Path extends AllPaths<Root> = []>(
+export function makeFBCursor<Root, Sub = Root>(
     docRef: DocumentReference<Root>,
     // collection: CollectionReference,
     // docId: string,
-    subKeys: Path): FBCursor<Root, Path> {
+    path: string[]): FBCursor<Root, Sub> {
     // const docRef = doc(collection, docId)
     return {
-        async select<K extends KeyAt<Root, Path>>(k) {
-            const keys = [...subKeys, k as string]
-            return makeFBCursor<Root, [...Path, K]>(docRef, keys)
+        select<K extends keyof Sub>(k): FBCursor<Root, Sub[K]> {
+            const keys = [...path, k as string]
+            return makeFBCursor<Root, Sub[K]>(docRef, keys)
         },
         async get(k?) {
             const data = (await getDoc(docRef)).data
+            if (path.length === 0) { return data }
             if (k == null) {
-                return ldGet(data)
+                return ldGet(data, [...path, k].join('.'))
             }
             else {
-                return (await getDoc(docRef)).data
+                return ldGet(data, path.join('.'))
             }
         },
         set(kOrV, val?) {
             if (val == null) {
-                const v = kOrV
-                const keyString = keys.join('.')
-                updateDoc(docRef, { [keyString]: v })
+                const value = kOrV
+                if (path.length === 0) { updateDoc(docRef, value) }
+                const keyString = path.join('.')
+                updateDoc(docRef, { [keyString]: value })
             } else {
-                const k = kOrV
-                const keyString = [...keys, k].join('.')
-                updateDoc(docRef, { [keyString]: v })
+                const key = kOrV
+                const value = val
+                const keyString = [...path, key].join('.')
+                updateDoc(docRef, { [keyString]: value })
             }
         },
         async apply(k, f) {
-            const keys = [...subKeys, k as string]
+            const keys = [...path, k as string]
             // https://stackoverflow.com/a/47296152
             const data = (await getDoc(docRef)).data
             const current = ldGet(data, keys)
             const newVal = f(current)
             const keyString = keys.join('.')
-            // TODO: explicit cast shouldn't be necessary
+            // TODO: explicit cast shouldn't be necessary.
+            // Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
             await updateDoc(docRef, { [keyString]: newVal } as UpdateData<Root>)
         },
         on(_, cb) {
-            onSnapshot(docRef, doc => {
-                cb(doc.data())
-            })
+            onSnapshot(docRef,
+                path.length === 0 ?
+                    // TODO: explicit cast shouldn't be necessary
+                    doc => { cb(doc.data() as unknown as Sub) } :
+                    doc => { cb(ldGet(doc.data(), path)) })
         },
     }
 }

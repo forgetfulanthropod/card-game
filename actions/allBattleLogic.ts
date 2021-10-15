@@ -1,7 +1,6 @@
 // TODO: getBattleScene
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
 import { EventEmitter } from 'eventemitter3'
-import type { FBCursor } from 'KeyAt'
 
 // import toast from 'react-hot-toast'
 // import type { MoveEmitter, NpcMoveEmitter } from '@/types'
@@ -9,6 +8,7 @@ import { vals } from '@/util'
 
 import { getBattleScene } from '.'
 import dispatch from './dispatch'
+import type { FBCursor } from './FBCursor'
 import { putUpDoors } from './functions'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc }from './rulebook/battle/misc'
