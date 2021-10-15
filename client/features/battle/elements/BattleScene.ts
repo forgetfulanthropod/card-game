@@ -43,7 +43,7 @@ export function BattleScene(): PixiContainer {
             ...childCursors.map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
-                    onClick: doCharacterAction,
+                    onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
                     move$,
                     scale: 1,
                     isSelected: false,
@@ -57,6 +57,7 @@ export function BattleScene(): PixiContainer {
 
     return container
 }
+
 function getCharacterFn(characterMeta: CharacterMeta) {
     if (characterMeta.isPc) return Frogknight
     else return Skeleton

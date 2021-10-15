@@ -2,9 +2,9 @@
 import type { Caller, CallReturn, Func } from '@shared/actions'
 import { httpsCallable } from 'firebase/functions'
 
-import { getDbAndFunctions } from '@/fire'
+import { maybeInitializeApp } from '@/fire'
 
-const { functions } = getDbAndFunctions()
+const { functions } = maybeInitializeApp()
 
 export function callWrap<F extends Func>(name: string): Caller<F> {
     const doCall: Caller<F> = async (...args) => {

@@ -62,10 +62,12 @@ async function main() {
         define: substitions,
         watch: !shouldWatch ? null : {
             onRebuild(error, result) {
+                // TODO: if we want true build time, then here we could echo the time
+                //   into a file and the client could read from it with a fetch
                 if (error) {
                     console.error(`!!${time()}: ERROR watch build failed:`, error)
                 } else {
-                    console.log(`${time}: watch build succeeded:`, result)
+                    console.log(`${time()}: watch build succeeded:`, result)
                     if (shouldLint) {
                         console.log('linting...')
                         spawn('npm', ['run', 'lint'], { stdio: 'inherit' })

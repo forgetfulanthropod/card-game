@@ -34,7 +34,8 @@ export function onRulebook(cb: Callback): void {
 })()
 
 
-/** The pattern above with triggercallbacks etc lets us
+/** Do not call at the module-level
+ * The pattern above with triggercallbacks etc lets us
  *  write synchronous code everywhere in app, we just need to
  *  wait for callbacks in onRulebook and onGamestate
  */
@@ -45,9 +46,11 @@ export function getTree(): MyBaobab<Gamestate> {
     return state.gamestate
 }
 
+/** Do not call at the module-level */
 export function getRulebook(): Rulebook {
     if (state.rulebook == null) {
-        throw Error('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
+        console.trace('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
+        throw Error()
     }
     return state.rulebook
 }

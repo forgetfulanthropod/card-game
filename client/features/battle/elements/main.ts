@@ -70,7 +70,7 @@ function bindBattleState(app: PixiApplication) {
             app.stage.removeChild(doorsCont)
             doorsCont = null
         } else if (doors != null) {
-            doorsCont = Doors({ callbacks: doors.map(d => () => chooseDoor(d)) })
+            doorsCont = Doors({ callbacks: doors.map(d => () => chooseDoor({ door: d })) })
             app.stage.addChild(doorsCont)
         }
     })

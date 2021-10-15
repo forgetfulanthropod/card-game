@@ -3,7 +3,6 @@
 import { getRulebook } from '../rootTree'
 import type { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '../types'
 
-const { stanceTypeMetaMap } = getRulebook()
 // NPCs do not have stances
 // PCs must have stances
 export function getDamage(d: AttackData): number {
@@ -26,6 +25,7 @@ function getDefenseMultiplier(defender: CharacterMeta): StanceMultiplier {
 
 function getStanceTypeMeta(stance: StanceName | undefined) {
     if (stance == null) throw new Error('invalid stance!')
+    const { stanceTypeMetaMap } = getRulebook()
 
     return stanceTypeMetaMap[stance as StanceName]
 }

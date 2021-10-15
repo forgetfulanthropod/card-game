@@ -7,12 +7,16 @@ import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
+import { makeNewUser } from './actions'
 import { onGamestate, onRulebook } from './data/rootTree'
+import { maybeInitializeApp } from './fire'
 
-render(<App />, document.getElementById('preact-root') as HTMLDivElement)
+console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
+
 
 const state = {
     started: false,
+    createdUser: false,
     basic: false,
     deluxe: false,
     rulebook: false,
@@ -25,21 +29,29 @@ loadAssets(
 )
 
 onRulebook(() => maybeStart('rulebook'))
-onGamestate(() => maybeStart('gamestate'))
+onGamestate(() => maybeStart('gamestate'));
 
+(async function makeTheUser() {
+    // TODO: check if this await actually waits all the way through
+    console.log('initializing app')
+    maybeInitializeApp()
+    console.log('making user')
+    await makeNewUser({ username: 'alice' })
+    state.createdUser = true
+})()
 
 function maybeStart<K extends keyof typeof state>(k: K) {
     if (!state[k]) {
         console.log(`loaded: ${k}`)
     }
     state[k] = true
-    if (state.basic && state.deluxe && state.rulebook && state.gamestate && !state.started) {
+    if (state.basic && state.deluxe && state.rulebook && state.gamestate && state.createdUser && !state.started) {
         console.log('everything loaded up. starting app.')
+        render(<App />, document.getElementById('preact-root') as HTMLDivElement)
         start(document.getElementById('pixi-root') as HTMLCanvasElement)
         state.started = true
     }
 }
 
-setTimeout(() => alert(`reload at ${(new Date()).toLocaleTimeString()}`), 1000)
 
 // helloWorld()

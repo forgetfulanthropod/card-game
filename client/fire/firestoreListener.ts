@@ -8,17 +8,17 @@ import { doc, onSnapshot } from 'firebase/firestore'
 
 import { getTree } from '@/data/rootTree'
 
-import { getDbAndFunctions } from '.'
+import { maybeInitializeApp } from '.'
 
 
 export async function getGameState(): Promise<Gamestate> {
-    const { db } = getDbAndFunctions()
+    const { db } = maybeInitializeApp()
     const d = await getDoc(doc(db, 'users', 'alice'))
     if (!d.exists) {
         throw Error('game state d does not exist')
     }
     const data = d.data() as Gamestate
-    if (data.inventory == null) {
+    if (data?.inventory == null) {
         throw Error('document has no inventory key. Likely doc does not exist.')
     }
     return data as Gamestate
@@ -27,7 +27,7 @@ export async function getGameState(): Promise<Gamestate> {
 // https://firebase.google.com/docs/firestore/query-data/listen
 export function attachFirestoreListener(): void {
     //firestore.onChange(change => updateBaobab(change))
-    const { db } = getDbAndFunctions()
+    const { db } = maybeInitializeApp()
     const _unsub = onSnapshot(doc(db, 'users', 'alice'),
         function onNext(doc) {
             const data = doc.data()

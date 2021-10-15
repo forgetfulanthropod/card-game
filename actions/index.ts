@@ -11,7 +11,11 @@ import { https } from 'firebase-functions'
 import { dispatch as dispatch_ } from './'
 import type { FBCursor } from './FBCursor'
 import { makeFBCursor } from './FBCursor'
-import { changeScene_, chooseDoor_, doCharacterAction_, getRulebook_, hello_, makeNewUser_, putUpDoors_, startGame_, } from './functions'
+import { changeScene_, chooseDoor_, doCharacterAction_, echo_, getRulebook_, hello_, makeNewUser_, square_, startGame_, } from './functions'
+
+// TOGGLE: choose function network interface type
+// const wrapper = onCallWrapper
+const wrapper = onRequestWrapper
 
 let app: null | App = null
 
@@ -24,13 +28,14 @@ function startFirebaseApp() {
 }
 // startFirebaseApp()
 
-const wrapper = onRequestWrapper // or onCallWrapper
 
 export const changeScene = wrapper(changeScene_)
-export const putUpDoors = wrapper(putUpDoors_)
+// export const putUpDoors = wrapper(putUpDoors_)
 export const chooseDoor = wrapper(chooseDoor_)
 export const dispatch = wrapper(dispatch_)
 export const hello = wrapper(hello_)
+export const square = wrapper(square_)
+export const echo = wrapper(echo_)
 export const getRulebook = wrapper(getRulebook_)
 export const startGame = wrapper(startGame_)
 export const doCharacterAction = wrapper(doCharacterAction_)
