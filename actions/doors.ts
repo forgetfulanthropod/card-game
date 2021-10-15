@@ -1,5 +1,6 @@
 import type { CharacterMeta, CharacterUid, Door } from '@shared/index'
 
+import { getBattleScene } from './getters'
 import { newNPCMeta } from './rulebook/battle'
 
 
@@ -47,4 +48,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
     }
 }
 
-export default null
+export async function putUpDoors(): Promise<void> {
+    const scene = await getBattleScene('alice')
+    scene.set('doors', getDoorChoices({ dungeonName: 'cool dungeon', roomsPassed: 0 }))
+}

@@ -1,7 +1,5 @@
 import type { DocumentReference, UpdateData } from 'firebase/firestore'
-import { updateDoc } from 'firebase/firestore'
-import { onSnapshot } from 'firebase/firestore'
-import { getDoc } from 'firebase/firestore'
+import { getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import ldGet from 'lodash/get'
 
 // type Objectish = Record<string, unknown>

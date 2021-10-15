@@ -1,6 +1,6 @@
 import type { Dispatch } from '@shared/actions'
 
-import { getBattleScene } from '.'
+import { getBattleScene } from './getters'
 import { makeInitialBattleState } from './rulebook/battle'
 import { checkWinner } from './rulebook/battle/misc'
 import { keys, vals } from './util'

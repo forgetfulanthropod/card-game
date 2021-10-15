@@ -1,18 +1,41 @@
 import type { CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
 
 // NOTE: if we keep all args as strings then we can test in URL bar more easily
-// I think returning data is fine
-export type Hello = (args: Empty) => 'hello'
-export type Square = (args: { n: string }) => number
-export type Echo<T extends Empty> = (args: T) => T // eslint-disable-line @typescript-eslint/ban-types
-
-export type ChangeScene = (args: { newSceneName: SceneName }) => void
-export type ChooseDoor = (args: { door: Door }) => void
-export type GetRulebook = (args: Empty) => Rulebook
-export type StartGame = (args: Empty) => void
-export type DoCharacterAction = (args: { uid: CharacterUid }) => void
-export type MakeNewUser = (args: { username: 'alice' }) => void
-export type Dispatch = (action: Action) => Promise<void>
+// I think returning data as other kinds of values is fine.
+type Hello = (args: Empty) => 'hello'
+type Square = (args: { n: string }) => number
+type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
+type ChangeScene = (args: { newSceneName: SceneName }) => void
+type ChooseDoor = (args: { door: Door }) => void
+type GetRulebook = (args: Empty) => Rulebook
+type StartGame = (args: Empty) => void
+type DoCharacterAction = (args: { uid: CharacterUid }) => void
+type MakeNewUser = (args: { username: 'alice' }) => void
+type Dispatch = (action: Action) => Promise<void>
+export interface ServerActions {
+    hello: Hello
+    square: Square
+    echo: Echo
+    changeScene: ChangeScene
+    chooseDoor: ChooseDoor
+    getRulebook: GetRulebook
+    startGame: StartGame
+    doCharacterAction: DoCharacterAction
+    makeNewUser: MakeNewUser
+    dispatch: Dispatch
+}
+export interface ClientActions {
+    hello: Caller<Hello>
+    square: Caller<Square>
+    echo: Caller<Echo>
+    changeScene: Caller<ChangeScene>
+    chooseDoor: Caller<ChooseDoor>
+    startGame: Caller<StartGame>
+    doCharacterAction: Caller<DoCharacterAction>
+    makeNewUser: Caller<MakeNewUser>
+    dispatch: Caller<Dispatch>
+    getRulebookAsync(): Promise<Rulebook>
+}
 
 
 type Empty = Record<string, never>

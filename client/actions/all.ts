@@ -1,32 +1,34 @@
-import type { ChangeScene, ChooseDoor, Dispatch, DoCharacterAction, Echo, GetRulebook, Hello, MakeNewUser, ServerResult, Square, StartGame, } from '@shared/actions'
+import type { ClientActions, ServerResult } from '@shared/actions'
 import type { Rulebook } from '@shared/index'
 
 import { callWrap } from './call'
 
-export const hello = callWrap<Hello>('hello')
-export const square = callWrap<Square>('square')
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const echo = callWrap<Echo<any>>('echo')
+const clientActions: ClientActions = {
+    hello: callWrap('hello'),
+    square: callWrap('square'),
+    echo: callWrap('echo'),
 
-/** This function is more complex cuz I really wanted to check return type.
- *  Can make this simpler if we use some run-time type checking library such as woutervh-/typescript-is.
- */
-export const getRulebookAsync = async (): Promise<Rulebook> => {
-    const response = await callWrap<GetRulebook>('getRulebook')({})
-    if (response.status === 'error') {
-        throw Error(`error getting rulebook from server: ${response.message}`)
-    }
-    if (response.result.characters == null) {
-        throw Error('got rulebook from server but had null characters property so there was probably a server error')
-    }
-    return response.result
+    /** This function is more complex cuz I really wanted to check return type.
+     *  Can make this simpler if we use some run-time type checking library such as woutervh-/typescript-is.
+     */
+    getRulebookAsync: async (): Promise<Rulebook> => {
+        const response = await callWrap<(eo: EmptyObject) => Rulebook>('getRulebook')({})
+        if (response.status === 'error') {
+            throw Error(`error getting rulebook from server: ${response.message}`)
+        }
+        if (response.result.characters == null) {
+            throw Error('got rulebook from server but had null characters property so there was probably a server error')
+        }
+        return response.result
+    },
+    startGame: callWrap('startGame'),
+    doCharacterAction: callWrap('doCharacterAction'),
+    changeScene: callWrap('changeScene'),
+    chooseDoor: callWrap('chooseDoor'),
+    dispatch: callWrap('dispatch'),
+    makeNewUser: callWrap('makeNewUser'),
 }
-export const startGame = callWrap<StartGame>('startGame')
-export const doCharacterAction = callWrap<DoCharacterAction>('doCharacterAction')
-export const changeScene = callWrap<ChangeScene>('changeScene')
-export const chooseDoor = callWrap<ChooseDoor>('chooseDoor')
-export const dispatch = callWrap<Dispatch>('dispatch')
-export const makeNewUser = callWrap<MakeNewUser>('makeNewUser')
+export const { hello, square, echo, getRulebookAsync, startGame, doCharacterAction, changeScene, chooseDoor, dispatch, makeNewUser, } = clientActions
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
     if (serverResult.status === 'error') {

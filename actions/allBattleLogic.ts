@@ -2,10 +2,10 @@
 import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
 import { EventEmitter } from 'eventemitter3'
 
-import { getBattleScene } from '.'
 import dispatch from './dispatch'
+import { putUpDoors } from './doors'
 import type { FBCursor } from './FBCursor'
-import { putUpDoors_ } from './functions'
+import { getBattleScene } from './getters'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './rulebook/battle/misc'
 // import toast from 'react-hot-toast'
@@ -81,7 +81,7 @@ export async function getBindings() {
     function endGame(s: BattleWinState) {
         tl(s === 'won' ? 'You win' : 'Computer wins')
         if (s === 'won') {
-            putUpDoors_()
+            putUpDoors()
         }
         // if (winner === 'NPC') {
         //     // TODO
