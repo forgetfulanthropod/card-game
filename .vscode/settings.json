@@ -1,9 +1,9 @@
 {
     "workbench.colorCustomizations": {
-        "activityBar.background": "#53005b",
-        "titleBar.activeBackground": "#53005b",
-        "titleBar.activeForeground": "#F8FBF2",
-        "statusBar.background": "#53005b",
+        "titleBar.inactiveForeground": "#b8b8b8",
+        "titleBar.activeForeground": "#b8b8b8",
+        "sideBar.background": "#28002b",
+        "sideBar.foreground": "#F8FBF2",
         "statusBar.foreground": "#F8FBF2"
     },
     "files.insertFinalNewline": true,
@@ -45,4 +45,26 @@
         "build"
     ],
     "formatFiles.excludePattern": "**/*.json",
+    "colorTabs.config": [
+        {
+            "regex": "client/.*",
+            "color": "#880000",
+            "label": "CLIENT"
+        },
+        {
+            "regex": "shared/.*",
+            "color": "#008800",
+            "label": "SHARED"
+        },
+        {
+            "regex": "actions/.*",
+            "color": "#000088",
+            "label": "SERVER"
+        },
+    ],
+    "colorTabs.statusBarBackground": true,
+    "colorTabs.tabBorder": true,
+    "colorTabs.titleBackground": true,
+    "colorTabs.activityBarBackground": false,
+    "colorTabs.titleLabel": true,
 }
