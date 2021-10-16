@@ -1,5 +1,4 @@
-import type { DocumentReference, UpdateData } from 'firebase/firestore'
-import { getDoc, onSnapshot, updateDoc } from 'firebase/firestore'
+import type { firestore } from 'firebase-admin'
 import ldGet from 'lodash/get'
 
 // type Objectish = Record<string, unknown>
@@ -13,8 +12,10 @@ export interface FBCursor<Root, Sub = Root> {
     apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): void
     on(eventName: 'update', cb: (v: Sub) => void): void
 }
+
+// Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
 export function makeFBCursor<Root, Sub = Root>(
-    docRef: DocumentReference<Root>,
+    docRef: firestore.DocumentReference<Root>,
     // collection: CollectionReference,
     // docId: string,
     path: string[]): FBCursor<Root, Sub> {
@@ -25,7 +26,7 @@ export function makeFBCursor<Root, Sub = Root>(
             return makeFBCursor<Root, Sub[K]>(docRef, keys)
         },
         async get(k?) {
-            const data = (await getDoc(docRef)).data
+            const data = (await docRef.get()).data
             if (path.length === 0) { return data }
             if (k == null) {
                 return ldGet(data, [...path, k].join('.'))
@@ -37,29 +38,27 @@ export function makeFBCursor<Root, Sub = Root>(
         set(kOrV, val?) {
             if (val == null) {
                 const value = kOrV
-                if (path.length === 0) { updateDoc(docRef, value) }
+                if (path.length === 0) { docRef.update(value) }
                 const keyString = path.join('.')
-                updateDoc(docRef, { [keyString]: value })
+                docRef.update({ [keyString]: value })
             } else {
                 const key = kOrV
                 const value = val
                 const keyString = [...path, key].join('.')
-                updateDoc(docRef, { [keyString]: value })
+                docRef.update({ [keyString]: value })
             }
         },
         async apply(k, f) {
             const keys = [...path, k as string]
             // https://stackoverflow.com/a/47296152
-            const data = (await getDoc(docRef)).data
+            const data = (await docRef.get()).data
             const current = ldGet(data, keys)
             const newVal = f(current)
             const keyString = keys.join('.')
-            // TODO: explicit cast shouldn't be necessary.
-            // Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
-            await updateDoc(docRef, { [keyString]: newVal } as UpdateData<Root>)
+            await docRef.update({ [keyString]: newVal })
         },
         on(_, cb) {
-            onSnapshot(docRef,
+            docRef.onSnapshot(
                 path.length === 0 ?
                     // TODO: explicit cast shouldn't be necessary
                     doc => { cb(doc.data() as unknown as Sub) } :

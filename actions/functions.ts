@@ -2,9 +2,8 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
-import dispatch from './dispatch'
+import dispatch_ from './dispatch'
 import { makeRoom } from './doors'
-import { startFirebaseApp } from './fbutil'
 import { getBattleScene, getGameStateCursor } from './getters'
 import { initialGameState, rulebook } from './rulebook/index'
 import { objFilter } from './util'
@@ -42,7 +41,7 @@ const serverActions: ServerActions = {
         await firestore().collection('users').doc(args.username).set(initialGameState)
         // WRONG: CLIENT CODE: // await setDoc(doc(collection(getDb(), 'users'), username), initialGameState)
     },
-    dispatch,
+    dispatch: dispatch_,
 }
 export const hello = wrapper(serverActions.hello)
 export const square = wrapper(serverActions.square)
@@ -53,27 +52,30 @@ export const getRulebook = wrapper(serverActions.getRulebook)
 export const startGame = wrapper(serverActions.startGame)
 export const doCharacterAction = wrapper(serverActions.doCharacterAction)
 export const makeNewUser = wrapper(serverActions.makeNewUser)
+export const dispatch = wrapper(serverActions.dispatch)
 
 
 function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
-    startFirebaseApp()
+    // startFirebaseApp()
     return https.onRequest(async (request, response) => {
         try {
             const result = await f(request.query)
             response.send({ status: 'success', result })
         } catch (e) {
+            console.error(`exception occured in client call to ${f.name}: `, e)
             response.send({ status: 'error', message: JSON.stringify(e) })
         }
     })
 }
 
 function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableContext) => ReturnType) {
-    startFirebaseApp()
+    // startFirebaseApp()
     return https.onCall(async (data, context) => {
         try {
             const result = await f(data[0], context)
             return { status: 'success', result }
         } catch (e) {
+            console.error(`exception occured in client call to ${f.name}: `, e)
             return { status: 'error', message: JSON.stringify(e) }
         }
     })

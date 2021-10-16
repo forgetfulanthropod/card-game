@@ -1,10 +1,9 @@
 import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
-import { doc, getDoc } from 'firebase/firestore'
+import { firestore } from 'firebase-admin'
 
 import type { FBCursor } from './FBCursor'
 import { makeFBCursor } from './FBCursor'
-import { db } from './fbutil'
 
 
 export async function getBattleScene(username: 'alice'): Promise<FBCursor<Gamestate, BattleScene>> {
@@ -16,9 +15,10 @@ export async function getBattleScene(username: 'alice'): Promise<FBCursor<Gamest
 }
 
 export async function getGameStateCursor(username: 'alice'): Promise<FBCursor<Gamestate>> {
-    const docRef = doc(db, 'users', username)
-    if (!(await getDoc(docRef)).exists) {
+    const docRef = firestore().collection('users').doc(username)
+    if (!(await docRef.get()).exists) {
         throw Error('could not find user doc')
     }
+    console.log('docRef exists')
     return makeFBCursor(docRef, [])
 }
