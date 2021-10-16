@@ -4,7 +4,7 @@ import { PngLayersBackground, VideoBackground } from './mypixi'
 
 
 export default ({ scale, src, srcs }: { scale: number, src?: string, srcs?: string[] }): PixiSprite | PixiContainer => {
-    if (process.env.DISABLE_BACKGROUND === 'yes') {
+    if (process.env.CLIENT_DISABLE_BACKGROUND === 'yes') {
         return Container({ children: [] })
     }
     if (src != null) {

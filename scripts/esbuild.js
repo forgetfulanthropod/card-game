@@ -2,7 +2,7 @@ const esbuild = require('esbuild')
 const fs = require('fs')
 const { spawn } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
-const envFile = require('dotenv').config()
+const envFile = require('dotenv').config()?.parsed
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
 
 const buildDir = 'build'
@@ -10,16 +10,20 @@ const publicDir = 'public'
 
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
-const shouldLint = envFile?.parsed?.ESBUILD_SHOULD_LINT === 'yes'
+const shouldLint = envFile?.ESBUILD_SHOULD_LINT === 'yes'
+const isDevelopment = envFile?.ESBUILD_NODE_ENV === 'development'
 console.log({ shouldWatch, shouldLint })
 
-const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === 'development'
 const envObj = {
-    'process.env.DISABLE_BACKGROUND': `"${envFile?.parsed?.DISABLE_BACKGROUND}"`,
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
-    'process.env.buildTime': `"${new Date().toLocaleDateString()} ${time()}"`,
+    'process.env.buildTime': `"${new Date().toLocaleString()}"`,
 }
-console.log(envObj)
+for (const k of Object.keys(envFile ?? {})) {
+    if (k.startsWith('CLIENT')) {
+        envObj[`process.env.${k}`] = `"${envFile?.[k]}"`
+    }
+}
+console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')
 
 // const preactSubs = {

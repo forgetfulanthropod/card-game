@@ -6,10 +6,15 @@ import { maybeInitializeApp } from '@/fire'
 
 const { functions } = maybeInitializeApp()
 
+const shouldLog = process.env.CLIENT_LOG_API_REQUESTS === 'yes'
+
 export function callWrap<F extends Func>(name: string): Caller<F> {
+    const randId = Math.random().toString().slice(2, 6)
+    if (shouldLog) { console.log(`calling ${name}#${randId} at ${new Date().toLocaleTimeString()}`) }
     const doCall: Caller<F> = async (...args) => {
         try {
             const res = await httpsCallable(functions, name)(args)
+            if (shouldLog) { console.log(`function ${name}#${randId} returned ${JSON.stringify(res)} at ${new Date().toLocaleTimeString()}`) }
             return res.data as CallReturn<F>
         } catch (e) {
             console.error(`server error: ${e}`)

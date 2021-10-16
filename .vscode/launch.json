@@ -12,7 +12,13 @@
                 "<node_internals>/**"
             ],
             "attach": 9229,
-            "restart": true,
+            "restart": true
+        },
+        {
+            "type": "pwa-chrome",
+            "name": "chrome client",
+            "request": "launch",
+            "url": "http://localhost:3000"
         }
     ]
 }
