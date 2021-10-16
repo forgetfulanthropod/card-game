@@ -11,6 +11,8 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "emulate": "firebase emulators:start",
+        "emulate-debug": "firebase emulators:start --inspect-functions",
+        "functions-shell": "firebase functions:shell",
         "clean-ports": "bash scripts/killports.sh 5001 8080 3001",
         "only": "firebase emulators:start --only"
     },
