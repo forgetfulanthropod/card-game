@@ -19,6 +19,5 @@ export async function getGameStateCursor(username: 'alice'): Promise<FBCursor<Ga
     if (!(await docRef.get()).exists) {
         throw Error('could not find user doc')
     }
-    console.log('docRef exists')
     return makeFBCursor(docRef, [])
 }

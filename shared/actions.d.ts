@@ -2,9 +2,12 @@ import type { CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneN
 
 // NOTE: if we keep all args as strings then we can test in URL bar more easily
 // I think returning data as other kinds of values is fine.
+// I couldn't find a less verbose way to do this.
+// To add a function, add it three times here, twice in actions/functions.ts, and twice in client/actions/all.ts. (seven total lol)
 type Hello = (args: Empty) => 'hello'
 type Square = (args: { n: string }) => number
 type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
+type GetOwnedCharacters = (args: Empty) => Record<CharacterUid, CharacterName>
 type ChangeScene = (args: { newSceneName: SceneName }) => void
 type ChooseDoor = (args: { door: Door }) => void
 type GetRulebook = (args: Empty) => Rulebook
@@ -17,6 +20,7 @@ export interface ServerActions {
     square: Square
     echo: Echo
     changeScene: ChangeScene
+    getOwnedCharacters: GetOwnedCharacters
     chooseDoor: ChooseDoor
     getRulebook: GetRulebook
     startGame: StartGame
@@ -24,10 +28,13 @@ export interface ServerActions {
     makeNewUser: MakeNewUser
     dispatch: Dispatch
 }
+
+// I think there must be some kind of mapped interface via indexed types but idk how.
 export interface ClientActions {
     hello: Caller<Hello>
     square: Caller<Square>
     echo: Caller<Echo>
+    getOwnedCharacters: Caller<GetOwnedCharacters>
     changeScene: Caller<ChangeScene>
     chooseDoor: Caller<ChooseDoor>
     startGame: Caller<StartGame>

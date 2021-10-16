@@ -64,7 +64,6 @@ interface CraftingScene extends SceneHas {
 }
 
 
-
 export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryState
 

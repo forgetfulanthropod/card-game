@@ -22,39 +22,36 @@ export function makeFBCursor<Root, Sub = Root>(
     // const docRef = doc(collection, docId)
     return {
         select<K extends keyof Sub>(k): FBCursor<Root, Sub[K]> {
-            const keys = [...path, k as string]
-            return makeFBCursor<Root, Sub[K]>(docRef, keys)
+            const newPath = [...path, k as string]
+            return makeFBCursor<Root, Sub[K]>(docRef, newPath)
         },
         async get(k?) {
-            const data = (await docRef.get()).data
-            if (path.length === 0) { return data }
-            if (k == null) {
-                return ldGet(data, [...path, k].join('.'))
-            }
-            else {
-                return ldGet(data, path.join('.'))
-            }
+            const data = (await docRef.get()).data()
+            const newPath = k == null ? path : [...path, k]
+            if (newPath.length === 0) { return data }
+            const result = ldGet(data, newPath)
+            return result
         },
-        set(kOrV, val?) {
-            if (val == null) {
-                const value = kOrV
+        set(keyOrValue, maybeVal?) {
+            if (maybeVal == null) {
+                const value = keyOrValue
                 if (path.length === 0) { docRef.update(value) }
                 const keyString = path.join('.')
                 docRef.update({ [keyString]: value })
             } else {
-                const key = kOrV
-                const value = val
+                const key = keyOrValue
+                const value = maybeVal
                 const keyString = [...path, key].join('.')
                 docRef.update({ [keyString]: value })
             }
         },
         async apply(k, f) {
-            const keys = [...path, k as string]
+            const newPath = [...path, k as string]
             // https://stackoverflow.com/a/47296152
-            const data = (await docRef.get()).data
-            const current = ldGet(data, keys)
+            const data = (await docRef.get()).data()
+            const current = ldGet(data, newPath)
             const newVal = f(current)
-            const keyString = keys.join('.')
+            const keyString = newPath.join('.')
             await docRef.update({ [keyString]: newVal })
         },
         on(_, cb) {

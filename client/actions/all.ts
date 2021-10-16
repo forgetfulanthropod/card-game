@@ -7,7 +7,7 @@ const clientActions: ClientActions = {
     hello: callWrap('hello'),
     square: callWrap('square'),
     echo: callWrap('echo'),
-
+    getOwnedCharacters: callWrap('getOwnedCharacters'),
     /** This function is more complex cuz I really wanted to check return type.
      *  Can make this simpler if we use some run-time type checking library such as woutervh-/typescript-is.
      */
@@ -28,6 +28,10 @@ const clientActions: ClientActions = {
     dispatch: callWrap('dispatch'),
     makeNewUser: callWrap('makeNewUser'),
 }
+
+// @ts-ignore for debugging:
+window.actions = clientActions
+
 export const { hello, square, echo, getRulebookAsync, startGame, doCharacterAction, changeScene, chooseDoor, dispatch, makeNewUser, } = clientActions
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {

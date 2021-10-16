@@ -22,6 +22,6 @@ export const rulebook: Rulebook = {
 
 export const initialGameState: Gamestate = {
     scene: rulebook.initialScenes.battle,
-    ownedCharacters: {},
+    ownedCharacters: { 'ownedCharacter1234': 'frogKnight' },
     inventory: {},
 }
