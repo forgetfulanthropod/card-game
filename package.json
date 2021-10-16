@@ -11,7 +11,8 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "emulate": "firebase emulators:start",
-        "clean-ports": "bash scripts/killports.sh 5001 8080 3001"
+        "clean-ports": "bash scripts/killports.sh 5001 8080 3001",
+        "only": "firebase emulators:start --only"
     },
     "dependencies": {
         "ahooks": "^2.10.11",

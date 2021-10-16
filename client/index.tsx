@@ -7,8 +7,8 @@ import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
-import { makeNewUser } from './actions'
-import { onGamestate, onRulebook } from './data/rootTree'
+import { makeNewUser, square } from './actions'
+import { fillBothTrees, onGamestate, onRulebook } from './data/rootTree'
 import { maybeInitializeApp } from './fire'
 
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
@@ -28,6 +28,8 @@ loadAssets(
     function onDeluxe() { maybeStart('deluxe') }
 )
 
+square({ n: '12' })
+
 onRulebook(() => maybeStart('rulebook'))
 onGamestate(() => maybeStart('gamestate'));
 
@@ -38,6 +40,7 @@ onGamestate(() => maybeStart('gamestate'));
     console.log('making user')
     await makeNewUser({ username: 'alice' })
     state.createdUser = true
+    fillBothTrees()
 })()
 
 function maybeStart<K extends keyof typeof state>(k: K) {

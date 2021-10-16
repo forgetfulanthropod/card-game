@@ -22,7 +22,7 @@ export function onRulebook(cb: Callback): void {
     state.rulebookCallbacks.push(cb)
 }
 
-(async function triggerCallbacks() {
+export async function fillBothTrees(): Promise<void> {
     state.gamestate = new MyBaobab(await getGameState())
     // @ts-ignore for debugging:
     window.tree = state.gamestate
@@ -31,7 +31,7 @@ export function onRulebook(cb: Callback): void {
     state.rulebook = await getRulebookAsync()
     for (const cb of state.rulebookCallbacks) { cb() }
     state.rulebookCallbacks = []
-})()
+}
 
 
 /** Do not call at the module-level

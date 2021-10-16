@@ -9,14 +9,14 @@ import { getBattleScene, getGameStateCursor } from './getters'
 import { initialGameState, rulebook } from './rulebook/index'
 import { objFilter } from './util'
 
-
-const wrapper = onRequestWrapper
-// const wrapper = onCallWrapper
+// TOGGLE
+// const wrapper = onRequestWrapper
+const wrapper = onCallWrapper
 
 
 const serverActions: ServerActions = {
     hello: () => { return 'hello' },
-    square: args => { return Number(args.n) ** 2 },
+    square: args => { console.log('square args:', JSON.stringify(args)); return Number(args.n) ** 2 },
     echo: args => { return args }, // eslint-disable-line @typescript-eslint/no-explicit-any
     changeScene: async args => {
         const tree = await getGameStateCursor('alice')
@@ -37,7 +37,9 @@ const serverActions: ServerActions = {
         // TODO
     },
     makeNewUser: async (args) => {
-        await firestore().collection('users').add({ [args.username]: initialGameState })
+        console.log(`args: ${JSON.stringify(args)}`)
+        console.log(`adding user ${args.username} with initial gamestate`)
+        await firestore().collection('users').doc(args.username).set(initialGameState)
         // WRONG: CLIENT CODE: // await setDoc(doc(collection(getDb(), 'users'), username), initialGameState)
     },
     dispatch,
@@ -69,7 +71,7 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
     startFirebaseApp()
     return https.onCall(async (data, context) => {
         try {
-            const result = await f(data, context)
+            const result = await f(data[0], context)
             return { status: 'success', result }
         } catch (e) {
             return { status: 'error', message: JSON.stringify(e) }
