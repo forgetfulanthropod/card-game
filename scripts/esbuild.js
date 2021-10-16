@@ -18,11 +18,13 @@ const envObj = {
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
     'process.env.buildTime': `"${new Date().toLocaleString()}"`,
 }
-for (const k of Object.keys(envFile ?? {})) {
-    if (k.startsWith('CLIENT')) {
-        envObj[`process.env.${k}`] = `"${envFile?.[k]}"`
-    }
-}
+const clientEnvKeys = [
+    "CLIENT_DISABLE_BACKGROUND",
+    "CLIENT_LOG_API_REQUESTS"
+]
+for (const k of clientEnvKeys) [
+    envObj[`process.env.${k}`] = `"${envFile?.[k]}"`
+]
 console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')
 

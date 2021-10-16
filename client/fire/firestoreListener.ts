@@ -6,10 +6,15 @@ import type { DocumentData } from 'firebase/firestore'
 import { getDoc } from 'firebase/firestore'
 import { doc, onSnapshot } from 'firebase/firestore'
 
+// import isEqual from 'lodash/isEqual'
 import { getTree } from '@/data/rootTree'
 
 import { maybeInitializeApp } from '.'
 
+const config = {
+    enableExpensiveUpdateValidation: false,
+    logChanges: false,
+}
 
 export async function getGameState(): Promise<Gamestate> {
     const { db } = maybeInitializeApp()
@@ -43,7 +48,8 @@ export function attachFirestoreListener(): void {
 /** UNTESTED */
 function updateBoabab(data: DocumentData): void {
     const newState = data as unknown as Gamestate
-    const oldState = getTree().get()
+    const gameStateCursor = getTree()
+    const oldState = gameStateCursor.get()
     const differences = calcDiff(oldState, newState)
     if (differences == null) {
         console.warn('no differences')
@@ -54,7 +60,20 @@ function updateBoabab(data: DocumentData): void {
             console.warn('entire thing changed:', JSON.stringify(change))
             continue
         }
-        applyChange(change, getTree())
+        applyChange(change, gameStateCursor)
+    }
+    if (config.enableExpensiveUpdateValidation) {
+        const newTree = gameStateCursor.get()
+        const treeDifferences = calcDiff(oldState, newTree)
+        const diffDiff = calcDiff(treeDifferences, differences)
+        if (diffDiff != null) {
+            console.warn(
+                'diffs oldtree-vs-firebase and oldtree-vs-newtree are not the same',
+                'this likely means there is an error in updateBaobab or applyChange')
+            console.log('oldtree-vs-firebase vs oldtree-vs-newtree:', diffDiff)
+        } else {
+            console.log('diff seems to be applied correctly')
+        }
     }
     // TODO: deep diff update. see pathDiff in client/util/index
     //const key = firestoreEvent.path
@@ -63,6 +82,7 @@ function updateBoabab(data: DocumentData): void {
 }
 
 function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
+    if (config.logChanges) console.log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
             // @ts-ignore
