@@ -15,6 +15,7 @@ console.log({ shouldWatch, shouldLint })
 
 const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === 'development'
 const envObj = {
+    'process.env.DISABLE_BACKGROUND': `"${envFile?.parsed?.DISABLE_BACKGROUND}"`,
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
     'process.env.buildTime': `"${new Date().toLocaleDateString()} ${time()}"`,
 }
