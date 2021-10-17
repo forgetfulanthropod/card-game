@@ -1,5 +1,5 @@
 import type { Cursorish, NetworkEvent, NetworkEventEmitter } from '../shared/networkEvents'
-const config = { log: true }
+const config = { log: false }
 // TODO: shouldn't store entire event history forever...
 
 export function makeServerEventEmitter<Name extends string, Data>(name: Name, cursor: Cursorish<NetworkEvent<Name, Data>[]>): NetworkEventEmitter<Name, Data> {

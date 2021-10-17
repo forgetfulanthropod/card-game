@@ -8,12 +8,12 @@ import { keys, vals } from './util'
 
 const dispatch: Dispatch = async (action) => {
     // console.log({ scene, action, data: scene.get() })
-    // tl(`reducer received action ${JSON.stringify(action)}`)
+    console.log(`>>>>dispatching ${JSON.stringify(action)}`)
     const scene = await getBattleScene('alice')
     switch (action.a) {
         case 'setIsPlayerTurn': {
             // tl(`setting player turn to ${action.v}`)
-            scene.set('isPlayerTurn', action.v)
+            await scene.set('isPlayerTurn', action.v)
             return
         } case 'setBattleHasBegun': {
             scene.set('state', 'in battle')

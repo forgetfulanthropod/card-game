@@ -42,11 +42,14 @@ export const getBindings = memoize(async function getBindings() {
         return { ...value, alivePcs, aliveNpcs, isMoveAvailable }
     }
 
-    const state = await cursorToState(scene)
+    let state = await cursorToState(scene)
+
+    scene.on('update', async () => state = await cursorToState(scene))
     // scene.on('update', function () {
     //     Object.assign(state, sceneToState(scene))
     // })
-    const isPlayerFirstTurn = await scene.select('isPlayerTurn').get()
+    let isPlayerFirstTurn = await scene.select('isPlayerTurn').get()
+
     // debugger
 
 
@@ -100,7 +103,7 @@ export const getBindings = memoize(async function getBindings() {
 
 
     async function doNpcMove(_reason?: string) {
-        // tl(`npcMove(reason: ${reason})`)
+        tl(`npcMove(reason: ${_reason})`)
         const prefix = 'npc not moving cuz '
         if (checkWinner(vals(state.allCharacters)) != null) {
             log(prefix + 'battle is won')
@@ -193,6 +196,7 @@ export const getBindings = memoize(async function getBindings() {
 
         // if there's another unmoved NPC then make it strike
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
+            console.log('******************** ordinary')
             await dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }

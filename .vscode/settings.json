@@ -1,7 +1,7 @@
 {
     "workbench.colorCustomizations": {
         "titleBar.inactiveForeground": "#b8b8b8",
-        "sideBar.background": "#fde2ff",
+        "sideBar.background": "#a825ff3a",
         "sideBar.foreground": "#000000"
     },
     "files.insertFinalNewline": true,
