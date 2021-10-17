@@ -8,6 +8,8 @@ export function LevelInfo(): PixiContainer {
 
     const scene = getEntryScene()
 
+    const level = scene.select('selectedLevel').get()
+
     scene.select('selectedLevel').on('update', () => {
         const selectedLevel = scene.get().selectedLevel
 
@@ -17,11 +19,11 @@ export function LevelInfo(): PixiContainer {
     })
 
     const levelNumText = Text({
-        text: 'Level 1',
+        text: `Level ${level?.num}`,
         anchor: [.5, 1],
         style: {
             fontFamily: 'VT323',
-            fontSize: 80,
+            fontSize: 60,
             fill: ['#fff', '#eee'], // gradient
             // letterSpacing: -5,
             stroke: '#999',
@@ -33,6 +35,7 @@ export function LevelInfo(): PixiContainer {
         text: '◀',
         anchor: [.5, 1],
         x: -300,
+        y: 0,
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
@@ -48,6 +51,7 @@ export function LevelInfo(): PixiContainer {
         text: '▶',
         anchor: [.5, 1],
         x: 300,
+        y: 0,
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
@@ -61,24 +65,28 @@ export function LevelInfo(): PixiContainer {
     })
 
     const levelNameText = Text({
-        text: 'Hooligan’s Bluff',
+        text: `${level?.name}`,
         anchor: [.5, 0],
-        y: 20,
+        y: 25,
         style: {
             fontFamily: 'VT323',
-            fontSize: 60,
+            fontSize: 45,
             fill: '#fff',
+            stroke: '#999',
+            strokeThickness: 5,
         },
     })
 
     const pointLimitText = Text({
-        text: 'point limit: 20',
+        text: `point limit: ${level?.pointLimit}`,
         anchor: [.5, 0],
-        y: 80,
+        y: 90,
         style: {
             fontFamily: 'VT323',
             fontSize: 30,
             fill: '#fff',
+            stroke: '#999',
+            strokeThickness: 5,
         },
     })
 

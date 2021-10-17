@@ -39,8 +39,8 @@ import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 
-import font from '../../../assets/VT323-Regular.ttf'
-// import font from '../../../assets/ARCADE_R.ttf'
+// import font from '../../../assets/VT323-Regular.ttf'
+import font from '../../../assets/ARCADE_N.ttf'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 

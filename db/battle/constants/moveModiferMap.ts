@@ -36,8 +36,8 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
     },
     SP: {
         name: 'SP',
-        numTargets: 2,
-        multiplier: .5,
+        numTargets: [2, 3],
+        multiplier: [.4, .333],
     },
     DOT1: {
         name: 'DOT1',

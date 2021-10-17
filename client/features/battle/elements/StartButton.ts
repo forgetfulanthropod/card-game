@@ -21,8 +21,7 @@ export function StartButton(): PixiContainer {
             }),
             Text({
                 text: 'GO!',
-                anchor: [.5, .5],
-                y: -60,
+                anchor: [.5, 1.5],
                 style: {
                     fontFamily: 'VT323',
                     fontSize: 80,

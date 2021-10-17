@@ -14,8 +14,8 @@ export interface BattleScene extends SceneHas {
 
 export interface MoveModifier {
     name: MoveModifierName
-    numTargets: number
-    multiplier: number
+    numTargets: number | number[]
+    multiplier: number | number[]
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
