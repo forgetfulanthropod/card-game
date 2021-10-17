@@ -67,6 +67,7 @@ type Setter<T> = T | ((old: T) => T)
 export type Action =
     | { a: 'setIsPlayerTurn', v: boolean }
     | { a: 'setBattleHasBegun' }
+    | { a: 'move', d: AttackData }
     | { a: 'setHasMoved', uid: string, v: boolean }
     | { a: 'setHealth', uid: string, h: Setter<number> }
     | { a: 'clearHasMoved' }

@@ -123,6 +123,7 @@ export const getBindings = memoize(async function getBindings() {
         }
         const move = getNpcMove(vals(state.allCharacters))
         move$.emit(move)
+        await dispatch({ a: 'move', d: move })
         await dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(async () => await dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
@@ -181,6 +182,7 @@ export const getBindings = memoize(async function getBindings() {
             move: state.selectedMove,
         }
         move$.emit(ad)
+        await dispatch({ a: 'move', d: ad })
 
         // change to unmoved PC if there is one
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)

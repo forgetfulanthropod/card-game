@@ -1,4 +1,5 @@
 import type { Dispatch } from '@shared/actions'
+import { getDamage } from './attack'
 
 import { getBattleScene } from './getters'
 import { makeInitialBattleState } from './rulebook/battle'
@@ -18,6 +19,15 @@ const dispatch: Dispatch = async (action) => {
         } case 'setBattleHasBegun': {
             scene.set('state', 'in battle')
             return
+        } case 'move': {
+            const allCharacters = await scene.select('allCharacters').get()
+            // console.log('+++++++++ got here! \n\n')
+            getCharacterKeysAndDamages(action.d).forEach(({ key, damage }) => {
+                console.log({ allCharacters, key })
+                const newHealth = allCharacters[key].health - damage
+                scene.select('allCharacters').select(key).set('health', newHealth)
+            })
+            return
         } case 'setHasMoved': {
             // let notFound = true
             scene.select('allCharacters').select(action.uid).set('hasMoved', true)
@@ -25,20 +35,20 @@ const dispatch: Dispatch = async (action) => {
             // rootTree.commit()
             return
         } case 'setHealth': {
-            console.log('setting health of', action.uid)
-            // debugger
-            // let notFound = true
-            const charCursor = scene.select('allCharacters').select(action.uid)
-            const prevHealth = await charCursor.get('health')
-            charCursor.set('health', typeof action.h === 'function' ? action.h(prevHealth) : action.h)
-            const winner = checkWinner(vals(await scene.get('allCharacters')))
-            if (winner === 'PC') scene.set('state', 'won')
-            if (winner === 'NPC') scene.set('state', 'lost')
+            // console.log('setting health of', action.uid)
+            // // debugger
+            // // let notFound = true
+            // const charCursor = scene.select('allCharacters').select(action.uid)
+            // const prevHealth = await charCursor.get('health')
+            // charCursor.set('health', typeof action.h === 'function' ? action.h(prevHealth) : action.h)
+            // const winner = checkWinner(vals(await scene.get('allCharacters')))
+            // if (winner === 'PC') scene.set('state', 'won')
+            // if (winner === 'NPC') scene.set('state', 'lost')
 
-            // .allCharacters.find(c => c.id === action.id)
-            // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
+            // // .allCharacters.find(c => c.id === action.id)
+            // // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
 
-            return
+            // return
         } case 'clearHasMoved': {
             const cursor = scene.select('allCharacters')
             for (const k of keys(await cursor.get())) {
@@ -74,3 +84,14 @@ const dispatch: Dispatch = async (action) => {
     }
 }
 export default dispatch
+
+
+
+//TODO: move
+
+function getCharacterKeysAndDamages(attackData) {
+    const d = attackData.defenders.map(defender => ({ key: defender.uid, damage: getDamage(attackData) }))
+    // console.log({ d })
+    // console.log({ defenders: attackData.defenders })
+    return d
+}
