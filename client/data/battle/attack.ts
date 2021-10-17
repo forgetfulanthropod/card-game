@@ -7,7 +7,7 @@ import { stanceTypeMetaMap, moveModiferMap } from './constants'
 // PCs must have stances
 export function getDamage(d: AttackData): number {
 
-    console.log({ moveMultiplier: getMoveMultiplier(d) })
+    // console.log({ moveMultiplier: getMoveMultiplier(d) })
 
     const dam = d.attacker.damage
         * getAttackMultiplier(d.attacker)
@@ -23,15 +23,15 @@ function getAttackMultiplier(attacker: CharacterMeta): StanceMultiplier {
 }
 
 
+// export interface MoveModifier {
+//     name: MoveModifierName
+//     numTargets: number | number[]
+//     multiplier: number | number[]
+//     defaultSpriteUrl?: string
+//     isSpecial?: boolean
+// }
 function getMoveMultiplier(d: AttackData): number {
     return d.move.types.reduce((multiplier, nextType) => {
-        // export interface MoveModifier {
-        //     name: MoveModifierName
-        //     numTargets: number | number[]
-        //     multiplier: number | number[]
-        //     defaultSpriteUrl?: string
-        //     isSpecial?: boolean
-        // }
         const typeMeta = moveModiferMap[nextType]
 
         let typeMultiplier: number
@@ -45,7 +45,7 @@ function getMoveMultiplier(d: AttackData): number {
             typeMultiplier = typeMeta.multiplier as number
         }
 
-        console.log(JSON.stringify({ multiplier, typeMultiplier }))
+        // console.log(JSON.stringify({ multiplier, typeMultiplier }))
 
         return multiplier * typeMultiplier
     }, 1)
