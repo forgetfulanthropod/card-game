@@ -24,6 +24,7 @@ const config = { log: true }
 function log(...args: unknown[]) { if (config.log) { console.log(args) } }
 
 export const getBindings = memoize(async function getBindings() {
+    // TODO: RIDDLED WITH FUCKING BUGS
     const scene = await getBattleScene('alice')
 
     // const { battleCursor: battleState, dispatch } = props
@@ -68,10 +69,10 @@ export const getBindings = memoize(async function getBindings() {
         }
     }
 
-    function resetRound() {
+    async function resetRound() {
         if (DEBUG) tl('resetting moves')
-        dispatch({ a: 'clearHasMoved' })
-        dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
+        await dispatch({ a: 'clearHasMoved' })
+        await dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
         tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
         if (!isPlayerFirstTurn) {
             setTimeout(() => doNpcMove('first move of round'), 1000)
@@ -98,7 +99,7 @@ export const getBindings = memoize(async function getBindings() {
     })
 
 
-    function doNpcMove(_reason?: string) {
+    async function doNpcMove(_reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
         const prefix = 'npc not moving cuz '
         if (checkWinner(vals(state.allCharacters)) != null) {
@@ -114,14 +115,14 @@ export const getBindings = memoize(async function getBindings() {
             return
         }
         if (state.aliveNpcs.every(c => c.hasMoved)) {
-            dispatch({ a: 'setIsPlayerTurn', v: true })
+            await dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
         const move = getNpcMove(vals(state.allCharacters))
         move$.emit(move)
-        dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
+        await dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
-            setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
+            setTimeout(async () => await dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
         }
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
@@ -150,7 +151,7 @@ export const getBindings = memoize(async function getBindings() {
                 log('selected char has already attacked')
                 return
             }
-            dispatch({ a: 'setSelectedCharacter', c: clicked })
+            await dispatch({ a: 'setSelectedCharacter', c: clicked })
             return
         }
 
@@ -165,7 +166,7 @@ export const getBindings = memoize(async function getBindings() {
             tl('select move first')
             return
         }
-        dispatch({ a: 'setHasMoved', uid: state.selectedCharacter, v: true })
+        await dispatch({ a: 'setHasMoved', uid: state.selectedCharacter, v: true })
         const defenders = [clicked]
         if (moveModifiers[state.selectedMove.types[0]].numTargets > 1) {
             const closest = getClosestAlive(vals(state.allCharacters), clicked, 1)
@@ -183,16 +184,16 @@ export const getBindings = memoize(async function getBindings() {
         if (newPc == null) {
             // should be unreachable
             tl('no unmoved PC')
-            dispatch({ a: 'setIsPlayerTurn', v: false })
+            await dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => doNpcMove('attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
         tl(`selecting character ${newPc.uid}`)
-        dispatch({ a: 'setSelectedCharacter', c: newPc })
+        await dispatch({ a: 'setSelectedCharacter', c: newPc })
 
         // if there's another unmoved NPC then make it strike
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
-            dispatch({ a: 'setIsPlayerTurn', v: false })
+            await dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }

@@ -16,7 +16,7 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: string,
 }
 
 export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number }): Room {
-    const uids = new Array(10).fill(null).map(() => Math.random().toString().slice(2))
+    const uids = new Array(10).fill(null).map(() => 'fromMakeRoom' + Math.random().toString().slice(2, 6))
     switch (args.door) {
         case 'ordinary':
             return {

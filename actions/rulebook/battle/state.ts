@@ -18,7 +18,7 @@ function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
     ]
     const o: Record<CharacterUid, CharacterMeta> = {}
     for (const c of all) {
-        const uid = Math.random().toString().slice(2)
+        const uid = 'fromMakeInitialCharacters' + Math.random().toString().slice(2, 6)
         o[uid] = c
         c.uid = uid
     }
@@ -48,7 +48,7 @@ export function makeInitialBattleState(
     return Object.freeze({
         name: 'battle',
         turnCount: 0,
-        state: 'in battle',
+        state: 'not started',
         isPlayerTurn: Math.random() < .5,
         battleHasBegun: true,
         allCharacters,
@@ -71,6 +71,7 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     ]
     return A.slice(0, n)
 }
+
 function newPCMeta(args: { x: number; y: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1

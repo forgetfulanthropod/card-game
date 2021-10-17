@@ -62,7 +62,11 @@ function Character(args: CharacterProps): PixiContainer {
 
     let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance })
 
-    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
+    const sprites = makeSprites(args, characterMeta, onHeight)
+    if (sprites == null) {
+        return Container({ children: [] })
+    }
+    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = sprites
 
     const mainContainer = Container({
         children: [
@@ -144,6 +148,7 @@ function Character(args: CharacterProps): PixiContainer {
 }
 
 function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
+
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 10
     const grayFilter = new filters.ColorMatrixFilter()
@@ -155,6 +160,14 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
 
     const assetIdCursor = args.cursor.select('name')
     const assetIdToSrc = (assetId: CharacterName) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+
+    if (assetIdCursor.get() == null) {
+        // TODO: has to do with renewChildren()
+        // should never occur...
+        console.error('null character assetId. probably character was removed or uid was changed.')
+        return null
+    }
+
     const charSpriteProps = {
         src: assetIdToSrc(assetIdCursor.get()),
         anchor: [0, 1] as [number, number],

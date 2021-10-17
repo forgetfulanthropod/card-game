@@ -1,5 +1,6 @@
 import type { NetworkEventEmitter } from '@shared/networkEvents'
 import { makeClientEventListener } from '@shared/networkEvents'
+import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
@@ -30,6 +31,8 @@ export function BattleScene(): PixiContainer {
         const newKeys = keys(allCharsCursor.get())
         if (!isEqual(lastKeys, newKeys)) {
             tl('character keys changed!')
+            console.log('difference between old keys and new keys:',
+                diff(lastKeys, newKeys))
             lastKeys = newKeys
             renewChildren()
         }

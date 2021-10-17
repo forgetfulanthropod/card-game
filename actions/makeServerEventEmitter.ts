@@ -12,7 +12,7 @@ export function makeServerEventEmitter<Name extends string, Data>(name: Name, cu
             const event = {
                 type: name,
                 sentAt: new Date().toUTCString(),
-                uid: Math.random().toString().slice(2),
+                uid: 'eventUID' + Math.random().toString().slice(2, 6),
                 data,
             }
             if (config.log) { console.log(`sending new ${name} event:`, event) }

@@ -6,7 +6,7 @@ import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
-import { changeScene, makeNewUser } from './actions'
+import { makeNewUser } from './actions'
 import { fillBothTrees, onGamestate, onRulebook } from './data/rootTree'
 import { maybeInitializeApp } from './fire'
 import { attachFirestoreListener } from './fire/firestoreListener'
@@ -57,8 +57,8 @@ async function maybeStart<K extends keyof typeof state>(k: K) {
         log('everything loaded up')
         log('attaching firestore listener')
         attachFirestoreListener()
-        log('changing scene')
-        await changeScene({ newSceneName: 'battle' })
+        // log('changing scene')
+        // await changeScene({ newSceneName: 'battle' })
         log('starting preact')
         render(<App />, document.getElementById('preact-root') as HTMLDivElement)
         log('starting pixi')

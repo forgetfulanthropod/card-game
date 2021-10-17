@@ -43,6 +43,7 @@ const serverActions: ServerActions = {
         return bindings.doCharacterAction(uid)
     },
     makeNewUser: async (args) => {
+        // TODO: I'm not sure if this fully resets the user
         console.log(`adding user ${args.username} with initial gamestate`)
         await firestore().collection('users').doc(args.username).set(initialGameState)
     },
