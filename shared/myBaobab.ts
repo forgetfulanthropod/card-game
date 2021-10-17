@@ -64,7 +64,7 @@ export class MyBaobab<T extends any> extends Baobab {
 
 export class MyCursor<T extends any> extends Cursor {
     constructor() { super() }
-    apply(getNew: (state: T) => T): T { return super.apply(path, getNew) }
+    apply(getNew: (state: T) => T): T { return super.apply(getNew) }
     apply<K extends keyof T>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): MyCursor<T[K]>
     apply<K extends AllPaths<T>>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): DeepIndex<T, K> { return super.apply(path, getNew) }
 

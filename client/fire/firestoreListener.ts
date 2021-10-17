@@ -12,8 +12,8 @@ import { getTree } from '@/data/rootTree'
 import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: false,
-    logChanges: false,
+    enableExpensiveUpdateValidation: true,
+    logChanges: true,
 }
 
 export async function getGameState(): Promise<Gamestate> {
@@ -99,9 +99,15 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
             break
         }
         case 'A': { // array change
-            const { path, index, item } = change
+            const { path, index: _index, item } = change
+            if (item.kind !== 'N') {
+                throw Error('implementation can only currently add new array elements sorry')
+            }
             // @ts-ignore
-            applyChange(cursor.select([...path, index]), item)
+            cursor.apply(path, arr => [...arr, item.rhs])
+            // TODO: would be better if it worked:
+            // @ts-ignore
+            // applyChange(cursor.select([...path, index]), item)
         }
     }
 }

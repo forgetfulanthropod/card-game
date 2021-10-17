@@ -24,4 +24,5 @@ export const initialGameState: Gamestate = {
     scene: rulebook.initialScenes.battle,
     ownedCharacters: { 'ownedCharacter1234': 'frogKnight' },
     inventory: {},
+    events: [],
 }

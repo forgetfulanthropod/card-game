@@ -11,3 +11,5 @@ node_modules/
 package-lock.json
 
 /*.log
+
+pnpm-lock.yaml

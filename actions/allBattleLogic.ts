@@ -1,38 +1,35 @@
 // TODO: getBattleScene
-import type { AttackData, BattleScene, BattleWinState, CharacterMeta } from '@shared/index'
-import { EventEmitter } from 'eventemitter3'
+import type { AttackData, BattleScene, BattleWinState, CharacterUid, Gamestate } from '@shared/index'
+import type { NetworkEvent } from '@shared/networkEvents'
+import memoize from 'lodash/memoize'
 
 import dispatch from './dispatch'
 import { putUpDoors } from './doors'
 import type { FBCursor } from './FBCursor'
-import { getBattleScene } from './getters'
+import { getBattleScene, getGameStateCursor } from './getters'
+import { makeServerEventEmitter } from './makeServerEventEmitter'
 import { moveModiferMap as moveModifiers } from './rulebook/battle'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './rulebook/battle/misc'
 // import toast from 'react-hot-toast'
 // import type { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { vals } from './util'
 
-
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEBUG = false
 
 const tl = (x: string) => console.log(x)
 
-// TODO
-// interface Bindings  {
-//     startGame: any,
-//     resetRound: any,
-//     endGame: any,
-//     doCharacterAction: any,
-//     move$: any,
-// }
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function getBindings() {
+const config = { log: true }
+
+function log(...args: unknown[]) { if (config.log) { console.log(args) } }
+
+export const getBindings = memoize(async function getBindings() {
     const scene = await getBattleScene('alice')
 
     // const { battleCursor: battleState, dispatch } = props
-    const move$ = new EventEmitter<{ '': AttackData }>()
-    const npcMove$ = new EventEmitter<{ '': string }>()
+    // TODO: move$ won't work anymore.
+    const eventsCursor: FBCursor<Gamestate, NetworkEvent<'move', AttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const move$ = makeServerEventEmitter<'move', AttackData>('move', eventsCursor)
 
     const cursorToState = async (cursor: FBCursor<BattleScene>) => {
         const value = await cursor.get()
@@ -52,19 +49,23 @@ export async function getBindings() {
     // debugger
 
 
-    move$.on('', function showMove(ad: AttackData) {
-        if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
-        // toast(ad.move.name, { style: { backgroundColor: ad.attacker.isPc ? 'green' : 'red', color: 'white' } } )
-        console.log(ad.move.name)
-    })
+    // move $.on('', function showMove(ad: AttackData) {
+    //     if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
+    //     // toast(ad.move.name, { style: { backgroundColor: ad.attacker.isPc ? 'green' : 'red', color: 'white' } } )
+    //     console.log(ad.move.name)
+    // })
 
-    function startGame() {
+    async function startGame() {
+        if (await scene.get('state') === 'in battle') {
+            // already in game
+            console.warn('already started game')
+            return
+        }
+        scene.set('state', 'in battle')
         tl(state.isPlayerTurn ? 'You go first!' : 'Enemy goes first!')
         if (!state.isPlayerTurn) {
-            const t = setTimeout(() => npcMove$.emit('', 'first move of game'), 1000)
-            return () => clearTimeout(t)
+            setTimeout(() => doNpcMove('first move of game'), 1000)
         }
-        return () => { }
     }
 
     function resetRound() {
@@ -73,7 +74,7 @@ export async function getBindings() {
         dispatch({ a: 'setIsPlayerTurn', v: isPlayerFirstTurn })
         tl(isPlayerFirstTurn ? 'You start' : 'Enemy starts')
         if (!isPlayerFirstTurn) {
-            setTimeout(() => npcMove$.emit('', 'first move of round'), 1000)
+            setTimeout(() => doNpcMove('first move of round'), 1000)
         }
     }
 
@@ -86,13 +87,7 @@ export async function getBindings() {
         // if (winner === 'NPC') {
         //     // TODO
         //     const st = setTimeout(() => showEndScreen('lose'), 1000)
-        //     return () => clearTimeout(st)
         // }
-        // if (winner === 'PC') {
-        //     const st = setTimeout(() => showEndScreen('win'), 0) // MARK
-        //     return () => clearTimeout(st)
-        // }
-        return () => { }
     }
     const winStateCursor = scene.select('state')
     winStateCursor.on('update', async () => {
@@ -105,34 +100,56 @@ export async function getBindings() {
 
     function doNpcMove(_reason?: string) {
         // tl(`npcMove(reason: ${reason})`)
-        if (checkWinner(vals(state.allCharacters)) != null) { return }
-        if (state.isPlayerTurn) { return }
-        if (state.alivePcs.length === 0) { return }
+        const prefix = 'npc not moving cuz '
+        if (checkWinner(vals(state.allCharacters)) != null) {
+            log(prefix + 'battle is won')
+            return
+        }
+        if (state.isPlayerTurn) {
+            log(prefix + 'it is player turn')
+            return
+        }
+        if (state.alivePcs.length === 0) {
+            log(prefix + 'none are alive')
+            return
+        }
         if (state.aliveNpcs.every(c => c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: true })
             return
         }
         const move = getNpcMove(vals(state.allCharacters))
-        move$.emit('', move)
+        move$.emit(move)
         dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
             setTimeout(() => dispatch({ a: 'setIsPlayerTurn', v: true }), 500)
             return
         }
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
-            setTimeout(() => npcMove$.emit('', 'no unmoved PC and NPC turn'), 1000)
+            setTimeout(() => doNpcMove('no unmoved PC and NPC turn'), 1000)
         }
     }
-    // tl('adding listiner')
-    npcMove$.on('', e => doNpcMove(e))
 
-    function doCharacterAction(clicked: CharacterMeta) {
-        if (checkWinner(vals(state.allCharacters)) != null) return
-        if (!state.isPlayerTurn) return
-        if (state.alivePcs.every(c => c.hasMoved)) return
+    async function doCharacterAction(clickedUid: CharacterUid) {
+        log('received click for ' + clickedUid)
+        const clicked = state.allCharacters[clickedUid]
+        if (checkWinner(vals(state.allCharacters)) != null) {
+            log('winner exists')
+            return
+        }
+        if (!state.isPlayerTurn) {
+            log('not player turn')
+            return
+        }
+        if (state.alivePcs.every(c => c.hasMoved)) {
+            log('no unmoved pcs')
+            return
+        }
         // click to choose selected Pc:
         if (clicked.isPc) {
-            if (clicked.hasMoved) return
+            if (clicked.hasMoved) {
+                log('selected char has already attacked')
+                return
+            }
             dispatch({ a: 'setSelectedCharacter', c: clicked })
             return
         }
@@ -159,7 +176,7 @@ export async function getBindings() {
             defenders: defenders,
             move: state.selectedMove,
         }
-        move$.emit('', ad)
+        move$.emit(ad)
 
         // change to unmoved PC if there is one
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)
@@ -167,7 +184,7 @@ export async function getBindings() {
             // should be unreachable
             tl('no unmoved PC')
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => npcMove$.emit('', 'attack back'), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => doNpcMove('attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
         }
         tl(`selecting character ${newPc.uid}`)
@@ -176,17 +193,11 @@ export async function getBindings() {
         // if there's another unmoved NPC then make it strike
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
             dispatch({ a: 'setIsPlayerTurn', v: false })
-            setTimeout(() => npcMove$.emit('', 'NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
+            setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     }
     return {
         startGame,
-        resetRound,
         doCharacterAction,
-        move$,
     }
-}
-
-function showEndScreen(_kind: 'win' | 'lose') {
-    // TODO
-}
+})

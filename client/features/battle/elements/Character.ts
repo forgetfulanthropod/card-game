@@ -1,15 +1,16 @@
 import type { MyCursor } from '@shared/myBaobab'
+import type { NetworkEvent } from '@shared/networkEvents'
 import { filters, Loader } from 'pixi.js'
 
 // import { useLoaderContext } from '../providers/LoaderProvider'
 import { getDamage } from '@/data/battle/attack'
 import { getBattleScene } from '@/data/rootTree'
 import type { AttackData, CharacterMeta, CharacterUid } from '@/data/types'
-import type { MoveEmitter } from '@/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
 // import dispatch from '@/actions'
 import type { CharacterName } from '../logic/AssetLoader'
+import type { Move$ } from './BattleScene'
 // import { MoveEmitter } from '../components/AllCharacters'
 // import { Dispatcher } from '../components/CharacterManager'
 // import { Hover } from './Hover'
@@ -38,7 +39,7 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
 interface KnownCharacterProps {
     onClick: (c: CharacterUid) => void
     // dispatch: Dispatcher
-    move$: MoveEmitter
+    move$: Move$
     scale: number
     cursor: MyCursor<CharacterMeta>
 }
@@ -49,6 +50,7 @@ interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
     direction: -1 | 1
 }
+
 function Character(args: CharacterProps): PixiContainer {
     // NOTE: necessary so the onClick sends the correct data after a character change.
     const characterMeta = { ...args.cursor.get() }
@@ -110,7 +112,8 @@ function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    args.move$.on('', function doCharMove(d: AttackData) {
+    args.move$.on(function doCharMove(event: NetworkEvent<'move', AttackData>) {
+        const d = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
         if (d.attacker.uid === myId) {
@@ -214,6 +217,7 @@ const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
 type Point = { x: number, y: number }
+
 function makeFlyToOnTick(start: Point, flyTo: Point) {
     let totalElapsed = 0
     return (container: PixiContainer, elapsed: number): void | 'remove' => {

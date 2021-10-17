@@ -2,6 +2,7 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
+import { getBindings } from './allBattleLogic'
 import dispatch_ from './dispatch'
 import { makeRoom } from './doors'
 import { getBattleScene, getGameStateCursor } from './getters'
@@ -34,16 +35,16 @@ const serverActions: ServerActions = {
     },
     getRulebook: () => { return rulebook },
     startGame: async () => {
-        const scene = await getBattleScene('alice')
-        scene.set('state', 'in battle')
+        const bindings = await getBindings()
+        return bindings.startGame()
     },
-    doCharacterAction: () => {
-        // TODO
+    doCharacterAction: async ({ uid }) => {
+        const bindings = await getBindings()
+        return bindings.doCharacterAction(uid)
     },
     makeNewUser: async (args) => {
         console.log(`adding user ${args.username} with initial gamestate`)
         await firestore().collection('users').doc(args.username).set(initialGameState)
-        // WRONG: CLIENT CODE: // await setDoc(doc(collection(getDb(), 'users'), username), initialGameState)
     },
     dispatch: dispatch_,
 }
@@ -73,7 +74,7 @@ function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
         if (isLog) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
         try {
             const result = await f(request.query)
-            if (isLog) { console.log(`    ${f.name} responding with ${JSON.stringify(result)}`) }
+            if (isLog) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })
         } catch (e) {
             console.error(`exception occured in client call to ${f.name}: `, e)
@@ -89,7 +90,7 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
         if (isLog) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(data[0])}`) }
         try {
             const result = await f(data[0], context)
-            if (isLog) { console.log(`    ${f.name} responding with ${JSON.stringify(result)}`) }
+            if (isLog) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             return { status: 'success', result }
         } catch (e) {
             console.error(`exception occured in client call to ${f.name}: `, e)

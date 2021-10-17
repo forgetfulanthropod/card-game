@@ -4,4 +4,5 @@ export * from './datamodel'
 export * from './entryTypes'
 export * from './immutable'
 export * from './myBaobab'
-// keeping ./actions separate for now
+// excluding actions.d.ts
+// excluding baobabEventEmitter.ts

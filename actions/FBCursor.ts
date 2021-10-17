@@ -9,6 +9,7 @@ export interface FBCursor<Root, Sub = Root> {
     get<K extends keyof Sub>(k: K): Promise<Sub[K]>
     set(v: Sub): void
     set<K extends keyof Sub>(k: K, v: Sub[K]): void
+    apply(f: (prev: Sub) => Sub): void
     apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): void
     on(eventName: 'update', cb: (v: Sub) => void): void
 }
@@ -16,10 +17,7 @@ export interface FBCursor<Root, Sub = Root> {
 // Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
 export function makeFBCursor<Root, Sub = Root>(
     docRef: firestore.DocumentReference<Root>,
-    // collection: CollectionReference,
-    // docId: string,
     path: string[]): FBCursor<Root, Sub> {
-    // const docRef = doc(collection, docId)
     return {
         select<K extends keyof Sub>(k): FBCursor<Root, Sub[K]> {
             const newPath = [...path, k as string]
@@ -32,6 +30,7 @@ export function makeFBCursor<Root, Sub = Root>(
             const result = ldGet(data, newPath)
             return result
         },
+        // https://stackoverflow.com/a/47296152
         set(keyOrValue, maybeVal?) {
             if (maybeVal == null) {
                 const value = keyOrValue
@@ -45,12 +44,14 @@ export function makeFBCursor<Root, Sub = Root>(
                 docRef.update({ [keyString]: value })
             }
         },
-        async apply(k, f) {
-            const newPath = [...path, k as string]
-            // https://stackoverflow.com/a/47296152
+        async apply(keyOrFunc, maybeFunc?) {
             const data = (await docRef.get()).data()
+            const [key, func] = maybeFunc == null ?
+                [null, keyOrFunc] :
+                [keyOrFunc, maybeFunc]
+            const newPath = key == null ? path : [...path, key as string]
             const current = ldGet(data, newPath)
-            const newVal = f(current)
+            const newVal = func(current)
             const keyString = newPath.join('.')
             await docRef.update({ [keyString]: newVal })
         },

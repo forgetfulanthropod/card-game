@@ -1,8 +1,9 @@
-import { EventEmitter } from 'eventemitter3'
+import type { NetworkEventEmitter } from '@shared/networkEvents'
+import { makeClientEventListener } from '@shared/networkEvents'
 import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
-import { getBattleScene } from '@/data/rootTree'
+import { getBattleScene, getTree } from '@/data/rootTree'
 import type { AttackData, CharacterMeta } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
 
@@ -12,9 +13,11 @@ import { Frogknight, Skeleton } from './Character'
 import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
+export type Move$ = NetworkEventEmitter<'move', AttackData>
+
 export function BattleScene(): PixiContainer {
-    // TODO
-    const move$ = new EventEmitter<{ '': AttackData }>()
+    const eventsCursor = getTree().select('events')
+    const move$ = makeClientEventListener<'move', AttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
     const container = Container({ children: [] })
