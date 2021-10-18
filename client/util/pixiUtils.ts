@@ -1,6 +1,9 @@
-import { PixiContainer, PixiSprite } from '@/features/battle/elements/mypixi'
 import type { Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
+
+import type { PixiContainer, PixiSprite, PixiTexture } from '@/features/battle/elements/mypixi'
+import { PixiLoader } from '@/features/battle/elements/mypixi'
+import type { AssetKey } from '@/features/battle/logic/AssetLoader'
 
 export function drawCircle(g: PixiGraphics, color: string, x: number, y: number, radius: number): void {
     g.beginFill(utils.string2hex(color))
@@ -16,7 +19,6 @@ export function flashElement(sprite: PixiSprite, { durationMs = 500 } = {}): voi
 }
 
 export function hideElement(sprite: PixiSprite | PixiContainer, { durationMs = 500 } = {}): void {
-    console.log('hiding el')
     sprite.visible = false
     setTimeout(() => {
         sprite.visible = true
@@ -40,4 +42,8 @@ export function doFlashElement(
             s.destroy()
         }
     }, durationMs)
+}
+
+export function dataOf(assetId: AssetKey): PixiTexture {
+    return PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
 }

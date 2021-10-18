@@ -1,4 +1,5 @@
-import type { h, JSX } from 'preact'
+import type { JSX } from 'preact'
+
 import StartButton from './StartButton'
 
 

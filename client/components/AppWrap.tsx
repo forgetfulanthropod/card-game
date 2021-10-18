@@ -1,4 +1,4 @@
-import type { h, JSX } from 'preact'
+import type { JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
 

@@ -1,4 +1,4 @@
-import type { h, JSX } from 'preact'
+import { h, JSX } from 'preact' // eslint-disable-line
 import { createContext } from 'preact'
 import { useContext, useMemo, useState } from 'preact/hooks'
 

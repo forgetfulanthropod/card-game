@@ -2,7 +2,7 @@ const esbuild = require('esbuild')
 const fs = require('fs')
 const { spawn } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
-const envFile = require('dotenv').config()
+const envFile = require('dotenv').config()?.parsed
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
 
 const buildDir = 'build'
@@ -10,14 +10,22 @@ const publicDir = 'public'
 
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
-const shouldLint = envFile?.parsed?.ESBUILD_SHOULD_LINT === 'yes'
+const shouldLint = envFile?.ESBUILD_SHOULD_LINT === 'yes'
+const isDevelopment = envFile?.ESBUILD_NODE_ENV === 'development'
 console.log({ shouldWatch, shouldLint })
 
-const isDevelopment = envFile?.parsed?.ESBUILD_NODE_ENV === 'development'
 const envObj = {
-    'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`
+    'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
+    'process.env.buildTime': `"${new Date().toLocaleString()}"`,
 }
-console.log(envObj)
+const clientEnvKeys = [
+    "CLIENT_DISABLE_BACKGROUND",
+    "CLIENT_LOG_API_REQUESTS"
+]
+for (const k of clientEnvKeys) [
+    envObj[`process.env.${k}`] = `"${envFile?.[k]}"`
+]
+console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')
 
 // const preactSubs = {
@@ -61,10 +69,12 @@ async function main() {
         define: substitions,
         watch: !shouldWatch ? null : {
             onRebuild(error, result) {
+                // TODO: if we want true build time, then here we could echo the time
+                //   into a file and the client could read from it with a fetch
                 if (error) {
-                    console.error(`ERROR watch at ${new Date()} failed:`, error)
+                    console.error(`!!${time()}: ERROR watch build failed:`, error)
                 } else {
-                    console.log(`watch build at ${new Date()} succeeded:`, result)
+                    console.log(`${time()}: watch build succeeded:`, result)
                     if (shouldLint) {
                         console.log('linting...')
                         spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
@@ -82,11 +92,15 @@ async function main() {
 
     })
         .then(() => {
-            console.log('built at ' + new Date())
+            console.log(`${time()}: initial build succeeded`)
             if (shouldLint) {
                 console.log('linting...')
                 spawn('npm', ['run', 'lint'], { stdio: 'inherit' })
             }
         })
         .catch((err) => { console.error(err) })
+}
+
+function time() {
+    return new Date().toLocaleTimeString()
 }

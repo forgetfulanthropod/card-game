@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // @ts-ignore
 import styled from 'styled-components'
+
 // import { css, keyframes } from 'styled-components'
 import startPng from '../assets/start.png'
 
