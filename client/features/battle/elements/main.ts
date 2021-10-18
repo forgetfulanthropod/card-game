@@ -2,6 +2,7 @@ import { chooseDoor } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
 
 import { BattleScene } from './BattleScene'
+import Chest from './Chest'
 import Doors from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
 import type { PixiApplication, PixiContainer } from './mypixi'
@@ -55,12 +56,10 @@ function bindBattleState(app: PixiApplication) {
 
     const stateCursor = getBattleScene().select('state')
     stateCursor.on('update', () => {
-        // if (stateCursor.get() === 'won')
-
-        // if (stateCursor.get() === 'won')
-        //     app.stage.addChild(
-        //         Chest({ size: { width: app.stage.width, height: app.stage.height } })
-        //     )
+        if (stateCursor.get() === 'won')
+            app.stage.addChild(
+                Chest({ size: { width: app.stage.width, height: app.stage.height } })
+            )
     })
     const doorCursor = getBattleScene().select('doors')
     let doorsCont: PixiContainer | null = null

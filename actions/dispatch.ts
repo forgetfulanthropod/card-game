@@ -9,7 +9,7 @@ import { keys, vals } from './util'
 
 const dispatch: Dispatch = async (action) => {
     // console.log({ scene, action, data: scene.get() })
-    console.log(`>>>>dispatching ${JSON.stringify(action)}`)
+    // console.log(`>>>>dispatching ${JSON.stringify(action)}`)
     const scene = await getBattleScene('alice')
     switch (action.a) {
         case 'setIsPlayerTurn': {
@@ -21,12 +21,16 @@ const dispatch: Dispatch = async (action) => {
             return
         } case 'move': {
             const allCharacters = await scene.select('allCharacters').get()
-            // console.log('+++++++++ got here! \n\n')
-            getCharacterKeysAndDamages(action.d).forEach(({ key, damage }) => {
-                console.log({ allCharacters, key })
+
+            getCharacterKeysAndDamages(action.d).forEach(async ({ key, damage }) => {
                 const newHealth = allCharacters[key].health - damage
-                scene.select('allCharacters').select(key).set('health', newHealth)
+                await scene.select('allCharacters').select(key).set('health', newHealth)
             })
+
+            const winner = checkWinner(vals(await scene.get('allCharacters')))
+            if (winner === 'PC') scene.set('state', 'won')
+            if (winner === 'NPC') scene.set('state', 'lost')
+
             return
         } case 'setHasMoved': {
             // let notFound = true
@@ -86,12 +90,8 @@ const dispatch: Dispatch = async (action) => {
 export default dispatch
 
 
-
-//TODO: move
-
 function getCharacterKeysAndDamages(attackData) {
-    const d = attackData.defenders.map(defender => ({ key: defender.uid, damage: getDamage(attackData) }))
-    // console.log({ d })
-    // console.log({ defenders: attackData.defenders })
-    return d
+    return attackData.defenders.map(defender => (
+        { key: defender.uid, damage: getDamage(attackData) }
+    ))
 }

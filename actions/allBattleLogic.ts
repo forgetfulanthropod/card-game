@@ -198,7 +198,6 @@ export const getBindings = memoize(async function getBindings() {
 
         // if there's another unmoved NPC then make it strike
         if (state.aliveNpcs.some(c => !c.hasMoved)) {
-            console.log('******************** ordinary')
             await dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
