@@ -12,8 +12,8 @@ import { getTree } from '@/data/rootTree'
 import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: true,
-    logChanges: false,
+    enableExpensiveUpdateValidation: false,
+    logChanges: true,
 }
 
 export async function getGameState(): Promise<Gamestate> {
@@ -113,7 +113,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
                     break
                 case 'D':
                     // @ts-ignore
-                    cursor.apply(path, arr => [...arr.slice(index), ...arr.slice(index + 1)])
+                    cursor.apply(path, arr => [...arr.slice(0, index), ...arr.slice(index + 1)])
                     break
                 case 'E':
                     // @ts-ignore

@@ -1,9 +1,11 @@
-import { getBattleScene } from '@/data/rootTree'
-import type { CharacterMeta, CharacterUid, CompleteAttackData } from '@/data/types'
-import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 import type { MyCursor } from '@shared/myBaobab'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { filters, Loader } from 'pixi.js'
+
+import { getBattleScene } from '@/data/rootTree'
+import type { CharacterMeta, CharacterUid, CompleteAttackData } from '@/data/types'
+import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
+
 import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
@@ -13,16 +15,16 @@ import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
 import { Container, PixiTicker, Sprite } from './mypixi'
 
 
-const config = {
-    isHealthNumber: false
-}
+// const config = {
+//     isHealthNumber: false
+// }
 
 const RED = 0xFF0000
 const BLUE = 0x0000FF
 const YELLOW = 0xe4e42d
 const SHOW_HIT_TIME = 1000
 const ATTACK_ANIMATION_TIME = 1000
-const HEALTH_CHANGE_WAIT_TIME = 300
+// const HEALTH_CHANGE_WAIT_TIME = 300
 
 export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
@@ -127,14 +129,9 @@ function Character(args: CharacterProps): PixiContainer {
         }
 
         if (defenders.findIndex(d => d.uid === myId) > -1) {
-            // debugger
-            // const damage = getDamage(d)
             flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
             doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
             doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage }), { durationMs: SHOW_HIT_TIME })
-            // TODO: should characters update their own health?
-            // **TODO**: convert to API call
-            // setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
     })
 
