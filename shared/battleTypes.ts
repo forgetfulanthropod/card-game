@@ -16,14 +16,13 @@ export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
 export interface MoveModifier {
     name: MoveModifierName
-    numTargets: number
+    numTargets: number | number[]
     multiplier?: number
     multiplierRange?: [number, number]
     multipliers?: number[] // for damage over time
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
-
 
 
 export interface CharacterMeta extends CharacterStats {

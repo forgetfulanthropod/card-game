@@ -293,7 +293,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         isPc: false,
         points: 15,
         maxHealth: 54,
-        damage: 11,
+        damage: 2,
         moves: [
             { name: 'Sword Whack', types: ['BA'] },
             { name: 'Rusty Poke', types: ['DOT2'] },
