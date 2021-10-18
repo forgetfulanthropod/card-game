@@ -10,7 +10,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: null | Door[]
+    doors: Door[]
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
@@ -23,7 +23,6 @@ export interface MoveModifier {
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
-
 
 
 export interface CharacterMeta extends CharacterStats {

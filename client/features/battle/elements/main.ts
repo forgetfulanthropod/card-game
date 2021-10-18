@@ -65,7 +65,7 @@ function bindBattleState(app: PixiApplication) {
     let doorsCont: PixiContainer | null = null
     doorCursor.on('update', () => {
         const doors = doorCursor.get()
-        if (doors == null && doorsCont != null) {
+        if (doors.length === 0 && doorsCont != null) {
             app.stage.removeChild(doorsCont)
             doorsCont = null
         } else if (doors != null) {
