@@ -3,9 +3,7 @@
         "titleBar.inactiveForeground": "#b8b8b8",
         "sideBar.background": "#a825ff3a",
         "sideBar.foreground": "#000000",
-        "activityBar.background": "#1C3314",
-        "titleBar.activeBackground": "#27481C",
-        "titleBar.activeForeground": "#F8FCF7"
+        "activityBar.background": "#1C3314"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,

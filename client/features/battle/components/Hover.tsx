@@ -10,7 +10,16 @@ import Table from './Table'
 export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
     const cm = props.characterMeta
     const { moveModiferMap } = getRulebook()
-    const moveAt = (i: number) => `${cm.moves[i].name} ${moveModiferMap[cm.moves[i].types[0]].multiplier * cm.damage | 0}`
+    const damageOf = (i: number) => {
+        const mod = moveModiferMap[cm.moves[i].types[0]]
+        if (mod.multiplier != null)
+            return mod.multiplier * cm.damage | 0
+        if (mod.multipliers != null)
+            return mod.multipliers.map(mul => mul * cm.damage | 0)
+        if (mod.multiplierRange != null)
+            return mod.multiplierRange.map(mul => mul * cm.damage | 0)
+    }
+    const moveAt = (i: number) => `${cm.moves[i].name} ${damageOf(i)}`
     return <>{cm.isPc ?
         <PCHoverDiv>
             stance: {cm.stance}

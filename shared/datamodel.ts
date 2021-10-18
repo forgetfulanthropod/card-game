@@ -84,9 +84,11 @@ export interface CharacterStats {
     name: CharacterName
     displayName: string
     points: number
+    isPc: boolean
     maxHealth: number // AKA base health
     damage: number // AKA base attack
     moves: CharacterMove[]
+    learnableMoves?: LearnableCharacterMove[]
     level: number
     modifier: number
 }
@@ -95,4 +97,7 @@ export interface CharacterMove {
     types: MoveModifierName[]
 }
 
+export interface LearnableCharacterMove extends CharacterMove {
+    minLevel: number
+}
 export type Door = 'ordinary' | 'easier' | 'harder' | 'etc'
