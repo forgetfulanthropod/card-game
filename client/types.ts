@@ -1,9 +1,8 @@
 
-import EventEmitter from 'eventemitter3'
-import Preact from 'preact'
+import type Preact from 'preact'
 // import Preact, {JSX} from 'preact'
-import { StateUpdater } from 'preact/hooks'
-import { AttackData } from './data/types'
+import type { StateUpdater } from 'preact/hooks'
+
 
 // const o : {x: typeof JSX} = {x: Preact.JSX}
 // type JSX = typeof Preact.JSX
@@ -26,6 +25,3 @@ declare global {
 }
 
 export default null
-
-export type MoveEmitter = EventEmitter<{ '': AttackData }>
-export type NpcMoveEmitter = EventEmitter<{ '': string }>

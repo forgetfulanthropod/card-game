@@ -1,6 +1,7 @@
 import { Matrix, utils } from 'pixi.js'
 
-import { Container, Graphics, PixiContainer, PixiGraphics, PixiLoader, Sprite, Text } from './mypixi'
+import type { PixiContainer, PixiGraphics } from './mypixi'
+import { Container, Graphics, PixiLoader, Sprite, Text } from './mypixi'
 
 type Rect = [
     number, // x
@@ -72,6 +73,10 @@ export default function HealthBar(
     }
 
 
+    if (args.value == null) {
+        // TODO: see TODO BqUPq
+        return Container({ children: [] })
+    }
     const mainEl = Container({
         name: HealthBar.name,
         x: 0,

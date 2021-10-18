@@ -14,13 +14,15 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module",
-        "project": "./tsconfig.json"
+        "sourceType": "module"
+        // "project": "./tsconfig.json"
     },
     "plugins": [
         "react",
         "react-hooks",
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "unused-imports",
+        "simple-import-sort"
     ],
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
@@ -63,11 +65,37 @@
                 "null": "ignore"
             }
         ],
-        "@typescript-eslint/no-unused-vars": [
+        // "@typescript-eslint/no-unused-vars": [ "warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$|^_" } ],
+        // for import organizing:
+        // "sort-imports": [
+        //     "warn"
+        // ],
+        "@typescript-eslint/consistent-type-imports": [
             "warn",
             {
-                "argsIgnorePattern": "^_",
-                "varsIgnorePattern": "^_"
+                "prefer": "type-imports"
+            }
+        ],
+        "@typescript-eslint/no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "warn",
+        "unused-imports/no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^h$|^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "simple-import-sort/imports": "error",
+        // "simple-import-sort/exports": "error",
+        "no-multiple-empty-lines": "warn",
+        "padding-line-between-statements": [
+            "warn",
+            {
+                "blankLine": "always",
+                "prev": "*",
+                "next": "function"
             }
         ]
     },
@@ -77,7 +105,17 @@
         }
     },
     "ignorePatterns": [
-        "scripts/",
-        "api/"
+        "scripts/"
     ]
+    // "overrides": [
+    //     {
+    //         "files": [
+    //             "client/**/*.ts",
+    //             "client/**/*.tsx",
+    //             "client/**/*.d.ts",
+    //             "shared/**/*.d.ts",
+    //             "functions/src/**/*.ts"
+    //         ]
+    //     }
+    // ]
 }

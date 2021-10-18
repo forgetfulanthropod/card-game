@@ -1,13 +1,15 @@
-import { moveModiferMap } from '@/data/battle/constants'
-import { CharacterMeta } from '@/data/types'
-import type { h, JSX } from 'preact'
+import type { JSX } from 'preact'
+
+import { getRulebook } from '@/data/rootTree'
+import type { CharacterMeta } from '@/data/types'
+
 import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 import Table from './Table'
 
 
-
 export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
     const cm = props.characterMeta
+    const { moveModiferMap } = getRulebook()
     const damageOf = (i: number) => {
         const mod = moveModiferMap[cm.moves[i].types[0]]
         if (mod.multiplier != null)

@@ -1,7 +1,8 @@
-import { changeScene } from '@@/logic/functions'
-import { h, JSX } from 'preact'
+import type { JSX } from 'preact'
 //@ts-ignore
 import styled from 'styled-components'
+
+import { changeScene } from '@/actions'
 
 const Root = styled.button`
     position: absolute;
@@ -15,5 +16,5 @@ const Root = styled.button`
 `
 
 export default function StartButton(): JSX.Element {
-    return <Root onClick={() => changeScene('battle')}>start</Root>
+    return <Root onClick={() => changeScene({ newSceneName: 'battle' })}>start</Root>
 }

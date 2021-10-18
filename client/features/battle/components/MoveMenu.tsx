@@ -1,8 +1,12 @@
-import { getBattleScene } from '@/data/rootTree'
-import { h, JSX } from 'preact'
+import type { JSX } from 'preact'
 import { useState } from 'preact/hooks'
-import dispatch from '@@/logic/dispatch'
+
+import { dispatch } from '@/actions'
+import { getBattleScene } from '@/data/rootTree'
+
 import { MoveButton, MoveMenuDiv } from './Styles'
+
+
 export default function MoveMenu(): JSX.Element {
     const scene = getBattleScene()
     const selectedMove = scene.select('selectedMove')
@@ -20,7 +24,9 @@ export default function MoveMenu(): JSX.Element {
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
     selectedCharacter.on('update', () => {
         // tl('moves list change to ' + JSON.stringify(moves.get()));
-        setMvs(movesOf(selectedCharacter.get()))
+        const newMoves = movesOf(selectedCharacter.get())
+        setMvs(newMoves)
+        dispatch({ a: 'setSelectedMove', m: newMoves[0] })
     })
 
     return <MoveMenuDiv>

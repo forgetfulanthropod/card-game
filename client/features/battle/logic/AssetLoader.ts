@@ -1,4 +1,10 @@
 import { Loader } from 'pixi.js'
+import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
+
+import check from '../../../assets/check.png'
+import font from '../../../assets/VT323-Regular.ttf'
+import stanceAggressive from '../assets/aggressive stance.png'
+import gemButton from '../assets/BUTTON_GEMS.png'
 import bloatDemon from '../assets/cards/bloat_demon-200.png'
 import bogSpirit from '../assets/cards/BogSpirit-200.png'
 import bookle from '../assets/cards/bookle-200.png'
@@ -12,10 +18,6 @@ import matchaGelatinCube from '../assets/cards/matcha_gelatin_cube-200.png'
 import mimic from '../assets/cards/mimic-200.png'
 import mushroomFarmer from '../assets/cards/Mushroom_Farmer2-200.png'
 import penguinKnight from '../assets/cards/PenguinKnight-200.png'
-
-import stanceNeutral from '../assets/neutral stance.png'
-import stanceDefensive from '../assets/defensive stance.png'
-import stanceAggressive from '../assets/aggressive stance.png'
 import snacky from '../assets/cards/Snacky-200.png'
 import theHatefly from '../assets/cards/TheHatefly-200.png'
 import trioOfFools from '../assets/cards/TrioOfFools-200.png'
@@ -26,13 +28,21 @@ import orcWarrior from '../assets/chars/orcWarrior-200.png'
 import warhog from '../assets/chars/warhog-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
+import stanceDefensive from '../assets/defensive stance.png'
 import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import healthBorder from '../assets/HEALTH_BORDER.png'
 import healthTexture from '../assets/HEALTH_TEXTURE.png'
 import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
+import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
+import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+// import font from '../../../assets/ARCADE_R.ttf'
+
+Loader.registerPlugin(WebfontLoaderPlugin)
+
+import door from '../assets/temp-door.png'
 const characterAssets = {
     bloatDemon,
     bogSpirit,
@@ -65,14 +75,18 @@ const basicAssets = {
     ...characterAssets,
     fishstick,
     potion,
+    swordShield,
     bread,
+    check,
     chestBody,
     chestLid,
+    door,
 }
 const deluxeAssets = {
     stanceNeutral,
     stanceDefensive,
     stanceAggressive,
+    gemButton,
     healthBorder,
     healthTexture,
 }
@@ -87,6 +101,8 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
             Loader.shared.add(name, url)
         }
     }
+
+    Loader.shared.add({ name: 'VT323', url: font })
     Loader.shared.load()
 
     // @ts-ignore
@@ -102,5 +118,6 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
             onDeluxeLoaded()
         }
     })
+
     // return () => Loader.shared.onLoad.detach(cb)
 }

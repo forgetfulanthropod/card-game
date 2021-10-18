@@ -1,17 +1,21 @@
-import { numbers } from '@/data/battle/constants'
-const { BASE_HEIGHT, BASE_WIDTH } = numbers
-import { registerPixiInspector } from '@/util/pixiInspector'
+import type {
+    Filter as PixiFilter, InteractionEvent,
+    ITextStyle
+} from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
-    Filter as PixiFilter,
-    Graphics as PixiGraphics, InteractionEvent,
-    ITextStyle, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
+    Graphics as PixiGraphics, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
     Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource
 } from 'pixi.js'
+
+import { registerPixiInspector } from '@/util/pixiInspector'
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
+
+const BASE_HEIGHT = 1080
+const BASE_WIDTH = 1920
 
 // export type Sprite = PixiSprite
 
@@ -63,6 +67,11 @@ interface GraphicsArgs extends ShownArgs {
 }
 
 export function Sprite(args: SpriteArgs): PixiSprite {
+    if (args.src == null) {
+        console.error(`Sprite named '${args.name}' received null src arg`)
+        console.trace()
+        return PixiSprite.from(PixiTexture.WHITE)
+    }
     const s = PixiSprite.from(args.src)
 
     applyShownArgs(s, args)
