@@ -48,13 +48,13 @@ export function getTree(): MyBaobab<Gamestate> {
 }
 
 /** Do not call at the module-level */
-export function getRulebook(): Rulebook {
-    if (state.rulebook == null) {
-        console.trace('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
-        throw Error()
-    }
-    return state.rulebook
-}
+// export function getRulebook(): Rulebook {
+//     if (state.rulebook == null) {
+//         console.trace('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
+//         throw Error()
+//     }
+//     return state.rulebook
+// }
 
 // export const commitTree = () => tree.commit()
 
