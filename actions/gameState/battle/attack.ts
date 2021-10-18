@@ -40,11 +40,11 @@ function getMoveMultiplier(d: AttackData): number {
 
         let typeMultiplier: number
 
-        if (Array.isArray(typeMeta.multiplier) && Array.isArray(typeMeta.numTargets)) {
+        if (typeMeta.multipliers != null && Array.isArray(typeMeta.numTargets)) {
             const numDefenders = d.defenders.length
             const relevantMultiplierIndex = typeMeta.numTargets.findIndex(num => numDefenders <= num)
             if (relevantMultiplierIndex === -1) throw new Error('hmm something is deeply wrong')
-            typeMultiplier = typeMeta.multiplier[relevantMultiplierIndex]
+            typeMultiplier = typeMeta.multipliers[relevantMultiplierIndex]
         } else {
             typeMultiplier = typeMeta.multiplier as number
         }
