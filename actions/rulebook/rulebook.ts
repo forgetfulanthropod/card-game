@@ -1,8 +1,7 @@
 import type { Rulebook } from '@shared/index'
 
+import { numbers } from '../gameState/battle/state'
 import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle'
-import { makeBattleState, numbers } from './battle/state'
-import { initialEntryState } from './entry/state'
 // import { initialEntryState } from './entry/state'
 
 
@@ -18,12 +17,12 @@ export const rulebook: Rulebook = {
         { name: 'The Ninth Trash Hole of Hell', num: 4, pointLimit: 100, modifier: 5, },
     ],
     items: {},
-    initialScenes: {
-        battle: makeBattleState(),
-        entry: initialEntryState,
-        map: { name: 'map', coordinates: [-1, -1], unlockedLocations: [] },
-        craft: { name: 'craft', onTable: {}, selectedRecipe: '' },
-    },
+    // initialScenes: {
+    //     battle: makeBattleState(),
+    //     entry: initialEntryState,
+    //     map: { name: 'map', coordinates: [-1, -1], unlockedLocations: [] },
+    //     craft: { name: 'craft', onTable: {}, selectedRecipe: '' },
+    // },
     numbers,
     stanceTypeMetaMap,
     moveModiferMap,

@@ -2,7 +2,9 @@
 
 // import { getRulebook } from '../rootTree'
 import type { AttackData, CharacterMeta, StanceMultiplier, StanceName } from '@shared/battleTypes'
-import { rulebook } from './rulebook'
+
+import { rulebook } from '../../rulebook'
+
 
 // NPCs do not have stances
 // PCs must have stances

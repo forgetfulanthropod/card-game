@@ -7,7 +7,7 @@ import type {
     StanceName
 } from '@shared/index'
 
-import { statsMap } from '.'
+import { statsMap } from '../../rulebook/battle'
 
 
 const BASE_WIDTH = 1920

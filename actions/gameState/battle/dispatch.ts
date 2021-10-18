@@ -1,10 +1,10 @@
 import type { Dispatch } from '@shared/actions'
 
+import { getBattleScene } from '../../util/getters'
+import { keys, vals } from '../../util/objectMethods'
 import { getCharacterKeysAndDamages } from './attack'
-import { getBattleScene } from './getters'
-import { makeBattleState } from './rulebook/battle'
-import { checkWinner } from './rulebook/battle/misc'
-import { keys, vals } from './util'
+import { checkWinner } from './misc'
+import { makeBattleState } from './state'
 
 
 const dispatch: Dispatch = async (action) => {

@@ -2,16 +2,17 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
-import { getBindings } from './allBattleLogic'
-import dispatch_ from './dispatch'
-import { makeRoom } from './doors'
-import { initialGameState } from './gameState'
-import { getBattleScene, getGameStateCursor } from './getters'
+import { initialScenes } from './gameState'
+import { getBindings } from './gameState/battle/allBattleLogic'
+import dispatch_ from './gameState/battle/dispatch'
+import { makeRoom } from './gameState/battle/doors'
+import { initialGameState } from './gameState/gameState'
 import { rulebook } from './rulebook/index'
 import settings from './settings'
-import { objFilter } from './util'
+import { getBattleScene, getGameStateCursor } from './util/getters'
+import { objFilter } from './util/objectMethods'
 
-const wrapper = { 'call': onCallWrapper, 'request': onRequestWrapper }[settings.wrapperType]
+const wrapper = { 'call': onCallWrapper, 'request': onRequestWrapper }[settings.fireFunctionAdapterId]
 
 // doing it like this (instead of as separate exports) validates that
 // we've defined all the needed functions, and reduces the number of imports.
@@ -26,7 +27,7 @@ const serverActions: ServerActions = {
     changeScene: async args => {
         const tree = await getGameStateCursor('alice')
         // debugger
-        tree.set('scene', rulebook.initialScenes[args.newSceneName])
+        tree.set('scene', initialScenes[args.newSceneName])
         // if (args.newSceneName === 'battle') {
         //     tree.set('scene', makeBattleState(getEntryScene().select('selectedCharacters').get()))
         // }

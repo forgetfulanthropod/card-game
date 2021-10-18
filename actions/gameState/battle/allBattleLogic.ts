@@ -3,17 +3,17 @@ import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAtt
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
 
+import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
+import type { FireCursor } from '../../util/FireCursor'
+import { getBattleScene, getGameStateCursor } from '../../util/getters'
+import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
+// import toast from 'react-hot-toast'
+// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
+import { vals } from '../../util/objectMethods'
 import { getCharacterKeysAndDamages } from './attack'
 import dispatch from './dispatch'
 import { putUpDoors } from './doors'
-import type { FBCursor } from './FBCursor'
-import { getBattleScene, getGameStateCursor } from './getters'
-import { makeServerEventEmitter } from './makeServerEventEmitter'
-import { moveModiferMap as moveModifiers } from './rulebook/battle'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './rulebook/battle/misc'
-// import toast from 'react-hot-toast'
-// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
-import { vals } from './util'
+import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEBUG = false
@@ -30,10 +30,10 @@ export const getBindings = memoize(async function getBindings() {
 
     // const { battleCursor: battleState, dispatch } = props
     // TODO: move$ won't work anymore.
-    const eventsCursor: FBCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
     const move$ = makeServerEventEmitter<'move', CompleteAttackData>('move', eventsCursor)
 
-    const cursorToState = async (cursor: FBCursor<BattleScene>) => {
+    const cursorToState = async (cursor: FireCursor<BattleScene>) => {
         const value = await cursor.get()
         const allCharacters = vals(value.allCharacters)
         const alivePcs = allCharacters.filter(c => c.isPc && c.health > 0)

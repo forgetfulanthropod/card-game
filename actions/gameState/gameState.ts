@@ -1,7 +1,7 @@
 import type { Gamestate } from '@shared/index'
 
-import { statsMap } from './rulebook/battle'
-import { initialEntryState } from './rulebook/entry/state'
+import { statsMap } from '../rulebook/battle'
+import { initialEntryState } from './entry/state'
 
 
 export function initialOwnedCharacters(): any {
