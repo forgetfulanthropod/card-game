@@ -1,8 +1,5 @@
 
-// import { AttackData } from '@shared/index'
 import type { AttackData, CharacterMeta, CharacterUid, StanceMultiplier, StanceName } from '@shared/index'
-
-import { moveModiferMap } from '@/rulebook/battle'
 
 import { rulebook } from '../../rulebook'
 
@@ -39,7 +36,7 @@ function getAttackMultiplier(attacker: CharacterMeta): StanceMultiplier {
 // }
 function getMoveMultiplier(d: AttackData): number {
     return d.move.types.reduce((multiplier, nextType) => {
-        const typeMeta = moveModiferMap[nextType]
+        const typeMeta = rulebook.moveModiferMap[nextType]
 
         let typeMultiplier: number
 
