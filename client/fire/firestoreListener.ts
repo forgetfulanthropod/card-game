@@ -69,10 +69,16 @@ function updateBoabab(data: DocumentData): void {
         if (diffDiff != null) {
             console.warn(
                 'diffs oldtree-vs-firebase and oldtree-vs-newtree are not the same',
-                'this likely means there is an error in updateBaobab or applyChange')
-            console.log('oldtree-vs-firebase vs oldtree-vs-newtree:', diffDiff)
+                'this likely means there is an error in updateBaobab or applyChange',
+                {
+                    oldTree: oldState,
+                    fromFirebase: newState,
+                    newTree: newTree,
+                    'oldtree-vs-firebase': differences,
+                    'oldtree-vs-new-tree': treeDifferences,
+                })
         } else {
-            console.log('diff seems to be applied correctly')
+            console.log('diff seems to be applied correctly:', differences)
         }
     }
     // TODO: deep diff update. see pathDiff in client/util/index
@@ -100,23 +106,9 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
         }
         case 'A': { // array change
             const { path, index: index, item } = change
-            console.log('array change is ', change)
-            switch (item.kind) {
-                case 'N':
-                    // @ts-ignore
-                    cursor.set([...path, index], item.rhs)
-                    break
-                case 'D':
-                    // @ts-ignore
-                    cursor.apply(path, arr => [...arr.slice(0, index), ...arr.slice(index + 1)])
-                    break
-                case 'E':
-                    // @ts-ignore
-                    cursor.set([...path, index], item.rhs)
-                    break
-                case 'A':
-                    throw Error('not implemented')
-            }
+            // @ts-ignore
+            applyChange(item, cursor.select([...path, index]))
+            break
         }
     }
 }

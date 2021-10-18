@@ -9,6 +9,7 @@ import { DungeonEntryScene } from './DungeonEntryScene'
 import type { PixiApplication, PixiContainer } from './mypixi'
 import { Application } from './mypixi'
 
+
 const config = {
     showOneThing: null as (null | (() => PixiContainer))
     // showOneThing: () => DoorsStories('log'),
@@ -62,17 +63,22 @@ function bindGamestate(app: PixiApplication) {
 function bindBattleState(app: PixiApplication) {
 
     const stateCursor = getBattleScene().select('state')
+    let chest: PixiContainer | null = null
     stateCursor.on('update', () => {
-        if (stateCursor.get() === 'won')
-            app.stage.addChild(
-                Chest({ size: { width: app.stage.width, height: app.stage.height } })
-            )
+        if (stateCursor.get() === 'won') {
+            chest = Chest({ size: { width: app.stage.width, height: app.stage.height } })
+            app.stage.addChild(chest)
+        } else if (chest != null) {
+            app.stage.removeChild(chest)
+            chest.destroy()
+            chest = null
+        }
     })
     const doorCursor = getBattleScene().select('doors')
     let doorsCont: PixiContainer | null = null
     doorCursor.on('update', () => {
         const doors = doorCursor.get()
-        if (doors == null && doorsCont != null) {
+        if (doors.length === 0 && doorsCont != null) {
             app.stage.removeChild(doorsCont)
             doorsCont = null
         } else if (doors != null) {
