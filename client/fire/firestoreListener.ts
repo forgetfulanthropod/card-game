@@ -99,15 +99,23 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
             break
         }
         case 'A': { // array change
-            const { path, index: _index, item } = change
-            if (item.kind !== 'N') {
-                throw Error('implementation can only currently add new array elements sorry')
+            const { path, index: index, item } = change
+            switch (item.kind) {
+                case 'N':
+                    // @ts-ignore
+                    cursor.set([...path, index], item.rhs)
+                    break
+                case 'D':
+                    // @ts-ignore
+                    cursor.apply(path, arr => [...arr.slice(index), ...arr.slice(index + 1)])
+                    break
+                case 'E':
+                    // @ts-ignore
+                    cursor.set([...path, index], item.rhs)
+                    break
+                case 'A':
+                    throw Error('not implemented')
             }
-            // @ts-ignore
-            cursor.apply(path, arr => [...arr, item.rhs])
-            // TODO: would be better if it worked:
-            // @ts-ignore
-            // applyChange(cursor.select([...path, index]), item)
         }
     }
 }
