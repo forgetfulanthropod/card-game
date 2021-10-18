@@ -2,8 +2,8 @@
 import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAttackData, Gamestate } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
-import { getCharacterKeysAndDamages } from './attack'
 
+import { getCharacterKeysAndDamages } from './attack'
 import dispatch from './dispatch'
 import { putUpDoors } from './doors'
 import type { FBCursor } from './FBCursor'
@@ -46,19 +46,8 @@ export const getBindings = memoize(async function getBindings() {
     let state = await cursorToState(scene)
 
     scene.on('update', async () => state = await cursorToState(scene))
-    // scene.on('update', function () {
-    //     Object.assign(state, sceneToState(scene))
-    // })
-    let isPlayerFirstTurn = await scene.select('isPlayerTurn').get()
 
-    // debugger
-
-
-    // move $.on('', function showMove(ad: AttackData) {
-    //     if (DEBUG) tl(`${ad.attacker.uid} attacks ${ad.defenders.map(d => d.uid)} with ${ad.move.name}`)
-    //     // toast(ad.move.name, { style: { backgroundColor: ad.attacker.isPc ? 'green' : 'red', color: 'white' } } )
-    //     console.log(ad.move.name)
-    // })
+    const isPlayerFirstTurn = await scene.select('isPlayerTurn').get()
 
     async function startGame() {
         if (await scene.get('state') === 'in battle') {

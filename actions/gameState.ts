@@ -1,7 +1,7 @@
 import type { Gamestate } from '@shared/index'
 
-import { statsMap } from './battle'
-import { initialEntryState } from './entry/state'
+import { statsMap } from './rulebook/battle'
+import { initialEntryState } from './rulebook/entry/state'
 
 
 export function initialOwnedCharacters(): any {
@@ -37,7 +37,6 @@ export function initialOwnedCharacters(): any {
 
 export const initialGameState: Gamestate = {
     scene: initialEntryState,
-    // ownedCharacters: {},
     ownedCharacters: initialOwnedCharacters(),
     inventory: {},
     events: [],

@@ -5,8 +5,9 @@ import { https } from 'firebase-functions/v1'
 import { getBindings } from './allBattleLogic'
 import dispatch_ from './dispatch'
 import { makeRoom } from './doors'
+import { initialGameState } from './gameState'
 import { getBattleScene, getGameStateCursor } from './getters'
-import { initialGameState, rulebook } from './rulebook/index'
+import { rulebook } from './rulebook/index'
 import settings from './settings'
 import { objFilter } from './util'
 
@@ -26,6 +27,9 @@ const serverActions: ServerActions = {
         const tree = await getGameStateCursor('alice')
         // debugger
         tree.set('scene', rulebook.initialScenes[args.newSceneName])
+        // if (args.newSceneName === 'battle') {
+        //     tree.set('scene', makeBattleState(getEntryScene().select('selectedCharacters').get()))
+        // }
     },
     chooseDoor: async args => {
         const scene = await getBattleScene('alice')

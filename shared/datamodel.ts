@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { AttackData, BattleScene, CharacterName, MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
+import type { BattleScene, CharacterName, CompleteAttackData, EntryScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
 
 import type { NetworkEvent } from './networkEvents'
 
@@ -52,7 +52,7 @@ export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
-    events: NetworkEvent<AttackData>[]
+    events: NetworkEvent<'move', CompleteAttackData>[]
 }
 
 export interface OwnedCharacter extends CharacterStats {
