@@ -7,8 +7,8 @@ export interface FBCursor<Root, Sub = Root> {
     select<K extends keyof Sub>(k: K): FBCursor<Root, Sub[K]>
     get(): Promise<Sub>
     get<K extends keyof Sub>(k: K): Promise<Sub[K]>
-    set(v: Sub): void
-    set<K extends keyof Sub>(k: K, v: Sub[K]): void
+    set(v: Sub): Promise<void>
+    set<K extends keyof Sub>(k: K, v: Sub[K]): Promise<void>
     apply(f: (prev: Sub) => Sub): void
     apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): void
     on(eventName: 'update', cb: (v: Sub) => void): void
@@ -31,17 +31,17 @@ export function makeFBCursor<Root, Sub = Root>(
             return result
         },
         // https://stackoverflow.com/a/47296152
-        set(keyOrValue, maybeVal?) {
+        async set(keyOrValue, maybeVal?): Promise<void> {
             if (maybeVal == null) {
                 const value = keyOrValue
-                if (path.length === 0) { docRef.update(value) }
+                if (path.length === 0) { await docRef.update(value) }
                 const keyString = path.join('.')
-                docRef.update({ [keyString]: value })
+                await docRef.update({ [keyString]: value })
             } else {
                 const key = keyOrValue
                 const value = maybeVal
                 const keyString = [...path, key].join('.')
-                docRef.update({ [keyString]: value })
+                await docRef.update({ [keyString]: value })
             }
         },
         async apply(keyOrFunc, maybeFunc?) {

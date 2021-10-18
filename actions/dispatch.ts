@@ -22,12 +22,13 @@ const dispatch: Dispatch = async (action) => {
         } case 'move': {
             const allCharacters = await scene.select('allCharacters').get()
 
-            getCharacterKeysAndDamages(action.d).forEach(async ({ key, damage }) => {
+            await Promise.all(getCharacterKeysAndDamages(action.d).map(async ({ key, damage }) => {
                 const newHealth = allCharacters[key].health - damage
-                await scene.select('allCharacters').select(key).set('health', newHealth)
-            })
+                return await scene.select('allCharacters').select(key).set('health', newHealth)
+            }))
 
             const winner = checkWinner(vals(await scene.get('allCharacters')))
+
             if (winner === 'PC') scene.set('state', 'won')
             if (winner === 'NPC') scene.set('state', 'lost')
 
