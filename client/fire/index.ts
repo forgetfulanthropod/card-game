@@ -1,13 +1,11 @@
 import { initializeApp } from 'firebase/app'
-import { connectFirestoreEmulator, Firestore, getFirestore } from 'firebase/firestore'
-import { connectFunctionsEmulator, Functions, getFunctions } from 'firebase/functions'
+import type { Firestore } from 'firebase/firestore'
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore'
+import type { Functions } from 'firebase/functions'
+import { connectFunctionsEmulator, getFunctions } from 'firebase/functions'
+import memoize from 'lodash/memoize'
 
-
-
-type Result = { functions: Functions, db: Firestore }
-let result: Result | null = null
-export function maybeInitializeFirebase(): Result {
-    if (result != null) return result
+export const maybeInitializeApp = memoize(function maybeInitializeApp(): { functions: Functions, db: Firestore } {
     const app = initializeApp({
         projectId: 'kaiju-75e84',
     })
@@ -15,6 +13,5 @@ export function maybeInitializeFirebase(): Result {
     const db = getFirestore()
     connectFunctionsEmulator(functions, 'localhost', 5001)
     connectFirestoreEmulator(db, 'localhost', 8080)
-    result = { functions, db }
-    return result
-}
+    return { functions, db }
+})

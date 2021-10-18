@@ -1,8 +1,12 @@
-import { numbers } from '@/data/battle/constants'
 import { getEntryScene } from '@/data/rootTree'
-import { changeDungeon } from '@@/logic/dungeonEntry'
-import { Container, PixiContainer, Text } from './mypixi'
 
+import type { PixiContainer } from './mypixi'
+import { Container, Text } from './mypixi'
+
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
+
+function changeDungeon(n: number) { throw Error('unimplemented') }
 
 export function LevelInfo(): PixiContainer {
 
@@ -84,8 +88,8 @@ export function LevelInfo(): PixiContainer {
 
 
     const root = Container({
-        x: numbers.BASE_WIDTH / 2,
-        y: numbers.BASE_HEIGHT / 10,
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 10,
         children: [
             leftButton,
             levelNumText,

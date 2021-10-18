@@ -22,13 +22,49 @@
     },
     "[typescript]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
+        // "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
         "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "npm.packageManager": "pnpm",
     "files.exclude": {
-        "**/.keep": true
+        "**/.keep": true,
+        "actions/lib": true,
     },
     "prettier.tabWidth": 4,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "formatFiles.excludedFolders": [
+        "node_modules",
+        ".vscode",
+        ".git",
+        "dist",
+        ".chrome",
+        "build"
+    ],
+    "formatFiles.excludePattern": "**/*.json",
+    "colorTabs.config": [
+        {
+            "regex": "client/.*",
+            "color": "#000088",
+            "label": "CLIENT"
+        },
+        {
+            "regex": "shared/.*",
+            "color": "#008800",
+            "label": "SHARED"
+        },
+        {
+            "regex": "actions/.*",
+            "color": "#880000",
+            "label": "SERVER"
+        },
+    ],
+    "colorTabs.statusBarBackground": true,
+    "colorTabs.tabBorder": true,
+    "colorTabs.titleBackground": true,
+    "colorTabs.activityBarBackground": false,
+    "colorTabs.titleLabel": true,
 }

@@ -1,14 +1,18 @@
-import { numbers } from '@/data/battle/constants'
 import { dataOf } from '@/util/pixiUtils'
-import { changeScene } from '@@/logic/functions'
-import { Container, PixiContainer, Sprite, Text } from './mypixi'
 
+import type { PixiContainer } from './mypixi'
+import { Container, Sprite, Text } from './mypixi'
+
+function changeScene(u: unknown) { throw Error('unimplemented') }
+
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
 
 export function StartButton(): PixiContainer {
 
     const root = Container({
-        x: numbers.BASE_WIDTH / 2,
-        y: numbers.BASE_HEIGHT * .95,
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT * .95,
         children: [
             Sprite({
                 src: dataOf('gemButton'),

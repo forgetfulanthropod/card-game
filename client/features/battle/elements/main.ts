@@ -1,12 +1,24 @@
+import { chooseDoor } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
+
 import { BattleScene } from './BattleScene'
 import Chest from './Chest'
+import Doors from './Doors'
 import { DungeonEntryScene } from './DungeonEntryScene'
-import { Application, PixiApplication, PixiContainer } from './mypixi'
+import type { PixiApplication, PixiContainer } from './mypixi'
+import { Application } from './mypixi'
+
+const config = {
+    showOneThing: null as (null | (() => PixiContainer))
+    // showOneThing: () => DoorsStories('log'),
+}
 
 export function start(canvas: HTMLCanvasElement): PixiApplication {
     // const scale = window.innerWidth / BASE_WIDTH
 
+    if (config?.showOneThing != null) {
+        return Application({ canvas, children: [config?.showOneThing()] })
+    }
     const app = Application({ canvas, children: [] })
 
     bindGamestate(app)
@@ -48,5 +60,17 @@ function bindBattleState(app: PixiApplication) {
             app.stage.addChild(
                 Chest({ size: { width: app.stage.width, height: app.stage.height } })
             )
+    })
+    const doorCursor = getBattleScene().select('doors')
+    let doorsCont: PixiContainer | null = null
+    doorCursor.on('update', () => {
+        const doors = doorCursor.get()
+        if (doors == null && doorsCont != null) {
+            app.stage.removeChild(doorsCont)
+            doorsCont = null
+        } else if (doors != null) {
+            doorsCont = Doors({ callbacks: doors.map(d => () => chooseDoor({ door: d })) })
+            app.stage.addChild(doorsCont)
+        }
     })
 }

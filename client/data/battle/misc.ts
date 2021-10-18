@@ -1,6 +1,7 @@
-import { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
-import { moveModifiers, stanceTypeMetaMap } from './constants'
+// TODO: do not replicate this file
 
+import { getRulebook } from '../rootTree'
+import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '../types'
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
 export function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
@@ -29,6 +30,7 @@ export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterM
 }
 
 export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+    const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac
         .filter(c => c.isPc && c.health > 0)
 
@@ -71,6 +73,7 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const defenders = [getPCTarget(ac)]
 
     const mainType: MoveModifierName = move.types[0]
+    const { moveModifiers } = getRulebook()
     if (moveModifiers[mainType].numTargets > 1) {
         const closest = getClosestAlive(ac, defenders[0], 1)
         if (closest != null)

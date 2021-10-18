@@ -1,12 +1,15 @@
-import { MyCursor } from '@/config/myBaobab'
+import type { EntryScene, MyCursor } from '@shared/index'
+
 import { ownedCharacters, scene } from '@/data/rootTree'
 // import { OwnedCharacter } from '@/data/types'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
-import { EntryScene } from '@@/db/entry/types'
-import { addSelected } from '@@/logic/dungeonEntry'
 
-import { Container, PixiContainer, PixiText, Sprite, Text } from './mypixi'
+// import { addSelected } from '@@/logic/dungeonEntry'
+import type { PixiContainer } from './mypixi'
+import { Container, Sprite, Text } from './mypixi'
+
+function addSelected(u: unknown) { throw Error('unimplemented') }
 
 export function OwnedCharacters(): PixiContainer {
     const selectedCharacters = (scene as MyCursor<EntryScene>).select('selectedCharacters')

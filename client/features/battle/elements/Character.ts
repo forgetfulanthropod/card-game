@@ -1,20 +1,18 @@
-import { MyCursor } from '@/config/myBaobab'
-import dispatch from '@@/logic/dispatch'
 import { getBattleScene } from '@/data/rootTree'
-import { AttackData, CharacterMeta } from '@/data/types'
-import { MoveEmitter } from '@/types'
+import type { CharacterMeta, CharacterUid, CompleteAttackData } from '@/data/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
+import type { MyCursor } from '@shared/myBaobab'
+import type { NetworkEvent } from '@shared/networkEvents'
 import { filters, Loader } from 'pixi.js'
-// import { useLoaderContext } from '../providers/LoaderProvider'
-import { getDamage } from '../../../data/battle/attack'
-import { CharacterName } from '../logic/AssetLoader'
-// import { MoveEmitter } from '../components/AllCharacters'
-// import { Dispatcher } from '../components/CharacterManager'
-// import { Hover } from './Hover'
+import type { CharacterName } from '../logic/AssetLoader'
+import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
-import { Container, PixiContainer, PixiSprite, PixiTexture, PixiTicker, Sprite } from './mypixi'
+import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
+import { Container, PixiTicker, Sprite } from './mypixi'
+
+
 const config = {
     isHealthNumber: false
 }
@@ -33,9 +31,9 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
 }
 interface KnownCharacterProps {
-    onClick: (c: CharacterMeta) => void
+    onClick: (c: CharacterUid) => void
     // dispatch: Dispatcher
-    move$: MoveEmitter
+    move$: Move$
     scale: number
     cursor: MyCursor<CharacterMeta>
 }
@@ -46,6 +44,7 @@ interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
     direction: -1 | 1
 }
+
 function Character(args: CharacterProps): PixiContainer {
     // NOTE: necessary so the onClick sends the correct data after a character change.
     const characterMeta = { ...args.cursor.get() }
@@ -57,7 +56,11 @@ function Character(args: CharacterProps): PixiContainer {
 
     let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance })
 
-    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = makeSprites(args, characterMeta, onHeight)
+    const sprites = makeSprites(args, characterMeta, onHeight)
+    if (sprites == null) {
+        return Container({ children: [] })
+    }
+    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = sprites
 
     const mainContainer = Container({
         children: [
@@ -107,13 +110,14 @@ function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    args.move$.on('', function doCharMove(d: AttackData) {
+    args.move$.on(function doCharMove(event: NetworkEvent<'move', CompleteAttackData>) {
+        const { attacker, defenders, move, damageMap } = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
-        if (d.attacker.uid === myId) {
+        if (attacker.uid === myId) {
             flashElement(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
+            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defenders[0].screenX, y: defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
                 if (result === 'remove')
@@ -122,14 +126,15 @@ function Character(args: CharacterProps): PixiContainer {
 
         }
 
-        if (d.defenders.findIndex(d => d.uid === myId) > -1) {
+        if (defenders.findIndex(d => d.uid === myId) > -1) {
             // debugger
-            const damage = getDamage(d)
+            // const damage = getDamage(d)
             flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
-            setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
+            // **TODO**: convert to API call
+            // setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
         }
     })
 
@@ -137,6 +142,7 @@ function Character(args: CharacterProps): PixiContainer {
 }
 
 function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
+
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 10
     const grayFilter = new filters.ColorMatrixFilter()
@@ -148,6 +154,14 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
 
     const assetIdCursor = args.cursor.select('name')
     const assetIdToSrc = (assetId: CharacterName) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+
+    if (assetIdCursor.get() == null) {
+        // TODO: has to do with renewChildren()
+        // should never occur...
+        console.error('null character assetId. probably character was removed or uid was changed.')
+        return null
+    }
+
     const charSpriteProps = {
         src: assetIdToSrc(assetIdCursor.get()),
         anchor: [0, 1] as [number, number],
@@ -158,7 +172,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         ...charSpriteProps,
         name: 'mainCharacterSprite',
         onClick: () => {
-            args.onClick(characterMeta)
+            args.onClick(characterMeta.uid)
         },
         zIndex: 1
     })
@@ -176,6 +190,15 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     assetIdCursor.on('update', () => {
         // tl('asset update')
         const texture = assetIdToSrc(assetIdCursor.get())
+        if (texture == null) {
+            // TODO: this occurs when allCharacters gets new characters and this character is no longer defined.
+            // (Unique ID: BqUPq)
+            // The parent destroys the child but not before this listener fires.
+            // Or perhaps tree listeners are not destroyed when a child is destroyed.
+            // In that case, the mypixi/Sprite thing needs to take an onDestroy argument that removes the listeners.
+            // Anyway, for now we can just return.
+            return
+        }
         const height = texture.height
         const update = (s: PixiSprite) => {
             s.texture = texture
@@ -201,6 +224,7 @@ const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * .6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
 type Point = { x: number, y: number }
+
 function makeFlyToOnTick(start: Point, flyTo: Point) {
     let totalElapsed = 0
     return (container: PixiContainer, elapsed: number): void | 'remove' => {
