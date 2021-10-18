@@ -106,22 +106,9 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
         }
         case 'A': { // array change
             const { path, index: index, item } = change
-            switch (item.kind) {
-                case 'N':
-                    // @ts-ignore
-                    cursor.set([...path, index], item.rhs)
-                    break
-                case 'D':
-                    // @ts-ignore
-                    cursor.apply(path, arr => [...arr.slice(0, index), ...arr.slice(index + 1)])
-                    break
-                case 'E':
-                    // @ts-ignore
-                    cursor.set([...path, index], item.rhs)
-                    break
-                case 'A':
-                    throw Error('not implemented')
-            }
+            // @ts-ignore
+            applyChange(item, cursor.select([...path, index]))
+            break
         }
     }
 }
