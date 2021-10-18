@@ -3,7 +3,7 @@ import { getBattleScene, getTree } from '@/data/rootTree'
 import type { CharacterMeta, CompleteAttackData } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
 import type { NetworkEventEmitter } from '@shared/networkEvents'
-import { makeClientEventListener } from '@shared/networkEvents'
+import { makeClientEventListener } from "@/util/makeClientEventListener"
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 import CaveVideo from '../assets/cave_main_1.webm'
