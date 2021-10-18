@@ -1,10 +1,11 @@
 {
     "workbench.colorCustomizations": {
-        "activityBar.background": "#53005b",
-        "titleBar.activeBackground": "#53005b",
-        "titleBar.activeForeground": "#F8FBF2",
-        "statusBar.background": "#53005b",
-        "statusBar.foreground": "#F8FBF2"
+        "titleBar.inactiveForeground": "#b8b8b8",
+        "sideBar.background": "#a825ff3a",
+        "sideBar.foreground": "#000000",
+        "activityBar.background": "#1C3314",
+        "titleBar.activeBackground": "#27481C",
+        "titleBar.activeForeground": "#F8FCF7"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
