@@ -25,7 +25,7 @@ export async function addSelected(args: { character: OwnedCharacter }): Promise<
 
     const allCharacters = await scene.select('selectedCharacters').get()
 
-    const indexInselected = allCharacters.findIndex(character => c === character)
+    const indexInselected = allCharacters.findIndex(character => c.uid === character.uid)
     if (indexInselected !== -1)
         scene.apply('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
     else {

@@ -100,6 +100,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
         }
         case 'A': { // array change
             const { path, index: index, item } = change
+            console.log('array change is ', change)
             switch (item.kind) {
                 case 'N':
                     // @ts-ignore
@@ -107,7 +108,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
                     break
                 case 'D':
                     // @ts-ignore
-                    cursor.apply(path, arr => [...arr.slice(index), ...arr.slice(index + 1)])
+                    cursor.apply(path, arr => [...arr.slice(0, index), ...arr.slice(index + 1)])
                     break
                 case 'E':
                     // @ts-ignore
