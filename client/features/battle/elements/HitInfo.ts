@@ -1,4 +1,5 @@
-import { PixiText, Text } from './mypixi'
+import type { PixiText } from './mypixi'
+import { Text } from './mypixi'
 
 export default function HitInfo(args: { damage: number }): PixiText {
     return Text({

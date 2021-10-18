@@ -1,8 +1,11 @@
 import { getEntryScene } from '@/data/rootTree'
-import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
-import { BASE_HEIGHT, BASE_WIDTH } from '@@/db/battle/constants'
-import { Container, PixiContainer, Sprite } from './mypixi'
+
+import type { PixiContainer } from './mypixi'
+import { Container, Sprite } from './mypixi'
+
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
 
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
@@ -12,7 +15,8 @@ export function SelectedCharacters(): PixiContainer {
     })
 
     function setSelectedCharacters() {
-        const characters = selectedCharacters.get().map((c, i) =>
+
+        const characters = selectedCharacters.get()?.map((c, i) =>
             Container({
                 x: Math.ceil(i / 2) * 200 * (i % 2 > 0 ? 1 : -1),
                 y: 0,
@@ -24,7 +28,7 @@ export function SelectedCharacters(): PixiContainer {
                     })
                 ],
             })
-        )
+        ) ?? []
         root.removeChildren()
         if (characters.length > 0) root.addChild(...characters)
     }

@@ -1,12 +1,15 @@
-import { numbers } from '@/data/battle/constants'
+
 import { GameMenuItem } from './GameMenuItem'
-import { Container, PixiContainer } from './mypixi'
+import type { PixiContainer } from './mypixi'
+import { Container } from './mypixi'
+
+const BASE_HEIGHT = 1080
 
 
 export function GameMenu(): PixiContainer {
 
     return Container({
-        y: numbers.BASE_HEIGHT / 2,
+        y: BASE_HEIGHT / 2,
         children: [
             GameMenuItem('characters', 0),
             GameMenuItem('items', 1),

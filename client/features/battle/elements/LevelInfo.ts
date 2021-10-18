@@ -1,8 +1,11 @@
-import { numbers } from '@/data/battle/constants'
+import { changeDungeon } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
-import { changeDungeon } from '@@/logic/dungeonEntry'
-import { Container, PixiContainer, Text } from './mypixi'
 
+import type { PixiContainer } from './mypixi'
+import { Container, Text } from './mypixi'
+
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
 
 export function LevelInfo(): PixiContainer {
 
@@ -11,7 +14,7 @@ export function LevelInfo(): PixiContainer {
     const level = scene.select('selectedLevel').get()
 
     scene.select('selectedLevel').on('update', () => {
-        const selectedLevel = scene.get().selectedLevel
+        const selectedLevel = scene.get().selectedLevel ?? {}
 
         levelNumText.text = `Level ${selectedLevel.num}`
         levelNameText.text = selectedLevel.name
@@ -44,7 +47,7 @@ export function LevelInfo(): PixiContainer {
             strokeThickness: 5,
         },
         onClick() {
-            changeDungeon(-1)
+            changeDungeon({ direction: -1 })
         }
     })
     const rightButton = Text({
@@ -60,7 +63,7 @@ export function LevelInfo(): PixiContainer {
             strokeThickness: 5,
         },
         onClick() {
-            changeDungeon(+1)
+            changeDungeon({ direction: +1 })
         }
     })
 
@@ -92,8 +95,8 @@ export function LevelInfo(): PixiContainer {
 
 
     const root = Container({
-        x: numbers.BASE_WIDTH / 2,
-        y: numbers.BASE_HEIGHT / 10,
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 10,
         children: [
             leftButton,
             levelNumText,

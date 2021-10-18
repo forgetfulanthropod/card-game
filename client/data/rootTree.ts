@@ -1,31 +1,78 @@
-import { BattleScene } from '@@/db/battle/types'
+import type { BattleScene } from '@shared/battleTypes'
+import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
+import { MyBaobab } from '@shared/myBaobab'
 
-import { EntryScene } from '@@/db/entry/types'
-import { initialGameState } from '@@/db/gameState'
-import { MyBaobab, MyCursor } from '../config/myBaobab'
-import { Scene } from './types'
+import { getRulebookAsync } from '@/actions'
+import { getGameState } from '@/fire/firestoreListener'
 
-export const tree = new MyBaobab(initialGameState)
+import type { Scene } from './types'
 
-// @ts-ignore (debugging)
-window.tree = tree
+
+/** Global variables for file */
+const state = {
+    gamestate: null as MyBaobab<Gamestate> | null,
+    rulebook: null as Rulebook | null,
+    gameStateCallbacks: [] as Callback[],
+    rulebookCallbacks: [] as Callback[],
+}
+
+export function onGamestate(cb: Callback): void {
+    state.gameStateCallbacks.push(cb)
+}
+export function onRulebook(cb: Callback): void {
+    state.rulebookCallbacks.push(cb)
+}
+
+export async function fillBothTrees(): Promise<void> {
+    state.gamestate = new MyBaobab(await getGameState())
+    // @ts-ignore for debugging:
+    window.tree = state.gamestate
+    for (const cb of state.gameStateCallbacks) { cb() }
+    state.gameStateCallbacks = []
+    state.rulebook = await getRulebookAsync()
+    for (const cb of state.rulebookCallbacks) { cb() }
+    state.rulebookCallbacks = []
+}
+
+
+/** Do not call at the module-level
+ * The pattern above with triggercallbacks etc lets us
+ *  write synchronous code everywhere in app, we just need to
+ *  wait for callbacks in onRulebook and onGamestate
+ */
+export function getTree(): MyBaobab<Gamestate> {
+    if (state.gamestate == null) {
+        throw Error('tried to get tree before it was loaded. Did you wait for onGamestate?')
+    }
+    return state.gamestate
+}
+
+/** Do not call at the module-level */
+export function getRulebook(): Rulebook {
+    if (state.rulebook == null) {
+        console.trace('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
+        throw Error()
+    }
+    return state.rulebook
+}
+
+// export const commitTree = () => tree.commit()
 
 export const getBattleScene = (): MyCursor<BattleScene> => {
-    const curType = tree.select('scene').select('name').get()
-    if (curType !== 'battle') {
-        throw new Error(`tried to get battle scene when you're in ${curType}`)
+    const sceneName = getTree().select('scene').get('name')
+    if (sceneName !== 'battle') {
+        throw new Error(`tried to get battle scene when you're in ${sceneName}`)
     }
-    return tree.select('scene') as MyCursor<BattleScene>
+    return getTree().select('scene') as MyCursor<BattleScene>
 }
 export const getEntryScene = (): MyCursor<EntryScene> => {
-    const curType = tree.select('scene').select('name').get()
+    const curType = getTree().select('scene').select('name').get()
     if (curType !== 'entry') {
         throw new Error(`tried to get entry scene when you're in ${curType}`)
     }
-    return tree.select('scene') as MyCursor<EntryScene>
+    return getTree().select('scene') as MyCursor<EntryScene>
 }
 
-export const getScene = (): MyCursor<Scene> => tree.select('scene')
-export const scene = tree.select('scene')
-export const ownedCharacters = tree.select('ownedCharacters')
+export const getOwnedCharacters = () => getTree().select('ownedCharacters')
+export const getScene = (): MyCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
