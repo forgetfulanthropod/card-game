@@ -9,8 +9,8 @@ export interface FireCursor<Root, Sub = Root> {
     get<K extends keyof Sub>(k: K): Promise<Sub[K]>
     set(v: Sub): Promise<void>
     set<K extends keyof Sub>(k: K, v: Sub[K]): Promise<void>
-    apply(f: (prev: Sub) => Sub): void
-    apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): void
+    apply(f: (prev: Sub) => Sub): Promise<void>
+    apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): Promise<void>
     on(eventName: 'update', cb: (v: Sub) => void): void
 }
 

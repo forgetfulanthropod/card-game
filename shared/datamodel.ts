@@ -100,4 +100,4 @@ export interface CharacterMove {
 export interface LearnableCharacterMove extends CharacterMove {
     minLevel: number
 }
-export type Door = 'ordinary' | 'easier' | 'harder' | 'etc'
+export type Door = 'A' | 'B' | 'C' | 'D'

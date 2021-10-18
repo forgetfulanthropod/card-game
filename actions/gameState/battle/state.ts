@@ -64,7 +64,7 @@ export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
         selectedMove,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        doors: null,
+        doors: [],
     })
 }
 

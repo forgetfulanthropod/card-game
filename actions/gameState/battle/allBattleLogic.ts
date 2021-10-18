@@ -1,4 +1,3 @@
-// TODO: getBattleScene
 import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAttackData, Gamestate } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
@@ -7,8 +6,6 @@ import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
 import type { FireCursor } from '../../util/FireCursor'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
-// import toast from 'react-hot-toast'
-// import type { MoveEmitter, NpcMoveEmitter } from '@/types'
 import { vals } from '../../util/objectMethods'
 import { getCharacterKeysAndDamages } from './attack'
 import dispatch from './dispatch'
@@ -23,6 +20,8 @@ const tl = (x: string) => console.log(x)
 const config = { log: true }
 
 function log(...args: unknown[]) { if (config.log) { console.log(args) } }
+
+function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
 export const getBindings = memoize(async function getBindings() {
     // TODO: RIDDLED WITH FUCKING BUGS
@@ -96,15 +95,15 @@ export const getBindings = memoize(async function getBindings() {
         tl(`npcMove(reason: ${_reason})`)
         const prefix = 'npc. not moving cuz '
         if (checkWinner(vals(state.allCharacters)) != null) {
-            log(prefix + 'battle is won')
+            warn(prefix + 'battle is won')
             return
         }
         if (state.isPlayerTurn) {
-            log(prefix + 'it is player turn')
+            warn(prefix + 'it is player turn')
             return
         }
         if (state.alivePcs.length === 0) {
-            log(prefix + 'none are alive')
+            warn(prefix + 'none are alive')
             return
         }
         if (state.aliveNpcs.every(c => c.hasMoved)) {
@@ -129,21 +128,21 @@ export const getBindings = memoize(async function getBindings() {
         log('received click for ' + clickedUid)
         const clicked = state.allCharacters[clickedUid]
         if (checkWinner(vals(state.allCharacters)) != null) {
-            log('winner exists')
+            warn('winner exists')
             return
         }
         if (!state.isPlayerTurn) {
-            log('not player turn')
+            warn('not player turn')
             return
         }
         if (state.alivePcs.every(c => c.hasMoved)) {
-            log('no unmoved pcs')
+            warn('no unmoved pcs')
             return
         }
         // click to choose selected Pc:
         if (clicked.isPc) {
             if (clicked.hasMoved) {
-                log('selected char has already attacked')
+                warn('selected char has already attacked')
                 return
             }
             await dispatch({ a: 'setSelectedCharacter', c: clicked })
@@ -180,7 +179,7 @@ export const getBindings = memoize(async function getBindings() {
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)
         if (newPc == null) {
             // should be unreachable
-            tl('no unmoved PC')
+            warn('no unmoved PC')
             await dispatch({ a: 'setIsPlayerTurn', v: false })
             setTimeout(() => doNpcMove('attack back'), TIME_AFTER_PLAYER_MOVE + 500)
             return
