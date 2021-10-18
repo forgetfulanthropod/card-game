@@ -12,8 +12,8 @@ import { getTree } from '@/data/rootTree'
 import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: true,
-    logChanges: true,
+    enableExpensiveUpdateValidation: false,
+    logChanges: false,
 }
 
 export async function getGameState(): Promise<Gamestate> {

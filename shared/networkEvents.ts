@@ -5,7 +5,7 @@
 
 import type { AttackData } from '.'
 
-const config = { log: true }
+const config = { log: false }
 
 
 export interface NetworkEventEmitter<Name extends string, Data> {
