@@ -2,28 +2,29 @@ import type { DisplayObject } from 'pixi.js'
 
 import type { PixiContainer } from '@/features/battle/elements/mypixi'
 
+/** Easier thing for adding and removing sprites maybe. Untested. Not sure if useful. */
 export class Managed {
-    public shown: boolean
     private child: DisplayObject | null = null
     constructor(private parent: PixiContainer, private childFactory: () => DisplayObject) {
-        this.shown = false
     }
     show(): void {
-        if (this.shown) {
+        if (this.child != null) {
             console.warn('already shown')
             return
         }
         this.child = this.childFactory()
         this.parent.addChild(this.child)
-        this.shown = true
     }
     remove(): void {
-        if (!this.shown) {
+        if (this.child == null) {
             console.warn('already removed')
             return
         }
-        this.parent.removeChild(this.child)
+        if (this.child)
+            this.parent.removeChild(this.child)
         this.child?.destroy()
-        this.shown = false
+    }
+    get shown(): boolean {
+        return this.child != null
     }
 }
