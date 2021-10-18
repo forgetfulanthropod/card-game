@@ -24,6 +24,8 @@ const clientActions: ClientActions = {
     startGame: callWrap('startGame'),
     doCharacterAction: callWrap('doCharacterAction'),
     changeScene: callWrap('changeScene'),
+    changeDungeon: callWrap('changeDungeon'),
+    addSelected: callWrap('addSelected'),
     chooseDoor: callWrap('chooseDoor'),
     dispatch: callWrap('dispatch'),
     makeNewUser: callWrap('makeNewUser'),
@@ -32,7 +34,20 @@ const clientActions: ClientActions = {
 // @ts-ignore for debugging:
 window.actions = clientActions
 
-export const { hello, square, echo, getRulebookAsync, startGame, doCharacterAction, changeScene, chooseDoor, dispatch, makeNewUser, } = clientActions
+export const {
+    hello,
+    square,
+    echo,
+    getRulebookAsync,
+    startGame,
+    doCharacterAction,
+    changeScene,
+    changeDungeon,
+    addSelected,
+    chooseDoor,
+    dispatch,
+    makeNewUser,
+} = clientActions
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
     if (serverResult.status === 'error') {

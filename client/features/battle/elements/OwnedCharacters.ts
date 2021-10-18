@@ -1,14 +1,13 @@
 
+import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
 // import { OwnedCharacter } from '@/data/types'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
 
-// import { addSelected } from '@@/logic/dungeonEntry'
 import type { PixiContainer } from './mypixi'
 import { Container, Sprite, Text } from './mypixi'
 
-function addSelected(u: unknown) { throw Error('unimplemented') }
 
 export function OwnedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
@@ -18,7 +17,7 @@ export function OwnedCharacters(): PixiContainer {
             if (characterContainer.children.length > 1)
                 characterContainer.removeChildren(1)
         })
-        selectedCharacters.get().map(c => {
+        selectedCharacters.get()?.map(c => {
             const indexOfOwned = vals(getOwnedCharacters().get()).findIndex(oc => c.uid === oc.uid)
             characters[indexOfOwned].addChild(
                 Sprite({
@@ -38,7 +37,7 @@ export function OwnedCharacters(): PixiContainer {
                 Sprite({
                     src: dataOf(c.name),
                     scale: .45,
-                    onClick: () => addSelected(c),
+                    onClick: () => addSelected({ character: c }),
                 })
             ],
         })

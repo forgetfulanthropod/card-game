@@ -10,6 +10,8 @@ type Square = (args: { n: string }) => number
 type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
 type GetOwnedCharacters = (args: Empty) => Promise<Record<CharacterUid, OwnedCharacter>>
 type ChangeScene = (args: { newSceneName: SceneName }) => void
+type ChangeDungeon = (args: { direction: -1 | 1 }) => void
+type AddSelected = (args: { character: OwnedCharacter }) => void
 type ChooseDoor = (args: { door: Door }) => void
 type GetRulebook = (args: Empty) => Rulebook
 type StartGame = (args: Empty) => void
@@ -28,6 +30,8 @@ export interface ServerActions {
     doCharacterAction: DoCharacterAction
     makeNewUser: MakeNewUser
     dispatch: Dispatch
+    changeDungeon: ChangeDungeon
+    addSelected: AddSelected
 }
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
@@ -43,6 +47,8 @@ export interface ClientActions {
     makeNewUser: Caller<MakeNewUser>
     dispatch: Caller<Dispatch>
     getRulebookAsync(): Promise<Rulebook>
+    changeDungeon: Caller<ChangeDungeon>
+    addSelected: Caller<AddSelected>
 }
 
 

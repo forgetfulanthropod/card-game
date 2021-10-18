@@ -2,15 +2,17 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
-import { initialScenes } from './gameState'
 import { getBindings } from './gameState/battle/allBattleLogic'
 import dispatch_ from './gameState/battle/dispatch'
 import { makeRoom } from './gameState/battle/doors'
+import { makeBattleState } from './gameState/battle/state'
+import { addSelected as addSelected_, changeDungeon as changeDungeon_ } from './gameState/entry/actions'
 import { initialGameState } from './gameState/gameState'
 import { rulebook } from './rulebook/index'
 import settings from './settings'
-import { getBattleScene, getGameStateCursor } from './util/getters'
+import { getBattleScene, getEntryScene, getGameStateCursor } from './util/getters'
 import { objFilter } from './util/objectMethods'
+
 
 const wrapper = { 'call': onCallWrapper, 'request': onRequestWrapper }[settings.fireFunctionAdapterId]
 
@@ -27,11 +29,14 @@ const serverActions: ServerActions = {
     changeScene: async args => {
         const tree = await getGameStateCursor('alice')
         // debugger
-        tree.set('scene', initialScenes[args.newSceneName])
-        // if (args.newSceneName === 'battle') {
-        //     tree.set('scene', makeBattleState(getEntryScene().select('selectedCharacters').get()))
-        // }
+        // tree.set('scene', initialScenes[args.newSceneName])
+        if (args.newSceneName === 'battle') {
+            const entryScene = await getEntryScene('alice')
+            tree.set('scene', makeBattleState(await entryScene.select('selectedCharacters').get()))
+        }
     },
+    addSelected: addSelected_,
+    changeDungeon: changeDungeon_,
     chooseDoor: async args => {
         const scene = await getBattleScene('alice')
         const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: 0 })
@@ -69,6 +74,8 @@ export const startGame = wrapper(serverActions.startGame)
 export const doCharacterAction = wrapper(serverActions.doCharacterAction)
 export const makeNewUser = wrapper(serverActions.makeNewUser)
 export const dispatch = wrapper(serverActions.dispatch)
+export const addSelected = wrapper(addSelected_)
+export const changeDungeon = wrapper(changeDungeon_)
 
 
 const isLog = settings.shouldLogAllCalls

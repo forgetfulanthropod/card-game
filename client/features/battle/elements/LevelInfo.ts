@@ -1,3 +1,4 @@
+import { changeDungeon } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
 
 import type { PixiContainer } from './mypixi'
@@ -6,14 +7,12 @@ import { Container, Text } from './mypixi'
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 
-function changeDungeon(n: number) { throw Error('unimplemented') }
-
 export function LevelInfo(): PixiContainer {
 
     const scene = getEntryScene()
 
     scene.select('selectedLevel').on('update', () => {
-        const selectedLevel = scene.get().selectedLevel
+        const selectedLevel = scene.get().selectedLevel ?? {}
 
         levelNumText.text = `Level ${selectedLevel.num}`
         levelNameText.text = selectedLevel.name
@@ -45,7 +44,7 @@ export function LevelInfo(): PixiContainer {
             strokeThickness: 5,
         },
         onClick() {
-            changeDungeon(-1)
+            changeDungeon({ direction: -1 })
         }
     })
     const rightButton = Text({
@@ -60,7 +59,7 @@ export function LevelInfo(): PixiContainer {
             strokeThickness: 5,
         },
         onClick() {
-            changeDungeon(+1)
+            changeDungeon({ direction: +1 })
         }
     })
 

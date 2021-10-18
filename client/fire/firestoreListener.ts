@@ -12,7 +12,7 @@ import { getTree } from '@/data/rootTree'
 import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: false,
+    enableExpensiveUpdateValidation: true,
     logChanges: false,
 }
 
@@ -90,6 +90,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
             break
         }
         case 'D': { // deleted property
+            console.log('deleting ', change.path)
             cursor.unset(change.path)
             break
         }

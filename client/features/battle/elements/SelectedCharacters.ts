@@ -15,7 +15,8 @@ export function SelectedCharacters(): PixiContainer {
     })
 
     function setSelectedCharacters() {
-        const characters = selectedCharacters.get().map((c, i) =>
+
+        const characters = selectedCharacters.get()?.map((c, i) =>
             Container({
                 x: Math.ceil(i / 2) * 200 * (i % 2 > 0 ? 1 : -1),
                 y: 0,
@@ -27,7 +28,7 @@ export function SelectedCharacters(): PixiContainer {
                     })
                 ],
             })
-        )
+        ) ?? []
         root.removeChildren()
         if (characters.length > 0) root.addChild(...characters)
     }
