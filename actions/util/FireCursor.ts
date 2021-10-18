@@ -3,8 +3,8 @@ import ldGet from 'lodash/get'
 
 // type Objectish = Record<string, unknown>
 // type PathsOf<Root, Path extends AllPaths<Root>> = AllPaths<DeepIndex<Root, Path>>
-export interface FBCursor<Root, Sub = Root> {
-    select<K extends keyof Sub>(k: K): FBCursor<Root, Sub[K]>
+export interface FireCursor<Root, Sub = Root> {
+    select<K extends keyof Sub>(k: K): FireCursor<Root, Sub[K]>
     get(): Promise<Sub>
     get<K extends keyof Sub>(k: K): Promise<Sub[K]>
     set(v: Sub): Promise<void>
@@ -17,9 +17,9 @@ export interface FBCursor<Root, Sub = Root> {
 // Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
 export function makeFBCursor<Root, Sub = Root>(
     docRef: firestore.DocumentReference<Root>,
-    path: string[]): FBCursor<Root, Sub> {
+    path: string[]): FireCursor<Root, Sub> {
     return {
-        select<K extends keyof Sub>(k): FBCursor<Root, Sub[K]> {
+        select<K extends keyof Sub>(k): FireCursor<Root, Sub[K]> {
             const newPath = [...path, k as string]
             return makeFBCursor<Root, Sub[K]>(docRef, newPath)
         },

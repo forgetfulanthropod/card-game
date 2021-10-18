@@ -1,4 +1,5 @@
-import type { CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
+import type { OwnedCharacter } from './datamodel'
 
 // NOTE: if we keep all args as strings then we can test in URL bar more easily
 // I think returning data as other kinds of values is fine.
@@ -7,14 +8,16 @@ import type { CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneN
 type Hello = (args: Empty) => 'hello'
 type Square = (args: { n: string }) => number
 type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
-type GetOwnedCharacters = (args: Empty) => Record<CharacterUid, CharacterName>
+type GetOwnedCharacters = (args: Empty) => Promise<Record<CharacterUid, OwnedCharacter>>
 type ChangeScene = (args: { newSceneName: SceneName }) => void
+type ChangeDungeon = (args: { direction: -1 | 1 }) => void
+type AddSelected = (args: { character: OwnedCharacter }) => void
 type ChooseDoor = (args: { door: Door }) => void
 type GetRulebook = (args: Empty) => Rulebook
 type StartGame = (args: Empty) => void
 type DoCharacterAction = (args: { uid: CharacterUid }) => void
 type MakeNewUser = (args: { username: 'alice' }) => void
-type Dispatch = (action: Action) => Promise<void>
+export type Dispatch = (action: Action) => Promise<void>
 export interface ServerActions {
     hello: Hello
     square: Square
@@ -27,6 +30,8 @@ export interface ServerActions {
     doCharacterAction: DoCharacterAction
     makeNewUser: MakeNewUser
     dispatch: Dispatch
+    changeDungeon: ChangeDungeon
+    addSelected: AddSelected
 }
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
@@ -42,6 +47,8 @@ export interface ClientActions {
     makeNewUser: Caller<MakeNewUser>
     dispatch: Caller<Dispatch>
     getRulebookAsync(): Promise<Rulebook>
+    changeDungeon: Caller<ChangeDungeon>
+    addSelected: Caller<AddSelected>
 }
 
 
@@ -51,7 +58,7 @@ type Empty = Record<string, never>
 // }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Func = (...args: any[]) => any
+export type Func = (...args: any[]) => any
 export type Caller<F extends Func> = (...args: Parameters<F>) => Promise<CallReturn<F>>
 export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 export type ServerResult<T> = { status: 'success', result: T } | { status: 'error', message: string }

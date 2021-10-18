@@ -24,7 +24,9 @@ export default function MoveMenu(): JSX.Element {
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
     selectedCharacter.on('update', () => {
         // tl('moves list change to ' + JSON.stringify(moves.get()));
-        setMvs(movesOf(selectedCharacter.get()))
+        const newMoves = movesOf(selectedCharacter.get())
+        setMvs(newMoves)
+        dispatch({ a: 'setSelectedMove', m: newMoves[0] })
     })
 
     return <MoveMenuDiv>

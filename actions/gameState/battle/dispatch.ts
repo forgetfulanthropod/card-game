@@ -1,10 +1,10 @@
 import type { Dispatch } from '@shared/actions'
-import { getCharacterKeysAndDamages } from './attack'
 
-import { getBattleScene } from './getters'
-import { makeInitialBattleState } from './rulebook/battle'
-import { checkWinner } from './rulebook/battle/misc'
-import { keys, vals } from './util'
+import { getBattleScene } from '../../util/getters'
+import { keys, vals } from '../../util/objectMethods'
+import { getCharacterKeysAndDamages } from './attack'
+import { checkWinner } from './misc'
+import { makeBattleState } from './state'
 
 
 const dispatch: Dispatch = async (action) => {
@@ -40,6 +40,7 @@ const dispatch: Dispatch = async (action) => {
             // rootTree.commit()
             return
         } case 'setHealth': {
+            return
             // console.log('setting health of', action.uid)
             // // debugger
             // // let notFound = true
@@ -67,7 +68,7 @@ const dispatch: Dispatch = async (action) => {
             scene.set('selectedMove', action.m)
             return
         } case 'fullReset': {
-            scene.set(makeInitialBattleState())
+            scene.set(makeBattleState())
             return
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')

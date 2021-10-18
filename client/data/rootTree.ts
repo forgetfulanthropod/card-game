@@ -1,11 +1,12 @@
 import type { BattleScene } from '@shared/battleTypes'
-import type { Gamestate, MyCursor, Rulebook } from '@shared/index'
+import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
 import { MyBaobab } from '@shared/myBaobab'
 
 import { getRulebookAsync } from '@/actions'
 import { getGameState } from '@/fire/firestoreListener'
 
 import type { Scene } from './types'
+
 
 /** Global variables for file */
 const state = {
@@ -57,13 +58,6 @@ export function getRulebook(): Rulebook {
 
 // export const commitTree = () => tree.commit()
 
-// export const getBattleScene = () => {
-//     const curType = tree.select('scene').select('type').get()
-//     if (curType != 'battle') {
-//         throw new Error(`tried to get battle scene when you\'re in ${curType}`)
-//     }
-//     tree.select('scene') as BattleScene
-// }
 export const getBattleScene = (): MyCursor<BattleScene> => {
     const sceneName = getTree().select('scene').get('name')
     if (sceneName !== 'battle') {
@@ -71,5 +65,14 @@ export const getBattleScene = (): MyCursor<BattleScene> => {
     }
     return getTree().select('scene') as MyCursor<BattleScene>
 }
+export const getEntryScene = (): MyCursor<EntryScene> => {
+    const curType = getTree().select('scene').select('name').get()
+    if (curType !== 'entry') {
+        throw new Error(`tried to get entry scene when you're in ${curType}`)
+    }
+    return getTree().select('scene') as MyCursor<EntryScene>
+}
+
+export const getOwnedCharacters = () => getTree().select('ownedCharacters')
 export const getScene = (): MyCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()

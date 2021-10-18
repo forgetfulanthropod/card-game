@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast'
 
 import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
-import DungeonEntry from '@/features/battle/components/DungeonEntry'
 
 import AppWrap from './AppWrap'
 
@@ -15,7 +14,6 @@ export default function App(): JSX.Element {
 
     return <AppWrap>
         <Toaster />
-        {sceneType === 'entry' && <DungeonEntry />}
         {sceneType === 'battle' && <Battle />}
     </AppWrap>
 }

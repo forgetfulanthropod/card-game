@@ -1,6 +1,10 @@
 import { Loader } from 'pixi.js'
+import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
+import check from '../../../assets/check.png'
+import font from '../../../assets/VT323-Regular.ttf'
 import stanceAggressive from '../assets/aggressive stance.png'
+import gemButton from '../assets/BUTTON_GEMS.png'
 import bloatDemon from '../assets/cards/bloat_demon-200.png'
 import bogSpirit from '../assets/cards/BogSpirit-200.png'
 import bookle from '../assets/cards/bookle-200.png'
@@ -30,9 +34,14 @@ import healthBorder from '../assets/HEALTH_BORDER.png'
 import healthTexture from '../assets/HEALTH_TEXTURE.png'
 import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
 import potion from '../assets/misc-png/INVENTORY_POTION.png'
+import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+// import font from '../../../assets/ARCADE_R.ttf'
+
+Loader.registerPlugin(WebfontLoaderPlugin)
+
 import door from '../assets/temp-door.png'
 const characterAssets = {
     bloatDemon,
@@ -66,7 +75,9 @@ const basicAssets = {
     ...characterAssets,
     fishstick,
     potion,
+    swordShield,
     bread,
+    check,
     chestBody,
     chestLid,
     door,
@@ -75,6 +86,7 @@ const deluxeAssets = {
     stanceNeutral,
     stanceDefensive,
     stanceAggressive,
+    gemButton,
     healthBorder,
     healthTexture,
 }
@@ -89,6 +101,8 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
             Loader.shared.add(name, url)
         }
     }
+
+    Loader.shared.add({ name: 'VT323', url: font })
     Loader.shared.load()
 
     // @ts-ignore
@@ -104,5 +118,6 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
             onDeluxeLoaded()
         }
     })
+
     // return () => Loader.shared.onLoad.detach(cb)
 }

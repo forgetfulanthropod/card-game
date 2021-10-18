@@ -2,7 +2,7 @@
 
 import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '@shared/index'
 
-import { moveModiferMap, stanceTypeMetaMap } from '.'
+import { moveModiferMap, stanceTypeMetaMap } from '../../rulebook/battle'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 

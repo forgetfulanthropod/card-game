@@ -12,7 +12,7 @@ import { getTree } from '@/data/rootTree'
 import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: false,
+    enableExpensiveUpdateValidation: true,
     logChanges: false,
 }
 

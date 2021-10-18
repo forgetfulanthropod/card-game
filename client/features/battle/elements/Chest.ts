@@ -3,10 +3,7 @@ import { dataOf } from '@/util/pixiUtils'
 import type { PixiContainer, PixiSprite } from './mypixi'
 import { Container, PixiTexture, Sprite } from './mypixi'
 
-
 const rotationRate = 1.0
-const baseSize = 500
-
 
 export default function Chest(args: { size: Size }): PixiContainer {
     const c = Container({

@@ -1,6 +1,14 @@
-import type { BattleScene, CharacterMeta, CharacterName, CharacterUid, StanceName } from '@shared/index'
+import type {
+    BattleScene,
+    CharacterMeta,
+    CharacterName,
+    CharacterUid,
+    OwnedCharacter,
+    StanceName
+} from '@shared/index'
 
-import { statsMap } from '.'
+import { statsMap } from '../../rulebook/battle'
+
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -9,27 +17,27 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
 
-function makeInitialCharacters(): Record<CharacterUid, CharacterMeta> {
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 1)
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, 6)
+function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
+    // const chosen = chosen ?? vals(initialOwnedCharacters())
+    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
+    const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
+
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: '' })),
-        ...playerCharacterPositions.map(([x, y]) => newPCMeta({ x, y })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + Math.random().toString().slice(3, 6) })),
+        ...chosen.map((c, i) => {
+            const [x, y] = playerCharacterPositions[i]
+            return newPCMeta({ uid: c.uid, name: c.name, x, y })
+        }),
     ]
     const o: Record<CharacterUid, CharacterMeta> = {}
     for (const c of all) {
-        const uid = 'fromMakeInitialCharacters' + Math.random().toString().slice(2, 6)
-        o[uid] = c
-        c.uid = uid
+        o[c.uid] = c
     }
     return o
 }
 
-export function makeInitialBattleState(
-    // TODO
-    // chosenCharacters: CharacterName[]
-): BattleScene {
-    const allCharacters = makeInitialCharacters()
+export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
+    const allCharacters = makeCharacters(chosen)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -72,15 +80,16 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     return A.slice(0, n)
 }
 
-function newPCMeta(args: { x: number; y: number }): CharacterMeta {
+function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterName }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceName = args.x > X_AGGRESSIVE_THRESH ?
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
+    const stats = statsMap[args.name]
     return {
-        ...statsMap.frogKnight,
-        uid: '', // being set in makeInitialCharacters rn
+        ...stats,
+        uid: args.uid,
         isPc: true,
         x: args.x,
         y: args.y,
@@ -88,7 +97,7 @@ function newPCMeta(args: { x: number; y: number }): CharacterMeta {
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
-        health: statsMap.frogKnight.maxHealth,
+        health: stats.maxHealth,
     }
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
@@ -109,4 +118,8 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         hasMoved: false,
         health: statsMap[args.name].maxHealth,
     }
+}
+
+function randString(): string {
+    return Math.random().toString().slice(2)
 }

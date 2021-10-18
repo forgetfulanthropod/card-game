@@ -1,7 +1,7 @@
 import type { CharacterMeta, CharacterUid, Door } from '@shared/index'
 
-import { getBattleScene } from './getters'
-import { newNPCMeta } from './rulebook/battle'
+import { getBattleScene } from '../../util/getters'
+import { newNPCMeta } from './state'
 
 
 // type CharacterModifer = string

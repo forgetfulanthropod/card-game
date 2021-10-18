@@ -2,9 +2,8 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { AttackData, BattleScene, CharacterName, MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
+import type { BattleScene, CharacterName, CompleteAttackData, EntryScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
 
-import type { EntryState } from './entryTypes'
 import type { NetworkEvent } from './networkEvents'
 
 
@@ -23,17 +22,23 @@ export interface Rulebook {
         displayName: string
         name: LocationName
     }>
+    dungeonLevels: {
+        name: string
+        num: number
+        pointLimit: number
+        modifier: number
+    }[]
     items: Record<ItemName, {
         name: ItemName
         displayName: string
         description: string
     }>
-    initialScenes: {
-        map: MapScene,
-        entry: EntryState,
-        battle: BattleScene,
-        craft: CraftingScene,
-    }
+    // initialScenes: {
+    //     map: MapScene,
+    //     entry: EntryScene,
+    //     battle: BattleScene,
+    //     craft: CraftingScene,
+    // }
     numbers: {
         BASE_WIDTH: number
         BASE_HEIGHT: number
@@ -45,11 +50,16 @@ export interface Rulebook {
 }
 export interface Gamestate {
     scene: Scene
-    ownedCharacters: Record<CharacterUid, CharacterName>
+    ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
-    events: NetworkEvent<AttackData>[]
+    events: NetworkEvent<'move', CompleteAttackData>[]
 }
 
+export interface OwnedCharacter extends CharacterStats {
+    uid: string
+    tokenId: string
+    nftName: string
+}
 export interface SceneHas {
     name: SceneName
 }
@@ -67,7 +77,7 @@ interface CraftingScene extends SceneHas {
 
 
 export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
-export type Scene = MapScene | BattleScene | CraftingScene | EntryState
+export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
 export interface CharacterStats {
