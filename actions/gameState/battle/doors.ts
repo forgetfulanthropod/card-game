@@ -50,5 +50,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
 
 export async function putUpDoors(): Promise<void> {
     const scene = await getBattleScene('alice')
+    // console.log('adding doors')
+    scene.set('state', 'not started')
     scene.set('doors', getDoorChoices({ dungeonName: 'cool dungeon', roomsPassed: 0 }))
 }
