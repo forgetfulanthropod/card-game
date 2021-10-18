@@ -33,10 +33,10 @@ function bindGamestate(app: PixiApplication) {
     let lastScene: PixiContainer | null = null
 
     //@ts-ignore
-    document.body.children[1].style.cursor = 'pointer'
+    document.body.style.cursor = 'pointer'
     console.log({ cursor: `url('${pointer}')` })
     //@ts-ignore
-    document.body.children[1].style.cursor = `url('${pointer}'), pointer`
+    document.body.style.cursor = `url('${pointer}'), pointer`
 
     const sceneTypeCursor = getScene().select('name')
     sceneTypeCursor.on('update', () => {
