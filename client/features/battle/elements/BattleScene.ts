@@ -1,24 +1,24 @@
+import { doCharacterAction, startGame } from '@/actions'
+import { getBattleScene, getTree } from '@/data/rootTree'
+import type { CharacterMeta, CompleteAttackData } from '@/data/types'
+import { keyMap, keys, tl } from '@/util'
 import type { NetworkEventEmitter } from '@shared/networkEvents'
 import { makeClientEventListener } from '@shared/networkEvents'
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
-
-import { doCharacterAction, startGame } from '@/actions'
-import { getBattleScene, getTree } from '@/data/rootTree'
-import type { AttackData, CharacterMeta } from '@/data/types'
-import { keyMap, keys, tl } from '@/util'
-
 import CaveVideo from '../assets/cave_main_1.webm'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
 import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
-export type Move$ = NetworkEventEmitter<'move', AttackData>
+
+
+export type Move$ = NetworkEventEmitter<'move', CompleteAttackData>
 
 export function BattleScene(): PixiContainer {
     const eventsCursor = getTree().select('events')
-    const move$ = makeClientEventListener<'move', AttackData>('move', eventsCursor)
+    const move$ = makeClientEventListener<'move', CompleteAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
     const container = Container({ children: [] })

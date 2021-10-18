@@ -6,7 +6,13 @@ import { rulebook } from './rulebook'
 
 // NPCs do not have stances
 // PCs must have stances
-export function getDamage(d: AttackData): number {
+export function getCharacterKeysAndDamages(attackData) {
+    return attackData.defenders.map(defender => (
+        { key: defender.uid, damage: getDamage(attackData) }
+    ))
+}
+
+function getDamage(d: AttackData): number {
     if (d.attacker.isPc)
         return getAttackMultiplier(d.attacker) * d.attacker.damage | 0
 

@@ -1,7 +1,8 @@
 // TODO: getBattleScene
-import type { AttackData, BattleScene, BattleWinState, CharacterUid, Gamestate } from '@shared/index'
+import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAttackData, Gamestate } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
+import { getCharacterKeysAndDamages } from './attack'
 
 import dispatch from './dispatch'
 import { putUpDoors } from './doors'
@@ -29,8 +30,8 @@ export const getBindings = memoize(async function getBindings() {
 
     // const { battleCursor: battleState, dispatch } = props
     // TODO: move$ won't work anymore.
-    const eventsCursor: FBCursor<Gamestate, NetworkEvent<'move', AttackData>[]> = (await getGameStateCursor('alice')).select('events')
-    const move$ = makeServerEventEmitter<'move', AttackData>('move', eventsCursor)
+    const eventsCursor: FBCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const move$ = makeServerEventEmitter<'move', CompleteAttackData>('move', eventsCursor)
 
     const cursorToState = async (cursor: FBCursor<BattleScene>) => {
         const value = await cursor.get()
@@ -104,7 +105,7 @@ export const getBindings = memoize(async function getBindings() {
 
     async function doNpcMove(_reason?: string) {
         tl(`npcMove(reason: ${_reason})`)
-        const prefix = 'npc not moving cuz '
+        const prefix = 'npc. not moving cuz '
         if (checkWinner(vals(state.allCharacters)) != null) {
             log(prefix + 'battle is won')
             return
@@ -122,7 +123,8 @@ export const getBindings = memoize(async function getBindings() {
             return
         }
         const move = getNpcMove(vals(state.allCharacters))
-        move$.emit(move)
+        const damageMap = getCharacterKeysAndDamages(move)
+        move$.emit({ ...move, damageMap })
         await dispatch({ a: 'move', d: move })
         await dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
@@ -181,8 +183,9 @@ export const getBindings = memoize(async function getBindings() {
             defenders: defenders,
             move: state.selectedMove,
         }
-        move$.emit(ad)
         await dispatch({ a: 'move', d: ad })
+        const damageMap = getCharacterKeysAndDamages(ad)
+        move$.emit({ ...ad, damageMap })
 
         // change to unmoved PC if there is one
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)

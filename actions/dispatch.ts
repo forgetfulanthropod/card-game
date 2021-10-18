@@ -1,5 +1,5 @@
 import type { Dispatch } from '@shared/actions'
-import { getDamage } from './attack'
+import { getCharacterKeysAndDamages } from './attack'
 
 import { getBattleScene } from './getters'
 import { makeInitialBattleState } from './rulebook/battle'
@@ -89,10 +89,3 @@ const dispatch: Dispatch = async (action) => {
     }
 }
 export default dispatch
-
-
-function getCharacterKeysAndDamages(attackData) {
-    return attackData.defenders.map(defender => (
-        { key: defender.uid, damage: getDamage(attackData) }
-    ))
-}

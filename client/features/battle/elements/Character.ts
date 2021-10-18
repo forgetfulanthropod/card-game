@@ -1,24 +1,18 @@
+import { getBattleScene } from '@/data/rootTree'
+import type { CharacterMeta, CharacterUid, CompleteAttackData } from '@/data/types'
+import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 import type { MyCursor } from '@shared/myBaobab'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { filters, Loader } from 'pixi.js'
-
-// import { useLoaderContext } from '../providers/LoaderProvider'
-import { getDamage } from '@/data/battle/attack'
-import { getBattleScene } from '@/data/rootTree'
-import type { AttackData, CharacterMeta, CharacterUid } from '@/data/types'
-import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
-
-// import dispatch from '@/actions'
 import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
-// import { MoveEmitter } from '../components/AllCharacters'
-// import { Dispatcher } from '../components/CharacterManager'
-// import { Hover } from './Hover'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
 import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
 import { Container, PixiTicker, Sprite } from './mypixi'
+
+
 const config = {
     isHealthNumber: false
 }
@@ -116,14 +110,14 @@ function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    args.move$.on(function doCharMove(event: NetworkEvent<'move', AttackData>) {
-        const d = event.data
+    args.move$.on(function doCharMove(event: NetworkEvent<'move', CompleteAttackData>) {
+        const { attacker, defenders, move, damageMap } = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
-        if (d.attacker.uid === myId) {
+        if (attacker.uid === myId) {
             flashElement(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: d.defenders[0].screenX, y: d.defenders[0].screenY })
+            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defenders[0].screenX, y: defenders[0].screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
                 if (result === 'remove')
@@ -132,12 +126,12 @@ function Character(args: CharacterProps): PixiContainer {
 
         }
 
-        if (d.defenders.findIndex(d => d.uid === myId) > -1) {
+        if (defenders.findIndex(d => d.uid === myId) > -1) {
             // debugger
-            const damage = getDamage(d)
+            // const damage = getDamage(d)
             flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: d.move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damage }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage }), { durationMs: SHOW_HIT_TIME })
             // TODO: should characters update their own health?
             // **TODO**: convert to API call
             // setTimeout(() => dispatch({ a: 'setHealth', uid: myId, h: h => (h - damage) }), HEALTH_CHANGE_WAIT_TIME)
