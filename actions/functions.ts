@@ -33,7 +33,7 @@ const serverActions: ServerActions = {
         if (args.newSceneName === 'battle') {
             const entrySceneData = await (await getEntryScene('alice')).get()
             const { selectedCharacters, selectedLevel } = entrySceneData
-            const dungeonName = rulebook.dungeonLevels[selectedLevel.num].name
+            const dungeonName = rulebook.dungeonLevels[selectedLevel.num - 1].name
             tree.set('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
         }
     },
