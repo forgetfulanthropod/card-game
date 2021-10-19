@@ -43,6 +43,7 @@ function randInt(min: number, under: number): number {
 export async function putUpDoors(): Promise<void> {
     const scene = await getBattleScene('alice')
     // console.log('adding doors')
+    const { roomsPassed, dungeonName } = await scene.get()
     scene.set('state', 'not started')
-    scene.set('doors', getDoorChoices({ dungeonName: 'cool dungeon', roomsPassed: 0 }))
+    scene.set('doors', getDoorChoices({ roomsPassed, dungeonName }))
 }
