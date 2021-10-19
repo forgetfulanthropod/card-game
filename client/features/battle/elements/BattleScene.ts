@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import type { CharacterMeta, CompleteAttackData } from '@/data/types'
+import type { CharacterMeta, NetworkAttackData } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 
@@ -17,11 +17,11 @@ import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
 
-export type Move$ = NetworkEventEmitter<'move', CompleteAttackData>
+export type Move$ = NetworkEventEmitter<'move', NetworkAttackData>
 
 export function BattleScene(): PixiContainer {
     const eventsCursor = getTree().select('events')
-    const move$ = makeClientEventListener<'move', CompleteAttackData>('move', eventsCursor)
+    const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
     const container = Container({ children: [] })

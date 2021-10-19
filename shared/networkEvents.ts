@@ -3,7 +3,7 @@
  * Probably gonna break down eventually but we can write a new shim when it does
  */
 
-import type { CompleteAttackData } from '.'
+import type { NetworkAttackData } from '.'
 
 
 export interface NetworkEventEmitter<Name extends string, Data> {
@@ -20,7 +20,7 @@ export interface NetworkEvent<Name extends string, Data> {
 }
 
 export type MoveEmitter = NetworkEventEmitter<'move', MoveEvent>
-export type MoveEvent = NetworkEvent<'move', CompleteAttackData>
+export type MoveEvent = NetworkEvent<'move', NetworkAttackData>
 
 export interface Cursorish<T> {
     apply(updater: (x: T) => T): void

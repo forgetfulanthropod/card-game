@@ -54,7 +54,11 @@ export type AttackData = {
     defenders: CharacterMeta[]
     move: CharacterMove
 }
-export interface CompleteAttackData extends AttackData {
+export interface NetworkAttackData {
+    attackerIsPc: boolean
+    move: CharacterMove
+    attacker: CharacterUid
+    defenders: CharacterUid[]
     damageMap: {
         key: CharacterUid
         damage: number

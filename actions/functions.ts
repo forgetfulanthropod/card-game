@@ -42,7 +42,7 @@ const serverActions: ServerActions = {
     changeDungeon: changeDungeon_,
     chooseDoor: async args => {
         const scene = await getBattleScene('alice')
-        const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: 0 })
+        const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: await scene.get('roomsPassed') })
         // console.log('removing doors')
         await scene.set('doors', { options: [], descriptions: [] })
         await scene.set('state', 'in battle')
