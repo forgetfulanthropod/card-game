@@ -14,7 +14,9 @@ export default function MoveMenu(): JSX.Element {
     const [sm, setSm] = useState(selectedMove.get())
     selectedMove.on('update', () => {
         // tl('selected move change');
-        setSm(selectedMove.get())
+        const x = selectedMove.get()
+        if (x == null) { return }
+        setSm(x)
     })
 
     const selectedCharacter = scene.select('selectedCharacter')
@@ -23,8 +25,10 @@ export default function MoveMenu(): JSX.Element {
     const movesOf = (charId: string) => allCharacters.select(charId).select('moves').get()
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
     selectedCharacter.on('update', () => {
+        const sc = selectedCharacter.get()
         // tl('moves list change to ' + JSON.stringify(moves.get()));
-        const newMoves = movesOf(selectedCharacter.get())
+        if (sc == null) { setMvs([]); return }
+        const newMoves = movesOf(sc)
         setMvs(newMoves)
         dispatch({ a: 'setSelectedMove', m: newMoves[0] })
     })

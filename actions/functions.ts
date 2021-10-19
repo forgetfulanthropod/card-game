@@ -7,6 +7,7 @@ import dispatch_ from './gameState/battle/dispatch'
 import { makeRoom } from './gameState/battle/doors'
 import { makeBattleState } from './gameState/battle/state'
 import { addSelected as addSelected_, changeDungeon as changeDungeon_ } from './gameState/entry/actions'
+import { initialEntryState } from './gameState/entry/state'
 import { initialGameState } from './gameState/gameState'
 import { rulebook } from './rulebook/index'
 import settings from './settings'
@@ -63,6 +64,13 @@ const serverActions: ServerActions = {
         await firestore().collection('users').doc(args.username).set(initialGameState)
     },
     dispatch: dispatch_,
+    exitDungeon: async (_args) => {
+        const gameState = await getGameStateCursor('alice')
+        if (await gameState.select('scene').get('name') !== 'battle') {
+            throw Error('exitDungeon callede when not in a battle scene')
+        }
+        gameState.select('scene').set(initialEntryState)
+    }
 }
 
 // for debugging:
@@ -79,9 +87,9 @@ export const startGame = wrapper(serverActions.startGame)
 export const doCharacterAction = wrapper(serverActions.doCharacterAction)
 export const makeNewUser = wrapper(serverActions.makeNewUser)
 export const dispatch = wrapper(serverActions.dispatch)
+export const exitDungeon = wrapper(serverActions.exitDungeon)
 export const addSelected = wrapper(addSelected_)
 export const changeDungeon = wrapper(changeDungeon_)
-
 
 const isLog = settings.shouldLogAllCalls
 

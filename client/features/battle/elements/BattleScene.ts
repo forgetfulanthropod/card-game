@@ -31,7 +31,12 @@ export function BattleScene(): PixiContainer {
     const allCharsCursor = getBattleScene().select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
-        const newKeys = keys(allCharsCursor.get())
+        const allChars = allCharsCursor.get()
+        if (allChars == null) {
+            container.destroy()
+            return
+        }
+        const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
             tl('character keys changed!')
             console.log('difference between old keys and new keys:',

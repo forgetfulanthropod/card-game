@@ -1,4 +1,4 @@
-import { chooseDoor } from '@/actions'
+import { chooseDoor, exitDungeon } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
 
 import pointer from '../../../assets/mouse.png'
@@ -78,11 +78,15 @@ function bindBattleState(app: PixiApplication) {
     let doorsCont: PixiContainer | null = null
     doorCursor.on('update', () => {
         const doors = doorCursor.get()
-        if (doors.options.length === 0 && doorsCont != null) {
+        if ((doors == null || doors.options.length === 0) && doorsCont != null) {
             app.stage.removeChild(doorsCont)
             doorsCont = null
         } else if (doors != null) {
-            doorsCont = Doors({ callbacks: doors.options.map(d => () => chooseDoor({ door: d })), descriptions: doors.descriptions })
+            doorsCont = Doors({
+                callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
+                descriptions: doors.descriptions,
+                exit: () => exitDungeon({}),
+            })
             app.stage.addChild(doorsCont)
         }
     })
