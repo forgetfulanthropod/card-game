@@ -8,6 +8,8 @@
 # echo "starting backend tsc"
 # osascript -e 'tell application "Terminal" to do script "npm run start"'
 
+# https://apple.stackexchange.com/a/58151
+
 wd=$(pwd)
 osascript -e "
 tell application \"Terminal\"

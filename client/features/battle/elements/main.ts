@@ -78,11 +78,11 @@ function bindBattleState(app: PixiApplication) {
     let doorsCont: PixiContainer | null = null
     doorCursor.on('update', () => {
         const doors = doorCursor.get()
-        if (doors.length === 0 && doorsCont != null) {
+        if (doors.options.length === 0 && doorsCont != null) {
             app.stage.removeChild(doorsCont)
             doorsCont = null
         } else if (doors != null) {
-            doorsCont = Doors({ callbacks: doors.map(d => () => chooseDoor({ door: d })) })
+            doorsCont = Doors({ callbacks: doors.options.map(d => () => chooseDoor({ door: d })), descriptions: doors.descriptions })
             app.stage.addChild(doorsCont)
         }
     })

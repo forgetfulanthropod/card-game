@@ -1,11 +1,13 @@
 import type { CharacterMeta, CharacterUid, Door, DungeonName } from '@shared/index'
 
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
-import { mapToObj } from '../../rulebook/objUtils'
+import { mapToObj, zip } from '../../util/arrayMethods'
 import { getBattleScene } from '../../util/getters'
+import { valMap } from '../../util/objectMethods'
 import { length } from '../../util/objectMethods'
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
+
 
 // type CharacterModifer = string
 
@@ -14,10 +16,19 @@ type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): Door[] {
+export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: Door[], descriptions: string[] } {
     const allDoors: Door[] = ['A', 'B', 'C', 'D']
-    const n = length(dungeonRooms[args.roomsPassed + 1])
-    return allDoors.slice(0, n)
+    const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
+    const n = length(roomOutcomes)
+    const descriptions = valMap(roomOutcomes, outcome =>
+        zip(outcome.outcomes, outcome.probs)
+            .map(([o, p]) =>
+                o.map(([name, level]) =>
+                    `Lvl${level} ${name}`).join(' + ')
+                + ' : '
+                + p.toString().slice(0, 3))
+            .join('\n'))
+    return { options: allDoors.slice(0, n), descriptions }
 }
 
 export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number }): Room {

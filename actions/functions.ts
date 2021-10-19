@@ -43,7 +43,7 @@ const serverActions: ServerActions = {
         const scene = await getBattleScene('alice')
         const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: 0 })
         // console.log('removing doors')
-        await scene.set('doors', [])
+        await scene.set('doors', { options: [], descriptions: [] })
         await scene.set('state', 'in battle')
         await scene.set('roomsPassed', await scene.get('roomsPassed') + 1)
         await scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
