@@ -3,9 +3,9 @@ import type { AttackData, CharacterMeta, CharacterUid, StanceMultiplier, StanceN
 
 import { rulebook } from '../../rulebook'
 
-export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
+export function getCharacterKeysAndDamages(attackData: AttackData, multiplier = 1): { key: CharacterUid, damage: number }[] {
     return attackData.defenders.map(defender => (
-        { key: defender.uid, damage: getDamage(attackData) }
+        { key: defender.uid, damage: getDamage(attackData) * multiplier }
     ))
 }
 
