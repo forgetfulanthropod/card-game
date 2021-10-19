@@ -45,6 +45,7 @@ const serverActions: ServerActions = {
         // console.log('removing doors')
         await scene.set('doors', [])
         await scene.set('state', 'in battle')
+        await scene.set('roomsPassed', await scene.get('roomsPassed') + 1)
         await scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
     },
     getRulebook: () => { return rulebook },

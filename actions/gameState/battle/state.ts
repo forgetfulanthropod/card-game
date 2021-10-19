@@ -67,6 +67,7 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         doors: [],
+        roomsPassed: 0
     })
 }
 
@@ -119,6 +120,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         health: statsMap[args.name].maxHealth,
+        // health: 1,
     }
 }
 

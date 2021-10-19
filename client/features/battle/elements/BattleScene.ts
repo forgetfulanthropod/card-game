@@ -12,6 +12,7 @@ import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
+import InfoBox from './InfoBox'
 import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
@@ -40,6 +41,7 @@ export function BattleScene(): PixiContainer {
         }
     })
 
+
     function renewChildren() {
         tl('renewing children')
         const ch = container.children
@@ -52,6 +54,7 @@ export function BattleScene(): PixiContainer {
             { srcs: [backgrounds[dungeonName]] }
         const newChildren = [
             background({ scale: 1, ...backgroundArgs }),
+            InfoBox({ info: [`Room ${getBattleScene().get('roomsPassed')}`, getBattleScene().get('dungeonName')] }),
             ...childCursors.map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,

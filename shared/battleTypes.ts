@@ -12,6 +12,7 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     doors: Door[]
+    roomsPassed: number
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
