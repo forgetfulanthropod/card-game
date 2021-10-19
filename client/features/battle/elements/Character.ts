@@ -99,11 +99,12 @@ function Character(args: CharacterProps): PixiContainer {
 
     function updateDeathAndHealth() {
         const char = args.cursor.get()
-        mainContainer.removeChild(healthBar)
+        if (char == null) return
 
         if (char.health <= 0) {
             flyingContainer.removeChildren()
         } else {
+            mainContainer.removeChild(healthBar)
             healthBar = HealthBar({ value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
             mainContainer.addChild(healthBar)
         }
