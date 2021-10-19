@@ -34,9 +34,19 @@ const dispatch: Dispatch = async (action) => {
                     .filter(e => e.remainingRounds > 0)
             })
 
-            await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect }) => {
-                return await scene.select('allCharacters').select(key).apply('effects', e => {
-                    return [...e, effect]
+            await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect: newEffect }) => {
+                return await scene.select('allCharacters').select(key).apply('effects', prevEffects => {
+                    const prevTypeIndex = prevEffects.findIndex(effect => effect.type === newEffect.type)
+                    if (prevTypeIndex > -1) {
+                        const prevEffect = prevEffects[prevTypeIndex]
+                        const mergedEffect = {
+                            type: newEffect.type,
+                            remainingRounds: newEffect.remainingRounds + prevEffect.remainingRounds,
+                            damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
+                        }
+                        return [...prevEffects.slice(0, prevTypeIndex), mergedEffect, ...prevEffects.slice(prevTypeIndex + 1)]
+                    }
+                    return [...prevEffects, newEffect]
                 })
             }))
 
