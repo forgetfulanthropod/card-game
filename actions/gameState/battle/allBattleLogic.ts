@@ -1,17 +1,18 @@
-import type { AttackData, BattleWinState, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
+import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
-
-import { makeServerEventEmitter } from '@/util/makeServerEventEmitter'
+import { memoize } from 'lodash'
 
 import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
 import type { FireCursor } from '../../util/FireCursor'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
+import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
 import { keys, vals } from '../../util/objectMethods'
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
 
-const TIME_AFTER_PLAYER_MOVE = 100
+const TIME_AFTER_PLAYER_MOVE = 1000
+const DEFAULT_WAIT = 1000
 const DEBUG = false
 
 const tl = (x: string) => console.log(x)
@@ -22,6 +23,8 @@ function log(...args: unknown[]) { if (config.log) { console.log(args) } }
 
 function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
+type Scene = FireCursor<Gamestate, BattleScene>
+
 export async function startGame_(): Promise<void> {
     const scene = await getBattleScene('alice')
     if (await scene.get('state') === 'in battle') {
@@ -29,48 +32,34 @@ export async function startGame_(): Promise<void> {
         console.warn('already started game')
         return
     }
-    scene.set('state', 'in battle')
-    const playerStartsGame = Math.random() < 0.5
-    scene.set('isPlayerTurn', playerStartsGame)
-    tl(playerStartsGame ? 'You go first!' : 'Enemy goes first!')
-    if (!playerStartsGame) {
-        setTimeout(() => doNpcMove('first move of game'), 100)
-    }
+    await scene.set('state', 'in battle')
+    resetRound(scene)
 }
 
-async function resetRound() {
+export async function resetRound(scene: Scene): Promise<void> {
     if (DEBUG) tl('resetting moves')
-    const scene = await getBattleScene('alice')
     const cursor = scene.select('allCharacters')
-    for (const k of keys(await cursor.get())) {
-        cursor.select(k).set('hasMoved', false)
-    }
+    await clearAllMoves(cursor)
 
     const playerStartsRound = Math.random() < 0.5
-    scene.set('isPlayerTurn', playerStartsRound)
+    await scene.set('isPlayerTurn', playerStartsRound)
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
-        setTimeout(() => doNpcMove('first move of round'), 100)
+        setTimeout(() => doNpcMove('first move of round'), DEFAULT_WAIT)
     }
 }
 
-// const winner = checkWinner(vals(allCharacters))
-// TODO: call this. (when?)
-function endGame(s: BattleWinState) {
-    tl(s === 'won' ? 'You win' : 'Computer wins')
-    if (s === 'won') {
-        putUpDoors()
-    }
+async function clearAllMoves(cursor: FireCursor<Gamestate, Record<string, CharacterMeta>>) {
+    await Promise.all(
+        keys(await cursor.get())
+            .map(async (k) => await cursor.select(k).set('hasMoved', false)))
 }
 
 async function doNpcMove(_reason?: string) {
     const scene = await getBattleScene('alice')
     tl(`npcMove(reason: ${_reason})`)
-    const { allCharacters, isPlayerTurn } = await (await getBattleScene('alice')).get()
-    const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
-    const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
-    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
-    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
+    const { allCharacters, isPlayerTurn } = await scene.get()
+    const { alivePcs, aliveNpcs } = getLivingChars(allCharacters)
     const prefix = 'npc. not moving cuz '
     if (checkWinner(vals(allCharacters)) != null) {
         warn(prefix + 'battle is won')
@@ -85,40 +74,21 @@ async function doNpcMove(_reason?: string) {
         return
     }
     if (aliveNpcs.every(c => c.hasMoved)) {
-        scene.set('isPlayerTurn', true)
+        warn(prefix + 'every npc has moved')
+        // await scene.set('isPlayerTurn', true)
         return
     }
     const move = getNpcMove(vals(allCharacters))
-
-    const damageMap = getCharacterKeysAndDamages(move)
-
-    move$.emit({
-        attackerIsPc: false,
-        attacker: move.attacker.uid,
-        defenders: move.defenders.map(d => d.uid),
-        move: move.move,
-        damageMap
-    })
-    await dispatchMove(move)
-    scene.select('allCharacters').select(move.attacker.uid).set('hasMoved', true)
-    if (alivePcs.some(c => !c.hasMoved)) {
-        setTimeout(async () => await scene.set('isPlayerTurn', true), 50)
-        return
-    }
-    if (aliveNpcs.some(c => !c.hasMoved)) {
-        setTimeout(() => doNpcMove('no unmoved PC and NPC turn'), 100)
-    }
+    await handleMove(scene, allCharacters, move)
 }
+
 
 export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void> {
     const scene = await getBattleScene('alice')
-    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = await (await getBattleScene('alice')).get()
+    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = await scene.get()
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
-    const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
-    const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
-    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
-    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
+    const { alivePcs } = getLivingChars(allCharacters)
     if (checkWinner(vals(allCharacters)) != null) {
         warn('winner exists')
         return
@@ -137,7 +107,7 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
             warn('selected char has already attacked')
             return
         }
-        scene.set('selectedCharacter', clicked.uid)
+        await scene.set('selectedCharacter', clicked.uid)
         return
     }
 
@@ -152,7 +122,6 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         tl('select move first')
         return
     }
-    scene.select('allCharacters').select(selectedCharacter).set('hasMoved', true)
 
     const defenders = [clicked]
     if (moveModifiers[selectedMove.types[0]].numTargets > 1) {
@@ -164,49 +133,98 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         defenders: defenders,
         move: selectedMove,
     }
-    dispatchMove(ad)
-    const damageMap = getCharacterKeysAndDamages(ad)
+    await handleMove(scene, allCharacters, ad)
+
+}
+
+
+async function handleMove(scene: Scene, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
+    const move$ = await getMoveChannel()
+
+    const damageMap = getCharacterKeysAndDamages(attackData)
     move$.emit({
-        attackerIsPc: false,
-        attacker: ad.attacker.uid,
-        defenders: ad.defenders.map(d => d.uid),
-        move: ad.move,
+        attackerIsPc: attackData.attacker.isPc,
+        attacker: attackData.attacker.uid,
+        defenders: attackData.defenders.map(d => d.uid),
+        move: attackData.move,
         damageMap
     })
 
-    // change to unmoved PC if there is one
-    const newPc = getUnmovedPc(vals(allCharacters), selectedCharacter)
-    if (newPc == null) {
-        // should be unreachable
-        warn('no unmoved PC')
-        scene.set('isPlayerTurn', false)
-        setTimeout(() => doNpcMove('attack back'), TIME_AFTER_PLAYER_MOVE + 50)
+    // Update health and hasMoved
+
+    await scene.select('allCharacters').select(attackData.attacker.uid).set('hasMoved', true)
+
+    await Promise.all(getCharacterKeysAndDamages(attackData).map(async ({ key, damage }) => {
+        const newHealth = allCharacters[key].health - damage
+        await scene.select('allCharacters').select(key).set('health', newHealth)
+    }))
+
+    // Check battle over
+
+    const { allCharacters: newAllCharacters, selectedCharacter } = await scene.get()
+    const winner = checkWinner(vals(newAllCharacters))
+
+    if (winner != null) {
+        clearAllMoves
+    }
+    if (winner === 'PC') {
+        await scene.set('state', 'won')
+        putUpDoors(scene)
+        return
+    } else if (winner === 'NPC') {
+        await scene.set('state', 'lost')
         return
     }
-    tl(`selecting character ${newPc.uid}`)
-    scene.set('selectedCharacter', newPc.uid)
 
-    // if there's another unmoved NPC then make it strike
-    if (aliveNpcs.some(c => !c.hasMoved)) {
-        scene.set('isPlayerTurn', false)
-        setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 50)
+    // Check reset round
+
+    const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
+
+    if (!isMoveAvailable) {
+        resetRound(scene)
+        return
+    }
+
+    // DO NEXT TURN
+
+    const { alivePcs, aliveNpcs } = getLivingChars(newAllCharacters)
+
+    if (attackData.attacker.isPc) {
+        // change to unmoved PC if there is one
+        const newPc = getUnmovedPc(vals(allCharacters), selectedCharacter)
+        if (newPc == null) {
+            warn('no unmoved PC')
+        } else {
+            tl(`selecting character ${newPc.uid}`)
+            scene.set('selectedCharacter', newPc.uid) // no await necessary
+        }
+        // if there's another unmoved NPC then make it strike
+        if (aliveNpcs.some(c => !c.hasMoved)) {
+            await scene.set('isPlayerTurn', false)
+            setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
+        }
+    } else {
+        if (alivePcs.some(c => !c.hasMoved)) {
+            await scene.set('isPlayerTurn', true)
+            return
+        }
+        if (aliveNpcs.some(c => !c.hasMoved)) {
+            setTimeout(() => {
+                doNpcMove('no unmoved PC and NPC turn')
+            }, DEFAULT_WAIT)
+        }
     }
 }
 
 
-async function dispatchMove(attackData: AttackData) {
-    const scene = await getBattleScene('alice')
-    const allCharacters = await scene.select('allCharacters').get()
+const getMoveChannel = memoize(async function getMoveChannel() {
+    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
+    return move$
+})
 
-    await Promise.all(getCharacterKeysAndDamages(attackData).map(async ({ key, damage }) => {
-        const newHealth = allCharacters[key].health - damage
-        return await scene.select('allCharacters').select(key).set('health', newHealth)
-    }))
-
-    const winner = checkWinner(vals(await scene.get('allCharacters')))
-
-    if (winner === 'PC') scene.set('state', 'won')
-    if (winner === 'NPC') scene.set('state', 'lost')
-    const isMoveAvailable = checkMoveAvailable(vals(allCharacters))
-    if (!isMoveAvailable) { resetRound() }
+function getLivingChars(allCharacters: Record<string, CharacterMeta>) {
+    const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
+    const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
+    return { alivePcs, aliveNpcs }
 }

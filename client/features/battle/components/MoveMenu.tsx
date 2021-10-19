@@ -16,7 +16,7 @@ export default function MoveMenu(): JSX.Element {
         // tl('selected move change');
         // @ts-ignore
         const elapsed = window.startTime - Date.now()
-        console.log(`round trip move change took ${elapsed} seconds`)
+        // console.log(`round trip move change took ${elapsed} seconds`)
         const x = selectedMove.get()
         if (x == null) { return }
         setSm(x)

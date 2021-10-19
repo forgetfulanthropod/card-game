@@ -2,7 +2,7 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
-import { doCharacterAction_, startGame_ } from './gameState/battle/allBattleLogic'
+import { doCharacterAction_, resetRound, startGame_ } from './gameState/battle/allBattleLogic'
 import dispatch_ from './gameState/battle/dispatch'
 import { makeRoom } from './gameState/battle/doors'
 import { makeBattleState } from './gameState/battle/state'
@@ -44,10 +44,13 @@ const serverActions: ServerActions = {
         const scene = await getBattleScene('alice')
         const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: await scene.get('roomsPassed') })
         // console.log('removing doors')
-        await scene.set('doors', { options: [], descriptions: [] })
-        await scene.set('state', 'in battle')
-        await scene.set('roomsPassed', await scene.get('roomsPassed') + 1)
-        await scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
+        await Promise.all([
+            scene.set('doors', { options: [], descriptions: [] }),
+            scene.set('roomsPassed', await scene.get('roomsPassed') + 1),
+            scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies })),
+            scene.set('state', 'in battle')
+        ])
+        await resetRound(scene)
     },
     getRulebook: () => { return rulebook },
     startGame: async () => { startGame_() },
