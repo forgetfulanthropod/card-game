@@ -126,6 +126,7 @@ function Character(args: CharacterProps): PixiContainer {
                     PixiTicker.shared.remove(cb)
             })
 
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage, isPoison: true }), { durationMs: SHOW_HIT_TIME })
         }
 
         if (defenders.findIndex(d => d.uid === myId) > -1) {

@@ -4,9 +4,16 @@ import type { AttackData, CharacterMeta, CharacterUid, StanceMultiplier, StanceN
 import { rulebook } from '../../rulebook'
 
 export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
-    return attackData.defenders.map(defender => (
+    const kds = attackData.defenders.map(defender => (
         { key: defender.uid, damage: getDamage(attackData) }
     ))
+    const attackerDOT = attackData.attacker.effects.find(e => e.type.indexOf('DOT') > -1)
+
+    if (attackerDOT) {
+        kds.push({ key: attackData.attacker.uid, damage: attackerDOT.damage })
+    }
+
+    return kds
 }
 
 function getDamage(d: AttackData): number {

@@ -27,6 +27,13 @@ const dispatch: Dispatch = async (action) => {
                 return await scene.select('allCharacters').select(key).set('health', newHealth)
             }))
 
+            // await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect }) => {
+            //     //clear old effects
+
+            //     //apply new effects
+
+            // }))
+
             const winner = checkWinner(vals(await scene.get('allCharacters')))
 
             if (winner === 'PC') scene.set('state', 'won')
