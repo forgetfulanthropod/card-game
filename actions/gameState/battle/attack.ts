@@ -26,10 +26,7 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
 export function getCharacterKeysAndEffects(attackData: AttackData): { key: CharacterUid, effect: Effect }[] {
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
-        console.log('moveTypeDOT', moveTypeDOT, 'rulebook.moveModiferMap', rulebook.moveModiferMap)
         const moveMeta = rulebook.moveModiferMap[moveTypeDOT]
-
-        console.log('effectMult::: ', moveMeta.effectMultipliers)
 
         return attackData.defenders.map(d => ({
             key: d.uid,

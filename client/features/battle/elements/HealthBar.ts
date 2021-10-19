@@ -1,3 +1,4 @@
+import type { Effect } from '@shared/index'
 import { Matrix, utils } from 'pixi.js'
 
 import type { PixiContainer, PixiGraphics } from './mypixi'
@@ -16,6 +17,7 @@ export default function HealthBar(
     args: {
         value: number,
         max: number,
+        effects: Effect[]
         colorStops?: { color: string, stop: number }[],
         numberColor?: string
         stance?: StanceType
@@ -49,7 +51,7 @@ export default function HealthBar(
         .sort((cs1, cs2) => cs1.stop - cs2.stop)
         .find(cs => portion <= cs.stop) || { color: 'pink' }).color
 
-    const color = args.numberColor ?? background
+    // const color = args.numberColor ?? background
 
 
     function drawHealthBar(g: PixiGraphics) {
@@ -77,28 +79,30 @@ export default function HealthBar(
         // TODO: see TODO BqUPq
         return Container({ children: [] })
     }
+    const health = Graphics({ draw: drawHealthBar })
+    const healthText = Text({
+        text: args.value.toString(),
+        anchor: [0, 1],
+        style: {
+            fontFamily: 'monospace',
+            fontSize: 30,
+            fill: ['#ffeaab', '#f2b600'], // gradient
+            letterSpacing: -5,
+        },
+    })
     const mainEl = Container({
         name: HealthBar.name,
         x: 0,
         y: 0,
         zIndex: 2,
         children: [
-            Graphics({ draw: drawHealthBar }),
+            health,
             Sprite({
                 src: PixiLoader.shared.resources?.healthBorder?.data,
                 width: displayWidth,
                 height: displayHeight
             }),
-            Text({
-                text: args.value.toString(),
-                anchor: [0, 1],
-                style: {
-                    fontFamily: 'monospace',
-                    fontSize: 30,
-                    fill: ['#ffeaab', '#f2b600'], // gradient
-                    letterSpacing: -5,
-                },
-            }),
+            healthText,
         ]
     })
 
@@ -117,6 +121,22 @@ export default function HealthBar(
             height: displayWidth / 3 / stanceSrc.width * stanceSrc.height
         }))
     }
+
+
+    const effects = args.effects.map(
+        e => Text({
+            text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
+            y: 40,
+            style: {
+                fontFamily: 'monospace',
+                fontSize: 30,
+                fill: 'rgba(255,255,255,.6)',
+                letterSpacing: -5,
+            },
+        })
+    )
+
+    if (effects.length > 0) mainEl.addChild(...effects)
 
     return mainEl
 }

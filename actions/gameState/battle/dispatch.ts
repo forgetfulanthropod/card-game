@@ -27,17 +27,17 @@ const dispatch: Dispatch = async (action) => {
                 return await scene.select('allCharacters').select(key).set('health', newHealth)
             }))
 
+            // reduce remaining rounds, clear exhausted effects
+            await scene.select('allCharacters').select(action.d.attacker.uid).apply('effects', e => {
+                return e
+                    .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
+                    .filter(e => e.remainingRounds > 0)
+            })
+
             await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect }) => {
-
                 return await scene.select('allCharacters').select(key).apply('effects', e => {
-                    // clear exhausted effects
-                    const oldEffects = e
-                        .map(e => ({ remainingRounds: e.remainingRounds - 1, ...e }))
-                        .filter(e => e.remainingRounds > 0)
-
-                    return [...oldEffects, effect]
+                    return [...e, effect]
                 })
-
             }))
 
             const winner = checkWinner(vals(await scene.get('allCharacters')))

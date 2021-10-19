@@ -51,7 +51,7 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         name: 'DOT2',
         numTargets: 1,
         multiplier: .5,
-        effectMultipliers: [.25, .25, .25],
+        effectMultipliers: [.25, .25, .25, .25],
     },
     ROD1: {
         name: 'ROD1',
