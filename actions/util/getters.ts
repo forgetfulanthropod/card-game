@@ -2,9 +2,10 @@ import type { BattleScene } from '@shared/battleTypes'
 import type { Gamestate } from '@shared/datamodel'
 import type { EntryScene } from '@shared/entryTypes'
 import { firestore } from 'firebase-admin'
+import { memoize } from 'lodash'
 
 import type { FireCursor } from './FireCursor'
-import { makeFBCursor } from './FireCursor'
+import { makeFireCursor } from './FireCursor'
 
 
 export async function getEntryScene(username: 'alice'): Promise<FireCursor<Gamestate, EntryScene>> {
@@ -24,10 +25,10 @@ export async function getBattleScene(username: 'alice'): Promise<BattleCursor> {
     return scene as BattleCursor
 }
 
-export async function getGameStateCursor(username: 'alice'): Promise<FireCursor<Gamestate>> {
+export const getGameStateCursor = memoize(async function getGameStateCursor(username: 'alice'): Promise<FireCursor<Gamestate>> {
     const docRef = firestore().collection('users').doc(username)
     if (!(await docRef.get()).exists) {
         throw Error('could not find user doc')
     }
-    return makeFBCursor(docRef, [])
-}
+    return makeFireCursor(docRef, [])
+})
