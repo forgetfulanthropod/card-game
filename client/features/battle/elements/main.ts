@@ -1,6 +1,7 @@
 import { chooseDoor } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
 
+import pointer from '../../../assets/mouse.png'
 import { BattleScene } from './BattleScene'
 import Chest from './Chest'
 import Doors from './Doors'
@@ -30,6 +31,12 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
 
 function bindGamestate(app: PixiApplication) {
     let lastScene: PixiContainer | null = null
+
+    //@ts-ignore
+    document.body.style.cursor = 'pointer'
+    console.log({ cursor: `url('${pointer}')` })
+    //@ts-ignore
+    document.body.style.cursor = `url('${pointer}'), pointer`
 
     const sceneTypeCursor = getScene().select('name')
     sceneTypeCursor.on('update', () => {
