@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import type { CharacterMeta, CompleteAttackData } from '@/data/types'
+import type { CharacterMeta, NetworkAttackData } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 
@@ -17,11 +17,11 @@ import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
 
 
-export type Move$ = NetworkEventEmitter<'move', CompleteAttackData>
+export type Move$ = NetworkEventEmitter<'move', NetworkAttackData>
 
 export function BattleScene(): PixiContainer {
     const eventsCursor = getTree().select('events')
-    const move$ = makeClientEventListener<'move', CompleteAttackData>('move', eventsCursor)
+    const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
     const container = Container({ children: [] })
@@ -31,7 +31,12 @@ export function BattleScene(): PixiContainer {
     const allCharsCursor = getBattleScene().select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
-        const newKeys = keys(allCharsCursor.get())
+        const allChars = allCharsCursor.get()
+        if (allChars == null) {
+            container.destroy()
+            return
+        }
+        const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
             tl('character keys changed!')
             console.log('difference between old keys and new keys:',

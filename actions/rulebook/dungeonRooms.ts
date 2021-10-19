@@ -1,5 +1,9 @@
 import type { CharacterName } from '@shared/CharacterName'
 
+const config = {
+    doValidation: false
+}
+
 // type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 // type DoorLetter = string//'A' | 'B' | 'C' | 'D'
 type EnemyLevel = number
@@ -51,9 +55,10 @@ export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
     }
 }
 
-validate(dungeonRooms)
-console.log('dungeon rooms are ok')
-
+if (config.doValidation) {
+    validate(dungeonRooms)
+    console.log('dungeon rooms are ok')
+}
 
 function validate(dr: typeof dungeonRooms): void {
     for (const [num, level] of Object.entries(dr)) {

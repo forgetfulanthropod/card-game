@@ -17,6 +17,7 @@ type GetRulebook = (args: Empty) => Rulebook
 type StartGame = (args: Empty) => void
 type DoCharacterAction = (args: { uid: CharacterUid }) => void
 type MakeNewUser = (args: { username: 'alice' }) => void
+type ExitDungeon = (args: Empty) => void
 export type Dispatch = (action: Action) => Promise<void>
 export interface ServerActions {
     hello: Hello
@@ -32,6 +33,7 @@ export interface ServerActions {
     dispatch: Dispatch
     changeDungeon: ChangeDungeon
     addSelected: AddSelected
+    exitDungeon: ExitDungeon
 }
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
@@ -49,6 +51,7 @@ export interface ClientActions {
     getRulebookAsync(): Promise<Rulebook>
     changeDungeon: Caller<ChangeDungeon>
     addSelected: Caller<AddSelected>
+    exitDungeon: Caller<ExitDungeon>
 }
 
 

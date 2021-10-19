@@ -1,4 +1,4 @@
-import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAttackData, Gamestate } from '@shared/index'
+import type { AttackData, BattleScene, BattleWinState, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
 
@@ -30,8 +30,8 @@ export const getBindings = memoize(async function getBindings() {
     // const dungeonModifier = rulebook.dungeonLevels.find(dl => dl.name === dungeonName).modifier ?? 1
     // const { battleCursor: battleState, dispatch } = props
     // TODO: move$ won't work anymore.
-    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
-    const move$ = makeServerEventEmitter<'move', CompleteAttackData>('move', eventsCursor)
+    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
 
     const cursorToState = async (cursor: FireCursor<BattleScene>) => {
         const value = await cursor.get()
@@ -115,7 +115,14 @@ export const getBindings = memoize(async function getBindings() {
 
         // const damageMap = getCharacterKeysAndDamages(move, dungeonModifier)
         const damageMap = getCharacterKeysAndDamages(move)
-        move$.emit({ ...move, damageMap })
+
+        move$.emit({
+            attackerIsPc: false,
+            attacker: move.attacker.uid,
+            defenders: move.defenders.map(d => d.uid),
+            move: move.move,
+            damageMap
+        })
         await dispatch({ a: 'move', d: move })
         await dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
         if (state.alivePcs.some(c => !c.hasMoved)) {
@@ -176,7 +183,13 @@ export const getBindings = memoize(async function getBindings() {
         }
         await dispatch({ a: 'move', d: ad })
         const damageMap = getCharacterKeysAndDamages(ad)
-        move$.emit({ ...ad, damageMap })
+        move$.emit({
+            attackerIsPc: false,
+            attacker: ad.attacker.uid,
+            defenders: ad.defenders.map(d => d.uid),
+            move: ad.move,
+            damageMap
+        })
 
         // change to unmoved PC if there is one
         const newPc = getUnmovedPc(vals(state.allCharacters), state.selectedCharacter)

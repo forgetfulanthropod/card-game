@@ -14,7 +14,8 @@
         "emulate-debug": "firebase emulators:start --inspect-functions",
         "functions-shell": "firebase functions:shell",
         "clean-ports": "bash scripts/killports.sh 5001 8080 3001 9229 4400 4500",
-        "only": "firebase emulators:start --only"
+        "only": "firebase emulators:start --only",
+        "fullstart": "bash scripts/fullstart.sh"
     },
     "dependencies": {
         "ahooks": "^2.10.11",

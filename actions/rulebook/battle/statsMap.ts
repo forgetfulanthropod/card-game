@@ -393,3 +393,5 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         level: 1,
     },
 }
+
+export const npcNames = Object.values(statsMap).filter(x => !x.isPc).map(x => x.name)

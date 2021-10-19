@@ -66,7 +66,7 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
         selectedMove,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        doors: [],
+        doors: { options: [], descriptions: [] },
         roomsPassed: 0
     })
 }

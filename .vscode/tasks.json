@@ -2,27 +2,56 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Four tabs",
+			"dependsOn": [
+				"tsc actions",
+				"tsc client",
+				"esbuild client",
+				"run emulator",
+			],
+			"dependsOrder": "parallel",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"isBackground": true,
+			"detail": "see https://stackoverflow.com/a/58181330",
+			// "runOptions": { "runOn": "folderOpen", }
+		},
+		{
+			"label": "tsc actions",
+			"type": "typescript",
+			"tsconfig": "actions/tsconfig.json",
+			"option": "watch",
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"group": "build"
+		},
+		{
+			"label": "tsc client",
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",
 			"option": "watch",
 			"problemMatcher": [
 				"$tsc-watch"
 			],
-			"group": "build",
-			"label": "tsc: watch - tsconfig.json",
-			"runOptions": {
-				// "runOn": "folderOpen"
-			}
+			"group": "build"
 		},
 		{
+			"label": "esbuild client",
 			"type": "npm",
 			"script": "start",
 			"problemMatcher": [],
-			"label": "start-esbuild-watch",
-			"detail": "build and watch client",
-			"runOptions": {
-				// "runOn": "folderOpen",
-			}
-		}
+		},
+		{
+			"label": "run emulator",
+			"type": "npm",
+			"script": "emulate",
+			"problemMatcher": [],
+		},
 	]
 }

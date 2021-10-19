@@ -11,7 +11,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: Door[]
+    doors: { options: Door[], descriptions: string[] }
     roomsPassed: number
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
@@ -63,7 +63,11 @@ export type AttackData = {
     defenders: CharacterMeta[]
     move: CharacterMove
 }
-export interface CompleteAttackData extends AttackData {
+export interface NetworkAttackData {
+    attackerIsPc: boolean
+    move: CharacterMove
+    attacker: CharacterUid
+    defenders: CharacterUid[]
     damageMap: {
         key: CharacterUid
         damage: number
