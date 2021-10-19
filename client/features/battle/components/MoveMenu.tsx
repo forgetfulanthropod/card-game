@@ -14,6 +14,9 @@ export default function MoveMenu(): JSX.Element {
     const [sm, setSm] = useState(selectedMove.get())
     selectedMove.on('update', () => {
         // tl('selected move change');
+        // @ts-ignore
+        const elapsed = window.startTime - Date.now()
+        // console.log(`round trip move change took ${elapsed} seconds`)
         const x = selectedMove.get()
         if (x == null) { return }
         setSm(x)
@@ -36,7 +39,11 @@ export default function MoveMenu(): JSX.Element {
     return <MoveMenuDiv>
         {mvs.map(m => <MoveButton
             key={m.types[0]}
-            onClick={() => dispatch({ a: 'setSelectedMove', m: m })}
+            onClick={() => {
+                // @ts-ignore
+                window.startTime = Date.now()
+                dispatch({ a: 'setSelectedMove', m: m })
+            }}
             isSelected={sm.name === m.name}
         >
             {m.name}

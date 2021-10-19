@@ -13,7 +13,7 @@ import { maybeInitializeApp } from '.'
 
 const config = {
     enableExpensiveUpdateValidation: false,
-    logChanges: true,
+    logChanges: false,
 }
 
 export async function getGameState(): Promise<Gamestate> {
