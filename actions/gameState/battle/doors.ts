@@ -1,11 +1,11 @@
-import type { CharacterMeta, CharacterUid, Door } from '@shared/index'
+import type { CharacterMeta, CharacterUid, Door, DungeonName } from '@shared/index'
 
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
 import { mapToObj } from '../../rulebook/objUtils'
 import { getBattleScene } from '../../util/getters'
+import { length } from '../../util/objectMethods'
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
-
 
 // type CharacterModifer = string
 
@@ -14,12 +14,17 @@ type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(args: { roomsPassed: number, dungeonName: string, otherInfoIdk?: any }): [Door, Door, Door] {
-    return ['A', 'B', 'C']
+export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): Door[] {
+    const allDoors: Door[] = ['A', 'B', 'C', 'D']
+    const n = length(dungeonRooms[args.roomsPassed + 1])
+    return allDoors.slice(0, n)
 }
 
 export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number }): Room {
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1][args.door]
+    if (roomOutcomes == null) {
+        throw Error(`Could not find roomOutcomes at dungeonRooms[${args.roomsPassed + 1}][${args.door}]`)
+    }
     const index = weightedRandom(roomOutcomes.probs)
     const outcome = roomOutcomes.outcomes[index]
     return {
