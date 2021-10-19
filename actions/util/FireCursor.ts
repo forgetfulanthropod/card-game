@@ -21,6 +21,10 @@ export function makeFireCursor<Root, Sub = Root>(
     path: string[],
     docRefMemo?: DocRefMemo<Root>): FireCursor<Root, Sub> {
     if (path.length === 0 && docRefMemo == null) {
+        if (global.madeCursor) {
+            throw Error('already made cursor')
+        }
+        global.madeCursor = true
         docRefMemo = makeDocRefMemo(docRef)
     }
     return {
@@ -53,6 +57,9 @@ export function makeFireCursor<Root, Sub = Root>(
                 await docRef.update({ [keyString]: value })
             }
         },
+        // setLater() { },
+        // applyLater() { },
+        // commit() { },
         async apply(keyOrFunc, maybeFunc?) {
             const data = await docRefMemo.get()
             docRefMemo.clear()
