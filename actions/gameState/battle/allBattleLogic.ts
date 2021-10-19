@@ -4,12 +4,14 @@ import { memoize } from 'lodash'
 
 import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
 import type { FireCursor } from '../../util/FireCursor'
+import type { BattleCursor } from '../../util/getters'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
 import { keys, vals } from '../../util/objectMethods'
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
+import applyMove from './move'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEFAULT_WAIT = 1000
@@ -23,7 +25,6 @@ function log(...args: unknown[]) { if (config.log) { console.log(args) } }
 
 function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
-type Scene = FireCursor<Gamestate, BattleScene>
 
 export async function startGame_(): Promise<void> {
     const scene = await getBattleScene('alice')
@@ -36,7 +37,7 @@ export async function startGame_(): Promise<void> {
     resetRound(scene)
 }
 
-export async function resetRound(scene: Scene): Promise<void> {
+export async function resetRound(scene: BattleCursor): Promise<void> {
     if (DEBUG) tl('resetting moves')
     const cursor = scene.select('allCharacters')
     await clearAllMoves(cursor)
@@ -138,8 +139,10 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
 }
 
 
-async function handleMove(scene: Scene, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
+async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
     const move$ = await getMoveChannel()
+
+    // Dispatch move to client to trigger animation
 
     const damageMap = getCharacterKeysAndDamages(attackData)
     move$.emit({
@@ -150,14 +153,9 @@ async function handleMove(scene: Scene, allCharacters: BattleScene['allCharacter
         damageMap
     })
 
-    // Update health and hasMoved
+    // Update health, effects, and hasMoved
 
-    await scene.select('allCharacters').select(attackData.attacker.uid).set('hasMoved', true)
-
-    await Promise.all(getCharacterKeysAndDamages(attackData).map(async ({ key, damage }) => {
-        const newHealth = allCharacters[key].health - damage
-        await scene.select('allCharacters').select(key).set('health', newHealth)
-    }))
+    await applyMove(scene, allCharacters, attackData)
 
     // Check battle over
 

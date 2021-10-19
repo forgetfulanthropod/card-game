@@ -1,40 +1,43 @@
-import { getCharacterKeysAndDamages } from './attack'
 
-export default async function move() {
-    const allCharacters = await scene.select('allCharacters').get()
+import type { AttackData, CharacterMeta, Effect } from '@shared/battleTypes'
+import { findIndex } from 'lodash'
 
-    await Promise.all(getCharacterKeysAndDamages(action.d).map(async ({ key, damage }) => {
-        const newHealth = allCharacters[key].health - damage
-        return await scene.select('allCharacters').select(key).set('health', newHealth)
-    }))
+import type { BattleCursor } from '@/util/getters'
 
-    // reduce remaining rounds, clear exhausted effects
-    await scene.select('allCharacters').select(action.d.attacker.uid).apply('effects', e => {
-        return e
-            .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
-            .filter(e => e.remainingRounds > 0)
-    })
+import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
+/** Applies hasmoved, health, and effects */
+export default async function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): Promise<void> {
+    const allChars = scene.select('allCharacters')
 
-    await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect: newEffect }) => {
-        return await scene.select('allCharacters').select(key).apply('effects', prevEffects => {
-            const prevTypeIndex = prevEffects.findIndex(effect => effect.type === newEffect.type)
-            if (prevTypeIndex > -1) {
-                const prevEffect = prevEffects[prevTypeIndex]
-                const mergedEffect = {
-                    type: newEffect.type,
-                    remainingRounds: newEffect.remainingRounds + prevEffect.remainingRounds,
-                    damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
-                }
-                return [...prevEffects.slice(0, prevTypeIndex), mergedEffect, ...prevEffects.slice(prevTypeIndex + 1)]
-            }
-            return [...prevEffects, newEffect]
-        })
-    }))
+    const promises = [
+        allChars.select(attackData.attacker.uid).set('hasMoved', true),
+        ...getCharacterKeysAndDamages(attackData).map(async ({ key, damage }) => {
+            const newHealth = lastAllChars[key].health - damage
+            return await allChars.select(key).set('health', newHealth)
+        }),
+        allChars.select(attackData.attacker.uid).apply('effects', e => {
+            return e
+                .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
+                .filter(e => e.remainingRounds > 0)
+        }),
+        // reduce remaining rounds, clear exhausted effects
+        ...getCharacterKeysAndEffects(attackData).map(async ({ key, effect: newEffect }) =>
+            await allChars.select(key).apply('effects', prev => updateEffect(newEffect, prev))
+        )
+    ]
+    await Promise.all(promises)
+}
 
-    const winner = checkWinner(vals(await scene.get('allCharacters')))
-
-    if (winner === 'PC') scene.set('state', 'won')
-    if (winner === 'NPC') scene.set('state', 'lost')
-
-
+function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {
+    const prevTypeIndex = findIndex(prev, { type: newEffect.type }) // prev.findIndex(effect => effect.type === newEffect.type)
+    if (prevTypeIndex > -1) {
+        const prevEffect = prev[prevTypeIndex]
+        const mergedEffect = {
+            type: newEffect.type,
+            remainingRounds: prevEffect.remainingRounds + newEffect.remainingRounds,
+            damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
+        }
+        return [...prev.slice(0, prevTypeIndex), mergedEffect, ...prev.slice(prevTypeIndex + 1)]
+    }
+    return [...prev, newEffect]
 }

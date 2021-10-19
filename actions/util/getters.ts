@@ -15,12 +15,13 @@ export async function getEntryScene(username: 'alice'): Promise<FireCursor<Games
     return scene as FireCursor<Gamestate, EntryScene>
 }
 
-export async function getBattleScene(username: 'alice'): Promise<FireCursor<Gamestate, BattleScene>> {
+export type BattleCursor = FireCursor<Gamestate, BattleScene>
+export async function getBattleScene(username: 'alice'): Promise<BattleCursor> {
     const scene = (await getGameStateCursor(username)).select('scene')
     if (await scene.get('name') !== 'battle') {
         throw Error('getBattleScene called when not in battle scene')
     }
-    return scene as FireCursor<Gamestate, BattleScene>
+    return scene as BattleCursor
 }
 
 export async function getGameStateCursor(username: 'alice'): Promise<FireCursor<Gamestate>> {
