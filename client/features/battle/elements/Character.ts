@@ -3,7 +3,7 @@ import type { NetworkEvent } from '@shared/networkEvents'
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'
-import type { CharacterMeta, CharacterUid, CompleteAttackData } from '@/data/types'
+import type { CharacterMeta, CharacterUid, NetworkAttackData } from '@/data/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
 import type { CharacterName } from '../logic/AssetLoader'
@@ -56,7 +56,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     // ---Sprites and containers---
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance })
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: characterMeta.effects })
 
     const sprites = makeSprites(args, characterMeta, onHeight)
     if (sprites == null) {
@@ -97,41 +97,56 @@ function Character(args: CharacterProps): PixiContainer {
 
     function onHeight(height: number) { aboveCharacterContainer.y = -height }
 
-    args.cursor.select('health').on('update', () => {
-        const value = args.cursor.select('health').get()
-        mainContainer.removeChild(healthBar)
+    function updateDeathAndHealth() {
+        const char = args.cursor.get()
+        if (char == null) return
 
-        if (value <= 0) {
+        if (char.health <= 0) {
             flyingContainer.removeChildren()
         } else {
-            healthBar = HealthBar({ value, max: characterMeta.maxHealth, stance: characterMeta.stance })
+            mainContainer.removeChild(healthBar)
+            healthBar = HealthBar({ value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
             mainContainer.addChild(healthBar)
         }
+    }
 
-    })
+    args.cursor.select('health').on('update', updateDeathAndHealth)
+    args.cursor.select('effects').on('update', updateDeathAndHealth)
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    args.move$.on(function doCharMove(event: NetworkEvent<'move', CompleteAttackData>) {
+    args.move$.on(function doCharMove(event: NetworkEvent<'move', NetworkAttackData>) {
         const { attacker, defenders, move, damageMap } = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
-        if (attacker.uid === myId) {
+        if (attacker === myId) {
             flashElement(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
             hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defenders[0].screenX, y: defenders[0].screenY })
+            const defender0 = getBattleScene().select('allCharacters').select(defenders[0]).get()
+            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defender0.screenX, y: defender0.screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
                 if (result === 'remove')
                     PixiTicker.shared.remove(cb)
             })
-
+            const charDamage = damageMap.find(d => d.key === myId)?.damage ?? null
+            if (charDamage != null)
+                doFlashElement(
+                    aboveCharacterContainer,
+                    () => HitInfo({ damage: charDamage, isPoison: true }),
+                    { durationMs: SHOW_HIT_TIME }
+                )
         }
 
-        if (defenders.findIndex(d => d.uid === myId) > -1) {
+        if (defenders.findIndex(d => d === myId) > -1) {
             flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
             doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage }), { durationMs: SHOW_HIT_TIME })
+            const damageObj = damageMap.find(d => d.key === myId)
+            if (damageObj == null) {
+                console.warn(`damageMap did not provide value for defender with id ${myId}. damageMap:`, damageMap)
+                return
+            }
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageObj.damage }), { durationMs: SHOW_HIT_TIME })
         }
     })
 

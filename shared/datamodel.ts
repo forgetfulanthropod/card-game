@@ -2,15 +2,15 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, CompleteAttackData, EntryScene, MoveModifier, MoveModifierName, StanceName, StanceStats } from '@shared/index'
+import type { BattleScene, CharacterName, EntryScene, MoveModifier, MoveModifierName, NetworkAttackData, StanceName, StanceStats } from '@shared/index'
 
 import type { NetworkEvent } from './networkEvents'
 
 
 export type CharacterUid = string
 
-type ItemName = string
-type ItemUid = string
+export type ItemName = string
+export type ItemUid = string
 type LocationName = string
 type RecipeName = string
 
@@ -47,7 +47,7 @@ export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
-    events: NetworkEvent<'move', CompleteAttackData>[]
+    events: NetworkEvent<'move', NetworkAttackData>[]
 }
 
 export interface OwnedCharacter extends CharacterStats {
@@ -95,7 +95,7 @@ export interface CharacterMove {
 export interface LearnableCharacterMove extends CharacterMove {
     minLevel: number
 }
-export type Door = 'A' | 'B' | 'C' | 'D'
+export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
 export interface DungeonLevel {
     name: DungeonName

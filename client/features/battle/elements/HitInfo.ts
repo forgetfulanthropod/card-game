@@ -1,7 +1,7 @@
 import type { PixiText } from './mypixi'
 import { Text } from './mypixi'
 
-export default function HitInfo(args: { damage: number }): PixiText {
+export default function HitInfo(args: { damage: number, isPoison?: boolean }): PixiText {
     return Text({
         text: `-${args.damage}`,
         anchor: [0, 1],
@@ -9,7 +9,7 @@ export default function HitInfo(args: { damage: number }): PixiText {
             fontFamily: 'monospace',
             fontSize: 60,
             //   fontWeight: 400,
-            fill: ['#bf040e', '#98040c'], // gradient
+            fill: args.isPoison ? ['rgb(143,253,49)', 'rgb(43,148,52)'] : ['#bf040e', '#98040c'], // gradient
             // stroke: '#01d27e',
             // strokeThickness: 5,
             letterSpacing: -5,

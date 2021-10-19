@@ -11,8 +11,9 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: Door[]
+    doors: { options: Door[], descriptions: string[] }
     roomsPassed: number
+    // loot: Record<ItemUid, ItemName>
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
@@ -21,11 +22,19 @@ export interface MoveModifier {
     numTargets: number | number[]
     multiplier?: number
     multiplierRange?: [number, number]
-    multipliers?: number[] // for damage over time
+    multipliers?: number[] // number of targets varying damage
+    effectMultipliers?: number[] // for damage over time
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
 
+export type EffectType = 'DOT1' | 'DOT2'
+export interface Effect {
+    type?: EffectType
+    remainingRounds?: number
+    damagesByRound?: number[]
+    dealer?: CharacterMeta
+}
 
 export interface CharacterMeta extends CharacterStats {
     name: CharacterName
@@ -38,6 +47,7 @@ export interface CharacterMeta extends CharacterStats {
     screenX: number
     screenY: number
     stance: StanceName
+    effects: Effect[]
 }
 
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
@@ -54,7 +64,11 @@ export type AttackData = {
     defenders: CharacterMeta[]
     move: CharacterMove
 }
-export interface CompleteAttackData extends AttackData {
+export interface NetworkAttackData {
+    attackerIsPc: boolean
+    move: CharacterMove
+    attacker: CharacterUid
+    defenders: CharacterUid[]
     damageMap: {
         key: CharacterUid
         damage: number

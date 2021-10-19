@@ -292,7 +292,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         displayName: 'Skeleton Warrior',
         isPc: false,
         points: 15,
-        maxHealth: 54,
+        maxHealth: 10,
         damage: 2,
         moves: [
             { name: 'Sword Whack', types: ['BA'] },
@@ -393,3 +393,5 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         level: 1,
     },
 }
+
+export const npcNames = Object.values(statsMap).filter(x => !x.isPc).map(x => x.name)
