@@ -17,9 +17,6 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
 }
 
 function getDamage(d: AttackData): number {
-    if (d.attacker.isPc)
-        return getAttackMultiplier(d.attacker) * d.attacker.damage | 0
-
     const dam = d.attacker.damage
         * getAttackMultiplier(d.attacker)
         * getMoveMultiplier(d)

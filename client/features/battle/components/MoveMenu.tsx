@@ -35,7 +35,7 @@ export default function MoveMenu(): JSX.Element {
             onClick={() => dispatch({ a: 'setSelectedMove', m: m })}
             isSelected={sm.name === m.name}
         >
-            {m.name}
+            {m.name} ({m.types.toString()})
         </MoveButton>
         )}
     </MoveMenuDiv>
