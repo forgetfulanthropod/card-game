@@ -4,7 +4,7 @@ import type { EntryScene } from '@shared/entryTypes'
 import { firestore } from 'firebase-admin'
 
 import type { FireCursor } from './FireCursor'
-import { makeFBCursor } from './FireCursor'
+import { makeFireCursor } from './FireCursor'
 
 
 export async function getEntryScene(username: 'alice'): Promise<FireCursor<Gamestate, EntryScene>> {
@@ -28,5 +28,5 @@ export async function getGameStateCursor(username: 'alice'): Promise<FireCursor<
     if (!(await docRef.get()).exists) {
         throw Error('could not find user doc')
     }
-    return makeFBCursor(docRef, [])
+    return makeFireCursor(docRef, [])
 }
