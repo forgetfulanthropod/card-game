@@ -2,7 +2,6 @@ import type { AttackData, BattleScene, BattleWinState, CharacterUid, CompleteAtt
 import type { NetworkEvent } from '@shared/networkEvents'
 import memoize from 'lodash/memoize'
 
-import { rulebook } from '../../rulebook'
 import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
 import type { FireCursor } from '../../util/FireCursor'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
@@ -27,8 +26,8 @@ function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 export const getBindings = memoize(async function getBindings() {
     // TODO: RIDDLED WITH FUCKING BUGS
     const scene = await getBattleScene('alice')
-    const dungeonName = await (await getBattleScene('alice')).get('dungeonName')
-    const dungeonModifier = rulebook.dungeonLevels.find(dl => dl.name === dungeonName).modifier ?? 1
+    // const dungeonName = await (await getBattleScene('alice')).get('dungeonName')
+    // const dungeonModifier = rulebook.dungeonLevels.find(dl => dl.name === dungeonName).modifier ?? 1
     // const { battleCursor: battleState, dispatch } = props
     // TODO: move$ won't work anymore.
     const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
@@ -114,7 +113,8 @@ export const getBindings = memoize(async function getBindings() {
         }
         const move = getNpcMove(vals(state.allCharacters))
 
-        const damageMap = getCharacterKeysAndDamages(move, dungeonModifier)
+        // const damageMap = getCharacterKeysAndDamages(move, dungeonModifier)
+        const damageMap = getCharacterKeysAndDamages(move)
         move$.emit({ ...move, damageMap })
         await dispatch({ a: 'move', d: move })
         await dispatch({ a: 'setHasMoved', uid: move.attacker.uid, v: true })
