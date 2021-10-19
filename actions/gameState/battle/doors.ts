@@ -1,5 +1,7 @@
 import type { CharacterMeta, CharacterUid, Door, DungeonName } from '@shared/index'
+import { sampleSize } from 'lodash'
 
+import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
 import { mapToObj, zip } from '../../util/arrayMethods'
 import { getBattleScene } from '../../util/getters'
@@ -11,6 +13,12 @@ import { newNPCMeta } from './state'
 
 // type CharacterModifer = string
 
+
+const config = {
+    addRandomDoor: true
+}
+
+
 type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
@@ -19,7 +27,7 @@ type Room = {
 export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: Door[], descriptions: string[] } {
     const allDoors: Door[] = ['A', 'B', 'C', 'D']
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
-    const n = length(roomOutcomes)
+    const options = allDoors.slice(0, length(roomOutcomes))
     const descriptions = valMap(roomOutcomes, outcome =>
         zip(outcome.outcomes, outcome.probs)
             .map(([o, p]) =>
@@ -28,10 +36,23 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: Dungeon
                 + ' : '
                 + p.toString().slice(0, 3))
             .join('\n'))
-    return { options: allDoors.slice(0, n), descriptions }
+    if (config.addRandomDoor) {
+        options.push('random')
+        descriptions.push('completely random')
+    }
+    return { options, descriptions }
 }
 
 export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number }): Room {
+    if (args.door === 'random') {
+        return {
+            modifier: -1,
+            enemies: mapToObj(sampleSize(npcNames, randInt(0, 5)), name => {
+                const uid = makeUid()
+                return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid })]
+            })
+        }
+    }
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1][args.door]
     if (roomOutcomes == null) {
         throw Error(`Could not find roomOutcomes at dungeonRooms[${args.roomsPassed + 1}][${args.door}]`)

@@ -8,12 +8,15 @@ import { Container, Sprite } from './mypixi'
 const doorWidth = 335
 
 export default function Doors(args: { callbacks: Callback[], descriptions?: string[], exit: Callback }): PixiContainer {
-    const doorsAndText = args.callbacks.flatMap((cb, i) => [
-        Door({ xScaled: i * 1.5 + 1, onClick: cb }),
-        args?.descriptions?.[i] != null && Text({ text: args.descriptions[i], x: (i * 1.5 + 1) * doorWidth }),
-    ])
+    const doorsAndText = args.callbacks.flatMap((cb, i) => {
+        const door = Door({ xScaled: i * 1.5 + 1, onClick: cb })
+        const text = args?.descriptions?.[i] != null && Text({ text: args.descriptions[i], x: (i * 1.5 + 1) * doorWidth, width: doorWidth })
+        return [door, text]
+    })
     return Container({
-        children: [...doorsAndText, PlainButton({ onClick: args.exit, text: 'exit' })]
+        children: [
+            ...doorsAndText,
+            PlainButton({ onClick: args.exit, text: 'exit' })]
     })
 }
 

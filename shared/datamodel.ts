@@ -95,7 +95,7 @@ export interface CharacterMove {
 export interface LearnableCharacterMove extends CharacterMove {
     minLevel: number
 }
-export type Door = 'A' | 'B' | 'C' | 'D'
+export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
 export interface DungeonLevel {
     name: DungeonName
