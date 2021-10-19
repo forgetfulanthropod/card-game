@@ -26,7 +26,8 @@ function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 export const getBindings = memoize(async function getBindings() {
     // TODO: RIDDLED WITH FUCKING BUGS
     const scene = await getBattleScene('alice')
-
+    // const dungeonName = await (await getBattleScene('alice')).get('dungeonName')
+    // const dungeonModifier = rulebook.dungeonLevels.find(dl => dl.name === dungeonName).modifier ?? 1
     // const { battleCursor: battleState, dispatch } = props
     // TODO: move$ won't work anymore.
     const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', CompleteAttackData>[]> = (await getGameStateCursor('alice')).select('events')
@@ -111,6 +112,8 @@ export const getBindings = memoize(async function getBindings() {
             return
         }
         const move = getNpcMove(vals(state.allCharacters))
+
+        // const damageMap = getCharacterKeysAndDamages(move, dungeonModifier)
         const damageMap = getCharacterKeysAndDamages(move)
         move$.emit({ ...move, damageMap })
         await dispatch({ a: 'move', d: move })

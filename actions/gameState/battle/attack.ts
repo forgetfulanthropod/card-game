@@ -7,11 +7,11 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
     const kds = attackData.defenders.map(defender => (
         { key: defender.uid, damage: getDamage(attackData) }
     ))
-    const attackerDOT = attackData.attacker.effects.find(e => e.type.indexOf('DOT') > -1)
+    // const attackerDOT = attackData.attacker.effects.find(e => e.type.indexOf('DOT') > -1)
 
-    if (attackerDOT) {
-        kds.push({ key: attackData.attacker.uid, damage: attackerDOT.damage })
-    }
+    // if (attackerDOT) {
+    //     kds.push({ key: attackData.attacker.uid, damage: attackerDOT.damage })
+    // }
 
     return kds
 }

@@ -218,7 +218,7 @@ export function VideoBackground(args: { name?: string, scale: number, src: strin
     return sprite
 }
 
-export function PngLayersBackground(args: { name?: string, scale: number, srcs: string[] }): PixiContainer {
+export function PngLayersBackground(args: { name?: string, scale: number, srcs: string[] | PixiTexture[] }): PixiContainer {
     return Container({
         children: args.srcs.map(src =>
             Sprite({

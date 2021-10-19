@@ -31,8 +31,10 @@ const serverActions: ServerActions = {
         // debugger
         // tree.set('scene', initialScenes[args.newSceneName])
         if (args.newSceneName === 'battle') {
-            const entryScene = await getEntryScene('alice')
-            tree.set('scene', makeBattleState(await entryScene.select('selectedCharacters').get()))
+            const entrySceneData = await (await getEntryScene('alice')).get()
+            const { selectedCharacters, selectedLevel } = entrySceneData
+            const dungeonName = rulebook.dungeonLevels[selectedLevel.num].name
+            tree.set('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
         }
     },
     addSelected: addSelected_,
@@ -43,6 +45,7 @@ const serverActions: ServerActions = {
         // console.log('removing doors')
         await scene.set('doors', [])
         await scene.set('state', 'in battle')
+        await scene.set('roomsPassed', await scene.get('roomsPassed') + 1)
         await scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
     },
     getRulebook: () => { return rulebook },

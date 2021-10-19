@@ -23,7 +23,7 @@ const clientEnvKeys = [
     "CLIENT_LOG_API_REQUESTS"
 ]
 for (const k of clientEnvKeys) [
-    envObj[`process.env.${k}`] = `"${envFile?.[k]}"`
+    envObj[`process.env.${k}`] = `"${envFile?.[k] ?? ''}"`
 ]
 console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')

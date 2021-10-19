@@ -125,8 +125,13 @@ function Character(args: CharacterProps): PixiContainer {
                 if (result === 'remove')
                     PixiTicker.shared.remove(cb)
             })
-
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageMap.find(d => d.key === myId)!.damage, isPoison: true }), { durationMs: SHOW_HIT_TIME })
+            const charDamage = damageMap.find(d => d.key === myId)?.damage ?? null
+            if (charDamage != null)
+                doFlashElement(
+                    aboveCharacterContainer,
+                    () => HitInfo({ damage: charDamage, isPoison: true }),
+                    { durationMs: SHOW_HIT_TIME }
+                )
         }
 
         if (defenders.findIndex(d => d.uid === myId) > -1) {

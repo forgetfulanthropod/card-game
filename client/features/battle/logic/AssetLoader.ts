@@ -5,6 +5,9 @@ import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 import font from '../../../assets/ARCADE_N_.ttf'
 import check from '../../../assets/check.png'
 import stanceAggressive from '../assets/aggressive stance.png'
+import fort from '../assets/backgrounds/fort-skeleton-temp.jpg'
+import hoolgans from '../assets/backgrounds/hoolgans-bluff-temp.jpg'
+import ninth from '../assets/backgrounds/ninth-trash-hole.png'
 import gemButton from '../assets/BUTTON_GEMS.png'
 import bloatDemon from '../assets/cards/bloat_demon-200.png'
 import bogSpirit from '../assets/cards/BogSpirit-200.png'
@@ -39,10 +42,17 @@ import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '../assets/misc-png/ITEM_BREAD.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
+import door from '../assets/temp-door.png'
+
+export const backgrounds = {
+    'Hooligan’s Bluff': hoolgans,
+    'The Matcha Caves': 'matcha',
+    'Fort Skeleton': fort,
+    'The Ninth Trash Hole of Hell': ninth,
+}
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
-import door from '../assets/temp-door.png'
 const characterAssets = {
     bloatDemon,
     bogSpirit,
@@ -73,6 +83,7 @@ export const characterAssetKeys = Object.keys(characterAssets) as CharacterName[
 
 const basicAssets = {
     ...characterAssets,
+    ...backgrounds,
     fishstick,
     potion,
     swordShield,

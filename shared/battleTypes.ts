@@ -1,7 +1,8 @@
-import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, Door, SceneHas } from '@shared/index'
+import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, Door, DungeonName, SceneHas } from '@shared/index'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
+    dungeonName: DungeonName
     state: BattleWinState
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
@@ -11,6 +12,7 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     doors: Door[]
+    roomsPassed: number
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 

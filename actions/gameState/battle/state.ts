@@ -3,6 +3,7 @@ import type {
     CharacterMeta,
     CharacterName,
     CharacterUid,
+    DungeonName,
     OwnedCharacter,
     StanceName
 } from '@shared/index'
@@ -36,8 +37,8 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
     return o
 }
 
-export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
-    const allCharacters = makeCharacters(chosen)
+export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
+    const allCharacters = makeCharacters(args.chosen)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -55,6 +56,7 @@ export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         name: 'battle',
+        dungeonName: args.dungeonName ?? 'The Matcha Caves',
         turnCount: 0,
         state: 'not started',
         isPlayerTurn: Math.random() < .5,
@@ -65,6 +67,7 @@ export function makeBattleState(chosen?: OwnedCharacter[]): BattleScene {
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         doors: [],
+        roomsPassed: 0
     })
 }
 
@@ -117,6 +120,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         health: statsMap[args.name].maxHealth,
+        // health: 1,
     }
 }
 
