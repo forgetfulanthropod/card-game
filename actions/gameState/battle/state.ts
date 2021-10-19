@@ -101,6 +101,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         stance,
         hasMoved: false,
         health: stats.maxHealth,
+        effects: [],
     }
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
@@ -120,6 +121,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         health: statsMap[args.name].maxHealth,
+        effects: [],
         // health: 1,
     }
 }

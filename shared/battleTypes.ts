@@ -21,16 +21,17 @@ export interface MoveModifier {
     numTargets: number | number[]
     multiplier?: number
     multiplierRange?: [number, number]
-    multipliers?: number[] // for damage over time and varying target numbers
+    multipliers?: number[] // number of targets varying damage
+    effectMultipliers?: number[] // for damage over time
     defaultSpriteUrl?: string
     isSpecial?: boolean
 }
 
-type EffectType = 'DOT1' | 'DOT2'
+export type EffectType = 'DOT1' | 'DOT2'
 export interface Effect {
     type?: EffectType
     remainingRounds?: number
-    damage?: number
+    damagesByRound?: number[]
     dealer?: CharacterMeta
 }
 
@@ -45,7 +46,7 @@ export interface CharacterMeta extends CharacterStats {
     screenX: number
     screenY: number
     stance: StanceName
-    effects?: Effect[]
+    effects: Effect[]
 }
 
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'

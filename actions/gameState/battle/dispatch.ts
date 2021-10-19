@@ -2,7 +2,7 @@ import type { Dispatch } from '@shared/actions'
 
 import { getBattleScene } from '../../util/getters'
 import { keys, vals } from '../../util/objectMethods'
-import { getCharacterKeysAndDamages } from './attack'
+import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
 import { checkWinner } from './misc'
 import { makeBattleState } from './state'
 
@@ -27,12 +27,18 @@ const dispatch: Dispatch = async (action) => {
                 return await scene.select('allCharacters').select(key).set('health', newHealth)
             }))
 
-            // await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect }) => {
-            //     //clear old effects
+            await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect }) => {
 
-            //     //apply new effects
+                return await scene.select('allCharacters').select(key).apply('effects', e => {
+                    // clear exhausted effects
+                    const oldEffects = e
+                        .map(e => ({ remainingRounds: e.remainingRounds - 1, ...e }))
+                        .filter(e => e.remainingRounds > 0)
 
-            // }))
+                    return [...oldEffects, effect]
+                })
+
+            }))
 
             const winner = checkWinner(vals(await scene.get('allCharacters')))
 

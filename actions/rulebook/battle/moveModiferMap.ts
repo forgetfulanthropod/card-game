@@ -44,12 +44,14 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         // TODO: subsequent damage is inflited before that character activates
         name: 'DOT1',
         numTargets: 1,
-        multipliers: [.5, .33, .33, .33],
+        multiplier: .5,
+        effectMultipliers: [.33, .33, .33],
     },
     DOT2: {
         name: 'DOT2',
         numTargets: 1,
-        multipliers: [.5, .25, .25, .25],
+        multiplier: .5,
+        effectMultipliers: [.25, .25, .25],
     },
     ROD1: {
         name: 'ROD1',
