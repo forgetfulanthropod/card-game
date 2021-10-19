@@ -54,7 +54,7 @@ export function BattleScene(): PixiContainer {
             { srcs: [backgrounds[dungeonName]] }
         const newChildren = [
             background({ scale: 1, ...backgroundArgs }),
-            InfoBox({ info: [`Room ${getBattleScene().get('roomsPassed')}`, getBattleScene().get('dungeonName')] }),
+            InfoBox({ info: [`Room ${getBattleScene().get('roomsPassed') + 1}`, getBattleScene().get('dungeonName')] }),
             ...childCursors.map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
