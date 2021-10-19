@@ -1,10 +1,11 @@
-import type { CharacterMeta, CharacterUid, Door, DungeonName } from '@shared/index'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
 import { sampleSize } from 'lodash'
+
+import type { FireCursor } from '@/util/FireCursor'
 
 import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
 import { mapToObj, zip } from '../../util/arrayMethods'
-import { getBattleScene } from '../../util/getters'
 import { valMap } from '../../util/objectMethods'
 import { length } from '../../util/objectMethods'
 import { weightedRandom } from './misc'
@@ -77,8 +78,7 @@ function randInt(min: number, under: number): number {
     return (Math.random() * (under - min) + min) | 0
 }
 
-export async function putUpDoors(): Promise<void> {
-    const scene = await getBattleScene('alice')
+export async function putUpDoors(scene: FireCursor<Gamestate, BattleScene>): Promise<void> {
     // console.log('adding doors')
     const { roomsPassed, dungeonName } = await scene.get()
     scene.set('state', 'not started')

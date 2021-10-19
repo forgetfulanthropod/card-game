@@ -2,7 +2,7 @@ import type { ServerActions } from '@shared/actions'
 import { firestore } from 'firebase-admin'
 import { https } from 'firebase-functions/v1'
 
-import { getBindings } from './gameState/battle/allBattleLogic'
+import { doCharacterAction_, resetRound, startGame_ } from './gameState/battle/allBattleLogic'
 import dispatch_ from './gameState/battle/dispatch'
 import { makeRoom } from './gameState/battle/doors'
 import { makeBattleState } from './gameState/battle/state'
@@ -44,20 +44,17 @@ const serverActions: ServerActions = {
         const scene = await getBattleScene('alice')
         const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: await scene.get('roomsPassed') })
         // console.log('removing doors')
-        await scene.set('doors', { options: [], descriptions: [] })
-        await scene.set('state', 'in battle')
-        await scene.set('roomsPassed', await scene.get('roomsPassed') + 1)
-        await scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
+        await Promise.all([
+            scene.set('doors', { options: [], descriptions: [] }),
+            scene.set('roomsPassed', await scene.get('roomsPassed') + 1),
+            scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies })),
+            scene.set('state', 'in battle')
+        ])
+        await resetRound(scene)
     },
     getRulebook: () => { return rulebook },
-    startGame: async () => {
-        const bindings = await getBindings()
-        return bindings.startGame()
-    },
-    doCharacterAction: async ({ uid }) => {
-        const bindings = await getBindings()
-        return bindings.doCharacterAction(uid)
-    },
+    startGame: async () => { startGame_() },
+    doCharacterAction: async ({ uid }) => { doCharacterAction_(uid) },
     makeNewUser: async (args) => {
         // TODO: I'm not sure if this fully resets the user
         console.log(`adding user ${args.username} with initial gamestate`)
@@ -113,10 +110,12 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
     // startFirebaseApp()
     return https.onCall(async (data, context) => {
         const randId = makeRandId()
+        const startTime = Date.now()
         if (isLog) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(data[0])}`) }
         try {
             const result = await f(data[0], context)
-            if (isLog) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
+            const elapsed = Date.now() - startTime
+            if (isLog) { console.log(`    ${f.name}#${randId} took ${elapsed} seconds and is responding with ${JSON.stringify(result)}`) }
             return { status: 'success', result }
         } catch (e) {
             console.error(`exception occured in client call to ${f.name}: `, e)

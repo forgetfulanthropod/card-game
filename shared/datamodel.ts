@@ -9,8 +9,8 @@ import type { NetworkEvent } from './networkEvents'
 
 export type CharacterUid = string
 
-type ItemName = string
-type ItemUid = string
+export type ItemName = string
+export type ItemUid = string
 type LocationName = string
 type RecipeName = string
 

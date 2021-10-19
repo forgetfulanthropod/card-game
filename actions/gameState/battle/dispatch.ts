@@ -1,9 +1,7 @@
 import type { Dispatch } from '@shared/actions'
 
 import { getBattleScene } from '../../util/getters'
-import { keys, vals } from '../../util/objectMethods'
-import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
-import { checkWinner } from './misc'
+import { keys } from '../../util/objectMethods'
 import { makeBattleState } from './state'
 
 
@@ -12,82 +10,7 @@ const dispatch: Dispatch = async (action) => {
     // console.log(`>>>>dispatching ${JSON.stringify(action)}`)
     const scene = await getBattleScene('alice')
     switch (action.a) {
-        case 'setIsPlayerTurn': {
-            // tl(`setting player turn to ${action.v}`)
-            await scene.set('isPlayerTurn', action.v)
-            return
-        } case 'setBattleHasBegun': {
-            scene.set('state', 'in battle')
-            return
-        } case 'move': {
-            const allCharacters = await scene.select('allCharacters').get()
-
-            await Promise.all(getCharacterKeysAndDamages(action.d).map(async ({ key, damage }) => {
-                const newHealth = allCharacters[key].health - damage
-                return await scene.select('allCharacters').select(key).set('health', newHealth)
-            }))
-
-            // reduce remaining rounds, clear exhausted effects
-            await scene.select('allCharacters').select(action.d.attacker.uid).apply('effects', e => {
-                return e
-                    .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
-                    .filter(e => e.remainingRounds > 0)
-            })
-
-            await Promise.all(getCharacterKeysAndEffects(action.d).map(async ({ key, effect: newEffect }) => {
-                return await scene.select('allCharacters').select(key).apply('effects', prevEffects => {
-                    const prevTypeIndex = prevEffects.findIndex(effect => effect.type === newEffect.type)
-                    if (prevTypeIndex > -1) {
-                        const prevEffect = prevEffects[prevTypeIndex]
-                        const mergedEffect = {
-                            type: newEffect.type,
-                            remainingRounds: newEffect.remainingRounds + prevEffect.remainingRounds,
-                            damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
-                        }
-                        return [...prevEffects.slice(0, prevTypeIndex), mergedEffect, ...prevEffects.slice(prevTypeIndex + 1)]
-                    }
-                    return [...prevEffects, newEffect]
-                })
-            }))
-
-            const winner = checkWinner(vals(await scene.get('allCharacters')))
-
-            if (winner === 'PC') scene.set('state', 'won')
-            if (winner === 'NPC') scene.set('state', 'lost')
-
-            return
-        } case 'setHasMoved': {
-            // let notFound = true
-            scene.select('allCharacters').select(action.uid).set('hasMoved', true)
-            // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
-            // rootTree.commit()
-            return
-        } case 'setHealth': {
-            return
-            // console.log('setting health of', action.uid)
-            // // debugger
-            // // let notFound = true
-            // const charCursor = scene.select('allCharacters').select(action.uid)
-            // const prevHealth = await charCursor.get('health')
-            // charCursor.set('health', typeof action.h === 'function' ? action.h(prevHealth) : action.h)
-            // const winner = checkWinner(vals(await scene.get('allCharacters')))
-            // if (winner === 'PC') scene.set('state', 'won')
-            // if (winner === 'NPC') scene.set('state', 'lost')
-
-            // // .allCharacters.find(c => c.id === action.id)
-            // // if (notFound) { console.error(`couldn't find character with id ${action.id}`); return }
-
-            // return
-        } case 'clearHasMoved': {
-            const cursor = scene.select('allCharacters')
-            for (const k of keys(await cursor.get())) {
-                cursor.select(k).set('hasMoved', false)
-            }
-            return
-        } case 'setSelectedCharacter': {
-            scene.set('selectedCharacter', action.c.uid)
-            return
-        } case 'setSelectedMove': {
+        case 'setSelectedMove': {
             scene.set('selectedMove', action.m)
             return
         } case 'fullReset': {
