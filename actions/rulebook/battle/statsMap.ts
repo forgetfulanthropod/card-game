@@ -292,7 +292,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         displayName: 'Skeleton Warrior',
         isPc: false,
         points: 15,
-        maxHealth: 54,
+        maxHealth: 10,
         damage: 2,
         moves: [
             { name: 'Sword Whack', types: ['BA'] },

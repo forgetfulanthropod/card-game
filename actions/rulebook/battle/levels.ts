@@ -1,5 +1,5 @@
 export const npcLevelStatsMap = {
-    skeleton: {
+    skeletonWarrior: {
         1: { maxHealth: 10, damage: 2 },
         2: { maxHealth: 20, damage: 4 },
         3: { maxHealth: 30, damage: 6 },
@@ -11,7 +11,7 @@ export const npcLevelStatsMap = {
         9: { maxHealth: 98, damage: 19 },
         10: { maxHealth: 109, damage: 21 },
     },
-    matcha: {
+    matchaGelatinCube: {
         1: { maxHealth: 15, damage: 2 },
         2: { maxHealth: 25, damage: 3 },
         3: { maxHealth: 39, damage: 4 },

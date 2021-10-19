@@ -48,7 +48,7 @@ export function BattleScene(): PixiContainer {
 
 
     function renewChildren() {
-        tl('renewing children')
+        console.log('renewing children')
         const ch = container.children
         container.removeChildren()
         for (const x of ch) { x.destroy() }

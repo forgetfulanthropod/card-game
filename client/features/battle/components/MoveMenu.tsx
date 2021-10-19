@@ -46,7 +46,7 @@ export default function MoveMenu(): JSX.Element {
             }}
             isSelected={sm.name === m.name}
         >
-            {m.name}
+            {m.name} ({m.types.toString()})
         </MoveButton>
         )}
     </MoveMenuDiv>

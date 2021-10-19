@@ -56,7 +56,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     // ---Sprites and containers---
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance })
+    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: characterMeta.effects })
 
     const sprites = makeSprites(args, characterMeta, onHeight)
     if (sprites == null) {
@@ -97,18 +97,21 @@ function Character(args: CharacterProps): PixiContainer {
 
     function onHeight(height: number) { aboveCharacterContainer.y = -height }
 
-    args.cursor.select('health').on('update', () => {
-        const value = args.cursor.select('health').get()
-        mainContainer.removeChild(healthBar)
+    function updateDeathAndHealth() {
+        const char = args.cursor.get()
+        if (char == null) return
 
-        if (value <= 0) {
+        if (char.health <= 0) {
             flyingContainer.removeChildren()
         } else {
-            healthBar = HealthBar({ value, max: characterMeta.maxHealth, stance: characterMeta.stance })
+            mainContainer.removeChild(healthBar)
+            healthBar = HealthBar({ value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
             mainContainer.addChild(healthBar)
         }
+    }
 
-    })
+    args.cursor.select('health').on('update', updateDeathAndHealth)
+    args.cursor.select('effects').on('update', updateDeathAndHealth)
 
     // const [isHovering, setIsHovering] = useState(false)
 
@@ -126,7 +129,13 @@ function Character(args: CharacterProps): PixiContainer {
                 if (result === 'remove')
                     PixiTicker.shared.remove(cb)
             })
-
+            const charDamage = damageMap.find(d => d.key === myId)?.damage ?? null
+            if (charDamage != null)
+                doFlashElement(
+                    aboveCharacterContainer,
+                    () => HitInfo({ damage: charDamage, isPoison: true }),
+                    { durationMs: SHOW_HIT_TIME }
+                )
         }
 
         if (defenders.findIndex(d => d === myId) > -1) {

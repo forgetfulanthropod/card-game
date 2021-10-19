@@ -8,7 +8,7 @@ import type {
     StanceName
 } from '@shared/index'
 
-import { statsMap } from '../../rulebook/battle'
+import { npcLevelStatsMap, statsMap } from '../../rulebook/battle'
 
 
 const BASE_WIDTH = 1920
@@ -24,7 +24,7 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + Math.random().toString().slice(3, 6) })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + Math.random().toString().slice(3, 6), level: 1 })),
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
@@ -101,16 +101,26 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         stance,
         hasMoved: false,
         health: stats.maxHealth,
+        effects: [],
     }
 }
-export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string }): CharacterMeta {
+export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     // console.log('args.name', args.name)
     // console.log('statsMap[args.name]', statsMap[args.name])
     // console.log('statsMap', statsMap)
+    const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
+
+    if (levelInfo != null) {
+        levelInfo.health = levelInfo.maxHealth
+        levelInfo.level = args.level
+    }
+
     return {
         ...statsMap[args.name],
+        health: statsMap[args.name].maxHealth,
+        ...(levelInfo ?? {}),
         uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
@@ -119,7 +129,8 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         screenY: scale * BASE_HEIGHT * args.y / 100,
         stance: 'neutral',
         hasMoved: false,
-        health: statsMap[args.name].maxHealth,
+        effects: [],
+        // health: 1,
     }
 }
 
