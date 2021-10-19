@@ -6,4 +6,5 @@ export const initialEntryState: EntryScene = {
     name: 'entry',
     selectedCharacters: [],
     selectedLevel: rulebook.dungeonLevels[0],
+
 }
