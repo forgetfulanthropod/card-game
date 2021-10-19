@@ -1,4 +1,4 @@
-import DungeonEntryPng from '../assets/temple_background.png'
+import DungeonEntryPng from '../assets/backgrounds/temple_background.png'
 import background from './background'
 import { GameMenu } from './GameMenu'
 import { LevelInfo } from './LevelInfo'

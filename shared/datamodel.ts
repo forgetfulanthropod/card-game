@@ -22,12 +22,7 @@ export interface Rulebook {
         displayName: string
         name: LocationName
     }>
-    dungeonLevels: {
-        name: string
-        num: number
-        pointLimit: number
-        modifier: number
-    }[]
+    dungeonLevels: DungeonLevel[]
     items: Record<ItemName, {
         name: ItemName
         displayName: string
@@ -101,3 +96,16 @@ export interface LearnableCharacterMove extends CharacterMove {
     minLevel: number
 }
 export type Door = 'A' | 'B' | 'C' | 'D'
+
+export interface DungeonLevel {
+    name: DungeonName
+    num: number
+    pointLimit: number
+    modifier: number
+}
+
+export type DungeonName =
+    | 'Hooligan’s Bluff'
+    | 'The Matcha Caves'
+    | 'Fort Skeleton'
+    | 'The Ninth Trash Hole of Hell'

@@ -1,17 +1,19 @@
+import type { NetworkEventEmitter } from '@shared/networkEvents'
+import { diff } from 'deep-diff'
+import isEqual from 'lodash/isEqual'
+
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
 import type { CharacterMeta, CompleteAttackData } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
-import type { NetworkEventEmitter } from '@shared/networkEvents'
-import { makeClientEventListener } from "@/util/makeClientEventListener"
-import { diff } from 'deep-diff'
-import isEqual from 'lodash/isEqual'
-import CaveVideo from '../assets/cave_main_1.webm'
+import { makeClientEventListener } from '@/util/makeClientEventListener'
+
+import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
+import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
 import type { PixiContainer } from './mypixi'
 import { Container } from './mypixi'
-
 
 
 export type Move$ = NetworkEventEmitter<'move', CompleteAttackData>
@@ -44,8 +46,12 @@ export function BattleScene(): PixiContainer {
         container.removeChildren()
         for (const x of ch) { x.destroy() }
         const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
+        const dungeonName = getBattleScene().get('dungeonName')
+        const backgroundArgs = dungeonName === 'The Matcha Caves' ?
+            { src: CaveVideo } :
+            { srcs: [backgrounds[dungeonName]] }
         const newChildren = [
-            background({ scale: 1, src: CaveVideo }),
+            background({ scale: 1, ...backgroundArgs }),
             ...childCursors.map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
