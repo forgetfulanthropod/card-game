@@ -21,7 +21,7 @@ export class FireCursor<Root extends Objectish, Sub = Root> {
     getK<K extends keyof Sub>(k: K): Sub[K] { return get(this.rootData, [...this.path, k]) }
     set(value: Sub): void { set(this.rootData, this.path, value) }
     setK<K extends keyof Sub>(key: K, value: Sub[K]): void {
-        console.log(`firecursor setting ${key} to ${JSON.stringify(value)}`)
+        // console.log(`firecursor setting ${key} to ${JSON.stringify(value)}`)
         // debugger
         set(this.rootData, [...this.path, key], value)
     }

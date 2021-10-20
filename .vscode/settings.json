@@ -3,12 +3,7 @@
         "titleBar.inactiveForeground": "#b8b8b8",
         "sideBar.background": "#a825ff3a",
         "sideBar.foreground": "#000000",
-        "activityBar.background": "#1C3314",
-        "tab.activeBorder": "#880000",
-        "titleBar.activeBackground": "#880000",
-        "titleBar.activeForeground": "#000000",
-        "statusBar.background": "#880000",
-        "statusBar.foreground": "#000000"
+        "activityBar.background": "#1C3314"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
@@ -71,5 +66,4 @@
     "colorTabs.titleBackground": true,
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
-    "window.title": "~[SERVER]~${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${activeEditorShort}${separator}${rootName}",
 }
