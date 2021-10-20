@@ -1,66 +1,62 @@
+import { diff } from 'deep-diff'
 import type { firestore } from 'firebase-admin'
-import ldGet from 'lodash/get'
+import { get, set, update } from 'lodash'
+// type Objectish = Record<unknown, unknown>
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Objectish { }
 
-// type Objectish = Record<string, unknown>
-// type PathsOf<Root, Path extends AllPaths<Root>> = AllPaths<DeepIndex<Root, Path>>
-export interface FireCursor<Root, Sub = Root> {
-    select<K extends keyof Sub>(k: K): FireCursor<Root, Sub[K]>
-    get(): Promise<Sub>
-    get<K extends keyof Sub>(k: K): Promise<Sub[K]>
-    set(v: Sub): Promise<void>
-    set<K extends keyof Sub>(k: K, v: Sub[K]): Promise<void>
-    apply(f: (prev: Sub) => Sub): Promise<void>
-    apply<K extends keyof Sub>(k: K, f: (prev: Sub[K]) => Sub[K]): Promise<void>
-    on(eventName: 'update', cb: (v: Sub) => void): void
+const config = {
+    logDiffOnFlush: false
 }
 
-// Probably should just export makeFBCursor<Root> and make the <Sub> stuff a private function.
-export function makeFBCursor<Root, Sub = Root>(
-    docRef: firestore.DocumentReference<Root>,
-    path: string[]): FireCursor<Root, Sub> {
-    return {
-        select<K extends keyof Sub>(k): FireCursor<Root, Sub[K]> {
-            const newPath = [...path, k as string]
-            return makeFBCursor<Root, Sub[K]>(docRef, newPath)
-        },
-        async get(k?) {
-            const data = (await docRef.get()).data()
-            const newPath = k == null ? path : [...path, k]
-            if (newPath.length === 0) { return data }
-            const result = ldGet(data, newPath)
-            return result
-        },
-        // https://stackoverflow.com/a/47296152
-        async set(keyOrValue, maybeVal?): Promise<void> {
-            if (maybeVal == null) {
-                const value = keyOrValue
-                if (path.length === 0) { await docRef.update(value) }
-                const keyString = path.join('.')
-                await docRef.update({ [keyString]: value })
-            } else {
-                const key = keyOrValue
-                const value = maybeVal
-                const keyString = [...path, key].join('.')
-                await docRef.update({ [keyString]: value })
-            }
-        },
-        async apply(keyOrFunc, maybeFunc?) {
-            const data = (await docRef.get()).data()
-            const [key, func] = maybeFunc == null ?
-                [null, keyOrFunc] :
-                [keyOrFunc, maybeFunc]
-            const newPath = key == null ? path : [...path, key as string]
-            const current = ldGet(data, newPath)
-            const newVal = func(current)
-            const keyString = newPath.join('.')
-            await docRef.update({ [keyString]: newVal })
-        },
-        on(_, cb) {
-            docRef.onSnapshot(
-                path.length === 0 ?
-                    // TODO: explicit cast shouldn't be necessary
-                    doc => { cb(doc.data() as unknown as Sub) } :
-                    doc => { cb(ldGet(doc.data(), path)) })
-        },
+export class FireCursor<Root extends Objectish, Sub = Root> {
+    constructor(private docRef: firestore.DocumentReference<Root>,
+        private path: string[],
+        public rootData: Root) { }
+    select<K extends keyof Sub>(k: K): FireCursor<Root, Sub[K]> {
+        const newPath = [...this.path, k as string]
+        return new FireCursor<Root, Sub[K]>(this.docRef, newPath, this.rootData)
     }
+    get(): Sub { return get(this.rootData, this.path) }
+    getK<K extends keyof Sub>(k: K): Sub[K] { return get(this.rootData, [...this.path, k]) }
+    set(value: Sub): void { set(this.rootData, this.path, value) }
+    setK<K extends keyof Sub>(key: K, value: Sub[K]): void {
+        // console.log(`firecursor setting ${key} to ${JSON.stringify(value)}`)
+        // debugger
+        set(this.rootData, [...this.path, key], value)
+    }
+    apply(func: (prev: Sub) => Sub): void { update(this.rootData, this.path, func) }
+    applyK<K extends keyof Sub>(key: K, func: (prev: Sub[K]) => Sub[K]): void { update(this.rootData, [...this.path, key], func) }
+    async flush(): Promise<void> {
+        // TODO?: update with diff instead of full thing?
+        if (config.logDiffOnFlush) {
+            const prev = (await this.docRef.get()).data()
+            const differences = diff(prev, this.rootData)
+            console.log('flushing data with differences...', JSON.stringify(differences))
+        }
+        await this.docRef.set(this.rootData)
+    }
+}
+// TODO:
+// export type FireCursor = typeof FireCursor
+
+// declare global {
+//     interface globalThis {
+//         rootCursorInstance: FireCursor
+//     }
+// }
+
+export async function makeRootFireCursor<Root>(docRef: firestore.DocumentReference<Root>): Promise<FireCursor<Root, Root>> {
+    // @ts-ignore
+    if (global.rootCursorInstance != null) {
+        // TODO: delete old fields from global.rootCursorInstance before object.assign
+        // @ts-ignore
+        Object.assign(global.rootCursorInstance.rootData, (await docRef.get()).data())
+        // @ts-ignore
+        return global.rootCursorInstance
+    }
+    // @ts-ignore
+    global.rootCursorInstance = new FireCursor(docRef, [], (await docRef.get()).data())
+    // @ts-ignore
+    return global.rootCursorInstance
 }

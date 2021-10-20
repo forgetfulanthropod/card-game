@@ -8,8 +8,9 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
         { key: defender.uid, damage: getDamage(attackData) }
     ))
 
-    const attackerDOT = attackData.attacker.effects.find(e => e.type.indexOf('DOT') > -1)
+    const attackerDOT = attackData.attacker.effects.find(e => e.type && e.type.indexOf('DOT') > -1)
     if (attackerDOT != null) {
+        if (attackerDOT.damagesByRound == null || attackerDOT.remainingRounds == null) { throw Error('bad attack effect data') }
         const damage = attackerDOT.damagesByRound[attackerDOT.damagesByRound.length - attackerDOT.remainingRounds]
         kds.push({ key: attackData.attacker.uid, damage })
     }
@@ -28,14 +29,14 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
     if (moveTypeDOT != null) {
         const moveMeta = rulebook.moveModiferMap[moveTypeDOT]
 
+        if (moveMeta.effectMultipliers === undefined) { throw Error('bad move meta') }
         return attackData.defenders.map(d => ({
             key: d.uid,
             effect: {
                 type: moveTypeDOT as EffectType,
-                remainingRounds: moveMeta.effectMultipliers.length - 1,
+                remainingRounds: moveMeta.effectMultipliers!.length - 1,
                 damagesByRound: [
-                    ...moveMeta.effectMultipliers
-                        .map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
+                    ...moveMeta.effectMultipliers!.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
                 ]
             }
         }))

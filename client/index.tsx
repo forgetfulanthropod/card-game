@@ -14,11 +14,11 @@ import { attachFirestoreListener } from './fire/firestoreListener'
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
 const config = {
-    log: false
+    log: true
 }
 
 function log(...args: unknown[]) {
-    if (config.log) { console.log(args) }
+    if (config.log) { console.log(...args) }
 }
 
 const state = {

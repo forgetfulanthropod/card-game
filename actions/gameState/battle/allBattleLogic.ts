@@ -28,38 +28,35 @@ function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
 export async function startGame_(): Promise<void> {
     const scene = await getBattleScene('alice')
-    if (await scene.get('state') === 'in battle') {
+    if (scene.getK('state') === 'in battle') {
         // already in game
         console.warn('already started game')
         return
     }
-    await scene.set('state', 'in battle')
+    scene.setK('state', 'in battle')
     resetRound(scene)
+    await scene.flush()
 }
 
-export async function resetRound(scene: BattleCursor): Promise<void> {
+export function resetRound(scene: BattleCursor): void {
     if (DEBUG) tl('resetting moves')
     const cursor = scene.select('allCharacters')
-    await clearAllMoves(cursor)
+    keys(cursor.get())
+        .map((k) => cursor.select(k).setK('hasMoved', false))
 
     const playerStartsRound = Math.random() < 0.5
-    await scene.set('isPlayerTurn', playerStartsRound)
+    scene.setK('isPlayerTurn', playerStartsRound)
+    scene.flush()
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
         setTimeout(() => doNpcMove('first move of round'), DEFAULT_WAIT)
     }
 }
 
-async function clearAllMoves(cursor: FireCursor<Gamestate, Record<string, CharacterMeta>>) {
-    await Promise.all(
-        keys(await cursor.get())
-            .map(async (k) => await cursor.select(k).set('hasMoved', false)))
-}
-
 async function doNpcMove(_reason?: string) {
     const scene = await getBattleScene('alice')
     tl(`npcMove(reason: ${_reason})`)
-    const { allCharacters, isPlayerTurn } = await scene.get()
+    const { allCharacters, isPlayerTurn } = scene.get()
     const { alivePcs, aliveNpcs } = getLivingChars(allCharacters)
     const prefix = 'npc. not moving cuz '
     if (checkWinner(vals(allCharacters)) != null) {
@@ -76,7 +73,7 @@ async function doNpcMove(_reason?: string) {
     }
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
-        // await scene.set('isPlayerTurn', true)
+        // await scene.setK('isPlayerTurn', true)
         return
     }
     const move = getNpcMove(vals(allCharacters))
@@ -86,7 +83,7 @@ async function doNpcMove(_reason?: string) {
 
 export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void> {
     const scene = await getBattleScene('alice')
-    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = await scene.get()
+    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
     const { alivePcs } = getLivingChars(allCharacters)
@@ -108,7 +105,7 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
             warn('selected char has already attacked')
             return
         }
-        await scene.set('selectedCharacter', clicked.uid)
+        scene.setK('selectedCharacter', clicked.uid)
         return
     }
 
@@ -136,6 +133,7 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
     await handleMove(scene, allCharacters, ad)
 
+    await scene.flush()
 }
 
 
@@ -155,19 +153,19 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
 
     // Update health, effects, and hasMoved
 
-    await applyMove(scene, allCharacters, attackData)
+    applyMove(scene, allCharacters, attackData)
 
     // Check battle over
 
-    const { allCharacters: newAllCharacters, selectedCharacter } = await scene.get()
+    const { allCharacters: newAllCharacters, selectedCharacter } = scene.get()
     const winner = checkWinner(vals(newAllCharacters))
 
     if (winner === 'PC') {
-        await scene.set('state', 'won')
+        scene.setK('state', 'won')
         putUpDoors(scene)
         return
     } else if (winner === 'NPC') {
-        await scene.set('state', 'lost')
+        scene.setK('state', 'lost')
         return
     }
 
@@ -182,6 +180,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
 
     // DO NEXT TURN
 
+
     const { alivePcs, aliveNpcs } = getLivingChars(newAllCharacters)
 
     if (attackData.attacker.isPc) {
@@ -191,19 +190,24 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
             warn('no unmoved PC')
         } else {
             tl(`selecting character ${newPc.uid}`)
-            scene.set('selectedCharacter', newPc.uid) // no await necessary
+            scene.setK('selectedCharacter', newPc.uid) // no await necessary
         }
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
-            await scene.set('isPlayerTurn', false)
+            console.log('will be NPC turn')
+            scene.setK('isPlayerTurn', false)
+            await scene.flush()
             setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
-            await scene.set('isPlayerTurn', true)
+            console.log('will be player turn')
+            scene.setK('isPlayerTurn', true)
             return
         }
         if (aliveNpcs.some(c => !c.hasMoved)) {
+            console.log('will be player turn')
+            await scene.flush()
             setTimeout(() => {
                 doNpcMove('no unmoved PC and NPC turn')
             }, DEFAULT_WAIT)

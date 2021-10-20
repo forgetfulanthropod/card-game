@@ -38,7 +38,7 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
 }
 
 export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args.chosen)
+    const allCharacters = makeCharacters(args?.chosen)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -56,7 +56,7 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
     if (selectedCharacter == null) throw Error('no player characters!')
     return Object.freeze({
         name: 'battle',
-        dungeonName: args.dungeonName ?? 'The Matcha Caves',
+        dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 0,
         state: 'not started',
         isPlayerTurn: Math.random() < .5,
@@ -110,6 +110,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     // console.log('args.name', args.name)
     // console.log('statsMap[args.name]', statsMap[args.name])
     // console.log('statsMap', statsMap)
+    // @ts-ignore
     const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
 
     if (levelInfo != null) {

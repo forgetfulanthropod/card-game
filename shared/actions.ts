@@ -1,4 +1,4 @@
-import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
+import type { CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
 import type { OwnedCharacter } from './datamodel'
 
 // NOTE: if we keep all args as strings then we can test in URL bar more easily
@@ -73,7 +73,7 @@ type Size = {
     height: number
 }
 
-type Setter<T> = T | ((old: T) => T)
+// type Setter<T> = T | ((old: T) => T)
 export type Action =
     // | { a: 'setIsPlayerTurn', v: boolean }
     // | { a: 'setBattleHasBegun' }

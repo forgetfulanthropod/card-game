@@ -11,28 +11,29 @@ const dispatch: Dispatch = async (action) => {
     const scene = await getBattleScene('alice')
     switch (action.a) {
         case 'setSelectedMove': {
-            scene.set('selectedMove', action.m)
-            return
+            scene.setK('selectedMove', action.m)
+            break
         } case 'fullReset': {
             scene.set(makeBattleState())
-            return
+            break
         } case 'updateScreenSize': {
             const cursor = scene.select('allCharacters')
-            for (const k of keys(await cursor.get())) {
+            for (const k of keys(cursor.get())) {
                 const cu = cursor.select(k)
-                const ch = await cu.get()
-                cu.set('screenX', ch.x * action.size.width / 100)
-                cu.set('screenY', ch.y * action.size.height / 100)
+                const ch = cu.get()
+                cu.setK('screenX', ch.x * action.size.width / 100)
+                cu.setK('screenY', ch.y * action.size.height / 100)
             }
-            return
+            break
         } case 'setIsBasicLoaded': {
-            scene.set('isBasicLoaded', action.v)
-            return
+            scene.setK('isBasicLoaded', action.v)
+            break
         } case 'setIsDeluxeLoaded': {
-            scene.set('isDeluxeLoaded', action.v)
-            return
+            scene.setK('isDeluxeLoaded', action.v)
+            break
         } default:
             throw new Error(`unknown action ${JSON.stringify(action)}`)
     }
+    await scene.flush()
 }
 export default dispatch
