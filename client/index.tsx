@@ -7,7 +7,7 @@ import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
-import { fillBothTrees, onGamestate, onRulebook } from './data/rootTree'
+import { fillBothTrees, onGamestate } from './data/rootTree'
 import { maybeInitializeApp } from './fire'
 import { attachFirestoreListener } from './fire/firestoreListener'
 
@@ -35,7 +35,7 @@ loadAssets(
     function onDeluxe() { maybeStart('deluxe') }
 )
 
-onRulebook(() => maybeStart('rulebook'))
+// onRulebook(() => maybeStart('rulebook'))
 onGamestate(() => maybeStart('gamestate'));
 
 (async function makeTheUser() {
@@ -53,7 +53,7 @@ async function maybeStart<K extends keyof typeof state>(k: K) {
         log(`loaded: ${k}`)
     }
     state[k] = true
-    if (state.basic && state.deluxe && state.rulebook && state.gamestate && state.createdUser && !state.started) {
+    if (state.basic && state.deluxe && state.gamestate && state.createdUser && !state.started) {
         log('everything loaded up')
         log('attaching firestore listener')
         attachFirestoreListener()

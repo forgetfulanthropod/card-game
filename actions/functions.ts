@@ -52,7 +52,7 @@ const serverActions: ServerActions = {
         ])
         await resetRound(scene)
     },
-    getRulebook: () => { return rulebook },
+    // getRulebook: () => { return rulebook },
     startGame: async () => { startGame_() },
     doCharacterAction: async ({ uid }) => { doCharacterAction_(uid) },
     makeNewUser: async (args) => {
@@ -79,7 +79,7 @@ export const echo = wrapper(serverActions.echo)
 // export const getOwnedCharacters = wrapper(serverActions.getOwnedCharacters)
 export const changeScene = wrapper(serverActions.changeScene)
 export const chooseDoor = wrapper(serverActions.chooseDoor)
-export const getRulebook = wrapper(serverActions.getRulebook)
+// export const getRulebook = wrapper(serverActions.getRulebook)
 export const startGame = wrapper(serverActions.startGame)
 export const doCharacterAction = wrapper(serverActions.doCharacterAction)
 export const makeNewUser = wrapper(serverActions.makeNewUser)
