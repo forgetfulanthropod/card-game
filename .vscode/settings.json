@@ -30,6 +30,11 @@
     "files.exclude": {
         "**/.keep": true,
         "actions/lib": true,
+        "node_modules/": true,
+        "actions/node_modules/": true,
+        "pnpm-lock.json": true,
+        "actions/pnpm-lock.json": true,
+        "build/": true,
     },
     "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {
