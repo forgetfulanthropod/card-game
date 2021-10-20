@@ -6,26 +6,23 @@ import type { BattleCursor } from '@/util/getters'
 
 import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
 /** Applies hasmoved, health, and effects */
-export default async function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): Promise<void> {
+export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): void {
     const allChars = scene.select('allCharacters')
 
-    const promises = [
-        allChars.select(attackData.attacker.uid).set('hasMoved', true),
-        ...getCharacterKeysAndDamages(attackData).map(async ({ key, damage }) => {
-            const newHealth = lastAllChars[key].health - damage
-            return await allChars.select(key).set('health', newHealth)
-        }),
-        allChars.select(attackData.attacker.uid).apply('effects', e => {
-            return e
-                .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
-                .filter(e => e.remainingRounds > 0)
-        }),
-        // reduce remaining rounds, clear exhausted effects
-        ...getCharacterKeysAndEffects(attackData).map(async ({ key, effect: newEffect }) =>
-            await allChars.select(key).apply('effects', prev => updateEffect(newEffect, prev))
-        )
-    ]
-    await Promise.all(promises)
+    allChars.select(attackData.attacker.uid).setK('hasMoved', true)
+    getCharacterKeysAndDamages(attackData).forEach(({ key, damage }) => {
+        const newHealth = lastAllChars[key].health - damage
+        allChars.select(key).setK('health', newHealth)
+    })
+    allChars.select(attackData.attacker.uid).applyK('effects', e => {
+        return e
+            .map(e => ({ ...e, remainingRounds: e.remainingRounds! - 1 }))
+            .filter(e => e.remainingRounds > 0)
+    })
+    // reduce remaining rounds, clear exhausted effects
+    getCharacterKeysAndEffects(attackData).forEach(({ key, effect: newEffect }) =>
+        allChars.select(key).applyK('effects', prev => updateEffect(newEffect, prev))
+    )
 }
 
 function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {
@@ -34,8 +31,8 @@ function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {
         const prevEffect = prev[prevTypeIndex]
         const mergedEffect = {
             type: newEffect.type,
-            remainingRounds: prevEffect.remainingRounds + newEffect.remainingRounds,
-            damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
+            remainingRounds: prevEffect.remainingRounds! + newEffect.remainingRounds!,
+            damagesByRound: [...prevEffect.damagesByRound!, ...newEffect.damagesByRound!],
         }
         return [...prev.slice(0, prevTypeIndex), mergedEffect, ...prev.slice(prevTypeIndex + 1)]
     }

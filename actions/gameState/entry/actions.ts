@@ -7,7 +7,7 @@ export async function changeDungeon({ direction }: { direction: -1 | 1 }): Promi
     const levels = rulebook.dungeonLevels
     const scene = await getEntryScene('alice')
 
-    let l = (await scene.select('selectedLevel').get()).num + direction
+    let l = (scene.select('selectedLevel').get()).num + direction
 
     if (l < 1) {
         l = levels.length
@@ -17,27 +17,29 @@ export async function changeDungeon({ direction }: { direction: -1 | 1 }): Promi
 
     scene.select('selectedCharacters').set([])
     scene.select('selectedLevel').set(levels[l - 1])
+    await scene.flush()
 }
 
 export async function addSelected(args: { character: OwnedCharacter }): Promise<void> {
     const c = args.character
     const scene = await getEntryScene('alice')
 
-    const allCharacters = await scene.select('selectedCharacters').get()
+    const allCharacters = scene.select('selectedCharacters').get()
 
     const indexInselected = allCharacters.findIndex(character => c.uid === character.uid)
     if (indexInselected !== -1)
-        scene.apply('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
+        scene.applyK('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
     else {
         const totalPoints = [...allCharacters, c]
             .reduce((acc, curr) => {
                 return acc + curr.points
             }, 0)
 
-        const pointLimit = await scene.select('selectedLevel').select('pointLimit').get()
+        const pointLimit = scene.select('selectedLevel').select('pointLimit').get()
 
         if (totalPoints <= pointLimit)
-            scene.apply('selectedCharacters', sel => [...sel, c])
+            scene.applyK('selectedCharacters', sel => [...sel, c])
     }
+    await scene.flush()
 
 }

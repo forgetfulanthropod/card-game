@@ -71,5 +71,5 @@
     "colorTabs.titleBackground": true,
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
-    "window.title": "~[SERVER]~${separator}${activeEditorShort}${separator}${rootName}",
+    "window.title": "~[SERVER]~${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${separator}${activeEditorShort}${separator}${rootName}",
 }
