@@ -33,8 +33,8 @@ export class FireCursor<Root extends Objectish, Sub = Root> {
             const prev = (await this.docRef.get()).data()
             const differences = diff(prev, this.rootData)
             console.log('flushing data with differences...', JSON.stringify(differences))
-            await this.docRef.set(this.rootData)
         }
+        await this.docRef.set(this.rootData)
     }
 }
 // TODO:
