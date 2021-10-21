@@ -13,8 +13,8 @@ import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
 
-const TIME_AFTER_PLAYER_MOVE = 1
-const DEFAULT_WAIT = 1
+const TIME_AFTER_PLAYER_MOVE = 1000
+const DEFAULT_WAIT = 1000
 const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 const DEBUG = false
 
