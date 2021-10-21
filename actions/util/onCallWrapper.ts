@@ -1,24 +1,25 @@
-
-
 const config = {
     log: false,
 }
 
 function makeRandId() { return Math.random().toString().slice(2, 6) }
-
-export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): HttpsFunction {
-    return https.onCall(async (data, _context) => {
+export type HttpsFunction = unknown
+const https = {
+    onRequest(u: unknown) {
+        // TODO
+    }
+}
+export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)) {
+    return https.onRequest(async (request: { query: Args }, response: { send(u: unknown): void }) => {
         const randId = makeRandId()
-        const startTime = Date.now()
-        if (config.log) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(data[0])}`) }
+        if (config.log) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
         try {
-            const result = await f(data[0])
-            const elapsed = Date.now() - startTime
-            if (config.log) { console.log(`    ${f.name}#${randId} took ${elapsed / 1000} seconds and is responding with ${JSON.stringify(result)}`) }
-            return { status: 'success', result }
+            const result = await f(request.query as unknown as Args)
+            if (config.log) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
+            response.send({ status: 'success', result })
         } catch (e) {
             console.error(`exception occured in client call to ${f.name}: `, e)
-            return { status: 'error', message: JSON.stringify(e) }
+            response.send({ status: 'error', message: JSON.stringify(e) })
         }
     })
 }

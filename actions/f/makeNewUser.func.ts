@@ -1,4 +1,5 @@
 
+import { getRootCursor } from '@/util/getters'
 import { initialGameState } from '../gameState/gameState'
 import { onCallWrapper } from '../util/onCallWrapper'
 
@@ -6,5 +7,5 @@ export default onCallWrapper(async (args: { username: 'alice' }): Promise<void> 
     // TODO: I'm not sure if this fully resets the user
     // await sleep(2000)
     console.log(`adding user ${args.username} with initial gamestate`)
-    await datastore().collection('users').doc(args.username).set(initialGameState)
+    getRootCursor().select('users').select(args.username).set(initialGameState)
 })

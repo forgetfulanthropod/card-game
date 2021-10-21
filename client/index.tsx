@@ -55,7 +55,7 @@ async function maybeStart<K extends keyof typeof state>(k: K) {
     state[k] = true
     if (state.basic && state.deluxe && state.gamestate && state.createdUser && !state.started) {
         log('everything loaded up')
-        log('attaching datastore listener')
+        log('attaching server data listener')
         attachServerListener()
         // log('changing scene')
         // await changeScene({ newSceneName: 'battle' })

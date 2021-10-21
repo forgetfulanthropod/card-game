@@ -23,10 +23,16 @@ export async function getBattleScene(username: 'alice'): Promise<BattleCursor> {
     return scene as BattleCursor
 }
 
-export const getGameStateCursor = async function getGameStateCursor(username: 'alice'): Promise<DataCursor<Gamestate>> {
-    const docRef = datastore().collection('users').doc(username) as datastore.DocumentReference<Gamestate>
-    if (!(await docRef.get()).exists) {
-        throw Error('could not find user doc')
+export function getGameStateCursor(username: 'alice'): DataCursor<Gamestate> {
+    return makeRootDataCursor()
+}
+
+interface RootTreeShit {
+    users: {
+        alice: Gamestate
     }
-    return await makeRootDataCursor(docRef)
+    testCounters: { counter0: number }
+}
+export function getRootCursor(): DataCursor<RootTreeShit> {
+    return null as unknown as DataCursor<RootTreeShit>
 }
