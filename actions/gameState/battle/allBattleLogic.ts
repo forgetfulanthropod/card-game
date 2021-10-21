@@ -131,10 +131,15 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
 
     const defenders = [clicked]
-    const moveModifier = moveModifiers[selectedMove.types[0]]
-    const numTargets = typeof moveModifier.numTargets === 'number' ?
-        moveModifier.numTargets :
-        moveModifier.numTargets[moveModifier.numTargets.length - 1]
+    let numTargets = 1
+    selectedMove.types
+        .map(t => moveModifiers[t])
+        .forEach(moveModifier => {
+            const numForMove = typeof moveModifier.numTargets === 'number' ?
+                moveModifier.numTargets :
+                moveModifier.numTargets[moveModifier.numTargets.length - 1]
+            if (numForMove > numTargets) numTargets = numForMove
+        })
     if (numTargets > 1) {
         for (let i = 1; i < numTargets; i++) {
             const closest = getClosestAlive(vals(allCharacters), clicked, i)
