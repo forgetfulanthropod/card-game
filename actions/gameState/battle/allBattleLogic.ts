@@ -34,11 +34,11 @@ export async function startGame_(): Promise<void> {
         return
     }
     scene.setK('state', 'in battle')
-    resetRound(scene)
-    await scene.flush()
+    await resetRound(scene)
+    // await scene.flush()
 }
 
-export function resetRound(scene: BattleCursor): void {
+export async function resetRound(scene: BattleCursor): Promise<void> {
     if (DEBUG) tl('resetting moves')
     const cursor = scene.select('allCharacters')
     keys(cursor.get())
@@ -46,10 +46,13 @@ export function resetRound(scene: BattleCursor): void {
 
     const playerStartsRound = Math.random() < 0.5
     scene.setK('isPlayerTurn', playerStartsRound)
-    scene.flush()
+    // await scene.flush()
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
-        setTimeout(() => doNpcMove('first move of round'), DEFAULT_WAIT)
+        // await sleep(DEFAULT_WAIT)
+        await doNpcMove('first move of round')
+    } else {
+        await scene.flush()
     }
 }
 
@@ -133,7 +136,7 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
     await handleMove(scene, allCharacters, ad)
 
-    await scene.flush()
+    // await scene.flush()
 }
 
 
@@ -174,7 +177,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
 
     if (!isMoveAvailable) {
-        resetRound(scene)
+        await resetRound(scene)
         return
     }
 
@@ -196,23 +199,26 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be NPC turn')
             scene.setK('isPlayerTurn', false)
-            await scene.flush()
-            setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
+            // await scene.flush()
+            // await sleep(TIME_AFTER_PLAYER_MOVE + 500)
+            await doNpcMove('NPC has extra turns')
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
             console.log('will be player turn')
             scene.setK('isPlayerTurn', true)
-            return
+            // return
         }
-        if (aliveNpcs.some(c => !c.hasMoved)) {
+        else if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be player turn')
-            await scene.flush()
-            setTimeout(() => {
-                doNpcMove('no unmoved PC and NPC turn')
-            }, DEFAULT_WAIT)
+            // await scene.flush()
+            // await sleep(DEFAULT_WAIT)
+            await doNpcMove('no unmoved PC and NPC turn')
+            // setTimeout(() => {
+            // }, DEFAULT_WAIT)
         }
     }
+    await scene.flush()
 }
 
 

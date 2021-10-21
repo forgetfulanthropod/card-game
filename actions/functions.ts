@@ -52,7 +52,7 @@ const serverActions: ServerActions = {
         scene.setK('roomsPassed', scene.getK('roomsPassed') + 1)
         scene.applyK('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
         scene.setK('state', 'in battle')
-        resetRound(scene)
+        await resetRound(scene)
         await scene.flush()
     },
     getRulebook: () => { return rulebook },
@@ -76,7 +76,7 @@ const serverActions: ServerActions = {
             throw Error('exitDungeon callede when not in a battle scene')
         }
         gameState.select('scene').set(initialEntryState)
-        gameState.flush()
+        await gameState.flush()
     }
 }
 
@@ -137,7 +137,3 @@ function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Arg
 }
 
 const makeRandId = () => Math.random().toString().slice(2, 5)
-
-const _sleep = (milliseconds: number): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-}
