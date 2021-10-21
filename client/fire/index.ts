@@ -19,6 +19,7 @@ export const maybeInitializeApp = memoize(function maybeInitializeApp(): { funct
     const functions = getFunctions(app)
     const db = getFirestore()
     if (process.env.CLIENT_IS_LOCAL === 'yes') {
+        console.log('CLIENT_IS_LOCAL')
         connectFunctionsEmulator(functions, 'localhost', 5001)
         connectFirestoreEmulator(db, 'localhost', 8080)
     }

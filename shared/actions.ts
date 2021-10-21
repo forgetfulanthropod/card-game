@@ -18,6 +18,7 @@ type StartGame = (args: Empty) => void
 type DoCharacterAction = (args: { uid: CharacterUid }) => void
 type MakeNewUser = (args: { username: 'alice' }) => void
 type ExitDungeon = (args: Empty) => void
+type IncrementTestCounter = (args: Empty) => void
 export type Dispatch = (action: Action) => Promise<void>
 export interface ServerActions {
     hello: Hello
@@ -34,6 +35,7 @@ export interface ServerActions {
     changeDungeon: ChangeDungeon
     addSelected: AddSelected
     exitDungeon: ExitDungeon
+    incrementTestCounter: IncrementTestCounter
 }
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
@@ -52,6 +54,7 @@ export interface ClientActions {
     changeDungeon: Caller<ChangeDungeon>
     addSelected: Caller<AddSelected>
     exitDungeon: Caller<ExitDungeon>
+    incrementTestCounter: Caller<IncrementTestCounter>
 }
 
 
