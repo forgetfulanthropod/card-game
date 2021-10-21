@@ -34,5 +34,5 @@ export interface RootTreeShit {
     testCounters: { counter0: number }
 }
 export function getRootCursor(): DataCursor<RootTreeShit> {
-    return null as unknown as DataCursor<RootTreeShit>
+    return makeRootDataCursor()
 }

@@ -5,19 +5,22 @@
         "build": "rm -rf lib && tsc",
         "esbuild": "rm -rf lib && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
         "parcel": "rm -rf lib && parcel build",
-        "minify": "uglifyjs lib/actions/index.js > lib/actions/uglyindex.js"
+        "minify": "uglifyjs lib/index.js > lib/uglyindex.js"
     },
     "engines": {
         "node": "14"
     },
-    "main": "lib/actions/index.js",
+    "source": "index.ts",
+    "main": "lib/index.js",
     "dependencies": {
         "baobab": "^2.6.1",
         "deep-diff": "^1.0.2",
         "eventemitter3": "^4.0.7",
+        "express": "^4.17.1",
         "lodash": "^4.17.21"
     },
     "devDependencies": {
+        "@types/express": "^4.17.13",
         "typescript": "^4.4.4"
     },
     "private": true
