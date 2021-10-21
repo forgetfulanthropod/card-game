@@ -10,6 +10,7 @@
     },
     "main": "lib/actions/index.js",
     "dependencies": {
+        "better-firebase-functions": "^3.4.1",
         "deep-diff": "^1.0.2",
         "eventemitter3": "^4.0.7",
         "firebase-admin": "^10.0.0",
