@@ -6,7 +6,7 @@ import { getBattleScene } from '../util/getters'
 import { objFilter } from '../util/objectMethods'
 import { onCallWrapper } from '../util/onCallWrapper'
 
-export default onCallWrapper(async (args: { door: Door }): Promise<void> => {
+export default onCallWrapper(async function chooseDoor(args: { door: Door }): Promise<void> {
     const scene = await getBattleScene('alice')
     const room = makeRoom({
         door: args.door, dungeonName: 'cool dungeon', roomsPassed: scene.getK('roomsPassed')

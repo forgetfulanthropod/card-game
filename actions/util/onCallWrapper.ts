@@ -1,3 +1,4 @@
+import { app } from '../index'
 const config = {
     log: false,
 }
@@ -9,8 +10,8 @@ const https = {
         // TODO
     }
 }
-export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)) {
-    return https.onRequest(async (request: { query: Args }, response: { send(u: unknown): void }) => {
+export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): void {
+    app.get('/' + f.name, async (request, response) => {
         const randId = makeRandId()
         if (config.log) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
         try {

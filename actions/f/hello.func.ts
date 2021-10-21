@@ -1,2 +1,2 @@
 import { onCallWrapper } from '../util/onCallWrapper'
-export default onCallWrapper(() => { return 'hello' })
+export default onCallWrapper(function hello() { return 'hello' })

@@ -5,7 +5,7 @@ import { rulebook } from '../rulebook/index'
 import { getEntryScene, getGameStateCursor } from '../util/getters'
 import { onCallWrapper } from '../util/onCallWrapper'
 
-export default onCallWrapper(async (args: { newSceneName: SceneName }): Promise<void> => {
+export default onCallWrapper(async function changeScene(args: { newSceneName: SceneName }): Promise<void> {
     console.log('changing scene to', args.newSceneName)
     const tree = await getGameStateCursor('alice')
     if (args.newSceneName === 'battle') {

@@ -1,6 +1,8 @@
 import type { OwnedCharacter } from '@shared/datamodel'
 
-import { addSelected } from '../gameState/entry/actions'
+import { addSelected as addSelected_ } from '../gameState/entry/actions'
 import { onCallWrapper } from '../util/onCallWrapper'
 
-export default onCallWrapper((args: { character: OwnedCharacter }) => addSelected(args))
+export default onCallWrapper(function addSelected(args: { character: OwnedCharacter }) {
+    return addSelected_(args)
+})
