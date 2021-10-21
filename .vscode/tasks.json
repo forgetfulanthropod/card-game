@@ -29,7 +29,10 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"group": "actions",
+			}
 		},
 		{
 			"label": "tsc client",
@@ -39,19 +42,28 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			],
-			"group": "build"
+			"group": "build",
+			"presentation": {
+				"group": "client",
+			}
 		},
 		{
 			"label": "esbuild client",
 			"type": "npm",
 			"script": "start",
 			"problemMatcher": [],
+			"presentation": {
+				"group": "client",
+			}
 		},
 		{
 			"label": "run emulator",
 			"type": "npm",
 			"script": "emulate",
 			"problemMatcher": [],
+			"presentation": {
+				"group": "actions",
+			}
 		},
 	]
 }
