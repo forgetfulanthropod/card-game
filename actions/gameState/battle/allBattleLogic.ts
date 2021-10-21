@@ -50,9 +50,8 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     if (!playerStartsRound) {
         // await sleep(DEFAULT_WAIT)
         await doNpcMove('first move of round')
-    } else {
-        await scene.flush()
     }
+    await scene.flush()
 }
 
 async function doNpcMove(_reason?: string) {
@@ -96,10 +95,11 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
     if (!isPlayerTurn) {
         warn('not player turn')
-        setTimeout(() => {
-            if (!scene.select('isPlayerTurn').get())
-                doNpcMove('NPC has extra turns')
-        }, NOT_YOUR_TURN_REJECTION_WAIT)
+        if (!scene.getK('isPlayerTurn')) {
+            // await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
+            // TODO: uncomment below?
+            // await doNpcMove('NPC has extra turns')
+        }
         return
     }
     if (alivePcs.every(c => c.hasMoved)) {
