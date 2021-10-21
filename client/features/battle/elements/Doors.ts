@@ -14,7 +14,7 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
         const text = args?.descriptions?.[i] != null &&
             Text({
                 text: args.descriptions[i],
-                x: (i * 1.5 + 1) * doorWidth,
+                x: (i * 1.15 + .5) * doorWidth,
                 y: BASE_HEIGHT / 2,
                 anchor: [.5, 0],
                 width: doorWidth,
