@@ -47,7 +47,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
     if (args.door === 'random') {
         return {
             modifier: -1,
-            enemies: mapToObj(sampleSize(npcNames, randInt(0, 5)), name => {
+            enemies: mapToObj(sampleSize(npcNames, randInt(1, 5)), name => {
                 const uid = makeUid()
                 return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: 1 })]
             })
