@@ -32,10 +32,7 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
 function bindGamestate(app: PixiApplication) {
     let lastScene: PixiContainer | null = null
 
-    //@ts-ignore
     document.body.style.cursor = 'pointer'
-    console.log({ cursor: `url('${pointer}')` })
-    //@ts-ignore
     document.body.style.cursor = `url('${pointer}'), pointer`
 
     const sceneTypeCursor = getScene().select('name')
