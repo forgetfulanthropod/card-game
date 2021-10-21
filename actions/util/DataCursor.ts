@@ -1,4 +1,6 @@
+import { Gamestate, Immutable, MyBaobab, MyCursor } from '@shared/index'
 import { get, set, update } from 'lodash'
+import { RootTreeShit } from './getters'
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Objectish { }
@@ -14,32 +16,18 @@ class CursorRoot<Root extends Objectish> {
     ) { }
 }
 
-export class DataCursor<Root extends Objectish, Sub = Root> {
-    constructor(public R: CursorRoot<Root>,
-        private path: string[],
-    ) { }
-    select<K extends keyof Sub>(k: K): DataCursor<Root, Sub[K]> {
-        const newPath = [...this.path, k as string]
-        return new DataCursor<Root, Sub[K]>(this.R, newPath)
+export class DataCursor<Root extends Objectish, Sub = Root> extends MyCursor<Sub> {
+    constructor(private boababCursor: MyCursor<Sub>) {
+        super()
     }
-    get(): Sub { return get(this.R.data, this.path) }
-    getK<K extends keyof Sub>(k: K): Sub[K] { return get(this.R.data, [...this.path, k]) }
-    set(value: Sub): void {
-        this.R.changeMade = true
-        set(this.R.data, this.path, value)
-    }
+    getK<K extends keyof Sub>(k: K): Sub[K] { return this.get(k) }
     setK<K extends keyof Sub>(key: K, value: Sub[K]): void {
-        this.R.changeMade = true
-        set(this.R.data, [...this.path, key], value)
+        this.set(key, value)
     }
-    apply(func: (prev: Sub) => Sub): void {
-        this.R.changeMade = true
-        update(this.R.data, this.path, func)
+    applyK<K extends keyof Sub>(key: K, func: (prev: Immutable<Sub[K]>) => Immutable<Sub[K]>): void {
+        this.apply(key, func)
     }
-    applyK<K extends keyof Sub>(key: K, func: (prev: Sub[K]) => Sub[K]): void {
-        this.R.changeMade = true
-        update(this.R.data, [...this.path, key], func)
-    }
+    select<K extends keyof Sub>(k: K) { return new DataCursor(this.boababCursor.select(k)) }
     async flush(): Promise<void> {
         return // TODO
     }
@@ -53,6 +41,14 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
 //     }
 // }
 
-export function makeRootDataCursor<Root>(): DataCursor<Root, Root> {
-    return null as unknown as DataCursor<Root, Root>
+export function makeRootDataCursor(): DataCursor<RootTreeShit> {
+    const b = new MyBaobab({
+        contents: {
+            users: {
+                alice: null as unknown as Gamestate
+            },
+            testCounters: { counter0: 0 }
+        }
+    })
+    return new DataCursor(b.select('contents'))
 }

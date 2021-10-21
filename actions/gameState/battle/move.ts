@@ -5,6 +5,7 @@ import { findIndex } from 'lodash'
 import type { BattleCursor } from '@/util/getters'
 
 import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
+import { Immutable } from '@shared/index'
 /** Applies hasmoved, health, and effects */
 export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): void {
     const allChars = scene.select('allCharacters')
@@ -25,7 +26,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
     )
 }
 
-function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {
+function updateEffect(newEffect: Effect, prev: Immutable<Effect[]>): Immutable<Effect[]> {
     const prevTypeIndex = findIndex(prev, { type: newEffect.type }) // prev.findIndex(effect => effect.type === newEffect.type)
     if (prevTypeIndex > -1) {
         const prevEffect = prev[prevTypeIndex]

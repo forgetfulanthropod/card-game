@@ -24,10 +24,10 @@ export async function getBattleScene(username: 'alice'): Promise<BattleCursor> {
 }
 
 export function getGameStateCursor(username: 'alice'): DataCursor<Gamestate> {
-    return makeRootDataCursor()
+    return makeRootDataCursor().select('users').select('alice')
 }
 
-interface RootTreeShit {
+export interface RootTreeShit {
     users: {
         alice: Gamestate
     }
