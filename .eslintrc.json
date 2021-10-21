@@ -14,8 +14,8 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module"
-        // "project": "./tsconfig.json"
+        "sourceType": "module",
+        "project": "actions/tsconfig.json"
     },
     "plugins": [
         "react",
@@ -97,7 +97,9 @@
                 "prev": "*",
                 "next": "function"
             }
-        ]
+        ],
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/require-await": "error"
     },
     "settings": {
         "react": {

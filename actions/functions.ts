@@ -25,52 +25,58 @@ const serverActions: ServerActions = {
     echo: args => { return args }, // eslint-disable-line @typescript-eslint/no-explicit-any
     // getOwnedCharacters: async () => {
     //     const tree = await getGameStateCursor('alice')
-    //     return await tree.get('ownedCharacters')
+    //     return await tree.getK('ownedCharacters')
     // },
     changeScene: async args => {
         const tree = await getGameStateCursor('alice')
         // debugger
-        // tree.set('scene', initialScenes[args.newSceneName])
+        // tree.setK('scene', initialScenes[args.newSceneName])
         if (args.newSceneName === 'battle') {
-            const entrySceneData = await (await getEntryScene('alice')).get()
+            const entrySceneData = (await getEntryScene('alice')).get()
             const { selectedCharacters, selectedLevel } = entrySceneData
             const dungeonName = rulebook.dungeonLevels[selectedLevel.num - 1].name
-            tree.set('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
+            tree.setK('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
         }
+        await tree.flush()
+
     },
     addSelected: addSelected_,
     changeDungeon: changeDungeon_,
     chooseDoor: async args => {
         const scene = await getBattleScene('alice')
-        const room = makeRoom({ door: args.door, dungeonName: 'cool dungeon', roomsPassed: await scene.get('roomsPassed') })
+        const room = makeRoom({
+            door: args.door, dungeonName: 'cool dungeon', roomsPassed: scene.getK('roomsPassed')
+        })
         // console.log('removing doors')
-        await Promise.all([
-            scene.set('doors', { options: [], descriptions: [] }),
-            scene.set('roomsPassed', await scene.get('roomsPassed') + 1),
-            scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies })),
-            scene.set('state', 'in battle')
-        ])
-        await resetRound(scene)
+        scene.setK('doors', { options: [], descriptions: [] })
+        scene.setK('roomsPassed', scene.getK('roomsPassed') + 1)
+        scene.applyK('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
+        scene.setK('state', 'in battle')
+        resetRound(scene)
+        await scene.flush()
     },
     // getRulebook: () => { return rulebook },
-    startGame: async () => { startGame_() },
-    doCharacterAction: async ({ uid }) => { doCharacterAction_(uid) },
+    startGame: async () => { await startGame_() },
+    doCharacterAction: async ({ uid }) => { await doCharacterAction_(uid) },
     makeNewUser: async (args) => {
         // TODO: I'm not sure if this fully resets the user
+        // await sleep(2000)
         console.log(`adding user ${args.username} with initial gamestate`)
         await firestore().collection('users').doc(args.username).set(initialGameState)
     },
     dispatch: dispatch_,
     exitDungeon: async (_args) => {
         const gameState = await getGameStateCursor('alice')
-        if (await gameState.select('scene').get('name') !== 'battle') {
+        if (gameState.select('scene').getK('name') !== 'battle') {
             throw Error('exitDungeon callede when not in a battle scene')
         }
         gameState.select('scene').set(initialEntryState)
+        gameState.flush()
     }
 }
 
 // for debugging:
+// @ts-ignore
 global.serverActions = serverActions
 
 export const hello = wrapper(serverActions.hello)
@@ -90,13 +96,13 @@ export const changeDungeon = wrapper(changeDungeon_)
 
 const isLog = settings.shouldLogAllCalls
 
-function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
+function onRequestWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)) {
     // startFirebaseApp()
     return https.onRequest(async (request, response) => {
         const randId = makeRandId()
         if (isLog) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
         try {
-            const result = await f(request.query)
+            const result = await f(request.query as unknown as Args)
             if (isLog) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })
         } catch (e) {
@@ -106,14 +112,14 @@ function onRequestWrapper<ReturnType>(f: (u: unknown) => ReturnType) {
     })
 }
 
-function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableContext) => ReturnType) {
+function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)) {
     // startFirebaseApp()
-    return https.onCall(async (data, context) => {
+    return https.onCall(async (data, _context) => {
         const randId = makeRandId()
         const startTime = Date.now()
         if (isLog) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(data[0])}`) }
         try {
-            const result = await f(data[0], context)
+            const result = await f(data[0])
             const elapsed = Date.now() - startTime
             if (isLog) { console.log(`    ${f.name}#${randId} took ${elapsed} seconds and is responding with ${JSON.stringify(result)}`) }
             return { status: 'success', result }
@@ -125,3 +131,7 @@ function onCallWrapper<ReturnType>(f: (u: unknown, context?: https.CallableConte
 }
 
 const makeRandId = () => Math.random().toString().slice(2, 5)
+
+const _sleep = (milliseconds: number): Promise<void> => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+}

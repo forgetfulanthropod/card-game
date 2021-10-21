@@ -73,7 +73,7 @@ type Size = {
     height: number
 }
 
-type Setter<T> = T | ((old: T) => T)
+// type Setter<T> = T | ((old: T) => T)
 export type Action =
     // | { a: 'setIsPlayerTurn', v: boolean }
     // | { a: 'setBattleHasBegun' }

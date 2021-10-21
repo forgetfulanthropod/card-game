@@ -78,9 +78,9 @@ function randInt(min: number, under: number): number {
     return (Math.random() * (under - min) + min) | 0
 }
 
-export async function putUpDoors(scene: FireCursor<Gamestate, BattleScene>): Promise<void> {
+export function putUpDoors(scene: FireCursor<Gamestate, BattleScene>): void {
     // console.log('adding doors')
-    const { roomsPassed, dungeonName } = await scene.get()
-    scene.set('state', 'not started')
-    scene.set('doors', getDoorChoices({ roomsPassed, dungeonName }))
+    const { roomsPassed, dungeonName } = scene.get()
+    scene.setK('state', 'not started')
+    scene.setK('doors', getDoorChoices({ roomsPassed, dungeonName }))
 }

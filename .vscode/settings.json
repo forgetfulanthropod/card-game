@@ -3,12 +3,7 @@
         "titleBar.inactiveForeground": "#b8b8b8",
         "sideBar.background": "#a825ff3a",
         "sideBar.foreground": "#000000",
-        "activityBar.background": "#1C3314",
-        "tab.activeBorder": "#880000",
-        "titleBar.activeBackground": "#880000",
-        "titleBar.activeForeground": "#000000",
-        "statusBar.background": "#880000",
-        "statusBar.foreground": "#000000"
+        "activityBar.background": "#1C3314"
     },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
@@ -35,6 +30,11 @@
     "files.exclude": {
         "**/.keep": true,
         "actions/lib": true,
+        "node_modules/": true,
+        "actions/node_modules/": true,
+        "pnpm-lock.json": true,
+        "actions/pnpm-lock.json": true,
+        "build/": true,
     },
     "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {
@@ -71,5 +71,4 @@
     "colorTabs.titleBackground": true,
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
-    "window.title": "~[SERVER]~${separator}${activeEditorShort}${separator}${rootName}",
 }

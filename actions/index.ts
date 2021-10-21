@@ -5,4 +5,5 @@ initializeApp({ projectId: 'kaiju-75e84', })
 export * from './functions'
 
 // for debugging
+// @ts-ignore
 global.firestore = firestore()

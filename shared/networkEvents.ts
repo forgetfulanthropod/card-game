@@ -25,5 +25,5 @@ export type MoveEvent = NetworkEvent<'move', NetworkAttackData>
 export interface Cursorish<T> {
     apply(updater: (x: T) => T): void
     get(): T | Promise<T>
-    on(_: 'update', cb: () => void): void
+    on?: (_: 'update', cb: () => void) => void
 }
