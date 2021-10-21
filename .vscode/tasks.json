@@ -4,7 +4,6 @@
 		{
 			"label": "Four tabs",
 			"dependsOn": [
-				"tsc actions",
 				"tsc client",
 				"esbuild client",
 				"run server",
@@ -60,7 +59,12 @@
 			"label": "run server",
 			"type": "npm",
 			"script": "server",
+			"options": {
+				"cwd": "actions"
+			},
 			"problemMatcher": [],
+			"dependsOrder": "sequence",
+			"dependsOn": "tsc actions",
 			"presentation": {
 				"group": "actions",
 			}

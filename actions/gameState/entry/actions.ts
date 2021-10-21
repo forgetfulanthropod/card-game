@@ -40,6 +40,7 @@ export async function addSelected(args: { character: OwnedCharacter }): Promise<
         if (totalPoints <= pointLimit)
             scene.applyK('selectedCharacters', sel => [...sel, c])
     }
+    // debugger
     await scene.flush()
 
 }

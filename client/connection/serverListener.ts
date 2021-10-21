@@ -13,6 +13,11 @@ export function waitForHandshake(): Promise<void> {
     })
 }
 
+export function getSocket() {
+    return socket
+}
+
+
 const config = {
     enableExpensiveUpdateValidation: false,
     logChanges: false,

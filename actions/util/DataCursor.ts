@@ -32,9 +32,14 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
         this.bc.apply(key, func)
     }
     select<K extends keyof Sub>(k: K) { return new DataCursor(this.bc.select(k)) }
-    async flush(): Promise<void> {
+    async flush(customName?: string, justSub = false): Promise<void> {
         console.log('flushing')
-        getIo().emit('update', getRootCursor().select('users').select('alice').get())
+        customName != null && console.log('flushing to event name ', customName, 'and justSub is', justSub)
+        if (justSub) {
+            getIo().emit(customName ?? 'update', this.bc.get())
+            return
+        }
+        getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
         return // TODO
     }
 }

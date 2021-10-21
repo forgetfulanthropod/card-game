@@ -3,13 +3,19 @@ import { h } from 'preact' // eslint-disable-line unused-imports/no-unused-impor
 import { useEffect, useRef } from 'preact/hooks'
 
 import { incrementTestCounter } from '@/actions'
-import { maybeInitializeApp } from '@/connection'
+import { getSocket, maybeInitializeApp } from '@/connection'
+import { getTree } from '@/data/rootTree'
 // import { maybeInitializeApp } from '@/connection'
 export default function TestCounter(): JSX.Element {
     const start = useRef(0)
     useEffect(() => {
         const { db } = maybeInitializeApp()
         console.log('attaching test counter listener')
+        const onChange = (data: unknown) => {
+            console.log('counter data changed to', data, (Date.now() - start.current) / 1000, 'seconds after button press')
+        }
+        getSocket().on('counterChange', onChange)
+        return () => getSocket().off('counuterChange', onChange)
         // TODO:
         // const unsub = onSnapshot(doc(db, 'testCounters', 'counter0'), doc =>
         //     console.log('doc is', doc.data(), (Date.now() - start.current) / 1000, 'seconds after button press'))

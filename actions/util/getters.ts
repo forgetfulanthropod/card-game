@@ -8,6 +8,7 @@ import { makeRootDataCursor } from './DataCursor'
 
 export async function getEntryScene(username: 'alice'): Promise<DataCursor<Gamestate, EntryScene>> {
     const scene = (await getGameStateCursor(username)).select('scene')
+    // debugger
     if (scene.getK('name') !== 'entry') {
         throw Error('getEntryScene called when not in entry scene')
     }

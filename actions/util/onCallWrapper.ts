@@ -1,7 +1,8 @@
 import { getApp } from '..'
 
 const config = {
-    log: false,
+    log: true,
+    method: 'post' as 'post' | 'get'
 }
 
 function makeRandId() { return Math.random().toString().slice(2, 6) }
@@ -12,11 +13,20 @@ const https = {
     }
 }
 export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): () => void {
-    return () => getApp().get('/' + f.name, async (request, response) => {
+    return () => getApp().post('/' + f.name, async (request, response) => {
+        // return () => getApp()[config.method]('/' + f.name, async (request, response) => {
         const randId = makeRandId()
-        if (config.log) { console.log(`received call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
         try {
-            const result = await f(request.query as unknown as Args)
+            // debugger
+            let result: ReturnType | null = null
+            if (config.method === 'get') {
+                if (config.log) { console.log(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
+                result = await f(request.query as unknown as Args)
+            } else {
+                // debugger
+                if (config.log) { console.log(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
+                result = await f(request.body)
+            }
             if (config.log) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })
         } catch (e) {

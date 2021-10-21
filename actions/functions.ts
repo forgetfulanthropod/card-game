@@ -10,6 +10,8 @@ import attachIncrementTestCounter from './f/incrementTestCounter.func'
 import attachMakeNewUser from './f/makeNewUser.func'
 import attachSquare from './f/square'
 import attachStartGame from './f/startGame'
+import dispatch from './gameState/battle/dispatch'
+import { onCallWrapper } from './util/onCallWrapper'
 
 export function doIt(): void {
     attachAddSelected()
@@ -24,4 +26,5 @@ export function doIt(): void {
     attachMakeNewUser()
     attachSquare()
     attachStartGame()
+    onCallWrapper(dispatch)()
 }
