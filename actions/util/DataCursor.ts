@@ -10,16 +10,6 @@ import { getRootCursor } from './getters'
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Objectish { }
 
-const config = {
-    logDiffOnFlush: false
-}
-
-class CursorRoot<Root extends Objectish> {
-    constructor(
-        public data: Root,
-        public changeMade: boolean,
-    ) { }
-}
 
 export class DataCursor<Root extends Objectish, Sub = Root> {
     constructor(private bc: MyCursor<Sub>) {

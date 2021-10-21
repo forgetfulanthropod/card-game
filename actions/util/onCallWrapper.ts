@@ -6,12 +6,7 @@ const config = {
 }
 
 function makeRandId() { return Math.random().toString().slice(2, 6) }
-export type HttpsFunction = unknown
-const https = {
-    onRequest(u: unknown) {
-        // TODO
-    }
-}
+
 export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): () => void {
     return () => getApp().post('/' + f.name, async (request, response) => {
         // return () => getApp()[config.method]('/' + f.name, async (request, response) => {

@@ -1,10 +1,10 @@
-import type { Gamestate } from '@shared/index'
+import type { Gamestate, OwnedCharacter } from '@shared/index'
 
 import { statsMap } from '../rulebook/battle'
 import { initialEntryState } from './entry/state'
 
 
-export function initialOwnedCharacters(): any {
+export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
     return {
         // 'char-uid-8W2mG': { uid: 'char-uid-8W2mG', tokenId: '1234', nftName: 'Frog Knight #1234', ...statsMap.frogKnight }, // has everything for each character
         // 'char-uid-TLO23': { uid: 'char-uid-TLO23', tokenId: '1234', nftName: 'Mushroom Farmer #1234', ...statsMap.mushroomFarmer },

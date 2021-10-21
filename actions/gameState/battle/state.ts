@@ -24,7 +24,7 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + Math.random().toString().slice(3, 6), level: 1 })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: 1 })),
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
@@ -136,5 +136,5 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
 }
 
 function randString(): string {
-    return Math.random().toString().slice(2)
+    return Math.random().toString().slice(2, 6)
 }

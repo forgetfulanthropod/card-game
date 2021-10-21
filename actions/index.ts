@@ -12,11 +12,11 @@ const http = new HttpServer(app)
 const io = new SocketServer(http)
 // @ts-ignore
 
-export function getIo() {
+export function getIo(): typeof io {
     return io
 }
 
-export function getApp() {
+export function getApp(): typeof app {
     return app
 }
 

@@ -8,6 +8,7 @@ import type { BattleCursor } from '../../util/getters'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
 import { keys, vals } from '../../util/objectMethods'
+import { onCallWrapper } from '../../util/onCallWrapper'
 import sleep from '../../util/sleep'
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
@@ -28,7 +29,7 @@ function log(...args: unknown[]) { if (config.log) { console.log(args) } }
 function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
 
-export async function startGame_(): Promise<void> {
+export const startGame = onCallWrapper(async function startGame(): Promise<void> {
     const scene = getBattleScene('alice')
     if (scene.getK('state') === 'in battle') {
         // already in game
@@ -37,7 +38,7 @@ export async function startGame_(): Promise<void> {
     }
     scene.setK('state', 'in battle')
     await resetRound(scene)
-}
+})
 
 export async function resetRound(scene: BattleCursor): Promise<void> {
     if (DEBUG) tl('resetting moves')

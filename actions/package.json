@@ -1,7 +1,7 @@
 {
     "name": "actions-api",
     "scripts": {
-        "clear": "cp -r ../shared ./shared && rm -rf lib",
+        "clear": "bash clear.sh",
         "start": "npm run clear && tsc -w",
         "build": "npm run clear && tsc",
         "esbuild": "npm run clear && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
