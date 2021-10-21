@@ -1,53 +1,49 @@
 // **TODO**: write the code in this file
+import { getTree } from '@/data/rootTree'
 import type { Gamestate, MyBaobab, MyCursor } from '@shared/index'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
-import type { DocumentData } from 'firebase/firestore'
-import { getDoc } from 'firebase/firestore'
-import { doc, onSnapshot } from 'firebase/firestore'
+import { useCallback } from 'preact/hooks'
+import { io } from 'socket.io-client'
+const socket = io()
+export function waitForHandshake(): Promise<void> {
+    return new Promise(resolve => {
+        console.log('got the hey')
+        socket.once('hey', () => resolve())
+    })
+}
 
-// import isEqual from 'lodash/isEqual'
-import { getTree } from '@/data/rootTree'
+export function getSocket() {
+    return socket
+}
 
-import { maybeInitializeApp } from '.'
 
 const config = {
-    enableExpensiveUpdateValidation: false,
-    logChanges: false,
+    enableExpensiveUpdateValidation: true,
+    logChanges: true,
 }
 
-export async function getGameState(): Promise<Gamestate> {
-    const { db } = maybeInitializeApp()
-    const d = await getDoc(doc(db, 'users', 'alice'))
-    if (!d.exists) {
-        throw Error('game state d does not exist')
-    }
-    const data = d.data() as Gamestate
-    if (data?.inventory == null) {
-        throw Error('document has no inventory key. Likely doc does not exist.')
-    }
-    return data as Gamestate
+export async function listenForInitialGameState(): Promise<Gamestate> {
+    console.log('hoping for gamestate')
+    return new Promise(resolve => {
+        socket.once('update', (data) => {
+            console.log('received gamestate')
+            resolve(data as Gamestate)
+        })
+    })
 }
 
-// https://firebase.google.com/docs/firestore/query-data/listen
-export function attachFirestoreListener(): void {
-    //firestore.onChange(change => updateBaobab(change))
-    const { db } = maybeInitializeApp()
-    const _unsub = onSnapshot(doc(db, 'users', 'alice'),
-        function onNext(doc) {
-            const data = doc.data()
-            if (data != null)
-                updateBoabab(data)
-            else
-                console.warn('doc.data was null')
-        },
-        function onError(err) { console.error('Firestore error: ', err) }
-    )
+export function attachServerListener(): void {
+    console.log('attaching server listener')
+    socket.on('update', data => {
+        console.log('received server data', data)
+        // getTree().set(data)
+        updateBoabab(data)
+    })
 }
 
-/** UNTESTED */
-function updateBoabab(data: DocumentData): void {
-    const newState = data as unknown as Gamestate
+function updateBoabab(fromServer: unknown): void {
+    const newState = fromServer as unknown as Gamestate
     const gameStateCursor = getTree()
     const oldState = gameStateCursor.get()
     const differences = calcDiff(oldState, newState)
@@ -68,13 +64,13 @@ function updateBoabab(data: DocumentData): void {
         const diffDiff = calcDiff(treeDifferences, differences)
         if (diffDiff != null) {
             console.warn(
-                'diffs oldtree-vs-firebase and oldtree-vs-newtree are not the same',
+                'diffs oldtree-vs-server and oldtree-vs-newtree are not the same',
                 'this likely means there is an error in updateBaobab or applyChange',
                 {
                     oldTree: oldState,
-                    fromFirebase: newState,
+                    fromServer: newState,
                     newTree: newTree,
-                    'oldtree-vs-firebase': differences,
+                    'oldtree-vs-server': differences,
                     'oldtree-vs-new-tree': treeDifferences,
                 })
         } else {
@@ -82,8 +78,8 @@ function updateBoabab(data: DocumentData): void {
         }
     }
     // TODO: deep diff update. see pathDiff in client/util/index
-    //const key = firestoreEvent.path
-    //const data = firestoreEvent.newData
+    //const key = datastoreEvent.path
+    //const data = datastoreEvent.newData
     //getTree().apply(key, data)
 }
 

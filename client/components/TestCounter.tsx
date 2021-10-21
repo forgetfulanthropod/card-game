@@ -1,18 +1,25 @@
-import { doc, onSnapshot } from 'firebase/firestore'
 import type { JSX } from 'preact'
 import { h } from 'preact' // eslint-disable-line unused-imports/no-unused-imports
 import { useEffect, useRef } from 'preact/hooks'
 
 import { incrementTestCounter } from '@/actions'
-import { maybeInitializeApp } from '@/fire'
+import { getSocket, maybeInitializeApp } from '@/connection'
+import { getTree } from '@/data/rootTree'
+// import { maybeInitializeApp } from '@/connection'
 export default function TestCounter(): JSX.Element {
     const start = useRef(0)
     useEffect(() => {
         const { db } = maybeInitializeApp()
         console.log('attaching test counter listener')
-        const unsub = onSnapshot(doc(db, 'testCounters', 'counter0'), doc =>
-            console.log('doc is', doc.data(), (Date.now() - start.current) / 1000, 'seconds after button press'))
-        return unsub
+        const onChange = (data: unknown) => {
+            console.log('counter data changed to', data, (Date.now() - start.current) / 1000, 'seconds after button press')
+        }
+        getSocket().on('counterChange', onChange)
+        return () => getSocket().off('counuterChange', onChange)
+        // TODO:
+        // const unsub = onSnapshot(doc(db, 'testCounters', 'counter0'), doc =>
+        //     console.log('doc is', doc.data(), (Date.now() - start.current) / 1000, 'seconds after button press'))
+        // return unsub
     }, [])
 
     return <button

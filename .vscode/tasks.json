@@ -4,10 +4,9 @@
 		{
 			"label": "Four tabs",
 			"dependsOn": [
-				"tsc actions",
 				"tsc client",
 				"esbuild client",
-				"run emulator",
+				"run server",
 			],
 			"dependsOrder": "parallel",
 			"group": {
@@ -57,10 +56,14 @@
 			}
 		},
 		{
-			"label": "run emulator",
-			"type": "npm",
-			"script": "emulate",
+			"label": "run server",
+			"type": "shell",
+			"command": "cd actions && npm run server",
+			// "script": "server",
+			// "options": { "cwd": "./actions" },
 			"problemMatcher": [],
+			"dependsOrder": "sequence",
+			"dependsOn": "tsc actions",
 			"presentation": {
 				"group": "actions",
 			}

@@ -43,10 +43,10 @@ import bread from '../assets/misc-png/ITEM_BREAD.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 import door from '../assets/temp-door.png'
-
+import matcha from '../assets/backgrounds/matcha-caves.jpg'
 export const backgrounds = {
     'Hooligan’s Bluff': hoolgans,
-    'The Matcha Caves': 'matcha',
+    'The Matcha Caves': matcha,
     'Fort Skeleton': fort,
     'The Ninth Trash Hole of Hell': ninth,
 }

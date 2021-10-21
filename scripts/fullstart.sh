@@ -1,13 +1,3 @@
-# echo "starting esbuild"
-# osascript -e 'tell application "Terminal" to do script "npm start"'
-# echo "starting emulate"
-# osascript -e 'tell application "Terminal" to do script "npm run emulate"'
-# echo "starting client tsc"
-# osascript -e 'tell application "Terminal" to do script "npm run tsc-watch"'
-# cd actions
-# echo "starting backend tsc"
-# osascript -e 'tell application "Terminal" to do script "npm run start"'
-
 # https://apple.stackexchange.com/a/58151
 
 wd=$(pwd)
@@ -16,7 +6,7 @@ tell application \"Terminal\"
     activate
     do script \"cd $wd; npm start\" in front window
     my makeTab()
-    do script \"cd $wd; npm run emulate\" in front window
+    do script \"cd $wd; npm run serve\" in front window
     my makeTab()
     do script \"cd $wd; npm run tsc-watch\" in front window
     my makeTab()

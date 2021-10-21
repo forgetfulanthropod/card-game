@@ -22,6 +22,7 @@ const clientEnvKeys = [
     "CLIENT_DISABLE_BACKGROUND",
     "CLIENT_LOG_API_REQUESTS",
     "CLIENT_IS_LOCAL",
+    "CLIENT_HOST"
 ]
 for (const k of clientEnvKeys) [
     envObj[`process.env.${k}`] = `"${envFile?.[k] ?? ''}"`

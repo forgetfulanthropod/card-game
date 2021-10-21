@@ -3,7 +3,7 @@ import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
 import { MyBaobab } from '@shared/myBaobab'
 
 // import { getRulebookAsync } from '@/actions'
-import { getGameState } from '@/fire/firestoreListener'
+import { listenForInitialGameState } from '@/connection/serverListener'
 
 import type { Scene } from './types'
 
@@ -11,24 +11,12 @@ import type { Scene } from './types'
 /** Global variables for file */
 const state = {
     gamestate: null as MyBaobab<Gamestate> | null,
-    rulebook: null as Rulebook | null,
-    gameStateCallbacks: [] as Callback[],
-    // rulebookCallbacks: [] as Callback[],
 }
 
-export function onGamestate(cb: Callback): void {
-    state.gameStateCallbacks.push(cb)
-}
-// export function onRulebook(cb: Callback): void {
-//     state.rulebookCallbacks.push(cb)
-// }
-
-export async function fillBothTrees(): Promise<void> {
-    state.gamestate = new MyBaobab(await getGameState())
+export async function waitForGameStateToFill(): Promise<void> {
+    state.gamestate = new MyBaobab(await listenForInitialGameState())
     // @ts-ignore for debugging:
     window.tree = state.gamestate
-    for (const cb of state.gameStateCallbacks) { cb() }
-    state.gameStateCallbacks = []
     // state.rulebook = await getRulebookAsync()
     // for (const cb of state.rulebookCallbacks) { cb() }
     // state.rulebookCallbacks = []
@@ -46,17 +34,6 @@ export function getTree(): MyBaobab<Gamestate> {
     }
     return state.gamestate
 }
-
-/** Do not call at the module-level */
-// export function getRulebook(): Rulebook {
-//     if (state.rulebook == null) {
-//         console.trace('tried to get rulebook before it was loaded. Did you wait for onRulebook?')
-//         throw Error()
-//     }
-//     return state.rulebook
-// }
-
-// export const commitTree = () => tree.commit()
 
 export const getBattleScene = (): MyCursor<BattleScene> => {
     const sceneName = getTree().select('scene').get('name')

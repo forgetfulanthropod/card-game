@@ -1,9 +1,10 @@
+import sleep from '../../util/sleep'
 import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
 
 import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
-import type { FireCursor } from '../../util/FireCursor'
+import type { DataCursor } from '../../util/DataCursor'
 import type { BattleCursor } from '../../util/getters'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
@@ -35,11 +36,10 @@ export async function startGame_(): Promise<void> {
         return
     }
     scene.setK('state', 'in battle')
-    resetRound(scene)
-    await scene.flush()
+    await resetRound(scene)
 }
 
-export function resetRound(scene: BattleCursor): void {
+export async function resetRound(scene: BattleCursor): Promise<void> {
     if (DEBUG) tl('resetting moves')
     const cursor = scene.select('allCharacters')
     keys(cursor.get())
@@ -47,11 +47,12 @@ export function resetRound(scene: BattleCursor): void {
 
     const playerStartsRound = Math.random() < 0.5
     scene.setK('isPlayerTurn', playerStartsRound)
-    scene.flush()
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
-        setTimeout(() => doNpcMove('first move of round'), DEFAULT_WAIT)
+        await sleep(DEFAULT_WAIT)
+        await doNpcMove('first move of round')
     }
+    await scene.flush()
 }
 
 async function doNpcMove(_reason?: string) {
@@ -74,7 +75,8 @@ async function doNpcMove(_reason?: string) {
     }
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
-        // await scene.setK('isPlayerTurn', true)
+        scene.setK('isPlayerTurn', true)
+        await scene.flush()
         return
     }
     const move = getNpcMove(vals(allCharacters))
@@ -94,10 +96,11 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
     if (!isPlayerTurn) {
         warn('not player turn')
-        setTimeout(() => {
-            if (!scene.select('isPlayerTurn').get())
-                doNpcMove('NPC has extra turns')
-        }, NOT_YOUR_TURN_REJECTION_WAIT)
+        if (!scene.getK('isPlayerTurn')) {
+            await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
+            // TODO: uncomment below?
+            await doNpcMove('NPC has extra turns')
+        }
         return
     }
     if (alivePcs.every(c => c.hasMoved)) {
@@ -143,8 +146,6 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         move: selectedMove,
     }
     await handleMove(scene, allCharacters, ad)
-
-    await scene.flush()
 }
 
 
@@ -177,6 +178,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         return
     } else if (winner === 'NPC') {
         scene.setK('state', 'lost')
+        scene.flush()
         return
     }
 
@@ -185,7 +187,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
 
     if (!isMoveAvailable) {
-        resetRound(scene)
+        await resetRound(scene)
         return
     }
 
@@ -201,34 +203,31 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
             warn('no unmoved PC')
         } else {
             tl(`selecting character ${newPc.uid}`)
-            scene.setK('selectedCharacter', newPc.uid) // no await necessary
+            scene.setK('selectedCharacter', newPc.uid)
         }
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be NPC turn')
             scene.setK('isPlayerTurn', false)
-            await scene.flush()
-            setTimeout(() => doNpcMove('NPC has extra turns'), TIME_AFTER_PLAYER_MOVE + 500)
+            await sleep(TIME_AFTER_PLAYER_MOVE + 500)
+            await doNpcMove('NPC has extra turns')
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
             console.log('will be player turn')
             scene.setK('isPlayerTurn', true)
-            return
-        }
-        if (aliveNpcs.some(c => !c.hasMoved)) {
+        } else if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be player turn')
-            await scene.flush()
-            setTimeout(() => {
-                doNpcMove('no unmoved PC and NPC turn')
-            }, DEFAULT_WAIT)
+            await sleep(DEFAULT_WAIT)
+            await doNpcMove('no unmoved PC and NPC turn')
         }
     }
+    await scene.flush()
 }
 
 
 const getMoveChannel = memoize(async function getMoveChannel() {
-    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const eventsCursor: DataCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
     const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
     return move$
 })
