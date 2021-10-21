@@ -1,11 +1,11 @@
 
 import type { AttackData, CharacterMeta, Effect } from '@shared/battleTypes'
+import type { Immutable } from '@shared/index'
 import { findIndex } from 'lodash'
 
 import type { BattleCursor } from '@/util/getters'
 
 import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
-import { Immutable } from '@shared/index'
 /** Applies hasmoved, health, and effects */
 export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): void {
     const allChars = scene.select('allCharacters')

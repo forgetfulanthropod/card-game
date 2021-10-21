@@ -17,7 +17,7 @@ type IncrementTestCounter = (args: Empty) => void
 type MakeNewUser = (args: { username: 'alice' }) => void
 type Square = (args: { n: string }) => number
 type StartGame = (args: Empty) => void
-export type Dispatch = (action: Action) => Promise<void>
+export type Dispatch = (action: Action) => void
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
 export interface ClientActions {

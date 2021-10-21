@@ -1,8 +1,11 @@
 import type { Gamestate, Immutable, } from '@shared/index'
-import { MyCursor, MyBaobab } from '../shared/myBaobab'
-import { get, memoize, set, update } from 'lodash'
-import { getRootCursor, RootTreeShit } from './getters'
+import { memoize } from 'lodash'
+
 import { getIo } from '..'
+import type { MyCursor } from '../shared/myBaobab'
+import { MyBaobab } from '../shared/myBaobab'
+import type { RootTreeShit } from './getters'
+import { getRootCursor } from './getters'
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Objectish { }
@@ -31,16 +34,16 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
     applyK<K extends keyof Sub>(key: K, func: (prev: Immutable<Sub[K]>) => Immutable<Sub[K]>): void {
         this.bc.apply(key, func)
     }
-    select<K extends keyof Sub>(k: K) { return new DataCursor(this.bc.select(k)) }
-    async flush(customName?: string, justSub = false): Promise<void> {
+    select<K extends keyof Sub>(k: K): DataCursor<Sub[K]> { return new DataCursor(this.bc.select(k)) }
+    flush(customName?: string, justSub = false): void {
         console.log('flushing')
-        customName != null && console.log('flushing to event name ', customName, 'and justSub is', justSub)
+        if (customName != null) { console.log('flushing to event name ', customName, 'and justSub is', justSub) }
         if (justSub) {
             getIo().emit(customName ?? 'update', this.bc.get())
             return
         }
         getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
-        return // TODO
+        // TODO
     }
 }
 // TODO:

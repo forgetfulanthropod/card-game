@@ -1,9 +1,9 @@
-//@ts-ignore
-import _ from 'ts-node/register' // debugging
 import express from 'express'
+import { Server as HttpServer } from 'http'
 // import path from 'path'
 import { Server as SocketServer } from 'socket.io'
-import { Server as HttpServer } from 'http'
+// import * as _forImports from 'amd-loader'
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

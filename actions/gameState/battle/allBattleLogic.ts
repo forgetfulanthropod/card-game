@@ -28,7 +28,7 @@ function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
 
 export async function startGame_(): Promise<void> {
-    const scene = await getBattleScene('alice')
+    const scene = getBattleScene('alice')
     if (scene.getK('state') === 'in battle') {
         // already in game
         console.warn('already started game')
@@ -51,11 +51,11 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
         // await sleep(DEFAULT_WAIT)
         await doNpcMove('first move of round')
     }
-    await scene.flush()
+    scene.flush()
 }
 
 async function doNpcMove(_reason?: string) {
-    const scene = await getBattleScene('alice')
+    const scene = getBattleScene('alice')
     tl(`npcMove(reason: ${_reason})`)
     const { allCharacters, isPlayerTurn } = scene.get()
     const { alivePcs, aliveNpcs } = getLivingChars(allCharacters)
@@ -75,7 +75,7 @@ async function doNpcMove(_reason?: string) {
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
         scene.setK('isPlayerTurn', true)
-        await scene.flush()
+        scene.flush()
         return
     }
     const move = getNpcMove(vals(allCharacters))
@@ -84,7 +84,7 @@ async function doNpcMove(_reason?: string) {
 
 
 export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void> {
-    const scene = await getBattleScene('alice')
+    const scene = getBattleScene('alice')
     const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
@@ -149,7 +149,7 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
 
 
 async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
-    const move$ = await getMoveChannel()
+    const move$ = getMoveChannel()
 
     // Dispatch move to client to trigger animation
 
@@ -220,12 +220,12 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
             await doNpcMove('no unmoved PC and NPC turn')
         }
     }
-    await scene.flush()
+    scene.flush()
 }
 
 
-const getMoveChannel = memoize(async function getMoveChannel() {
-    const eventsCursor: DataCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+const getMoveChannel = memoize(function getMoveChannel() {
+    const eventsCursor: DataCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events')
     const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
     return move$
 })
