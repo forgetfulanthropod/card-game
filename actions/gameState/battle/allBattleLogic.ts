@@ -1,3 +1,4 @@
+import sleep from '../../util/sleep'
 import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
@@ -48,7 +49,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     scene.setK('isPlayerTurn', playerStartsRound)
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
-        // await sleep(DEFAULT_WAIT)
+        await sleep(DEFAULT_WAIT)
         await doNpcMove('first move of round')
     }
     await scene.flush()
@@ -96,9 +97,9 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     if (!isPlayerTurn) {
         warn('not player turn')
         if (!scene.getK('isPlayerTurn')) {
-            // await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
+            await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
             // TODO: uncomment below?
-            // await doNpcMove('NPC has extra turns')
+            await doNpcMove('NPC has extra turns')
         }
         return
     }
@@ -208,7 +209,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be NPC turn')
             scene.setK('isPlayerTurn', false)
-            // await sleep(TIME_AFTER_PLAYER_MOVE + 500)
+            await sleep(TIME_AFTER_PLAYER_MOVE + 500)
             await doNpcMove('NPC has extra turns')
         }
     } else {
@@ -217,6 +218,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
             scene.setK('isPlayerTurn', true)
         } else if (aliveNpcs.some(c => !c.hasMoved)) {
             console.log('will be player turn')
+            await sleep(DEFAULT_WAIT)
             await doNpcMove('no unmoved PC and NPC turn')
         }
     }
