@@ -3,7 +3,11 @@
     "description": "firebase cloud functions",
     "scripts": {
         "start": "rm -rf lib && tsc -w",
-        "build": "rm -rf lib && tsc"
+        "build": "rm -rf lib && tsc",
+        "esbuild": "rm -rf lib && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
+        "parcel": "rm -rf lib && parcel build",
+        "minify": "uglifyjs lib/actions/index.js > lib/actions/uglyindex.js",
+        "actions": "firebase emulators:start --only functions"
     },
     "engines": {
         "node": "14"
