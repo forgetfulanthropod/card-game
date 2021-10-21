@@ -24,6 +24,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
     getCharacterKeysAndEffects(attackData).forEach(({ key, effect: newEffect }) =>
         allChars.select(key).applyK('effects', prev => updateEffect(newEffect, prev))
     )
+    scene.flush()
 }
 
 function updateEffect(newEffect: Effect, prev: Immutable<Effect[]>): Immutable<Effect[]> {
