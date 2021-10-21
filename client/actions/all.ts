@@ -3,9 +3,9 @@ import type { ClientActions, ServerResult } from '@shared/actions'
 import { callWrap } from './call'
 
 const clientActions: ClientActions = {
-    hello: callWrap('f-hello'),
-    square: callWrap('f-square'),
-    echo: callWrap('f-echo'),
+    hello: callWrap('hello'),
+    square: callWrap('square'),
+    echo: callWrap('echo'),
     // getOwnedCharacters: callWrap('getOwnedCharacters'),
     /** This function is more complex cuz I really wanted to check return type.
      *  Can make this simpler if we use some run-time type checking library such as woutervh-/typescript-is.
@@ -20,16 +20,16 @@ const clientActions: ClientActions = {
     //     }
     //     return response.result
     // },
-    startGame: callWrap('f-startGame'),
-    doCharacterAction: callWrap('f-doCharacterAction'),
-    changeScene: callWrap('f-changeScene'),
-    changeDungeon: callWrap('f-changeDungeon'),
-    addSelected: callWrap('f-addSelected'),
-    chooseDoor: callWrap('f-chooseDoor'),
-    dispatch: callWrap('f-dispatch'),
-    makeNewUser: callWrap('f-makeNewUser'),
-    exitDungeon: callWrap('f-exitDungeon'),
-    incrementTestCounter: callWrap('f-incrementTestCounter'),
+    startGame: callWrap('startGame'),
+    doCharacterAction: callWrap('doCharacterAction'),
+    changeScene: callWrap('changeScene'),
+    changeDungeon: callWrap('changeDungeon'),
+    addSelected: callWrap('addSelected'),
+    chooseDoor: callWrap('chooseDoor'),
+    dispatch: callWrap('dispatch'),
+    makeNewUser: callWrap('makeNewUser'),
+    exitDungeon: callWrap('exitDungeon'),
+    incrementTestCounter: callWrap('incrementTestCounter'),
 }
 
 // @ts-ignore for debugging:

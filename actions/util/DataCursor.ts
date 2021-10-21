@@ -1,7 +1,8 @@
 import type { Gamestate, Immutable, } from '@shared/index'
 import { MyCursor, MyBaobab } from '../shared/myBaobab'
 import { get, memoize, set, update } from 'lodash'
-import { RootTreeShit } from './getters'
+import { getRootCursor, RootTreeShit } from './getters'
+import { getIo } from '..'
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Objectish { }
@@ -32,6 +33,8 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
     }
     select<K extends keyof Sub>(k: K) { return new DataCursor(this.bc.select(k)) }
     async flush(): Promise<void> {
+        console.log('flushing')
+        getIo().emit('update', getRootCursor().select('users').select('alice').get())
         return // TODO
     }
 }

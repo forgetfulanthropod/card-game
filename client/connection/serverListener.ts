@@ -3,18 +3,37 @@ import { getTree } from '@/data/rootTree'
 import type { Gamestate, MyBaobab, MyCursor } from '@shared/index'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
+import { useCallback } from 'preact/hooks'
+import { io } from 'socket.io-client'
+const socket = io()
+export function waitForHandshake(): Promise<void> {
+    return new Promise(resolve => {
+        console.log('got the hey')
+        socket.once('hey', () => resolve())
+    })
+}
 
 const config = {
     enableExpensiveUpdateValidation: false,
     logChanges: false,
 }
 
-export async function getGameState(): Promise<Gamestate> {
-    return null as unknown as Gamestate
+export async function listenForInitialGameState(): Promise<Gamestate> {
+    console.log('hoping for gamestate')
+    return new Promise(resolve => {
+        socket.once('update', (data) => {
+            console.log('received gamestate')
+            resolve(data as Gamestate)
+        })
+    })
 }
 
 export function attachServerListener(): void {
-    // TODO
+    console.log('attaching server listener')
+    socket.on('update', data => {
+        console.log('received server data', data)
+        getTree().set(data)
+    })
 }
 
 function updateBoabab(fromServer: unknown): void {

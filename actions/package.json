@@ -20,7 +20,8 @@
         "deep-diff": "^1.0.2",
         "eventemitter3": "^4.0.7",
         "express": "^4.17.1",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "socket.io": "^4.3.1"
     },
     "devDependencies": {
         "@types/express": "^4.17.13",

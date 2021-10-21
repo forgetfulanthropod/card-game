@@ -7,9 +7,9 @@ import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
-import { fillBothTrees, onGamestate } from './data/rootTree'
+import { waitForGameStateToFill } from './data/rootTree'
 import { maybeInitializeApp } from './connection'
-import { attachServerListener } from './connection/serverListener'
+import { attachServerListener, waitForHandshake } from './connection/serverListener'
 
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
@@ -30,22 +30,21 @@ const state = {
     gamestate: false,
 }
 
+
 loadAssets(
     function onBasic() { maybeStart('basic') },
     function onDeluxe() { maybeStart('deluxe') }
-)
-
-// onRulebook(() => maybeStart('rulebook'))
-onGamestate(() => maybeStart('gamestate'));
+);
 
 (async function makeTheUser() {
     // TODO: check if this await actually waits all the way through
     log('initializing app')
     maybeInitializeApp()
+    await waitForHandshake()
+    waitForGameStateToFill().then(() => maybeStart('gamestate'))
     log('making user')
     await makeNewUser({ username: 'alice' })
-    state.createdUser = true
-    fillBothTrees()
+    maybeStart('createdUser')
 })()
 
 async function maybeStart<K extends keyof typeof state>(k: K) {
