@@ -1,5 +1,7 @@
 import { dataOf } from '@/util/pixiUtils'
-import { Container, PixiContainer, Sprite } from './mypixi'
+
+import type { PixiContainer} from './mypixi';
+import { Container, Sprite } from './mypixi'
 import { OwnedCharacters } from './OwnedCharacters'
 
 

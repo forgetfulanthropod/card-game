@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    // "module": "system",
+    // Single output file
+    // "module": "amd",
     // "moduleResolution": "node",
-    "noImplicitReturns": true,
-    "noUnusedLocals": false,
-    "outDir": "lib",
+    // "noImplicitReturns": true,
+    // "noUnusedLocals": false,
     // "outFile": "lib/index.js",
+    // Split output files
+    "module": "commonjs",
+    "outDir": "lib",
     "sourceMap": true,
     "strict": true,
     "target": "es2017",

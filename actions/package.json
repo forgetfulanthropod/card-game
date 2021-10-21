@@ -1,7 +1,7 @@
 {
     "name": "actions-api",
     "scripts": {
-        "clear": "cp -r ../shared ./shared && rm -rf lib",
+        "clear": "bash clear.sh",
         "start": "npm run clear && tsc -w",
         "build": "npm run clear && tsc",
         "esbuild": "npm run clear && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
@@ -9,7 +9,8 @@
         "pwatch": " npm run clear && parcel watch",
         "debug": " npm run clear && parcel build --no-optimize --no-scope-hoist --no-content-hash && node inspect lib/index.js",
         "minify": "uglifyjs lib/index.js > lib/uglyindex.js",
-        "server": "nodemon --inspect lib/actions/index.js"
+        "server-watch": "nodemon --inspect lib/actions/index.js",
+        "server": "node lib/actions/index.js"
     },
     "engines": {
         "node": "14"
@@ -17,6 +18,7 @@
     "source": "index.ts",
     "main": "lib/index.js",
     "dependencies": {
+        "amd-loader": "^0.0.8",
         "baobab": "^2.6.1",
         "deep-diff": "^1.0.2",
         "eventemitter3": "^4.0.7",

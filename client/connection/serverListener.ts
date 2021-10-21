@@ -1,10 +1,10 @@
 // **TODO**: write the code in this file
-import { getTree } from '@/data/rootTree'
 import type { Gamestate, MyBaobab, MyCursor } from '@shared/index'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
-import { useCallback } from 'preact/hooks'
 import { io } from 'socket.io-client'
+
+import { getTree } from '@/data/rootTree'
 const socket = io()
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
@@ -13,7 +13,7 @@ export function waitForHandshake(): Promise<void> {
     })
 }
 
-export function getSocket() {
+export function getSocket(): typeof socket {
     return socket
 }
 

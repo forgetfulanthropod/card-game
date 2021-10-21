@@ -7,7 +7,7 @@ import { objFilter } from '../util/objectMethods'
 import { onCallWrapper } from '../util/onCallWrapper'
 
 export default onCallWrapper(async function chooseDoor(args: { door: Door }): Promise<void> {
-    const scene = await getBattleScene('alice')
+    const scene = getBattleScene('alice')
     const room = makeRoom({
         door: args.door, dungeonName: 'cool dungeon', roomsPassed: scene.getK('roomsPassed')
     })
@@ -17,5 +17,5 @@ export default onCallWrapper(async function chooseDoor(args: { door: Door }): Pr
     scene.applyK('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
     scene.setK('state', 'in battle')
     await resetRound(scene)
-    await scene.flush()
+    scene.flush()
 })

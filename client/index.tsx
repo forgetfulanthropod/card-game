@@ -7,9 +7,8 @@ import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
-import { waitForGameStateToFill } from './data/rootTree'
-import { maybeInitializeApp } from './connection'
 import { attachServerListener, waitForHandshake } from './connection/serverListener'
+import { waitForGameStateToFill } from './data/rootTree'
 
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
@@ -39,7 +38,6 @@ loadAssets(
 (async function makeTheUser() {
     // TODO: check if this await actually waits all the way through
     log('initializing app')
-    maybeInitializeApp()
     await waitForHandshake()
     waitForGameStateToFill().then(() => maybeStart('gamestate'))
     log('making user')

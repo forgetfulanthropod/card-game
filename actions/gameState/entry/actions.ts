@@ -3,9 +3,9 @@ import type { OwnedCharacter } from '@shared/index'
 import { rulebook } from '../../rulebook'
 import { getEntryScene } from '../../util/getters'
 
-export async function changeDungeon({ direction }: { direction: -1 | 1 }): Promise<void> {
+export function changeDungeon({ direction }: { direction: -1 | 1 }): void {
     const levels = rulebook.dungeonLevels
-    const scene = await getEntryScene('alice')
+    const scene = getEntryScene('alice')
 
     let l = (scene.select('selectedLevel').get()).num + direction
 
@@ -17,12 +17,12 @@ export async function changeDungeon({ direction }: { direction: -1 | 1 }): Promi
 
     scene.select('selectedCharacters').set([])
     scene.select('selectedLevel').set(levels[l - 1])
-    await scene.flush()
+    scene.flush()
 }
 
-export async function addSelected(args: { character: OwnedCharacter }): Promise<void> {
+export function addSelected(args: { character: OwnedCharacter }): void {
     const c = args.character
-    const scene = await getEntryScene('alice')
+    const scene = getEntryScene('alice')
 
     const allCharacters = scene.select('selectedCharacters').get()
 
@@ -41,6 +41,6 @@ export async function addSelected(args: { character: OwnedCharacter }): Promise<
             scene.applyK('selectedCharacters', sel => [...sel, c])
     }
     // debugger
-    await scene.flush()
+    scene.flush()
 
 }

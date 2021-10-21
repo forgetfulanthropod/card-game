@@ -1,47 +1,26 @@
-//@ts-ignore
-import _ from 'ts-node/register' // debugging
 import express from 'express'
-// import path from 'path'
-import { Server as SocketServer } from 'socket.io'
 import { Server as HttpServer } from 'http'
+import { Server as SocketServer } from 'socket.io'
+
+import { attachAPIRoutes } from './functions'
+const port = 3003
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const http = new HttpServer(app)
 const io = new SocketServer(http)
-// @ts-ignore
 
-export function getIo() {
+
+export function getIo(): typeof io {
     return io
 }
 
-export function getApp() {
+export function getApp(): typeof app {
     return app
 }
 
-const port = 3003
-
-// app.get('/', (req, res) => {
-//     res.send(`<!DOCTYPE html>
-//     <html>
-//        <head>
-//           <title>Hello world</title>
-//        </head>
-//        <script src = "/socket.io/socket.io.js"></script>
-
-//        <script>
-//           const socket = io();
-//           socket.on('hey', (args) => console.log('received hey with', args))
-//        </script>
-//        <body>Hello</body>
-//     </html>
-//     `)
-// })
-// app.get('/hi', (req, res) => {
-//     res.send('hi there')
-// })
-//Whenever someone connects this gets executed
 
 io.on('connection', function (socket) {
     console.log('A user connected')
@@ -53,11 +32,7 @@ io.on('connection', function (socket) {
     })
 })
 
-// @ts-ignore
-global.io = io
-
-import { doIt } from './functions'
-doIt()
+attachAPIRoutes()
 
 app.use(express.static('../build'))
 

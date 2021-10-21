@@ -1,14 +1,14 @@
-import type { Dispatch } from '@shared/actions'
+import type { Action } from '@shared/actions'
 
 import { getBattleScene } from '../../util/getters'
 import { keys } from '../../util/objectMethods'
 import { makeBattleState } from './state'
 
 
-const dispatch: Dispatch = async (action) => {
+const dispatch = (action: Action): void => {
     // console.log({ scene, action, data: scene.get() })
     // console.log(`>>>>dispatching ${JSON.stringify(action)}`)
-    const scene = await getBattleScene('alice')
+    const scene = getBattleScene('alice')
     switch (action.a) {
         case 'setSelectedMove': {
             scene.setK('selectedMove', action.m)
@@ -34,6 +34,6 @@ const dispatch: Dispatch = async (action) => {
         } default:
             throw new Error(`unknown action ${JSON.stringify(action)}`)
     }
-    await scene.flush()
+    scene.flush()
 }
 export default dispatch
