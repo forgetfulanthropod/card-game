@@ -26,6 +26,7 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
     }
     select<K extends keyof Sub>(k: K): DataCursor<Sub[K]> { return new DataCursor(this.bc.select(k)) }
     flush(customName?: string, justSub = false): void {
+        // TODO eventually: just flush Sub probably or maybe flush changes (diff)
         console.log('flushing')
         if (customName != null) { console.log('flushing to event name ', customName, 'and justSub is', justSub) }
         if (justSub) {

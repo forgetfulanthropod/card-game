@@ -13,7 +13,7 @@ export const changeScene = callWrap<(args: { newSceneName: SceneName }) => void>
 export const chooseDoor = callWrap<(args: { door: Door }) => void>('chooseDoor')
 export const dispatch = callWrap<(action: Action) => void>('dispatch')
 export const doCharacterAction = callWrap<(args: { uid: CharacterUid }) => void>('doCharacterAction')
-export const echo = callWrap<<T>(args: T) => T>('echo')
+export const echo = callWrap<(args: unknown) => unknown>('echo')
 export const exitDungeon = callWrap<(args: Empty) => void>('exitDungeon')
 export const hello = callWrap<(args: Empty) => 'hello'>('hello')
 export const incrementTestCounter = callWrap<(args: Empty) => void>('incrementTestCounter')
