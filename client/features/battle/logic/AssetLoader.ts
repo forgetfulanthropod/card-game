@@ -7,6 +7,7 @@ import check from '../../../assets/check.png'
 import stanceAggressive from '../assets/aggressive stance.png'
 import hoolgans from '../assets/backgrounds/cave-final.png'
 import fort from '../assets/backgrounds/fort-skeleton-temp.jpg'
+import matcha from '../assets/backgrounds/matcha-caves.jpg'
 import ninth from '../assets/backgrounds/ninth-trash-hole.png'
 import gemButton from '../assets/BUTTON_GEMS.png'
 import bloatDemon from '../assets/cards/bloat_demon-200.png'
@@ -43,7 +44,6 @@ import bread from '../assets/misc-png/ITEM_BREAD.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 import door from '../assets/temp-door.png'
-import matcha from '../assets/backgrounds/matcha-caves.jpg'
 export const backgrounds = {
     'Hooligan’s Bluff': hoolgans,
     'The Matcha Caves': matcha,

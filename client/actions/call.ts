@@ -1,10 +1,8 @@
 /** Exports all the API routes as functions */
-import type { Caller, CallReturn, Func } from '@shared/actions'
+import type { Caller, Func } from '@shared/actions'
 
-import { maybeInitializeApp } from '@/connection'
 import { entryMap } from '@/util'
 
-const { functions } = maybeInitializeApp()
 
 const CLIENT_HOST = process.env.CLIENT_HOST
 const config = {
@@ -12,7 +10,7 @@ const config = {
     method: 'post' as 'get' | 'post',
     host: CLIENT_HOST != null && CLIENT_HOST.length > 0 ? process.env.CLIENT_HOST : 'localhost',
 }
-console.log("call.ts config:", config)
+console.log('call.ts config:', config)
 
 
 export function callWrap<F extends Func>(name: string): Caller<F> {

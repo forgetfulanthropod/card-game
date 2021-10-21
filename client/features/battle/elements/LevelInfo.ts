@@ -46,8 +46,8 @@ export function LevelInfo(): PixiContainer {
             stroke: '#999',
             strokeThickness: 5,
         },
-        onClick() {
-            changeDungeon({ direction: -1 })
+        async onClick() {
+            await changeDungeon({ direction: -1 })
         }
     })
     const rightButton = Text({
@@ -62,8 +62,8 @@ export function LevelInfo(): PixiContainer {
             stroke: '#999',
             strokeThickness: 5,
         },
-        onClick() {
-            changeDungeon({ direction: +1 })
+        async onClick() {
+            await changeDungeon({ direction: +1 })
         }
     })
 

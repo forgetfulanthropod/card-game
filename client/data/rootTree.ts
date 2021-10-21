@@ -1,5 +1,5 @@
 import type { BattleScene } from '@shared/battleTypes'
-import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
+import type { EntryScene, Gamestate, MyCursor, OwnedCharacter } from '@shared/index'
 import { MyBaobab } from '@shared/myBaobab'
 
 // import { getRulebookAsync } from '@/actions'
@@ -50,6 +50,6 @@ export const getEntryScene = (): MyCursor<EntryScene> => {
     return getTree().select('scene') as MyCursor<EntryScene>
 }
 
-export const getOwnedCharacters = () => getTree().select('ownedCharacters')
+export const getOwnedCharacters = (): MyCursor<Record<string, OwnedCharacter>> => getTree().select('ownedCharacters')
 export const getScene = (): MyCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()

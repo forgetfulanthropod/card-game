@@ -17,8 +17,8 @@ export function StartButton(): PixiContainer {
                 src: dataOf('gemButton'),
                 anchor: [.5, 1],
                 scale: .5,
-                onClick() {
-                    changeScene({ newSceneName: 'battle' })
+                async onClick() {
+                    await changeScene({ newSceneName: 'battle' })
                 }
             }),
             Text({

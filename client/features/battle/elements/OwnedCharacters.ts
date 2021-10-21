@@ -43,7 +43,7 @@ export function OwnedCharacters(): PixiContainer {
         })
     )
 
-    const hoverTexts = vals(getOwnedCharacters().get()).map((c, i) => {
+    const hoverTexts = vals(getOwnedCharacters().get()).map((c, _i) => {
         return Text({
             text: `${c.points}`,
             anchor: [0, 0],
