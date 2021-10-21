@@ -14,8 +14,8 @@
             "jsx": true
         },
         "ecmaVersion": 12,
-        "sourceType": "module",
-        "project": "actions/tsconfig.json"
+        "sourceType": "module"
+        // ,"project": "actions/tsconfig.json"
     },
     "plugins": [
         "react",

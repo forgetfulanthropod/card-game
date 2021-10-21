@@ -1,4 +1,5 @@
 // **TODO**: write the code in this file
+import { getTree } from '@/data/rootTree'
 import type { Gamestate, MyBaobab, MyCursor } from '@shared/index'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
@@ -9,14 +10,15 @@ const config = {
 }
 
 export async function getGameState(): Promise<Gamestate> {
+    return null as unknown as Gamestate
 }
 
 export function attachServerListener(): void {
+    // TODO
 }
 
-/** UNTESTED */
-function updateBoabab(data: DocumentData): void {
-    const newState = data as unknown as Gamestate
+function updateBoabab(fromServer: unknown): void {
+    const newState = fromServer as unknown as Gamestate
     const gameStateCursor = getTree()
     const oldState = gameStateCursor.get()
     const differences = calcDiff(oldState, newState)
