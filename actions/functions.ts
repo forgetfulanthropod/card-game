@@ -13,7 +13,7 @@ import { startGame as attachStartGame } from './gameState/battle/allBattleLogic'
 import dispatch from './gameState/battle/dispatch'
 import { onCallWrapper } from './util/onCallWrapper'
 
-export function doIt(): void {
+export function attachAPIRoutes(): void {
     attachAddSelected()
     attachChangeDungeon()
     attachChangeScene()
