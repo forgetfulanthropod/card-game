@@ -28,7 +28,8 @@ const clientActions: ClientActions = {
     chooseDoor: callWrap('chooseDoor'),
     dispatch: callWrap('dispatch'),
     makeNewUser: callWrap('makeNewUser'),
-    exitDungeon: callWrap('exitDungeon')
+    exitDungeon: callWrap('exitDungeon'),
+    incrementTestCounter: callWrap('incrementTestCounter'),
 }
 
 // @ts-ignore for debugging:
@@ -48,6 +49,7 @@ export const {
     dispatch,
     makeNewUser,
     exitDungeon,
+    incrementTestCounter,
 } = clientActions
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {

@@ -64,6 +64,11 @@ const serverActions: ServerActions = {
         console.log(`adding user ${args.username} with initial gamestate`)
         await firestore().collection('users').doc(args.username).set(initialGameState)
     },
+    incrementTestCounter: async () => {
+        const doc = firestore().collection('testCounters').doc('counter0')
+        const prev = (await doc.get()).data()?.count ?? 0
+        await doc.set({ count: prev + 1 })
+    },
     dispatch: dispatch_,
     exitDungeon: async (_args) => {
         const gameState = await getGameStateCursor('alice')
@@ -91,6 +96,7 @@ export const doCharacterAction = wrapper(serverActions.doCharacterAction)
 export const makeNewUser = wrapper(serverActions.makeNewUser)
 export const dispatch = wrapper(serverActions.dispatch)
 export const exitDungeon = wrapper(serverActions.exitDungeon)
+export const incrementTestCounter = wrapper(serverActions.incrementTestCounter)
 export const addSelected = wrapper(addSelected_)
 export const changeDungeon = wrapper(changeDungeon_)
 
@@ -121,7 +127,7 @@ function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Arg
         try {
             const result = await f(data[0])
             const elapsed = Date.now() - startTime
-            if (isLog) { console.log(`    ${f.name}#${randId} took ${elapsed} seconds and is responding with ${JSON.stringify(result)}`) }
+            if (isLog) { console.log(`    ${f.name}#${randId} took ${elapsed / 1000} seconds and is responding with ${JSON.stringify(result)}`) }
             return { status: 'success', result }
         } catch (e) {
             console.error(`exception occured in client call to ${f.name}: `, e)
