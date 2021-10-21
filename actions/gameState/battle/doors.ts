@@ -1,7 +1,7 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
 import { sampleSize } from 'lodash'
 
-import type { FireCursor } from '@/util/FireCursor'
+import type { DataCursor } from '@/util/DataCursor'
 
 import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
@@ -78,7 +78,7 @@ function randInt(min: number, under: number): number {
     return (Math.random() * (under - min) + min) | 0
 }
 
-export function putUpDoors(scene: FireCursor<Gamestate, BattleScene>): void {
+export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
     // console.log('adding doors')
     const { roomsPassed, dungeonName } = scene.get()
     scene.setK('state', 'not started')

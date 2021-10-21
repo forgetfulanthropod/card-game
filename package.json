@@ -10,11 +10,6 @@
         "oldserve": "npx serve -s build -p 3000",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
-        "emulate": "firebase emulators:start",
-        "emulate-debug": "firebase emulators:start --inspect-functions",
-        "functions-shell": "firebase functions:shell",
-        "clean-ports": "bash scripts/killports.sh 5001 8080 3001 9229 4400 4500",
-        "only": "firebase emulators:start --only",
         "fullstart": "bash scripts/fullstart.sh"
     },
     "dependencies": {
@@ -25,7 +20,6 @@
         "esbuild-css-modules-plugin": "^2.0.9",
         "esbuild-plugin-alias": "^0.2.0",
         "eventemitter3": "^4.0.7",
-        "firebase": "^9.1.2",
         "lodash": "^4.17.21",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.1.3",

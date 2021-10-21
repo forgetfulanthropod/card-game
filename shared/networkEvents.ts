@@ -1,5 +1,5 @@
 
-/** Emulate event emitters over network with firestore updates.
+/** Simulate event emitters over network with datastore updates.
  * Probably gonna break down eventually but we can write a new shim when it does
  */
 

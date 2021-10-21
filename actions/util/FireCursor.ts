@@ -1,5 +1,4 @@
 import { diff } from 'deep-diff'
-import type { firestore } from 'firebase-admin'
 import { get, set, update } from 'lodash'
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -11,19 +10,19 @@ const config = {
 
 class CursorRoot<Root extends Objectish> {
     constructor(
-        public docRef: firestore.DocumentReference<Root>,
+        public docRef: datastore.DocumentReference<Root>,
         public data: Root,
         public changeMade: boolean,
     ) { }
 }
 
-export class FireCursor<Root extends Objectish, Sub = Root> {
+export class DataCursor<Root extends Objectish, Sub = Root> {
     constructor(public R: CursorRoot<Root>,
         private path: string[],
     ) { }
-    select<K extends keyof Sub>(k: K): FireCursor<Root, Sub[K]> {
+    select<K extends keyof Sub>(k: K): DataCursor<Root, Sub[K]> {
         const newPath = [...this.path, k as string]
-        return new FireCursor<Root, Sub[K]>(this.R, newPath)
+        return new DataCursor<Root, Sub[K]>(this.R, newPath)
     }
     get(): Sub { return get(this.R.data, this.path) }
     getK<K extends keyof Sub>(k: K): Sub[K] { return get(this.R.data, [...this.path, k]) }
@@ -59,21 +58,21 @@ export class FireCursor<Root extends Objectish, Sub = Root> {
     }
 }
 // TODO:
-// export type FireCursor = typeof FireCursor
+// export type DataCursor = typeof DataCursor
 
 // declare global {
 //     interface globalThis {
-//         rootCursorInstance: FireCursor
+//         rootCursorInstance: DataCursor
 //     }
 // }
-let rootInstance: FireCursor<Objectish> | null = null
+let rootInstance: DataCursor<Objectish> | null = null
 
-export async function makeRootFireCursor<Root>(docRef: firestore.DocumentReference<Root>): Promise<FireCursor<Root, Root>> {
+export async function makeRootDataCursor<Root>(docRef: datastore.DocumentReference<Root>): Promise<DataCursor<Root, Root>> {
     if (rootInstance != null) {
         Object.assign(rootInstance.R.data, (await docRef.get()).data())
-        return rootInstance as FireCursor<Root, Root>
+        return rootInstance as DataCursor<Root, Root>
     }
     const cursorRoot = new CursorRoot<Root>(docRef, (await docRef.get()).data() as Root, false)
-    rootInstance = new FireCursor(cursorRoot, [])
-    return rootInstance as FireCursor<Root, Root>
+    rootInstance = new DataCursor(cursorRoot, [])
+    return rootInstance as DataCursor<Root, Root>
 }

@@ -3,7 +3,7 @@ import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
 
 import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
-import type { FireCursor } from '../../util/FireCursor'
+import type { DataCursor } from '../../util/DataCursor'
 import type { BattleCursor } from '../../util/getters'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
@@ -224,7 +224,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
 
 
 const getMoveChannel = memoize(async function getMoveChannel() {
-    const eventsCursor: FireCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
+    const eventsCursor: DataCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (await getGameStateCursor('alice')).select('events')
     const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
     return move$
 })

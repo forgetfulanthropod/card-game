@@ -1,5 +1,3 @@
-import type { HttpsFunction } from 'firebase-functions/v1'
-import { https } from 'firebase-functions/v1'
 
 
 const config = {
@@ -9,7 +7,6 @@ const config = {
 function makeRandId() { return Math.random().toString().slice(2, 6) }
 
 export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): HttpsFunction {
-    // startFirebaseApp()
     return https.onCall(async (data, _context) => {
         const randId = makeRandId()
         const startTime = Date.now()

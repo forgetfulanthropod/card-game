@@ -109,16 +109,6 @@
     },
     "ignorePatterns": [
         "scripts/"
-    ],
-    "overrides": [
-        {
-            "files": [
-                // "client/**/*.ts",
-                // "client/**/*.tsx",
-                // "client/**/*.d.ts",
-                "shared/**/*.ts",
-                "functions/**/*.ts"
-            ]
-        }
     ]
+    // ,"overrides": [ { "files": [ "client/**/*.ts", "client/**/*.tsx", "client/**/*.d.ts", "shared/**/*.ts", "functions/**/*.ts" ] } ]
 }

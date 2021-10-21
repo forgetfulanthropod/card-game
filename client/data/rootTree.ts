@@ -3,7 +3,7 @@ import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
 import { MyBaobab } from '@shared/myBaobab'
 
 // import { getRulebookAsync } from '@/actions'
-import { getGameState } from '@/fire/firestoreListener'
+import { getGameState } from '@/connection/serverListener'
 
 import type { Scene } from './types'
 

@@ -8,8 +8,8 @@ import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
 import { fillBothTrees, onGamestate } from './data/rootTree'
-import { maybeInitializeApp } from './fire'
-import { attachFirestoreListener } from './fire/firestoreListener'
+import { maybeInitializeApp } from './connection'
+import { attachServerListener } from './connection/serverListener'
 
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
@@ -55,8 +55,8 @@ async function maybeStart<K extends keyof typeof state>(k: K) {
     state[k] = true
     if (state.basic && state.deluxe && state.gamestate && state.createdUser && !state.started) {
         log('everything loaded up')
-        log('attaching firestore listener')
-        attachFirestoreListener()
+        log('attaching datastore listener')
+        attachServerListener()
         // log('changing scene')
         // await changeScene({ newSceneName: 'battle' })
         log('starting preact')

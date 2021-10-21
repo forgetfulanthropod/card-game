@@ -7,7 +7,7 @@
 				"tsc actions",
 				"tsc client",
 				"esbuild client",
-				"run emulator",
+				"run server",
 			],
 			"dependsOrder": "parallel",
 			"group": {
@@ -57,9 +57,9 @@
 			}
 		},
 		{
-			"label": "run emulator",
+			"label": "run server",
 			"type": "npm",
-			"script": "emulate",
+			"script": "server",
 			"problemMatcher": [],
 			"presentation": {
 				"group": "actions",

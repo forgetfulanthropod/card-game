@@ -1,28 +1,22 @@
 {
     "name": "actions-api",
-    "description": "firebase cloud functions",
     "scripts": {
         "start": "rm -rf lib && tsc -w",
         "build": "rm -rf lib && tsc",
         "esbuild": "rm -rf lib && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
         "parcel": "rm -rf lib && parcel build",
         "minify": "uglifyjs lib/actions/index.js > lib/actions/uglyindex.js",
-        "actions": "firebase emulators:start --only functions"
     },
     "engines": {
         "node": "14"
     },
     "main": "lib/actions/index.js",
     "dependencies": {
-        "better-firebase-functions": "^3.4.1",
         "deep-diff": "^1.0.2",
         "eventemitter3": "^4.0.7",
-        "firebase-admin": "^10.0.0",
-        "firebase-functions": "^3.15.7",
         "lodash": "^4.17.21"
     },
     "devDependencies": {
-        "firebase-functions-test": "^0.3.3",
         "typescript": "^4.4.4"
     },
     "private": true

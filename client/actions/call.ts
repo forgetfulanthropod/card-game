@@ -1,8 +1,7 @@
 /** Exports all the API routes as functions */
 import type { Caller, CallReturn, Func } from '@shared/actions'
-import { httpsCallable } from 'firebase/functions'
 
-import { maybeInitializeApp } from '@/fire'
+import { maybeInitializeApp } from '@/connection'
 
 const { functions } = maybeInitializeApp()
 
