@@ -83,4 +83,5 @@ export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
     const { roomsPassed, dungeonName } = scene.get()
     scene.setK('state', 'not started')
     scene.setK('doors', getDoorChoices({ roomsPassed, dungeonName }))
+    scene.flush()
 }

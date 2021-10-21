@@ -177,6 +177,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         return
     } else if (winner === 'NPC') {
         scene.setK('state', 'lost')
+        scene.flush()
         return
     }
 

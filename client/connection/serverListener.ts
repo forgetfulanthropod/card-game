@@ -19,8 +19,8 @@ export function getSocket() {
 
 
 const config = {
-    enableExpensiveUpdateValidation: false,
-    logChanges: false,
+    enableExpensiveUpdateValidation: true,
+    logChanges: true,
 }
 
 export async function listenForInitialGameState(): Promise<Gamestate> {
@@ -37,7 +37,8 @@ export function attachServerListener(): void {
     console.log('attaching server listener')
     socket.on('update', data => {
         console.log('received server data', data)
-        getTree().set(data)
+        // getTree().set(data)
+        updateBoabab(data)
     })
 }
 
