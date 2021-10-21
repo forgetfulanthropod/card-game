@@ -1,4 +1,4 @@
-import type { CharacterMove, CharacterUid, Door, Rulebook, SceneName } from '.'
+import type { CharacterMove, CharacterUid, Door, SceneName } from '.'
 import type { OwnedCharacter } from './datamodel'
 
 // NOTE: if we keep all args as strings then we can test in URL bar more easily
@@ -8,12 +8,12 @@ import type { OwnedCharacter } from './datamodel'
 type Hello = (args: Empty) => 'hello'
 type Square = (args: { n: string }) => number
 type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
-type GetOwnedCharacters = (args: Empty) => Promise<Record<CharacterUid, OwnedCharacter>>
+// type GetOwnedCharacters = (args: Empty) => Promise<Record<CharacterUid, OwnedCharacter>>
 type ChangeScene = (args: { newSceneName: SceneName }) => void
 type ChangeDungeon = (args: { direction: -1 | 1 }) => void
 type AddSelected = (args: { character: OwnedCharacter }) => void
 type ChooseDoor = (args: { door: Door }) => void
-type GetRulebook = (args: Empty) => Rulebook
+// type GetRulebook = (args: Empty) => Rulebook
 type StartGame = (args: Empty) => void
 type DoCharacterAction = (args: { uid: CharacterUid }) => void
 type MakeNewUser = (args: { username: 'alice' }) => void
@@ -25,9 +25,9 @@ export interface ServerActions {
     square: Square
     echo: Echo
     changeScene: ChangeScene
-    getOwnedCharacters: GetOwnedCharacters
+    // getOwnedCharacters: GetOwnedCharacters
     chooseDoor: ChooseDoor
-    getRulebook: GetRulebook
+    // getRulebook: GetRulebook
     startGame: StartGame
     doCharacterAction: DoCharacterAction
     makeNewUser: MakeNewUser
@@ -43,14 +43,14 @@ export interface ClientActions {
     hello: Caller<Hello>
     square: Caller<Square>
     echo: Caller<Echo>
-    getOwnedCharacters: Caller<GetOwnedCharacters>
+    // getOwnedCharacters: Caller<GetOwnedCharacters>
     changeScene: Caller<ChangeScene>
     chooseDoor: Caller<ChooseDoor>
     startGame: Caller<StartGame>
     doCharacterAction: Caller<DoCharacterAction>
     makeNewUser: Caller<MakeNewUser>
     dispatch: Caller<Dispatch>
-    getRulebookAsync(): Promise<Rulebook>
+    // getRulebookAsync(): Promise<Rulebook>
     changeDungeon: Caller<ChangeDungeon>
     addSelected: Caller<AddSelected>
     exitDungeon: Caller<ExitDungeon>

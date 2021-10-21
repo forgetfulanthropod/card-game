@@ -8,11 +8,12 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
         { key: defender.uid, damage: getDamage(attackData) }
     ))
 
-    const attackerDOT = attackData.attacker.effects.find(e => e.type && e.type.indexOf('DOT') > -1)
-    if (attackerDOT != null) {
-        if (attackerDOT.damagesByRound == null || attackerDOT.remainingRounds == null) { throw Error('bad attack effect data') }
-        const damage = attackerDOT.damagesByRound[attackerDOT.damagesByRound.length - attackerDOT.remainingRounds]
-        kds.push({ key: attackData.attacker.uid, damage })
+    if (attackData.attacker.effects.length > 0) {
+        attackData.attacker.effects.map(e => {
+            if (e.damagesByRound == null || e.remainingRounds == null) { throw Error('bad attack effect data') }
+            const damage = e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
+            kds.push({ key: attackData.attacker.uid, damage })
+        })
     }
 
     return kds
@@ -78,8 +79,15 @@ function getMoveMultiplier(d: AttackData): number {
             const relevantMultiplierIndex = typeMeta.numTargets.findIndex(num => numDefenders <= num)
             if (relevantMultiplierIndex === -1) throw new Error('hmm something is deeply wrong')
             typeMultiplier = typeMeta.multipliers[relevantMultiplierIndex]
+            console.log('>>>>>>>>>>>>. hi set typeMultiplier via multipliers array..', typeMeta.multipliers)
+        } else if (typeMeta.multiplier != null) {
+            typeMultiplier = typeMeta.multiplier
+        } else if (typeMeta.multiplierRange != null) {
+            const r = typeMeta.multiplierRange
+            typeMultiplier = r[0] + Math.random() * Math.abs(r[1] - r[0])
         } else {
-            typeMultiplier = typeMeta.multiplier as number
+            console.log('><><><><><><><><>< UNIMPLEMENTED! ><><><><><><><><><')
+            typeMultiplier = 1
         }
 
         // console.log(JSON.stringify({ multiplier, typeMultiplier }))

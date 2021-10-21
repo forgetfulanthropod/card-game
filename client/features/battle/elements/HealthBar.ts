@@ -124,9 +124,9 @@ export default function HealthBar(
 
 
     const effects = args.effects.map(
-        e => Text({
+        (e, i) => Text({
             text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
-            y: 40,
+            y: 40 * (i + 1),
             style: {
                 fontFamily: 'monospace',
                 fontSize: 30,

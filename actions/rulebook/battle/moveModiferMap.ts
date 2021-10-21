@@ -35,10 +35,9 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         multiplier: .5,
     },
     SP: {
-        // TODO: If only two targets are present, it does 40% damage to both.
         name: 'SP',
         numTargets: [2, 3],
-        multipliers: [.4, .333],
+        multipliers: [.4, .333], // if only two targets are present, it does 40% damage to both.
     },
     DOT1: {
         // TODO: subsequent damage is inflited before that character activates

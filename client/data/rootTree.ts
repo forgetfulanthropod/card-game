@@ -2,7 +2,7 @@ import type { BattleScene } from '@shared/battleTypes'
 import type { EntryScene, Gamestate, MyCursor, Rulebook } from '@shared/index'
 import { MyBaobab } from '@shared/myBaobab'
 
-import { getRulebookAsync } from '@/actions'
+// import { getRulebookAsync } from '@/actions'
 import { getGameState } from '@/fire/firestoreListener'
 
 import type { Scene } from './types'
@@ -13,15 +13,15 @@ const state = {
     gamestate: null as MyBaobab<Gamestate> | null,
     rulebook: null as Rulebook | null,
     gameStateCallbacks: [] as Callback[],
-    rulebookCallbacks: [] as Callback[],
+    // rulebookCallbacks: [] as Callback[],
 }
 
 export function onGamestate(cb: Callback): void {
     state.gameStateCallbacks.push(cb)
 }
-export function onRulebook(cb: Callback): void {
-    state.rulebookCallbacks.push(cb)
-}
+// export function onRulebook(cb: Callback): void {
+//     state.rulebookCallbacks.push(cb)
+// }
 
 export async function fillBothTrees(): Promise<void> {
     state.gamestate = new MyBaobab(await getGameState())
@@ -29,9 +29,9 @@ export async function fillBothTrees(): Promise<void> {
     window.tree = state.gamestate
     for (const cb of state.gameStateCallbacks) { cb() }
     state.gameStateCallbacks = []
-    state.rulebook = await getRulebookAsync()
-    for (const cb of state.rulebookCallbacks) { cb() }
-    state.rulebookCallbacks = []
+    // state.rulebook = await getRulebookAsync()
+    // for (const cb of state.rulebookCallbacks) { cb() }
+    // state.rulebookCallbacks = []
 }
 
 

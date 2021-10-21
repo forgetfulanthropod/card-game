@@ -5,12 +5,23 @@ import type { PixiContainer } from './mypixi'
 import { Text } from './mypixi'
 import { Container, Sprite } from './mypixi'
 
-const doorWidth = 335
+const doorWidth = 330
+const BASE_HEIGHT = 1080
 
 export default function Doors(args: { callbacks: Callback[], descriptions?: string[], exit: Callback }): PixiContainer {
     const doorsAndText = args.callbacks.flatMap((cb, i) => {
-        const door = Door({ xScaled: i * 1.5 + 1, onClick: cb })
-        const text = args?.descriptions?.[i] != null && Text({ text: args.descriptions[i], x: (i * 1.5 + 1) * doorWidth, width: doorWidth })
+        const door = Door({ xScaled: i * 1.15 + .5, onClick: cb })
+        const text = args?.descriptions?.[i] != null &&
+            Text({
+                text: args.descriptions[i],
+                x: (i * 1.15 + .5) * doorWidth,
+                y: BASE_HEIGHT / 2,
+                anchor: [.5, 0],
+                width: doorWidth,
+                style: {
+                    fill: 'white',
+                },
+            })
         return [door, text]
     })
     return Container({
@@ -22,9 +33,13 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
 
 function Door(args: { xScaled: number, onClick: Callback }) {
     const texture = dataOf('door')
-    const x = texture.width * args.xScaled
+    const x = doorWidth * args.xScaled
+    console.log({ scale: doorWidth / texture.width })
     return Sprite({
         x,
+        y: BASE_HEIGHT / 2,
+        anchor: [.5, .5],
+        scale: doorWidth / texture.width,
         src: texture,
         onClick: args.onClick
     })
