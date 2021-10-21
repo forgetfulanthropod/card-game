@@ -5,56 +5,35 @@ import type { OwnedCharacter } from './datamodel'
 // I think returning data as other kinds of values is fine.
 // I couldn't find a less verbose way to do this.
 // To add a function, add it three times here, twice in actions/functions.ts, and twice in client/actions/all.ts. (seven total lol)
-type Hello = (args: Empty) => 'hello'
-type Square = (args: { n: string }) => number
-type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
-// type GetOwnedCharacters = (args: Empty) => Promise<Record<CharacterUid, OwnedCharacter>>
-type ChangeScene = (args: { newSceneName: SceneName }) => void
-type ChangeDungeon = (args: { direction: -1 | 1 }) => void
 type AddSelected = (args: { character: OwnedCharacter }) => void
+type ChangeDungeon = (args: { direction: -1 | 1 }) => void
+type ChangeScene = (args: { newSceneName: SceneName }) => void
 type ChooseDoor = (args: { door: Door }) => void
-// type GetRulebook = (args: Empty) => Rulebook
-type StartGame = (args: Empty) => void
 type DoCharacterAction = (args: { uid: CharacterUid }) => void
-type MakeNewUser = (args: { username: 'alice' }) => void
+type Echo = <T extends Empty>(args: T) => T // eslint-disable-line @typescript-eslint/ban-types
 type ExitDungeon = (args: Empty) => void
+type Hello = (args: Empty) => 'hello'
 type IncrementTestCounter = (args: Empty) => void
+type MakeNewUser = (args: { username: 'alice' }) => void
+type Square = (args: { n: string }) => number
+type StartGame = (args: Empty) => void
 export type Dispatch = (action: Action) => Promise<void>
-export interface ServerActions {
-    hello: Hello
-    square: Square
-    echo: Echo
-    changeScene: ChangeScene
-    // getOwnedCharacters: GetOwnedCharacters
-    chooseDoor: ChooseDoor
-    // getRulebook: GetRulebook
-    startGame: StartGame
-    doCharacterAction: DoCharacterAction
-    makeNewUser: MakeNewUser
-    dispatch: Dispatch
-    changeDungeon: ChangeDungeon
-    addSelected: AddSelected
-    exitDungeon: ExitDungeon
-    incrementTestCounter: IncrementTestCounter
-}
 
 // I think there must be some kind of mapped interface via indexed types but idk how.
 export interface ClientActions {
-    hello: Caller<Hello>
-    square: Caller<Square>
-    echo: Caller<Echo>
-    // getOwnedCharacters: Caller<GetOwnedCharacters>
+    addSelected: Caller<AddSelected>
+    changeDungeon: Caller<ChangeDungeon>
     changeScene: Caller<ChangeScene>
     chooseDoor: Caller<ChooseDoor>
-    startGame: Caller<StartGame>
-    doCharacterAction: Caller<DoCharacterAction>
-    makeNewUser: Caller<MakeNewUser>
     dispatch: Caller<Dispatch>
-    // getRulebookAsync(): Promise<Rulebook>
-    changeDungeon: Caller<ChangeDungeon>
-    addSelected: Caller<AddSelected>
+    doCharacterAction: Caller<DoCharacterAction>
+    echo: Caller<Echo>
     exitDungeon: Caller<ExitDungeon>
+    hello: Caller<Hello>
     incrementTestCounter: Caller<IncrementTestCounter>
+    makeNewUser: Caller<MakeNewUser>
+    square: Caller<Square>
+    startGame: Caller<StartGame>
 }
 
 
