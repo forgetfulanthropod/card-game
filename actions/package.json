@@ -1,10 +1,13 @@
 {
     "name": "actions-api",
     "scripts": {
-        "start": "rm -rf lib && tsc -w",
-        "build": "rm -rf lib && tsc",
-        "esbuild": "rm -rf lib && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
-        "parcel": "rm -rf lib && parcel build",
+        "clear": "cp -r ../shared ./shared && rm -rf lib",
+        "start": "npm run clear && tsc -w",
+        "build": "npm run clear && tsc",
+        "esbuild": "npm run clear && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
+        "parcel": " npm run clear && parcel build",
+        "pwatch": " npm run clear && parcel watch",
+        "debug": " npm run clear && parcel build --no-optimize --no-scope-hoist --no-content-hash && node inspect lib/index.js",
         "minify": "uglifyjs lib/index.js > lib/uglyindex.js"
     },
     "engines": {

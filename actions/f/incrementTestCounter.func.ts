@@ -1,5 +1,5 @@
 
-import { getRootCursor } from '@/util/getters'
+import { getRootCursor } from '../util/getters'
 import { onCallWrapper } from '../util/onCallWrapper'
 
 export default onCallWrapper(async function incrementTestCounter() {

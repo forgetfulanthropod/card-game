@@ -1,5 +1,6 @@
-import { Gamestate, Immutable, MyBaobab, MyCursor } from '@shared/index'
-import { get, set, update } from 'lodash'
+import type { Gamestate, Immutable, } from '@shared/index'
+import { MyCursor, MyBaobab } from '../shared/myBaobab'
+import { get, memoize, set, update } from 'lodash'
 import { RootTreeShit } from './getters'
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -16,18 +17,20 @@ class CursorRoot<Root extends Objectish> {
     ) { }
 }
 
-export class DataCursor<Root extends Objectish, Sub = Root> extends MyCursor<Sub> {
-    constructor(private boababCursor: MyCursor<Sub>) {
-        super()
+export class DataCursor<Root extends Objectish, Sub = Root> {
+    constructor(private bc: MyCursor<Sub>) {
     }
-    getK<K extends keyof Sub>(k: K): Sub[K] { return this.get(k) }
+    get(): Sub { return this.bc.get() }
+    getK<K extends keyof Sub>(k: K): Sub[K] { return this.bc.get(k) }
+    set(value: Sub): Sub { return this.bc.set(value) }
     setK<K extends keyof Sub>(key: K, value: Sub[K]): void {
-        this.set(key, value)
+        this.bc.set(key, value)
     }
+    apply(update: (s: Sub) => Sub): Sub { return this.bc.apply(update) }
     applyK<K extends keyof Sub>(key: K, func: (prev: Immutable<Sub[K]>) => Immutable<Sub[K]>): void {
-        this.apply(key, func)
+        this.bc.apply(key, func)
     }
-    select<K extends keyof Sub>(k: K) { return new DataCursor(this.boababCursor.select(k)) }
+    select<K extends keyof Sub>(k: K) { return new DataCursor(this.bc.select(k)) }
     async flush(): Promise<void> {
         return // TODO
     }
@@ -41,14 +44,18 @@ export class DataCursor<Root extends Objectish, Sub = Root> extends MyCursor<Sub
 //     }
 // }
 
-export function makeRootDataCursor(): DataCursor<RootTreeShit> {
+export const makeRootDataCursor = memoize(function makeRootDataCursor(): DataCursor<RootTreeShit> {
     const b = new MyBaobab({
         contents: {
             users: {
                 alice: null as unknown as Gamestate
+
             },
             testCounters: { counter0: 0 }
         }
     })
-    return new DataCursor(b.select('contents'))
-}
+    console.log('guest')
+    const c = b.select('contents')
+    console.log('west')
+    return new DataCursor(c)
+})

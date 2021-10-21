@@ -1,7 +1,7 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
 import { sampleSize } from 'lodash'
 
-import type { DataCursor } from '@/util/DataCursor'
+import type { DataCursor } from '../../util/DataCursor'
 
 import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
