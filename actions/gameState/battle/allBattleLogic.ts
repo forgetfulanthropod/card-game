@@ -13,8 +13,9 @@ import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
 
-const TIME_AFTER_PLAYER_MOVE = 1000
-const DEFAULT_WAIT = 1000
+const TIME_AFTER_PLAYER_MOVE = 1
+const DEFAULT_WAIT = 1
+const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 const DEBUG = false
 
 const tl = (x: string) => console.log(x)
@@ -93,6 +94,10 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
     if (!isPlayerTurn) {
         warn('not player turn')
+        setTimeout(() => {
+            if (!scene.select('isPlayerTurn').get())
+                doNpcMove('NPC has extra turns')
+        }, NOT_YOUR_TURN_REJECTION_WAIT)
         return
     }
     if (alivePcs.every(c => c.hasMoved)) {
@@ -122,9 +127,15 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
     }
 
     const defenders = [clicked]
-    if (moveModifiers[selectedMove.types[0]].numTargets > 1) {
-        const closest = getClosestAlive(vals(allCharacters), clicked, 1)
-        if (closest != null) defenders.push(closest)
+    const moveModifier = moveModifiers[selectedMove.types[0]]
+    const numTargets = typeof moveModifier.numTargets === 'number' ?
+        moveModifier.numTargets :
+        moveModifier.numTargets[moveModifier.numTargets.length - 1]
+    if (numTargets > 1) {
+        for (let i = 1; i < numTargets; i++) {
+            const closest = getClosestAlive(vals(allCharacters), clicked, i)
+            if (closest != null) defenders.push(closest)
+        }
     }
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],
