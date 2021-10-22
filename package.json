@@ -2,7 +2,7 @@
     "scripts": {
         "build": "bash scripts/build.sh",
         "start": "bash scripts/start.sh",
-        "lint": "eslint -c .client.eslintrc.json $(fd -e ts -e tsx client shared)",
+        "lint": "eslint -c .client.eslintrc.json $(fd -e ts -e tsx . client shared)",
         "fmt": "npm run lint -- --fix",
         "lint-actions": "eslint -c .actions.eslintrc.json $(fd -e ts . actions)",
         "fmt-actions": "npm run lint-actions -- --fix",
