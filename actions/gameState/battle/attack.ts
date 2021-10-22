@@ -2,10 +2,11 @@
 import type { AttackData, CharacterMeta, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
 
 import { rulebook } from '../../rulebook'
+import { getTransformed, isSpecial } from './specialMoves'
 
 export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
-        { key: defender.uid, damage: getDamage(attackData) }
+        { key: defender.uid, damage: getDamage(attackData, defender) }
     ))
 
     if (attackData.attacker.effects.length > 0) {
@@ -29,7 +30,7 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
 export function getCharacterKeysAndEffects(attackData: AttackData): { key: CharacterUid, effect: Effect }[] {
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
-        const moveMeta = rulebook.moveModiferMap[moveTypeDOT]
+        const moveMeta = rulebook.moveMetaMap[moveTypeDOT]
 
         if (moveMeta.effectMultipliers === undefined) { throw Error('bad move meta') }
         return attackData.defenders.map(d => ({
@@ -47,11 +48,14 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
     return []
 }
 
-function getDamage(d: AttackData): number {
-    const dam = d.attacker.damage
-        * getAttackMultiplier(d.attacker)
-        * getMoveMultiplier(d)
-        * getDefenseMultiplier(d.defenders[0]) | 0
+function getDamage(ad: AttackData, defender: CharacterMeta): number {
+    let attackData = ad
+    if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
+
+    const dam = attackData.attacker.damage
+        * getAttackMultiplier(attackData.attacker)
+        * getMoveMultiplier(attackData)
+        * getDefenseMultiplier(defender) | 0
 
     return dam > 0 ? dam : 1
 }
@@ -71,7 +75,7 @@ function getAttackMultiplier(attacker: CharacterMeta): StanceMultiplier {
 // }
 function getMoveMultiplier(d: AttackData): number {
     return d.move.types.reduce((multiplier, nextType) => {
-        const typeMeta = rulebook.moveModiferMap[nextType]
+        const typeMeta = rulebook.moveMetaMap[nextType]
 
         let typeMultiplier: number
 

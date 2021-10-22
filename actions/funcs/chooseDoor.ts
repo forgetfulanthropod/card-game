@@ -2,7 +2,7 @@ import type { Door } from '@shared/datamodel'
 
 import { resetRound } from '../gameState/battle/allBattleLogic'
 import { makeRoom } from '../gameState/battle/doors'
-import { getBattleScene } from '../util/getters'
+import { getBattleScene } from '../util/treeAccessors'
 import { objFilter } from '../util/objectMethods'
 import { onCallWrapper } from '../util/onCallWrapper'
 

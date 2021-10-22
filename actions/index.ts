@@ -3,7 +3,7 @@ import { Server as HttpServer } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './functions'
-const port = 3003
+const port = 3000
 
 const app = express()
 app.use(express.json())

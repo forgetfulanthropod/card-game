@@ -12,5 +12,5 @@ export const {
     recipes,
     numbers,
     stanceTypeMetaMap,
-    moveModiferMap,
+    moveMetaMap,
 } = rulebook

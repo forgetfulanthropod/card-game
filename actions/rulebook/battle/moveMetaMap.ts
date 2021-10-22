@@ -1,5 +1,5 @@
 // import { deepFreeze } from '@/util'
-import type { MoveModifier, MoveModifierName } from '@shared/index'
+import type { MoveMeta, MoveMetaName } from '@shared/index'
 
 
 // Basic Attack: 100% of attack damage, no modifiers
@@ -23,7 +23,7 @@ import type { MoveModifier, MoveModifierName } from '@shared/index'
 
 // TODO: fill in this data
 
-export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
+export const moveMetaMap: Record<MoveMetaName, MoveMeta> = {
     BA: {
         name: 'BA',
         numTargets: 1,
@@ -92,7 +92,7 @@ export const moveModiferMap: Record<MoveModifierName, MoveModifier> = {
         // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
         name: 'MIM',
         numTargets: 1,
-        multiplier: 1,
+        multiplier: 0,
         isSpecial: true,
     },
 

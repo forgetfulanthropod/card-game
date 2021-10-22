@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, EntryScene, MoveModifier, MoveModifierName, NetworkAttackData, StanceName, StanceStats } from '@shared/index'
+import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '@shared/index'
 
 import type { NetworkEvent } from './networkEvents'
 
@@ -16,7 +16,7 @@ type RecipeName = string
 
 export interface Rulebook {
     characters: Record<CharacterName, CharacterStats>
-    moveModifiers: Record<MoveModifierName, MoveModifier>
+    moveMetaMap: Record<MoveMetaName, MoveMeta>
     recipes: Record<RecipeName, { name: RecipeName, ingredients: ItemName[], result: ItemName }>
     locations: Record<LocationName, {
         displayName: string
@@ -41,7 +41,6 @@ export interface Rulebook {
         X_NEUTRAL_THRESH: number
     }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
-    moveModiferMap: Record<MoveModifierName, MoveModifier>
 }
 export interface Gamestate {
     scene: Scene
@@ -89,7 +88,7 @@ export interface CharacterStats {
 }
 export interface CharacterMove {
     name: string
-    types: MoveModifierName[]
+    types: MoveMetaName[]
 }
 
 export interface LearnableCharacterMove extends CharacterMove {
