@@ -1,9 +1,10 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
-import { sampleSize } from 'lodash'
+import { keys, sample, sampleSize } from 'lodash'
 
 import { npcNames } from '../../rulebook/battle'
+import type { SpecialDoorName } from '../../rulebook/battle/specialDoorsMap'
+import { specialDoorsMap } from '../../rulebook/battle/specialDoorsMap'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
-import type { SpecialDoor } from '../../rulebook/battle/specialDoorsMap'
 import { mapToObj, zip } from '../../util/arrayMethods'
 import type { DataCursor } from '../../util/DataCursor'
 import { valMap } from '../../util/objectMethods'
@@ -44,7 +45,8 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: Dungeon
     return { options, descriptions }
 }
 
-export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number }): Room {
+export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
+    const modifier = args?.modifier ?? 1
     if (args.door === 'random') {
         return {
             modifier: -1,
@@ -61,7 +63,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
     const index = weightedRandom(roomOutcomes.probs)
     const outcome = roomOutcomes.outcomes[index]
     return {
-        modifier: -1,
+        modifier: modifier,
         enemies: mapToObj(outcome, pair => {
             const [name, level] = pair
             const uid = makeUid()
@@ -70,51 +72,94 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
     }
 }
 
-export function handleSpecialDoor(args: { door: SpecialDoor }) {
-    const d = args.door
-    switch (d.name) {
+export function handleSpecialDoor(args: {
+    door: SpecialDoorName,
+    dungeonName: DungeonName,
+    roomsPassed: number
+}): Room {
+
+    const { door, dungeonName, roomsPassed } = args
+    // Putting the assignment inside each case makes typescript happy
+    switch (door) {
         case 'bigScary': {
-            break
+            const d = specialDoorsMap[door]
+            const regularDoorOptions = keys(dungeonRooms[args.roomsPassed + 1])
+            if (regularDoorOptions.length === 0) {
+                console.error('no door options!')
+                return { modifier: -1, enemies: {} }
+            }
+            const regularDoorName = sample(regularDoorOptions) as Door
+            return makeRoom({ dungeonName, roomsPassed, door: regularDoorName, modifier: d.variables.modifier })
         }
         case 'candyBaby': {
-            break
+            const _d = specialDoorsMap[door]
+            throw Error(`unimplented door: ${door}`)
         }
         case 'normal': {
-            break
+            return makeRandRegularRoom(dungeonName, roomsPassed)
         }
-        case 'matcha': {
-            break
-        }
-        case 'skeleton': {
-            break
+        case 'matcha': case 'skeleton': {
+            const v = specialDoorsMap[door].variables
+            const uid = makeUid()
+            if (roomsPassed + 1 === v.levelToAppearOn) {
+                return {
+                    modifier: 1,
+                    enemies: { uid: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) }
+                }
+            }
+            return makeRandRegularRoom(dungeonName, roomsPassed)
         }
         case 'rareItem': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'bossDoor': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'face': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'tiny': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'jumbo': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'randomEvent': {
-            break
+            const _v = specialDoorsMap[door].variables
+            throw Error(`unimplented door: ${door}`)
         }
         case 'campfire': {
-            break
+            const v = specialDoorsMap[door].variables
+            if (v.effectType === 'absolute') {
+                console.error('unimplemented')
+                return { modifier: -1, enemies: {} }
+            } else if (v.effectType === 'proportional') {
+                console.error('unimplemented')
+                return { modifier: -1, enemies: {} }
+            } else {
+                throw Error(`campfire has unknown effectType ${v.effectType}`)
+            }
         }
         default: {
-            throw Error(`unknown door type `)
+            throw Error('unknown door type ')
         }
     }
 }
 
+function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Room {
+    const regularDoorOptions = keys(dungeonRooms[roomsPassed + 1])
+    if (regularDoorOptions.length === 0) {
+        console.error('no door options!')
+        return { modifier: -1, enemies: {} }
+    }
+    const regularDoorName = sample(regularDoorOptions) as Door
+    return makeRoom({ dungeonName, roomsPassed, door: regularDoorName })
+}
 
 export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
     // console.log('adding doors')
@@ -131,4 +176,8 @@ function makeUid(): string {
 
 function randInt(min: number, under: number): number {
     return (Math.random() * (under - min) + min) | 0
+}
+
+function randCoords() {
+    return { x: randInt(50, 95), y: randInt(40, 80) }
 }

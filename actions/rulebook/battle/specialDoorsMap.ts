@@ -1,16 +1,15 @@
-import type { RoomOutcomes } from '../dungeonRooms'
+import type { CharacterName } from '@/shared'
 
-export const specialDoorNames = ['bigScary', 'candyBaby', 'normal', 'matcha', 'skeleton', 'rareItem', 'bossDoor', 'face', 'tiny', 'jumbo', 'randomEvent', 'campfire',]
-export type SpecialDoorName = typeof specialDoorNames[number]
+// export const specialDoorNames = ['bigScary', 'candyBaby', 'normal', 'matcha', 'skeleton', 'rareItem', 'bossDoor', 'face', 'tiny', 'jumbo', 'randomEvent', 'campfire',]
+export type SpecialDoorName = keyof typeof specialDoorsMap
 
-export interface SpecialDoor {
+export interface SpecialDoor<T = Record<string, unknown>> {
     name: SpecialDoorName
     description: string
-    variables: Record<string, unknown>
+    variables: T
 }
 
-export type SpecialDoorsMap = Record<SpecialDoorName, SpecialDoor>
-export const specialDoorsMap: SpecialDoorsMap = {
+export const specialDoorsMap = {
     'bigScary': {
         name: 'bigScary',
         description: 'additional x2 dungeon modifier',
@@ -32,15 +31,9 @@ export const specialDoorsMap: SpecialDoorsMap = {
         name: 'matcha',
         description: 'will automatically spawn all matcha if given a choice between randomly generating matcha with 50/50 variables.if this level is level 6, spawn a level 10 matcha cube',
         variables: {
-            conditions: [
-                {
-                    when: { level: 6 },
-                    has: {
-                        outcomes: [[['matchaGelatinCube', 10]]],
-                        probs: [1],
-                    },
-                },
-            ]
+            levelToAppearOn: 6,
+            enemyName: 'matchaGelatinCube' as CharacterName,
+            enemyLevel: 10,
         }
     },
     'skeleton': {
@@ -48,7 +41,7 @@ export const specialDoorsMap: SpecialDoorsMap = {
         description: 'same as matcha door but for skeletons',
         variables: {
             levelToAppearOn: 6,
-            enemyName: 'skeletonWarrior',
+            enemyName: 'skeletonWarrior' as CharacterName,
             enemyLevel: 10,
         }
     },
@@ -76,7 +69,9 @@ export const specialDoorsMap: SpecialDoorsMap = {
     'tiny': {
         name: 'tiny',
         description: 'applies dungeon level modifier to generate more characters for all enemies',
-        variables: {},
+        variables: {
+            tinyPerEnemy: 2,
+        },
     },
     'jumbo': {
         name: 'jumbo',
