@@ -11,6 +11,7 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
     if (attackData.attacker.effects.length > 0) {
         attackData.attacker.effects.map(e => {
             if (e.damagesByRound == null || e.remainingRounds == null) { throw Error('bad attack effect data') }
+            if (e.remainingRounds <= 0) { throw Error('trying to apply exhausted effect') }
             const damage = e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
             kds.push({ key: attackData.attacker.uid, damage })
         })

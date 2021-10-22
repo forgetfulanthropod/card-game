@@ -1,5 +1,6 @@
 // TODO: do not replicate this file
 
+import { vals } from '@/util'
 import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '@shared/index'
 
 import { moveModiferMap, stanceTypeMetaMap } from '../../rulebook/battle'
@@ -71,17 +72,34 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     }
 
     const move = getRandomMove(attacker)
-    const defenders = [getPCTarget(ac)]
+    const defender = getPCTarget(ac)
 
-    const mainType: MoveModifierName = move.types[0]
-    if (moveModiferMap[mainType].numTargets > 1) {
-        const closest = getClosestAlive(ac, defenders[0], 1)
-        if (closest != null)
-            defenders.push(closest)
+    const defenders = getDefenders(defender, move.types, ac)
+
+
+    return { attacker, defenders, move }
+}
+
+export function getDefenders(defender: CharacterMeta, moveTypes: MoveModifierName[], ac: CharacterMeta[]): CharacterMeta[] {
+    const defenders = [defender]
+
+    let numTargets = 1
+    moveTypes
+        .map(t => moveModiferMap[t])
+        .forEach(moveModifier => {
+            const numForMove = typeof moveModifier.numTargets === 'number' ?
+                moveModifier.numTargets :
+                moveModifier.numTargets[moveModifier.numTargets.length - 1]
+            if (numForMove > numTargets) numTargets = numForMove
+        })
+    if (numTargets > 1) {
+        for (let i = 1; i < numTargets; i++) {
+            const closest = getClosestAlive(ac, defender, i)
+            if (closest != null) defenders.push(closest)
+        }
     }
 
-    // console.log('defenders:', defenders)
-    return { attacker, defenders, move }
+    return defenders
 }
 
 

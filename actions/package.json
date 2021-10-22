@@ -9,7 +9,7 @@
         "pwatch": " npm run clear && parcel watch",
         "debug": " npm run clear && parcel build --no-optimize --no-scope-hoist --no-content-hash && node inspect lib/index.js",
         "minify": "uglifyjs lib/index.js > lib/uglyindex.js",
-        "server-watch": "nodemon --inspect lib/actions/index.js",
+        "server-watch": "nodemon lib/actions/index.js",
         "server": "node lib/actions/index.js"
     },
     "engines": {
