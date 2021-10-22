@@ -9,9 +9,9 @@
 
 // export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
 //     const cm = props.characterMeta
-//     const { moveModiferMap } = getRulebook()
+//     const { moveMetaMap } = getRulebook()
 //     const damageOf = (i: number) => {
-//         const mod = moveModiferMap[cm.moves[i].types[0]]
+//         const mod = moveMetaMap[cm.moves[i].types[0]]
 //         if (mod.multiplier != null)
 //             return mod.multiplier * cm.damage | 0
 //         if (mod.multipliers != null)

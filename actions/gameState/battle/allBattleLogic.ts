@@ -2,8 +2,8 @@ import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, N
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
 import type { DataCursor } from '../../util/DataCursor'
-import type { BattleCursor } from '../../util/getters'
-import { getBattleScene, getGameStateCursor } from '../../util/getters'
+import type { BattleCursor } from '../../util/treeAccessors'
+import { getBattleScene, getGameStateCursor } from '../../util/treeAccessors'
 import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
 import { keys, vals } from '../../util/objectMethods'
 import { onCallWrapper } from '../../util/onCallWrapper'
@@ -12,6 +12,7 @@ import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getDefenders, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
+import { getTransformed, isSpecial } from './specialMoves'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -129,10 +130,13 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         return
     }
 
+    let move = selectedMove
+    if (isSpecial(move)) move = getTransformed(move, selectedCharacter)
+
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],
-        defenders: getDefenders(clicked, selectedMove.types, vals(allCharacters)),
-        move: selectedMove,
+        defenders: getDefenders(clicked, move, vals(allCharacters)),
+        move,
     }
     await handleMove(scene, allCharacters, ad)
 }

@@ -3,7 +3,7 @@ import type { AttackData, CharacterMeta, Effect } from '@shared/battleTypes'
 import type { Immutable } from '@shared/index'
 import { findIndex } from 'lodash'
 
-import type { BattleCursor } from '@/util/getters'
+import type { BattleCursor } from '@/util/treeAccessors'
 
 import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
 /** Applies hasmoved, health, and effects */

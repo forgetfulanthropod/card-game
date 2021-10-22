@@ -17,8 +17,8 @@ export interface BattleScene extends SceneHas {
 }
 export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
-export interface MoveModifier {
-    name: MoveModifierName
+export interface MoveMeta {
+    name: MoveMetaName
     numTargets: number | number[]
     multiplier?: number
     multiplierRange?: [number, number]
@@ -58,7 +58,7 @@ export type StanceStats = {
     defenseMultiplier: StanceMultiplier
     targetLikelihood: 0 | 1 | 2
 }
-export type MoveModifierName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM' | 'DBF1' | 'DBF2' | 'BLK'
+export type MoveMetaName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM' | 'DBF1' | 'DBF2' | 'BLK'
 export type AttackData = {
     attacker: CharacterMeta
     defenders: CharacterMeta[]

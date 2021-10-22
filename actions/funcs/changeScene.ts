@@ -2,7 +2,7 @@ import type { SceneName } from '@shared/index'
 
 import { makeBattleState } from '../gameState/battle/state'
 import { rulebook } from '../rulebook/index'
-import { getEntryScene, getGameStateCursor } from '../util/getters'
+import { getEntryScene, getGameStateCursor } from '../util/treeAccessors'
 import { onCallWrapper } from '../util/onCallWrapper'
 
 export default onCallWrapper(function changeScene(args: { newSceneName: SceneName }): void {

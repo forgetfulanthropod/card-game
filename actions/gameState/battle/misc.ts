@@ -1,9 +1,10 @@
 // TODO: do not replicate this file
 
-import { vals } from '@/util'
-import type { AttackData, CharacterMeta, CharacterMove, MoveModifierName } from '@shared/index'
+// import { vals } from '@/util'
+import type { AttackData, CharacterMeta, CharacterMove } from '@shared/index'
 
-import { moveModiferMap, stanceTypeMetaMap } from '../../rulebook/battle'
+import { moveMetaMap, stanceTypeMetaMap } from '../../rulebook/battle'
+import { getTransformed, isSpecial } from './specialMoves'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
@@ -61,8 +62,11 @@ export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
 
 export function getRandomMove(attacker: CharacterMeta): CharacterMove {
     const moves = attacker.moves
-    const result = randomEl(moves)
-    return result
+    let move = randomEl(moves)
+
+    if (isSpecial(move)) move = getTransformed(move, attacker.uid)
+
+    return move
 }
 
 export function getNpcMove(ac: CharacterMeta[]): AttackData {
@@ -74,22 +78,22 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
     const move = getRandomMove(attacker)
     const defender = getPCTarget(ac)
 
-    const defenders = getDefenders(defender, move.types, ac)
+    const defenders = getDefenders(defender, move, ac)
 
 
     return { attacker, defenders, move }
 }
 
-export function getDefenders(defender: CharacterMeta, moveTypes: MoveModifierName[], ac: CharacterMeta[]): CharacterMeta[] {
+export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: CharacterMeta[]): CharacterMeta[] {
     const defenders = [defender]
 
     let numTargets = 1
-    moveTypes
-        .map(t => moveModiferMap[t])
-        .forEach(moveModifier => {
-            const numForMove = typeof moveModifier.numTargets === 'number' ?
-                moveModifier.numTargets :
-                moveModifier.numTargets[moveModifier.numTargets.length - 1]
+    move.types
+        .map(t => moveMetaMap[t])
+        .forEach(moveMeta => {
+            const numForMove = typeof moveMeta.numTargets === 'number' ?
+                moveMeta.numTargets :
+                moveMeta.numTargets[moveMeta.numTargets.length - 1]
             if (numForMove > numTargets) numTargets = numForMove
         })
     if (numTargets > 1) {
