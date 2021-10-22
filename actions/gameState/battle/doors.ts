@@ -3,6 +3,7 @@ import { sampleSize } from 'lodash'
 
 import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
+import type { SpecialDoor } from '../../rulebook/battle/specialDoors'
 import { mapToObj, zip } from '../../util/arrayMethods'
 import type { DataCursor } from '../../util/DataCursor'
 import { valMap } from '../../util/objectMethods'
@@ -69,13 +70,48 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
     }
 }
 
-function makeUid(): string {
-    return 'charUid-fromDoors-' + Math.random().toString().slice(2, 6)
+export function handleSpecialDoor(args: { door: SpecialDoor }) {
+    const d = args.door
+    switch (d.name) {
+        case 'bigScary': {
+            break
+        }
+        case 'candyBaby': {
+            break
+        }
+        case 'normal': {
+            break
+        }
+        case 'matcha': {
+            break
+        }
+        case 'skeleton': {
+            break
+        }
+        case 'rareItem': {
+            break
+        }
+        case 'bossDoor': {
+            break
+        }
+        case 'face': {
+            break
+        }
+        case 'tiny': {
+            break
+        }
+        case 'jumbo': {
+            break
+        }
+        case 'randomEvent': {
+            break
+        }
+        case 'campfire': {
+            break
+        }
+    }
 }
 
-function randInt(min: number, under: number): number {
-    return (Math.random() * (under - min) + min) | 0
-}
 
 export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
     // console.log('adding doors')
@@ -83,4 +119,13 @@ export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
     scene.setK('state', 'not started')
     scene.setK('doors', getDoorChoices({ roomsPassed, dungeonName }))
     scene.flush()
+}
+
+
+function makeUid(): string {
+    return 'charUid-fromDoors-' + Math.random().toString().slice(2, 6)
+}
+
+function randInt(min: number, under: number): number {
+    return (Math.random() * (under - min) + min) | 0
 }

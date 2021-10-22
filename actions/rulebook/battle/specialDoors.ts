@@ -1,34 +1,34 @@
 import type { RoomOutcomes } from '../dungeonRooms'
 
-const specialDoorNames = ['bigScary', 'candyBaby', 'normal', 'matcha', 'skeleton', 'rareItem', 'bossDoor', 'face', 'tiny', 'jumbo', 'randomEvent', 'campfire',]
-type SpecialDoorName = typeof specialDoorNames[number]
+export const specialDoorNames = ['bigScary', 'candyBaby', 'normal', 'matcha', 'skeleton', 'rareItem', 'bossDoor', 'face', 'tiny', 'jumbo', 'randomEvent', 'campfire',]
+export type SpecialDoorName = typeof specialDoorNames[number]
 
-interface SpecialDoor {
-    id: SpecialDoorName
+export interface SpecialDoor {
+    name: SpecialDoorName
     description: string
     variables: Record<string, unknown>
 }
 
 export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
     'bigScary': {
-        id: 'bigScary',
+        name: 'bigScary',
         description: 'additional x2 dungeon modifier',
         variables: {
             modifier: 2,
         }
     },
     'candyBaby': {
-        id: 'candyBaby',
+        name: 'candyBaby',
         description: 'generates a room equal to three rooms back, with equally scaled loot modifier',
         variables: { special: true },
     },
     'normal': {
-        id: 'normal',
+        name: 'normal',
         description: 'always takes up 1 door slot. does A-B-C system based on level',
         variables: {}
     },
     'matcha': {
-        id: 'matcha',
+        name: 'matcha',
         description: 'will automatically spawn all matcha if given a choice between randomly generating matcha with 50/50 variables.if this level is level 6, spawn a level 10 matcha cube',
         variables: {
             conditions: [
@@ -43,7 +43,7 @@ export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
         }
     },
     'skeleton': {
-        id: 'skeleton',
+        name: 'skeleton',
         description: 'same as matcha door but for skeletons',
         variables: {
             levelToAppearOn: 6,
@@ -52,19 +52,19 @@ export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
         }
     },
     'rareItem': {
-        id: 'rareItem',
+        name: 'rareItem',
         description: 'we should figure out the specifics of what this should be in conjunction with crafting, but it’d be fun to have a door that has an especially difficult material or crafting item',
         variables: {
             possibleItems: ['fishstick', 'potion', 'swordShield', 'bread'],
         }
     },
     'bossDoor': {
-        id: 'bossDoor',
+        name: 'bossDoor',
         description: 'has the boss',
         variables: {},
     },
     'face': {
-        id: 'face',
+        name: 'face',
         description: 'with a specific character’s face on it that lets you fight them as a boss. generate this character at level 1. for each difficult modifier, randomly increase the character\'s health by +7 or give them +1 attack',
         variables: {
             initialLevel: 1,
@@ -73,24 +73,24 @@ export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
         }
     },
     'tiny': {
-        id: 'tiny',
+        name: 'tiny',
         description: 'applies dungeon level modifier to generate more characters for all enemies',
         variables: {},
     },
     'jumbo': {
-        id: 'jumbo',
+        name: 'jumbo',
         description: 'makes the character with the highest level in this dungeon room jumbo',
         variables: {
             criteria: 'highest' as 'highest' | 'all' | 'random'
         }
     },
     'randomEvent': {
-        id: 'randomEvent',
+        name: 'randomEvent',
         description: 'question mark door',
         variables: {}
     },
     'campfire': {
-        id: 'campfire',
+        name: 'campfire',
         description: 'heals all characters for either a flat value or % of health, not sure what a good number would be yet. probably either 10% or +14',
         variables: {
             effectType: 'absolute' as 'absolute' | 'proportional',
