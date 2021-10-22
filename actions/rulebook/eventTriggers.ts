@@ -3,8 +3,8 @@ import dedent from '@/util/dedent'
 // TODO: markdown processing
 export default [
     {
-        id: "carriage",
-        shortDescription: "Your party sees a carriage with a broken wheel.  Driving the carriage is an elderly frog with a very big beard.",
+        id: 'carriage',
+        shortDescription: 'Your party sees a carriage with a broken wheel.  Driving the carriage is an elderly frog with a very big beard.',
         fullDescription: dedent(`
             "Hello travelers, I am an elderly frog with a very big beard.  I am bad at driving and as a result I have broken my carriage wheel while attempting to do donuts in the cave.  I am unable to fix the wheel by myself, but perhaps could repair it with the assistance of some strapping young kaiju.  Will you help me?"
 
@@ -25,16 +25,16 @@ export default [
             3. Ask pressing questions about the Gnome Hooligan's childhood until he has a panic attack and shares his life story.  Build a small campfire and exchange tales while eating salted meat bread.  Heal all party members for X.`)
     },
     {
-        id: "clearing",
-        shortDescription: "You find a clearing in the dungeon.  It is a dark and peaceful night.  What would you like to do?",
+        id: 'clearing',
+        shortDescription: 'You find a clearing in the dungeon.  It is a dark and peaceful night.  What would you like to do?',
         fullDescription: dedent(`
             1. Set up camp for the night.  Heal all party members by 20 health.
             2. Bury treasure.  Put aside 30% of your current loot to be saved if you die while in the dungeon.
             3. Throw a small party to lift everyone’s spirits.  Give all characters a +3 attack buff for the next 5 rooms.`)
     },
     {
-        id: "hats",
-        shortDescription: "Hats!  Hats for sale!  I am selling hats oh god is there anyone here please please help me sell these hats I am desperate to sell my hats.",
+        id: 'hats',
+        shortDescription: 'Hats!  Hats for sale!  I am selling hats oh god is there anyone here please please help me sell these hats I am desperate to sell my hats.',
         fullDescription: dedent(`
             A desperate hat salesman approaches your party.  He is wearing far too many hats.  They are stacked very tall above his head in a big tower that sways when he walks.
 
@@ -54,8 +54,8 @@ export default [
             3.  “Aaaaaaaaaaaah!”, you scream.  “Ahhhhhhhhhhhhhh!”.  Leave without touching the statue.`)
     },
     {
-        id: "gnome",
-        shortDescription: "A gnome wearing striped pajamas with matching nightcap approaches you.  He is carrying a small candle and a warm glass of milk.  He smacks his lips three times.  “Ho hum, memememe”, exclaims the gnome.",
+        id: 'gnome',
+        shortDescription: 'A gnome wearing striped pajamas with matching nightcap approaches you.  He is carrying a small candle and a warm glass of milk.  He smacks his lips three times.  “Ho hum, memememe”, exclaims the gnome.',
         fullDescription: dedent(`
             **“**It is my bed time” the gnome tells you.  “I will have a much more comfortable sleep if you read me a tale from my favorite book, ‘The Little Gnome Prince Who Lived in A Bath Tub Made of Chocolate’.  Please do not read me the tale from the back of the book, ‘The Little Gnome Who Lived Alone in a Townhouse Made of Ghosts’.  It will give me sleep paralysis”.
 
@@ -71,8 +71,8 @@ export default [
             “aaaAAAAAAAAAAA ZZZZZZZZZZ AAAAAAAHHHHAAAA ZZZ AHAHAAAAAAAAA NONONONO AAAAAAAAA ZZZZ aaaHhhhhhhhhhfffffffff”!`)
     },
     {
-        id: "babysitting",
-        shortDescription: "*Oh no!  The three adult men I am responsible for baby sitting have run off again.”",
+        id: 'babysitting',
+        shortDescription: '*Oh no!  The three adult men I am responsible for baby sitting have run off again.”',
         fullDescription: dedent(`
             A distressed young woman approaches you.  “Please help me.  I am responsible for baby sitting three idiots (fully grown) who have run off and hid somewhere nearby.  Their mother will not pay me if I return without them, and I need money to stay alive.  I think they are gnomes but honestly I am not sure they could just be extremely hairy and small”.
 
@@ -110,8 +110,8 @@ export default [
             “Oh…. You want are going to keep the wand?  I guess that means I am doomed to a lifetime of stomping in circles and being mad.  This is the worst day of my entire life.  I no longer want to be alive.  Goodbye stranger”.`)
     },
     {
-        id: "baron",
-        shortDescription: "“I am The Baron of Fun!!!!  YOU are about to have FUN!!!!!!!  This is my kingdom and it is FUN!!!!  I DEMAND that you have fun RIGHT NOW!!!”",
+        id: 'baron',
+        shortDescription: '“I am The Baron of Fun!!!!  YOU are about to have FUN!!!!!!!  This is my kingdom and it is FUN!!!!  I DEMAND that you have fun RIGHT NOW!!!”',
         fullDescription: dedent(`
             An incredibly nervous looking penguin stands before you.  He is wearing an extremely ostentatious cape and waves a scepter around`)
     }]
