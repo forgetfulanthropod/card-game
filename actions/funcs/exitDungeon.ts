@@ -1,5 +1,5 @@
 import { initialEntryState } from '../gameState/entry/state'
-import { getGameStateCursor } from '../util/getters'
+import { getGameStateCursor } from '../util/treeAccessors'
 import { onCallWrapper } from '../util/onCallWrapper'
 export default onCallWrapper(function exitDungeon(_args: { [x: string]: never }): void {
     const gameState = getGameStateCursor('alice')

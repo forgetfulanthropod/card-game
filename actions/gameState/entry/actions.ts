@@ -1,7 +1,7 @@
 import type { OwnedCharacter } from '@shared/index'
 
 import { rulebook } from '../../rulebook'
-import { getEntryScene } from '../../util/getters'
+import { getEntryScene } from '../../util/treeAccessors'
 
 export function changeDungeon({ direction }: { direction: -1 | 1 }): void {
     const levels = rulebook.dungeonLevels

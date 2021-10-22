@@ -1,7 +1,7 @@
 /** Exports all the API routes as functions */
 import type { Caller, Func } from '@shared/actions'
 
-import { entryMap } from '@/util'
+import { entryMap } from '../util'
 
 
 const CLIENT_HOST = process.env.CLIENT_HOST

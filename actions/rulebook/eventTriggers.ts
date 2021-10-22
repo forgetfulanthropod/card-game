@@ -1,4 +1,4 @@
-import dedent from '@/util/dedent'
+import dedent from '.././util/dedent'
 
 // TODO: markdown processing
 export default [

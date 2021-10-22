@@ -1,7 +1,7 @@
 import type { DungeonLevel, Rulebook } from '@shared/index'
 
 import { numbers } from '../gameState/battle/state'
-import { moveModiferMap, stanceTypeMetaMap, statsMap } from './battle'
+import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
 // import { initialEntryState } from './entry/state'
 
 const dungeonLevels: DungeonLevel[] = [
@@ -12,7 +12,7 @@ const dungeonLevels: DungeonLevel[] = [
 ]
 export const rulebook: Rulebook = {
     characters: statsMap,
-    moveModifiers: moveModiferMap,
+    moveMetaMap,
     recipes: {},
     locations: {},
     dungeonLevels: dungeonLevels,
@@ -25,5 +25,4 @@ export const rulebook: Rulebook = {
     // },
     numbers,
     stanceTypeMetaMap,
-    moveModiferMap,
 }
