@@ -72,4 +72,5 @@
     "colorTabs.titleBackground": true,
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
+    "eslint.packageManager": "pnpm",
 }

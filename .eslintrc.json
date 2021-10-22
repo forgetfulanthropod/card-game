@@ -76,7 +76,71 @@
         "@typescript-eslint/no-floating-promises": "error"
     },
     "ignorePatterns": [
-        "scripts/"
-    ]
+        "scripts/",
+        "actions/lib",
+        "build",
+        "tests",
+        "**/*.js"
+    ],
     // ,"overrides": [ { "files": [ "client/**/*.ts", "client/**/*.tsx", "client/**/*.d.ts", "shared/**/*.ts", "functions/**/*.ts" ] } ]
+    "overrides": [
+        {
+            "files": [
+                "client/**/*.ts",
+                "client/**/*.tsx",
+                "client/**/*.d.ts",
+                "shared/**/*.ts",
+                "functions/**/*.ts"
+            ],
+            "extends": [
+                "plugin:react/recommended"
+            ],
+            "plugins": [
+                "react",
+                "react-hooks"
+            ],
+            "parserOptions": {
+                "ecmaFeatures": {
+                    "jsx": true
+                },
+                "project": "tsconfig.json"
+            },
+            "rules": {
+                "react/no-unused-prop-types": "warn",
+                "react/jsx-props-no-multi-spaces": "warn",
+                "react/jsx-tag-spacing": [
+                    "warn",
+                    {
+                        "beforeClosing": "never"
+                    }
+                ],
+                "react-hooks/rules-of-hooks": [
+                    "error"
+                    // ,{
+                    //     "additionalHooks": "(useEventEmitter|useSubscription|useEffectWhen)"
+                    // }
+                ],
+                "react-hooks/exhaustive-deps": [
+                    "warn"
+                    // ,{
+                    //     "additionalHooks": "(useEffectWhen)"
+                    // }
+                ],
+                "react/react-in-jsx-scope": "off"
+            },
+            "settings": {
+                "react": {
+                    "version": "17.0.2"
+                }
+            }
+        },
+        {
+            "files": [
+                "actions/**/*.ts"
+            ],
+            "parserOptions": {
+                "project": "./actions/tsconfig.json"
+            }
+        }
+    ]
 }
