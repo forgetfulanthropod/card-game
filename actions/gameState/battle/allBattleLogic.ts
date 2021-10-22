@@ -1,8 +1,6 @@
 import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
-
-import { moveModiferMap as moveModifiers } from '../../rulebook/battle'
 import type { DataCursor } from '../../util/DataCursor'
 import type { BattleCursor } from '../../util/getters'
 import { getBattleScene, getGameStateCursor } from '../../util/getters'
@@ -12,8 +10,9 @@ import { onCallWrapper } from '../../util/onCallWrapper'
 import sleep from '../../util/sleep'
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
-import { checkMoveAvailable, checkWinner, getClosestAlive, getNpcMove, getUnmovedPc } from './misc'
+import { checkMoveAvailable, checkWinner, getDefenders, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
+
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEFAULT_WAIT = 1000
@@ -130,25 +129,9 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         return
     }
 
-    const defenders = [clicked]
-    let numTargets = 1
-    selectedMove.types
-        .map(t => moveModifiers[t])
-        .forEach(moveModifier => {
-            const numForMove = typeof moveModifier.numTargets === 'number' ?
-                moveModifier.numTargets :
-                moveModifier.numTargets[moveModifier.numTargets.length - 1]
-            if (numForMove > numTargets) numTargets = numForMove
-        })
-    if (numTargets > 1) {
-        for (let i = 1; i < numTargets; i++) {
-            const closest = getClosestAlive(vals(allCharacters), clicked, i)
-            if (closest != null) defenders.push(closest)
-        }
-    }
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],
-        defenders: defenders,
+        defenders: getDefenders(clicked, selectedMove.types, vals(allCharacters)),
         move: selectedMove,
     }
     await handleMove(scene, allCharacters, ad)

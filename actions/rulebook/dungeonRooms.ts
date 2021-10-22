@@ -18,15 +18,18 @@ export type RoomOutcomes = {
 
 const m: CharacterName = 'matchaGelatinCube'
 const s: CharacterName = 'skeletonWarrior'
+const mimic: CharacterName = 'mimic'
 
 export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
     1: {
         A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
         B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [.5, .5] },
+        C: { outcomes: [[[mimic, 5]]], probs: [1] },
     }, 2: { // TODO: A
         A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
         B: { outcomes: [[[s, 4], [m, 1]], [[s, 4], [s, 1]]], probs: [.5, .5] },
-        C: { outcomes: [[[s, 5]]], probs: [1] },
+        C: { outcomes: [[[mimic, 5]]], probs: [1] },
+        D: { outcomes: [[[s, 5]]], probs: [1] },
     }, 3: {
         A: {
             outcomes: [
@@ -47,7 +50,7 @@ export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
     }, 5: {
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
     }, 6: {
-        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
+        A: { outcomes: [[[mimic, 5]]], probs: [1] },
     }, 7: {
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
     }, 8: { // boss
