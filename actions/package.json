@@ -1,9 +1,9 @@
 {
     "name": "actions-api",
     "scripts": {
-        "clear": "bash clear.sh",
         "start": "npm run clear && tsc -w",
         "build": "npm run clear && tsc",
+        "clear": "bash clear.sh",
         "esbuild": "npm run clear && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
         "parcel": " npm run clear && parcel build",
         "pwatch": " npm run clear && parcel watch",
