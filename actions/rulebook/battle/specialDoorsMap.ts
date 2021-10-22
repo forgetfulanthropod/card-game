@@ -9,7 +9,8 @@ export interface SpecialDoor {
     variables: Record<string, unknown>
 }
 
-export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
+export type SpecialDoorsMap = Record<SpecialDoorName, SpecialDoor>
+export const specialDoorsMap: SpecialDoorsMap = {
     'bigScary': {
         name: 'bigScary',
         description: 'additional x2 dungeon modifier',

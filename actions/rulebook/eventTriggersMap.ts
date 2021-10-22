@@ -7,9 +7,9 @@ export interface EventTrigger {
     shortDescription: string
     fullDescription: string
 }
-export type EventTriggers = Record<EventTriggerName, EventTrigger>
+export type EventTriggersMap = Record<EventTriggerName, EventTrigger>
 // TODO: markdown processing
-export const eventTriggers: EventTriggers = {
+export const eventTriggersMap: EventTriggersMap = {
     'carriage': {
         name: 'carriage',
         shortDescription: 'Your party sees a carriage with a broken wheel.  Driving the carriage is an elderly frog with a very big beard.',

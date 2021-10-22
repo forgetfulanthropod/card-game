@@ -3,7 +3,7 @@ import { sampleSize } from 'lodash'
 
 import { npcNames } from '../../rulebook/battle'
 import { dungeonRooms } from '../../rulebook/dungeonRooms'
-import type { SpecialDoor } from '../../rulebook/battle/specialDoors'
+import type { SpecialDoor } from '../../rulebook/battle/specialDoorsMap'
 import { mapToObj, zip } from '../../util/arrayMethods'
 import type { DataCursor } from '../../util/DataCursor'
 import { valMap } from '../../util/objectMethods'
@@ -108,6 +108,9 @@ export function handleSpecialDoor(args: { door: SpecialDoor }) {
         }
         case 'campfire': {
             break
+        }
+        default: {
+            throw Error(`unknown door type `)
         }
     }
 }
