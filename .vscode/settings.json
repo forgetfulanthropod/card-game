@@ -1,11 +1,4 @@
 {
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#283111",
-        "titleBar.activeBackground": "#384418",
-        "titleBar.activeForeground": "#F8FBF2",
-        "statusBar.background": "#384418",
-        "statusBar.foreground": "#F8FBF2"
-    },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
