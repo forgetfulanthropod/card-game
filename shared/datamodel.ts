@@ -89,6 +89,7 @@ export interface CharacterStats {
 export interface CharacterMove {
     name: string
     types: MoveMetaName[]
+    damageRange?: number[]
 }
 
 export interface LearnableCharacterMove extends CharacterMove {

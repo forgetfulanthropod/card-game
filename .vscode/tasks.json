@@ -58,7 +58,7 @@
 		{
 			"label": "run server",
 			"type": "shell",
-			"command": "cd actions && npm run server",
+			"command": "cd actions && npm run server-watch",
 			// "script": "server",
 			// "options": { "cwd": "./actions" },
 			"problemMatcher": [],
