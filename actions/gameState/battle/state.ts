@@ -9,6 +9,7 @@ import type {
 } from '@shared/index'
 
 import { npcLevelStatsMap, statsMap } from '../../rulebook/battle'
+import { getCharacterMovesWithDamageRanges } from './attack'
 
 
 const BASE_WIDTH = 1920
@@ -90,8 +91,10 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     const stats = statsMap[args.name]
+    const moves = getCharacterMovesWithDamageRanges({...stats, stance})
     return {
         ...stats,
+        moves,
         uid: args.uid,
         isPc: true,
         x: args.x,

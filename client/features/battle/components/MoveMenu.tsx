@@ -12,6 +12,13 @@ export default function MoveMenu(): JSX.Element {
     const selectedMove = scene.select('selectedMove')
 
     const [sm, setSm] = useState(selectedMove.get())
+    const [isPlayerTurn, setIsPlayerTurn] = useState(scene.select('isPlayerTurn').get())
+
+
+    scene.select('isPlayerTurn').on('update', () => {
+        setIsPlayerTurn(scene.select('isPlayerTurn').get())
+    })
+
     selectedMove.on('update', () => {
         // tl('selected move change');
         // @ts-ignore
@@ -36,18 +43,21 @@ export default function MoveMenu(): JSX.Element {
         dispatch({ a: 'setSelectedMove', m: newMoves[0] })
     })
 
-    return <MoveMenuDiv>
-        {mvs.map(m => <MoveButton
-            key={m.types[0]}
-            onClick={() => {
-                // @ts-ignore
-                window.startTime = Date.now()
-                dispatch({ a: 'setSelectedMove', m: m })
-            }}
-            isSelected={sm.name === m.name}
-        >
-            {m.name} ({m.types.toString()})
-        </MoveButton>
-        )}
-    </MoveMenuDiv>
+    return <>
+        {isPlayerTurn && <MoveMenuDiv>
+            {mvs.map(m => <MoveButton
+                key={m.types[0]}
+                onClick={() => {
+                    // @ts-ignore
+                    window.startTime = Date.now()
+                    dispatch({ a: 'setSelectedMove', m: m })
+                }}
+                isSelected={sm.name === m.name}
+            >
+                {m.name} ({m.types.toString()}) [{m.damageRange?.join('-')}]
+            </MoveButton>
+            )}
+        </MoveMenuDiv>
+        }
+    </>
 }

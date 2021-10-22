@@ -1,4 +1,4 @@
-import { CharacterMove, CharacterUid } from '@/shared';
+import type { CharacterMove, CharacterUid } from '@/shared';
 import { getEventsCursor, getGameStateCursor } from '../../util/treeAccessors';
 
 export function isSpecial(move: CharacterMove): boolean {
