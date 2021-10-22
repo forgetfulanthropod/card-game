@@ -45,29 +45,24 @@ export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
     'skeleton': {
         id: 'skeleton',
         description: 'same as matcha door but for skeletons',
-        conditions: [
-            {
-                when: { level: 6 },
-                has: {
-                    outcomes: [[['skeletonWarrior', 10]]],
-                    probs: [1],
-                },
-            },
-        ]
+        variables: {
+            levelToAppearOn: 6,
+            enemyName: 'skeletonWarrior',
+            enemyLevel: 10,
+        }
     },
     'rareItem': {
         id: 'rareItem',
         description: 'we should figure out the specifics of what this should be in conjunction with crafting, but it’d be fun to have a door that has an especially difficult material or crafting item',
-        special: true
+        variables: {
+            possibleItems: ['fishstick', 'potion', 'swordShield', 'bread'],
+        }
     },
     'bossDoor': {
         id: 'bossDoor',
         description: 'has the boss',
-        has: {
-            outcomes: [[['bloatDemon', 100]]],
-            probs: [1],
-        }
-    }, // TODO: below
+        variables: {},
+    },
     'face': {
         id: 'face',
         description: 'with a specific character’s face on it that lets you fight them as a boss. generate this character at level 1. for each difficult modifier, randomly increase the character\'s health by +7 or give them +1 attack',
@@ -80,14 +75,19 @@ export const specialDoors: Record<SpecialDoorName, SpecialDoor> = {
     'tiny': {
         id: 'tiny',
         description: 'applies dungeon level modifier to generate more characters for all enemies',
+        variables: {},
     },
     'jumbo': {
         id: 'jumbo',
         description: 'makes the character with the highest level in this dungeon room jumbo',
+        variables: {
+            criteria: 'highest' as 'highest' | 'all' | 'random'
+        }
     },
     'randomEvent': {
         id: 'randomEvent',
         description: 'question mark door',
+        variables: {}
     },
     'campfire': {
         id: 'campfire',
