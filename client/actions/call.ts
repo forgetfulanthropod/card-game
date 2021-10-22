@@ -8,7 +8,7 @@ const CLIENT_HOST = process.env.CLIENT_HOST
 const config = {
     shouldLog: process.env.CLIENT_LOG_API_REQUESTS === 'yes',
     method: 'post' as 'get' | 'post',
-    host: CLIENT_HOST != null && CLIENT_HOST.length > 0 ? process.env.CLIENT_HOST : 'localhost',
+    host: CLIENT_HOST != null && CLIENT_HOST.length > 0 ? process.env.CLIENT_HOST : 'localhost:3000',
 }
 console.log('call.ts config:', config)
 
@@ -24,11 +24,11 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
             let json: ReturnType<F> | null = null
             if (config.method === 'get') {
                 const pairs = entryMap(args[0], (k, v) => `${k}=${v}`).join('&')
-                const res = await fetch(`http://${config.host}:3003/${name}?${pairs}`)
+                const res = await fetch(`http://${config.host}/${name}?${pairs}`)
                 json = await res.json()
             } else {
                 console.log('the body will be:', JSON.stringify(args[0]))
-                const res = await fetch(`http://${config.host}:3003/${name}`, {
+                const res = await fetch(`http://${config.host}/${name}`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

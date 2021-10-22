@@ -1,4 +1,4 @@
-const res = await fetch(`http://localhost:3003/square`, {
+const res = await fetch(`http://localhost:3000/square`, {
     method: 'POST',
     headers: {
         'Accept': 'application/json',
