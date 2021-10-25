@@ -7,5 +7,5 @@ export default onCallWrapper(function exitDungeon(_args: { [x: string]: never })
         throw Error('exitDungeon callede when not in a battle scene')
     }
     gameState.select('scene').set(initialEntryState)
-    gameState.flush()
+    gameState.commit()
 })

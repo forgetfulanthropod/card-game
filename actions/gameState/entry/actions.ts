@@ -17,7 +17,7 @@ export function changeDungeon({ direction }: { direction: -1 | 1 }): void {
 
     scene.select('selectedCharacters').set([])
     scene.select('selectedLevel').set(levels[l - 1])
-    scene.flush()
+    scene.commit()
 }
 
 export function addSelected(args: { character: OwnedCharacter }): void {
@@ -41,6 +41,6 @@ export function addSelected(args: { character: OwnedCharacter }): void {
             scene.applyK('selectedCharacters', sel => [...sel, c])
     }
     // debugger
-    scene.flush()
+    scene.commit()
 
 }

@@ -8,5 +8,5 @@ export default onCallWrapper(function makeNewUser(args: { username: 'alice' }): 
     // await sleep(2000)
     console.log(`adding user ${args.username} with initial gamestate`)
     getRootCursor().select('users').select(args.username).set(initialGameState)
-    getRootCursor().flush()
+    getRootCursor().commit()
 })

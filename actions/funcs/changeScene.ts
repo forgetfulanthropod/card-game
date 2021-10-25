@@ -14,6 +14,6 @@ export default onCallWrapper(function changeScene(args: { newSceneName: SceneNam
         const dungeonName = rulebook.dungeonLevels[selectedLevel.num - 1].name
         tree.setK('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
     }
-    tree.flush()
+    tree.commit()
 
 })
