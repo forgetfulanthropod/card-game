@@ -91,7 +91,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     const stats = statsMap[args.name]
-    const moves = getCharacterMovesWithDamageRanges({...stats, stance})
+    const moves = getCharacterMovesWithDamageRanges({ ...stats, stance })
     return {
         ...stats,
         moves,
@@ -108,6 +108,8 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
     }
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
+    // debugger
+    console.log(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     // console.log('args.name', args.name)
