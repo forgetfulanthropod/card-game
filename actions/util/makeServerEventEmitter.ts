@@ -1,4 +1,4 @@
-import type { Cursorish, NetworkEvent, NetworkEventEmitter } from '../../shared/networkEvents'
+import type { Cursorish, NetworkEvent, NetworkEventEmitter } from '@shared/networkEvents'
 const config = { log: false }
 // TODO: shouldn't store entire event history forever...
 

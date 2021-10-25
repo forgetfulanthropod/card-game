@@ -1,16 +1,15 @@
 {
     "name": "actions-api",
     "scripts": {
-        "start": "npm run clear && tsc -w",
-        "build": "npm run clear && tsc",
-        "clear": "bash clear.sh",
-        "esbuild": "npm run clear && esbuild index.ts --bundle --minify --tree-shaking=ignore-annotations --platform=node --outfile=lib/index.js",
+        "server-watch": "nodemon --enable-source-maps ../server-build/index.js",
+        "server": "node --enable-source-maps ../server-build/index.js",
+        "build": "esbuild index.ts --bundle --platform=node --keep-names --outfile=../server-build/index.js --sourcemap --allow-overwrite  --tsconfig=tsconfig.json",
+        "watch": "npm run build -- --watch",
+        "tsc": "tsc",
+        "tsc-watch": "tsc-watch",
         "parcel": " npm run clear && parcel build",
         "pwatch": " npm run clear && parcel watch",
-        "debug": " npm run clear && parcel build --no-optimize --no-scope-hoist --no-content-hash && node inspect lib/index.js",
-        "minify": "uglifyjs lib/index.js > lib/uglyindex.js",
-        "server-watch": "nodemon lib/actions/index.js",
-        "server": "node lib/actions/index.js"
+        "parcel-debug": "parcel build --no-optimize --no-scope-hoist --no-content-hash"
     },
     "engines": {
         "node": "14"

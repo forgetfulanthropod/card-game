@@ -3,11 +3,13 @@ import { Server as HttpServer } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './functions'
+
 const port = 3000
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 
 const http = new HttpServer(app)
 const io = new SocketServer(http)

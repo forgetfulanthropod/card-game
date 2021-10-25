@@ -3,8 +3,10 @@
 // import { vals } from '@/util'
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared/index'
 
-import { moveMetaMap, stanceTypeMetaMap } from '../../rulebook/battle'
+import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
+
 import { getTransformed, isSpecial } from './specialMoves'
+
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 

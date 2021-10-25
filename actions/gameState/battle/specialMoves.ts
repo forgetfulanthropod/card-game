@@ -1,5 +1,7 @@
-import type { CharacterMove, CharacterUid } from '@/shared';
-import { getEventsCursor, getGameStateCursor } from '../../util/treeAccessors';
+import type { CharacterMove, CharacterUid } from '@shared/index'
+
+import { getEventsCursor } from '@/util'
+
 
 export function isSpecial(move: CharacterMove): boolean {
     return move.types.includes('MIM')

@@ -13,4 +13,3 @@ package-lock.json
 /*.log
 
 pnpm-lock.yaml
-shared/

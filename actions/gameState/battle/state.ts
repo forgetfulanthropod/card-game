@@ -8,7 +8,8 @@ import type {
     StanceName
 } from '@shared/index'
 
-import { npcLevelStatsMap, statsMap } from '../../rulebook/battle'
+import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
+
 import { getCharacterMovesWithDamageRanges } from './attack'
 
 

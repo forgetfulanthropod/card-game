@@ -1,8 +1,10 @@
 
-import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, MoveMetaName, StanceMultiplier, StanceName } from '@shared/index'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
 
-import { rulebook } from '../../rulebook'
+import { rulebook } from '@/rulebook'
+
 import { getTransformed, isSpecial } from './specialMoves'
+
 
 export function getCharacterMovesWithDamageRanges(character: Partial<CharacterMeta>): CharacterMove[] {
     return character.moves!.map(move => {
@@ -75,7 +77,7 @@ function getDamage(ad: AttackData, defender: CharacterMeta): number {
 }
 
 
-function getAttackMultiplier(attacker:  Partial<CharacterMeta>): StanceMultiplier {
+function getAttackMultiplier(attacker: Partial<CharacterMeta>): StanceMultiplier {
     return getStanceTypeMeta(attacker.stance).attackMultiplier
 }
 

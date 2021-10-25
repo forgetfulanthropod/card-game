@@ -1,13 +1,10 @@
 import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
-import type { DataCursor } from '../../util/DataCursor'
-import type { BattleCursor } from '../../util/treeAccessors'
-import { getBattleScene, getGameStateCursor } from '../../util/treeAccessors'
-import { makeServerEventEmitter } from '../../util/makeServerEventEmitter'
-import { keys, vals } from '../../util/objectMethods'
-import { onCallWrapper } from '../../util/onCallWrapper'
-import sleep from '../../util/sleep'
+
+import type { BattleCursor, DataCursor } from '@/util'
+import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util'
+
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
 import { checkMoveAvailable, checkWinner, getDefenders, getNpcMove, getUnmovedPc } from './misc'

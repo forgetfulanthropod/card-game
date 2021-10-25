@@ -2,8 +2,9 @@ import type { SceneName } from '@shared/index'
 
 import { makeBattleState } from '../gameState/battle/state'
 import { rulebook } from '../rulebook/index'
-import { getEntryScene, getGameStateCursor } from '../util/treeAccessors'
 import { onCallWrapper } from '../util/onCallWrapper'
+import { getEntryScene, getGameStateCursor } from '../util/treeAccessors'
+
 
 export default onCallWrapper(function changeScene(args: { newSceneName: SceneName }): void {
     console.log('changing scene to', args.newSceneName)

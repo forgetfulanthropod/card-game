@@ -8,6 +8,7 @@ import { objFilter } from '../util/objectMethods'
 import { onCallWrapper } from '../util/onCallWrapper'
 import { getBattleScene } from '../util/treeAccessors'
 
+
 export default onCallWrapper(async function chooseDoor(args: { door: SpecialDoorName }): Promise<void> {
     const scene = getBattleScene('alice')
 
