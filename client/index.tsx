@@ -33,19 +33,19 @@ const state = {
 loadAssets(
     function onBasic() { maybeStart('basic') },
     function onDeluxe() { maybeStart('deluxe') }
-);
+)
 
-(async function makeTheUser() {
+void (async function makeTheUser() {
     // TODO: check if this await actually waits all the way through
     log('initializing app')
     await waitForHandshake()
-    waitForGameStateToFill().then(() => maybeStart('gamestate'))
+    void waitForGameStateToFill().then(() => maybeStart('gamestate'))
     log('making user')
     await makeNewUser({ username: 'alice' })
     maybeStart('createdUser')
 })()
 
-async function maybeStart<K extends keyof typeof state>(k: K) {
+function maybeStart<K extends keyof typeof state>(k: K) {
     if (!state[k]) {
         log(`loaded: ${k}`)
     }

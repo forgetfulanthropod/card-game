@@ -15,9 +15,7 @@ import { newNPCMeta } from './state'
 // type CharacterModifer = string
 
 
-const config = {
-    addRandomDoor: true
-}
+// const config = { addRandomDoor: true }
 
 
 type Room = {
@@ -25,7 +23,7 @@ type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+export function getDoorChoices(_args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
 
     return {
         options: ['bigScary', 'normal', 'matcha'],

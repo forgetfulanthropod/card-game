@@ -42,7 +42,7 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
                 }
             }
             if (config.shouldLog) { console.log(`function ${name}#${randId} took ${(Date.now() - startTime) / 1000} seconds and  returned ${JSON.stringify(json)} at ${new Date().toLocaleTimeString()}`) }
-            return json!
+            return json
         } catch (e) {
             console.error(`server error: ${e}`)
             return { status: 'error', message: 'error connecting to server' }

@@ -22,12 +22,12 @@
     "jsxFragmentFactory": "Fragment",
     "baseUrl": ".",
     "paths": {
+      "@shared": [
+        "./shared/index"
+      ],
       "@/*": [
         "./client/*"
       ],
-      "@shared/*": [
-        "./shared/*"
-      ]
     },
     "allowJs": true,
     "skipLibCheck": true,
