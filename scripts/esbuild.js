@@ -1,6 +1,6 @@
 const esbuild = require('esbuild')
 const fs = require('fs')
-const { spawn } = require('child_process')
+const { spawn, spawnSync } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
 const envFile = require('dotenv').config()?.parsed
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
@@ -12,7 +12,11 @@ const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 const shouldLint = envFile?.ESBUILD_SHOULD_LINT === 'yes'
 const isDevelopment = envFile?.ESBUILD_NODE_ENV === 'development'
-console.log({ shouldWatch, shouldLint })
+
+const gitBranch = spawnSync("git", ["branch", "--show-current"], { encoding: 'utf8' }).output[1].trim()
+console.log({ shouldWatch, shouldLint, gitBranch })
+
+envFile.CLIENT_GIT_BRANCH = gitBranch
 
 const envObj = {
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
@@ -22,6 +26,7 @@ const clientEnvKeys = [
     "CLIENT_DISABLE_BACKGROUND",
     "CLIENT_LOG_API_REQUESTS",
     "CLIENT_IS_LOCAL",
+    "CLIENT_GIT_BRANCH"
 ]
 for (const k of clientEnvKeys) [
     envObj[`process.env.${k}`] = `"${envFile?.[k] ?? ''}"`
