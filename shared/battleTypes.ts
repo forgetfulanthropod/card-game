@@ -1,4 +1,6 @@
-import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, Door, DungeonName, SceneHas } from '@shared/index'
+import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, DungeonName, SceneHas } from '@shared/index'
+
+import type { SpecialDoorName } from './SpecialDoorName'
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
@@ -11,7 +13,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: { options: Door[], descriptions: string[] }
+    doors: { options: SpecialDoorName[], descriptions: string[] }
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
 }

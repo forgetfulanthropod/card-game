@@ -1,12 +1,12 @@
 // https://gist.github.com/malthe/02350255c759d5478e89
 export default function dedent(text: string): string {
-    var re_whitespace = /^([ \t]*)(.*)\n/gm
-    var l, m, i
+    const re_whitespace = /^([ \t]*)(.*)\n/gm
+    let l, m, i
 
     while ((m = re_whitespace.exec(text)) !== null) {
         if (!m[2]) continue
-
-        if (l = m[1].length) {
+        l = m[1].length
+        if (l) {
             i = (i !== undefined) ? Math.min(i, l) : l
         } else break
     }

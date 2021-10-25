@@ -1,5 +1,6 @@
 import type { Action, ServerResult } from '@shared/actions'
-import type { CharacterUid, Door, OwnedCharacter, SceneName } from '@shared/index'
+import type { CharacterUid, OwnedCharacter, SceneName } from '@shared/index'
+import type { SpecialDoorName } from '@shared/SpecialDoorName'
 
 import { callWrap } from './call'
 
@@ -10,7 +11,7 @@ type Empty = Record<string, never>
 export const addSelected = callWrap<(args: { character: OwnedCharacter }) => void>('addSelected')
 export const changeDungeon = callWrap<(args: { direction: -1 | 1 }) => void>('changeDungeon')
 export const changeScene = callWrap<(args: { newSceneName: SceneName }) => void>('changeScene')
-export const chooseDoor = callWrap<(args: { door: Door }) => void>('chooseDoor')
+export const chooseDoor = callWrap<(args: { door: SpecialDoorName }) => void>('chooseDoor')
 export const dispatch = callWrap<(action: Action) => void>('dispatch')
 export const doCharacterAction = callWrap<(args: { uid: CharacterUid }) => void>('doCharacterAction')
 export const echo = callWrap<(args: unknown) => unknown>('echo')
