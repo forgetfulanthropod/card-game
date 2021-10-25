@@ -1,4 +1,5 @@
 import { getApp } from '..'
+import { consoleError } from './consoleError'
 
 const config = {
     log: true,
@@ -27,7 +28,7 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
                 if (config.log) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
                 response.send({ status: 'success', result })
             } catch (e) {
-                console.error(`exception occured in client call to ${f.name}: `, e)
+                consoleError(`exception occured in client call to ${f.name}: `, e)
                 response.send({ status: 'error', message: JSON.stringify(e) })
             }
         })

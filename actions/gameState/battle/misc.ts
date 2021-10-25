@@ -4,6 +4,7 @@
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared/index'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
+import { consoleError } from '@/util'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
@@ -117,7 +118,7 @@ export function randomEl<T>(arr: readonly T[]): T {
 /** Returns index of chosen element */
 export function weightedRandom(probabilites: number[]): number {
     if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        console.error('array contains NaN or Inf or negative numbers')
+        consoleError('array contains NaN or Inf or negative numbers')
         return 0
     }
     let runningTotal = 0

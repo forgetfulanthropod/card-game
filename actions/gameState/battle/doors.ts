@@ -6,7 +6,7 @@ import type { SpecialDoorName } from '@/rulebook/battle/specialDoorsMap'
 import { specialDoorsMap } from '@/rulebook/battle/specialDoorsMap'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import type { DataCursor } from '@/util'
-import { mapToObj } from '@/util'
+import { consoleError, mapToObj } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
@@ -87,7 +87,7 @@ export function handleSpecialDoor(args: {
             const d = specialDoorsMap[door]
             const regularDoorOptions = keys(dungeonRooms[args.roomsPassed + 1])
             if (regularDoorOptions.length === 0) {
-                console.error('no door options!')
+                consoleError('no door options!')
                 return { modifier: -1, enemies: {} }
             }
             const regularDoorName = sample(regularDoorOptions) as Door
@@ -110,10 +110,10 @@ export function handleSpecialDoor(args: {
         case 'campfire': {
             const v = specialDoorsMap[door].variables
             if (v.effectType === 'absolute') {
-                console.error('unimplemented')
+                consoleError('unimplemented')
                 return { modifier: -1, enemies: {} }
             } else if (v.effectType === 'proportional') {
-                console.error('unimplemented')
+                consoleError('unimplemented')
                 return { modifier: -1, enemies: {} }
             } else {
                 throw Error(`campfire has unknown effectType ${v.effectType}`)
@@ -129,7 +129,7 @@ export function handleSpecialDoor(args: {
 function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Room {
     const regularDoorOptions = keys(dungeonRooms[roomsPassed + 1])
     if (regularDoorOptions.length === 0) {
-        console.error('no door options!')
+        consoleError('no door options!')
         return { modifier: -1, enemies: {} }
     }
     const regularDoorName = sample(regularDoorOptions) as Door
