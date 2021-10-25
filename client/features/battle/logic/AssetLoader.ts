@@ -44,6 +44,7 @@ import bread from '../assets/misc-png/ITEM_BREAD.png'
 import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 import door from '../assets/temp-door.png'
+
 export const backgrounds = {
     'Hooligan’s Bluff': hoolgans,
     'The Matcha Caves': matcha,

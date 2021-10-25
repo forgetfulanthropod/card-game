@@ -1,5 +1,4 @@
-import type { MyCursor } from '@shared'
-import type { NetworkEvent } from '@shared'
+import type { MyCursor, NetworkEvent } from '@shared'
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'

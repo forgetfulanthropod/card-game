@@ -4,6 +4,7 @@ import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from './mypixi'
 import { Container, Text } from './mypixi'
 
+
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 

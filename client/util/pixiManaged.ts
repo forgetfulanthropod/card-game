@@ -2,6 +2,7 @@ import type { DisplayObject } from 'pixi.js'
 
 import type { PixiContainer } from '@/features/battle/elements/mypixi'
 
+
 /** Easier thing for adding and removing sprites maybe. Untested. Not sure if useful. */
 export class Managed {
     private child: DisplayObject | null = null

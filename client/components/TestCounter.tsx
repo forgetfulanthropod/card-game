@@ -3,7 +3,8 @@ import { h } from 'preact' // eslint-disable-line unused-imports/no-unused-impor
 import { useEffect, useRef } from 'preact/hooks'
 
 import { incrementTestCounter } from '@/actions'
-import { getSocket, } from '@/connection'
+import { getSocket } from '@/connection'
+
 // import { maybeInitializeApp } from '@/connection'
 export default function TestCounter(): JSX.Element {
     const start = useRef(0)

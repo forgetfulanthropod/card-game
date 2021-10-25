@@ -1,6 +1,4 @@
-import type { CharacterUid, OwnedCharacter, SceneName } from '@shared'
-import type { Action, ServerResult } from '@shared'
-import type { SpecialDoorName } from '@shared'
+import type { Action, CharacterUid, OwnedCharacter, SceneName, ServerResult, SpecialDoorName } from '@shared'
 
 import { callWrap } from './call'
 

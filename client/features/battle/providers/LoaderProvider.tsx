@@ -1,5 +1,4 @@
-import { h, JSX } from 'preact' // eslint-disable-line
-import { createContext } from 'preact'
+import { createContext, h, JSX } from 'preact' // eslint-disable-line
 import { useContext, useMemo, useState } from 'preact/hooks'
 
 export function LoaderProvider(props: { children: Children }): JSX.Element {

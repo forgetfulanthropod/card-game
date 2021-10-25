@@ -10,6 +10,7 @@ import {
 } from 'pixi.js'
 
 import { registerPixiInspector } from '@/util/pixiInspector'
+
 // export { PixiLoader }
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
