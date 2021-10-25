@@ -1,8 +1,22 @@
 
-import type { AttackData, CharacterMeta, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, MoveMetaName, StanceMultiplier, StanceName } from '@shared/index'
 
 import { rulebook } from '../../rulebook'
 import { getTransformed, isSpecial } from './specialMoves'
+
+export function getCharacterMovesWithDamageRanges(character: Partial<CharacterMeta>): CharacterMove[] {
+    return character.moves!.map(move => {
+
+        const damageRange = getMoveMultiplierRange(move).map(multiplier => {
+            return character.damage! * getAttackMultiplier(character) * multiplier
+        })
+
+        return {
+            ...move,
+            damageRange
+        }
+    })
+}
 
 export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
@@ -61,7 +75,7 @@ function getDamage(ad: AttackData, defender: CharacterMeta): number {
 }
 
 
-function getAttackMultiplier(attacker: CharacterMeta): StanceMultiplier {
+function getAttackMultiplier(attacker:  Partial<CharacterMeta>): StanceMultiplier {
     return getStanceTypeMeta(attacker.stance).attackMultiplier
 }
 
@@ -99,6 +113,29 @@ function getMoveMultiplier(d: AttackData): number {
 
         return multiplier * typeMultiplier
     }, 1)
+}
+
+function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number] {
+    // return [1,5]
+    let min = Number.POSITIVE_INFINITY
+    let max = Number.NEGATIVE_INFINITY
+
+    move.types.forEach(type => {
+        const moveMeta = rulebook.moveMetaMap[type]
+        let multipliers
+        if (moveMeta.multiplier != null)
+            multipliers = [moveMeta.multiplier]
+        else multipliers = [...moveMeta.multipliers!]
+
+        multipliers.forEach(m => {
+            if (m < min) min = m
+            if (m > max) max = m
+        })
+    })
+
+    if (min === max) return [min]
+
+    return [min, max]
 }
 
 
