@@ -1,4 +1,4 @@
-import type { Gamestate, Immutable, } from '@shared/index'
+import type { Gamestate, Immutable } from '@shared/index'
 import type { MyCursor } from '@shared/myBaobab'
 import { MyBaobab } from '@shared/myBaobab'
 import { memoize } from 'lodash'
@@ -6,6 +6,7 @@ import { memoize } from 'lodash'
 import { getIo } from '..'
 import type { RootTreeShit } from './treeAccessors'
 import { getRootCursor } from './treeAccessors'
+
 // type Objectish = Record<unknown, unknown>
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Objectish { }

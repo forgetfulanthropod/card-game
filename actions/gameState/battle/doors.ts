@@ -1,12 +1,13 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
 import { keys, sample, sampleSize } from 'lodash'
 
-import { npcNames } from '../../rulebook/battle'
-import type { SpecialDoorName } from '../../rulebook/battle/specialDoorsMap'
-import { specialDoorsMap } from '../../rulebook/battle/specialDoorsMap'
-import { dungeonRooms } from '../../rulebook/dungeonRooms'
-import { mapToObj } from '../../util/arrayMethods'
-import type { DataCursor } from '../../util/DataCursor'
+import { npcNames } from '@/rulebook/battle'
+import type { SpecialDoorName } from '@/rulebook/battle/specialDoorsMap'
+import { specialDoorsMap } from '@/rulebook/battle/specialDoorsMap'
+import { dungeonRooms } from '@/rulebook/dungeonRooms'
+import type { DataCursor } from '@/util/'
+import { mapToObj } from '@/util/'
+
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
 

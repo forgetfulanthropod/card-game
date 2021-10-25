@@ -5,6 +5,7 @@ import { rulebook } from '../rulebook/index'
 import { onCallWrapper } from '../util/onCallWrapper'
 import { getEntryScene, getGameStateCursor } from '../util/treeAccessors'
 
+
 export default onCallWrapper(function changeScene(args: { newSceneName: SceneName }): void {
     console.log('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')
