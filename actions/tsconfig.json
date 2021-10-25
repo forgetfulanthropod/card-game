@@ -20,8 +20,8 @@
       "@/*": [
         "./*"
       ],
-      "@shared/*": [
-        "../shared/*"
+      "@shared": [
+        "../shared/index"
       ],
     },
   },

@@ -1,4 +1,4 @@
-import type { DungeonLevel, Rulebook } from '@shared/index'
+import type { DungeonLevel, Rulebook } from '@shared'
 
 import { numbers } from '../gameState/battle/state'
 import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'

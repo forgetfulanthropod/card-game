@@ -1,5 +1,5 @@
 // TODO: do not replicate this file
-import type { Immutable } from '@shared/immutable'
+import type { Immutable } from '@shared'
 import isEqual from 'lodash/isEqual'
 import isObject from 'lodash/isObject'
 import transform from 'lodash/transform'

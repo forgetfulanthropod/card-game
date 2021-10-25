@@ -2,7 +2,7 @@
 
 // import { Immutable } from '@/config/immutable'
 // import { deepFreeze } from '@/util'
-import type { CharacterName, CharacterStats } from '@shared/index'
+import type { CharacterName, CharacterStats } from '@shared'
 export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
         name: 'bloatDemon',

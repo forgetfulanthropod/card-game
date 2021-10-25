@@ -66,4 +66,9 @@
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
     "eslint.packageManager": "pnpm",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#1C3314",
+        "titleBar.activeBackground": "#27481C",
+        "titleBar.activeForeground": "#F8FCF7"
+    },
 }

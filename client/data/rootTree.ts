@@ -1,6 +1,6 @@
-import type { BattleScene } from '@shared/battleTypes'
-import type { EntryScene, Gamestate, MyCursor, OwnedCharacter } from '@shared/index'
-import { MyBaobab } from '@shared/myBaobab'
+import type { BattleScene } from '@shared'
+import type { EntryScene, Gamestate, MyCursor, OwnedCharacter } from '@shared'
+import { MyBaobab } from '@shared'
 
 // import { getRulebookAsync } from '@/actions'
 import { listenForInitialGameState } from '@/connection/serverListener'

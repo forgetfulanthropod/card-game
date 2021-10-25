@@ -1,6 +1,6 @@
-import type { Gamestate, Immutable } from '@shared/index'
-import type { MyCursor } from '@shared/myBaobab'
-import { MyBaobab } from '@shared/myBaobab'
+import type { Gamestate, Immutable } from '@shared'
+import type { MyCursor } from '@shared'
+import { MyBaobab } from '@shared'
 import { memoize } from 'lodash'
 
 import { getIo } from '..'

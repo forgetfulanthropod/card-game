@@ -1,5 +1,5 @@
 
-import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared'
 
 import { rulebook } from '@/rulebook'
 

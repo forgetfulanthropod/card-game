@@ -1,5 +1,5 @@
-import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
-import type { NetworkEvent } from '@shared/networkEvents'
+import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared'
+import type { NetworkEvent } from '@shared'
 import { memoize } from 'lodash'
 
 import type { BattleCursor, DataCursor } from '@/util'

@@ -1,4 +1,4 @@
-import type { CharacterName } from '@shared/CharacterName'
+import type { CharacterName } from '@shared'
 
 const config = {
     doValidation: false

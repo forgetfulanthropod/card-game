@@ -1,4 +1,4 @@
-import type { Effect } from '@shared/index'
+import type { Effect } from '@shared'
 import { Matrix, utils } from 'pixi.js'
 
 import type { PixiContainer, PixiGraphics } from './mypixi'

@@ -1,5 +1,5 @@
 // import { deepFreeze } from '@/util'
-import type { StanceName, StanceStats } from '@shared/index'
+import type { StanceName, StanceStats } from '@shared'
 export const stanceTypeMetaMap: Record<StanceName, StanceStats> = {
     defensive: {
         name: 'defensive',

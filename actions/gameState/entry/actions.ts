@@ -1,4 +1,4 @@
-import type { OwnedCharacter } from '@shared/index'
+import type { OwnedCharacter } from '@shared'
 
 import { rulebook } from '@/rulebook'
 import { getEntryScene } from '@/util'

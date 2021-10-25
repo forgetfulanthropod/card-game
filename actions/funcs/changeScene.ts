@@ -1,4 +1,4 @@
-import type { SceneName } from '@shared/index'
+import type { SceneName } from '@shared'
 
 import { makeBattleState } from '../gameState/battle/state'
 import { rulebook } from '../rulebook/index'

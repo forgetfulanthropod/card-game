@@ -1,4 +1,4 @@
-import type { NetworkEventEmitter } from '@shared/networkEvents'
+import type { NetworkEventEmitter } from '@shared'
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
