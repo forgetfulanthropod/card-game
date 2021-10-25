@@ -1,5 +1,6 @@
 import type { MyCursor, NetworkEvent } from '@shared'
 import { filters, Loader } from 'pixi.js'
+import toast from 'react-hot-toast'
 
 import { getBattleScene } from '@/data/rootTree'
 import type { CharacterMeta, CharacterUid, NetworkAttackData } from '@/data/types'
@@ -195,7 +196,12 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.uid })
 
     hasMovedCursor.on('update', () => {
-        hasMovedSprite.visible = hasMovedCursor.get()
+        const newVal = hasMovedCursor.get()
+        if (newVal && hasMovedSprite.visible) {
+            // TODO: only toast from one sprite
+            toast('round reset')
+        }
+        hasMovedSprite.visible = newVal
     })
 
     assetIdCursor.on('update', () => {
