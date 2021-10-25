@@ -66,4 +66,6 @@
     "colorTabs.activityBarBackground": false,
     "colorTabs.titleLabel": true,
     "eslint.packageManager": "pnpm",
+    "javascript.format.semicolons": "remove",
+    "typescript.format.semicolons": "remove",
 }
