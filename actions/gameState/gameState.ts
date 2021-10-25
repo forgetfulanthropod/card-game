@@ -1,4 +1,4 @@
-import type { Gamestate, OwnedCharacter } from '@shared/index'
+import type { Gamestate, OwnedCharacter } from '@shared'
 
 import { statsMap } from '../rulebook/battle'
 import { initialEntryState } from './entry/state'

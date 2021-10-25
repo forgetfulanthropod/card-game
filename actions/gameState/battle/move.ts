@@ -1,6 +1,5 @@
 
-import type { AttackData, CharacterMeta, Effect } from '@shared/battleTypes'
-import type { Immutable } from '@shared/index'
+import type { AttackData, CharacterMeta, Effect, Immutable } from '@shared'
 import { findIndex } from 'lodash'
 
 import type { BattleCursor } from '@/util'

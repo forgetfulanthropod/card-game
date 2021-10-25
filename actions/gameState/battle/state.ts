@@ -6,7 +6,7 @@ import type {
     DungeonName,
     OwnedCharacter,
     StanceName
-} from '@shared/index'
+} from '@shared'
 
 import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
 
@@ -105,6 +105,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         stance,
         hasMoved: false,
         health: stats.maxHealth,
+        experience: 0,
         effects: [],
     }
 }

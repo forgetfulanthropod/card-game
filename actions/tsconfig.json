@@ -17,11 +17,11 @@
     "baseUrl": ".",
     "skipLibCheck": true,
     "paths": {
+      "@shared": [
+        "../shared/index"
+      ],
       "@/*": [
         "./*"
-      ],
-      "@shared/*": [
-        "../shared/*"
       ],
     },
   },

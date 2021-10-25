@@ -1,5 +1,5 @@
 /** Exports all the API routes as functions */
-import type { Caller, Func } from '@shared/actions'
+import type { Caller, Func } from '@shared'
 
 import { entryMap } from '../util'
 

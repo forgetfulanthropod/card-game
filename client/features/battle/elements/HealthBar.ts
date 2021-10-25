@@ -1,8 +1,9 @@
-import type { Effect } from '@shared/index'
+import type { Effect } from '@shared'
 import { Matrix, utils } from 'pixi.js'
 
 import type { PixiContainer, PixiGraphics } from './mypixi'
 import { Container, Graphics, PixiLoader, Sprite, Text } from './mypixi'
+
 
 type Rect = [
     number, // x

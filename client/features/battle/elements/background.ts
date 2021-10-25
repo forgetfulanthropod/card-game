@@ -1,6 +1,5 @@
 import type { PixiContainer, PixiSprite } from './mypixi'
-import { Container } from './mypixi'
-import { PngLayersBackground, VideoBackground } from './mypixi'
+import { Container, PngLayersBackground, VideoBackground } from './mypixi'
 
 
 export default function Background({ scale, src, srcs }: { scale: number, src?: string, srcs?: string[] }): PixiSprite | PixiContainer {

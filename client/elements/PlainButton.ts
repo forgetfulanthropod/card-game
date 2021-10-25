@@ -1,6 +1,5 @@
 import type { PixiContainer } from '@/features/battle/elements/mypixi'
-import { PixiTexture, Sprite } from '@/features/battle/elements/mypixi'
-import { Container, Text } from '@/features/battle/elements/mypixi'
+import { Container, PixiTexture, Sprite, Text } from '@/features/battle/elements/mypixi'
 
 export default function PlainButton(args: { text: string, onClick: Callback, fontSize?: number, x?: number, y?: number, width?: number }): PixiContainer {
     const { fontSize = 30, x, y, width, onClick } = args

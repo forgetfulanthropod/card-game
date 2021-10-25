@@ -1,7 +1,7 @@
 // TODO: do not replicate this file
 
 // import { vals } from '@/util'
-import type { AttackData, CharacterMeta, CharacterMove } from '@shared/index'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
 import { consoleError } from '@/util'
@@ -10,6 +10,10 @@ import { getTransformed, isSpecial } from './specialMoves'
 
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
+
+export function getCharIds(ac: CharacterMeta[], filters: Partial<CharacterMeta>): CharacterUid[] {
+    return []
+}
 
 export function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
     const charDist = (a: CharacterMeta, b: CharacterMeta) =>
@@ -28,7 +32,6 @@ export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
-
 
 export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterMeta | null {
     const chars = ac.filter(c => c.isPc && c.health > 0 && !c.hasMoved && c.uid !== excludeId)

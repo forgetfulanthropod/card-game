@@ -1,4 +1,4 @@
-import type { MyCursor } from '@shared/myBaobab'
+import type { MyCursor } from '@shared'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
@@ -7,6 +7,8 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+
+
 // import TestCounter from './TestCounter'
 
 

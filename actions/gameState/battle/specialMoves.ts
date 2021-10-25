@@ -1,4 +1,4 @@
-import type { CharacterMove, CharacterUid } from '@shared/index'
+import type { CharacterMove, CharacterUid } from '@shared'
 
 import { getEventsCursor } from '@/util'
 

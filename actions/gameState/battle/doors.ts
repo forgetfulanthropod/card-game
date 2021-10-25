@@ -1,4 +1,4 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared/index'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
 import { keys, sample, sampleSize } from 'lodash'
 
 import { npcNames } from '@/rulebook/battle'

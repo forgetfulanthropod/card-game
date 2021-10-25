@@ -1,5 +1,5 @@
 // import { deepFreeze } from '@/util'
-import type { MoveMeta, MoveMetaName } from '@shared/index'
+import type { MoveMeta, MoveMetaName } from '@shared'
 
 
 // Basic Attack: 100% of attack damage, no modifiers

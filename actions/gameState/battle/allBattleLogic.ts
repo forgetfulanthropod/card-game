@@ -1,5 +1,4 @@
-import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData } from '@shared/index'
-import type { NetworkEvent } from '@shared/networkEvents'
+import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData, NetworkEvent } from '@shared'
 import { memoize } from 'lodash'
 
 import type { BattleCursor, DataCursor } from '@/util'
@@ -7,6 +6,7 @@ import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCal
 
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
+import { incrementXP } from './experiencePoints'
 import { checkMoveAvailable, checkWinner, getDefenders, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
 import { getTransformed, isSpecial } from './specialMoves'
@@ -164,6 +164,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
 
     if (winner === 'PC') {
         scene.setK('state', 'won')
+        incrementXP(scene)
         putUpDoors(scene)
         return
     } else if (winner === 'NPC') {

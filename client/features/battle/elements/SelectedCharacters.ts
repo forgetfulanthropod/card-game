@@ -4,6 +4,7 @@ import { dataOf } from '@/util/pixiUtils'
 import type { PixiContainer } from './mypixi'
 import { Container, Sprite } from './mypixi'
 
+
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 

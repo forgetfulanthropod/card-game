@@ -1,6 +1,7 @@
-import type { EntryScene } from '@shared/index'
+import type { EntryScene } from '@shared'
 
 import { rulebook } from '@/rulebook/rulebook'
+
 
 export const initialEntryState: EntryScene = {
     name: 'entry',

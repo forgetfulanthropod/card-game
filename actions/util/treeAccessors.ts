@@ -1,7 +1,9 @@
-import type { BattleScene } from '@shared/battleTypes'
-import type { Gamestate } from '@shared/datamodel'
-import type { EntryScene } from '@shared/entryTypes'
-import type { MoveEvent } from '@shared/networkEvents'
+import type {
+    BattleScene,
+    EntryScene,
+    Gamestate,
+    MoveEvent
+} from '@shared'
 
 import type { DataCursor } from './DataCursor'
 import { makeRootDataCursor } from './DataCursor'

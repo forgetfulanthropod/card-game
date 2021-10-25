@@ -1,6 +1,6 @@
-import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, DungeonName, SceneHas } from '@shared/index'
-
+import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, DungeonName, SceneHas } from '.'
 import type { SpecialDoorName } from './SpecialDoorName'
+
 
 export interface BattleScene extends SceneHas {
     name: 'battle'
@@ -44,6 +44,7 @@ export interface CharacterMeta extends CharacterStats {
     isPc: boolean
     hasMoved: boolean
     health: number
+    experience: number
     x: number
     y: number
     screenX: number
