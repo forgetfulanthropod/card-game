@@ -32,6 +32,7 @@
     },
     "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {
+        // "source.organizeImports": true,
         "source.fixAll.eslint": true
     },
     "formatFiles.excludedFolders": [
