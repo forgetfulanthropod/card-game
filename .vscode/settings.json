@@ -71,4 +71,6 @@
         "titleBar.activeBackground": "#27481C",
         "titleBar.activeForeground": "#F8FCF7"
     },
+    "javascript.format.semicolons": "remove",
+    "typescript.format.semicolons": "remove",
 }
