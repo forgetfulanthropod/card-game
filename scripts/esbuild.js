@@ -13,7 +13,9 @@ const shouldWatch = args.length === 1 && args[0] === 'watch'
 const shouldLint = envFile?.ESBUILD_SHOULD_LINT === 'yes'
 const isDevelopment = envFile?.ESBUILD_NODE_ENV === 'development'
 
-const gitBranch = spawnSync("git", ["branch", "--show-current"], { encoding: 'utf8' }).output[1].trim()
+// `git branch --show-current` doesn't work on old git versions
+
+const gitBranch = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { encoding: 'utf8' }).output[1].trim()
 console.log({ shouldWatch, shouldLint, gitBranch })
 
 envFile.CLIENT_GIT_BRANCH = gitBranch

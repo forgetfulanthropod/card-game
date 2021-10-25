@@ -1,8 +1,12 @@
+import { spawnSync } from 'child_process'
 import express from 'express'
 import { Server as HttpServer } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './functions'
+
+const gitBranch = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { encoding: 'utf8' })?.output?.[1]?.trim()
+console.log('serving from branch', gitBranch)
 
 
 const port = 3000
