@@ -40,7 +40,8 @@
         ".git",
         "dist",
         ".chrome",
-        "build"
+        "build",
+        "actions/shared"
     ],
     "formatFiles.excludePattern": "**/*.json",
     "colorTabs.config": [
