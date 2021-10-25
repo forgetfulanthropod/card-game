@@ -40,5 +40,5 @@ app.use(express.static('../build'))
 
 
 http.listen(port, function () {
-    console.log(`listening on port ${port}`)
+    console.log(`Serving on http://localhost:${port}`)
 })
