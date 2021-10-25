@@ -53,7 +53,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
         await sleep(DEFAULT_WAIT)
         await doNpcMove('first move of round')
     }
-    scene.flush()
+    scene.commit()
 }
 
 async function doNpcMove(_reason?: string) {
@@ -77,7 +77,7 @@ async function doNpcMove(_reason?: string) {
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
         scene.setK('isPlayerTurn', true)
-        scene.flush()
+        scene.commit()
         return
     }
     const move = getNpcMove(vals(allCharacters))
@@ -171,7 +171,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         return
     } else if (winner === 'NPC') {
         scene.setK('state', 'lost')
-        scene.flush()
+        scene.commit()
         return
     }
 
@@ -215,7 +215,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
             await doNpcMove('no unmoved PC and NPC turn')
         }
     }
-    scene.flush()
+    scene.commit()
 }
 
 

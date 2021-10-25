@@ -34,6 +34,6 @@ const dispatch = (action: Action): void => {
         } default:
             throw new Error(`unknown action ${JSON.stringify(action)}`)
     }
-    scene.flush()
+    scene.commit()
 }
 export default dispatch

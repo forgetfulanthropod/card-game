@@ -17,5 +17,5 @@ export default onCallWrapper(async function chooseDoor(args: { door: Door }): Pr
     scene.applyK('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
     scene.setK('state', 'in battle')
     await resetRound(scene)
-    scene.flush()
+    scene.commit()
 })
