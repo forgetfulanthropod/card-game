@@ -1,6 +1,6 @@
 import type { Action } from '@shared/actions'
 
-import { getBattleScene, keys } from '@/util/'
+import { getBattleScene, keys } from '@/util'
 
 import { makeBattleState } from './state'
 

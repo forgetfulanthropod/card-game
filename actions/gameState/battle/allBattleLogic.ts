@@ -2,8 +2,8 @@ import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, N
 import type { NetworkEvent } from '@shared/networkEvents'
 import { memoize } from 'lodash'
 
-import type { BattleCursor, DataCursor } from '@/util/'
-import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util/'
+import type { BattleCursor, DataCursor } from '@/util'
+import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util'
 
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'

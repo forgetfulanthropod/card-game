@@ -1,6 +1,6 @@
 import type { CharacterMove, CharacterUid } from '@shared/index'
 
-import { getEventsCursor } from '@/util/'
+import { getEventsCursor } from '@/util'
 
 
 export function isSpecial(move: CharacterMove): boolean {

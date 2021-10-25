@@ -1,7 +1,7 @@
 import type { OwnedCharacter } from '@shared/index'
 
 import { rulebook } from '@/rulebook'
-import { getEntryScene } from '@/util/'
+import { getEntryScene } from '@/util'
 
 
 export function changeDungeon({ direction }: { direction: -1 | 1 }): void {
