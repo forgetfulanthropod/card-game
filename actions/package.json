@@ -1,8 +1,8 @@
 {
     "name": "actions-api",
     "scripts": {
-        "server-watch": "nodemon ../server-build/index.js",
-        "server": "node ../server-build/index.js",
+        "server-watch": "nodemon --enable-source-maps ../server-build/index.js",
+        "server": "node --enable-source-maps ../server-build/index.js",
         "build": "esbuild index.ts --bundle --platform=node --keep-names --outfile=../server-build/index.js --sourcemap --allow-overwrite  --tsconfig=tsconfig.json",
         "watch": "npm run build -- --watch",
         "tsc": "tsc",
