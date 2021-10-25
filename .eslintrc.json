@@ -89,8 +89,7 @@
                 "client/**/*.ts",
                 "client/**/*.tsx",
                 "client/**/*.d.ts",
-                "shared/**/*.ts",
-                "functions/**/*.ts"
+                "shared/**/*.ts"
             ],
             "extends": [
                 "plugin:react/recommended"

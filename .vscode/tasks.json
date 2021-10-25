@@ -2,10 +2,12 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Four tabs",
+			"label": "Do everything",
 			"dependsOn": [
+				"tsc actions",
 				"tsc client",
 				"esbuild client",
+				"esbuild server",
 				"run server",
 			],
 			"dependsOrder": "parallel",
@@ -13,9 +15,6 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"problemMatcher": [
-				"$tsc-watch"
-			],
 			"isBackground": true,
 			"detail": "see https://stackoverflow.com/a/58181330",
 			// "runOptions": { "runOn": "folderOpen", }
@@ -30,7 +29,7 @@
 			],
 			"group": "build",
 			"presentation": {
-				"group": "actions",
+				"group": "checkers",
 			}
 		},
 		{
@@ -43,29 +42,31 @@
 			],
 			"group": "build",
 			"presentation": {
-				"group": "client",
+				"group": "checkers",
 			}
 		},
 		{
 			"label": "esbuild client",
 			"type": "npm",
 			"script": "start",
-			"problemMatcher": [],
 			"presentation": {
-				"group": "client",
+				"group": "builders",
+			}
+		},
+		{
+			"label": "esbuild server",
+			"type": "shell",
+			"command": "cd actions && npm run watch",
+			"presentation": {
+				"group": "builders",
 			}
 		},
 		{
 			"label": "run server",
 			"type": "shell",
 			"command": "cd actions && npm run server-watch",
-			// "script": "server",
-			// "options": { "cwd": "./actions" },
-			"problemMatcher": [],
-			"dependsOrder": "sequence",
-			"dependsOn": "tsc actions",
 			"presentation": {
-				"group": "actions",
+				"group": "group3",
 			}
 		},
 	]

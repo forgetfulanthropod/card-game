@@ -41,7 +41,6 @@
         "dist",
         ".chrome",
         "build",
-        "actions/shared"
     ],
     "formatFiles.excludePattern": "**/*.json",
     "colorTabs.config": [

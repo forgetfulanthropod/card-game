@@ -94,10 +94,6 @@ export function handleSpecialDoor(args: {
             const regularDoorName = sample(regularDoorOptions) as Door
             return makeRoom({ dungeonName, roomsPassed, door: regularDoorName, modifier: d.variables.modifier })
         }
-        case 'candyBaby': {
-            const _d = specialDoorsMap[door]
-            throw Error(`unimplented door: ${door}`)
-        }
         case 'normal': {
             return makeRandRegularRoom(dungeonName, roomsPassed)
         }
@@ -112,30 +108,6 @@ export function handleSpecialDoor(args: {
             // }
             // return makeRandRegularRoom(dungeonName, roomsPassed)
         }
-        case 'rareItem': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
-        case 'bossDoor': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
-        case 'face': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
-        case 'tiny': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
-        case 'jumbo': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
-        case 'randomEvent': {
-            const _v = specialDoorsMap[door].variables
-            throw Error(`unimplented door: ${door}`)
-        }
         case 'campfire': {
             const v = specialDoorsMap[door].variables
             if (v.effectType === 'absolute') {
@@ -149,6 +121,7 @@ export function handleSpecialDoor(args: {
             }
         }
         default: {
+            // TODO: 'rareItem' 'bossDoor' 'face' 'tiny' 'jumbo' 'randomEvent' 'candyBaby'
             throw Error('unknown door type ')
         }
     }

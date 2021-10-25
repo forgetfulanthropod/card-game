@@ -8,8 +8,9 @@
     // "outFile": "lib/index.js",
     // Split output files
     "module": "commonjs",
-    "outDir": "lib",
-    "sourceMap": true,
+    // "outDir": "lib",
+    // "sourceMap": true,
+    "noEmit": true,
     "strict": true,
     "target": "es2017",
     "esModuleInterop": true,
@@ -20,14 +21,13 @@
         "./*"
       ],
       "@shared/*": [
-        "./shared/*"
+        "../shared/*"
       ],
     },
   },
   "compileOnSave": true,
   "include": [
-    ".",
+    "./**/*.ts",
     "../shared",
-    "rulebook"
-  ]
+  ],
 }
