@@ -1,7 +1,7 @@
 {
     "name": "actions-api",
     "scripts": {
-        "server-watch": "nodemon --enable-source-maps ../server-build/index.js",
+        "server-watch": "nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "server": "node --enable-source-maps ../server-build/index.js",
         "build": "esbuild index.ts --bundle --platform=node --keep-names --outfile=../server-build/index.js --sourcemap --allow-overwrite  --tsconfig=tsconfig.json",
         "watch": "npm run build -- --watch",
@@ -11,11 +11,6 @@
         "pwatch": " npm run clear && parcel watch",
         "parcel-debug": "parcel build --no-optimize --no-scope-hoist --no-content-hash"
     },
-    "engines": {
-        "node": "14"
-    },
-    "source": "index.ts",
-    "main": "lib/index.js",
     "dependencies": {
         "amd-loader": "^0.0.8",
         "baobab": "^2.6.1",
