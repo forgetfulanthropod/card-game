@@ -34,7 +34,7 @@ type ImmutableSet<T> = ReadonlySet<Immutable<T>>
 type ImmutableObject<T> = { readonly [K in keyof T]: Immutable<T[K]> }
 
 
-export class MyBaobab<T extends any> extends Baobab {
+export class MyBaobab<T> extends Baobab {
     constructor(initialState?: T, options?: Partial<BaobabOptions>) {
         super(initialState, options)
     }
@@ -62,7 +62,7 @@ export class MyBaobab<T extends any> extends Baobab {
 }
 
 
-export class MyCursor<T extends any> extends Cursor {
+export class MyCursor<T> extends Cursor {
     constructor() { super() }
     apply(getNew: (state: T) => T): T { return super.apply(getNew) }
     apply<K extends keyof T>(path: K, getNew: (state: Immutable<T[K]>) => Immutable<T[K]>): MyCursor<T[K]>

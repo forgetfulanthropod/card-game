@@ -1,16 +1,16 @@
 
-import type { AttackData, CharacterMeta, CharacterMove, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared/index'
 
 import { rulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
-export function getCharacterMovesWithDamageRanges(character: Partial<CharacterMeta>): CharacterMove[] {
-    return character.moves!.map(move => {
+export function getCharacterMovesWithDamageRanges(character: CharacterStats & { stance: StanceName }): CharacterMove[] {
+    return character.moves.map(move => {
 
         const damageRange = getMoveMultiplierRange(move).map(multiplier => {
-            return character.damage! * getAttackMultiplier(character) * multiplier
+            return character.damage * getAttackMultiplier(character) * multiplier
         })
 
         return {
@@ -48,14 +48,15 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
     if (moveTypeDOT != null) {
         const moveMeta = rulebook.moveMetaMap[moveTypeDOT]
 
-        if (moveMeta.effectMultipliers === undefined) { throw Error('bad move meta') }
+        if (moveMeta.effectMultipliers == null) { throw Error('bad move meta') }
+        const effectMultipliers = moveMeta.effectMultipliers
         return attackData.defenders.map(d => ({
             key: d.uid,
             effect: {
                 type: moveTypeDOT as EffectType,
-                remainingRounds: moveMeta.effectMultipliers!.length - 1,
+                remainingRounds: effectMultipliers.length - 1,
                 damagesByRound: [
-                    ...moveMeta.effectMultipliers!.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
+                    ...effectMultipliers.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
                 ]
             }
         }))
@@ -127,7 +128,10 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
         let multipliers
         if (moveMeta.multiplier != null)
             multipliers = [moveMeta.multiplier]
-        else multipliers = [...moveMeta.multipliers!]
+        else if (moveMeta.multipliers != null)
+            multipliers = [...moveMeta.multipliers]
+        else
+            throw Error('movemeta has neither multiplier not multipliers')
 
         multipliers.forEach(m => {
             if (m < min) min = m

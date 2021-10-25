@@ -32,9 +32,9 @@ export interface MoveMeta {
 
 export type EffectType = 'DOT1' | 'DOT2'
 export interface Effect {
-    type?: EffectType
-    remainingRounds?: number
-    damagesByRound?: number[]
+    type: EffectType
+    remainingRounds: number
+    damagesByRound: number[]
     dealer?: CharacterMeta
 }
 

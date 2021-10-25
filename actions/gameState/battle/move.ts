@@ -19,7 +19,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
     })
     allChars.select(attackData.attacker.uid).applyK('effects', e => {
         return e
-            .map(e => ({ ...e, remainingRounds: e.remainingRounds! - 1 }))
+            .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
             .filter(e => e.remainingRounds > 0)
     })
     // reduce remaining rounds, clear exhausted effects
@@ -35,8 +35,8 @@ function updateEffect(newEffect: Effect, prev: Immutable<Effect[]>): Immutable<E
         const prevEffect = prev[prevTypeIndex]
         const mergedEffect = {
             type: newEffect.type,
-            remainingRounds: prevEffect.remainingRounds! + newEffect.remainingRounds!,
-            damagesByRound: [...prevEffect.damagesByRound!, ...newEffect.damagesByRound!],
+            remainingRounds: prevEffect.remainingRounds + newEffect.remainingRounds,
+            damagesByRound: [...prevEffect.damagesByRound, ...newEffect.damagesByRound],
         }
         return [...prev.slice(0, prevTypeIndex), mergedEffect, ...prev.slice(prevTypeIndex + 1)]
     }
