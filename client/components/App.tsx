@@ -7,6 +7,7 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import EventHistorySideBar from './EventHistorySidebar'
 
 
 // import TestCounter from './TestCounter'
@@ -17,6 +18,7 @@ export default function App(): JSX.Element {
 
     return <AppWrap>
         <Toaster />
+        <EventHistorySideBar />
         {sceneType === 'battle' && <Battle />}
         {/* <TestCounter /> */}
     </AppWrap>
