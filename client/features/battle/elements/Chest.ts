@@ -29,10 +29,10 @@ export default function Chest(args: { size: Size }): PixiContainer {
                 src: dataOf('chestLid'),
                 onTick: (lid, elapsed) => {
                     lid.angle = Math.min(lid.angle + rotationRate * elapsed, 45)
-                }
-            })
+                },
+            }),
 
-        ]
+        ],
     })
 
     setTimeout(() => {

@@ -2,7 +2,7 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
-    MoveEvent
+    MoveEvent,
 } from '@shared'
 
 import type { DataCursor } from './DataCursor'

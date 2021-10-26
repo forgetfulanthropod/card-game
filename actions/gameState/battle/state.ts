@@ -5,7 +5,7 @@ import type {
     CharacterUid,
     DungeonName,
     OwnedCharacter,
-    StanceName
+    StanceName,
 } from '@shared'
 
 import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
@@ -18,7 +18,7 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH, }
+export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
 function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
@@ -69,7 +69,7 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         doors: { options: [], descriptions: [] },
-        roomsPassed: 0
+        roomsPassed: 0,
     })
 }
 

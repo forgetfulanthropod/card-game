@@ -66,7 +66,7 @@ export function BattleScene(): PixiContainer {
                     move$,
                     scale: 1,
                     isSelected: false,
-                }))
+                })),
         ]
         for (const x of newChildren) {
             container.addChild(x)

@@ -31,7 +31,7 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: Dungeon
     const descriptions = describeOutcomes(roomOutcomes).join('\n or \n')
     return {
         options,
-        descriptions: ['big scary door\n X2 Modifier', descriptions, 'LV 10 matcha door']
+        descriptions: ['big scary door\n X2 Modifier', descriptions, 'LV 10 matcha door'],
     }
     // const allDoors: Door[] = ['A', 'B', 'C', 'D']
     // const options = allDoors.slice(0, length(roomOutcomes))
@@ -58,7 +58,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
             enemies: mapToObj(sampleSize(npcNames, randInt(1, 5)), name => {
                 const uid = makeUid()
                 return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: randInt(1, 4) })]
-            })
+            }),
         }
     }
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1][args.door]
@@ -73,7 +73,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
             const [name, level] = pair
             const uid = makeUid()
             return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: level * modifier })]
-        })
+        }),
     }
 }
 
@@ -105,7 +105,7 @@ export function handleSpecialDoor(args: {
             // if (roomsPassed + 1 === v.levelToAppearOn) {
             return {
                 modifier: 1,
-                enemies: { [uid]: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) }
+                enemies: { [uid]: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) },
             }
             // }
             // return makeRandRegularRoom(dungeonName, roomsPassed)

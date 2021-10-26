@@ -68,7 +68,7 @@ export default function HealthBar(
             texture,
             color,
             alpha: 1,
-            matrix: new Matrix(.1, 0, 0, .1, 0, 0)
+            matrix: new Matrix(.1, 0, 0, .1, 0, 0),
         })
         g.drawRect(...rect)
 
@@ -101,10 +101,10 @@ export default function HealthBar(
             Sprite({
                 src: PixiLoader.shared.resources?.healthBorder?.data,
                 width: displayWidth,
-                height: displayHeight
+                height: displayHeight,
             }),
             healthText,
-        ]
+        ],
     })
 
     const stanceSrc = args.stance == null ? null :
@@ -119,7 +119,7 @@ export default function HealthBar(
             y: displayHeight * 1.1,
             anchor: [1, 0],
             width: displayWidth / 3,
-            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height
+            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height,
         }))
     }
 

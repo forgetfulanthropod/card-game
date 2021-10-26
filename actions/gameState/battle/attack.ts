@@ -15,7 +15,7 @@ export function getCharacterMovesWithDamageRanges(character: CharacterStats & { 
 
         return {
             ...move,
-            damageRange
+            damageRange,
         }
     })
 }
@@ -49,10 +49,8 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
             effect: {
                 type: moveTypeDOT as EffectType,
                 remainingRounds: effectMultipliers.length - 1,
-                damagesByRound: [
-                    ...effectMultipliers.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
-                ]
-            }
+                damagesByRound: [...effectMultipliers.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))],
+            },
         }))
     }
 

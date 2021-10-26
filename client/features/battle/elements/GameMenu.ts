@@ -14,6 +14,6 @@ export function GameMenu(): PixiContainer {
             GameMenuItem('characters', 0),
             GameMenuItem('items', 1),
             GameMenuItem('materials', 2),
-        ]
+        ],
     })
 }

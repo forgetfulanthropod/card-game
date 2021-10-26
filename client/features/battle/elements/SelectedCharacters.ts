@@ -26,7 +26,7 @@ export function SelectedCharacters(): PixiContainer {
                         anchor: [.5, .5],
                         src: dataOf(c.name),
                         scale: 1,
-                    })
+                    }),
                 ],
             })
         ) ?? []
@@ -38,7 +38,7 @@ export function SelectedCharacters(): PixiContainer {
     const root = Container({
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT * .65,
-        children: []
+        children: [],
     })
 
     setSelectedCharacters()

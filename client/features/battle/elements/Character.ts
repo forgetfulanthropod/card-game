@@ -72,7 +72,7 @@ function Character(args: CharacterProps): PixiContainer {
             defendSprite,
             hasMovedSprite,
             healthBar,
-        ]
+        ],
     })
     mainContainer.sortChildren()
 
@@ -89,7 +89,7 @@ function Character(args: CharacterProps): PixiContainer {
         children: [
             mainContainer,
             aboveCharacterContainer,
-        ]
+        ],
     })
 
 
@@ -193,7 +193,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         onClick: () => {
             args.onClick(characterMeta.uid)
         },
-        zIndex: 1
+        zIndex: 1,
     })
     const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
     const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })

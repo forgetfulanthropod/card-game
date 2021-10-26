@@ -19,6 +19,6 @@ export function makeServerEventEmitter<Name extends string, Data>(name: Name, cu
             cursor.apply(events => [...events, event])
             // @ts-ignore
             cursor.commit()
-        }
+        },
     }
 }

@@ -43,11 +43,11 @@ export const makeRootDataCursor = memoize(function makeRootDataCursor(): DataCur
     const b = new MyBaobab({
         contents: {
             users: {
-                alice: null as unknown as Gamestate
+                alice: null as unknown as Gamestate,
 
             },
-            testCounters: { counter0: 0 }
-        }
+            testCounters: { counter0: 0 },
+        },
     })
     console.log('guest')
     const c = b.select('contents')

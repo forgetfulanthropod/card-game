@@ -20,7 +20,7 @@ export function StartButton(): PixiContainer {
                 scale: .5,
                 async onClick() {
                     await changeScene({ newSceneName: 'battle' })
-                }
+                },
             }),
             Text({
                 text: 'GO!',
@@ -32,7 +32,7 @@ export function StartButton(): PixiContainer {
                     stroke: '#999',
                     strokeThickness: 5,
                 },
-            })
+            }),
         ],
     })
 

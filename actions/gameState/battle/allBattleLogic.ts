@@ -149,7 +149,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         attacker: attackData.attacker.uid,
         defenders: attackData.defenders.map(d => d.uid),
         move: attackData.move,
-        damageMap
+        damageMap,
     })
 
     // Update health, effects, and hasMoved

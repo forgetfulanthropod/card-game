@@ -26,7 +26,7 @@ export function makeClientEventListener<Name extends string, Data>(name: Name, c
         },
         emit(_event) {
             throw Error('client cannot emit events')
-        }
+        },
     }
 
 }

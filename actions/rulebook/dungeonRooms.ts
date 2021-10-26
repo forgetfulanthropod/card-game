@@ -1,7 +1,7 @@
 import type { CharacterName } from '@shared'
 
 const config = {
-    doValidation: false
+    doValidation: false,
 }
 
 // type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
@@ -39,10 +39,12 @@ export const dungeonRooms: DungeonRooms = {
     }, 3: {
         A: {
             outcomes: [
-                [[m, 3], [m, 2]], [[m, 3], [s, 2]],
-                [[s, 3], [m, 2]], [[s, 3], [s, 2]],
+                [[m, 3], [m, 2]],
+[[m, 3], [s, 2]],
+                [[s, 3], [m, 2]],
+[[s, 3], [s, 2]],
             ],
-            probs: [.25, .25, .25, .25]
+            probs: [.25, .25, .25, .25],
         },
         B: { outcomes: [[[s, 5]], [[m, 5]]], probs: [.5, .5] },
         C: {
@@ -50,7 +52,7 @@ export const dungeonRooms: DungeonRooms = {
                 [[m, 2], [m, 2], [m, 2], [m, 2]],
                 [[s, 2], [s, 2], [s, 2], [s, 2]],
             ],
-            probs: [.5, .5]
+            probs: [.5, .5],
         },
     }, 4: { // TODO: cases below
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
@@ -62,7 +64,7 @@ export const dungeonRooms: DungeonRooms = {
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
     }, 8: { // boss
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
-    }
+    },
 }
 
 if (config.doValidation) {

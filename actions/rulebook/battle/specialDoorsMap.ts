@@ -15,7 +15,7 @@ export const specialDoorsMap = {
         description: 'additional x2 dungeon modifier',
         variables: {
             modifier: 2,
-        }
+        },
     },
     'candyBaby': {
         name: 'candyBaby',
@@ -25,7 +25,7 @@ export const specialDoorsMap = {
     'normal': {
         name: 'normal',
         description: 'always takes up 1 door slot. does A-B-C system based on level',
-        variables: {}
+        variables: {},
     },
     'matcha': {
         name: 'matcha',
@@ -34,7 +34,7 @@ export const specialDoorsMap = {
             levelToAppearOn: 6,
             enemyName: 'matchaGelatinCube' as CharacterName,
             enemyLevel: 10,
-        }
+        },
     },
     'skeleton': {
         name: 'skeleton',
@@ -43,14 +43,14 @@ export const specialDoorsMap = {
             levelToAppearOn: 6,
             enemyName: 'skeletonWarrior' as CharacterName,
             enemyLevel: 10,
-        }
+        },
     },
     'rareItem': {
         name: 'rareItem',
         description: 'we should figure out the specifics of what this should be in conjunction with crafting, but it’d be fun to have a door that has an especially difficult material or crafting item',
         variables: {
             possibleItems: ['fishstick', 'potion', 'swordShield', 'bread'],
-        }
+        },
     },
     'bossDoor': {
         name: 'bossDoor',
@@ -64,7 +64,7 @@ export const specialDoorsMap = {
             initialLevel: 1,
             healthIncrease: 7,
             attackIncrease: 1,
-        }
+        },
     },
     'tiny': {
         name: 'tiny',
@@ -77,13 +77,13 @@ export const specialDoorsMap = {
         name: 'jumbo',
         description: 'makes the character with the highest level in this dungeon room jumbo',
         variables: {
-            criteria: 'highest' as 'highest' | 'all' | 'random'
-        }
+            criteria: 'highest' as 'highest' | 'all' | 'random',
+        },
     },
     'randomEvent': {
         name: 'randomEvent',
         description: 'question mark door',
-        variables: {}
+        variables: {},
     },
     'campfire': {
         name: 'campfire',
@@ -92,6 +92,6 @@ export const specialDoorsMap = {
             effectType: 'absolute' as 'absolute' | 'proportional',
             absoluteIncrease: 14,
             proportionalIncrease: 10,
-        }
+        },
     },
 }

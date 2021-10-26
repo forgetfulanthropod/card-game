@@ -28,9 +28,9 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(args[0])
+                    body: JSON.stringify(args[0]),
                 })
 
                 try {

@@ -29,7 +29,7 @@ export default function HitInfo(args: { level: number }): PixiContainer {
                     dropShadowColor: '#eeeeee',
                 },
             }),
-        ]
+        ],
     })
 
 }

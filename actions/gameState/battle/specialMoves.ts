@@ -23,6 +23,6 @@ function getMimicMove(move: CharacterMove, charUid: CharacterUid): CharacterMove
 
     return {
         ...move,
-        types
+        types,
     }
 }

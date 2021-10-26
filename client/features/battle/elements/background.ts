@@ -10,7 +10,7 @@ export default function Background({ scale, src, srcs }: { scale: number, src?: 
         return VideoBackground({
             name: 'Background',
             src,
-            scale
+            scale,
         })
     }
 
