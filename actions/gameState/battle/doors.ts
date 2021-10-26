@@ -1,9 +1,8 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
 import { keys, sample, sampleSize } from 'lodash'
 
-import { npcNames } from '@/rulebook/battle'
-import type { SpecialDoorName } from '@/rulebook/battle/specialDoorsMap'
-import { specialDoorsMap } from '@/rulebook/battle/specialDoorsMap'
+import type { SpecialDoorName } from '@/rulebook/battle'
+import { npcNames, specialDoorsMap } from '@/rulebook/battle'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import type { DataCursor } from '@/util'
 import { consoleError, mapToObj } from '@/util'
@@ -47,7 +46,7 @@ export function getDoorChoices(_args: { roomsPassed: number, dungeonName: Dungeo
     // return { options, descriptions }
 }
 
-export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
+function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
     const modifier = args?.modifier ?? 1
     if (args.door === 'random') {
         return {

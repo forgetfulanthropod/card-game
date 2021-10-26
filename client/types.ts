@@ -1,6 +1,5 @@
 
 import type Preact from 'preact'
-// import Preact, {JSX} from 'preact'
 import type { StateUpdater } from 'preact/hooks'
 
 
@@ -23,5 +22,3 @@ declare global {
     }
     type EmptyObject = Record<string, never>
 }
-
-export default null

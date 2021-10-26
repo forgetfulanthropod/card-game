@@ -1,4 +1,3 @@
-// import { PixiApplication } from '@/features/battle/elements/mypixi'
 import * as PIXI from 'pixi.js'
 
 // https://github.com/bfanger/pixi-inspector

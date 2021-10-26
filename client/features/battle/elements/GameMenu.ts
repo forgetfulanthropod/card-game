@@ -14,13 +14,6 @@ export function GameMenu(): PixiContainer {
             GameMenuItem('characters', 0),
             GameMenuItem('items', 1),
             GameMenuItem('materials', 2),
-            // Sprite({
-            //     src:
-            // })
-            // background({ scale: 1, srcs: [DungeonEntryPng] }),
-            // GameMenu() // PlayerCharacterMenu() | ConsumableItemsMenu | EquippableItemsMenu
-            // LevelInfo()
-            // PlayerCharacters()
         ]
     })
 }

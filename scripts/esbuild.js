@@ -36,16 +36,9 @@ for (const k of clientEnvKeys) [
 console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')
 
-// const preactSubs = {
-//     '"react"': '"preact/compat"',
-//     '"react-dom/test-utils"': '"preact/test-utils"',
-//     '"react-dom"': '"preact/compat"',
-//     '"react/jsx-runtime"': '"preact/jsx-runtime"'
-// }
 const substitions = {
     ...envObj,
-    "global": "window" // node_modules/baobab/dist/helpers.js:203
-    // ...preactSubs,
+    // "global": "window"
 }
 
 main()
@@ -60,7 +53,6 @@ async function main() {
         entryPoints: ['client/index.tsx'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
-        inject: ['./client/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',
