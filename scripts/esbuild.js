@@ -38,7 +38,7 @@ const alias = require('esbuild-plugin-alias')
 
 const substitions = {
     ...envObj,
-    // "global": "window"
+    "global": "window"
 }
 
 main()
