@@ -6,6 +6,9 @@ import { vals } from '@/util'
 
 import { getCharIds } from './misc'
 
+const HEALTH_PER_LEVEL = 7
+const DAMAGE_PER_LEVEL = 1
+
 
 export function incrementXP(scene: DataCursor<Gamestate, BattleScene>): void {
     const totalXP = getTotalXP(scene)
@@ -47,9 +50,9 @@ function getLeveledUpCharacter(
         ...character,
         level: character.level + 1,
         experience: experience % levelThreshold,
-        damage: character.damage + 3,
-        maxHealth: character.maxHealth + 7,
-        health:    character.maxHealth + 7,
+        damage: character.damage + DAMAGE_PER_LEVEL,
+        maxHealth: character.maxHealth + HEALTH_PER_LEVEL,
+        health:    character.maxHealth + HEALTH_PER_LEVEL,
     }
 }
 
