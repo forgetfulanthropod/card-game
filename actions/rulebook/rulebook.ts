@@ -1,10 +1,9 @@
 import type { DungeonLevel, Rulebook } from '@shared'
 
-import { numbers } from '../gameState/battle/state'
+import { numbers } from '@/gameState/battle'
+
 import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
 
-
-// import { initialEntryState } from './entry/state'
 
 const dungeonLevels: DungeonLevel[] = [
     { name: 'Hooligan’s Bluff', num: 1, pointLimit: 20, modifier: 1, },
@@ -19,12 +18,6 @@ export const rulebook: Rulebook = {
     locations: {},
     dungeonLevels: dungeonLevels,
     items: {},
-    // initialScenes: {
-    //     battle: makeBattleState(),
-    //     entry: initialEntryState,
-    //     map: { name: 'map', coordinates: [-1, -1], unlockedLocations: [] },
-    //     craft: { name: 'craft', onTable: {}, selectedRecipe: '' },
-    // },
     numbers,
     stanceTypeMetaMap,
     levelThresholds: {

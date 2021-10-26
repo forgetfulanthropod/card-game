@@ -1,10 +1,9 @@
-import type { NetworkEventEmitter } from '@shared'
+import type { CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@shared'
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import type { CharacterMeta, NetworkAttackData } from '@/data/types'
 import { keyMap, keys, tl } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 

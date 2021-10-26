@@ -77,7 +77,7 @@ export default function HealthBar(
 
 
     if (args.value == null) {
-        // TODO: see TODO BqUPq
+        // TODO: see BqUPq
         return Container({ children: [] })
     }
     const health = Graphics({ draw: drawHealthBar })

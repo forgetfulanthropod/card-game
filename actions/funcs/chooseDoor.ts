@@ -1,12 +1,8 @@
 
 
+import { handleSpecialDoor, resetRound } from '@/gameState/battle'
 import type { SpecialDoorName } from '@/rulebook/battle'
-
-import { resetRound } from '../gameState/battle/allBattleLogic'
-import { handleSpecialDoor } from '../gameState/battle/doors'
-import { objFilter } from '../util/objectMethods'
-import { onCallWrapper } from '../util/onCallWrapper'
-import { getBattleScene } from '../util/treeAccessors'
+import { getBattleScene, objFilter, onCallWrapper } from '@/util'
 
 
 export default onCallWrapper(async function chooseDoor(args: { door: SpecialDoorName }): Promise<void> {

@@ -114,9 +114,6 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     console.log(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    // console.log('args.name', args.name)
-    // console.log('statsMap[args.name]', statsMap[args.name])
-    // console.log('statsMap', statsMap)
     // @ts-ignore
     const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
 

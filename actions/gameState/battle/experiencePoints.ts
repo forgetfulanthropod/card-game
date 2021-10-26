@@ -17,11 +17,11 @@ export function incrementXP(scene: DataCursor<Gamestate, BattleScene>): void {
 
     const livingPcIds = getCharIds(
         vals(scene.select('allCharacters').get()),
-        {health: 1, isPc: true}
+        { health: 1, isPc: true }
     )
 
     scene.select('allCharacters').apply(ac => {
-        const allCharacters = {...ac}
+        const allCharacters = { ...ac }
 
         const xpPerCharacter = Math.round(totalXP / livingPcIds.length)
         livingPcIds.map(id => {

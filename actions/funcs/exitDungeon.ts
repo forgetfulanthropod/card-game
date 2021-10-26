@@ -1,6 +1,5 @@
-import { initialEntryState } from '../gameState/entry/state'
-import { onCallWrapper } from '../util/onCallWrapper'
-import { getGameStateCursor } from '../util/treeAccessors'
+import { initialEntryState } from '@/gameState/entry/state'
+import { getGameStateCursor, onCallWrapper } from '@/util'
 export default onCallWrapper(function exitDungeon(_args: { [x: string]: never }): void {
     const gameState = getGameStateCursor('alice')
     if (gameState.select('scene').getK('name') !== 'battle') {

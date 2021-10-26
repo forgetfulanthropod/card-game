@@ -1,4 +1,4 @@
-import type { JSX } from 'preact'
+import { h, JSX, Fragment } from 'preact' // eslint-disable-line
 
 import MoveMenu from './MoveMenu'
 

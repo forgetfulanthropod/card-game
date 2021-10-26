@@ -1,6 +1,6 @@
 const esbuild = require('esbuild')
 const fs = require('fs')
-const { spawn } = require('child_process')
+const { spawn, spawnSync } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
 const envFile = require('dotenv').config()?.parsed
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
@@ -12,7 +12,13 @@ const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 const shouldLint = envFile?.ESBUILD_SHOULD_LINT === 'yes'
 const isDevelopment = envFile?.ESBUILD_NODE_ENV === 'development'
-console.log({ shouldWatch, shouldLint })
+
+// `git branch --show-current` doesn't work on old git versions
+
+const gitBranch = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { encoding: 'utf8' }).output[1].trim()
+console.log({ shouldWatch, shouldLint, gitBranch })
+
+envFile.CLIENT_GIT_BRANCH = gitBranch
 
 const envObj = {
     'process.env.NODE_ENV': `"${isDevelopment ? 'development' : 'production'}"`,
@@ -22,6 +28,7 @@ const clientEnvKeys = [
     "CLIENT_DISABLE_BACKGROUND",
     "CLIENT_LOG_API_REQUESTS",
     "CLIENT_IS_LOCAL",
+    "CLIENT_GIT_BRANCH"
 ]
 for (const k of clientEnvKeys) [
     envObj[`process.env.${k}`] = `"${envFile?.[k] ?? ''}"`
@@ -29,16 +36,9 @@ for (const k of clientEnvKeys) [
 console.log("environment object given to client:", envObj)
 const alias = require('esbuild-plugin-alias')
 
-// const preactSubs = {
-//     '"react"': '"preact/compat"',
-//     '"react-dom/test-utils"': '"preact/test-utils"',
-//     '"react-dom"': '"preact/compat"',
-//     '"react/jsx-runtime"': '"preact/jsx-runtime"'
-// }
 const substitions = {
     ...envObj,
-    "global": "window" // node_modules/baobab/dist/helpers.js:203
-    // ...preactSubs,
+    // "global": "window"
 }
 
 main()
@@ -53,7 +53,6 @@ async function main() {
         entryPoints: ['client/index.tsx'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
-        inject: ['./client/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',

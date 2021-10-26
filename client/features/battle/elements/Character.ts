@@ -1,8 +1,7 @@
-import type { MyCursor, NetworkEvent } from '@shared'
+import type { CharacterMeta, CharacterUid, MyCursor, NetworkAttackData, NetworkEvent } from '@shared'
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'
-import type { CharacterMeta, CharacterUid, NetworkAttackData } from '@/data/types'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
 import type { CharacterName } from '../logic/AssetLoader'

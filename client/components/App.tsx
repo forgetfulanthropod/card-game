@@ -9,13 +9,11 @@ import Battle from '@/features/battle/components/Battle'
 import AppWrap from './AppWrap'
 
 
-// import TestCounter from './TestCounter'
-
-
 export default function App(): JSX.Element {
     const sceneType = useCursor(getTree().select('scene').select('name'))
 
     return <AppWrap>
+        <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
         <Toaster />
         {sceneType === 'battle' && <Battle />}
         {/* <TestCounter /> */}
