@@ -1,5 +1,6 @@
 import type { BattleScene, EntryScene, Gamestate, MyCursor, OwnedCharacter, Scene } from '@shared'
 import { MyBaobab } from '@shared'
+import { memoize } from 'lodash'
 
 import { listenForInitialGameState } from '@/connection/serverListener'
 
@@ -46,3 +47,13 @@ export const getEntryScene = (): MyCursor<EntryScene> => {
 export const getOwnedCharacters = (): MyCursor<Record<string, OwnedCharacter>> => getTree().select('ownedCharacters')
 export const getScene = (): MyCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
+
+
+interface ClientTree {
+    serverCalls: unknown[]
+}
+export const getClientTree: () => MyBaobab<ClientTree> = memoize(() => {
+    return new MyBaobab<ClientTree>({
+        serverCalls: []
+    })
+})

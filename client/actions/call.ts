@@ -1,12 +1,14 @@
 /** Exports all the API routes as functions */
 import type { Caller, Func } from '@shared'
 
+import { getClientTree } from '@/data/rootTree'
 import { entryMap } from '@/util'
 
 
 const config = {
     shouldLog: process.env.CLIENT_LOG_API_REQUESTS === 'yes',
     method: 'post' as 'get' | 'post',
+    shouldSaveCalls: true,
 }
 console.log('call.ts config:', config)
 
@@ -14,6 +16,9 @@ console.log('call.ts config:', config)
 export function callWrap<F extends Func>(name: string): Caller<F> {
     const randId = Math.random().toString().slice(2, 6)
     const doCall: Caller<F> = async (...args) => {
+        if (config.shouldSaveCalls) {
+            getClientTree().select('serverCalls').push({ name, args: args[0], time: new Date().toLocaleTimeString() })
+        }
         if (config.shouldLog) { console.log(`calling ${name}#${randId}(${JSON.stringify(args[0])}) at ${new Date().toLocaleTimeString()}`) }
         try {
             const startTime = Date.now()

@@ -7,6 +7,7 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import { Sidebar } from './Sidebar'
 
 
 export default function App(): JSX.Element {
@@ -15,6 +16,7 @@ export default function App(): JSX.Element {
     return <AppWrap>
         <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
         <Toaster />
+        <Sidebar />
         {sceneType === 'battle' && <Battle />}
         {/* <TestCounter /> */}
     </AppWrap>

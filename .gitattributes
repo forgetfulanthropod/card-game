@@ -1,1 +1,2 @@
 *.ts filter=gitignoreline
+*.json filter=gitignoreline
