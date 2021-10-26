@@ -2,8 +2,6 @@
 // @ts-ignore
 import styled from 'styled-components'
 
-// import { css, keyframes } from 'styled-components'
-
 
 export const HoverDiv = styled.div`
     background: black;

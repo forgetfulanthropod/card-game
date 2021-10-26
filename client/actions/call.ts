@@ -17,8 +17,6 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
         if (config.shouldLog) { console.log(`calling ${name}#${randId}(${JSON.stringify(args[0])}) at ${new Date().toLocaleTimeString()}`) }
         try {
             const startTime = Date.now()
-            // TODO: fetch
-            // const res = await httpsCallable(functions, name)(args)
             let json: ReturnType<F> | null = null
             if (config.method === 'get') {
                 const pairs = entryMap(args[0], (k, v) => `${k}=${v}`).join('&')

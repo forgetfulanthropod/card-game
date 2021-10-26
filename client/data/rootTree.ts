@@ -1,4 +1,3 @@
-// import { getRulebookAsync } from '@/actions'
 import type { BattleScene, EntryScene, Gamestate, MyCursor, OwnedCharacter, Scene } from '@shared'
 import { MyBaobab } from '@shared'
 
@@ -14,9 +13,6 @@ export async function waitForGameStateToFill(): Promise<void> {
     state.gamestate = new MyBaobab(await listenForInitialGameState())
     // @ts-ignore for debugging:
     window.tree = state.gamestate
-    // state.rulebook = await getRulebookAsync()
-    // for (const cb of state.rulebookCallbacks) { cb() }
-    // state.rulebookCallbacks = []
 }
 
 

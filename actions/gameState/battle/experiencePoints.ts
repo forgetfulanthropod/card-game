@@ -1,4 +1,3 @@
-// import type { BattleScene, Gamestate } from '@shared'
 
 import type { BattleScene, Gamestate } from '@shared'
 

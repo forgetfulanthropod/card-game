@@ -1,4 +1,3 @@
-// import { deepFreeze } from '@/util'
 import type { MoveMeta, MoveMetaName } from '@shared'
 
 
@@ -20,8 +19,6 @@ import type { MoveMeta, MoveMetaName } from '@shared'
 // The potential damage range of each character’s attack should always be displayed.  For example, if a character has 10 attack and does a basic attack, it should show the potential damage as 9-11, not 10.
 
 // DOT effects applied by multiple characters can stack, but a character cannot stack DOT with itself.
-
-// TODO: fill in this data
 
 export const moveMetaMap: Record<MoveMetaName, MoveMeta> = {
     BA: {

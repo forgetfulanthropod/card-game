@@ -19,14 +19,9 @@ export default function (args: {
             fontSize: 40,
             fontWeight: '900',
             fill: ['#333', '#000'], // gradient
-            // stroke: '#01d27e',
-            // strokeThickness: 5,
             letterSpacing: -2,
             stroke: '#aaa',
             strokeThickness: 4,
-            // dropShadowDistance: 6,
-            // wordWrap: true,
-            // wordWrapWidth: 440,
         },
     })
 }

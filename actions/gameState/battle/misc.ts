@@ -1,6 +1,3 @@
-// TODO: do not replicate this file
-
-// import { vals } from '@/util'
 import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
@@ -135,14 +132,3 @@ export function weightedRandom(probabilites: number[]): number {
     // hits e.g. when all probabilities are 0
     return Math.random() * probabilites.length | 0
 }
-
-
-// TODO: jest/mocha?
-// export function test(A) {
-//     const counts = A.map(() => 0)
-//     const n = 10000
-//     for (let i = 0; i < n; i++) {
-//         counts[weightedRandom(A)] += 1
-//     }
-//     return counts.map(x => x / n)
-// }

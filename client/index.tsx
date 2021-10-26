@@ -37,7 +37,6 @@ loadAssets(
 )
 
 void (async function makeTheUser() {
-    // TODO: check if this await actually waits all the way through
     log('initializing app')
     await waitForHandshake()
     void waitForGameStateToFill().then(() => maybeStart('gamestate'))

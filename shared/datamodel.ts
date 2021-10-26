@@ -27,12 +27,6 @@ export interface Rulebook {
         displayName: string
         description: string
     }>
-    // initialScenes: {
-    //     map: MapScene,
-    //     entry: EntryScene,
-    //     battle: BattleScene,
-    //     craft: CraftingScene,
-    // }
     numbers: {
         BASE_WIDTH: number
         BASE_HEIGHT: number
