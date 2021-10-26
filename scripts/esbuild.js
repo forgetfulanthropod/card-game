@@ -2,7 +2,7 @@ const esbuild = require('esbuild')
 const fs = require('fs')
 const { spawn, spawnSync } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
-const envFile = require('dotenv').config()?.parsed
+const envFile = require('dotenv').config()?.parsed ?? {}
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
 
 const buildDir = 'build'
