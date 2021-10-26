@@ -28,7 +28,7 @@ export function hideElement(sprite: PixiSprite | PixiContainer, { durationMs = 5
 
 export function doFlashElement(
     parent: PixiContainer,
-    makeSprite: () => PixiSprite,
+    makeSprite: () => PixiSprite | PixiContainer,
     { durationMs = 500, sort = true } = {}
 ): void {
     const s = makeSprite()

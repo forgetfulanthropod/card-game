@@ -4,6 +4,9 @@ export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
 export function keys<K extends string | number, V>(obj: Record<K, V>): string[] {
     return Object.keys(obj)
 }
+export function stringKeys<K extends string, V>(obj: Record<K, V>): K[] {
+    return Object.keys(obj) as K[]
+}
 export function objFilter<K extends string | number, V>(obj: Record<K, V>, f: (k: string, v: V) => boolean): Record<K, V> {
     // @ts-ignore
     const o: Record<K, V> = {};

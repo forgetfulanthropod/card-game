@@ -1,11 +1,29 @@
 import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
-import { consoleError } from '@/util'
+import { stringKeys } from '@/util'
+import { consoleError } from '@/util/consoleError'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
+export function getId(x: number, y: number): string { return `${x}-${y}` }
+
+type CharacterFilters = Pick<CharacterMeta, 'health' | 'isPc'>
+export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
+    return ac
+        .filter(c => {
+            return stringKeys(filters).every((filterKey): boolean => {
+                if (typeof filters[filterKey] === 'boolean')
+                    return  c[filterKey] === filters[filterKey]
+                if (typeof filters[filterKey] === 'number')
+                    return  c[filterKey] >= filters[filterKey]
+                throw Error('invalid filterKey')
+            })
+        })
+        .map(c => {
+            return c.uid
+        })
 export function getCharIds(ac: CharacterMeta[], filters: Partial<CharacterMeta>): CharacterUid[] {
     return []
 }
