@@ -11,7 +11,8 @@
         "oldserve": "npx serve -s build -p 3000",
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
-        "fullstart": "bash scripts/fullstart.sh"
+        "fullstart": "bash scripts/fullstart.sh",
+        "savestaged": "git diff --patch --staged > changes.patch; git commit -m 'temp'; git reset --hard HEAD^"
     },
     "dependencies": {
         "baobab": "^2.6.1",
