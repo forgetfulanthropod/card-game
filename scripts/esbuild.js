@@ -60,7 +60,6 @@ async function main() {
         entryPoints: ['client/index.tsx'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
-        inject: ['./client/preact-shim.js'],
         bundle: true,
         outfile: buildDir + '/out.js',
         target: 'es6',

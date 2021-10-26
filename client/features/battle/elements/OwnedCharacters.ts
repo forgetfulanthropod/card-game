@@ -1,7 +1,7 @@
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
-// import { OwnedCharacter } from '@/data/types'
+// import { OwnedCharacter } from '@shared'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
 

@@ -9,13 +9,11 @@ import { consoleError } from '@/util'
 import { getTransformed, isSpecial } from './specialMoves'
 
 
-export function getId(x: number, y: number): string { return `${x}-${y}` }
-
 export function getCharIds(ac: CharacterMeta[], filters: Partial<CharacterMeta>): CharacterUid[] {
     return []
 }
 
-export function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
+function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
     const charDist = (a: CharacterMeta, b: CharacterMeta) =>
         dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
     return [...allCharacters]
@@ -27,7 +25,7 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
 
-export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
+function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     const chars = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
     return randomEl(chars)
@@ -39,7 +37,7 @@ export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterM
     return randomEl(chars)
 }
 
-export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const allLivingPlayerCharacters = ac
         .filter(c => c.isPc && c.health > 0)
 
@@ -66,7 +64,7 @@ export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
 }
 
 
-export function getRandomMove(attacker: CharacterMeta): CharacterMove {
+function getRandomMove(attacker: CharacterMeta): CharacterMove {
     const moves = attacker.moves
     let move = randomEl(moves)
 
@@ -113,7 +111,7 @@ export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: C
 }
 
 
-export function randomEl<T>(arr: readonly T[]): T {
+function randomEl<T>(arr: readonly T[]): T {
     return arr[Math.random() * arr.length | 0]
 }
 

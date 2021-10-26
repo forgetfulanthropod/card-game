@@ -1,5 +1,7 @@
-import { getApp } from '..'
+import { getApp } from '@/index'
+
 import { consoleError } from './consoleError'
+
 
 const config = {
     log: true,

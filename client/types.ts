@@ -23,5 +23,3 @@ declare global {
     }
     type EmptyObject = Record<string, never>
 }
-
-export default null

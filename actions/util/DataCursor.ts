@@ -2,7 +2,8 @@ import type { Gamestate, Immutable, MyCursor } from '@shared'
 import { MyBaobab } from '@shared'
 import { memoize } from 'lodash'
 
-import { getIo } from '..'
+import { getIo } from '@/index'
+
 import type { RootTreeShit } from './treeAccessors'
 import { getRootCursor } from './treeAccessors'
 

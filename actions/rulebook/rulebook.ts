@@ -1,6 +1,7 @@
 import type { DungeonLevel, Rulebook } from '@shared'
 
-import { numbers } from '../gameState/battle/state'
+import { numbers } from '@/gameState/battle'
+
 import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
 
 

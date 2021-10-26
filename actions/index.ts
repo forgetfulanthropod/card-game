@@ -5,7 +5,8 @@ import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './functions'
 
-const gitBranch = spawnSync("git", ["rev-parse", "--abbrev-ref", "HEAD"], { encoding: 'utf8' })?.output?.[1]?.trim()
+
+const gitBranch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' })?.output?.[1]?.trim()
 console.log('serving from branch', gitBranch)
 
 

@@ -1,4 +1,4 @@
-import type { CharacterMove } from '@/data/types'
+import type { CharacterMove } from '@shared'
 
 import type { PixiText } from './mypixi'
 import { Text } from './mypixi'

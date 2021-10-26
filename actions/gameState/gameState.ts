@@ -1,6 +1,7 @@
 import type { Gamestate, OwnedCharacter } from '@shared'
 
-import { statsMap } from '../rulebook/battle'
+import { statsMap } from '@/rulebook/battle'
+
 import { initialEntryState } from './entry/state'
 
 

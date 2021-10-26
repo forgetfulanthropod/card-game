@@ -9,9 +9,8 @@ import attachHello from './funcs/hello'
 import attachIncrementTestCounter from './funcs/incrementTestCounter'
 import attachMakeNewUser from './funcs/makeNewUser'
 import attachSquare from './funcs/square'
-import { startGame as attachStartGame } from './gameState/battle/allBattleLogic'
-import dispatch from './gameState/battle/dispatch'
-import { onCallWrapper } from './util/onCallWrapper'
+import { dispatch, startGame as attachStartGame } from './gameState/battle'
+import { onCallWrapper } from './util'
 
 export function attachAPIRoutes(): void {
     attachAddSelected()

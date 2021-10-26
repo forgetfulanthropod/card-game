@@ -1,10 +1,8 @@
 // import { getRulebookAsync } from '@/actions'
-import type { BattleScene, EntryScene, Gamestate, MyCursor, OwnedCharacter } from '@shared'
+import type { BattleScene, EntryScene, Gamestate, MyCursor, OwnedCharacter, Scene } from '@shared'
 import { MyBaobab } from '@shared'
 
 import { listenForInitialGameState } from '@/connection/serverListener'
-
-import type { Scene } from './types'
 
 
 /** Global variables for file */

@@ -1,6 +1,5 @@
 
-import { onCallWrapper } from '../util/onCallWrapper'
-import { getRootCursor } from '../util/treeAccessors'
+import { getRootCursor, onCallWrapper } from '@/util'
 
 export default onCallWrapper(function incrementTestCounter() {
     const doc = getRootCursor().select('testCounters').select('counter0')

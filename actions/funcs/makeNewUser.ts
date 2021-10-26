@@ -1,7 +1,6 @@
 
-import { initialGameState } from '../gameState/gameState'
-import { onCallWrapper } from '../util/onCallWrapper'
-import { getRootCursor } from '../util/treeAccessors'
+import { initialGameState } from '@/gameState/gameState'
+import { getRootCursor, onCallWrapper } from '@/util'
 
 export default onCallWrapper(function makeNewUser(args: { username: 'alice' }): void {
     // TODO: I'm not sure if this fully resets the user

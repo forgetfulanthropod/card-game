@@ -1,13 +1,13 @@
 import './global.css'
 
-import { render } from 'preact'
+import { h, JSX, render } from 'preact' // eslint-disable-line
 
 import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
-import { attachServerListener, waitForHandshake } from './connection/serverListener'
+import { attachServerListener, waitForHandshake } from './connection'
 import { waitForGameStateToFill } from './data/rootTree'
 
 
