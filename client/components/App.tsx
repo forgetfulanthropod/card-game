@@ -10,9 +10,6 @@ import AppWrap from './AppWrap'
 import { Sidebar } from './Sidebar'
 
 
-// import TestCounter from './TestCounter'
-
-
 export default function App(): JSX.Element {
     const sceneType = useCursor(getTree().select('scene').select('name'))
 

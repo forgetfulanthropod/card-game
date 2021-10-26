@@ -5,7 +5,7 @@ import { getBattleScene, keys } from '@/util'
 import { makeBattleState } from './state'
 
 
-const dispatch = (action: Action): void => {
+export const dispatch = (action: Action): void => {
     // console.log({ scene, action, data: scene.get() })
     // console.log(`>>>>dispatching ${JSON.stringify(action)}`)
     const scene = getBattleScene('alice')
@@ -36,4 +36,3 @@ const dispatch = (action: Action): void => {
     }
     scene.commit()
 }
-export default dispatch

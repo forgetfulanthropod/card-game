@@ -1,4 +1,4 @@
-import dedent from '.././util/dedent'
+import { dedent } from '@/util'
 
 export const eventTriggerNames = ['carriage', 'clearing', 'hats', 'gnome', 'babysitting', 'baron',]
 export type EventTriggerName = typeof eventTriggerNames[number]

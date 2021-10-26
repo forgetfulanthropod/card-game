@@ -96,7 +96,6 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         warn('not player turn')
         if (!scene.getK('isPlayerTurn')) {
             await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
-            // TODO: uncomment below?
             await doNpcMove('NPC has extra turns')
         }
         return

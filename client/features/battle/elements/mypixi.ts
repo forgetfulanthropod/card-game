@@ -51,7 +51,7 @@ interface SpriteArgs extends ShownArgs {
     src: string | PixiTexture
 }
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
-export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
+type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends DisplayObjectArgs {
     children: PixiChildren
     onTick?: OnContainerTick

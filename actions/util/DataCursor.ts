@@ -2,7 +2,8 @@ import type { Gamestate, Immutable, MyCursor } from '@shared'
 import { MyBaobab } from '@shared'
 import { memoize } from 'lodash'
 
-import { getIo } from '..'
+import { getIo } from '@/index'
+
 import type { RootTreeShit } from './treeAccessors'
 import { getRootCursor } from './treeAccessors'
 
@@ -35,17 +36,8 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
             return
         }
         getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
-        // TODO
     }
 }
-// TODO:
-// export type DataCursor = typeof DataCursor
-
-// declare global {
-//     interface globalThis {
-//         rootCursorInstance: DataCursor
-//     }
-// }
 
 export const makeRootDataCursor = memoize(function makeRootDataCursor(): DataCursor<RootTreeShit> {
     const b = new MyBaobab({

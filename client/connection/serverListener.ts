@@ -1,4 +1,3 @@
-// **TODO**: write the code in this file
 import type { Gamestate, MyBaobab, MyCursor } from '@shared'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
@@ -78,10 +77,6 @@ function updateBoabab(fromServer: unknown): void {
             console.log('diff seems to be applied correctly:', differences)
         }
     }
-    // TODO: deep diff update. see pathDiff in client/util/index
-    //const key = datastoreEvent.path
-    //const data = datastoreEvent.newData
-    //getTree().apply(key, data)
 }
 
 function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {

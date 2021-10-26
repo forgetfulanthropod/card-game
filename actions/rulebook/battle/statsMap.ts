@@ -1,7 +1,3 @@
-// TODO: better name for this file and export?
-
-// import { Immutable } from '@/config/immutable'
-// import { deepFreeze } from '@/util'
 import type { CharacterName, CharacterStats } from '@shared'
 export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
