@@ -70,10 +70,31 @@
                 "prev": "*",
                 "next": "function"
             }
+            // ,{ "blankLine": "always", "prev": "*", "next": "export" }
         ],
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
-        "@typescript-eslint/no-floating-promises": "error"
+        "@typescript-eslint/no-floating-promises": "error",
+        "array-bracket-newline": [
+            "warn",
+            {
+                "multiline": true
+            }
+        ],
+        "array-element-newline": [
+            "warn",
+            "consistent"
+        ],
+        "comma-dangle": [
+            "warn",
+            {
+                "arrays": "always-multiline",
+                "objects": "always-multiline",
+                "imports": "always-multiline",
+                "exports": "always-multiline",
+                "functions": "only-multiline"
+            }
+        ]
     },
     "ignorePatterns": [
         "scripts/",
