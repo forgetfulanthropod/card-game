@@ -40,6 +40,7 @@ export interface Rulebook {
         X_NEUTRAL_THRESH: number
     }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
+    levelThresholds: Record<number, number>
 }
 export interface Gamestate {
     scene: Scene

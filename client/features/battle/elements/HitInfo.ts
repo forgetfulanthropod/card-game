@@ -1,7 +1,7 @@
 import type { PixiText } from './mypixi'
 import { Text } from './mypixi'
 
-export default function HitInfo(args: { damage: number, isPoison?: boolean }): PixiText {
+export default function HitInfo(args: { damage: number | string, isPoison?: boolean }): PixiText {
     return Text({
         text: `-${args.damage}`,
         anchor: [0, 1],

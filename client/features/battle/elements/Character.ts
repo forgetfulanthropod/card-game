@@ -9,6 +9,7 @@ import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
+import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
 import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
 import { Container, PixiTicker, Sprite } from './mypixi'
@@ -22,6 +23,7 @@ const RED = 0xFF0000
 const BLUE = 0x0000FF
 const YELLOW = 0xe4e42d
 const SHOW_HIT_TIME = 1000
+const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 // const HEALTH_CHANGE_WAIT_TIME = 300
 
@@ -111,6 +113,13 @@ function Character(args: CharacterProps): PixiContainer {
 
     args.cursor.select('health').on('update', updateDeathAndHealth)
     args.cursor.select('effects').on('update', updateDeathAndHealth)
+    args.cursor.select('level').on('update', () => {
+        doFlashElement(
+            aboveCharacterContainer,
+            () => LevelUp({ level: args.cursor.select('level').get() }),
+            { durationMs: SHOW_LEVEL_UP_TIME }
+        )
+    })
 
     // const [isHovering, setIsHovering] = useState(false)
 

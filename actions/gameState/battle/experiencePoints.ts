@@ -1,7 +1,6 @@
-// import type { BattleScene, Gamestate } from '@shared'
+import type { BattleScene, CharacterMeta, Gamestate } from '@shared'
 
-import type { BattleScene, Gamestate } from '@shared'
-
+import { rulebook } from '@/rulebook'
 import type { DataCursor } from '@/util'
 import { vals } from '@/util'
 
@@ -10,6 +9,8 @@ import { getCharIds } from './misc'
 
 export function incrementXP(scene: DataCursor<Gamestate, BattleScene>): void {
     const totalXP = getTotalXP(scene)
+
+    console.log({totalXP})
 
     const livingPcIds = getCharIds(
         vals(scene.select('allCharacters').get()),
@@ -21,14 +22,35 @@ export function incrementXP(scene: DataCursor<Gamestate, BattleScene>): void {
 
         const xpPerCharacter = Math.round(totalXP / livingPcIds.length)
         livingPcIds.map(id => {
-            allCharacters[id] = {
-                ...allCharacters[id],
-                experience: allCharacters[id].experience + xpPerCharacter,
+            const character = allCharacters[id]
+            const experience = allCharacters[id].experience + xpPerCharacter
+
+            const levelThreshold = rulebook.levelThresholds[character.level + 1] * character.points / 15 | 0
+
+            if (experience > levelThreshold) {
+                allCharacters[id] = getLeveledUpCharacter({character, experience, levelThreshold})
+            } else {
+                allCharacters[id] = {...allCharacters[id], experience}
             }
         })
 
         return allCharacters
     })
+}
+
+function getLeveledUpCharacter(
+    {character, experience, levelThreshold}:
+    {character: CharacterMeta, experience: number, levelThreshold: number}
+): CharacterMeta {
+
+    return {
+        ...character,
+        level: character.level + 1,
+        experience: experience % levelThreshold,
+        damage: character.damage + 3,
+        maxHealth: character.maxHealth + 7,
+        health:    character.maxHealth + 7,
+    }
 }
 
 // xp = health + damage of slain enemy

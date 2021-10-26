@@ -4,15 +4,31 @@
 import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
-import { consoleError } from '@/util'
+import { keys } from '@/util'
+import { consoleError } from '@/util/consoleError'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
-export function getCharIds(ac: CharacterMeta[], filters: Partial<CharacterMeta>): CharacterUid[] {
-    return []
+type CharacterFilters = Pick<CharacterMeta, 'health' | 'isPc'>
+export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
+    return ac
+        .filter(c => {
+            //TODO: FIX IT!!!
+            //@ts-ignore
+            return keys(filters).every((filterKey: keyof CharacterFilters): boolean => {
+
+                if (typeof filters[filterKey] === 'boolean')
+                    return  c[filterKey] === filters[filterKey]
+                if (typeof filters[filterKey] === 'number')
+                    return  c[filterKey] >= filters[filterKey]
+            })
+        })
+        .map(c => {
+            return c.uid
+        })
 }
 
 export function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
