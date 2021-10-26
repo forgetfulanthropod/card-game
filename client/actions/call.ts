@@ -1,7 +1,7 @@
 /** Exports all the API routes as functions */
 import type { Caller, Func } from '@shared'
 
-import { entryMap } from '../util'
+import { entryMap } from '@/util'
 
 
 const config = {
