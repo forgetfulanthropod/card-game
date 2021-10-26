@@ -40,7 +40,7 @@ export const dungeonRooms: DungeonRooms = {
         A: {
             outcomes: [
                 [[m, 3], [m, 2]], [[m, 3], [s, 2]],
-                [[s, 3], [m, 2]], [[s, 3], [s, 2]]
+                [[s, 3], [m, 2]], [[s, 3], [s, 2]],
             ],
             probs: [.25, .25, .25, .25]
         },
