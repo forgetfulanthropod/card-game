@@ -20,7 +20,9 @@ const m: CharacterName = 'matchaGelatinCube'
 const s: CharacterName = 'skeletonWarrior'
 const mimic: CharacterName = 'mimic'
 
-export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
+export type DungeonRooms = Record<number, Record<string, RoomOutcomes>>
+
+export const dungeonRooms: DungeonRooms = {
     1: {
         A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
         B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [.5, .5] },
