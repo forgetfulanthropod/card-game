@@ -9,7 +9,7 @@ const config = {
 type EnemyLevel = number
 type Probability = number
 type Outcome = [CharacterName, EnemyLevel][]
-type RoomOutcomes = {
+export type RoomOutcomes = {
     outcomes: Outcome[]
     probs: Probability[]
 }

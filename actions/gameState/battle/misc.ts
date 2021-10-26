@@ -24,8 +24,6 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
         .map(c => {
             return c.uid
         })
-export function getCharIds(ac: CharacterMeta[], filters: Partial<CharacterMeta>): CharacterUid[] {
-    return []
 }
 
 function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
