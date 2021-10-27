@@ -41,7 +41,7 @@ export function BattleScene(): PixiContainer {
         }
         const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
-            tl('character keys changed!')
+            // tl('character keys changed!')
             console.log('difference between old keys and new keys:',
                 diff(lastKeys, newKeys))
             lastKeys = newKeys
