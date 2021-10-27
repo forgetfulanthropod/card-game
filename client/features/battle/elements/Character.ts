@@ -203,7 +203,8 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.uid })
 
     hasMovedCursor.on('update', () => {
-        hasMovedSprite.visible = hasMovedCursor.get()
+        const newVal = hasMovedCursor.get()
+        hasMovedSprite.visible = newVal
     })
 
     assetIdCursor.on('update', () => {

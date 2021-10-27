@@ -5,12 +5,17 @@ import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
 
+function log(...args: unknown[]) {
+    const shouldLog = false
+    if (shouldLog) console.log(...args)
+}
+
 const subdir = process.env.CLIENT_SUBDIR
 const socketPath = subdir && subdir.length > 0 ? `/${subdir}` : ''
 const socket = io({ path: `${socketPath}/socket` })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
-        console.log('got the hey')
+        log('got the hey')
         socket.once('hey', () => resolve())
     })
 }
@@ -26,19 +31,19 @@ const config = {
 }
 
 export async function listenForInitialGameState(): Promise<Gamestate> {
-    console.log('hoping for gamestate')
+    log('hoping for gamestate')
     return new Promise(resolve => {
         socket.once('update', (data) => {
-            console.log('received gamestate')
+            log('received gamestate')
             resolve(data as Gamestate)
         })
     })
 }
 
 export function attachServerListener(): void {
-    console.log('attaching server listener')
+    log('attaching server listener')
     socket.on('update', data => {
-        console.log('received server data', data)
+        log('received server data', data)
         // getTree().set(data)
         updateBoabab(data)
     })
@@ -76,13 +81,13 @@ function updateBoabab(fromServer: unknown): void {
                     'oldtree-vs-new-tree': treeDifferences,
                 })
         } else {
-            console.log('diff seems to be applied correctly:', differences)
+            log('diff seems to be applied correctly:', differences)
         }
     }
 }
 
 function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
-    if (config.logChanges) console.log('applying tree change:', change, 'at:', cursor.toString())
+    if (config.logChanges) log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
             // @ts-ignore
