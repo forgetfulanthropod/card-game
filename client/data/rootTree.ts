@@ -57,3 +57,6 @@ export const getClientTree: () => MyBaobab<ClientTree> = memoize(() => {
         serverCalls: [],
     })
 })
+
+// @ts-ignore
+window.clientTree = getClientTree()

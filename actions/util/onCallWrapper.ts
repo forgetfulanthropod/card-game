@@ -29,7 +29,7 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
                 response.send({ status: 'success', result })
             } catch (e) {
                 logger.error(`exception occured in client call to ${f.name}: `, e)
-                response.send({ status: 'error', message: JSON.stringify(e) })
+                response.send({ status: 'error', message: `${e}` })
             }
         })
     }

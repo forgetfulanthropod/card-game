@@ -5,8 +5,13 @@ import expsession from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
+import { setGlobalRandomSeed } from './config/seedrand'
 import { attachAPIRoutes } from './functions'
 
+if (process.env.FIXED_SEED === 'yes') {
+    console.log('NOTE: USING FIXED SEED')
+    setGlobalRandomSeed()
+}
 
 const port = process.env.PORT ?? 3000
 

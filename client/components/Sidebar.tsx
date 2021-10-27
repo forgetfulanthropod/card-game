@@ -9,7 +9,6 @@ import styled from 'styled-components'
 
 import { getClientTree, getTree } from '@/data/rootTree'
 
-
 interface JSONEditData {
     plainText: unknown
     markupText: unknown

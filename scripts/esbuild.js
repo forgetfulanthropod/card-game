@@ -4,6 +4,7 @@ const { spawn, spawnSync } = require('child_process')
 const { copyFolderRecursiveSync } = require('./copy')
 const envFile = require('dotenv').config()?.parsed ?? {}
 const cssModulesPlugin = require('esbuild-css-modules-plugin')
+const alias = require('esbuild-plugin-alias')
 
 const buildDir = 'build'
 const publicDir = 'public'
@@ -35,7 +36,6 @@ for (const k of clientEnvKeys) [
     envObj[`process.env.${k}`] = `"${envFile?.[k] ?? ''}"`
 ]
 console.log("environment object given to client:", envObj)
-const alias = require('esbuild-plugin-alias')
 
 const substitions = {
     ...envObj,
@@ -73,6 +73,7 @@ async function main() {
             onRebuild(error, result) {
                 // TODO: if we want true build time, then here we could echo the time
                 //   into a file and the client could read from it with a fetch
+                // substitions['process.env.buildTime'] = `"${new Date().toLocaleString()}"` // does not work
                 if (error) {
                     console.error(`!!${time()}: ERROR watch build failed:`, error)
                 } else {
