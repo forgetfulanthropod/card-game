@@ -12,4 +12,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: root
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: bash /root/kaiju-router/job.sh
+        script: /root/kaiju-router/logify.sh /root/kaiju-router/job.sh /root/kaiju-router/log.log
