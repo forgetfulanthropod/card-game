@@ -1,8 +1,8 @@
 import type { CharacterMeta, CharacterUid, MyCursor, NetworkAttackData, NetworkEvent } from '@shared'
 import { filters, Loader } from 'pixi.js'
-import toast from 'react-hot-toast'
 
 import { getBattleScene } from '@/data/rootTree'
+import { tl } from '@/util'
 import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
 
 import type { CharacterName } from '../logic/AssetLoader'
@@ -205,9 +205,10 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
 
     hasMovedCursor.on('update', () => {
         const newVal = hasMovedCursor.get()
-        if (newVal && hasMovedSprite.visible) {
+        if (!newVal && hasMovedSprite.visible) {
             // TODO: only toast from one sprite
-            toast('round reset')
+
+            tl(getBattleScene().select('isPlayerTurn').get() ? 'player starts round' : 'NPC starts round')
         }
         hasMovedSprite.visible = newVal
     })
