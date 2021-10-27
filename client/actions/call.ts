@@ -25,11 +25,11 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
             let json: ReturnType<F> | null = null
             if (config.method === 'get') {
                 const pairs = entryMap(args[0], (k, v) => `${k}=${v}`).join('&')
-                const res = await fetch(`/${name}?${pairs}`)
+                const res = await fetch(`${name}?${pairs}`)
                 json = await res.json()
             } else {
                 console.log('the body will be:', JSON.stringify(args[0]))
-                const res = await fetch(`/${name}`, {
+                const res = await fetch(`${name}`, {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',

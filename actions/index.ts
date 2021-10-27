@@ -1,26 +1,28 @@
 import { spawnSync } from 'child_process'
 import express from 'express'
-import { Server as HttpServer } from 'http'
+import expsession from 'express-session'
 import { Server as SocketServer } from 'socket.io'
-
 import { attachAPIRoutes } from './functions'
-
-
 const gitBranch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' })?.output?.[1]?.trim()
 console.log('serving from branch', gitBranch)
 
-
-const port = 3000
+const port = process.env.PORT ?? 3000
 
 const app = express()
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+const sessionMiddleware = expsession({
+    secret: 'random secret',
+    saveUninitialized: true,
+    resave: true
+})
+app.use(sessionMiddleware)
 
-const http = new HttpServer(app)
-const io = new SocketServer(http)
 
 
+let io: null | SocketServer = null
 export function getIo(): typeof io {
     return io
 }
@@ -30,21 +32,48 @@ export function getApp(): typeof app {
 }
 
 
-io.on('connection', function (socket) {
-    console.log('A user connected')
-    setTimeout(() => { socket.emit('hey', 'data') }, 1000)
-
-    //Whenever someone disconnects this piece of code executed
-    socket.on('disconnect', function () {
-        console.log('A user disconnected')
-    })
-})
 
 attachAPIRoutes()
 
-app.use(express.static('../build'))
+app.use('/', express.static('../build'))
+
+export function mountIo(server, prefix) {
+    // app.set('base', prefix)
+    io = new SocketServer(server, { path: prefix + '/socket' })
+
+    io.use(function (socket, next) {
+        // @ts-ignore
+        sessionMiddleware(socket.request, socket.request.res, next)
+    })
+
+    // when a socket.io connect connects, get the session and store the id in it
+    io.on('connection', function (socket) {
+        // socket.handshake.headers
+        console.log(`socket.io connected: ${socket.id}`)
+        // save socket.io socket in the session
+        // @ts-ignore
+        console.log("session at socket.io connection:\n", socket.request.session)
+        // @ts-ignore
+        socket.request.session.socketio = socket.id
+        // @ts-ignore
+        socket.request.session.save()
+    })
 
 
-http.listen(port, function () {
-    console.log(`Serving on http://localhost:${port}`)
-})
+    io.on('connection', function (socket) {
+        console.log('A user connected')
+        setTimeout(() => { socket.emit('hey', 'data') }, 1000)
+
+        //Whenever someone disconnects this piece of code executed
+        socket.on('disconnect', function () {
+            console.log('A user disconnected')
+        })
+    })
+}
+
+if (process.env.USE_ROUTER !== 'yes') {
+    const server = app.listen(port, function () {
+        console.log(`Serving on http://localhost:${port}`)
+    })
+    mountIo(server, '')
+}
