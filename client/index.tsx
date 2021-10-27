@@ -14,7 +14,7 @@ import { waitForGameStateToFill } from './data/rootTree'
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
 const config = {
-    log: true,
+    log: false,
 }
 
 function log(...args: unknown[]) {

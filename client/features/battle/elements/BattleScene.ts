@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import { keyMap, keys, tl } from '@/util'
+import { keyMap, keys, tl, vals } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
@@ -20,6 +20,7 @@ export type Move$ = NetworkEventEmitter<'move', NetworkAttackData>
 
 export function BattleScene(): PixiContainer {
     const eventsCursor = getTree().select('events')
+    const scene = getBattleScene()
     const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
@@ -27,10 +28,13 @@ export function BattleScene(): PixiContainer {
 
     setTimeout(startGame, 100)
 
-    const allCharsCursor = getBattleScene().select('allCharacters')
+    const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
         const allChars = allCharsCursor.get()
+        if (vals(allChars).filter(c => c.health > 0).every(cm => !cm.hasMoved)) {
+            tl(scene.get('isPlayerTurn') ? 'player starts round' : 'NPC starts round')
+        }
         if (allChars == null) {
             container.destroy()
             return
@@ -52,13 +56,13 @@ export function BattleScene(): PixiContainer {
         container.removeChildren()
         for (const x of ch) { x.destroy() }
         const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
-        const dungeonName = getBattleScene().get('dungeonName')
+        const dungeonName = scene.get('dungeonName')
         const backgroundArgs = dungeonName === 'The Matcha Caves' ?
             { src: CaveVideo } :
             { srcs: [backgrounds[dungeonName]] }
         const newChildren = [
             background({ scale: 1, ...backgroundArgs }),
-            InfoBox({ info: [`Room ${getBattleScene().get('roomsPassed') + 1}`, getBattleScene().get('dungeonName')] }),
+            InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
             ...childCursors.map(childCursor =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
