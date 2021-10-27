@@ -172,12 +172,12 @@ export function Application(args: {
 
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
-    applyDisplayObjectArgs(c, args)
     for (const ch of args.children) {
         if (ch != null && ch !== false) {
             c.addChild(ch)
         }
     }
+    applyDisplayObjectArgs(c, args)
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick && args.onTick(c, dt)
