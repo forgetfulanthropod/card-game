@@ -5,7 +5,8 @@ import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
 
-const socket = io()
+const socketPath = process.env.CLIENT_SUBDIR
+const socket = io(undefined, { path: '/${socketPath}/socket' })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
         console.log('got the hey')
