@@ -40,7 +40,10 @@ export const startGame = onCallWrapper(async function startGame(): Promise<void>
 export const toggleStance = onCallWrapper(function toggleStance({characterUid}: {characterUid: CharacterUid}): void {
     const scene = getBattleScene('alice')
     const ac = scene.select('allCharacters').get()
-    if (getCharIds(vals(ac), {isPc: true, hasMoved: true}).length > 0) return
+    if (
+        getCharIds(vals(ac), {isPc: true, hasMoved: true}).length > 0 ||
+        scene.select('isPlayerTurn').get() === false
+    ) return
 
     const stanceCursor = scene.select('allCharacters').select(characterUid).select('stance')
 
