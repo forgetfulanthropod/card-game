@@ -6,13 +6,9 @@ import { attachAPIRoutes } from './functions'
 const gitBranch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' })?.output?.[1]?.trim()
 console.log('serving from branch', gitBranch)
 
-const port = 3001
+const port = process.env.PORT ?? 3000
 
 const app = express()
-
-// const server = app.listen(port, function () {
-//     console.log(`Serving on http://localhost:${port}`)
-// })
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -39,7 +35,7 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
-app.use('/', express.static('/Users/l/git/kaijuA/build'))
+app.use('/', express.static('../build'))
 
 export function mountIo(server, prefix) {
     // app.set('base', prefix)
@@ -73,4 +69,11 @@ export function mountIo(server, prefix) {
             console.log('A user disconnected')
         })
     })
+}
+
+if (process.env.USE_ROUTER !== 'yes') {
+    const server = app.listen(port, function () {
+        console.log(`Serving on http://localhost:${port}`)
+    })
+    mountIo(server, '')
 }
