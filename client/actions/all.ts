@@ -19,6 +19,7 @@ export const incrementTestCounter = callWrap<(args: Empty) => void>('incrementTe
 export const makeNewUser = callWrap<(args: { username: 'alice' }) => void>('makeNewUser')
 export const square = callWrap<(args: { n: string }) => number>('square')
 export const startGame = callWrap<(args: Empty) => void>('startGame')
+export const toggleStance = callWrap<(args: {characterUid: CharacterUid}) => void>('toggleStance')
 
 export function failIfError<S, T extends ServerResult<S>>(serverResult: T): S {
     if (serverResult.status === 'error') {

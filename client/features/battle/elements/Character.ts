@@ -56,7 +56,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     // ---Sprites and containers---
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: characterMeta.effects })
+    let healthBar = HealthBar({ characterUid: characterMeta.uid, value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: characterMeta.effects })
 
     const sprites = makeSprites(args, characterMeta, onHeight)
     if (sprites == null) {
@@ -105,7 +105,7 @@ function Character(args: CharacterProps): PixiContainer {
             flyingContainer.removeChildren()
         } else {
             mainContainer.removeChild(healthBar)
-            healthBar = HealthBar({ value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
+            healthBar = HealthBar({ characterUid: char.uid, value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
             mainContainer.addChild(healthBar)
         }
     }

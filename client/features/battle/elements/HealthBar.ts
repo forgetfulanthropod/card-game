@@ -1,5 +1,8 @@
-import type { Effect } from '@shared'
+import type { CharacterUid, Effect } from '@shared'
 import { Matrix, utils } from 'pixi.js'
+
+import { toggleStance } from '@/actions'
+import { getBattleScene } from '@/data/rootTree'
 
 import type { PixiContainer, PixiGraphics } from './mypixi'
 import { Container, Graphics, PixiLoader, Sprite, Text } from './mypixi'
@@ -16,16 +19,20 @@ type StanceType = 'defensive' | 'neutral' | 'aggressive'
 
 export default function HealthBar(
     args: {
+        characterUid: CharacterUid,
         value: number,
         max: number,
         effects: Effect[]
         colorStops?: { color: string, stop: number }[],
         numberColor?: string
-        stance?: StanceType
+        stance: StanceType
     }
 ): PixiContainer {
     // TODO:
     // const { isDeluxeLoaded } = useLoaderContext()
+    const battleScene = getBattleScene()
+    const characterCursor = battleScene.select('allCharacters').select(args.characterUid)
+
     const portion = args.value / args.max
 
     const displayWidth = 140
@@ -106,23 +113,34 @@ export default function HealthBar(
             healthText,
         ],
     })
+    // begin stance
+    let stanceEl = getStanceEl(args.stance)
+    mainEl.addChild(stanceEl)
 
-    const stanceSrc = args.stance == null ? null :
-        args.stance === 'neutral' ? PixiLoader.shared.resources?.stanceNeutral?.data :
-            args.stance === 'aggressive' ? PixiLoader.shared.resources?.stanceAggressive?.data :
-                args.stance === 'defensive' ? PixiLoader.shared.resources?.stanceDefensive?.data : null
+    characterCursor.select('stance').on('update', () => {
+        mainEl.removeChild(stanceEl)
+        stanceEl = getStanceEl(characterCursor.select('stance').get())
+        mainEl.addChild(stanceEl)
+    })
 
-    if (stanceSrc != null) {
-        mainEl.addChild(Sprite({
+    function getStanceEl(stance: StanceType) {
+
+        const stanceSrc = stance === 'neutral' ? PixiLoader.shared.resources?.stanceNeutral?.data :
+                            stance === 'aggressive' ? PixiLoader.shared.resources?.stanceAggressive?.data :
+                                PixiLoader.shared.resources?.stanceDefensive?.data // stance === 'defensive'
+
+
+        return Sprite({
             src: stanceSrc,
             x: displayWidth,
             y: displayHeight * 1.1,
             anchor: [1, 0],
             width: displayWidth / 3,
             height: displayWidth / 3 / stanceSrc.width * stanceSrc.height,
-        }))
+            onClick: () => toggleStance({characterUid: args.characterUid}),
+        })
     }
-
+    // end stance
 
     const effects = args.effects.map(
         (e, i) => Text({
