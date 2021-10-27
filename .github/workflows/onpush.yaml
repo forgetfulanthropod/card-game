@@ -1,5 +1,5 @@
 name: deploy on linode
-on: [push, pull_request]
+on: [push, delete]
 jobs:
   build:
     name: Build
