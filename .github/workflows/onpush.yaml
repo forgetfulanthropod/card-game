@@ -10,5 +10,6 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
+        username: root
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: echo `date` >> /root/log.txt
