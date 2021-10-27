@@ -125,6 +125,8 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
         })
     })
 
+    if (min < 1) min = 1
+    if (max < 1) max = 1
     if (min === max) return [min]
 
     return [Math.round(min), Math.round(max)]
