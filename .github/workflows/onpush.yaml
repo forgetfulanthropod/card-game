@@ -1,7 +1,6 @@
-name: remote ssh command
-on: [push]
+name: deploy on linode
+on: [push, delete]
 jobs:
-
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -12,4 +11,4 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: root
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: echo `date` >> /root/log.txt
+        script: /root/kaiju-router/logify.sh /root/kaiju-router/job.sh /root/kaiju-router/log.log

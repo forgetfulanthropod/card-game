@@ -1,5 +1,4 @@
 export * from './arrayMethods'
-export * from './consoleError'
 export * from './DataCursor'
 export * from './dedent'
 export * from './makeServerEventEmitter'

@@ -2,7 +2,6 @@ import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@sh
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
 import { stringKeys } from '@/util'
-import { consoleError } from '@/util/consoleError'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
@@ -15,9 +14,9 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
         .filter(c => {
             return stringKeys(filters).every((filterKey): boolean => {
                 if (typeof filters[filterKey] === 'boolean')
-                    return  c[filterKey] === filters[filterKey]
+                    return c[filterKey] === filters[filterKey]
                 if (typeof filters[filterKey] === 'number')
-                    return  c[filterKey] >= filters[filterKey]
+                    return c[filterKey] >= filters[filterKey]
                 throw Error('invalid filterKey')
             })
         })
@@ -132,7 +131,7 @@ function randomEl<T>(arr: readonly T[]): T {
 /** Returns index of chosen element */
 export function weightedRandom(probabilites: number[]): number {
     if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        consoleError('array contains NaN or Inf or negative numbers')
+        logger.error('array contains NaN or Inf or negative numbers')
         return 0
     }
     let runningTotal = 0

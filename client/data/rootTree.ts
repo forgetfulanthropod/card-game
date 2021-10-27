@@ -54,6 +54,6 @@ interface ClientTree {
 }
 export const getClientTree: () => MyBaobab<ClientTree> = memoize(() => {
     return new MyBaobab<ClientTree>({
-        serverCalls: []
+        serverCalls: [],
     })
 })

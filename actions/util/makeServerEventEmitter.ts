@@ -15,7 +15,7 @@ export function makeServerEventEmitter<Name extends string, Data>(name: Name, cu
                 uid: 'eventUID' + Math.random().toString().slice(2, 6),
                 data,
             }
-            if (config.log) { console.log(`sending new ${name} event:`, event) }
+            if (config.log) { logger.info(`sending new ${name} event:`, event) }
             cursor.apply(events => [...events, event])
             // @ts-ignore
             cursor.commit()

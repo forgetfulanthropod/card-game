@@ -6,7 +6,7 @@ import { getEntryScene, getGameStateCursor, onCallWrapper } from '@/util'
 
 
 export default onCallWrapper(function changeScene(args: { newSceneName: SceneName }): void {
-    console.log('changing scene to', args.newSceneName)
+    logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')
     if (args.newSceneName === 'battle') {
         const entrySceneData = (getEntryScene('alice')).get()
