@@ -1,8 +1,6 @@
 import type { PixiContainer } from './mypixi'
-import { Container, Text } from './mypixi'
+import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from './mypixi'
 
-const BASE_WIDTH = 1920
-const BASE_HEIGHT = 1080
 export default function InfoBox(args: { info: string[] }): PixiContainer {
 
     const levelNumText = Text({
@@ -18,7 +16,6 @@ export default function InfoBox(args: { info: string[] }): PixiContainer {
             strokeThickness: 5,
         },
     })
-
 
     const root = Container({
         x: BASE_WIDTH / 2,

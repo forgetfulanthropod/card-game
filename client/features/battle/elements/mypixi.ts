@@ -15,8 +15,8 @@ import { registerPixiInspector } from '@/util/pixiInspector'
 // TODO: export the types instead of constructors
 export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
 
-const BASE_HEIGHT = 1080
-const BASE_WIDTH = 1920
+export const BASE_HEIGHT = 1080
+export const BASE_WIDTH = 1920
 
 // export type Sprite = PixiSprite
 
@@ -150,11 +150,12 @@ function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
         }
     }
 }
+let app: null | PixiApplication = null
 export function Application(args: {
     canvas: HTMLCanvasElement,
     children: (PixiSprite | PixiContainer)[]
 }): PixiApplication {
-    const app = new PixiApplication({
+    app = new PixiApplication({
         view: args.canvas,
         resolution: window.devicePixelRatio || 1,
         // backgroundColor: 0x6495ed,
@@ -168,6 +169,15 @@ export function Application(args: {
     window.app = app
     registerPixiInspector()
     return app
+}
+export function getPixiApp(): PixiApplication {
+    if (app == null) throw Error('pixi application is null')
+    return app
+}
+export function getAppSize(): { width: number, height: number } {
+    if (app == null) throw Error('pixi application is null')
+    const { width, height } = app.stage
+    return { width, height }
 }
 
 export function Container(args: ContainerArgs): PixiContainer {

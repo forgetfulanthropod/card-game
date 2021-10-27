@@ -2,7 +2,7 @@ import PlainButton from '@/elements/PlainButton'
 import { dataOf } from '@/util/pixiUtils'
 
 import type { PixiContainer } from './mypixi'
-import { Container, Sprite, Text } from './mypixi'
+import { Container, getAppSize, Sprite, Text } from './mypixi'
 
 
 const doorWidth = 330
@@ -15,7 +15,7 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
             Text({
                 text: args.descriptions[i],
                 x: (i * 1.15 + .5) * doorWidth,
-                y: BASE_HEIGHT / 2,
+                y: getAppSize().height / 2,
                 anchor: [.5, 0],
                 width: doorWidth,
                 style: {
@@ -24,12 +24,13 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
             })
         return [door, text]
     })
-    return Container({
-        children: [
-            ...doorsAndText,
-            PlainButton({ onClick: args.exit, text: 'exit' }),
-],
+    const container = Container({
+        children: doorsAndText,
     })
+    container.x = getAppSize().width / 2
+    container.pivot.x = container.width / 2
+    container.addChild(PlainButton({ onClick: args.exit, text: 'exit' }))
+    return container
 }
 
 function Door(args: { xScaled: number, onClick: Callback }) {
