@@ -7,7 +7,7 @@ import { getTree } from '@/data/rootTree'
 
 const subdir = process.env.CLIENT_SUBDIR
 const socketPath = subdir && subdir.length > 0 ? `/${subdir}` : ''
-const socket = io(undefined, { path: `${socketPath}/socket` })
+const socket = io({ path: `${socketPath}/socket` })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
         console.log('got the hey')

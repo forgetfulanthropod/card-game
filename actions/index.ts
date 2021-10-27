@@ -2,6 +2,7 @@ import 'config/logger'
 
 import express from 'express'
 import expsession from 'express-session'
+import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './functions'
@@ -23,7 +24,8 @@ app.use(sessionMiddleware)
 
 
 let io: null | SocketServer = null
-export function getIo(): typeof io {
+export function getIo(): SocketServer {
+    if (io == null) throw Error('socket.io was not initialized')
     return io
 }
 
@@ -36,7 +38,7 @@ attachAPIRoutes()
 
 app.use('/', express.static(__dirname + '/../build'))
 
-export function mountIo(server, prefix) {
+export function mountIo(server: Server, prefix: string): void {
     // app.set('base', prefix)
     io = new SocketServer(server, { path: prefix + '/socket' })
 
