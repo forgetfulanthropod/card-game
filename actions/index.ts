@@ -35,7 +35,7 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
-app.use('/', express.static('../build'))
+app.use('/', express.static(__dirname + '/../build'))
 
 export function mountIo(server, prefix) {
     // app.set('base', prefix)
