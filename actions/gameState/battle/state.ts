@@ -111,7 +111,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
     // debugger
-    console.log(`making new npc with ${JSON.stringify(args)}`)
+    logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     // @ts-ignore

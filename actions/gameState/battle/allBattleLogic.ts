@@ -17,11 +17,11 @@ const DEFAULT_WAIT = 1000
 const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 const DEBUG = false
 
-const tl = (x: string) => console.log(x)
+const tl = (x: string) => logger.info(x)
 
 const config = { log: true }
 
-function log(...args: unknown[]) { if (config.log) { console.log(args) } }
+function log(...args: unknown[]) { if (config.log) { logger.info(args) } }
 
 function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
@@ -197,17 +197,17 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         }
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
-            console.log('will be NPC turn')
+            logger.info('will be NPC turn')
             scene.setK('isPlayerTurn', false)
             await sleep(TIME_AFTER_PLAYER_MOVE + 500)
             await doNpcMove('NPC has extra turns')
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
-            console.log('will be player turn')
+            logger.info('will be player turn')
             scene.setK('isPlayerTurn', true)
         } else if (aliveNpcs.some(c => !c.hasMoved)) {
-            console.log('will be player turn')
+            logger.info('will be player turn')
             await sleep(DEFAULT_WAIT)
             await doNpcMove('no unmoved PC and NPC turn')
         }

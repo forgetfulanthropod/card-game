@@ -29,8 +29,8 @@ export class DataCursor<Root extends Objectish, Sub = Root> {
     select<K extends keyof Sub>(k: K): DataCursor<Sub[K]> { return new DataCursor(this.bc.select(k)) }
     commit(customName?: string, justSub = false): void {
         // TODO eventually: just commit Sub probably or maybe commit changes (diff)
-        console.log('committing')
-        if (customName != null) { console.log('committing to event name ', customName, 'and justSub is', justSub) }
+        logger.info('committing')
+        if (customName != null) { logger.info('committing to event name ', customName, 'and justSub is', justSub) }
         if (justSub) {
             getIo().emit(customName ?? 'update', this.bc.get())
             return
@@ -49,8 +49,8 @@ export const makeRootDataCursor = memoize(function makeRootDataCursor(): DataCur
             testCounters: { counter0: 0 },
         },
     })
-    console.log('guest')
+    logger.info('guest')
     const c = b.select('contents')
-    console.log('west')
+    logger.info('west')
     return new DataCursor(c)
 })

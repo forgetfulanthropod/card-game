@@ -1,7 +1,5 @@
 import { getApp } from '@/index'
 
-import { consoleError } from './consoleError'
-
 
 const config = {
     log: true,
@@ -12,7 +10,7 @@ function makeRandId() { return Math.random().toString().slice(2, 6) }
 
 export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): () => void {
     return () => {
-        console.log(`attaching route  ${JSON.stringify(f.name)}`)
+        logger.info(`attaching route  ${JSON.stringify(f.name)}`)
         getApp().post('/' + f.name, async (request, response) => {
             // return () => getApp()[config.method]('/' + f.name, async (request, response) => {
             const randId = makeRandId()
@@ -20,17 +18,17 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
                 // debugger
                 let result: ReturnType | null = null
                 if (config.method === 'get') {
-                    if (config.log) { console.log(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
+                    if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
                     result = await f(request.query as unknown as Args)
                 } else {
                     // debugger
-                    if (config.log) { console.log(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
+                    if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
                     result = await f(request.body)
                 }
-                if (config.log) { console.log(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
+                if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
                 response.send({ status: 'success', result })
             } catch (e) {
-                consoleError(`exception occured in client call to ${f.name}: `, e)
+                logger.error(`exception occured in client call to ${f.name}: `, e)
                 response.send({ status: 'error', message: JSON.stringify(e) })
             }
         })

@@ -85,18 +85,18 @@ function getMoveMultiplier(d: AttackData): number {
             const relevantMultiplierIndex = typeMeta.numTargets.findIndex(num => numDefenders <= num)
             if (relevantMultiplierIndex === -1) throw new Error('hmm something is deeply wrong')
             typeMultiplier = typeMeta.multipliers[relevantMultiplierIndex]
-            console.log('>>>>>>>>>>>>. hi set typeMultiplier via multipliers array..', typeMeta.multipliers)
+            logger.info('>>>>>>>>>>>>. hi set typeMultiplier via multipliers array..', typeMeta.multipliers)
         } else if (typeMeta.multiplier != null) {
             typeMultiplier = typeMeta.multiplier
         } else if (typeMeta.multiplierRange != null) {
             const r = typeMeta.multiplierRange
             typeMultiplier = r[0] + Math.random() * Math.abs(r[1] - r[0])
         } else {
-            console.log('><><><><><><><><>< UNIMPLEMENTED! ><><><><><><><><><')
+            logger.info('><><><><><><><><>< UNIMPLEMENTED! ><><><><><><><><><')
             typeMultiplier = 1
         }
 
-        // console.log(JSON.stringify({ multiplier, typeMultiplier }))
+        // logger.info(JSON.stringify({ multiplier, typeMultiplier }))
 
         return multiplier * typeMultiplier
     }, 1)

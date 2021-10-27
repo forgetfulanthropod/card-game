@@ -28,21 +28,23 @@ export const dungeonRooms: DungeonRooms = {
         B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [.5, .5] },
 
     }, 2: {
-        A: { outcomes: [
-            [[m, 1], [m, 1]],
-            [[s, 1], [s, 1]],
-            [[m, 2]],
-            [[s, 2]],
-        ], probs: [.25, .25, .25, .25] },
+        A: {
+            outcomes: [
+                [[m, 1], [m, 1]],
+                [[s, 1], [s, 1]],
+                [[m, 2]],
+                [[s, 2]],
+            ], probs: [.25, .25, .25, .25],
+        },
         B: { outcomes: [[[s, 4], [m, 1]], [[s, 4], [s, 1]]], probs: [.5, .5] },
         C: { outcomes: [[[s, 5]]], probs: [1] },
     }, 3: {
         A: {
             outcomes: [
                 [[m, 3], [m, 2]],
-[[m, 3], [s, 2]],
+                [[m, 3], [s, 2]],
                 [[s, 3], [m, 2]],
-[[s, 3], [s, 2]],
+                [[s, 3], [s, 2]],
             ],
             probs: [.25, .25, .25, .25],
         },
@@ -69,7 +71,7 @@ export const dungeonRooms: DungeonRooms = {
 
 if (config.doValidation) {
     validate(dungeonRooms)
-    console.log('dungeon rooms are ok')
+    logger.info('dungeon rooms are ok')
 }
 
 function validate(dr: typeof dungeonRooms): void {

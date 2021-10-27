@@ -1,10 +1,11 @@
-import { spawnSync } from 'child_process'
+import 'config/logger'
+
 import express from 'express'
 import expsession from 'express-session'
 import { Server as SocketServer } from 'socket.io'
+
 import { attachAPIRoutes } from './functions'
-const gitBranch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8' })?.output?.[1]?.trim()
-console.log('serving from branch', gitBranch)
+
 
 const port = process.env.PORT ?? 3000
 
@@ -16,10 +17,9 @@ app.use(express.urlencoded({ extended: true }))
 const sessionMiddleware = expsession({
     secret: 'random secret',
     saveUninitialized: true,
-    resave: true
+    resave: true,
 })
 app.use(sessionMiddleware)
-
 
 
 let io: null | SocketServer = null
@@ -30,7 +30,6 @@ export function getIo(): typeof io {
 export function getApp(): typeof app {
     return app
 }
-
 
 
 attachAPIRoutes()
@@ -49,10 +48,10 @@ export function mountIo(server, prefix) {
     // when a socket.io connect connects, get the session and store the id in it
     io.on('connection', function (socket) {
         // socket.handshake.headers
-        console.log(`socket.io connected: ${socket.id}`)
+        logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
         // @ts-ignore
-        console.log("session at socket.io connection:\n", socket.request.session)
+        logger.info('session at socket.io connection:\n', socket.request.session)
         // @ts-ignore
         socket.request.session.socketio = socket.id
         // @ts-ignore
@@ -61,19 +60,19 @@ export function mountIo(server, prefix) {
 
 
     io.on('connection', function (socket) {
-        console.log('A user connected')
+        logger.info('A user connected')
         setTimeout(() => { socket.emit('hey', 'data') }, 1000)
 
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {
-            console.log('A user disconnected')
+            logger.info('A user disconnected')
         })
     })
 }
 
 if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {
-        console.log(`Serving on http://localhost:${port}`)
+        logger.info(`Serving on http://localhost:${port}`)
     })
     mountIo(server, '')
 }

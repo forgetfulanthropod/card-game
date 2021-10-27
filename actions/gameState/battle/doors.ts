@@ -3,11 +3,11 @@ import { keys, sample, sampleSize, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
-import type { RoomOutcomes } from '@/rulebook/dungeonRooms';
+import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import type { DataCursor} from '@/util';
+import type { DataCursor } from '@/util'
 import { vals } from '@/util'
-import { consoleError, mapToObj } from '@/util'
+import { mapToObj } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
@@ -90,7 +90,7 @@ export function handleSpecialDoor(args: {
             const d = specialDoorsMap[door]
             const regularDoorOptions = keys(dungeonRooms[args.roomsPassed + 1])
             if (regularDoorOptions.length === 0) {
-                consoleError('no door options!')
+                logger.error('no door options!')
                 return { modifier: -1, enemies: {} }
             }
             const regularDoorName = sample(regularDoorOptions) as Door
@@ -113,10 +113,10 @@ export function handleSpecialDoor(args: {
         case 'campfire': {
             const v = specialDoorsMap[door].variables
             if (v.effectType === 'absolute') {
-                consoleError('unimplemented')
+                logger.error('unimplemented')
                 return { modifier: -1, enemies: {} }
             } else if (v.effectType === 'proportional') {
-                consoleError('unimplemented')
+                logger.error('unimplemented')
                 return { modifier: -1, enemies: {} }
             } else {
                 throw Error(`campfire has unknown effectType ${v.effectType}`)
@@ -132,7 +132,7 @@ export function handleSpecialDoor(args: {
 function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Room {
     const regularDoorOptions = keys(dungeonRooms[roomsPassed + 1])
     if (regularDoorOptions.length === 0) {
-        consoleError('no door options!')
+        logger.error('no door options!')
         return { modifier: -1, enemies: {} }
     }
     const regularDoorName = sample(regularDoorOptions) as Door
@@ -140,7 +140,7 @@ function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Roo
 }
 
 export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
-    // console.log('adding doors')
+    // logger.info('adding doors')
     const { roomsPassed, dungeonName } = scene.get()
     scene.setK('state', 'not started')
     scene.setK('doors', getDoorChoices({ roomsPassed, dungeonName }))

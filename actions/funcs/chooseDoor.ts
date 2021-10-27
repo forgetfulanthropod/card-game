@@ -12,7 +12,7 @@ export default onCallWrapper(async function chooseDoor(args: { door: SpecialDoor
     // const room = makeRoom({
     //     door: args.door, dungeonName: 'cool dungeon', roomsPassed: scene.getK('roomsPassed')
     // })
-    // console.log('removing doors')
+    // logger.info('removing doors')
     scene.setK('doors', { options: [], descriptions: [] })
     scene.setK('roomsPassed', scene.getK('roomsPassed') + 1)
     scene.applyK('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
