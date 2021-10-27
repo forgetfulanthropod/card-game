@@ -24,9 +24,7 @@ export function GameMenuItem(noun: 'characters' | 'items' | 'materials', index: 
 
     const root = Container({
         y: (index - 1) * 150,
-        children: [
-            Sprite({ onClick, src: nounSrc, scale: .5, x: 20, anchor: [0, .5] }),
-        ]
+        children: [Sprite({ onClick, src: nounSrc, scale: .5, x: 20, anchor: [0, .5] })],
     })
 
     return root

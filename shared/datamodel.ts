@@ -27,12 +27,6 @@ export interface Rulebook {
         displayName: string
         description: string
     }>
-    // initialScenes: {
-    //     map: MapScene,
-    //     entry: EntryScene,
-    //     battle: BattleScene,
-    //     craft: CraftingScene,
-    // }
     numbers: {
         BASE_WIDTH: number
         BASE_HEIGHT: number
@@ -40,6 +34,7 @@ export interface Rulebook {
         X_NEUTRAL_THRESH: number
     }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
+    levelThresholds: Record<number, number>
 }
 export interface Gamestate {
     scene: Scene

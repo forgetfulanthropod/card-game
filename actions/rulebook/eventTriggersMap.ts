@@ -1,6 +1,6 @@
-import dedent from '.././util/dedent'
+import { dedent } from '@/util'
 
-export const eventTriggerNames = ['carriage', 'clearing', 'hats', 'gnome', 'babysitting', 'baron',]
+export const eventTriggerNames = ['carriage', 'clearing', 'hats', 'gnome', 'babysitting', 'baron']
 export type EventTriggerName = typeof eventTriggerNames[number]
 export interface EventTrigger {
     name: EventTriggerName
@@ -30,7 +30,7 @@ export const eventTriggersMap: EventTriggersMap = {
 
             1.  Purchase the bomb.  Give a single character in your party the ability: WHOLESALE GNOME BOMB (Single use): Splash damage, double the attack value of this character for one round.  Costs X.
             2. Light the bomb.  The gnome hooligan runs away screaming and leaves all of his wet dollar bills scattered on the ground.  Take X damage, receive X treasure.
-            3. Ask pressing questions about the Gnome Hooligan's childhood until he has a panic attack and shares his life story.  Build a small campfire and exchange tales while eating salted meat bread.  Heal all party members for X.`)
+            3. Ask pressing questions about the Gnome Hooligan's childhood until he has a panic attack and shares his life story.  Build a small campfire and exchange tales while eating salted meat bread.  Heal all party members for X.`),
     },
     'clearing': {
         name: 'clearing',
@@ -38,7 +38,7 @@ export const eventTriggersMap: EventTriggersMap = {
         fullDescription: dedent(`
             1. Set up camp for the night.  Heal all party members by 20 health.
             2. Bury treasure.  Put aside 30% of your current loot to be saved if you die while in the dungeon.
-            3. Throw a small party to lift everyone’s spirits.  Give all characters a +3 attack buff for the next 5 rooms.`)
+            3. Throw a small party to lift everyone’s spirits.  Give all characters a +3 attack buff for the next 5 rooms.`),
     },
     'hats': {
         name: 'hats',
@@ -59,7 +59,7 @@ export const eventTriggersMap: EventTriggersMap = {
 
             1. One of your party members touches the demon’s left hand.  Permanently give that party member +3 attack and -21 health (to a minimum of 1).
             2. One of your party members touches the demon’s right hand.  Permanently give that party member +22 health and -3 attack (to a minimum of 1).
-            3.  “Aaaaaaaaaaaah!”, you scream.  “Ahhhhhhhhhhhhhh!”.  Leave without touching the statue.`)
+            3.  “Aaaaaaaaaaaah!”, you scream.  “Ahhhhhhhhhhhhhh!”.  Leave without touching the statue.`),
     },
     'gnome': {
         name: 'gnome',
@@ -76,7 +76,7 @@ export const eventTriggersMap: EventTriggersMap = {
 
             If prompt 2 is chose, play the following dialogue box:
 
-            “aaaAAAAAAAAAAA ZZZZZZZZZZ AAAAAAAHHHHAAAA ZZZ AHAHAAAAAAAAA NONONONO AAAAAAAAA ZZZZ aaaHhhhhhhhhhfffffffff”!`)
+            “aaaAAAAAAAAAAA ZZZZZZZZZZ AAAAAAAHHHHAAAA ZZZ AHAHAAAAAAAAA NONONONO AAAAAAAAA ZZZZ aaaHhhhhhhhhhfffffffff”!`),
     },
     'babysitting': {
         name: 'babysitting',
@@ -115,12 +115,12 @@ export const eventTriggersMap: EventTriggersMap = {
 
             If prompt 2 is selected, play the following dialogue box:
 
-            “Oh…. You want are going to keep the wand?  I guess that means I am doomed to a lifetime of stomping in circles and being mad.  This is the worst day of my entire life.  I no longer want to be alive.  Goodbye stranger”.`)
+            “Oh…. You want are going to keep the wand?  I guess that means I am doomed to a lifetime of stomping in circles and being mad.  This is the worst day of my entire life.  I no longer want to be alive.  Goodbye stranger”.`),
     },
     'baron': {
         name: 'baron',
         shortDescription: '“I am The Baron of Fun!!!!  YOU are about to have FUN!!!!!!!  This is my kingdom and it is FUN!!!!  I DEMAND that you have fun RIGHT NOW!!!”',
         fullDescription: dedent(`
-            An incredibly nervous looking penguin stands before you.  He is wearing an extremely ostentatious cape and waves a scepter around`)
-    }
+            An incredibly nervous looking penguin stands before you.  He is wearing an extremely ostentatious cape and waves a scepter around`),
+    },
 }

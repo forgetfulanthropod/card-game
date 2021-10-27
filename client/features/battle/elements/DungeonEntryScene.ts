@@ -16,6 +16,6 @@ export function DungeonEntryScene(): PixiContainer {
             StartButton(),
             LevelInfo(),
             GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
-        ]
+        ],
     })
 }

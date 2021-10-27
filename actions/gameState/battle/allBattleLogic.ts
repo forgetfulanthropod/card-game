@@ -96,7 +96,6 @@ export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void
         warn('not player turn')
         if (!scene.getK('isPlayerTurn')) {
             await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
-            // TODO: uncomment below?
             await doNpcMove('NPC has extra turns')
         }
         return
@@ -150,7 +149,7 @@ async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCh
         attacker: attackData.attacker.uid,
         defenders: attackData.defenders.map(d => d.uid),
         move: attackData.move,
-        damageMap
+        damageMap,
     })
 
     // Update health, effects, and hasMoved

@@ -1,12 +1,12 @@
 import type {
     Filter as PixiFilter, InteractionEvent,
-    ITextStyle
+    ITextStyle,
 } from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
     Graphics as PixiGraphics, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
-    Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource
+    Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource,
 } from 'pixi.js'
 
 import { registerPixiInspector } from '@/util/pixiInspector'
@@ -51,7 +51,7 @@ interface SpriteArgs extends ShownArgs {
     src: string | PixiTexture
 }
 export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
-export type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
+type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends DisplayObjectArgs {
     children: PixiChildren
     onTick?: OnContainerTick
@@ -226,7 +226,7 @@ export function PngLayersBackground(args: { name?: string, scale: number, srcs: 
                 src,
                 width: BASE_WIDTH,
                 height: BASE_HEIGHT,
-                zIndex: -1
-            }))
+                zIndex: -1,
+            })),
     })
 }

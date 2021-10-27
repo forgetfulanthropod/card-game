@@ -15,7 +15,7 @@ export function getCharacterMovesWithDamageRanges(character: CharacterStats & { 
 
         return {
             ...move,
-            damageRange
+            damageRange,
         }
     })
 }
@@ -37,12 +37,6 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
     return kds
 }
 
-// export interface Effect {
-//     type?: EffectType
-//     remainingRounds?: number
-//     damagesByRound?: number[]
-//     dealer?: CharacterMeta
-// }
 export function getCharacterKeysAndEffects(attackData: AttackData): { key: CharacterUid, effect: Effect }[] {
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
@@ -55,10 +49,8 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
             effect: {
                 type: moveTypeDOT as EffectType,
                 remainingRounds: effectMultipliers.length - 1,
-                damagesByRound: [
-                    ...effectMultipliers.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))
-                ]
-            }
+                damagesByRound: [...effectMultipliers.map(m => Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0))],
+            },
         }))
     }
 
@@ -82,14 +74,6 @@ function getAttackMultiplier(attacker: Partial<CharacterMeta>): StanceMultiplier
     return getStanceTypeMeta(attacker.stance).attackMultiplier
 }
 
-
-// export interface MoveModifier {
-//     name: MoveModifierName
-//     numTargets: number | number[]
-//     multiplier: number | number[]
-//     defaultSpriteUrl?: string
-//     isSpecial?: boolean
-// }
 function getMoveMultiplier(d: AttackData): number {
     return d.move.types.reduce((multiplier, nextType) => {
         const typeMeta = rulebook.moveMetaMap[nextType]

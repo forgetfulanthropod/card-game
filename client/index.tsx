@@ -1,20 +1,20 @@
 import './global.css'
 
-import { render } from 'preact'
+import { h, JSX, render } from 'preact' // eslint-disable-line
 
 import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { makeNewUser } from './actions'
-import { attachServerListener, waitForHandshake } from './connection/serverListener'
+import { attachServerListener, waitForHandshake } from './connection'
 import { waitForGameStateToFill } from './data/rootTree'
 
 
 console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
 
 const config = {
-    log: true
+    log: true,
 }
 
 function log(...args: unknown[]) {
@@ -37,7 +37,6 @@ loadAssets(
 )
 
 void (async function makeTheUser() {
-    // TODO: check if this await actually waits all the way through
     log('initializing app')
     await waitForHandshake()
     void waitForGameStateToFill().then(() => maybeStart('gamestate'))

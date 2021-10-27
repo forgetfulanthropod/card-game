@@ -1,11 +1,12 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
-import { keys, sample, sampleSize } from 'lodash'
+import { keys, sample, sampleSize, zip } from 'lodash'
 
-import { npcNames } from '@/rulebook/battle'
-import type { SpecialDoorName } from '@/rulebook/battle/specialDoorsMap'
-import { specialDoorsMap } from '@/rulebook/battle/specialDoorsMap'
+import type { SpecialDoorName } from '@/rulebook/battle'
+import { npcNames, specialDoorsMap } from '@/rulebook/battle'
+import type { RoomOutcomes } from '@/rulebook/dungeonRooms';
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import type { DataCursor } from '@/util'
+import type { DataCursor} from '@/util';
+import { vals } from '@/util'
 import { consoleError, mapToObj } from '@/util'
 
 import { weightedRandom } from './misc'
@@ -23,23 +24,17 @@ type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(_args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
 
+    const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha']
+    const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
+    const descriptions = describeOutcomes(roomOutcomes).join('\n or \n')
     return {
-        options: ['bigScary', 'normal', 'matcha'],
-        descriptions: ['big scary door', 'random choice of A,B,C...', 'matcha door']
+        options,
+        descriptions: ['big scary door\n X2 Modifier', descriptions, 'LV 10 matcha door'],
     }
     // const allDoors: Door[] = ['A', 'B', 'C', 'D']
-    // const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
     // const options = allDoors.slice(0, length(roomOutcomes))
-    // const descriptions = valMap(roomOutcomes, outcome =>
-    //     zip(outcome.outcomes, outcome.probs)
-    //         .map(([o, p]) =>
-    //             o.map(([name, level]) =>
-    //                 `Lvl${level} ${name}`).join(' + ')
-    //             + ' : '
-    //             + p.toString().slice(0, 3))
-    //         .join('\n'))
     // if (config.addRandomDoor) {
     //     options.push('random')
     //     descriptions.push('completely random')
@@ -47,7 +42,15 @@ export function getDoorChoices(_args: { roomsPassed: number, dungeonName: Dungeo
     // return { options, descriptions }
 }
 
-export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
+function describeOutcomes(roomOutcomes: Record<string, RoomOutcomes>): string[] {
+    return vals(roomOutcomes).map(outcome => zip(outcome.outcomes, outcome.probs)
+        .map(([o, p]) => o != null && p != null && o.map(([name, level]) => `Lvl${level} ${name}`).join(' + ')
+            + ' : '
+            + p.toString().slice(0, 3))
+        .join('\n'))
+}
+
+function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
     const modifier = args?.modifier ?? 1
     if (args.door === 'random') {
         return {
@@ -55,7 +58,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
             enemies: mapToObj(sampleSize(npcNames, randInt(1, 5)), name => {
                 const uid = makeUid()
                 return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: randInt(1, 4) })]
-            })
+            }),
         }
     }
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1][args.door]
@@ -70,7 +73,7 @@ export function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: n
             const [name, level] = pair
             const uid = makeUid()
             return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: level * modifier })]
-        })
+        }),
     }
 }
 
@@ -102,7 +105,7 @@ export function handleSpecialDoor(args: {
             // if (roomsPassed + 1 === v.levelToAppearOn) {
             return {
                 modifier: 1,
-                enemies: { [uid]: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) }
+                enemies: { [uid]: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) },
             }
             // }
             // return makeRandRegularRoom(dungeonName, roomsPassed)

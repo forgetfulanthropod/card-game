@@ -1,5 +1,5 @@
 // https://gist.github.com/malthe/02350255c759d5478e89
-export default function dedent(text: string): string {
+export function dedent(text: string): string {
     const re_whitespace = /^([ \t]*)(.*)\n/gm
     let l, m, i
 

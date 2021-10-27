@@ -49,7 +49,7 @@ export function LevelInfo(): PixiContainer {
         },
         async onClick() {
             await changeDungeon({ direction: -1 })
-        }
+        },
     })
     const rightButton = Text({
         text: '▶',
@@ -65,7 +65,7 @@ export function LevelInfo(): PixiContainer {
         },
         async onClick() {
             await changeDungeon({ direction: +1 })
-        }
+        },
     })
 
     const levelNameText = Text({

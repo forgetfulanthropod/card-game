@@ -27,7 +27,8 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
     return Container({
         children: [
             ...doorsAndText,
-            PlainButton({ onClick: args.exit, text: 'exit' })]
+            PlainButton({ onClick: args.exit, text: 'exit' }),
+],
     })
 }
 
@@ -41,7 +42,7 @@ function Door(args: { xScaled: number, onClick: Callback }) {
         anchor: [.5, .5],
         scale: doorWidth / texture.width,
         src: texture,
-        onClick: args.onClick
+        onClick: args.onClick,
     })
 }
 
@@ -52,7 +53,7 @@ export function DoorsStories(name: 'alert2' | 'log4'): ReturnType<typeof Doors> 
                 () => alert('door 1'),
                 () => alert('door 2'),
             ],
-            exit: () => { alert('exit') }
+            exit: () => { alert('exit') },
         },
         ),
         log4: () => Doors({
@@ -60,9 +61,9 @@ export function DoorsStories(name: 'alert2' | 'log4'): ReturnType<typeof Doors> 
                 () => console.log('door 1'),
                 () => console.log('door 2'),
                 () => console.log('door 3'),
-                () => console.log('door 4')
+                () => console.log('door 4'),
             ],
-            exit: () => { console.log('exit') }
+            exit: () => { console.log('exit') },
         }),
     }[name]()
 }

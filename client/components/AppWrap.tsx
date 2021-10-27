@@ -1,4 +1,4 @@
-import type { JSX } from 'preact'
+import { h, JSX } from 'preact' // eslint-disable-line
 //@ts-ignore
 import styled from 'styled-components'
 

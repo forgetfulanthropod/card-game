@@ -1,7 +1,6 @@
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
-// import { OwnedCharacter } from '@/data/types'
 import { vals } from '@/util'
 import { dataOf } from '@/util/pixiUtils'
 
@@ -38,7 +37,7 @@ export function OwnedCharacters(): PixiContainer {
                     src: dataOf(c.name),
                     scale: .45,
                     onClick: () => addSelected({ character: c }),
-                })
+                }),
             ],
         })
     )
@@ -68,7 +67,7 @@ export function OwnedCharacters(): PixiContainer {
     const root = Container({
         x: 200,
         y: -200,
-        children: characters
+        children: characters,
     })
 
 

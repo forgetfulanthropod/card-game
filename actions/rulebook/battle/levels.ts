@@ -46,7 +46,7 @@ export const npcLevelStatsMap = {
         8: { maxHealth: 205, damage: 18 },
         9: { maxHealth: 230, damage: 20 },
         10: { maxHealth: 255, damage: 22 },
-    }
+    },
 }
 
 export const levelMinMoveMap = {
@@ -69,5 +69,5 @@ export const levelMinMoveMap = {
         'Mimic': 0,
         'Chomp': 0,
         'Infectious Bite': 0,
-    }
+    },
 }

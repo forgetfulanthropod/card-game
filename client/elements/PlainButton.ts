@@ -6,7 +6,7 @@ export default function PlainButton(args: { text: string, onClick: Callback, fon
     const text = Text({
         text: args.text,
         onClick,
-        style: { fontSize, },
+        style: { fontSize },
         x,
         y,
         width,
@@ -23,6 +23,6 @@ export default function PlainButton(args: { text: string, onClick: Callback, fon
         children: [
             bg,
             text,
-        ]
+        ],
     })
 }

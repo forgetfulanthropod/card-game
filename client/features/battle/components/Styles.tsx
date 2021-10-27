@@ -2,9 +2,6 @@
 // @ts-ignore
 import styled from 'styled-components'
 
-// import { css, keyframes } from 'styled-components'
-import startPng from '../assets/start.png'
-
 
 export const HoverDiv = styled.div`
     background: black;
@@ -81,16 +78,6 @@ export const IdleScreenOverlay = styled.div`
 `
 
 
-export const Start = styled.img.attrs({ src: startPng })`
-    position: absolute;
-    transform: translate(-50%, -50%);
-    width: 20%;
-    left: 50%;
-    top: 25%;
-    z-index: 1001;
-    user-select: none;
-`
-
 export const Lose = styled.img`
     position: absolute;
     margin: auto;
@@ -107,33 +94,6 @@ export const Lose = styled.img`
     animation-fill-mode: forwards;
 `
 // animation: ${css`${zoom} .5s`};
-
-interface SP {
-    isAttacking: boolean
-    isDefending: boolean
-    x: number
-    y: number
-    color?: string
-    blur?: boolean
-    glow?: boolean
-    absolute?: boolean
-    hasMoved: boolean
-}
-// ${(p: SP) => (p.isAttacking || p.isDefending) && css`animation: ${shake} 0.5s;`}
-export const Sprite = styled.img.attrs({ width: 200 })`
-    user-select: none;
-    position: ${(p: SP) => p.absolute === true ? 'absolute' : 'relative'};
-    left: ${(p: SP) => p.x}%;
-    top: ${(p: SP) => p.y}%;
-    width: 100%;
-    z-index: 5;
-    ${(p: SP) => p.hasMoved && 'filter: grayscale(50%) drop-shadow(0 0 1vw black)'}
-    ${(p: SP) => p.blur === true && 'filter: blur(8px);'}
-    /* box-shadow: 5px 6px 7px black; */
-`
-// ${(p: SP) => p.color != null && css`
-//     filter: opacity(0.5) drop-shadow(0 0 ${p.glow ? '3vw' : '0'} ${p.color});
-// `}
 
 export const Reset = styled.button`
     position: absolute;

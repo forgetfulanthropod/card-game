@@ -1,7 +1,7 @@
 // import type { JSX } from 'preact'
 
 // import { getRulebook } from '@/data/rootTree'
-// import type { CharacterMeta } from '@/data/types'
+// import type { CharacterMeta } from '@shared'
 
 // import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 // import Table from './Table'

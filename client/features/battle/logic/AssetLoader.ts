@@ -1,7 +1,6 @@
 import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
-// import font from '../../../assets/VT323-Regular.ttf'
 import font from '../../../assets/ARCADE_N_.ttf'
 import check from '../../../assets/check.png'
 import stanceAggressive from '../assets/aggressive stance.png'
@@ -80,7 +79,6 @@ const characterAssets = {
     wimpyGuard,
 }
 export type CharacterName = keyof typeof characterAssets
-export const characterAssetKeys = Object.keys(characterAssets) as CharacterName[]
 
 const basicAssets = {
     ...characterAssets,

@@ -11,7 +11,7 @@ import { Application } from './mypixi'
 
 
 const config = {
-    showOneThing: null as (null | (() => PixiContainer))
+    showOneThing: null as (null | (() => PixiContainer)),
     // showOneThing: () => DoorsStories('log'),
 }
 

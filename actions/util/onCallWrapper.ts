@@ -1,9 +1,11 @@
-import { getApp } from '..'
+import { getApp } from '@/index'
+
 import { consoleError } from './consoleError'
+
 
 const config = {
     log: true,
-    method: 'post' as 'post' | 'get'
+    method: 'post' as 'post' | 'get',
 }
 
 function makeRandId() { return Math.random().toString().slice(2, 6) }

@@ -1,7 +1,7 @@
 import type { CharacterName } from '@shared'
 
 const config = {
-    doValidation: false
+    doValidation: false,
 }
 
 // type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
@@ -20,22 +20,31 @@ const m: CharacterName = 'matchaGelatinCube'
 const s: CharacterName = 'skeletonWarrior'
 const mimic: CharacterName = 'mimic'
 
-export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
+export type DungeonRooms = Record<number, Record<string, RoomOutcomes>>
+
+export const dungeonRooms: DungeonRooms = {
     1: {
         A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
         B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [.5, .5] },
-        C: { outcomes: [[[mimic, 5]]], probs: [1] },
-    }, 2: { // TODO: A
-        A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
+
+    }, 2: {
+        A: { outcomes: [
+            [[m, 1], [m, 1]],
+            [[s, 1], [s, 1]],
+            [[m, 2]],
+            [[s, 2]],
+        ], probs: [.25, .25, .25, .25] },
         B: { outcomes: [[[s, 4], [m, 1]], [[s, 4], [s, 1]]], probs: [.5, .5] },
-        C: { outcomes: [[[mimic, 5]]], probs: [1] },
-        D: { outcomes: [[[s, 5]]], probs: [1] },
+        C: { outcomes: [[[s, 5]]], probs: [1] },
     }, 3: {
         A: {
             outcomes: [
-                [[m, 3], [m, 2]], [[m, 3], [s, 2]],
-                [[s, 3], [m, 2]], [[s, 3], [s, 2]]],
-            probs: [.25, .25, .25, .25]
+                [[m, 3], [m, 2]],
+[[m, 3], [s, 2]],
+                [[s, 3], [m, 2]],
+[[s, 3], [s, 2]],
+            ],
+            probs: [.25, .25, .25, .25],
         },
         B: { outcomes: [[[s, 5]], [[m, 5]]], probs: [.5, .5] },
         C: {
@@ -43,7 +52,7 @@ export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
                 [[m, 2], [m, 2], [m, 2], [m, 2]],
                 [[s, 2], [s, 2], [s, 2], [s, 2]],
             ],
-            probs: [.5, .5]
+            probs: [.5, .5],
         },
     }, 4: { // TODO: cases below
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
@@ -55,7 +64,7 @@ export const dungeonRooms: Record<number, Record<string, RoomOutcomes>> = {
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
     }, 8: { // boss
         A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
-    }
+    },
 }
 
 if (config.doValidation) {
