@@ -61,10 +61,10 @@ function getDamage(ad: AttackData, defender: CharacterMeta): number {
     let attackData = ad
     if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
 
-    const dam = attackData.attacker.damage
+    const dam = Math.round(attackData.attacker.damage
         * getAttackMultiplier(attackData.attacker)
         * getMoveMultiplier(attackData)
-        * getDefenseMultiplier(defender) | 0
+        * getDefenseMultiplier(defender))
 
     return dam > 0 ? dam : 1
 }
@@ -114,8 +114,10 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
             multipliers = [moveMeta.multiplier]
         else if (moveMeta.multipliers != null)
             multipliers = [...moveMeta.multipliers]
+        else if (moveMeta.multiplierRange != null)
+            multipliers = [...moveMeta.multiplierRange]
         else
-            throw Error('movemeta has neither multiplier not multipliers')
+            throw Error('movemeta has neither multiplier nor multipliers nor multiplierRange')
 
         multipliers.forEach(m => {
             if (m < min) min = m
@@ -125,7 +127,7 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
 
     if (min === max) return [min]
 
-    return [min, max]
+    return [Math.round(min), Math.round(max)]
 }
 
 
