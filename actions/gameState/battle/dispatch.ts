@@ -8,6 +8,8 @@ import { makeBattleState } from './state'
 export const dispatch = (action: Action): void => {
     // logger.info({ scene, action, data: scene.get() })
     // logger.info(`>>>>dispatching ${JSON.stringify(action)}`)
+
+    console.log(action)
     const scene = getBattleScene('alice')
     switch (action.a) {
         case 'setSelectedMove': {

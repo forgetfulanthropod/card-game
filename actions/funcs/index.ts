@@ -1,0 +1,15 @@
+// @index('./**/*.ts', f => `export { default as ${(f.name)} } from '${f.path}'`)
+export { default as addSelected } from './addSelected'
+export { default as changeDungeon } from './changeDungeon'
+export { default as changeScene } from './changeScene'
+export { default as chooseDoor } from './chooseDoor'
+export { default as doCharacterAction } from './doCharacterAction'
+export { default as echo } from './echo'
+export { default as exitDungeon } from './exitDungeon'
+export { default as hello } from './hello'
+export { default as incrementTestCounter } from './incrementTestCounter'
+export { default as makeNewUser } from './makeNewUser'
+export { default as square } from './square'
+export { default as startGame } from './startGame'
+export { default as toggleStance } from './toggleStance'
+// @endindex
