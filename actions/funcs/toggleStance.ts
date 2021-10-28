@@ -1,10 +1,10 @@
 import type { CharacterUid, StanceName } from '@shared'
 
 import { getCharacterMovesWithDamageRanges, getCharIds } from '@/gameState/battle'
-import { getBattleScene, onCallWrapper, vals } from '@/util'
+import { getBattleScene, vals } from '@/util'
 
 
-export default onCallWrapper(function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
+export default function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
     const scene = getBattleScene('alice')
     const ac = scene.select('allCharacters').get()
     if (getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||
@@ -31,4 +31,4 @@ export default onCallWrapper(function toggleStance({ characterUid }: { character
         return getCharacterMovesWithDamageRanges(characterCursor.get())
     })
     characterCursor.commit()
-})
+}

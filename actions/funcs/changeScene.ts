@@ -2,10 +2,10 @@ import type { SceneName } from '@shared'
 
 import { makeBattleState } from '@/gameState/battle'
 import { rulebook } from '@/rulebook/index'
-import { getEntryScene, getGameStateCursor, onCallWrapper } from '@/util'
+import { getEntryScene, getGameStateCursor } from '@/util'
 
 
-export default onCallWrapper(function changeScene(args: { newSceneName: SceneName }): void {
+export default function changeScene(args: { newSceneName: SceneName }): void {
     logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')
     if (args.newSceneName === 'battle') {
@@ -16,4 +16,4 @@ export default onCallWrapper(function changeScene(args: { newSceneName: SceneNam
     }
     tree.commit()
 
-})
+}

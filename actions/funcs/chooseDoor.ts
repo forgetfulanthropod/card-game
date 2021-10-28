@@ -2,10 +2,10 @@
 
 import { handleSpecialDoor, resetRound } from '@/gameState/battle'
 import type { SpecialDoorName } from '@/rulebook/battle'
-import { getBattleScene, objFilter, onCallWrapper } from '@/util'
+import { getBattleScene, objFilter } from '@/util'
 
 
-export default onCallWrapper(async function chooseDoor(args: { door: SpecialDoorName }): Promise<void> {
+export default async function chooseDoor(args: { door: SpecialDoorName }): Promise<void> {
     const scene = getBattleScene('alice')
 
     const room = handleSpecialDoor({ door: args.door, dungeonName: scene.getK('dungeonName'), roomsPassed: scene.getK('roomsPassed') })
@@ -19,4 +19,4 @@ export default onCallWrapper(async function chooseDoor(args: { door: SpecialDoor
     scene.setK('state', 'in battle')
     await resetRound(scene)
     scene.commit()
-})
+}
