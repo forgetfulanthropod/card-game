@@ -1,29 +1,28 @@
-import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData, NetworkEvent, StanceName } from '@shared'
+import type { AttackData, BattleScene, CharacterMeta, Gamestate, NetworkAttackData, NetworkEvent } from '@shared'
 import { memoize } from 'lodash'
 
 import type { BattleCursor, DataCursor } from '@/util'
 import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util'
 
-import { getCharacterKeysAndDamages, getCharacterMovesWithDamageRanges } from './attack'
+import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
 import { incrementXP } from './experiencePoints'
-import { checkMoveAvailable, checkWinner, getCharIds, getDefenders, getNpcMove, getUnmovedPc } from './misc'
+import { checkMoveAvailable, checkWinner, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
-import { getTransformed, isSpecial } from './specialMoves'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEFAULT_WAIT = 1000
-const NOT_YOUR_TURN_REJECTION_WAIT = 1000
+export const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 const DEBUG = false
 
-const tl = (x: string) => logger.info(x)
+export const tl = (x: string) => logger.info(x)
 
 const config = { log: true }
 
-function log(...args: unknown[]) { if (config.log) { logger.info(args) } }
+export function log(...args: unknown[]) { if (config.log) { logger.info(args) } }
 
-function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
+export function warn(...args: unknown[]) { if (config.log) { console.warn(args) } }
 
 
 export const startGame = onCallWrapper(async function startGame(): Promise<void> {
@@ -35,36 +34,6 @@ export const startGame = onCallWrapper(async function startGame(): Promise<void>
     }
     scene.setK('state', 'in battle')
     await resetRound(scene)
-})
-
-export const toggleStance = onCallWrapper(function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
-    const scene = getBattleScene('alice')
-    const ac = scene.select('allCharacters').get()
-    if (
-        getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||
-        scene.select('isPlayerTurn').get() === false
-    ) return
-
-    const stanceCursor = scene.select('allCharacters').select(characterUid).select('stance')
-
-    const stances: StanceName[] = [
-        'defensive',
-        'neutral',
-        'aggressive',
-    ]
-    const stance = stanceCursor.get()
-    const stanceIndex = stances.findIndex(v => stance === v)
-
-    const nextIndex = (stanceIndex + 1) % stances.length
-
-    stanceCursor.set(stances[nextIndex])
-
-    const characterCursor = scene.select('allCharacters').select(characterUid)
-    characterCursor.select('moves').apply(() => {
-        console.log(characterCursor.get())
-        return getCharacterMovesWithDamageRanges(characterCursor.get())
-    })
-    characterCursor.commit()
 })
 
 export async function resetRound(scene: BattleCursor): Promise<void> {
@@ -83,7 +52,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     scene.commit()
 }
 
-async function doNpcMove(_reason?: string) {
+export async function doNpcMove(_reason?: string) {
     const scene = getBattleScene('alice')
     tl(`npcMove(reason: ${_reason})`)
     const { allCharacters, isPlayerTurn } = scene.get()
@@ -112,63 +81,7 @@ async function doNpcMove(_reason?: string) {
 }
 
 
-export async function doCharacterAction_(clickedUid: CharacterUid): Promise<void> {
-    const scene = getBattleScene('alice')
-    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
-    log('received click for ' + clickedUid)
-    const clicked = allCharacters[clickedUid]
-    const { alivePcs } = getLivingChars(allCharacters)
-    if (checkWinner(vals(allCharacters)) != null) {
-        warn('winner exists')
-        return
-    }
-    if (!isPlayerTurn) {
-        warn('not player turn')
-        if (!scene.getK('isPlayerTurn')) {
-            await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
-            await doNpcMove('NPC has extra turns')
-        }
-        return
-    }
-    if (alivePcs.every(c => c.hasMoved)) {
-        warn('no unmoved pcs')
-        return
-    }
-    // click to choose selected Pc:
-    if (clicked.isPc) {
-        if (clicked.hasMoved) {
-            warn('selected char has already attacked')
-            return
-        }
-        scene.setK('selectedCharacter', clicked.uid)
-        return
-    }
-
-    // clicked on NPC but no selected character
-    if (!selectedCharacter || allCharacters[selectedCharacter].hasMoved) {
-        // should be unreachable
-        tl('select attacker first')
-        return
-    }
-    if (selectedMove == null) {
-        // should be unreachable
-        tl('select move first')
-        return
-    }
-
-    let move = selectedMove
-    if (isSpecial(move)) move = getTransformed(move, selectedCharacter)
-
-    const ad: AttackData = {
-        attacker: allCharacters[selectedCharacter],
-        defenders: getDefenders(clicked, move, vals(allCharacters)),
-        move,
-    }
-    await handleMove(scene, allCharacters, ad)
-}
-
-
-async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
+export async function handleMove(scene: BattleCursor, allCharacters: BattleScene['allCharacters'], attackData: AttackData) {
     const move$ = getMoveChannel()
 
     // Dispatch move to client to trigger animation
@@ -252,7 +165,7 @@ const getMoveChannel = memoize(function getMoveChannel() {
     return move$
 })
 
-function getLivingChars(allCharacters: Record<string, CharacterMeta>) {
+export function getLivingChars(allCharacters: Record<string, CharacterMeta>) {
     const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
     const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
     return { alivePcs, aliveNpcs }
