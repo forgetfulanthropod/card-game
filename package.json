@@ -13,7 +13,8 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "fullstart": "bash scripts/fullstart.sh",
-        "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^"
+        "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^",
+        "newtodo": "git diff origin/main... | grep TODO | code -"
     },
     "dependencies": {
         "baobab": "^2.6.1",
