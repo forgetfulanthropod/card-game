@@ -1,8 +1,8 @@
 import { getBattleScene, vals } from '@/util'
 
 import { handleMove } from './handleMove'
+import { tl, warn } from './logging'
 import { checkWinner, getLivingChars, getNpcMove } from './misc'
-import { tl, warn } from './startGame'
 
 
 export async function doNpcMove(_reason?: string) {

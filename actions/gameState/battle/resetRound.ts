@@ -1,8 +1,9 @@
 import type { BattleCursor } from '@/util'
 import { keys, sleep } from '@/util'
 
+import { DEBUG, DEFAULT_WAIT } from '../../funcs/startGame'
 import { doNpcMove } from './doNpcMove'
-import { DEBUG, DEFAULT_WAIT, tl } from './startGame'
+import { tl } from './logging'
 
 
 export async function resetRound(scene: BattleCursor): Promise<void> {

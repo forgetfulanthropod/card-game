@@ -9,6 +9,6 @@ export * from './misc'
 export * from './move'
 export * from './resetRound'
 export * from './specialMoves'
-export * from './startGame'
+export * from '../../funcs/startGame'
 export * from './state'
 // @endindex
