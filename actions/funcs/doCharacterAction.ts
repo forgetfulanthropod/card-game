@@ -47,6 +47,7 @@ export default onCallWrapper(
                 return
             }
             scene.setK('selectedCharacter', clicked.uid)
+            scene.commit()
             return
         }
 
