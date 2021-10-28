@@ -1,5 +1,5 @@
 name: deploy on linode
-on: [push, delete]
+on: [push, delete, workflow_dispatch]
 jobs:
   build:
     name: Build
