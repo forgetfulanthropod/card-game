@@ -2,6 +2,7 @@
     "scripts": {
         "build": "bash scripts/build.sh",
         "start": "bash scripts/start.sh",
+        "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "lint": "eslint .",
         "fmt": "eslint . --fix",
         "lint-watch": "echo 'doesnt work great' && esw -w actions/**/*.ts client/**/*.ts{,x} shared/**/*.ts",
@@ -12,7 +13,8 @@
         "storybook": "start-storybook -p 6006",
         "build-storybook": "build-storybook",
         "fullstart": "bash scripts/fullstart.sh",
-        "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^"
+        "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^",
+        "newtodo": "git diff origin/main... | grep TODO | code -"
     },
     "dependencies": {
         "baobab": "^2.6.1",
@@ -45,6 +47,7 @@
         "eslint-plugin-unused-imports": "^1.1.5",
         "eslint-watch": "^7.0.0",
         "live-server": "^1.2.1",
-        "typescript": "^4.4.3"
+        "typescript": "^4.4.3",
+        "vscode-generate-index-standalone": "^1.6.0"
     }
 }

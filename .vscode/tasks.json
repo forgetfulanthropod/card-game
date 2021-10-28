@@ -4,7 +4,7 @@
 		{
 			"label": "Do everything",
 			"dependsOn": [
-				"tsc actions",
+				"tsc server",
 				"tsc client",
 				"esbuild client",
 				"esbuild server",
@@ -20,9 +20,9 @@
 			// "runOptions": { "runOn": "folderOpen", }
 		},
 		{
-			"label": "tsc actions",
+			"label": "tsc server",
 			"type": "typescript",
-			"tsconfig": "actions/tsconfig.json",
+			"tsconfig": "server/tsconfig.json",
 			"option": "watch",
 			"problemMatcher": [
 				"$tsc-watch"
@@ -56,7 +56,7 @@
 		{
 			"label": "esbuild server",
 			"type": "shell",
-			"command": "cd actions && npm run watch",
+			"command": "cd server && npm run watch",
 			"presentation": {
 				"group": "builders",
 			}
@@ -64,7 +64,7 @@
 		{
 			"label": "run server",
 			"type": "shell",
-			"command": "cd actions && npm run server-watch",
+			"command": "cd server && npm run server-watch",
 			"presentation": {
 				"group": "group3",
 			}
