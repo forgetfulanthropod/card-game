@@ -1,12 +1,20 @@
 import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
-import { stringKeys } from '@/util'
+import { stringKeys, vals } from '@/util'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
+
+export function getLivingChars(
+    allCharacters: Record<string, CharacterMeta>
+): { alivePcs: CharacterMeta[], aliveNpcs: CharacterMeta[] } {
+    const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
+    const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
+    return { alivePcs, aliveNpcs }
+}
 
 type CharacterFilters = Partial<CharacterMeta>
 export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
@@ -20,7 +28,7 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
                     return c[filterKey] === filters[filterKey]
                 if (typeof filters[filterKey] === 'number')
                     //@ts-ignore
-                    return  c[filterKey] >= filters[filterKey]
+                    return c[filterKey] >= filters[filterKey]
                 throw Error('invalid filterKey')
             })
         })

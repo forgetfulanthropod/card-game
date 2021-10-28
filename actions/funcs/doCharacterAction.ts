@@ -2,9 +2,10 @@ import type { AttackData } from '@shared'
 
 import { getBattleScene, onCallWrapper, sleep, vals } from '@/util'
 
-import { checkWinner, getDefenders } from '../gameState/battle/misc'
+import { doNpcMove, handleMove } from '../gameState/battle'
+import { checkWinner, getDefenders, getLivingChars } from '../gameState/battle/misc'
 import { getTransformed, isSpecial } from '../gameState/battle/specialMoves'
-import { doNpcMove, getLivingChars, handleMove, log, NOT_YOUR_TURN_REJECTION_WAIT, tl, warn } from '../gameState/battle/startGame'
+import { log, NOT_YOUR_TURN_REJECTION_WAIT, tl, warn } from '../gameState/battle/startGame'
 
 
 export default onCallWrapper(
