@@ -9,8 +9,9 @@ import attachHello from './funcs/hello'
 import attachIncrementTestCounter from './funcs/incrementTestCounter'
 import attachMakeNewUser from './funcs/makeNewUser'
 import attachSquare from './funcs/square'
+import attachStartGame from './funcs/startGame'
 import { toggleStance as attachToggleStance } from './funcs/toggleStance'
-import { dispatch, startGame as attachStartGame } from './gameState/battle'
+import { dispatch } from './gameState/battle'
 import { onCallWrapper } from './util'
 
 export function attachAPIRoutes(): void {

@@ -1,9 +1,7 @@
 import type { CharacterUid, StanceName } from '@shared'
 
+import { getCharacterMovesWithDamageRanges, getCharIds } from '@/gameState/battle'
 import { getBattleScene, onCallWrapper, vals } from '@/util'
-
-import { getCharacterMovesWithDamageRanges } from '../gameState/battle/attack'
-import { getCharIds } from '../gameState/battle/misc'
 
 
 export const toggleStance = onCallWrapper(function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {

@@ -1,11 +1,19 @@
 import type { AttackData } from '@shared'
 
+import {
+    checkWinner,
+    doNpcMove,
+    getDefenders,
+    getLivingChars,
+    getTransformed,
+    handleMove,
+    isSpecial,
+    log,
+    tl,
+    warn,
+} from '@/gameState/battle'
 import { getBattleScene, onCallWrapper, sleep, vals } from '@/util'
 
-import { doNpcMove, handleMove } from '../gameState/battle'
-import { log, tl, warn } from '../gameState/battle/logging'
-import { checkWinner, getDefenders, getLivingChars } from '../gameState/battle/misc'
-import { getTransformed, isSpecial } from '../gameState/battle/specialMoves'
 import { NOT_YOUR_TURN_REJECTION_WAIT } from './startGame'
 
 
