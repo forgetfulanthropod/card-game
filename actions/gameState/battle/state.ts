@@ -61,7 +61,7 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 0,
         state: 'not started',
-        isPlayerTurn: Math.random() < .5,
+        isPlayerTurn: srandom() < .5,
         battleHasBegun: true,
         allCharacters,
         selectedCharacter: selectedCharacter.uid,
@@ -140,5 +140,5 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
 }
 
 function randString(): string {
-    return Math.random().toString().slice(2, 6)
+    return srandom().toString().slice(2, 6)
 }

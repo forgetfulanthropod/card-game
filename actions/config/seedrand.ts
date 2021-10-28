@@ -1,9 +1,15 @@
 import seedrandom from 'seedrandom'
-export function setGlobalRandomSeed(useConstantFunction = false): void {
-    if (useConstantFunction) {
-        global.Math.random = () => 0
-        return
-    }
-    const rng = seedrandom('kaiju')
-    global.Math.random = rng
+
+declare global {
+    // eslint-disable-next-line no-var
+    var srandom: ReturnType<typeof seedrandom>
+}
+const seed = Math.random().toString()
+console.log('setting random seed:', seed)
+global.srandom = seedrandom(seed)
+
+export function setGlobalRandomSeed(): void {
+    const seed = 'kaiju'
+    console.log('setting random seed:', seed)
+    global.srandom = seedrandom(seed)
 }

@@ -1,13 +1,12 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
-import { keys, sample, sampleSize, zip } from 'lodash'
+import { keys, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
 import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import type { DataCursor } from '@/util'
-import { vals } from '@/util'
-import { mapToObj } from '@/util'
+import { mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
@@ -55,9 +54,9 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     if (args.door === 'random') {
         return {
             modifier,
-            enemies: mapToObj(sampleSize(npcNames, randInt(1, 5)), name => {
+            enemies: mapToObj(ssampleSize(npcNames, srandInt(1, 5)), name => {
                 const uid = makeUid()
-                return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: randInt(1, 4) })]
+                return [uid, newNPCMeta({ x: srandInt(50, 80), y: srandInt(40, 70), name, uid, level: srandInt(1, 4) })]
             }),
         }
     }
@@ -72,7 +71,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
         enemies: mapToObj(outcome, pair => {
             const [name, level] = pair
             const uid = makeUid()
-            return [uid, newNPCMeta({ x: randInt(50, 80), y: randInt(40, 70), name, uid, level: level * modifier })]
+            return [uid, newNPCMeta({ x: srandInt(50, 80), y: srandInt(40, 70), name, uid, level: level * modifier })]
         }),
     }
 }
@@ -93,7 +92,7 @@ export function handleSpecialDoor(args: {
                 logger.error('no door options!')
                 return { modifier: -1, enemies: {} }
             }
-            const regularDoorName = sample(regularDoorOptions) as Door
+            const regularDoorName = ssample(regularDoorOptions) as Door
             return makeRoom({ dungeonName, roomsPassed, door: regularDoorName, modifier: d.variables.modifier })
         }
         case 'normal': {
@@ -135,7 +134,7 @@ function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Roo
         logger.error('no door options!')
         return { modifier: -1, enemies: {} }
     }
-    const regularDoorName = sample(regularDoorOptions) as Door
+    const regularDoorName = ssample(regularDoorOptions) as Door
     return makeRoom({ dungeonName, roomsPassed, door: regularDoorName })
 }
 
@@ -149,13 +148,10 @@ export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
 
 
 function makeUid(): string {
-    return 'charUid-fromDoors-' + Math.random().toString().slice(2, 6)
+    return 'charUid-fromDoors-' + srandom().toString().slice(2, 6)
 }
 
-function randInt(min: number, under: number): number {
-    return (Math.random() * (under - min) + min) | 0
-}
 
 function randCoords() {
-    return { x: randInt(50, 95), y: randInt(40, 80) }
+    return { x: srandInt(50, 95), y: srandInt(40, 80) }
 }

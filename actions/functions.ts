@@ -8,6 +8,7 @@ import attachExitDungeon from './funcs/exitDungeon'
 import attachHello from './funcs/hello'
 import attachIncrementTestCounter from './funcs/incrementTestCounter'
 import attachMakeNewUser from './funcs/makeNewUser'
+import attachResetRandomSeed from './funcs/resetRandomSeed'
 import attachSquare from './funcs/square'
 import { dispatch, startGame as attachStartGame } from './gameState/battle'
 import { onCallWrapper } from './util'
@@ -26,4 +27,5 @@ export function attachAPIRoutes(): void {
     attachSquare()
     attachStartGame()
     onCallWrapper(dispatch)()
+    attachResetRandomSeed()
 }
