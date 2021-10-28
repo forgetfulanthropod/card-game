@@ -65,28 +65,27 @@ export const moveMetaMap: Record<MoveMetaName, MoveMeta> = {
         multiplierRange: [.50, 1.50],
     },
     ST: {
-        // TODO: no 1/3 modifier
+        // CLARIFY
         name: 'ST',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
     INHSO: {
-        // TODO: heals for +1 per target
+        // CLARIFY heals for +1 per target
         name: 'INHSO',
         numTargets: 2, // ?
         multiplier: 1,
         isSpecial: true,
     },
     DC4A: {
-        // TODO: subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
+        // CLARIFY subtract health of a friendly kaiju equal to damage: give 1.5x that health to the lich lord
         name: 'DC4A',
         numTargets: 1,
         multiplier: 1,
         isSpecial: true,
     },
     MIM: {
-        // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
         name: 'MIM',
         numTargets: 1,
         multiplier: 0,

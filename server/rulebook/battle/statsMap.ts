@@ -199,7 +199,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         maxHealth: 130,
         damage: 12,
         moves: [
-            { name: 'Mimic', types: ['MIM'] }, // TODO: copies the last ability to have targeted this character but uses the mimic's attack damage instead
+            { name: 'Mimic', types: ['MIM'] },
             { name: 'Chomp', types: ['BA'] },
             { name: 'Infectious Bite', types: ['ROD1', 'DOT1'] },
         ],
