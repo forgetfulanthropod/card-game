@@ -12,14 +12,11 @@
 // import attachStartGame from './funcs/startGame'
 
 import * as allFunctions from './funcs'
-import { dispatch } from './gameState/battle'
-import { onCallWrapper, vals } from './util'
+import { vals } from './util'
 
 export function attachAPIRoutes(): void {
     vals(allFunctions).forEach(
         // f => onCallWrapper(f)()
         f => f()
     )
-
-    onCallWrapper(dispatch)()
 }
