@@ -4,7 +4,7 @@ import { memoize } from 'lodash'
 import type { BattleCursor, DataCursor } from '@/util'
 import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util'
 
-import { getCharacterKeysAndDamages } from './attack'
+import { getCharacterKeysAndDamages, getCharacterMovesWithDamageRanges } from './attack'
 import { putUpDoors } from './doors'
 import { incrementXP } from './experiencePoints'
 import { checkMoveAvailable, checkWinner, getCharIds, getDefenders, getNpcMove, getUnmovedPc } from './misc'
@@ -37,11 +37,11 @@ export const startGame = onCallWrapper(async function startGame(): Promise<void>
     await resetRound(scene)
 })
 
-export const toggleStance = onCallWrapper(function toggleStance({characterUid}: {characterUid: CharacterUid}): void {
+export const toggleStance = onCallWrapper(function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
     const scene = getBattleScene('alice')
     const ac = scene.select('allCharacters').get()
     if (
-        getCharIds(vals(ac), {isPc: true, hasMoved: true}).length > 0 ||
+        getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||
         scene.select('isPlayerTurn').get() === false
     ) return
 
@@ -59,7 +59,12 @@ export const toggleStance = onCallWrapper(function toggleStance({characterUid}: 
 
     stanceCursor.set(stances[nextIndex])
 
-    stanceCursor.commit()
+    const characterCursor = scene.select('allCharacters').select(characterUid)
+    characterCursor.select('moves').apply(() => {
+        console.log(characterCursor.get())
+        return getCharacterMovesWithDamageRanges(characterCursor.get())
+    })
+    characterCursor.commit()
 })
 
 export async function resetRound(scene: BattleCursor): Promise<void> {

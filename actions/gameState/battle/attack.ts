@@ -10,7 +10,11 @@ export function getCharacterMovesWithDamageRanges(character: CharacterStats & { 
     return character.moves.map(move => {
 
         const damageRange = getMoveMultiplierRange(move).map(multiplier => {
-            return character.damage * getAttackMultiplier(character) * multiplier
+            const damage = Math.round(
+                character.damage * getAttackMultiplier(character) * multiplier
+            )
+
+            return damage < 1 ? 1 : damage
         })
 
         return {
@@ -119,17 +123,17 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
         else
             throw Error('movemeta has neither multiplier nor multipliers nor multiplierRange')
 
+        const compoundedMin = min < Number.POSITIVE_INFINITY ? min : 1
+        const compoundedMax = max > Number.NEGATIVE_INFINITY ? max : 1
         multipliers.forEach(m => {
-            if (m < min) min = m
-            if (m > max) max = m
+            if (compoundedMin * m < min) min = compoundedMin * m
+            if (compoundedMax * m > max) max = compoundedMax * m
         })
     })
 
-    if (min < 1) min = 1
-    if (max < 1) max = 1
     if (min === max) return [min]
 
-    return [Math.round(min), Math.round(max)]
+    return [min, max]
 }
 
 

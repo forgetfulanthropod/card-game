@@ -34,8 +34,14 @@ export default function MoveMenu(): JSX.Element {
 
     const movesOf = (charId: string) => allCharacters.select(charId).select('moves').get()
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
-    selectedCharacter.on('update', async () => {
-        const sc = selectedCharacter.get()
+
+    allCharacters.select(selectedCharacter.get()).select('moves').on('update', updateMoves)
+    selectedCharacter.on('update', async (e) => {
+        allCharacters.select(e.data.previousData).select('moves').off('update', updateMoves)
+
+        const sc = e.data.currentData
+        allCharacters.select(sc).select('moves').on('update', updateMoves)
+
         // tl('moves list change to ' + JSON.stringify(moves.get()));
         if (sc == null) { setMvs([]); return }
         const newMoves = movesOf(sc)
@@ -43,13 +49,18 @@ export default function MoveMenu(): JSX.Element {
         await dispatch({ a: 'setSelectedMove', m: newMoves[0] })
     })
 
+    function updateMoves() {
+        console.log('updating', selectedCharacter.get())
+        setMvs(movesOf(selectedCharacter.get()))
+    }
+
     return <>
         {isPlayerTurn && <MoveMenuDiv>
             {mvs.map(m => <MoveButton
                 key={m.types[0]}
                 onClick={async () => {
                     // @ts-ignore
-                    window.startTime = Date.now()
+                    // window.startTime = Date.now()
                     await dispatch({ a: 'setSelectedMove', m: m })
                 }}
                 isSelected={sm.name === m.name}
