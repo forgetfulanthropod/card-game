@@ -1,2 +1,3 @@
+import type { Square } from '@shared'
 
-export default function square(args: { n: string }): number { return Number(args.n) ** 2 }
+export const square: Square = args => args.n ** 2

@@ -5,7 +5,8 @@ import type { SpecialDoorName } from '@/rulebook/battle'
 import { getBattleScene, objFilter } from '@/util'
 
 
-export default async function chooseDoor(args: { door: SpecialDoorName }): Promise<void> {
+import type { ChooseDoor } from '@shared'
+export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')
 
     const room = handleSpecialDoor({ door: args.door, dungeonName: scene.getK('dungeonName'), roomsPassed: scene.getK('roomsPassed') })

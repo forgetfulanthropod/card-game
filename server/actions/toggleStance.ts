@@ -4,7 +4,9 @@ import { getCharacterMovesWithDamageRanges, getCharIds } from '@/gameState/battl
 import { getBattleScene, vals } from '@/util'
 
 
-export default function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
+import type { ToggleStance } from '@shared'
+export const toggleStance: ToggleStance = (args) => {
+    const { characterUid } = args
     const scene = getBattleScene('alice')
     const ac = scene.select('allCharacters').get()
     if (getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||

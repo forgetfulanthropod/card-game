@@ -1,12 +1,11 @@
-import type { Action } from '@shared'
+import type { Action, Dispatch } from '@shared'
 
 import { getBattleScene, keys } from '@/util'
 
 import { makeBattleState } from '../gameState/battle/state'
 
 
-export default
-    function dispatch(action: Action): void {
+export const dispatch: Dispatch = action => {
     // logger.info({ scene, action, data: scene.get() })
     // logger.info(`>>>>dispatching ${JSON.stringify(action)}`)
 

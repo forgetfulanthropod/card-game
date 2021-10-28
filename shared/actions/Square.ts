@@ -1,1 +1,1 @@
-export type Square = (args: { n: string }) => number
+export type Square = (args: { n: number }) => number

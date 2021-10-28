@@ -5,7 +5,8 @@ import { rulebook } from '@/rulebook/index'
 import { getEntryScene, getGameStateCursor } from '@/util'
 
 
-export default function changeScene(args: { newSceneName: SceneName }): void {
+import type { ChangeScene } from '@shared'
+export const changeScene: ChangeScene = (args) => {
     logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')
     if (args.newSceneName === 'battle') {

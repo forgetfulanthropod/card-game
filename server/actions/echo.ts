@@ -1,1 +1,2 @@
-export default function echo<T extends { [x: string]: never }>(args: T): T { return args }
+import type { Echo } from '@shared'
+export const echo: Echo = args => args

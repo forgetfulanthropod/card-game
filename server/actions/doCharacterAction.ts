@@ -1,4 +1,4 @@
-import type { AttackData } from '@shared'
+import type { AttackData, DoCharacterAction } from '@shared'
 
 import {
     checkWinner,
@@ -17,8 +17,8 @@ import { getBattleScene, sleep, vals } from '@/util'
 import { NOT_YOUR_TURN_REJECTION_WAIT } from './startGame'
 
 
-export default
-    async function doCharacterAction({ uid: clickedUid }: { uid: string }): Promise<void> {
+export const doCharacterAction: DoCharacterAction = async args => {
+    const { uid: clickedUid } = args
     const scene = getBattleScene('alice')
     const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
     log('received click for ' + clickedUid)

@@ -1,7 +1,8 @@
 import { rulebook } from '@/rulebook'
 import { getEntryScene } from '@/util'
 
-export default function changeDungeon(args: { direction: -1 | 1 }): void {
+import type { ChangeDungeon } from '@shared'
+export const changeDungeon: ChangeDungeon = (args) => {
     const levels = rulebook.dungeonLevels
     const scene = getEntryScene('alice')
 

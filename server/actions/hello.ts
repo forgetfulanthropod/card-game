@@ -1,1 +1,2 @@
-export default function hello() { return 'hello' }
+import type { Hello } from '@shared'
+export const hello: Hello = (_args) => 'hello'
