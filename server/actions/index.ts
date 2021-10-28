@@ -1,5 +1,5 @@
 // @index('./**/*.ts', f => `export { default as ${(f.name)} } from '${f.path}'`)
-export { default as addSelected } from './addSelected'
+export { addSelected } from './addSelected'
 export { default as changeDungeon } from './changeDungeon'
 export { default as changeScene } from './changeScene'
 export { default as chooseDoor } from './chooseDoor'

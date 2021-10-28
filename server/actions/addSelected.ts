@@ -1,9 +1,8 @@
-import type { OwnedCharacter } from '@shared'
+import type { AddSelected } from '@shared'
 
 import { getEntryScene } from '@/util'
 
-
-export default function addSelected(args: { character: OwnedCharacter }): void {
+export const addSelected: AddSelected = (args) => {
     const c = args.character
     const scene = getEntryScene('alice')
 

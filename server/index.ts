@@ -5,7 +5,7 @@ import expsession from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
-import { attachAPIRoutes } from './functions'
+import { attachAPIRoutes } from './attachActions'
 
 
 const port = process.env.PORT ?? 3000
