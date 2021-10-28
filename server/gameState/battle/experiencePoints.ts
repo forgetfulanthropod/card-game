@@ -47,6 +47,7 @@ function getLeveledUpCharacter(
 ): CharacterMeta {
 
     const maxHealth = character.maxHealth + HEALTH_PER_LEVEL
+    const health = Math.min(Math.round(character.health + maxHealth * .05), maxHealth)
 
     return {
         ...character,
@@ -54,7 +55,7 @@ function getLeveledUpCharacter(
         experience: experience % levelThreshold,
         damage: character.damage + DAMAGE_PER_LEVEL,
         maxHealth,
-        health: Math.min(character.health + maxHealth * .05, maxHealth),
+        health,
     }
 }
 
