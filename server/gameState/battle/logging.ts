@@ -7,5 +7,5 @@ export function log(...args: unknown[]): void {
 }
 
 export function warn(...args: unknown[]): void {
-    if (config.log) { console.warn(args) }
+    if (config.log) { logger.warn(args) }
 }

@@ -29,7 +29,7 @@ export const toggleStance: ToggleStance = (args) => {
 
     const characterCursor = scene.select('allCharacters').select(characterUid)
     characterCursor.select('moves').apply(() => {
-        console.log(characterCursor.get())
+        logger.info(characterCursor.get())
         return getCharacterMovesWithDamageRanges(characterCursor.get())
     })
     characterCursor.commit()

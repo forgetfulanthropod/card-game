@@ -9,7 +9,7 @@ import { setGlobalRandomSeed } from './config/seedrand'
 import { attachAPIRoutes } from './attachActions'
 
 if (process.env.FIXED_SEED === 'yes') {
-    console.log('NOTE: USING FIXED SEED')
+    logger.info('NOTE: USING FIXED SEED')
     setGlobalRandomSeed()
 }
 
