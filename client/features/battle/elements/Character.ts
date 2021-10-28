@@ -16,7 +16,7 @@ import { Container, PixiTicker, Sprite } from './mypixi'
 
 const RED = 0xFF0000
 const BLUE = 0x0000FF
-const YELLOW = 0xe4e42d
+const WHITE = 0xFFFFFF
 const SHOW_HIT_TIME = 1000
 const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
@@ -153,7 +153,7 @@ function Character(args: CharacterProps): PixiContainer {
 function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
 
     const blurFilter = new filters.BlurFilter()
-    blurFilter.blur = 10
+    blurFilter.blur = 20
     const grayFilter = new filters.ColorMatrixFilter()
     grayFilter.saturate(-.7, false)
     const redFilter = new filters.ColorMatrixFilter()
@@ -190,7 +190,7 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedId = getBattleScene().select('selectedCharacter')
-    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: YELLOW, name: 'glow', zIndex: 0, visible: selectedId.get() === characterMeta.uid })
+    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: WHITE, zIndex: 0, visible: selectedId.get() === characterMeta.uid })
 
     hasMovedCursor.on('update', () => {
         const newVal = hasMovedCursor.get()

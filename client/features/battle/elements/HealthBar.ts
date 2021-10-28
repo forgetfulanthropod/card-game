@@ -20,7 +20,7 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = battleScene.select('allCharacters').select(characterUid)
     // if (characterCursor.get() == null) return null
 
-    const displayWidth = 140
+    const displayWidth = 200
     const rawWidth = 1841
     const rawHeight = 161
     const widthToHeight = rawHeight / rawWidth
@@ -43,6 +43,7 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
                 src: PixiLoader.shared.resources?.healthBorder?.data,
                 width: displayWidth,
                 height: displayHeight,
+                zIndex: 2,
             }),
         ],
     })
@@ -95,6 +96,7 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
         health = Graphics({ draw: drawHealthBar })
         healthText = Text({
             text,
+            zIndex: 1,
             anchor: [0, 1],
             style: {
                 fontFamily: 'monospace',
@@ -105,6 +107,8 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
         })
 
         mainEl.addChild(health, healthText)
+
+        mainEl.sortChildren()
     }
 
     let stanceEl: PixiSprite
@@ -116,6 +120,8 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
     })
 
     function updateStance() {
+        if (!characterCursor.select('isPc').get()) return
+
         const stance = characterCursor.select('stance').get()
 
         const stanceSrc = stance === 'neutral' ? PixiLoader.shared.resources?.stanceNeutral?.data :
