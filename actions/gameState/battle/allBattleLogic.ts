@@ -1,13 +1,13 @@
-import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData, NetworkEvent } from '@shared'
+import type { AttackData, BattleScene, CharacterMeta, CharacterUid, Gamestate, NetworkAttackData, NetworkEvent, StanceName } from '@shared'
 import { memoize } from 'lodash'
 
 import type { BattleCursor, DataCursor } from '@/util'
 import { getBattleScene, getGameStateCursor, keys, makeServerEventEmitter, onCallWrapper, sleep, vals } from '@/util'
 
-import { getCharacterKeysAndDamages } from './attack'
+import { getCharacterKeysAndDamages, getCharacterMovesWithDamageRanges } from './attack'
 import { putUpDoors } from './doors'
 import { incrementXP } from './experiencePoints'
-import { checkMoveAvailable, checkWinner, getDefenders, getNpcMove, getUnmovedPc } from './misc'
+import { checkMoveAvailable, checkWinner, getCharIds, getDefenders, getNpcMove, getUnmovedPc } from './misc'
 import applyMove from './move'
 import { getTransformed, isSpecial } from './specialMoves'
 
@@ -35,6 +35,36 @@ export const startGame = onCallWrapper(async function startGame(): Promise<void>
     }
     scene.setK('state', 'in battle')
     await resetRound(scene)
+})
+
+export const toggleStance = onCallWrapper(function toggleStance({ characterUid }: { characterUid: CharacterUid }): void {
+    const scene = getBattleScene('alice')
+    const ac = scene.select('allCharacters').get()
+    if (
+        getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||
+        scene.select('isPlayerTurn').get() === false
+    ) return
+
+    const stanceCursor = scene.select('allCharacters').select(characterUid).select('stance')
+
+    const stances: StanceName[] = [
+        'defensive',
+        'neutral',
+        'aggressive',
+    ]
+    const stance = stanceCursor.get()
+    const stanceIndex = stances.findIndex(v => stance === v)
+
+    const nextIndex = (stanceIndex + 1) % stances.length
+
+    stanceCursor.set(stances[nextIndex])
+
+    const characterCursor = scene.select('allCharacters').select(characterUid)
+    characterCursor.select('moves').apply(() => {
+        console.log(characterCursor.get())
+        return getCharacterMovesWithDamageRanges(characterCursor.get())
+    })
+    characterCursor.commit()
 })
 
 export async function resetRound(scene: BattleCursor): Promise<void> {

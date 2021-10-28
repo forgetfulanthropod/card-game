@@ -9,7 +9,7 @@ import attachHello from './funcs/hello'
 import attachIncrementTestCounter from './funcs/incrementTestCounter'
 import attachMakeNewUser from './funcs/makeNewUser'
 import attachSquare from './funcs/square'
-import { dispatch, startGame as attachStartGame } from './gameState/battle'
+import { dispatch, startGame as attachStartGame, toggleStance as attachToggleStance } from './gameState/battle'
 import { onCallWrapper } from './util'
 
 export function attachAPIRoutes(): void {
@@ -25,5 +25,6 @@ export function attachAPIRoutes(): void {
     attachMakeNewUser()
     attachSquare()
     attachStartGame()
+    attachToggleStance()
     onCallWrapper(dispatch)()
 }

@@ -10,7 +10,11 @@ export function getCharacterMovesWithDamageRanges(character: CharacterStats & { 
     return character.moves.map(move => {
 
         const damageRange = getMoveMultiplierRange(move).map(multiplier => {
-            return character.damage * getAttackMultiplier(character) * multiplier
+            const damage = Math.round(
+                character.damage * getAttackMultiplier(character) * multiplier
+            )
+
+            return damage < 1 ? 1 : damage
         })
 
         return {
@@ -61,10 +65,10 @@ function getDamage(ad: AttackData, defender: CharacterMeta): number {
     let attackData = ad
     if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
 
-    const dam = attackData.attacker.damage
+    const dam = Math.round(attackData.attacker.damage
         * getAttackMultiplier(attackData.attacker)
         * getMoveMultiplier(attackData)
-        * getDefenseMultiplier(defender) | 0
+        * getDefenseMultiplier(defender))
 
     return dam > 0 ? dam : 1
 }
@@ -114,12 +118,16 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
             multipliers = [moveMeta.multiplier]
         else if (moveMeta.multipliers != null)
             multipliers = [...moveMeta.multipliers]
+        else if (moveMeta.multiplierRange != null)
+            multipliers = [...moveMeta.multiplierRange]
         else
-            throw Error('movemeta has neither multiplier not multipliers')
+            throw Error('movemeta has neither multiplier nor multipliers nor multiplierRange')
 
+        const compoundedMin = min < Number.POSITIVE_INFINITY ? min : 1
+        const compoundedMax = max > Number.NEGATIVE_INFINITY ? max : 1
         multipliers.forEach(m => {
-            if (m < min) min = m
-            if (m > max) max = m
+            if (compoundedMin * m < min) min = compoundedMin * m
+            if (compoundedMax * m > max) max = compoundedMax * m
         })
     })
 

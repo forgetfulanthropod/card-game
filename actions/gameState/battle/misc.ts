@@ -8,15 +8,19 @@ import { getTransformed, isSpecial } from './specialMoves'
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
-type CharacterFilters = Pick<CharacterMeta, 'health' | 'isPc'>
+type CharacterFilters = Partial<CharacterMeta>
 export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
+    if (filters == null) return []
+
     return ac
         .filter(c => {
+            //@ts-ignore
             return stringKeys(filters).every((filterKey): boolean => {
                 if (typeof filters[filterKey] === 'boolean')
                     return c[filterKey] === filters[filterKey]
                 if (typeof filters[filterKey] === 'number')
-                    return c[filterKey] >= filters[filterKey]
+                    //@ts-ignore
+                    return  c[filterKey] >= filters[filterKey]
                 throw Error('invalid filterKey')
             })
         })

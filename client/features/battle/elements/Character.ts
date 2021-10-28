@@ -14,17 +14,12 @@ import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
 import { Container, PixiTicker, Sprite } from './mypixi'
 
 
-// const config = {
-//     isHealthNumber: false
-// }
-
 const RED = 0xFF0000
 const BLUE = 0x0000FF
 const YELLOW = 0xe4e42d
 const SHOW_HIT_TIME = 1000
 const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
-// const HEALTH_CHANGE_WAIT_TIME = 300
 
 export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
@@ -34,7 +29,6 @@ export function Skeleton(props: KnownCharacterProps): PixiContainer {
 }
 interface KnownCharacterProps {
     onClick: (c: CharacterUid) => void
-    // dispatch: Dispatcher
     move$: Move$
     scale: number
     cursor: MyCursor<CharacterMeta>
@@ -56,7 +50,7 @@ function Character(args: CharacterProps): PixiContainer {
 
     // ---Sprites and containers---
 
-    let healthBar = HealthBar({ value: characterMeta.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: characterMeta.effects })
+    const healthBar = HealthBar(characterMeta.uid)
 
     const sprites = makeSprites(args, characterMeta, onHeight)
     if (sprites == null) {
@@ -103,10 +97,6 @@ function Character(args: CharacterProps): PixiContainer {
 
         if (char.health <= 0) {
             flyingContainer.removeChildren()
-        } else {
-            mainContainer.removeChild(healthBar)
-            healthBar = HealthBar({ value: char.health, max: characterMeta.maxHealth, stance: characterMeta.stance, effects: char.effects })
-            mainContainer.addChild(healthBar)
         }
     }
 
