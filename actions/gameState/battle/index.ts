@@ -12,11 +12,3 @@ export * from './specialMoves'
 export * from './startGame'
 export * from './state'
 // @endindex
-
-// export * from './startGame'
-// export * from './dispatch'
-// export * from './doors'
-// export * from './state'
-// export * from './resetRound'
-// export * from './handleMove'
-// export * from './doNpcMove'
