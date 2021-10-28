@@ -21,7 +21,7 @@ export default function MoveMenu(): JSX.Element {
 
     selectedMove.on('update', () => {
         // tl('selected move change');
-        // @ts-ignore
+        // @ts-expect-error
         const elapsed = Date.now() - window.startTime
         console.log(`round trip move change took ${elapsed / 1000} seconds`)
         const x = selectedMove.get()
@@ -59,7 +59,6 @@ export default function MoveMenu(): JSX.Element {
             {mvs.map(m => <MoveButton
                 key={m.types[0]}
                 onClick={async () => {
-                    // @ts-ignore
                     // window.startTime = Date.now()
                     await dispatch({ a: 'setSelectedMove', m: m })
                 }}

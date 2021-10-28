@@ -12,7 +12,7 @@ const state = {
 
 export async function waitForGameStateToFill(): Promise<void> {
     state.gamestate = new MyBaobab(await listenForInitialGameState())
-    // @ts-ignore for debugging:
+    // @ts-expect-error for debugging:
     window.tree = state.gamestate
 }
 

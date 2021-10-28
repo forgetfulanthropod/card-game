@@ -90,7 +90,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
     if (config.logChanges) log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
-            // @ts-ignore
+            // @ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
@@ -99,13 +99,13 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
             break
         }
         case 'E': { // edited property
-            // @ts-ignore
+            // @ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
         case 'A': { // array change
             const { path, index: index, item } = change
-            // @ts-ignore
+            // @ts-expect-error
             applyChange(item, cursor.select([...path, index]))
             break
         }

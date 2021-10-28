@@ -43,7 +43,7 @@ export function mountIo(server: Server, prefix: string): void {
     io = new SocketServer(server, { path: prefix + '/socket' })
 
     io.use(function (socket, next) {
-        // @ts-ignore
+        // @ts-expect-error
         sessionMiddleware(socket.request, socket.request.res, next)
     })
 
@@ -52,11 +52,11 @@ export function mountIo(server: Server, prefix: string): void {
         // socket.handshake.headers
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
-        // @ts-ignore
+        // @ts-expect-error
         logger.info('session at socket.io connection:\n', socket.request.session)
-        // @ts-ignore
+        // @ts-expect-error
         socket.request.session.socketio = socket.id
-        // @ts-ignore
+        // @ts-expect-error
         socket.request.session.save()
     })
 
