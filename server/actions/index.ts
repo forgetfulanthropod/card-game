@@ -1,0 +1,16 @@
+// @index('./**/*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
+export { addSelected } from './addSelected'
+export { changeDungeon } from './changeDungeon'
+export { changeScene } from './changeScene'
+export { chooseDoor } from './chooseDoor'
+export { dispatch } from './dispatch'
+export { doCharacterAction } from './doCharacterAction'
+export { echo } from './echo'
+export { exitDungeon } from './exitDungeon'
+export { hello } from './hello'
+export { incrementTestCounter } from './incrementTestCounter'
+export { makeNewUser } from './makeNewUser'
+export { square } from './square'
+export { startGame } from './startGame'
+export { toggleStance } from './toggleStance'
+// @endindex
