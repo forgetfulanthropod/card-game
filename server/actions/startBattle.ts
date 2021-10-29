@@ -8,8 +8,8 @@ export const DEFAULT_WAIT = 1000
 export const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 export const DEBUG = false
 
-import type { StartGame } from '@shared'
-export const startGame: StartGame = async (_args) => {
+import type { StartBattle } from '@shared'
+export const startBattle: StartBattle = async (_args) => {
     const scene = getBattleScene('alice')
     if (scene.getK('state') === 'in battle') {
         // already in game

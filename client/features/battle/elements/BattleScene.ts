@@ -2,7 +2,7 @@ import type { CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@sha
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
-import { doCharacterAction, startGame } from '@/actions'
+import { doCharacterAction, startBattle } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, overlay } from '@/elementsUtil'
@@ -26,7 +26,7 @@ export function BattleScene(): PixiContainer {
 
     const container = Container({ children: [] })
 
-    setTimeout(startGame, 100)
+    setTimeout(startBattle, 100)
 
     const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())

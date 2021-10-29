@@ -4,7 +4,7 @@ import { memoize } from 'lodash'
 import type { BattleCursor, DataCursor } from '@/util'
 import { getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
 
-import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startGame'
+import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startBattle'
 import { getCharacterKeysAndDamages } from './attack'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
