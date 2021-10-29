@@ -3,7 +3,7 @@
     "scripts": {
         "server-watch": "nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "server": "node --enable-source-maps ../server-build/index.js",
-        "build": "node ../scripts/server-esbuild.js",
+        "build": "node ../scripts/serverEsbuild.mjs",
         "watch": "npm run build -- watch",
         "tsc": "tsc",
         "tsc-watch": "tsc-watch",
@@ -12,10 +12,8 @@
         "parcel-debug": "parcel build --no-optimize --no-scope-hoist --no-content-hash"
     },
     "dependencies": {
-        "amd-loader": "^0.0.8",
         "baobab": "^2.6.1",
         "deep-diff": "^1.0.2",
-        "eventemitter3": "^4.0.7",
         "express": "^4.17.1",
         "express-session": "^1.17.2",
         "lodash": "^4.17.21",

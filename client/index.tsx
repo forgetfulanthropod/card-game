@@ -13,8 +13,8 @@ import { waitForGameStateToFill } from './data/rootTree'
 
 console.log(`loaded at ${(new Date()).toLocaleTimeString()}`)
 console.log('client build info:', {
-    gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
-    gitCommit: process.env.CLIENT_GIT_COMMIT ?? '',
+    currentBranch: process.env.CLIENT_GIT_BRANCH ?? '',
+    lastCommit: process.env.CLIENT_GIT_COMMIT ?? '',
     buildTime: process.env.CLIENT_BUILD_TIME ?? '',
 })
 

@@ -2,7 +2,7 @@ import { build as esbuild } from 'esbuild'
 import { rmSync, mkdirSync, cpSync } from 'fs'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
-import { makeBuildInfo } from './makeBuildInfo.js'
+import { makeBuildInfo } from './makeBuildInfo.mjs'
 
 const buildDir = 'build'
 const publicDir = 'public'
@@ -14,7 +14,7 @@ console.log('substitutions:', makeSubstitutions())
 
 function makeSubstitutions() {
     return {
-        ...makeBuildInfo(true),
+        ...makeBuildInfo('CLIENT_'),
         'global': 'window',
     }
 }

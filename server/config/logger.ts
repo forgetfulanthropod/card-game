@@ -11,8 +11,8 @@ declare global {
 }
 global.logger = winston.createLogger({
     format: winston.format.combine(
-
         winston.format.colorize(),
+        winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.json(),
         winston.format.printf(info => `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`)

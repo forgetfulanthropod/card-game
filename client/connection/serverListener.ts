@@ -10,8 +10,8 @@ function log(...args: unknown[]) {
     if (shouldLog) console.log(...args)
 }
 
-// TODO: test
-const socket = io({ path: 'socket' })
+const urlPrefix = window.location.href.split('/')[3]
+const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
         log('got the hey')

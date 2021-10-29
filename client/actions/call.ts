@@ -10,8 +10,6 @@ const config = {
     method: 'post' as 'get' | 'post',
     shouldSaveCalls: true,
 }
-console.log('call.ts config:', config)
-
 
 export function callWrap<F extends Func>(name: string): Caller<F> {
     const randId = Math.random().toString().slice(2, 6)

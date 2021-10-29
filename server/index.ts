@@ -1,4 +1,4 @@
-import 'config/logger'
+import './config/logger'
 
 import express from 'express'
 import expsession from 'express-session'
@@ -10,8 +10,13 @@ import { attachAPIRoutes } from './attachActions'
 
 const port = process.env.PORT ?? 3000
 
-const buildInfo = { port, gitBranch: process.env.GIT_BRANCH ?? '', gitCommit: process.env.GIT_COMMIT ?? '', buildTime: process.env.BUILD_TIME ?? '' }
-logger.info(`server started with ${buildInfo}`)
+const buildInfo = {
+    port,
+    gitBranch: process.env.SERVER_GIT_BRANCH ?? '',
+    gitCommit: process.env.SERVER_GIT_COMMIT ?? '',
+    buildTime: process.env.SERVER_BUILD_TIME ?? '',
+}
+logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 
 const app = express()
 

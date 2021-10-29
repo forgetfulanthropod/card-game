@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "build": "node scripts/esbuild.js",
-        "start": "node scripts/esbuild.js watch",
+        "build": "node scripts/esbuild.mjs",
+        "start": "npm run build -- watch",
         "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "lint": "eslint .",
         "fmt": "eslint . --fix",
@@ -14,16 +14,15 @@
         "build-storybook": "build-storybook",
         "fullstart": "bash scripts/fullstart.sh",
         "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^",
-        "newtodo": "git diff origin/main -G TODO"
+        "newtodo": "git diff origin/main -G TODO",
+        "install-build-all": "npm i --production && npm run build && cd server && npm i --production && npm run build"
     },
     "dependencies": {
         "baobab": "^2.6.1",
         "deep-diff": "^1.0.2",
-        "dotenv": "^10.0.0",
         "esbuild": "^0.13.4",
         "esbuild-css-modules-plugin": "^2.0.9",
         "esbuild-plugin-alias": "^0.2.0",
-        "eventemitter3": "^4.0.7",
         "lodash": "^4.17.21",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.1.3",

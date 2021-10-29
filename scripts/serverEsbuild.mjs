@@ -1,16 +1,20 @@
-import { build as _build } from 'esbuild'
-import { makeBuildInfo } from './makeBuildInfo.js'
+import { build as esbuild } from 'esbuild'
+import { makeBuildInfo } from './makeBuildInfo.mjs'
 const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
-
-const envObj = makeBuildInfo()
+console.log({ shouldWatch })
+const envObj = makeBuildInfo('SERVER_')
 console.log("build environment:", envObj)
+
+const parentDir = process.env.PWD.split('/').at(-1)
+if (parentDir !== 'server')
+    throw Error("must be run from directory 'server'")
 
 build()
 
 function build() {
-    _build({
-        // --bundle --platform=node --keep-names --outfile=../server-build/index.js --sourcemap --allow-overwrite  --tsconfig=tsconfig.json
+    esbuild({
+        entryPoints: ['index.ts'],
         bundle: true,
         platform: 'node',
         keepNames: true,
@@ -18,10 +22,13 @@ function build() {
         sourcemap: true,
         allowOverwrite: true,
         tsconfig: './tsconfig.json',
-        define: makeBuildInfo(),
+        define: makeBuildInfo('SERVER_'),
         watch: shouldWatch && {
-            onRebuild(_error, result) {
+            onRebuild(error, result) {
+                if (error) { console.error('rebuild error:', error) }
+                console.log('rebuilt. stopping old build.')
                 result.stop()
+                console.log('running another build.')
                 build()
             }
         },
