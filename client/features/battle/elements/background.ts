@@ -1,5 +1,5 @@
-import type { PixiContainer, PixiSprite } from './mypixi'
-import { Container, PngLayersBackground, VideoBackground } from './mypixi'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil/mypixi'
+import { Container, PngLayersBackground, VideoBackground } from '@/elementsUtil/mypixi'
 
 const config = {
     enableBackground: true,

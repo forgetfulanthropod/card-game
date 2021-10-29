@@ -1,8 +1,7 @@
 import { changeDungeon } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
-
-import type { PixiContainer } from './mypixi'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from './mypixi'
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil/mypixi'
 
 
 export function LevelInfo(): PixiContainer {

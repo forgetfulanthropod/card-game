@@ -1,8 +1,7 @@
 import PlainButton from '@/elements/PlainButton'
-import { dataOf } from '@/util/pixiUtils'
-
-import type { PixiContainer } from './mypixi'
-import { Container, getAppSize, Sprite, Text } from './mypixi'
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { Container, getAppSize, Sprite, Text } from '@/elementsUtil/mypixi'
+import { dataOf } from '@/elementsUtil/pixiUtils'
 
 
 const doorWidth = 330

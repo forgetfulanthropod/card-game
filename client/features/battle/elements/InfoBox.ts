@@ -1,5 +1,5 @@
-import type { PixiContainer } from './mypixi'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from './mypixi'
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil/mypixi'
 
 export default function InfoBox(args: { info: string[] }): PixiContainer {
 

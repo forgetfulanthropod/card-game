@@ -1,7 +1,7 @@
 import type { CharacterMove } from '@shared'
 
-import type { PixiText } from './mypixi'
-import { Text } from './mypixi'
+import type { PixiText } from '@/elementsUtil/mypixi'
+import { Text } from '@/elementsUtil/mypixi'
 
 
 export default function (args: {

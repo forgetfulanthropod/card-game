@@ -4,7 +4,10 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import { keyMap, keys, tl, vals } from '@/util'
+import { overlay } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { Container } from '@/elementsUtil/mypixi'
+import { keyMap, keys, vals } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
@@ -12,8 +15,6 @@ import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
 import { Frogknight, Skeleton } from './Character'
 import InfoBox from './InfoBox'
-import type { PixiContainer } from './mypixi'
-import { Container } from './mypixi'
 
 
 export type Move$ = NetworkEventEmitter<'move', NetworkAttackData>
@@ -33,7 +34,9 @@ export function BattleScene(): PixiContainer {
     allCharsCursor.on('update', function checkIfKeysChanged() {
         const allChars = allCharsCursor.get()
         if (vals(allChars).filter(c => c.health > 0).every(cm => !cm.hasMoved)) {
-            tl(scene.get('isPlayerTurn') ? 'player starts round' : 'NPC starts round')
+            // tl()
+            const message = scene.get('isPlayerTurn') ? 'You start round!' : 'Enemy starts round!'
+            overlay({ elementId: 'roundStart', data: { message } })
         }
         if (allChars == null) {
             container.destroy()

@@ -1,8 +1,8 @@
-import { dataOf } from '@/util/pixiUtils';
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { Container, Sprite } from '@/elementsUtil/mypixi'
+import { dataOf } from '@/elementsUtil/pixiUtils'
 
-import type { PixiContainer } from './mypixi';
-import { Container, Sprite } from './mypixi';
-import { OwnedCharacters } from './OwnedCharacters';
+import { OwnedCharacters } from './OwnedCharacters'
 
 
 export function GameMenuItem(noun: 'characters' | 'items' | 'materials', index: number): PixiContainer {

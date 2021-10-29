@@ -1,9 +1,10 @@
+import type { PixiContainer } from '@/elementsUtil/mypixi'
+import { Container } from '@/elementsUtil/mypixi'
+
 import DungeonEntryPng from '../assets/backgrounds/temple_background.png'
 import background from './background'
 import { GameMenu } from './GameMenu'
 import { LevelInfo } from './LevelInfo'
-import type { PixiContainer } from './mypixi'
-import { Container } from './mypixi'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
 
