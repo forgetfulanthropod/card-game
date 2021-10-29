@@ -11,15 +11,15 @@ declare global {
 }
 global.logger = winston.createLogger({
     format: winston.format.combine(
-
         winston.format.colorize(),
+        winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.json(),
         winston.format.printf(info => `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`)
     ),
     transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: __dirname + '/../actions.log' }),
+        new winston.transports.File({ filename: __dirname + '/../server.log' }),
     ],
 })
 

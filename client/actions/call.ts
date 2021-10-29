@@ -6,12 +6,10 @@ import { entryMap } from '@/util'
 
 
 const config = {
-    shouldLog: process.env.CLIENT_LOG_API_REQUESTS === 'yes',
+    shouldLog: false,
     method: 'post' as 'get' | 'post',
     shouldSaveCalls: true,
 }
-console.log('call.ts config:', config)
-
 
 export function callWrap<F extends Func>(name: string): Caller<F> {
     const randId = Math.random().toString().slice(2, 6)
