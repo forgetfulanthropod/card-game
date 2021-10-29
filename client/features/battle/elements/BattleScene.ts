@@ -4,9 +4,8 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction, startGame } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
-import { overlay } from '@/elementsUtil'
-import type { PixiContainer } from '@/elementsUtil/mypixi'
-import { Container } from '@/elementsUtil/mypixi'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container, overlay } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
 import { makeClientEventListener } from '@/util/makeClientEventListener'
 

@@ -2,9 +2,8 @@ import type { CharacterMeta, CharacterUid, MyCursor, NetworkAttackData, NetworkE
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil/mypixi'
-import { Container, PixiTicker, Sprite } from '@/elementsUtil/mypixi'
-import { doFlashElement, flashElement, hideElement } from '@/elementsUtil/pixiUtils'
+import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
+import { Container, doFlashElement, flashElement, hideElement, PixiTicker, Sprite } from '@/elementsUtil'
 
 import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'

@@ -1,6 +1,6 @@
 
-import type { PixiApplication, PixiContainer } from '@/elementsUtil/mypixi'
-import { Application } from '@/elementsUtil/mypixi'
+import type { PixiApplication, PixiContainer } from '@/elementsUtil'
+import { Application } from '@/elementsUtil'
 
 import { bindGamestate } from '../logic/bindGamestate'
 

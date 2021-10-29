@@ -1,4 +1,4 @@
-// @index(['./*.ts', './actions/index.ts','!./baobabEventEmitter.ts'], f => `export * from '${f.path}'`)
+// @index(['./*.ts'], f => `export * from '${f.path}'`)
 export * from './mypixi'
 export * from './overlay'
 export * from './pixiInspector'

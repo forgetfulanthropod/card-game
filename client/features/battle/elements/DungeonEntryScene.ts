@@ -1,5 +1,5 @@
-import type { PixiContainer } from '@/elementsUtil/mypixi'
-import { Container } from '@/elementsUtil/mypixi'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
 
 import DungeonEntryPng from '../assets/backgrounds/temple_background.png'
 import background from './background'

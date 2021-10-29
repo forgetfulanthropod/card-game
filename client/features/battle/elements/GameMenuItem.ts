@@ -1,6 +1,5 @@
-import type { PixiContainer } from '@/elementsUtil/mypixi'
-import { Container, Sprite } from '@/elementsUtil/mypixi'
-import { dataOf } from '@/elementsUtil/pixiUtils'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container, dataOf, Sprite } from '@/elementsUtil'
 
 import { OwnedCharacters } from './OwnedCharacters'
 

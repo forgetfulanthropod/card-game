@@ -1,7 +1,6 @@
 import { getEntryScene } from '@/data/rootTree'
-import type { PixiContainer } from '@/elementsUtil/mypixi'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil/mypixi'
-import { dataOf } from '@/elementsUtil/pixiUtils'
+import type { PixiContainer } from '@/elementsUtil'
+import { BASE_HEIGHT, BASE_WIDTH, Container, dataOf, Sprite } from '@/elementsUtil'
 
 
 export function SelectedCharacters(): PixiContainer {

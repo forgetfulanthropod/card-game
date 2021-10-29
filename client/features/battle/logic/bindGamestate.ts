@@ -1,6 +1,6 @@
 import { chooseDoor, exitDungeon } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
-import type { PixiApplication, PixiContainer } from '@/elementsUtil/mypixi'
+import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
@@ -8,7 +8,8 @@ import Chest from '../elements/Chest'
 import Doors from '../elements/Doors'
 import { DungeonEntryScene } from '../elements/DungeonEntryScene'
 
-export function bindGamestate(app: PixiApplication) {
+
+export function bindGamestate(app: PixiApplication): void {
     let lastScene: PixiContainer | null = null
 
     document.body.style.cursor = 'pointer'

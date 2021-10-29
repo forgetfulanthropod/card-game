@@ -3,8 +3,8 @@ import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiGraphics, PixiSprite, PixiText } from '@/elementsUtil/mypixi'
-import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil/mypixi'
+import type { PixiContainer, PixiGraphics, PixiSprite, PixiText } from '@/elementsUtil'
+import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
 
 
 type Rect = [

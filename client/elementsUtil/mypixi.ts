@@ -9,7 +9,8 @@ import {
     Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource,
 } from 'pixi.js'
 
-import { registerPixiInspector } from '@/elementsUtil/pixiInspector'
+import { registerPixiInspector } from '@/elementsUtil'
+
 
 // export { PixiLoader }
 // TODO: export the types instead of constructors
