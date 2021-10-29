@@ -2,6 +2,8 @@ if [ -z "$1" ]; then
     echo Filename required. Changes not saved.
     exit 1
 fi
+if git diff --cached --quiet && { echo "There are no staged changes!" && exit 1 }
+
 mkdir patches
 filename=./patches/$1.patch
 git diff --patch --staged > $filename

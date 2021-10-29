@@ -136,7 +136,7 @@ export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: C
 
 
 function randomEl<T>(arr: readonly T[]): T {
-    return arr[Math.random() * arr.length | 0]
+    return arr[srandom() * arr.length | 0]
 }
 
 
@@ -153,9 +153,9 @@ export function weightedRandom(probabilites: number[]): number {
         runningTotals[i] = runningTotal
     }
     const total = runningTotal
-    const x = Math.random() * total
+    const x = srandom() * total
     const index = runningTotals.findIndex(t => t > x)
     if (index !== -1) return index
     // hits e.g. when all probabilities are 0
-    return Math.random() * probabilites.length | 0
+    return srandom() * probabilites.length | 0
 }

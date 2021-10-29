@@ -9,7 +9,7 @@ export const dispatch: Dispatch = action => {
     // logger.info({ scene, action, data: scene.get() })
     // logger.info(`>>>>dispatching ${JSON.stringify(action)}`)
 
-    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', action)
+    logger.info('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', action)
     const scene = getBattleScene('alice')
     switch (action.a) {
         case 'setSelectedMove': {

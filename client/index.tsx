@@ -1,6 +1,7 @@
 import './global.css'
+import './util/windowUtils'
 
-import { h, JSX, render } from 'preact' // eslint-disable-line
+import { h, render } from 'preact' // eslint-disable-line
 
 import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'

@@ -6,7 +6,12 @@ import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
+import { setGlobalRandomSeed } from './config/seedrand'
 
+if (process.env.FIXED_SEED === 'yes') {
+    logger.info('NOTE: USING FIXED SEED')
+    setGlobalRandomSeed()
+}
 
 const port = process.env.PORT ?? 3000
 
