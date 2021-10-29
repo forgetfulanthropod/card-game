@@ -10,6 +10,9 @@ import { attachAPIRoutes } from './attachActions'
 
 const port = process.env.PORT ?? 3000
 
+const buildInfo = { port, gitBranch: process.env.GIT_BRANCH ?? '', gitCommit: process.env.GIT_COMMIT ?? '', buildTime: process.env.BUILD_TIME ?? '' }
+logger.info(`server started with ${buildInfo}`)
+
 const app = express()
 
 app.use(express.json())
@@ -63,7 +66,7 @@ export function mountIo(server: Server, prefix: string): void {
 
     io.on('connection', function (socket) {
         logger.info('A user connected')
-        setTimeout(() => { socket.emit('hey', 'data') }, 1000)
+        setTimeout(() => { socket.emit('hey', { serverBuildInfo: buildInfo }) }, 1000)
 
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {

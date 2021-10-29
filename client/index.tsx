@@ -11,7 +11,12 @@ import { attachServerListener, waitForHandshake } from './connection'
 import { waitForGameStateToFill } from './data/rootTree'
 
 
-console.log(`app built at ${process.env.buildTime} and loaded at ${(new Date()).toLocaleTimeString()}`)
+console.log(`loaded at ${(new Date()).toLocaleTimeString()}`)
+console.log('client build info:', {
+    gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
+    gitCommit: process.env.CLIENT_GIT_COMMIT ?? '',
+    buildTime: process.env.CLIENT_BUILD_TIME ?? '',
+})
 
 const config = {
     log: false,

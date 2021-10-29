@@ -1,7 +1,7 @@
 {
     "scripts": {
-        "build": "bash scripts/build.sh",
-        "start": "bash scripts/start.sh",
+        "build": "node scripts/esbuild.js",
+        "start": "node scripts/esbuild.js watch",
         "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "lint": "eslint .",
         "fmt": "eslint . --fix",

@@ -3,8 +3,8 @@
     "scripts": {
         "server-watch": "nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "server": "node --enable-source-maps ../server-build/index.js",
-        "build": "esbuild index.ts --bundle --platform=node --keep-names --outfile=../server-build/index.js --sourcemap --allow-overwrite  --tsconfig=tsconfig.json",
-        "watch": "npm run build -- --watch",
+        "build": "node ../scripts/server-esbuild.js",
+        "watch": "npm run build -- watch",
         "tsc": "tsc",
         "tsc-watch": "tsc-watch",
         "parcel": " npm run clear && parcel build",

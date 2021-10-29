@@ -6,7 +6,7 @@ import { entryMap } from '@/util'
 
 
 const config = {
-    shouldLog: process.env.CLIENT_LOG_API_REQUESTS === 'yes',
+    shouldLog: false,
     method: 'post' as 'get' | 'post',
     shouldSaveCalls: true,
 }

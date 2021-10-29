@@ -10,15 +10,18 @@ function log(...args: unknown[]) {
     if (shouldLog) console.log(...args)
 }
 
-const subdir = process.env.CLIENT_SUBDIR
-const socketPath = subdir && subdir.length > 0 ? `/${subdir}` : ''
-const socket = io({ path: `${socketPath}/socket` })
+// TODO: test
+const socket = io({ path: 'socket' })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
         log('got the hey')
-        socket.once('hey', () => resolve())
+        socket.once('hey', (data) => {
+            console.log(`'hey' data from server: ${JSON.stringify(data)}`)
+            resolve()
+        })
     })
 }
+
 
 export function getSocket(): typeof socket {
     return socket
