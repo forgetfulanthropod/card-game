@@ -60,9 +60,3 @@ export const getClientTree: () => MyBaobab<ClientTree> = memoize(() => {
 
 // @ts-ignore
 window.clientTree = getClientTree()
-
-// @ts-ignore
-window.copyHistory = async () => {
-    await navigator.clipboard.writeText(JSON.stringify(getClientTree().get().serverCalls))
-    console.log('copied!')
-}
