@@ -94,7 +94,7 @@ function getMoveMultiplier(d: AttackData): number {
             typeMultiplier = typeMeta.multiplier
         } else if (typeMeta.multiplierRange != null) {
             const r = typeMeta.multiplierRange
-            typeMultiplier = r[0] + Math.random() * Math.abs(r[1] - r[0])
+            typeMultiplier = r[0] + srandom() * Math.abs(r[1] - r[0])
         } else {
             logger.info('><><><><><><><><>< UNIMPLEMENTED! ><><><><><><><><><')
             typeMultiplier = 1

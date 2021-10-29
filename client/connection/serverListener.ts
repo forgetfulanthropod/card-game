@@ -5,9 +5,13 @@ import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
 
+const config = {
+    enableExpensiveUpdateValidation: false,
+    shouldLog: false,
+}
+
 function log(...args: unknown[]) {
-    const shouldLog = false
-    if (shouldLog) console.log(...args)
+    if (config.shouldLog) console.log(...args)
 }
 
 const urlPrefix = window.location.href.split('/')[3]
@@ -27,11 +31,6 @@ export function getSocket(): typeof socket {
     return socket
 }
 
-
-const config = {
-    enableExpensiveUpdateValidation: true,
-    logChanges: true,
-}
 
 export async function listenForInitialGameState(): Promise<Gamestate> {
     log('hoping for gamestate')
@@ -90,7 +89,7 @@ function updateBoabab(fromServer: unknown): void {
 }
 
 function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
-    if (config.logChanges) log('applying tree change:', change, 'at:', cursor.toString())
+    log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
             // @ts-expect-error

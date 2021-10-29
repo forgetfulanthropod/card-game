@@ -13,7 +13,7 @@ export const startGame: StartGame = async (args) => {
     const scene = getBattleScene('alice')
     if (scene.getK('state') === 'in battle') {
         // already in game
-        console.warn('already started game')
+        logger.warn('already started game')
         return
     }
     scene.setK('state', 'in battle')

@@ -13,7 +13,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     keys(cursor.get())
         .map((k) => cursor.select(k).setK('hasMoved', false))
 
-    const playerStartsRound = Math.random() < 0.5
+    const playerStartsRound = srandom() < 0.5
     scene.setK('isPlayerTurn', playerStartsRound)
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {

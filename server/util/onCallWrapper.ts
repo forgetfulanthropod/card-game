@@ -6,7 +6,7 @@ const config = {
     method: 'post' as 'post' | 'get',
 }
 
-function makeRandId() { return Math.random().toString().slice(2, 6) }
+function makeRandId() { return srandom().toString().slice(2, 6) }
 
 export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): void {
     logger.info(`attaching route  ${JSON.stringify(f.name)}`)

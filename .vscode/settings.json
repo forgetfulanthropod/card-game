@@ -73,4 +73,14 @@
     "javascript.format.semicolons": "remove",
     "typescript.format.semicolons": "remove",
     "editor.formatOnSave": true,
+    "searchEverywhere.exclude": [
+        "**/.git",
+        "**/.DS_Store",
+        "**/package-lock.json",
+        "**/node_modules/**",
+        "**/.vscode/**",
+        "**/pnpm-lock.yaml"
+    ],
+    "searchEverywhere.include": "**/*.{ts,tsx,mjs}",
+    "searchEverywhere.shouldUseDebounce": false,
 }
