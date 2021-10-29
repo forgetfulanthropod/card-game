@@ -2,7 +2,8 @@ import type { CharacterMeta, CharacterUid, MyCursor, NetworkAttackData, NetworkE
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'
-import { doFlashElement, flashElement, hideElement } from '@/util/pixiUtils'
+import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
+import { Container, doFlashElement, flashElement, hideElement, PixiTicker, Sprite } from '@/elementsUtil'
 
 import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
@@ -10,8 +11,6 @@ import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
-import type { PixiContainer, PixiSprite, PixiTexture } from './mypixi'
-import { Container, PixiTicker, Sprite } from './mypixi'
 
 
 const RED = 0xFF0000

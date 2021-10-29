@@ -1,6 +1,5 @@
-import type { PixiContainer} from './mypixi';
-import { Container } from './mypixi'
-import { Text } from './mypixi'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container, Text } from '@/elementsUtil'
 
 export default function HitInfo(args: { level: number }): PixiContainer {
     return Container({

@@ -1,4 +1,4 @@
-import { h, JSX, Fragment } from 'preact' // eslint-disable-line
+import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 
 import { dispatch } from '@/actions'

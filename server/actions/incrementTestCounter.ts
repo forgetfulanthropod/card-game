@@ -1,8 +1,8 @@
 
-import { getRootCursor } from '@/util'
-
 import type { IncrementTestCounter } from '@shared'
-export const incrementTestCounter: IncrementTestCounter = (args) => {
+
+import { getRootCursor } from '@/util'
+export const incrementTestCounter: IncrementTestCounter = (_args) => {
     const doc = getRootCursor().select('testCounters').select('counter0')
     doc.apply(x => x + 1)
     doc.commit('counterChange', true)

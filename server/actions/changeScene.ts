@@ -1,11 +1,9 @@
-import type { SceneName } from '@shared'
+
+import type { ChangeScene } from '@shared'
 
 import { makeBattleState } from '@/gameState/battle'
 import { rulebook } from '@/rulebook/index'
 import { getEntryScene, getGameStateCursor } from '@/util'
-
-
-import type { ChangeScene } from '@shared'
 export const changeScene: ChangeScene = (args) => {
     logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')

@@ -1,11 +1,9 @@
 
 
-import { handleSpecialDoor, resetRound } from '@/gameState/battle'
-import type { SpecialDoorName } from '@/rulebook/battle'
-import { getBattleScene, objFilter } from '@/util'
-
-
 import type { ChooseDoor } from '@shared'
+
+import { handleSpecialDoor, resetRound } from '@/gameState/battle'
+import { getBattleScene, objFilter } from '@/util'
 export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')
 

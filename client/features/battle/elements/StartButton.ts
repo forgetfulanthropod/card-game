@@ -1,8 +1,6 @@
 import { changeScene } from '@/actions'
-import { dataOf } from '@/util/pixiUtils'
-
-import type { PixiContainer } from './mypixi'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite, Text } from './mypixi'
+import type { PixiContainer } from '@/elementsUtil'
+import { BASE_HEIGHT, BASE_WIDTH, Container, dataOf, Sprite, Text } from '@/elementsUtil'
 
 
 export function StartButton(): PixiContainer {

@@ -5,6 +5,7 @@ import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
 
+
 const config = {
     enableExpensiveUpdateValidation: false,
     shouldLog: false,

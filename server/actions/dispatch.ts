@@ -1,4 +1,4 @@
-import type { Action, Dispatch } from '@shared'
+import type { Dispatch } from '@shared'
 
 import { getBattleScene, keys } from '@/util'
 

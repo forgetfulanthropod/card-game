@@ -1,10 +1,8 @@
-import type { CharacterUid, StanceName } from '@shared'
+import type { StanceName } from '@shared'
+import type { ToggleStance } from '@shared'
 
 import { getCharacterMovesWithDamageRanges, getCharIds } from '@/gameState/battle'
 import { getBattleScene, vals } from '@/util'
-
-
-import type { ToggleStance } from '@shared'
 export const toggleStance: ToggleStance = (args) => {
     const { characterUid } = args
     const scene = getBattleScene('alice')

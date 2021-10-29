@@ -1,7 +1,5 @@
-import { dataOf } from '@/util/pixiUtils'
-
-import type { PixiContainer, PixiSprite } from './mypixi'
-import { Container, PixiTexture, Sprite } from './mypixi'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { Container, dataOf, PixiTexture, Sprite } from '@/elementsUtil'
 
 
 const rotationRate = 1.0

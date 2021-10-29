@@ -1,7 +1,7 @@
+import type { ChangeDungeon } from '@shared'
+
 import { rulebook } from '@/rulebook'
 import { getEntryScene } from '@/util'
-
-import type { ChangeDungeon } from '@shared'
 export const changeDungeon: ChangeDungeon = (args) => {
     const levels = rulebook.dungeonLevels
     const scene = getEntryScene('alice')

@@ -1,6 +1,6 @@
 import type { DisplayObject } from 'pixi.js'
 
-import type { PixiContainer } from '@/features/battle/elements/mypixi'
+import type { PixiContainer } from '@/elementsUtil'
 
 
 /** Easier thing for adding and removing sprites maybe. Untested. Not sure if useful. */

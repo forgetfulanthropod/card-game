@@ -1,7 +1,9 @@
 
+import type { PixiContainer } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
+
 import { GameMenuItem } from './GameMenuItem'
-import type { PixiContainer } from './mypixi'
-import { Container } from './mypixi'
+
 
 const BASE_HEIGHT = 1080
 

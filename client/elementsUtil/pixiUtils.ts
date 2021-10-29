@@ -1,8 +1,8 @@
 import type { Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
-import type { PixiContainer, PixiSprite, PixiTexture } from '@/features/battle/elements/mypixi'
-import { PixiLoader } from '@/features/battle/elements/mypixi'
+import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
+import { PixiLoader } from '@/elementsUtil'
 import type { AssetKey } from '@/features/battle/logic/AssetLoader'
 
 

@@ -1,11 +1,9 @@
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container, dataOf, Sprite, Text } from '@/elementsUtil'
 import { vals } from '@/util'
-import { dataOf } from '@/util/pixiUtils'
-
-import type { PixiContainer } from './mypixi'
-import { Container, Sprite, Text } from './mypixi'
 
 
 export function OwnedCharacters(): PixiContainer {

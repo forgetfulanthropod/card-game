@@ -1,7 +1,8 @@
+import type { ExitDungeon } from '@shared'
+
 import { initialEntryState } from '@/gameState/entry/state'
 import { getGameStateCursor } from '@/util'
-import type { ExitDungeon } from '@shared'
-export const exitDungeon: ExitDungeon = (args) => {
+export const exitDungeon: ExitDungeon = (_args) => {
     const gameState = getGameStateCursor('alice')
     if (gameState.select('scene').getK('name') !== 'battle') {
         throw Error('exitDungeon callede when not in a battle scene')
