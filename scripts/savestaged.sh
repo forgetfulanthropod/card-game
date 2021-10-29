@@ -3,7 +3,7 @@ if [ -z "$1" ]; then
     exit 1
 fi
 mkdir patches
-filename=$patches/$1.patch
+filename=./patches/$1.patch
 git diff --patch --staged > $filename
 git commit -m 'temp'
 git reset --hard HEAD^
