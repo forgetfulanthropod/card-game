@@ -1,19 +1,16 @@
 {
+    "name": "kaiju-client",
     "scripts": {
-        "build": "node scripts/esbuild.mjs",
+        "build": "node scripts/clientEsbuild.mjs",
         "start": "npm run build -- watch",
+        "clean": "rm -rf ./build ./server-build",
         "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "lint": "eslint .",
         "fmt": "eslint . --fix",
         "lint-watch": "echo 'doesnt work great' && esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts",
         "tsc": "tsc",
         "tsc-watch": "tsc --watch --preserveWatchOutput",
-        "serve": "live-server --quiet --port=3000 build/",
-        "oldserve": "npx serve -s build -p 3000",
-        "storybook": "start-storybook -p 6006",
-        "build-storybook": "build-storybook",
-        "fullstart": "bash scripts/fullstart.sh",
-        "savestaged": "git diff --patch --staged > changes-$RANDOM.patch; git commit -m 'temp'; git reset --hard HEAD^",
+        "savestaged": "bash scripts/savestaged.sh",
         "newtodo": "git diff origin/main -G TODO",
         "install-build-all": "npm i --production && npm run build && cd server && npm i --production && npm run build"
     },

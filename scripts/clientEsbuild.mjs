@@ -1,11 +1,11 @@
 import { build as esbuild } from 'esbuild'
-import { rmSync, mkdirSync, cpSync } from 'fs'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
+import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
 const buildDir = 'build'
-const publicDir = 'public'
+const publicDir = 'client/public_'
 
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
