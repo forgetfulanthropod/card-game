@@ -5,7 +5,7 @@ import { tl, warn } from './logging'
 import { checkWinner, getLivingChars, getNpcMove } from './misc'
 
 
-export async function doNpcMove(_reason?: string) {
+export async function doNpcMove(_reason?: string): Promise<void> {
     const scene = getBattleScene('alice')
     tl(`npcMove(reason: ${_reason})`)
     const { allCharacters, isPlayerTurn } = scene.get()

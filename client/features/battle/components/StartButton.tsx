@@ -1,5 +1,5 @@
 import type { JSX } from 'preact'
-//@ts-ignore
+//@ts-expect-error
 import styled from 'styled-components'
 
 import { changeScene } from '@/actions'

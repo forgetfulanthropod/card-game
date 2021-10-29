@@ -165,7 +165,7 @@ export function Application(args: {
     for (const c of args.children) {
         app.stage.addChild(c)
     }
-    // @ts-ignore
+    // @ts-expect-error
     window.app = app
     registerPixiInspector()
     return app

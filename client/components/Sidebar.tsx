@@ -2,9 +2,9 @@ import type { Gamestate, MyCursor } from '@shared'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 import JSONInput from 'react-json-editor-ajrm'
-// @ts-ignore
+// @ts-expect-error
 import locale from 'react-json-editor-ajrm/locale/en'
-// @ts-ignore
+// @ts-expect-error
 import styled from 'styled-components'
 
 import { getClientTree, getTree } from '@/data/rootTree'

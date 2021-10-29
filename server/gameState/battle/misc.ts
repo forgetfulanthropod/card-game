@@ -22,12 +22,12 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
 
     return ac
         .filter(c => {
-            //@ts-ignore
+            //@ts-expect-error
             return stringKeys(filters).every((filterKey): boolean => {
                 if (typeof filters[filterKey] === 'boolean')
                     return c[filterKey] === filters[filterKey]
                 if (typeof filters[filterKey] === 'number')
-                    //@ts-ignore
+                    //@ts-expect-error
                     return c[filterKey] >= filters[filterKey]
                 throw Error('invalid filterKey')
             })

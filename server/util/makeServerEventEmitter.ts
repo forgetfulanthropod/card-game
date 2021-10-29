@@ -17,7 +17,7 @@ export function makeServerEventEmitter<Name extends string, Data>(name: Name, cu
             }
             if (config.log) { logger.info(`sending new ${name} event:`, event) }
             cursor.apply(events => [...events, event])
-            // @ts-ignore
+            // @ts-expect-error
             cursor.commit()
         },
     }

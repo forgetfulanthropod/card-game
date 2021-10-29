@@ -12,7 +12,7 @@ export function deepFreeze<T extends object>(obj: T): Immutable<T> {
     // Freeze properties before freezing self
 
     for (const name of propNames) {
-        // @ts-ignore
+        // @ts-expect-error
         const value = obj[name]
 
         if (value && typeof value === 'object') {

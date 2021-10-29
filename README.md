@@ -15,7 +15,6 @@ kaiju
 - `.gitattributes`: just has a snippet for ignoring lines
 - `.ignorecommits.json`: set of commits to ignore for deep blaming
 - `README.md`: this file
-- `example.env`: example `.env` file. `.env` has build settings for the client, used by scripts/esbuild.js.
 - `package.json`: dependencies and scripts
 - `tsconfig.json`: typescript configuration
 

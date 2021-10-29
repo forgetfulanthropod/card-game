@@ -23,12 +23,10 @@
     "npm.packageManager": "pnpm",
     "files.exclude": {
         "**/.keep": true,
-        "server/lib": true,
-        "node_modules/": true,
-        "server/node_modules/": true,
-        "pnpm-lock.json": true,
-        "server/pnpm-lock.json": true,
+        "**/node_modules/": true,
+        "**/pnpm-lock.yaml": true,
         "build/": true,
+        "server-build/": true,
     },
     "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {
@@ -56,7 +54,7 @@
             "label": "SHARED"
         },
         {
-            "regex": "actions/.*",
+            "regex": "server/.*",
             "color": "#880000",
             "label": "SERVER"
         },

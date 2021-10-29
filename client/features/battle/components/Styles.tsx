@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-ignore
+// @ts-expect-error
 import styled from 'styled-components'
 
 

@@ -14,16 +14,18 @@ function log(...args: unknown[]) {
     if (config.shouldLog) console.log(...args)
 }
 
-
-const subdir = process.env.CLIENT_SUBDIR
-const socketPath = subdir && subdir.length > 0 ? `/${subdir}` : ''
-const socket = io({ path: `${socketPath}/socket` })
+const urlPrefix = window.location.href.split('/')[3]
+const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
 export function waitForHandshake(): Promise<void> {
     return new Promise(resolve => {
         log('got the hey')
-        socket.once('hey', () => resolve())
+        socket.once('hey', (data) => {
+            console.log(`'hey' data from server: ${JSON.stringify(data)}`)
+            resolve()
+        })
     })
 }
+
 
 export function getSocket(): typeof socket {
     return socket
@@ -90,7 +92,7 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
     log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
-            // @ts-ignore
+            // @ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
@@ -99,13 +101,13 @@ function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
             break
         }
         case 'E': { // edited property
-            // @ts-ignore
+            // @ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
         case 'A': { // array change
             const { path, index: index, item } = change
-            // @ts-ignore
+            // @ts-expect-error
             applyChange(item, cursor.select([...path, index]))
             break
         }

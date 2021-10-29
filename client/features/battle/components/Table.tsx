@@ -1,5 +1,5 @@
 import { h, JSX } from 'preact' // eslint-disable-line
-//@ts-ignore
+//@ts-expect-error
 import styled from 'styled-components'
 export default function Table(props: { rows: string[][], header?: string }): JSX.Element {
     const contents = <>

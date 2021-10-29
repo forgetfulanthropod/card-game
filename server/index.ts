@@ -1,4 +1,4 @@
-import 'config/logger'
+import './config/logger'
 
 import express from 'express'
 import expsession from 'express-session'
@@ -14,6 +14,14 @@ if (process.env.FIXED_SEED === 'yes') {
 }
 
 const port = process.env.PORT ?? 3000
+
+const buildInfo = {
+    port,
+    gitBranch: process.env.SERVER_GIT_BRANCH ?? '',
+    gitCommit: process.env.SERVER_GIT_COMMIT ?? '',
+    buildTime: process.env.SERVER_BUILD_TIME ?? '',
+}
+logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 
 const app = express()
 
@@ -48,7 +56,7 @@ export function mountIo(server: Server, prefix: string): void {
     io = new SocketServer(server, { path: prefix + '/socket' })
 
     io.use(function (socket, next) {
-        // @ts-ignore
+        // @ts-expect-error
         sessionMiddleware(socket.request, socket.request.res, next)
     })
 
@@ -57,18 +65,18 @@ export function mountIo(server: Server, prefix: string): void {
         // socket.handshake.headers
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
-        // @ts-ignore
+        // @ts-expect-error
         logger.info('session at socket.io connection:\n', socket.request.session)
-        // @ts-ignore
+        // @ts-expect-error
         socket.request.session.socketio = socket.id
-        // @ts-ignore
+        // @ts-expect-error
         socket.request.session.save()
     })
 
 
     io.on('connection', function (socket) {
         logger.info('A user connected')
-        setTimeout(() => { socket.emit('hey', 'data') }, 1000)
+        setTimeout(() => { socket.emit('hey', { serverBuildInfo: buildInfo }) }, 1000)
 
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {
