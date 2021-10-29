@@ -19,7 +19,7 @@ global.logger = winston.createLogger({
     ),
     transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: __dirname + '/../actions.log' }),
+        new winston.transports.File({ filename: __dirname + '/../server.log' }),
     ],
 })
 
