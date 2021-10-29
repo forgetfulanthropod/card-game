@@ -5,8 +5,8 @@ import expsession from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
-import { setGlobalRandomSeed } from './config/seedrand'
 import { attachAPIRoutes } from './attachActions'
+import { setGlobalRandomSeed } from './config/seedrand'
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
