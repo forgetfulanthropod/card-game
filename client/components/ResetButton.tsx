@@ -8,6 +8,7 @@ const Root = styled.button`
     position: absolute;
     right: 10px;
     bottom: 10px;
+    pointer-events: auto;
 `
 
 export default function ResetButton(): JSX.Element {

@@ -32,14 +32,14 @@ export function BattleScene(): PixiContainer {
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
         const allChars = allCharsCursor.get()
+        if (allChars == null) {
+            container.destroy()
+            return
+        }
         if (vals(allChars).filter(c => c.health > 0).every(cm => !cm.hasMoved)) {
             // tl()
             const message = scene.get('isPlayerTurn') ? 'You start round!' : 'Enemy starts round!'
             overlay({ elementId: 'roundStart', data: { message } })
-        }
-        if (allChars == null) {
-            container.destroy()
-            return
         }
         const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
