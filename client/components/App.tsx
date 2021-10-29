@@ -7,6 +7,7 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import ResetButton from './ResetButton'
 import { Sidebar } from './Sidebar'
 
 
@@ -17,6 +18,7 @@ export default function App(): JSX.Element {
         <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
         <Toaster />
         <Sidebar />
+        <ResetButton />
         {sceneType === 'battle' && <Battle />}
         {/* <TestCounter /> */}
     </AppWrap>
