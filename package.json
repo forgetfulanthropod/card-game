@@ -12,7 +12,7 @@
         "tsc-watch": "tsc --watch --preserveWatchOutput",
         "savestaged": "bash scripts/savestaged.sh",
         "newtodo": "git diff origin/main -G TODO",
-        "install-build-all": "npm i --production && npm run build && cd server && npm i --production && npm run build"
+        "CI": "npm run clean && npm i --production && npm run build && cd server && npm i --production && npm run build"
     },
     "dependencies": {
         "baobab": "^2.6.1",
