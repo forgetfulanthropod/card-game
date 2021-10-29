@@ -20,10 +20,10 @@ const SHOW_HIT_TIME = 1000
 const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 
-export function Frogknight(props: KnownPlayerCharacterProps): PixiContainer {
+export function PlayerCharacterElm(props: KnownPlayerCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
 }
-export function Skeleton(props: KnownCharacterProps): PixiContainer {
+export function NPCElm(props: KnownCharacterProps): PixiContainer {
     return Character({ direction: -1, ...props })
 }
 interface KnownCharacterProps {
@@ -45,7 +45,6 @@ function Character(args: CharacterProps): PixiContainer {
     const characterMeta = { ...args.cursor.get() }
     args.cursor.on('update', () => { Object.assign(characterMeta, args.cursor.get()) })
     const { screenX, screenY } = characterMeta
-
 
     // ---Sprites and containers---
 
@@ -145,6 +144,8 @@ function Character(args: CharacterProps): PixiContainer {
             doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageObj.damage }), { durationMs: SHOW_HIT_TIME })
         }
     })
+
+    updateDeathAndHealth()
 
     return flyingContainer
 }

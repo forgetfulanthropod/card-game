@@ -7,7 +7,6 @@ import App from '@/components/App'
 import { start } from '@/features/battle/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
-import { makeNewUser } from './actions'
 import { attachServerListener, waitForHandshake } from './connection'
 import { waitForGameStateToFill } from './data/rootTree'
 
@@ -20,7 +19,7 @@ console.log('client build info:', {
 })
 
 const config = {
-    log: false,
+    log: true,
 }
 
 function log(...args: unknown[]) {
@@ -44,10 +43,10 @@ loadAssets(
 
 void (async function makeTheUser() {
     log('initializing app')
-    await waitForHandshake()
-    void waitForGameStateToFill().then(() => maybeStart('gamestate'))
-    log('making user')
-    await makeNewUser({ username: 'alice' })
+    await Promise.all([waitForGameStateToFill(), waitForHandshake()])
+    maybeStart('gamestate')
+    // log('making user')
+    // await makeNewUser({ username: 'alice' })
     maybeStart('createdUser')
 })()
 
