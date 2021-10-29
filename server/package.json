@@ -1,5 +1,5 @@
 {
-    "name": "actions-api",
+    "name": "kaiju-server",
     "scripts": {
         "server-watch": "nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "server": "node --enable-source-maps ../server-build/index.js",

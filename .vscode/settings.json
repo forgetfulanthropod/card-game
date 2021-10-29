@@ -54,7 +54,7 @@
             "label": "SHARED"
         },
         {
-            "regex": "actions/.*",
+            "regex": "server/.*",
             "color": "#880000",
             "label": "SERVER"
         },
