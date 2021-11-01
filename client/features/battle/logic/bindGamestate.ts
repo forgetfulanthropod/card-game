@@ -1,11 +1,9 @@
-import { chooseDoor, exitDungeon } from '@/actions'
 import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
 import Chest from '../elements/Chest'
-import Doors from '../elements/Doors'
 import { DungeonEntryScene } from '../elements/DungeonEntryScene'
 
 
@@ -50,22 +48,6 @@ function bindBattleState(app: PixiApplication) {
             app.stage.removeChild(chest)
             chest.destroy()
             chest = null
-        }
-    })
-    const doorCursor = getBattleScene().select('doors')
-    let doorsCont: PixiContainer | null = null
-    doorCursor.on('update', () => {
-        const doors = doorCursor.get()
-        if ((doors == null || doors.options.length === 0) && doorsCont != null) {
-            app.stage.removeChild(doorsCont)
-            doorsCont = null
-        } else if (doors != null) {
-            doorsCont = Doors({
-                callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
-                descriptions: doors.descriptions,
-                exit: () => exitDungeon({}),
-            })
-            app.stage.addChild(doorsCont)
         }
     })
 }
