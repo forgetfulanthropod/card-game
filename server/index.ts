@@ -5,12 +5,22 @@ import expsession from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
+import { addNewUser } from './actions/makeNewUser'
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
+import { getRootCursor } from './util'
+
+const config = {
+    addNewUserOnStart: true,
+}
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
     setGlobalRandomSeed()
+}
+
+if (config.addNewUserOnStart) {
+    addNewUser({ username: 'alice' })
 }
 
 const port = process.env.PORT ?? 3000
@@ -76,7 +86,10 @@ export function mountIo(server: Server, prefix: string): void {
 
     io.on('connection', function (socket) {
         logger.info('A user connected')
-        setTimeout(() => { socket.emit('hey', { serverBuildInfo: buildInfo }) }, 1000)
+        socket.emit('hey', { serverBuildInfo: buildInfo })
+        if (config.addNewUserOnStart) {
+            getRootCursor().commit()
+        }
 
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {

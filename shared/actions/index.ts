@@ -12,7 +12,7 @@ export * from './IncrementTestCounter'
 export * from './MakeNewUser'
 export * from './ResetRandomSeed'
 export * from './Square'
-export * from './StartGame'
+export * from './StartBattle'
 export * from './ToggleStance'
 // @endindex
 declare global {

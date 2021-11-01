@@ -13,6 +13,6 @@ export { incrementTestCounter } from './incrementTestCounter'
 export { makeNewUser } from './makeNewUser'
 export { resetRandomSeed } from './resetRandomSeed'
 export { square } from './square'
-export { startGame } from './startGame'
+export { startBattle } from './startBattle'
 export { toggleStance } from './toggleStance'
 // @endindex

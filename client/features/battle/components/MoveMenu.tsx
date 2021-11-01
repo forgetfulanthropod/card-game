@@ -40,6 +40,7 @@ export default function MoveMenu(): JSX.Element {
         allCharacters.select(e.data.previousData).select('moves').off('update', updateMoves)
 
         const sc = e.data.currentData
+        if (sc == null) return
         allCharacters.select(sc).select('moves').on('update', updateMoves)
 
         // tl('moves list change to ' + JSON.stringify(moves.get()));

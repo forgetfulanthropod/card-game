@@ -2,7 +2,7 @@ import type { CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@sha
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
-import { doCharacterAction, startGame } from '@/actions'
+import { chooseDoor, doCharacterAction, exitDungeon, startBattle } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, overlay } from '@/elementsUtil'
@@ -12,7 +12,8 @@ import { makeClientEventListener } from '@/util/makeClientEventListener'
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
-import { Frogknight, Skeleton } from './Character'
+import { NPCElm, PlayerCharacterElm } from './Character'
+import Doors from './Doors'
 import InfoBox from './InfoBox'
 
 
@@ -24,22 +25,22 @@ export function BattleScene(): PixiContainer {
     const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()
 
-    const container = Container({ children: [] })
+    const container = Container({ name: 'BattleScene', children: [] })
 
-    setTimeout(startGame, 100)
+    setTimeout(startBattle, 100)
 
     const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
         const allChars = allCharsCursor.get()
+        if (allChars == null) {
+            container.destroy()
+            return
+        }
         if (vals(allChars).filter(c => c.health > 0).every(cm => !cm.hasMoved)) {
             // tl()
             const message = scene.get('isPlayerTurn') ? 'You start round!' : 'Enemy starts round!'
             overlay({ elementId: 'roundStart', data: { message } })
-        }
-        if (allChars == null) {
-            container.destroy()
-            return
         }
         const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
@@ -80,10 +81,38 @@ export function BattleScene(): PixiContainer {
     }
     renewChildren()
 
+    setTimeout(() => makeDoors(container), 0)
+
     return container
 }
 
 function getCharacterFn(characterMeta: CharacterMeta) {
-    if (characterMeta.isPc) return Frogknight
-    else return Skeleton
+    if (characterMeta.isPc) return PlayerCharacterElm
+    else return NPCElm
+}
+
+
+function makeDoors(parent: PixiContainer) {
+    const doorCursor = getBattleScene().select('doors')
+    let doorsCont: PixiContainer | null = null
+    update()
+    doorCursor.on('update', update)
+
+    function update() {
+        const doors = doorCursor.get()
+        console.log('doors update...')
+        if ((doors == null || doors.options.length === 0) && doorsCont != null) {
+            parent.removeChild(doorsCont)
+            doorsCont = null
+        } else if (doors != null) {
+            console.log('adding some doors')
+            doorsCont = Doors({
+                callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
+                descriptions: doors.descriptions,
+                exit: () => exitDungeon({}),
+            })
+            parent.addChild(doorsCont)
+        }
+
+    }
 }

@@ -8,7 +8,7 @@ import { getTree } from '@/data/rootTree'
 
 const config = {
     enableExpensiveUpdateValidation: false,
-    shouldLog: false,
+    shouldLog: true,
 }
 
 function log(...args: unknown[]) {

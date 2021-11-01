@@ -23,6 +23,7 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
         return [door, text]
     })
     const container = Container({
+        name: 'Doors',
         children: doorsAndText,
     })
     container.x = getAppSize().width / 2

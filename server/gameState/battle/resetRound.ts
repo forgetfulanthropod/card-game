@@ -1,7 +1,7 @@
 import type { BattleCursor } from '@/util'
 import { keys, sleep } from '@/util'
 
-import { DEBUG, DEFAULT_WAIT } from '../../actions/startGame'
+import { DEBUG, DEFAULT_WAIT } from '../../actions/startBattle'
 import { doNpcMove } from './doNpcMove'
 import { tl } from './logging'
 

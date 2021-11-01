@@ -49,8 +49,6 @@ export const makeRootDataCursor = memoize(function makeRootDataCursor(): DataCur
             testCounters: { counter0: 0 },
         },
     })
-    logger.info('guest')
     const c = b.select('contents')
-    logger.info('west')
     return new DataCursor(c)
 })
