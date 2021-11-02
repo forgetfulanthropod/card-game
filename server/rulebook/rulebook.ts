@@ -2,7 +2,7 @@ import type { DungeonLevel, Rulebook } from '@shared'
 
 import { numbers } from '@/gameState/battle'
 
-import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
+import { moveMetaMap, npcLevelStatsMap, stanceTypeMetaMap, statsMap } from './battle'
 import { dungeonRooms } from './dungeonRooms'
 
 
@@ -22,6 +22,7 @@ export const rulebook: Rulebook = {
     items: {},
     numbers,
     stanceTypeMetaMap,
+    npcLevelStatsMap,
     levelThresholds: {
         2: 100,
         3: 200,

@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, NpcLevelStats, StanceName, StanceStats } from '.'
 import type { NetworkEvent } from './networkEvents'
 
 
@@ -35,6 +35,7 @@ export interface Rulebook {
         X_NEUTRAL_THRESH: number
     }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
+    npcLevelStatsMap: NpcLevelStats
     levelThresholds: Record<number, number>
 }
 export interface Gamestate {

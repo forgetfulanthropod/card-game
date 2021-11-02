@@ -1,4 +1,7 @@
-export const npcLevelStatsMap = {
+import type { NpcLevelStats } from '@shared'
+
+//@ts-expect-error
+export const npcLevelStatsMap: NpcLevelStats = {
     skeletonWarrior: {
         1: { maxHealth: 10, damage: 2 },
         2: { maxHealth: 20, damage: 4 },
