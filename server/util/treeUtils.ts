@@ -5,8 +5,10 @@ import type {
     MoveEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
+import { SBaobab } from 'baobab'
+import { memoize } from 'lodash'
 
-import { makeRootDataCursor } from './DataCursor'
+import { getIo } from '@/index'
 
 
 export function getEntryScene(username: 'alice'): SCursor<EntryScene> {
@@ -35,15 +37,36 @@ export function getEventsCursor(username: 'alice'): EventCursor {
 }
 
 export function getGameStateCursor(username: 'alice'): SCursor<Gamestate> {
-    return makeRootDataCursor().select('users').select(username)
+    return getRootCursor().select('users').select(username)
 }
 
-export interface RootTreeShit {
+export interface RootTree {
     users: {
         alice: Gamestate
     }
     testCounters: { counter0: number }
 }
-export function getRootCursor(): SCursor<RootTreeShit> {
-    return makeRootDataCursor()
+
+export function commit(cursor: { get: () => unknown }, customName?: string, justSub = false): void {
+    // TODO eventually: just commit Sub probably or maybe commit changes (diff)
+    logger.info('committing')
+    if (customName != null) { logger.info('committing to event name ', customName, 'and justSub is', justSub) }
+    if (justSub) {
+        getIo().emit(customName ?? 'update', cursor.get())
+        return
+    }
+    getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
 }
+
+export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree> {
+    const b = new SBaobab({
+        contents: {
+            users: {
+                alice: null as unknown as Gamestate,
+
+            },
+            testCounters: { counter0: 0 },
+        },
+    })
+    return b.select('contents')
+})
