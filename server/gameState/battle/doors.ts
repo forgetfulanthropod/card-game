@@ -2,14 +2,13 @@ import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, RoomO
 import type { SCursor } from 'baobab'
 import { keys, zip } from 'lodash'
 
-import { rulebook } from '@/rulebook'
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import { commit, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
-import { getLevelInfo, newNPCMeta } from './state'
+import { newNPCMeta } from './state'
 
 
 // type CharacterModifer = string
@@ -18,7 +17,7 @@ import { getLevelInfo, newNPCMeta } from './state'
 // const config = { addRandomDoor: true }
 
 
-type Room = {
+export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
 }
@@ -125,40 +124,6 @@ export function getRoom(args: {
             // TODO: 'rareItem' 'bossDoor' 'face' 'tiny' 'jumbo' 'randomEvent' 'candyBaby'
             throw Error('unknown door type ')
         }
-    }
-}
-
-export function levelUpEnemies(room: Room, dungeonName: DungeonName): Room {
-    let enemies = room.enemies
-
-    if (getLevelIncrease(dungeonName) > 0) {
-        enemies = {}
-
-        const enemyKeys = keys(room.enemies)
-        // console.log('levelUpEnemy', levelUpEnemy(enemies[enemyKeys[0]], getLevelIncrease(dungeonName)))
-        vals(room.enemies).map((e, i) => enemies[enemyKeys[i]] = levelUpEnemy(e, getLevelIncrease(dungeonName)))
-
-    }
-
-    return { ...room, enemies }
-}
-
-export function getLevelIncrease(dungeonName: DungeonName): number {
-    const dungeonLevelInfo = rulebook.dungeonLevels.find(l => l.name === dungeonName)
-
-    if (dungeonLevelInfo == null) {
-        throw Error('level increase error')
-    }
-
-    const mod = dungeonLevelInfo.modifier
-
-    return mod > 1 ? mod : 0
-}
-
-function levelUpEnemy(enemy: CharacterMeta, levelIncrease: number): CharacterMeta {
-    return {
-        ...enemy,
-        ...getLevelInfo(enemy.name, enemy.level + levelIncrease),
     }
 }
 

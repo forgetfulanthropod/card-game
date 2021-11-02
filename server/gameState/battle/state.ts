@@ -8,10 +8,10 @@ import type {
     StanceName,
 } from '@shared'
 
-import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
+import { statsMap } from '@/rulebook/battle'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
-import { getLevelIncrease } from './doors'
+import { getLevelIncrease, getLevelInfo } from './npcLeveling'
 
 
 const BASE_WIDTH = 1920
@@ -136,24 +136,6 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         experience: 0,
         // health: 1,
     }
-}
-
-type LevelInfo = {
-    damage: number
-    maxHealth: number
-    level?: number
-    health?: number
-}
-
-export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
-    const levelInfo: LevelInfo = { ...npcLevelStatsMap[name]?.[level] }
-
-    if (levelInfo != null) {
-        levelInfo.health = levelInfo.maxHealth
-        levelInfo.level = level
-    }
-
-    return levelInfo
 }
 
 function randString(): string {

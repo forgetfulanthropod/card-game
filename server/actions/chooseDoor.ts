@@ -2,7 +2,8 @@
 
 import type { ChooseDoor } from '@shared'
 
-import { getRoom, levelUpEnemies, resetRound } from '@/gameState/battle'
+import { getRoom, resetRound } from '@/gameState/battle'
+import { levelUpEnemies } from '@/gameState/battle/npcLeveling'
 import { commit, getBattleScene, objFilter } from '@/util'
 
 export const chooseDoor: ChooseDoor = async (args) => {

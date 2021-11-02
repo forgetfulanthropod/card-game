@@ -42,7 +42,8 @@ export default function MoveMenu(): JSX.Element {
 
     allCharacters.select(selectedCharacter.get()).select('moves').on('update', updateMoves)
     selectedCharacter.on('update', async (e) => {
-        allCharacters.select(e.data.previousData).select('moves').off('update', updateMoves)
+        if (e.data.previousData)
+            allCharacters.select(e.data.previousData).select('moves').off('update', updateMoves)
 
         const sc = e.data.currentData
         if (sc == null) return

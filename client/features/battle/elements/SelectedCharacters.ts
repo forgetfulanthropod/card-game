@@ -6,8 +6,8 @@ import { BASE_HEIGHT, BASE_WIDTH, Container, dataOf, Sprite } from '@/elementsUt
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
-    selectedCharacters.on('update', () => {
-        setSelectedCharacters()
+    selectedCharacters.on('update', e => {
+        if (e.data.currentData != null) setSelectedCharacters()
     })
 
     function setSelectedCharacters() {
