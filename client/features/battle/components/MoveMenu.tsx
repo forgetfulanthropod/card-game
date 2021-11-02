@@ -32,7 +32,12 @@ export default function MoveMenu(): JSX.Element {
     const selectedCharacter = scene.select('selectedCharacter')
     const allCharacters = scene.select('allCharacters')
 
-    const movesOf = (charId: string) => allCharacters.select(charId).select('moves').get()
+    const movesOf = (charId: string) => {
+        if (allCharacters.get() == null)
+            return []
+
+        return allCharacters.select(charId).select('moves').get()
+    }
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
 
     allCharacters.select(selectedCharacter.get()).select('moves').on('update', updateMoves)
