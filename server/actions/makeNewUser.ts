@@ -2,11 +2,12 @@
 import type { MakeNewUser } from '@shared'
 
 import { initialGameState } from '@/gameState/gameState'
-import { getRootCursor } from '@/util'
+import { commit, getRootCursor } from '@/util'
+
 export const makeNewUser: MakeNewUser = (args) => {
     logger.info(`adding user ${args.username} with initial gamestate`)
     addNewUser(args)
-    getRootCursor().commit()
+    commit(getRootCursor())
 }
 
 export function addNewUser(args: { username: 'alice' }): void {

@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { makeNewUser } from '@/actions'
 
+
 const Root = styled.button`
     position: absolute;
     right: 10px;

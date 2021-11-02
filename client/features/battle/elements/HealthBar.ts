@@ -1,4 +1,5 @@
-import type { CharacterMeta, CharacterUid, MyCursor } from '@shared'
+import type { CharacterMeta, CharacterUid } from '@shared'
+import type { SCursor } from 'baobab'
 import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
@@ -36,7 +37,7 @@ function getCharacterCursor(characterUid: string) {
     return getBattleScene().select('allCharacters').select(characterUid)
 }
 
-function makeEffectIndicator(characterCursor: MyCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
     let effects: PixiContainer
 
     updateEffects()
@@ -68,7 +69,7 @@ function makeEffectIndicator(characterCursor: MyCursor<CharacterMeta>, mainEl: P
     }
 }
 
-function makeStanceIndicator(characterCursor: MyCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeStanceIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
     let stanceEl: PixiSprite
 
     updateStance()
@@ -119,7 +120,7 @@ function makeMainEl() {
     })
 }
 
-function makeHealthIndicator(characterCursor: MyCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
     let health: PixiGraphics
     let healthText: PixiText
 
@@ -154,7 +155,7 @@ function makeHealthIndicator(characterCursor: MyCursor<CharacterMeta>, mainEl: P
     }
 }
 
-function drawHealthBar(characterCursor: MyCursor<CharacterMeta>, g: PixiGraphics) {
+function drawHealthBar(characterCursor: SCursor<CharacterMeta>, g: PixiGraphics) {
     const xMargin = .01869158878
     const yMargin = .16883116883
     const colorStops = [

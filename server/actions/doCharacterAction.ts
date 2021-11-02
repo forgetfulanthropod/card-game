@@ -12,7 +12,7 @@ import {
     tl,
     warn,
 } from '@/gameState/battle'
-import { getBattleScene, sleep, vals } from '@/util'
+import { commit, getBattleScene, sleep, vals } from '@/util'
 
 import { NOT_YOUR_TURN_REJECTION_WAIT } from './startBattle'
 
@@ -30,7 +30,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
     }
     if (!isPlayerTurn) {
         warn('not player turn')
-        if (!scene.getK('isPlayerTurn')) {
+        if (!scene.get('isPlayerTurn')) {
             await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
             await doNpcMove('NPC has extra turns')
         }
@@ -46,8 +46,8 @@ export const doCharacterAction: DoCharacterAction = async args => {
             warn('selected char has already attacked')
             return
         }
-        scene.setK('selectedCharacter', clicked.uid)
-        scene.commit()
+        scene.set('selectedCharacter', clicked.uid)
+        commit(scene)
         return
     }
 

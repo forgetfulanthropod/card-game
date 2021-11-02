@@ -1,4 +1,7 @@
 import type { Cursorish, NetworkEvent, NetworkEventEmitter } from '@shared'
+
+import { commit } from '@/util'
+
 const config = { log: false }
 // TODO: shouldn't store entire event history forever...
 
@@ -17,8 +20,7 @@ export function makeServerEventEmitter<Name extends string, Data>(name: Name, cu
             }
             if (config.log) { logger.info(`sending new ${name} event:`, event) }
             cursor.apply(events => [...events, event])
-            // @ts-expect-error
-            cursor.commit()
+            commit(cursor)
         },
     }
 }

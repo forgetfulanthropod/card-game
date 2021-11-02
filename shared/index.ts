@@ -7,7 +7,6 @@ export * from './datamodel'
 export * from './dispatch'
 export * from './entryTypes'
 export * from './immutable'
-export * from './myBaobab'
 export * from './networkEvents'
 export * from './SpecialDoorName'
 // @endindex

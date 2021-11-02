@@ -3,7 +3,8 @@ import type { ChangeScene } from '@shared'
 
 import { makeBattleState } from '@/gameState/battle'
 import { rulebook } from '@/rulebook/index'
-import { getEntryScene, getGameStateCursor } from '@/util'
+import { commit, getEntryScene, getGameStateCursor } from '@/util'
+
 export const changeScene: ChangeScene = (args) => {
     logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor('alice')
@@ -11,8 +12,8 @@ export const changeScene: ChangeScene = (args) => {
         const entrySceneData = (getEntryScene('alice')).get()
         const { selectedCharacters, selectedLevel } = entrySceneData
         const dungeonName = rulebook.dungeonLevels[selectedLevel.num - 1].name
-        tree.setK('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
+        tree.set('scene', makeBattleState({ chosen: selectedCharacters, dungeonName }))
     }
-    tree.commit()
+    commit(tree)
 
 }

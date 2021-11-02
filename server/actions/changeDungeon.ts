@@ -1,7 +1,8 @@
 import type { ChangeDungeon } from '@shared'
 
 import { rulebook } from '@/rulebook'
-import { getEntryScene } from '@/util'
+import { commit, getEntryScene } from '@/util'
+
 export const changeDungeon: ChangeDungeon = (args) => {
     const levels = rulebook.dungeonLevels
     const scene = getEntryScene('alice')
@@ -16,5 +17,5 @@ export const changeDungeon: ChangeDungeon = (args) => {
 
     scene.select('selectedCharacters').set([])
     scene.select('selectedLevel').set(levels[l - 1])
-    scene.commit()
+    commit(scene)
 }

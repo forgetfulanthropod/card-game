@@ -1,4 +1,5 @@
-import type { CharacterMeta, CharacterUid, MyCursor, NetworkAttackData, NetworkEvent } from '@shared'
+import type { CharacterMeta, CharacterUid, NetworkAttackData, NetworkEvent } from '@shared'
+import type { SCursor } from 'baobab'
 import { filters, Loader } from 'pixi.js'
 
 import { getBattleScene } from '@/data/rootTree'
@@ -30,7 +31,7 @@ interface KnownCharacterProps {
     onClick: (c: CharacterUid) => void
     move$: Move$
     scale: number
-    cursor: MyCursor<CharacterMeta>
+    cursor: SCursor<CharacterMeta>
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
