@@ -1,7 +1,9 @@
-import type { AttackData, BattleScene, Gamestate, NetworkAttackData, NetworkEvent } from '@shared'
+import type { AttackData, BattleScene, NetworkAttackData, NetworkEvent } from '@shared'
+import type { SCursor } from 'baobab'
 import { memoize } from 'lodash'
 
-import type { BattleCursor, DataCursor } from '@/util'
+import type { BattleCursor } from '@/util'
+import { commit } from '@/util'
 import { getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
 
 import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startBattle'
@@ -41,13 +43,13 @@ export async function handleMove(
     const winner = checkWinner(vals(newAllCharacters))
 
     if (winner === 'PC') {
-        scene.setK('state', 'won')
+        scene.set('state', 'won')
         incrementXP(scene)
         putUpDoors(scene)
         return
     } else if (winner === 'NPC') {
-        scene.setK('state', 'lost')
-        scene.commit()
+        scene.set('state', 'lost')
+        commit(scene)
         return
     }
 
@@ -69,29 +71,29 @@ export async function handleMove(
             warn('no unmoved PC')
         } else {
             tl(`selecting character ${newPc.uid}`)
-            scene.setK('selectedCharacter', newPc.uid)
+            scene.set('selectedCharacter', newPc.uid)
         }
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
             logger.info('will be NPC turn')
-            scene.setK('isPlayerTurn', false)
+            scene.set('isPlayerTurn', false)
             await sleep(TIME_AFTER_PLAYER_MOVE + 500)
             await doNpcMove('NPC has extra turns')
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
             logger.info('will be player turn')
-            scene.setK('isPlayerTurn', true)
+            scene.set('isPlayerTurn', true)
         } else if (aliveNpcs.some(c => !c.hasMoved)) {
             logger.info('will be player turn')
             await sleep(DEFAULT_WAIT)
             await doNpcMove('no unmoved PC and NPC turn')
         }
     }
-    scene.commit()
+    commit(scene)
 }
 const getMoveChannel = memoize(function getMoveChannel() {
-    const eventsCursor: DataCursor<Gamestate, NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events')
+    const eventsCursor: SCursor<NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events')
     const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
     return move$
 })

@@ -1,7 +1,7 @@
-import type { BattleScene, CharacterMeta, Gamestate } from '@shared'
+import type { BattleScene, CharacterMeta } from '@shared'
+import type { SCursor } from 'baobab'
 
 import { rulebook } from '@/rulebook'
-import type { DataCursor } from '@/util'
 import { vals } from '@/util'
 
 import { getCharIds } from './misc'
@@ -10,7 +10,7 @@ const HEALTH_PER_LEVEL = 7
 const DAMAGE_PER_LEVEL = 1
 
 
-export function incrementXP(scene: DataCursor<Gamestate, BattleScene>): void {
+export function incrementXP(scene: SCursor<BattleScene>): void {
     const totalXP = getTotalXP(scene)
 
     logger.info({ totalXP })
@@ -60,7 +60,7 @@ function getLeveledUpCharacter(
 }
 
 // xp = health + damage of slain enemy
-function getTotalXP(scene: DataCursor<Gamestate, BattleScene>): number {
+function getTotalXP(scene: SCursor<BattleScene>): number {
     return vals(scene.select('allCharacters').get()).reduce((total, character) => {
         return total + (character.isPc ? character.maxHealth + character.damage : 0)
     }, 0)

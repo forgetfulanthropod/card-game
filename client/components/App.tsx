@@ -1,4 +1,3 @@
-import type { MyCursor } from '@shared'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
@@ -9,6 +8,7 @@ import Battle from '@/features/battle/components/Battle'
 import AppWrap from './AppWrap'
 import ResetButton from './ResetButton'
 import { Sidebar } from './Sidebar'
+import type { SCursor } from 'baobab'
 
 
 export default function App(): JSX.Element {
@@ -24,7 +24,7 @@ export default function App(): JSX.Element {
     </AppWrap>
 }
 
-function useCursor<T>(cursor: MyCursor<T>): T {
+function useCursor<T>(cursor: SCursor<T>): T {
     const [v, setV] = useState(cursor.get())
     useEffect(() => {
         const cb = () => setV(cursor.get())

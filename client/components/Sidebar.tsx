@@ -1,4 +1,5 @@
-import type { Gamestate, MyCursor } from '@shared'
+import type { Gamestate } from '@shared'
+import type { SCursor } from 'baobab'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 import JSONInput from 'react-json-editor-ajrm'
@@ -50,7 +51,7 @@ function GamestateEditor(props: { top: string }): JSX.Element {
     </Root>
 }
 
-function OneSidebar<T>(props: { cursor: MyCursor<T[]>, title: string, top: string }): JSX.Element {
+function OneSidebar<T>(props: { cursor: SCursor<T[]>, title: string, top: string }): JSX.Element {
     const c = props.cursor
     const [shown, setShown] = useState(false)
     const [events, setEvents] = useState(c.get())

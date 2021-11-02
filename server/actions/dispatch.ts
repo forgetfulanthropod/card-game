@@ -1,6 +1,6 @@
 import type { Dispatch } from '@shared'
 
-import { getBattleScene, keys } from '@/util'
+import { commit, getBattleScene, keys } from '@/util'
 
 import { makeBattleState } from '../gameState/battle/state'
 
@@ -13,7 +13,7 @@ export const dispatch: Dispatch = action => {
     const scene = getBattleScene('alice')
     switch (action.a) {
         case 'setSelectedMove': {
-            scene.setK('selectedMove', action.m)
+            scene.set('selectedMove', action.m)
             break
         } case 'fullReset': {
             scene.set(makeBattleState())
@@ -23,18 +23,18 @@ export const dispatch: Dispatch = action => {
             for (const k of keys(cursor.get())) {
                 const cu = cursor.select(k)
                 const ch = cu.get()
-                cu.setK('screenX', ch.x * action.size.width / 100)
-                cu.setK('screenY', ch.y * action.size.height / 100)
+                cu.set('screenX', ch.x * action.size.width / 100)
+                cu.set('screenY', ch.y * action.size.height / 100)
             }
             break
         } case 'setIsBasicLoaded': {
-            scene.setK('isBasicLoaded', action.v)
+            scene.set('isBasicLoaded', action.v)
             break
         } case 'setIsDeluxeLoaded': {
-            scene.setK('isDeluxeLoaded', action.v)
+            scene.set('isDeluxeLoaded', action.v)
             break
         } default:
             throw new Error(`unknown action ${JSON.stringify(action)}`)
     }
-    scene.commit()
+    commit(scene)
 }

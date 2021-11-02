@@ -8,7 +8,7 @@ import { Server as SocketServer } from 'socket.io'
 import { addNewUser } from './actions/makeNewUser'
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
-import { getRootCursor } from './util'
+import { commit, getRootCursor } from './util'
 
 const config = {
     addNewUserOnStart: true,
@@ -88,7 +88,7 @@ export function mountIo(server: Server, prefix: string): void {
         logger.info('A user connected')
         socket.emit('hey', { serverBuildInfo: buildInfo })
         if (config.addNewUserOnStart) {
-            getRootCursor().commit()
+            commit(getRootCursor())
         }
 
         //Whenever someone disconnects this piece of code executed

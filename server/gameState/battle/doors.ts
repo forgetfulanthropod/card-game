@@ -1,12 +1,12 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName } from '@shared'
+import type { SCursor } from 'baobab'
 import { keys, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
 import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import type { DataCursor } from '@/util'
-import { mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
+import { commit, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
@@ -138,12 +138,12 @@ function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Roo
     return makeRoom({ dungeonName, roomsPassed, door: regularDoorName })
 }
 
-export function putUpDoors(scene: DataCursor<Gamestate, BattleScene>): void {
+export function putUpDoors(scene: SCursor<BattleScene>): void {
     // logger.info('adding doors')
     const { roomsPassed, dungeonName } = scene.get()
-    scene.setK('state', 'not started')
-    scene.setK('doors', getDoorChoices({ roomsPassed, dungeonName }))
-    scene.commit()
+    scene.set('state', 'not started')
+    scene.set('doors', getDoorChoices({ roomsPassed, dungeonName }))
+    commit(scene)
 }
 
 

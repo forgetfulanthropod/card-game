@@ -1,5 +1,6 @@
-import type { BattleScene, EntryScene, Gamestate, MyCursor, OwnedCharacter, Scene } from '@shared'
-import { MyBaobab } from '@shared'
+import type { BattleScene, EntryScene, Gamestate, OwnedCharacter, Scene } from '@shared'
+import type { SCursor } from 'baobab'
+import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
 
 import { listenForInitialGameState } from '@/connection/serverListener'
@@ -7,11 +8,11 @@ import { listenForInitialGameState } from '@/connection/serverListener'
 
 /** Global variables for file */
 const state = {
-    gamestate: null as MyBaobab<Gamestate> | null,
+    gamestate: null as SBaobab<Gamestate> | null,
 }
 
 export async function waitForGameStateToFill(): Promise<void> {
-    state.gamestate = new MyBaobab(await listenForInitialGameState())
+    state.gamestate = new SBaobab(await listenForInitialGameState())
     // @ts-expect-error for debugging:
     window.tree = state.gamestate
 }
@@ -22,38 +23,38 @@ export async function waitForGameStateToFill(): Promise<void> {
  *  write synchronous code everywhere in app, we just need to
  *  wait for callbacks in onRulebook and onGamestate
  */
-export function getTree(): MyBaobab<Gamestate> {
+export function getTree(): SBaobab<Gamestate> {
     if (state.gamestate == null) {
         throw Error('tried to get tree before it was loaded. Did you wait for onGamestate?')
     }
     return state.gamestate
 }
 
-export const getBattleScene = (): MyCursor<BattleScene> => {
+export const getBattleScene = (): SCursor<BattleScene> => {
     const sceneName = getTree().select('scene').get('name')
     if (sceneName !== 'battle') {
         throw new Error(`tried to get battle scene when you're in ${sceneName}`)
     }
-    return getTree().select('scene') as MyCursor<BattleScene>
+    return getTree().select('scene') as SCursor<BattleScene>
 }
-export const getEntryScene = (): MyCursor<EntryScene> => {
+export const getEntryScene = (): SCursor<EntryScene> => {
     const curType = getTree().select('scene').select('name').get()
     if (curType !== 'entry') {
         throw new Error(`tried to get entry scene when you're in ${curType}`)
     }
-    return getTree().select('scene') as MyCursor<EntryScene>
+    return getTree().select('scene') as SCursor<EntryScene>
 }
 
-export const getOwnedCharacters = (): MyCursor<Record<string, OwnedCharacter>> => getTree().select('ownedCharacters')
-export const getScene = (): MyCursor<Scene> => getTree().select('scene')
+export const getOwnedCharacters = (): SCursor<Record<string, OwnedCharacter>> => getTree().select('ownedCharacters')
+export const getScene = (): SCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 
 
 interface ClientTree {
     serverCalls: unknown[]
 }
-export const getClientTree: () => MyBaobab<ClientTree> = memoize(() => {
-    return new MyBaobab<ClientTree>({
+export const getClientTree: () => SBaobab<ClientTree> = memoize(() => {
+    return new SBaobab<ClientTree>({
         serverCalls: [],
     })
 })

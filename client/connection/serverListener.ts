@@ -1,4 +1,6 @@
-import type { Gamestate, MyBaobab, MyCursor } from '@shared'
+import type { Gamestate } from '@shared'
+import type { SBaobab } from 'baobab'
+import type { SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
 import { io } from 'socket.io-client'
@@ -89,26 +91,31 @@ function updateBoabab(fromServer: unknown): void {
     }
 }
 
-function applyChange<T>(change: Diff<T, T>, cursor: MyCursor<T> | MyBaobab<T>) {
+function applyChange<T>(change: Diff<T, T>, cursor: SCursor<T> | SBaobab<T>) {
     log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': { // new property
-            // @ts-expect-error
+            //@ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
         case 'D': { // deleted property
+            //@ts-expect-error
             cursor.unset(change.path)
             break
         }
         case 'E': { // edited property
-            // @ts-expect-error
+            //@ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
         case 'A': { // array change
             const { path, index: index, item } = change
-            // @ts-expect-error
+            if (path == null) {
+                console.warn('array change got null path')
+                break
+            }
+            //@ts-expect-error
             applyChange(item, cursor.select([...path, index]))
             break
         }

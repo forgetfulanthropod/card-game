@@ -15,7 +15,7 @@
         "CI": "npm run clean && npm i --production && npm run build && cd server && npm i --production && npm run build"
     },
     "dependencies": {
-        "baobab": "^2.6.1",
+        "baobab": "link:/Users/l/git/qpwo-baobab",
         "deep-diff": "^1.0.2",
         "esbuild": "^0.13.4",
         "esbuild-css-modules-plugin": "^2.0.9",
