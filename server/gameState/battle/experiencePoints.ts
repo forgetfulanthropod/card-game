@@ -6,6 +6,7 @@ import { vals } from '@/util'
 
 import { getCharIds } from './misc'
 
+
 const HEALTH_PER_LEVEL = 7
 const DAMAGE_PER_LEVEL = 1
 

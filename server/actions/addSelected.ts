@@ -2,6 +2,7 @@ import type { AddSelected } from '@shared'
 
 import { commit, getEntryScene } from '@/util'
 
+
 export const addSelected: AddSelected = (args) => {
     const c = args.character
     const scene = getEntryScene('alice')

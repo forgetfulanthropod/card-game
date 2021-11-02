@@ -1,3 +1,4 @@
+import type { SCursor } from 'baobab'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useEffect, useState } from 'preact/hooks'
 import { Toaster } from 'react-hot-toast'
@@ -8,7 +9,6 @@ import Battle from '@/features/battle/components/Battle'
 import AppWrap from './AppWrap'
 import ResetButton from './ResetButton'
 import { Sidebar } from './Sidebar'
-import type { SCursor } from 'baobab'
 
 
 export default function App(): JSX.Element {

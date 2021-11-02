@@ -1,6 +1,5 @@
 import type { Gamestate } from '@shared'
-import type { SBaobab } from 'baobab'
-import type { SCursor } from 'baobab'
+import type { SBaobab, SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
 import { io } from 'socket.io-client'

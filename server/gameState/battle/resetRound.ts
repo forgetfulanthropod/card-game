@@ -1,6 +1,5 @@
 import type { BattleCursor } from '@/util'
-import { commit } from '@/util'
-import { keys, sleep } from '@/util'
+import { commit, keys, sleep } from '@/util'
 
 import { DEBUG, DEFAULT_WAIT } from '../../actions/startBattle'
 import { doNpcMove } from './doNpcMove'

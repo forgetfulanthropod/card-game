@@ -2,6 +2,7 @@ import type { ExitDungeon } from '@shared'
 
 import { initialEntryState } from '@/gameState/entry/state'
 import { commit, getGameStateCursor } from '@/util'
+
 export const exitDungeon: ExitDungeon = (_args) => {
     const gameState = getGameStateCursor('alice')
     if (gameState.select('scene').get('name') !== 'battle') {

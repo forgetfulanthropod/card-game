@@ -10,6 +10,7 @@ import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
 import { commit, getRootCursor } from './util'
 
+
 const config = {
     addNewUserOnStart: true,
 }

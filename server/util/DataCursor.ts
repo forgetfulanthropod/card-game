@@ -8,6 +8,7 @@ import { getIo } from '@/index'
 import type { RootTreeShit } from './treeAccessors'
 import { getRootCursor } from './treeAccessors'
 
+
 export function commit(cursor: { get: () => unknown }, customName?: string, justSub = false): void {
     // TODO eventually: just commit Sub probably or maybe commit changes (diff)
     logger.info('committing')

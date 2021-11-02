@@ -4,6 +4,7 @@ import type { ChooseDoor } from '@shared'
 
 import { handleSpecialDoor, resetRound } from '@/gameState/battle'
 import { commit, getBattleScene, objFilter } from '@/util'
+
 export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')
 

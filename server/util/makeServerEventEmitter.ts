@@ -1,6 +1,7 @@
 import type { Cursorish, NetworkEvent, NetworkEventEmitter } from '@shared'
 
 import { commit } from '@/util'
+
 const config = { log: false }
 // TODO: shouldn't store entire event history forever...
 

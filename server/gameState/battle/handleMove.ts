@@ -3,8 +3,7 @@ import type { SCursor } from 'baobab'
 import { memoize } from 'lodash'
 
 import type { BattleCursor } from '@/util'
-import { commit } from '@/util'
-import { getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
+import { commit, getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
 
 import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startBattle'
 import { getCharacterKeysAndDamages } from './attack'
