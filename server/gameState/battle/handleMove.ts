@@ -92,7 +92,7 @@ export async function handleMove(
     commit(scene)
 }
 const getMoveChannel = memoize(function getMoveChannel() {
-    const eventsCursor: SCursor<NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events')
+    const eventsCursor: SCursor<NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events').select('move')
     const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
     return move$
 })

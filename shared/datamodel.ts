@@ -3,7 +3,7 @@
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
 import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, NpcLevelStats, StanceName, StanceStats } from '.'
-import type { NetworkEvent } from './networkEvents'
+import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
 export type CharacterUid = string
@@ -42,7 +42,10 @@ export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
-    events: NetworkEvent<'move', NetworkAttackData>[]
+    events: {
+        move: NetworkEvent<'move', NetworkAttackData>[]
+        world: WorldEvent[]
+    }
 }
 
 export interface OwnedCharacter extends CharacterStats {

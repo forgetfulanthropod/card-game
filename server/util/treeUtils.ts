@@ -31,7 +31,7 @@ export function getBattleScene(username: 'alice'): BattleCursor {
 
 export type EventCursor = SCursor<MoveEvent[]>
 export function getEventsCursor(username: 'alice'): EventCursor {
-    const events = getGameStateCursor(username).select('events')
+    const events = getGameStateCursor(username).select('events').select('move')
 
     return events as EventCursor
 }

@@ -20,7 +20,7 @@ import InfoBox from './InfoBox'
 export type Move$ = NetworkEventEmitter<'move', NetworkAttackData>
 
 export function BattleScene(): PixiContainer {
-    const eventsCursor = getTree().select('events')
+    const eventsCursor = getTree().select('events').select('move')
     const scene = getBattleScene()
     const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
     // const { move$, } = getBindings()

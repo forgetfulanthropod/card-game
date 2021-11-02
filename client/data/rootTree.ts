@@ -49,13 +49,14 @@ export const getOwnedCharacters = (): SCursor<Record<string, OwnedCharacter>> =>
 export const getScene = (): SCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 
-
-interface ClientTree {
+export interface ClientTree {
     serverCalls: unknown[]
+    // modal: null | { title: string, body: string, onClose: Callback }
 }
 export const getClientTree: () => SBaobab<ClientTree> = memoize(() => {
     return new SBaobab<ClientTree>({
         serverCalls: [],
+        // modal: null,
     })
 })
 
