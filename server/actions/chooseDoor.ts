@@ -2,12 +2,13 @@
 
 import type { ChooseDoor } from '@shared'
 
-import { handleSpecialDoor, resetRound } from '@/gameState/battle'
+import { getRoom, resetRound } from '@/gameState/battle'
 import { getBattleScene, objFilter } from '@/util'
+
 export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')
 
-    const room = handleSpecialDoor({ door: args.door, dungeonName: scene.getK('dungeonName'), roomsPassed: scene.getK('roomsPassed') })
+    const room = getRoom({ door: args.door, dungeonName: scene.getK('dungeonName'), roomsPassed: scene.getK('roomsPassed') })
     // const room = makeRoom({
     //     door: args.door, dungeonName: 'cool dungeon', roomsPassed: scene.getK('roomsPassed')
     // })

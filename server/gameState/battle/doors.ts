@@ -75,7 +75,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     }
 }
 
-export function handleSpecialDoor(args: {
+export function getRoom(args: {
     door: SpecialDoorName,
     dungeonName: DungeonName,
     roomsPassed: number
