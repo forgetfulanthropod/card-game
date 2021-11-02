@@ -1,12 +1,13 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName } from '@shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, WorldEvent, WorldEventData } from '@shared'
 import type { SCursor } from 'baobab'
-import { keys, zip } from 'lodash'
+import { keys, memoize, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
 import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import { commit, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
+import { eventTriggersMap } from '@/rulebook/eventTriggersMap'
+import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
@@ -25,12 +26,17 @@ type Room = {
 
 export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
 
-    const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha']
+    const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
-    const descriptions = describeOutcomes(roomOutcomes).join('\n or \n')
+    const normalDescriptions = describeOutcomes(roomOutcomes).join('\n or \n')
     return {
         options,
-        descriptions: ['big scary door\n X2 Modifier', descriptions, 'LV 10 matcha door'],
+        descriptions: [
+            'big scary door\n X2 Modifier',
+            normalDescriptions,
+            'LV 10 matcha door',
+            'randomEvent',
+        ],
     }
     // const allDoors: Door[] = ['A', 'B', 'C', 'D']
     // const options = allDoors.slice(0, length(roomOutcomes))
@@ -121,6 +127,11 @@ export function handleSpecialDoor(args: {
                 throw Error(`campfire has unknown effectType ${v.effectType}`)
             }
         }
+        case 'randomEvent': {
+            const worldEvent = ssample(vals(eventTriggersMap))
+            getWorldChannel().emit({ title: worldEvent.shortDescription, body: worldEvent.fullDescription })
+            return makeRandRegularRoom(dungeonName, roomsPassed)
+        }
         default: {
             // TODO: 'rareItem' 'bossDoor' 'face' 'tiny' 'jumbo' 'randomEvent' 'candyBaby'
             throw Error('unknown door type ')
@@ -155,3 +166,9 @@ function makeUid(): string {
 function randCoords() {
     return { x: srandInt(50, 95), y: srandInt(40, 80) }
 }
+
+const getWorldChannel = memoize(function getWorldChannel() {
+    const eventsCursor: SCursor<WorldEvent[]> = (getGameStateCursor('alice')).select('events').select('world')
+    const move$ = makeServerEventEmitter<'world', WorldEventData>('world', eventsCursor)
+    return move$
+})

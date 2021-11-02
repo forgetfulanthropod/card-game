@@ -51,12 +51,12 @@ export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 
 export interface ClientTree {
     serverCalls: unknown[]
-    modal: null | { title: string, body: string, onClose: Callback }
+    // modal: null | { title: string, body: string, onClose: Callback }
 }
 export const getClientTree: () => SBaobab<ClientTree> = memoize(() => {
     return new SBaobab<ClientTree>({
         serverCalls: [],
-        modal: null,
+        // modal: null,
     })
 })
 

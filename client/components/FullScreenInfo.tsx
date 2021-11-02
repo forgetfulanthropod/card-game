@@ -2,10 +2,10 @@ import { h, Fragment, JSX } from 'preact' // eslint-disable-line
 // @ts-expect-error
 import styled from 'styled-components'
 import { parse } from 'marked'
-import { useEffect, useRef } from 'preact/hooks'
-import type { ClientTree } from '@/data/rootTree'
-import { getClientTree } from '@/data/rootTree'
-import { useCursor } from './util'
+import { useEffect, useRef, useState } from 'preact/hooks'
+import type { WorldEventData } from '@shared'
+import { getTree } from '@/data/rootTree'
+import { makeClientEventListener } from '@/util'
 
 const Modal = styled.div`
     pointer-events: auto;
@@ -48,14 +48,20 @@ const Modal = styled.div`
     }
 `
 
+interface Info { title: string, body: string, onClose: Callback }
+
 export function FullScreenInfo(): JSX.Element {
-    const info = useCursor(getClientTree().select('modal'))
+    const [info, setInfo] = useState<Info | null>(null)
+    useEffect(() => {
+        const world$ = makeClientEventListener<'world', WorldEventData>('world', getTree().select('events').select('world'))
+        world$.on(e => setInfo({ title: e.data.title, body: e.data.body, onClose: () => setInfo(null) }))
+    }, [])
     if (info == null) { return <></> }
     return <FullScreenInfo_ {...info} />
 }
 
-function FullScreenInfo_(props: ClientTree['modal']): JSX.Element {
-    const { title, body, onClose } = props!
+function FullScreenInfo_(props: Info): JSX.Element {
+    const { title, body, onClose } = props
     const ref = useRef<HTMLDivElement>(null)
 
     useEffect(() => {

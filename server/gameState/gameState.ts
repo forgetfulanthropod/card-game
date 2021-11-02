@@ -40,5 +40,5 @@ export const initialGameState: Gamestate = {
     scene: initialEntryState,
     ownedCharacters: initialOwnedCharacters(),
     inventory: {},
-    events: [],
+    events: { world: [], move: [] },
 }

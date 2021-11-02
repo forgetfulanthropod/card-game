@@ -27,3 +27,10 @@ export interface Cursorish<T> {
     get(): T | Promise<T>
     on?: (_: 'update', cb: () => void) => void
 }
+
+export type WorldEventEmitter = NetworkEventEmitter<'world', WorldEvent>
+export type WorldEvent = NetworkEvent<'world', WorldEventData>
+export interface WorldEventData {
+    title: string,
+    body: string,
+}
