@@ -1,5 +1,5 @@
 /** Admin-only */
 
-import type { Blessing } from '@shared'
+import type { BlessingName } from '@shared'
 
-export type SetBlessings = (args: { blessings: Blessing[] }) => void
+export type SetBlessings = (args: { blessings: BlessingName[] }) => void
