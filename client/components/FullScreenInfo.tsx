@@ -2,8 +2,10 @@ import { h, Fragment, JSX } from 'preact' // eslint-disable-line
 // @ts-expect-error
 import styled from 'styled-components'
 import { parse } from 'marked'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef } from 'preact/hooks'
+import type { ClientTree } from '@/data/rootTree'
 import { getClientTree } from '@/data/rootTree'
+import { useCursor } from './util'
 
 const Modal = styled.div`
     pointer-events: auto;
@@ -47,18 +49,13 @@ const Modal = styled.div`
 `
 
 export function FullScreenInfo(): JSX.Element {
-    const m = getClientTree().select('modal')
-    const [info, setInfo] = useState(m.get())
-    m.on('update', e => setInfo(e.data.currentData))
-    if (info == null) {
-        return <></>
-    }
-    console.log('rendering with', info)
+    const info = useCursor(getClientTree().select('modal'))
+    if (info == null) { return <></> }
     return <FullScreenInfo_ {...info} />
 }
 
-function FullScreenInfo_(props: { title: string, body: string, onClose: Callback }): JSX.Element {
-    const { title, body, onClose } = props
+function FullScreenInfo_(props: ClientTree['modal']): JSX.Element {
+    const { title, body, onClose } = props!
     const ref = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
