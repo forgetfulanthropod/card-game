@@ -1,9 +1,8 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate } from '@shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, Gamestate, RoomOutcomes } from '@shared'
 import { keys, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
-import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import type { DataCursor } from '@/util'
 import { mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
