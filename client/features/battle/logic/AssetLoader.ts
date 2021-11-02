@@ -117,7 +117,7 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
 
     Loader.shared.load()
 
-    // @ts-expect-error
+    // @ts-ignore
     Loader.shared.onLoad.add((_, { name }) => {
         loaded.add(name)
         if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {

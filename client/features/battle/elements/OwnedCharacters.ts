@@ -1,5 +1,6 @@
 
-import type { MyCursor, OwnedCharacter } from '@shared'
+import type { OwnedCharacter } from '@shared'
+import type { SCursor } from 'baobab'
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
@@ -61,7 +62,7 @@ function makeCharacters() {
     )
 }
 
-function makeSelectionIndicators(characters: PixiContainer[], selectedCharacters: MyCursor<OwnedCharacter[]>) {
+function makeSelectionIndicators(characters: PixiContainer[], selectedCharacters: SCursor<OwnedCharacter[]>) {
 
     update()
     selectedCharacters.on('update', update)

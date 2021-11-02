@@ -1,4 +1,4 @@
-import { getBattleScene, vals } from '@/util'
+import { commit, getBattleScene, vals } from '@/util'
 
 import { handleMove } from './handleMove'
 import { tl, warn } from './logging'
@@ -25,8 +25,8 @@ export async function doNpcMove(_reason?: string): Promise<void> {
     }
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
-        scene.setK('isPlayerTurn', true)
-        scene.commit()
+        scene.set('isPlayerTurn', true)
+        commit(scene)
         return
     }
     const move = getNpcMove(vals(allCharacters))

@@ -27,7 +27,8 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
             if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })
         } catch (e) {
-            logger.error(`exception occured in client call to ${f.name}: `, e)
+            const err = e as unknown as Error
+            logger.error(`exception occured in client call to ${f.name}: ${JSON.stringify(err.message)} ${err.stack}`)
             response.send({ status: 'error', message: JSON.stringify(e) })
         }
     })

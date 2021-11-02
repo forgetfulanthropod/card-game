@@ -1,6 +1,7 @@
 import type { AddSelected } from '@shared'
 
-import { getEntryScene } from '@/util'
+import { commit, getEntryScene } from '@/util'
+
 
 export const addSelected: AddSelected = (args) => {
     const c = args.character
@@ -10,7 +11,7 @@ export const addSelected: AddSelected = (args) => {
 
     const indexInselected = allCharacters.findIndex(character => c.uid === character.uid)
     if (indexInselected !== -1)
-        scene.applyK('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
+        scene.apply('selectedCharacters', sel => [...sel.slice(0, indexInselected), ...sel.slice(indexInselected + 1)])
     else {
         const totalPoints = [...allCharacters, c]
             .reduce((acc, curr) => {
@@ -20,9 +21,9 @@ export const addSelected: AddSelected = (args) => {
         const pointLimit = scene.select('selectedLevel').select('pointLimit').get()
 
         if (totalPoints <= pointLimit)
-            scene.applyK('selectedCharacters', sel => [...sel, c])
+            scene.apply('selectedCharacters', sel => [...sel, c])
     }
     // debugger
-    scene.commit()
+    commit(scene)
 
 }
