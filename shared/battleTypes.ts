@@ -53,6 +53,17 @@ export interface CharacterMeta extends CharacterStats {
     effects: Effect[]
 }
 
+export type NpcLevelStats = Record<
+    Partial<CharacterName>,
+    Record<
+        number,
+        {
+            maxHealth: number,
+            damage: number
+        }
+    >
+>
+
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
 export type StanceMultiplier = .75 | 1 | 1.25
 export type StanceStats = {

@@ -8,9 +8,10 @@ import type {
     StanceName,
 } from '@shared'
 
-import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
+import { statsMap } from '@/rulebook/battle'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
+import { getLevelIncrease, getLevelInfo } from './npcLeveling'
 
 
 const BASE_WIDTH = 1920
@@ -20,13 +21,17 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
-function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
+function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName): Record<CharacterUid, CharacterMeta> {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
+    const level = dungeonName == null ?
+        1 :
+        1 + getLevelIncrease(dungeonName)
+
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: 1 })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level })),
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
@@ -40,7 +45,7 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
 }
 
 export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen)
+    const allCharacters = makeCharacters(args?.chosen, args?.dungeonName)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -114,18 +119,11 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    // @ts-expect-error
-    const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
-
-    if (levelInfo != null) {
-        levelInfo.health = levelInfo.maxHealth
-        levelInfo.level = args.level
-    }
 
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
-        ...(levelInfo ?? {}),
+        ...(getLevelInfo(args.name, args.level)),
         uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
@@ -135,6 +133,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         effects: [],
+        experience: 0,
         // health: 1,
     }
 }

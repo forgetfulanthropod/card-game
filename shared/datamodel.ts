@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, NpcLevelStats, StanceName, StanceStats } from '.'
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
@@ -22,6 +22,7 @@ export interface Rulebook {
         name: LocationName
     }>
     dungeonLevels: DungeonLevel[]
+    dungeonRooms: DungeonRooms
     items: Record<ItemName, {
         name: ItemName
         displayName: string
@@ -34,6 +35,7 @@ export interface Rulebook {
         X_NEUTRAL_THRESH: number
     }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
+    npcLevelStatsMap: NpcLevelStats
     levelThresholds: Record<number, number>
 }
 export interface Gamestate {
@@ -100,6 +102,18 @@ export interface DungeonLevel {
     pointLimit: number
     modifier: number
 }
+
+// type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+// type DoorLetter = string//'A' | 'B' | 'C' | 'D'
+type EnemyLevel = number
+type Probability = number
+type Outcome = [CharacterName, EnemyLevel][]
+export type RoomOutcomes = {
+    outcomes: Outcome[]
+    probs: Probability[]
+}
+
+export type DungeonRooms = Record<number, Record<string, RoomOutcomes>>
 
 export type DungeonName =
     | 'Hooligan’s Bluff'

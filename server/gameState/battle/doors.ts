@@ -1,10 +1,9 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, WorldEvent, WorldEventData } from '@shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, RoomOutcomes, WorldEvent, WorldEventData } from '@shared'
 import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
 import type { SpecialDoorName } from '@/rulebook/battle'
 import { npcNames, specialDoorsMap } from '@/rulebook/battle'
-import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
 import { dungeonRooms } from '@/rulebook/dungeonRooms'
 import { eventTriggersMap } from '@/rulebook/eventTriggersMap'
 import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
@@ -19,7 +18,7 @@ import { newNPCMeta } from './state'
 // const config = { addRandomDoor: true }
 
 
-type Room = {
+export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
 }
@@ -82,7 +81,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     }
 }
 
-export function handleSpecialDoor(args: {
+export function getRoom(args: {
     door: SpecialDoorName,
     dungeonName: DungeonName,
     roomsPassed: number
