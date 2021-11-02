@@ -16,6 +16,7 @@ type RecipeName = string
 export interface Rulebook {
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
+    blessings: Record<BlessingName, Blessing>
     recipes: Record<RecipeName, { name: RecipeName, ingredients: ItemName[], result: ItemName }>
     locations: Record<LocationName, {
         displayName: string
@@ -40,6 +41,7 @@ export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
+    blessings: Blessing[]
     events: {
         move: NetworkEvent<'move', NetworkAttackData>[]
         world: WorldEvent[]
@@ -106,3 +108,6 @@ export type DungeonName =
     | 'The Matcha Caves'
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
+
+export type Blessing = { name: string, effect: string }
+export type BlessingName = 'amulet' | 'charm'

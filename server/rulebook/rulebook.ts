@@ -3,6 +3,7 @@ import type { DungeonLevel, Rulebook } from '@shared'
 import { numbers } from '@/gameState/battle'
 
 import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
+import { blessingsMap } from './blessingsMap'
 
 
 const dungeonLevels: DungeonLevel[] = [
@@ -18,6 +19,7 @@ export const rulebook: Rulebook = {
     locations: {},
     dungeonLevels: dungeonLevels,
     items: {},
+    blessings: blessingsMap,
     numbers,
     stanceTypeMetaMap,
     levelThresholds: {

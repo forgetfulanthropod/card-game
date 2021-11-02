@@ -40,5 +40,6 @@ export const initialGameState: Gamestate = {
     scene: initialEntryState,
     ownedCharacters: initialOwnedCharacters(),
     inventory: {},
+    blessings: [],
     events: { world: [], move: [] },
 }
