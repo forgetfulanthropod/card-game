@@ -84,4 +84,5 @@
     "searchEverywhere.include": "**/*.{ts,tsx,mjs}",
     "searchEverywhere.shouldUseDebounce": false,
     "searchEverywhere.shouldInitOnStartup": true,
+    "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
 }
