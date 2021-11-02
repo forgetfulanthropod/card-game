@@ -7,6 +7,7 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import { FullScreenInfo } from './FullScreenInfo'
 import ResetButton from './ResetButton'
 import { Sidebar } from './Sidebar'
 
@@ -19,6 +20,7 @@ export default function App(): JSX.Element {
         <Toaster />
         <Sidebar />
         <ResetButton />
+        <FullScreenInfo />
         {sceneType === 'battle' && <Battle />}
         {/* <TestCounter /> */}
     </AppWrap>
