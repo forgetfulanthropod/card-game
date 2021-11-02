@@ -1,6 +1,6 @@
 import type { Gamestate } from '@shared'
 import type { SCursor } from 'baobab'
-import { SBaobab } from 'baobab/dist/sbaobab'
+import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
 
 import { getIo } from '@/index'
