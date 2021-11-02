@@ -1,11 +1,11 @@
 import type { EntryScene } from '@shared'
 
-import { rulebook } from '@/rulebook/rulebook'
+import { getRulebook } from '@/rulebook'
 
 
 export const initialEntryState: EntryScene = {
     name: 'entry',
     selectedCharacters: [],
-    selectedLevel: rulebook.dungeonLevels[0],
+    selectedLevel: getRulebook().dungeonLevels[0],
 
 }

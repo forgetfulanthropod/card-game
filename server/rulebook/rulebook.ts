@@ -1,8 +1,8 @@
 import type { DungeonLevel, Rulebook } from '@shared'
 
-import { numbers } from '@/gameState/battle'
-
-import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
+import { moveMetaMap, npcLevelStatsMap, specialDoorsMap, stanceTypeMetaMap, statsMap } from './battle'
+import { dungeonRooms } from './dungeonRooms'
+import { eventTriggersMap } from './eventTriggersMap'
 
 
 const dungeonLevels: DungeonLevel[] = [
@@ -11,15 +11,19 @@ const dungeonLevels: DungeonLevel[] = [
     { name: 'Fort Skeleton', num: 3, pointLimit: 65, modifier: 3 },
     { name: 'The Ninth Trash Hole of Hell', num: 4, pointLimit: 100, modifier: 5 },
 ]
-export const rulebook: Rulebook = {
+const rulebook: Rulebook = {
     characters: statsMap,
     moveMetaMap,
+    npcLevelStatsMap,
     recipes: {},
     locations: {},
     dungeonLevels: dungeonLevels,
     items: {},
-    numbers,
     stanceTypeMetaMap,
+    // npcNames,
+    specialDoorsMap,
+    dungeonRooms,
+    eventTriggersMap,
     levelThresholds: {
         2: 100,
         3: 200,
@@ -31,3 +35,5 @@ export const rulebook: Rulebook = {
         9: 800,
     },
 }
+
+export const getRulebook = (): Rulebook => rulebook

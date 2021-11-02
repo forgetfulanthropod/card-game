@@ -8,17 +8,17 @@ import type {
     StanceName,
 } from '@shared'
 
-import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
 
+const { npcLevelStatsMap, characters: statsMap } = getRulebook()
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
 function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
@@ -114,18 +114,14 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    // @ts-expect-error
     const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
 
-    if (levelInfo != null) {
-        levelInfo.health = levelInfo.maxHealth
-        levelInfo.level = args.level
-    }
+    const info = levelInfo != null && { ...levelInfo, health: levelInfo.maxHealth, level: args.level }
 
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
-        ...(levelInfo ?? {}),
+        ...(info ?? {}),
         uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
@@ -135,6 +131,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         effects: [],
+        experience: 0,
         // health: 1,
     }
 }

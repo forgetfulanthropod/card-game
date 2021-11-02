@@ -1,6 +1,8 @@
 import type { Gamestate, OwnedCharacter } from '@shared'
 
-import { statsMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
+
+const { characters: statsMap } = getRulebook()
 
 import { initialEntryState } from './entry/state'
 

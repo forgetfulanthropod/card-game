@@ -2,7 +2,8 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { DungeonRooms } from './DungeonRooms'
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
@@ -20,22 +21,22 @@ export interface Rulebook {
     locations: Record<LocationName, {
         displayName: string
         name: LocationName
-    }>
+    }>,
+    npcLevelStatsMap: NpcLevelStatsMap
     dungeonLevels: DungeonLevel[]
     items: Record<ItemName, {
         name: ItemName
         displayName: string
         description: string
     }>
-    numbers: {
-        BASE_WIDTH: number
-        BASE_HEIGHT: number
-        X_AGGRESSIVE_THRESH: number
-        X_NEUTRAL_THRESH: number
-    }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
     levelThresholds: Record<number, number>
+    // npcNames: CharacterName[]
+    specialDoorsMap: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+    dungeonRooms: DungeonRooms
+    eventTriggersMap: EventTriggersMap
 }
+
 export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
@@ -106,3 +107,5 @@ export type DungeonName =
     | 'The Matcha Caves'
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
+
+export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>

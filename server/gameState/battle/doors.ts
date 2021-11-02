@@ -1,18 +1,18 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, WorldEvent, WorldEventData } from '@shared'
+import type { SpecialDoorName } from '@shared'
+import type { RoomOutcomes } from '@shared'
 import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
-import type { SpecialDoorName } from '@/rulebook/battle'
-import { npcNames, specialDoorsMap } from '@/rulebook/battle'
-import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
-import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import { eventTriggersMap } from '@/rulebook/eventTriggersMap'
+import { getRulebook } from '@/rulebook'
 import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
 
 
+const { characters, specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
+const npcNames = Object.values(characters).filter(x => !x.isPc).map(x => x.name)
 // type CharacterModifer = string
 
 
