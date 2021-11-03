@@ -32,6 +32,7 @@ interface KnownCharacterProps {
     move$: Move$
     scale: number
     cursor: SCursor<CharacterMeta>
+    zIndex: number
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -58,6 +59,7 @@ function Character(args: CharacterProps): PixiContainer {
     const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = sprites
 
     const mainContainer = Container({
+        zIndex: args.zIndex,
         children: [
             mainSprite,
             selectedSprite,

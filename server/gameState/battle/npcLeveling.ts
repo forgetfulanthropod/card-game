@@ -19,8 +19,9 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
         const enemyKeys = keys(room.enemies)
         // console.log('levelUpEnemy', levelUpEnemy(enemies[enemyKeys[0]], getLevelIncrease(dungeonName)))
         vals(room.enemies).forEach((e, i) => {
-            const coinFlip = Math.random() < .5
-            console.log('coin flip was ' + (coinFlip ? 'heads' : 'tails'))
+            // const coinFlip = Math.random() < .5
+            const coinFlip = false
+            // console.log('coin flip was ' + (coinFlip ? 'heads' : 'tails'))
             if (coinFlip) {
                 enemies[enemyKeys[i]] = levelUpEnemy(e, increase)
             } else {
