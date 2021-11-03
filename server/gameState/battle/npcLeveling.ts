@@ -10,7 +10,9 @@ import type { Room } from './doors'
 export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
     let enemies = room.enemies
 
-    if (getLevelIncrease(dungeonName) > 0) {
+    const increase = getLevelIncrease(dungeonName)
+
+    if (increase > 0) {
         enemies = {}
 
         const enemyKeys = keys(room.enemies)
@@ -18,12 +20,22 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
         vals(room.enemies).forEach((e, i) => {
             const coinFlip = Math.random() < .5
             console.log('coin flip was ' + (coinFlip ? 'heads' : 'tails'))
-            // if (coinFlip) {
-            //     enemies[enemyKeys[i]] = levelUpEnemy(e, getLevelIncrease(dungeonName))
-            // } else {
-            enemies[enemyKeys[i]] = e
-            enemies[enemyKeys[i] + '_clone'] = cloneDeep(e)
-            // }
+            if (coinFlip) {
+                enemies[enemyKeys[i]] = levelUpEnemy(e, increase)
+            } else {
+                enemies[enemyKeys[i]] = e
+                for (let i = 1; i < increase; i++) {
+                    const cloneUid = `${enemyKeys[i]}_clone${i}`
+                    enemies[cloneUid] = {
+                        ...cloneDeep(e),
+                        x: e.x + 20 * i,
+                        y: e.y + 20 * i,
+                        screenX: e.screenX + 60 * i,
+                        screenY: e.screenY + 60 * i,
+                        uid: cloneUid,
+                    }
+                }
+            }
 
         })
 
