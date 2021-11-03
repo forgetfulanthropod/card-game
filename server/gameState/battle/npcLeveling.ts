@@ -1,5 +1,5 @@
 import type { CharacterMeta, CharacterName, DungeonName } from '@shared'
-import { keys } from 'lodash'
+import { cloneDeep, keys } from 'lodash'
 
 import { rulebook } from '@/rulebook'
 import { npcLevelStatsMap } from '@/rulebook/battle'
@@ -7,8 +7,7 @@ import { vals } from '@/util'
 
 import type { Room } from './doors'
 
-
-export function levelUpEnemies(room: Room, dungeonName: DungeonName): Room {
+export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
     let enemies = room.enemies
 
     if (getLevelIncrease(dungeonName) > 0) {
@@ -16,7 +15,17 @@ export function levelUpEnemies(room: Room, dungeonName: DungeonName): Room {
 
         const enemyKeys = keys(room.enemies)
         // console.log('levelUpEnemy', levelUpEnemy(enemies[enemyKeys[0]], getLevelIncrease(dungeonName)))
-        vals(room.enemies).map((e, i) => enemies[enemyKeys[i]] = levelUpEnemy(e, getLevelIncrease(dungeonName)))
+        vals(room.enemies).forEach((e, i) => {
+            const coinFlip = Math.random() < .5
+            console.log('coin flip was ' + (coinFlip ? 'heads' : 'tails'))
+            // if (coinFlip) {
+            //     enemies[enemyKeys[i]] = levelUpEnemy(e, getLevelIncrease(dungeonName))
+            // } else {
+            enemies[enemyKeys[i]] = e
+            enemies[enemyKeys[i] + '_clone'] = cloneDeep(e)
+            // }
+
+        })
 
     }
 

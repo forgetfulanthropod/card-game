@@ -11,7 +11,7 @@ import type {
 import { statsMap } from '@/rulebook/battle'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
-import { getLevelIncrease, getLevelInfo } from './npcLeveling'
+import { getLevelInfo } from './npcLeveling'
 
 
 const BASE_WIDTH = 1920
@@ -23,15 +23,23 @@ export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL
 
 function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName): Record<CharacterUid, CharacterMeta> {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
+    // const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
-    const level = dungeonName == null ?
-        1 :
-        1 + getLevelIncrease(dungeonName)
+    // const increasedLevel = dungeonName == null ?
+    //     1 :
+    //     1 + getLevelIncrease(dungeonName)
 
+    // TODO: increase number or level...
+    // this is very similar to chooseDoor
+    // and they requested a door at the start
+    // so I shold be able to make that change
+    // and remove the duplication between here and there
+    // const npcs = nonPlayerCharacterPositions.map(([x, y]) => {
+    // return newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: increasedLevel })
+    // })
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level })),
+        // ...npcs,
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })

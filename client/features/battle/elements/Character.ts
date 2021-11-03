@@ -10,7 +10,7 @@ import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
-import LevelUp from './LevelUp'
+// import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
 
 
@@ -101,13 +101,13 @@ function Character(args: CharacterProps): PixiContainer {
 
     args.cursor.select('health').on('update', updateDeathAndHealth)
     args.cursor.select('effects').on('update', updateDeathAndHealth)
-    args.cursor.select('level').on('update', () => {
-        doFlashElement(
-            aboveCharacterContainer,
-            () => LevelUp({ level: args.cursor.select('level').get() }),
-            { durationMs: SHOW_LEVEL_UP_TIME }
-        )
-    })
+    // args.cursor.select('level').on('update', () => {
+    //     doFlashElement(
+    //         aboveCharacterContainer,
+    //         () => LevelUp({ level: args.cursor.select('level').get() }),
+    //         { durationMs: SHOW_LEVEL_UP_TIME }
+    //     )
+    // })
 
     // const [isHovering, setIsHovering] = useState(false)
 
