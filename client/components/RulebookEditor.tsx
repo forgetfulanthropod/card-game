@@ -52,7 +52,7 @@ const ButtonGroup = styled.div`
 export function RulebookEditor(_props: Empty): JSX.Element {
     const ref: MonacoRef = useRef(null)
     const [id, setId] = useState('default')
-    const [showMonaco, setShowMonaco] = useState(true)
+    const [showMonaco, setShowMonaco] = useState(false)
     const rulebooks = useCursor(getTree().select('rulebooks'))
     const curRulebook = useCursor(getTree().select('curRulebook'))
     if (curRulebook == null) { throw Error('null rulebook') }
