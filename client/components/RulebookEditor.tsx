@@ -20,7 +20,7 @@ const ButtonGroup = styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    & button {
+    & * {
         background-color: #04aa6d; /* Green background */
         border: 1px solid green; /* Green border */
         color: white; /* White text */
@@ -29,7 +29,7 @@ const ButtonGroup = styled.div`
         float: left; /* Float the buttons side by side */
     }
 
-    & button:not(:last-child) {
+    & *:not(:last-child) {
         border-right: none; /* Prevent double borders */
     }
 
@@ -41,25 +41,31 @@ const ButtonGroup = styled.div`
     }
 
     /* Add a background color on hover */
-    & button:hover {
+    & *:hover {
         background-color: #3e8e41;
     }
 `
 
 export function RulebookEditor(_props: Empty): JSX.Element {
     const ref: MonacoRef = useRef(null)
-    const [shown, setShown] = useState(true)
+    const [showMonaco, setShowMonaco] = useState(true)
     return <>
-        {shown && <Monaco mref={ref} />}
+        {showMonaco && <Monaco mref={ref} />}
         <ButtonGroup>
             <button onClick={() => {
-                if (shown) alert(`current value: ${ref.current?.getValue()}`)
-                setShown(s => !s)
+                if (showMonaco) alert(`current value: ${ref.current?.getValue()}`)
+                setShowMonaco(s => !s)
             }}>
                 Open/close
             </button>
             <button>Save new</button>
-            <button>Open existing</button>
+            {/* <button onClick={() => setShowSelector(s => !s)}>Open existing</button>
+            {showSelector && */}
+            <Selector
+                options={['a', 'b', 'c']}
+                onChoice={(s) => {
+                    alert(`you chose ${s}`)
+                }} />
             <button>Delete current</button>
         </ButtonGroup>
     </>
@@ -76,4 +82,12 @@ function Monaco(props: { mref: MonacoRef }): JSX.Element {
             defaultValue="// some comment"
         />
     </EditorWrap>
+}
+
+function Selector(props: { options: string[], onChoice: (s: string) => void }): JSX.Element {
+    // @ts-expect-error
+    return <select onChange={e => props.onChoice(e?.target?.value)}>
+        {props.options.map(o =>
+            <option key={o} value={o}>{o}</option>)}
+    </select>
 }
