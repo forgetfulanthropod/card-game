@@ -2,7 +2,7 @@ import type { Gamestate, Rulebook } from '@shared'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { homedir } from 'os'
 
-import { getRootCursor } from '.'
+import { commit, getRootCursor } from '.'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
@@ -11,6 +11,7 @@ const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+
 export function updateRulebookNames(): void {
     const cursor = getRootCursor().select('users').select('alice').select('rulebooks')
     cursor.set(getRulebookNames())
+    commit(cursor)
 }
 
 export function getRulebookNames(): Gamestate['rulebooks'] {

@@ -4,7 +4,10 @@ import Editor from '@monaco-editor/react'
 // @ts-ignore
 import styled from 'styled-components'
 import { useRef, useState } from 'preact/hooks'
-
+import { rulebookAction } from '@/actions'
+import { useCursor } from './util'
+import { getTree } from '@/data/rootTree'
+import type { Rulebook } from '@shared'
 const EditorWrap = styled.div`
     // z-index: 10;
     pointer-events: auto;
@@ -48,9 +51,12 @@ const ButtonGroup = styled.div`
 
 export function RulebookEditor(_props: Empty): JSX.Element {
     const ref: MonacoRef = useRef(null)
+    const [id, setId] = useState('default')
     const [showMonaco, setShowMonaco] = useState(true)
+    const rulebooks = useCursor(getTree().select('rulebooks'))
+    const curRulebook = useCursor(getTree().select('curRulebook'))
     return <>
-        {showMonaco && <Monaco mref={ref} />}
+        {showMonaco && <Monaco mref={ref} defaultValue={JSON.stringify(curRulebook, null, 4)} />}
         <ButtonGroup>
             <button onClick={() => {
                 if (showMonaco) alert(`current value: ${ref.current?.getValue()}`)
@@ -58,28 +64,41 @@ export function RulebookEditor(_props: Empty): JSX.Element {
             }}>
                 Open/close
             </button>
-            <button>Save new</button>
+            <button
+                onClick={() => {
+                    const rulebookString = ref.current?.getValue()
+                    if (rulebookString == null) { throw Error() }
+                    const rulebook = JSON.parse(rulebookString) as Rulebook
+                    void rulebookAction({ do: 'new', rulebook })
+                }}>
+                Save new
+            </button>
             {/* <button onClick={() => setShowSelector(s => !s)}>Open existing</button>
             {showSelector && */}
             <Selector
-                options={['a', 'b', 'c']}
+                options={rulebooks?.map(r => r.name) ?? []}
                 onChoice={(s) => {
-                    alert(`you chose ${s}`)
+                    const id = rulebooks?.find(r => r.name === s)?.id
+                    if (id == null) { throw Error }
+                    setId(id)
+                    void rulebookAction({ do: 'choose', id })
                 }} />
-            <button>Delete current</button>
+            <button
+                onClick={() => { void rulebookAction({ do: 'delete', id }) }}
+            >Delete current</button>
         </ButtonGroup>
     </>
 }
 
 type MonacoRef = RefObject<{ getValue(): string }>
 
-function Monaco(props: { mref: MonacoRef }): JSX.Element {
+function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
     return <EditorWrap>
         <Editor
             onMount={(editor, _monaco) => props.mref.current = editor}
             height="98vh"
             defaultLanguage="javascript"
-            defaultValue="// some comment"
+            defaultValue={props.defaultValue}
         />
     </EditorWrap>
 }
