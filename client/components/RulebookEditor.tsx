@@ -55,11 +55,12 @@ export function RulebookEditor(_props: Empty): JSX.Element {
     const [showMonaco, setShowMonaco] = useState(true)
     const rulebooks = useCursor(getTree().select('rulebooks'))
     const curRulebook = useCursor(getTree().select('curRulebook'))
+    if (curRulebook == null) { throw Error('null rulebook') }
     return <>
         {showMonaco && <Monaco mref={ref} defaultValue={JSON.stringify(curRulebook, null, 4)} />}
         <ButtonGroup>
             <button onClick={() => {
-                if (showMonaco) alert(`current value: ${ref.current?.getValue()}`)
+                // if (showMonaco) alert(`current value: ${ref.current?.getValue()}`)
                 setShowMonaco(s => !s)
             }}>
                 Open/close
@@ -76,6 +77,7 @@ export function RulebookEditor(_props: Empty): JSX.Element {
             {/* <button onClick={() => setShowSelector(s => !s)}>Open existing</button>
             {showSelector && */}
             <Selector
+                value={curRulebook?.name}
                 options={rulebooks?.map(r => r.name) ?? []}
                 onChoice={(s) => {
                     const id = rulebooks?.find(r => r.name === s)?.id
@@ -97,15 +99,15 @@ function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
         <Editor
             onMount={(editor, _monaco) => props.mref.current = editor}
             height="98vh"
-            defaultLanguage="javascript"
+            defaultLanguage="json"
             defaultValue={props.defaultValue}
         />
     </EditorWrap>
 }
 
-function Selector(props: { options: string[], onChoice: (s: string) => void }): JSX.Element {
+function Selector(props: { options: string[], onChoice: (s: string) => void, value: string }): JSX.Element {
     // @ts-expect-error
-    return <select onChange={e => props.onChoice(e?.target?.value)}>
+    return <select value={props.value} onChange={e => props.onChoice(e?.target?.value)}>
         {props.options.map(o =>
             <option key={o} value={o}>{o}</option>)}
     </select>

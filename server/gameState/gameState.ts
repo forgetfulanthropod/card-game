@@ -5,13 +5,13 @@ import { getRulebookNames } from '@/util'
 
 import { initialEntryState } from './entry/state'
 
-const { characters: statsMap } = getRulebook()
 
 const config = {
     includeRulebook: true,
 }
 
 export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
+    const { characters: statsMap } = getRulebook()
     return {
         // 'char-uid-8W2mG': { uid: 'char-uid-8W2mG', tokenId: '1234', nftName: 'Frog Knight #1234', ...statsMap.frogKnight }, // has everything for each character
         // 'char-uid-TLO23': { uid: 'char-uid-TLO23', tokenId: '1234', nftName: 'Mushroom Farmer #1234', ...statsMap.mushroomFarmer },

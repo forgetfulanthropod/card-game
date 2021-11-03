@@ -2,6 +2,8 @@ import type { Gamestate, Rulebook } from '@shared'
 import { existsSync, readdirSync, readFileSync } from 'fs'
 import { homedir } from 'os'
 
+import { getRulebook } from '@/rulebook'
+
 import { commit, getRootCursor } from '.'
 
 export const prefix = homedir() + '/rulebooks/'
@@ -11,6 +13,12 @@ const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+
 export function updateRulebookNames(): void {
     const cursor = getRootCursor().select('users').select('alice').select('rulebooks')
     cursor.set(getRulebookNames())
+    commit(cursor)
+}
+
+export function updateClientRulebook(): void {
+    const cursor = getRootCursor().select('users').select('alice').select('curRulebook')
+    cursor.set(getRulebook())
     commit(cursor)
 }
 
