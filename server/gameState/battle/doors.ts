@@ -19,7 +19,7 @@ const npcNames = Object.values(characters).filter(x => !x.isPc).map(x => x.name)
 // const config = { addRandomDoor: true }
 
 
-type Room = {
+export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
 }
@@ -82,7 +82,7 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     }
 }
 
-export function handleSpecialDoor(args: {
+export function getRoom(args: {
     door: SpecialDoorName,
     dungeonName: DungeonName,
     roomsPassed: number

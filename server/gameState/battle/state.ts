@@ -11,8 +11,9 @@ import type {
 import { getRulebook } from '@/rulebook'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
+import { getLevelIncrease, getLevelInfo } from './npcLeveling'
 
-const { npcLevelStatsMap, characters: statsMap } = getRulebook()
+const { characters: statsMap } = getRulebook()
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -20,13 +21,17 @@ const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
 
-function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
+function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName): Record<CharacterUid, CharacterMeta> {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
     const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
 
+    const level = dungeonName == null ?
+        1 :
+        1 + getLevelIncrease(dungeonName)
+
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: 1 })),
+        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level })),
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
@@ -40,7 +45,7 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, Cha
 }
 
 export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen)
+    const allCharacters = makeCharacters(args?.chosen, args?.dungeonName)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -114,14 +119,11 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
-
-    const info = levelInfo != null && { ...levelInfo, health: levelInfo.maxHealth, level: args.level }
 
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
-        ...(info ?? {}),
+        ...(getLevelInfo(args.name, args.level)),
         uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
