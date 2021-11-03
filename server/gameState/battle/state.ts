@@ -9,6 +9,7 @@ import type {
 } from '@shared'
 
 import { statsMap } from '@/rulebook/battle'
+import { keys, vals } from '@/util'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
 import { getLevelInfo } from './npcLeveling'
@@ -21,7 +22,9 @@ const X_NEUTRAL_THRESH = 9
 
 export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
-function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName): Record<CharacterUid, CharacterMeta> {
+type Characters = Record<CharacterUid, CharacterMeta>
+
+function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
     // const chosen = chosen ?? vals(initialOwnedCharacters())
     // const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
@@ -45,7 +48,7 @@ function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
         }),
     ]
-    const o: Record<CharacterUid, CharacterMeta> = {}
+    const o: Characters = {}
     for (const c of all) {
         o[c.uid] = c
     }
@@ -53,7 +56,7 @@ function makeCharacters(chosen: OwnedCharacter[] = [], dungeonName?: DungeonName
 }
 
 export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen, args?.dungeonName)
+    const allCharacters = makeCharacters(args?.chosen)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
@@ -86,7 +89,22 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
     })
 }
 
-function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+export function rearrangeNpcs(npcs: Characters): Characters {
+    const positions = makePositions(65, 50, 18, 13, keys(npcs).length)
+
+    const rearrangedNpcs: Characters = {}
+
+    const npcKeys = keys(npcs)
+    vals(npcs).forEach((npc, i) => {
+        const [x, y] = positions[i]
+
+        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: BASE_WIDTH * x / 100, screenY: BASE_HEIGHT * y / 100 }
+    })
+
+    return rearrangedNpcs
+}
+
+export function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
@@ -94,6 +112,8 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
         [x0 + hGap / 2, y0 + vGap],
         [x0, y0 + vGap * 2],
         [x0 + hGap, y0 + vGap * 2],
+        [x0 - hGap, y0 + vGap * 2],
+        [x0 - hGap, y0 - vGap * 2],
     ]
     return A.slice(0, n)
 }

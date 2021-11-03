@@ -5,6 +5,7 @@ import { rulebook } from '@/rulebook'
 import { npcLevelStatsMap } from '@/rulebook/battle'
 import { vals } from '@/util'
 
+import { rearrangeNpcs } from '.'
 import type { Room } from './doors'
 
 export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
@@ -39,10 +40,12 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
 
         })
 
+        enemies = rearrangeNpcs(enemies)
     }
 
     return { ...room, enemies }
 }
+
 
 export function getLevelIncrease(dungeonName: DungeonName): number {
     const dungeonLevelInfo = rulebook.dungeonLevels.find(l => l.name === dungeonName)
