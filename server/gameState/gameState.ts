@@ -1,11 +1,15 @@
 import type { Gamestate, OwnedCharacter } from '@shared'
 
 import { getRulebook } from '@/rulebook'
-
-const { characters: statsMap } = getRulebook()
+import { getRulebookNames } from '@/util'
 
 import { initialEntryState } from './entry/state'
 
+const { characters: statsMap } = getRulebook()
+
+const config = {
+    includeRulebook: true,
+}
 
 export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
     return {
@@ -38,9 +42,13 @@ export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
 }
 
 
-export const initialGameState: Gamestate = {
-    scene: initialEntryState,
-    ownedCharacters: initialOwnedCharacters(),
-    inventory: {},
-    events: { world: [], move: [] },
+export function getInitialGameState(): Gamestate {
+    return {
+        scene: initialEntryState,
+        ownedCharacters: initialOwnedCharacters(),
+        inventory: {},
+        events: { world: [], move: [] },
+        rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
+        curRulebook: config.includeRulebook ? getRulebook() : undefined,
+    }
 }

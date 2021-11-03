@@ -13,6 +13,9 @@
       "@shared": [
         "../shared/index"
       ],
+      "@shared/code": [
+        "../shared/code/index"
+      ],
       "@/*": [
         "./*"
       ],
