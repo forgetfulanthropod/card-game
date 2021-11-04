@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { rulebookAction } from '@/actions'
 import { useCursor } from './util'
 import { getTree } from '@/data/rootTree'
-import type { Gamestate, Rulebook } from '@shared'
+import type { Rulebook } from '@shared'
 import toast from 'react-hot-toast'
 import type { editor } from 'monaco-editor'
 const EditorWrap = styled.div`
@@ -55,29 +55,31 @@ const ButtonGroup = styled.div`
 // TODO: edit the name outside of the rulebook
 // TODO: add a "saved at" field programatically
 
-export function RulebookEditor(_props: Empty): JSX.Element {
+export function RulebookEditor(): JSX.Element {
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
     const rulebooks = useCursor(getTree().select('rulebooks'))
     const curRulebook = useCursor(getTree().select('curRulebook'))
+    const name = curRulebook != null ? JSON.parse(curRulebook).name : null
     useEffect(() => {
-        ref.current?.setValue(JSON.stringify(curRulebook, null, 4))
+        if (curRulebook == null) return
+        ref.current?.setValue(curRulebook)
+        ref.current?.getAction('editor.action.formatDocument').run()
     }, [curRulebook])
-    const id = rulebooks?.find(r => r.name === curRulebook?.name)?.id
-    if (curRulebook == null) { toast.error('null rulebook'); return <></> }
-    if (id == null) { toast.error('null id'); return <></> }
+    if (curRulebook == null) { toast.error('null curRulebook'); return <></> }
+    if (rulebooks == null) { toast.error('null rulebooks'); return <></> }
     return <>
-        {shown && <Monaco mref={ref} defaultValue={JSON.stringify(curRulebook, null, 4)} />}
+        {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
         <ButtonGroup>
             <button onClick={() => setShown(s => !s)}>Open/close</button>
             <Selector
-                value={curRulebook?.name}
-                options={rulebooks?.map(r => r.name) ?? []}
-                onChoice={s => chooseRulebook(s, rulebooks)} />
+                value={name}
+                options={rulebooks}
+                onChoice={newName => rulebookAction({ do: 'choose', name: newName })} />
             {shown && <>
                 <button onClick={() => addNewRulebook(ref, rulebooks)}>Save new</button>
-                <button onClick={() => overwriteRulebook(ref, id)}>Overwrite</button>
-                <button onClick={() => deleteRulebook(id)}>Delete current</button>
+                <button onClick={() => overwriteRulebook(ref, name)}>Overwrite</button>
+                <button onClick={() => deleteRulebook(name)}>Delete current</button>
             </>}
         </ButtonGroup>
     </>
@@ -85,29 +87,24 @@ export function RulebookEditor(_props: Empty): JSX.Element {
 
 type MonacoRef = RefObject<editor.IStandaloneCodeEditor>
 
-async function deleteRulebook(id: string): Promise<void> {
-    if (id === 'default') {
+async function deleteRulebook(name: string): Promise<void> {
+    if (name === 'default') {
         toast.error('cannot delete default rulebook')
         return
     }
-    await rulebookAction({ do: 'delete', id })
+    await rulebookAction({ do: 'delete', name })
     toast('deleted')
 }
 
-async function chooseRulebook(name: string, rulebooks: Gamestate['rulebooks']): Promise<void> {
-    const id = rulebooks?.find(r => r.name === name)?.id
-    if (id == null) { toast.error('null id'); return }
-    await rulebookAction({ do: 'choose', id })
-}
 
-async function addNewRulebook(ref: MonacoRef, rulebooks?: Gamestate['rulebooks']): Promise<void> {
+async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
         toast.error('cannot save rulebook with name \'default\'')
         return
     }
-    if (rulebooks?.find(rb => rb.name === newRulebook.name)) {
+    if (rulebooks.includes(newRulebook.name)) {
         toast.error('already have rulebook with that name')
         return
     }
@@ -127,18 +124,18 @@ function parseRulebook(ref: MonacoRef): Mb<Rulebook> {
     }
 }
 
-async function overwriteRulebook(ref: MonacoRef, id: string): Promise<void> {
+async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
         toast.error('cannot save rulebook with name \'default\'')
         return
     }
-    if (id === 'default') {
+    if (name === 'default') {
         toast.error('cannot overwrite default. save new instead.')
         return
     }
-    await rulebookAction({ do: 'delete', id })
+    await rulebookAction({ do: 'delete', name })
     await rulebookAction({ do: 'new', rulebook: newRulebook })
     toast('overwritten')
 }
@@ -147,7 +144,11 @@ function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
 
     return <EditorWrap>
         <Editor
-            onMount={(editor, _monaco) => { props.mref.current = editor }}
+            onMount={(editor, _monaco) => {
+                props.mref.current = editor
+                toast('formatting')
+                void editor.getAction('editor.action.formatDocument').run()
+            }}
             height="98vh"
             defaultLanguage="json"
             defaultValue={props.defaultValue}

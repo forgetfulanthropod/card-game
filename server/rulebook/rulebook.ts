@@ -1,6 +1,8 @@
 import type { DungeonLevel, Rulebook } from '@shared'
 import { rulebookVersion } from '@shared/code'
 
+import { orderRulebook } from '@/util'
+
 import { moveMetaMap, npcLevelStatsMap, specialDoorsMap, stanceTypeMetaMap, statsMap } from './battle'
 import { dungeonRooms } from './dungeonRooms'
 import { eventTriggersMap } from './eventTriggersMap'
@@ -12,7 +14,9 @@ const dungeonLevels: DungeonLevel[] = [
     { name: 'Fort Skeleton', num: 3, pointLimit: 65, modifier: 3 },
     { name: 'The Ninth Trash Hole of Hell', num: 4, pointLimit: 100, modifier: 5 },
 ]
-const defaultRulebook: Rulebook = {
+
+
+const defaultRulebook: Rulebook = orderRulebook({
     version: rulebookVersion,
     name: 'default',
     characters: statsMap,
@@ -37,7 +41,7 @@ const defaultRulebook: Rulebook = {
         8: 700,
         9: 800,
     },
-}
+})
 let rulebook = defaultRulebook
 
 export function setRulebook(r: Rulebook): void { rulebook = r }

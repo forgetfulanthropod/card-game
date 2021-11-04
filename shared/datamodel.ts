@@ -15,6 +15,7 @@ type RecipeName = string
 
 export interface Rulebook {
     version: string
+    savedAt?: string
     name: string
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
@@ -46,8 +47,8 @@ export interface Gamestate {
         move: NetworkEvent<'move', NetworkAttackData>[]
         world: WorldEvent[]
     }
-    rulebooks?: { name: string, id: RulebookUid }[]
-    curRulebook?: Rulebook
+    rulebooks?: string[]
+    curRulebook?: string
 }
 
 export interface OwnedCharacter extends CharacterStats {
@@ -112,5 +113,3 @@ export type DungeonName =
     | 'The Ninth Trash Hole of Hell'
 
 export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>
-
-export type RulebookUid = 'default' | string

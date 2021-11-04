@@ -1,7 +1,7 @@
-import type { Rulebook, RulebookUid } from '@shared'
+import type { Rulebook } from '@shared'
 
 export type RulebookAction = (args: Args) => void
 type Args =
     | { do: 'new', rulebook: Rulebook }
-    | { do: 'delete', id: RulebookUid }
-    | { do: 'choose', id: RulebookUid }
+    | { do: 'delete', name: string }
+    | { do: 'choose', name: string }

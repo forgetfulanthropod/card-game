@@ -1,7 +1,7 @@
 import type { Gamestate, OwnedCharacter } from '@shared'
 
 import { getRulebook } from '@/rulebook'
-import { getRulebookPairs } from '@/util'
+import { getRulebookNames, stringifyRulebook } from '@/util'
 
 import { initialEntryState } from './entry/state'
 
@@ -48,7 +48,7 @@ export function getInitialGameState(): Gamestate {
         ownedCharacters: initialOwnedCharacters(),
         inventory: {},
         events: { world: [], move: [] },
-        rulebooks: config.includeRulebook ? getRulebookPairs() : undefined,
-        curRulebook: config.includeRulebook ? getRulebook() : undefined,
+        rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
+        curRulebook: config.includeRulebook ? stringifyRulebook(getRulebook()) : undefined,
     }
 }
