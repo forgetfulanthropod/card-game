@@ -48,7 +48,6 @@ export const rulebookAction: RulebookAction = args => {
             }
             args.rulebook.savedAt = pacificDate()
             const s = stringifyRulebook(args.rulebook)
-            debugger
             const p = toPath(newName)
             logger.info(`creating rulebook ${newName}`)
             if (existsSync(p)) {

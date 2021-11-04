@@ -50,9 +50,5 @@ export function stringifyRulebook(rb: Rulebook): string {
     })
     allKeys.sort()
     const final = [...keyOrder, ...difference(allKeys, keyOrder)]
-    return JSON.stringify(rb, final)
-}
-
-export function orderRulebook(rb: Rulebook): Rulebook {
-    return JSON.parse(stringifyRulebook(rb))
+    return JSON.stringify(rb, final, 4)
 }

@@ -4,7 +4,7 @@ import Editor from '@monaco-editor/react'
 // @ts-ignore
 import styled from 'styled-components'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { rulebookAction } from '@/actions'
+import { makeNewUser, rulebookAction } from '@/actions'
 import { useCursor } from './util'
 import { getTree } from '@/data/rootTree'
 import type { Rulebook } from '@shared'
@@ -64,7 +64,6 @@ export function RulebookEditor(): JSX.Element {
     useEffect(() => {
         if (curRulebook == null) return
         ref.current?.setValue(curRulebook)
-        ref.current?.getAction('editor.action.formatDocument').run()
     }, [curRulebook])
     if (curRulebook == null) { toast.error('null curRulebook'); return <></> }
     if (rulebooks == null) { toast.error('null rulebooks'); return <></> }
@@ -75,7 +74,10 @@ export function RulebookEditor(): JSX.Element {
             <Selector
                 value={name}
                 options={rulebooks}
-                onChoice={newName => rulebookAction({ do: 'choose', name: newName })} />
+                onChoice={async newName => {
+                    await rulebookAction({ do: 'choose', name: newName })
+                    await makeNewUser({ username: 'alice' })
+                }} />
             {shown && <>
                 <button onClick={() => addNewRulebook(ref, rulebooks)}>Save new</button>
                 <button onClick={() => overwriteRulebook(ref, name)}>Overwrite</button>
@@ -109,6 +111,7 @@ async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void
         return
     }
     await rulebookAction({ do: 'new', rulebook: newRulebook })
+    await makeNewUser({ username: 'alice' })
     toast('added')
 }
 
@@ -137,6 +140,7 @@ async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     }
     await rulebookAction({ do: 'delete', name })
     await rulebookAction({ do: 'new', rulebook: newRulebook })
+    await makeNewUser({ username: 'alice' })
     toast('overwritten')
 }
 
@@ -144,11 +148,7 @@ function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
 
     return <EditorWrap>
         <Editor
-            onMount={(editor, _monaco) => {
-                props.mref.current = editor
-                toast('formatting')
-                void editor.getAction('editor.action.formatDocument').run()
-            }}
+            onMount={(editor, _monaco) => { props.mref.current = editor }}
             height="98vh"
             defaultLanguage="json"
             defaultValue={props.defaultValue}
