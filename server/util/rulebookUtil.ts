@@ -12,7 +12,7 @@ const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+
 
 export function updateRulebookNames(): void {
     const cursor = getRootCursor().select('users').select('alice').select('rulebooks')
-    cursor.set(getRulebookNames())
+    cursor.set(getRulebookPairs())
     commit(cursor)
 }
 
@@ -22,7 +22,7 @@ export function updateClientRulebook(): void {
     commit(cursor)
 }
 
-export function getRulebookNames(): Gamestate['rulebooks'] {
+export function getRulebookPairs(): Gamestate['rulebooks'] {
     const things = [{ name: 'default', id: 'default' }]
     if (!existsSync(prefix)) {
         return things
