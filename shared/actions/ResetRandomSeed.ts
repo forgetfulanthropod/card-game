@@ -1,1 +1,1 @@
-export type ResetRandomSeed = (args: Empty) => void
+export type ResetRandomSeed = () => void

@@ -1,1 +1,1 @@
-export type StartBattle = (args: Empty) => void
+export type StartBattle = () => void

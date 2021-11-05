@@ -12,7 +12,7 @@ window.copyHistory = copyHistory
 
 async function runRecording(recording: { name: string, args: Record<string, unknown> }[], setSeed = true): Promise<void> {
     if (setSeed) {
-        await resetRandomSeed({})
+        await resetRandomSeed()
     }
     for (const { name, args } of recording) {
         console.log(jss`running ${name}(${args})`)

@@ -10,7 +10,7 @@ export const DEFAULT_WAIT = 1000
 export const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 export const DEBUG = false
 
-export const startBattle: StartBattle = async (_args) => {
+export const startBattle: StartBattle = async () => {
     const scene = getBattleScene('alice')
     if (scene.get('state') === 'in battle') {
         // already in game

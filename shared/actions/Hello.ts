@@ -1,1 +1,1 @@
-export type Hello = (args: Empty) => 'hello'
+export type Hello = () => 'hello'

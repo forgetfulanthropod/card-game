@@ -1,4 +1,5 @@
-import type { CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@shared'
+import type { BattleScene, CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@shared'
+import type { SCursor } from 'baobab'
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
 
@@ -27,8 +28,17 @@ export function BattleScene(): PixiContainer {
 
     const container = Container({ name: 'BattleScene', children: [] })
 
-    setTimeout(startBattle, 100)
 
+    bindCharactersWatcher(scene, container, move$)
+    renewChildren(scene, container, move$)
+
+    setTimeout(() => makeDoors(container), 0)
+    setTimeout(() => startBattle(), 0)
+
+    return container
+}
+
+function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
     const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
     allCharsCursor.on('update', function checkIfKeysChanged() {
@@ -48,42 +58,37 @@ export function BattleScene(): PixiContainer {
             console.log('difference between old keys and new keys:',
                 diff(lastKeys, newKeys))
             lastKeys = newKeys
-            renewChildren()
+            renewChildren(scene, container, move$)
         }
     })
 
+}
 
-    function renewChildren() {
-        console.log('renewing children')
-        const ch = container.children
-        container.removeChildren()
-        for (const x of ch) { x.destroy() }
-        const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
-        const dungeonName = scene.get('dungeonName')
-        const backgroundArgs = dungeonName === 'The Matcha Caves' ?
-            { src: CaveVideo } :
-            { srcs: [backgrounds[dungeonName]] }
-        const newChildren = [
-            background({ scale: 1, ...backgroundArgs }),
-            InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
-            ...childCursors.map(childCursor =>
-                getCharacterFn(childCursor.get())({
-                    cursor: childCursor,
-                    onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
-                    move$,
-                    scale: 1,
-                    isSelected: false,
-                })),
-        ]
-        for (const x of newChildren) {
-            container.addChild(x)
-        }
+function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
+    const allCharsCursor = scene.select('allCharacters')
+    console.log('renewing children')
+    const ch = container.children
+    container.removeChildren()
+    for (const x of ch) { x.destroy() }
+    const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
+    const dungeonName = scene.get('dungeonName')
+    const backgroundArgs = dungeonName === 'The Matcha Caves' ?
+        { src: CaveVideo } :
+        { srcs: [backgrounds[dungeonName]] }
+    const newChildren = [
+        background({ scale: 1, ...backgroundArgs }),
+        InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
+        ...childCursors.map(childCursor => getCharacterFn(childCursor.get())({
+            cursor: childCursor,
+            onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
+            move$,
+            scale: 1,
+            isSelected: false,
+        })),
+    ]
+    for (const x of newChildren) {
+        container.addChild(x)
     }
-    renewChildren()
-
-    setTimeout(() => makeDoors(container), 0)
-
-    return container
 }
 
 function getCharacterFn(characterMeta: CharacterMeta) {
@@ -109,7 +114,7 @@ function makeDoors(parent: PixiContainer) {
             doorsCont = Doors({
                 callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
                 descriptions: doors.descriptions,
-                exit: () => exitDungeon({}),
+                exit: () => exitDungeon(),
             })
             parent.addChild(doorsCont)
         }

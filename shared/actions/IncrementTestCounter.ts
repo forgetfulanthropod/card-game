@@ -1,1 +1,1 @@
-export type IncrementTestCounter = (args: Empty) => void
+export type IncrementTestCounter = () => void

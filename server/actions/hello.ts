@@ -1,2 +1,2 @@
 import type { Hello } from '@shared'
-export const hello: Hello = (_args) => 'hello'
+export const hello: Hello = () => 'hello'

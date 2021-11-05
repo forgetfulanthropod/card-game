@@ -1,5 +1,5 @@
 import type { Gamestate, Rulebook } from '@shared'
-import { readdirSync } from 'fs'
+import { existsSync, mkdirSync, readdirSync } from 'fs'
 import { difference } from 'lodash'
 import { homedir } from 'os'
 
@@ -24,6 +24,9 @@ export function updateClientRulebook(): void {
 }
 
 export function getRulebookNames(): Gamestate['rulebooks'] {
+    if (!existsSync(prefix)) {
+        mkdirSync(prefix)
+    }
     const filenames = readdirSync(prefix)
     const names = filenames.map(fn => removeExtension(fn))
     return [...names, 'default']

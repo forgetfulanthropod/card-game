@@ -1,1 +1,1 @@
-export type ExitDungeon = (args: Empty) => void
+export type ExitDungeon = () => void

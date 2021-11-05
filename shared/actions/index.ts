@@ -16,6 +16,3 @@ export * from './Square'
 export * from './StartBattle'
 export * from './ToggleStance'
 // @endindex
-declare global {
-    type Empty = Record<string, never>
-}
