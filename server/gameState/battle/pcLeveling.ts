@@ -1,7 +1,7 @@
 import type { BattleScene, CharacterMeta } from '@shared'
 import type { SCursor } from 'baobab'
 
-import { rulebook } from '@/rulebook'
+import { getRulebook } from '@/rulebook'
 import { vals } from '@/util'
 
 import { getCharIds } from './misc'
@@ -29,7 +29,7 @@ export function incrementXP(scene: SCursor<BattleScene>): void {
             const character = allCharacters[id]
             const experience = allCharacters[id].experience + xpPerCharacter
 
-            const levelThreshold = rulebook.levelThresholds[character.level + 1] * character.points / 15 | 0
+            const levelThreshold = getRulebook().levelThresholds[character.level + 1] * character.points / 15 | 0
 
             if (experience > levelThreshold) {
                 allCharacters[id] = getLeveledUpCharacter({ character, experience, levelThreshold })

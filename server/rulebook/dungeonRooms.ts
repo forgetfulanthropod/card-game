@@ -1,9 +1,12 @@
 import type { CharacterName, DungeonRooms } from '@shared'
 
+
 const config = {
     doValidation: false,
 }
 
+// type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+// type DoorLetter = string//'A' | 'B' | 'C' | 'D'
 
 // https://www.notion.so/combat-mechanics-1-2-as-list-b095bf5399d546ae9d15d31134e5ca10#964bc1d3db774a29ba80df49fac856db
 

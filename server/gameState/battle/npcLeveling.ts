@@ -1,7 +1,7 @@
 import type { CharacterMeta, CharacterName, DungeonName } from '@shared'
 import { keys } from 'lodash'
 
-import { rulebook } from '@/rulebook'
+import { getRulebook } from '@/rulebook'
 import { npcLevelStatsMap } from '@/rulebook/battle'
 import { vals } from '@/util'
 
@@ -24,7 +24,7 @@ export function levelUpEnemies(room: Room, dungeonName: DungeonName): Room {
 }
 
 export function getLevelIncrease(dungeonName: DungeonName): number {
-    const dungeonLevelInfo = rulebook.dungeonLevels.find(l => l.name === dungeonName)
+    const dungeonLevelInfo = getRulebook().dungeonLevels.find(l => l.name === dungeonName)
 
     if (dungeonLevelInfo == null) {
         throw Error('level increase error')
@@ -54,8 +54,9 @@ const MAX_DATA_LEVEL = 10
 const OVER_MAX_ATTACK = 3
 const OVER_MAX_HEALTH = 21
 export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
-    const levelInfo: LevelInfo = { ...npcLevelStatsMap[name]?.[Math.min(level, MAX_DATA_LEVEL)] }
-
+    const index = Math.min(level, MAX_DATA_LEVEL)
+    const levelInfo: LevelInfo | undefined = npcLevelStatsMap[name]?.[index]
+    if (levelInfo == null) { throw Error('undefined level info') }
     console.log({ levelInfo, level })
 
     if (level > MAX_DATA_LEVEL) {
