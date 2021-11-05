@@ -370,4 +370,4 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
     },
 }
 
-export const npcNames = Object.values(statsMap).filter(x => !x.isPc).map(x => x.name)
+// export const npcNames = Object.values(statsMap).filter(x => !x.isPc).map(x => x.name)

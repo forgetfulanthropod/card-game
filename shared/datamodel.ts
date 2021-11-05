@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, EntryScene, MoveMeta, MoveMetaName, NetworkAttackData, NpcLevelStats, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
@@ -14,13 +14,17 @@ type LocationName = string
 type RecipeName = string
 
 export interface Rulebook {
+    version: string
+    savedAt?: string
+    name: string
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
     recipes: Record<RecipeName, { name: RecipeName, ingredients: ItemName[], result: ItemName }>
     locations: Record<LocationName, {
         displayName: string
         name: LocationName
-    }>
+    }>,
+    npcLevelStatsMap: NpcLevelStatsMap
     dungeonLevels: DungeonLevel[]
     dungeonRooms: DungeonRooms
     items: Record<ItemName, {
@@ -28,16 +32,13 @@ export interface Rulebook {
         displayName: string
         description: string
     }>
-    numbers: {
-        BASE_WIDTH: number
-        BASE_HEIGHT: number
-        X_AGGRESSIVE_THRESH: number
-        X_NEUTRAL_THRESH: number
-    }
     stanceTypeMetaMap: Record<StanceName, StanceStats>
-    npcLevelStatsMap: NpcLevelStats
     levelThresholds: Record<number, number>
+    // npcNames: CharacterName[]
+    specialDoorsMap: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
+    eventTriggersMap: EventTriggersMap
 }
+
 export interface Gamestate {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
@@ -46,6 +47,8 @@ export interface Gamestate {
         move: NetworkEvent<'move', NetworkAttackData>[]
         world: WorldEvent[]
     }
+    rulebooks?: string[]
+    curRulebook?: string
 }
 
 export interface OwnedCharacter extends CharacterStats {
@@ -103,20 +106,10 @@ export interface DungeonLevel {
     modifier: number
 }
 
-// type RoomLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-// type DoorLetter = string//'A' | 'B' | 'C' | 'D'
-type EnemyLevel = number
-type Probability = number
-type Outcome = [CharacterName, EnemyLevel][]
-export type RoomOutcomes = {
-    outcomes: Outcome[]
-    probs: Probability[]
-}
-
-export type DungeonRooms = Record<number, Record<string, RoomOutcomes>>
-
 export type DungeonName =
     | 'Hooligan’s Bluff'
     | 'The Matcha Caves'
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
+
+export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>

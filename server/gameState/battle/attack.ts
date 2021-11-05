@@ -1,7 +1,7 @@
 
 import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared'
 
-import { rulebook } from '@/rulebook'
+import { getRulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
@@ -44,7 +44,7 @@ export function getCharacterKeysAndDamages(attackData: AttackData): { key: Chara
 export function getCharacterKeysAndEffects(attackData: AttackData): { key: CharacterUid, effect: Effect }[] {
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
-        const moveMeta = rulebook.moveMetaMap[moveTypeDOT]
+        const moveMeta = getRulebook().moveMetaMap[moveTypeDOT]
 
         if (moveMeta.effectMultipliers == null) { throw Error('bad move meta') }
         const effectMultipliers = moveMeta.effectMultipliers
@@ -80,7 +80,7 @@ function getAttackMultiplier(attacker: Partial<CharacterMeta>): StanceMultiplier
 
 function getMoveMultiplier(d: AttackData): number {
     return d.move.types.reduce((multiplier, nextType) => {
-        const typeMeta = rulebook.moveMetaMap[nextType]
+        const typeMeta = getRulebook().moveMetaMap[nextType]
 
         let typeMultiplier: number
 
@@ -112,7 +112,7 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
     let max = Number.NEGATIVE_INFINITY
 
     move.types.forEach(type => {
-        const moveMeta = rulebook.moveMetaMap[type]
+        const moveMeta = getRulebook().moveMetaMap[type]
         let multipliers
         if (moveMeta.multiplier != null)
             multipliers = [moveMeta.multiplier]
@@ -143,7 +143,7 @@ function getDefenseMultiplier(defender: CharacterMeta): StanceMultiplier {
 
 function getStanceTypeMeta(stance: StanceName | undefined) {
     if (stance == null) throw new Error('invalid stance!')
-    const { stanceTypeMetaMap } = rulebook
+    const { stanceTypeMetaMap } = getRulebook()
 
     return stanceTypeMetaMap[stance as StanceName]
 }

@@ -10,6 +10,7 @@ import loadAssets from '@/features/battle/logic/AssetLoader'
 import { attachServerListener, waitForHandshake } from './connection'
 import { waitForGameStateToFill } from './data/rootTree'
 
+// TODO? add rulebook version checking to handshake?
 
 console.log(`loaded at ${(new Date()).toLocaleTimeString()}`)
 console.log('client build info:', {

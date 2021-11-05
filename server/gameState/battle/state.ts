@@ -8,7 +8,7 @@ import type {
     StanceName,
 } from '@shared'
 
-import { statsMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
@@ -20,7 +20,6 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
 type Characters = Record<CharacterUid, CharacterMeta>
 
@@ -119,6 +118,7 @@ export function makePositions(x0: number, y0: number, hGap: number, vGap: number
 }
 
 function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterName }): CharacterMeta {
+    const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceName = args.x > X_AGGRESSIVE_THRESH ?
@@ -143,6 +143,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
     }
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
+    const { characters: statsMap } = getRulebook()
     // debugger
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH

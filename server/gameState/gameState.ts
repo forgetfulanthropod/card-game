@@ -1,11 +1,17 @@
 import type { Gamestate, OwnedCharacter } from '@shared'
 
-import { statsMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
+import { getRulebookNames, stringifyRulebook } from '@/util'
 
 import { initialEntryState } from './entry/state'
 
 
+const config = {
+    includeRulebook: true,
+}
+
 export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
+    const { characters: statsMap } = getRulebook()
     return {
         // 'char-uid-8W2mG': { uid: 'char-uid-8W2mG', tokenId: '1234', nftName: 'Frog Knight #1234', ...statsMap.frogKnight }, // has everything for each character
         // 'char-uid-TLO23': { uid: 'char-uid-TLO23', tokenId: '1234', nftName: 'Mushroom Farmer #1234', ...statsMap.mushroomFarmer },
@@ -36,9 +42,13 @@ export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
 }
 
 
-export const initialGameState: Gamestate = {
-    scene: initialEntryState,
-    ownedCharacters: initialOwnedCharacters(),
-    inventory: {},
-    events: { world: [], move: [] },
+export function getInitialGameState(): Gamestate {
+    return {
+        scene: initialEntryState,
+        ownedCharacters: initialOwnedCharacters(),
+        inventory: {},
+        events: { world: [], move: [] },
+        rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
+        curRulebook: config.includeRulebook ? stringifyRulebook(getRulebook()) : undefined,
+    }
 }

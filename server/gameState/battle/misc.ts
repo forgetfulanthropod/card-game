@@ -1,10 +1,11 @@
 import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
-import { moveMetaMap, stanceTypeMetaMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
 import { stringKeys, vals } from '@/util'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
+const { moveMetaMap, stanceTypeMetaMap } = getRulebook()
 
 export function getId(x: number, y: number): string { return `${x}-${y}` }
 
