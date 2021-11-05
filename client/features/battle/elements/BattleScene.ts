@@ -24,10 +24,8 @@ export function BattleScene(): PixiContainer {
     const eventsCursor = getTree().select('events').select('move')
     const scene = getBattleScene()
     const move$ = makeClientEventListener<'move', NetworkAttackData>('move', eventsCursor)
-    // const { move$, } = getBindings()
 
     const container = Container({ name: 'BattleScene', children: [] })
-
 
     bindCharactersWatcher(scene, container, move$)
     renewChildren(scene, container, move$)
