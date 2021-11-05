@@ -58,7 +58,9 @@ export function BattleScene(): PixiContainer {
         const ch = container.children
         container.removeChildren()
         for (const x of ch) { x.destroy() }
-        const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
+        const allCharacters = allCharsCursor.get()
+        const sortedYs = vals(allCharacters).map(c => c.y).sort((y1, y2) => y1 - y2)
+        const childCursors = keyMap(allCharacters, k => allCharsCursor.select(k))
         const dungeonName = scene.get('dungeonName')
         const backgroundArgs = dungeonName === 'The Matcha Caves' ?
             { src: CaveVideo } :
@@ -66,18 +68,20 @@ export function BattleScene(): PixiContainer {
         const newChildren = [
             background({ scale: 1, ...backgroundArgs }),
             InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
-            ...childCursors.map(childCursor =>
+            ...childCursors.map((childCursor, i) =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
                     onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
                     move$,
                     scale: 1,
                     isSelected: false,
+                    zIndex: sortedYs.findIndex(y => y === childCursor.get().y),
                 })),
         ]
         for (const x of newChildren) {
             container.addChild(x)
         }
+        container.sortChildren()
     }
     renewChildren()
 

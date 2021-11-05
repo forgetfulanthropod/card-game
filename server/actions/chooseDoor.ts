@@ -3,13 +3,13 @@
 import type { ChooseDoor } from '@shared'
 
 import { getRoom, resetRound } from '@/gameState/battle'
-import { levelUpEnemies } from '@/gameState/battle/npcLeveling'
+import { modifyRoom } from '@/gameState/battle/npcLeveling'
 import { commit, getBattleScene, objFilter } from '@/util'
 
 export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')
 
-    const room = levelUpEnemies(
+    const room = modifyRoom(
         getRoom({ door: args.door, dungeonName: scene.get('dungeonName'), roomsPassed: scene.get('roomsPassed') }),
         scene.get('dungeonName'),
     )
