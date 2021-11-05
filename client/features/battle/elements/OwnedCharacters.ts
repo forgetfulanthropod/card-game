@@ -47,10 +47,12 @@ export function OwnedCharacters(): PixiContainer {
     return root
 }
 
+const NUM_OF_EACH_CHAR = 5
+
 function makeCharacters() {
     return vals(getOwnedCharacters().get()).map((c, i) => Container({
-        x: i % 5 * 110,
-        y: Math.floor(i / 5) * 150,
+        x: (i / NUM_OF_EACH_CHAR | 0) % 5 * 150 + i / NUM_OF_EACH_CHAR % 5 * 100,
+        y: Math.floor((i / NUM_OF_EACH_CHAR | 0) / 5) * 150,
         children: [
             Sprite({
                 src: dataOf(c.name),
@@ -58,8 +60,7 @@ function makeCharacters() {
                 onClick: () => addSelected({ character: c }),
             }),
         ],
-    })
-    )
+    }))
 }
 
 function makeSelectionIndicators(characters: PixiContainer[], selectedCharacters: SCursor<OwnedCharacter[]>) {
