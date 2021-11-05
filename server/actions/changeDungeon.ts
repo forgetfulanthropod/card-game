@@ -1,10 +1,10 @@
 import type { ChangeDungeon } from '@shared'
 
-import { rulebook } from '@/rulebook'
+import { getRulebook } from '@/rulebook'
 import { commit, getEntryScene } from '@/util'
 
 export const changeDungeon: ChangeDungeon = (args) => {
-    const levels = rulebook.dungeonLevels
+    const levels = getRulebook().dungeonLevels
     const scene = getEntryScene('alice')
 
     let l = (scene.select('selectedLevel').get()).num + args.direction
