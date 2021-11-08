@@ -24,24 +24,8 @@ const X_NEUTRAL_THRESH = 9
 type Characters = Record<CharacterUid, CharacterMeta>
 
 function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
-    // const chosen = chosen ?? vals(initialOwnedCharacters())
-    // const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
-
-    // const increasedLevel = dungeonName == null ?
-    //     1 :
-    //     1 + getLevelIncrease(dungeonName)
-
-    // TODO: increase number or level...
-    // this is very similar to chooseDoor
-    // and they requested a door at the start
-    // so I shold be able to make that change
-    // and remove the duplication between here and there
-    // const npcs = nonPlayerCharacterPositions.map(([x, y]) => {
-    // return newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: increasedLevel })
-    // })
     const all = [
-        // ...npcs,
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
