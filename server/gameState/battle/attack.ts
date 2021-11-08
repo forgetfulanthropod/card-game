@@ -1,14 +1,12 @@
 
-import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName, StatsWithStance } from '@shared'
 
 import { getRulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
-type CharacterWithStance = CharacterStats & { stance: StanceName }
-
-export function getCharacterMovesWithDamageRanges(character: CharacterWithStance): CharacterMove[] {
+export function getCharacterMovesWithDamageRanges(character: Readonly<StatsWithStance>): CharacterMove[] {
     return character.moves.map(move => {
         const damageRange = getMoveMultiplierRange(move)
             .map(multiplier => getDamage(character, multiplier))
@@ -28,7 +26,7 @@ export function getCharacterMovesWithDamageRanges(character: CharacterWithStance
 }
 
 
-export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
+export function getCharacterKeysAndDamages(attackData: Readonly<AttackData>): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
         { key: defender.uid, damage: getDamage(attackData, defender) }
     ))

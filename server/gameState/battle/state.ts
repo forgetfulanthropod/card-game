@@ -11,8 +11,9 @@ import type {
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
 
-import { getCharacterMovesWithDamageRanges } from './attack'
+import { blessingUpdate } from '.'
 import { getLevelInfo } from './npcLeveling'
+import { stanceBlessingUpdate } from './stanceBlessingUpdate'
 
 
 const BASE_WIDTH = 1920
@@ -109,10 +110,9 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     const stats = statsMap[args.name]
-    const moves = getCharacterMovesWithDamageRanges({ ...stats, stance })
-    return {
+    // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
+    const before = {
         ...stats,
-        moves,
         uid: args.uid,
         isPc: true,
         x: args.x,
@@ -125,6 +125,7 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         experience: 0,
         effects: [],
     }
+    return stanceBlessingUpdate(before)
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
@@ -133,7 +134,8 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
 
-    return {
+    const stance: StanceName = 'neutral'
+    const before = {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
         ...(getLevelInfo(args.name, args.level)),
@@ -143,10 +145,11 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         y: args.y,
         screenX: scale * BASE_WIDTH * args.x / 100,
         screenY: scale * BASE_HEIGHT * args.y / 100,
-        stance: 'neutral',
+        stance,
         hasMoved: false,
         effects: [],
         experience: 0,
         // health: 1,
     }
+    return blessingUpdate(before)
 }

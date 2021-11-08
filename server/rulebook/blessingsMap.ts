@@ -1,8 +1,8 @@
 import type { Blessing, BlessingName } from '@shared'
 
 export const blessingsMap: Record<BlessingName, Blessing> = {
-    'amulet': {
-        name: 'amulet',
+    'strongPcs': {
+        name: 'strongPcs',
         effects: [
             {
                 target: 'party',
@@ -13,8 +13,29 @@ export const blessingsMap: Record<BlessingName, Blessing> = {
             },
         ],
     },
-    'charm': {
-        name: 'charm',
+    'strongEnemies': {
+        name: 'strongEnemies',
+        effects: [
+            {
+                target: 'enemies',
+                healthMultiplicand: 2,
+                damageMultiplicand: 2,
+            },
+        ],
+    },
+    'weakEnemies': {
+        name: 'weakEnemies',
+        // effect: 'double your turns',
+        effects: [
+            {
+                target: 'enemies',
+                healthMultiplicand: .5,
+                damageMultiplicand: .5,
+            },
+        ],
+    },
+    'weakPcs': {
+        name: 'weakPcs',
         // effect: 'double your turns',
         effects: [
             {

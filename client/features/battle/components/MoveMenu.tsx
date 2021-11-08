@@ -21,8 +21,8 @@ export default function MoveMenu(): JSX.Element {
 
     selectedMove.on('update', () => {
         // tl('selected move change');
-        // @ts-expect-error
-        const elapsed = Date.now() - window.startTime
+        // @ ts-expect-error
+        // const elapsed = Date.now() - window.startTime
         // console.log(`round trip move change took ${elapsed / 1000} seconds`)
         const x = selectedMove.get()
         if (x == null) { return }

@@ -131,5 +131,7 @@ export type Blessing = {
     }[],
 
 }
-export type BlessingName = 'amulet' | 'charm' | 'ptbotflax'
+export type BlessingName = 'ptbotflax' | 'strongPcs' | 'strongEnemies' | 'weakEnemies' | 'weakPcs'
 export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>
+
+export type StatsWithStance = CharacterStats & { stance: StanceName }

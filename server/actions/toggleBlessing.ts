@@ -1,8 +1,9 @@
 import type { ToggleBlessing } from '@shared'
-import { findIndex } from 'lodash'
+import { findIndex, values } from 'lodash'
 
+import { stanceBlessingUpdate } from '@/gameState/battle'
 import { blessingsMap } from '@/rulebook/blessingsMap'
-import { commit, getGameStateCursor } from '@/util'
+import { commit, getBattleScene, getGameStateCursor } from '@/util'
 
 export const toggleBlessing: ToggleBlessing = (args) => {
     const gameState = getGameStateCursor('alice')
@@ -13,6 +14,13 @@ export const toggleBlessing: ToggleBlessing = (args) => {
         }
         return drop(blessings, i)
     })
+
+    if (getGameStateCursor('alice').select('scene').get('name') === 'battle') {
+        const allCharactersCursor = getBattleScene('alice').select('allCharacters')
+        for (const cm of values(allCharactersCursor.get())) {
+            allCharactersCursor.set(cm.uid, stanceBlessingUpdate(cm))
+        }
+    }
     commit(gameState)
 }
 
