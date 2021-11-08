@@ -1,7 +1,7 @@
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 
-import { dispatch } from '@/actions'
+import { selectMove } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 
 import { MoveButton, MoveMenuDiv } from './Styles'
@@ -53,7 +53,8 @@ export default function MoveMenu(): JSX.Element {
         if (sc == null) { setMvs([]); return }
         const newMoves = movesOf(sc)
         setMvs(newMoves)
-        await dispatch({ a: 'setSelectedMove', m: newMoves[0] })
+        // TODO: server should update the move itself
+        await selectMove({ move: newMoves[0] })
     })
 
     function updateMoves() {
@@ -67,7 +68,7 @@ export default function MoveMenu(): JSX.Element {
                 key={m.types[0]}
                 onClick={async () => {
                     // window.startTime = Date.now()
-                    await dispatch({ a: 'setSelectedMove', m: m })
+                    await selectMove({ move: m })
                 }}
                 isSelected={sm.name === m.name}
             >
