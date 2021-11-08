@@ -62,6 +62,8 @@ function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiConta
 
 }
 
+// hi
+
 function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
 
     const allCharsCursor = scene.select('allCharacters')
