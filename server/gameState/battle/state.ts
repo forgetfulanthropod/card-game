@@ -166,7 +166,3 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         // health: 1,
     }
 }
-
-function randString(): string {
-    return srandom().toString().slice(2, 6)
-}

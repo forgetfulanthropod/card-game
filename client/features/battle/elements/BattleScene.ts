@@ -68,7 +68,7 @@ export function BattleScene(): PixiContainer {
         const newChildren = [
             background({ scale: 1, ...backgroundArgs }),
             InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
-            ...childCursors.map((childCursor, i) =>
+            ...childCursors.map((childCursor, _i) =>
                 getCharacterFn(childCursor.get())({
                     cursor: childCursor,
                     onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
