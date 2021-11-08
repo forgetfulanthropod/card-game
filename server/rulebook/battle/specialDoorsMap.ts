@@ -33,7 +33,7 @@ export const specialDoorsMap = {
         variables: {
             levelToAppearOn: 6,
             enemyName: 'matchaGelatinCube' as CharacterName,
-            enemyLevel: 10,
+            enemyLevel: 2,
         },
     },
     'skeleton': {

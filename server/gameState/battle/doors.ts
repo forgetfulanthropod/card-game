@@ -11,12 +11,6 @@ import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
 
 
-// type CharacterModifer = string
-
-
-// const config = { addRandomDoor: true }
-
-
 export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
@@ -33,7 +27,7 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: Dungeon
         descriptions: [
             'big scary door\n X2 Modifier',
             normalDescriptions,
-            'LV 10 matcha door',
+            'matcha door',
             'randomEvent',
         ],
     }
