@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, SpecialDoorName, StanceName, StanceStats } from '.'
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
@@ -114,6 +114,21 @@ export type DungeonName =
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
 
-export type Blessing = { name: string, effect: string }
-export type BlessingName = 'amulet' | 'charm'
+type TargetType = 'party' | 'enemies'
+
+export type Blessing = {
+    name: string,
+    after?: {
+        doorType?: SpecialDoorName
+    }
+    effects: {
+        target: TargetType | { type: TargetType, characterType: CharacterName },
+        healthMultiplicand?: number,
+        healthAddend?: number,
+        damageMultiplicand?: number,
+        damageAddend?: number,
+    }[],
+
+}
+export type BlessingName = 'amulet' | 'charm' | 'ptbotflax'
 export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>

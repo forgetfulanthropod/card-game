@@ -12,7 +12,7 @@ export { incrementTestCounter } from './incrementTestCounter'
 export { makeNewUser } from './makeNewUser'
 export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
-export { setBlessings } from './setBlessings'
 export { startBattle } from './startBattle'
+export { toggleBlessing } from './toggleBlessing'
 export { toggleStance } from './toggleStance'
 // @endindex

@@ -62,6 +62,9 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
 }
 
 function getDamage(ad: AttackData, defender: CharacterMeta): number {
+    // const blessings = getGameStateCursor('alice').select('blessings')
+
+
     let attackData = ad
     if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
 
