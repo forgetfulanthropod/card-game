@@ -6,23 +6,27 @@ import { getRulebook } from '@/rulebook'
 import { getTransformed, isSpecial } from './specialMoves'
 
 
-export function getCharacterMovesWithDamageRanges(character: CharacterStats & { stance: StanceName }): CharacterMove[] {
+type CharacterWithStance = CharacterStats & { stance: StanceName }
+
+export function getCharacterMovesWithDamageRanges(character: CharacterWithStance): CharacterMove[] {
     return character.moves.map(move => {
-
-        const damageRange = getMoveMultiplierRange(move).map(multiplier => {
-            const damage = Math.round(
-                character.damage * getAttackMultiplier(character) * multiplier
-            )
-
-            return damage < 1 ? 1 : damage
-        })
+        const damageRange = getMoveMultiplierRange(move)
+            .map(multiplier => getDamage(character, multiplier))
 
         return {
             ...move,
             damageRange,
         }
     })
+
+    function getDamage(character: CharacterStats, multiplier: number): number {
+        const damage = Math.round(
+            character.damage * getAttackMultiplier(character) * multiplier
+        )
+        return damage < 1 ? 1 : damage
+    }
 }
+
 
 export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
