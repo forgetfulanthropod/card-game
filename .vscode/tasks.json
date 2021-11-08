@@ -47,8 +47,8 @@
 		},
 		{
 			"label": "esbuild client",
-			"type": "npm",
-			"script": "start",
+			"type": "shell",
+			"command": "npm start",
 			"presentation": {
 				"group": "builders",
 			}

@@ -63,11 +63,15 @@ function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiConta
 }
 
 function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
+
     const allCharsCursor = scene.select('allCharacters')
-    console.log('renewing children')
-    const ch = container.children
+    const children = container.children
     container.removeChildren()
-    for (const x of ch) { x.destroy() }
+
+    for (const x of children) { x.destroy() }
+
+    const allCharacters = allCharsCursor.get()
+    const sortedYs = vals(allCharacters).map(c => c.y).sort((y1, y2) => y1 - y2)
     const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
     const dungeonName = scene.get('dungeonName')
     const backgroundArgs = dungeonName === 'The Matcha Caves' ?
@@ -76,17 +80,20 @@ function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, mo
     const newChildren = [
         background({ scale: 1, ...backgroundArgs }),
         InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
-        ...childCursors.map(childCursor => getCharacterFn(childCursor.get())({
-            cursor: childCursor,
-            onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
-            move$,
-            scale: 1,
-            isSelected: false,
-        })),
+        ...childCursors.map(childCursor =>
+            getCharacterFn(childCursor.get())({
+                cursor: childCursor,
+                onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
+                move$,
+                scale: 1,
+                isSelected: false,
+                zIndex: sortedYs.findIndex(y => y === childCursor.get().y),
+            })),
     ]
     for (const x of newChildren) {
         container.addChild(x)
     }
+    container.sortChildren()
 }
 
 function getCharacterFn(characterMeta: CharacterMeta) {
