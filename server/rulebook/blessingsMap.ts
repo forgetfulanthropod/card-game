@@ -25,7 +25,8 @@ export const blessingsMap: Record<BlessingName, Blessing> = {
         ],
     },
     'ptbotflax': {
-        name: 'Play The Bones of The Fallen Like a Xylophone',
+        name: 'ptbotflax',
+        displayName: 'Play The Bones of The Fallen Like a Xylophone',
         after: { doorType: 'skeleton' },
         effects: [
             {

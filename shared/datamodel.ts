@@ -118,6 +118,7 @@ type TargetType = 'party' | 'enemies'
 
 export type Blessing = {
     name: string,
+    displayName?: string,
     after?: {
         doorType?: SpecialDoorName
     }

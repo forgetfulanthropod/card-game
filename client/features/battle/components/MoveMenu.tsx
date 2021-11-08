@@ -23,7 +23,7 @@ export default function MoveMenu(): JSX.Element {
         // tl('selected move change');
         // @ts-expect-error
         const elapsed = Date.now() - window.startTime
-        console.log(`round trip move change took ${elapsed / 1000} seconds`)
+        // console.log(`round trip move change took ${elapsed / 1000} seconds`)
         const x = selectedMove.get()
         if (x == null) { return }
         setSm(x)
