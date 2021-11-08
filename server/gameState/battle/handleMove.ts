@@ -9,10 +9,10 @@ import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startBattle'
 import { getCharacterKeysAndDamages } from './attack'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
-import { incrementXP } from './experiencePoints'
 import { tl, warn } from './logging'
 import { checkMoveAvailable, checkWinner, getLivingChars, getUnmovedPc } from './misc'
 import applyMove from './move'
+import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
 
 

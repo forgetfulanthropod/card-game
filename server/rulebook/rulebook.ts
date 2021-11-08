@@ -1,9 +1,10 @@
 import type { DungeonLevel, Rulebook } from '@shared'
+import { rulebookVersion } from '@shared/code'
 
-import { numbers } from '@/gameState/battle'
-
-import { moveMetaMap, stanceTypeMetaMap, statsMap } from './battle'
+import { moveMetaMap, npcLevelStatsMap, specialDoorsMap, stanceTypeMetaMap, statsMap } from './battle'
 import { blessingsMap } from './blessingsMap'
+import { dungeonRooms } from './dungeonRooms'
+import { eventTriggersMap } from './eventTriggersMap'
 
 
 const dungeonLevels: DungeonLevel[] = [
@@ -12,16 +13,24 @@ const dungeonLevels: DungeonLevel[] = [
     { name: 'Fort Skeleton', num: 3, pointLimit: 65, modifier: 3 },
     { name: 'The Ninth Trash Hole of Hell', num: 4, pointLimit: 100, modifier: 5 },
 ]
-export const rulebook: Rulebook = {
+
+
+const defaultRulebook: Rulebook = {
+    version: rulebookVersion,
+    name: 'default',
     characters: statsMap,
     moveMetaMap,
+    npcLevelStatsMap,
     recipes: {},
     locations: {},
-    dungeonLevels: dungeonLevels,
+    dungeonLevels,
+    dungeonRooms,
     items: {},
     blessings: blessingsMap,
-    numbers,
     stanceTypeMetaMap,
+    // npcNames,
+    specialDoorsMap,
+    eventTriggersMap,
     levelThresholds: {
         2: 100,
         3: 200,
@@ -33,3 +42,10 @@ export const rulebook: Rulebook = {
         9: 800,
     },
 }
+let rulebook = defaultRulebook
+
+export function setRulebook(r: Rulebook): void { rulebook = r }
+
+export function getRulebook(): Rulebook { return rulebook }
+
+export function resetRulebook(): void { rulebook = defaultRulebook }

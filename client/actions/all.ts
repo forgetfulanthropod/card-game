@@ -18,6 +18,7 @@ export const incrementTestCounter = callWrap<AllTypes.IncrementTestCounter>('inc
 export const makeNewUser = callWrap<AllTypes.MakeNewUser>('makeNewUser')
 export const resetRandomSeed = callWrap<AllTypes.ResetRandomSeed>('resetRandomSeed')
 export const setBlessings = callWrap<AllTypes.SetBlessings>('setBlessings')
+export const rulebookAction = callWrap<AllTypes.RulebookAction>('rulebookAction')
 export const square = callWrap<AllTypes.Square>('square')
 export const startBattle = callWrap<AllTypes.StartBattle>('startBattle')
 export const toggleStance = callWrap<AllTypes.ToggleStance>('toggleStance')

@@ -29,6 +29,9 @@
       "@shared/actions": [
         "./shared/actions/index"
       ],
+      "@shared/code": [
+        "./shared/code/index"
+      ],
       "@/*": [
         "./client/*"
       ],

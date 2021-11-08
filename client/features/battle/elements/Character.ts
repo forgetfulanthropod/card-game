@@ -10,7 +10,7 @@ import type { CharacterName } from '../logic/AssetLoader'
 import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
-import LevelUp from './LevelUp'
+// import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
 
 
@@ -18,7 +18,7 @@ const RED = 0xFF0000
 const BLUE = 0x0000FF
 const WHITE = 0xFFFFFF
 const SHOW_HIT_TIME = 1000
-const SHOW_LEVEL_UP_TIME = 2000
+// const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 
 export function PlayerCharacterElm(props: KnownPlayerCharacterProps): PixiContainer {
@@ -32,6 +32,7 @@ interface KnownCharacterProps {
     move$: Move$
     scale: number
     cursor: SCursor<CharacterMeta>
+    zIndex: number
 }
 interface KnownPlayerCharacterProps extends KnownCharacterProps {
     isSelected: boolean
@@ -58,6 +59,7 @@ function Character(args: CharacterProps): PixiContainer {
     const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = sprites
 
     const mainContainer = Container({
+        zIndex: args.zIndex,
         children: [
             mainSprite,
             selectedSprite,
@@ -101,13 +103,13 @@ function Character(args: CharacterProps): PixiContainer {
 
     args.cursor.select('health').on('update', updateDeathAndHealth)
     args.cursor.select('effects').on('update', updateDeathAndHealth)
-    args.cursor.select('level').on('update', () => {
-        doFlashElement(
-            aboveCharacterContainer,
-            () => LevelUp({ level: args.cursor.select('level').get() }),
-            { durationMs: SHOW_LEVEL_UP_TIME }
-        )
-    })
+    // args.cursor.select('level').on('update', () => {
+    //     doFlashElement(
+    //         aboveCharacterContainer,
+    //         () => LevelUp({ level: args.cursor.select('level').get() }),
+    //         { durationMs: SHOW_LEVEL_UP_TIME }
+    //     )
+    // })
 
     // const [isHovering, setIsHovering] = useState(false)
 

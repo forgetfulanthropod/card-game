@@ -8,9 +8,11 @@ import type {
     StanceName,
 } from '@shared'
 
-import { npcLevelStatsMap, statsMap } from '@/rulebook/battle'
+import { getRulebook } from '@/rulebook'
+import { keys, vals } from '@/util'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
+import { getLevelInfo } from './npcLeveling'
 
 
 const BASE_WIDTH = 1920
@@ -18,21 +20,18 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-export const numbers = { BASE_WIDTH, BASE_HEIGHT, X_AGGRESSIVE_THRESH, X_NEUTRAL_THRESH }
 
-function makeCharacters(chosen: OwnedCharacter[] = []): Record<CharacterUid, CharacterMeta> {
-    // const chosen = chosen ?? vals(initialOwnedCharacters())
-    const nonPlayerCharacterPositions = makePositions(65, 50, 18, 13, 2)
+type Characters = Record<CharacterUid, CharacterMeta>
+
+function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
-
     const all = [
-        ...nonPlayerCharacterPositions.map(([x, y]) => newNPCMeta({ x, y, name: 'skeletonWarrior', uid: 'makeCharacters' + randString(), level: 1 })),
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return newPCMeta({ uid: c.uid, name: c.name, x, y })
         }),
     ]
-    const o: Record<CharacterUid, CharacterMeta> = {}
+    const o: Characters = {}
     for (const c of all) {
         o[c.uid] = c
     }
@@ -73,7 +72,22 @@ export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?
     })
 }
 
-function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+export function rearrangeNpcs(npcs: Characters): Characters {
+    const positions = makePositions(65, 50, 18, 13, keys(npcs).length)
+
+    const rearrangedNpcs: Characters = {}
+
+    const npcKeys = keys(npcs)
+    vals(npcs).forEach((npc, i) => {
+        const [x, y] = positions[i]
+
+        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: BASE_WIDTH * x / 100, screenY: BASE_HEIGHT * y / 100 }
+    })
+
+    return rearrangedNpcs
+}
+
+export function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
@@ -81,11 +95,14 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
         [x0 + hGap / 2, y0 + vGap],
         [x0, y0 + vGap * 2],
         [x0 + hGap, y0 + vGap * 2],
+        [x0 - hGap, y0 + vGap * 2],
+        [x0 - hGap, y0 - vGap * 2],
     ]
     return A.slice(0, n)
 }
 
 function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterName }): CharacterMeta {
+    const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceName = args.x > X_AGGRESSIVE_THRESH ?
@@ -110,22 +127,16 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
     }
 }
 export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
+    const { characters: statsMap } = getRulebook()
     // debugger
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    // @ts-expect-error
-    const levelInfo = npcLevelStatsMap[args.name]?.[args.level]
-
-    if (levelInfo != null) {
-        levelInfo.health = levelInfo.maxHealth
-        levelInfo.level = args.level
-    }
 
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
-        ...(levelInfo ?? {}),
+        ...(getLevelInfo(args.name, args.level)),
         uid: args.uid, // being set in makeInitialCharacters rn
         isPc: false,
         x: args.x,
@@ -135,10 +146,7 @@ export function newNPCMeta(args: { x: number; y: number, name: CharacterName, ui
         stance: 'neutral',
         hasMoved: false,
         effects: [],
+        experience: 0,
         // health: 1,
     }
-}
-
-function randString(): string {
-    return srandom().toString().slice(2, 6)
 }

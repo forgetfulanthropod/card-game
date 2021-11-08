@@ -1,30 +1,23 @@
 import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, WorldEvent, WorldEventData } from '@shared'
+import type { SpecialDoorName } from '@shared'
+import type { RoomOutcomes } from '@shared'
 import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
-import type { SpecialDoorName } from '@/rulebook/battle'
-import { npcNames, specialDoorsMap } from '@/rulebook/battle'
-import type { RoomOutcomes } from '@/rulebook/dungeonRooms'
-import { dungeonRooms } from '@/rulebook/dungeonRooms'
-import { eventTriggersMap } from '@/rulebook/eventTriggersMap'
+import { getRulebook } from '@/rulebook'
 import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
 import { weightedRandom } from './misc'
 import { newNPCMeta } from './state'
 
 
-// type CharacterModifer = string
-
-
-// const config = { addRandomDoor: true }
-
-
-type Room = {
+export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
 export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+    const { dungeonRooms } = getRulebook()
 
     const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
@@ -34,7 +27,7 @@ export function getDoorChoices(args: { roomsPassed: number, dungeonName: Dungeon
         descriptions: [
             'big scary door\n X2 Modifier',
             normalDescriptions,
-            'LV 10 matcha door',
+            'matcha door',
             'randomEvent',
         ],
     }
@@ -56,6 +49,8 @@ function describeOutcomes(roomOutcomes: Record<string, RoomOutcomes>): string[] 
 }
 
 function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
+    const { dungeonRooms, characters } = getRulebook()
+    const npcNames = Object.values(characters).filter(x => !x.isPc).map(x => x.name)
     const modifier = args?.modifier ?? 1
     if (args.door === 'random') {
         return {
@@ -82,12 +77,13 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     }
 }
 
-export function handleSpecialDoor(args: {
+export function getRoom(args: {
     door: SpecialDoorName,
     dungeonName: DungeonName,
     roomsPassed: number
 }): Room {
 
+    const { specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
     const { door, dungeonName, roomsPassed } = args
     // Putting the assignment inside each case makes typescript happy
     switch (door) {
@@ -140,6 +136,7 @@ export function handleSpecialDoor(args: {
 }
 
 function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Room {
+    const { dungeonRooms } = getRulebook()
     const regularDoorOptions = keys(dungeonRooms[roomsPassed + 1])
     if (regularDoorOptions.length === 0) {
         logger.error('no door options!')
