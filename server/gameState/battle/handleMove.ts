@@ -5,7 +5,6 @@ import { memoize } from 'lodash'
 import type { BattleCursor } from '@/util'
 import { commit, getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
 
-import { DEFAULT_WAIT, TIME_AFTER_PLAYER_MOVE } from '../../actions/startBattle'
 import { getCharacterKeysAndDamages } from './attack'
 import { getLivingChars, getUnmovedPc } from './characterGetters'
 import { doNpcMove } from './doNpcMove'
@@ -16,6 +15,9 @@ import applyMove from './move'
 import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
 
+
+const TIME_AFTER_PLAYER_MOVE = 1000
+const DEFAULT_WAIT = 1000
 
 export async function handleMove(
     scene: BattleCursor,

@@ -42,7 +42,7 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     return rearrangedNpcs
 }
 
-function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+export function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
