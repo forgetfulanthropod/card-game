@@ -3,11 +3,11 @@ import type { CharacterMeta } from '@shared'
 import { getGameStateCursor } from '@/util'
 
 
-export function blessingUpdate(characterMeta: Readonly<CharacterMeta>): CharacterMeta {
+export function applyBlessings(characterMeta: Readonly<CharacterMeta>): CharacterMeta {
     const bls = getGameStateCursor('alice').get('blessings')
     const type = characterMeta.isPc ? 'party' : 'enemies'
     let damage = characterMeta.damage
-    let health = characterMeta.health
+    let maxHealth = characterMeta.maxHealth
     for (const b of bls) {
         for (const ef of b.effects) {
             if (ef.target === type
@@ -21,11 +21,11 @@ export function blessingUpdate(characterMeta: Readonly<CharacterMeta>): Characte
 
                 const hmult = ef.healthMultiplicand ?? 1
                 const hadd = ef.healthAddend ?? 0
-                health = health * hmult + hadd
+                maxHealth = maxHealth * hmult + hadd
             }
         }
     }
-    return { ...characterMeta, damage, health }
+    return { ...characterMeta, damage, maxHealth }
 }
 
 /*

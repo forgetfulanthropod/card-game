@@ -3,7 +3,6 @@ import type { CharacterMeta, CharacterName, CharacterUid, OwnedCharacter, Stance
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
 
-import { blessingUpdate } from '.'
 import { getModified } from './characterModifierManagement'
 import { getLevelInfo } from './npcLeveling'
 
@@ -18,7 +17,7 @@ export function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return newPCMeta({ uid: c.uid, name: c.name, x, y })
+            return getModified(newPCMeta({ uid: c.uid, name: c.name, x, y }))
         }),
     ]
     const o: Characters = {}
@@ -57,7 +56,7 @@ function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6
     return A.slice(0, n)
 }
 
-function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
+export function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
@@ -66,7 +65,7 @@ function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterNam
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     const stats = statsMap[args.name]
     // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
-    const before = {
+    return {
         ...stats,
         uid: args.uid,
         isPc: true,
@@ -80,7 +79,6 @@ function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterNam
         experience: 0,
         effects: [],
     }
-    return getModified(before)
 }
 export function newNPCMeta(args: { x: number; y: number; name: CharacterName; uid: string; level: number }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
@@ -90,7 +88,7 @@ export function newNPCMeta(args: { x: number; y: number; name: CharacterName; ui
     const scale = 1
 
     const stance: StanceName = 'neutral'
-    const before = {
+    return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
         ...(getLevelInfo(args.name, args.level)),
@@ -106,5 +104,4 @@ export function newNPCMeta(args: { x: number; y: number; name: CharacterName; ui
         experience: 0,
         // health: 1,
     }
-    return blessingUpdate(before)
 }
