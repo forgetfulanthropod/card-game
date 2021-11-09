@@ -19,6 +19,7 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
             if (config.method === 'get') {
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
                 result = await f(request.query as unknown as Args)
+                // TODO: could commit scene here instead of at the end of every function
             } else {
                 // debugger
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }

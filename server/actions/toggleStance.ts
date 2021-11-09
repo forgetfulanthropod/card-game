@@ -1,7 +1,8 @@
 import type { StanceName, ToggleStance } from '@shared'
 
-import { getCharacterMovesWithDamageRanges } from '@/gameState/battle'
+import { getModified } from '@/gameState/battle'
 import { commit, getBattleScene } from '@/util'
+
 
 export const toggleStance: ToggleStance = (args) => {
     const { characterUid } = args
@@ -31,9 +32,7 @@ export const toggleStance: ToggleStance = (args) => {
 
     stanceCursor.set(stances[nextIndex])
 
-    characterCursor.select('moves').apply(() => {
-        logger.info(character)
-        return getCharacterMovesWithDamageRanges(character)
-    })
+    characterCursor.apply(getModified)
+
     commit(characterCursor)
 }

@@ -10,6 +10,7 @@ import ResetButton from './ResetButton'
 import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
+import { BlessingToggles } from './BlessingToggles'
 
 
 export default function App(): JSX.Element {
@@ -19,6 +20,7 @@ export default function App(): JSX.Element {
         <Toaster />
         <Sidebar />
         <ResetButton />
+        <BlessingToggles />
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
         <RulebookEditor />

@@ -14,7 +14,7 @@ import { registerPixiInspector } from '@/elementsUtil'
 
 // export { PixiLoader }
 // TODO: export the types instead of constructors
-export { PixiTicker, PixiApplication, PixiLoader, PixiContainer, PixiSprite, PixiText, PixiTexture, PixiVideoResource, PixiGraphics }
+export { PixiApplication, PixiContainer, PixiGraphics,PixiLoader, PixiSprite, PixiText, PixiTexture, PixiTicker, PixiVideoResource }
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
