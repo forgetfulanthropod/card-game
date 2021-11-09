@@ -21,28 +21,16 @@ const SHOW_HIT_TIME = 1000
 // const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 
-export function PlayerCharacterElm(props: KnownPlayerCharacterProps): PixiContainer {
-    return Character({ direction: -1, ...props })
-}
-export function NPCElm(props: KnownCharacterProps): PixiContainer {
-    return Character({ direction: -1, ...props })
-}
-interface KnownCharacterProps {
+interface CharacterProps {
     onClick: (c: CharacterUid) => void
     move$: Move$
     scale: number
     cursor: SCursor<CharacterMeta>
     zIndex: number
-}
-interface KnownPlayerCharacterProps extends KnownCharacterProps {
-    isSelected: boolean
-}
-interface CharacterProps extends KnownCharacterProps {
     isSelected?: boolean
-    direction: -1 | 1
 }
 
-function Character(args: CharacterProps): PixiContainer {
+export function Character(args: CharacterProps): PixiContainer {
     // NOTE: necessary so the onClick sends the correct data after a character change.
     const characterMeta = { ...args.cursor.get() }
     args.cursor.on('update', () => { Object.assign(characterMeta, args.cursor.get()) })
