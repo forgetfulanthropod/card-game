@@ -29,7 +29,7 @@ export function getBattleScene(username: 'alice'): BattleCursor {
     return scene as BattleCursor
 }
 
-export type EventCursor = SCursor<MoveEvent[]>
+type EventCursor = SCursor<MoveEvent[]>
 export function getEventsCursor(username: 'alice'): EventCursor {
     const events = getGameStateCursor(username).select('events').select('move')
 
@@ -40,7 +40,7 @@ export function getGameStateCursor(username: 'alice'): SCursor<Gamestate> {
     return getRootCursor().select('users').select(username)
 }
 
-export interface RootTree {
+interface RootTree {
     users: {
         alice: Gamestate
     }

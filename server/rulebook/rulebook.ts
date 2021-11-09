@@ -2,6 +2,7 @@ import type { DungeonLevel, Rulebook } from '@shared'
 import { rulebookVersion } from '@shared/code'
 
 import { moveMetaMap, npcLevelStatsMap, specialDoorsMap, stanceTypeMetaMap, statsMap } from './battle'
+import { blessingsMap } from './blessingsMap'
 import { dungeonRooms } from './dungeonRooms'
 import { eventTriggersMap } from './eventTriggersMap'
 
@@ -25,6 +26,7 @@ const defaultRulebook: Rulebook = {
     dungeonLevels,
     dungeonRooms,
     items: {},
+    blessings: blessingsMap,
     stanceTypeMetaMap,
     // npcNames,
     specialDoorsMap,

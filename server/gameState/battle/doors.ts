@@ -7,8 +7,8 @@ import { keys, memoize, zip } from 'lodash'
 import { getRulebook } from '@/rulebook'
 import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
+import { newNPCMeta } from './characterManagement'
 import { weightedRandom } from './misc'
-import { newNPCMeta } from './state'
 
 
 export type Room = {
@@ -16,7 +16,7 @@ export type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
     const { dungeonRooms } = getRulebook()
 
     const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']

@@ -1,8 +1,9 @@
 import { commit, getBattleScene, vals } from '@/util'
 
+import { getLivingChars } from './characterGetters'
 import { handleMove } from './handleMove'
 import { tl, warn } from './logging'
-import { checkWinner, getLivingChars, getNpcMove } from './misc'
+import { checkWinner, getNpcMove } from './misc'
 
 
 export async function doNpcMove(_reason?: string): Promise<void> {

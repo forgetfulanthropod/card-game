@@ -1,30 +1,32 @@
 
-import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName } from '@shared'
+import type { AttackData, CharacterMeta, CharacterMove, CharacterStats, CharacterUid, Effect, EffectType, StanceMultiplier, StanceName, StatsWithStance } from '@shared'
 
 import { getRulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
 
-export function getCharacterMovesWithDamageRanges(character: CharacterStats & { stance: StanceName }): CharacterMove[] {
+export function getCharacterMovesWithDamageRanges(character: Readonly<StatsWithStance>): CharacterMove[] {
     return character.moves.map(move => {
-
-        const damageRange = getMoveMultiplierRange(move).map(multiplier => {
-            const damage = Math.round(
-                character.damage * getAttackMultiplier(character) * multiplier
-            )
-
-            return damage < 1 ? 1 : damage
-        })
+        const damageRange = getMoveMultiplierRange(move)
+            .map(multiplier => getDamage(character, multiplier))
 
         return {
             ...move,
             damageRange,
         }
     })
+
+    function getDamage(character: CharacterStats, multiplier: number): number {
+        const damage = Math.round(
+            character.damage * getAttackMultiplier(character) * multiplier
+        )
+        return damage < 1 ? 1 : damage
+    }
 }
 
-export function getCharacterKeysAndDamages(attackData: AttackData): { key: CharacterUid, damage: number }[] {
+
+export function getCharacterKeysAndDamages(attackData: Readonly<AttackData>): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
         { key: defender.uid, damage: getDamage(attackData, defender) }
     ))
@@ -62,6 +64,9 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
 }
 
 function getDamage(ad: AttackData, defender: CharacterMeta): number {
+    // const blessings = getGameStateCursor('alice').select('blessings')
+
+
     let attackData = ad
     if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
 

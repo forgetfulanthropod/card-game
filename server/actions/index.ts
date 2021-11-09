@@ -1,11 +1,10 @@
+
 // @index('./**/*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
 export { addSelected } from './addSelected'
 export { changeDungeon } from './changeDungeon'
 export { changeScene } from './changeScene'
 export { chooseDoor } from './chooseDoor'
-export { dispatch } from './dispatch'
 export { doCharacterAction } from './doCharacterAction'
-export { echo } from './echo'
 export { exitDungeon } from './exitDungeon'
 export { getRandom } from './getRandom'
 export { hello } from './hello'
@@ -13,7 +12,8 @@ export { incrementTestCounter } from './incrementTestCounter'
 export { makeNewUser } from './makeNewUser'
 export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
-export { square } from './square'
+export { selectMove } from './selectMove'
 export { startBattle } from './startBattle'
+export { toggleBlessing } from './toggleBlessing'
 export { toggleStance } from './toggleStance'
 // @endindex

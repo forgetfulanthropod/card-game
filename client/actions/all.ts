@@ -1,5 +1,5 @@
-import type { ServerResult } from '@shared'
 import type * as AllTypes from '@shared/actions'
+import type { ServerResult } from '@shared/actions'
 
 import { callWrap } from './call'
 
@@ -9,17 +9,16 @@ export const addSelected = callWrap<AllTypes.AddSelected>('addSelected')
 export const changeDungeon = callWrap<AllTypes.ChangeDungeon>('changeDungeon')
 export const changeScene = callWrap<AllTypes.ChangeScene>('changeScene')
 export const chooseDoor = callWrap<AllTypes.ChooseDoor>('chooseDoor')
-export const dispatch = callWrap<AllTypes.Dispatch>('dispatch')
 export const doCharacterAction = callWrap<AllTypes.DoCharacterAction>('doCharacterAction')
-export const echo = callWrap<AllTypes.Echo>('echo')
 export const exitDungeon = callWrap<AllTypes.ExitDungeon>('exitDungeon')
 export const hello = callWrap<AllTypes.Hello>('hello')
 export const incrementTestCounter = callWrap<AllTypes.IncrementTestCounter>('incrementTestCounter')
 export const makeNewUser = callWrap<AllTypes.MakeNewUser>('makeNewUser')
 export const resetRandomSeed = callWrap<AllTypes.ResetRandomSeed>('resetRandomSeed')
 export const rulebookAction = callWrap<AllTypes.RulebookAction>('rulebookAction')
-export const square = callWrap<AllTypes.Square>('square')
+export const selectMove = callWrap<AllTypes.SelectMove>('selectMove')
 export const startBattle = callWrap<AllTypes.StartBattle>('startBattle')
+export const toggleBlessing = callWrap<AllTypes.ToggleBlessing>('toggleBlessing')
 export const toggleStance = callWrap<AllTypes.ToggleStance>('toggleStance')
 // @endindex
 

@@ -17,7 +17,7 @@ export interface BattleScene extends SceneHas {
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
 }
-export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
+type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
 export interface MoveMeta {
     name: MoveMetaName
