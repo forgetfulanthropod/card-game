@@ -2,10 +2,11 @@ import type { ToggleBlessing } from '@shared'
 import { findIndex, values } from 'lodash'
 
 import { getModified } from '@/gameState/battle'
-import { blessingsMap } from '@/rulebook/blessingsMap'
+import { getRulebook } from '@/rulebook'
 import { commit, getBattleScene, getGameStateCursor } from '@/util'
 
 export const toggleBlessing: ToggleBlessing = (args) => {
+    const { blessings: blessingsMap } = getRulebook()
     const gameState = getGameStateCursor('alice')
     gameState.apply('blessings', blessings => {
         const i = findIndex(blessings, { name: args.name })

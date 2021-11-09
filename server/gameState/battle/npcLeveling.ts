@@ -2,7 +2,6 @@ import type { CharacterMeta, CharacterName, DungeonName } from '@shared'
 import { cloneDeep, keys } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { npcLevelStatsMap } from '@/rulebook/battle'
 import { vals } from '@/util'
 
 import { rearrangeNpcs } from '.'
@@ -79,6 +78,8 @@ const MAX_DATA_LEVEL = 10
 const OVER_MAX_ATTACK = 3
 const OVER_MAX_HEALTH = 21
 export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
+    const { npcLevelStatsMap } = getRulebook()
+
     const index = Math.min(level, MAX_DATA_LEVEL)
     const levelInfo: LevelInfo | undefined = npcLevelStatsMap[name]?.[index]
     if (levelInfo == null) { throw Error('undefined level info') }

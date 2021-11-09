@@ -1,6 +1,7 @@
 // @index('./**/*.ts', f => `export * from '${f.path}'`)
 export * from './attack'
 export * from './blessings'
+export * from './characterGetters'
 export * from './characterManagement'
 export * from './characterModifierManagement'
 export * from './doNpcMove'

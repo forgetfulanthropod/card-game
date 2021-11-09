@@ -1,5 +1,6 @@
-import type { CharacterMeta, CharacterUid } from '@shared'
+import type { CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
+import { getRulebook } from '@/rulebook'
 import { stringKeys, vals } from '@/util'
 
 import { randomEl, weightedRandom } from './misc'
@@ -57,6 +58,7 @@ export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterM
     return randomEl(chars)
 }
 export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+    const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac
         .filter(c => c.isPc && c.health > 0)
 
@@ -66,4 +68,28 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     )
 
     return allLivingPlayerCharacters[targetIndex]
+}
+
+
+export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: CharacterMeta[]): CharacterMeta[] {
+    const { moveMetaMap } = getRulebook()
+    const defenders = [defender]
+
+    let numTargets = 1
+    move.types
+        .map(t => moveMetaMap[t])
+        .forEach(moveMeta => {
+            const numForMove = typeof moveMeta.numTargets === 'number' ?
+                moveMeta.numTargets :
+                moveMeta.numTargets[moveMeta.numTargets.length - 1]
+            if (numForMove > numTargets) numTargets = numForMove
+        })
+    if (numTargets > 1) {
+        for (let i = 1; i < numTargets; i++) {
+            const closest = getClosestAlive(ac, defender, i)
+            if (closest != null) defenders.push(closest)
+        }
+    }
+
+    return defenders
 }

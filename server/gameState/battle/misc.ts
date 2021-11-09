@@ -1,11 +1,7 @@
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared'
 
-import { getRulebook } from '@/rulebook'
-
-import { getClosestAlive, getPCTarget, getUnmovedNpc } from './characterGetters'
+import { getDefenders, getPCTarget, getUnmovedNpc } from './characterGetters'
 import { getTransformed, isSpecial } from './specialMoves'
-
-const { moveMetaMap, stanceTypeMetaMap } = getRulebook()
 
 export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     if (ac.every(c => c.isPc || c.health <= 0))
@@ -44,28 +40,6 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
 
 
     return { attacker, defenders, move }
-}
-
-export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: CharacterMeta[]): CharacterMeta[] {
-    const defenders = [defender]
-
-    let numTargets = 1
-    move.types
-        .map(t => moveMetaMap[t])
-        .forEach(moveMeta => {
-            const numForMove = typeof moveMeta.numTargets === 'number' ?
-                moveMeta.numTargets :
-                moveMeta.numTargets[moveMeta.numTargets.length - 1]
-            if (numForMove > numTargets) numTargets = numForMove
-        })
-    if (numTargets > 1) {
-        for (let i = 1; i < numTargets; i++) {
-            const closest = getClosestAlive(ac, defender, i)
-            if (closest != null) defenders.push(closest)
-        }
-    }
-
-    return defenders
 }
 
 
