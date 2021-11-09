@@ -16,7 +16,6 @@ const Root = styled.div`
     transform: translateX(-50%);
     color: white;
     pointer-events: auto;
-    font-size: xx-large;
     span {
         margin-right: 10px;
     }
