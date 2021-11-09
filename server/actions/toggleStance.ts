@@ -1,17 +1,23 @@
 import type { StanceName, ToggleStance } from '@shared'
 
-import { getCharacterMovesWithDamageRanges, getCharIds } from '@/gameState/battle'
-import { commit, getBattleScene, vals } from '@/util'
+import { getCharacterMovesWithDamageRanges } from '@/gameState/battle'
+import { commit, getBattleScene } from '@/util'
 
 export const toggleStance: ToggleStance = (args) => {
     const { characterUid } = args
     const scene = getBattleScene('alice')
-    const ac = scene.select('allCharacters').get()
-    if (getCharIds(vals(ac), { isPc: true, hasMoved: true }).length > 0 ||
-        scene.select('isPlayerTurn').get() === false)
-        return
 
-    const stanceCursor = scene.select('allCharacters').select(characterUid).select('stance')
+    const characterCursor = scene.select('allCharacters').select(characterUid)
+    const character = characterCursor.get()
+
+    if (
+        !character.isPc ||
+        character.hasMoved ||
+        !scene.get().isPlayerTurn ||
+        scene.get().selectedCharacter !== character.uid
+    ) return
+
+    const stanceCursor = characterCursor.select('stance')
 
     const stances: StanceName[] = [
         'defensive',
@@ -25,10 +31,9 @@ export const toggleStance: ToggleStance = (args) => {
 
     stanceCursor.set(stances[nextIndex])
 
-    const characterCursor = scene.select('allCharacters').select(characterUid)
     characterCursor.select('moves').apply(() => {
-        logger.info(characterCursor.get())
-        return getCharacterMovesWithDamageRanges(characterCursor.get())
+        logger.info(character)
+        return getCharacterMovesWithDamageRanges(character)
     })
     commit(characterCursor)
 }
