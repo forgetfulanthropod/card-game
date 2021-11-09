@@ -1,6 +1,6 @@
 import type { StanceName, ToggleStance } from '@shared'
 
-import { getCharIds, stanceBlessingUpdate } from '@/gameState/battle'
+import { getCharIds, getModified } from '@/gameState/battle'
 import { commit, getBattleScene, vals } from '@/util'
 
 export const toggleStance: ToggleStance = (args) => {
@@ -26,6 +26,6 @@ export const toggleStance: ToggleStance = (args) => {
     stanceCursor.set(stances[nextIndex])
 
     const characterCursor = scene.select('allCharacters').select(characterUid)
-    characterCursor.apply(stanceBlessingUpdate)
+    characterCursor.apply(getModified)
     commit(characterCursor)
 }

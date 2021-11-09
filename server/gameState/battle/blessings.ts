@@ -2,16 +2,6 @@ import type { CharacterMeta } from '@shared'
 
 import { getGameStateCursor } from '@/util'
 
-import { getCharacterMovesWithDamageRanges } from './attack'
-
-
-/** Returns updated blessing. Does not modify in place! (i.e. pure function) (That's the goal at least.) */
-export function stanceBlessingUpdate(cm: Readonly<CharacterMeta>): CharacterMeta {
-    // TODO: should probably make brand new info from stance + a key in the statsMap
-    cm = blessingUpdate(cm)
-    cm = { ...cm, moves: getCharacterMovesWithDamageRanges(cm) }
-    return cm
-}
 
 export function blessingUpdate(characterMeta: Readonly<CharacterMeta>): CharacterMeta {
     const bls = getGameStateCursor('alice').get('blessings')

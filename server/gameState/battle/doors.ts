@@ -7,8 +7,8 @@ import { keys, memoize, zip } from 'lodash'
 import { getRulebook } from '@/rulebook'
 import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
 
+import { newNPCMeta } from './characterManagement'
 import { weightedRandom } from './misc'
-import { newNPCMeta } from './state'
 
 
 export type Room = {
