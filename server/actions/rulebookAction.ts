@@ -46,8 +46,8 @@ export const rulebookAction: RulebookAction = args => {
             if (newName === 'default') {
                 throw Error('cannot name rulebook \'default\'')
             }
-            args.rulebook.savedAt = pacificDate()
-            const s = stringifyRulebook(args.rulebook)
+            const rulebook = { ...args.rulebook, savedAt: pacificDate() }
+            const s = stringifyRulebook(rulebook)
             const p = toPath(newName)
             logger.info(`creating rulebook ${newName}`)
             if (existsSync(p)) {

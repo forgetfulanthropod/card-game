@@ -26,6 +26,6 @@ export const toggleStance: ToggleStance = (args) => {
     stanceCursor.set(stances[nextIndex])
 
     const characterCursor = scene.select('allCharacters').select(characterUid)
-    characterCursor.set(stanceBlessingUpdate(characterCursor.get()))
+    characterCursor.apply(stanceBlessingUpdate)
     commit(characterCursor)
 }

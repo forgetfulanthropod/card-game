@@ -4,6 +4,7 @@ import { getGameStateCursor } from '@/util'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
 
+
 /** Returns updated blessing. Does not modify in place! (i.e. pure function) (That's the goal at least.) */
 export function stanceBlessingUpdate(cm: Readonly<CharacterMeta>): CharacterMeta {
     // TODO: should probably make brand new info from stance + a key in the statsMap
@@ -12,17 +13,17 @@ export function stanceBlessingUpdate(cm: Readonly<CharacterMeta>): CharacterMeta
     return cm
 }
 
-export function blessingUpdate(cm: Readonly<CharacterMeta>): CharacterMeta {
+export function blessingUpdate(characterMeta: Readonly<CharacterMeta>): CharacterMeta {
     const bls = getGameStateCursor('alice').get('blessings')
-    const type = cm.isPc ? 'party' : 'enemies'
-    let damage = cm.damage
-    let health = cm.health
+    const type = characterMeta.isPc ? 'party' : 'enemies'
+    let damage = characterMeta.damage
+    let health = characterMeta.health
     for (const b of bls) {
         for (const ef of b.effects) {
             if (ef.target === type
-                || typeof ef.target === 'object' && ef.target.type === type && ef.target.characterType === cm.name) {
+                || typeof ef.target === 'object' && ef.target.type === type && ef.target.characterType === characterMeta.name) {
                 // console.log('you have an effect affecting you')
-                console.log(`Character ${cm.name} has effect ${b.name}`)
+                console.log(`Character ${characterMeta.name} has effect ${b.name}`)
 
                 const dmult = ef.damageMultiplicand ?? 1
                 const dadd = ef.damageAddend ?? 0
@@ -34,7 +35,7 @@ export function blessingUpdate(cm: Readonly<CharacterMeta>): CharacterMeta {
             }
         }
     }
-    return { ...cm, damage, health }
+    return { ...characterMeta, damage, health }
 }
 
 /*

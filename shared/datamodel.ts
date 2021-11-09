@@ -13,7 +13,8 @@ export type ItemUid = string
 type LocationName = string
 type RecipeName = string
 
-export interface Rulebook {
+export type Rulebook = Readonly<RulebookI>
+interface RulebookI {
     version: string
     savedAt?: string
     name: string
@@ -40,7 +41,8 @@ export interface Rulebook {
     eventTriggersMap: EventTriggersMap
 }
 
-export interface Gamestate {
+export type Gamestate = Readonly<GamestateI>
+interface GamestateI {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
@@ -53,12 +55,14 @@ export interface Gamestate {
     curRulebook?: string
 }
 
-export interface OwnedCharacter extends CharacterStats {
+export type OwnedCharacter = Readonly<OwnedCharacterI>
+interface OwnedCharacterI extends CharacterStatsI {
     uid: string
     tokenId: string
     nftName: string
 }
-export interface SceneHas {
+export type SceneHas = Readonly<SceneHasI>
+interface SceneHasI {
     name: SceneName
 }
 
@@ -78,7 +82,8 @@ export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
-export interface CharacterStats {
+export type CharacterStats = Readonly<CharacterStatsI>
+interface CharacterStatsI {
     name: CharacterName
     displayName: string
     points: number
@@ -90,18 +95,21 @@ export interface CharacterStats {
     level: number
     modifier: number
 }
-export interface CharacterMove {
+export type CharacterMove = Readonly<CharacterMoveI>
+interface CharacterMoveI {
     name: string
     types: MoveMetaName[]
     damageRange?: number[]
 }
 
-export interface LearnableCharacterMove extends CharacterMove {
+export type LearnableCharacterMove = Readonly<LearnableCharacterMoveI>
+interface LearnableCharacterMoveI extends CharacterMoveI {
     minLevel: number
 }
 export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
-export interface DungeonLevel {
+export type DungeonLevel = Readonly<DungeonLevelI>
+interface DungeonLevelI {
     name: DungeonName
     num: number
     pointLimit: number
