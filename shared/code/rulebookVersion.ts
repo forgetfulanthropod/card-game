@@ -1,1 +1,1 @@
-export const rulebookVersion = '1.0.0'
+export const rulebookVersion = '1.1.0'
