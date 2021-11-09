@@ -47,7 +47,7 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
 }
 
 
-export function getLevelIncrease(dungeonName: DungeonName): number {
+function getLevelIncrease(dungeonName: DungeonName): number {
     const dungeonLevelInfo = getRulebook().dungeonLevels.find(l => l.name === dungeonName)
 
     if (dungeonLevelInfo == null) {

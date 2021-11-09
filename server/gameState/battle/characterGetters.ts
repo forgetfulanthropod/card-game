@@ -6,8 +6,6 @@ import { stringKeys, vals } from '@/util'
 import { randomEl, weightedRandom } from './misc'
 
 
-export function getId(x: number, y: number): string { return `${x}-${y}` }
-
 export function getLivingChars(
     allCharacters: Record<string, CharacterMeta>
 ): { alivePcs: CharacterMeta[]; aliveNpcs: CharacterMeta[] } {
@@ -36,7 +34,8 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
             return c.uid
         })
 }
-export function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
+
+function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
     const charDist = (a: CharacterMeta, b: CharacterMeta) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
     return [...allCharacters]
         .filter(c => c.isPc === character.isPc && c.health > 0)

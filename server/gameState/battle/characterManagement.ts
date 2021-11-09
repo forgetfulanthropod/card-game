@@ -8,11 +8,11 @@ import { getModified } from './characterModifierManagement'
 import { getLevelInfo } from './npcLeveling'
 
 
-export const BASE_WIDTH = 1920
-export const BASE_HEIGHT = 1080
-export const X_AGGRESSIVE_THRESH = 11
-export const X_NEUTRAL_THRESH = 9
-export type Characters = Record<CharacterUid, CharacterMeta>
+const BASE_WIDTH = 1920
+const BASE_HEIGHT = 1080
+const X_AGGRESSIVE_THRESH = 11
+const X_NEUTRAL_THRESH = 9
+type Characters = Record<CharacterUid, CharacterMeta>
 export function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
     const all = [
@@ -43,7 +43,7 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     return rearrangedNpcs
 }
 
-export function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
@@ -57,7 +57,7 @@ export function makePositions(x0: number, y0: number, hGap: number, vGap: number
     return A.slice(0, n)
 }
 
-export function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
+function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1

@@ -21,5 +21,5 @@ declare global {
 
 export type Func = (...args: any[]) => any // eslint-disable-line @typescript-eslint/no-explicit-any
 export type Caller<F extends Func> = (...args: Parameters<F>) => Promise<CallReturn<F> | null>
-export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
+type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 export type ServerResult<T> = { status: 'success', result: T } | { status: 'error', message: string }

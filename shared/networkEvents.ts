@@ -19,7 +19,6 @@ export interface NetworkEvent<Name extends string, Data> {
     data: Data
 }
 
-export type MoveEmitter = NetworkEventEmitter<'move', MoveEvent>
 export type MoveEvent = NetworkEvent<'move', NetworkAttackData>
 
 export interface Cursorish<T> {
@@ -28,7 +27,6 @@ export interface Cursorish<T> {
     on?: (_: 'update', cb: () => void) => void
 }
 
-export type WorldEventEmitter = NetworkEventEmitter<'world', WorldEvent>
 export type WorldEvent = NetworkEvent<'world', WorldEventData>
 export interface WorldEventData {
     title: string,

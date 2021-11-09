@@ -102,7 +102,7 @@ interface CharacterMoveI {
     damageRange?: number[]
 }
 
-export type LearnableCharacterMove = Readonly<LearnableCharacterMoveI>
+type LearnableCharacterMove = Readonly<LearnableCharacterMoveI>
 interface LearnableCharacterMoveI extends CharacterMoveI {
     minLevel: number
 }

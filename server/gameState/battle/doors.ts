@@ -16,7 +16,7 @@ export type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-export function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
     const { dungeonRooms } = getRulebook()
 
     const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']

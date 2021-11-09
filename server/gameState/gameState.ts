@@ -12,7 +12,7 @@ const config = {
     includeRulebook: true,
 }
 
-export function initialOwnedCharacters(): Record<string, OwnedCharacter> {
+function initialOwnedCharacters(): Record<string, OwnedCharacter> {
 
     const { characters: statsMap } = getRulebook()
 
