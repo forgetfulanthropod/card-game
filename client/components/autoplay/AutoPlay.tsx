@@ -6,7 +6,7 @@ import toast from 'react-hot-toast'
 // @ts-expect-error
 import styled from 'styled-components'
 
-import { addSelected, changeDungeon, changeScene } from '@/actions'
+import { addSelected, changeDungeon, changeScene, chooseDoor, doCharacterAction } from '@/actions'
 import { getTree } from '@/data/rootTree'
 
 const Root = styled.button`
@@ -86,7 +86,28 @@ class Runner {
 
     async battleStep(tree: Gamestate) {
         const scene = tree.scene as BattleScene
-        await sleep(1000)
+        const doorOptions = scene.doors.options
+        if (doorOptions.length > 0) {
+            toast('doors detected. picking random door.')
+            const door = sample(doorOptions)
+            if (door == null) { throw Error('null door') }
+            await chooseDoor({ door })
+        }
+        if (!scene.isPlayerTurn) {
+            toast('not my turn - doing nothing')
+            return
+        }
+        const enemies = values(scene.allCharacters).filter(c => !c.isPc && c.health > 0)
+        if (enemies.length === 0) {
+            toast('no enemies to hit -- doing nothing')
+            return
+        }
+        // TODO: pick random unmoved PC
+        // TODO: pick random stance
+        const enemy = sample(enemies)
+        if (enemy == null) { throw Error('null enemy') }
+        toast(`hitting enemy ${enemy.name} (${enemy.uid})`)
+        await doCharacterAction({ uid: enemy.uid })
     }
 
 }
