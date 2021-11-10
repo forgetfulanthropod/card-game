@@ -1,5 +1,7 @@
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared'
 
+import { randomEl } from '@/util'
+
 import { getDefenders, getPCTarget, getUnmovedNpc } from './characterGetters'
 import { getTransformed, isSpecial } from './specialMoves'
 
@@ -40,30 +42,4 @@ export function getNpcMove(ac: CharacterMeta[]): AttackData {
 
 
     return { attacker, defenders, move }
-}
-
-
-export function randomEl<T>(arr: readonly T[]): T {
-    return arr[srandom() * arr.length | 0]
-}
-
-
-/** Returns index of chosen element */
-export function weightedRandom(probabilites: number[]): number {
-    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        logger.error('array contains NaN or Inf or negative numbers')
-        return 0
-    }
-    let runningTotal = 0
-    const runningTotals = []
-    for (let i = 0; i < probabilites.length; i++) {
-        runningTotal += probabilites[i]
-        runningTotals[i] = runningTotal
-    }
-    const total = runningTotal
-    const x = srandom() * total
-    const index = runningTotals.findIndex(t => t > x)
-    if (index !== -1) return index
-    // hits e.g. when all probabilities are 0
-    return srandom() * probabilites.length | 0
 }

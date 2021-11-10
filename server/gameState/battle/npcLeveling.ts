@@ -4,7 +4,7 @@ import { cloneDeep, keys } from 'lodash'
 import { getRulebook } from '@/rulebook'
 import { vals } from '@/util'
 
-import { rearrangeNpcs } from '.'
+import { rearrangeNpcs } from './characterManagement'
 import type { Room } from './doors'
 
 export function modifyRoom(room: Room, dungeonName: DungeonName): Room {

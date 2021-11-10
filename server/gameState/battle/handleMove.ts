@@ -10,10 +10,10 @@ import { getLivingChars, getUnmovedPc } from './characterGetters'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
 import { tl, warn } from './logging'
-import { checkMoveAvailable, checkWinner } from './misc'
 import applyMove from './move'
 import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
+import { checkMoveAvailable, checkWinner } from './round'
 
 
 const TIME_AFTER_PLAYER_MOVE = 1000

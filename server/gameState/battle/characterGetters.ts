@@ -1,9 +1,7 @@
 import type { CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { getRulebook } from '@/rulebook'
-import { stringKeys, vals } from '@/util'
-
-import { randomEl, weightedRandom } from './misc'
+import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
 
 
 export function getLivingChars(

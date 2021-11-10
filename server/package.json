@@ -7,7 +7,7 @@
         "build": "node ../scripts/serverEsbuild.mjs",
         "watch": "npm run build -- watch",
         "tsc": "tsc",
-        "tsc-watch": "tsc-watch"
+        "tsc-watch": "tsc -w"
     },
     "dependencies": {
         "baobab": "github:qpwo/baobab#more-detailed-types",

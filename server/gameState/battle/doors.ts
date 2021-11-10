@@ -5,10 +5,9 @@ import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
+import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
 
 import { makePositions, newNPCMeta } from './characterManagement'
-import { weightedRandom } from './misc'
 
 
 export type Room = {
