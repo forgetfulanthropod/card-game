@@ -11,6 +11,7 @@ import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
 import { BlessingToggles } from './BlessingToggles'
+import { AutoPlay } from './autoplay/AutoPlay'
 
 
 export default function App(): JSX.Element {
@@ -23,6 +24,7 @@ export default function App(): JSX.Element {
         <BlessingToggles />
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
+        <AutoPlay />
         <RulebookEditor />
         {/* <TestCounter /> */}
     </AppWrap>

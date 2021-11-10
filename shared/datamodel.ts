@@ -13,7 +13,7 @@ export type ItemUid = string
 type LocationName = string
 type RecipeName = string
 
-export type Rulebook = Readonly<RulebookI>
+export type Rulebook = Readonly<RulebookI> & { ___?: undefined }
 interface RulebookI {
     version: string
     savedAt?: string
@@ -42,7 +42,7 @@ interface RulebookI {
     eventTriggersMap: EventTriggersMap
 }
 
-export type Gamestate = Readonly<GamestateI>
+export type Gamestate = Readonly<GamestateI> & { ___?: undefined }
 interface GamestateI {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
@@ -56,13 +56,13 @@ interface GamestateI {
     curRulebook?: string
 }
 
-export type OwnedCharacter = Readonly<OwnedCharacterI>
+export type OwnedCharacter = Readonly<OwnedCharacterI> & { ___?: undefined }
 interface OwnedCharacterI extends CharacterStatsI {
     uid: string
     tokenId: string
     nftName: string
 }
-export type SceneHas = Readonly<SceneHasI>
+export type SceneHas = Readonly<SceneHasI> & { ___?: undefined }
 interface SceneHasI {
     name: SceneName
 }
@@ -83,7 +83,7 @@ export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
-export type CharacterStats = Readonly<CharacterStatsI>
+export type CharacterStats = Readonly<CharacterStatsI> & { ___?: undefined }
 interface CharacterStatsI {
     name: CharacterName
     displayName: string
@@ -96,20 +96,20 @@ interface CharacterStatsI {
     level: number
     modifier: number
 }
-export type CharacterMove = Readonly<CharacterMoveI>
+export type CharacterMove = Readonly<CharacterMoveI> & { ___?: undefined }
 interface CharacterMoveI {
     name: string
     types: MoveMetaName[]
     damageRange?: number[]
 }
 
-type LearnableCharacterMove = Readonly<LearnableCharacterMoveI>
+type LearnableCharacterMove = Readonly<LearnableCharacterMoveI> & { ___?: undefined }
 interface LearnableCharacterMoveI extends CharacterMoveI {
     minLevel: number
 }
 export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
-export type DungeonLevel = Readonly<DungeonLevelI>
+export type DungeonLevel = Readonly<DungeonLevelI> & { ___?: undefined }
 interface DungeonLevelI {
     name: DungeonName
     num: number
