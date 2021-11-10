@@ -1,17 +1,9 @@
-import type {
-    BattleScene,
-    CharacterMeta,
-    CharacterName,
-    CharacterUid,
-    DungeonName,
-    OwnedCharacter,
-    StanceName,
-} from '@shared'
+import type { CharacterMeta, CharacterName, CharacterUid, OwnedCharacter, StanceName } from '@shared'
 
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
 
-import { getCharacterMovesWithDamageRanges } from './attack'
+import { getModified } from './characterModifierManagement'
 import { getLevelInfo } from './npcLeveling'
 
 
@@ -19,16 +11,13 @@ const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
-
-
 type Characters = Record<CharacterUid, CharacterMeta>
-
-function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
+export function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return newPCMeta({ uid: c.uid, name: c.name, x, y })
+            return getModified(newPCMeta({ uid: c.uid, name: c.name, x, y }))
         }),
     ]
     const o: Characters = {}
@@ -36,40 +25,6 @@ function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
         o[c.uid] = c
     }
     return o
-}
-
-export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen)
-
-    // kill most of the characters
-    // for (let i = 0; i < 12; i++) {
-    //     if (i === 0 || i === 6) continue
-    //     allCharacters[i].health = -1
-    //     // allCharacters
-    // }
-
-
-    const selectedCharacter = Object.values(allCharacters).find(c => c.isPc)
-    if (!selectedCharacter) {
-        throw Error('could not find any initial player characters')
-    }
-    const selectedMove = selectedCharacter.moves[0]
-    if (selectedCharacter == null) throw Error('no player characters!')
-    return Object.freeze({
-        name: 'battle',
-        dungeonName: args?.dungeonName ?? 'The Matcha Caves',
-        turnCount: 0,
-        state: 'not started',
-        isPlayerTurn: srandom() < .5,
-        battleHasBegun: true,
-        allCharacters,
-        selectedCharacter: selectedCharacter.uid,
-        selectedMove,
-        isBasicLoaded: false,
-        isDeluxeLoaded: false,
-        doors: { options: [], descriptions: [] },
-        roomsPassed: 0,
-    })
 }
 
 export function rearrangeNpcs(npcs: Characters): Characters {
@@ -101,7 +56,7 @@ export function makePositions(x0: number, y0: number, hGap: number, vGap: number
     return A.slice(0, n)
 }
 
-function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterName }): CharacterMeta {
+export function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
@@ -109,10 +64,9 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         'aggressive' :
         (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
     const stats = statsMap[args.name]
-    const moves = getCharacterMovesWithDamageRanges({ ...stats, stance })
+    // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
     return {
         ...stats,
-        moves,
         uid: args.uid,
         isPc: true,
         x: args.x,
@@ -126,24 +80,25 @@ function newPCMeta(args: { x: number; y: number, uid: string, name: CharacterNam
         effects: [],
     }
 }
-export function newNPCMeta(args: { x: number; y: number, name: CharacterName, uid: string, level: number }): CharacterMeta {
+export function newNPCMeta(args: { x: number; y: number; name: CharacterName; uid: string; level: number }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // debugger
     logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
 
+    const stance: StanceName = 'neutral'
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
         ...(getLevelInfo(args.name, args.level)),
-        uid: args.uid, // being set in makeInitialCharacters rn
+        uid: args.uid,
         isPc: false,
         x: args.x,
         y: args.y,
         screenX: scale * BASE_WIDTH * args.x / 100,
         screenY: scale * BASE_HEIGHT * args.y / 100,
-        stance: 'neutral',
+        stance,
         hasMoved: false,
         effects: [],
         experience: 0,

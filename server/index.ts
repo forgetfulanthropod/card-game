@@ -5,10 +5,9 @@ import expsession from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
-import { addNewUser } from './actions/makeNewUser'
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
-import { commit, getRootCursor } from './util'
+import { addNewUser, commit, getRootCursor } from './util'
 
 
 const config = {

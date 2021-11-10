@@ -6,6 +6,7 @@ export interface BattleScene extends SceneHas {
     name: 'battle'
     dungeonName: DungeonName
     state: BattleWinState
+    playerStarts: boolean
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
     selectedCharacter: CharacterUid
@@ -17,7 +18,7 @@ export interface BattleScene extends SceneHas {
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
 }
-export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
+type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
 export interface MoveMeta {
     name: MoveMetaName

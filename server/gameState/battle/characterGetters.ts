@@ -1,25 +1,20 @@
-import type { AttackData, CharacterMeta, CharacterMove, CharacterUid } from '@shared'
+import type { CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { getRulebook } from '@/rulebook'
-import { stringKeys, vals } from '@/util'
+import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
 
-import { getTransformed, isSpecial } from './specialMoves'
-
-const { moveMetaMap, stanceTypeMetaMap } = getRulebook()
-
-export function getId(x: number, y: number): string { return `${x}-${y}` }
 
 export function getLivingChars(
     allCharacters: Record<string, CharacterMeta>
-): { alivePcs: CharacterMeta[], aliveNpcs: CharacterMeta[] } {
+): { alivePcs: CharacterMeta[]; aliveNpcs: CharacterMeta[] } {
     const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
     const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
     return { alivePcs, aliveNpcs }
 }
-
 type CharacterFilters = Partial<CharacterMeta>
 export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
-    if (filters == null) return []
+    if (filters == null)
+        return []
 
     return ac
         .filter(c => {
@@ -39,8 +34,7 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
 }
 
 function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
-    const charDist = (a: CharacterMeta, b: CharacterMeta) =>
-        dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
+    const charDist = (a: CharacterMeta, b: CharacterMeta) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
     return [...allCharacters]
         .filter(c => c.isPc === character.isPc && c.health > 0)
         .sort((a, b) => charDist(a, b))[nthClosest]
@@ -49,8 +43,7 @@ function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMet
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
-
-function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
+export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     const chars = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
     if (chars.length === 0) { return null }
     return randomEl(chars)
@@ -61,8 +54,8 @@ export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterM
     if (chars.length === 0) { return null }
     return randomEl(chars)
 }
-
-function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+    const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac
         .filter(c => c.isPc && c.health > 0)
 
@@ -74,46 +67,9 @@ function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     return allLivingPlayerCharacters[targetIndex]
 }
 
-export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
-    if (ac.every(c => c.isPc || c.health <= 0))
-        return 'PC'
-    if (ac.every(c => !c.isPc || c.health <= 0))
-        return 'NPC'
-    return null
-}
-
-// TODO: should be at least one person...
-export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
-    return ac.some(c => c.isPc && c.health > 0 && !c.hasMoved)
-        || ac.some(c => !c.isPc && c.health > 0 && !c.hasMoved)
-}
-
-
-function getRandomMove(attacker: CharacterMeta): CharacterMove {
-    const moves = attacker.moves
-    let move = randomEl(moves)
-
-    if (isSpecial(move)) move = getTransformed(move, attacker.uid)
-
-    return move
-}
-
-export function getNpcMove(ac: CharacterMeta[]): AttackData {
-    const attacker = getUnmovedNpc(ac)
-    if (attacker == null) {
-        throw Error('no unmoved NPC')
-    }
-
-    const move = getRandomMove(attacker)
-    const defender = getPCTarget(ac)
-
-    const defenders = getDefenders(defender, move, ac)
-
-
-    return { attacker, defenders, move }
-}
 
 export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: CharacterMeta[]): CharacterMeta[] {
+    const { moveMetaMap } = getRulebook()
     const defenders = [defender]
 
     let numTargets = 1
@@ -133,30 +89,4 @@ export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: C
     }
 
     return defenders
-}
-
-
-function randomEl<T>(arr: readonly T[]): T {
-    return arr[srandom() * arr.length | 0]
-}
-
-
-/** Returns index of chosen element */
-export function weightedRandom(probabilites: number[]): number {
-    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
-        logger.error('array contains NaN or Inf or negative numbers')
-        return 0
-    }
-    let runningTotal = 0
-    const runningTotals = []
-    for (let i = 0; i < probabilites.length; i++) {
-        runningTotal += probabilites[i]
-        runningTotals[i] = runningTotal
-    }
-    const total = runningTotal
-    const x = srandom() * total
-    const index = runningTotals.findIndex(t => t > x)
-    if (index !== -1) return index
-    // hits e.g. when all probabilities are 0
-    return srandom() * probabilites.length | 0
 }

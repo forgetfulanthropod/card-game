@@ -5,7 +5,8 @@ import { homedir } from 'os'
 
 import { getRulebook } from '@/rulebook'
 
-import { commit, getRootCursor } from '.'
+import { commit, getRootCursor } from './treeUtils'
+
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'

@@ -2,7 +2,7 @@
 // There can be multiple skeletons though so each one also has a unique ID (uid)
 // The Rulebook exclusively uses names; the gamestate uses names for rulebook data, and uid for its own data
 // The gamestate reads from the rulebook, but not vice versa
-import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, StanceName, StanceStats } from '.'
+import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTriggersMap, MoveMeta, MoveMetaName, NetworkAttackData, SpecialDoorName, StanceName, StanceStats } from '.'
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
@@ -13,12 +13,15 @@ export type ItemUid = string
 type LocationName = string
 type RecipeName = string
 
-export interface Rulebook {
+export type Rulebook = Readonly<RulebookI>
+interface RulebookI {
     version: string
     savedAt?: string
     name: string
+    shouldCoinFlipEveryRound: boolean
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
+    blessings: Record<BlessingName, Blessing>
     recipes: Record<RecipeName, { name: RecipeName, ingredients: ItemName[], result: ItemName }>
     locations: Record<LocationName, {
         displayName: string
@@ -39,10 +42,12 @@ export interface Rulebook {
     eventTriggersMap: EventTriggersMap
 }
 
-export interface Gamestate {
+export type Gamestate = Readonly<GamestateI>
+interface GamestateI {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
+    blessings: Blessing[]
     events: {
         move: NetworkEvent<'move', NetworkAttackData>[]
         world: WorldEvent[]
@@ -51,12 +56,14 @@ export interface Gamestate {
     curRulebook?: string
 }
 
-export interface OwnedCharacter extends CharacterStats {
+export type OwnedCharacter = Readonly<OwnedCharacterI>
+interface OwnedCharacterI extends CharacterStatsI {
     uid: string
     tokenId: string
     nftName: string
 }
-export interface SceneHas {
+export type SceneHas = Readonly<SceneHasI>
+interface SceneHasI {
     name: SceneName
 }
 
@@ -76,7 +83,8 @@ export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
-export interface CharacterStats {
+export type CharacterStats = Readonly<CharacterStatsI>
+interface CharacterStatsI {
     name: CharacterName
     displayName: string
     points: number
@@ -88,18 +96,21 @@ export interface CharacterStats {
     level: number
     modifier: number
 }
-export interface CharacterMove {
+export type CharacterMove = Readonly<CharacterMoveI>
+interface CharacterMoveI {
     name: string
     types: MoveMetaName[]
     damageRange?: number[]
 }
 
-export interface LearnableCharacterMove extends CharacterMove {
+type LearnableCharacterMove = Readonly<LearnableCharacterMoveI>
+interface LearnableCharacterMoveI extends CharacterMoveI {
     minLevel: number
 }
 export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
-export interface DungeonLevel {
+export type DungeonLevel = Readonly<DungeonLevelI>
+interface DungeonLevelI {
     name: DungeonName
     num: number
     pointLimit: number
@@ -112,4 +123,24 @@ export type DungeonName =
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
 
+type TargetType = 'party' | 'enemies'
+
+export type Blessing = {
+    name: string,
+    displayName?: string,
+    after?: {
+        doorType?: SpecialDoorName
+    }
+    effects: {
+        target: TargetType | { type: TargetType, characterType: CharacterName },
+        healthMultiplicand?: number,
+        healthAddend?: number,
+        damageMultiplicand?: number,
+        damageAddend?: number,
+    }[],
+
+}
+export type BlessingName = 'ptbotflax' | 'strongPcs' | 'strongEnemies' | 'weakEnemies' | 'weakPcs'
 export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>
+
+export type StatsWithStance = CharacterStats & { stance: StanceName }

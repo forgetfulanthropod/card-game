@@ -1,4 +1,4 @@
-import type { BattleScene, CharacterMeta, NetworkAttackData, NetworkEventEmitter } from '@shared'
+import type { BattleScene, NetworkAttackData, NetworkEventEmitter } from '@shared'
 import type { SCursor } from 'baobab'
 import { diff } from 'deep-diff'
 import isEqual from 'lodash/isEqual'
@@ -13,7 +13,7 @@ import { makeClientEventListener } from '@/util/makeClientEventListener'
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
-import { NPCElm, PlayerCharacterElm } from './Character'
+import { Character } from './Character'
 import Doors from './Doors'
 import InfoBox from './InfoBox'
 
@@ -63,7 +63,7 @@ function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiConta
 }
 
 function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
-
+    // MARK
     const allCharsCursor = scene.select('allCharacters')
     const children = container.children
     container.removeChildren()
@@ -81,13 +81,13 @@ function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, mo
         background({ scale: 1, ...backgroundArgs }),
         InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
         ...childCursors.map(childCursor =>
-            getCharacterFn(childCursor.get())({
+            Character({
                 cursor: childCursor,
                 onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
                 move$,
                 scale: 1,
                 isSelected: false,
-                zIndex: sortedYs.findIndex(y => y === childCursor.get().y),
+                zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
             })),
     ]
     for (const x of newChildren) {
@@ -95,12 +95,6 @@ function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, mo
     }
     container.sortChildren()
 }
-
-function getCharacterFn(characterMeta: CharacterMeta) {
-    if (characterMeta.isPc) return PlayerCharacterElm
-    else return NPCElm
-}
-
 
 function makeDoors(parent: PixiContainer) {
     const doorCursor = getBattleScene().select('doors')
@@ -113,6 +107,7 @@ function makeDoors(parent: PixiContainer) {
         console.log('doors update...')
         if ((doors == null || doors.options.length === 0) && doorsCont != null) {
             parent.removeChild(doorsCont)
+            doorsCont.destroy()
             doorsCont = null
         } else if (doors != null) {
             console.log('adding some doors')

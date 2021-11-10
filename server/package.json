@@ -3,14 +3,11 @@
     "scripts": {
         "server-watch": "nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "server": "node --enable-source-maps ../server-build/index.js",
+        "server-watch-debug": "nodemon --inspect --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "build": "node ../scripts/serverEsbuild.mjs",
         "watch": "npm run build -- watch",
         "tsc": "tsc",
-        "tsc-watch": "tsc-watch",
-        "source": "echo TODO FIX ; test -f .runenv && export $(cat .runenv | xargs)",
-        "parcel": " npm run clear && parcel build",
-        "pwatch": " npm run clear && parcel watch",
-        "parcel-debug": "parcel build --no-optimize --no-scope-hoist --no-content-hash"
+        "tsc-watch": "tsc -w"
     },
     "dependencies": {
         "baobab": "github:qpwo/baobab#more-detailed-types",
