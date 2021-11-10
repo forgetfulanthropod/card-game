@@ -1,0 +1,46 @@
+{
+    "$schema": "https://arkit.pro/schema.json",
+    "components": [
+        {
+            "type": "Component",
+            "patterns": [
+                "**/*.ts",
+                "**/*.tsx"
+            ]
+        }
+    ],
+    "excludePatterns": [
+        "server/node_modules",
+        "node_modules",
+        "build",
+        "server-build"
+    ],
+    "output": {
+        "path": "arkit.svg",
+        "groups": [
+            {
+                "type": "Client",
+                "patterns": [
+                    "client/**"
+                ]
+            },
+            {
+                "type": "Server",
+                "patterns": [
+                    "server/**"
+                ]
+            },
+            {
+                "type": "Shared",
+                "patterns": [
+                    "shared/**"
+                ]
+            },
+            {
+                "components": [
+                    "Component"
+                ]
+            }
+        ]
+    }
+}

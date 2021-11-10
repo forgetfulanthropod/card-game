@@ -14,7 +14,7 @@ import {
 } from '@/gameState/battle'
 import { commit, getBattleScene, sleep, vals } from '@/util'
 
-import { NOT_YOUR_TURN_REJECTION_WAIT } from './startBattle'
+const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 
 
 export const doCharacterAction: DoCharacterAction = async args => {

@@ -13,7 +13,8 @@
         "savestaged": "bash scripts/savestaged.sh",
         "newtodo": "git diff origin/main -G TODO",
         "CI": "npm run clean && pnpm i --production && npm run build && cd server && pnpm i --production && npm run build",
-        "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt"
+        "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
+        "arkit": "npx arkit"
     },
     "dependencies": {
         "@monaco-editor/react": "^4.3.1",

@@ -1,8 +1,8 @@
 import type { CharacterMeta } from '@shared'
 
-import { newNPCMeta, newPCMeta } from '.'
 import { getCharacterMovesWithDamageRanges } from './attack'
 import { applyBlessings } from './blessings'
+import { newNPCMeta, newPCMeta } from './characterManagement'
 
 
 export function getModified(prev: Readonly<CharacterMeta>): CharacterMeta {

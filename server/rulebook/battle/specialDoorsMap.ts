@@ -3,11 +3,11 @@ import type { CharacterName } from '@shared'
 // export const specialDoorNames = ['bigScary', 'candyBaby', 'normal', 'matcha', 'skeleton', 'rareItem', 'bossDoor', 'face', 'tiny', 'jumbo', 'randomEvent', 'campfire',]
 export type SpecialDoorName = keyof typeof specialDoorsMap
 
-interface SpecialDoor<T = Record<string, unknown>> {
+/* interface SpecialDoor<T = Record<string, unknown>> {
     name: SpecialDoorName
     description: string
     variables: T
-}
+} */
 
 export const specialDoorsMap = {
     'bigScary': {

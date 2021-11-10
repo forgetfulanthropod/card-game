@@ -5,10 +5,9 @@ import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals } from '@/util'
+import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
 
-import { newNPCMeta } from './characterManagement'
-import { weightedRandom } from './misc'
+import { makePositions, newNPCMeta } from './characterManagement'
 
 
 export type Room = {
@@ -52,12 +51,14 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
     const { dungeonRooms, characters } = getRulebook()
     const npcNames = Object.values(characters).filter(x => !x.isPc).map(x => x.name)
     const modifier = args?.modifier ?? 1
+    const names = ssampleSize(npcNames, srandInt(1, 5))
+    const positions = makePositions(65, 50, 18, 13, names.length)
     if (args.door === 'random') {
         return {
             modifier,
-            enemies: mapToObj(ssampleSize(npcNames, srandInt(1, 5)), name => {
+            enemies: mapToObj(names, (name, i) => {
                 const uid = makeUid()
-                return [uid, newNPCMeta({ x: srandInt(50, 80), y: srandInt(40, 70), name, uid, level: srandInt(1, 4) })]
+                return [uid, newNPCMeta({ x: positions[i][0], y: positions[i][1], name, uid, level: srandInt(1, 4) })]
             }),
         }
     }

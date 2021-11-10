@@ -2,9 +2,9 @@
 
 import type { ChooseDoor } from '@shared'
 
-import { getRoom, resetRound } from '@/gameState/battle'
-import { modifyRoom } from '@/gameState/battle/npcLeveling'
+import { getRoom, modifyRoom, resetRound } from '@/gameState/battle'
 import { commit, getBattleScene, objFilter } from '@/util'
+
 
 export const chooseDoor: ChooseDoor = async (args) => {
     const scene = getBattleScene('alice')

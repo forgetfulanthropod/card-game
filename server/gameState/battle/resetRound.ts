@@ -2,10 +2,11 @@ import { getRulebook } from '@/rulebook'
 import type { BattleCursor } from '@/util'
 import { commit, keys, sleep } from '@/util'
 
-import { DEBUG, DEFAULT_WAIT } from '../../actions/startBattle'
 import { doNpcMove } from './doNpcMove'
 import { tl } from './logging'
 
+const DEFAULT_WAIT = 1000
+const DEBUG = false
 
 export async function resetRound(scene: BattleCursor): Promise<void> {
     if (DEBUG)
