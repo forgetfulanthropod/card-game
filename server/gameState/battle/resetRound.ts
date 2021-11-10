@@ -1,3 +1,4 @@
+import { getRulebook } from '@/rulebook'
 import type { BattleCursor } from '@/util'
 import { commit, keys, sleep } from '@/util'
 
@@ -14,7 +15,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     keys(cursor.get())
         .map((k) => cursor.select(k).set('hasMoved', false))
 
-    const playerStartsRound = srandom() < 0.5
+    const playerStartsRound = getRulebook().shouldCoinFlipEveryRound ? scene.select('playerStarts').get() : srandom() < 0.5
     scene.set('isPlayerTurn', playerStartsRound)
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {

@@ -18,6 +18,7 @@ interface RulebookI {
     version: string
     savedAt?: string
     name: string
+    shouldCoinFlipEveryRound: boolean
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
     blessings: Record<BlessingName, Blessing>

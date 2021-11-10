@@ -18,6 +18,7 @@ const dungeonLevels: DungeonLevel[] = [
 const defaultRulebook: Rulebook = {
     version: rulebookVersion,
     name: 'default',
+    shouldCoinFlipEveryRound: false,
     characters: statsMap,
     moveMetaMap,
     npcLevelStatsMap,
