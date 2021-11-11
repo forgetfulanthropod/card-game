@@ -6,15 +6,19 @@ import type { BattleScene, CharacterName, DungeonRooms, EntryScene, EventTrigger
 import type { NetworkEvent, WorldEvent } from './networkEvents'
 
 
-export type CharacterUid = string
+export type CharacterUid = string & Brandify
 
-export type ItemName = string
-export type ItemUid = string
-type LocationName = string
-type RecipeName = string
+export type ItemName = string & Brandify
+export type ItemUid = string & Brandify
+type LocationName = string & Brandify
+type RecipeName = string & Brandify
 
-export type Rulebook = Readonly<RulebookI> & { ___?: undefined }
-interface RulebookI {
+/** Intersecting a type with this makes the type not get aliased to its definition by typescript & vscode. Useful for e.g. auto-refactors and function return types. */
+type Brandify = {
+    ___?: undefined
+}
+
+export type Rulebook = Readonly<{
     version: string
     savedAt?: string
     name: string
@@ -40,10 +44,9 @@ interface RulebookI {
     // npcNames: CharacterName[]
     specialDoorsMap: Record<string, any> // eslint-disable-line @typescript-eslint/no-explicit-any
     eventTriggersMap: EventTriggersMap
-}
+}> & Brandify
 
-export type Gamestate = Readonly<GamestateI> & { ___?: undefined }
-interface GamestateI {
+export type Gamestate = Readonly<{
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
@@ -54,18 +57,17 @@ interface GamestateI {
     }
     rulebooks?: string[]
     curRulebook?: string
-}
+}> & Brandify
 
-export type OwnedCharacter = Readonly<OwnedCharacterI> & { ___?: undefined }
-interface OwnedCharacterI extends CharacterStatsI {
+export type OwnedCharacter = CharacterStats & Readonly<{
     uid: string
     tokenId: string
     nftName: string
-}
-export type SceneHas = Readonly<SceneHasI> & { ___?: undefined }
-interface SceneHasI {
+}> & Brandify
+
+export type SceneHas = Readonly<{
     name: SceneName
-}
+}> & Brandify
 
 interface MapScene extends SceneHas {
     name: 'map'
@@ -83,8 +85,7 @@ export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 
-export type CharacterStats = Readonly<CharacterStatsI> & { ___?: undefined }
-interface CharacterStatsI {
+export type CharacterStats = Readonly<{
     name: CharacterName
     displayName: string
     points: number
@@ -95,21 +96,19 @@ interface CharacterStatsI {
     learnableMoves?: LearnableCharacterMove[]
     level: number
     modifier: number
-}
-export type CharacterMove = Readonly<CharacterMoveI> & { ___?: undefined }
-interface CharacterMoveI {
+}> & Brandify
+export type CharacterMove = Readonly<{
     name: string
     types: MoveMetaName[]
     damageRange?: number[]
-}
+}> & Brandify
 
-type LearnableCharacterMove = Readonly<LearnableCharacterMoveI> & { ___?: undefined }
-interface LearnableCharacterMoveI extends CharacterMoveI {
+type LearnableCharacterMove = CharacterMove & Readonly<{
     minLevel: number
-}
+}> & Brandify
 export type Door = 'A' | 'B' | 'C' | 'D' | 'random'
 
-export type DungeonLevel = Readonly<DungeonLevelI> & { ___?: undefined }
+export type DungeonLevel = Readonly<DungeonLevelI> & Brandify
 interface DungeonLevelI {
     name: DungeonName
     num: number
@@ -125,7 +124,7 @@ export type DungeonName =
 
 type TargetType = 'party' | 'enemies'
 
-export type Blessing = {
+export type Blessing = Readonly<{
     name: string,
     displayName?: string,
     after?: {
@@ -139,8 +138,8 @@ export type Blessing = {
         damageAddend?: number,
     }[],
 
-}
+}> & Brandify
 export type BlessingName = 'ptbotflax' | 'strongPcs' | 'strongEnemies' | 'weakEnemies' | 'weakPcs'
-export type NpcLevelStatsMap = Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>
+export type NpcLevelStatsMap = Readonly<Partial<Record<CharacterName, Record<number, { maxHealth: number, damage: number }>>>> & Brandify
 
-export type StatsWithStance = CharacterStats & { stance: StanceName }
+export type StatsWithStance = CharacterStats & Readonly<{ stance: StanceName }> & Brandify
