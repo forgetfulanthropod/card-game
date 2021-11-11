@@ -10,6 +10,7 @@ import { getLivingChars, getUnmovedPc } from './characterGetters'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
 import { tl, warn } from './logging'
+import { claimLoot } from './loot'
 import applyMove from './move'
 import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
@@ -47,6 +48,7 @@ export async function handleMove(
     if (winner === 'PC') {
         scene.set('state', 'won')
         incrementXP(scene)
+        claimLoot()
         putUpDoors(scene)
         return
     } else if (winner === 'NPC') {

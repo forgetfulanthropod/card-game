@@ -89,7 +89,7 @@ interface RP { shown: boolean, top: string, styleChildren: boolean }
 const Root = styled.div`
     pointer-events: auto;
     background: white;
-    position: absolute;
+    position: fixed;
     width: 25%;
     overflow: scroll;
     right: 0;

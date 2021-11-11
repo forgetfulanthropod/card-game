@@ -4,7 +4,7 @@ import './util/windowUtils'
 import { h, render } from 'preact' // eslint-disable-line
 
 import App from '@/components/App'
-import { start } from '@/features/battle/elements/main'
+import { start } from '@/elements/main'
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { attachServerListener, waitForHandshake } from './connection'

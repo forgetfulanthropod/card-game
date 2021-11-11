@@ -26,7 +26,7 @@ export default function PlainButton(args: { text: string, onClick: Callback, fon
         y: text.y - text.height * 0.1,
     })
     return Container({
-        name: 'PlanButton',
+        name: 'PlainButton',
         children: [
             bg,
             text,

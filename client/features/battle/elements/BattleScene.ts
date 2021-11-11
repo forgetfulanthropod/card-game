@@ -5,6 +5,7 @@ import isEqual from 'lodash/isEqual'
 
 import { chooseDoor, doCharacterAction, exitDungeon, startBattle } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
+import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, overlay } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
@@ -91,6 +92,7 @@ function updateScene(scene: SCursor<BattleScene>, container: PixiContainer, move
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
             })),
+        Coin(),
     ]
     for (const x of newChildren) {
         container.addChild(x)

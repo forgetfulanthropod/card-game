@@ -34,6 +34,7 @@ export function getInitialGameState(): Gamestate {
         scene: initialEntryState,
         ownedCharacters: initialOwnedCharacters(),
         inventory: {},
+        coin: 0,
         blessings: [],
         events: { world: [], move: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
