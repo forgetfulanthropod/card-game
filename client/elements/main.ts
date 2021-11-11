@@ -1,8 +1,7 @@
 
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { Application } from '@/elementsUtil'
-
-import { bindGamestate } from '../logic/bindGamestate'
+import { bindGamestate } from '@/features/battle/logic/bindGamestate'
 
 
 const config = {
@@ -16,7 +15,10 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
     if (config?.showOneThing != null) {
         return Application({ canvas, children: [config?.showOneThing()] })
     }
-    const app = Application({ canvas, children: [] })
+    const app = Application({
+        canvas,
+        children: [],
+    })
 
     bindGamestate(app)
 

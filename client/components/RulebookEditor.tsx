@@ -1,5 +1,4 @@
 import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
-import Editor from '@monaco-editor/react'
 
 // @ts-ignore
 import styled from 'styled-components'
@@ -9,15 +8,8 @@ import { useCursor } from './util'
 import { getTree } from '@/data/rootTree'
 import type { Rulebook } from '@shared'
 import toast from 'react-hot-toast'
-import type { editor } from 'monaco-editor'
-const EditorWrap = styled.div`
-    // z-index: 10;
-    pointer-events: auto;
-    position: fixed;
-    top: 3vh;
-    left: 1vw;
-    width: 98vw;
-`
+import type { MonacoRef } from './Monaco'
+import { Monaco } from './Monaco'
 
 const ButtonGroup = styled.div`
     // z-index: 11;
@@ -87,7 +79,6 @@ export function RulebookEditor(): JSX.Element {
     </>
 }
 
-type MonacoRef = RefObject<editor.IStandaloneCodeEditor>
 
 async function deleteRulebook(name: string): Promise<void> {
     if (name === 'default') {
@@ -142,18 +133,6 @@ async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     await rulebookAction({ do: 'new', rulebook: newRulebook })
     await makeNewUser({ username: 'alice' })
     toast('overwritten')
-}
-
-function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
-
-    return <EditorWrap>
-        <Editor
-            onMount={(editor, _monaco) => { props.mref.current = editor }}
-            height="98vh"
-            defaultLanguage="json"
-            defaultValue={props.defaultValue}
-        />
-    </EditorWrap>
 }
 
 function Selector(props: { options: string[], onChoice: (s: string) => void, value: string }): JSX.Element {

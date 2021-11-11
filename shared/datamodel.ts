@@ -47,6 +47,7 @@ interface GamestateI {
     scene: Scene
     ownedCharacters: Record<CharacterUid, OwnedCharacter>
     inventory: Record<ItemUid, ItemName>
+    coin: number
     blessings: Blessing[]
     events: {
         move: NetworkEvent<'move', NetworkAttackData>[]

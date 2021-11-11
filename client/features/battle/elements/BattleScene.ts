@@ -5,6 +5,7 @@ import isEqual from 'lodash/isEqual'
 
 import { chooseDoor, doCharacterAction, exitDungeon, startBattle } from '@/actions'
 import { getBattleScene, getTree } from '@/data/rootTree'
+import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, overlay } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
@@ -27,8 +28,7 @@ export function BattleScene(): PixiContainer {
 
     const container = Container({ name: 'BattleScene', children: [] })
 
-    bindCharactersWatcher(scene, container, move$)
-    renewChildren(scene, container, move$)
+    bindCharacters(scene, container, move$)
 
     setTimeout(() => makeDoors(container), 0)
     setTimeout(() => startBattle(), 0)
@@ -36,9 +36,12 @@ export function BattleScene(): PixiContainer {
     return container
 }
 
-function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
+function bindCharacters(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
     const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
+
+    updateScene(scene, container, move$)
+
     allCharsCursor.on('update', function checkIfKeysChanged() {
         const allChars = allCharsCursor.get()
         if (allChars == null) {
@@ -56,14 +59,14 @@ function bindCharactersWatcher(scene: SCursor<BattleScene>, container: PixiConta
             console.log('difference between old keys and new keys:',
                 diff(lastKeys, newKeys))
             lastKeys = newKeys
-            renewChildren(scene, container, move$)
+            updateScene(scene, container, move$)
         }
     })
 
 }
 
-function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
-    // MARK
+function updateScene(scene: SCursor<BattleScene>, container: PixiContainer, move$: NetworkEventEmitter<'move', NetworkAttackData>) {
+
     const allCharsCursor = scene.select('allCharacters')
     const children = container.children
     container.removeChildren()
@@ -89,6 +92,7 @@ function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, mo
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
             })),
+        Coin(),
     ]
     for (const x of newChildren) {
         container.addChild(x)
@@ -98,25 +102,25 @@ function renewChildren(scene: SCursor<BattleScene>, container: PixiContainer, mo
 
 function makeDoors(parent: PixiContainer) {
     const doorCursor = getBattleScene().select('doors')
-    let doorsCont: PixiContainer | null = null
+    let doorsContainer: PixiContainer | null = null
     update()
     doorCursor.on('update', update)
 
     function update() {
         const doors = doorCursor.get()
         console.log('doors update...')
-        if ((doors == null || doors.options.length === 0) && doorsCont != null) {
-            parent.removeChild(doorsCont)
-            doorsCont.destroy()
-            doorsCont = null
+        if ((doors == null || doors.options.length === 0) && doorsContainer != null) {
+            parent.removeChild(doorsContainer)
+            doorsContainer.destroy()
+            doorsContainer = null
         } else if (doors != null) {
             console.log('adding some doors')
-            doorsCont = Doors({
+            doorsContainer = Doors({
                 callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
                 descriptions: doors.descriptions,
                 exit: () => exitDungeon(),
             })
-            parent.addChild(doorsCont)
+            parent.addChild(doorsContainer)
         }
 
     }
