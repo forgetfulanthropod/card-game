@@ -18,11 +18,11 @@ export default function App(): JSX.Element {
     return <AppWrap>
         <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
         <Toaster />
-        <Sidebar />
         <ResetButton />
         <BlessingToggles />
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
+        <Sidebar />
         <RulebookEditor />
         {/* <TestCounter /> */}
     </AppWrap>

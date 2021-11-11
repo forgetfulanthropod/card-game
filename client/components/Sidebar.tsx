@@ -1,14 +1,18 @@
 import type { Gamestate } from '@shared'
 import type { SCursor } from 'baobab'
+import { omit } from 'lodash'
 import { h, JSX } from 'preact' // eslint-disable-line
-import { useState } from 'preact/hooks'
-import JSONInput from 'react-json-editor-ajrm'
-// @ts-expect-error
-import locale from 'react-json-editor-ajrm/locale/en'
+import { useRef, useState } from 'preact/hooks'
+import toast from 'react-hot-toast'
 // @ts-expect-error
 import styled from 'styled-components'
 
 import { getClientTree, getTree } from '@/data/rootTree'
+import { stringify } from '@/util'
+
+import type { MonacoRef } from './Monaco'
+import { Monaco } from './Monaco'
+import { useCursor } from './util'
 
 
 interface JSONEditData {
@@ -29,8 +33,12 @@ export function Sidebar(): JSX.Element {
 }
 
 function GamestateEditor(props: { top: string }): JSX.Element {
-    const [data, setData] = useState(getTree().get())
-    getTree().on('update', () => { setData(getTree().get()) })
+    // const [data, setData] = useState(getTree().get())
+    // getTree().on('update', () => { setData(getTree().get()) })
+
+    const ref: MonacoRef = useRef(null)
+    const data = useCursor(getTree().select())
+
     const [shown, setShown] = useState(false)
     const title = 'Edit gamestate tree'
     return <Root shown={shown} top={props.top} styleChildren={false}>
@@ -38,16 +46,26 @@ function GamestateEditor(props: { top: string }): JSX.Element {
             {shown ? <b>{title}</b> : title}
         </span>
         {shown &&
-            <JSONInput
-                id='gamestate-editor'
-                theme='light_mitsuketa_tribute'
-                locale={locale}
-                placeholder={data}
-                height='100%'
-                onChange={(data: JSONEditData) => {
-                    getTree().set(data.jsObject as Gamestate)
+            <Monaco
+                mref={ref}
+                defaultValue={stringify(omit(data, ['curRulebook', 'rulebooks']))}
+                onClose={() => {
+                    if (ref.current == null) return
+                    const curString = ref.current.getValue()
+                    let parsed = null
+                    try {
+                        parsed = JSON.parse(curString) as Partial<Gamestate>
+                    } catch (e) {
+                        toast.error('json parse error')
+                        return
+                    }
+                    getTree().merge(parsed)
+                    setShown(false)
                 }}
             />}
+        {/* onChange={(data: JSONEditData) => {
+                    getTree().set(data.jsObject as Gamestate)
+                }} */}
     </Root>
 }
 

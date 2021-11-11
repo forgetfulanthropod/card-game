@@ -11,4 +11,4 @@ export function jss(literals: TemplateStringsArray, ...placeholders: unknown[]):
     return result
 }
 
-console.log(jss`My object is ${{ x: { y: { z: 1 } } }} and the color is ${'purple'}`)
+// console.log(jss`My object is ${{ x: { y: { z: 1 } } }} and the color is ${'purple'}`)

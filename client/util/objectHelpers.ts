@@ -39,3 +39,7 @@ export function keyMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k
 export function entryMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k: string, v: V) => X): X[] {
     return (Object.entries(obj) as [string, V][]).map(([k, v]) => f(k, v))
 }
+
+export function stringify(obj: Record<string, unknown>): string {
+    return JSON.stringify(obj, null, 4)
+}
