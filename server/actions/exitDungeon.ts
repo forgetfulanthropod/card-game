@@ -1,4 +1,4 @@
-import type { ExitDungeon } from '@shared'
+import type { ExitDungeon } from '@serverActions'
 
 import { initialEntryState } from '@/gameState/entry/state'
 import { commit, getGameStateCursor } from '@/util'

@@ -1,4 +1,4 @@
-import type { SelectMove } from '@shared'
+import type { SelectMove } from '@serverActions'
 
 import { commit, getBattleScene } from '@/util'
 

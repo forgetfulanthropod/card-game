@@ -1,5 +1,5 @@
 
-import type { StartBattle } from '@shared'
+import type { StartBattle } from '@serverActions'
 
 import { resetRound } from '@/gameState/battle'
 import { getBattleScene } from '@/util'

@@ -1,4 +1,4 @@
-import type { AddSelected } from '@shared'
+import type { AddSelected } from '@serverActions'
 
 import { commit, getEntryScene } from '@/util'
 

@@ -1,5 +1,5 @@
 
-import type { ChangeScene } from '@shared'
+import type { ChangeScene } from '@serverActions'
 
 import { makeBattleState, putUpDoors } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'

@@ -17,13 +17,17 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
             // debugger
             let result: ReturnType | null = null
             if (config.method === 'get') {
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
-                result = await f(request.query as unknown as Args)
+                // @ts-expect-error
+                const fullRequest = { ...request.query, username: request.session.username }
+                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullRequest)}`) }
+                result = await f(fullRequest as unknown as Args)
                 // TODO: could commit scene here instead of at the end of every function
             } else {
                 // debugger
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
-                result = await f(request.body)
+                // @ts-expect-error
+                const fullBody = { ...request.body, username: request.session.username }
+                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullBody)}`) }
+                result = await f(fullBody)
             }
             if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })

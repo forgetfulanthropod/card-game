@@ -1,5 +1,5 @@
 
-import type { MakeNewUser } from '@shared'
+import type { MakeNewUser } from '@serverActions'
 
 import { commit, getRootCursor } from '@/util'
 import { addNewUser } from '@/util/addNewUser'

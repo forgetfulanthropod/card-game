@@ -1,4 +1,5 @@
-import type { AttackData, DoCharacterAction } from '@shared'
+import type { DoCharacterAction } from '@serverActions'
+import type { AttackData } from '@shared'
 
 import {
     checkWinner,

@@ -1,4 +1,4 @@
-import type { ChangeDungeon } from '@shared'
+import type { ChangeDungeon } from '@serverActions'
 
 import { getRulebook } from '@/rulebook'
 import { commit, getEntryScene } from '@/util'

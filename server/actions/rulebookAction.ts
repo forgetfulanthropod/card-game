@@ -1,5 +1,5 @@
 
-import type { RulebookAction } from '@shared'
+import type { RulebookAction } from '@serverActions'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 
 import { resetRulebook, setRulebook } from '@/rulebook/rulebook'

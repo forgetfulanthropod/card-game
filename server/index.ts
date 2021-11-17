@@ -1,14 +1,13 @@
 import './config/logger'
 
 import express from 'express'
-import expsession from 'express-session'
+import session from 'express-session'
 import type { Server } from 'http'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
 import { addNewUser, commit, getRootCursor } from './util'
-
 
 const config = {
     addNewUserOnStart: true,
@@ -38,7 +37,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const sessionMiddleware = expsession({
+const sessionMiddleware = session({
     secret: 'random secret',
     saveUninitialized: true,
     resave: true,
@@ -60,6 +59,15 @@ export function getApp(): typeof app {
 attachAPIRoutes()
 
 app.use('/', express.static(__dirname + '/../build'))
+app.use('/setusername', (req, res) => {
+    // @ts-expect-error
+    req.session.username = 'alice'
+    res.send('success')
+})
+app.use('/getusername', (req, res) => {
+    // @ts-expect-error
+    res.send(`your username is ${req.session.username}`)
+})
 
 export function mountIo(server: Server, prefix: string): void {
     // app.set('base', prefix)

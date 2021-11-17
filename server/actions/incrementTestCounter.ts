@@ -1,5 +1,5 @@
 
-import type { IncrementTestCounter } from '@shared'
+import type { IncrementTestCounter } from '@serverActions'
 
 import { commit, getRootCursor } from '@/util'
 

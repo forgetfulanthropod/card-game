@@ -1,4 +1,4 @@
-import type { ToggleBlessing } from '@shared'
+import type { ToggleBlessing } from '@serverActions'
 import { findIndex, values } from 'lodash'
 
 import { getModified } from '@/gameState/battle'

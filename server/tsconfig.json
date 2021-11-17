@@ -10,6 +10,9 @@
     "baseUrl": ".",
     "skipLibCheck": true,
     "paths": {
+      "@serverActions": [
+        "./actions/types/serverActions"
+      ],
       "@shared": [
         "../shared/index"
       ],

@@ -1,12 +1,11 @@
-
-
-import type { ChooseDoor } from '@shared'
+import type { ChooseDoor } from '@serverActions'
 
 import { getRoom, modifyRoom, resetRound } from '@/gameState/battle'
 import { commit, getBattleScene, objFilter } from '@/util'
 
 
 export const chooseDoor: ChooseDoor = async (args) => {
+
     const scene = getBattleScene('alice')
 
     const room = modifyRoom(
