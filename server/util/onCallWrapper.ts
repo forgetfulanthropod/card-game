@@ -1,5 +1,7 @@
 import { getApp } from '@/index'
 
+import { commit, fullUserCommit, getGameStateCursor } from '.'
+
 
 const config = {
     log: true,
@@ -16,18 +18,21 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
         try {
             // debugger
             let result: ReturnType | null = null
+            // @ts-expect-error
+            const username = request.session.username as string
+            if (typeof username !== 'string') { logger.error('no username!') }
             if (config.method === 'get') {
-                // @ts-expect-error
-                const fullRequest = { ...request.query, username: request.session.username }
+                const fullRequest = { ...request.query, username }
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullRequest)}`) }
                 result = await f(fullRequest as unknown as Args)
                 // TODO: could commit scene here instead of at the end of every function
+                fullUserCommit(getGameStateCursor(username))
             } else {
                 // debugger
-                // @ts-expect-error
-                const fullBody = { ...request.body, username: request.session.username }
+                const fullBody = { ...request.body, username }
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullBody)}`) }
                 result = await f(fullBody)
+                commit(getGameStateCursor(username))
             }
             if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })

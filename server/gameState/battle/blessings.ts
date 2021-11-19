@@ -3,8 +3,8 @@ import type { CharacterMeta } from '@shared'
 import { getGameStateCursor } from '@/util'
 
 
-export function applyBlessings(characterMeta: Readonly<CharacterMeta>): CharacterMeta {
-    const bls = getGameStateCursor('alice').get('blessings')
+export function applyBlessings(characterMeta: Readonly<CharacterMeta>, username: string): CharacterMeta {
+    const bls = getGameStateCursor(username).get('blessings')
     const type = characterMeta.isPc ? 'party' : 'enemies'
     let damage = characterMeta.damage
     let maxHealth = characterMeta.maxHealth

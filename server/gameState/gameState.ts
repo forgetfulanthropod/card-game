@@ -29,7 +29,7 @@ function initialOwnedCharacters(): Record<string, OwnedCharacter> {
 }
 
 
-export function getInitialGameState(): Gamestate {
+export function getInitialGameState(username: string): Gamestate {
     return {
         scene: initialEntryState,
         ownedCharacters: initialOwnedCharacters(),
@@ -39,5 +39,6 @@ export function getInitialGameState(): Gamestate {
         events: { world: [], move: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook ? stringifyRulebook(getRulebook()) : undefined,
+        username,
     }
 }

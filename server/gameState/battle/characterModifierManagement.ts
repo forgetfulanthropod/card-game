@@ -5,10 +5,10 @@ import { applyBlessings } from './blessings'
 import { newNPCMeta, newPCMeta } from './characterManagement'
 
 
-export function getModified(prev: Readonly<CharacterMeta>): CharacterMeta {
+export function getModified(prev: Readonly<CharacterMeta>, username: string): CharacterMeta {
     const clean = cleanMeta(prev)
 
-    const blessed = applyBlessings(clean)
+    const blessed = applyBlessings(clean, username)
     const stanced = { ...blessed, moves: getCharacterMovesWithDamageRanges(blessed) }
 
     const final = copyFinalProperties(stanced, prev)

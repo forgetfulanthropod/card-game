@@ -13,7 +13,7 @@ export default function TestCounter(): JSX.Element {
         const onChange = (data: unknown) => {
             console.log('counter data changed to', data, (Date.now() - start.current) / 1000, 'seconds after button press')
         }
-        getSocket().on('counterChange', onChange)
+        // getSocket().on('counterChange', onChange) // RETIRED
         return () => getSocket().off('counuterChange', onChange)
         // TODO:
         // const unsub = onSnapshot(doc(db, 'testCounters', 'counter0'), doc =>

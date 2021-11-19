@@ -8,7 +8,7 @@ import { tl } from './logging'
 const DEFAULT_WAIT = 1000
 const DEBUG = false
 
-export async function resetRound(scene: BattleCursor): Promise<void> {
+export async function resetRound(scene: BattleCursor, username: string): Promise<void> {
     if (DEBUG)
         tl('resetting moves')
     const cursor = scene.select('allCharacters')
@@ -20,7 +20,7 @@ export async function resetRound(scene: BattleCursor): Promise<void> {
     tl(playerStartsRound ? 'You start' : 'Enemy starts')
     if (!playerStartsRound) {
         await sleep(DEFAULT_WAIT)
-        await doNpcMove('first move of round')
+        await doNpcMove('first move of round', username)
     }
     commit(scene)
 }

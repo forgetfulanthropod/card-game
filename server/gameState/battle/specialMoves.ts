@@ -7,15 +7,15 @@ export function isSpecial(move: CharacterMove): boolean {
     return move.types.includes('MIM')
 }
 
-export function getTransformed(move: CharacterMove, charUid: CharacterUid): CharacterMove {
+export function getTransformed({ move, charUid, username }: { move: CharacterMove; charUid: CharacterUid, username: string }): CharacterMove {
     if (move.types.includes('MIM'))
-        return getMimicMove(move, charUid)
+        return getMimicMove({ move, charUid, username })
 
     return move
 }
 
-function getMimicMove(move: CharacterMove, charUid: CharacterUid): CharacterMove {
-    const lastAttackOnThisCharacter = [...getEventsCursor('alice').get()]
+function getMimicMove({ move, charUid, username }: { move: CharacterMove; charUid: CharacterUid, username: string }): CharacterMove {
+    const lastAttackOnThisCharacter = [...getEventsCursor(username).get()]
         ?.reverse()
         ?.find(event => event.data.defenders.find(d => d === charUid))
 

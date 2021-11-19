@@ -36,7 +36,7 @@ export interface Effect {
     type: EffectType
     remainingRounds: number
     damagesByRound: number[]
-    dealer?: CharacterMeta
+    dealer?: CharacterUid
 }
 
 export interface CharacterMeta extends CharacterStats {

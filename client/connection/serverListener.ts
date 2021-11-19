@@ -46,18 +46,18 @@ export async function listenForInitialGameState(): Promise<Gamestate> {
 
 export function attachServerListener(): void {
     log('attaching server listener')
-    socket.on('update', data => {
+    socket.on('update', ({ data, path }: { data: unknown, path: string[] }) => {
         log('received server data', data)
         // getTree().set(data)
-        updateBoabab(data)
+        updateBoabab(data, path)
     })
 }
 
-function updateBoabab(fromServer: unknown): void {
-    const newState = fromServer as unknown as Gamestate
-    const gameStateCursor = getTree()
-    const oldState = gameStateCursor.get()
-    const differences = calcDiff(oldState, newState)
+function updateBoabab(fromServer: unknown, path: string[]): void {
+    // @ts-expect-error
+    const cursor = getTree().select(path) as SCursor<unknown>
+    const oldState = cursor.get() as unknown
+    const differences = calcDiff(oldState, fromServer)
     if (differences == null) {
         console.warn('no differences')
         return
@@ -67,10 +67,10 @@ function updateBoabab(fromServer: unknown): void {
             console.warn('entire thing changed:', JSON.stringify(change))
             continue
         }
-        applyChange(change, gameStateCursor)
+        applyChange(change, cursor)
     }
     if (config.enableExpensiveUpdateValidation) {
-        const newTree = gameStateCursor.get()
+        const newTree = cursor.get()
         const treeDifferences = calcDiff(oldState, newTree)
         const diffDiff = calcDiff(treeDifferences, differences)
         if (diffDiff != null) {
@@ -79,7 +79,7 @@ function updateBoabab(fromServer: unknown): void {
                 'this likely means there is an error in updateBaobab or applyChange',
                 {
                     oldTree: oldState,
-                    fromServer: newState,
+                    fromServer: fromServer,
                     newTree: newTree,
                     'oldtree-vs-server': differences,
                     'oldtree-vs-new-tree': treeDifferences,

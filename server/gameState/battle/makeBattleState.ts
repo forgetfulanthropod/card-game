@@ -7,8 +7,8 @@ import type {
 import { makeCharacters } from './characterManagement'
 
 
-export function makeBattleState(args?: { chosen?: OwnedCharacter[], dungeonName?: DungeonName }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen)
+export function makeBattleState(args: { chosen?: OwnedCharacter[], dungeonName?: DungeonName, username: string }): BattleScene {
+    const allCharacters = makeCharacters(args?.chosen, args.username)
 
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {

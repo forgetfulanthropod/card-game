@@ -12,12 +12,12 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 type Characters = Record<CharacterUid, CharacterMeta>
-export function makeCharacters(chosen: OwnedCharacter[] = []): Characters {
+export function makeCharacters(chosen: OwnedCharacter[] = [], username: string): Characters {
     const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return getModified(newPCMeta({ uid: c.uid, name: c.name, x, y }))
+            return getModified(newPCMeta({ uid: c.uid, name: c.name, x, y }), username)
         }),
     ]
     const o: Characters = {}

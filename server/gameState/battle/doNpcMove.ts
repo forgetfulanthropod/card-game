@@ -6,9 +6,9 @@ import { tl, warn } from './logging'
 import { checkWinner, getNpcMove } from './round'
 
 
-export async function doNpcMove(_reason?: string): Promise<void> {
-    const scene = getBattleScene('alice')
-    tl(`npcMove(reason: ${_reason})`)
+export async function doNpcMove(reason: string, username: string): Promise<void> {
+    const scene = getBattleScene(username)
+    tl(`npcMove(reason: ${reason})`)
     const { allCharacters, isPlayerTurn } = scene.get()
     const { alivePcs, aliveNpcs } = getLivingChars(allCharacters)
     const prefix = 'npc. not moving cuz '
@@ -30,6 +30,6 @@ export async function doNpcMove(_reason?: string): Promise<void> {
         commit(scene)
         return
     }
-    const move = getNpcMove(vals(allCharacters))
-    await handleMove(scene, allCharacters, move)
+    const move = getNpcMove(vals(allCharacters), username)
+    await handleMove({ scene, allCharacters, attackData: move, username })
 }

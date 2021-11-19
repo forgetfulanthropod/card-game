@@ -5,7 +5,7 @@ import type { SCursor } from 'baobab'
 import { keys, memoize, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { commit, getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
+import { getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
 
 import { makePositions, newNPCMeta } from './characterManagement'
 
@@ -81,7 +81,8 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
 export function getRoom(args: {
     door: SpecialDoorName,
     dungeonName: DungeonName,
-    roomsPassed: number
+    roomsPassed: number,
+    username: string,
 }): Room {
 
     const { specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
@@ -126,7 +127,7 @@ export function getRoom(args: {
         }
         case 'randomEvent': {
             const worldEvent = ssample(vals(eventTriggersMap))
-            getWorldChannel().emit({ title: worldEvent.shortDescription, body: worldEvent.fullDescription })
+            getWorldChannel(args.username).emit({ title: worldEvent.shortDescription, body: worldEvent.fullDescription })
             return makeRandRegularRoom(dungeonName, roomsPassed)
         }
         default: {
@@ -152,7 +153,6 @@ export function putUpDoors(scene: SCursor<BattleScene>): void {
     const { roomsPassed, dungeonName } = scene.get()
     scene.set('state', 'not started')
     scene.set('doors', getDoorChoices({ roomsPassed, dungeonName }))
-    commit(scene)
 }
 
 
@@ -165,8 +165,8 @@ function randCoords() {
     return { x: srandInt(50, 95), y: srandInt(40, 80) }
 }
 
-const getWorldChannel = memoize(function getWorldChannel() {
-    const eventsCursor: SCursor<WorldEvent[]> = (getGameStateCursor('alice')).select('events').select('world')
+const getWorldChannel = memoize(function getWorldChannel(username: string) {
+    const eventsCursor: SCursor<WorldEvent[]> = (getGameStateCursor(username)).select('events').select('world')
     const move$ = makeServerEventEmitter<'world', WorldEventData>('world', eventsCursor)
     return move$
 })

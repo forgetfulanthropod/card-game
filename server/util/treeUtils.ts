@@ -11,7 +11,7 @@ import { memoize } from 'lodash'
 import { getIo } from '@/index'
 
 
-export function getEntryScene(username: 'alice'): SCursor<EntryScene> {
+export function getEntryScene(username: string): SCursor<EntryScene> {
     const scene = getGameStateCursor(username).select('scene')
     // debugger
     if (scene.get('name') !== 'entry') {
@@ -21,7 +21,7 @@ export function getEntryScene(username: 'alice'): SCursor<EntryScene> {
 }
 
 export type BattleCursor = SCursor<BattleScene>
-export function getBattleScene(username: 'alice'): BattleCursor {
+export function getBattleScene(username: string): BattleCursor {
     const scene = getGameStateCursor(username).select('scene')
     if (scene.get('name') !== 'battle') {
         throw Error('getBattleScene called when not in battle scene')
@@ -30,32 +30,29 @@ export function getBattleScene(username: 'alice'): BattleCursor {
 }
 
 type EventCursor = SCursor<MoveEvent[]>
-export function getEventsCursor(username: 'alice'): EventCursor {
+export function getEventsCursor(username: string): EventCursor {
     const events = getGameStateCursor(username).select('events').select('move')
 
     return events as EventCursor
 }
 
-export function getGameStateCursor(username: 'alice'): SCursor<Gamestate> {
+export function getGameStateCursor(username: string): SCursor<Gamestate> {
     return getRootCursor().select('users').select(username)
 }
 
 interface RootTree {
-    users: {
-        alice: Gamestate
-    }
+    users: Record<string, Gamestate>
     testCounters: { counter0: number }
 }
 
-export function commit(cursor: { get: () => unknown }, customName?: string, justSub = false): void {
-    // TODO eventually: just commit Sub probably or maybe commit changes (diff)
+export function commit(cursor: SCursor<unknown>): void {
     logger.info('committing')
-    if (customName != null) { logger.info('committing to event name ', customName, 'and justSub is', justSub) }
-    if (justSub) {
-        getIo().emit(customName ?? 'update', cursor.get())
-        return
-    }
-    getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
+
+    const path = cursor.path as string[]
+    getIo().emit('update', { data: cursor.get(), path: path.slice(3) })
+}
+export function fullUserCommit(userCursor: SCursor<unknown>): void {
+    commit(userCursor)
 }
 
 export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree> {

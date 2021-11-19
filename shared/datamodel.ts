@@ -55,6 +55,7 @@ interface GamestateI {
     }
     rulebooks?: string[]
     curRulebook?: string
+    username: string
 }
 
 export type OwnedCharacter = Readonly<OwnedCharacterI>

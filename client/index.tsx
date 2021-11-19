@@ -47,7 +47,7 @@ void (async function makeTheUser() {
     await Promise.all([waitForGameStateToFill(), waitForHandshake()])
     maybeStart('gamestate')
     // log('making user')
-    // await makeNewUser({ username: 'alice' })
+    // await makeNewUser({ username, })
     maybeStart('createdUser')
 })()
 

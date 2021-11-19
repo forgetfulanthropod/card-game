@@ -68,7 +68,7 @@ export function RulebookEditor(): JSX.Element {
                 options={rulebooks}
                 onChoice={async newName => {
                     await rulebookAction({ do: 'choose', name: newName })
-                    await makeNewUser({ username: 'alice' })
+                    await makeNewUser({ username, })
                 }} />
             {shown && <>
                 <button onClick={() => addNewRulebook(ref, rulebooks)}>Save new</button>
@@ -102,7 +102,7 @@ async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void
         return
     }
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username: 'alice' })
+    await makeNewUser({ username, })
     toast('added')
 }
 
@@ -131,7 +131,7 @@ async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     }
     await rulebookAction({ do: 'delete', name })
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username: 'alice' })
+    await makeNewUser({ username, })
     toast('overwritten')
 }
 
