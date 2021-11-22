@@ -45,13 +45,13 @@ interface RootTree {
     testCounters: { counter0: number }
 }
 
-export function commit(cursor: SCursor<unknown>): void {
+export function commit(cursor: { get(): unknown, path?: unknown }): void {
     logger.info('committing')
 
     const path = cursor.path as string[]
     getIo().emit('update', { data: cursor.get(), path: path.slice(3) })
 }
-export function fullUserCommit(userCursor: SCursor<unknown>): void {
+export function fullUserCommit(userCursor: { get(): unknown, path?: unknown }): void {
     commit(userCursor)
 }
 
@@ -65,5 +65,7 @@ export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree>
             testCounters: { counter0: 0 },
         },
     })
-    return b.select('contents')
+    const result = b.select('contents')
+    // @ts-expect-error
+    return result
 })
