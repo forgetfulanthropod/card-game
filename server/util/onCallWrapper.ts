@@ -1,6 +1,6 @@
 import { getApp } from '@/index'
 
-import { commit, fullUserCommit, getGameStateCursor } from '.'
+import { fullUserCommit, getGameStateCursor } from '.'
 
 
 const config = {
@@ -10,7 +10,10 @@ const config = {
 
 function makeRandId() { return srandom().toString().slice(2, 6) }
 
-export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): void {
+export function onCallWrapper<Args, ReturnType>(
+    f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
+    options?: { disableCommit?: boolean }
+): void {
     logger.info(`attaching route  ${JSON.stringify(f.name)}`)
     getApp().post('/' + f.name, async (request, response) => {
         // return () => getApp()[config.method]('/' + f.name, async (request, response) => {
@@ -26,13 +29,15 @@ export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | (
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullRequest)}`) }
                 result = await f(fullRequest as unknown as Args)
                 // TODO: could commit scene here instead of at the end of every function
-                fullUserCommit(getGameStateCursor(username))
+                if (options?.disableCommit !== true)
+                    fullUserCommit(getGameStateCursor(username))
             } else {
                 // debugger
                 const fullBody = { ...request.body, username }
                 if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullBody)}`) }
                 result = await f(fullBody)
-                commit(getGameStateCursor(username))
+                if (options?.disableCommit !== true)
+                    fullUserCommit(getGameStateCursor(username))
             }
             if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
             response.send({ status: 'success', result })

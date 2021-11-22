@@ -4,5 +4,5 @@ import { getRootCursor } from './treeUtils'
 
 
 export function addNewUser(args: { username: string }): void {
-    getRootCursor().select('users').select(args.username).set(getInitialGameState(args.username))
+    getRootCursor().select('users').set(args.username, getInitialGameState(args.username))
 }

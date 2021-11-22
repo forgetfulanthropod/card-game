@@ -7,7 +7,7 @@ import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
-import { addNewUser, fullUserCommit, getRootCursor } from './util'
+import { addNewUser } from './util'
 
 const config = {
     addNewUserOnStart: true,
@@ -61,7 +61,7 @@ attachAPIRoutes()
 app.use('/', express.static(__dirname + '/../build'))
 app.use('/setusername', (req, res) => {
     // @ts-expect-error
-    req.session.username = username
+    req.session.username = req.username
     res.send('success')
 })
 app.use('/getusername', (req, res) => {
@@ -96,9 +96,9 @@ export function mountIo(server: Server, prefix: string): void {
         logger.info('A user connected')
         socket.emit('hey', { serverBuildInfo: buildInfo })
         if (config.addNewUserOnStart) {
-            // @ts-expect-error
-            const username = socket.request.session.username as string
-            fullUserCommit(getRootCursor().select('users').select(username))
+            // @ ts-expect-error
+            // const username = socket.request.session.username as string
+            // fullUserCommit(getRootCursor().select('users').select(username))
         }
 
         //Whenever someone disconnects this piece of code executed
