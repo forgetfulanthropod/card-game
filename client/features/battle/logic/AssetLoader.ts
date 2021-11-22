@@ -103,7 +103,10 @@ const deluxeAssets = {
 }
 const allAssets = { ...basicAssets, ...deluxeAssets }
 export type AssetKey = keyof typeof allAssets
-export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Callback): void {
+// TODO: add back basic and deluxe
+export default function loadAssets(): Promise<void> {
+    let basicDone = false
+    let deluxeDone = false
     const loaded = new Set(Object.keys(allAssets).filter(name => Loader.shared.resources[name]?.data != null))
 
 
@@ -117,19 +120,21 @@ export default function loadAssets(onBasicLoaded: Callback, onDeluxeLoaded: Call
 
     Loader.shared.load()
 
-    // @ts-ignore
-    Loader.shared.onLoad.add((_, { name }) => {
-        loaded.add(name)
-        if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
-            // TODO:
-            // dispatch({ a: 'setIsBasicLoaded', v: true })
-            onBasicLoaded()
-        }
-        if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
-            // dispatch({ a: 'setIsDeluxeLoaded', v: true })
-            onDeluxeLoaded()
-        }
+    return new Promise(resolve => {
+        Loader.shared.onLoad.add((_, { name }) => {
+            loaded.add(name)
+            if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
+                // TODO:
+                // dispatch({ a: 'setIsBasicLoaded', v: true })
+                basicDone = true
+            }
+            if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
+                // dispatch({ a: 'setIsDeluxeLoaded', v: true })
+                deluxeDone = true
+            }
+            if (basicDone && deluxeDone)
+                resolve()
+        })
     })
-
     // return () => Loader.shared.onLoad.detach(cb)
 }

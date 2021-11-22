@@ -19,6 +19,8 @@ import type { IncrementTestCounter as _IncrementTestCounter } from '@shared'
 export type IncrementTestCounter = ServerAction<_IncrementTestCounter>
 import type { MakeNewUser as _MakeNewUser } from '@shared'
 export type MakeNewUser = ServerAction<_MakeNewUser>
+import type { MaybeMakeUser as _MaybeMakeUser } from '@shared'
+export type MaybeMakeUser = ServerAction<_MaybeMakeUser>
 import type { ResetRandomSeed as _ResetRandomSeed } from '@shared'
 export type ResetRandomSeed = ServerAction<_ResetRandomSeed>
 import type { RulebookAction as _RulebookAction } from '@shared'

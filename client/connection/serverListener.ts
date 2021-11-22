@@ -9,7 +9,7 @@ import { getTree } from '@/data/rootTree'
 
 const config = {
     enableExpensiveUpdateValidation: false,
-    shouldLog: false,
+    shouldLog: true,
 }
 
 function log(...args: unknown[]) {
@@ -18,7 +18,7 @@ function log(...args: unknown[]) {
 
 const urlPrefix = window.location.href.split('/')[3]
 const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
-export function waitForHandshake(): Promise<void> {
+export function waitForHey(): Promise<void> {
     return new Promise(resolve => {
         log('got the hey')
         socket.once('hey', (data) => {
@@ -34,7 +34,7 @@ export function getSocket(): typeof socket {
 }
 
 
-export async function listenForInitialGameState(): Promise<Gamestate> {
+export async function waitForInitialGamestate(): Promise<Gamestate> {
     log('hoping for gamestate')
     return new Promise(resolve => {
         socket.once('update', (data) => {
