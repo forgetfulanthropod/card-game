@@ -47,7 +47,8 @@ const ButtonGroup = styled.div`
 // TODO: edit the name outside of the rulebook
 // TODO: add a "saved at" field programatically
 
-export function RulebookEditor(): JSX.Element {
+export function RulebookEditor(props: { username: string }): JSX.Element {
+    const { username } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
     const rulebooks = useCursor(getTree().select('rulebooks'))
@@ -68,11 +69,11 @@ export function RulebookEditor(): JSX.Element {
                 options={rulebooks}
                 onChoice={async newName => {
                     await rulebookAction({ do: 'choose', name: newName })
-                    await makeNewUser({ username, })
+                    await makeNewUser({ username })
                 }} />
             {shown && <>
-                <button onClick={() => addNewRulebook(ref, rulebooks)}>Save new</button>
-                <button onClick={() => overwriteRulebook(ref, name)}>Overwrite</button>
+                <button onClick={() => addNewRulebook(ref, rulebooks, username)}>Save new</button>
+                <button onClick={() => overwriteRulebook(ref, name, username)}>Overwrite</button>
                 <button onClick={() => deleteRulebook(name)}>Delete current</button>
             </>}
         </ButtonGroup>
@@ -90,7 +91,7 @@ async function deleteRulebook(name: string): Promise<void> {
 }
 
 
-async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void> {
+async function addNewRulebook(ref: MonacoRef, rulebooks: string[], username: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
@@ -102,7 +103,7 @@ async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void
         return
     }
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username, })
+    await makeNewUser({ username })
     toast('added')
 }
 
@@ -118,7 +119,7 @@ function parseRulebook(ref: MonacoRef): Mb<Rulebook> {
     }
 }
 
-async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
+async function overwriteRulebook(ref: MonacoRef, name: string, username: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
@@ -131,7 +132,7 @@ async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     }
     await rulebookAction({ do: 'delete', name })
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username, })
+    await makeNewUser({ username })
     toast('overwritten')
 }
 

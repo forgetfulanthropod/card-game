@@ -11,19 +11,21 @@ import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
 import { BlessingToggles } from './BlessingToggles'
+import { useState } from 'preact/hooks'
 
 
 export default function App(): JSX.Element {
     const sceneType = useCursor(getTree().select('scene').select('name'))
+    const [username, setUsername] = useState('')
     return <AppWrap>
         <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
         <Toaster />
-        <ResetButton />
+        <ResetButton username={username} />
         <BlessingToggles />
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
         <Sidebar />
-        <RulebookEditor />
+        <RulebookEditor username={username} />
         {/* <TestCounter /> */}
     </AppWrap>
 }

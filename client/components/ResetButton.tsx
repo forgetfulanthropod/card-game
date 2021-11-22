@@ -12,9 +12,9 @@ const Root = styled.button`
     pointer-events: auto;
 `
 
-export default function ResetButton(): JSX.Element {
+export default function ResetButton(props: { username: string }): JSX.Element {
 
-    return <Root onClick={() => makeNewUser({ username })}>
+    return <Root onClick={() => makeNewUser({ username: props.username })}>
         reset everything
     </Root>
 }
