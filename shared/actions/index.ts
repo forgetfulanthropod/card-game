@@ -17,6 +17,7 @@ export * from './ToggleBlessing'
 export * from './ToggleStance'
 // @endindex
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Func = (...args: any[]) => any
 
 // eslint-disable-line @typescript-eslint/no-explicit-any

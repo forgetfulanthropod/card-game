@@ -1,6 +1,6 @@
 import { getApp } from '@/index'
 
-import { fullUserCommit, getGameStateCursor } from '.'
+import { commit, getGameStateCursor } from '.'
 
 const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)
@@ -21,6 +21,8 @@ export function onCallWrapper<Args, ReturnType>(
             let result: ReturnType | null = null
             // @ts-expect-error
             const username = request.session.username as string
+            // @ts-expect-error
+            const socketId: string = request.session.socketio
             if (typeof username !== 'string')
                 logger.error('no username!')
             if (config.log)
@@ -29,11 +31,13 @@ export function onCallWrapper<Args, ReturnType>(
                 // @ts-expect-error
                 result = await f(request)
             } else {
-                request.body.username = username
-                result = await f(request.body)
+                const body = { ...request.body }
+                body.username = username
+                body.socketId = socketId
+                result = await f(body)
             }
             if (options?.disableCommit !== true)
-                fullUserCommit(getGameStateCursor(username))
+                commit(getGameStateCursor(username), username)
             if (config.log)
                 logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`)
             response.send({ status: 'success', result })

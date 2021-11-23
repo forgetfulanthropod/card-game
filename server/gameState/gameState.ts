@@ -36,7 +36,7 @@ export function getInitialGameState(username: string): Gamestate {
         inventory: {},
         coin: 0,
         blessings: [],
-        events: { world: [], move: [] },
+        events: { world$: [], move$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook ? stringifyRulebook(getRulebook()) : undefined,
         username,

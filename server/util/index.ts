@@ -2,7 +2,6 @@
 export * from './addNewUser'
 export * from './arrayMethods'
 export * from './dedent'
-export * from './makeServerEventEmitter'
 export * from './objectMethods'
 export * from './onCallWrapper'
 export * from './rand'

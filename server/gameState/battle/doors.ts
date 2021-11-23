@@ -1,11 +1,11 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName, WorldEvent, WorldEventData } from '@shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName } from '@shared'
 import type { SpecialDoorName } from '@shared'
 import type { RoomOutcomes } from '@shared'
 import type { SCursor } from 'baobab'
-import { keys, memoize, zip } from 'lodash'
+import { keys, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { getGameStateCursor, makeServerEventEmitter, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
+import { emit, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
 
 import { makePositions, newNPCMeta } from './characterManagement'
 
@@ -127,7 +127,7 @@ export function getRoom(args: {
         }
         case 'randomEvent': {
             const worldEvent = ssample(vals(eventTriggersMap))
-            getWorldChannel(args.username).emit({ title: worldEvent.shortDescription, body: worldEvent.fullDescription })
+            emit({ username: args.username, event: 'world$', data: { title: worldEvent.shortDescription, body: worldEvent.fullDescription } })
             return makeRandRegularRoom(dungeonName, roomsPassed)
         }
         default: {
@@ -164,9 +164,3 @@ function makeUid(): string {
 function randCoords() {
     return { x: srandInt(50, 95), y: srandInt(40, 80) }
 }
-
-const getWorldChannel = memoize(function getWorldChannel(username: string) {
-    const eventsCursor: SCursor<WorldEvent[]> = (getGameStateCursor(username)).select('events').select('world')
-    const move$ = makeServerEventEmitter<'world', WorldEventData>('world', eventsCursor)
-    return move$
-})

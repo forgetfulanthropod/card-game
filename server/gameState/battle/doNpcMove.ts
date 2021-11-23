@@ -27,7 +27,7 @@ export async function doNpcMove(reason: string, username: string): Promise<void>
     if (aliveNpcs.every(c => c.hasMoved)) {
         warn(prefix + 'every npc has moved')
         scene.set('isPlayerTurn', true)
-        commit(scene)
+        commit(scene, username)
         return
     }
     const move = getNpcMove(vals(allCharacters), username)

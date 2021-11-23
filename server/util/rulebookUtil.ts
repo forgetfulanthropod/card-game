@@ -5,7 +5,7 @@ import { homedir } from 'os'
 
 import { getRulebook } from '@/rulebook'
 
-import { fullUserCommit, getGameStateCursor } from '.'
+import { commit, getGameStateCursor } from '.'
 import { getRootCursor } from './treeUtils'
 
 
@@ -24,7 +24,7 @@ export function updateClientRulebookData(username: string): void {
         user.select('rulebooks').set(rulebookNames)
         user.select('curRulebook').set(curRulebook)
     }
-    fullUserCommit(getGameStateCursor(username))
+    commit(getGameStateCursor(username), username)
 }
 
 export function getRulebookNames(): Gamestate['rulebooks'] {

@@ -2,13 +2,12 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
-    MoveEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
 
-import { getIo } from '@/index'
+import { getIo, getSocketId } from '@/index'
 
 
 export function getEntryScene(username: string): SCursor<EntryScene> {
@@ -29,12 +28,6 @@ export function getBattleScene(username: string): BattleCursor {
     return scene as BattleCursor
 }
 
-type EventCursor = SCursor<MoveEvent[]>
-export function getEventsCursor(username: string): EventCursor {
-    const events = getGameStateCursor(username).select('events').select('move')
-
-    return events as EventCursor
-}
 
 export function getGameStateCursor(username: string): SCursor<Gamestate> {
     return getRootCursor().select('users').select(username)
@@ -45,27 +38,30 @@ interface RootTree {
     testCounters: { counter0: number }
 }
 
-export function commit(cursor: { get(): unknown, path?: unknown }): void {
-    logger.info('committing')
+export function commit<A>(cursor: SCursor<A>, username: string): void {
 
+    const socketId = getSocketId(username)
     const path = cursor.path as string[]
-    getIo().emit('update', { data: cursor.get(), path: path.slice(3) })
+    logger.info(`committing to user ${username} (id ${socketId})`)
+    getIo().to(socketId).emit('update', { data: cursor.get(), path: path.slice(3) })
 }
-export function fullUserCommit(userCursor: { get(): unknown, path?: unknown }): void {
-    commit(userCursor)
+
+export function emit(args: { username: string; event: string; data: unknown }): void {
+    getGameStateCursor(args.username).select('events').select(args.event).push(args.data)
+    const socketId = getSocketId(args.username)
+    getIo().to(socketId).emit(args.event, args.data)
 }
+
+
+// hmm if we made each user a separate tree then random functions could call .root() and not need to know the username...
 
 export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree> {
     const b = new SBaobab({
         contents: {
-            users: {
-                alice: null as unknown as Gamestate,
-
-            },
+            users: {},
             testCounters: { counter0: 0 },
         },
     })
     const result = b.select('contents')
-    // @ts-expect-error
     return result
 })

@@ -37,7 +37,7 @@ export type ToggleStance = ServerAction<_ToggleStance>
 
 
 type ServerAction<T extends Func> =
-    (args: Objify<Parameters<T>[0]> & { username: string })
+    (args: Objify<Parameters<T>[0]> & { username: string, socketId: string })
         => ReturnType<T>
 
 
@@ -45,4 +45,5 @@ type ServerAction<T extends Func> =
 interface Empty { }
 type Objify<Type> = Type extends Obj ? Obj : Empty
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Obj = Record<string | number | symbol, any>

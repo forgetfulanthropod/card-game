@@ -48,7 +48,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
             return
         }
         scene.set('selectedCharacter', clicked.uid)
-        commit(scene)
+        commit(scene, args.username)
         return
     }
 

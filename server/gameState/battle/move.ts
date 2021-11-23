@@ -26,7 +26,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
     getCharacterKeysAndEffects(attackData).forEach(({ key, effect: newEffect }) =>
         allChars.select(key).apply('effects', prev => updateEffect(newEffect, prev))
     )
-    commit(scene)
+    commit(scene, username)
 }
 
 function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {

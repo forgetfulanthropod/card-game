@@ -22,5 +22,5 @@ export async function resetRound(scene: BattleCursor, username: string): Promise
         await sleep(DEFAULT_WAIT)
         await doNpcMove('first move of round', username)
     }
-    commit(scene)
+    commit(scene, username)
 }

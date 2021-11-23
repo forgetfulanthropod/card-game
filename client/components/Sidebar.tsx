@@ -15,18 +15,9 @@ import { Monaco } from './Monaco'
 import { useCursor } from './util'
 
 
-interface JSONEditData {
-    plainText: unknown
-    markupText: unknown
-    json: unknown
-    jsObject: unknown
-    lines: unknown
-    error: unknown
-}
-
 export function Sidebar(): JSX.Element {
     return <div style={{ pointerEvents: 'auto' }}>
-        <OneSidebar cursor={getTree().select('events').select('move')} title="Event History" top="0" />
+        <OneSidebar cursor={getTree().select('events').select('move$')} title="Event History" top="0" />
         <OneSidebar cursor={getClientTree().select('serverCalls')} title="Server calls" top="1em" />
         <GamestateEditor top="2em" />
     </div>

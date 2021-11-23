@@ -1,9 +1,8 @@
-import type { AttackData, BattleScene, NetworkAttackData, NetworkEvent } from '@shared'
-import type { SCursor } from 'baobab'
-import { memoize } from 'lodash'
+import type { AttackData, BattleScene } from '@shared'
 
 import type { BattleCursor } from '@/util'
-import { commit, getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
+import { emit } from '@/util'
+import { commit, sleep, vals } from '@/util'
 
 import { getCharacterKeysAndDamages } from './attack'
 import { getLivingChars, getUnmovedPc } from './characterGetters'
@@ -27,16 +26,17 @@ export async function handleMove(args: {
     username: string
 }): Promise<void> {
     const { scene, allCharacters, attackData, username } = args
-    const move$ = getMoveChannel(username)
 
     // Dispatch move to client to trigger animation
     const damageMap = getCharacterKeysAndDamages(attackData, username)
-    move$.emit({
-        attackerIsPc: attackData.attacker.isPc,
-        attacker: attackData.attacker.uid,
-        defenders: attackData.defenders.map(d => d.uid),
-        move: attackData.move,
-        damageMap,
+    emit({
+        username: args.username, event: 'move$', data: {
+            attackerIsPc: attackData.attacker.isPc,
+            attacker: attackData.attacker.uid,
+            defenders: attackData.defenders.map(d => d.uid),
+            move: attackData.move,
+            damageMap,
+        },
     })
 
     // Update health, effects, and hasMoved
@@ -54,7 +54,7 @@ export async function handleMove(args: {
         return
     } else if (winner === 'NPC') {
         scene.set('state', 'lost')
-        commit(scene)
+        commit(scene, username)
         return
     }
 
@@ -95,10 +95,5 @@ export async function handleMove(args: {
             await doNpcMove('no unmoved PC and NPC turn', username)
         }
     }
-    commit(scene)
+    commit(scene, username)
 }
-const getMoveChannel = memoize(function getMoveChannel(username: string) {
-    const eventsCursor: SCursor<NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor(username)).select('events').select('move')
-    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
-    return move$
-})
