@@ -1,15 +1,14 @@
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 
-import { attachServerListener as attachChangeListener, waitForHey } from '@/connection'
+import { attachServerListener as attachChangeListener } from '@/connection'
 import { waitForGameStateToFill } from '@/data/rootTree'
 import { start } from '@/elements/main'
-import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import App from './App'
 import { useState } from 'preact/hooks'
 import { maybeMakeUser } from '@/actions'
 
-const log = (...args: unknown[]) => true && console.log(args)
+const log = (...args: unknown[]) => true && console.log(...args)
 
 export default function UsernameEntry(): JSX.Element {
     const [username, setUsername] = useState('')
@@ -36,11 +35,10 @@ export default function UsernameEntry(): JSX.Element {
 }
 
 async function fullClientStart(username: string) {
+    log('doing full start')
     await Promise.all([
         waitForGameStateToFill(),
-        waitForHey(),
         maybeMakeUser({ username }),
-        loadAssets(),
     ])
     log('everything loaded up')
     log('attaching server data listener')

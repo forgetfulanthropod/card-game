@@ -10,7 +10,7 @@ import { setGlobalRandomSeed } from './config/seedrand'
 import { addNewUser } from './util'
 
 const config = {
-    addNewUserOnStart: true,
+    addNewUserOnStart: false,
 }
 
 if (process.env.FIXED_SEED === 'yes') {

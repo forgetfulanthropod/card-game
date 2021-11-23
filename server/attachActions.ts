@@ -2,10 +2,14 @@ import { onCallWrapper, vals } from '@/util'
 
 import * as all from './actions'
 
-const noCommit = ['hello']
+const noCommit: unknown[] = [all.hello, all.maybeMakeUser]
+const noUserPack: unknown[] = [all.maybeMakeUser]
 
 export function attachAPIRoutes(): void {
     vals(all).forEach(
-        f => onCallWrapper(f, { disableCommit: noCommit.includes(f.name) })
+        f => onCallWrapper(f, {
+            disableCommit: noCommit.includes(f),
+            disableUsername: noUserPack.includes(f),
+        })
     )
 }

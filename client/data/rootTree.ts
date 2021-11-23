@@ -15,6 +15,7 @@ export async function waitForGameStateToFill(): Promise<void> {
     state.gamestate = new SBaobab(await waitForInitialGamestate())
     // @ts-expect-error for debugging:
     window.tree = state.gamestate
+    console.log('gamestate all good')
 }
 
 

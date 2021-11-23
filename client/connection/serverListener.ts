@@ -20,7 +20,6 @@ const urlPrefix = window.location.href.split('/')[3]
 const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
 export function waitForHey(): Promise<void> {
     return new Promise(resolve => {
-        log('got the hey')
         socket.once('hey', (data) => {
             console.log(`'hey' data from server: ${JSON.stringify(data)}`)
             resolve()
@@ -37,7 +36,7 @@ export function getSocket(): typeof socket {
 export async function waitForInitialGamestate(): Promise<Gamestate> {
     log('hoping for gamestate')
     return new Promise(resolve => {
-        socket.once('update', (data) => {
+        socket.once('update', ({ data, _path }) => {
             log('received gamestate')
             resolve(data as Gamestate)
         })

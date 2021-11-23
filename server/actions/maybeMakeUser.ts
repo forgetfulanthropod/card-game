@@ -2,7 +2,7 @@
 import type { MaybeMakeUser } from '@serverActions'
 import { has } from 'lodash'
 
-import { getRootCursor } from '@/util'
+import { commit, getRootCursor } from '@/util'
 import { addNewUser } from '@/util/addNewUser'
 
 export const maybeMakeUser: MaybeMakeUser = (args) => {
@@ -11,8 +11,9 @@ export const maybeMakeUser: MaybeMakeUser = (args) => {
     const users = getRootCursor().get('users')
     if (has(users, username)) {
         logger.info(`already has user ${username}`)
-        return
+    } else {
+        logger.info(`making new user ${username}`)
+        addNewUser(args)
     }
-    logger.info(`making new user ${username}`)
-    addNewUser(args)
+    commit(getRootCursor().select('users').select(username))
 }

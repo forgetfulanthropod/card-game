@@ -12,7 +12,10 @@ function makeRandId() { return srandom().toString().slice(2, 6) }
 
 export function onCallWrapper<Args, ReturnType>(
     f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
-    options?: { disableCommit?: boolean }
+    options?: {
+        disableCommit?: boolean,
+        disableUsername?: boolean,
+    }
 ): void {
     logger.info(`attaching route  ${JSON.stringify(f.name)}`)
     getApp().post('/' + f.name, async (request, response) => {
@@ -25,17 +28,17 @@ export function onCallWrapper<Args, ReturnType>(
             const username = request.session.username as string
             if (typeof username !== 'string') { logger.error('no username!') }
             if (config.method === 'get') {
-                const fullRequest = { ...request.query, username }
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullRequest)}`) }
-                result = await f(fullRequest as unknown as Args)
+                if (options?.disableUsername !== true) request.query.username = username
+                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
+                result = await f(request.query as unknown as Args)
                 // TODO: could commit scene here instead of at the end of every function
                 if (options?.disableCommit !== true)
                     fullUserCommit(getGameStateCursor(username))
             } else {
                 // debugger
-                const fullBody = { ...request.body, username }
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(fullBody)}`) }
-                result = await f(fullBody)
+                if (options?.disableUsername !== true) request.body.username = username
+                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
+                result = await f(request.body)
                 if (options?.disableCommit !== true)
                     fullUserCommit(getGameStateCursor(username))
             }
