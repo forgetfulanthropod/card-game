@@ -127,7 +127,18 @@ export function getRoom(args: {
         }
         case 'randomEvent': {
             const worldEvent = ssample(vals(eventTriggersMap))
-            emit({ username: args.username, event: 'world$', data: { title: worldEvent.shortDescription, body: worldEvent.fullDescription } })
+            emit({
+                username: args.username,
+                event: {
+                    sentAt: new Date().toLocaleDateString(),
+                    uid: srandom().toString().slice(6),
+                    type: 'world$',
+                    data: {
+                        title: worldEvent.shortDescription,
+                        body: worldEvent.fullDescription,
+                    },
+                },
+            })
             return makeRandRegularRoom(dungeonName, roomsPassed)
         }
         default: {

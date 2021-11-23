@@ -30,12 +30,18 @@ export async function handleMove(args: {
     // Dispatch move to client to trigger animation
     const damageMap = getCharacterKeysAndDamages(attackData, username)
     emit({
-        username: args.username, event: 'move$', data: {
-            attackerIsPc: attackData.attacker.isPc,
-            attacker: attackData.attacker.uid,
-            defenders: attackData.defenders.map(d => d.uid),
-            move: attackData.move,
-            damageMap,
+        username: args.username,
+        event: {
+            type: 'move$',
+            sentAt: new Date().toLocaleDateString(),
+            uid: srandom().toString().slice(6),
+            data: {
+                attackerIsPc: attackData.attacker.isPc,
+                attacker: attackData.attacker.uid,
+                defenders: attackData.defenders.map(d => d.uid),
+                move: attackData.move,
+                damageMap,
+            },
         },
     })
 

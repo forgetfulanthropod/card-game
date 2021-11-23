@@ -2,6 +2,7 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
+    NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
@@ -46,10 +47,10 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     getIo().to(socketId).emit('update', { data: cursor.get(), path: path.slice(3) })
 }
 
-export function emit(args: { username: string; event: string; data: unknown }): void {
-    getGameStateCursor(args.username).select('events').select(args.event).push(args.data)
+export function emit<_A extends string, _B>(args: { username: string; event: NetworkEvent<_A, _B> }): void {
+    getGameStateCursor(args.username).select('events').select(args.event.type).push(args.event)
     const socketId = getSocketId(args.username)
-    getIo().to(socketId).emit(args.event, args.data)
+    getIo().to(socketId).emit(args.event.type, args.event)
 }
 
 
