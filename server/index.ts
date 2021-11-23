@@ -59,7 +59,7 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
-app.use('/', express.static(__dirname + '/../build'))
+app.use('/', express.static(__dirname + '/../build', { extensions: ['.atlas'] }))
 
 export function mountIo(server: Server, prefix: string): void {
     // app.set('base', prefix)

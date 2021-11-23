@@ -1,23 +1,16 @@
-// const app = new PIXI.Application()
-// document.body.appendChild(app.view)
-
-// import spineboy
-
 import { Spine } from 'pixi-spine'
 
-import type { PixiApplication } from '@/elementsUtil'
-
-// load spine data
+import type { PixiApplication, PixiLoader } from '@/elementsUtil'
 
 export function addSpineCharacter(app: PixiApplication): void {
 
     app.loader
-        .add('spineboypro', 'spine/spineboy-pro.json')
+        .add('spineboypro', 'spine/spineboy-pro2.json')
         .load(onAssetsLoaded)
 
     app.stage.interactive = true
 
-    function onAssetsLoaded(loader, res) {
+    function onAssetsLoaded(loader: PixiLoader, res) {
         // create a spine boy
         const spineBoyPro = new Spine(res.spineboypro.spineData)
 
