@@ -4,6 +4,7 @@ import { has } from 'lodash'
 import { commit, getRootCursor } from '@/util'
 import { addNewUser } from '@/util/addNewUser'
 
+/** Very special case! */
 export const maybeMakeUser = (req: any) => {
     const username: string = req.body.username
     req.session.username = username
