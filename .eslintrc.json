@@ -132,7 +132,8 @@
                     "warn",
                     {
                         "ignore": [
-                            "class"
+                            "class",
+                            "clip-path"
                         ]
                     }
                 ],
