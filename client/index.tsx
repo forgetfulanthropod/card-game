@@ -6,7 +6,7 @@ import { h, render } from 'preact' // eslint-disable-line
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { hello } from './actions'
-import UsernameEntry from './components/UsernameEntry'
+import UsernameEntry2 from './components/UsernameEntry2'
 import { waitForHey } from './connection'
 
 const log = (...args: unknown[]) => true && console.log(...args)
@@ -26,6 +26,6 @@ async function main() {
         loadAssets(),
     ])
 
-    render(<UsernameEntry />, document.getElementById('preact-root') as HTMLDivElement)
+    render(<UsernameEntry2 />, document.getElementById('preact-root') as HTMLDivElement)
 }
 void main()
