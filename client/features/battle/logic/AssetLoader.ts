@@ -126,16 +126,13 @@ export default function loadAssets(): Promise<void> {
             if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
                 // TODO:
                 // dispatch({ a: 'setIsBasicLoaded', v: true })
-                console.log('basic loaded')
                 basicDone = true
             }
             if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
                 // dispatch({ a: 'setIsDeluxeLoaded', v: true })
-                console.log('deluxe loaded')
                 deluxeDone = true
             }
             if (basicDone && deluxeDone) {
-                console.log('both loaded!')
                 resolve()
             }
         })

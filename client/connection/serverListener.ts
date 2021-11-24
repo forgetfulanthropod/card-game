@@ -9,7 +9,7 @@ import { getTree } from '@/data/rootTree'
 
 const config = {
     enableExpensiveUpdateValidation: false,
-    shouldLog: true,
+    shouldLog: false,
 }
 
 function log(...args: unknown[]) {

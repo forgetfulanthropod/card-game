@@ -101,7 +101,6 @@ export function Character(args: CharacterProps): PixiContainer {
     // const [isHovering, setIsHovering] = useState(false)
 
     getSocket().on('move$', function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
-        console.log('move$ triggered!')
         const { attacker, defenders, move, damageMap } = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid
