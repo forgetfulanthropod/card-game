@@ -24,8 +24,8 @@ export default function UsernameEntry2(): JSX.Element {
                 <div class={styles['enterWrap']}>
                     {/* <?xml version="1.0" encoding="UTF-8" standalone="no"?> */}
                     <svg
-                        width="76.052795mm"
-                        height="75.577599mm"
+                        width="100%"
+                        height="100%"
                         viewBox="87.664001 129.0064 76.052795 75.577599">
                         <g>
                             <path
