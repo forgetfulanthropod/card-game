@@ -1,0 +1,123 @@
+FK_TEST_02.png
+size:1988,1517
+filter:Linear,Linear
+pma:true
+images/CAPE copy
+bounds:921,1091,682,424
+offsets:1,2,685,427
+images/FRONT_ARMOR
+bounds:336,470,590,400
+offsets:1,1,592,402
+images/HAT
+bounds:1388,106,165,173
+offsets:1,1,167,175
+images/HEAD
+bounds:928,526,578,352
+offsets:1,2,580,355
+images/L_ARM copy
+bounds:727,59,220,287
+offsets:1,1,222,289
+rotate:90
+images/L_EYE copy
+bounds:1592,886,192,155
+offsets:1,1,194,157
+images/L_FINGERS
+bounds:1489,282,126,189
+offsets:2,1,129,190
+rotate:90
+images/L_KNEE copy
+bounds:1645,431,234,178
+offsets:1,2,236,181
+images/L_LEG_JOINT copy
+bounds:1324,22,265,82
+offsets:1,2,268,85
+images/L_PALM copy
+bounds:1799,1352,163,187
+offsets:1,2,166,190
+rotate:90
+images/L_PUPIL
+bounds:1674,124,125,57
+offsets:2,1,128,59
+images/L_SHOE_BACK copy
+bounds:1016,18,306,135
+offsets:1,1,309,137
+images/L_SHOE_TOE copy
+bounds:1845,669,231,121
+offsets:1,1,234,123
+rotate:90
+images/L_SHOULDER copy
+bounds:1645,611,198,273
+offsets:1,1,201,275
+images/L_THUMB
+bounds:1555,140,117,140
+offsets:1,2,120,144
+images/MOUTH_OPEN_HAPPY
+bounds:322,290,485,178
+offsets:0,1,486,179
+images/MOUTH_SMILE
+bounds:1016,155,370,124
+offsets:1,1,372,126
+images/Mouth_SAD
+bounds:1605,1043,472,111
+offsets:0,0,473,111
+rotate:90
+images/NECKLACE
+bounds:2,13,473,150
+offsets:1,1,475,152
+rotate:90
+images/R_ARM
+bounds:322,2,197,286
+offsets:1,1,200,288
+images/R_EYE
+bounds:1680,183,246,154
+offsets:1,1,248,156
+rotate:90
+images/R_HAND
+bounds:1799,902,169,212
+offsets:1,1,171,215
+images/R_KNEE copy
+bounds:1799,1116,234,182
+offsets:1,3,236,186
+rotate:90
+images/R_LEG_JOINT copy
+bounds:1881,402,265,82
+offsets:1,2,268,85
+rotate:90
+images/R_PUPIL
+bounds:727,4,159,53
+offsets:1,1,162,55
+images/R_SHOE_BACK copy
+bounds:1508,572,306,135
+offsets:2,1,309,137
+rotate:90
+images/R_SHOE_TOE copy
+bounds:1836,169,231,121
+offsets:2,1,234,123
+rotate:90
+images/R_SHOULDER
+bounds:521,15,204,273
+offsets:1,2,206,276
+images/SHIELD
+bounds:336,872,583,643
+offsets:1,1,585,645
+images/SWORD_FLAT copy
+bounds:2,488,332,1027
+offsets:1,2,334,1029
+images/angryeyebrow
+bounds:928,410,637,114
+offsets:28,48,693,210
+images/closed_eye
+bounds:921,880,669,209
+offsets:16,0,693,210
+images/eyebrow_sad
+bounds:809,345,678,63
+offsets:1,0,680,64
+images/mouth_SMILE_02
+bounds:1718,1071,444,79
+rotate:90
+images/openmouth
+bounds:154,40,446,166
+rotate:90
+images/sadeyebrow
+bounds:809,281,678,62
+offsets:10,80,693,210
