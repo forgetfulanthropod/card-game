@@ -56,11 +56,11 @@ export default function UsernameEntry2(): JSX.Element {
                             </clipPath>
                         </defs>
                         <image class={styles.svgimage} href={goodEarthImg} width="100%" preserveAspectRatio="xMinYMin slice" height="100%" x="87.66" y="125" clip-path="url(#user-space)">
-                            {/* <animate
-                            dur="8s"
-                            repeatCount="indefinite"
-                            attributeName="y"
-                            values="125;131;125;" /> */}
+                            <animate
+                                dur="8s"
+                                repeatCount="indefinite"
+                                attributeName="y"
+                                values="125;131;125;" />
                         </image>
 
                     </svg>
