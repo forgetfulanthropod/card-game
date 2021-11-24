@@ -6,8 +6,10 @@ import { h, render } from 'preact' // eslint-disable-line
 import loadAssets from '@/features/battle/logic/AssetLoader'
 
 import { hello } from './actions'
-import UsernameEntry2 from './components/UsernameEntry2'
-import { waitForHey } from './connection'
+import App from './components/App'
+// import GameManager from './components/GameManager'
+// import App from './components/UsernameEntry2'
+import { resolveWhenSocketConfirmed } from './connection'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
@@ -22,10 +24,10 @@ void hello().then(res => log('hello got', res))
 
 async function main() {
     await Promise.all([
-        waitForHey(),
+        resolveWhenSocketConfirmed(),
         loadAssets(),
     ])
 
-    render(<UsernameEntry2 />, document.getElementById('preact-root') as HTMLDivElement)
+    render(<App />, document.getElementById('preact-root') as HTMLDivElement)
 }
 void main()

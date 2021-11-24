@@ -76,14 +76,12 @@
     left: 50%;
     transform: translate(-50%, -100%);
     width: 25%;
+    transition: opacity 2s;
 }
 
 .enterWrap {
     position: relative;
     display: inline-block;
-    opacity: 1;
-    /* MARK*/
-    transition: opacity 2s;
     width: 100%;
 }
 

@@ -18,9 +18,9 @@ function log(...args: unknown[]) {
 
 const urlPrefix = window.location.href.split('/')[3]
 const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
-export function waitForHey(): Promise<void> {
+export function resolveWhenSocketConfirmed(): Promise<void> {
     return new Promise(resolve => {
-        socket.once('hey', (data) => {
+        socket.once('receivedConnection', (data) => {
             console.log(`'hey' data from server: ${JSON.stringify(data)}`)
             resolve()
         })

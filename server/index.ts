@@ -83,7 +83,7 @@ export function mountIo(server: Server, prefix: string): void {
     })
 
     // when a socket.io connect connects, get the session and store the id in it
-    io.on('connection', function (socket) {
+    io.on('connection', function packSession(socket) {
         // socket.handshake.headers
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
@@ -97,9 +97,9 @@ export function mountIo(server: Server, prefix: string): void {
     })
 
 
-    io.on('connection', function (socket) {
+    io.on('connection', function confirmAndBindDisconnect(socket) {
         logger.info('A user connected')
-        socket.emit('hey', { serverBuildInfo: buildInfo })
+        socket.emit('receivedConnection', { serverBuildInfo: buildInfo })
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {
             logger.info('A user disconnected')

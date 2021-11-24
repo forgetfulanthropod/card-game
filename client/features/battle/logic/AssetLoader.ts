@@ -121,6 +121,7 @@ export default function loadAssets(): Promise<void> {
     Loader.shared.load()
 
     return new Promise(resolve => {
+        // @ts-ignore
         Loader.shared.onLoad.add((_, { name }) => {
             loaded.add(name)
             if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
