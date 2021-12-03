@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3001
 
 const bs58 = require('bs58');
 
@@ -23,17 +23,48 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+app.post('/mint', function (req, res) {
+  //res.send('POST request to the homepage')
+  var data = req.body
+  //console.log(data)
+  //console.log(data["amount"])
+  
+  var mintTokens = (async (data) => {
+    console.log("data", data)
+    
+    let amount = data["amount"]
+    let connection = new Connection(web3.clusterApiUrl("devnet"));
+    //console.log(connection)
+    var fromWallet = web3.Keypair.fromSecretKey(secretKey);
+
+    var myMint = new web3.PublicKey(mintToken);
+
+    var myToken = new Token(
+      connection,
+      myMint,
+      TOKEN_PROGRAM_ID,
+      fromWallet // guy who pays to create new accounts.
+    );
+
+    let fromTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(
+      fromWallet.publicKey,
+    );
+    
+    await myToken.mintTo(fromTokenAccount.address, fromWallet.publicKey, [], amount);
+
+  });
+
+  mintTokens(data).then(res.send("ok"))
+  // return remaining tokens
 })
 
-app.post('/', function (req, res) {
+app.post('/ft', function (req, res) {
   //res.send('POST request to the homepage')
   var data = req.body
   console.log(data)
   //console.log(data["amount"])
   
-  var myDelegate = (async (data) => {
+  var transferTokens = (async (data) => {
     console.log("data", data)
     let toAddress = data["toAddress"]
     let amount = data["amount"]
@@ -91,10 +122,10 @@ app.post('/', function (req, res) {
       console.log("SUCCESS");
   });
 
-  myDelegate(data).then(res.send("ok"))
-  
+  transferTokens(data).then(res.send("ok"))
+  // return remaining tokens
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Microservice listening at http://localhost:${port}`)
 })
