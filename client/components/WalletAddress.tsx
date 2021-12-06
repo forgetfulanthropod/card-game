@@ -17,6 +17,6 @@ export default function WalletAddress(): JSX.Element {
     const ref = useRef<HTMLInputElement | null>(null)
     return <Root>
         <input ref={ref}></input>
-        <button onClick={() => claimLoot({ walletAddress: ref.current?.value! })}>Go</button>
+        <button onClick={() => claimLoot({ walletAddress: ref.current?.value! })}>Claim Tokens</button>
     </Root>
 }
