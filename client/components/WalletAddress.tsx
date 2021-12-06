@@ -2,7 +2,7 @@ import { h, JSX } from 'preact' // eslint-disable-line
 //@ts-ignore
 import styled from 'styled-components'
 
-import { makeNewUser } from '@/actions'
+import { claimLoot, makeNewUser } from '@/actions'
 import { useRef } from 'preact/hooks'
 
 
@@ -17,6 +17,6 @@ export default function WalletAddress(): JSX.Element {
     const ref = useRef<HTMLInputElement | null>(null)
     return <Root>
         <input ref={ref}></input>
-        <button onClick={() => alert(ref.current?.value)}>Go</button>
+        <button onClick={() => claimLoot({ walletAddress: ref.current?.value! })}>Go</button>
     </Root>
 }

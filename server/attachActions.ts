@@ -5,7 +5,7 @@ import * as all from './actions'
 
 export function attachAPIRoutes(): void {
     vals(all).forEach(
-        // @ts-expect-error
+        // @ts-ignore-error
         f => onCallWrapper(f)
     )
 }
