@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 import { claimLoot, makeNewUser } from '@/actions'
 import { useRef } from 'preact/hooks'
+import { jss, tl } from '@/util'
 
 
 const Root = styled.div`
@@ -17,6 +18,13 @@ export default function WalletAddress(): JSX.Element {
     const ref = useRef<HTMLInputElement | null>(null)
     return <Root>
         <input ref={ref}></input>
-        <button onClick={() => claimLoot({ walletAddress: ref.current?.value! })}>Claim Tokens</button>
+        <button
+            onClick={async () => {
+                tl('attempting to claim loot...')
+                const res = await claimLoot({ walletAddress: ref.current?.value! })
+                tl(jss`server wallet response: ${res}`)
+            }}>
+            Claim Tokens
+        </button>
     </Root>
 }
