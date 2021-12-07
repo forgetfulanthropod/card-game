@@ -1,4 +1,4 @@
-`node index.js`
+`npm start`
 
 ## Make a post request to /ft
 
