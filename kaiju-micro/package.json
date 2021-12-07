@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "esbuild index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=build.js",
-    "start": "npm run build && node build.js"
+    "start": "rm -f build.js && npm run build && node build.js"
   },
   "author": "",
   "license": "ISC",
