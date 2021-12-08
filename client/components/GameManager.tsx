@@ -11,6 +11,7 @@ import ResetButton from './ResetButton'
 import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
+import WalletAddress from './WalletAddress'
 
 
 export default function GameManager(props: { username: string }): JSX.Element {
@@ -26,5 +27,6 @@ export default function GameManager(props: { username: string }): JSX.Element {
         <Sidebar />
         <RulebookEditor username={username} />
         {/* <TestCounter /> */}
+        <WalletAddress />
     </AppWrap>
 }
