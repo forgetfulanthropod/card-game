@@ -23,5 +23,6 @@ export async function hasUser(username: string): Promise<boolean> {
 }
 
 export async function getAllUsers(): Promise<Record<string, Gamestate>> {
+    // @ts-ignore
     return (await db.ref('users').get()).val()
 }
