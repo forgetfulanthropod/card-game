@@ -12,6 +12,7 @@ import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
 import WalletAddress from './WalletAddress'
+import { AutoPlay } from './autoplay/AutoPlay'
 
 
 export default function GameManager(props: { username: string }): JSX.Element {
@@ -28,5 +29,7 @@ export default function GameManager(props: { username: string }): JSX.Element {
         <RulebookEditor username={username} />
         {/* <TestCounter /> */}
         <WalletAddress />
+        <AutoPlay />
+
     </AppWrap>
 }
