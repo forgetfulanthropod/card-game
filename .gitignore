@@ -16,3 +16,7 @@ pnpm-lock.yaml
 *.zip
 .parcel-cache
 /server-build
+
+/kaiju-micro/node_modules
+/kaiju-micro/package-lock.json
+/kaiju-micro/build.js

@@ -1,17 +1,18 @@
 import './config/logger'
+import './database'
 
 import express from 'express'
-import expsession from 'express-session'
+import session from 'express-session'
 import type { Server } from 'http'
+import { findKey, has } from 'lodash'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
-import { addNewUser, commit, getRootCursor } from './util'
-
+import { addNewUser } from './util'
 
 const config = {
-    addNewUserOnStart: true,
+    addNewUserOnStart: false,
 }
 
 if (process.env.FIXED_SEED === 'yes') {
@@ -19,8 +20,12 @@ if (process.env.FIXED_SEED === 'yes') {
     setGlobalRandomSeed()
 }
 
+if (process.env.FORCE_NEW_DB === 'yes') {
+    // TODO
+}
+
 if (config.addNewUserOnStart) {
-    addNewUser({ username: 'alice' })
+    addNewUser({ username: 'defaultUser' })
 }
 
 const port = process.env.PORT ?? 3000
@@ -38,7 +43,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const sessionMiddleware = expsession({
+const sessionMiddleware = session({
     secret: 'random secret',
     saveUninitialized: true,
     resave: true,
@@ -61,6 +66,18 @@ attachAPIRoutes()
 
 app.use('/', express.static(__dirname + '/../build'))
 
+const usernameToSocketId: Record<string, string> = {}
+export function setSocketId(username: string, socketId: string): void {
+    usernameToSocketId[username] = socketId
+}
+
+export function getSocketId(username: string): string {
+    if (has(usernameToSocketId, username)) {
+        return usernameToSocketId[username]
+    }
+    throw Error(`no socket for user ${username}`)
+}
+
 export function mountIo(server: Server, prefix: string): void {
     // app.set('base', prefix)
     io = new SocketServer(server, { path: prefix + '/socket' })
@@ -71,7 +88,7 @@ export function mountIo(server: Server, prefix: string): void {
     })
 
     // when a socket.io connect connects, get the session and store the id in it
-    io.on('connection', function (socket) {
+    io.on('connection', function packSession(socket) {
         // socket.handshake.headers
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
@@ -79,21 +96,23 @@ export function mountIo(server: Server, prefix: string): void {
         logger.info('session at socket.io connection:\n', socket.request.session)
         // @ts-expect-error
         socket.request.session.socketio = socket.id
+
         // @ts-expect-error
         socket.request.session.save()
     })
 
 
-    io.on('connection', function (socket) {
+    io.on('connection', function confirmAndBindDisconnect(socket) {
         logger.info('A user connected')
-        socket.emit('hey', { serverBuildInfo: buildInfo })
-        if (config.addNewUserOnStart) {
-            commit(getRootCursor())
-        }
-
+        socket.emit('receivedConnection', { serverBuildInfo: buildInfo })
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', function () {
             logger.info('A user disconnected')
+            const k = findKey(usernameToSocketId, sid => sid === socket.id)
+            if (k !== undefined) {
+                delete usernameToSocketId[k]
+                logger.info('Removing their record in usernameToSocketId')
+            }
         })
     })
 }

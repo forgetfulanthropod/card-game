@@ -26,9 +26,9 @@ export function getCharacterMovesWithDamageRanges(character: Readonly<StatsWithS
 }
 
 
-export function getCharacterKeysAndDamages(attackData: Readonly<AttackData>): { key: CharacterUid, damage: number }[] {
+export function getCharacterKeysAndDamages(attackData: Readonly<AttackData>, username: string): { key: CharacterUid, damage: number }[] {
     const kds = attackData.defenders.map(defender => (
-        { key: defender.uid, damage: getDamage(attackData, defender) }
+        { key: defender.uid, damage: getDamage({ ad: attackData, defender, username }) }
     ))
 
     if (attackData.attacker.effects.length > 0) {
@@ -63,12 +63,12 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
     return []
 }
 
-function getDamage(ad: AttackData, defender: CharacterMeta): number {
-    // const blessings = getGameStateCursor('alice').select('blessings')
+function getDamage({ ad, defender, username }: { ad: AttackData; defender: CharacterMeta, username: string }): number {
+    // const blessings = getGameStateCursor(username).select('blessings')
 
 
     let attackData = ad
-    if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed(ad.move, ad.attacker.uid) }
+    if (isSpecial(ad.move)) attackData = { ...ad, move: getTransformed({ move: ad.move, charUid: ad.attacker.uid, username }) }
 
     const dam = Math.round(attackData.attacker.damage
         * getAttackMultiplier(attackData.attacker)

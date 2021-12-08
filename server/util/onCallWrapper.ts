@@ -1,31 +1,45 @@
 import { getApp } from '@/index'
 
+import { commit, getGameStateCursor } from '.'
 
-const config = {
-    log: true,
-    method: 'post' as 'post' | 'get',
-}
+const config = { log: true }
+// const log = (...args: unknown[]) => true && logger.info(...args)
 
 function makeRandId() { return srandom().toString().slice(2, 6) }
 
-export function onCallWrapper<Args, ReturnType>(f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>)): void {
+export function onCallWrapper<Args, ReturnType>(
+    f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
+    options?: {
+        disableCommit?: boolean,
+        wholeRequest?: boolean,
+    }
+): void {
     logger.info(`attaching route  ${JSON.stringify(f.name)}`)
     getApp().post('/' + f.name, async (request, response) => {
-        // return () => getApp()[config.method]('/' + f.name, async (request, response) => {
         const randId = makeRandId()
         try {
-            // debugger
             let result: ReturnType | null = null
-            if (config.method === 'get') {
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.query)}`) }
-                result = await f(request.query as unknown as Args)
-                // TODO: could commit scene here instead of at the end of every function
+            // @ts-expect-error
+            const username = request.session.username as string
+            // @ts-expect-error
+            const socketId: string = request.session.socketio
+            if (typeof username !== 'string')
+                logger.error('no username!')
+            if (config.log)
+                logger.info(`received post call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`)
+            if (options?.wholeRequest) {
+                // @ts-expect-error
+                result = await f(request)
             } else {
-                // debugger
-                if (config.log) { logger.info(`received ${config.method} call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`) }
-                result = await f(request.body)
+                const body = { ...request.body }
+                body.username = username
+                body.socketId = socketId
+                result = await f(body)
             }
-            if (config.log) { logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`) }
+            if (options?.disableCommit !== true)
+                commit(getGameStateCursor(username), username)
+            if (config.log)
+                logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`)
             response.send({ status: 'success', result })
         } catch (e) {
             const err = e as unknown as Error

@@ -35,7 +35,6 @@ export default function Doors(args: { callbacks: Callback[], descriptions?: stri
 function Door(args: { xScaled: number, onClick: Callback }) {
     const texture = dataOf('door')
     const x = doorWidth * args.xScaled
-    console.log({ scale: doorWidth / texture.width })
     return Sprite({
         x,
         y: BASE_HEIGHT / 2,

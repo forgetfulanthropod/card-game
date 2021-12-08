@@ -8,9 +8,12 @@
         "watch": "npm run build -- watch",
         "tsc": "tsc",
         "tsc-watch": "tsc -w",
-        "depgraph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg"
+        "depgraph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg",
+        "test": "testyts"
     },
     "dependencies": {
+        "acebase": "^1.11.1",
+        "axios": "^0.24.0",
         "baobab": "github:qpwo/baobab#more-detailed-types",
         "deep-diff": "^1.0.2",
         "express": "^4.17.1",
@@ -27,6 +30,7 @@
         "@types/seedrandom": "^3.0.1",
         "esbuild": "^0.13.9",
         "nodemon": "^2.0.14",
+        "testyts": "^1.5.0",
         "typescript": "^4.4.4"
     },
     "private": true

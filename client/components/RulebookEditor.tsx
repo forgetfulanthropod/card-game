@@ -1,5 +1,4 @@
 import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
-import Editor from '@monaco-editor/react'
 
 // @ts-ignore
 import styled from 'styled-components'
@@ -9,15 +8,8 @@ import { useCursor } from './util'
 import { getTree } from '@/data/rootTree'
 import type { Rulebook } from '@shared'
 import toast from 'react-hot-toast'
-import type { editor } from 'monaco-editor'
-const EditorWrap = styled.div`
-    // z-index: 10;
-    pointer-events: auto;
-    position: fixed;
-    top: 3vh;
-    left: 1vw;
-    width: 98vw;
-`
+import type { MonacoRef } from './Monaco'
+import { Monaco } from './Monaco'
 
 const ButtonGroup = styled.div`
     // z-index: 11;
@@ -55,7 +47,8 @@ const ButtonGroup = styled.div`
 // TODO: edit the name outside of the rulebook
 // TODO: add a "saved at" field programatically
 
-export function RulebookEditor(): JSX.Element {
+export function RulebookEditor(props: { username: string }): JSX.Element {
+    const { username } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
     const rulebooks = useCursor(getTree().select('rulebooks'))
@@ -76,18 +69,17 @@ export function RulebookEditor(): JSX.Element {
                 options={rulebooks}
                 onChoice={async newName => {
                     await rulebookAction({ do: 'choose', name: newName })
-                    await makeNewUser({ username: 'alice' })
+                    await makeNewUser({ username })
                 }} />
             {shown && <>
-                <button onClick={() => addNewRulebook(ref, rulebooks)}>Save new</button>
-                <button onClick={() => overwriteRulebook(ref, name)}>Overwrite</button>
+                <button onClick={() => addNewRulebook(ref, rulebooks, username)}>Save new</button>
+                <button onClick={() => overwriteRulebook(ref, name, username)}>Overwrite</button>
                 <button onClick={() => deleteRulebook(name)}>Delete current</button>
             </>}
         </ButtonGroup>
     </>
 }
 
-type MonacoRef = RefObject<editor.IStandaloneCodeEditor>
 
 async function deleteRulebook(name: string): Promise<void> {
     if (name === 'default') {
@@ -99,7 +91,7 @@ async function deleteRulebook(name: string): Promise<void> {
 }
 
 
-async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void> {
+async function addNewRulebook(ref: MonacoRef, rulebooks: string[], username: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
@@ -111,7 +103,7 @@ async function addNewRulebook(ref: MonacoRef, rulebooks: string[]): Promise<void
         return
     }
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username: 'alice' })
+    await makeNewUser({ username })
     toast('added')
 }
 
@@ -127,7 +119,7 @@ function parseRulebook(ref: MonacoRef): Mb<Rulebook> {
     }
 }
 
-async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
+async function overwriteRulebook(ref: MonacoRef, name: string, username: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
@@ -140,20 +132,8 @@ async function overwriteRulebook(ref: MonacoRef, name: string): Promise<void> {
     }
     await rulebookAction({ do: 'delete', name })
     await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username: 'alice' })
+    await makeNewUser({ username })
     toast('overwritten')
-}
-
-function Monaco(props: { mref: MonacoRef, defaultValue: string }): JSX.Element {
-
-    return <EditorWrap>
-        <Editor
-            onMount={(editor, _monaco) => { props.mref.current = editor }}
-            height="98vh"
-            defaultLanguage="json"
-            defaultValue={props.defaultValue}
-        />
-    </EditorWrap>
 }
 
 function Selector(props: { options: string[], onChoice: (s: string) => void, value: string }): JSX.Element {

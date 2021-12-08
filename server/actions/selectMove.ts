@@ -1,9 +1,8 @@
-import type { SelectMove } from '@shared'
+import type { SelectMove } from '@serverActions'
 
-import { commit, getBattleScene } from '@/util'
+import { getBattleScene } from '@/util'
 
 export const selectMove: SelectMove = args => {
-    const scene = getBattleScene('alice')
+    const scene = getBattleScene(args.username)
     scene.set('selectedMove', args.move)
-    commit(scene)
 }

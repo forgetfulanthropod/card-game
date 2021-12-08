@@ -1,2 +1,6 @@
-import type { Hello } from '@shared'
-export const hello: Hello = () => 'hello'
+import type { Hello } from '@serverActions'
+
+export const hello: Hello = () => {
+    // console.log(args.username)
+    return 'hello'
+}

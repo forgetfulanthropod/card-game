@@ -1,15 +1,15 @@
-import type { AttackData, BattleScene, NetworkAttackData, NetworkEvent } from '@shared'
-import type { SCursor } from 'baobab'
-import { memoize } from 'lodash'
+import type { AttackData, BattleScene } from '@shared'
 
 import type { BattleCursor } from '@/util'
-import { commit, getGameStateCursor, makeServerEventEmitter, sleep, vals } from '@/util'
+import { emit } from '@/util'
+import { commit, sleep, vals } from '@/util'
 
 import { getCharacterKeysAndDamages } from './attack'
 import { getLivingChars, getUnmovedPc } from './characterGetters'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
 import { tl, warn } from './logging'
+import { claimLoot } from './loot'
 import applyMove from './move'
 import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
@@ -19,26 +19,34 @@ import { checkMoveAvailable, checkWinner } from './round'
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEFAULT_WAIT = 1000
 
-export async function handleMove(
-    scene: BattleCursor,
-    allCharacters: BattleScene['allCharacters'],
-    attackData: AttackData,
-): Promise<void> {
-
-    const move$ = getMoveChannel()
+export async function handleMove(args: {
+    scene: BattleCursor
+    allCharacters: BattleScene['allCharacters']
+    attackData: AttackData
+    username: string
+}): Promise<void> {
+    const { scene, allCharacters, attackData, username } = args
 
     // Dispatch move to client to trigger animation
-    const damageMap = getCharacterKeysAndDamages(attackData)
-    move$.emit({
-        attackerIsPc: attackData.attacker.isPc,
-        attacker: attackData.attacker.uid,
-        defenders: attackData.defenders.map(d => d.uid),
-        move: attackData.move,
-        damageMap,
+    const damageMap = getCharacterKeysAndDamages(attackData, username)
+    emit({
+        username: args.username,
+        event: {
+            type: 'move$',
+            sentAt: new Date().toLocaleDateString(),
+            uid: srandom().toString().slice(6),
+            data: {
+                attackerIsPc: attackData.attacker.isPc,
+                attacker: attackData.attacker.uid,
+                defenders: attackData.defenders.map(d => d.uid),
+                move: attackData.move,
+                damageMap,
+            },
+        },
     })
 
     // Update health, effects, and hasMoved
-    applyMove(scene, allCharacters, attackData)
+    applyMove(scene, allCharacters, attackData, username)
 
     // Check battle over
     const { allCharacters: newAllCharacters, selectedCharacter } = scene.get()
@@ -47,11 +55,12 @@ export async function handleMove(
     if (winner === 'PC') {
         scene.set('state', 'won')
         incrementXP(scene)
+        claimLoot(username)
         putUpDoors(scene)
         return
     } else if (winner === 'NPC') {
         scene.set('state', 'lost')
-        commit(scene)
+        commit(scene, username)
         return
     }
 
@@ -59,7 +68,7 @@ export async function handleMove(
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
 
     if (!isMoveAvailable) {
-        await resetRound(scene)
+        await resetRound(scene, args.username)
         return
     }
 
@@ -80,7 +89,7 @@ export async function handleMove(
             logger.info('will be NPC turn')
             scene.set('isPlayerTurn', false)
             await sleep(TIME_AFTER_PLAYER_MOVE + 500)
-            await doNpcMove('NPC has extra turns')
+            await doNpcMove('NPC has extra turns', username)
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
@@ -89,13 +98,8 @@ export async function handleMove(
         } else if (aliveNpcs.some(c => !c.hasMoved)) {
             logger.info('will be player turn')
             await sleep(DEFAULT_WAIT)
-            await doNpcMove('no unmoved PC and NPC turn')
+            await doNpcMove('no unmoved PC and NPC turn', username)
         }
     }
-    commit(scene)
+    commit(scene, username)
 }
-const getMoveChannel = memoize(function getMoveChannel() {
-    const eventsCursor: SCursor<NetworkEvent<'move', NetworkAttackData>[]> = (getGameStateCursor('alice')).select('events').select('move')
-    const move$ = makeServerEventEmitter<'move', NetworkAttackData>('move', eventsCursor)
-    return move$
-})

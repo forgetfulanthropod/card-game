@@ -1,3 +1,4 @@
+import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 
@@ -17,6 +18,7 @@ export function DungeonEntryScene(): PixiContainer {
             StartButton(),
             LevelInfo(),
             GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
+            Coin(),
         ],
     })
 }
