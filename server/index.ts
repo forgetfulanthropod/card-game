@@ -64,7 +64,7 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
-app.use('/', express.static(__dirname + '/../build'))
+app.use('/', express.static(__dirname + '/../build', { extensions: ['.atlas'] }))
 
 const usernameToSocketId: Record<string, string> = {}
 export function setSocketId(username: string, socketId: string): void {

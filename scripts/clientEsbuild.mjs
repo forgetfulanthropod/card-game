@@ -26,41 +26,43 @@ function build() {
     mkdirSync(buildDir)
     cpSync(publicDir, buildDir, { recursive: true })
     esbuild({
-        minify: true, //!isDevelopment,
-        sourcemap: true, //isDevelopment,
-        entryPoints: ['client/index.tsx'],
-        jsxFactory: 'h',
-        jsxFragment: 'Fragment',
-        bundle: true,
-        outfile: buildDir + '/out.js',
-        target: 'es6',
-        loader: {
-            '.ts': 'ts',
-            '.tsx': 'tsx',
-            '.svg': 'dataurl',
-            '.css': 'css',
-            '.png': 'file',
-            '.jpg': 'file',
-            '.mp4': 'file',
-            '.webm': 'file',
-            '.ttf': 'file',
-        },
-        define: makeSubstitutions(),
-        watch: shouldWatch && {
-            onRebuild(_error, result) {
-                result.stop()
-                build()
-            }
-        },
-        plugins: [
-            cssModulesPlugin(),
-            alias({
-                'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-            })
-        ]
+            minify: true, //!isDevelopment,
+            sourcemap: true, //isDevelopment,
+            entryPoints: ['client/index.tsx'],
+            jsxFactory: 'h',
+            jsxFragment: 'Fragment',
+            bundle: true,
+            outfile: buildDir + '/out.js',
+            target: 'es6',
+            loader: {
+                '.ts': 'ts',
+                '.tsx': 'tsx',
+                '.svg': 'dataurl',
+                '.css': 'css',
+                '.png': 'file',
+                '.jpg': 'file',
+                '.mp4': 'file',
+                '.webm': 'file',
+                '.ttf': 'file',
+                '.atlas': 'file',
+                '.json': 'file',
+            },
+            define: makeSubstitutions(),
+            watch: shouldWatch && {
+                onRebuild(_error, result) {
+                    result.stop()
+                    build()
+                }
+            },
+            plugins: [
+                cssModulesPlugin(),
+                alias({
+                    'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                    'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                })
+            ]
 
-    })
+        })
         .then(() => { console.log(`${time()}: build succeeded`) })
         .catch((err) => { console.error(err) })
 }
