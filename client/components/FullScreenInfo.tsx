@@ -46,14 +46,20 @@ const Modal = styled.div`
     }
 `
 
-interface Info { title: string, body: string, onClose: Callback }
+interface Info {
+    title: string
+    body: string
+    onClose: Callback
+}
 
 export function FullScreenInfo(): JSX.Element {
     const [info, setInfo] = useState<Info | null>(null)
     useEffect(() => {
         getSocket().on('world$', e => setInfo({ title: e.data.title, body: e.data.body, onClose: () => setInfo(null) }))
     }, [])
-    if (info == null) { return <></> }
+    if (info == null) {
+        return <></>
+    }
     return <FullScreenInfo_ {...info} />
 }
 
@@ -66,12 +72,15 @@ function FullScreenInfo_(props: Info): JSX.Element {
         ref.current.innerHTML = parse(body)
     }, [body])
 
-
-    return <Modal onClick={onClose}>
-        <div className="content" onClick={e => e.preventDefault()}>
-            <h1 className="title">{title}</h1>
-            <div ref={ref}></div>
-            <span className="close" onClick={onClose}>Ⅹ</span>
-        </div>
-    </Modal>
+    return (
+        <Modal onClick={onClose}>
+            <div className="content" onClick={e => e.preventDefault()}>
+                <h1 className="title">{title}</h1>
+                <div ref={ref}></div>
+                <span className="close" onClick={onClose}>
+                    Ⅹ
+                </span>
+            </div>
+        </Modal>
+    )
 }

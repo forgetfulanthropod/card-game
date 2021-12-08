@@ -2,13 +2,12 @@
 // @ts-expect-error
 import styled from 'styled-components'
 
-
 export const HoverDiv = styled.div`
     background: black;
     opacity: 0.5;
     font-size: 2em;
     padding: 1%;
-    border-radius: .4vw;
+    border-radius: 0.4vw;
     z-index: 10;
     position: absolute;
     bottom: 15vw;
@@ -19,13 +18,11 @@ export const HoverDiv = styled.div`
     padding: 8px;
 `
 
-
 export const EnemyHoverDiv = styled(HoverDiv)`
     box-shadow: 0 0 2px 4px red;
     right: 3vw;
     width: 18vw;
 `
-
 
 export const PCHoverDiv = styled(HoverDiv)`
     box-shadow: 0 0 2px 4px skyblue;
@@ -33,7 +30,6 @@ export const PCHoverDiv = styled(HoverDiv)`
     left: 0;
     text-align: center;
 `
-
 
 // export const shake = keyframes`
 //     0% { transform: translate(1px, 1px) rotate(0deg); }
@@ -66,7 +62,6 @@ export const PCHoverDiv = styled(HoverDiv)`
 //   100% { transform: translateY(0%);; }
 // `
 
-
 export const IdleScreenOverlay = styled.div`
     position: absolute;
     top: 0;
@@ -74,9 +69,8 @@ export const IdleScreenOverlay = styled.div`
     bottom: 0;
     left: 0;
     z-index: 1000;
-    background: rgba(0,0,0,.4);
+    background: rgba(0, 0, 0, 0.4);
 `
-
 
 export const Lose = styled.img`
     position: absolute;
@@ -89,7 +83,7 @@ export const Lose = styled.img`
     height: 50%;
     /* transition: transform 2.0s; */
     /* &:hover { */
-        /* transform: scale(2.0); */
+    /* transform: scale(2.0); */
     /* } */
     animation-fill-mode: forwards;
 `
@@ -121,9 +115,11 @@ export const MoveMenuDiv = styled.div`
     left: 1vw;
 `
 
-interface ABP { isSelected: boolean }
+interface ABP {
+    isSelected: boolean
+}
 export const MoveButton = styled.button<ABP>`
-    background: ${(p: ABP) => p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)'};
+    background: ${(p: ABP) => (p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)')};
     color: white;
     font-family: monospace;
     display: block;

@@ -3,7 +3,6 @@ import type { StateUpdater } from 'preact/hooks'
 
 // const o : {x: typeof JSX} = {x: Preact.JSX}
 // type JSX = typeof Preact.JSX
-
 declare global {
     // type JSX.Element = PJSX.Element
     /** Maybe type */

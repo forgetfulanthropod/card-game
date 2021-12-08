@@ -14,22 +14,26 @@ import { useCursor } from './util'
 import WalletAddress from './WalletAddress'
 import { AutoPlay } from './autoplay/AutoPlay'
 
-
 export default function GameManager(props: { username: string }): JSX.Element {
     const { username } = props
     const sceneType = useCursor(getTree().select('scene').select('name'))
-    return <AppWrap>
-        <div>On branch {'\''}{process.env.CLIENT_GIT_BRANCH}{'\''}</div>
-        <Toaster />
-        <ResetButton username={username} />
-        <BlessingToggles />
-        {sceneType === 'battle' && <Battle />}
-        <FullScreenInfo />
-        <Sidebar />
-        <RulebookEditor username={username} />
-        {/* <TestCounter /> */}
-        <WalletAddress />
-        <AutoPlay />
-
-    </AppWrap>
+    return (
+        <AppWrap>
+            <div>
+                On branch {"'"}
+                {process.env.CLIENT_GIT_BRANCH}
+                {"'"}
+            </div>
+            <Toaster />
+            <ResetButton username={username} />
+            <BlessingToggles />
+            {sceneType === 'battle' && <Battle />}
+            <FullScreenInfo />
+            <Sidebar />
+            <RulebookEditor username={username} />
+            {/* <TestCounter /> */}
+            <WalletAddress />
+            <AutoPlay />
+        </AppWrap>
+    )
 }

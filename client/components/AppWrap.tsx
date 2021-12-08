@@ -10,7 +10,5 @@ const Relative = styled.div`
 `
 
 export default function AppWrap(props: { children: Children }): JSX.Element {
-    return <Relative>
-        {props.children}
-    </Relative>
+    return <Relative>{props.children}</Relative>
 }

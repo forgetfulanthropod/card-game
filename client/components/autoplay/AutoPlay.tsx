@@ -13,22 +13,28 @@ const Root = styled.button`
     pointer-events: auto;
     position: absolute;
     bottom: 1%;
-    left: 1%
+    left: 1%;
 `
 
 export function AutoPlay(_props: Empty): JSX.Element {
     const [running, setRunning] = useState(false)
     const [runner] = useState(() => new Runner())
-    return <Root onClick={() => {
-        setRunning(r => {
-            if (r) {
-                runner.stop()
-            } else {
-                runner.start()
-            }
-            return !r
-        })
-    }}>{running ? 'Stop' : 'Start'} Autoplay</Root>
+    return (
+        <Root
+            onClick={() => {
+                setRunning(r => {
+                    if (r) {
+                        runner.stop()
+                    } else {
+                        runner.start()
+                    }
+                    return !r
+                })
+            }}
+        >
+            {running ? 'Stop' : 'Start'} Autoplay
+        </Root>
+    )
 }
 
 const minWait = 2000
@@ -37,8 +43,7 @@ class Runner {
     running = false
     lastStep = 0
 
-
-    constructor() { }
+    constructor() {}
 
     start() {
         this.running = true
@@ -53,7 +58,9 @@ class Runner {
 
     async step() {
         if (Date.now() - this.lastStep < minWait) {
-            if (this.running) { requestAnimationFrame(() => this.step()) }
+            if (this.running) {
+                requestAnimationFrame(() => this.step())
+            }
             return
         }
         this.lastStep = Date.now()
@@ -64,7 +71,9 @@ class Runner {
         } else if (sceneName === 'battle') {
             await this.battleStep(tree)
         }
-        if (this.running) { requestAnimationFrame(() => this.step()) }
+        if (this.running) {
+            requestAnimationFrame(() => this.step())
+        }
     }
 
     async entryStep(tree: Gamestate) {
@@ -90,7 +99,9 @@ class Runner {
         if (doorOptions.length > 0) {
             toast('doors detected. picking random door.')
             const door = sample(doorOptions)
-            if (door == null) { throw Error('null door') }
+            if (door == null) {
+                throw Error('null door')
+            }
             await chooseDoor({ door })
         }
         if (!scene.isPlayerTurn) {
@@ -105,13 +116,13 @@ class Runner {
         // TODO: pick random unmoved PC
         // TODO: pick random stance
         const enemy = sample(enemies)
-        if (enemy == null) { throw Error('null enemy') }
+        if (enemy == null) {
+            throw Error('null enemy')
+        }
         toast(`hitting enemy ${enemy.name} (${enemy.uid})`)
         await doCharacterAction({ uid: enemy.uid })
     }
-
 }
-
 
 async function addNewCharacter(availableChars: OwnedCharacter[]) {
     console.log(`there are ${availableChars.length} options`)
@@ -119,16 +130,19 @@ async function addNewCharacter(availableChars: OwnedCharacter[]) {
         throw Error('no chars left')
     }
     const charChoice = sample(availableChars)
-    if (charChoice == null) { throw Error('null char') }
+    if (charChoice == null) {
+        throw Error('null char')
+    }
     await addSelected({ character: charChoice })
 }
 
 function getAvailableChars(scene: EntryScene, tree: Gamestate) {
     const pointsRemaining = scene.selectedLevel.pointLimit - sum(scene.selectedCharacters.map(sc => sc.points))
-    const availableChars = values(tree.ownedCharacters)
-        .filter(oc => find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null // not selected
-            && oc.points < pointsRemaining // within point limit
-        )
+    const availableChars = values(tree.ownedCharacters).filter(
+        oc =>
+            find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected
+            oc.points < pointsRemaining // within point limit
+    )
     return availableChars
 }
 

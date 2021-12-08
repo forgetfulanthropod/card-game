@@ -32,7 +32,7 @@ const ButtonGroup = styled.div`
 
     /* Clear floats (clearfix hack) */
     &:after {
-        content: "";
+        content: '';
         clear: both;
         display: table;
     }
@@ -58,28 +58,38 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
         if (curRulebook == null) return
         ref.current?.setValue(curRulebook)
     }, [curRulebook])
-    if (curRulebook == null) { toast.error('null curRulebook'); return <></> }
-    if (rulebooks == null) { toast.error('null rulebooks'); return <></> }
-    return <>
-        {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
-        <ButtonGroup>
-            <button onClick={() => setShown(s => !s)}>Open/close</button>
-            <Selector
-                value={name}
-                options={rulebooks}
-                onChoice={async newName => {
-                    await rulebookAction({ do: 'choose', name: newName })
-                    await makeNewUser({ username })
-                }} />
-            {shown && <>
-                <button onClick={() => addNewRulebook(ref, rulebooks, username)}>Save new</button>
-                <button onClick={() => overwriteRulebook(ref, name, username)}>Overwrite</button>
-                <button onClick={() => deleteRulebook(name)}>Delete current</button>
-            </>}
-        </ButtonGroup>
-    </>
+    if (curRulebook == null) {
+        toast.error('null curRulebook')
+        return <></>
+    }
+    if (rulebooks == null) {
+        toast.error('null rulebooks')
+        return <></>
+    }
+    return (
+        <>
+            {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
+            <ButtonGroup>
+                <button onClick={() => setShown(s => !s)}>Open/close</button>
+                <Selector
+                    value={name}
+                    options={rulebooks}
+                    onChoice={async newName => {
+                        await rulebookAction({ do: 'choose', name: newName })
+                        await makeNewUser({ username })
+                    }}
+                />
+                {shown && (
+                    <>
+                        <button onClick={() => addNewRulebook(ref, rulebooks, username)}>Save new</button>
+                        <button onClick={() => overwriteRulebook(ref, name, username)}>Overwrite</button>
+                        <button onClick={() => deleteRulebook(name)}>Delete current</button>
+                    </>
+                )}
+            </ButtonGroup>
+        </>
+    )
 }
-
 
 async function deleteRulebook(name: string): Promise<void> {
     if (name === 'default') {
@@ -90,12 +100,11 @@ async function deleteRulebook(name: string): Promise<void> {
     toast('deleted')
 }
 
-
 async function addNewRulebook(ref: MonacoRef, rulebooks: string[], username: string): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
-        toast.error('cannot save rulebook with name \'default\'')
+        toast.error("cannot save rulebook with name 'default'")
         return
     }
     if (rulebooks.includes(newRulebook.name)) {
@@ -109,7 +118,9 @@ async function addNewRulebook(ref: MonacoRef, rulebooks: string[], username: str
 
 function parseRulebook(ref: MonacoRef): Mb<Rulebook> {
     const rulebookString = ref.current?.getValue()
-    if (rulebookString == null) { throw Error() }
+    if (rulebookString == null) {
+        throw Error()
+    }
     try {
         const newRulebook = JSON.parse(rulebookString) as Rulebook
         return newRulebook
@@ -123,7 +134,7 @@ async function overwriteRulebook(ref: MonacoRef, name: string, username: string)
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
     if (newRulebook.name === 'default') {
-        toast.error('cannot save rulebook with name \'default\'')
+        toast.error("cannot save rulebook with name 'default'")
         return
     }
     if (name === 'default') {
@@ -136,10 +147,15 @@ async function overwriteRulebook(ref: MonacoRef, name: string, username: string)
     toast('overwritten')
 }
 
-function Selector(props: { options: string[], onChoice: (s: string) => void, value: string }): JSX.Element {
+function Selector(props: { options: string[]; onChoice: (s: string) => void; value: string }): JSX.Element {
     // @ts-expect-error
-    return <select value={props.value} onChange={e => props.onChoice(e?.target?.value)}>
-        {props.options.map(o =>
-            <option key={o} value={o}>{o}</option>)}
-    </select>
+    return (
+        <select value={props.value} onChange={e => props.onChoice(e?.target?.value)}>
+            {props.options.map(o => (
+                <option key={o} value={o}>
+                    {o}
+                </option>
+            ))}
+        </select>
+    )
 }

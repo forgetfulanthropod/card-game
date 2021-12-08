@@ -6,7 +6,6 @@ import { claimLoot } from '@/actions'
 import { useRef } from 'preact/hooks'
 import { jss, tl } from '@/util'
 
-
 const Root = styled.div`
     position: absolute;
     right: 50%;
@@ -16,15 +15,18 @@ const Root = styled.div`
 
 export default function WalletAddress(): JSX.Element {
     const ref = useRef<HTMLInputElement>(null)
-    return <Root>
-        <input ref={ref}></input>
-        <button
-            onClick={async () => {
-                tl('attempting to claim loot...')
-                const res = await claimLoot({ walletAddress: ref.current!.value })
-                tl(jss`server wallet response: ${res}`)
-            }}>
-            Claim Tokens
-        </button>
-    </Root>
+    return (
+        <Root>
+            <input ref={ref}></input>
+            <button
+                onClick={async () => {
+                    tl('attempting to claim loot...')
+                    const res = await claimLoot({ walletAddress: ref.current!.value })
+                    tl(jss`server wallet response: ${res}`)
+                }}
+            >
+                Claim Tokens
+            </button>
+        </Root>
+    )
 }

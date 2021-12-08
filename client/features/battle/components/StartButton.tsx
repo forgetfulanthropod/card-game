@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 import { changeScene } from '@/actions'
 
-
 const Root = styled.button`
     position: absolute;
     top: 50%;
