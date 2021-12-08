@@ -1,7 +1,8 @@
 
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { Application } from '@/elementsUtil'
-import { bindGamestate } from '@/features/battle/logic/bindGamestate'
+
+import { addSpineCharacter } from './SpineCharacter'
 
 
 const config = {
@@ -20,7 +21,9 @@ export function start(canvas: HTMLCanvasElement): PixiApplication {
         children: [],
     })
 
-    bindGamestate(app)
+    addSpineCharacter(app)
+
+    // bindGamestate(app)
 
     return app
 }
