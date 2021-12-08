@@ -1,7 +1,6 @@
 import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, DungeonName, SceneHas } from '.'
 import type { SpecialDoorName } from './SpecialDoorName'
 
-
 export interface BattleScene extends SceneHas {
     name: 'battle'
     dungeonName: DungeonName
@@ -14,7 +13,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: { options: SpecialDoorName[], descriptions: string[] }
+    doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
 }
@@ -54,16 +53,30 @@ export interface CharacterMeta extends CharacterStats {
     effects: Effect[]
 }
 
-
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
-export type StanceMultiplier = .75 | 1 | 1.25
+export type StanceMultiplier = 0.75 | 1 | 1.25
 export type StanceStats = {
     name: StanceName
     attackMultiplier: StanceMultiplier
     defenseMultiplier: StanceMultiplier
     targetLikelihood: 0 | 1 | 2
 }
-export type MoveMetaName = 'BA' | 'SL' | 'SP' | 'ROD1' | 'ROD2' | 'ROD3' | 'DOT1' | 'DOT2' | 'ST' | 'INHSO' | 'DC4A' | 'MIM' | 'DBF1' | 'DBF2' | 'BLK'
+export type MoveMetaName =
+    | 'BA'
+    | 'SL'
+    | 'SP'
+    | 'ROD1'
+    | 'ROD2'
+    | 'ROD3'
+    | 'DOT1'
+    | 'DOT2'
+    | 'ST'
+    | 'INHSO'
+    | 'DC4A'
+    | 'MIM'
+    | 'DBF1'
+    | 'DBF2'
+    | 'BLK'
 export type AttackData = {
     attacker: CharacterMeta
     defenders: CharacterMeta[]

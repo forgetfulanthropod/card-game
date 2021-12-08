@@ -7,38 +7,29 @@ import type { SCursor } from 'baobab'
 
 // import { getCharIds } from './misc'
 
-
 // const HEALTH_PER_LEVEL = 7
 // const DAMAGE_PER_LEVEL = 1
 
-
 export function incrementXP(_scene: SCursor<BattleScene>): void {
     // const totalXP = getTotalXP(scene)
-
     // logger.info({ totalXP })
-
     // const livingPcIds = getCharIds(
     //     vals(scene.select('allCharacters').get()),
     //     { health: 1, isPc: true }
     // )
-
     // scene.select('allCharacters').apply(ac => {
     //     const allCharacters = { ...ac }
-
     //     const xpPerCharacter = Math.round(totalXP / livingPcIds.length)
     //     livingPcIds.map(id => {
     //         const character = allCharacters[id]
     //         const experience = allCharacters[id].experience + xpPerCharacter
-
     //     const levelThreshold = getRulebook().levelThresholds[character.level + 1] * character.points / 15 | 0
-
     //         if (experience > levelThreshold) {
     //             allCharacters[id] = getLeveledUpCharacter({ character, experience, levelThreshold })
     //         } else {
     //             allCharacters[id] = { ...allCharacters[id], experience }
     //         }
     //     })
-
     //     return allCharacters
     // })
 }

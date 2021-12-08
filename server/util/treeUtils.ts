@@ -1,9 +1,4 @@
-import type {
-    BattleScene,
-    EntryScene,
-    Gamestate,
-    NetworkEvent,
-} from '@shared'
+import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
@@ -11,7 +6,6 @@ import winston from 'winston'
 
 import { getAllUsers, setUser } from '@/database'
 import { getIo, getSocketId } from '@/index'
-
 
 export function getEntryScene(username: string): SCursor<EntryScene> {
     const scene = getGameStateCursor(username).select('scene')
@@ -31,7 +25,6 @@ export function getBattleScene(username: string): BattleCursor {
     return scene as BattleCursor
 }
 
-
 export function getGameStateCursor(username: string): SCursor<Gamestate> {
     return getRootCursor().select('users').select(username)
 }
@@ -42,11 +35,12 @@ interface RootTree {
 }
 
 export function commit<A>(cursor: SCursor<A>, username: string): void {
-
     const socketId = getSocketId(username)
     const path = cursor.path as string[]
     logger.info(`committing to user ${username} (id ${socketId})`)
-    getIo().to(socketId).emit('update', { data: cursor.get(), path: path.slice(3) })
+    getIo()
+        .to(socketId)
+        .emit('update', { data: cursor.get(), path: path.slice(3) })
     void setUser(username, getGameStateCursor(username).get())
 }
 
@@ -55,7 +49,6 @@ export function emit<_A extends string, _B>(args: { username: string; event: Net
     const socketId = getSocketId(args.username)
     getIo().to(socketId).emit(args.event.type, args.event)
 }
-
 
 // hmm if we made each user a separate tree then random functions could call .root() and not need to know the username...
 

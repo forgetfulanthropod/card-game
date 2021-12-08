@@ -2,10 +2,9 @@ import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
 export default function InfoBox(args: { info: string[] }): PixiContainer {
-
     const levelNumText = Text({
         text: args.info.join('\n'),
-        anchor: [.5, 1],
+        anchor: [0.5, 1],
         style: {
             fontFamily: 'VT323',
             fontSize: 30,
@@ -22,7 +21,6 @@ export default function InfoBox(args: { info: string[] }): PixiContainer {
         y: BASE_HEIGHT / 8,
         children: [levelNumText],
     })
-
 
     return root
 }

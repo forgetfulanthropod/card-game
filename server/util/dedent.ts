@@ -7,12 +7,11 @@ export function dedent(text: string): string {
         if (!m[2]) continue
         l = m[1].length
         if (l) {
-            i = (i !== undefined) ? Math.min(i, l) : l
+            i = i !== undefined ? Math.min(i, l) : l
         } else break
     }
 
-    if (i)
-        text = text.replace(new RegExp('^[ \t]{' + i + '}(.*\n)', 'gm'), '$1')
+    if (i) text = text.replace(new RegExp('^[ \t]{' + i + '}(.*\n)', 'gm'), '$1')
 
     return text
 }

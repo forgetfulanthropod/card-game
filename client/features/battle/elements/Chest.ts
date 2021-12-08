@@ -1,7 +1,6 @@
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { Container, dataOf, PixiTexture, Sprite } from '@/elementsUtil'
 
-
 const rotationRate = 1.0
 
 export default function Chest(args: { size: Size }): PixiContainer {
@@ -15,7 +14,7 @@ export default function Chest(args: { size: Size }): PixiContainer {
             Sprite({
                 name: 'Chest',
                 x: 300,
-                anchor: [1, .3],
+                anchor: [1, 0.3],
                 src: dataOf('chestBody'),
             }),
             Sprite({
@@ -23,13 +22,12 @@ export default function Chest(args: { size: Size }): PixiContainer {
                 // anchor: [1, .3],
                 x: 300,
                 pivot: [-50, 0],
-                anchor: [.95, .4],
+                anchor: [0.95, 0.4],
                 src: dataOf('chestLid'),
                 onTick: (lid, elapsed) => {
                     lid.angle = Math.min(lid.angle + rotationRate * elapsed, 45)
                 },
             }),
-
         ],
     })
 
@@ -48,7 +46,6 @@ export default function Chest(args: { size: Size }): PixiContainer {
     //     drawCircle(g, 'orange', body.anchor.x, body.anchor.y, 10)
     // }}/>
 }
-
 
 function Overlay(args: { size: Size }): PixiSprite {
     return Sprite({

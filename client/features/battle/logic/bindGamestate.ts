@@ -6,7 +6,6 @@ import { BattleScene } from '../elements/BattleScene'
 import Chest from '../elements/Chest'
 import { DungeonEntryScene } from '../elements/DungeonEntryScene'
 
-
 export function bindGamestate(app: PixiApplication): void {
     let lastScene: PixiContainer | null = null
 
@@ -20,8 +19,7 @@ export function bindGamestate(app: PixiApplication): void {
     setScene()
 
     function setScene() {
-        if (lastScene !== null)
-            app.stage.removeChild(lastScene)
+        if (lastScene !== null) app.stage.removeChild(lastScene)
 
         const sceneType = sceneTypeCursor.get()
         if (sceneType === 'battle') {
@@ -37,7 +35,6 @@ export function bindGamestate(app: PixiApplication): void {
 }
 
 function bindBattleState(app: PixiApplication) {
-
     const stateCursor = getBattleScene().select('state')
     let chest: PixiContainer | null = null
     stateCursor.on('update', () => {

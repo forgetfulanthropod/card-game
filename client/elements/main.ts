@@ -1,12 +1,10 @@
-
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { Application } from '@/elementsUtil'
 
 import { addSpineCharacter } from './SpineCharacter'
 
-
 const config = {
-    showOneThing: null as (null | (() => PixiContainer)),
+    showOneThing: null as null | (() => PixiContainer),
     // showOneThing: () => DoorsStories('log'),
 }
 

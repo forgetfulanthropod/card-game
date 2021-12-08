@@ -1,6 +1,5 @@
 import type { MoveMeta, MoveMetaName } from '@shared'
 
-
 // Basic Attack: 100% of attack damage, no modifiers
 // Slash: 50% of attack damage, affects up to one adjacent target (rounded up at .5 or greater, down otherwise)
 // DOT 1: Deals 50% of attack damage.  Does 33% for three subsequent turns as well.  (subsequent damage is inflicted before that character activates.  This is not modified by RNG)
@@ -29,40 +28,40 @@ export const moveMetaMap: Record<MoveMetaName, MoveMeta> = {
     SL: {
         name: 'SL',
         numTargets: 2,
-        multiplier: .5,
+        multiplier: 0.5,
     },
     SP: {
         name: 'SP',
         numTargets: [2, 3],
-        multipliers: [.4, .333], // if only two targets are present, it does 40% damage to both.
+        multipliers: [0.4, 0.333], // if only two targets are present, it does 40% damage to both.
     },
     DOT1: {
         // TODO: subsequent damage is inflited before that character activates
         name: 'DOT1',
         numTargets: 1,
-        multiplier: .5,
-        effectMultipliers: [.33, .33, .33],
+        multiplier: 0.5,
+        effectMultipliers: [0.33, 0.33, 0.33],
     },
     DOT2: {
         name: 'DOT2',
         numTargets: 1,
-        multiplier: .5,
-        effectMultipliers: [.25, .25, .25, .25],
+        multiplier: 0.5,
+        effectMultipliers: [0.25, 0.25, 0.25, 0.25],
     },
     ROD1: {
         name: 'ROD1',
         numTargets: 1,
-        multiplierRange: [.75, 1.25],
+        multiplierRange: [0.75, 1.25],
     },
     ROD2: {
         name: 'ROD2',
         numTargets: 1,
-        multiplierRange: [.67, 1.33],
+        multiplierRange: [0.67, 1.33],
     },
     ROD3: {
         name: 'ROD3',
         numTargets: 1,
-        multiplierRange: [.50, 1.50],
+        multiplierRange: [0.5, 1.5],
     },
     ST: {
         // CLARIFY

@@ -1,19 +1,14 @@
 import { getTree } from '@/data/rootTree'
-import type {
-    PixiContainer,
-} from '@/elementsUtil'
-import {
-    BASE_WIDTH,
-    Container,
-    Text,
-} from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
+import { BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
 export default function Coin(): PixiContainer {
-
     const coin = getTree().get('coin')
-    getTree().select('coin').on('update', e => {
-        text.text = getText(e.data.currentData)
-    })
+    getTree()
+        .select('coin')
+        .on('update', e => {
+            text.text = getText(e.data.currentData)
+        })
 
     const text = Text({
         text: getText(coin),

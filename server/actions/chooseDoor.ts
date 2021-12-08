@@ -3,14 +3,17 @@ import type { ChooseDoor } from '@serverActions'
 import { getRoom, modifyRoom, resetRound } from '@/gameState/battle'
 import { getBattleScene, objFilter } from '@/util'
 
-
-export const chooseDoor: ChooseDoor = async (args) => {
-
+export const chooseDoor: ChooseDoor = async args => {
     const scene = getBattleScene(args.username)
 
     const room = modifyRoom(
-        getRoom({ door: args.door, dungeonName: scene.get('dungeonName'), roomsPassed: scene.get('roomsPassed'), username: args.username }),
-        scene.get('dungeonName'),
+        getRoom({
+            door: args.door,
+            dungeonName: scene.get('dungeonName'),
+            roomsPassed: scene.get('roomsPassed'),
+            username: args.username,
+        }),
+        scene.get('dungeonName')
     )
 
     scene.set('doors', { options: [], descriptions: [] })
@@ -19,5 +22,4 @@ export const chooseDoor: ChooseDoor = async (args) => {
     scene.set('state', 'in battle')
 
     await resetRound(scene, args.username)
-
 }

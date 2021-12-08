@@ -1,9 +1,10 @@
 function changeTimezone(date: Date, ianatz: string): Date {
-
     // suppose the date is 12:00 UTC
-    const invdate = new Date(date.toLocaleString('en-US', {
-        timeZone: ianatz,
-    }))
+    const invdate = new Date(
+        date.toLocaleString('en-US', {
+            timeZone: ianatz,
+        })
+    )
 
     // then invdate will be 07:00 in Toronto
     // and the diff is 5 hours
@@ -11,7 +12,6 @@ function changeTimezone(date: Date, ianatz: string): Date {
 
     // so 12:00 in Toronto is 17:00 UTC
     return new Date(date.getTime() - diff) // needs to substract
-
 }
 
 export function pacificDate(): string {

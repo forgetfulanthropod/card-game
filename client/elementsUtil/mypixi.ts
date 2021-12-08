@@ -1,20 +1,31 @@
-import type {
-    Filter as PixiFilter, InteractionEvent,
-    ITextStyle,
-} from 'pixi.js'
+import type { Filter as PixiFilter, InteractionEvent, ITextStyle } from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
-    Graphics as PixiGraphics, Loader as PixiLoader, Sprite as PixiSprite, Text as PixiText,
-    Texture as PixiTexture, Ticker as PixiTicker, VideoResource as PixiVideoResource,
+    Graphics as PixiGraphics,
+    Loader as PixiLoader,
+    Sprite as PixiSprite,
+    Text as PixiText,
+    Texture as PixiTexture,
+    Ticker as PixiTicker,
+    VideoResource as PixiVideoResource,
 } from 'pixi.js'
 
 import { registerPixiInspector } from '@/elementsUtil'
 
-
 // export { PixiLoader }
 // TODO: export the types instead of constructors
-export { PixiApplication, PixiContainer, PixiGraphics,PixiLoader, PixiSprite, PixiText, PixiTexture, PixiTicker, PixiVideoResource }
+export {
+    PixiApplication,
+    PixiContainer,
+    PixiGraphics,
+    PixiLoader,
+    PixiSprite,
+    PixiText,
+    PixiTexture,
+    PixiTicker,
+    PixiVideoResource,
+}
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
@@ -45,7 +56,6 @@ interface ShownArgs extends DisplayObjectArgs {
     tint?: number
     anchor?: number | Pair
 }
-
 
 export type OnPixiTick = (self: PixiSprite | PixiContainer, delta: number) => void | 'remove'
 interface SpriteArgs extends ShownArgs {
@@ -81,7 +91,9 @@ export function Sprite(args: SpriteArgs): PixiSprite {
 }
 
 function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
-    if (args.position != null) { x.position.set(...args.position) }
+    if (args.position != null) {
+        x.position.set(...args.position)
+    }
     if (args.scale != null) {
         if (Array.isArray(args.scale)) {
             x.scale.set(...args.scale)
@@ -90,8 +102,12 @@ function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiG
         }
     }
 
-    if (args.width != null) { x.width = args.width }
-    if (args.height != null) { x.height = args.height }
+    if (args.width != null) {
+        x.width = args.width
+    }
+    if (args.height != null) {
+        x.height = args.height
+    }
     if (args.pivot != null) {
         if (Array.isArray(args.pivot)) {
             x.pivot.set(...args.pivot)
@@ -99,14 +115,17 @@ function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiG
             x.pivot.set(args.pivot)
         }
     }
-    if (args.x != null) { x.x = args.x }
-    if (args.y != null) { x.y = args.y }
+    if (args.x != null) {
+        x.x = args.x
+    }
+    if (args.y != null) {
+        x.y = args.y
+    }
 
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick && args.onTick(x, dt)
-            if (result === 'remove')
-                PixiTicker.shared.remove(cb)
+            if (result === 'remove') PixiTicker.shared.remove(cb)
         })
     }
 
@@ -142,7 +161,6 @@ function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
         x.tint = args.tint
     }
 
-
     if (args.anchor != null) {
         if (Array.isArray(args.anchor)) {
             x.anchor.set(...args.anchor)
@@ -153,7 +171,7 @@ function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
 }
 let app: null | PixiApplication = null
 export function Application(args: {
-    canvas: HTMLCanvasElement,
+    canvas: HTMLCanvasElement
     children: (PixiSprite | PixiContainer)[]
 }): PixiApplication {
     app = new PixiApplication({
@@ -175,7 +193,7 @@ export function getPixiApp(): PixiApplication {
     if (app == null) throw Error('pixi application is null')
     return app
 }
-export function getAppSize(): { width: number, height: number } {
+export function getAppSize(): { width: number; height: number } {
     if (app == null) throw Error('pixi application is null')
     const { width, height } = app.stage
     return { width, height }
@@ -192,8 +210,7 @@ export function Container(args: ContainerArgs): PixiContainer {
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
             const result = args.onTick && args.onTick(c, dt)
-            if (result === 'remove')
-                PixiTicker.shared.remove(cb)
+            if (result === 'remove') PixiTicker.shared.remove(cb)
         })
     }
     if (args.name != null) {
@@ -209,7 +226,6 @@ export function Text(args: TextArgs): PixiText {
     return text
 }
 
-
 export function Graphics(args: GraphicsArgs): PixiGraphics {
     const g = new PixiGraphics()
     args.draw(g)
@@ -217,7 +233,7 @@ export function Graphics(args: GraphicsArgs): PixiGraphics {
     return g
 }
 
-export function VideoBackground(args: { name?: string, scale: number, src: string }): PixiSprite {
+export function VideoBackground(args: { name?: string; scale: number; src: string }): PixiSprite {
     const r = new PixiVideoResource(args.src, { updateFPS: 24 })
     const source = r.source as HTMLVideoElement
     source.muted = true
@@ -225,12 +241,18 @@ export function VideoBackground(args: { name?: string, scale: number, src: strin
     const sprite = PixiSprite.from(PixiTexture.from(r.source))
     sprite.width = BASE_WIDTH * args.scale
     sprite.height = BASE_HEIGHT * args.scale
-    if (args.name) { sprite.name = args.name }
+    if (args.name) {
+        sprite.name = args.name
+    }
     sprite.zIndex = -1
     return sprite
 }
 
-export function PngLayersBackground(args: { name?: string, scale: number, srcs: string[] | PixiTexture[] }): PixiContainer {
+export function PngLayersBackground(args: {
+    name?: string
+    scale: number
+    srcs: string[] | PixiTexture[]
+}): PixiContainer {
     return Container({
         children: args.srcs.map(src =>
             Sprite({
@@ -238,6 +260,7 @@ export function PngLayersBackground(args: { name?: string, scale: number, srcs: 
                 width: BASE_WIDTH,
                 height: BASE_HEIGHT,
                 zIndex: -1,
-            })),
+            })
+        ),
     })
 }

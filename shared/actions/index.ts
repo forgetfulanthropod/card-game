@@ -26,4 +26,4 @@ export type Caller<F extends Func> = (...args: Parameters<F>) => Promise<CallRet
 
 type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 
-export type ServerResult<T> = { status: 'success', result: T } | { status: 'error', message: string }
+export type ServerResult<T> = { status: 'success'; result: T } | { status: 'error'; message: string }

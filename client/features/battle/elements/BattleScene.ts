@@ -16,7 +16,6 @@ import { Character } from './Character'
 import Doors from './Doors'
 import InfoBox from './InfoBox'
 
-
 export function BattleScene(): PixiContainer {
     const scene = getBattleScene()
 
@@ -42,7 +41,11 @@ function bindCharacters(scene: SCursor<BattleScene>, container: PixiContainer) {
             container.destroy()
             return
         }
-        if (vals(allChars).filter(c => c.health > 0).every(cm => !cm.hasMoved)) {
+        if (
+            vals(allChars)
+                .filter(c => c.health > 0)
+                .every(cm => !cm.hasMoved)
+        ) {
             // tl()
             const message = scene.get('isPlayerTurn') ? 'You start round!' : 'Enemy starts round!'
             overlay({ elementId: 'roundStart', data: { message } })
@@ -55,24 +58,25 @@ function bindCharacters(scene: SCursor<BattleScene>, container: PixiContainer) {
             updateScene(scene, container)
         }
     })
-
 }
 
 function updateScene(scene: SCursor<BattleScene>, container: PixiContainer) {
-
     const allCharsCursor = scene.select('allCharacters')
     const children = container.children
     container.removeChildren()
 
-    for (const x of children) { x.destroy() }
+    for (const x of children) {
+        x.destroy()
+    }
 
     const allCharacters = allCharsCursor.get()
-    const sortedYs = vals(allCharacters).map(c => c.y).sort((y1, y2) => y1 - y2)
+    const sortedYs = vals(allCharacters)
+        .map(c => c.y)
+        .sort((y1, y2) => y1 - y2)
     const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
     const dungeonName = scene.get('dungeonName')
-    const backgroundArgs = dungeonName === 'The Matcha Caves' ?
-        { src: CaveVideo } :
-        { srcs: [backgrounds[dungeonName]] }
+    const backgroundArgs =
+        dungeonName === 'The Matcha Caves' ? { src: CaveVideo } : { srcs: [backgrounds[dungeonName]] }
     const newChildren = [
         background({ scale: 1, ...backgroundArgs }),
         InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
@@ -83,7 +87,8 @@ function updateScene(scene: SCursor<BattleScene>, container: PixiContainer) {
                 scale: 1,
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
-            })),
+            })
+        ),
         Coin(),
     ]
     for (const x of newChildren) {
@@ -114,6 +119,5 @@ function makeDoors(parent: PixiContainer) {
             })
             parent.addChild(doorsContainer)
         }
-
     }
 }

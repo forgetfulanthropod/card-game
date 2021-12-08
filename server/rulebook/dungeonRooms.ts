@@ -1,6 +1,5 @@
 import type { CharacterName, DungeonRooms } from '@shared'
 
-
 const config = {
     doValidation: false,
 }
@@ -14,51 +13,108 @@ const m: CharacterName = 'matchaGelatinCube'
 const s: CharacterName = 'skeletonWarrior'
 const mimic: CharacterName = 'mimic'
 
-
 export const dungeonRooms: DungeonRooms = {
     1: {
-        A: { outcomes: [[[m, 1]], [[s, 1], [s, 1]]], probs: [.5, .5] },
-        B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [.5, .5] },
-
-    }, 2: {
         A: {
             outcomes: [
-                [[m, 1], [m, 1]],
-                [[s, 1], [s, 1]],
+                [[m, 1]],
+                [
+                    [s, 1],
+                    [s, 1],
+                ],
+            ],
+            probs: [0.5, 0.5],
+        },
+        B: { outcomes: [[[m, 3]], [[s, 2]]], probs: [0.5, 0.5] },
+    },
+    2: {
+        A: {
+            outcomes: [
+                [
+                    [m, 1],
+                    [m, 1],
+                ],
+                [
+                    [s, 1],
+                    [s, 1],
+                ],
                 [[m, 2]],
                 [[s, 2]],
-            ], probs: [.25, .25, .25, .25],
+            ],
+            probs: [0.25, 0.25, 0.25, 0.25],
         },
-        B: { outcomes: [[[s, 4], [m, 1]], [[s, 4], [s, 1]]], probs: [.5, .5] },
+        B: {
+            outcomes: [
+                [
+                    [s, 4],
+                    [m, 1],
+                ],
+                [
+                    [s, 4],
+                    [s, 1],
+                ],
+            ],
+            probs: [0.5, 0.5],
+        },
         C: { outcomes: [[[s, 5]]], probs: [1] },
-    }, 3: {
+    },
+    3: {
         A: {
             outcomes: [
-                [[m, 3], [m, 2]],
-                [[m, 3], [s, 2]],
-                [[s, 3], [m, 2]],
-                [[s, 3], [s, 2]],
+                [
+                    [m, 3],
+                    [m, 2],
+                ],
+                [
+                    [m, 3],
+                    [s, 2],
+                ],
+                [
+                    [s, 3],
+                    [m, 2],
+                ],
+                [
+                    [s, 3],
+                    [s, 2],
+                ],
             ],
-            probs: [.25, .25, .25, .25],
+            probs: [0.25, 0.25, 0.25, 0.25],
         },
-        B: { outcomes: [[[s, 5]], [[m, 5]]], probs: [.5, .5] },
+        B: { outcomes: [[[s, 5]], [[m, 5]]], probs: [0.5, 0.5] },
         C: {
             outcomes: [
-                [[m, 2], [m, 2], [m, 2], [m, 2]],
-                [[s, 2], [s, 2], [s, 2], [s, 2]],
+                [
+                    [m, 2],
+                    [m, 2],
+                    [m, 2],
+                    [m, 2],
+                ],
+                [
+                    [s, 2],
+                    [s, 2],
+                    [s, 2],
+                    [s, 2],
+                ],
             ],
-            probs: [.5, .5],
+            probs: [0.5, 0.5],
         },
-    }, 4: { // TODO: cases below
-        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
-    }, 5: {
-        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
-    }, 6: {
+    },
+    4: {
+        // TODO: cases below
+        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [0.5, 0.5] },
+    },
+    5: {
+        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [0.5, 0.5] },
+    },
+    6: {
         A: { outcomes: [[[mimic, 5]]], probs: [1] },
-    }, 7: {
-        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
-    }, 8: { // boss
-        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [.5, .5] },
+    },
+    7: {
+        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [0.5, 0.5] },
+    },
+    8: {
+        // boss
+        A: { outcomes: [[[m, 8]], [[s, 8]]], probs: [0.5, 0.5] },
     },
 }
 

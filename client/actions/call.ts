@@ -4,7 +4,6 @@ import type { Caller, Func } from '@shared'
 import { getClientTree } from '@/data/rootTree'
 import { entryMap } from '@/util'
 
-
 const config = {
     shouldLog: false,
     method: 'post' as 'get' | 'post',
@@ -17,7 +16,9 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
         if (config.shouldSaveCalls) {
             getClientTree().select('serverCalls').push({ name, args: args[0], time: new Date().toLocaleTimeString() })
         }
-        if (config.shouldLog) { console.log(`calling ${name}#${randId}(${JSON.stringify(args[0])}) at ${new Date().toLocaleTimeString()}`) }
+        if (config.shouldLog) {
+            console.log(`calling ${name}#${randId}(${JSON.stringify(args[0])}) at ${new Date().toLocaleTimeString()}`)
+        }
         try {
             const startTime = Date.now()
             let json: ReturnType<F> | null = null
@@ -29,7 +30,7 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
                 const res = await fetch(`${name}`, {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json',
+                        Accept: 'application/json',
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(args[0]),
@@ -41,7 +42,13 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
                     console.log(`${name}#${randId} did not return json`)
                 }
             }
-            if (config.shouldLog) { console.log(`function ${name}#${randId} took ${(Date.now() - startTime) / 1000} seconds and  returned ${JSON.stringify(json)} at ${new Date().toLocaleTimeString()}`) }
+            if (config.shouldLog) {
+                console.log(
+                    `function ${name}#${randId} took ${
+                        (Date.now() - startTime) / 1000
+                    } seconds and  returned ${JSON.stringify(json)} at ${new Date().toLocaleTimeString()}`
+                )
+            }
             return json
         } catch (e) {
             console.error(`server error: ${e}`)

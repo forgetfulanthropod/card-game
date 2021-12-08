@@ -1,4 +1,3 @@
-
 // @index('./*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
 export { addSelected } from './addSelected'
 export { changeDungeon } from './changeDungeon'

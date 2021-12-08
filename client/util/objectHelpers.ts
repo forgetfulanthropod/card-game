@@ -20,14 +20,12 @@ export function deepFreeze<T extends object>(obj: T): Immutable<T> {
     return Object.freeze(obj) as Immutable<T>
 }
 
-
 export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
     return Object.values(obj)
 }
 export function keys<K extends string | number, V>(obj: Record<K, V>): string[] {
     return Object.keys(obj)
 }
-
 
 export function length<K extends string | number>(obj: Record<K, unknown>): number {
     return Object.keys(obj).length

@@ -5,7 +5,6 @@ import { handleMove } from './handleMove'
 import { tl, warn } from './logging'
 import { checkWinner, getNpcMove } from './round'
 
-
 export async function doNpcMove(reason: string, username: string): Promise<void> {
     const scene = getBattleScene(username)
     tl(`npcMove(reason: ${reason})`)

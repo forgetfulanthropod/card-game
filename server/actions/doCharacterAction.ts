@@ -17,7 +17,6 @@ import { commit, getBattleScene, sleep, vals } from '@/util'
 
 const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 
-
 export const doCharacterAction: DoCharacterAction = async args => {
     const { uid: clickedUid } = args
     const scene = getBattleScene(args.username)
@@ -65,8 +64,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
     }
 
     let move = selectedMove
-    if (isSpecial(move))
-        move = getTransformed({ move, charUid: selectedCharacter, username: args.username })
+    if (isSpecial(move)) move = getTransformed({ move, charUid: selectedCharacter, username: args.username })
 
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],

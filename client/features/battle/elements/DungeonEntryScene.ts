@@ -9,7 +9,6 @@ import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
 
-
 export function DungeonEntryScene(): PixiContainer {
     return Container({
         children: [

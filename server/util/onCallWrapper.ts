@@ -5,13 +5,15 @@ import { commit, getGameStateCursor } from '.'
 const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)
 
-function makeRandId() { return srandom().toString().slice(2, 6) }
+function makeRandId() {
+    return srandom().toString().slice(2, 6)
+}
 
 export function onCallWrapper<Args, ReturnType>(
     f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
     options?: {
-        disableCommit?: boolean,
-        wholeRequest?: boolean,
+        disableCommit?: boolean
+        wholeRequest?: boolean
     }
 ): void {
     logger.info(`attaching route  ${JSON.stringify(f.name)}`)
@@ -23,8 +25,7 @@ export function onCallWrapper<Args, ReturnType>(
             const username = request.session.username as string
             // @ts-expect-error
             const socketId: string = request.session.socketio
-            if (typeof username !== 'string')
-                logger.error('no username!')
+            if (typeof username !== 'string') logger.error('no username!')
             if (config.log)
                 logger.info(`received post call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`)
             if (options?.wholeRequest) {
@@ -36,10 +37,8 @@ export function onCallWrapper<Args, ReturnType>(
                 body.socketId = socketId
                 result = await f(body)
             }
-            if (options?.disableCommit !== true)
-                commit(getGameStateCursor(username), username)
-            if (config.log)
-                logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`)
+            if (options?.disableCommit !== true) commit(getGameStateCursor(username), username)
+            if (config.log) logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`)
             response.send({ status: 'success', result })
         } catch (e) {
             const err = e as unknown as Error

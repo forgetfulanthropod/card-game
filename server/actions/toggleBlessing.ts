@@ -6,7 +6,7 @@ import { getModified } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
 import { getBattleScene, getGameStateCursor } from '@/util'
 
-export const toggleBlessing: ToggleBlessing = (args) => {
+export const toggleBlessing: ToggleBlessing = args => {
     const name = args.username as BlessingName
     const { blessings: blessingsMap } = getRulebook()
     const gameState = getGameStateCursor(args.username)

@@ -6,7 +6,6 @@ import { keys, vals } from '@/util'
 import { getModified } from './characterModifierManagement'
 import { getLevelInfo } from './npcLeveling'
 
-
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
@@ -36,7 +35,7 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     vals(npcs).forEach((npc, i) => {
         const [x, y] = positions[i]
 
-        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: BASE_WIDTH * x / 100, screenY: BASE_HEIGHT * y / 100 }
+        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: (BASE_WIDTH * x) / 100, screenY: (BASE_HEIGHT * y) / 100 }
     })
 
     return rearrangedNpcs
@@ -60,9 +59,8 @@ export function newPCMeta(args: { x: number; y: number; uid: string; name: Chara
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    const stance: StanceName = args.x > X_AGGRESSIVE_THRESH ?
-        'aggressive' :
-        (args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive')
+    const stance: StanceName =
+        args.x > X_AGGRESSIVE_THRESH ? 'aggressive' : args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive'
     const stats = statsMap[args.name]
     // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
     return {
@@ -71,8 +69,8 @@ export function newPCMeta(args: { x: number; y: number; uid: string; name: Chara
         isPc: true,
         x: args.x,
         y: args.y,
-        screenX: scale * BASE_WIDTH * args.x / 100,
-        screenY: scale * BASE_HEIGHT * args.y / 100,
+        screenX: (scale * BASE_WIDTH * args.x) / 100,
+        screenY: (scale * BASE_HEIGHT * args.y) / 100,
         stance,
         hasMoved: false,
         health: stats.maxHealth,
@@ -80,7 +78,13 @@ export function newPCMeta(args: { x: number; y: number; uid: string; name: Chara
         effects: [],
     }
 }
-export function newNPCMeta(args: { x: number; y: number; name: CharacterName; uid: string; level: number }): CharacterMeta {
+export function newNPCMeta(args: {
+    x: number
+    y: number
+    name: CharacterName
+    uid: string
+    level: number
+}): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // debugger
     logger.info(`making new npc with ${JSON.stringify(args)}`)
@@ -91,13 +95,13 @@ export function newNPCMeta(args: { x: number; y: number; name: CharacterName; ui
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
-        ...(getLevelInfo(args.name, args.level)),
+        ...getLevelInfo(args.name, args.level),
         uid: args.uid,
         isPc: false,
         x: args.x,
         y: args.y,
-        screenX: scale * BASE_WIDTH * args.x / 100,
-        screenY: scale * BASE_HEIGHT * args.y / 100,
+        screenX: (scale * BASE_WIDTH * args.x) / 100,
+        screenY: (scale * BASE_HEIGHT * args.y) / 100,
         stance,
         hasMoved: false,
         effects: [],

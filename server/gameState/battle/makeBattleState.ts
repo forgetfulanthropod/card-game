@@ -1,13 +1,12 @@
-import type {
-    BattleScene,
-    DungeonName,
-    OwnedCharacter,
-} from '@shared'
+import type { BattleScene, DungeonName, OwnedCharacter } from '@shared'
 
 import { makeCharacters } from './characterManagement'
 
-
-export function makeBattleState(args: { chosen?: OwnedCharacter[], dungeonName?: DungeonName, username: string }): BattleScene {
+export function makeBattleState(args: {
+    chosen?: OwnedCharacter[]
+    dungeonName?: DungeonName
+    username: string
+}): BattleScene {
     const allCharacters = makeCharacters(args?.chosen, args.username)
 
     // kill most of the characters
@@ -17,14 +16,13 @@ export function makeBattleState(args: { chosen?: OwnedCharacter[], dungeonName?:
     //     // allCharacters
     // }
 
-
     const selectedCharacter = Object.values(allCharacters).find(c => c.isPc)
     if (!selectedCharacter) {
         throw Error('could not find any initial player characters')
     }
     const selectedMove = selectedCharacter.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
-    const playerStarts = srandom() < .5
+    const playerStarts = srandom() < 0.5
 
     return Object.freeze({
         name: 'battle',

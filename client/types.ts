@@ -1,7 +1,5 @@
-
 import type Preact from 'preact'
 import type { StateUpdater } from 'preact/hooks'
-
 
 // const o : {x: typeof JSX} = {x: Preact.JSX}
 // type JSX = typeof Preact.JSX

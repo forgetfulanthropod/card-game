@@ -1,4 +1,3 @@
-
 import { has } from 'lodash'
 
 import { commit, getRootCursor } from '@/util'

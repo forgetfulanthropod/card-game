@@ -1,4 +1,3 @@
-
 export function mapToObj<T, S>(A: T[], f: (t: T, i: number) => [string, S]): Record<string, S> {
     const o: Record<string, S> = {}
     A.forEach((x, i) => {

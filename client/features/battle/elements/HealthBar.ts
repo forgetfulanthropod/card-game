@@ -7,21 +7,18 @@ import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics, PixiSprite, PixiText } from '@/elementsUtil'
 import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
 
-
 type Rect = [
     number, // x
     number, // y
     number, // width
-    number, // height
+    number // height
 ]
-
 
 const displayWidth = 200
 const rawWidth = 1841
 const rawHeight = 161
 const widthToHeight = rawHeight / rawWidth
 const displayHeight = displayWidth * widthToHeight
-
 
 export default function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
@@ -50,8 +47,8 @@ function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
         mainEl.removeChild(effects)
 
         effects = Container({
-            children: (characterCursor.select('effects').get() ?? []).map(
-                (e, i) => Text({
+            children: (characterCursor.select('effects').get() ?? []).map((e, i) =>
+                Text({
                     text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
                     y: 50 + 40 * i,
                     style: {
@@ -64,8 +61,7 @@ function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
             ),
         })
 
-        if (effects.children.length > 0)
-            mainEl.addChild(effects)
+        if (effects.children.length > 0) mainEl.addChild(effects)
     }
 }
 
@@ -79,24 +75,25 @@ function makeStanceIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
     })
 
     function updateStance() {
-        if (!characterCursor.select('isPc').get())
-            return
+        if (!characterCursor.select('isPc').get()) return
 
         const stance = characterCursor.select('stance').get()
 
-        const stanceSrc = stance === 'neutral' ? PixiLoader.shared.resources?.stanceNeutral?.data :
-            stance === 'aggressive' ? PixiLoader.shared.resources?.stanceAggressive?.data :
-                PixiLoader.shared.resources?.stanceDefensive?.data // stance === 'defensive'
+        const stanceSrc =
+            stance === 'neutral'
+                ? PixiLoader.shared.resources?.stanceNeutral?.data
+                : stance === 'aggressive'
+                ? PixiLoader.shared.resources?.stanceAggressive?.data
+                : PixiLoader.shared.resources?.stanceDefensive?.data // stance === 'defensive'
 
-        if (stanceEl != null)
-            mainEl.removeChild(stanceEl)
+        if (stanceEl != null) mainEl.removeChild(stanceEl)
         stanceEl = Sprite({
             src: stanceSrc,
             x: displayWidth,
             y: displayHeight * 1.1,
             anchor: [1, 0],
             width: displayWidth / 3,
-            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height,
+            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
             onClick: () => toggleStance({ characterUid: characterCursor.get('uid') }),
         })
         mainEl.addChild(stanceEl)
@@ -131,9 +128,7 @@ function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
     })
 
     function updateHealth() {
-
-        if (health != null && healthText != null)
-            mainEl.removeChild(health, healthText)
+        if (health != null && healthText != null) mainEl.removeChild(health, healthText)
 
         const text = characterCursor.select('health').get()?.toString()
 
@@ -156,18 +151,18 @@ function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
 }
 
 function drawHealthBar(characterCursor: SCursor<CharacterMeta>, g: PixiGraphics) {
-    const xMargin = .01869158878
-    const yMargin = .16883116883
+    const xMargin = 0.01869158878
+    const yMargin = 0.16883116883
     const colorStops = [
-        { color: '#98040c', stop: .2 },
-        { color: '#fff133', stop: .4 },
+        { color: '#98040c', stop: 0.2 },
+        { color: '#fff133', stop: 0.4 },
         { color: '#91ff85', stop: 1 },
     ]
 
     const portion = characterCursor.select('health').get() / characterCursor.select('maxHealth').get()
-    const background = ([...colorStops]
-        .sort((cs1, cs2) => cs1.stop - cs2.stop)
-        .find(cs => portion <= cs.stop) || { color: 'pink' }).color
+    const background = (
+        [...colorStops].sort((cs1, cs2) => cs1.stop - cs2.stop).find(cs => portion <= cs.stop) || { color: 'pink' }
+    ).color
     const rect: Rect = [
         displayWidth * xMargin,
         displayHeight * yMargin,
@@ -187,7 +182,7 @@ function drawHealthBar(characterCursor: SCursor<CharacterMeta>, g: PixiGraphics)
         texture,
         color,
         alpha: 1,
-        matrix: new Matrix(.1, 0, 0, .1, 0, 0),
+        matrix: new Matrix(0.1, 0, 0, 0.1, 0, 0),
     })
     g.drawRect(...rect)
 

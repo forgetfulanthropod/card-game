@@ -8,7 +8,6 @@ import { getRulebook } from '@/rulebook'
 import { commit, getGameStateCursor } from '.'
 import { getRootCursor } from './treeUtils'
 
-
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
 const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+$/, '')
@@ -36,20 +35,15 @@ export function getRulebookNames(): Gamestate['rulebooks'] {
     return [...names, 'default']
 }
 
-
 /** put at the top */
-const keyOrder = [
-    'name',
-    'version',
-    'savedAt',
-]
+const keyOrder = ['name', 'version', 'savedAt']
 
 /** Ensures consistent key ordering which is good for diffs */
 export function stringifyRulebook(rb: Rulebook): string {
     const allKeys: string[] = []
     const seen = new Set<string>()
     JSON.stringify(rb, function (key, value) {
-        if (!(seen.has(key))) {
+        if (!seen.has(key)) {
             allKeys.push(key)
             seen.add(key)
         }

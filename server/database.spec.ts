@@ -1,12 +1,7 @@
 import { expect, Test, TestSuite } from 'testyts'
 import { isDeepStrictEqual } from 'util'
 
-import {
-    deleteUser,
-    hasUser,
-    readUser,
-    setUser,
-} from './database'
+import { deleteUser, hasUser, readUser, setUser } from './database'
 
 @TestSuite()
 export class DatabaseTestSuite {

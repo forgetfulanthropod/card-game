@@ -5,7 +5,6 @@ import { memoize } from 'lodash'
 
 import { waitForInitialGamestate } from '@/connection/serverListener'
 
-
 /** Global variables for file */
 const state = {
     gamestate: null as SBaobab<Gamestate> | null,
@@ -17,7 +16,6 @@ export async function waitForGameStateToFill(): Promise<void> {
     window.tree = state.gamestate
     console.log('gamestate all good')
 }
-
 
 /** Do not call at the module-level
  * The pattern above with triggercallbacks etc lets us

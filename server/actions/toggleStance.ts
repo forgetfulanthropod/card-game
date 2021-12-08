@@ -4,8 +4,7 @@ import type { StanceName } from '@shared'
 import { getModified } from '@/gameState/battle'
 import { getBattleScene } from '@/util'
 
-
-export const toggleStance: ToggleStance = (args) => {
+export const toggleStance: ToggleStance = args => {
     const { characterUid } = args
     const scene = getBattleScene(args.username)
 
@@ -17,15 +16,12 @@ export const toggleStance: ToggleStance = (args) => {
         character.hasMoved ||
         !scene.get().isPlayerTurn ||
         scene.get().selectedCharacter !== character.uid
-    ) return
+    )
+        return
 
     const stanceCursor = characterCursor.select('stance')
 
-    const stances: StanceName[] = [
-        'defensive',
-        'neutral',
-        'aggressive',
-    ]
+    const stances: StanceName[] = ['defensive', 'neutral', 'aggressive']
     const stance = stanceCursor.get()
     const stanceIndex = stances.findIndex(v => stance === v)
 
@@ -34,5 +30,4 @@ export const toggleStance: ToggleStance = (args) => {
     stanceCursor.set(stances[nextIndex])
 
     characterCursor.apply(ch => getModified(ch, args.username))
-
 }

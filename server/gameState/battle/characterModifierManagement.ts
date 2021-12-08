@@ -4,7 +4,6 @@ import { getCharacterMovesWithDamageRanges } from './attack'
 import { applyBlessings } from './blessings'
 import { newNPCMeta, newPCMeta } from './characterManagement'
 
-
 export function getModified(prev: Readonly<CharacterMeta>, username: string): CharacterMeta {
     const clean = cleanMeta(prev)
 

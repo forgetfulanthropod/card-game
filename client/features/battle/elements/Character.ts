@@ -13,10 +13,9 @@ import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
 
-
-const RED = 0xFF0000
-const BLUE = 0x0000FF
-const WHITE = 0xFFFFFF
+const RED = 0xff0000
+const BLUE = 0x0000ff
+const WHITE = 0xffffff
 const SHOW_HIT_TIME = 1000
 // const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
@@ -32,7 +31,9 @@ interface CharacterProps {
 export function Character(args: CharacterProps): PixiContainer {
     // NOTE: necessary so the onClick sends the correct data after a character change.
     const characterMeta = { ...args.cursor.get() }
-    args.cursor.on('update', () => { Object.assign(characterMeta, args.cursor.get()) })
+    args.cursor.on('update', () => {
+        Object.assign(characterMeta, args.cursor.get())
+    })
     const { screenX, screenY } = characterMeta
 
     // ---Sprites and containers---
@@ -47,14 +48,7 @@ export function Character(args: CharacterProps): PixiContainer {
 
     const mainContainer = Container({
         zIndex: args.zIndex,
-        children: [
-            mainSprite,
-            selectedSprite,
-            attackSprite,
-            defendSprite,
-            hasMovedSprite,
-            healthBar,
-        ],
+        children: [mainSprite, selectedSprite, attackSprite, defendSprite, hasMovedSprite, healthBar],
     })
     mainContainer.sortChildren()
 
@@ -68,16 +62,14 @@ export function Character(args: CharacterProps): PixiContainer {
         name: 'FlyingContainer',
         x: screenX,
         y: screenY,
-        children: [
-            mainContainer,
-            aboveCharacterContainer,
-        ],
+        children: [mainContainer, aboveCharacterContainer],
     })
-
 
     // ---Functions and listeners---
 
-    function onHeight(height: number) { aboveCharacterContainer.y = -height }
+    function onHeight(height: number) {
+        aboveCharacterContainer.y = -height
+    }
 
     function updateDeathAndHealth() {
         const char = args.cursor.get()
@@ -111,27 +103,28 @@ export function Character(args: CharacterProps): PixiContainer {
             const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defender0.screenX, y: defender0.screenY })
             PixiTicker.shared.add(function cb(dt) {
                 const result = fly(flyingContainer, dt)
-                if (result === 'remove')
-                    PixiTicker.shared.remove(cb)
+                if (result === 'remove') PixiTicker.shared.remove(cb)
             })
             const charDamage = damageMap.find(d => d.key === myId)?.damage ?? null
             if (charDamage != null)
-                doFlashElement(
-                    aboveCharacterContainer,
-                    () => HitInfo({ damage: charDamage, isPoison: true }),
-                    { durationMs: SHOW_HIT_TIME }
-                )
+                doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: charDamage, isPoison: true }), {
+                    durationMs: SHOW_HIT_TIME,
+                })
         }
 
         if (defenders.findIndex(d => d === myId) > -1) {
             flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: - 70 }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: -70 }), {
+                durationMs: SHOW_HIT_TIME,
+            })
             const damageObj = damageMap.find(d => d.key === myId)
             if (damageObj == null) {
                 console.warn(`damageMap did not provide value for defender with id ${myId}. damageMap:`, damageMap)
                 return
             }
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageObj.damage }), { durationMs: SHOW_HIT_TIME })
+            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageObj.damage }), {
+                durationMs: SHOW_HIT_TIME,
+            })
         }
     })
 
@@ -141,11 +134,10 @@ export function Character(args: CharacterProps): PixiContainer {
 }
 
 function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
-
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 20
     const grayFilter = new filters.ColorMatrixFilter()
-    grayFilter.saturate(-.7, false)
+    grayFilter.saturate(-0.7, false)
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
 
@@ -177,10 +169,21 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     })
     const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
     const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
-    const hasMovedSprite = Sprite({ ...charSpriteProps, filters: [grayFilter], zIndex: 2, visible: hasMovedCursor.get() })
+    const hasMovedSprite = Sprite({
+        ...charSpriteProps,
+        filters: [grayFilter],
+        zIndex: 2,
+        visible: hasMovedCursor.get(),
+    })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedId = getBattleScene().select('selectedCharacter')
-    const selectedSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: WHITE, zIndex: 0, visible: selectedId.get() === characterMeta.uid })
+    const selectedSprite = Sprite({
+        ...charSpriteProps,
+        filters: [blurFilter],
+        tint: WHITE,
+        zIndex: 0,
+        visible: selectedId.get() === characterMeta.uid,
+    })
 
     hasMovedCursor.on('update', () => {
         const newVal = hasMovedCursor.get()
@@ -216,14 +219,20 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         selectedSprite.visible = selectedId.get() === characterMeta.uid
     })
 
-    return { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight: charSpriteProps.height }
+    return {
+        attackSprite,
+        defendSprite,
+        mainSprite,
+        selectedSprite,
+        hasMovedSprite,
+        initialHeight: charSpriteProps.height,
+    }
 }
 
-
 const FLY_TIME = 800
-const FLY_TO_TIME = FLY_TIME * .6
+const FLY_TO_TIME = FLY_TIME * 0.6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-type Point = { x: number, y: number }
+type Point = { x: number; y: number }
 
 function makeFlyToOnTick(start: Point, flyTo: Point) {
     let totalElapsed = 0
@@ -231,11 +240,11 @@ function makeFlyToOnTick(start: Point, flyTo: Point) {
         // const deltaTimeMs = elapsed * 1000 / 60
         totalElapsed += elapsed * 16.66
         if (totalElapsed < FLY_TO_TIME) {
-            container.x = start.x + (flyTo.x - start.x) * totalElapsed / FLY_TO_TIME
-            container.y = start.y + (flyTo.y - start.y) * totalElapsed / FLY_TO_TIME
+            container.x = start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
+            container.y = start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
         } else if (totalElapsed < FLY_TIME) {
-            container.x = flyTo.x + (start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
-            container.y = flyTo.y + (start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            container.x = flyTo.x + ((start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME)) / FLY_BACK_TIME
+            container.y = flyTo.y + ((start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME)) / FLY_BACK_TIME
         } else {
             container.x = start.x
             container.y = start.y

@@ -1,11 +1,9 @@
-
 import type { StartBattle } from '@serverActions'
 
 import { resetRound } from '@/gameState/battle'
 import { getBattleScene } from '@/util'
 
-
-export const startBattle: StartBattle = async (args) => {
+export const startBattle: StartBattle = async args => {
     const scene = getBattleScene(args.username)
     if (scene.get('state') === 'in battle') {
         // already in game

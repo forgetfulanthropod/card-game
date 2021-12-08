@@ -1,4 +1,3 @@
-
 import type { AttackData, CharacterMeta, Effect } from '@shared'
 import { findIndex } from 'lodash'
 
@@ -7,9 +6,13 @@ import { commit } from '@/util'
 
 import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack'
 
-
 /** Applies hasmoved, health, and effects */
-export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData, username: string): void {
+export default function applyMove(
+    scene: BattleCursor,
+    lastAllChars: Record<string, CharacterMeta>,
+    attackData: AttackData,
+    username: string
+): void {
     const allChars = scene.select('allCharacters')
 
     allChars.select(attackData.attacker.uid).set('hasMoved', true)
@@ -18,9 +21,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
         allChars.select(key).set('health', newHealth)
     })
     allChars.select(attackData.attacker.uid).apply('effects', e => {
-        return e
-            .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
-            .filter(e => e.remainingRounds > 0)
+        return e.map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 })).filter(e => e.remainingRounds > 0)
     })
     // reduce remaining rounds, clear exhausted effects
     getCharacterKeysAndEffects(attackData).forEach(({ key, effect: newEffect }) =>

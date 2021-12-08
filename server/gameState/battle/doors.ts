@@ -9,13 +9,15 @@ import { emit, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } 
 
 import { makePositions, newNPCMeta } from './characterManagement'
 
-
 export type Room = {
     modifier: number
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName }): { options: SpecialDoorName[], descriptions: string[] } {
+function getDoorChoices(args: { roomsPassed: number; dungeonName: DungeonName }): {
+    options: SpecialDoorName[]
+    descriptions: string[]
+} {
     const { dungeonRooms } = getRulebook()
 
     const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']
@@ -23,12 +25,7 @@ function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName })
     const normalDescriptions = describeOutcomes(roomOutcomes).join('\n or \n')
     return {
         options,
-        descriptions: [
-            'big scary door\n X2 Modifier',
-            normalDescriptions,
-            'matcha door',
-            'randomEvent',
-        ],
+        descriptions: ['big scary door\n X2 Modifier', normalDescriptions, 'matcha door', 'randomEvent'],
     }
     // const allDoors: Door[] = ['A', 'B', 'C', 'D']
     // const options = allDoors.slice(0, length(roomOutcomes))
@@ -40,16 +37,23 @@ function getDoorChoices(args: { roomsPassed: number, dungeonName: DungeonName })
 }
 
 function describeOutcomes(roomOutcomes: Record<string, RoomOutcomes>): string[] {
-    return vals(roomOutcomes).map(outcome => zip(outcome.outcomes, outcome.probs)
-        .map(([o, p]) => o != null && p != null && o.map(([name, level]) => `Lvl${level} ${name}`).join(' + ')
-            + ' : '
-            + p.toString().slice(0, 3))
-        .join('\n'))
+    return vals(roomOutcomes).map(outcome =>
+        zip(outcome.outcomes, outcome.probs)
+            .map(
+                ([o, p]) =>
+                    o != null &&
+                    p != null &&
+                    o.map(([name, level]) => `Lvl${level} ${name}`).join(' + ') + ' : ' + p.toString().slice(0, 3)
+            )
+            .join('\n')
+    )
 }
 
-function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, modifier?: number }): Room {
+function makeRoom(args: { door: Door; dungeonName: string; roomsPassed: number; modifier?: number }): Room {
     const { dungeonRooms, characters } = getRulebook()
-    const npcNames = Object.values(characters).filter(x => !x.isPc).map(x => x.name)
+    const npcNames = Object.values(characters)
+        .filter(x => !x.isPc)
+        .map(x => x.name)
     const modifier = args?.modifier ?? 1
     const names = ssampleSize(npcNames, srandInt(1, 5))
     const positions = makePositions(65, 50, 18, 13, names.length)
@@ -79,12 +83,11 @@ function makeRoom(args: { door: Door, dungeonName: string, roomsPassed: number, 
 }
 
 export function getRoom(args: {
-    door: SpecialDoorName,
-    dungeonName: DungeonName,
-    roomsPassed: number,
-    username: string,
+    door: SpecialDoorName
+    dungeonName: DungeonName
+    roomsPassed: number
+    username: string
 }): Room {
-
     const { specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
     const { door, dungeonName, roomsPassed } = args
     // Putting the assignment inside each case makes typescript happy
@@ -102,7 +105,8 @@ export function getRoom(args: {
         case 'normal': {
             return makeRandRegularRoom(dungeonName, roomsPassed)
         }
-        case 'matcha': case 'skeleton': {
+        case 'matcha':
+        case 'skeleton': {
             const v = specialDoorsMap[door].variables
             const uid = makeUid()
             // if (roomsPassed + 1 === v.levelToAppearOn) {
@@ -166,11 +170,9 @@ export function putUpDoors(scene: SCursor<BattleScene>): void {
     scene.set('doors', getDoorChoices({ roomsPassed, dungeonName }))
 }
 
-
 function makeUid(): string {
     return 'charUid-fromDoors-' + srandom().toString().slice(2, 6)
 }
-
 
 function randCoords() {
     return { x: srandInt(50, 95), y: srandInt(40, 80) }

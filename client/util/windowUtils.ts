@@ -3,14 +3,16 @@ import { getClientTree } from '@/data/rootTree'
 
 import { jss } from './jsonString'
 
-
 // @ts-expect-error
 window.runRecording = runRecording
 
 // @ts-expect-error
 window.copyHistory = copyHistory
 
-async function runRecording(recording: { name: string, args: Record<string, unknown> }[], setSeed = true): Promise<void> {
+async function runRecording(
+    recording: { name: string; args: Record<string, unknown> }[],
+    setSeed = true
+): Promise<void> {
     if (setSeed) {
         await resetRandomSeed()
     }
@@ -21,7 +23,7 @@ async function runRecording(recording: { name: string, args: Record<string, unkn
             res = await fetch(`${name}`, {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(args),
@@ -39,9 +41,7 @@ async function runRecording(recording: { name: string, args: Record<string, unkn
             console.warn(`${name} did not return json`)
         }
     }
-
 }
-
 
 async function copyHistory() {
     console.log('Quick, click the window!')
@@ -53,7 +53,6 @@ async function copyHistory() {
         console.log('couldnt copy')
     }
 }
-
 
 function sleep(milliseconds: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, milliseconds))

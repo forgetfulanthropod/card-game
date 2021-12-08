@@ -1,1 +1,3 @@
-export function getRandom(): number { return srandom() }
+export function getRandom(): number {
+    return srandom()
+}

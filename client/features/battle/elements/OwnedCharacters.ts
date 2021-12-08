@@ -1,4 +1,3 @@
-
 import type { OwnedCharacter } from '@shared'
 import type { SCursor } from 'baobab'
 
@@ -7,7 +6,6 @@ import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, dataOf, Sprite, Text } from '@/elementsUtil'
 import { vals } from '@/util'
-
 
 export function OwnedCharacters(): PixiContainer {
     const characters = makeCharacters()
@@ -30,12 +28,16 @@ export function OwnedCharacters(): PixiContainer {
         })
     })
 
-    characters.forEach((c, i) => c.children[0].on('mouseover', () => {
-        c.addChild(hoverTexts[i])
-    }))
-    characters.forEach((c, i) => c.children[0].on('mouseout', () => {
-        c.removeChild(hoverTexts[i])
-    }))
+    characters.forEach((c, i) =>
+        c.children[0].on('mouseover', () => {
+            c.addChild(hoverTexts[i])
+        })
+    )
+    characters.forEach((c, i) =>
+        c.children[0].on('mouseout', () => {
+            c.removeChild(hoverTexts[i])
+        })
+    )
 
     const root = Container({
         x: 200,
@@ -43,35 +45,34 @@ export function OwnedCharacters(): PixiContainer {
         children: characters,
     })
 
-
     return root
 }
 
 const NUM_OF_EACH_CHAR = 5
 
 function makeCharacters() {
-    return vals(getOwnedCharacters().get()).map((c, i) => Container({
-        x: (i / NUM_OF_EACH_CHAR | 0) % 5 * 150 + i / NUM_OF_EACH_CHAR % 5 * 100,
-        y: Math.floor((i / NUM_OF_EACH_CHAR | 0) / 5) * 150,
-        children: [
-            Sprite({
-                src: dataOf(c.name),
-                scale: .45,
-                onClick: () => addSelected({ character: c }),
-            }),
-        ],
-    }))
+    return vals(getOwnedCharacters().get()).map((c, i) =>
+        Container({
+            x: (((i / NUM_OF_EACH_CHAR) | 0) % 5) * 150 + ((i / NUM_OF_EACH_CHAR) % 5) * 100,
+            y: Math.floor(((i / NUM_OF_EACH_CHAR) | 0) / 5) * 150,
+            children: [
+                Sprite({
+                    src: dataOf(c.name),
+                    scale: 0.45,
+                    onClick: () => addSelected({ character: c }),
+                }),
+            ],
+        })
+    )
 }
 
 function makeSelectionIndicators(characters: PixiContainer[], selectedCharacters: SCursor<OwnedCharacter[]>) {
-
     update()
     selectedCharacters.on('update', update)
 
     function update() {
         characters.forEach(characterContainer => {
-            if (characterContainer.children.length > 1)
-                characterContainer.removeChildren(1)
+            if (characterContainer.children.length > 1) characterContainer.removeChildren(1)
         })
         selectedCharacters.get()?.map(c => {
             const indexOfOwned = vals(getOwnedCharacters().get()).findIndex(oc => c.uid === oc.uid)

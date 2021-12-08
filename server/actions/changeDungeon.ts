@@ -3,11 +3,11 @@ import type { ChangeDungeon } from '@serverActions'
 import { getRulebook } from '@/rulebook'
 import { getEntryScene } from '@/util'
 
-export const changeDungeon: ChangeDungeon = (args) => {
+export const changeDungeon: ChangeDungeon = args => {
     const levels = getRulebook().dungeonLevels
     const scene = getEntryScene(args.username)
 
-    let l = (scene.select('selectedLevel').get()).num + args.direction
+    let l = scene.select('selectedLevel').get().num + args.direction
 
     if (l < 1) {
         l = levels.length

@@ -55,7 +55,7 @@ export const levelMinMoveMap = {
     skeleton: {
         'Sword Whack': 0,
         'Rusty Poke': 2,
-        'Slash': 3,
+        Slash: 3,
     },
     matcha: {
         'Basic Attack': 0,
@@ -64,12 +64,12 @@ export const levelMinMoveMap = {
     },
     orcWarrior: {
         'Meaty Charge': 0,
-        'Slash': 4,
+        Slash: 4,
         'Bellow and Sing': 6,
     },
     mimic: {
-        'Mimic': 0,
-        'Chomp': 0,
+        Mimic: 0,
+        Chomp: 0,
         'Infectious Bite': 0,
     },
 }

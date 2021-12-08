@@ -1,5 +1,3 @@
-
-
 export interface EventTrigger {
     name: EventTriggerName
     shortDescription: string

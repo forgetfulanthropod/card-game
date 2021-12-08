@@ -3,7 +3,6 @@ import { Spine } from 'pixi-spine'
 import type { PixiApplication, PixiLoader } from '@/elementsUtil'
 
 export function addSpineCharacter(app: PixiApplication): void {
-
     app.loader
         // .add('spineboypro', 'spine/demo/spineboy-pro.json')
         // .add('spineboypro', 'spine/penguin/spine.json')

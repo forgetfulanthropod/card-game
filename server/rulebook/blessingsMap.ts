@@ -1,7 +1,7 @@
 import type { Blessing, BlessingName } from '@shared'
 
 export const blessingsMap: Record<BlessingName, Blessing> = {
-    'strongPcs': {
+    strongPcs: {
         name: 'strongPcs',
         effects: [
             {
@@ -13,7 +13,7 @@ export const blessingsMap: Record<BlessingName, Blessing> = {
             },
         ],
     },
-    'strongEnemies': {
+    strongEnemies: {
         name: 'strongEnemies',
         effects: [
             {
@@ -23,29 +23,29 @@ export const blessingsMap: Record<BlessingName, Blessing> = {
             },
         ],
     },
-    'weakEnemies': {
+    weakEnemies: {
         name: 'weakEnemies',
         // effect: 'double your turns',
         effects: [
             {
                 target: 'enemies',
-                healthMultiplicand: .5,
-                damageMultiplicand: .5,
+                healthMultiplicand: 0.5,
+                damageMultiplicand: 0.5,
             },
         ],
     },
-    'weakPcs': {
+    weakPcs: {
         name: 'weakPcs',
         // effect: 'double your turns',
         effects: [
             {
                 target: 'enemies',
-                healthMultiplicand: .5,
-                damageMultiplicand: .5,
+                healthMultiplicand: 0.5,
+                damageMultiplicand: 0.5,
             },
         ],
     },
-    'ptbotflax': {
+    ptbotflax: {
         name: 'ptbotflax',
         displayName: 'Play The Bones of The Fallen Like a Xylophone',
         after: { doorType: 'skeleton' },

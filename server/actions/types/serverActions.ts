@@ -1,4 +1,3 @@
-
 import type { Func } from '@shared'
 // @index(['../../../shared/actions/*.ts', '!../../../shared/actions/index.ts'], f => `import type { ${f.name} as _${f.name} } from '@shared'\nexport type ${f.name} = ServerAction<_${f.name}>`)
 import type { AddSelected as _AddSelected } from '@shared'
@@ -37,14 +36,12 @@ import type { ToggleStance as _ToggleStance } from '@shared'
 export type ToggleStance = ServerAction<_ToggleStance>
 // @endindex
 
-
-type ServerAction<T extends Func> =
-    (args: Objify<Parameters<T>[0]> & { username: string, socketId: string })
-        => ReturnType<T>
-
+type ServerAction<T extends Func> = (
+    args: Objify<Parameters<T>[0]> & { username: string; socketId: string }
+) => ReturnType<T>
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Empty { }
+interface Empty {}
 type Objify<Type> = Type extends Obj ? Obj : Empty
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

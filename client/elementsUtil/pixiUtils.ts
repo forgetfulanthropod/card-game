@@ -5,7 +5,6 @@ import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
 import { PixiLoader } from '@/elementsUtil'
 import type { AssetKey } from '@/features/battle/logic/AssetLoader'
 
-
 export function drawCircle(g: PixiGraphics, color: string, x: number, y: number, radius: number): void {
     g.beginFill(utils.string2hex(color))
     g.drawCircle(x, y, radius)

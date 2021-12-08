@@ -44,7 +44,6 @@ import stanceNeutral from '../assets/neutral stance.png'
 import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 import door from '../assets/temp-door.png'
 
-
 export const backgrounds = {
     'Hooligan’s Bluff': hoolgans,
     'The Matcha Caves': matcha,
@@ -108,7 +107,6 @@ export default function loadAssets(): Promise<void> {
     let basicDone = false
     let deluxeDone = false
     const loaded = new Set(Object.keys(allAssets).filter(name => Loader.shared.resources[name]?.data != null))
-
 
     for (const [name, url] of Object.entries({ ...basicAssets, ...deluxeAssets })) {
         if (Loader.shared.resources[name]?.data == null) {

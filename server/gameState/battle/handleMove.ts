@@ -15,7 +15,6 @@ import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
 import { checkMoveAvailable, checkWinner } from './round'
 
-
 const TIME_AFTER_PLAYER_MOVE = 1000
 const DEFAULT_WAIT = 1000
 

@@ -3,25 +3,23 @@ import type { CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 import { getRulebook } from '@/rulebook'
 import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
 
-
-export function getLivingChars(
-    allCharacters: Record<string, CharacterMeta>
-): { alivePcs: CharacterMeta[]; aliveNpcs: CharacterMeta[] } {
+export function getLivingChars(allCharacters: Record<string, CharacterMeta>): {
+    alivePcs: CharacterMeta[]
+    aliveNpcs: CharacterMeta[]
+} {
     const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
     const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
     return { alivePcs, aliveNpcs }
 }
 type CharacterFilters = Partial<CharacterMeta>
 export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): CharacterUid[] {
-    if (filters == null)
-        return []
+    if (filters == null) return []
 
     return ac
         .filter(c => {
             //@ts-expect-error
             return stringKeys(filters).every((filterKey): boolean => {
-                if (typeof filters[filterKey] === 'boolean')
-                    return c[filterKey] === filters[filterKey]
+                if (typeof filters[filterKey] === 'boolean') return c[filterKey] === filters[filterKey]
                 if (typeof filters[filterKey] === 'number')
                     //@ts-expect-error
                     return c[filterKey] >= filters[filterKey]
@@ -33,11 +31,16 @@ export function getCharIds(ac: CharacterMeta[], filters: CharacterFilters): Char
         })
 }
 
-function getClosestAlive(allCharacters: CharacterMeta[], character: CharacterMeta, nthClosest: number): CharacterMeta | null {
-    const charDist = (a: CharacterMeta, b: CharacterMeta) => dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
-    return [...allCharacters]
-        .filter(c => c.isPc === character.isPc && c.health > 0)
-        .sort((a, b) => charDist(a, b))[nthClosest]
+function getClosestAlive(
+    allCharacters: CharacterMeta[],
+    character: CharacterMeta,
+    nthClosest: number
+): CharacterMeta | null {
+    const charDist = (a: CharacterMeta, b: CharacterMeta) =>
+        dist([a.x, a.y], [character.x, character.y]) - dist([b.x, b.y], [character.x, character.y])
+    return [...allCharacters].filter(c => c.isPc === character.isPc && c.health > 0).sort((a, b) => charDist(a, b))[
+        nthClosest
+    ]
 }
 
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
@@ -45,28 +48,27 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
 }
 export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
     const chars = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
-    if (chars.length === 0) { return null }
+    if (chars.length === 0) {
+        return null
+    }
     return randomEl(chars)
 }
 
 export function getUnmovedPc(ac: CharacterMeta[], excludeId: string): CharacterMeta | null {
     const chars = ac.filter(c => c.isPc && c.health > 0 && !c.hasMoved && c.uid !== excludeId)
-    if (chars.length === 0) { return null }
+    if (chars.length === 0) {
+        return null
+    }
     return randomEl(chars)
 }
 export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
-    const allLivingPlayerCharacters = ac
-        .filter(c => c.isPc && c.health > 0)
+    const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)
 
-    const targetIndex = weightedRandom(
-        allLivingPlayerCharacters
-            .map(c => stanceTypeMetaMap[c.stance].targetLikelihood)
-    )
+    const targetIndex = weightedRandom(allLivingPlayerCharacters.map(c => stanceTypeMetaMap[c.stance].targetLikelihood))
 
     return allLivingPlayerCharacters[targetIndex]
 }
-
 
 export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: CharacterMeta[]): CharacterMeta[] {
     const { moveMetaMap } = getRulebook()
@@ -76,9 +78,10 @@ export function getDefenders(defender: CharacterMeta, move: CharacterMove, ac: C
     move.types
         .map(t => moveMetaMap[t])
         .forEach(moveMeta => {
-            const numForMove = typeof moveMeta.numTargets === 'number' ?
-                moveMeta.numTargets :
-                moveMeta.numTargets[moveMeta.numTargets.length - 1]
+            const numForMove =
+                typeof moveMeta.numTargets === 'number'
+                    ? moveMeta.numTargets
+                    : moveMeta.numTargets[moveMeta.numTargets.length - 1]
             if (numForMove > numTargets) numTargets = numForMove
         })
     if (numTargets > 1) {

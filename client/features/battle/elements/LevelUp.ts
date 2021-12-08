@@ -6,7 +6,7 @@ export default function HitInfo(args: { level: number }): PixiContainer {
         children: [
             Text({
                 text: `${args.level}`,
-                anchor: [0, .8],
+                anchor: [0, 0.8],
                 x: 250,
                 style: {
                     fontFamily: 'monospace',
@@ -30,5 +30,4 @@ export default function HitInfo(args: { level: number }): PixiContainer {
             }),
         ],
     })
-
 }

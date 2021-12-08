@@ -2,8 +2,11 @@ import { spawnSync } from 'child_process'
 import type { Logger } from 'winston'
 import winston from 'winston'
 
-
-export const gitBranch = spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], { encoding: 'utf8', cwd: __dirname })?.output?.[1]?.trim() ?? 'unknown'
+export const gitBranch =
+    spawnSync('git', ['rev-parse', '--abbrev-ref', 'HEAD'], {
+        encoding: 'utf8',
+        cwd: __dirname,
+    })?.output?.[1]?.trim() ?? 'unknown'
 
 declare global {
     // eslint-disable-next-line no-var
@@ -15,7 +18,10 @@ global.logger = winston.createLogger({
         winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.json(),
-        winston.format.printf((info: winston.Logform.TransformableInfo) => `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`)
+        winston.format.printf(
+            (info: winston.Logform.TransformableInfo) =>
+                `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`
+        )
     ),
     transports: [
         new winston.transports.Console(),

@@ -7,8 +7,12 @@ export function ssample<T>(arr: T[]): T {
 }
 // Will be very slow when arr.length is large and n is near arr.length
 export function ssampleSize<T>(arr: T[], n: number): T[] {
-    if (n > arr.length) { throw Error('n larger than arr.length') }
-    if (n <= 0) { return [] }
+    if (n > arr.length) {
+        throw Error('n larger than arr.length')
+    }
+    if (n <= 0) {
+        return []
+    }
     const indices: number[] = []
     while (indices.length < n) {
         const i = srandInt(0, arr.length)
@@ -20,9 +24,8 @@ export function ssampleSize<T>(arr: T[], n: number): T[] {
 }
 
 export function randomEl<T>(arr: readonly T[]): T {
-    return arr[srandom() * arr.length | 0]
+    return arr[(srandom() * arr.length) | 0]
 }
-
 
 /** Returns index of chosen element */
 export function weightedRandom(probabilites: number[]): number {
@@ -41,5 +44,5 @@ export function weightedRandom(probabilites: number[]): number {
     const index = runningTotals.findIndex(t => t > x)
     if (index !== -1) return index
     // hits e.g. when all probabilities are 0
-    return srandom() * probabilites.length | 0
+    return (srandom() * probabilites.length) | 0
 }

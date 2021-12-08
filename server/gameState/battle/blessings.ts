@@ -2,7 +2,6 @@ import type { CharacterMeta } from '@shared'
 
 import { getGameStateCursor } from '@/util'
 
-
 export function applyBlessings(characterMeta: Readonly<CharacterMeta>, username: string): CharacterMeta {
     const bls = getGameStateCursor(username).get('blessings')
     const type = characterMeta.isPc ? 'party' : 'enemies'
@@ -10,8 +9,12 @@ export function applyBlessings(characterMeta: Readonly<CharacterMeta>, username:
     let maxHealth = characterMeta.maxHealth
     for (const b of bls) {
         for (const ef of b.effects) {
-            if (ef.target === type
-                || typeof ef.target === 'object' && ef.target.type === type && ef.target.characterType === characterMeta.name) {
+            if (
+                ef.target === type ||
+                (typeof ef.target === 'object' &&
+                    ef.target.type === type &&
+                    ef.target.characterType === characterMeta.name)
+            ) {
                 // console.log('you have an effect affecting you')
                 console.log(`Character ${characterMeta.name} has effect ${b.name}`)
 

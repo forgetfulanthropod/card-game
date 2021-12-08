@@ -13,7 +13,6 @@ const config = {
 }
 
 function initialOwnedCharacters(): Record<string, OwnedCharacter> {
-
     const { characters: statsMap } = getRulebook()
 
     const oc: Record<string, OwnedCharacter> = {}
@@ -27,7 +26,6 @@ function initialOwnedCharacters(): Record<string, OwnedCharacter> {
 
     return oc
 }
-
 
 export function getInitialGameState(username: string): Gamestate {
     return {

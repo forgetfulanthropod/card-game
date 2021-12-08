@@ -50,7 +50,6 @@ const sessionMiddleware = session({
 })
 app.use(sessionMiddleware)
 
-
 let io: null | SocketServer = null
 export function getIo(): SocketServer {
     if (io == null) throw Error('socket.io was not initialized')
@@ -60,7 +59,6 @@ export function getIo(): SocketServer {
 export function getApp(): typeof app {
     return app
 }
-
 
 attachAPIRoutes()
 
@@ -100,7 +98,6 @@ export function mountIo(server: Server, prefix: string): void {
         // @ts-expect-error
         socket.request.session.save()
     })
-
 
     io.on('connection', function confirmAndBindDisconnect(socket) {
         logger.info('A user connected')

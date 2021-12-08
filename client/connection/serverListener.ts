@@ -6,7 +6,6 @@ import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
 
-
 const config = {
     enableExpensiveUpdateValidation: false,
     shouldLog: false,
@@ -20,18 +19,16 @@ const urlPrefix = window.location.href.split('/')[3]
 const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
 export function resolveWhenSocketConfirmed(): Promise<void> {
     return new Promise(resolve => {
-        socket.once('receivedConnection', (data) => {
+        socket.once('receivedConnection', data => {
             console.log(`'hey' data from server: ${JSON.stringify(data)}`)
             resolve()
         })
     })
 }
 
-
 export function getSocket(): typeof socket {
     return socket
 }
-
 
 export async function waitForInitialGamestate(): Promise<Gamestate> {
     log('hoping for gamestate')
@@ -45,7 +42,7 @@ export async function waitForInitialGamestate(): Promise<Gamestate> {
 
 export function attachServerListener(): void {
     log('attaching server listener')
-    socket.on('update', ({ data, path }: { data: unknown, path: string[] }) => {
+    socket.on('update', ({ data, path }: { data: unknown; path: string[] }) => {
         log('received server data', data)
         // getTree().set(data)
         updateBoabab(data, path)
@@ -82,7 +79,8 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
                     newTree: newTree,
                     'oldtree-vs-server': differences,
                     'oldtree-vs-new-tree': treeDifferences,
-                })
+                }
+            )
         } else {
             log('diff seems to be applied correctly:', differences)
         }
@@ -92,22 +90,26 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
 function applyChange<T>(change: Diff<T, T>, cursor: SCursor<T> | SBaobab<T>) {
     log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
-        case 'N': { // new property
+        case 'N': {
+            // new property
             //@ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
-        case 'D': { // deleted property
+        case 'D': {
+            // deleted property
             //@ts-expect-error
             cursor.unset(change.path)
             break
         }
-        case 'E': { // edited property
+        case 'E': {
+            // edited property
             //@ts-expect-error
             cursor.set(change.path, change.rhs)
             break
         }
-        case 'A': { // array change
+        case 'A': {
+            // array change
             const { path, index: index, item } = change
             if (path == null) {
                 console.warn('array change got null path')

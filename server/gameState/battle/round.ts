@@ -6,19 +6,15 @@ import { getDefenders, getPCTarget, getUnmovedNpc } from './characterGetters'
 import { getTransformed, isSpecial } from './specialMoves'
 
 export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
-    if (ac.every(c => c.isPc || c.health <= 0))
-        return 'PC'
-    if (ac.every(c => !c.isPc || c.health <= 0))
-        return 'NPC'
+    if (ac.every(c => c.isPc || c.health <= 0)) return 'PC'
+    if (ac.every(c => !c.isPc || c.health <= 0)) return 'NPC'
     return null
 }
 
 // TODO: should be at least one person...
 export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
-    return ac.some(c => c.isPc && c.health > 0 && !c.hasMoved)
-        || ac.some(c => !c.isPc && c.health > 0 && !c.hasMoved)
+    return ac.some(c => c.isPc && c.health > 0 && !c.hasMoved) || ac.some(c => !c.isPc && c.health > 0 && !c.hasMoved)
 }
-
 
 function getRandomMove(attacker: CharacterMeta, username: string): CharacterMove {
     const moves = attacker.moves
@@ -39,7 +35,6 @@ export function getNpcMove(ac: CharacterMeta[], username: string): AttackData {
     const defender = getPCTarget(ac)
 
     const defenders = getDefenders(defender, move, ac)
-
 
     return { attacker, defenders, move }
 }

@@ -18,7 +18,7 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
         const enemyKeys = keys(room.enemies)
         // console.log('levelUpEnemy', levelUpEnemy(enemies[enemyKeys[0]], getLevelIncrease(dungeonName)))
         vals(room.enemies).forEach((e, i) => {
-            const coinFlip = srandom() < .5
+            const coinFlip = srandom() < 0.5
             // const coinFlip = false
             // console.log('coin flip was ' + (coinFlip ? 'heads' : 'tails'))
             if (coinFlip) {
@@ -37,7 +37,6 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
                     }
                 }
             }
-
         })
 
         enemies = rearrangeNpcs(enemies)
@@ -45,7 +44,6 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
 
     return { ...room, enemies }
 }
-
 
 function getLevelIncrease(dungeonName: DungeonName): number {
     const dungeonLevelInfo = getRulebook().dungeonLevels.find(l => l.name === dungeonName)
@@ -82,12 +80,14 @@ export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
 
     const index = Math.min(level, MAX_DATA_LEVEL)
     const levelInfo: LevelInfo | undefined = npcLevelStatsMap[name]?.[index]
-    if (levelInfo == null) { throw Error('undefined level info') }
+    if (levelInfo == null) {
+        throw Error('undefined level info')
+    }
     console.log({ levelInfo, level })
 
     if (level > MAX_DATA_LEVEL) {
-        levelInfo.damage = levelInfo.damage + OVER_MAX_ATTACK * level % MAX_DATA_LEVEL
-        levelInfo.maxHealth = levelInfo.maxHealth + OVER_MAX_HEALTH * level % MAX_DATA_LEVEL
+        levelInfo.damage = levelInfo.damage + ((OVER_MAX_ATTACK * level) % MAX_DATA_LEVEL)
+        levelInfo.maxHealth = levelInfo.maxHealth + ((OVER_MAX_HEALTH * level) % MAX_DATA_LEVEL)
     }
 
     levelInfo.health = levelInfo.maxHealth

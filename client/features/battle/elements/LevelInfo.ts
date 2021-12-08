@@ -3,9 +3,7 @@ import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
-
 export function LevelInfo(): PixiContainer {
-
     const scene = getEntryScene()
 
     const level = scene.select('selectedLevel').get()
@@ -20,7 +18,7 @@ export function LevelInfo(): PixiContainer {
 
     const levelNumText = Text({
         text: `Level ${level?.num}`,
-        anchor: [.5, 1],
+        anchor: [0.5, 1],
         style: {
             fontFamily: 'VT323',
             fontSize: 60,
@@ -33,7 +31,7 @@ export function LevelInfo(): PixiContainer {
 
     const leftButton = Text({
         text: '◀',
-        anchor: [.5, 1],
+        anchor: [0.5, 1],
         x: -300,
         y: 0,
         style: {
@@ -49,7 +47,7 @@ export function LevelInfo(): PixiContainer {
     })
     const rightButton = Text({
         text: '▶',
-        anchor: [.5, 1],
+        anchor: [0.5, 1],
         x: 300,
         y: 0,
         style: {
@@ -66,7 +64,7 @@ export function LevelInfo(): PixiContainer {
 
     const levelNameText = Text({
         text: `${level?.name}`,
-        anchor: [.5, 0],
+        anchor: [0.5, 0],
         y: 25,
         style: {
             fontFamily: 'VT323',
@@ -79,7 +77,7 @@ export function LevelInfo(): PixiContainer {
 
     const pointLimitText = Text({
         text: `point limit: ${level?.pointLimit}`,
-        anchor: [.5, 0],
+        anchor: [0.5, 0],
         y: 90,
         style: {
             fontFamily: 'VT323',
@@ -90,19 +88,11 @@ export function LevelInfo(): PixiContainer {
         },
     })
 
-
     const root = Container({
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 10,
-        children: [
-            leftButton,
-            levelNumText,
-            rightButton,
-            levelNameText,
-            pointLimitText,
-        ],
+        children: [leftButton, levelNumText, rightButton, levelNameText, pointLimitText],
     })
-
 
     return root
 }
