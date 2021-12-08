@@ -8,8 +8,10 @@ import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
+import * as DB from './database'
 import { addNewUser } from './util'
 
+const _ = DB
 const config = {
     addNewUserOnStart: false,
 }
@@ -17,6 +19,10 @@ const config = {
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
     setGlobalRandomSeed()
+}
+
+if (process.env.FORCE_NEW_DB === 'yes') {
+    // TODO
 }
 
 if (config.addNewUserOnStart) {
