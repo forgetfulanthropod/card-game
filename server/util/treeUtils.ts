@@ -2,16 +2,18 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
-    MoveEvent,
+    NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
+import winston from 'winston'
 
-import { getIo } from '@/index'
+import { getAllUsers, setUser } from '@/database'
+import { getIo, getSocketId } from '@/index'
 
 
-export function getEntryScene(username: 'alice'): SCursor<EntryScene> {
+export function getEntryScene(username: string): SCursor<EntryScene> {
     const scene = getGameStateCursor(username).select('scene')
     // debugger
     if (scene.get('name') !== 'entry') {
@@ -21,7 +23,7 @@ export function getEntryScene(username: 'alice'): SCursor<EntryScene> {
 }
 
 export type BattleCursor = SCursor<BattleScene>
-export function getBattleScene(username: 'alice'): BattleCursor {
+export function getBattleScene(username: string): BattleCursor {
     const scene = getGameStateCursor(username).select('scene')
     if (scene.get('name') !== 'battle') {
         throw Error('getBattleScene called when not in battle scene')
@@ -29,44 +31,44 @@ export function getBattleScene(username: 'alice'): BattleCursor {
     return scene as BattleCursor
 }
 
-type EventCursor = SCursor<MoveEvent[]>
-export function getEventsCursor(username: 'alice'): EventCursor {
-    const events = getGameStateCursor(username).select('events').select('move')
 
-    return events as EventCursor
-}
-
-export function getGameStateCursor(username: 'alice'): SCursor<Gamestate> {
+export function getGameStateCursor(username: string): SCursor<Gamestate> {
     return getRootCursor().select('users').select(username)
 }
 
 interface RootTree {
-    users: {
-        alice: Gamestate
-    }
+    users: Record<string, Gamestate>
     testCounters: { counter0: number }
 }
 
-export function commit(cursor: { get: () => unknown }, customName?: string, justSub = false): void {
-    // TODO eventually: just commit Sub probably or maybe commit changes (diff)
-    logger.info('committing')
-    if (customName != null) { logger.info('committing to event name ', customName, 'and justSub is', justSub) }
-    if (justSub) {
-        getIo().emit(customName ?? 'update', cursor.get())
-        return
-    }
-    getIo().emit(customName ?? 'update', getRootCursor().select('users').select('alice').get())
+export function commit<A>(cursor: SCursor<A>, username: string): void {
+
+    const socketId = getSocketId(username)
+    const path = cursor.path as string[]
+    logger.info(`committing to user ${username} (id ${socketId})`)
+    getIo().to(socketId).emit('update', { data: cursor.get(), path: path.slice(3) })
+    void setUser(username, getGameStateCursor(username).get())
 }
+
+export function emit<_A extends string, _B>(args: { username: string; event: NetworkEvent<_A, _B> }): void {
+    getGameStateCursor(args.username).select('events').select(args.event.type).push(args.event)
+    const socketId = getSocketId(args.username)
+    getIo().to(socketId).emit(args.event.type, args.event)
+}
+
+
+// hmm if we made each user a separate tree then random functions could call .root() and not need to know the username...
 
 export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree> {
     const b = new SBaobab({
         contents: {
-            users: {
-                alice: null as unknown as Gamestate,
-
-            },
+            users: {},
             testCounters: { counter0: 0 },
         },
     })
-    return b.select('contents')
+    void getAllUsers()
+        .then(users => b.select('contents').select('users').set(users))
+        .catch(reason => winston.error('ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)))
+    const result = b.select('contents')
+    return result
 })

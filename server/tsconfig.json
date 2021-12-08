@@ -8,8 +8,12 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "skipLibCheck": true,
     "paths": {
+      "@serverActions": [
+        "./actions/types/serverActions"
+      ],
       "@shared": [
         "../shared/index"
       ],

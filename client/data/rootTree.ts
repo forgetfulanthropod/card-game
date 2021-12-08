@@ -3,7 +3,7 @@ import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
 
-import { listenForInitialGameState } from '@/connection/serverListener'
+import { waitForInitialGamestate } from '@/connection/serverListener'
 
 
 /** Global variables for file */
@@ -12,9 +12,10 @@ const state = {
 }
 
 export async function waitForGameStateToFill(): Promise<void> {
-    state.gamestate = new SBaobab(await listenForInitialGameState())
+    state.gamestate = new SBaobab(await waitForInitialGamestate())
     // @ts-expect-error for debugging:
     window.tree = state.gamestate
+    console.log('gamestate all good')
 }
 
 

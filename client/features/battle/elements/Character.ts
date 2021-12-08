@@ -2,12 +2,12 @@ import type { CharacterMeta, CharacterUid, NetworkAttackData, NetworkEvent } fro
 import type { SCursor } from 'baobab'
 import { filters, Loader } from 'pixi.js'
 
+import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
 import { Container, doFlashElement, flashElement, hideElement, PixiTicker, Sprite } from '@/elementsUtil'
 
 import type { CharacterName } from '../logic/AssetLoader'
-import type { Move$ } from './BattleScene'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
@@ -23,7 +23,6 @@ const ATTACK_ANIMATION_TIME = 1000
 
 interface CharacterProps {
     onClick: (c: CharacterUid) => void
-    move$: Move$
     scale: number
     cursor: SCursor<CharacterMeta>
     zIndex: number
@@ -101,7 +100,7 @@ export function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    args.move$.on(function doCharMove(event: NetworkEvent<'move', NetworkAttackData>) {
+    getSocket().on('move$', function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
         const { attacker, defenders, move, damageMap } = event.data
         // console.log("doCharMove of", JSON.stringify(d))
         const myId = characterMeta.uid

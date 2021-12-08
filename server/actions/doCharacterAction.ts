@@ -1,4 +1,5 @@
-import type { AttackData, DoCharacterAction } from '@shared'
+import type { DoCharacterAction } from '@serverActions'
+import type { AttackData } from '@shared'
 
 import {
     checkWinner,
@@ -19,7 +20,7 @@ const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 
 export const doCharacterAction: DoCharacterAction = async args => {
     const { uid: clickedUid } = args
-    const scene = getBattleScene('alice')
+    const scene = getBattleScene(args.username)
     const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
@@ -32,7 +33,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
         warn('not player turn')
         if (!scene.get('isPlayerTurn')) {
             await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
-            await doNpcMove('NPC has extra turns')
+            await doNpcMove('NPC has extra turns', args.username)
         }
         return
     }
@@ -47,7 +48,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
             return
         }
         scene.set('selectedCharacter', clicked.uid)
-        commit(scene)
+        commit(scene, args.username)
         return
     }
 
@@ -65,12 +66,12 @@ export const doCharacterAction: DoCharacterAction = async args => {
 
     let move = selectedMove
     if (isSpecial(move))
-        move = getTransformed(move, selectedCharacter)
+        move = getTransformed({ move, charUid: selectedCharacter, username: args.username })
 
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],
         defenders: getDefenders(clicked, move, vals(allCharacters)),
         move,
     }
-    await handleMove(scene, allCharacters, ad)
+    await handleMove({ scene, allCharacters, attackData: ad, username: args.username })
 }

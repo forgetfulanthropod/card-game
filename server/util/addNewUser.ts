@@ -1,8 +1,11 @@
+import { setUser } from '@/database'
 import { getInitialGameState } from '@/gameState/gameState'
 
 import { getRootCursor } from './treeUtils'
 
 
-export function addNewUser(args: { username: 'alice' }): void {
-    getRootCursor().select('users').select(args.username).set(getInitialGameState())
+export function addNewUser(args: { username: string }): void {
+    const gs = getInitialGameState(args.username)
+    getRootCursor().select('users').set(args.username, gs)
+    void setUser(args.username, gs)
 }

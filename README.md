@@ -1,6 +1,10 @@
 # kaiju
 kaiju
 
+1. `npm install` in root and /server
+2. Command Shift B in VSCode
+
+
 ## Directories
 
 - `.vscode`: editor configuration and build/debug tasks

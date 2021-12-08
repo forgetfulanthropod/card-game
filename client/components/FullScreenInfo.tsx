@@ -3,9 +3,7 @@ import { h, Fragment, JSX } from 'preact' // eslint-disable-line
 import styled from 'styled-components'
 import { parse } from 'marked'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import type { WorldEventData } from '@shared'
-import { getTree } from '@/data/rootTree'
-import { makeClientEventListener } from '@/util'
+import { getSocket } from '@/connection'
 
 const Modal = styled.div`
     pointer-events: auto;
@@ -53,8 +51,7 @@ interface Info { title: string, body: string, onClose: Callback }
 export function FullScreenInfo(): JSX.Element {
     const [info, setInfo] = useState<Info | null>(null)
     useEffect(() => {
-        const world$ = makeClientEventListener<'world', WorldEventData>('world', getTree().select('events').select('world'))
-        world$.on(e => setInfo({ title: e.data.title, body: e.data.body, onClose: () => setInfo(null) }))
+        getSocket().on('world$', e => setInfo({ title: e.data.title, body: e.data.body, onClose: () => setInfo(null) }))
     }, [])
     if (info == null) { return <></> }
     return <FullScreenInfo_ {...info} />

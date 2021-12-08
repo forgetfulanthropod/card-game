@@ -9,11 +9,11 @@ import { getCharacterKeysAndDamages, getCharacterKeysAndEffects } from './attack
 
 
 /** Applies hasmoved, health, and effects */
-export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData): void {
+export default function applyMove(scene: BattleCursor, lastAllChars: Record<string, CharacterMeta>, attackData: AttackData, username: string): void {
     const allChars = scene.select('allCharacters')
 
     allChars.select(attackData.attacker.uid).set('hasMoved', true)
-    getCharacterKeysAndDamages(attackData).forEach(({ key, damage }) => {
+    getCharacterKeysAndDamages(attackData, username).forEach(({ key, damage }) => {
         const newHealth = lastAllChars[key].health - damage
         allChars.select(key).set('health', newHealth)
     })
@@ -26,7 +26,7 @@ export default function applyMove(scene: BattleCursor, lastAllChars: Record<stri
     getCharacterKeysAndEffects(attackData).forEach(({ key, effect: newEffect }) =>
         allChars.select(key).apply('effects', prev => updateEffect(newEffect, prev))
     )
-    commit(scene)
+    commit(scene, username)
 }
 
 function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {

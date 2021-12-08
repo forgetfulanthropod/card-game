@@ -1,15 +1,16 @@
 
-// @index('./**/*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
+// @index('./*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
 export { addSelected } from './addSelected'
 export { changeDungeon } from './changeDungeon'
 export { changeScene } from './changeScene'
 export { chooseDoor } from './chooseDoor'
+export { claimLoot } from './claimLoot'
 export { doCharacterAction } from './doCharacterAction'
 export { exitDungeon } from './exitDungeon'
 export { getRandom } from './getRandom'
 export { hello } from './hello'
-export { incrementTestCounter } from './incrementTestCounter'
 export { makeNewUser } from './makeNewUser'
+export { maybeMakeUser } from './maybeMakeUser'
 export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
 export { selectMove } from './selectMove'

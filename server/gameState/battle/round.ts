@@ -20,22 +20,22 @@ export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
 }
 
 
-function getRandomMove(attacker: CharacterMeta): CharacterMove {
+function getRandomMove(attacker: CharacterMeta, username: string): CharacterMove {
     const moves = attacker.moves
     let move = randomEl(moves)
 
-    if (isSpecial(move)) move = getTransformed(move, attacker.uid)
+    if (isSpecial(move)) move = getTransformed({ move, charUid: attacker.uid, username })
 
     return move
 }
 
-export function getNpcMove(ac: CharacterMeta[]): AttackData {
+export function getNpcMove(ac: CharacterMeta[], username: string): AttackData {
     const attacker = getUnmovedNpc(ac)
     if (attacker == null) {
         throw Error('no unmoved NPC')
     }
 
-    const move = getRandomMove(attacker)
+    const move = getRandomMove(attacker, username)
     const defender = getPCTarget(ac)
 
     const defenders = getDefenders(defender, move, ac)

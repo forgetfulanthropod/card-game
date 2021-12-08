@@ -1,11 +1,11 @@
-import type { AddSelected } from '@shared'
+import type { AddSelected } from '@serverActions'
 
-import { commit, getEntryScene } from '@/util'
+import { getEntryScene } from '@/util'
 
 
 export const addSelected: AddSelected = (args) => {
     const c = args.character
-    const scene = getEntryScene('alice')
+    const scene = getEntryScene(args.username)
 
     const allCharacters = scene.select('selectedCharacters').get()
 
@@ -24,6 +24,5 @@ export const addSelected: AddSelected = (args) => {
             scene.apply('selectedCharacters', sel => [...sel, c])
     }
     // debugger
-    commit(scene)
 
 }
