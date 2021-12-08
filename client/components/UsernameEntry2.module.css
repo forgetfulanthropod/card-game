@@ -1,20 +1,20 @@
 @import url('//fonts.googleapis.com/css2?family=Meddon&family=Nanum+Brush+Script&family=Estonia&family=Noto+Sans+JP:wght@500&family=Permanent+Marker&display=swap');
-
 .background {
-  background: #666;
-  color: white;
-  font-family: sans-serif;
-  text-align: center;
-  background: url("https://assets.codepen.io/195953/mushroom-bg.png") no-repeat center center fixed;
-  background-size: cover;
-  width: 100%;
-  height: 100%;
-  position: absolute;
+    background: #666;
+    color: white;
+    font-family: sans-serif;
+    text-align: center;
+    background: url("https://assets.codepen.io/195953/mushroom-bg.png") no-repeat center center fixed;
+    background-size: contain;
+    width: 100%;
+    height: 100%;
+    position: absolute;
 }
 
 .kaiju {
-  width: 30%;
+    width: 30%;
 }
+
 
 /* .welcome {
   display: block;
@@ -24,82 +24,85 @@
   transform: translate(-50%,-50%);
   font-size: 3vw;
 } */
+
 .instructions {
-  display: block;
-  position: absolute;
-  top: 24%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  color: rgba(255,255,255,.6);
-  font-style: italic;
+    display: block;
+    position: absolute;
+    top: 24%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(255, 255, 255, .6);
+    font-style: italic;
 }
 
 .input {
-  position: absolute;
-  top: 33%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-
-  outline: none;
-  border:none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-
-  background: rgba(255,255,255,.3);
-  text-align: center;
-  width: 50%;
-  height: 10%;
-  border-radius: 20px;
-  font-size: 14vw;
-  padding: 60px 40px 40px 40px;
-  color: white;
-
-/*   font-family: 'Nanum Brush Script', cursive; */
-  font-family: 'Estonia', cursive;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    outline: none;
+    border: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, .3);
+    text-align: center;
+    width: 50%;
+    height: 10%;
+    border-radius: 20px;
+    font-size: 14vw;
+    padding: 60px 40px 40px 40px;
+    color: white;
+    /*   font-family: 'Nanum Brush Script', cursive; */
+    font-family: 'Estonia', cursive;
+    pointer-events: auto;
 }
 
 .enter {
-  position: absolute;
-  top: 70%;
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 2vw;
-  color: white;
-  outline: none;
-  border: none;
-  border-radius: 12px;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2vw;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 12px;
 }
 
 .enterWrapWrap {
-  position: absolute;
-  top: 98%;
-  left: 50%;
-  transform: translate(-50%, -100%);
-  width: 25%;
+    position: absolute;
+    top: 98%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: 25%;
+    transition: opacity 2s;
 }
+
 .enterWrap {
-  position: relative;
-  display: inline-block;
-  opacity: 1; /* MARK*/
-  transition: opacity 2s;
-  width: 100%;
+    position: relative;
+    display: inline-block;
+    width: 100%;
 }
+
+
 /* .enterWrap:hover {
   opacity: 1;
 } */
+
 .svgimage {
-  cursor: pointer;
+    cursor: pointer;
 }
+
 .enter {
-  font-family: "Permanent Marker";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  font-size: 5vw;
-/*   -webkit-text-stroke: 1px black; */
-  text-shadow: 2px 2px #C06D1F, -1px -1px #0a0;
-  color: white;
+    font-family: "Permanent Marker";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    font-size: 5vw;
+    /*   -webkit-text-stroke: 1px black; */
+    text-shadow: 2px 2px #C06D1F, -1px -1px #0a0;
+    color: white;
 }

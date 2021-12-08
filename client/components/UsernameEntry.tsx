@@ -1,10 +1,10 @@
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 
-import { attachServerListener as attachChangeListener } from '@/connection'
+import { attachServerListener } from '@/connection'
 import { waitForGameStateToFill } from '@/data/rootTree'
 import { start } from '@/elements/main'
 
-import App from './App'
+import GameManager from './GameManager'
 import { useState } from 'preact/hooks'
 import { maybeMakeUser } from '@/actions'
 
@@ -31,7 +31,7 @@ export default function UsernameEntry(): JSX.Element {
                 }}
             />
         </>
-    return <App username={username} />
+    return <GameManager username={username} />
 }
 
 async function fullClientStart(username: string) {
@@ -42,7 +42,7 @@ async function fullClientStart(username: string) {
     ])
     log('everything loaded up')
     log('attaching server data listener')
-    attachChangeListener()
+    attachServerListener()
     start(document.getElementById('pixi-root') as HTMLCanvasElement)
 
 }

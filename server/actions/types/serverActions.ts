@@ -9,6 +9,8 @@ import type { ChangeScene as _ChangeScene } from '@shared'
 export type ChangeScene = ServerAction<_ChangeScene>
 import type { ChooseDoor as _ChooseDoor } from '@shared'
 export type ChooseDoor = ServerAction<_ChooseDoor>
+import type { ClaimLoot as _ClaimLoot } from '@shared'
+export type ClaimLoot = ServerAction<_ClaimLoot>
 import type { DoCharacterAction as _DoCharacterAction } from '@shared'
 export type DoCharacterAction = ServerAction<_DoCharacterAction>
 import type { ExitDungeon as _ExitDungeon } from '@shared'
