@@ -7,7 +7,9 @@ import type {
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
+import winston from 'winston'
 
+import { getAllUsers, setUser } from '@/database'
 import { getIo, getSocketId } from '@/index'
 
 
@@ -45,6 +47,7 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     const path = cursor.path as string[]
     logger.info(`committing to user ${username} (id ${socketId})`)
     getIo().to(socketId).emit('update', { data: cursor.get(), path: path.slice(3) })
+    void setUser(username, getGameStateCursor(username).get())
 }
 
 export function emit<_A extends string, _B>(args: { username: string; event: NetworkEvent<_A, _B> }): void {
@@ -63,6 +66,9 @@ export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree>
             testCounters: { counter0: 0 },
         },
     })
+    void getAllUsers()
+        .then(users => b.select('contents').select('users').set(users))
+        .catch(reason => winston.error('ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)))
     const result = b.select('contents')
     return result
 })

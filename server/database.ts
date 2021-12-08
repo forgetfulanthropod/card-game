@@ -21,3 +21,7 @@ export async function readUser(username: string): Promise<Gamestate> {
 export async function hasUser(username: string): Promise<boolean> {
     return (await getRef(username).get()).exists()
 }
+
+export async function getAllUsers(): Promise<Record<string, Gamestate>> {
+    return (await db.ref('users').get()).val()
+}

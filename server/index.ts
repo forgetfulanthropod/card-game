@@ -1,4 +1,5 @@
 import './config/logger'
+import './database'
 
 import express from 'express'
 import session from 'express-session'
@@ -8,10 +9,8 @@ import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
 import { setGlobalRandomSeed } from './config/seedrand'
-import * as DB from './database'
 import { addNewUser } from './util'
 
-const _ = DB
 const config = {
     addNewUserOnStart: false,
 }
