@@ -10,15 +10,12 @@
     "eslint.options": {
         "cache": true,
     },
-    "[javascript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
     "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
         // "editor.defaultFormatter": "dbaeumer.vscode-eslint"
     },
     "[typescriptreact]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "npm.packageManager": "pnpm",
     "files.exclude": {
@@ -28,42 +25,10 @@
         "build/": true,
         "server-build/": true,
     },
-    "prettier.tabWidth": 4,
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
         "source.fixAll.eslint": true
     },
-    "formatFiles.excludedFolders": [
-        "node_modules",
-        ".vscode",
-        ".git",
-        "dist",
-        ".chrome",
-        "build",
-    ],
-    "formatFiles.excludePattern": "**/*.json",
-    "colorTabs.config": [
-        {
-            "regex": "client/.*",
-            "color": "#000088",
-            "label": "CLIENT"
-        },
-        {
-            "regex": "shared/.*",
-            "color": "#008800",
-            "label": "SHARED"
-        },
-        {
-            "regex": "server/.*",
-            "color": "#880000",
-            "label": "SERVER"
-        },
-    ],
-    "colorTabs.statusBarBackground": true,
-    "colorTabs.tabBorder": true,
-    "colorTabs.titleBackground": true,
-    "colorTabs.activityBarBackground": false,
-    "colorTabs.titleLabel": true,
     "eslint.packageManager": "pnpm",
     "workbench.colorCustomizations": {
         "activityBar.background": "#1C3314",
@@ -85,4 +50,5 @@
     "searchEverywhere.shouldUseDebounce": false,
     "searchEverywhere.shouldInitOnStartup": true,
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
+    "prettier.configPath": ".prettierrc.json",
 }
