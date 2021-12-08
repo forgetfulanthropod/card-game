@@ -8,6 +8,7 @@
         "watch": "npm run build -- watch",
         "tsc": "tsc",
         "tsc-watch": "tsc -w",
+        "depgraph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg",
         "test": "testyts"
     },
     "dependencies": {
