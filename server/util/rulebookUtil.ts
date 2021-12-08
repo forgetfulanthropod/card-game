@@ -5,23 +5,26 @@ import { homedir } from 'os'
 
 import { getRulebook } from '@/rulebook'
 
-import { commit, getRootCursor } from './treeUtils'
+import { commit, getGameStateCursor } from '.'
+import { getRootCursor } from './treeUtils'
 
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
 const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+$/, '')
 
-export function updateRulebookNames(): void {
-    const cursor = getRootCursor().select('users').select('alice').select('rulebooks')
-    cursor.set(getRulebookNames())
-    commit(cursor)
-}
-
-export function updateClientRulebook(): void {
-    const cursor = getRootCursor().select('users').select('alice').select('curRulebook')
-    cursor.set(stringifyRulebook(getRulebook()))
-    commit(cursor)
+export function updateClientRulebookData(username: string): void {
+    // Q: Update all users or just one?
+    const rulebookNames = getRulebookNames()
+    const curRulebook = stringifyRulebook(getRulebook())
+    const users = getRootCursor().select('users')
+    const usernames = Object.keys(users.get())
+    for (const username of usernames) {
+        const user = users.select(username)
+        user.select('rulebooks').set(rulebookNames)
+        user.select('curRulebook').set(curRulebook)
+    }
+    commit(getGameStateCursor(username), username)
 }
 
 export function getRulebookNames(): Gamestate['rulebooks'] {

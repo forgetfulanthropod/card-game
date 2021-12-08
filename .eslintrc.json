@@ -128,6 +128,15 @@
             "rules": {
                 "react/no-unused-prop-types": "warn",
                 "react/jsx-props-no-multi-spaces": "warn",
+                "react/no-unknown-property": [
+                    "warn",
+                    {
+                        "ignore": [
+                            "class",
+                            "clip-path"
+                        ]
+                    }
+                ],
                 "react/jsx-tag-spacing": [
                     "warn",
                     {

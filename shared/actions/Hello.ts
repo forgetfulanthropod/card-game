@@ -1,1 +1,1 @@
-export type Hello = () => 'hello'
+export type Hello = () => string

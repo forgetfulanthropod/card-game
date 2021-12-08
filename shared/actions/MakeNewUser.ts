@@ -1,1 +1,1 @@
-export type MakeNewUser = (args: { username: 'alice' }) => void
+export type MakeNewUser = (args: { username: string }) => void

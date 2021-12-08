@@ -1,8 +1,7 @@
-import type { ClaimLoot } from '@shared'
-
-import { commit, getGameStateCursor, getRootCursor } from '@/util'
-
+import type { ClaimLoot } from '@serverActions'
 import axios from 'axios'
+
+import { commit, getGameStateCursor } from '@/util'
 
 const microService = 'http://localhost:3001/ft'
 
@@ -13,7 +12,7 @@ export const claimLoot: ClaimLoot = async (args) => {
     const cursor = getGameStateCursor('alice')
     // reset to 0.
 
-    const coin = cursor.select("coin")
+    const coin = cursor.select('coin')
     const curCoin = coin.get()
 
     coin.set(0)
@@ -23,7 +22,7 @@ export const claimLoot: ClaimLoot = async (args) => {
     try {
         await axios.post(microService, {
             amount: curCoin,
-            toAddress: args.walletAddress
+            toAddress: args.walletAddress,
         })
     } catch (e) {
         logger.error(`Microservice error: ${JSON.stringify(e)}`)
@@ -31,5 +30,5 @@ export const claimLoot: ClaimLoot = async (args) => {
     }
 
 
-    commit(getRootCursor())
+    commit(getGameStateCursor(args.username), args.username)
 }
