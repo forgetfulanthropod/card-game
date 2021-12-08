@@ -15,7 +15,7 @@ global.logger = winston.createLogger({
         winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.json(),
-        winston.format.printf(info => `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`)
+        winston.format.printf((info: winston.Logform.TransformableInfo) => `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`)
     ),
     transports: [
         new winston.transports.Console(),

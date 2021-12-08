@@ -1,4 +1,5 @@
 import './config/logger'
+import './database'
 
 import express from 'express'
 import session from 'express-session'
@@ -17,6 +18,10 @@ const config = {
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
     setGlobalRandomSeed()
+}
+
+if (process.env.FORCE_NEW_DB === 'yes') {
+    // TODO
 }
 
 if (config.addNewUserOnStart) {
