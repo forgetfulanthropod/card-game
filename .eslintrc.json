@@ -21,10 +21,6 @@
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
         // auto-fixable stuff for formatter:
-        "quotes": [
-            "warn",
-            "single"
-        ],
         "no-unused-expressions": "warn",
         "consistent-return": "warn",
         "no-useless-return": "warn",
@@ -62,39 +58,9 @@
         ],
         "simple-import-sort/imports": "error",
         // "simple-import-sort/exports": "error",
-        "no-multiple-empty-lines": "warn",
-        "padding-line-between-statements": [
-            "warn",
-            {
-                "blankLine": "always",
-                "prev": "*",
-                "next": "function"
-            }
-            // ,{ "blankLine": "always", "prev": "*", "next": "export" }
-        ],
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
-        "@typescript-eslint/no-floating-promises": "error",
-        "array-bracket-newline": [
-            "warn",
-            {
-                "multiline": true
-            }
-        ],
-        "array-element-newline": [
-            "warn",
-            "consistent"
-        ],
-        "comma-dangle": [
-            "warn",
-            {
-                "arrays": "always-multiline",
-                "objects": "always-multiline",
-                "imports": "always-multiline",
-                "exports": "always-multiline",
-                "functions": "only-multiline"
-            }
-        ]
+        "@typescript-eslint/no-floating-promises": "error"
     },
     "ignorePatterns": [
         "scripts/",
@@ -103,7 +69,6 @@
         "tests",
         "**/*.js"
     ],
-    // ,"overrides": [ { "files": [ "client/**/*.ts", "client/**/*.tsx", "client/**/*.d.ts", "shared/**/*.ts", "functions/**/*.ts" ] } ]
     "overrides": [
         {
             "files": [
@@ -127,7 +92,6 @@
             },
             "rules": {
                 "react/no-unused-prop-types": "warn",
-                "react/jsx-props-no-multi-spaces": "warn",
                 "react/no-unknown-property": [
                     "warn",
                     {
@@ -137,24 +101,8 @@
                         ]
                     }
                 ],
-                "react/jsx-tag-spacing": [
-                    "warn",
-                    {
-                        "beforeClosing": "never"
-                    }
-                ],
-                "react-hooks/rules-of-hooks": [
-                    "error"
-                    // ,{
-                    //     "additionalHooks": "(useEventEmitter|useSubscription|useEffectWhen)"
-                    // }
-                ],
-                "react-hooks/exhaustive-deps": [
-                    "warn"
-                    // ,{
-                    //     "additionalHooks": "(useEffectWhen)"
-                    // }
-                ],
+                "react-hooks/rules-of-hooks": "error",
+                "react-hooks/exhaustive-deps": "warn",
                 "react/react-in-jsx-scope": "off"
             },
             "settings": {
