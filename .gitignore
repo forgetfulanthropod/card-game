@@ -19,3 +19,4 @@ pnpm-lock.yaml
 
 /kaiju-micro/node_modules
 /kaiju-micro/package-lock.json
+/kaiju-micro/build.js
