@@ -118,6 +118,14 @@
             "parserOptions": {
                 "project": "./server/tsconfig.json"
             }
+        },
+        {
+            "files": [
+                "kaiju-micro/**/*.ts"
+            ],
+            "parserOptions": {
+                "project": "./kaiju-micro/tsconfig.json"
+            }
         }
     ]
 }
