@@ -149,7 +149,3 @@ function getAvailableChars(scene: EntryScene, tree: Gamestate) {
 function flip(probTrue: number): boolean {
     return Math.random() < probTrue
 }
-
-const sleep = (ms: number) => {
-    return new Promise(resolve => setTimeout(resolve, ms))
-}

@@ -21,7 +21,8 @@ export default function WalletAddress(): JSX.Element {
             <button
                 onClick={async () => {
                     tl('attempting to claim loot...')
-                    const res = await claimLoot({ walletAddress: ref.current!.value })
+                    if (ref.current?.value == null) throw Error('null address')
+                    const res = await claimLoot({ walletAddress: ref.current?.value })
                     tl(jss`server wallet response: ${res}`)
                 }}
             >
