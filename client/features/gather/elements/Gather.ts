@@ -1,3 +1,5 @@
+import { clamp, sample } from 'lodash'
+
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { Container, PixiTexture, Sprite } from '@/elementsUtil'
 
@@ -5,7 +7,7 @@ export function Gather(): PixiContainer {
     const makeSquare = () =>
         makeDraggable(
             Sprite({
-                src: PixiTexture.WHITE,
+                src: sample([PixiTexture.WHITE]),
                 // onClick: () => alert('clicked'),
                 width: 300,
                 height: 500,
@@ -18,10 +20,13 @@ export function Gather(): PixiContainer {
     })
 }
 
-function makeDraggable(sprite: PixiSprite): PixiSprite {
+function makeDraggable(sprite: PixiSprite, margin = 10): PixiSprite {
     let offX = 0
     let offY = 0
     let dragging = false
+    // const { width, height } = getAppSize()
+    // console.log({ width, height })
+    const [width, height] = [1920, 1080]
 
     sprite.interactive = true
     sprite.on('pointerdown', e => {
@@ -31,8 +36,8 @@ function makeDraggable(sprite: PixiSprite): PixiSprite {
     })
     sprite.on('pointermove', e => {
         if (dragging) {
-            sprite.x = e.data.global.x - offX
-            sprite.y = e.data.global.y - offY
+            sprite.x = clamp(e.data.global.x - offX, margin - sprite.width, width - margin)
+            sprite.y = clamp(e.data.global.y - offY, margin - sprite.height, height - margin)
         }
     })
     sprite.on('pointerup', () => {
