@@ -16,7 +16,7 @@ const Root = styled.button`
     left: 1%;
 `
 
-export function AutoPlay(_props: Empty): JSX.Element {
+export function AutoPlay(): JSX.Element {
     const [running, setRunning] = useState(false)
     const [runner] = useState(() => new Runner())
     return (
