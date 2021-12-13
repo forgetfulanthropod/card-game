@@ -1,4 +1,4 @@
-import { clamp, sample } from 'lodash'
+import { clamp } from 'lodash'
 
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { Container, PixiTexture, Sprite } from '@/elementsUtil'
@@ -7,7 +7,7 @@ export function Gather(): PixiContainer {
     const makeSquare = () =>
         makeDraggable(
             Sprite({
-                src: sample([PixiTexture.WHITE]),
+                src: PixiTexture.WHITE,
                 // onClick: () => alert('clicked'),
                 width: 300,
                 height: 500,

@@ -11,7 +11,8 @@ export function addSpineCharacter(app: PixiApplication): void {
 
     app.stage.interactive = true
 
-    function onAssetsLoaded(loader: PixiLoader, res) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    function onAssetsLoaded(loader: PixiLoader, res: any) {
         // create a spine boy
         const spineBoyPro = new Spine(res.spineboypro.spineData)
 
