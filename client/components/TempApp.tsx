@@ -1,5 +1,6 @@
 import { Box, Button, ChakraProvider, Heading, SimpleGrid } from '@chakra-ui/react'
-import { Fragment, h, JSX, render } from 'preact' // eslint-disable-line
+import type { JSX } from 'preact'
+import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import SpawnPage from '@/features/spawn/components/SpawnPage'
@@ -13,7 +14,7 @@ const nameToPage = {
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('MenuPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('SpawnPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
