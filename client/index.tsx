@@ -1,6 +1,6 @@
 import './global.css'
 
-import { render } from 'preact' // eslint-disable-line
+import { h, JSX, render } from 'preact' // eslint-disable-line
 
 import { TempApp } from './components/TempApp'
 
@@ -17,4 +17,4 @@ import { TempApp } from './components/TempApp'
         },
     })
 ) */
-render(TempApp(), document.getElementById('preact-root') as HTMLDivElement)
+render(<TempApp />, document.getElementById('preact-root') as HTMLDivElement)

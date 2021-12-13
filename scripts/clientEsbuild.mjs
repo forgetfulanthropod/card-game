@@ -50,8 +50,9 @@ function build() {
             define: makeSubstitutions(),
             watch: shouldWatch && {
                 onRebuild(_error, result) {
-                    result.stop()
-                    build()
+                    console.log(`${time()}: rebuild succeeded`)
+                    // result.stop()
+                    // build()
                 }
             },
             plugins: [

@@ -148,8 +148,8 @@ async function overwriteRulebook(ref: MonacoRef, name: string, username: string)
 }
 
 function Selector(props: { options: string[]; onChoice: (s: string) => void; value: string }): JSX.Element {
-    // @ts-expect-error
     return (
+        // @ts-ignore-error
         <select value={props.value} onChange={e => props.onChoice(e?.target?.value)}>
             {props.options.map(o => (
                 <option key={o} value={o}>
