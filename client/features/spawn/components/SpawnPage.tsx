@@ -1,4 +1,4 @@
-import { Heading, Image, Radio, RadioGroup, Stack } from '@chakra-ui/react'
+import { Button, Heading, Image, Radio, RadioGroup, Stack, Text } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
@@ -11,18 +11,25 @@ import penguinKnight from '@/features/battle/assets/cards/PenguinKnight-200.png'
 import snacky from '@/features/battle/assets/cards/Snacky-200.png'
 
 export default function SpawnPage(props: PageProps): JSX.Element {
+    const choice1 = State(useState('_'))
+    const choice2 = State(useState('_'))
     return (
         <>
             <Heading>Spawn page</Heading>
             <PageHeader setPage={props.setPage} />
-            <RadioExample />
+            <RadioExample {...choice1} />
+            <RadioExample {...choice2} />
+            <Text>
+                Spawn the combination of a {choice1.val} and {choice2.val}?
+            </Text>
+            <Button>Spawn!</Button>
         </>
     )
 }
-function RadioExample() {
-    const [value, setValue] = useState('1')
+
+function RadioExample(props: { val: string; set: (s: string) => void }) {
     return (
-        <RadioGroup onChange={setValue} value={value}>
+        <RadioGroup onChange={props.set} value={props.val}>
             <Stack direction="row">
                 <Radio value="mimic">
                     <Image width={'50px'} src={mimic} />
@@ -39,4 +46,9 @@ function RadioExample() {
             </Stack>
         </RadioGroup>
     )
+}
+
+function State<T>(pair: [T, (t: T) => void]) {
+    const [val, set] = pair
+    return { val, set }
 }
