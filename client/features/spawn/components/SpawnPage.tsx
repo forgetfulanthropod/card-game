@@ -10,6 +10,17 @@ import mushroomFarmer from '@/features/battle/assets/cards/Mushroom_Farmer2-200.
 import penguinKnight from '@/features/battle/assets/cards/PenguinKnight-200.png'
 import snacky from '@/features/battle/assets/cards/Snacky-200.png'
 
+import ChakraTable from './ChakraTable'
+
+const tableData = [
+    ['stat', 'character 1', 'character 2', 'expected combo'],
+    ['glass', 47, 35, 61],
+    ['cook', 58, 88, 98],
+    ['rock', 85, 21, 38],
+    ['widely', 61, 14, 14],
+    ['bit', 68, 13, 30],
+]
+
 export default function SpawnPage(props: PageProps): JSX.Element {
     const choice1 = State(useState('_'))
     const choice2 = State(useState('_'))
@@ -22,7 +33,8 @@ export default function SpawnPage(props: PageProps): JSX.Element {
             <Text>
                 Spawn the combination of a {choice1.val} and {choice2.val}?
             </Text>
-            <Button>Spawn!</Button>
+            <ChakraTable data={tableData} />
+            <Button onClick={() => alert('spawn button not implemented')}>Spawn!</Button>
         </>
     )
 }
