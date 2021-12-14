@@ -39,16 +39,16 @@ function MenuPage(props: PageProps) {
             <Heading>Kaiju Cards Wireframes!</Heading>
             <PageHeader setPage={props.setPage} />
             <SimpleGrid columns={2} spacing={10} margin={'20px'}>
-                <MyButton text={'battle'} />
-                <MyButton text={'craft'} />
-                <MyButton text={'spawn'} onClick={() => props.setPage('SpawnPage')} />
-                <MyButton text={'gather idle'} />
-                <MyButton text={'gather minigame'} />
-                <MyButton text={'marketplace'} />
-                <MyButton text={'skill tree'} />
-                <MyButton text={'refining'} />
-                <MyButton text={'lending'} />
-                <MyButton text={'wallet tools'} />
+                <MyButton text={'battle ❌'} />
+                <MyButton text={'craft ❌'} />
+                <MyButton text={'spawn ✔️'} onClick={() => props.setPage('SpawnPage')} />
+                <MyButton text={'gather idle ❌'} />
+                <MyButton text={'gather minigame ᠁'} />
+                <MyButton text={'marketplace ❌'} />
+                <MyButton text={'skill tree ❌'} />
+                <MyButton text={'refining ❌'} />
+                <MyButton text={'lending ❌'} />
+                <MyButton text={'wallet tools ❌'} />
             </SimpleGrid>
         </>
     )
