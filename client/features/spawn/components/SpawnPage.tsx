@@ -34,7 +34,7 @@ export default function SpawnPage(props: PageProps): JSX.Element {
                 Spawn the combination of a {choice1.val} and {choice2.val}?
             </Text>
             <ChakraTable data={tableData} />
-            <Button onClick={() => alert('spawn button not implemented')}>Spawn!</Button>
+            <Button onClick={() => alert('spawn button not implemented')}>Spawn?</Button>
         </>
     )
 }
