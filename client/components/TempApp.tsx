@@ -3,6 +3,7 @@ import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
+import GatherGamePage from '@/features/gather/components/GatherGamePage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
 type ValidPage = keyof typeof nameToPage
@@ -11,10 +12,11 @@ export type PageProps = { setPage: (c: ValidPage) => void }
 const nameToPage = {
     MenuPage,
     SpawnPage,
+    GatherGamePage,
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('SpawnPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('GatherGamePage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
@@ -43,7 +45,7 @@ function MenuPage(props: PageProps) {
                 <MyButton text={'craft ❌'} />
                 <MyButton text={'spawn ✔️'} onClick={() => props.setPage('SpawnPage')} />
                 <MyButton text={'gather idle ❌'} />
-                <MyButton text={'gather minigame ᠁'} />
+                <MyButton text={'gather minigames ᠁'} onClick={() => props.setPage('GatherGamePage')} />
                 <MyButton text={'marketplace ❌'} />
                 <MyButton text={'skill tree ❌'} />
                 <MyButton text={'refining ❌'} />
