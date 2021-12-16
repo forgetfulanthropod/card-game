@@ -2,14 +2,14 @@ import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { range } from 'lodash'
 import { h } from 'preact'
 
-export default function ChakraTable(props: { data: (string | number)[][] }): JSX.Element {
+export default function ChakraTable(props: { data: (string | number | JSX.Element)[][] }): JSX.Element {
     return (
         <Table variant="simple">
             {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
             <Thead>
                 <Tr>
                     {props.data[0].map(s => (
-                        <Th key={s}>{s}</Th>
+                        <Th key={s.toString()}>{s}</Th>
                     ))}
                 </Tr>
             </Thead>
@@ -17,7 +17,7 @@ export default function ChakraTable(props: { data: (string | number)[][] }): JSX
                 {range(1, props.data.length).map(i => (
                     <Tr key={i}>
                         {props.data[i].map(s => (
-                            <Td key={s}>{s}</Td>
+                            <Td key={s.toString()}>{s}</Td>
                         ))}
                     </Tr>
                 ))}

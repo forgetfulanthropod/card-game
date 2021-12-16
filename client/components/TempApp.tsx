@@ -4,6 +4,7 @@ import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import GatherGamePage from '@/features/gather/components/GatherGamePage'
+import MarketplacePage from '@/features/marketplace/MarketplacePage'
 import OverworldPage from '@/features/overworld/components/OverworldPage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
@@ -15,10 +16,11 @@ const nameToPage = {
     SpawnPage,
     GatherGamePage,
     OverworldPage,
+    MarketplacePage,
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('OverworldPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('MarketplacePage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
@@ -48,12 +50,12 @@ function MenuPage(props: PageProps) {
                 <MyButton text={'spawn ✔️'} onClick={() => props.setPage('SpawnPage')} />
                 <MyButton text={'gather idle ❌'} />
                 <MyButton text={'gather minigames ᠁'} onClick={() => props.setPage('GatherGamePage')} />
-                <MyButton text={'marketplace ❌'} />
+                <MyButton text={'marketplace ᠁'} onClick={() => props.setPage('MarketplacePage')} />
                 <MyButton text={'skill tree ❌'} />
                 <MyButton text={'refining ❌'} />
                 <MyButton text={'lending ❌'} />
                 <MyButton text={'wallet tools ❌'} />
-                <MyButton text={'overworld ᠁'} onClick={() => props.setPage('OverworldPage')} />
+                <MyButton text={'overworld ✔️'} onClick={() => props.setPage('OverworldPage')} />
             </SimpleGrid>
         </>
     )
