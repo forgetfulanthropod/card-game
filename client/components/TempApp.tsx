@@ -6,6 +6,7 @@ import { useState } from 'preact/hooks'
 import GatherGamePage from '@/features/gather/components/GatherGamePage'
 import MarketplacePage from '@/features/marketplace/MarketplacePage'
 import OverworldPage from '@/features/overworld/components/OverworldPage'
+import SkilltreePage from '@/features/skilltree/SkilltreePage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
 type ValidPage = keyof typeof nameToPage
@@ -17,10 +18,11 @@ const nameToPage = {
     GatherGamePage,
     OverworldPage,
     MarketplacePage,
+    SkilltreePage,
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('MarketplacePage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('MenuPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
@@ -50,8 +52,8 @@ function MenuPage(props: PageProps) {
                 <MyButton text={'spawn ✔️'} onClick={() => props.setPage('SpawnPage')} />
                 <MyButton text={'gather idle ❌'} />
                 <MyButton text={'gather minigames ᠁'} onClick={() => props.setPage('GatherGamePage')} />
-                <MyButton text={'marketplace ᠁'} onClick={() => props.setPage('MarketplacePage')} />
-                <MyButton text={'skill tree ❌'} />
+                <MyButton text={'marketplace ✔️'} onClick={() => props.setPage('MarketplacePage')} />
+                <MyButton text={'skill tree ᠁'} onClick={() => props.setPage('SkilltreePage')} />
                 <MyButton text={'refining ❌'} />
                 <MyButton text={'lending ❌'} />
                 <MyButton text={'wallet tools ❌'} />

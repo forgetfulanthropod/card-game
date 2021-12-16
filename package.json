@@ -23,6 +23,7 @@
         "@emotion/styled": "^11",
         "@monaco-editor/react": "^4.3.1",
         "baobab": "github:qpwo/baobab#more-detailed-types",
+        "beautiful-skill-tree": "^1.7.1",
         "deep-diff": "^1.0.2",
         "esbuild": "^0.13.4",
         "esbuild-css-modules-plugin": "^2.0.9",
