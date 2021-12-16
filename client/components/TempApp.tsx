@@ -4,6 +4,7 @@ import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import GatherGamePage from '@/features/gather/components/GatherGamePage'
+import OverworldPage from '@/features/overworld/components/OverworldPage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
 type ValidPage = keyof typeof nameToPage
@@ -13,10 +14,11 @@ const nameToPage = {
     MenuPage,
     SpawnPage,
     GatherGamePage,
+    OverworldPage,
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('GatherGamePage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('OverworldPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
@@ -51,6 +53,7 @@ function MenuPage(props: PageProps) {
                 <MyButton text={'refining ❌'} />
                 <MyButton text={'lending ❌'} />
                 <MyButton text={'wallet tools ❌'} />
+                <MyButton text={'overworld ᠁'} onClick={() => props.setPage('OverworldPage')} />
             </SimpleGrid>
         </>
     )
