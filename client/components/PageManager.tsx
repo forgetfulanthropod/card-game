@@ -24,7 +24,7 @@ const nameToPage = {
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('MenuPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('OverworldPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
@@ -34,5 +34,3 @@ export function TempApp(): JSX.Element {
         </ChakraProvider>
     )
 }
-
-

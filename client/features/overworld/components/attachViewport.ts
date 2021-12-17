@@ -1,3 +1,4 @@
+import { range } from 'lodash'
 import { Viewport } from 'pixi-viewport'
 
 import { Application, Sprite } from '@/elementsUtil'
@@ -21,6 +22,16 @@ export function attachViewport(props: { canvas: HTMLCanvasElement }): void {
 
     // add the viewport to the stage
     app.stage.addChild(viewport)
+    const arrows = range(4).map(i => {
+        console.log('adding sprite at angle', 90 * i)
+        return Sprite({
+            src: arrowPng,
+            angle: 90 * i,
+        })
+    })
+    for (const a of arrows) {
+        app.stage.addChild(a)
+    }
 
     // activate plugins
     viewport.drag().pinch().wheel().decelerate()
