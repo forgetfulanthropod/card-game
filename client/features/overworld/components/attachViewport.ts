@@ -3,6 +3,8 @@ import { Viewport } from 'pixi-viewport'
 import { Application, Sprite } from '@/elementsUtil'
 
 import mapPng from '../assets/map.png'
+import arrowPng from '../assets/worn-arrow.png'
+
 export function attachViewport(props: { canvas: HTMLCanvasElement }): void {
     console.log('attempting to attach viewport')
     const app = Application({ canvas: props.canvas, children: [] })
