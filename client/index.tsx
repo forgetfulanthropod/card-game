@@ -2,7 +2,7 @@ import './global.css'
 
 import { h, JSX, render } from 'preact' // eslint-disable-line
 
-import { TempApp } from './components/TempApp'
+import { TempApp } from './components/PageManager'
 
 // import { Application } from './elementsUtil'
 // import { Gather } from './features/gather'

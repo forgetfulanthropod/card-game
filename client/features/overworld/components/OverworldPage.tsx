@@ -2,8 +2,8 @@ import { Heading, Text } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 
-import type { PageProps } from '@/components/TempApp'
-import { PageHeader } from '@/components/TempApp'
+import { PageHeader } from '@/components/PageHeader'
+import type { PageProps } from '@/components/PageManager'
 
 import { attachViewport } from './attachViewport'
 export default function OverworldPage(props: PageProps): JSX.Element {

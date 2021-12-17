@@ -7,7 +7,7 @@ export default function MySkilltree(): JSX.Element {
     return (
         <SkillProvider>
             <SkillTreeGroup>
-                {({ skillCount }) => (
+                {({ skillCount: _skillCount }) => (
                     <SkillTree
                         treeId="first-tree"
                         title="Skill Tree"

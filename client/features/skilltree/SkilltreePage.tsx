@@ -2,8 +2,8 @@ import { Box, Heading, Text } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { h } from 'preact'
 
-import type { PageProps } from '@/components/TempApp'
-import { PageHeader } from '@/components/TempApp'
+import { PageHeader } from '@/components/PageHeader'
+import type { PageProps } from '@/components/PageManager'
 
 import MySkilltree from './MySkilltree'
 
