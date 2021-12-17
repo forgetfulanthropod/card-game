@@ -15,7 +15,8 @@
         "CI": "npm run clean && pnpm i --production && npm run build && cd server && pnpm i --production && npm run build",
         "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
         "arkit": "npx arkit",
-        "clean-branches": "git branch -D $(git branch | grep -v 'main') && git fetch && git pull && git remote prune origin"
+        "clean-branches": "git branch -D $(git branch | grep -v 'main') && git fetch && git pull && git remote prune origin",
+        "live-serve": "live-server build"
     },
     "dependencies": {
         "@chakra-ui/react": "^1.7.3",
