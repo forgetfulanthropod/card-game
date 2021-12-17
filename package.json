@@ -16,7 +16,7 @@
         "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
         "arkit": "npx arkit",
         "clean-branches": "git branch -D $(git branch | grep -v 'main') && git fetch && git pull && git remote prune origin",
-        "live-serve": "live-server build"
+        "live-serve": "live-server build --host=localhost --port=3000"
     },
     "dependencies": {
         "@chakra-ui/react": "^1.7.3",
