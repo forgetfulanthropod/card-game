@@ -156,7 +156,6 @@ function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiG
     }
 
     if (args.angle != null) {
-        console.log('Sprite is setting angle to', args.angle)
         x.angle = args.angle
     }
 }
