@@ -4,13 +4,15 @@
 // List of items in minecraft - http://minecraft-ids.grahamedgecombe.com/
 // List of recipes in minecraft -   https://www.minecraftcraftingguide.net/
 
+import './style.css'
+
 import { range } from 'lodash'
 import { h } from 'preact'
 
 import { pairs } from './data'
 import { addItemToInventory, selectCraftTable, selectInventoryItem } from './mc'
 
-export default function mcComponent(): JSX.Element {
+export default function Minecrafter(): JSX.Element {
     return (
         <div id="screen">
             <h1>Crafting Table</h1>
