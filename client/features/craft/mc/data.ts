@@ -51,6 +51,19 @@ const _CLOCK = 347
 
 export type Recipe = [string, number, [number, number, number, number, number, number, number, number, number]]
 
+export const pairs: [string, number][] = [
+    ['Cobblestone', 4],
+    ['Wood', 17],
+    ['Iron', 265],
+    ['Gold', 266],
+    ['Diamond', 264],
+    ['Red', 331],
+    ['String', 287],
+    ['Feather', 288],
+    ['Flint', 318],
+    ['Coal', 263],
+]
+
 export const recipes: Recipe[] = [
     ['Wood Planks', WOOD_PLANK, [0, 0, 0, 0, WOOD, 0, 0, 0, 0]],
     ['Stick', STICK, [0, 0, 0, 0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0]],
