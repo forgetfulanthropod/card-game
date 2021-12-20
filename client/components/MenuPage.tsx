@@ -11,7 +11,7 @@ export function MenuPage(props: PageProps): JSX.Element {
             <PageHeader setPage={props.setPage} />
             <SimpleGrid columns={2} spacing={10} margin={'20px'}>
                 <MyButton text={'battle ❌'} />
-                <MyButton text={'craft ❌'} />
+                <MyButton text={'craft ᠁'} onClick={() => props.setPage('CraftPage')} />
                 <MyButton text={'spawn ✔️'} onClick={() => props.setPage('SpawnPage')} />
                 <MyButton text={'gather idle ❌'} />
                 <MyButton text={'gather minigames ᠁'} onClick={() => props.setPage('GatherGamePage')} />

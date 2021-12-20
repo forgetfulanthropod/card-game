@@ -10,6 +10,7 @@ import SkilltreePage from '@/features/skilltree/SkilltreePage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
 import { MenuPage } from './MenuPage'
+import CraftPage from '@/features/craft/components/CraftPage'
 
 export type ValidPage = keyof typeof nameToPage
 export type PageProps = { setPage: (c: ValidPage) => void }
@@ -21,10 +22,11 @@ const nameToPage = {
     OverworldPage,
     MarketplacePage,
     SkilltreePage,
+    CraftPage,
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('OverworldPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('CraftPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
