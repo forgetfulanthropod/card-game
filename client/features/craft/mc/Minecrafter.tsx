@@ -10,7 +10,7 @@ import { range } from 'lodash'
 import { h } from 'preact'
 
 import { pairs } from './data'
-import { addItemToInventory, selectCraftTable, selectInventoryItem } from './mc'
+import { addItemToInventory, selectCraftTable, selectInventoryItem } from './minecrafting'
 
 export default function Minecrafter(): JSX.Element {
     return (
