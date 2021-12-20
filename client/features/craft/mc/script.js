@@ -83,57 +83,58 @@ var selectedCell
 var selectedIngredient = 0
 var newItem = 0
 
-var recipes = []
-recipes.push(['Wood Planks', WOOD_PLANK, [0, 0, 0, 0, WOOD, 0, 0, 0, 0]])
-recipes.push(['Stick', STICK, [0, 0, 0, 0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0]])
-recipes.push(['Bow', BOW, [STRING, STICK, 0, STRING, 0, STICK, STRING, STICK, 0]])
-recipes.push(['Arrow', ARROW, [0, FLINT, 0, 0, STICK, 0, 0, FEATHER, 0]])
-recipes.push(['Torch', TORCH, [0, 0, 0, 0, COAL, 0, 0, STICK, 0]])
-recipes.push(['Redstone Torch', REDSTONETORCH, [0, 0, 0, 0, REDSTONE, 0, 0, STICK, 0]])
-recipes.push([
-    'Redstone Block',
-    REDSTONE_BLOCK,
-    [REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE],
-])
-recipes.push([
-    'Chest',
-    CHEST,
-    [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK],
-])
-recipes.push(['Crafting Table', CRAFTING_TABLE, [0, 0, 0, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, 0]])
-recipes.push([
-    'Furnace',
-    FURNACE,
-    [COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE],
-])
-recipes.push(['Bucket', BUCKET, [0, 0, 0, IRON_INGOT, 0, IRON_INGOT, 0, IRON_INGOT, 0]])
-recipes.push(['Flint and Steel', FLINT_AND_STEEL, [0, 0, 0, IRON_INGOT, 0, 0, 0, FLINT, 0]])
-recipes.push(['Wooden Axe', WOODEN_AXE, [WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, STICK, 0, 0, STICK, 0]])
-recipes.push(['Stone Axe', STONE_AXE, [COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, STICK, 0, 0, STICK, 0]])
-recipes.push(['Iron Axe', IRON_AXE, [IRON_INGOT, IRON_INGOT, 0, IRON_INGOT, STICK, 0, 0, STICK, 0]])
-recipes.push(['Diamond Axe', DIAMOND_AXE, [DIAMOND, DIAMOND, 0, DIAMOND, STICK, 0, 0, STICK, 0]])
-recipes.push(['Golden Axe', GOLDEN_AXE, [GOLD, GOLD, 0, GOLD, STICK, 0, 0, STICK, 0]])
-recipes.push(['Wooden Hoe', WOODEN_HOE, [WOOD_PLANK, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Stone Hoe', STONE_HOE, [COBBLESTONE, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Iron Hoe', IRON_HOE, [IRON_INGOT, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Diamond Hoe', DIAMOND_HOE, [DIAMOND, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Golden Hoe', GOLDEN_HOE, [GOLD, GOLD, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Wooden Pickaxe', WOODEN_PICKAXE, [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Stone Pickaxe', STONE_PICKAXE, [COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Iron Pickaxe', IRON_PICKAXE, [IRON_INGOT, IRON_INGOT, IRON_INGOT, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Diamond Pickaxe', DIAMOND_PICKAXE, [DIAMOND, DIAMOND, DIAMOND, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Golden Pickaxe', GOLDEN_PICKAXE, [GOLD, GOLD, GOLD, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Wooden Shovel', WOODEN_SHOVEL, [0, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Stone Shovel', STONE_SHOVEL, [0, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Iron Shovel', IRON_SHOVEL, [0, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Diamond Shovel', DIAMOND_SHOVEL, [0, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Golden Shovel', GOLDEN_SHOVEL, [0, GOLD, 0, 0, STICK, 0, 0, STICK, 0]])
-recipes.push(['Wooden Sword', WOODEN_SWORD, [0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0, 0, STICK, 0]])
-recipes.push(['Stone Sword', STONE_SWORD, [0, COBBLESTONE, 0, 0, COBBLESTONE, 0, 0, STICK, 0]])
-recipes.push(['Iron Sword', IRON_SWORD, [0, IRON_INGOT, 0, 0, IRON_INGOT, 0, 0, STICK, 0]])
-recipes.push(['Diamond Sword', DIAMOND_SWORD, [0, DIAMOND, 0, 0, DIAMOND, 0, 0, STICK, 0]])
-recipes.push(['Golden Sword', GOLDEN_SWORD, [0, GOLD, 0, 0, GOLD, 0, 0, STICK, 0]])
-recipes.push(['Fishing Rod', FISHING_ROD, [0, 0, STICK, 0, STICK, STRING, STICK, 0, STRING]])
+const recipes = [
+    ['Wood Planks', WOOD_PLANK, [0, 0, 0, 0, WOOD, 0, 0, 0, 0]],
+    ['Stick', STICK, [0, 0, 0, 0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0]],
+    ['Bow', BOW, [STRING, STICK, 0, STRING, 0, STICK, STRING, STICK, 0]],
+    ['Arrow', ARROW, [0, FLINT, 0, 0, STICK, 0, 0, FEATHER, 0]],
+    ['Torch', TORCH, [0, 0, 0, 0, COAL, 0, 0, STICK, 0]],
+    ['Redstone Torch', REDSTONETORCH, [0, 0, 0, 0, REDSTONE, 0, 0, STICK, 0]],
+    [
+        'Redstone Block',
+        REDSTONE_BLOCK,
+        [REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE],
+    ],
+    [
+        'Chest',
+        CHEST,
+        [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK],
+    ],
+    ['Crafting Table', CRAFTING_TABLE, [0, 0, 0, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, 0]],
+    [
+        'Furnace',
+        FURNACE,
+        [COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE],
+    ],
+    ['Bucket', BUCKET, [0, 0, 0, IRON_INGOT, 0, IRON_INGOT, 0, IRON_INGOT, 0]],
+    ['Flint and Steel', FLINT_AND_STEEL, [0, 0, 0, IRON_INGOT, 0, 0, 0, FLINT, 0]],
+    ['Wooden Axe', WOODEN_AXE, [WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, STICK, 0, 0, STICK, 0]],
+    ['Stone Axe', STONE_AXE, [COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, STICK, 0, 0, STICK, 0]],
+    ['Iron Axe', IRON_AXE, [IRON_INGOT, IRON_INGOT, 0, IRON_INGOT, STICK, 0, 0, STICK, 0]],
+    ['Diamond Axe', DIAMOND_AXE, [DIAMOND, DIAMOND, 0, DIAMOND, STICK, 0, 0, STICK, 0]],
+    ['Golden Axe', GOLDEN_AXE, [GOLD, GOLD, 0, GOLD, STICK, 0, 0, STICK, 0]],
+    ['Wooden Hoe', WOODEN_HOE, [WOOD_PLANK, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Stone Hoe', STONE_HOE, [COBBLESTONE, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Iron Hoe', IRON_HOE, [IRON_INGOT, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Diamond Hoe', DIAMOND_HOE, [DIAMOND, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Golden Hoe', GOLDEN_HOE, [GOLD, GOLD, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Wooden Pickaxe', WOODEN_PICKAXE, [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, STICK, 0, 0, STICK, 0]],
+    ['Stone Pickaxe', STONE_PICKAXE, [COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, STICK, 0, 0, STICK, 0]],
+    ['Iron Pickaxe', IRON_PICKAXE, [IRON_INGOT, IRON_INGOT, IRON_INGOT, 0, STICK, 0, 0, STICK, 0]],
+    ['Diamond Pickaxe', DIAMOND_PICKAXE, [DIAMOND, DIAMOND, DIAMOND, 0, STICK, 0, 0, STICK, 0]],
+    ['Golden Pickaxe', GOLDEN_PICKAXE, [GOLD, GOLD, GOLD, 0, STICK, 0, 0, STICK, 0]],
+    ['Wooden Shovel', WOODEN_SHOVEL, [0, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Stone Shovel', STONE_SHOVEL, [0, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Iron Shovel', IRON_SHOVEL, [0, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Diamond Shovel', DIAMOND_SHOVEL, [0, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Golden Shovel', GOLDEN_SHOVEL, [0, GOLD, 0, 0, STICK, 0, 0, STICK, 0]],
+    ['Wooden Sword', WOODEN_SWORD, [0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0, 0, STICK, 0]],
+    ['Stone Sword', STONE_SWORD, [0, COBBLESTONE, 0, 0, COBBLESTONE, 0, 0, STICK, 0]],
+    ['Iron Sword', IRON_SWORD, [0, IRON_INGOT, 0, 0, IRON_INGOT, 0, 0, STICK, 0]],
+    ['Diamond Sword', DIAMOND_SWORD, [0, DIAMOND, 0, 0, DIAMOND, 0, 0, STICK, 0]],
+    ['Golden Sword', GOLDEN_SWORD, [0, GOLD, 0, 0, GOLD, 0, 0, STICK, 0]],
+    ['Fishing Rod', FISHING_ROD, [0, 0, STICK, 0, STICK, STRING, STICK, 0, STRING]],
+]
 
 //Add newly crafted item to the inventory (if it's not already there)
 function addItemToInventory() {
