@@ -44,44 +44,6 @@ export default function Minecrafter(): JSX.Element {
                     <div class="gridCell" key={i} onClick={() => selectInventoryItem(i)} id={`inventory-${i}`}></div>
                 ))}
             </div>
-            <h1>
-                <br />
-                Recipes
-            </h1>
-            <div id="recipes">
-                <p>Wooden Planks:</p>
-                <img src="http://www.101computing.net/mc/recipe-wood-plank.png" />
-                <p>Sticks:</p>
-                <img src="http://www.101computing.net/mc/recipe-stick.png" />
-                <p>Chest:</p>
-                <img src="http://www.101computing.net/mc/recipe-chest.png" />
-                <p>Crafting Table:</p>
-                <img src="http://www.101computing.net/mc/recipe-crafting-table.png" />
-                <p>Furnace:</p>
-                <img src="http://www.101computing.net/mc/recipe-furnace.png" />
-                <p>Flint and Steel:</p>
-                <img src="http://www.101computing.net/mc/recipe-flint-and-steel.png" />
-                <p>Redstone Block:</p>
-                <img src="http://www.101computing.net/mc/recipe-redstone-block.png" />
-                <p>Swords:</p>
-                <img src="http://www.101computing.net/mc/recipe-swords.gif" />
-                <p>Fishing Rod:</p>
-                <img src="http://www.101computing.net/mc/recipe-fishing-rod.png" />
-                <p>Bow:</p>
-                <img src="http://www.101computing.net/mc/recipe-bow.png" />
-                <p>Arrows:</p>
-                <img src="http://www.101computing.net/mc/recipe-arrow.png" />
-                <p>Bucket:</p>
-                <img src="http://www.101computing.net/mc/recipe-bucket.png" />
-                <p>Hoes:</p>
-                <img src="http://www.101computing.net/mc/recipe-hoes.gif" />
-                <p>Axes:</p>
-                <img src="http://www.101computing.net/mc/recipe-axes.gif" />
-                <p>Pickaxes:</p>
-                <img src="http://www.101computing.net/mc/recipe-pickaxes.gif" />
-                <p>Shovels:</p>
-                <img src="http://www.101computing.net/mc/recipe-shovels.gif" />
-            </div>
         </div>
     )
 }
