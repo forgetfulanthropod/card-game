@@ -45,10 +45,13 @@ const GOLDEN_HOE = 294
 const FLINT = 318
 const BUCKET = 325
 const REDSTONE = 331
-const COMPASS = 345
+const _COMPASS = 345
 const FISHING_ROD = 346
-const CLOCK = 347
-export const recipes = [
+const _CLOCK = 347
+
+export type Recipe = [string, number, [number, number, number, number, number, number, number, number, number]]
+
+export const recipes: Recipe[] = [
     ['Wood Planks', WOOD_PLANK, [0, 0, 0, 0, WOOD, 0, 0, 0, 0]],
     ['Stick', STICK, [0, 0, 0, 0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0]],
     ['Bow', BOW, [STRING, STICK, 0, STRING, 0, STICK, STRING, STICK, 0]],
