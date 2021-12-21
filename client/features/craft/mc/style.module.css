@@ -1,23 +1,30 @@
-body {
+.css-full-reset {
+    all: revert;
+}
+
+.css-full-reset * {
+    all: revert;
+}
+
+.screen {
     background-color: #c6c6c6;
     margin: 10px;
     color: #404040;
-}
 
-#screen {
     min-width: 450px;
+    padding: 40px;
     overflow-x: scroll;
 }
 
-H1 {
+.h1 {
     clear: both;
 }
 
-#crafting-table {
+.crafting-table {
     margin-top: 10px;
 }
 
-#grid {
+.grid {
     float: left;
     margin-bottom: 16px;
 }
@@ -40,17 +47,19 @@ H1 {
     float: left;
 }
 
-#grid .gridCell:nth-child(3n + 1) {
-    clear: left;
-}
-#inventory .gridCell:nth-child(9n + 1) {
+.grid .gridCell:nth-child(3n + 1) {
     clear: left;
 }
 
-.gridCell IMG {
+.inventory .gridCell:nth-child(9n + 1) {
+    clear: left;
+}
+
+.gridCell img {
     padding: 2px;
 }
-#result {
+
+.result {
     float: left;
     text-align: center;
     padding-top: 8px;
@@ -64,12 +73,12 @@ H1 {
     height: 132px;
 }
 
-#recipes IMG {
+.recipes img {
     float: left;
     clear: both;
 }
 
-#recipes P {
+.recipes p {
     display: block;
     font-weight: bold;
     clear: both;

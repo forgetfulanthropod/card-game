@@ -4,14 +4,13 @@
 // List of items in minecraft - http://minecraft-ids.grahamedgecombe.com/
 // List of recipes in minecraft -   https://www.minecraftcraftingguide.net/
 
-import './style.css'
-
 import { range } from 'lodash'
 import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import { pairs } from './data'
 import { clickTableCell, doCraft } from './minecrafting'
+import s from './style.module.css'
 
 export type PSetter<T> = (cb: T | ((old: T) => T)) => void
 
@@ -28,46 +27,52 @@ export default function Minecrafter(): JSX.Element {
     const [selected, setSelected] = useState(inventory[0])
     const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
     return (
-        <div id="screen">
-            <h1>Crafting Table</h1>
-            <div id="grid">
-                {range(9).map(i => (
-                    <div class="gridCell" onClick={() => clickTableCell(i, selected, setCraftTable, setResult)} key={i}>
-                        <img src={imageOf(craftTable[i])} />
-                    </div>
-                ))}
-            </div>
-            <div class="arrow">{'➔'}</div>
-            <div id="result" onClick={() => doCraft(result?.[1] ?? 0, inventory, setInventory)}>
-                {result != null && (
-                    <>
-                        <img src={imageOf(result[1])} />
-                        <br />
-                        {result[0]}
-                        <br />
-                        Click on this item to add it to your inventory.
-                    </>
-                )}
-            </div>
-
-            <h1>Inventory</h1>
-            <p>{instructions}</p>
-            <div id="inventory">
-                {range(27).map(i =>
-                    inventory[i] === 0 ? (
-                        <div class="gridCell" key={i}></div>
-                    ) : (
+        <div class={s['cssFullReset']}>
+            <div class={s['screen']}>
+                <h1>Crafting Table</h1>
+                <div class={s['grid']}>
+                    {range(9).map(i => (
                         <div
-                            class="gridCell"
-                            onClick={() => setSelected(inventory[i])}
-                            style={{ backgroundColor: selected === inventory[i] ? '#88FF88' : '#8b8b8b' }}
+                            class={s['gridCell']}
+                            onClick={() => clickTableCell(i, selected, setCraftTable, setResult)}
                             key={i}
                         >
-                            <img src={imageOf(inventory[i])} />
-                            {/* alt={alt} */}
+                            <img src={imageOf(craftTable[i])} />
                         </div>
-                    )
-                )}
+                    ))}
+                </div>
+                <div class={s['arrow']}>{'➔'}</div>
+                <div class={s['result']} onClick={() => doCraft(result?.[1] ?? 0, inventory, setInventory)}>
+                    {result != null && (
+                        <>
+                            <img src={imageOf(result[1])} />
+                            <br />
+                            {result[0]}
+                            <br />
+                            Click on this item to add it to your inventory.
+                        </>
+                    )}
+                </div>
+
+                <h1>Inventory</h1>
+                <p>{instructions}</p>
+                <div class={s['inventory']}>
+                    {range(27).map(i =>
+                        inventory[i] === 0 ? (
+                            <div class={s['gridCell']} key={i}></div>
+                        ) : (
+                            <div
+                                class={s['gridCell']}
+                                onClick={() => setSelected(inventory[i])}
+                                style={{ backgroundColor: selected === inventory[i] ? '#88FF88' : '#8b8b8b' }}
+                                key={i}
+                            >
+                                <img src={imageOf(inventory[i])} />
+                                {/* alt={alt} */}
+                            </div>
+                        )
+                    )}
+                </div>
             </div>
         </div>
     )
