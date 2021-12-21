@@ -69,31 +69,29 @@ function Result(props: { result: [string, number] | null; inventory: number[]; s
     )
 }
 
-function Inventory(props: { inventory: number[]; setSelected: PSet<number>; selected: number }): JSX.Element {
-    return (
-        <>
-            <h1>Inventory</h1>
-            <p>{instructions}</p>
-            <div class={s.inventory}>
-                {range(27).map(i =>
-                    props.inventory[i] === 0 ? (
-                        <div class={s.gridCell} key={i}></div>
-                    ) : (
-                        <div
-                            class={s.gridCell}
-                            onClick={() => props.setSelected(props.inventory[i])}
-                            style={{ backgroundColor: props.selected === props.inventory[i] ? '#88FF88' : '#8b8b8b' }}
-                            key={i}
-                        >
-                            <img src={imageOf(props.inventory[i])} />
-                            {/* alt={alt} */}
-                        </div>
-                    )
-                )}
-            </div>
-        </>
-    )
-}
+const Inventory = (props: { inventory: number[]; setSelected: PSet<number>; selected: number }): JSX.Element => (
+    <>
+        <h1>Inventory</h1>
+        <p>{instructions}</p>
+        <div class={s.inventory}>
+            {range(27).map(i =>
+                props.inventory[i] === 0 ? (
+                    <div class={s.gridCell} key={i}></div>
+                ) : (
+                    <div
+                        class={s.gridCell}
+                        onClick={() => props.setSelected(props.inventory[i])}
+                        style={{ backgroundColor: props.selected === props.inventory[i] ? '#88FF88' : '#8b8b8b' }}
+                        key={i}
+                    >
+                        <img src={imageOf(props.inventory[i])} />
+                        {/* alt={alt} */}
+                    </div>
+                )
+            )}
+        </div>
+    </>
+)
 
 function imageOf(id: number): string {
     return `http://www.101computing.net/mc/${id}-0.png`
