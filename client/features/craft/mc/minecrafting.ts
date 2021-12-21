@@ -1,99 +1,71 @@
-import type { Recipe } from './data'
-import { initialInventory, recipes } from './data'
+import { isEqual } from 'lodash'
 
-export const nothing = null
+import { initialInventory, recipes } from './data'
+import type { PSetter } from './Minecrafter'
 
 const inventory = initialInventory.slice()
 const craftTable = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-let selectedCell: HTMLElement
 let selectedIngredient = 0
 let newItem = 0
 
-//Add newly crafted item to the inventory (if it's not already there)
-export function addItemToInventory(): void {
-    let inventoryIsFull = true
-    if (newItem !== 0) {
-        //First check if this item is not already in the inventory
-        if (inventory.indexOf(newItem) === -1) {
-            //Then find an empty location in the inventory
-            for (let i = 0; i < inventory.length; i++) {
-                if (inventory[i] === 0) {
-                    //Empty location spotted. Add item to the inventory
-                    inventoryIsFull = false
-                    inventory[i] = newItem
-                    const elm = document.getElementById('inventory-' + i)
-                    if (elm == null) {
-                        throw Error('null elm')
-                    }
-                    elm.innerHTML = "<IMG src='http://www.101computing.net/mc/" + +newItem + "-0.png'>"
-                    break
-                }
-            }
-            if (inventoryIsFull) alert('Inventory is full!')
-        } else {
-            alert('This item is already in your inventory!')
-        }
+//@ts-ignore
+window.inventory = inventory
+//@ts-ignore
+window.selectedIngredient = selectedIngredient
+
+//@ts-ignore
+window.craftTable = craftTable
+
+/** Add newly crafted item to the inventory (if it's not already there) */
+export function addItemToInventory(uiInventory: number[], setInventory: PSetter<number[]>): void {
+    if (newItem === 0) return
+    if (uiInventory.indexOf(newItem) !== -1) {
+        alert('This item is already in your inventory!')
+        return
     }
+    const i = uiInventory.indexOf(0)
+    if (i === -1) {
+        alert('Inventory is full!')
+        return
+    }
+    setInventory(inv => {
+        const A = inv.slice()
+        A[i] = newItem
+        return A
+    })
+    uiInventory[i] = newItem
+    inventory[i] = newItem
 }
 
-//A function to compare a recipe with the content of the craft table
-function checkRecipe(recipe: Recipe[2]) {
-    let match = true
-    for (let i = 0; i < 9; i++) {
-        if (recipe[i] !== craftTable[i]) {
-            match = false
-            break
-        }
+/** compare the craft table with all recipes to see if an item can be crafted */
+function craft(setResult: PSetter<null | [string, number]>) {
+    const i = recipes.findIndex(recipe => isEqual(recipe[2], craftTable))
+    // debugger
+    if (i === -1) {
+        setResult(null)
+        return
     }
-    return match
+    newItem = recipes[i][1]
+    setResult([recipes[i][0], recipes[i][1]])
 }
 
-//A function to compare the craft table with all recipes to see if an item can be crafted
-function craft() {
-    //Check each recipe one at a time
-    const elm = document.getElementById('result')
-    if (elm == null) throw Error('null elm')
-    elm.innerHTML = ''
-    newItem = 0
-    for (let i = 0; i < recipes.length; i++) {
-        if (checkRecipe(recipes[i][2])) {
-            newItem = recipes[i][1]
-            //Craft the new item!
-            elm.innerHTML =
-                "<IMG src='http://www.101computing.net/mc/" +
-                +recipes[i][1] +
-                "-0.png'><br/>" +
-                recipes[i][0] +
-                '<BR/>Click on this item to add it to your inventory.'
-            break
-        }
-    }
-}
-
-//Highlight inventory item when user click on it
-export function selectInventoryItem(cell_ID: number): void {
-    if (selectedCell) {
-        selectedCell.style.backgroundColor = '#8b8b8b'
-    }
-    const elm = document.getElementById('inventory-' + cell_ID)
-    if (elm == null) throw Error('null elm')
-    selectedCell = elm
-    selectedCell.style.backgroundColor = '#88FF88'
+/** Highlight inventory item when user click on it */
+export function selectInventoryItem(cell_ID: number, setSelected: PSetter<number>): void {
+    setSelected(cell_ID)
     selectedIngredient = inventory[cell_ID]
 }
 
-//Replace ingredient on craft table when the user click on one of the 9 cells of the craft table
-export function selectCraftTable(cell_ID: number): void {
-    const craftTableCell = document.getElementById('craftTable-' + cell_ID)
-    if (craftTableCell == null) throw Error('null elm')
-    if (craftTableCell.innerHTML === '') {
-        if (selectedCell) {
-            craftTableCell.innerHTML = selectedCell.innerHTML
-            craftTable[cell_ID] = selectedIngredient
-        }
-    } else {
-        craftTableCell.innerHTML = ''
-        craftTable[cell_ID] = 0
-    }
-    craft()
+/** Replace ingredient on craft table when the user click on one of the 9 cells of the craft table */
+export function selectCraftTable(
+    cell_ID: number,
+    setCraftTable: PSetter<number[]>,
+    setResult: PSetter<null | [string, number]>
+): void {
+    setCraftTable(ct => {
+        const A = ct.slice()
+        A[cell_ID] = A[cell_ID] === 0 ? selectedIngredient : 0
+        return A
+    })
+    craftTable[cell_ID] = selectedIngredient
+    craft(setResult)
 }

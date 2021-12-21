@@ -7,43 +7,71 @@
 import './style.css'
 
 import { range } from 'lodash'
-import { h } from 'preact'
+import { Fragment, h } from 'preact'
+import { useState } from 'preact/hooks'
 
 import { pairs } from './data'
 import { addItemToInventory, selectCraftTable, selectInventoryItem } from './minecrafting'
 
+export type PSetter<T> = (cb: T | ((old: T) => T)) => void
+
 export default function Minecrafter(): JSX.Element {
+    const [inventory, setInventory] = useState(() => {
+        const A = range(27).map(() => 0)
+        pairs.forEach(([_, x], i) => (A[i] = x))
+        return A
+    })
+    const [result, setResult] = useState<null | [string, number]>(null)
+    const [selected, setSelected] = useState(-1)
+    const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
     return (
         <div id="screen">
             <h1>Crafting Table</h1>
             <div id="grid">
                 {range(9).map(i => (
-                    <div class="gridCell" onClick={() => selectCraftTable(i)} id={`craftTable-${i}`} key={i}></div>
-                ))}
-            </div>
-            <div class="arrow">&#10132;</div>
-            <div id="result" onClick={() => addItemToInventory()}></div>
-
-            <h1>Inventory</h1>
-            <p>
-                Click on an ingredient from your inventory, then click on a cell of your crafting table to place this
-                ingredient.
-            </p>
-            <div id="inventory">
-                {pairs.map(([alt, id], index) => (
-                    <div
-                        class="gridCell"
-                        onClick={() => selectInventoryItem(index)}
-                        id={`inventory-${index}`}
-                        key={index}
-                    >
-                        <img src={`http://www.101computing.net/mc/${id}-0.png`} alt={alt} />
+                    <div class="gridCell" onClick={() => selectCraftTable(i, setCraftTable, setResult)} key={i}>
+                        <img src={imageOf(craftTable[i])} />
                     </div>
                 ))}
-                {range(10, 27).map(i => (
-                    <div class="gridCell" key={i} onClick={() => selectInventoryItem(i)} id={`inventory-${i}`}></div>
-                ))}
+            </div>
+            <div class="arrow">{'➔'}</div>
+            <div id="result" onClick={() => addItemToInventory(inventory, setInventory)}>
+                {result != null && (
+                    <>
+                        <img src={imageOf(result[1])} />
+                        <br />
+                        {result[0]}
+                        <br />
+                        Click on this item to add it to your inventory.
+                    </>
+                )}
+            </div>
+
+            <h1>Inventory</h1>
+            <p>{instructions}</p>
+            <div id="inventory">
+                {range(27).map(i =>
+                    inventory[i] === 0 ? (
+                        <div class="gridCell" key={i}></div>
+                    ) : (
+                        <div
+                            class="gridCell"
+                            onClick={() => selectInventoryItem(i, setSelected)}
+                            style={{ backgroundColor: selected === i ? '#88FF88' : '#8b8b8b' }}
+                            key={i}
+                        >
+                            <img src={imageOf(inventory[i])} />
+                            {/* alt={alt} */}
+                        </div>
+                    )
+                )}
             </div>
         </div>
     )
+}
+
+const instructions =
+    'Click on an ingredient from your inventory, then click on a cell of your crafting table to place this ingredient.'
+function imageOf(id: number): string {
+    return `http://www.101computing.net/mc/${id}-0.png`
 }
