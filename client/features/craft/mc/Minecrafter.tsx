@@ -17,26 +17,32 @@ export type PSetter<T> = (cb: T | ((old: T) => T)) => void
 const instructions =
     'Click on an ingredient from your inventory, then click on a cell of your crafting table to place this ingredient.'
 
+function CraftingTable(props: { selected: number; setResult: PSetter<[string, number] | null> }) {
+    const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
+    return (
+        <div class={s.grid}>
+            {range(9).map(i => (
+                <div
+                    class={s.gridCell}
+                    onClick={() => clickTableCell(i, props.selected, setCraftTable, props.setResult)}
+                    key={i}
+                >
+                    <img src={imageOf(craftTable[i])} />
+                </div>
+            ))}
+        </div>
+    )
+}
+
 export default function Minecrafter(): JSX.Element {
     const [inventory, setInventory] = useState(initialInventory)
     const [result, setResult] = useState<null | [string, number]>(null)
     const [selected, setSelected] = useState(inventory[0])
-    const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
     return (
         <div class={s.cssFullReset}>
             <div class={s.screen}>
                 <h1>Crafting Table</h1>
-                <div class={s.grid}>
-                    {range(9).map(i => (
-                        <div
-                            class={s.gridCell}
-                            onClick={() => clickTableCell(i, selected, setCraftTable, setResult)}
-                            key={i}
-                        >
-                            <img src={imageOf(craftTable[i])} />
-                        </div>
-                    ))}
-                </div>
+                <CraftingTable setResult={setResult} selected={selected} />
                 <div class={s.arrow}>{'➔'}</div>
                 <div class={s.result} onClick={() => doCraft(result?.[1] ?? 0, inventory, setInventory)}>
                     {result != null && (
