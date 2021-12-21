@@ -11,7 +11,7 @@ import { Fragment, h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import { pairs } from './data'
-import { addItemToInventory, selectCraftTable, selectInventoryItem } from './minecrafting'
+import { addItemToInventory, selectCraftTable } from './minecrafting'
 
 export type PSetter<T> = (cb: T | ((old: T) => T)) => void
 
@@ -22,20 +22,24 @@ export default function Minecrafter(): JSX.Element {
         return A
     })
     const [result, setResult] = useState<null | [string, number]>(null)
-    const [selected, setSelected] = useState(-1)
+    const [selected, setSelected] = useState(inventory[0])
     const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
     return (
         <div id="screen">
             <h1>Crafting Table</h1>
             <div id="grid">
                 {range(9).map(i => (
-                    <div class="gridCell" onClick={() => selectCraftTable(i, setCraftTable, setResult)} key={i}>
+                    <div
+                        class="gridCell"
+                        onClick={() => selectCraftTable(craftTable, i, selected, setCraftTable, setResult)}
+                        key={i}
+                    >
                         <img src={imageOf(craftTable[i])} />
                     </div>
                 ))}
             </div>
             <div class="arrow">{'➔'}</div>
-            <div id="result" onClick={() => addItemToInventory(inventory, setInventory)}>
+            <div id="result" onClick={() => addItemToInventory(result?.[1] ?? 0, inventory, setInventory)}>
                 {result != null && (
                     <>
                         <img src={imageOf(result[1])} />
@@ -56,8 +60,8 @@ export default function Minecrafter(): JSX.Element {
                     ) : (
                         <div
                             class="gridCell"
-                            onClick={() => selectInventoryItem(i, setSelected)}
-                            style={{ backgroundColor: selected === i ? '#88FF88' : '#8b8b8b' }}
+                            onClick={() => setSelected(inventory[i])}
+                            style={{ backgroundColor: selected === inventory[i] ? '#88FF88' : '#8b8b8b' }}
                             key={i}
                         >
                             <img src={imageOf(inventory[i])} />
