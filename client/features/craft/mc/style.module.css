@@ -1,8 +1,8 @@
-.css-full-reset {
+.cssFullReset {
     all: revert;
 }
 
-.css-full-reset * {
+.cssFullReset * {
     all: revert;
 }
 
