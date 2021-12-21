@@ -12,6 +12,7 @@ export function MenuPage(props: PageProps): JSX.Element {
             <Heading>Kaiju Cards Wireframes!</Heading>
             <PageHeader setPage={props.setPage} />
             <SimpleGrid columns={2} spacing={10} margin={'20px'}>
+                <MyButton text={'Character Details'} onClick={() => props.setPage('CharacterDetailPage')} />
                 <MyButton text={'QUESTS ᠁'} onClick={() => props.setPage('QuestsPage')} />
                 <MyButton text={'battle ❌'} />
                 <MyButton text={'craft ✔️'} onClick={() => props.setPage('CraftPage')} />
