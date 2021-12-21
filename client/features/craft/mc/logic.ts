@@ -1,9 +1,9 @@
 import { isEqual } from 'lodash'
 
 import { recipes } from './data'
-import type { PSetter } from './Minecrafter'
+import type { PSet } from './Minecrafter'
 
-export function doCraft(newItem: number, inventory: readonly number[], setInventory: PSetter<number[]>): void {
+export function doCraft(newItem: number, inventory: readonly number[], setInventory: PSet<number[]>): void {
     if (newItem === 0) return
     if (inventory.includes(newItem)) return
     const emptySlot = inventory.indexOf(0)
@@ -19,8 +19,8 @@ export function doCraft(newItem: number, inventory: readonly number[], setInvent
 export function clickTableCell(
     cellIndex: number,
     selectedIngredient: number,
-    setCraftTable: PSetter<number[]>,
-    setResult: PSetter<null | [string, number]>
+    setCraftTable: PSet<number[]>,
+    setResult: PSet<null | [string, number]>
 ): void {
     setCraftTable(ct => {
         const A = ct.slice()
@@ -30,7 +30,7 @@ export function clickTableCell(
     })
 }
 
-function findRecipe(craftTable: readonly number[], setResult: PSetter<null | [string, number]>) {
+function findRecipe(craftTable: readonly number[], setResult: PSet<null | [string, number]>) {
     const i = recipes.findIndex(recipe => isEqual(recipe[2], craftTable))
     setResult(i === -1 ? null : [recipes[i][0], recipes[i][1]])
 }

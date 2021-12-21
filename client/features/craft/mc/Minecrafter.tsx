@@ -12,27 +12,10 @@ import { initialInventory } from './data'
 import { clickTableCell, doCraft } from './logic'
 import s from './style.module.css'
 
-export type PSetter<T> = (cb: T | ((old: T) => T)) => void
+export type PSet<T> = (cb: T | ((old: T) => T)) => void
 
 const instructions =
     'Click on an ingredient from your inventory, then click on a cell of your crafting table to place this ingredient.'
-
-function CraftingTable(props: { selected: number; setResult: PSetter<[string, number] | null> }) {
-    const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
-    return (
-        <div class={s.grid}>
-            {range(9).map(i => (
-                <div
-                    class={s.gridCell}
-                    onClick={() => clickTableCell(i, props.selected, setCraftTable, props.setResult)}
-                    key={i}
-                >
-                    <img src={imageOf(craftTable[i])} />
-                </div>
-            ))}
-        </div>
-    )
-}
 
 export default function Minecrafter(): JSX.Element {
     const [inventory, setInventory] = useState(initialInventory)
@@ -41,42 +24,74 @@ export default function Minecrafter(): JSX.Element {
     return (
         <div class={s.cssFullReset}>
             <div class={s.screen}>
-                <h1>Crafting Table</h1>
                 <CraftingTable setResult={setResult} selected={selected} />
                 <div class={s.arrow}>{'➔'}</div>
-                <div class={s.result} onClick={() => doCraft(result?.[1] ?? 0, inventory, setInventory)}>
-                    {result != null && (
-                        <>
-                            <img src={imageOf(result[1])} />
-                            <br />
-                            {result[0]}
-                            <br />
-                            Click on this item to add it to your inventory.
-                        </>
-                    )}
-                </div>
-
-                <h1>Inventory</h1>
-                <p>{instructions}</p>
-                <div class={s.inventory}>
-                    {range(27).map(i =>
-                        inventory[i] === 0 ? (
-                            <div class={s.gridCell} key={i}></div>
-                        ) : (
-                            <div
-                                class={s.gridCell}
-                                onClick={() => setSelected(inventory[i])}
-                                style={{ backgroundColor: selected === inventory[i] ? '#88FF88' : '#8b8b8b' }}
-                                key={i}
-                            >
-                                <img src={imageOf(inventory[i])} />
-                                {/* alt={alt} */}
-                            </div>
-                        )
-                    )}
-                </div>
+                <Result {...{ result, inventory, setInventory }} />
+                <Inventory {...{ inventory, setSelected, selected }} />
             </div>
         </div>
+    )
+}
+
+function CraftingTable(props: { selected: number; setResult: PSet<[string, number] | null> }) {
+    const [craftTable, setCraftTable] = useState(range(9).map(() => 0))
+    return (
+        <>
+            <h1>Crafting Table</h1>
+            <div class={s.grid}>
+                {range(9).map(i => (
+                    <div
+                        class={s.gridCell}
+                        onClick={() => clickTableCell(i, props.selected, setCraftTable, props.setResult)}
+                        key={i}
+                    >
+                        <img src={imageOf(craftTable[i])} />
+                    </div>
+                ))}
+            </div>
+        </>
+    )
+}
+
+function Result(props: { result: [string, number] | null; inventory: number[]; setInventory: PSet<number[]> }) {
+    return (
+        <div class={s.result} onClick={() => doCraft(props.result?.[1] ?? 0, props.inventory, props.setInventory)}>
+            {props.result != null && (
+                <>
+                    <img src={imageOf(props.result[1])} />
+                    <br />
+                    {props.result[0]}
+                    <br />
+                    Click on this item to add it to your inventory.
+                </>
+            )}
+        </div>
+    )
+}
+
+function Inventory(props: { inventory: number[]; setSelected: PSet<number>; selected: number }): JSX.Element {
+    return (
+        <>
+            <h1>Inventory</h1>
+            <p>{instructions}</p>
+            <div class={s.inventory}>
+                {range(27).map(i =>
+                    props.inventory[i] === 0 ? (
+                        <div class={s.gridCell} key={i}></div>
+                    ) : (
+                        <div
+                            class={s.gridCell}
+                            onClick={() => props.setSelected(props.inventory[i])}
+                            style={{ backgroundColor: props.selected === props.inventory[i] ? '#88FF88' : '#8b8b8b' }}
+                            key={i}
+                        >
+                            <img src={imageOf(props.inventory[i])} />
+                            {/* alt={alt} */}
+                        </div>
+                    )
+                )}
+            </div>
+        </>
     )
 }
 
