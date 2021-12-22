@@ -1,20 +1,81 @@
-import { Box, Heading, Image, Text } from '@chakra-ui/react'
+import { Grid, GridItem, Image, SimpleGrid, Text } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { h } from 'preact'
 
-import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
+import characterSrc from '@/features/battle/assets/cards/PenguinKnight-200.png'
 
-import { ChainLightning, Dispel, MagicMirrorV2 } from '../assets/Wizard'
+import {
+    ChainLightning,
+    Dispel,
+    MagicalBarrier,
+    MagicalStorm,
+    MagicMirrorV2,
+    MagicMissile,
+    MysticalStrength,
+    OrbofLightning,
+    PonderOrb,
+    ScatterBrained,
+    SpellBook,
+} from '../assets/Wizard'
+
+const imageSrcs = [
+    ChainLightning,
+    Dispel,
+    MagicMirrorV2,
+    MagicMissile,
+    MagicalBarrier,
+    MagicalStorm,
+    MysticalStrength,
+    OrbofLightning,
+    PonderOrb,
+    ScatterBrained,
+    SpellBook,
+]
+
 export default function CharacterDetailPage(props: PageProps): JSX.Element {
+    // const [order, setOrder] = useState(imageSrcs)
     return (
-        <Box overflowY={'scroll'} position="fixed" top={0} left={0} right={0} bottom={0}>
-            <Heading>Marketplace Character Details</Heading>
+        <Grid
+            templateColumns="repeat(4, 1fr)"
+            columns={3}
+            overflowY={'scroll'}
+            position="fixed"
+            top={0}
+            left={0}
+            right={0}
+            bottom={0}
+            bg="black"
+            color="white"
+            fontSize="3rem"
+        >
+            {/* <Heading>Marketplace Character Details</Heading>
             <PageHeader setPage={props.setPage} />
-            <Text>Character details go here</Text>
-            <Image src={ChainLightning} />
-            <Image src={Dispel} />
-            <Image src={MagicMirrorV2} />
-        </Box>
+            <Text>Character details go here</Text> */}
+            {/* <VStack spacing="-80%" marginTop="50%"> */}
+            <GridItem colSpan={[4, 4, 1]}>
+                <Text>Battle</Text>
+                <SimpleGrid columns={2} spacing={1}>
+                    {imageSrcs.map(src => (
+                        <Image width={200} key={src} src={src} />
+                    ))}
+                </SimpleGrid>
+            </GridItem>
+            <GridItem colSpan={[4, 4, 2]}>
+                <Text>My FUnkYY Penguin</Text>
+                <Image width={'100%'} src={characterSrc} />
+            </GridItem>
+            <GridItem colSpan={[4, 4, 1]}>
+                <Text>Gather / Craft</Text>
+            </GridItem>
+            {/* <Box w={['100vw', '50vw', '50vw']}>
+                <Image width={200} src={characterSrc} />
+            </Box> */}
+            {/* <SimpleGrid columns={2} spacing={10} w={['100vw', '50vw', '25vw']}>
+                {imageSrcs.map(src => (
+                    <Image width={200} key={src} src={src} />
+                ))}
+            </SimpleGrid> */}
+        </Grid>
     )
 }
