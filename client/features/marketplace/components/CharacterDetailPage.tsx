@@ -1,4 +1,5 @@
 import { Box, Circle, Grid, GridItem, Heading, Image, SimpleGrid, Text } from '@chakra-ui/react'
+import { useMediaQuery } from '@chakra-ui/react'
 import { random } from 'lodash'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
@@ -38,6 +39,24 @@ const icons = ['👍', '🎉', '💪', '🏃‍♀️', '🧠', '👀', '🍀']
 
 export default function CharacterDetailPage(props: PageProps): JSX.Element {
     // const [order, setOrder] = useState(imageSrcs)
+    const [isLarge] = useMediaQuery('(min-width: 62em)')
+
+    const cards = (
+        <GridItem colSpan={[4, 4, 4, 1]}>
+            <Text>Battle</Text>
+            <SimpleGrid columns={2} spacing={1}>
+                {imageSrcs.map(src => (
+                    <Image width={200} key={src} src={src} />
+                ))}
+            </SimpleGrid>
+        </GridItem>
+    )
+    const character = (
+        <GridItem colSpan={[4, 4, 4, 2]}>
+            <Text>My funKYy Penguin</Text>
+            <Image width={'100%'} src={characterSrc} />
+        </GridItem>
+    )
     return (
         <>
             <Heading size="2xl">Marketplace Character Details</Heading>
@@ -59,18 +78,8 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
             <PageHeader setPage={props.setPage} />
             <Text>Character details go here</Text> */}
                 {/* <VStack spacing="-80%" marginTop="50%"> */}
-                <GridItem colSpan={[4, 4, 4, 1]}>
-                    <Text>Battle</Text>
-                    <SimpleGrid columns={2} spacing={1}>
-                        {imageSrcs.map(src => (
-                            <Image width={200} key={src} src={src} />
-                        ))}
-                    </SimpleGrid>
-                </GridItem>
-                <GridItem colSpan={[4, 4, 4, 2]}>
-                    <Text>My funKYy Penguin</Text>
-                    <Image width={'100%'} src={characterSrc} />
-                </GridItem>
+                {isLarge ? cards : character}
+                {isLarge ? character : cards}
                 <GridItem colSpan={[4, 4, 4, 1]}>
                     <Text>Gather / Craft</Text>
                     <SimpleGrid columns={4} spacing={1}>
