@@ -6,16 +6,17 @@ import { h } from 'preact'
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'
 
-import About from './About'
-import ManageAssets from './ManageAssets'
-import MyCharacters from './MyCharacters'
-import Overworld from './Overworld'
-import QuestProgress from './QuestProgress'
-import WelcomeModal from './WelcomeModal'
+import About from './sp/About'
+import ManageAssets from './sp/ManageAssets'
+import MyCharacters from './sp/MyCharacters'
+import Overworld from './sp/Overworld'
+import QuestProgress from './sp/QuestProgress'
+import UITour from './sp/UITour'
+import WelcomeModal from './util/WelcomeModal'
 
 type SubpageKey = keyof typeof subpages
 
-const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets }
+const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets, UITour }
 
 const state = new SBaobab({
     dared: false,
@@ -51,6 +52,7 @@ function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
         ['My Characters', 'MyCharacters'],
         ['Quest Progress', 'QuestProgress'],
         ['Manage Assets', 'ManageAssets'],
+        ['UI Component Tour', 'UITour'],
     ]
     return (
         <Menu>
