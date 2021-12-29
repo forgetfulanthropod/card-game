@@ -9,10 +9,14 @@ import type { PageProps } from '@/components/PageManager'
 
 const subpages = { Intro, Choose, Quest }
 
+type Subpage = { setSubpage: SetSubpage }
 type SetSubpage = StateUpdater<keyof typeof subpages>
-type SubpageProps = { setSubpage: SetSubpage }
 
 export default function QuestsPage(props: PageProps): JSX.Element {
+    return <Heading>Genesis quests</Heading>
+}
+
+function QuestsPage2(props: PageProps): JSX.Element {
     const [subpage, setSubpage] = useState<keyof typeof subpages>('Intro')
     const Subpage = subpages[subpage]
     return (
@@ -36,7 +40,7 @@ export default function QuestsPage(props: PageProps): JSX.Element {
     )
 }
 
-function Intro(props: SubpageProps) {
+function Intro(props: Subpage) {
     return (
         <>
             <Heading size="lg">Intro</Heading>
@@ -73,7 +77,7 @@ function MyBox(props: { children: Children }) {
     )
 }
 
-function Choose(props: SubpageProps) {
+function Choose(props: Subpage) {
     return (
         <>
             <Heading size="lg">Choose your character</Heading>
@@ -81,7 +85,7 @@ function Choose(props: SubpageProps) {
     )
 }
 
-function Quest(props: SubpageProps) {
+function Quest(props: Subpage) {
     return (
         <>
             <Heading size="lg">Quest!</Heading>

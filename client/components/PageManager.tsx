@@ -1,4 +1,4 @@
-import { Box, ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { h } from 'preact'
 import { useState } from 'preact/hooks'
@@ -30,15 +30,15 @@ const nameToPage = {
 } as const
 
 export function TempApp(): JSX.Element {
-    const [pageName, setPageName] = useState<keyof typeof nameToPage>('CharacterDetailPage')
+    const [pageName, setPageName] = useState<keyof typeof nameToPage>('QuestsPage')
     const Page = nameToPage[pageName]
     // const Page = nameToPage['MenuPage']
     return (
         <ChakraProvider>
-            <Box margin="10" padding="10">
-                <Page setPage={setPageName} />
-                {/* <Page setPage={() => {}} /> */}
-            </Box>
+            {/* <Box margin="10" padding="10"> */}
+            <Page setPage={setPageName} />
+            {/* <Page setPage={() => {}} /> */}
+            {/* </Box> */}
         </ChakraProvider>
     )
 }
