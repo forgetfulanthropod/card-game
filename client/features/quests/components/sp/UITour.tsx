@@ -1,4 +1,4 @@
-import { Box, Heading, Table, Td, Tr } from '@chakra-ui/react'
+import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { h } from 'preact'
 
@@ -13,36 +13,56 @@ export default function UITour(): JSX.Element {
         <Box>
             <Heading>UI Tour</Heading>
             <Table>
-                <Tr>
-                    <Td>Claim gems</Td>
-                    <Td>
-                        <ClaimGemsExample />
-                    </Td>
-                </Tr>
-                <Tr>
-                    <Td>Connect wallet</Td>
-                    <Td>
-                        <ConnectWalletExample />
-                    </Td>
-                </Tr>
-                <Tr>
-                    <Td>Character stats box</Td>
-                    <Td>
-                        <CharacterStatsBoxExample />
-                    </Td>
-                </Tr>
-                <Tr>
-                    <Td>Quest progress bar</Td>
-                    <Td>
-                        <QuestProgressBarExample />
-                    </Td>
-                </Tr>
-                <Tr>
-                    <Td>Form-your-party prompt</Td>
-                    <Td>
-                        <FormYourPartyPromptExample />
-                    </Td>
-                </Tr>
+                <Thead>
+                    <Tr>
+                        <Th>Purpose of UI component</Th>
+                        <Th>Example</Th>
+                    </Tr>
+                </Thead>
+                <Tbody>
+                    <Tr>
+                        <Td>Claim gems</Td>
+                        <Td>
+                            <ClaimGemsExample />
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>Connect wallet</Td>
+                        <Td>
+                            <ConnectWalletExample />
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>Character stats box</Td>
+                        <Td>
+                            <CharacterStatsBoxExample />
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>Quest progress bar</Td>
+                        <Td>
+                            <QuestProgressBarExample />
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>Form-your-party prompt</Td>
+                        <Td>
+                            <FormYourPartyPromptExample />
+                        </Td>
+                    </Tr>
+                    <Tr>
+                        <Td>View collected assets</Td>
+                        <Td></Td>
+                    </Tr>
+                    <Tr>
+                        <Td>NPC dialogue popup</Td>
+                        <Td></Td>
+                    </Tr>
+                    <Tr>
+                        <Td>New user tour arrow</Td>
+                        <Td></Td>
+                    </Tr>
+                </Tbody>
             </Table>
         </Box>
     )
