@@ -1,4 +1,5 @@
 import { Box, Button, ButtonGroup, Heading, Text } from '@chakra-ui/react'
+import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
@@ -7,6 +8,7 @@ import { useState } from 'preact/hooks'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
+import { useCursor } from '@/components/util'
 
 import type { Disclosure } from './MyModal'
 import { MyModal } from './MyModal'
@@ -16,30 +18,49 @@ type SetSubpage = StateUpdater<keyof typeof subpages>
 
 const subpages = { Intro, Choose, Quest }
 
+const state = new SBaobab({
+    dared: false,
+})
+
 export default function QuestsPage(props: PageProps): JSX.Element {
+    const dared = useCursor(state.select('dared'))
     return (
-        <>
-            <ModalExample2 />
+        <Box m={10} p={10}>
             <Heading>Genesis quests</Heading>
-        </>
+            {!dared ? (
+                <WelcomeModal onDare={() => state.set('dared', true)} />
+            ) : (
+                <Text bg="black" color="red" fontWeight="bold">
+                    YOU HAVE DARED
+                </Text>
+            )}
+        </Box>
     )
 }
 
-function ModalExample2() {
+function WelcomeModal(props: { onDare: Callback }) {
     const ref = useRef<Disclosure>()
 
     return (
         <>
-            <Button onClick={() => ref.current?.onOpen()}>Open modal 2</Button>
+            <Button onClick={() => ref.current?.onOpen()}>Genesis</Button>
             <MyModal
+                apiRef={ref}
                 title="modal 2"
                 body={
                     <>
-                        <Text>This is a body</Text>
-                        <Text>Sure is</Text>
+                        <Text>Do you dare embark on a quest?</Text>
+                        <Text>There is danger ahead.</Text>
                     </>
                 }
-                apiRef={ref}
+                footer={
+                    <>
+                        <Button colorScheme={'red'} onClick={props.onDare}>
+                            Dare
+                        </Button>
+                        <Button onClick={() => ref.current?.onClose()}>Nope</Button>
+                    </>
+                }
             />
         </>
     )
