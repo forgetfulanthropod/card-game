@@ -1,4 +1,4 @@
-import { Box, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import { Box, Button, Heading, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
@@ -7,6 +7,7 @@ import { useRef } from 'preact/hooks'
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'
 
+import mapJpg from '../assets/high-res-map.jpg'
 import type { Disclosure } from './MyModal'
 import { MyModal } from './MyModal'
 
@@ -19,7 +20,7 @@ const state = new SBaobab({
     subpage: 'About' as SubpageKey,
 })
 
-export default function QuestsPage(props: PageProps): JSX.Element {
+export default function QuestsPage(_props: PageProps): JSX.Element {
     const dared = useCursor(state.select('dared'))
     const subpageKey = useCursor(state.select('subpage'))
     const Subpage = subpages[subpageKey]
@@ -112,15 +113,20 @@ function About() {
                     wear piece mistake split composed every balloon tank bit
                 </Text>
             </MyBox>
-            <Button fontSize="xxx-large" padding="1em" onClick={() => props.setSubpage('Choose')}>
+            {/* <Button fontSize="xxx-large" padding="1em" onClick={() => props.setSubpage('Choose')}>
                 BEGIN
-            </Button>
+            </Button> */}
         </>
     )
 }
 
 function Overworld(): JSX.Element {
-    return <>Overworld</>
+    return (
+        <Box>
+            Overworld
+            <Image src={mapJpg} w={400} />
+        </Box>
+    )
 }
 function MyCharacters(): JSX.Element {
     return <>MyCharacters</>
