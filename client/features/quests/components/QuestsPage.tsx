@@ -13,15 +13,18 @@ import {
     Text,
     useDisclosure,
 } from '@chakra-ui/react'
-import type { JSX } from 'preact'
+import type { ComponentChildren, JSX, RefObject } from 'preact'
 import { Fragment, h } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 import { useState } from 'preact/hooks'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
 
 const subpages = { Intro, Choose, Quest }
+
+type CC = ComponentChildren
 
 type Subpage = { setSubpage: SetSubpage }
 type SetSubpage = StateUpdater<keyof typeof subpages>
@@ -30,6 +33,7 @@ export default function QuestsPage(props: PageProps): JSX.Element {
     return (
         <>
             <ModalExample />
+            <ModalExample2 />
             <Heading>Genesis quests</Heading>
         </>
     )
@@ -63,6 +67,46 @@ function ModalExample() {
                     </ModalFooter>
                 </ModalContent>
             </Modal>
+        </>
+    )
+}
+
+type Disclosure = ReturnType<typeof useDisclosure>
+function MyModal(props: { title?: CC; body?: CC; footer?: CC; apiRef: RefObject<Disclosure | undefined> }) {
+    const disclosure = useDisclosure()
+    props.apiRef.current = disclosure
+    const { isOpen, onClose } = disclosure
+    return (
+        <>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    {props.title && <ModalHeader>{props.title}</ModalHeader>}
+                    <ModalCloseButton />
+                    {props.body && <ModalBody>{props.body}</ModalBody>}
+                    {props.footer && <ModalFooter>{props.footer}</ModalFooter>}
+                </ModalContent>
+            </Modal>
+        </>
+    )
+}
+
+function ModalExample2() {
+    const ref = useRef<Disclosure>()
+
+    return (
+        <>
+            <Button onClick={() => ref.current?.onOpen()}>Open modal 2</Button>
+            <MyModal
+                title="modal 2"
+                body={
+                    <>
+                        <Text>This is a body</Text>
+                        <Text>Sure is</Text>
+                    </>
+                }
+                apiRef={ref}
+            />
         </>
     )
 }
