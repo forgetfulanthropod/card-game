@@ -5,7 +5,7 @@ import { h } from 'preact'
 export default function ClaimGems(): JSX.Element {
     return (
         <Box>
-            <Button>Claim Gems</Button>
+            <Button bg="#01ffff">💎 Claim Gems 💎</Button>
         </Box>
     )
 }

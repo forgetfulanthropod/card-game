@@ -21,7 +21,7 @@ const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets, 
 const state = new SBaobab({
     dared: false,
     nothing: null,
-    subpage: 'About' as SubpageKey,
+    subpage: 'UITour' as SubpageKey,
 })
 
 export default function QuestsPage(_props: PageProps): JSX.Element {
