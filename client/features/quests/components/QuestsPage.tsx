@@ -1,15 +1,17 @@
-import { Box, Button, Heading, Image, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import { Box, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
-import { Fragment, h } from 'preact'
-import { useRef } from 'preact/hooks'
+import { h } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'
 
-import mapJpg from '../assets/high-res-map.jpg'
-import type { Disclosure } from './MyModal'
-import { MyModal } from './MyModal'
+import About from './About'
+import ManageAssets from './ManageAssets'
+import MyCharacters from './MyCharacters'
+import Overworld from './Overworld'
+import QuestProgress from './QuestProgress'
+import WelcomeModal from './WelcomeModal'
 
 type SubpageKey = keyof typeof subpages
 
@@ -17,6 +19,7 @@ const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets }
 
 const state = new SBaobab({
     dared: false,
+    nothing: null,
     subpage: 'About' as SubpageKey,
 })
 
@@ -60,88 +63,5 @@ function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
                 ))}
             </MenuList>
         </Menu>
-    )
-}
-
-function WelcomeModal(props: { onDare: Callback }) {
-    const ref = useRef<Disclosure>()
-
-    return (
-        <>
-            <Button onClick={() => ref.current?.onOpen()}>Genesis</Button>
-            <MyModal
-                apiRef={ref}
-                title="Welcome to good Earth"
-                body={
-                    <>
-                        <Text>Do you dare embark on a quest?</Text>
-                        <Text>There is danger ahead.</Text>
-                    </>
-                }
-                footer={
-                    <>
-                        <Button colorScheme={'red'} onClick={props.onDare}>
-                            Dare
-                        </Button>
-                        <Button onClick={() => ref.current?.onClose()}>Nope</Button>
-                    </>
-                }
-            />
-        </>
-    )
-}
-
-function About() {
-    return (
-        <>
-            <Heading size="lg">Intro</Heading>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    wife different tone doctor join box star nuts eager fuel direct that chance fifty back select
-                    vegetable now vapor court agree salmon coal word
-                </Text>
-            </MyBox>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    seven measure final copper is scene thought wire ate beside where interest porch prove fly donkey
-                    hall diagram rice rod thumb does curve wonderful
-                </Text>
-            </MyBox>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    fourth just hit dish chosen team whose reason room writing practice tin machinery voyage sunlight
-                    wear piece mistake split composed every balloon tank bit
-                </Text>
-            </MyBox>
-            {/* <Button fontSize="xxx-large" padding="1em" onClick={() => props.setSubpage('Choose')}>
-                BEGIN
-            </Button> */}
-        </>
-    )
-}
-
-function Overworld(): JSX.Element {
-    return (
-        <Box>
-            Overworld
-            <Image src={mapJpg} w={400} />
-        </Box>
-    )
-}
-function MyCharacters(): JSX.Element {
-    return <>MyCharacters</>
-}
-function QuestProgress(): JSX.Element {
-    return <>QuestProgress</>
-}
-function ManageAssets(): JSX.Element {
-    return <>ManageAssets</>
-}
-
-function MyBox(props: { children: Children }) {
-    return (
-        <Box backgroundColor="#EEE" borderRadius="2em" marginBottom="2em" padding="2em" boxShadow="4px 4px 4px black">
-            {props.children}
-        </Box>
     )
 }
