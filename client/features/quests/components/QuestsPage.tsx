@@ -1,10 +1,9 @@
-import { Box, Button, ButtonGroup, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, ButtonGroup, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
-import { useRef } from 'preact/hooks'
-import { useState } from 'preact/hooks'
+import { useRef, useState } from 'preact/hooks'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
@@ -26,6 +25,7 @@ export default function QuestsPage(props: PageProps): JSX.Element {
     const dared = useCursor(state.select('dared'))
     return (
         <Box m={10} p={10}>
+            <GQMenu />
             <Heading>Genesis quests</Heading>
             {!dared ? (
                 <WelcomeModal onDare={() => state.set('dared', true)} />
@@ -38,6 +38,20 @@ export default function QuestsPage(props: PageProps): JSX.Element {
     )
 }
 
+function GQMenu(): JSX.Element {
+    return (
+        <Menu>
+            <MenuButton as={Button}>☰</MenuButton>
+            <MenuList>
+                <MenuItem>Overworld</MenuItem>
+                <MenuItem>My Characters</MenuItem>
+                <MenuItem>Quest Progress</MenuItem>
+                <MenuItem>Manage Assets</MenuItem>
+            </MenuList>
+        </Menu>
+    )
+}
+
 function WelcomeModal(props: { onDare: Callback }) {
     const ref = useRef<Disclosure>()
 
@@ -46,7 +60,7 @@ function WelcomeModal(props: { onDare: Callback }) {
             <Button onClick={() => ref.current?.onOpen()}>Genesis</Button>
             <MyModal
                 apiRef={ref}
-                title="modal 2"
+                title="Welcome to good Earth"
                 body={
                     <>
                         <Text>Do you dare embark on a quest?</Text>
