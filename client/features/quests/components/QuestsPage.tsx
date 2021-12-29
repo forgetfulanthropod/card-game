@@ -1,4 +1,18 @@
-import { Box, Button, ButtonGroup, Heading, Text } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Heading,
+    Modal,
+    ModalBody,
+    ModalCloseButton,
+    ModalContent,
+    ModalFooter,
+    ModalHeader,
+    ModalOverlay,
+    Text,
+    useDisclosure,
+} from '@chakra-ui/react'
 import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
@@ -13,7 +27,44 @@ type Subpage = { setSubpage: SetSubpage }
 type SetSubpage = StateUpdater<keyof typeof subpages>
 
 export default function QuestsPage(props: PageProps): JSX.Element {
-    return <Heading>Genesis quests</Heading>
+    return (
+        <>
+            <ModalExample />
+            <Heading>Genesis quests</Heading>
+        </>
+    )
+}
+function ModalExample() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    return (
+        <>
+            <Button onClick={onOpen}>Open Modal</Button>
+
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>Modal Title</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Text>
+                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis modi tempore dolore
+                            veritatis possimus rerum similique, odio accusantium
+                        </Text>
+                        <Text>
+                            adipisci suscipit id vel sequi distinctio reiciendis. Sequi aliquam reprehenderit in iure.
+                        </Text>
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Button colorScheme="blue" mr={3} onClick={onClose}>
+                            Close
+                        </Button>
+                        <Button variant="ghost">Secondary Action</Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
+        </>
+    )
 }
 
 function QuestsPage2(props: PageProps): JSX.Element {
