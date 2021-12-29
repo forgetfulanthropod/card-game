@@ -1,19 +1,5 @@
-import {
-    Box,
-    Button,
-    ButtonGroup,
-    Heading,
-    Modal,
-    ModalBody,
-    ModalCloseButton,
-    ModalContent,
-    ModalFooter,
-    ModalHeader,
-    ModalOverlay,
-    Text,
-    useDisclosure,
-} from '@chakra-ui/react'
-import type { ComponentChildren, JSX, RefObject } from 'preact'
+import { Box, Button, ButtonGroup, Heading, Text } from '@chakra-ui/react'
+import type { JSX } from 'preact'
 import { Fragment, h } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
 import { useRef } from 'preact/hooks'
@@ -22,71 +8,19 @@ import { useState } from 'preact/hooks'
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
 
-const subpages = { Intro, Choose, Quest }
+import type { Disclosure } from './MyModal'
+import { MyModal } from './MyModal'
 
-type CC = ComponentChildren
-
-type Subpage = { setSubpage: SetSubpage }
+type SubpageArgs = { setSubpage: SetSubpage }
 type SetSubpage = StateUpdater<keyof typeof subpages>
+
+const subpages = { Intro, Choose, Quest }
 
 export default function QuestsPage(props: PageProps): JSX.Element {
     return (
         <>
-            <ModalExample />
             <ModalExample2 />
             <Heading>Genesis quests</Heading>
-        </>
-    )
-}
-function ModalExample() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    return (
-        <>
-            <Button onClick={onOpen}>Open Modal</Button>
-
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Modal Title</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Text>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis modi tempore dolore
-                            veritatis possimus rerum similique, odio accusantium
-                        </Text>
-                        <Text>
-                            adipisci suscipit id vel sequi distinctio reiciendis. Sequi aliquam reprehenderit in iure.
-                        </Text>
-                    </ModalBody>
-
-                    <ModalFooter>
-                        <Button colorScheme="blue" mr={3} onClick={onClose}>
-                            Close
-                        </Button>
-                        <Button variant="ghost">Secondary Action</Button>
-                    </ModalFooter>
-                </ModalContent>
-            </Modal>
-        </>
-    )
-}
-
-type Disclosure = ReturnType<typeof useDisclosure>
-function MyModal(props: { title?: CC; body?: CC; footer?: CC; apiRef: RefObject<Disclosure | undefined> }) {
-    const disclosure = useDisclosure()
-    props.apiRef.current = disclosure
-    const { isOpen, onClose } = disclosure
-    return (
-        <>
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    {props.title && <ModalHeader>{props.title}</ModalHeader>}
-                    <ModalCloseButton />
-                    {props.body && <ModalBody>{props.body}</ModalBody>}
-                    {props.footer && <ModalFooter>{props.footer}</ModalFooter>}
-                </ModalContent>
-            </Modal>
         </>
     )
 }
@@ -135,7 +69,7 @@ function QuestsPage2(props: PageProps): JSX.Element {
     )
 }
 
-function Intro(props: Subpage) {
+function Intro(props: SubpageArgs) {
     return (
         <>
             <Heading size="lg">Intro</Heading>
@@ -172,7 +106,7 @@ function MyBox(props: { children: Children }) {
     )
 }
 
-function Choose(props: Subpage) {
+function Choose(props: SubpageArgs) {
     return (
         <>
             <Heading size="lg">Choose your character</Heading>
@@ -180,7 +114,7 @@ function Choose(props: Subpage) {
     )
 }
 
-function Quest(props: Subpage) {
+function Quest(props: SubpageArgs) {
     return (
         <>
             <Heading size="lg">Quest!</Heading>
