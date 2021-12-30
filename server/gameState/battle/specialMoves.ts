@@ -30,7 +30,7 @@ function getMimicMove({
     username: string
 }): CharacterMove {
     const lastAttackOnThisCharacter = [
-        ...(getGameStateCursor(username).select('events').get('move$') as NetworkEvent<'move$', AttackData>[]),
+        ...getGameStateCursor(username).select('events').get('move$') as NetworkEvent<'move$', AttackData>[],
     ]
         ?.reverse()
         ?.find(event => event.data.defenders.find(d => d.uid === charUid))

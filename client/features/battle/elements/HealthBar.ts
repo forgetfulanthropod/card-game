@@ -93,7 +93,7 @@ function makeStanceIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
             y: displayHeight * 1.1,
             anchor: [1, 0],
             width: displayWidth / 3,
-            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
+            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height,
             onClick: () => toggleStance({ characterUid: characterCursor.get('uid') }),
         })
         mainEl.addChild(stanceEl)

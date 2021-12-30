@@ -35,7 +35,7 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     vals(npcs).forEach((npc, i) => {
         const [x, y] = positions[i]
 
-        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: (BASE_WIDTH * x) / 100, screenY: (BASE_HEIGHT * y) / 100 }
+        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: BASE_WIDTH * x / 100, screenY: BASE_HEIGHT * y / 100 }
     })
 
     return rearrangedNpcs
@@ -69,8 +69,8 @@ export function newPCMeta(args: { x: number; y: number; uid: string; name: Chara
         isPc: true,
         x: args.x,
         y: args.y,
-        screenX: (scale * BASE_WIDTH * args.x) / 100,
-        screenY: (scale * BASE_HEIGHT * args.y) / 100,
+        screenX: scale * BASE_WIDTH * args.x / 100,
+        screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
         health: stats.maxHealth,
@@ -100,8 +100,8 @@ export function newNPCMeta(args: {
         isPc: false,
         x: args.x,
         y: args.y,
-        screenX: (scale * BASE_WIDTH * args.x) / 100,
-        screenY: (scale * BASE_HEIGHT * args.y) / 100,
+        screenX: scale * BASE_WIDTH * args.x / 100,
+        screenY: scale * BASE_HEIGHT * args.y / 100,
         stance,
         hasMoved: false,
         effects: [],

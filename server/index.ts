@@ -62,7 +62,10 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
-app.use('/', express.static(__dirname + '/../build', { extensions: ['.atlas'] }))
+app.use(
+    '/',
+    express.static(__dirname + '/../build', { extensions: ['.atlas'] })
+)
 
 const usernameToSocketId: Record<string, string> = {}
 export function setSocketId(username: string, socketId: string): void {
@@ -91,7 +94,10 @@ export function mountIo(server: Server, prefix: string): void {
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
         // @ts-expect-error
-        logger.info('session at socket.io connection:\n', socket.request.session)
+        logger.info(
+            'session at socket.io connection:\n',
+            socket.request.session
+        )
         // @ts-expect-error
         socket.request.session.socketio = socket.id
 

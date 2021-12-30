@@ -13,6 +13,7 @@ export function objFilter<K extends string | number, V>(
 ): Record<K, V> {
     // @ts-expect-error
     const o: Record<K, V> = {}
+    // eslint-disable-next-line no-extra-parens
     ;(Object.entries(obj) as [K, V][]).forEach(([k, v]) => {
         if (f(k as string, v)) o[k] = v
     })

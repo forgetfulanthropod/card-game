@@ -240,11 +240,11 @@ function makeFlyToOnTick(start: Point, flyTo: Point) {
         // const deltaTimeMs = elapsed * 1000 / 60
         totalElapsed += elapsed * 16.66
         if (totalElapsed < FLY_TO_TIME) {
-            container.x = start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
-            container.y = start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
+            container.x = start.x + (flyTo.x - start.x) * totalElapsed / FLY_TO_TIME
+            container.y = start.y + (flyTo.y - start.y) * totalElapsed / FLY_TO_TIME
         } else if (totalElapsed < FLY_TIME) {
-            container.x = flyTo.x + ((start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME)) / FLY_BACK_TIME
-            container.y = flyTo.y + ((start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME)) / FLY_BACK_TIME
+            container.x = flyTo.x + (start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            container.y = flyTo.y + (start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
         } else {
             container.x = start.x
             container.y = start.y

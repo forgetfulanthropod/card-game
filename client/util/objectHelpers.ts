@@ -35,6 +35,7 @@ export function keyMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k
     return Object.keys(obj).map(f)
 }
 export function entryMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k: string, v: V) => X): X[] {
+    // eslint-disable-next-line no-extra-parens
     return (Object.entries(obj) as [string, V][]).map(([k, v]) => f(k, v))
 }
 

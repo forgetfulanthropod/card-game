@@ -17,12 +17,12 @@ export default function CharacterStatsBox(props: { strength: number; rarity: str
                 </Tr>
             </Thead>
             <Tbody>
-                {data.map(([stat, value]) => (
+                {data.map(([stat, value]) => 
                     <Tr key={stat}>
                         <Td>{stat}</Td>
                         <Td>{value}</Td>
                     </Tr>
-                ))}
+                )}
             </Tbody>
         </Table>
     )

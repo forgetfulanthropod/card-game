@@ -79,13 +79,13 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
                         await makeNewUser({ username })
                     }}
                 />
-                {shown && (
+                {shown && 
                     <>
                         <button onClick={() => addNewRulebook(ref, rulebooks, username)}>Save new</button>
                         <button onClick={() => overwriteRulebook(ref, name, username)}>Overwrite</button>
                         <button onClick={() => deleteRulebook(name)}>Delete current</button>
                     </>
-                )}
+                }
             </ButtonGroup>
         </>
     )
@@ -151,11 +151,11 @@ function Selector(props: { options: string[]; onChoice: (s: string) => void; val
     return (
         // @ts-ignore-error
         <select value={props.value} onChange={e => props.onChoice(e?.target?.value)}>
-            {props.options.map(o => (
+            {props.options.map(o => 
                 <option key={o} value={o}>
                     {o}
                 </option>
-            ))}
+            )}
         </select>
     )
 }

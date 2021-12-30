@@ -41,28 +41,28 @@ const certs = ['🚗', '🪚', '✂️']
 export default function CharacterDetailPage(props: PageProps): JSX.Element {
     const [isLarge] = useMediaQuery('(min-width: 62em)')
 
-    const cards = (
+    const cards = 
         <GridItem colSpan={[4, 4, 4, 1]}>
             <Text>Battle</Text>
             <SimpleGrid columns={2} spacing={1}>
-                {imageSrcs.map(src => (
+                {imageSrcs.map(src => 
                     <Image width={200} key={src} src={src} />
-                ))}
+                )}
             </SimpleGrid>
         </GridItem>
-    )
-    const character = (
+    
+    const character = 
         <GridItem colSpan={[4, 4, 4, 2]}>
             <Text>My funKYy Penguin</Text>
-            {classes.map(cl => (
+            {classes.map(cl => 
                 <Text key={cl} margin="10px" as="span" bg="#333" fontSize={'1.5rem'} p="8px" borderRadius="12px">
                     {cl}
                 </Text>
-            ))}
+            )}
             <Image width={'100%'} src={characterSrc} />
         </GridItem>
-    )
-    const gatherCraft = (
+    
+    const gatherCraft = 
         <GridItem colSpan={[4, 4, 4, 1]}>
             <Text>Gather / Craft</Text>
             <SimpleGrid columns={4} spacing={1}>
@@ -77,7 +77,7 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
             </SimpleGrid>
             <Text>Certs</Text>
             <HStack>
-                {certs.map((cert, i) => (
+                {certs.map((cert, i) => 
                     <Square
                         // display="inline-block"
                         // as="span"
@@ -90,10 +90,10 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
                     >
                         {cert}
                     </Square>
-                ))}
+                )}
             </HStack>
         </GridItem>
-    )
+    
     return (
         <>
             <Heading size="2xl">

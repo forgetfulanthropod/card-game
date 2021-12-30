@@ -25,9 +25,16 @@ app.post('/mint', async function (req, res) {
             fromWallet // guy who pays to create new accounts.
         )
 
-        const fromTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(fromWallet.publicKey)
+        const fromTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(
+            fromWallet.publicKey
+        )
 
-        await myToken.mintTo(fromTokenAccount.address, fromWallet.publicKey, [], amount)
+        await myToken.mintTo(
+            fromTokenAccount.address,
+            fromWallet.publicKey,
+            [],
+            amount
+        )
     }
 
     await mintTokens(data)

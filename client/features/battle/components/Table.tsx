@@ -2,25 +2,25 @@ import { h, JSX } from 'preact' // eslint-disable-line
 //@ts-expect-error
 import styled from 'styled-components'
 export default function Table(props: { rows: string[][]; header?: string }): JSX.Element {
-    const contents = (
+    const contents = 
         <>
-            {props.header && (
+            {props.header && 
                 <thead>
                     <tr>
                         <th colSpan={2}>{props.header}</th>
                     </tr>
                 </thead>
-            )}
+            }
             <tbody>
-                {props.rows.map((r, i) => (
+                {props.rows.map((r, i) => 
                     <tr key={i}>
                         <td>{r[0]}</td>
                         <td>{r[1]}</td>
                     </tr>
-                ))}
+                )}
             </tbody>
         </>
-    )
+    
     return <StyledTable>{contents}</StyledTable>
 }
 

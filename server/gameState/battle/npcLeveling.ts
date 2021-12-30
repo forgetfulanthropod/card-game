@@ -86,8 +86,8 @@ export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
     console.log({ levelInfo, level })
 
     if (level > MAX_DATA_LEVEL) {
-        levelInfo.damage = levelInfo.damage + ((OVER_MAX_ATTACK * level) % MAX_DATA_LEVEL)
-        levelInfo.maxHealth = levelInfo.maxHealth + ((OVER_MAX_HEALTH * level) % MAX_DATA_LEVEL)
+        levelInfo.damage = levelInfo.damage + OVER_MAX_ATTACK * level % MAX_DATA_LEVEL
+        levelInfo.maxHealth = levelInfo.maxHealth + OVER_MAX_HEALTH * level % MAX_DATA_LEVEL
     }
 
     levelInfo.health = levelInfo.maxHealth

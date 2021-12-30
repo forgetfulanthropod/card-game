@@ -1,4 +1,11 @@
-import type { CharacterMove, CharacterName, CharacterStats, CharacterUid, DungeonName, SceneHas } from '.'
+import type {
+    CharacterMove,
+    CharacterName,
+    CharacterStats,
+    CharacterUid,
+    DungeonName,
+    SceneHas,
+} from '.'
 import type { SpecialDoorName } from './SpecialDoorName'
 
 export interface BattleScene extends SceneHas {

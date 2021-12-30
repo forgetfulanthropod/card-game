@@ -65,9 +65,9 @@ export default function MoveMenu(): JSX.Element {
 
     return (
         <>
-            {isPlayerTurn && (
+            {isPlayerTurn && 
                 <MoveMenuDiv>
-                    {mvs.map(m => (
+                    {mvs.map(m => 
                         <MoveButton
                             key={m.types[0]}
                             onClick={async () => {
@@ -78,9 +78,9 @@ export default function MoveMenu(): JSX.Element {
                         >
                             {m.name} ({m.types.toString()}) [{m.damageRange?.join('-')}]
                         </MoveButton>
-                    ))}
+                    )}
                 </MoveMenuDiv>
-            )}
+            }
         </>
     )
 }

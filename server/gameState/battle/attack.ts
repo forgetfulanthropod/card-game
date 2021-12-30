@@ -72,7 +72,7 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
                 remainingRounds: effectMultipliers.length - 1,
                 damagesByRound: [
                     ...effectMultipliers.map(m =>
-                        Math.max(1, (attackData.attacker.damage * m * getDefenseMultiplier(d)) | 0)
+                        Math.max(1, attackData.attacker.damage * m * getDefenseMultiplier(d) | 0)
                     ),
                 ],
             },

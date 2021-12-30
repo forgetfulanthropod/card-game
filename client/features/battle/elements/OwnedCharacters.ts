@@ -53,8 +53,8 @@ const NUM_OF_EACH_CHAR = 5
 function makeCharacters() {
     return vals(getOwnedCharacters().get()).map((c, i) =>
         Container({
-            x: (((i / NUM_OF_EACH_CHAR) | 0) % 5) * 150 + ((i / NUM_OF_EACH_CHAR) % 5) * 100,
-            y: Math.floor(((i / NUM_OF_EACH_CHAR) | 0) / 5) * 150,
+            x: (i / NUM_OF_EACH_CHAR | 0) % 5 * 150 + i / NUM_OF_EACH_CHAR % 5 * 100,
+            y: Math.floor((i / NUM_OF_EACH_CHAR | 0) / 5) * 150,
             children: [
                 Sprite({
                     src: dataOf(c.name),

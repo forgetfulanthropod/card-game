@@ -3,21 +3,14 @@
         "browser": true,
         "es2021": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
-    ],
+    "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module"
         // ,"project": "server/tsconfig.json"
     },
-    "plugins": [
-        "@typescript-eslint",
-        "unused-imports",
-        "simple-import-sort"
-    ],
+    "plugins": ["@typescript-eslint", "unused-imports", "simple-import-sort"],
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
         // auto-fixable stuff for formatter:
@@ -34,6 +27,8 @@
                 "null": "ignore"
             }
         ],
+        "no-extra-parens": "off",
+        "@typescript-eslint/no-extra-parens": ["error"],
         // "@typescript-eslint/no-unused-vars": [ "warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$|^_" } ],
         // for import organizing:
         // "sort-imports": [
@@ -62,28 +57,12 @@
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error"
     },
-    "ignorePatterns": [
-        "scripts/",
-        "server/lib",
-        "build",
-        "tests",
-        "**/*.js"
-    ],
+    "ignorePatterns": ["scripts/", "server/lib", "build", "tests", "**/*.js"],
     "overrides": [
         {
-            "files": [
-                "client/**/*.ts",
-                "client/**/*.tsx",
-                "client/**/*.d.ts",
-                "shared/**/*.ts"
-            ],
-            "extends": [
-                "plugin:react/recommended"
-            ],
-            "plugins": [
-                "react",
-                "react-hooks"
-            ],
+            "files": ["client/**/*.ts", "client/**/*.tsx", "client/**/*.d.ts", "shared/**/*.ts"],
+            "extends": ["plugin:react/recommended"],
+            "plugins": ["react", "react-hooks"],
             "parserOptions": {
                 "ecmaFeatures": {
                     "jsx": true
@@ -95,10 +74,7 @@
                 "react/no-unknown-property": [
                     "warn",
                     {
-                        "ignore": [
-                            "class",
-                            "clip-path"
-                        ]
+                        "ignore": ["class", "clip-path"]
                     }
                 ],
                 "react-hooks/rules-of-hooks": "error",
@@ -112,17 +88,13 @@
             }
         },
         {
-            "files": [
-                "server/**/*.ts"
-            ],
+            "files": ["server/**/*.ts"],
             "parserOptions": {
                 "project": "./server/tsconfig.json"
             }
         },
         {
-            "files": [
-                "kaiju-micro/**/*.ts"
-            ],
+            "files": ["kaiju-micro/**/*.ts"],
             "parserOptions": {
                 "project": "./kaiju-micro/tsconfig.json"
             }

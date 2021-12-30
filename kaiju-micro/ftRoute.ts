@@ -8,7 +8,10 @@ app.post('/ft', async function (req, res) {
     const data = req.body
     console.log(data)
     //console.log(data["amount"])
-    const transferTokens = async (data: { toAddress: string; amount: number }) => {
+    const transferTokens = async (data: {
+        toAddress: string
+        amount: number
+    }) => {
         console.log('data', data)
         const toAddress = data['toAddress']
         const amount = data['amount']
@@ -30,9 +33,13 @@ app.post('/ft', async function (req, res) {
         //console.log("tok", myToken)
         // FAILURE HERE
         // Create associated token accounts for my token if they don't exist yet
-        const fromTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(fromWallet.publicKey)
+        const fromTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(
+            fromWallet.publicKey
+        )
         //console.log("A", fromTokenAccount)
-        const toTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(new web3.PublicKey(toAddress))
+        const toTokenAccount = await myToken.getOrCreateAssociatedAccountInfo(
+            new web3.PublicKey(toAddress)
+        )
 
         //console.log("B", toTokenAccount)
         // Add token transfer instructions to transaction
@@ -48,7 +55,11 @@ app.post('/ft', async function (req, res) {
         )
 
         // Sign transaction, broadcast, and confirm
-        const signature = await web3.sendAndConfirmTransaction(connection, transaction, [fromWallet])
+        const signature = await web3.sendAndConfirmTransaction(
+            connection,
+            transaction,
+            [fromWallet]
+        )
         console.log('SIGNATURE', signature)
         console.log('SUCCESS')
     }
