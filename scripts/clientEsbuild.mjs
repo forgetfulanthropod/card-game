@@ -32,6 +32,7 @@ function build() {
         minify: true, //!isDevelopment,
         sourcemap: true, //isDevelopment,
         entryPoints: [entryPoint],
+        inject: ['config/preact-shim.js'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
         bundle: true,
