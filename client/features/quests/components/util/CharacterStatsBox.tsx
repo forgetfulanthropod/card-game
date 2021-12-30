@@ -19,12 +19,12 @@ export default function CharacterStatsBox(props: {
                 </Tr>
             </Thead>
             <Tbody>
-                {data.map(([stat, value]) => 
+                {data.map(([stat, value]) => (
                     <Tr key={stat}>
                         <Td>{stat}</Td>
                         <Td>{value}</Td>
                     </Tr>
-                )}
+                ))}
             </Tbody>
         </Table>
     )

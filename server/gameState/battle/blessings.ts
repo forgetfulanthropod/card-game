@@ -14,9 +14,9 @@ export function applyBlessings(
         for (const ef of b.effects) {
             if (
                 ef.target === type ||
-                typeof ef.target === 'object' &&
+                (typeof ef.target === 'object' &&
                     ef.target.type === type &&
-                    ef.target.characterType === characterMeta.name
+                    ef.target.characterType === characterMeta.name)
             ) {
                 // console.log('you have an effect affecting you')
                 console.log(
