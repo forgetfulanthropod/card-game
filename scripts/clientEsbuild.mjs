@@ -6,6 +6,7 @@ import { makeBuildInfo } from './makeBuildInfo.mjs'
 
 const buildDir = '../build'
 const publicDir = 'public_'
+const entryPoint = 'index.tsx'
 
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
@@ -28,7 +29,7 @@ function build() {
     esbuild({
         minify: true, //!isDevelopment,
         sourcemap: true, //isDevelopment,
-        entryPoints: ['client/index.tsx'],
+        entryPoints: [entryPoint],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
         bundle: true,
