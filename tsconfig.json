@@ -1,51 +1,33 @@
 // Client
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "esnext",
-    "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "noFallthroughCasesInSwitch": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    // "jsx": "react-jsx",
-    // "jsxImportSource": "preact",
-    "jsx": "preserve",
-    "jsxFactory": "h",
-    "jsxFragmentFactory": "Fragment",
-    "baseUrl": ".",
-    "paths": {
-      "@shared": [
-        "./shared/index"
-      ],
-      "@shared/actions": [
-        "./shared/actions/index"
-      ],
-      "@shared/code": [
-        "./shared/code/index"
-      ],
-      "@/*": [
-        "./client/*"
-      ],
+    "compilerOptions": {
+        "target": "es5",
+        "module": "esnext",
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "noFallthroughCasesInSwitch": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        // "jsx": "react-jsx",
+        // "jsxImportSource": "preact",
+        "jsx": "preserve",
+        "jsxFactory": "h",
+        "jsxFragmentFactory": "Fragment",
+        "baseUrl": ".",
+        "paths": {
+            "@shared": ["./shared/index"],
+            "@shared/actions": ["./shared/actions/index"],
+            "@shared/code": ["./shared/code/index"],
+            "@/*": ["./client/*"]
+        },
+        "allowJs": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true
     },
-    "allowJs": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-  },
-  "include": [
-    "client",
-    "shared",
-  ],
-  "exclude": [
-    "scripts",
-    "client/public_"
-  ]
+    "include": ["client", "shared"],
+    "exclude": ["scripts", "client/public_"]
 }

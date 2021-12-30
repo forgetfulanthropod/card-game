@@ -2,9 +2,11 @@ import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import { range } from 'lodash'
 import { h } from 'preact'
 
-export default function ChakraTable(props: { data: (string | number | JSX.Element)[][] }): JSX.Element {
+export default function ChakraTable(props: {
+    data: (string | number | JSX.Element)[][]
+}): JSX.Element {
     return (
-        <Table variant="simple">
+        <Table variant='simple'>
             {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
             <Thead>
                 <Tr>

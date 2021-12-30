@@ -8,7 +8,7 @@
     "typescript.preferences.quoteStyle": "single",
     "eslint.format.enable": true,
     "eslint.options": {
-        "cache": true,
+        "cache": true
     },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -23,7 +23,7 @@
         "**/node_modules/": true,
         "**/pnpm-lock.yaml": true,
         "build/": true,
-        "server-build/": true,
+        "server-build/": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
@@ -50,5 +50,5 @@
     "searchEverywhere.shouldUseDebounce": false,
     "searchEverywhere.shouldInitOnStartup": true,
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
-    "prettier.configPath": ".prettierrc.json",
+    "prettier.configPath": ".prettierrc.json"
 }

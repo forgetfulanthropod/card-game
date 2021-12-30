@@ -1,4 +1,8 @@
-import type { Filter as PixiFilter, InteractionEvent, ITextStyle } from 'pixi.js'
+import type {
+    Filter as PixiFilter,
+    InteractionEvent,
+    ITextStyle,
+} from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
@@ -58,11 +62,20 @@ interface ShownArgs extends DisplayObjectArgs {
     anchor?: number | Pair
 }
 
-export type OnPixiTick = (self: PixiSprite | PixiContainer, delta: number) => void | 'remove'
+export type OnPixiTick = (
+    self: PixiSprite | PixiContainer,
+    delta: number
+) => void | 'remove'
 interface SpriteArgs extends ShownArgs {
     src: string | PixiTexture
 }
-export type PixiChildren = (PixiSprite | PixiContainer | null | false | undefined)[]
+export type PixiChildren = (
+    | PixiSprite
+    | PixiContainer
+    | null
+    | false
+    | undefined
+)[]
 type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends DisplayObjectArgs {
     children: PixiChildren
@@ -91,7 +104,10 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     return s
 }
 
-function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiGraphics, args: DisplayObjectArgs) {
+function applyDisplayObjectArgs(
+    x: PixiContainer | PixiSprite | PixiText | PixiGraphics,
+    args: DisplayObjectArgs
+) {
     if (args.position != null) {
         x.position.set(...args.position)
     }
@@ -238,7 +254,11 @@ export function Graphics(args: GraphicsArgs): PixiGraphics {
     return g
 }
 
-export function VideoBackground(args: { name?: string; scale: number; src: string }): PixiSprite {
+export function VideoBackground(args: {
+    name?: string
+    scale: number
+    src: string
+}): PixiSprite {
     const r = new PixiVideoResource(args.src, { updateFPS: 24 })
     const source = r.source as HTMLVideoElement
     source.muted = true

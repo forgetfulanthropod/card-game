@@ -1,4 +1,9 @@
-import type { AttackData, CharacterMove, CharacterUid, NetworkEvent } from '@shared'
+import type {
+    AttackData,
+    CharacterMove,
+    CharacterUid,
+    NetworkEvent,
+} from '@shared'
 
 import { getGameStateCursor } from '@/util'
 
@@ -15,7 +20,8 @@ export function getTransformed({
     charUid: CharacterUid
     username: string
 }): CharacterMove {
-    if (move.types.includes('MIM')) return getMimicMove({ move, charUid, username })
+    if (move.types.includes('MIM'))
+        return getMimicMove({ move, charUid, username })
 
     return move
 }
@@ -30,7 +36,9 @@ function getMimicMove({
     username: string
 }): CharacterMove {
     const lastAttackOnThisCharacter = [
-        ...getGameStateCursor(username).select('events').get('move$') as NetworkEvent<'move$', AttackData>[],
+        ...(getGameStateCursor(username)
+            .select('events')
+            .get('move$') as NetworkEvent<'move$', AttackData>[]),
     ]
         ?.reverse()
         ?.find(event => event.data.defenders.find(d => d.uid === charUid))

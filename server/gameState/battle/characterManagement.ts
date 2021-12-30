@@ -1,4 +1,10 @@
-import type { CharacterMeta, CharacterName, CharacterUid, OwnedCharacter, StanceName } from '@shared'
+import type {
+    CharacterMeta,
+    CharacterName,
+    CharacterUid,
+    OwnedCharacter,
+    StanceName,
+} from '@shared'
 
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
@@ -11,12 +17,24 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 type Characters = Record<CharacterUid, CharacterMeta>
-export function makeCharacters(chosen: OwnedCharacter[] = [], username: string): Characters {
-    const playerCharacterPositions = makePositions(10, 50, 18, 13, chosen.length)
+export function makeCharacters(
+    chosen: OwnedCharacter[] = [],
+    username: string
+): Characters {
+    const playerCharacterPositions = makePositions(
+        10,
+        50,
+        18,
+        13,
+        chosen.length
+    )
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return getModified(newPCMeta({ uid: c.uid, name: c.name, x, y }), username)
+            return getModified(
+                newPCMeta({ uid: c.uid, name: c.name, x, y }),
+                username
+            )
         }),
     ]
     const o: Characters = {}
@@ -35,13 +53,25 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     vals(npcs).forEach((npc, i) => {
         const [x, y] = positions[i]
 
-        rearrangedNpcs[npcKeys[i]] = { ...npc, x, y, screenX: BASE_WIDTH * x / 100, screenY: BASE_HEIGHT * y / 100 }
+        rearrangedNpcs[npcKeys[i]] = {
+            ...npc,
+            x,
+            y,
+            screenX: BASE_WIDTH * x / 100,
+            screenY: BASE_HEIGHT * y / 100,
+        }
     })
 
     return rearrangedNpcs
 }
 
-export function makePositions(x0: number, y0: number, hGap: number, vGap: number, n = 6): [number, number][] {
+export function makePositions(
+    x0: number,
+    y0: number,
+    hGap: number,
+    vGap: number,
+    n = 6
+): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],
@@ -55,12 +85,21 @@ export function makePositions(x0: number, y0: number, hGap: number, vGap: number
     return A.slice(0, n)
 }
 
-export function newPCMeta(args: { x: number; y: number; uid: string; name: CharacterName }): CharacterMeta {
+export function newPCMeta(args: {
+    x: number
+    y: number
+    uid: string
+    name: CharacterName
+}): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceName =
-        args.x > X_AGGRESSIVE_THRESH ? 'aggressive' : args.x > X_NEUTRAL_THRESH ? 'neutral' : 'defensive'
+        args.x > X_AGGRESSIVE_THRESH
+            ? 'aggressive'
+            : args.x > X_NEUTRAL_THRESH
+            ? 'neutral'
+            : 'defensive'
     const stats = statsMap[args.name]
     // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
     return {

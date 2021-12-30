@@ -11,7 +11,8 @@ export function dedent(text: string): string {
         } else break
     }
 
-    if (i) text = text.replace(new RegExp('^[ \t]{' + i + '}(.*\n)', 'gm'), '$1')
+    if (i)
+        text = text.replace(new RegExp('^[ \t]{' + i + '}(.*\n)', 'gm'), '$1')
 
     return text
 }

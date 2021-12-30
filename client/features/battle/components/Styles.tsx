@@ -119,7 +119,8 @@ interface ABP {
     isSelected: boolean
 }
 export const MoveButton = styled.button<ABP>`
-    background: ${(p: ABP) => p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)'};
+    background: ${(p: ABP) =>
+        p.isSelected ? 'rgba(0,0,0,.6)' : 'rgba(40,40,40,.6)'};
     color: white;
     font-family: monospace;
     display: block;

@@ -8,7 +8,7 @@ export default function ConnectWallet(): JSX.Element {
     return (
         <Box>
             <Button>
-                <Image src={solanaSvg} maxH="50%" mr="10px" ml="10px" />
+                <Image src={solanaSvg} maxH='50%' mr='10px' ml='10px' />
                 Connect Wallet
             </Button>
         </Box>

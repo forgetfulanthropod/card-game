@@ -1,4 +1,13 @@
-import { Box, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import {
+    Box,
+    Button,
+    Heading,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Text,
+} from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
 import { h } from 'preact'
@@ -16,7 +25,14 @@ import WelcomeModal from './util/WelcomeModal'
 
 type SubpageKey = keyof typeof subpages
 
-const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets, UITour }
+const subpages = {
+    About,
+    Overworld,
+    MyCharacters,
+    QuestProgress,
+    ManageAssets,
+    UITour,
+}
 
 const state = new SBaobab({
     dared: false,
@@ -35,7 +51,7 @@ export default function QuestsPage(_props: PageProps): JSX.Element {
             {!dared ? 
                 <WelcomeModal onDare={() => state.set('dared', true)} />
              : 
-                <Text bg="black" color="red" fontWeight="bold">
+                <Text bg='black' color='red' fontWeight='bold'>
                     YOU HAVE DARED
                 </Text>
             }

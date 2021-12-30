@@ -10,8 +10,16 @@ export const changeScene: ChangeScene = args => {
     if (args.newSceneName === 'battle') {
         const entrySceneData = getEntryScene(args.username).get()
         const { selectedCharacters, selectedLevel } = entrySceneData
-        const dungeonName = getRulebook().dungeonLevels[selectedLevel.num - 1].name
-        tree.set('scene', makeBattleState({ chosen: selectedCharacters, dungeonName, username: args.username }))
+        const dungeonName =
+            getRulebook().dungeonLevels[selectedLevel.num - 1].name
+        tree.set(
+            'scene',
+            makeBattleState({
+                chosen: selectedCharacters,
+                dungeonName,
+                username: args.username,
+            })
+        )
         putUpDoors(getBattleScene(args.username))
     }
 }

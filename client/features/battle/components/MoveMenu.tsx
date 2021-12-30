@@ -11,7 +11,9 @@ export default function MoveMenu(): JSX.Element {
     const selectedMove = scene.select('selectedMove')
 
     const [sm, setSm] = useState(selectedMove.get())
-    const [isPlayerTurn, setIsPlayerTurn] = useState(scene.select('isPlayerTurn').get())
+    const [isPlayerTurn, setIsPlayerTurn] = useState(
+        scene.select('isPlayerTurn').get()
+    )
 
     scene.select('isPlayerTurn').on('update', () => {
         setIsPlayerTurn(scene.select('isPlayerTurn').get())
@@ -39,9 +41,16 @@ export default function MoveMenu(): JSX.Element {
     }
     const [mvs, setMvs] = useState(movesOf(selectedCharacter.get()))
 
-    allCharacters.select(selectedCharacter.get()).select('moves').on('update', updateMoves)
+    allCharacters
+        .select(selectedCharacter.get())
+        .select('moves')
+        .on('update', updateMoves)
     selectedCharacter.on('update', async e => {
-        if (e.data.previousData) allCharacters.select(e.data.previousData).select('moves').off('update', updateMoves)
+        if (e.data.previousData)
+            allCharacters
+                .select(e.data.previousData)
+                .select('moves')
+                .off('update', updateMoves)
 
         const sc = e.data.currentData
         if (sc == null) return
@@ -76,7 +85,8 @@ export default function MoveMenu(): JSX.Element {
                             }}
                             isSelected={sm.name === m.name}
                         >
-                            {m.name} ({m.types.toString()}) [{m.damageRange?.join('-')}]
+                            {m.name} ({m.types.toString()}) [
+                            {m.damageRange?.join('-')}]
                         </MoveButton>
                     )}
                 </MoveMenuDiv>

@@ -5,7 +5,11 @@ import { Container, dataOf, getAppSize, Sprite, Text } from '@/elementsUtil'
 const doorWidth = 330
 const BASE_HEIGHT = 1080
 
-export default function Doors(args: { callbacks: Callback[]; descriptions?: string[]; exit: Callback }): PixiContainer {
+export default function Doors(args: {
+    callbacks: Callback[]
+    descriptions?: string[]
+    exit: Callback
+}): PixiContainer {
     const doorsAndText = args.callbacks.flatMap((cb, i) => {
         const door = Door({ xScaled: i * 1.15 + 0.5, onClick: cb })
         const text =
@@ -45,7 +49,9 @@ function Door(args: { xScaled: number; onClick: Callback }) {
     })
 }
 
-export function DoorsStories(name: 'alert2' | 'log4'): ReturnType<typeof Doors> {
+export function DoorsStories(
+    name: 'alert2' | 'log4'
+): ReturnType<typeof Doors> {
     return {
         alert2: () =>
             Doors({

@@ -3,10 +3,7 @@
     "components": [
         {
             "type": "Component",
-            "patterns": [
-                "**/*.ts",
-                "**/*.tsx"
-            ]
+            "patterns": ["**/*.ts", "**/*.tsx"]
         }
     ],
     "excludePatterns": [
@@ -20,26 +17,18 @@
         "groups": [
             {
                 "type": "Client",
-                "patterns": [
-                    "client/**"
-                ]
+                "patterns": ["client/**"]
             },
             {
                 "type": "Server",
-                "patterns": [
-                    "server/**"
-                ]
+                "patterns": ["server/**"]
             },
             {
                 "type": "Shared",
-                "patterns": [
-                    "shared/**"
-                ]
+                "patterns": ["shared/**"]
             },
             {
-                "components": [
-                    "Component"
-                ]
+                "components": ["Component"]
             }
         ]
     }

@@ -2,7 +2,13 @@ import type { RulebookAction } from '@serverActions'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 
 import { resetRulebook, setRulebook } from '@/rulebook/rulebook'
-import { pacificDate, prefix, stringifyRulebook, toPath, updateClientRulebookData } from '@/util'
+import {
+    pacificDate,
+    prefix,
+    stringifyRulebook,
+    toPath,
+    updateClientRulebookData,
+} from '@/util'
 
 export const rulebookAction: RulebookAction = args => {
     logger.info(`rulebookAction performing action ${args.do}`)

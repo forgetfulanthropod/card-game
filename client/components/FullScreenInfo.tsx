@@ -55,7 +55,13 @@ interface Info {
 export function FullScreenInfo(): JSX.Element {
     const [info, setInfo] = useState<Info | null>(null)
     useEffect(() => {
-        getSocket().on('world$', e => setInfo({ title: e.data.title, body: e.data.body, onClose: () => setInfo(null) }))
+        getSocket().on('world$', e =>
+            setInfo({
+                title: e.data.title,
+                body: e.data.body,
+                onClose: () => setInfo(null),
+            })
+        )
     }, [])
     if (info == null) {
         return <></>
@@ -74,10 +80,10 @@ function FullScreenInfo_(props: Info): JSX.Element {
 
     return (
         <Modal onClick={onClose}>
-            <div className="content" onClick={e => e.preventDefault()}>
-                <h1 className="title">{title}</h1>
+            <div className='content' onClick={e => e.preventDefault()}>
+                <h1 className='title'>{title}</h1>
                 <div ref={ref}></div>
-                <span className="close" onClick={onClose}>
+                <span className='close' onClick={onClose}>
                     Ⅹ
                 </span>
             </div>

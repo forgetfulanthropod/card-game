@@ -22,7 +22,13 @@ const Root = styled.div`
 `
 
 export function BlessingToggles(): JSX.Element {
-    const A: BlessingName[] = ['ptbotflax', 'strongPcs', 'strongEnemies', 'weakEnemies', 'weakPcs']
+    const A: BlessingName[] = [
+        'ptbotflax',
+        'strongPcs',
+        'strongEnemies',
+        'weakEnemies',
+        'weakPcs',
+    ]
     const blessings = useCursor(getTree().select('blessings'))
     return (
         <Root>

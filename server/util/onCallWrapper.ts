@@ -27,7 +27,11 @@ export function onCallWrapper<Args, ReturnType>(
             const socketId: string = request.session.socketio
             if (typeof username !== 'string') logger.error('no username!')
             if (config.log)
-                logger.info(`received post call to ${f.name}#${randId} with ${JSON.stringify(request.body)}`)
+                logger.info(
+                    `received post call to ${
+                        f.name
+                    }#${randId} with ${JSON.stringify(request.body)}`
+                )
             if (options?.wholeRequest) {
                 // @ts-expect-error
                 result = await f(request)
@@ -37,12 +41,22 @@ export function onCallWrapper<Args, ReturnType>(
                 body.socketId = socketId
                 result = await f(body)
             }
-            if (options?.disableCommit !== true) commit(getGameStateCursor(username), username)
-            if (config.log) logger.info(`    ${f.name}#${randId} responding with ${JSON.stringify(result)}`)
+            if (options?.disableCommit !== true)
+                commit(getGameStateCursor(username), username)
+            if (config.log)
+                logger.info(
+                    `    ${f.name}#${randId} responding with ${JSON.stringify(
+                        result
+                    )}`
+                )
             response.send({ status: 'success', result })
         } catch (e) {
             const err = e as unknown as Error
-            logger.error(`exception occured in client call to ${f.name}: ${JSON.stringify(err.message)} ${err.stack}`)
+            logger.error(
+                `exception occured in client call to ${
+                    f.name
+                }: ${JSON.stringify(err.message)} ${err.stack}`
+            )
             response.send({ status: 'error', message: JSON.stringify(e) })
         }
     })

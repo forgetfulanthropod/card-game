@@ -36,11 +36,12 @@ export function Monaco(props: {
                     mref.current = editor
                     // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
                     await editor.getAction('editor.foldRecursively').run()
-                    for (let i = 0; i < foldLevel; i++) await editor.getAction('editor.unfold').run()
+                    for (let i = 0; i < foldLevel; i++)
+                        await editor.getAction('editor.unfold').run()
                     console.log('i tried to fold it ok')
                 }}
-                height="88vh"
-                defaultLanguage="json"
+                height='88vh'
+                defaultLanguage='json'
                 defaultValue={props.defaultValue}
             />
         </EditorWrap>

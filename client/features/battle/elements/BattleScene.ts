@@ -2,7 +2,12 @@ import type { BattleScene } from '@shared'
 import type { SCursor } from 'baobab'
 import isEqual from 'lodash/isEqual'
 
-import { chooseDoor, doCharacterAction, exitDungeon, startBattle } from '@/actions'
+import {
+    chooseDoor,
+    doCharacterAction,
+    exitDungeon,
+    startBattle,
+} from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
@@ -47,7 +52,9 @@ function bindCharacters(scene: SCursor<BattleScene>, container: PixiContainer) {
                 .every(cm => !cm.hasMoved)
         ) {
             // tl()
-            const message = scene.get('isPlayerTurn') ? 'You start round!' : 'Enemy starts round!'
+            const message = scene.get('isPlayerTurn')
+                ? 'You start round!'
+                : 'Enemy starts round!'
             overlay({ elementId: 'roundStart', data: { message } })
         }
         const newKeys = keys(allChars)
@@ -73,17 +80,27 @@ function updateScene(scene: SCursor<BattleScene>, container: PixiContainer) {
     const sortedYs = vals(allCharacters)
         .map(c => c.y)
         .sort((y1, y2) => y1 - y2)
-    const childCursors = keyMap(allCharsCursor.get(), k => allCharsCursor.select(k))
+    const childCursors = keyMap(allCharsCursor.get(), k =>
+        allCharsCursor.select(k)
+    )
     const dungeonName = scene.get('dungeonName')
     const backgroundArgs =
-        dungeonName === 'The Matcha Caves' ? { src: CaveVideo } : { srcs: [backgrounds[dungeonName]] }
+        dungeonName === 'The Matcha Caves'
+            ? { src: CaveVideo }
+            : { srcs: [backgrounds[dungeonName]] }
     const newChildren = [
         background({ scale: 1, ...backgroundArgs }),
-        InfoBox({ info: [`Room ${scene.get('roomsPassed') + 1}`, scene.get('dungeonName')] }),
+        InfoBox({
+            info: [
+                `Room ${scene.get('roomsPassed') + 1}`,
+                scene.get('dungeonName'),
+            ],
+        }),
         ...childCursors.map(childCursor =>
             Character({
                 cursor: childCursor,
-                onClick: () => doCharacterAction({ uid: childCursor.get('uid') }),
+                onClick: () =>
+                    doCharacterAction({ uid: childCursor.get('uid') }),
                 scale: 1,
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
@@ -106,14 +123,19 @@ function makeDoors(parent: PixiContainer) {
     function update() {
         const doors = doorCursor.get()
         // console.log('doors update...')
-        if ((doors == null || doors.options.length === 0) && doorsContainer != null) {
+        if (
+            (doors == null || doors.options.length === 0) &&
+            doorsContainer != null
+        ) {
             parent.removeChild(doorsContainer)
             doorsContainer.destroy()
             doorsContainer = null
         } else if (doors != null) {
             // console.log('adding some doors')
             doorsContainer = Doors({
-                callbacks: doors.options.map(d => () => chooseDoor({ door: d })),
+                callbacks: doors.options.map(
+                    d => () => chooseDoor({ door: d })
+                ),
                 descriptions: doors.descriptions,
                 exit: () => exitDungeon(),
             })

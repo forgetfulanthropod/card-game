@@ -18,7 +18,10 @@ export const chooseDoor: ChooseDoor = async args => {
 
     scene.set('doors', { options: [], descriptions: [] })
     scene.set('roomsPassed', scene.get('roomsPassed') + 1)
-    scene.apply('allCharacters', ac => ({ ...objFilter(ac, (_, c) => c.isPc), ...room.enemies }))
+    scene.apply('allCharacters', ac => ({
+        ...objFilter(ac, (_, c) => c.isPc),
+        ...room.enemies,
+    }))
     scene.set('state', 'in battle')
 
     await resetRound(scene, args.username)

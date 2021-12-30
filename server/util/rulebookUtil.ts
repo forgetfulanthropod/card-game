@@ -10,7 +10,8 @@ import { getRootCursor } from './treeUtils'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
-const removeExtension = (filename: string): string => filename.replace(/\.[^/.]+$/, '')
+const removeExtension = (filename: string): string =>
+    filename.replace(/\.[^/.]+$/, '')
 
 export function updateClientRulebookData(username: string): void {
     // Q: Update all users or just one?

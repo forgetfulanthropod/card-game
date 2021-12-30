@@ -1,14 +1,14 @@
 name: deploy on linode
 on: [push, delete, workflow_dispatch]
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: executing remote ssh commands using password
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: root
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: /root/kaiju-router/logify.sh /root/kaiju-router/job.sh /root/kaiju-router/log.log
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: executing remote ssh commands using password
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: root
+                  key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  script: /root/kaiju-router/logify.sh /root/kaiju-router/job.sh /root/kaiju-router/log.log

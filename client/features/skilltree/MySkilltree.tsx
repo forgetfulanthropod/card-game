@@ -9,11 +9,11 @@ export default function MySkilltree(): JSX.Element {
             <SkillTreeGroup>
                 {({ skillCount: _skillCount }) => 
                     <SkillTree
-                        treeId="first-tree"
-                        title="Skill Tree"
+                        treeId='first-tree'
+                        title='Skill Tree'
                         data={data}
                         collapsible
-                        description="My first skill tree"
+                        description='My first skill tree'
                     />
                 }
             </SkillTreeGroup>

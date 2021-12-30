@@ -1,73 +1,69 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Do everything",
-			"dependsOn": [
-				"tsc server",
-				"tsc client",
-				"esbuild client",
-				"esbuild server",
-				"run server",
-			],
-			"dependsOrder": "parallel",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"isBackground": true,
-			"detail": "see https://stackoverflow.com/a/58181330",
-			// "runOptions": { "runOn": "folderOpen", }
-		},
-		{
-			"label": "tsc server",
-			"type": "typescript",
-			"tsconfig": "server/tsconfig.json",
-			"option": "watch",
-			"problemMatcher": [
-				"$tsc-watch"
-			],
-			"group": "build",
-			"presentation": {
-				"group": "checkers",
-			}
-		},
-		{
-			"label": "tsc client",
-			"type": "typescript",
-			"tsconfig": "tsconfig.json",
-			"option": "watch",
-			"problemMatcher": [
-				"$tsc-watch"
-			],
-			"group": "build",
-			"presentation": {
-				"group": "checkers",
-			}
-		},
-		{
-			"label": "esbuild client",
-			"type": "shell",
-			"command": "npm start",
-			"presentation": {
-				"group": "builders",
-			}
-		},
-		{
-			"label": "esbuild server",
-			"type": "shell",
-			"command": "cd server && npm run watch",
-			"presentation": {
-				"group": "builders",
-			}
-		},
-		{
-			"label": "run server",
-			"type": "shell",
-			"command": "cd server && npm run server-watch",
-			"presentation": {
-				"group": "group3",
-			}
-		},
-	]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Do everything",
+            "dependsOn": [
+                "tsc server",
+                "tsc client",
+                "esbuild client",
+                "esbuild server",
+                "run server"
+            ],
+            "dependsOrder": "parallel",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "detail": "see https://stackoverflow.com/a/58181330"
+            // "runOptions": { "runOn": "folderOpen", }
+        },
+        {
+            "label": "tsc server",
+            "type": "typescript",
+            "tsconfig": "server/tsconfig.json",
+            "option": "watch",
+            "problemMatcher": ["$tsc-watch"],
+            "group": "build",
+            "presentation": {
+                "group": "checkers"
+            }
+        },
+        {
+            "label": "tsc client",
+            "type": "typescript",
+            "tsconfig": "tsconfig.json",
+            "option": "watch",
+            "problemMatcher": ["$tsc-watch"],
+            "group": "build",
+            "presentation": {
+                "group": "checkers"
+            }
+        },
+        {
+            "label": "esbuild client",
+            "type": "shell",
+            "command": "npm start",
+            "presentation": {
+                "group": "builders"
+            }
+        },
+        {
+            "label": "esbuild server",
+            "type": "shell",
+            "command": "cd server && npm run watch",
+            "presentation": {
+                "group": "builders"
+            }
+        },
+        {
+            "label": "run server",
+            "type": "shell",
+            "command": "cd server && npm run server-watch",
+            "presentation": {
+                "group": "group3"
+            }
+        }
+    ]
 }

@@ -91,7 +91,13 @@ export function LevelInfo(): PixiContainer {
     const root = Container({
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 10,
-        children: [leftButton, levelNumText, rightButton, levelNameText, pointLimitText],
+        children: [
+            leftButton,
+            levelNumText,
+            rightButton,
+            levelNameText,
+            pointLimitText,
+        ],
     })
 
     return root

@@ -19,14 +19,16 @@ export const data: SkillType[] = [
                         id: 'gather',
                         title: 'gather',
                         tooltip: {
-                            content: 'Start learning how to gather items in the world',
+                            content:
+                                'Start learning how to gather items in the world',
                         },
                         children: [
                             {
                                 id: 'mine',
                                 title: 'mine',
                                 tooltip: {
-                                    content: 'Begin the journey to mining copper, iron, and steel',
+                                    content:
+                                        'Begin the journey to mining copper, iron, and steel',
                                 },
                                 children: [],
                             },

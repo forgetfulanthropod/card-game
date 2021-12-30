@@ -1,6 +1,12 @@
 import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH, Container, dataOf, Sprite } from '@/elementsUtil'
+import {
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    dataOf,
+    Sprite,
+} from '@/elementsUtil'
 
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
@@ -26,7 +32,8 @@ export function SelectedCharacters(): PixiContainer {
             ) ?? []
         root.removeChildren()
         // @ts-ignore
-        if (Array.isArray(characters) && characters.length > 0) root.addChild(...characters)
+        if (Array.isArray(characters) && characters.length > 0)
+            root.addChild(...characters)
     }
 
     const root = Container({

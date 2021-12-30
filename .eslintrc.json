@@ -60,7 +60,12 @@
     "ignorePatterns": ["scripts/", "server/lib", "build", "tests", "**/*.js"],
     "overrides": [
         {
-            "files": ["client/**/*.ts", "client/**/*.tsx", "client/**/*.d.ts", "shared/**/*.ts"],
+            "files": [
+                "client/**/*.ts",
+                "client/**/*.tsx",
+                "client/**/*.d.ts",
+                "shared/**/*.ts"
+            ],
             "extends": ["plugin:react/recommended"],
             "plugins": ["react", "react-hooks"],
             "parserOptions": {

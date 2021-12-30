@@ -17,9 +17,17 @@ import { useCursor } from './util'
 export function Sidebar(): JSX.Element {
     return (
         <div style={{ pointerEvents: 'auto' }}>
-            <OneSidebar cursor={getTree().select('events').select('move$')} title="Event History" top="0" />
-            <OneSidebar cursor={getClientTree().select('serverCalls')} title="Server calls" top="1em" />
-            <GamestateEditor top="2em" />
+            <OneSidebar
+                cursor={getTree().select('events').select('move$')}
+                title='Event History'
+                top='0'
+            />
+            <OneSidebar
+                cursor={getClientTree().select('serverCalls')}
+                title='Server calls'
+                top='1em'
+            />
+            <GamestateEditor top='2em' />
         </div>
     )
 }
@@ -35,11 +43,15 @@ function GamestateEditor(props: { top: string }): JSX.Element {
     const title = 'Edit gamestate tree'
     return (
         <Root shown={shown} top={props.top} styleChildren={false}>
-            <span onClick={() => setShown(s => !s)}>{shown ? <b>{title}</b> : title}</span>
+            <span onClick={() => setShown(s => !s)}>
+                {shown ? <b>{title}</b> : title}
+            </span>
             {shown && 
                 <Monaco
                     mref={ref}
-                    defaultValue={stringify(omit(data, ['curRulebook', 'rulebooks']))}
+                    defaultValue={stringify(
+                        omit(data, ['curRulebook', 'rulebooks'])
+                    )}
                     onClose={() => {
                         if (ref.current == null) return
                         const curString = ref.current.getValue()
@@ -62,14 +74,20 @@ function GamestateEditor(props: { top: string }): JSX.Element {
     )
 }
 
-function OneSidebar<T>(props: { cursor: SCursor<T[]>; title: string; top: string }): JSX.Element {
+function OneSidebar<T>(props: {
+    cursor: SCursor<T[]>
+    title: string
+    top: string
+}): JSX.Element {
     const c = props.cursor
     const [shown, setShown] = useState(false)
     const [events, setEvents] = useState(c.get())
     c.on('update', () => setEvents(c.get()))
     return (
         <Root shown={shown} top={props.top} styleChildren={true}>
-            <span onClick={() => setShown(s => !s)}>{shown ? <b>{props.title}</b> : props.title}</span>
+            <span onClick={() => setShown(s => !s)}>
+                {shown ? <b>{props.title}</b> : props.title}
+            </span>
             {shown && 
                 <div>
                     {events.map((e, i) => 

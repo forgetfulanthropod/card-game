@@ -5,7 +5,10 @@ import type { PixiContainer } from '@/elementsUtil'
 /** Easier thing for adding and removing sprites maybe. Untested. Not sure if useful. */
 export class Managed {
     private child: DisplayObject | null = null
-    constructor(private parent: PixiContainer, private childFactory: () => DisplayObject) {}
+    constructor(
+        private parent: PixiContainer,
+        private childFactory: () => DisplayObject
+    ) {}
     show(): void {
         if (this.child != null) {
             console.warn('already shown')

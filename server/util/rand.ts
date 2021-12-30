@@ -29,7 +29,9 @@ export function randomEl<T>(arr: readonly T[]): T {
 
 /** Returns index of chosen element */
 export function weightedRandom(probabilites: number[]): number {
-    if (probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)) {
+    if (
+        probabilites.some(x => Number.isNaN(x) || !Number.isFinite(x) || x < 0)
+    ) {
         logger.error('array contains NaN or Inf or negative numbers')
         return 0
     }

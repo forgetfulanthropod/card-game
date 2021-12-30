@@ -21,7 +21,10 @@ const urlPrefix = window.location.href.split('/')[3]
 // MARK
 let socket: Socket = null as unknown as Socket
 export function maybeMakeSocket(): void {
-    if (socket == null) socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
+    if (socket == null)
+        socket = io({
+            path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
+        })
 }
 export function resolveWhenSocketConfirmed(): Promise<void> {
     maybeMakeSocket()
