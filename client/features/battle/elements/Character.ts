@@ -1,11 +1,23 @@
-import type { CharacterMeta, CharacterUid, NetworkAttackData, NetworkEvent } from '@shared'
+import type {
+    CharacterMeta,
+    CharacterUid,
+    NetworkAttackData,
+    NetworkEvent,
+} from '@shared'
 import type { SCursor } from 'baobab'
 import { filters, Loader } from 'pixi.js'
 
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
-import { Container, doFlashElement, flashElement, hideElement, PixiTicker, Sprite } from '@/elementsUtil'
+import {
+    Container,
+    doFlashElement,
+    flashElement,
+    hideElement,
+    PixiTicker,
+    Sprite,
+} from '@/elementsUtil'
 
 import type { CharacterName } from '../logic/AssetLoader'
 import HealthBar from './HealthBar'
@@ -44,11 +56,25 @@ export function Character(args: CharacterProps): PixiContainer {
     if (sprites == null) {
         return Container({ children: [] })
     }
-    const { attackSprite, defendSprite, mainSprite, selectedSprite, hasMovedSprite, initialHeight } = sprites
+    const {
+        attackSprite,
+        defendSprite,
+        mainSprite,
+        selectedSprite,
+        hasMovedSprite,
+        initialHeight,
+    } = sprites
 
     const mainContainer = Container({
         zIndex: args.zIndex,
-        children: [mainSprite, selectedSprite, attackSprite, defendSprite, hasMovedSprite, healthBar],
+        children: [
+            mainSprite,
+            selectedSprite,
+            attackSprite,
+            defendSprite,
+            hasMovedSprite,
+            healthBar,
+        ],
     })
     mainContainer.sortChildren()
 
@@ -92,48 +118,81 @@ export function Character(args: CharacterProps): PixiContainer {
 
     // const [isHovering, setIsHovering] = useState(false)
 
-    getSocket().on('move$', function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
-        const { attacker, defenders, move, damageMap } = event.data
-        // console.log("doCharMove of", JSON.stringify(d))
-        const myId = characterMeta.uid
-        if (attacker === myId) {
-            flashElement(attackSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-            const defender0 = getBattleScene().select('allCharacters').select(defenders[0]).get()
-            const fly = makeFlyToOnTick({ x: screenX, y: screenY }, { x: defender0.screenX, y: defender0.screenY })
-            PixiTicker.shared.add(function cb(dt) {
-                const result = fly(flyingContainer, dt)
-                if (result === 'remove') PixiTicker.shared.remove(cb)
-            })
-            const charDamage = damageMap.find(d => d.key === myId)?.damage ?? null
-            if (charDamage != null)
-                doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: charDamage, isPoison: true }), {
-                    durationMs: SHOW_HIT_TIME,
+    getSocket().on(
+        'move$',
+        function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
+            const { attacker, defenders, move, damageMap } = event.data
+            // console.log("doCharMove of", JSON.stringify(d))
+            const myId = characterMeta.uid
+            if (attacker === myId) {
+                flashElement(attackSprite, {
+                    durationMs: ATTACK_ANIMATION_TIME,
                 })
-        }
-
-        if (defenders.findIndex(d => d === myId) > -1) {
-            flashElement(defendSprite, { durationMs: ATTACK_ANIMATION_TIME })
-            doFlashElement(aboveCharacterContainer, () => MoveInfo({ move: move, offset: -70 }), {
-                durationMs: SHOW_HIT_TIME,
-            })
-            const damageObj = damageMap.find(d => d.key === myId)
-            if (damageObj == null) {
-                console.warn(`damageMap did not provide value for defender with id ${myId}. damageMap:`, damageMap)
-                return
+                hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
+                const defender0 = getBattleScene()
+                    .select('allCharacters')
+                    .select(defenders[0])
+                    .get()
+                const fly = makeFlyToOnTick(
+                    { x: screenX, y: screenY },
+                    { x: defender0.screenX, y: defender0.screenY }
+                )
+                PixiTicker.shared.add(function cb(dt) {
+                    const result = fly(flyingContainer, dt)
+                    if (result === 'remove') PixiTicker.shared.remove(cb)
+                })
+                const charDamage =
+                    damageMap.find(d => d.key === myId)?.damage ?? null
+                if (charDamage != null)
+                    doFlashElement(
+                        aboveCharacterContainer,
+                        () => HitInfo({ damage: charDamage, isPoison: true }),
+                        {
+                            durationMs: SHOW_HIT_TIME,
+                        }
+                    )
             }
-            doFlashElement(aboveCharacterContainer, () => HitInfo({ damage: damageObj.damage }), {
-                durationMs: SHOW_HIT_TIME,
-            })
+
+            if (defenders.findIndex(d => d === myId) > -1) {
+                flashElement(defendSprite, {
+                    durationMs: ATTACK_ANIMATION_TIME,
+                })
+                doFlashElement(
+                    aboveCharacterContainer,
+                    () => MoveInfo({ move: move, offset: -70 }),
+                    {
+                        durationMs: SHOW_HIT_TIME,
+                    }
+                )
+                const damageObj = damageMap.find(d => d.key === myId)
+                if (damageObj == null) {
+                    console.warn(
+                        `damageMap did not provide value for defender with id ${myId}. damageMap:`,
+                        damageMap
+                    )
+                    return
+                }
+                doFlashElement(
+                    aboveCharacterContainer,
+                    () => HitInfo({ damage: damageObj.damage }),
+                    {
+                        durationMs: SHOW_HIT_TIME,
+                    }
+                )
+            }
         }
-    })
+    )
 
     updateDeathAndHealth()
 
     return flyingContainer
 }
 
-function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeight: (height: number) => void) {
+function makeSprites(
+    args: CharacterProps,
+    characterMeta: CharacterMeta,
+    onHeight: (height: number) => void
+) {
     const blurFilter = new filters.BlurFilter()
     blurFilter.blur = 20
     const grayFilter = new filters.ColorMatrixFilter()
@@ -144,12 +203,15 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
     const hasMovedCursor = args.cursor.select('hasMoved')
 
     const assetIdCursor = args.cursor.select('name')
-    const assetIdToSrc = (assetId: CharacterName) => Loader.shared.resources?.[assetId]?.texture as PixiTexture
+    const assetIdToSrc = (assetId: CharacterName) =>
+        Loader.shared.resources?.[assetId]?.texture as PixiTexture
 
     if (assetIdCursor.get() == null) {
         // TODO: has to do with renewChildren()
         // should never occur...
-        console.error('null character assetId. probably character was removed or uid was changed.')
+        console.error(
+            'null character assetId. probably character was removed or uid was changed.'
+        )
         return null
     }
 
@@ -167,8 +229,20 @@ function makeSprites(args: CharacterProps, characterMeta: CharacterMeta, onHeigh
         },
         zIndex: 1,
     })
-    const defendSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: RED, zIndex: 0, visible: false })
-    const attackSprite = Sprite({ ...charSpriteProps, filters: [blurFilter], tint: BLUE, zIndex: 0, visible: false })
+    const defendSprite = Sprite({
+        ...charSpriteProps,
+        filters: [blurFilter],
+        tint: RED,
+        zIndex: 0,
+        visible: false,
+    })
+    const attackSprite = Sprite({
+        ...charSpriteProps,
+        filters: [blurFilter],
+        tint: BLUE,
+        zIndex: 0,
+        visible: false,
+    })
     const hasMovedSprite = Sprite({
         ...charSpriteProps,
         filters: [grayFilter],
@@ -240,11 +314,19 @@ function makeFlyToOnTick(start: Point, flyTo: Point) {
         // const deltaTimeMs = elapsed * 1000 / 60
         totalElapsed += elapsed * 16.66
         if (totalElapsed < FLY_TO_TIME) {
-            container.x = start.x + (flyTo.x - start.x) * totalElapsed / FLY_TO_TIME
-            container.y = start.y + (flyTo.y - start.y) * totalElapsed / FLY_TO_TIME
+            container.x =
+                start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
+            container.y =
+                start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
         } else if (totalElapsed < FLY_TIME) {
-            container.x = flyTo.x + (start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
-            container.y = flyTo.y + (start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME) / FLY_BACK_TIME
+            container.x =
+                flyTo.x +
+                ((start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME)) /
+                    FLY_BACK_TIME
+            container.y =
+                flyTo.y +
+                ((start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME)) /
+                    FLY_BACK_TIME
         } else {
             container.x = start.x
             container.y = start.y
