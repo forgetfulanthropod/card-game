@@ -4,8 +4,8 @@ import alias from 'esbuild-plugin-alias'
 import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
-const buildDir = 'build'
-const publicDir = 'client/public_'
+const buildDir = '../build'
+const publicDir = 'public_'
 
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
