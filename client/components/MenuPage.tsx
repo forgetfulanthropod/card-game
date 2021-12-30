@@ -1,7 +1,7 @@
 /*eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsForRegex": ["^mut"] }]*/
 
 import { Heading, SimpleGrid } from '@chakra-ui/react'
-import { Fragment, h } from 'preact'
+import { Fragment, h, JSX } from 'preact'
 
 import { MyButton, PageHeader } from './PageHeader'
 import type { PageProps } from './PageManager'

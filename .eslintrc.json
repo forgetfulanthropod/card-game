@@ -72,7 +72,7 @@
                 "ecmaFeatures": {
                     "jsx": true
                 },
-                "project": "tsconfig.json"
+                "project": "client/tsconfig.json"
             },
             "rules": {
                 "react/no-unused-prop-types": "warn",

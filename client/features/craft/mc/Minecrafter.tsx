@@ -5,7 +5,7 @@
 // List of recipes in minecraft -   https://www.minecraftcraftingguide.net/
 
 import { range } from 'lodash'
-import { Fragment, h } from 'preact'
+import { Fragment, h, JSX } from 'preact'
 import { useState } from 'preact/hooks'
 
 import { initialInventory } from './data'
@@ -42,7 +42,7 @@ function CraftingTable(props: {
         <>
             <h1>Crafting Table</h1>
             <div class={s.grid}>
-                {range(9).map(i => 
+                {range(9).map(i => (
                     <div
                         class={s.gridCell}
                         onClick={() =>
@@ -57,7 +57,7 @@ function CraftingTable(props: {
                     >
                         <img src={imageOf(craftTable[i])} />
                     </div>
-                )}
+                ))}
             </div>
         </>
     )
@@ -79,7 +79,7 @@ function Result(props: {
                 )
             }
         >
-            {props.result != null && 
+            {props.result != null && (
                 <>
                     <img src={imageOf(props.result[1])} />
                     <br />
@@ -87,7 +87,7 @@ function Result(props: {
                     <br />
                     Click on this item to add it to your inventory.
                 </>
-            }
+            )}
         </div>
     )
 }
@@ -96,15 +96,15 @@ const Inventory = (props: {
     inventory: number[]
     setSelected: PSet<number>
     selected: number
-}): JSX.Element => 
+}): JSX.Element => (
     <>
         <h1>Inventory</h1>
         <p>{instructions}</p>
         <div class={s.inventory}>
             {range(27).map(i =>
-                props.inventory[i] === 0 ? 
+                props.inventory[i] === 0 ? (
                     <div class={s.gridCell} key={i}></div>
-                 : 
+                ) : (
                     <div
                         class={s.gridCell}
                         onClick={() => props.setSelected(props.inventory[i])}
@@ -119,11 +119,11 @@ const Inventory = (props: {
                         <img src={imageOf(props.inventory[i])} />
                         {/* alt={alt} */}
                     </div>
-                
+                )
             )}
         </div>
     </>
-
+)
 
 function imageOf(id: number): string {
     return `http://www.101computing.net/mc/${id}-0.png`

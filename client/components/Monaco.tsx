@@ -2,7 +2,7 @@ import { Fragment, h, JSX, RefObject } from 'preact' // eslint-disable-line
 // @ts-ignore
 import styled from 'styled-components'
 
-import Editor from '@monaco-editor/react'
+import Editor, { OnMount } from '@monaco-editor/react'
 import type { editor } from 'monaco-editor'
 
 export type MonacoRef = RefObject<editor.IStandaloneCodeEditor>
@@ -32,14 +32,16 @@ export function Monaco(props: {
         <EditorWrap>
             {props.onClose && <button onClick={props.onClose}>close</button>}
             <Editor
-                onMount={async (editor, _monaco) => {
-                    mref.current = editor
-                    // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
-                    await editor.getAction('editor.foldRecursively').run()
-                    for (let i = 0; i < foldLevel; i++)
-                        await editor.getAction('editor.unfold').run()
-                    console.log('i tried to fold it ok')
-                }}
+                onMount={
+                    (async (editor, _monaco) => {
+                        mref.current = editor
+                        // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
+                        await editor.getAction('editor.foldRecursively').run()
+                        for (let i = 0; i < foldLevel; i++)
+                            await editor.getAction('editor.unfold').run()
+                        console.log('i tried to fold it ok')
+                    }) as OnMount
+                }
                 height='88vh'
                 defaultLanguage='json'
                 defaultValue={props.defaultValue}

@@ -12,22 +12,23 @@
         "noFallthroughCasesInSwitch": true,
         "isolatedModules": true,
         "noEmit": true,
-        // "jsx": "react-jsx",
-        // "jsxImportSource": "preact",
-        "jsx": "preserve",
-        "jsxFactory": "h",
-        "jsxFragmentFactory": "Fragment",
-        "baseUrl": "..",
+        "jsxImportSource": "preact",
+        "jsx": "react-jsx",
+        // "jsxFactory": "h",
+        // "jsxFragmentFactory": "Fragment",
+        "baseUrl": ".",
         "paths": {
-            "@shared": ["./shared/index"],
-            "@shared/actions": ["./shared/actions/index"],
-            "@shared/code": ["./shared/code/index"],
-            "@/*": ["./client/*"]
+            "@shared": ["../shared/index"],
+            "@shared/actions": ["../shared/actions/index"],
+            "@shared/code": ["../shared/code/index"],
+            "@/*": ["./*"],
+            "react": ["node_modules/preact/compat"],
+            "react-dom": ["node_modules/preact/compat"]
         },
         "allowJs": true,
         "skipLibCheck": true,
         "resolveJsonModule": true
-    },
-    "include": ["client", "shared"],
-    "exclude": ["scripts", "client/public_"]
+    }
+    // "include": ["./**/*.ts", "./**/*.tsx", "../shared/**/*"],
+    // "exclude": ["public_", "node_modules"]
 }

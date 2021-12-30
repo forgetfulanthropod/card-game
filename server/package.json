@@ -6,21 +6,21 @@
         "server-watch-debug": "nodemon --inspect --enable-source-maps --watch ../server-build/index.js ../server-build/index.js",
         "build": "node ../scripts/serverEsbuild.mjs",
         "build-watch": "npm run build -- watch",
-        "tsc": "tsc",
+        "tsc": "../node_modules/.bin/tsc --project tsconfig.json",
         "test": "testyts"
     },
     "dependencies": {
-        "acebase": "^1.11.1",
+        "acebase": "^1.12.4",
         "axios": "^0.24.0",
         "express-session": "^1.17.2",
         "seedrandom": "^3.0.5",
-        "socket.io": "^4.3.1",
+        "socket.io": "^4.4.0",
         "winston": "^3.3.3"
     },
     "devDependencies": {
         "@types/express-session": "^1.17.4",
         "@types/seedrandom": "^3.0.1",
-        "nodemon": "^2.0.14",
+        "nodemon": "^2.0.15",
         "testyts": "^1.5.0"
     }
 }

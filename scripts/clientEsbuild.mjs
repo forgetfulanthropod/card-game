@@ -11,6 +11,8 @@ const entryPoint = 'index.tsx'
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
 
+console.log('process.env.PWD:', process.env.PWD)
+
 console.log('substitutions:', makeSubstitutions())
 
 function makeSubstitutions() {

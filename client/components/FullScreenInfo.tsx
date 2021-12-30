@@ -1,7 +1,7 @@
 import { h, Fragment, JSX } from 'preact' // eslint-disable-line
 // @ts-expect-error
 import styled from 'styled-components'
-import { parse } from 'marked'
+// import { parse } from 'marked'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { getSocket } from '@/connection'
 
@@ -75,7 +75,8 @@ function FullScreenInfo_(props: Info): JSX.Element {
 
     useEffect(() => {
         if (ref.current == null) return
-        ref.current.innerHTML = parse(body)
+        // ref.current.innerHTML = parse(body)
+        ref.current.innerHTML = body
     }, [body])
 
     return (
