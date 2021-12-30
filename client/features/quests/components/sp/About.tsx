@@ -1,5 +1,6 @@
 import { Box, Heading, Text } from '@chakra-ui/react'
-import { Fragment, h } from 'preact'
+import type { h } from 'preact'
+import { Fragment } from 'preact'
 
 export default function About(): h.JSX.Element {
     return (

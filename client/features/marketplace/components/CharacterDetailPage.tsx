@@ -13,7 +13,7 @@ import {
 import { useMediaQuery } from '@chakra-ui/react'
 import { random } from 'lodash'
 import type { JSX } from 'preact'
-import { Fragment, h } from 'preact'
+import { Fragment } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
 import characterSrc from '@/features/battle/assets/cards/PenguinKnight-200.png'

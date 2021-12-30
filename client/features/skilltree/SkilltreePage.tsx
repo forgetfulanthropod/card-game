@@ -1,6 +1,5 @@
 import { Box, Heading, Text } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'

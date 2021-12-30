@@ -1,6 +1,5 @@
 import { Heading, Progress, VStack } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 export default function QuestProgressBar(props: {
     percent: number

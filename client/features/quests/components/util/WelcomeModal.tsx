@@ -1,5 +1,6 @@
 import { Button, Text } from '@chakra-ui/react'
-import { Fragment, h, JSX } from 'preact'
+import type { JSX } from 'preact'
+import { Fragment } from 'preact'
 import { useRef } from 'preact/hooks'
 
 import type { Disclosure } from './MyModal'

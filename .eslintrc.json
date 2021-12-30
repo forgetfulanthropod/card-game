@@ -8,7 +8,6 @@
     "parserOptions": {
         "ecmaVersion": 12,
         "sourceType": "module"
-        // ,"project": "server/tsconfig.json"
     },
     "plugins": ["@typescript-eslint", "unused-imports", "simple-import-sort"],
     "rules": {
@@ -99,9 +98,9 @@
             }
         },
         {
-            "files": ["kaiju-micro/**/*.ts"],
+            "files": ["crypto-server/**/*.ts"],
             "parserOptions": {
-                "project": "./kaiju-micro/tsconfig.json"
+                "project": "./crypto-server/tsconfig.json"
             }
         }
     ]

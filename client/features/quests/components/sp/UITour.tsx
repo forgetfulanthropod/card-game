@@ -1,6 +1,5 @@
 import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 import { CharacterStatsBoxExample } from '../util/CharacterStatsBox'
 import { ClaimGemsExample } from '../util/ClaimGems'

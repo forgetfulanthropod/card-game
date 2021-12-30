@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'

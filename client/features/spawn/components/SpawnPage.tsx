@@ -8,7 +8,7 @@ import {
     Text,
 } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { Fragment, h } from 'preact'
+import { Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 
 import { PageHeader } from '@/components/PageHeader'

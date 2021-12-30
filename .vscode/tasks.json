@@ -33,7 +33,7 @@
         {
             "label": "tsc client",
             "type": "typescript",
-            "tsconfig": "tsconfig.json",
+            "tsconfig": "client/tsconfig.json",
             "option": "watch",
             "problemMatcher": ["$tsc-watch"],
             "group": "build",
@@ -44,7 +44,7 @@
         {
             "label": "esbuild client",
             "type": "shell",
-            "command": "npm start",
+            "command": "cd server && npm run build-watch",
             "presentation": {
                 "group": "builders"
             }
@@ -52,7 +52,7 @@
         {
             "label": "esbuild server",
             "type": "shell",
-            "command": "cd server && npm run watch",
+            "command": "cd server && npm run build-watch",
             "presentation": {
                 "group": "builders"
             }

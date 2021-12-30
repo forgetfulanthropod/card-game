@@ -42,7 +42,7 @@ type ServerAction<T extends Func> = (
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Empty {}
-type Objify<Type> = Type extends Obj ? Obj : Empty
+type Objify<Type> = Type extends Obj ? Type : Empty
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Obj = Record<string | number | symbol, any>

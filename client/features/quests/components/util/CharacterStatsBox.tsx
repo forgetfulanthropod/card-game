@@ -1,6 +1,5 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 export default function CharacterStatsBox(props: {
     strength: number

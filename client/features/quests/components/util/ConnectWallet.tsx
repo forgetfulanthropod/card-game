@@ -1,6 +1,5 @@
 import { Box, Button, Image } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 import solanaSvg from '@/features/quests/assets/solanaLogoMark.svg'
 

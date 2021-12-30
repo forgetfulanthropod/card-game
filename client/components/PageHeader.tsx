@@ -1,6 +1,5 @@
 import { Box, Button } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
 import type { ValidPage } from './PageManager'
 

@@ -1,6 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 import { useState } from 'preact/hooks'
 
 import CraftPage from '@/features/craft/components/CraftPage'
