@@ -31,8 +31,8 @@ export function SelectedCharacters(): PixiContainer {
                 })
             ) ?? []
         root.removeChildren()
-        // @ts-ignore
         if (Array.isArray(characters) && characters.length > 0)
+            // @ts-ignore
             root.addChild(...characters)
     }
 

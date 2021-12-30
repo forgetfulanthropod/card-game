@@ -93,9 +93,9 @@ export function mountIo(server: Server, prefix: string): void {
         // socket.handshake.headers
         logger.info(`socket.io connected: ${socket.id}`)
         // save socket.io socket in the session
-        // @ts-expect-error
         logger.info(
             'session at socket.io connection:\n',
+            // @ts-expect-error
             socket.request.session
         )
         // @ts-expect-error
