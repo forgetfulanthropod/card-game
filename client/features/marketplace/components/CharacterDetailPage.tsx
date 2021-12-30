@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react'
 import { useMediaQuery } from '@chakra-ui/react'
 import { random } from 'lodash'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
@@ -49,7 +48,7 @@ const imageSrcs = [
 const icons = ['👍', '🎉', '💪', '🏃‍♀️', '🧠', '👀', '🍀']
 const classes = ['Trinity-Cleric', 'Climber-Arborist']
 const certs = ['🚗', '🪚', '✂️']
-export default function CharacterDetailPage(props: PageProps): JSX.Element {
+export default function CharacterDetailPage(props: PageProps): JSXElement {
     const [isLarge] = useMediaQuery('(min-width: 62em)')
 
     const cards = 

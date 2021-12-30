@@ -8,8 +8,6 @@ import { find, sample, sum, values } from 'lodash'
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
-// @ts-expect-error
-import styled from 'styled-components'
 
 import {
     addSelected,
@@ -18,6 +16,7 @@ import {
     chooseDoor,
     doCharacterAction,
 } from '@/actions'
+import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
 const Root = styled.button`
@@ -27,7 +26,7 @@ const Root = styled.button`
     left: 1%;
 `
 
-export function AutoPlay(): JSX.Element {
+export function AutoPlay(): JSXElement {
     const [running, setRunning] = useState(false)
     const [runner] = useState(() => new Runner())
     return (

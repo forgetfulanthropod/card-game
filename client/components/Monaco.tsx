@@ -1,6 +1,5 @@
 import { Fragment, h, JSX, RefObject } from 'preact' // eslint-disable-line
-// @ts-ignore
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 
 import type { OnMount } from '@monaco-editor/react'
 import Editor from '@monaco-editor/react'
@@ -22,7 +21,7 @@ export function Monaco(props: {
     defaultValue: string
     onClose?: () => void
     foldLevel?: number
-}): JSX.Element {
+}): JSXElement {
     const { foldLevel = 1, mref } = props
     // may need uselayouteffect?
     // useEffect(() => {

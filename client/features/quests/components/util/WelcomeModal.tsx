@@ -1,12 +1,11 @@
 import { Button, Text } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 import { useRef } from 'preact/hooks'
 
 import type { Disclosure } from './MyModal'
 import { MyModal } from './MyModal'
 
-export default function WelcomeModal(props: { onDare: Callback }): JSX.Element {
+export default function WelcomeModal(props: { onDare: Callback }): JSXElement {
     const ref = useRef<Disclosure>()
 
     return (

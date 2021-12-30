@@ -1,9 +1,8 @@
 import { Box, Button, Image } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 import solanaSvg from '@/features/quests/assets/solanaLogoMark.svg'
 
-export default function ConnectWallet(): JSX.Element {
+export default function ConnectWallet(): JSXElement {
     return (
         <Box>
             <Button>
@@ -13,6 +12,6 @@ export default function ConnectWallet(): JSX.Element {
         </Box>
     )
 }
-export function ConnectWalletExample(): JSX.Element {
+export function ConnectWalletExample(): JSXElement {
     return <ConnectWallet />
 }

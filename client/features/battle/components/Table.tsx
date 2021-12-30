@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export default function Table(props: {
     rows: string[][]
     header?: string
-}): JSX.Element {
+}): JSXElement {
     const contents = 
         <>
             {props.header && 

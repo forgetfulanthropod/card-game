@@ -1,5 +1,4 @@
 import { Heading, Text } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 
 import { PageHeader } from '@/components/PageHeader'
@@ -7,7 +6,7 @@ import type { PageProps } from '@/components/PageManager'
 
 import Minecrafter from '../mc/Minecrafter'
 
-export default function CraftPage(props: PageProps): JSX.Element {
+export default function CraftPage(props: PageProps): JSXElement {
     return (
         <>
             <Heading>Crafting page</Heading>

@@ -6,8 +6,7 @@ import { useCursor } from './util'
 import type { BlessingName } from '@shared'
 import { toggleBlessing } from '@/actions'
 
-// @ts-expect-error
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 
 const Root = styled.div`
     position: absolute;
@@ -21,7 +20,7 @@ const Root = styled.div`
     }
 `
 
-export function BlessingToggles(): JSX.Element {
+export function BlessingToggles(): JSXElement {
     const A: BlessingName[] = [
         'ptbotflax',
         'strongPcs',

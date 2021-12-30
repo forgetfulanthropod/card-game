@@ -10,7 +10,7 @@ import { useState } from 'preact/hooks'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
-export default function App(): JSX.Element {
+export default function App(): JSXElement {
     const [username, setUsername] = useState('')
 
     return username ? 

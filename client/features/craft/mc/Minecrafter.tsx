@@ -5,7 +5,6 @@
 // List of recipes in minecraft -   https://www.minecraftcraftingguide.net/
 
 import { range } from 'lodash'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 
@@ -18,7 +17,7 @@ export type PSet<T> = (cb: T | ((old: T) => T)) => void
 const instructions =
     'Click on an ingredient from your inventory, then click on a cell of your crafting table to place this ingredient.'
 
-export default function Minecrafter(): JSX.Element {
+export default function Minecrafter(): JSXElement {
     const [inventory, setInventory] = useState(initialInventory)
     const [result, setResult] = useState<null | [string, number]>(null)
     const [selected, setSelected] = useState(inventory[0])
@@ -97,7 +96,7 @@ const Inventory = (props: {
     inventory: number[]
     setSelected: PSet<number>
     selected: number
-}): JSX.Element => 
+}): JSXElement => 
     <>
         <h1>Inventory</h1>
         <p>{instructions}</p>

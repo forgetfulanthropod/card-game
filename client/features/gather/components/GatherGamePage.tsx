@@ -1,10 +1,9 @@
 import { Heading, Text } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
-export default function GatherGamePage(props: PageProps): JSX.Element {
+export default function GatherGamePage(props: PageProps): JSXElement {
     return (
         <>
             <Heading>Gather minigame page</Heading>

@@ -1,4 +1,3 @@
-import type { JSX } from 'preact'
 //@ts-expect-error
 import styled from 'styled-components'
 
@@ -15,7 +14,7 @@ const Root = styled.button`
     pointer-events: auto;
 `
 
-export default function StartButton(): JSX.Element {
+export default function StartButton(): JSXElement {
     return (
         <Root onClick={() => changeScene({ newSceneName: 'battle' })}>
             start

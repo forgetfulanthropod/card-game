@@ -1,9 +1,8 @@
 import { SkillProvider, SkillTree, SkillTreeGroup } from 'beautiful-skill-tree'
-import type { h } from 'preact'
 
 import { data } from './data'
 
-export default function MySkilltree(): h.JSX.Element {
+export default function MySkilltree(): JSXElement {
     return (
         <SkillProvider>
             <SkillTreeGroup>

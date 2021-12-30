@@ -9,7 +9,6 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
-import type { JSX } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'
@@ -39,7 +38,7 @@ const state = new SBaobab({
     subpage: 'UITour' as SubpageKey,
 })
 
-export default function QuestsPage(_props: PageProps): JSX.Element {
+export default function QuestsPage(_props: PageProps): JSXElement {
     const dared = useCursor(state.select('dared'))
     const subpageKey = useCursor(state.select('subpage'))
     const Subpage = subpages[subpageKey]
@@ -59,7 +58,7 @@ export default function QuestsPage(_props: PageProps): JSX.Element {
     )
 }
 
-function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
+function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSXElement {
     const { setSubpage } = props
     const choices: [string, SubpageKey][] = [
         ['About', 'About'],

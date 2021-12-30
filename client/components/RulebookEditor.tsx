@@ -1,7 +1,6 @@
 import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
 
-// @ts-ignore
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { makeNewUser, rulebookAction } from '@/actions'
 import { useCursor } from './util'
@@ -47,7 +46,7 @@ const ButtonGroup = styled.div`
 // TODO: edit the name outside of the rulebook
 // TODO: add a "saved at" field programatically
 
-export function RulebookEditor(props: { username: string }): JSX.Element {
+export function RulebookEditor(props: { username: string }): JSXElement {
     const { username } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
@@ -79,7 +78,7 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
                         await makeNewUser({ username })
                     }}
                 />
-                {shown && 
+                {shown && (
                     <>
                         <button
                             onClick={() =>
@@ -99,7 +98,7 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
                             Delete current
                         </button>
                     </>
-                }
+                )}
             </ButtonGroup>
         </>
     )
@@ -173,18 +172,18 @@ function Selector(props: {
     options: string[]
     onChoice: (s: string) => void
     value: string
-}): JSX.Element {
+}): JSXElement {
     return (
         <select
             value={props.value}
             // @ts-ignore-error
             onChange={e => props.onChoice(e?.target?.value)}
         >
-            {props.options.map(o => 
+            {props.options.map(o => (
                 <option key={o} value={o}>
                     {o}
                 </option>
-            )}
+            ))}
         </select>
     )
 }

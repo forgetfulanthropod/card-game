@@ -4,9 +4,8 @@ import { omit } from 'lodash'
 import { h, JSX } from 'preact' // eslint-disable-line
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
-// @ts-expect-error
-import styled from 'styled-components'
 
+import styled from '@/config/mystyled'
 import { getClientTree, getTree } from '@/data/rootTree'
 import { stringify } from '@/util'
 
@@ -14,7 +13,7 @@ import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
 import { useCursor } from './util'
 
-export function Sidebar(): JSX.Element {
+export function Sidebar(): JSXElement {
     return (
         <div style={{ pointerEvents: 'auto' }}>
             <OneSidebar
@@ -32,7 +31,7 @@ export function Sidebar(): JSX.Element {
     )
 }
 
-function GamestateEditor(props: { top: string }): JSX.Element {
+function GamestateEditor(props: { top: string }): JSXElement {
     // const [data, setData] = useState(getTree().get())
     // getTree().on('update', () => { setData(getTree().get()) })
 
@@ -46,7 +45,7 @@ function GamestateEditor(props: { top: string }): JSX.Element {
             <span onClick={() => setShown(s => !s)}>
                 {shown ? <b>{title}</b> : title}
             </span>
-            {shown && 
+            {shown && (
                 <Monaco
                     mref={ref}
                     defaultValue={stringify(
@@ -66,7 +65,7 @@ function GamestateEditor(props: { top: string }): JSX.Element {
                         setShown(false)
                     }}
                 />
-            }
+            )}
             {/* onChange={(data: JSONEditData) => {
                     getTree().set(data.jsObject as Gamestate)
                 }} */}
@@ -78,7 +77,7 @@ function OneSidebar<T>(props: {
     cursor: SCursor<T[]>
     title: string
     top: string
-}): JSX.Element {
+}): JSXElement {
     const c = props.cursor
     const [shown, setShown] = useState(false)
     const [events, setEvents] = useState(c.get())
@@ -88,13 +87,13 @@ function OneSidebar<T>(props: {
             <span onClick={() => setShown(s => !s)}>
                 {shown ? <b>{props.title}</b> : props.title}
             </span>
-            {shown && 
+            {shown && (
                 <div>
-                    {events.map((e, i) => 
+                    {events.map((e, i) => (
                         <div key={i}>{JSON.stringify(e)}</div>
-                    )}
+                    ))}
                 </div>
-            }
+            )}
         </Root>
     )
 }
@@ -112,7 +111,7 @@ const Root = styled.div`
     overflow: scroll;
     right: 0;
     top: ${(p: RP) => p.top};
-    height: ${(p: RP) => p.shown ? '100%' : ''};
+    height: ${(p: RP) => (p.shown ? '100%' : '')};
     ${(p: RP) =>
         p.styleChildren &&
         `>div {

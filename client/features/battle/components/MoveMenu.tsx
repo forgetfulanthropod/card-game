@@ -6,7 +6,7 @@ import { getBattleScene } from '@/data/rootTree'
 
 import { MoveButton, MoveMenuDiv } from './Styles'
 
-export default function MoveMenu(): JSX.Element {
+export default function MoveMenu(): JSXElement {
     const scene = getBattleScene()
     const selectedMove = scene.select('selectedMove')
 

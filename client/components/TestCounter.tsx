@@ -1,11 +1,10 @@
-import type { JSX } from 'preact'
 import { h } from 'preact' // eslint-disable-line unused-imports/no-unused-imports
 import { useEffect, useRef } from 'preact/hooks'
 
 import { incrementTestCounter } from '@/actions'
 import { getSocket } from '@/connection'
 
-export default function TestCounter(): JSX.Element {
+export default function TestCounter(): JSXElement {
     const start = useRef(0)
     useEffect(() => {
         console.log('attaching test counter listener')

@@ -9,7 +9,7 @@ import { getBattleScene } from '@/data/rootTree'
 import { keys, objFilter, objMap } from '@/util'
 
 import { characterAssetKeys } from './features/battle/logic/AssetLoader'
-export default function ArtistMenu(): JSX.Element {
+export default function ArtistMenu(): JSXElement {
     // const [x, setX] = useState<string | null>(null)
     // const stuff = useSettingsContext()
     return <div style={{ pointerEvents: 'auto', maxHeight: '100%', overflow: 'scroll' }}>
@@ -33,7 +33,7 @@ export default function ArtistMenu(): JSX.Element {
     </div>
 }
 
-function Dropdown(props: { top: JSX.Element | string, rest: Children }): JSX.Element {
+function Dropdown(props: { top: JSXElement | string, rest: Children }): JSXElement {
     return <DropdownDiv>
         <div className="top">{props.top}</div>
         <div className="dropdown">
@@ -69,7 +69,7 @@ const Row = styled.div`
     }
 `
 
-function Radio<T extends string>(props: { options: readonly T[], choice: T | null, setChoice: (s: T) => void }): JSX.Element {
+function Radio<T extends string>(props: { options: readonly T[], choice: T | null, setChoice: (s: T) => void }): JSXElement {
     return <div
         style={{
             // overflowWrap: 'break-word'
@@ -93,7 +93,7 @@ function Radio<T extends string>(props: { options: readonly T[], choice: T | nul
 }
 
 /** Assumes equal number PC & NPC! */
-function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSX.Element {
+function ChooseCharacters(props: { type: 'PC' | 'NPC' }): JSXElement {
     const battle = getBattleScene()
     const cursor = battle.select('allCharacters')
     const allCharacters = cursor.get()

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// @ts-expect-error
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 
 export const HoverDiv = styled.div`
     background: black;

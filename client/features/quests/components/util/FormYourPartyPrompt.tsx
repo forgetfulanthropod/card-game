@@ -1,7 +1,6 @@
 import { Box, Button } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
-export default function FormYourPartyPrompt(): JSX.Element {
+export default function FormYourPartyPrompt(): JSXElement {
     return (
         <Box>
             <Button
@@ -18,6 +17,6 @@ export default function FormYourPartyPrompt(): JSX.Element {
         </Box>
     )
 }
-export function FormYourPartyPromptExample(): JSX.Element {
+export function FormYourPartyPromptExample(): JSXElement {
     return <FormYourPartyPrompt />
 }

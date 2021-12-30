@@ -14,7 +14,7 @@ import { useCursor } from './util'
 import WalletAddress from './WalletAddress'
 import { AutoPlay } from './autoplay/AutoPlay'
 
-export default function GameManager(props: { username: string }): JSX.Element {
+export default function GameManager(props: { username: string }): JSXElement {
     const { username } = props
     const sceneType = useCursor(getTree().select('scene').select('name'))
     return (

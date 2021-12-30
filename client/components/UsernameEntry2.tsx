@@ -17,7 +17,7 @@ const _js = `name_input.addEventListener('input',
 
 export default function UsernameEntry2(props: {
     onEnter: (username: string) => void
-}): JSX.Element {
+}): JSXElement {
     const [username, setUsername] = useState('')
 
     return (

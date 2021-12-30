@@ -1,12 +1,11 @@
 import { Box, Heading, Text } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
 
 import MySkilltree from './MySkilltree'
 
-export default function SkilltreePage(props: PageProps): JSX.Element {
+export default function SkilltreePage(props: PageProps): JSXElement {
     return (
         <Box
             overflowY={'scroll'}

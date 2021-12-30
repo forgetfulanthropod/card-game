@@ -10,7 +10,7 @@ import { maybeMakeUser } from '@/actions'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
-export default function UsernameEntry(): JSX.Element {
+export default function UsernameEntry(): JSXElement {
     const [username, setUsername] = useState('')
     const [started, setStarted] = useState(false)
     if (!started)

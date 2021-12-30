@@ -1,5 +1,4 @@
 import { Box, Button, Heading } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
@@ -9,7 +8,7 @@ import peng from '@/features/battle/assets/cards/PenguinKnight-200.png'
 import snacky from '@/features/battle/assets/cards/Snacky-200.png'
 import ChakraTable from '@/features/spawn/components/ChakraTable'
 
-export default function MarketplacePage(props: PageProps): JSX.Element {
+export default function MarketplacePage(props: PageProps): JSXElement {
     const tableData = [
         ['Image', 'name', 'price', 'buy', 'glass', 'cook', 'rock', 'widely'],
         [
