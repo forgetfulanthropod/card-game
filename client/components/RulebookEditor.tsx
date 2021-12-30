@@ -79,7 +79,7 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
                         await makeNewUser({ username })
                     }}
                 />
-                {shown && (
+                {shown && 
                     <>
                         <button
                             onClick={() =>
@@ -99,7 +99,7 @@ export function RulebookEditor(props: { username: string }): JSX.Element {
                             Delete current
                         </button>
                     </>
-                )}
+                }
             </ButtonGroup>
         </>
     )
@@ -180,11 +180,11 @@ function Selector(props: {
             // @ts-ignore-error
             onChange={e => props.onChoice(e?.target?.value)}
         >
-            {props.options.map(o => (
+            {props.options.map(o => 
                 <option key={o} value={o}>
                     {o}
                 </option>
-            ))}
+            )}
         </select>
     )
 }
