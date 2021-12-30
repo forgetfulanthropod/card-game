@@ -7,6 +7,7 @@
         "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "lint": "eslint .",
         "fmt": "prettier -w -l . && eslint . --fix",
+        "fast-prettier": "pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"",
         "lint-watch": "echo 'doesnt work great' && esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts",
         "tsc": "tsc",
         "tsc-watch": "tsc --watch --preserveWatchOutput",
