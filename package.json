@@ -12,7 +12,8 @@
         "lint-watch": "echo 'doesnt work great' && esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts",
         "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
         "arkit": "npx arkit",
-        "dep-graph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg"
+        "dep-graph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg",
+        "npm-clean": "rm -rf {.,client,server,crypto-server}/{pnpm-lock.yaml,node_modules}"
     },
     "dependencies": {
         "esbuild": "^0.13.4",
