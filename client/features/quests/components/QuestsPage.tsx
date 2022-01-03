@@ -1,90 +1,69 @@
-import { Box, Button, ButtonGroup, Heading, Text } from '@chakra-ui/react'
+import { Box, Button, Heading, Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
+import { SBaobab } from 'baobab'
 import type { JSX } from 'preact'
-import { Fragment, h } from 'preact'
-import type { StateUpdater } from 'preact/hooks'
-import { useState } from 'preact/hooks'
+import { h } from 'preact'
 
-import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
+import { useCursor } from '@/components/util'
 
-const subpages = { Intro, Choose, Quest }
+import About from './sp/About'
+import ManageAssets from './sp/ManageAssets'
+import MyCharacters from './sp/MyCharacters'
+import Overworld from './sp/Overworld'
+import QuestProgress from './sp/QuestProgress'
+import UITour from './sp/UITour'
+import WelcomeModal from './util/WelcomeModal'
 
-type SetSubpage = StateUpdater<keyof typeof subpages>
-type SubpageProps = { setSubpage: SetSubpage }
+type SubpageKey = keyof typeof subpages
 
-export default function QuestsPage(props: PageProps): JSX.Element {
-    const [subpage, setSubpage] = useState<keyof typeof subpages>('Intro')
-    const Subpage = subpages[subpage]
+const subpages = { About, Overworld, MyCharacters, QuestProgress, ManageAssets, UITour }
+
+const state = new SBaobab({
+    dared: false,
+    nothing: null,
+    subpage: 'UITour' as SubpageKey,
+})
+
+export default function QuestsPage(_props: PageProps): JSX.Element {
+    const dared = useCursor(state.select('dared'))
+    const subpageKey = useCursor(state.select('subpage'))
+    const Subpage = subpages[subpageKey]
     return (
-        <>
-            <Heading>Genesis Quests</Heading>
-            <PageHeader setPage={props.setPage} />
-            <ButtonGroup variant="outline" spacing="2">
-                <Button onClick={() => setSubpage('Intro')} colorScheme="blue">
-                    Intro
-                </Button>
-                <Button onClick={() => setSubpage('Choose')} colorScheme="red">
-                    Choose your character
-                </Button>
-                <Button onClick={() => setSubpage('Quest')} colorScheme="green">
-                    Quest
-                </Button>
-            </ButtonGroup>
-            <Text>Genesis quests are the genesis bests</Text>
-            <Subpage setSubpage={setSubpage} />
-        </>
-    )
-}
-
-function Intro(props: SubpageProps) {
-    return (
-        <>
-            <Heading size="lg">Intro</Heading>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    wife different tone doctor join box star nuts eager fuel direct that chance fifty back select
-                    vegetable now vapor court agree salmon coal word
+        <Box m={10} p={10}>
+            <GQMenu setSubpage={sp => state.set('subpage', sp)} />
+            <Heading>Genesis quests</Heading>
+            {!dared ? (
+                <WelcomeModal onDare={() => state.set('dared', true)} />
+            ) : (
+                <Text bg="black" color="red" fontWeight="bold">
+                    YOU HAVE DARED
                 </Text>
-            </MyBox>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    seven measure final copper is scene thought wire ate beside where interest porch prove fly donkey
-                    hall diagram rice rod thumb does curve wonderful
-                </Text>
-            </MyBox>
-            <MyBox>
-                <Text fontSize="xxx-large">
-                    fourth just hit dish chosen team whose reason room writing practice tin machinery voyage sunlight
-                    wear piece mistake split composed every balloon tank bit
-                </Text>
-            </MyBox>
-            <Button fontSize="xxx-large" padding="1em" onClick={() => props.setSubpage('Choose')}>
-                BEGIN
-            </Button>
-        </>
-    )
-}
-
-function MyBox(props: { children: Children }) {
-    return (
-        <Box backgroundColor="#EEE" borderRadius="2em" marginBottom="2em" padding="2em" boxShadow="4px 4px 4px black">
-            {props.children}
+            )}
+            <Subpage />
         </Box>
     )
 }
 
-function Choose(props: SubpageProps) {
+function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
+    const { setSubpage } = props
+    const choices: [string, SubpageKey][] = [
+        ['About', 'About'],
+        ['Overworld', 'Overworld'],
+        ['My Characters', 'MyCharacters'],
+        ['Quest Progress', 'QuestProgress'],
+        ['Manage Assets', 'ManageAssets'],
+        ['UI Component Tour', 'UITour'],
+    ]
     return (
-        <>
-            <Heading size="lg">Choose your character</Heading>
-        </>
-    )
-}
-
-function Quest(props: SubpageProps) {
-    return (
-        <>
-            <Heading size="lg">Quest!</Heading>
-        </>
+        <Menu>
+            <MenuButton as={Button}>☰</MenuButton>
+            <MenuList>
+                {choices.map(([name, Comp]) => (
+                    <MenuItem key={name} onClick={() => setSubpage(Comp)}>
+                        {name}
+                    </MenuItem>
+                ))}
+            </MenuList>
+        </Menu>
     )
 }
