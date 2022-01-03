@@ -49,6 +49,7 @@ interface DisplayObjectArgs {
     name?: string
     zIndex?: number
     visible?: boolean
+    angle?: number
 }
 
 // text and sprite but not graphics
@@ -152,6 +153,10 @@ function applyDisplayObjectArgs(x: PixiContainer | PixiSprite | PixiText | PixiG
     }
     if (args.visible != null) {
         x.visible = args.visible
+    }
+
+    if (args.angle != null) {
+        x.angle = args.angle
     }
 }
 

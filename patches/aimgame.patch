@@ -1,0 +1,500 @@
+diff --git a/client/features/gather/components/aimgame/AimGame.tsx b/client/features/gather/components/aimgame/AimGame.tsx
+new file mode 100644
+index 0000000..3f0f2ab
+--- /dev/null
++++ b/client/features/gather/components/aimgame/AimGame.tsx
+@@ -0,0 +1,67 @@
++import { h } from 'preact'
++import { useCallback, useRef } from 'preact/hooks'
++
++import { startAimGame } from './script'
++import s from './style.module.css'
++
++export default function AimGame(): JSX.Element {
++    // const ref = useRef<HtmlSection>(null)
++    const started = useRef(false)
++    const onRef = useCallback((node: HTMLElement | null) => {
++        if (node != null) {
++            setTimeout(() => {
++                if (!started.current) {
++                    started.current = true
++                    startAimGame()
++                }
++            }, 1000)
++        }
++    }, [])
++    return (
++        <section class={s['game']} ref={onRef}>
++            <div class={s['gameInner'] + ' ' + s['container']}>
++                <div class={s['screen']}>
++                    <h1 class={s['screenHeadline']}>Aim Training</h1>
++                    <h3 class={s['screenSubheading']}>
++                        <span class={s['warn']}>Attention! </span>If you don't hit the ball, you will lose
++                    </h3>
++                    <button class={s['screenStart']}>Start</button>
++                </div>
++                <div class={s['screen']}>
++                    <h1 class={s['screenHeadline']}>Choise time</h1>
++                    <ul class={s['timeList']}>
++                        <li class={s['timeItem']}>
++                            <button class={s['timeBtn']} data-time="10">
++                                10 Sec
++                            </button>
++                        </li>
++                        <li class={s['timeItem']}>
++                            <button class={s['timeBtn']} data-time="20">
++                                20 Sec
++                            </button>
++                        </li>
++                        <li class={s['timeItem']}>
++                            <button class={s['timeBtn']} data-time="30">
++                                30 Sec
++                            </button>
++                        </li>
++                        <li class={s['timeItem field']}>
++                            <input class={s['timeField']} type="number" placeholder="Another... (In seconds)" />
++                            <button class={s['timeFieldBtn']} type="submit"></button>
++                        </li>
++                    </ul>
++                </div>
++                <div class={s['screen']}>
++                    <h3 class={s['screenTitle']}>
++                        Time left &nbsp
++                        <span class={s['screenTimer']}>00:00</span>
++                    </h3>
++                    <div class={s['screenBoard']}> </div>
++                    <div class={s['gameOver'] + s['hide']}>
++                        <button class={s['gameOverRestart']}>Restart</button>
++                    </div>
++                </div>
++            </div>
++        </section>
++    )
++}
+diff --git a/client/features/gather/components/aimgame/script.js b/client/features/gather/components/aimgame/script.js
+new file mode 100644
+index 0000000..0201228
+--- /dev/null
++++ b/client/features/gather/components/aimgame/script.js
+@@ -0,0 +1,212 @@
++import s from './style.module.css'
++window.s = s
++export function startAimGame() {
++    const screen = document.querySelectorAll('.' + s['screen'])
++    const btnStart = document.querySelector('.' + s['screenStart'])
++    const restart = document.querySelector('.' + s['gameOver'])
++    const btnReStart = document.querySelector('.' + s['gameOverRestart'])
++    const timeList = document.querySelector('.' + s['timeList'])
++    const field = document.querySelector('.' + s['field'])
++    const timer = document.querySelector('.' + s['screenTimer'])
++    const hasFocus = document.querySelector('.' + s['timeField'])
++    const btnTime = document.querySelector('.' + s['timeFieldBtn'])
++    const board = document.querySelector('.' + s['screenBoard'])
++    // const circle = document.querySelector('#circle')
++
++    // Counter(-Stricke :3)
++    let time = 0
++    let score = 0
++
++    let inputValue
++    let isOver = false
++    let inter
++    let interInput
++
++    // Func / Start
++    // Set time
++    const setTime = value => {
++        timer.innerHTML = value
++    }
++
++    // Get random number
++    const getRndNum = (min, max) => {
++        return Math.round(Math.random() * (max - min) + min)
++    }
++
++    // Get random HEX color
++    const getRndColor = () => {
++        const rndColor = '#' + Math.floor(Math.random() * 16777215).toString(16)
++        return rndColor
++    }
++
++    // Get value from input
++    const getInputValue = () => {
++        const value = document.querySelector(s['timeField']).value
++
++        if (value !== 0 && value.length > 0) {
++            inputValue = value
++            screen[1].classList.add(s['up'])
++        }
++    }
++
++    // Decrease time (Buttons)
++    const decTime = () => {
++        if (time === 0) {
++            gameEnd()
++        } else if (isOver === true) {
++            board.innerHTML = ''
++            restart.classList.remove(s['hide'])
++            gameOver()
++        } else {
++            let current = --time
++            if (current < 10) {
++                current = `0${current}`
++            }
++            setTime(`00:${current}`)
++        }
++    }
++
++    // Decrease time (Input)
++    const decTimeInput = () => {
++        if (inputValue === 0) {
++            gameEnd()
++        } else if (isOver === true) {
++            board.innerHTML = ''
++            restart.classList.remove(s['hide'])
++            gameOver()
++        } else {
++            let value = --inputValue
++
++            const seconds = value % 60
++            const secondsInMinutes = (value - seconds) / 60
++            const minutes = secondsInMinutes % 60
++            const hours = (secondsInMinutes - minutes) / 60
++
++            let current = `${hours}:${minutes}:${seconds}`
++
++            if (hours < 10 && hours !== 0) {
++                current = `0${hours}:${minutes}:${seconds}`
++            } else if (hours === 0 && minutes > 10) {
++                current = `${minutes}:${seconds}`
++            } else if (minutes < 10 && seconds > 10) {
++                current = `0${minutes}:${seconds}`
++            } else if (seconds < 10) {
++                current = `0${minutes}:0${seconds}`
++            }
++
++            setTime(current)
++        }
++    }
++
++    // Create circle on a board
++    const createRndCircle = () => {
++        const circle = document.createElement('div')
++        circle.classList.add(s['circle'])
++
++        // Sets dynamic random size and background color
++        setInterval(() => {
++            const { width, height } = board.getBoundingClientRect()
++            const s = getRndNum(10, 60)
++            const x = getRndNum(0, width - s)
++            const y = getRndNum(0, height - s)
++
++            circle.style.width = `${s}px`
++            circle.style.height = `${s}px`
++            circle.style.top = `${x}px`
++            circle.style.left = `${y}px`
++            circle.style.background = getRndColor()
++        }, 1000)
++
++        board.append(circle)
++    }
++
++    // Sets the params when starting the game. (Buttons)
++    const gameStart = () => {
++        timer.innerHTML = '00:00'
++        timer.parentElement.classList.remove(s['hide'])
++        board.innerHTML = ''
++        isOver = false
++        inter = setInterval(decTime, 1000)
++        createRndCircle()
++    }
++
++    // Sets the params when starting the game. (Input)
++    const gameStartInput = () => {
++        timer.innerHTML = '00:00'
++        timer.parentElement.classList.remove(s['hide'])
++        board.innerHTML = ''
++        isOver = false
++        interInput = setInterval(decTimeInput, 1000)
++        createRndCircle()
++    }
++
++    // Sets the params when ending the game.
++    const gameEnd = () => {
++        timer.parentElement.classList.add(s['hide'])
++        board.innerHTML = `<h1>Cчёт <span class='primary'>${score}</span></h1>`
++    }
++
++    // Sets the params if the game over
++    const gameOver = () => {
++        timer.parentElement.classList.add(s['hide'])
++        board.innerHTML = `<h3 class='gameOverMessage'>
++							<span>Fail (ノಠ益ಠ)ノ彡┻━┻</span>
++							<p>You lose :(<p>
++							<p>Your count: <span>${score}</span></p>
++						</h3>`
++        clearInterval(inter)
++        clearInterval(interInput)
++    }
++
++    // Sets dynamic color and box shadow
++    setInterval(() => {
++        btnStart.style.color = getRndColor()
++        btnStart.style.boxShadow = `0px 0px 30px -5px ${getRndColor()}`
++        btnReStart.style.color = getRndColor()
++        btnReStart.style.boxShadow = `0px 0px 30px -5px ${getRndColor()}`
++        board.style.boxShadow = `0px 0px 20px -5px ${getRndColor()}`
++    }, 100)
++    // Func / End
++
++    // Listeners / Start
++    btnTime.addEventListener('click', () => {
++        getInputValue()
++        gameStartInput()
++    })
++
++    btnStart.addEventListener('click', () => screen[0].classList.add(s['up']))
++
++    btnReStart.addEventListener('click', () => {
++        screen[1].classList.remove(s['up'])
++        restart.classList.add(s['hide'])
++    })
++
++    board.addEventListener('click', e => {
++        if (e.target.classList.contains(s['circle'])) {
++            score++
++            e.target.remove()
++            createRndCircle()
++        } else {
++            isOver = true
++        }
++    })
++
++    timeList.addEventListener('click', e => {
++        if (e.target.classList.contains(s['timeBtn'])) {
++            time = parseInt(e.target.getAttribute('data-time'))
++            screen[1].classList.add(s['up'])
++            gameStart()
++        }
++    })
++
++    hasFocus.addEventListener('focusin', () => {
++        field.style.border = '2px solid #9142e0'
++        btnTime.style.background = '#9142e0'
++    })
++
++    hasFocus.addEventListener('focusout', () => {
++        field.style.border = '2px solid #CFD8DC'
++        btnTime.style.background = '#CFD8DC'
++    })
++    // Listeners / End
++}
+diff --git a/client/features/gather/components/aimgame/style.module.css b/client/features/gather/components/aimgame/style.module.css
+new file mode 100644
+index 0000000..d7fa713
+--- /dev/null
++++ b/client/features/gather/components/aimgame/style.module.css
+@@ -0,0 +1,203 @@
++.container {
++    position: relative;
++    width: 100vw;
++    /* height: 100vh; */
++    height: 40vh;
++    overflow: hidden;
++}
++
++.screen {
++    display: flex;
++    flex-direction: column;
++    align-items: center;
++    justify-content: center;
++    width: 100vw;
++    /* height: 100vh; */
++    height: 40vh;
++    transition: margin 0.5s ease-out;
++}
++.screen.up {
++    /* margin-top: -100vh; */
++    margin-top: -40vh;
++}
++.screenHeadline {
++    margin-bottom: 20px;
++    font-size: 64px;
++}
++.screenSubheading {
++    margin-bottom: 50px;
++    color: #ffa726;
++}
++.screenStart {
++    padding: 10px 30px;
++    font-size: 24px;
++    background: none;
++    border-radius: 5px;
++    transition: 0.5s;
++}
++.screenBoard {
++    position: relative;
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    width: 500px;
++    height: 500px;
++    overflow: hidden;
++    background: none;
++    border-radius: 30px;
++    transition: 0.5s;
++}
++.screenTitle {
++    font-size: 24px;
++    margin-bottom: 30px;
++}
++.screenTimer {
++    color: #9142e0;
++}
++
++.timeList {
++    display: flex;
++    flex-wrap: wrap;
++    justify-content: center;
++    gap: 20px;
++    padding: 0;
++    list-style: none;
++}
++.timeItem {
++    display: flex;
++    color: #fff;
++    border: 2px solid #cfd8dc;
++    border-radius: 5px;
++    transition: 0.2s;
++}
++.timeItem:not(:last-child):hover {
++    color: #9142e0;
++    border: 2px solid #9142e0;
++}
++.timeBtn {
++    padding: 0.5rem 1rem;
++    font-family: inherit;
++    font-size: 1.5rem;
++    background-color: transparent;
++    border-radius: 5px;
++    cursor: pointer;
++}
++.timeBtn:hover {
++    color: #9142e0;
++    transition: 0.1s;
++}
++.timeField {
++    display: flex;
++    padding: 0.5rem 1rem;
++    color: #fff;
++    font-family: inherit;
++    font-size: 1.5rem;
++    background-color: transparent;
++    border: none;
++    border-radius: 5px 0 0 5px;
++    cursor: pointer;
++}
++.timeField:focus {
++    outline: none;
++}
++.timeField::-moz-placeholder {
++    font-size: 22px;
++}
++.timeField:-ms-input-placeholder {
++    font-size: 22px;
++}
++.timeField::placeholder {
++    font-size: 22px;
++}
++.timeFieldBtn {
++    position: relative;
++    width: 30px;
++    background: #cfd8dc;
++    border-radius: 0 2px 2px 0;
++    transition: 0.2s;
++}
++.timeFieldBtn:before {
++    position: absolute;
++    top: 50%;
++    left: 30%;
++    width: 10px;
++    height: 2px;
++    background: #fff;
++    border-radius: 2px;
++    content: '';
++}
++.timeFieldBtn::after {
++    position: absolute;
++    top: 50%;
++    left: 30%;
++    width: 10px;
++    height: 2px;
++    transform: rotate(90deg);
++    background: #fff;
++    border-radius: 2px;
++    content: '';
++}
++.timeFieldBtn:hover {
++    background: #9142e0;
++}
++.timeFieldBtn:hover:before,
++.timeFieldBtn:hover:after {
++    background: #fff;
++}
++
++.hide {
++    opacity: 0;
++    /* visibility: hidden; */
++    pointer-events: none;
++}
++
++.primary {
++    color: #9142e0;
++}
++
++.circle {
++    position: absolute;
++    background: #c49aef;
++    border-radius: 50%;
++    transition: 0.5s;
++    cursor: pointer;
++}
++
++.warn {
++    color: #f57c00;
++}
++
++.gameOver {
++    position: absolute;
++    display: flex;
++    flex-direction: column;
++}
++.gameOverMessage {
++    display: flex;
++    flex-direction: column;
++    margin-bottom: 50px;
++    color: #ffa726;
++    font-size: 24px;
++}
++.gameOverMessage > span {
++    margin-bottom: 5px;
++    color: #f57c00;
++    font-size: 28px;
++}
++.gameOverMessage p:not(:last-child) {
++    margin-bottom: 15px;
++}
++.gameOverMessage p > span {
++    color: #9142e0;
++}
++.gameOverRestart {
++    margin-top: 300px;
++    padding: 10px 30px;
++    font-size: 24px;
++    background: none;
++    border-radius: 5px;
++    transition: 0.5s;
++}
++
++.gameInner {
++}

@@ -50,8 +50,13 @@ function build() {
             define: makeSubstitutions(),
             watch: shouldWatch && {
                 onRebuild(_error, result) {
-                    result.stop()
-                    build()
+                    if (_error) {
+                        console.log(`${time()}: REBUID FAILED`)
+                    } else {
+                        console.log(`${time()}: rebuild succeeded`)
+                    }
+                    // result.stop()
+                    // build()
                 }
             },
             plugins: [
