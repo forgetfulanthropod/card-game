@@ -18,6 +18,7 @@ import ManageAssets from './sp/ManageAssets'
 import MyCharacters from './sp/MyCharacters'
 import Overworld from './sp/Overworld'
 import QuestProgress from './sp/QuestProgress'
+import Tavern from './sp/Tavern'
 import UITour from './sp/UITour'
 import WelcomeModal from './util/WelcomeModal'
 
@@ -30,12 +31,13 @@ const subpages = {
     QuestProgress,
     ManageAssets,
     UITour,
+    Tavern,
 }
 
 const state = new SBaobab({
     dared: false,
     nothing: null,
-    subpage: 'UITour' as SubpageKey,
+    subpage: 'Tavern' as SubpageKey,
 })
 
 export default function QuestsPage(_props: PageProps): JSXElement {
