@@ -2,6 +2,7 @@ import type { Gamestate } from '@shared'
 import type { SBaobab, SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
+import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
 import { getTree } from '@/data/rootTree'
@@ -16,8 +17,14 @@ function log(...args: unknown[]) {
 }
 
 const urlPrefix = window.location.href.split('/')[3]
-const socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
+
+// MARK
+let socket: Socket = null as unknown as Socket
+export function maybeMakeSocket(): void {
+    if (socket == null) socket = io({ path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket' })
+}
 export function resolveWhenSocketConfirmed(): Promise<void> {
+    maybeMakeSocket()
     return new Promise(resolve => {
         socket.once('receivedConnection', data => {
             console.log(`'hey' data from server: ${JSON.stringify(data)}`)
@@ -32,6 +39,7 @@ export function getSocket(): typeof socket {
 
 export async function waitForInitialGamestate(): Promise<Gamestate> {
     log('hoping for gamestate')
+    maybeMakeSocket()
     return new Promise(resolve => {
         socket.once('update', ({ data, _path }) => {
             log('received gamestate')
@@ -42,6 +50,7 @@ export async function waitForInitialGamestate(): Promise<Gamestate> {
 
 export function attachServerListener(): void {
     log('attaching server listener')
+    maybeMakeSocket()
     socket.on('update', ({ data, path }: { data: unknown; path: string[] }) => {
         log('received server data', data)
         // getTree().set(data)
