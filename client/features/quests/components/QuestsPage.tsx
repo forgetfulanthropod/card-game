@@ -9,7 +9,6 @@ import {
     Text,
 } from '@chakra-ui/react'
 import { SBaobab } from 'baobab'
-import type { JSX } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
 import { useCursor } from '@/components/util'
@@ -39,7 +38,7 @@ const state = new SBaobab({
     subpage: 'UITour' as SubpageKey,
 })
 
-export default function QuestsPage(_props: PageProps): JSX.Element {
+export default function QuestsPage(_props: PageProps): JSXElement {
     const dared = useCursor(state.select('dared'))
     const subpageKey = useCursor(state.select('subpage'))
     const Subpage = subpages[subpageKey]
@@ -47,19 +46,19 @@ export default function QuestsPage(_props: PageProps): JSX.Element {
         <Box m={10} p={10}>
             <GQMenu setSubpage={sp => state.set('subpage', sp)} />
             <Heading>Genesis quests</Heading>
-            {!dared ? 
+            {!dared ? (
                 <WelcomeModal onDare={() => state.set('dared', true)} />
-             : 
+            ) : (
                 <Text bg='black' color='red' fontWeight='bold'>
                     YOU HAVE DARED
                 </Text>
-            }
+            )}
             <Subpage />
         </Box>
     )
 }
 
-function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
+function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSXElement {
     const { setSubpage } = props
     const choices: [string, SubpageKey][] = [
         ['About', 'About'],
@@ -73,11 +72,11 @@ function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSX.Element {
         <Menu>
             <MenuButton as={Button}>☰</MenuButton>
             <MenuList>
-                {choices.map(([name, Comp]) => 
+                {choices.map(([name, Comp]) => (
                     <MenuItem key={name} onClick={() => setSubpage(Comp)}>
                         {name}
                     </MenuItem>
-                )}
+                ))}
             </MenuList>
         </Menu>
     )

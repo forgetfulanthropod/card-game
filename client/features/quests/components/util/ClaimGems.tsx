@@ -1,13 +1,12 @@
 import { Box, Button } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
-export default function ClaimGems(): JSX.Element {
+export default function ClaimGems(): JSXElement {
     return (
         <Box>
             <Button bg='#01ffff'>💎 Claim Gems 💎</Button>
         </Box>
     )
 }
-export function ClaimGemsExample(): JSX.Element {
+export function ClaimGemsExample(): JSXElement {
     return <ClaimGems />
 }

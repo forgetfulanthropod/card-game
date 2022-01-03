@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react'
 import { useMediaQuery } from '@chakra-ui/react'
 import { random } from 'lodash'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
@@ -49,24 +48,24 @@ const imageSrcs = [
 const icons = ['👍', '🎉', '💪', '🏃‍♀️', '🧠', '👀', '🍀']
 const classes = ['Trinity-Cleric', 'Climber-Arborist']
 const certs = ['🚗', '🪚', '✂️']
-export default function CharacterDetailPage(props: PageProps): JSX.Element {
+export default function CharacterDetailPage(props: PageProps): JSXElement {
     const [isLarge] = useMediaQuery('(min-width: 62em)')
 
-    const cards = 
+    const cards = (
         <GridItem colSpan={[4, 4, 4, 1]}>
             <Text>Battle</Text>
             <SimpleGrid columns={2} spacing={1}>
-                {imageSrcs.map(src => 
+                {imageSrcs.map(src => (
                     <Image width={200} key={src} src={src} />
-                )}
+                ))}
             </SimpleGrid>
         </GridItem>
-    
+    )
 
-    const character = 
+    const character = (
         <GridItem colSpan={[4, 4, 4, 2]}>
             <Text>My funKYy Penguin</Text>
-            {classes.map(cl => 
+            {classes.map(cl => (
                 <Text
                     key={cl}
                     margin='10px'
@@ -78,12 +77,12 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
                 >
                     {cl}
                 </Text>
-            )}
+            ))}
             <Image width={'100%'} src={characterSrc} />
         </GridItem>
-    
+    )
 
-    const gatherCraft = 
+    const gatherCraft = (
         <GridItem colSpan={[4, 4, 4, 1]}>
             <Text>Gather / Craft</Text>
             <SimpleGrid columns={4} spacing={1}>
@@ -98,7 +97,7 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
             </SimpleGrid>
             <Text>Certs</Text>
             <HStack>
-                {certs.map((cert, i) => 
+                {certs.map((cert, i) => (
                     <Square
                         // display="inline-block"
                         // as="span"
@@ -111,10 +110,10 @@ export default function CharacterDetailPage(props: PageProps): JSX.Element {
                     >
                         {cert}
                     </Square>
-                )}
+                ))}
             </HStack>
         </GridItem>
-    
+    )
 
     return (
         <>

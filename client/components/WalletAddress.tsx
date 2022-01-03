@@ -13,7 +13,7 @@ const Root = styled.div`
     pointer-events: auto;
 `
 
-export default function WalletAddress(): JSX.Element {
+export default function WalletAddress(): JSXElement {
     const ref = useRef<HTMLInputElement>(null)
     return (
         <Root>

@@ -26,8 +26,8 @@
                 "null": "ignore"
             }
         ],
-        "no-extra-parens": "warn",
-        "@typescript-eslint/no-extra-parens": "warn",
+        // "no-extra-parens": "warn",
+        // "@typescript-eslint/no-extra-parens": "warn",
         // "@typescript-eslint/no-unused-vars": [ "warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$|^_" } ],
         // for import organizing:
         // "sort-imports": [

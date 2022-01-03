@@ -1,9 +1,8 @@
 import { Box, Image } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 import mapJpg from '@/features/quests/assets/high-res-map.jpg'
 
-export default function Overworld(): JSX.Element {
+export default function Overworld(): JSXElement {
     return (
         <Box>
             Overworld

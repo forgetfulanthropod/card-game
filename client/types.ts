@@ -1,13 +1,13 @@
-import type Preact from 'preact'
+import type { ComponentChildren, JSX } from 'preact'
 import type { StateUpdater } from 'preact/hooks'
 
 // const o : {x: typeof JSX} = {x: Preact.JSX}
 // type JSX = typeof Preact.JSX
 declare global {
-    // type JSX.Element = PJSX.Element
+    // type JSXElement = PJSXElement
     /** Maybe type */
     type Mb<T> = T | null | undefined
-    type Children = Preact.JSX.Element | null | false | Children[]
+    type Children = ComponentChildren
     type Callback = () => void
     type Setter<T> = StateUpdater<T | undefined>
 
@@ -19,4 +19,5 @@ declare global {
         width?: number
         height?: number
     }
+    type JSXElement = JSX.Element
 }

@@ -3,8 +3,8 @@
     "scripts": {
         "CI": "bash scripts/ci.sh",
         "lint": "eslint .",
-        "fmt": "prettier -w -l . && eslint . --fix",
-        "fast-prettier": "pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"",
+        "simple-fmt": "prettier -w -l . && eslint . --fix",
+        "fmt": "pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\" && eslint . --fix",
         "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
         "save-staged": "bash scripts/savestaged.sh",
         "new-todo": "git diff origin/main -G TODO",
@@ -25,6 +25,7 @@
         "lodash": "^4.17.21"
     },
     "devDependencies": {
+        "@mixer/parallel-prettier": "^2.0.1",
         "@types/deep-diff": "^1.0.1",
         "@types/express": "^4.17.13",
         "@types/lodash": "^4.14.178",

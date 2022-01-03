@@ -1,11 +1,10 @@
 import { Box, Button } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 import type { ValidPage } from './PageManager'
 
 export function PageHeader(props: {
     setPage: (c: ValidPage) => void
-}): JSX.Element {
+}): JSXElement {
     return (
         <Box margin={'20px'} width={'20em'}>
             <MyButton onClick={() => props.setPage('MenuPage')} text={'Home'} />
@@ -16,7 +15,7 @@ export function PageHeader(props: {
 export function MyButton(props: {
     text: string
     onClick?: () => void
-}): JSX.Element {
+}): JSXElement {
     return (
         <Button
             colorScheme='blue'

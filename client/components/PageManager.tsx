@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import type { JSX } from 'preact'
+import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 
 import CraftPage from '@/features/craft/components/CraftPage'
@@ -28,7 +28,7 @@ const nameToPage = {
     QuestsPage,
 } as const
 
-export function TempApp(): JSX.Element {
+export function TempApp(): JSXElement {
     const [pageName, setPageName] =
         useState<keyof typeof nameToPage>('QuestsPage')
     const Page = nameToPage[pageName]

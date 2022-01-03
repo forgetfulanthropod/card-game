@@ -9,6 +9,6 @@ const Relative = styled.div`
     font-size: 1.3vw;
 `
 
-export default function AppWrap(props: { children: Children }): JSX.Element {
+export default function AppWrap(props: { children: Children }): JSXElement {
     return <Relative>{props.children}</Relative>
 }

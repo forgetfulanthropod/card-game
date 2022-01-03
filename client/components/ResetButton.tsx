@@ -1,6 +1,5 @@
 import { h, JSX } from 'preact' // eslint-disable-line
-//@ts-ignore
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 
 import { makeNewUser } from '@/actions'
 
@@ -11,7 +10,7 @@ const Root = styled.button`
     pointer-events: auto;
 `
 
-export default function ResetButton(props: { username: string }): JSX.Element {
+export default function ResetButton(props: { username: string }): JSXElement {
     return (
         <Root onClick={() => makeNewUser({ username: props.username })}>
             reset everything

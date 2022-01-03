@@ -83,9 +83,9 @@ export function getCharacterKeysAndEffects(
                     ...effectMultipliers.map(m =>
                         Math.max(
                             1,
-                            attackData.attacker.damage *
+                            (attackData.attacker.damage *
                                 m *
-                                getDefenseMultiplier(d) |
+                                getDefenseMultiplier(d)) |
                                 0
                         )
                     ),

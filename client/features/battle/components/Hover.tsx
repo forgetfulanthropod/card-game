@@ -6,7 +6,7 @@
 // import { EnemyHoverDiv, PCHoverDiv } from './Styles'
 // import Table from './Table'
 
-// export function Hover(props: { characterMeta: CharacterMeta }): JSX.Element {
+// export function Hover(props: { characterMeta: CharacterMeta }): JSXElement {
 //     const cm = props.characterMeta
 //     const { moveMetaMap } = getRulebook()
 //     const damageOf = (i: number) => {

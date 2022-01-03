@@ -1,6 +1,5 @@
 import { h, Fragment, JSX } from 'preact' // eslint-disable-line
-// @ts-expect-error
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 // import { parse } from 'marked'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { getSocket } from '@/connection'
@@ -52,7 +51,7 @@ interface Info {
     onClose: Callback
 }
 
-export function FullScreenInfo(): JSX.Element {
+export function FullScreenInfo(): JSXElement {
     const [info, setInfo] = useState<Info | null>(null)
     useEffect(() => {
         getSocket().on('world$', e =>
@@ -69,7 +68,7 @@ export function FullScreenInfo(): JSX.Element {
     return <FullScreenInfo_ {...info} />
 }
 
-function FullScreenInfo_(props: Info): JSX.Element {
+function FullScreenInfo_(props: Info): JSXElement {
     const { title, body, onClose } = props
     const ref = useRef<HTMLDivElement>(null)
 

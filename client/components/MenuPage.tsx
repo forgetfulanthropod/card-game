@@ -1,13 +1,12 @@
 /*eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsForRegex": ["^mut"] }]*/
 
 import { Heading, SimpleGrid } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 
 import { MyButton, PageHeader } from './PageHeader'
 import type { PageProps } from './PageManager'
 
-export function MenuPage(props: PageProps): JSX.Element {
+export function MenuPage(props: PageProps): JSXElement {
     return (
         <>
             <Heading>Kaiju Cards Wireframes!</Heading>

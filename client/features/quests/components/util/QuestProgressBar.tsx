@@ -1,10 +1,9 @@
 import { Heading, Progress, VStack } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 
 export default function QuestProgressBar(props: {
     percent: number
     title: string
-}): JSX.Element {
+}): JSXElement {
     return (
         <VStack bg='gray.100' p='10px' m='2px' borderRadius='2px'>
             <Heading>{props.title}</Heading>
@@ -17,6 +16,6 @@ export default function QuestProgressBar(props: {
         </VStack>
     )
 }
-export function QuestProgressBarExample(): JSX.Element {
+export function QuestProgressBarExample(): JSXElement {
     return <QuestProgressBar percent={75} title='Save Eden Village' />
 }

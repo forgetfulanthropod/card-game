@@ -7,7 +7,6 @@ import {
     Stack,
     Text,
 } from '@chakra-ui/react'
-import type { JSX } from 'preact'
 import { Fragment } from 'preact'
 import { useState } from 'preact/hooks'
 
@@ -29,7 +28,7 @@ const tableData = [
     ['bit', 68, 13, 30],
 ]
 
-export default function SpawnPage(props: PageProps): JSX.Element {
+export default function SpawnPage(props: PageProps): JSXElement {
     const choice1 = State(useState('_'))
     const choice2 = State(useState('_'))
     return (
