@@ -1,0 +1,34 @@
+// Client
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "esnext",
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "noFallthroughCasesInSwitch": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsxImportSource": "preact",
+        "jsx": "react-jsx",
+        // "jsxFactory": "h",
+        // "jsxFragmentFactory": "Fragment",
+        "baseUrl": ".",
+        "paths": {
+            "@shared": ["../shared/index"],
+            "@shared/actions": ["../shared/actions/index"],
+            "@shared/code": ["../shared/code/index"],
+            "@/*": ["./*"],
+            "react": ["node_modules/preact/compat"],
+            "react-dom": ["node_modules/preact/compat"]
+        },
+        "allowJs": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true
+    }
+    // "include": ["./**/*.ts", "./**/*.tsx", "../shared/**/*"],
+    // "exclude": ["public_", "node_modules"]
+}

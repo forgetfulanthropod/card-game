@@ -16,10 +16,10 @@ export default function UsernameEntry(): JSX.Element {
     if (!started)
         return (
             <>
-                <h1 style="color: white;">Enter username</h1>
+                <h1 style='color: white;'>Enter username</h1>
                 <input
-                    style="pointer-events: auto;"
-                    type="text"
+                    style='pointer-events: auto;'
+                    type='text'
                     value={username}
                     onChange={e =>
                         // @ts-expect-error

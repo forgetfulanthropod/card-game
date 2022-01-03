@@ -35,7 +35,10 @@ export type Rulebook = Readonly<{
     characters: Record<CharacterName, CharacterStats>
     moveMetaMap: Record<MoveMetaName, MoveMeta>
     blessings: Record<BlessingName, Blessing>
-    recipes: Record<RecipeName, { name: RecipeName; ingredients: ItemName[]; result: ItemName }>
+    recipes: Record<
+        RecipeName,
+        { name: RecipeName; ingredients: ItemName[]; result: ItemName }
+    >
     locations: Record<
         LocationName,
         {
@@ -137,7 +140,11 @@ interface DungeonLevelI {
     modifier: number
 }
 
-export type DungeonName = 'Hooligan’s Bluff' | 'The Matcha Caves' | 'Fort Skeleton' | 'The Ninth Trash Hole of Hell'
+export type DungeonName =
+    | 'Hooligan’s Bluff'
+    | 'The Matcha Caves'
+    | 'Fort Skeleton'
+    | 'The Ninth Trash Hole of Hell'
 
 type TargetType = 'party' | 'enemies'
 
@@ -156,10 +163,22 @@ export type Blessing = Readonly<{
     }[]
 }> &
     Brandify
-export type BlessingName = 'ptbotflax' | 'strongPcs' | 'strongEnemies' | 'weakEnemies' | 'weakPcs'
+export type BlessingName =
+    | 'ptbotflax'
+    | 'strongPcs'
+    | 'strongEnemies'
+    | 'weakEnemies'
+    | 'weakPcs'
 export type NpcLevelStatsMap = Readonly<
-    Partial<Record<CharacterName, Record<number, { maxHealth: number; damage: number }>>>
+    Partial<
+        Record<
+            CharacterName,
+            Record<number, { maxHealth: number; damage: number }>
+        >
+    >
 > &
     Brandify
 
-export type StatsWithStance = CharacterStats & Readonly<{ stance: StanceName }> & Brandify
+export type StatsWithStance = CharacterStats &
+    Readonly<{ stance: StanceName }> &
+    Brandify

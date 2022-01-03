@@ -3,7 +3,10 @@ import type { CharacterMove } from '@shared'
 import type { PixiText } from '@/elementsUtil'
 import { Text } from '@/elementsUtil'
 
-export default function (args: { move: CharacterMove; offset: number }): PixiText {
+export default function (args: {
+    move: CharacterMove
+    offset: number
+}): PixiText {
     return Text({
         y: args.offset,
         text: args.move.name,

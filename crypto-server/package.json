@@ -1,0 +1,18 @@
+{
+    "name": "kaiju-crypto-server",
+    "main": "index.js",
+    "scripts": {
+        "build": "esbuild index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=build.js",
+        "start": "rm -f build.js && npm run build && node build.js",
+        "tsc": "tsc"
+    },
+    "dependencies": {
+        "@solana/spl-token": "^0.1.8",
+        "@solana/web3.js": "^1.31.0",
+        "body-parser": "^1.19.0",
+        "bs58": "^4.0.1"
+    },
+    "devDependencies": {
+        "@types/body-parser": "^1.19.2"
+    }
+}

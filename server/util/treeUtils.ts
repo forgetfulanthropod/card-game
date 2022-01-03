@@ -44,24 +44,36 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     void setUser(username, getGameStateCursor(username).get())
 }
 
-export function emit<_A extends string, _B>(args: { username: string; event: NetworkEvent<_A, _B> }): void {
-    getGameStateCursor(args.username).select('events').select(args.event.type).push(args.event)
+export function emit<_A extends string, _B>(args: {
+    username: string
+    event: NetworkEvent<_A, _B>
+}): void {
+    getGameStateCursor(args.username)
+        .select('events')
+        .select(args.event.type)
+        .push(args.event)
     const socketId = getSocketId(args.username)
     getIo().to(socketId).emit(args.event.type, args.event)
 }
 
 // hmm if we made each user a separate tree then random functions could call .root() and not need to know the username...
 
-export const getRootCursor = memoize(function getRootCursor(): SCursor<RootTree> {
-    const b = new SBaobab({
-        contents: {
-            users: {},
-            testCounters: { counter0: 0 },
-        },
-    })
-    void getAllUsers()
-        .then(users => b.select('contents').select('users').set(users))
-        .catch(reason => winston.error('ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)))
-    const result = b.select('contents')
-    return result
-})
+export const getRootCursor = memoize(
+    function getRootCursor(): SCursor<RootTree> {
+        const b = new SBaobab({
+            contents: {
+                users: {},
+                testCounters: { counter0: 0 },
+            },
+        })
+        void getAllUsers()
+            .then(users => b.select('contents').select('users').set(users))
+            .catch(reason =>
+                winston.error(
+                    'ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)
+                )
+            )
+        const result = b.select('contents')
+        return result
+    }
+)

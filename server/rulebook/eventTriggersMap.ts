@@ -78,7 +78,8 @@ export const eventTriggersMap: EventTriggersMap = {
     },
     babysitting: {
         name: 'babysitting',
-        shortDescription: '*Oh no!  The three adult men I am responsible for baby sitting have run off again.”',
+        shortDescription:
+            '*Oh no!  The three adult men I am responsible for baby sitting have run off again.”',
         fullDescription: dedent(`
             A distressed young woman approaches you.  “Please help me.  I am responsible for baby sitting three idiots (fully grown) who have run off and hid somewhere nearby.  Their mother will not pay me if I return without them, and I need money to stay alive.  I think they are gnomes but honestly I am not sure they could just be extremely hairy and small”.
 

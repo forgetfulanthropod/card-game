@@ -9,7 +9,6 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import type { ComponentChildren, JSX, RefObject } from 'preact'
-import { h } from 'preact'
 
 type CC = ComponentChildren
 export type Disclosure = ReturnType<typeof useDisclosure>

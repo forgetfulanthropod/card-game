@@ -10,7 +10,10 @@ export async function deleteUser(username: string): Promise<void> {
     await getRef(username).remove()
 }
 
-export async function setUser(username: string, data: Gamestate): Promise<void> {
+export async function setUser(
+    username: string,
+    data: Gamestate
+): Promise<void> {
     await getRef(username).set(data)
 }
 

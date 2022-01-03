@@ -6,12 +6,11 @@ const noCommit: unknown[] = [all.hello, all.maybeMakeUser]
 const wholeRequests: unknown[] = [all.maybeMakeUser]
 
 export function attachAPIRoutes(): void {
-    vals(all).forEach(
+    vals(all).forEach(f =>
         // @ts-ignore
-        f =>
-            onCallWrapper(f, {
-                disableCommit: noCommit.includes(f),
-                wholeRequest: wholeRequests.includes(f),
-            })
+        onCallWrapper(f, {
+            disableCommit: noCommit.includes(f),
+            wholeRequest: wholeRequests.includes(f),
+        })
     )
 }

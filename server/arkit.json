@@ -3,57 +3,39 @@
     "components": [
         {
             "type": "Dependency",
-            "patterns": [
-                "node_modules/*"
-            ]
+            "patterns": ["node_modules/*"]
         },
         {
             "type": "Component",
-            "patterns": [
-                "**/*.ts"
-            ]
+            "patterns": ["**/*.ts"]
         }
     ],
-    "excludePatterns": [
-        "**/*.min.*"
-    ],
+    "excludePatterns": ["**/*.min.*"],
     "output": {
         "path": "arkit.svg",
         "groups": [
             {
                 "type": "Battle",
-                "patterns": [
-                    "gameState/battle/**"
-                ]
+                "patterns": ["gameState/battle/**"]
             },
             {
                 "type": "Actions",
-                "patterns": [
-                    "actions/**"
-                ]
+                "patterns": ["actions/**"]
             },
             {
                 "type": "Rulebook",
-                "patterns": [
-                    "rulebook/**"
-                ]
+                "patterns": ["rulebook/**"]
             },
             {
                 "type": "Util",
-                "patterns": [
-                    "util/**"
-                ]
+                "patterns": ["util/**"]
             },
             {
                 "type": "Dependencies",
-                "components": [
-                    "Dependency"
-                ]
+                "components": ["Dependency"]
             },
             {
-                "components": [
-                    "Component"
-                ]
+                "components": ["Component"]
             }
         ]
     }

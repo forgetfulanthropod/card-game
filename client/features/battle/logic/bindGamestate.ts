@@ -39,7 +39,9 @@ function bindBattleState(app: PixiApplication) {
     let chest: PixiContainer | null = null
     stateCursor.on('update', () => {
         if (stateCursor.get() === 'won') {
-            chest = Chest({ size: { width: app.stage.width, height: app.stage.height } })
+            chest = Chest({
+                size: { width: app.stage.width, height: app.stage.height },
+            })
             app.stage.addChild(chest)
         } else if (chest != null) {
             app.stage.removeChild(chest)

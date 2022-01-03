@@ -1,6 +1,12 @@
 // https://stackoverflow.com/a/58993872/4941530
-// eslint-disable-next-line @typescript-eslint/ban-types
-type ImmutablePrimitive = undefined | null | boolean | string | number | Function
+
+type ImmutablePrimitive =
+    | undefined
+    | null
+    | boolean
+    | string
+    | number
+    | Function // eslint-disable-line @typescript-eslint/ban-types
 
 export type Immutable<T> = T extends ImmutablePrimitive
     ? T

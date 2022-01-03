@@ -47,7 +47,9 @@ async function copyHistory() {
     console.log('Quick, click the window!')
     await sleep(1000)
     try {
-        await navigator.clipboard.writeText(JSON.stringify(getClientTree().get().serverCalls))
+        await navigator.clipboard.writeText(
+            JSON.stringify(getClientTree().get().serverCalls)
+        )
         console.log('copied!')
     } catch (e) {
         console.log('couldnt copy')

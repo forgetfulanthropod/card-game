@@ -127,10 +127,14 @@ function validate(dr: typeof dungeonRooms): void {
     for (const [num, level] of Object.entries(dr)) {
         for (const [letter, roomMaker] of Object.entries(level)) {
             if (roomMaker.outcomes.length !== roomMaker.probs.length) {
-                throw Error(`dungeonRooms[${num}][${letter}] has wrong number of probs`)
+                throw Error(
+                    `dungeonRooms[${num}][${letter}] has wrong number of probs`
+                )
             }
             if (sum(roomMaker.probs) !== 1) {
-                throw Error(`dungeonRooms[${num}][${letter}] probabilities do not sum to 1`)
+                throw Error(
+                    `dungeonRooms[${num}][${letter}] probabilities do not sum to 1`
+                )
             }
         }
     }

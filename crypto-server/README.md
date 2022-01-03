@@ -14,6 +14,7 @@ with json
 ## Make a post request to /mint
 
 with json
+
 ```
 {
 	"amount": 10
@@ -21,6 +22,7 @@ with json
 ```
 
 ## TODO
+
 [ ] store key secretly
 [ ] add minting tokens
 [ ] reload sol when needed. Figure out

@@ -46,7 +46,9 @@ export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
 }
 
 function getLevelIncrease(dungeonName: DungeonName): number {
-    const dungeonLevelInfo = getRulebook().dungeonLevels.find(l => l.name === dungeonName)
+    const dungeonLevelInfo = getRulebook().dungeonLevels.find(
+        l => l.name === dungeonName
+    )
 
     if (dungeonLevelInfo == null) {
         throw Error('level increase error')
@@ -57,7 +59,10 @@ function getLevelIncrease(dungeonName: DungeonName): number {
     return mod > 1 ? mod : 0
 }
 
-function levelUpEnemy(enemy: CharacterMeta, levelIncrease: number): CharacterMeta {
+function levelUpEnemy(
+    enemy: CharacterMeta,
+    levelIncrease: number
+): CharacterMeta {
     return {
         ...enemy,
         ...getLevelInfo(enemy.name, enemy.level + levelIncrease),
@@ -86,8 +91,10 @@ export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
     console.log({ levelInfo, level })
 
     if (level > MAX_DATA_LEVEL) {
-        levelInfo.damage = levelInfo.damage + ((OVER_MAX_ATTACK * level) % MAX_DATA_LEVEL)
-        levelInfo.maxHealth = levelInfo.maxHealth + ((OVER_MAX_HEALTH * level) % MAX_DATA_LEVEL)
+        levelInfo.damage =
+            levelInfo.damage + OVER_MAX_ATTACK * level % MAX_DATA_LEVEL
+        levelInfo.maxHealth =
+            levelInfo.maxHealth + OVER_MAX_HEALTH * level % MAX_DATA_LEVEL
     }
 
     levelInfo.health = levelInfo.maxHealth

@@ -23,18 +23,29 @@ export function deepFreeze<T extends object>(obj: T): Immutable<T> {
 export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
     return Object.values(obj)
 }
-export function keys<K extends string | number, V>(obj: Record<K, V>): string[] {
+export function keys<K extends string | number, V>(
+    obj: Record<K, V>
+): string[] {
     return Object.keys(obj)
 }
 
-export function length<K extends string | number>(obj: Record<K, unknown>): number {
+export function length<K extends string | number>(
+    obj: Record<K, unknown>
+): number {
     return Object.keys(obj).length
 }
 
-export function keyMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k: string) => X): X[] {
+export function keyMap<K extends string | number, V, X>(
+    obj: Record<K, V>,
+    f: (k: string) => X
+): X[] {
     return Object.keys(obj).map(f)
 }
-export function entryMap<K extends string | number, V, X>(obj: Record<K, V>, f: (k: string, v: V) => X): X[] {
+export function entryMap<K extends string | number, V, X>(
+    obj: Record<K, V>,
+    f: (k: string, v: V) => X
+): X[] {
+    // eslint-disable-next-line no-extra-parens
     return (Object.entries(obj) as [string, V][]).map(([k, v]) => f(k, v))
 }
 

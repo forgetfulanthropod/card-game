@@ -49,7 +49,11 @@ const _COMPASS = 345
 const FISHING_ROD = 346
 const _CLOCK = 347
 
-export type Recipe = [string, number, [number, number, number, number, number, number, number, number, number]]
+export type Recipe = [
+    string,
+    number,
+    [number, number, number, number, number, number, number, number, number]
+]
 
 export const pairs: [string, number][] = [
     ['Cobblestone', 4],
@@ -74,47 +78,169 @@ export const recipes: Recipe[] = [
     [
         'Redstone Block',
         REDSTONE_BLOCK,
-        [REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE, REDSTONE],
+        [
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+            REDSTONE,
+        ],
     ],
     [
         'Chest',
         CHEST,
-        [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, WOOD_PLANK],
+        [
+            WOOD_PLANK,
+            WOOD_PLANK,
+            WOOD_PLANK,
+            WOOD_PLANK,
+            0,
+            WOOD_PLANK,
+            WOOD_PLANK,
+            WOOD_PLANK,
+            WOOD_PLANK,
+        ],
     ],
-    ['Crafting Table', CRAFTING_TABLE, [0, 0, 0, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, 0]],
+    [
+        'Crafting Table',
+        CRAFTING_TABLE,
+        [0, 0, 0, WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, WOOD_PLANK, 0],
+    ],
     [
         'Furnace',
         FURNACE,
-        [COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, COBBLESTONE, COBBLESTONE, COBBLESTONE],
+        [
+            COBBLESTONE,
+            COBBLESTONE,
+            COBBLESTONE,
+            COBBLESTONE,
+            0,
+            COBBLESTONE,
+            COBBLESTONE,
+            COBBLESTONE,
+            COBBLESTONE,
+        ],
     ],
     ['Bucket', BUCKET, [0, 0, 0, IRON_INGOT, 0, IRON_INGOT, 0, IRON_INGOT, 0]],
-    ['Flint and Steel', FLINT_AND_STEEL, [0, 0, 0, IRON_INGOT, 0, 0, 0, FLINT, 0]],
-    ['Wooden Axe', WOODEN_AXE, [WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, STICK, 0, 0, STICK, 0]],
-    ['Stone Axe', STONE_AXE, [COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, STICK, 0, 0, STICK, 0]],
-    ['Iron Axe', IRON_AXE, [IRON_INGOT, IRON_INGOT, 0, IRON_INGOT, STICK, 0, 0, STICK, 0]],
-    ['Diamond Axe', DIAMOND_AXE, [DIAMOND, DIAMOND, 0, DIAMOND, STICK, 0, 0, STICK, 0]],
+    [
+        'Flint and Steel',
+        FLINT_AND_STEEL,
+        [0, 0, 0, IRON_INGOT, 0, 0, 0, FLINT, 0],
+    ],
+    [
+        'Wooden Axe',
+        WOODEN_AXE,
+        [WOOD_PLANK, WOOD_PLANK, 0, WOOD_PLANK, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Stone Axe',
+        STONE_AXE,
+        [COBBLESTONE, COBBLESTONE, 0, COBBLESTONE, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Iron Axe',
+        IRON_AXE,
+        [IRON_INGOT, IRON_INGOT, 0, IRON_INGOT, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Diamond Axe',
+        DIAMOND_AXE,
+        [DIAMOND, DIAMOND, 0, DIAMOND, STICK, 0, 0, STICK, 0],
+    ],
     ['Golden Axe', GOLDEN_AXE, [GOLD, GOLD, 0, GOLD, STICK, 0, 0, STICK, 0]],
-    ['Wooden Hoe', WOODEN_HOE, [WOOD_PLANK, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Stone Hoe', STONE_HOE, [COBBLESTONE, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Iron Hoe', IRON_HOE, [IRON_INGOT, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Diamond Hoe', DIAMOND_HOE, [DIAMOND, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]],
+    [
+        'Wooden Hoe',
+        WOODEN_HOE,
+        [WOOD_PLANK, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Stone Hoe',
+        STONE_HOE,
+        [COBBLESTONE, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Iron Hoe',
+        IRON_HOE,
+        [IRON_INGOT, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Diamond Hoe',
+        DIAMOND_HOE,
+        [DIAMOND, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
     ['Golden Hoe', GOLDEN_HOE, [GOLD, GOLD, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Wooden Pickaxe', WOODEN_PICKAXE, [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, STICK, 0, 0, STICK, 0]],
-    ['Stone Pickaxe', STONE_PICKAXE, [COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, STICK, 0, 0, STICK, 0]],
-    ['Iron Pickaxe', IRON_PICKAXE, [IRON_INGOT, IRON_INGOT, IRON_INGOT, 0, STICK, 0, 0, STICK, 0]],
-    ['Diamond Pickaxe', DIAMOND_PICKAXE, [DIAMOND, DIAMOND, DIAMOND, 0, STICK, 0, 0, STICK, 0]],
-    ['Golden Pickaxe', GOLDEN_PICKAXE, [GOLD, GOLD, GOLD, 0, STICK, 0, 0, STICK, 0]],
-    ['Wooden Shovel', WOODEN_SHOVEL, [0, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Stone Shovel', STONE_SHOVEL, [0, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0]],
+    [
+        'Wooden Pickaxe',
+        WOODEN_PICKAXE,
+        [WOOD_PLANK, WOOD_PLANK, WOOD_PLANK, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Stone Pickaxe',
+        STONE_PICKAXE,
+        [COBBLESTONE, COBBLESTONE, COBBLESTONE, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Iron Pickaxe',
+        IRON_PICKAXE,
+        [IRON_INGOT, IRON_INGOT, IRON_INGOT, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Diamond Pickaxe',
+        DIAMOND_PICKAXE,
+        [DIAMOND, DIAMOND, DIAMOND, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Golden Pickaxe',
+        GOLDEN_PICKAXE,
+        [GOLD, GOLD, GOLD, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Wooden Shovel',
+        WOODEN_SHOVEL,
+        [0, WOOD_PLANK, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
+    [
+        'Stone Shovel',
+        STONE_SHOVEL,
+        [0, COBBLESTONE, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
     ['Iron Shovel', IRON_SHOVEL, [0, IRON_INGOT, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Diamond Shovel', DIAMOND_SHOVEL, [0, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0]],
+    [
+        'Diamond Shovel',
+        DIAMOND_SHOVEL,
+        [0, DIAMOND, 0, 0, STICK, 0, 0, STICK, 0],
+    ],
     ['Golden Shovel', GOLDEN_SHOVEL, [0, GOLD, 0, 0, STICK, 0, 0, STICK, 0]],
-    ['Wooden Sword', WOODEN_SWORD, [0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0, 0, STICK, 0]],
-    ['Stone Sword', STONE_SWORD, [0, COBBLESTONE, 0, 0, COBBLESTONE, 0, 0, STICK, 0]],
-    ['Iron Sword', IRON_SWORD, [0, IRON_INGOT, 0, 0, IRON_INGOT, 0, 0, STICK, 0]],
-    ['Diamond Sword', DIAMOND_SWORD, [0, DIAMOND, 0, 0, DIAMOND, 0, 0, STICK, 0]],
+    [
+        'Wooden Sword',
+        WOODEN_SWORD,
+        [0, WOOD_PLANK, 0, 0, WOOD_PLANK, 0, 0, STICK, 0],
+    ],
+    [
+        'Stone Sword',
+        STONE_SWORD,
+        [0, COBBLESTONE, 0, 0, COBBLESTONE, 0, 0, STICK, 0],
+    ],
+    [
+        'Iron Sword',
+        IRON_SWORD,
+        [0, IRON_INGOT, 0, 0, IRON_INGOT, 0, 0, STICK, 0],
+    ],
+    [
+        'Diamond Sword',
+        DIAMOND_SWORD,
+        [0, DIAMOND, 0, 0, DIAMOND, 0, 0, STICK, 0],
+    ],
     ['Golden Sword', GOLDEN_SWORD, [0, GOLD, 0, 0, GOLD, 0, 0, STICK, 0]],
-    ['Fishing Rod', FISHING_ROD, [0, 0, STICK, 0, STICK, STRING, STICK, 0, STRING]],
+    [
+        'Fishing Rod',
+        FISHING_ROD,
+        [0, 0, STICK, 0, STICK, STRING, STICK, 0, STRING],
+    ],
 ]
 export const initialInventory = [
     COBBLESTONE,

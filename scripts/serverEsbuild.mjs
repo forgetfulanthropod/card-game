@@ -4,11 +4,10 @@ const args = process.argv.slice(2)
 const shouldWatch = args.length === 1 && args[0] === 'watch'
 console.log({ shouldWatch })
 const envObj = makeBuildInfo('SERVER_')
-console.log("build environment:", envObj)
+console.log('build environment:', envObj)
 
 const parentDir = process.env.PWD.split('/').at(-1)
-if (parentDir !== 'server')
-    throw Error("must be run from directory 'server'")
+if (parentDir !== 'server') throw Error("must be run from directory 'server'")
 
 build()
 
@@ -25,16 +24,22 @@ function build() {
         define: makeBuildInfo('SERVER_'),
         watch: shouldWatch && {
             onRebuild(error, result) {
-                if (error) { console.error('rebuild error:', error) }
+                if (error) {
+                    console.error('rebuild error:', error)
+                }
                 console.log('rebuilt. stopping old build.')
                 result.stop()
                 console.log('running another build.')
                 build()
-            }
+            },
         },
     })
-        .then(() => { console.log(`${time()}: build succeeded`) })
-        .catch((err) => { console.error(err) })
+        .then(() => {
+            console.log(`${time()}: build succeeded`)
+        })
+        .catch(err => {
+            console.error(err)
+        })
 }
 
 function time() {

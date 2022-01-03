@@ -5,20 +5,32 @@ import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
 import { PixiLoader } from '@/elementsUtil'
 import type { AssetKey } from '@/features/battle/logic/AssetLoader'
 
-export function drawCircle(g: PixiGraphics, color: string, x: number, y: number, radius: number): void {
+export function drawCircle(
+    g: PixiGraphics,
+    color: string,
+    x: number,
+    y: number,
+    radius: number
+): void {
     g.beginFill(utils.string2hex(color))
     g.drawCircle(x, y, radius)
     g.endFill()
 }
 
-export function flashElement(sprite: PixiSprite, { durationMs = 500 } = {}): void {
+export function flashElement(
+    sprite: PixiSprite,
+    { durationMs = 500 } = {}
+): void {
     sprite.visible = true
     setTimeout(() => {
         sprite.visible = false
     }, durationMs)
 }
 
-export function hideElement(sprite: PixiSprite | PixiContainer, { durationMs = 500 } = {}): void {
+export function hideElement(
+    sprite: PixiSprite | PixiContainer,
+    { durationMs = 500 } = {}
+): void {
     sprite.visible = false
     setTimeout(() => {
         sprite.visible = true

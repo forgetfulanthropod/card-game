@@ -20,7 +20,8 @@ const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 export const doCharacterAction: DoCharacterAction = async args => {
     const { uid: clickedUid } = args
     const scene = getBattleScene(args.username)
-    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } = scene.get()
+    const { allCharacters, isPlayerTurn, selectedCharacter, selectedMove } =
+        scene.get()
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
     const { alivePcs } = getLivingChars(allCharacters)
@@ -64,12 +65,22 @@ export const doCharacterAction: DoCharacterAction = async args => {
     }
 
     let move = selectedMove
-    if (isSpecial(move)) move = getTransformed({ move, charUid: selectedCharacter, username: args.username })
+    if (isSpecial(move))
+        move = getTransformed({
+            move,
+            charUid: selectedCharacter,
+            username: args.username,
+        })
 
     const ad: AttackData = {
         attacker: allCharacters[selectedCharacter],
         defenders: getDefenders(clicked, move, vals(allCharacters)),
         move,
     }
-    await handleMove({ scene, allCharacters, attackData: ad, username: args.username })
+    await handleMove({
+        scene,
+        allCharacters,
+        attackData: ad,
+        username: args.username,
+    })
 }

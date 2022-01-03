@@ -106,9 +106,16 @@ export type AssetKey = keyof typeof allAssets
 export default function loadAssets(): Promise<void> {
     let basicDone = false
     let deluxeDone = false
-    const loaded = new Set(Object.keys(allAssets).filter(name => Loader.shared.resources[name]?.data != null))
+    const loaded = new Set(
+        Object.keys(allAssets).filter(
+            name => Loader.shared.resources[name]?.data != null
+        )
+    )
 
-    for (const [name, url] of Object.entries({ ...basicAssets, ...deluxeAssets })) {
+    for (const [name, url] of Object.entries({
+        ...basicAssets,
+        ...deluxeAssets,
+    })) {
         if (Loader.shared.resources[name]?.data == null) {
             Loader.shared.add(name, url)
         }

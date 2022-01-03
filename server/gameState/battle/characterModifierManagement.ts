@@ -4,11 +4,17 @@ import { getCharacterMovesWithDamageRanges } from './attack'
 import { applyBlessings } from './blessings'
 import { newNPCMeta, newPCMeta } from './characterManagement'
 
-export function getModified(prev: Readonly<CharacterMeta>, username: string): CharacterMeta {
+export function getModified(
+    prev: Readonly<CharacterMeta>,
+    username: string
+): CharacterMeta {
     const clean = cleanMeta(prev)
 
     const blessed = applyBlessings(clean, username)
-    const stanced = { ...blessed, moves: getCharacterMovesWithDamageRanges(blessed) }
+    const stanced = {
+        ...blessed,
+        moves: getCharacterMovesWithDamageRanges(blessed),
+    }
 
     const final = copyFinalProperties(stanced, prev)
 
@@ -25,7 +31,10 @@ function cleanMeta(cm: Readonly<CharacterMeta>): CharacterMeta {
     }
 }
 
-function copyFinalProperties(to: Readonly<CharacterMeta>, from: CharacterMeta): CharacterMeta {
+function copyFinalProperties(
+    to: Readonly<CharacterMeta>,
+    from: CharacterMeta
+): CharacterMeta {
     const deltaHealth = to.maxHealth - from.maxHealth
     const newHealth = Math.max(from.health + deltaHealth, 1)
     return {

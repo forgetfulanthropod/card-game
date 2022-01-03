@@ -53,8 +53,10 @@ const NUM_OF_EACH_CHAR = 5
 function makeCharacters() {
     return vals(getOwnedCharacters().get()).map((c, i) =>
         Container({
-            x: (((i / NUM_OF_EACH_CHAR) | 0) % 5) * 150 + ((i / NUM_OF_EACH_CHAR) % 5) * 100,
-            y: Math.floor(((i / NUM_OF_EACH_CHAR) | 0) / 5) * 150,
+            x:
+                (i / NUM_OF_EACH_CHAR | 0) % 5 * 150 +
+                i / NUM_OF_EACH_CHAR % 5 * 100,
+            y: Math.floor((i / NUM_OF_EACH_CHAR | 0) / 5) * 150,
             children: [
                 Sprite({
                     src: dataOf(c.name),
@@ -66,16 +68,22 @@ function makeCharacters() {
     )
 }
 
-function makeSelectionIndicators(characters: PixiContainer[], selectedCharacters: SCursor<OwnedCharacter[]>) {
+function makeSelectionIndicators(
+    characters: PixiContainer[],
+    selectedCharacters: SCursor<OwnedCharacter[]>
+) {
     update()
     selectedCharacters.on('update', update)
 
     function update() {
         characters.forEach(characterContainer => {
-            if (characterContainer.children.length > 1) characterContainer.removeChildren(1)
+            if (characterContainer.children.length > 1)
+                characterContainer.removeChildren(1)
         })
         selectedCharacters.get()?.map(c => {
-            const indexOfOwned = vals(getOwnedCharacters().get()).findIndex(oc => c.uid === oc.uid)
+            const indexOfOwned = vals(getOwnedCharacters().get()).findIndex(
+                oc => c.uid === oc.uid
+            )
             characters[indexOfOwned].addChild(
                 Sprite({
                     src: dataOf('check'),

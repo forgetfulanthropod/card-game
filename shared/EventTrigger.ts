@@ -5,4 +5,10 @@ export interface EventTrigger {
 }
 
 export type EventTriggersMap = Record<EventTriggerName, EventTrigger>
-type EventTriggerName = 'carriage' | 'clearing' | 'hats' | 'gnome' | 'babysitting' | 'baron'
+type EventTriggerName =
+    | 'carriage'
+    | 'clearing'
+    | 'hats'
+    | 'gnome'
+    | 'babysitting'
+    | 'baron'

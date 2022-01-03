@@ -12,5 +12,9 @@ const Root = styled.button`
 `
 
 export default function ResetButton(props: { username: string }): JSX.Element {
-    return <Root onClick={() => makeNewUser({ username: props.username })}>reset everything</Root>
+    return (
+        <Root onClick={() => makeNewUser({ username: props.username })}>
+            reset everything
+        </Root>
+    )
 }

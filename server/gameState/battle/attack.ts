@@ -15,9 +15,13 @@ import { getRulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
-export function getCharacterMovesWithDamageRanges(character: Readonly<StatsWithStance>): CharacterMove[] {
+export function getCharacterMovesWithDamageRanges(
+    character: Readonly<StatsWithStance>
+): CharacterMove[] {
     return character.moves.map(move => {
-        const damageRange = getMoveMultiplierRange(move).map(multiplier => getDamage(character, multiplier))
+        const damageRange = getMoveMultiplierRange(move).map(multiplier =>
+            getDamage(character, multiplier)
+        )
 
         return {
             ...move,
@@ -26,7 +30,9 @@ export function getCharacterMovesWithDamageRanges(character: Readonly<StatsWithS
     })
 
     function getDamage(character: CharacterStats, multiplier: number): number {
-        const damage = Math.round(character.damage * getAttackMultiplier(character) * multiplier)
+        const damage = Math.round(
+            character.damage * getAttackMultiplier(character) * multiplier
+        )
         return damage < 1 ? 1 : damage
     }
 }
@@ -48,7 +54,8 @@ export function getCharacterKeysAndDamages(
             if (e.remainingRounds <= 0) {
                 throw Error('trying to apply exhausted effect')
             }
-            const damage = e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
+            const damage =
+                e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
             kds.push({ key: attackData.attacker.uid, damage })
         })
     }
@@ -56,7 +63,9 @@ export function getCharacterKeysAndDamages(
     return kds
 }
 
-export function getCharacterKeysAndEffects(attackData: AttackData): { key: CharacterUid; effect: Effect }[] {
+export function getCharacterKeysAndEffects(
+    attackData: AttackData
+): { key: CharacterUid; effect: Effect }[] {
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
         const moveMeta = getRulebook().moveMetaMap[moveTypeDOT]
@@ -72,7 +81,13 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
                 remainingRounds: effectMultipliers.length - 1,
                 damagesByRound: [
                     ...effectMultipliers.map(m =>
-                        Math.max(1, (attackData.attacker.damage * m * getDefenseMultiplier(d)) | 0)
+                        Math.max(
+                            1,
+                            attackData.attacker.damage *
+                                m *
+                                getDefenseMultiplier(d) |
+                                0
+                        )
                     ),
                 ],
             },
@@ -82,12 +97,27 @@ export function getCharacterKeysAndEffects(attackData: AttackData): { key: Chara
     return []
 }
 
-function getDamage({ ad, defender, username }: { ad: AttackData; defender: CharacterMeta; username: string }): number {
+function getDamage({
+    ad,
+    defender,
+    username,
+}: {
+    ad: AttackData
+    defender: CharacterMeta
+    username: string
+}): number {
     // const blessings = getGameStateCursor(username).select('blessings')
 
     let attackData = ad
     if (isSpecial(ad.move))
-        attackData = { ...ad, move: getTransformed({ move: ad.move, charUid: ad.attacker.uid, username }) }
+        attackData = {
+            ...ad,
+            move: getTransformed({
+                move: ad.move,
+                charUid: ad.attacker.uid,
+                username,
+            }),
+        }
 
     const dam = Math.round(
         attackData.attacker.damage *
@@ -99,7 +129,9 @@ function getDamage({ ad, defender, username }: { ad: AttackData; defender: Chara
     return dam > 0 ? dam : 1
 }
 
-function getAttackMultiplier(attacker: Partial<CharacterMeta>): StanceMultiplier {
+function getAttackMultiplier(
+    attacker: Partial<CharacterMeta>
+): StanceMultiplier {
     return getStanceTypeMeta(attacker.stance).attackMultiplier
 }
 
@@ -109,12 +141,21 @@ function getMoveMultiplier(d: AttackData): number {
 
         let typeMultiplier: number
 
-        if (typeMeta.multipliers != null && Array.isArray(typeMeta.numTargets)) {
+        if (
+            typeMeta.multipliers != null &&
+            Array.isArray(typeMeta.numTargets)
+        ) {
             const numDefenders = d.defenders.length
-            const relevantMultiplierIndex = typeMeta.numTargets.findIndex(num => numDefenders <= num)
-            if (relevantMultiplierIndex === -1) throw new Error('hmm something is deeply wrong')
+            const relevantMultiplierIndex = typeMeta.numTargets.findIndex(
+                num => numDefenders <= num
+            )
+            if (relevantMultiplierIndex === -1)
+                throw new Error('hmm something is deeply wrong')
             typeMultiplier = typeMeta.multipliers[relevantMultiplierIndex]
-            logger.info('>>>>>>>>>>>>. hi set typeMultiplier via multipliers array..', typeMeta.multipliers)
+            logger.info(
+                '>>>>>>>>>>>>. hi set typeMultiplier via multipliers array..',
+                typeMeta.multipliers
+            )
         } else if (typeMeta.multiplier != null) {
             typeMultiplier = typeMeta.multiplier
         } else if (typeMeta.multiplierRange != null) {
@@ -131,7 +172,9 @@ function getMoveMultiplier(d: AttackData): number {
     }, 1)
 }
 
-function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number] {
+function getMoveMultiplierRange(
+    move: CharacterMove
+): [number] | [number, number] {
     // return [1,5]
     let min = Number.POSITIVE_INFINITY
     let max = Number.NEGATIVE_INFINITY
@@ -140,9 +183,14 @@ function getMoveMultiplierRange(move: CharacterMove): [number] | [number, number
         const moveMeta = getRulebook().moveMetaMap[type]
         let multipliers
         if (moveMeta.multiplier != null) multipliers = [moveMeta.multiplier]
-        else if (moveMeta.multipliers != null) multipliers = [...moveMeta.multipliers]
-        else if (moveMeta.multiplierRange != null) multipliers = [...moveMeta.multiplierRange]
-        else throw Error('movemeta has neither multiplier nor multipliers nor multiplierRange')
+        else if (moveMeta.multipliers != null)
+            multipliers = [...moveMeta.multipliers]
+        else if (moveMeta.multiplierRange != null)
+            multipliers = [...moveMeta.multiplierRange]
+        else
+            throw Error(
+                'movemeta has neither multiplier nor multipliers nor multiplierRange'
+            )
 
         const compoundedMin = min < Number.POSITIVE_INFINITY ? min : 1
         const compoundedMax = max > Number.NEGATIVE_INFINITY ? max : 1

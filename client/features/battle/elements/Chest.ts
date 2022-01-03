@@ -32,8 +32,17 @@ export default function Chest(args: { size: Size }): PixiContainer {
     })
 
     setTimeout(() => {
-        c.addChild(Sprite({ name: 'fishstick', src: dataOf('fishstick'), x: -220, y: -120 }))
-        c.addChild(Sprite({ name: 'potion', src: dataOf('potion'), x: -100, y: -120 }))
+        c.addChild(
+            Sprite({
+                name: 'fishstick',
+                src: dataOf('fishstick'),
+                x: -220,
+                y: -120,
+            })
+        )
+        c.addChild(
+            Sprite({ name: 'potion', src: dataOf('potion'), x: -100, y: -120 })
+        )
     }, 1000)
 
     return c

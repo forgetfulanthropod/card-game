@@ -1,11 +1,25 @@
-import type { BattleScene, CharacterMeta, CharacterUid, Door, DungeonName } from '@shared'
+import type {
+    BattleScene,
+    CharacterMeta,
+    CharacterUid,
+    Door,
+    DungeonName,
+} from '@shared'
 import type { SpecialDoorName } from '@shared'
 import type { RoomOutcomes } from '@shared'
 import type { SCursor } from 'baobab'
 import { keys, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import { emit, mapToObj, srandInt, ssample, ssampleSize, vals, weightedRandom } from '@/util'
+import {
+    emit,
+    mapToObj,
+    srandInt,
+    ssample,
+    ssampleSize,
+    vals,
+    weightedRandom,
+} from '@/util'
 
 import { makePositions, newNPCMeta } from './characterManagement'
 
@@ -14,18 +28,31 @@ export type Room = {
     enemies: Record<CharacterUid, CharacterMeta>
 }
 
-function getDoorChoices(args: { roomsPassed: number; dungeonName: DungeonName }): {
+function getDoorChoices(args: {
+    roomsPassed: number
+    dungeonName: DungeonName
+}): {
     options: SpecialDoorName[]
     descriptions: string[]
 } {
     const { dungeonRooms } = getRulebook()
 
-    const options: SpecialDoorName[] = ['bigScary', 'normal', 'matcha', 'randomEvent']
+    const options: SpecialDoorName[] = [
+        'bigScary',
+        'normal',
+        'matcha',
+        'randomEvent',
+    ]
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1]
     const normalDescriptions = describeOutcomes(roomOutcomes).join('\n or \n')
     return {
         options,
-        descriptions: ['big scary door\n X2 Modifier', normalDescriptions, 'matcha door', 'randomEvent'],
+        descriptions: [
+            'big scary door\n X2 Modifier',
+            normalDescriptions,
+            'matcha door',
+            'randomEvent',
+        ],
     }
     // const allDoors: Door[] = ['A', 'B', 'C', 'D']
     // const options = allDoors.slice(0, length(roomOutcomes))
@@ -36,20 +63,31 @@ function getDoorChoices(args: { roomsPassed: number; dungeonName: DungeonName })
     // return { options, descriptions }
 }
 
-function describeOutcomes(roomOutcomes: Record<string, RoomOutcomes>): string[] {
+function describeOutcomes(
+    roomOutcomes: Record<string, RoomOutcomes>
+): string[] {
     return vals(roomOutcomes).map(outcome =>
         zip(outcome.outcomes, outcome.probs)
             .map(
                 ([o, p]) =>
                     o != null &&
                     p != null &&
-                    o.map(([name, level]) => `Lvl${level} ${name}`).join(' + ') + ' : ' + p.toString().slice(0, 3)
+                    o
+                        .map(([name, level]) => `Lvl${level} ${name}`)
+                        .join(' + ') +
+                        ' : ' +
+                        p.toString().slice(0, 3)
             )
             .join('\n')
     )
 }
 
-function makeRoom(args: { door: Door; dungeonName: string; roomsPassed: number; modifier?: number }): Room {
+function makeRoom(args: {
+    door: Door
+    dungeonName: string
+    roomsPassed: number
+    modifier?: number
+}): Room {
     const { dungeonRooms, characters } = getRulebook()
     const npcNames = Object.values(characters)
         .filter(x => !x.isPc)
@@ -62,13 +100,26 @@ function makeRoom(args: { door: Door; dungeonName: string; roomsPassed: number; 
             modifier,
             enemies: mapToObj(names, (name, i) => {
                 const uid = makeUid()
-                return [uid, newNPCMeta({ x: positions[i][0], y: positions[i][1], name, uid, level: srandInt(1, 4) })]
+                return [
+                    uid,
+                    newNPCMeta({
+                        x: positions[i][0],
+                        y: positions[i][1],
+                        name,
+                        uid,
+                        level: srandInt(1, 4),
+                    }),
+                ]
             }),
         }
     }
     const roomOutcomes = dungeonRooms[args.roomsPassed + 1][args.door]
     if (roomOutcomes == null) {
-        throw Error(`Could not find roomOutcomes at dungeonRooms[${args.roomsPassed + 1}][${args.door}]`)
+        throw Error(
+            `Could not find roomOutcomes at dungeonRooms[${
+                args.roomsPassed + 1
+            }][${args.door}]`
+        )
     }
     const index = weightedRandom(roomOutcomes.probs)
     const outcome = roomOutcomes.outcomes[index]
@@ -77,7 +128,16 @@ function makeRoom(args: { door: Door; dungeonName: string; roomsPassed: number; 
         enemies: mapToObj(outcome, pair => {
             const [name, level] = pair
             const uid = makeUid()
-            return [uid, newNPCMeta({ x: srandInt(50, 80), y: srandInt(40, 70), name, uid, level: level * modifier })]
+            return [
+                uid,
+                newNPCMeta({
+                    x: srandInt(50, 80),
+                    y: srandInt(40, 70),
+                    name,
+                    uid,
+                    level: level * modifier,
+                }),
+            ]
         }),
     }
 }
@@ -100,7 +160,12 @@ export function getRoom(args: {
                 return { modifier: -1, enemies: {} }
             }
             const regularDoorName = ssample(regularDoorOptions) as Door
-            return makeRoom({ dungeonName, roomsPassed, door: regularDoorName, modifier: d.variables.modifier })
+            return makeRoom({
+                dungeonName,
+                roomsPassed,
+                door: regularDoorName,
+                modifier: d.variables.modifier,
+            })
         }
         case 'normal': {
             return makeRandRegularRoom(dungeonName, roomsPassed)
@@ -112,7 +177,14 @@ export function getRoom(args: {
             // if (roomsPassed + 1 === v.levelToAppearOn) {
             return {
                 modifier: 1,
-                enemies: { [uid]: newNPCMeta({ ...randCoords(), name: v.enemyName, uid, level: v.enemyLevel }) },
+                enemies: {
+                    [uid]: newNPCMeta({
+                        ...randCoords(),
+                        name: v.enemyName,
+                        uid,
+                        level: v.enemyLevel,
+                    }),
+                },
             }
             // }
             // return makeRandRegularRoom(dungeonName, roomsPassed)
@@ -152,7 +224,10 @@ export function getRoom(args: {
     }
 }
 
-function makeRandRegularRoom(dungeonName: DungeonName, roomsPassed: number): Room {
+function makeRandRegularRoom(
+    dungeonName: DungeonName,
+    roomsPassed: number
+): Room {
     const { dungeonRooms } = getRulebook()
     const regularDoorOptions = keys(dungeonRooms[roomsPassed + 1])
     if (regularDoorOptions.length === 0) {

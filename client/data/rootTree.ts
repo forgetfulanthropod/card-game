@@ -1,4 +1,10 @@
-import type { BattleScene, EntryScene, Gamestate, OwnedCharacter, Scene } from '@shared'
+import type {
+    BattleScene,
+    EntryScene,
+    Gamestate,
+    OwnedCharacter,
+    Scene,
+} from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
@@ -24,7 +30,9 @@ export async function waitForGameStateToFill(): Promise<void> {
  */
 export function getTree(): SBaobab<Gamestate> {
     if (state.gamestate == null) {
-        throw Error('tried to get tree before it was loaded. Did you wait for onGamestate?')
+        throw Error(
+            'tried to get tree before it was loaded. Did you wait for onGamestate?'
+        )
     }
     return state.gamestate
 }
@@ -44,7 +52,8 @@ export const getEntryScene = (): SCursor<EntryScene> => {
     return getTree().select('scene') as SCursor<EntryScene>
 }
 
-export const getOwnedCharacters = (): SCursor<Record<string, OwnedCharacter>> => getTree().select('ownedCharacters')
+export const getOwnedCharacters = (): SCursor<Record<string, OwnedCharacter>> =>
+    getTree().select('ownedCharacters')
 export const getScene = (): SCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 

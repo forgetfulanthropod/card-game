@@ -1,5 +1,6 @@
 import { Button, Text } from '@chakra-ui/react'
-import { Fragment, h } from 'preact'
+import type { JSX } from 'preact'
+import { Fragment } from 'preact'
 import { useRef } from 'preact/hooks'
 
 import type { Disclosure } from './MyModal'
@@ -13,7 +14,7 @@ export default function WelcomeModal(props: { onDare: Callback }): JSX.Element {
             <Button onClick={() => ref.current?.onOpen()}>Genesis</Button>
             <MyModal
                 apiRef={ref}
-                title="Welcome to good Earth"
+                title='Welcome to good Earth'
                 body={
                     <>
                         <Text>Do you dare embark on a quest?</Text>
@@ -25,7 +26,9 @@ export default function WelcomeModal(props: { onDare: Callback }): JSX.Element {
                         <Button colorScheme={'red'} onClick={props.onDare}>
                             Dare
                         </Button>
-                        <Button onClick={() => ref.current?.onClose()}>Nope</Button>
+                        <Button onClick={() => ref.current?.onClose()}>
+                            Nope
+                        </Button>
                     </>
                 }
             />

@@ -14,10 +14,18 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
     const randId = Math.random().toString().slice(2, 6)
     const doCall: Caller<F> = async (...args) => {
         if (config.shouldSaveCalls) {
-            getClientTree().select('serverCalls').push({ name, args: args[0], time: new Date().toLocaleTimeString() })
+            getClientTree().select('serverCalls').push({
+                name,
+                args: args[0],
+                time: new Date().toLocaleTimeString(),
+            })
         }
         if (config.shouldLog) {
-            console.log(`calling ${name}#${randId}(${JSON.stringify(args[0])}) at ${new Date().toLocaleTimeString()}`)
+            console.log(
+                `calling ${name}#${randId}(${JSON.stringify(
+                    args[0]
+                )}) at ${new Date().toLocaleTimeString()}`
+            )
         }
         try {
             const startTime = Date.now()
@@ -46,7 +54,9 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
                 console.log(
                     `function ${name}#${randId} took ${
                         (Date.now() - startTime) / 1000
-                    } seconds and  returned ${JSON.stringify(json)} at ${new Date().toLocaleTimeString()}`
+                    } seconds and  returned ${JSON.stringify(
+                        json
+                    )} at ${new Date().toLocaleTimeString()}`
                 )
             }
             return json

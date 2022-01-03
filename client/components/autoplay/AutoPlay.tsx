@@ -1,4 +1,9 @@
-import type { BattleScene, EntryScene, Gamestate, OwnedCharacter } from '@shared'
+import type {
+    BattleScene,
+    EntryScene,
+    Gamestate,
+    OwnedCharacter,
+} from '@shared'
 import { find, sample, sum, values } from 'lodash'
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
@@ -6,7 +11,13 @@ import toast from 'react-hot-toast'
 // @ts-expect-error
 import styled from 'styled-components'
 
-import { addSelected, changeDungeon, changeScene, chooseDoor, doCharacterAction } from '@/actions'
+import {
+    addSelected,
+    changeDungeon,
+    changeScene,
+    chooseDoor,
+    doCharacterAction,
+} from '@/actions'
 import { getTree } from '@/data/rootTree'
 
 const Root = styled.button`
@@ -108,7 +119,9 @@ class Runner {
             toast('not my turn - doing nothing')
             return
         }
-        const enemies = values(scene.allCharacters).filter(c => !c.isPc && c.health > 0)
+        const enemies = values(scene.allCharacters).filter(
+            c => !c.isPc && c.health > 0
+        )
         if (enemies.length === 0) {
             toast('no enemies to hit -- doing nothing')
             return
@@ -137,7 +150,9 @@ async function addNewCharacter(availableChars: OwnedCharacter[]) {
 }
 
 function getAvailableChars(scene: EntryScene, tree: Gamestate) {
-    const pointsRemaining = scene.selectedLevel.pointLimit - sum(scene.selectedCharacters.map(sc => sc.points))
+    const pointsRemaining =
+        scene.selectedLevel.pointLimit -
+        sum(scene.selectedCharacters.map(sc => sc.points))
     const availableChars = values(tree.ownedCharacters).filter(
         oc =>
             find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected

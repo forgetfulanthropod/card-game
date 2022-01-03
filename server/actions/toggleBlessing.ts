@@ -18,8 +18,13 @@ export const toggleBlessing: ToggleBlessing = args => {
         return drop(blessings, i)
     })
 
-    if (getGameStateCursor(args.username).select('scene').get('name') === 'battle') {
-        const allCharactersCursor = getBattleScene(args.username).select('allCharacters')
+    if (
+        getGameStateCursor(args.username).select('scene').get('name') ===
+        'battle'
+    ) {
+        const allCharactersCursor = getBattleScene(args.username).select(
+            'allCharacters'
+        )
         for (const cm of values(allCharactersCursor.get())) {
             allCharactersCursor.set(cm.uid, getModified(cm, args.username))
         }

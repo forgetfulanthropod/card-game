@@ -19,12 +19,14 @@ export const specialDoorsMap = {
     },
     candyBaby: {
         name: 'candyBaby',
-        description: 'generates a room equal to three rooms back, with equally scaled loot modifier',
+        description:
+            'generates a room equal to three rooms back, with equally scaled loot modifier',
         variables: { special: true },
     },
     normal: {
         name: 'normal',
-        description: 'always takes up 1 door slot. does A-B-C system based on level',
+        description:
+            'always takes up 1 door slot. does A-B-C system based on level',
         variables: {},
     },
     matcha: {
@@ -71,14 +73,16 @@ export const specialDoorsMap = {
     },
     tiny: {
         name: 'tiny',
-        description: 'applies dungeon level modifier to generate more characters for all enemies',
+        description:
+            'applies dungeon level modifier to generate more characters for all enemies',
         variables: {
             tinyPerEnemy: 2,
         },
     },
     jumbo: {
         name: 'jumbo',
-        description: 'makes the character with the highest level in this dungeon room jumbo',
+        description:
+            'makes the character with the highest level in this dungeon room jumbo',
         variables: {
             criteria: 'highest' as 'highest' | 'all' | 'random',
         },

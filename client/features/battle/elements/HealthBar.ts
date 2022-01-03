@@ -4,7 +4,12 @@ import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiGraphics, PixiSprite, PixiText } from '@/elementsUtil'
+import type {
+    PixiContainer,
+    PixiGraphics,
+    PixiSprite,
+    PixiText,
+} from '@/elementsUtil'
 import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
 
 type Rect = [
@@ -34,7 +39,10 @@ function getCharacterCursor(characterUid: string) {
     return getBattleScene().select('allCharacters').select(characterUid)
 }
 
-function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeEffectIndicator(
+    characterCursor: SCursor<CharacterMeta>,
+    mainEl: PixiContainer
+) {
     let effects: PixiContainer
 
     updateEffects()
@@ -47,17 +55,18 @@ function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
         mainEl.removeChild(effects)
 
         effects = Container({
-            children: (characterCursor.select('effects').get() ?? []).map((e, i) =>
-                Text({
-                    text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
-                    y: 50 + 40 * i,
-                    style: {
-                        fontFamily: 'monospace',
-                        fontSize: 30,
-                        fill: 'rgba(255,255,255,.6)',
-                        letterSpacing: -5,
-                    },
-                })
+            children: (characterCursor.select('effects').get() ?? []).map(
+                (e, i) =>
+                    Text({
+                        text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
+                        y: 50 + 40 * i,
+                        style: {
+                            fontFamily: 'monospace',
+                            fontSize: 30,
+                            fill: 'rgba(255,255,255,.6)',
+                            letterSpacing: -5,
+                        },
+                    })
             ),
         })
 
@@ -65,7 +74,10 @@ function makeEffectIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
     }
 }
 
-function makeStanceIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeStanceIndicator(
+    characterCursor: SCursor<CharacterMeta>,
+    mainEl: PixiContainer
+) {
     let stanceEl: PixiSprite
 
     updateStance()
@@ -93,8 +105,9 @@ function makeStanceIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
             y: displayHeight * 1.1,
             anchor: [1, 0],
             width: displayWidth / 3,
-            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
-            onClick: () => toggleStance({ characterUid: characterCursor.get('uid') }),
+            height: displayWidth / 3 / stanceSrc.width * stanceSrc.height,
+            onClick: () =>
+                toggleStance({ characterUid: characterCursor.get('uid') }),
         })
         mainEl.addChild(stanceEl)
     }
@@ -117,7 +130,10 @@ function makeMainEl() {
     })
 }
 
-function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: PixiContainer) {
+function makeHealthIndicator(
+    characterCursor: SCursor<CharacterMeta>,
+    mainEl: PixiContainer
+) {
     let health: PixiGraphics
     let healthText: PixiText
 
@@ -128,7 +144,8 @@ function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
     })
 
     function updateHealth() {
-        if (health != null && healthText != null) mainEl.removeChild(health, healthText)
+        if (health != null && healthText != null)
+            mainEl.removeChild(health, healthText)
 
         const text = characterCursor.select('health').get()?.toString()
 
@@ -150,7 +167,10 @@ function makeHealthIndicator(characterCursor: SCursor<CharacterMeta>, mainEl: Pi
     }
 }
 
-function drawHealthBar(characterCursor: SCursor<CharacterMeta>, g: PixiGraphics) {
+function drawHealthBar(
+    characterCursor: SCursor<CharacterMeta>,
+    g: PixiGraphics
+) {
     const xMargin = 0.01869158878
     const yMargin = 0.16883116883
     const colorStops = [
@@ -159,9 +179,13 @@ function drawHealthBar(characterCursor: SCursor<CharacterMeta>, g: PixiGraphics)
         { color: '#91ff85', stop: 1 },
     ]
 
-    const portion = characterCursor.select('health').get() / characterCursor.select('maxHealth').get()
+    const portion =
+        characterCursor.select('health').get() /
+        characterCursor.select('maxHealth').get()
     const background = (
-        [...colorStops].sort((cs1, cs2) => cs1.stop - cs2.stop).find(cs => portion <= cs.stop) || { color: 'pink' }
+        [...colorStops]
+            .sort((cs1, cs2) => cs1.stop - cs2.stop)
+            .find(cs => portion <= cs.stop) || { color: 'pink' }
     ).color
     const rect: Rect = [
         displayWidth * xMargin,

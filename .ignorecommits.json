@@ -1,6 +1,0 @@
-{
-    "description:": "If you re-format the whole codebase or rename big directory, then add the hash here, and you can ignore it when you git blame. (The actual script or command to ignore specific commits is not written down anywhere yet.)",
-    "commits": [
-        "57adb0248461f75dc1a4848ef9cbe0c6e035ecf1"
-    ]
-}

@@ -1,8 +1,11 @@
 import { Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 import type { JSX } from 'preact'
-import { h } from 'preact'
 
-export default function CharacterStatsBox(props: { strength: number; rarity: string; ownedSince: Date }): JSX.Element {
+export default function CharacterStatsBox(props: {
+    strength: number
+    rarity: string
+    ownedSince: Date
+}): JSX.Element {
     const data: [string, any][] = [
         ['strength', props.strength],
         ['rarity', props.rarity],
@@ -17,16 +20,22 @@ export default function CharacterStatsBox(props: { strength: number; rarity: str
                 </Tr>
             </Thead>
             <Tbody>
-                {data.map(([stat, value]) => (
+                {data.map(([stat, value]) => 
                     <Tr key={stat}>
                         <Td>{stat}</Td>
                         <Td>{value}</Td>
                     </Tr>
-                ))}
+                )}
             </Tbody>
         </Table>
     )
 }
 export function CharacterStatsBoxExample(): JSX.Element {
-    return <CharacterStatsBox strength={5} rarity="common" ownedSince={new Date()} />
+    return (
+        <CharacterStatsBox
+            strength={5}
+            rarity='common'
+            ownedSince={new Date()}
+        />
+    )
 }

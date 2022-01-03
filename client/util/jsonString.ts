@@ -1,5 +1,8 @@
 /** Use jss`some template string` to stringify json */
-export function jss(literals: TemplateStringsArray, ...placeholders: unknown[]): string {
+export function jss(
+    literals: TemplateStringsArray,
+    ...placeholders: unknown[]
+): string {
     let result = ''
     for (let i = 0; i < placeholders.length; i++) {
         result += literals[i]
