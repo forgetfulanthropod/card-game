@@ -16,6 +16,7 @@
         "@solana/wallet-adapter-react-ui": "^0.8.0",
         "@solana/wallet-adapter-wallets": "^0.14.0",
         "@solana/web3.js": "^1.31.0",
+        "assert": "^2.0.0",
         "beautiful-skill-tree": "^1.7.1",
         "framer-motion": "^5",
         "marked": "^4.0.8",
@@ -26,6 +27,7 @@
         "preact": "^10.6.4",
         "react-hot-toast": "^2.1.1",
         "socket.io-client": "^4.4.0",
+        "stream": "^0.0.2",
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
