@@ -12,6 +12,7 @@ import SkilltreePage from '@/features/skilltree/SkilltreePage'
 import SpawnPage from '@/features/spawn/components/SpawnPage'
 
 import { MenuPage } from './MenuPage'
+import WalletWidget from './WalletWidget'
 
 export type ValidPage = keyof typeof nameToPage
 export type PageProps = { setPage: (c: ValidPage) => void }
@@ -32,9 +33,11 @@ export function TempApp(): JSXElement {
     const [pageName, setPageName] =
         useState<keyof typeof nameToPage>('QuestsPage')
     const Page = nameToPage[pageName]
+
     // const Page = nameToPage['MenuPage']
     return (
         <ChakraProvider>
+            <WalletWidget />
             {/* <Box margin="10" padding="10"> */}
             <Page setPage={setPageName} />
             {/* <Page setPage={() => {}} /> */}
