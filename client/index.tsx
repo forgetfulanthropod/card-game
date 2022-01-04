@@ -7,7 +7,9 @@ import { resolveWhenSocketConfirmed } from './connection'
 
 async function main() {
     await resolveWhenSocketConfirmed()
-    render(<App />, document.getElementById('preact-root') as HTMLDivElement)
+    const preactRoot = document.getElementById('preact-root') as HTMLDivElement
+    preactRoot.innerHTML = '' // remove the default warning
+    render(<App />, preactRoot)
 }
 
 void main()
