@@ -1,6 +1,6 @@
 import { Box, Heading, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
 
-import HackingMinigame from '../hacking/HackingMinigame'
+// import HackingMinigame from '../hacking/HackingMinigame'
 import { CharacterStatsBoxExample } from '../util/CharacterStatsBox'
 import { ClaimGemsExample } from '../util/ClaimGems'
 import { ConnectWalletExample } from '../util/ConnectWallet'
@@ -8,7 +8,7 @@ import { FormYourPartyPromptExample } from '../util/FormYourPartyPrompt'
 import { QuestProgressBarExample } from '../util/QuestProgressBar'
 
 export default function UITour(): JSXElement {
-    return <HackingMinigame />
+    // return <HackingMinigame />
     return (
         <Box>
             <Heading>UI Tour</Heading>

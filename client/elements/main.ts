@@ -1,27 +1,30 @@
-import type { PixiApplication, PixiContainer } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
 import { Application } from '@/elementsUtil'
-
-import { addSpineCharacter } from './SpineCharacter'
+import loadAssets from '@/features/battle/logic/AssetLoader'
+import { bindGamestate } from '@/features/battle/logic/bindGamestate'
 
 const config = {
     showOneThing: null as null | (() => PixiContainer),
     // showOneThing: () => DoorsStories('log'),
 }
 
-export function start(canvas: HTMLCanvasElement): PixiApplication {
+export async function startPixi(canvas: HTMLCanvasElement): Promise<void> {
     // const scale = window.innerWidth / BASE_WIDTH
-
+    await loadAssets()
     if (config?.showOneThing != null) {
-        return Application({ canvas, children: [config?.showOneThing()] })
+        Application({ canvas, children: [config?.showOneThing()] })
+        return
     }
     const app = Application({
         canvas,
         children: [],
     })
 
-    addSpineCharacter(app)
+    // app.stage.addChild(Graphics({ draw: g => {
+    //     g.draw
+    // }}))
 
-    // bindGamestate(app)
+    // addSpineCharacter(app)
 
-    return app
+    bindGamestate(app)
 }

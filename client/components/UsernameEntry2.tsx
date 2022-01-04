@@ -4,17 +4,6 @@ import goodEarthImg from '@/assets/good-earth.png'
 import styles from './UsernameEntry2.module.css'
 import { useState } from 'preact/hooks'
 
-const _js = `name_input.addEventListener('input',
-(event) => {
-  const style = document.querySelector('.enter-wrap').style
-  if (event.target.value.length > 0) {
-    style.opacity = 1;
-  } else {
-    style.opacity = 0;
-  }
-}
-)`
-
 export default function UsernameEntry2(props: {
     onEnter: (username: string) => void
 }): JSXElement {
@@ -36,8 +25,7 @@ export default function UsernameEntry2(props: {
                     spellCheck={false}
                     value={username}
                     onChange={e => {
-                        // @ts-expect-error
-                        setUsername(e?.target?.value)
+                        setUsername((e?.target as HTMLInputElement)?.value)
                     }}
                     onKeyUp={e => {
                         if (username.length > 1 && e.key === 'Enter') {
