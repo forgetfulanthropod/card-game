@@ -1,8 +1,7 @@
-import './global.css'
-
 import { render } from 'preact'
 
 import App from './components/App'
+import { TempApp } from './components/PageManager'
 import { resolveWhenSocketConfirmed } from './connection'
 
 const clientBuildInfo = {
@@ -12,11 +11,18 @@ const clientBuildInfo = {
 }
 console.log('client build info:', JSON.stringify(clientBuildInfo))
 
+const preactRoot = document.getElementById('preact-root') as HTMLDivElement
+
 async function main() {
     await resolveWhenSocketConfirmed()
-    const preactRoot = document.getElementById('preact-root') as HTMLDivElement
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)
 }
 
-void main()
+if (process.env.BARE === 'yes') {
+    console.log('it is bare')
+    render(<TempApp />, preactRoot)
+} else {
+    console.log('it is NOT bare')
+    void main()
+}

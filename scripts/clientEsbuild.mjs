@@ -19,6 +19,7 @@ function makeSubstitutions() {
     return {
         ...makeBuildInfo('CLIENT_'),
         global: 'window',
+        'process.env.BARE': `"${process.env.BARE}"`,
     }
 }
 
@@ -28,6 +29,11 @@ function build() {
     rmSync(buildDir, { recursive: true, force: true })
     mkdirSync(buildDir)
     cpSync(publicDir, buildDir, { recursive: true })
+    if (process.env.BARE === 'yes') {
+        cpSync(buildDir + '/bare-index.html', buildDir + '/index.html', {
+            errorOnExist: false,
+        })
+    }
     esbuild({
         minify: true, //!isDevelopment,
         sourcemap: true, //isDevelopment,

@@ -1,12 +1,14 @@
-import { h, JSX, Fragment } from 'preact' // eslint-disable-line
-import GameManager from './GameManager'
-import UsernameEntry2 from './UsernameEntry2'
+import '../global.css'
 
-import { waitForGameStateToFill } from '@/data/rootTree'
+import { useState } from 'preact/hooks'
+
 import { maybeMakeUser } from '@/actions'
 import { attachServerListener } from '@/connection'
+import { waitForGameStateToFill } from '@/data/rootTree'
 import { startPixi } from '@/elements/main'
-import { useState } from 'preact/hooks'
+
+import GameManager from './GameManager'
+import UsernameEntry2 from './UsernameEntry2'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
