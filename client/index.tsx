@@ -1,7 +1,13 @@
 import './global.css'
 
-import { h, JSX, render } from 'preact'
+import { render } from 'preact'
 
 import App from './components/App'
+import { resolveWhenSocketConfirmed } from './connection'
 
-render(<App />, document.getElementById('preact-root') as HTMLDivElement)
+async function main() {
+    await resolveWhenSocketConfirmed()
+    render(<App />, document.getElementById('preact-root') as HTMLDivElement)
+}
+
+void main()

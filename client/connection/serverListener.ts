@@ -12,9 +12,7 @@ const config = {
     shouldLog: false,
 }
 
-function log(...args: unknown[]) {
-    if (config.shouldLog) console.log(...args)
-}
+const log = (...args: unknown[]) => config.shouldLog && console.log(...args)
 
 const urlPrefix = window.location.href.split('/')[3]
 
@@ -28,15 +26,17 @@ export function maybeMakeSocket(): void {
 }
 export function resolveWhenSocketConfirmed(): Promise<void> {
     maybeMakeSocket()
+    log('waiting for socket connection with server')
     return new Promise(resolve => {
         socket.once('receivedConnection', data => {
+            log('got server socket connection')
             console.log(`'hey' data from server: ${JSON.stringify(data)}`)
             resolve()
         })
     })
 }
 
-export function getSocket(): typeof socket {
+export function getSocket(): Socket {
     return socket
 }
 
