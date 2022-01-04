@@ -1,4 +1,5 @@
 import './global.css'
+import 'preact/debug'
 
 import { h, JSX, render } from 'preact' // eslint-disable-line
 
