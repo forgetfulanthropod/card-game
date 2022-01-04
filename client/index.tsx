@@ -1,20 +1,7 @@
 import './global.css'
 
-import { h, JSX, render } from 'preact' // eslint-disable-line
+import { h, JSX, render } from 'preact'
 
-import { TempApp } from './components/PageManager'
+import App from './components/App'
 
-// import { Application } from './elementsUtil'
-// import { Gather } from './features/gather'
-
-// const app = Application({ canvas: document.getElementById('pixi-root') as HTMLCanvasElement, children: [] })
-// app.stage.addChild(Gather())
-/* Graphics({
-        draw: g => {
-            g.beginFill(0xff0000)
-            g.drawCircle(0, 0, 100)
-            g.endFill()
-        },
-    })
-) */
-render(<TempApp />, document.getElementById('preact-root') as HTMLDivElement)
+render(<App />, document.getElementById('preact-root') as HTMLDivElement)

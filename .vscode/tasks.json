@@ -44,7 +44,7 @@
         {
             "label": "esbuild client",
             "type": "shell",
-            "command": "cd server && npm run build-watch",
+            "command": "cd client && npm run build-watch",
             "presentation": {
                 "group": "builders"
             }

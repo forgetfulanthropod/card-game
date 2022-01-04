@@ -4,9 +4,9 @@
     color: white;
     font-family: sans-serif;
     text-align: center;
-    background: url('https://assets.codepen.io/195953/mushroom-bg.png')
-        no-repeat center center fixed;
+    background: url('https://assets.codepen.io/195953/mushroom-bg.png') no-repeat center center fixed;
     background-size: contain;
+    background-size: max(100vw, 2 * 100vh);
     width: 100%;
     height: 100%;
     position: absolute;
@@ -15,6 +15,7 @@
 .kaiju {
     width: 30%;
 }
+
 
 /* .welcome {
   display: block;
@@ -84,6 +85,7 @@
     display: inline-block;
     width: 100%;
 }
+
 
 /* .enterWrap:hover {
   opacity: 1;
