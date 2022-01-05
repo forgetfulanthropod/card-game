@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+import { pbkdf2, timingSafeEqual } from 'crypto'
 import type { Request } from 'express'
 import express from 'express'
 import type { Session } from 'express-session'
@@ -52,7 +53,13 @@ app.use(function (req: MyReq, res, next) {
 
 // dummy database
 
-const users: Record<string, { name: string; salt?: string; hash }> = {
+interface User {
+    name: string
+    salt?: string
+    hash?: string
+}
+
+const users: Record<string, User> = {
     tj: { name: 'tj' },
 }
 
@@ -65,6 +72,39 @@ hash({ password: 'foobar' }, function (err, pass, salt, hash) {
     users.tj.salt = salt
     users.tj.hash = hash
 })
+
+type LoginCallback = (
+    err?: unknown,
+    user?: User | false,
+    o?: { message: string }
+) => void
+function otherthing(password: string, user: User, cb: LoginCallback) {
+    if (user?.salt == null) {
+        throw Error('null user salt')
+    }
+    return pbkdf2(
+        password,
+        user.salt,
+        310000,
+        32,
+        'sha256',
+        function (err, hashedPassword) {
+            if (err) {
+                return cb(err)
+            }
+            if (user?.hash == null) {
+                throw Error('null user hash')
+            }
+
+            if (!timingSafeEqual(Buffer.from(user.hash), hashedPassword)) {
+                return cb(null, false, {
+                    message: 'Incorrect username or password.',
+                })
+            }
+            return cb(null, user)
+        }
+    )
+}
 
 // Authenticate using our plain-object database of doom!
 
