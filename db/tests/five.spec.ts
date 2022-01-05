@@ -1,6 +1,6 @@
 import { expect, Test, TestSuite } from 'testyts'
 
-import { five } from './index'
+import { five } from '../index'
 
 @TestSuite()
 export class FiveTestSuite {

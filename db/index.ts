@@ -21,7 +21,16 @@ export function five(): 5 {
 
 async function startDb() {
     const dbname = 'mydb'
-    const server = new AceBaseServer(dbname, { host: 'localhost', port: 5757 })
+    const server = new AceBaseServer(dbname, {
+        host: 'localhost',
+        port: 5757,
+        authentication: {
+            enabled: true,
+            allowUserSignup: false,
+            defaultAccessRule: 'auth',
+            defaultAdminPassword: 'password',
+        },
+    })
     await new Promise(resolve => server.ready(() => resolve(null)))
     logger.info('database is ready')
 }

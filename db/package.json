@@ -1,13 +1,24 @@
 {
     "name": "kaiju-db",
     "scripts": {
-        "build": "rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --source-map --outfile=db-build.js",
+        "build": "rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --outfile=db-build.js",
         "server": "node --enable-source-maps db-build.js",
         "run": "npm run build && npm run server",
         "tsc": "../node_modules/.bin/tsc --project tsconfig.json",
-        "test": "../node_modules/.bin/testyts"
+        "test": "testyts",
+        "oldtest": "../node_modules/.bin/testyts"
     },
     "dependencies": {
-        "acebase-server": "^1.7.0"
+        "acebase-server": "^1.7.0",
+        "socket.io-client": "^4.4.0",
+        "testyts": "^1.5.0",
+        "typescript": "^4.5.4"
+    },
+    "devDependencies": {
+        "acebase-client": "^1.10.1"
+    },
+    "depComments": {
+        "acebase-server": "the primary package, the db core package",
+        "acebase-client": "database client for testing"
     }
 }
