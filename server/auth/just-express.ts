@@ -4,27 +4,36 @@
  * Module dependencies.
  */
 
-import { pbkdf2, timingSafeEqual } from 'crypto'
-import type { Request } from 'express'
+import { pbkdf2Sync, randomBytes, timingSafeEqual } from 'crypto'
+// import ejs from 'ejs' // eslint-disable-line
+import type { NextFunction, Request, Response } from 'express'
 import express from 'express'
 import type { Session } from 'express-session'
 import session from 'express-session'
 import path from 'path'
-// @ts-expect-error
-import hash_ from 'pbkdf2-password'
-const hash = hash_()
-
-const app = (module.exports = express())
-
 interface UserSession extends Session {
     error?: unknown
     success?: unknown
+    user?: User
 }
 type MyReq = Request & { session: UserSession }
+
+interface User {
+    name: string
+    salt: string
+    hash: string
+}
+
+// dummy database
+const users: Record<string, User> = {}
+
+const app = (module.exports = express())
 
 // config
 
 app.set('view engine', 'ejs')
+app.engine('ejs', require('ejs').__express)
+
 app.set('views', path.join(__dirname, 'views'))
 
 // middleware
@@ -34,7 +43,7 @@ app.use(
     session({
         resave: false, // don't save session if unmodified
         saveUninitialized: false, // don't create session until something stored
-        secret: 'shhhh, very secret',
+        secret: 'yqb93847ybf137bfryslalskdjnfamnduhfe',
     })
 )
 
@@ -51,83 +60,35 @@ app.use(function (req: MyReq, res, next) {
     next()
 })
 
-// dummy database
-
-interface User {
-    name: string
-    salt?: string
-    hash?: string
+function dohash(password: string, salt: string): Buffer {
+    return pbkdf2Sync(password, salt, 310000, 32, 'sha256')
 }
 
-const users: Record<string, User> = {
-    tj: { name: 'tj' },
+function makeSalt(): string {
+    return randomBytes(128).toString('base64')
 }
 
-// when you create a user, generate a salt
-// and hash the password ('foobar' is the pass here)
-
-hash({ password: 'foobar' }, function (err, pass, salt, hash) {
-    if (err) throw err
-    // store the salt & hash in the "db"
-    users.tj.salt = salt
-    users.tj.hash = hash
-})
-
-type LoginCallback = (
-    err?: unknown,
-    user?: User | false,
-    o?: { message: string }
-) => void
-function otherthing(password: string, user: User, cb: LoginCallback) {
-    if (user?.salt == null) {
-        throw Error('null user salt')
-    }
-    return pbkdf2(
-        password,
-        user.salt,
-        310000,
-        32,
-        'sha256',
-        function (err, hashedPassword) {
-            if (err) {
-                return cb(err)
-            }
-            if (user?.hash == null) {
-                throw Error('null user hash')
-            }
-
-            if (!timingSafeEqual(Buffer.from(user.hash), hashedPassword)) {
-                return cb(null, false, {
-                    message: 'Incorrect username or password.',
-                })
-            }
-            return cb(null, user)
-        }
-    )
+function addUser(name: string, pass: string): void {
+    const salt = makeSalt()
+    const hash = dohash(pass, salt).toString('base64')
+    users[name] = { name, salt, hash }
 }
-
-// Authenticate using our plain-object database of doom!
 
 function authenticate(
     name: string,
-    pass: string,
-    fn: (err: unknown, user?: unknown) => void
-) {
-    console.log('authenticating %s:%s', name, pass)
+    pass: string
+): { user?: User; failMessage?: null } | { failMessage: string; user?: null } {
+    console.log('authenticating ${name}:${pass}') // TODO: remove
     const user = users[name]
-    // query the db for the given username
-    if (!user) return fn(new Error('cannot find user'))
-    // apply the same algorithm to the POSTed password, applying
-    // the hash against the pass / salt, if there is a match we
-    // found the user
-    hash({ password: pass, salt: user.salt }, function (err, pass, salt, hash) {
-        if (err) return fn(err)
-        if (hash === user.hash) return fn(null, user)
-        fn(new Error('invalid password'))
-    })
+    if (user == null) return { failMessage: 'username not found' }
+    const hashedPassword = dohash(pass, user.salt)
+    if (!timingSafeEqual(Buffer.from(user.hash, 'base64'), hashedPassword)) {
+        return { failMessage: 'incorrect username or password' }
+    }
+    return { user }
 }
 
-function restrict(req, res, next) {
+function restrict(req: MyReq, res: Response, next: NextFunction) {
     if (req.session.user) {
         next()
     } else {
@@ -136,7 +97,7 @@ function restrict(req, res, next) {
     }
 }
 
-app.get('/', function (req, res) {
+app.get('/', function (req: MyReq, res: Response) {
     res.redirect('/login')
 })
 
@@ -156,28 +117,31 @@ app.get('/login', function (req, res) {
     res.render('login')
 })
 
-app.post('/login', function (req, res) {
-    authenticate(req.body.username, req.body.password, function (err, user) {
-        if (user) {
-            // Regenerate session when signing in
-            // to prevent fixation
-            req.session.regenerate(function () {
-                // Store the user's primary key
-                // in the session store to be retrieved,
-                // or in this case the entire user object
-                req.session.user = user
-                req.session.success = `Authenticated as ${user.name} click to <a href="/logout">logout</a>.  You may now access <a href="/restricted">/restricted</a>.`
-                res.redirect('back')
-            })
-        } else {
-            req.session.error = `Authentication failed, please check your  username and password. (use "tj" and "foobar")`
-            res.redirect('/login')
-        }
-    })
+app.post('/login', function (req: MyReq, res) {
+    const result = authenticate(req.body.username, req.body.password)
+    if (result?.user != null) {
+        // Regenerate session when signing in
+        // to prevent fixation
+        req.session.regenerate(function () {
+            // Store the user's primary key
+            // in the session store to be retrieved,
+            // or in this case the entire user object
+            if (result?.user == null) {
+                throw Error('unreachable')
+            }
+            req.session.user = result.user
+            req.session.success = `Authenticated as ${result.user.name} click to <a href="/logout">logout</a>.  You may now access <a href="/restricted">/restricted</a>.`
+            res.redirect('back')
+        })
+    } else {
+        req.session.error = `Authentication failed: ${result.failMessage}`
+        res.redirect('/login')
+    }
 })
 
 /* istanbul ignore next */
-if (!module.parent) {
+if (require.main === module) {
+    addUser('user', 'pass')
     app.listen(3000)
     console.log('Express started on port 3000')
 }
