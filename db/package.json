@@ -1,0 +1,13 @@
+{
+    "name": "kaiju-db",
+    "scripts": {
+        "build": "rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --source-map --outfile=db-build.js",
+        "server": "node --enable-source-maps db-build.js",
+        "run": "npm run build && npm run server",
+        "tsc": "../node_modules/.bin/tsc --project tsconfig.json",
+        "test": "../node_modules/.bin/testyts"
+    },
+    "dependencies": {
+        "acebase-server": "^1.7.0"
+    }
+}

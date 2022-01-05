@@ -95,12 +95,24 @@
             "files": ["server/**/*.ts"],
             "parserOptions": {
                 "project": "./server/tsconfig.json"
+            },
+            "rules": {
+                "no-console": "error"
             }
         },
         {
             "files": ["crypto-server/**/*.ts"],
             "parserOptions": {
                 "project": "./crypto-server/tsconfig.json"
+            }
+        },
+        {
+            "files": ["db/**/*.ts"],
+            "parserOptions": {
+                "project": "./db/tsconfig.json"
+            },
+            "rules": {
+                "no-console": "error"
             }
         }
     ]
