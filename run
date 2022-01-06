@@ -1,8 +1,13 @@
 #!/bin/bash
+
+# formatter: ~/go/bin/shfmt -l -w -i 4 ./run
+
 set -e # fail on error
 
 # Add npm binaries to path
 export PATH=./node_modules/.bin:$PATH
+
+validCommands=(install-all CI lint simple-fmt fmt generate-indices save-staged new-todo clean-branches lint-watch view-imports-exports arkit dep-graph npm-clean)
 
 function install-all() {
     set +x # skip printing in this function
@@ -16,7 +21,71 @@ function install-all() {
     set -x
 }
 
-set -x # print commands as executed
+function CI() {
+    bash scripts/ci.sh
+}
 
-# Run a function name in the context of this script
-eval "$@"
+function lint() {
+    eslint .
+}
+
+function simple-fmt() {
+    prettier -w -l .
+    eslint . --fix
+}
+
+function fmt() {
+    pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
+    eslint . --fix
+}
+
+function generate-indices() {
+    vscode-generate-index-standalone ./shared ./client ./server/**/*.ts
+}
+
+function save-staged() {
+    bash scripts/savestaged.sh
+}
+
+function new-todo() {
+    git diff origin/main -G TODO
+}
+
+function clean-branches() {
+    git branch -D $(git branch | grep -v 'main')
+    git fetch
+    git pull
+    git remote prune origin
+}
+
+function lint-watch() {
+    echo 'doesnt work great'
+    esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts
+}
+
+function view-imports-exports() {
+    ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . >imports-and-exports.ignore.txt
+}
+
+function arkit() {
+    npx arkit
+}
+
+function dep-graph() {
+    rm -f deps.svg
+    depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg >deps.svg
+    open deps.svg
+}
+
+function npm-clean() {
+    # previously: /{pnpm-lock.yaml,node_modules}
+    rm -rf {.,client,server,crypto-server,db}/{node_modules}
+}
+
+# Check if command is valid, i.e. in valid list; if so then execute it
+if [[ " ${validCommands[*]} " =~ " ${1} " ]]; then
+    set -x # print commands as executed
+    eval "$@"
+else
+    echo "Unknown command: $1"
+fi
