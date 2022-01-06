@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e # fail on error
+
+# Add npm binaries to path
+export PATH=./node_modules/.bin:$PATH
+
+function install-all() {
+    set +x # skip printing in this function
+    wd=$(pwd)
+    for d in . client server db crypto-server; do
+        cd $d
+        echo "installing in $d"
+        pnpm install
+        cd $wd
+    done
+    set -x
+}
+
+set -x # print commands as executed
+
+# Run a function name in the context of this script
+eval "$@"
