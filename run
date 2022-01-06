@@ -1,13 +1,11 @@
 #!/bin/bash
 
-# formatter: ~/go/bin/shfmt -l -w -i 4 ./run
-
 set -e # fail on error
 
 # Add npm binaries to path
 export PATH=./node_modules/.bin:$PATH
 
-validCommands=(install-all CI lint simple-fmt fmt generate-indices save-staged new-todo clean-branches lint-watch view-imports-exports arkit dep-graph npm-clean)
+# declare -a validCommands
 
 function install-all() {
     set +x # skip printing in this function
@@ -15,7 +13,7 @@ function install-all() {
     for d in . client server db crypto-server; do
         cd $d
         echo "installing in $d"
-        pnpm install
+        pnpm install &
         cd $wd
     done
     set -x
@@ -29,6 +27,21 @@ function lint() {
     eslint .
 }
 
+function tsc-all() {
+    tsc --project client/tsconfig.json &
+    tsc --project server/tsconfig.json &
+    tsc --project db/tsconfig.json &
+    tsc --project crypto-server/tsconfig.json
+}
+
+function build-all() {
+    echo TODO
+}
+
+function clean-builds() {
+    echo TODO
+}
+
 function simple-fmt() {
     prettier -w -l .
     eslint . --fix
@@ -37,6 +50,10 @@ function simple-fmt() {
 function fmt() {
     pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
     eslint . --fix
+}
+
+function self-fmt() {
+    ~/go/bin/shfmt -l -w -i 4 ./run
 }
 
 function generate-indices() {
@@ -82,10 +99,13 @@ function npm-clean() {
     rm -rf {.,client,server,crypto-server,db}/{node_modules}
 }
 
-# Check if command is valid, i.e. in valid list; if so then execute it
-if [[ " ${validCommands[*]} " =~ " ${1} " ]]; then
-    set -x # print commands as executed
-    eval "$@"
-else
-    echo "Unknown command: $1"
-fi
+# # Check if command is valid, i.e. in valid list; if so then execute it
+# if [[ " ${validCommands[*]} " =~ " ${1} " ]]; then
+#     set -x # print commands as executed
+#     eval "$@"
+# else
+#     echo "Unknown command: $1"
+# fi
+
+set -x # print commands as executed
+eval "$@"
