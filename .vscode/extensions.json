@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "balehok.ts-prune-vscode",
+        "chunsen.bracket-select",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "emeraldwalk.RunOnSave",
+        "esbenp.prettier-vscode",
+        "JayFong.generate-index",
+        "pustelto.bracketeer",
+        "spmeesseman.vscode-taskexplorer"
+    ]
+}
