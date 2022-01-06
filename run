@@ -104,7 +104,7 @@ function npm-clean() {
 ## CLIENT
 
 function client:build() {
-    node ../scripts/clientEsbuild.mjs
+    node scripts/clientEsbuild.mjs
 }
 function client:build-watch() {
     npm run build -- watch
@@ -113,10 +113,10 @@ function client:bare-build-watch() {
     BARE=yes npm run build-watch
 }
 function client:tsc() {
-    ../node_modules/.bin/tsc --project tsconfig.json
+    tsc --project tsconfig.json
 }
 function client:live-serve() {
-    live-server ../build --host=localhost --port=300
+    live-server build --host=localhost --port=3000
 }
 
 ## MAIN SERVER
