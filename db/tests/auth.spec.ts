@@ -2,6 +2,7 @@ import { AceBaseClient } from 'acebase-client'
 import { expect, Test, TestSuite, BeforeAll, AfterAll } from 'testyts'
 
 const username = 'ewout'
+const adminPassword = 'password'
 const pass1 = 'TooEasy4U?'
 const pass2 = 'TooHard4U?'
 
@@ -24,7 +25,7 @@ export class AuthorizationTestSuite {
     @Test()
     async signup() {
         console.log('signing into admin')
-        await this.db.auth.signIn('admin', 'JDh!uC7mqremk@MB')
+        await this.db.auth.signIn('admin', adminPassword)
         const details = {
             username: username,
             displayName: 'Ewout Stortenbeker',
