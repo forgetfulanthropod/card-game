@@ -1,6 +1,7 @@
 build
 server-build
-kaiju-micro/build.js
+crypto-server/build.js
+db/db-build.js
 node_modules
 
 pnpm-lock.yaml
