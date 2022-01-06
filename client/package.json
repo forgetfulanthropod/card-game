@@ -1,12 +1,5 @@
 {
     "name": "kaiju-client",
-    "scripts": {
-        "build": "node ../scripts/clientEsbuild.mjs",
-        "build-watch": "npm run build -- watch",
-        "bare-build-watch": "BARE=yes npm run build-watch",
-        "tsc": "../node_modules/.bin/tsc --project tsconfig.json",
-        "live-serve": "live-server ../build --host=localhost --port=3000"
-    },
     "dependencies": {
         "@chakra-ui/react": "^1.7.3",
         "@emotion/react": "^11",

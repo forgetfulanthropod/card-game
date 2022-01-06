@@ -7,6 +7,8 @@ export PATH=./node_modules/.bin:$PATH
 
 # declare -a validCommands
 
+## ROOT
+
 function install-all() {
     set +x # skip printing in this function
     wd=$(pwd)
@@ -97,6 +99,78 @@ function dep-graph() {
 function npm-clean() {
     # previously: /{pnpm-lock.yaml,node_modules}
     rm -rf {.,client,server,crypto-server,db}/{node_modules}
+}
+
+## CLIENT
+
+function client:build() {
+    node ../scripts/clientEsbuild.mjs
+}
+function client:build-watch() {
+    npm run build -- watch
+}
+function client:bare-build-watch() {
+    BARE=yes npm run build-watch
+}
+function client:tsc() {
+    ../node_modules/.bin/tsc --project tsconfig.json
+}
+function client:live-serve() {
+    live-server ../build --host=localhost --port=300
+}
+
+## MAIN SERVER
+
+function server:server() {
+    node --enable-source-maps ../server-build/index.js
+}
+function server:server-watch() {
+    nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+}
+function server:server-watch-debug() {
+    nodemon --inspect --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+}
+function server:build() {
+    node ../scripts/serverEsbuild.mjs
+}
+function server:build-watch() {
+    npm run build -- watch
+}
+function server:tsc() {
+    ../node_modules/.bin/tsc --project tsconfig.json
+}
+function server:test() {
+    testyts
+}
+
+## CRYPTO SERVER
+
+function cypto:build() {
+    esbuild index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=build.js
+}
+function cypto:start() {
+    rm -f build.js && npm run build && node build.js
+}
+function cypto:tsc() {
+    tsc
+}
+
+## DATABASE
+
+function db:build() {
+    rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --outfile=db-build.js
+}
+function db:server() {
+    node --enable-source-maps db-build.js
+}
+function db:run() {
+    npm run build && npm run server
+}
+function db:tsc() {
+    ../node_modules/.bin/tsc --project tsconfig.json
+}
+function db:test() {
+    ../node_modules/.bin/testyts
 }
 
 # # Check if command is valid, i.e. in valid list; if so then execute it
