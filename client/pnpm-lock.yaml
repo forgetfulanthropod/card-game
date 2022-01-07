@@ -4,6 +4,7 @@ specifiers:
   '@chakra-ui/react': ^1.7.3
   '@emotion/react': ^11
   '@emotion/styled': ^11
+  '@metaplex-foundation/mpl-token-metadata': ^0.0.2
   '@monaco-editor/react': ^4.3.1
   '@solana/wallet-adapter-base': ^0.9.0
   '@solana/wallet-adapter-react': ^0.15.0
@@ -30,6 +31,7 @@ dependencies:
   '@chakra-ui/react': 1.7.3_15089e580bd243b67c17e8e3f12f3a1e
   '@emotion/react': 11.7.1
   '@emotion/styled': 11.6.0_@emotion+react@11.7.1
+  '@metaplex-foundation/mpl-token-metadata': 0.0.2
   '@monaco-editor/react': 4.3.1_monaco-editor@0.31.1
   '@solana/wallet-adapter-base': 0.9.0
   '@solana/wallet-adapter-react': 0.15.0
@@ -1145,6 +1147,27 @@ packages:
     resolution: {integrity: sha512-lLseUPEhSFUXYTKj6q7s2O3s2vW2ebgA11vMAlKodXGf5AFw4zUoEbTz9CoFOC9jS6xY4Qr8BmRnxP/odT4Uuw==}
     dev: false
 
+  /@metaplex-foundation/mpl-core/0.0.2:
+    resolution: {integrity: sha512-UUJ4BlYiWdDegAWmjsNQiNehwYU3QfSFWs3sv4VX0J6/ZrQ28zqosGhQ+I2ZCTEy216finJ82sZWNjuwSWCYyQ==}
+    dependencies:
+      '@solana/web3.js': 1.31.0
+      bs58: 4.0.1
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
+  /@metaplex-foundation/mpl-token-metadata/0.0.2:
+    resolution: {integrity: sha512-yKJPhFlX8MkNbSCi1iwHn4xKmguLK/xFhYa+RuYdL2seuT4CKXHj2CnR2AkcdQj46Za4/nR3jZcRFKq7QlnvBw==}
+    dependencies:
+      '@metaplex-foundation/mpl-core': 0.0.2
+      '@solana/spl-token': 0.1.8
+      '@solana/web3.js': 1.31.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
+    dev: false
+
   /@monaco-editor/loader/1.2.0_monaco-editor@0.31.1:
     resolution: {integrity: sha512-cJVCG/T/KxXgzYnjKqyAgsKDbH9mGLjcXxN6AmwumBwa2rVFkwvGcUj1RJtD0ko4XqLqJxwqsN/Z/KURB5f1OQ==}
     peerDependencies:
@@ -1765,6 +1788,21 @@ packages:
     engines: {node: '>=5.10'}
     dependencies:
       buffer: 6.0.3
+    dev: false
+
+  /@solana/spl-token/0.1.8:
+    resolution: {integrity: sha512-LZmYCKcPQDtJgecvWOgT/cnoIQPWjdH+QVyzPcFvyDUiT0DiRjZaam4aqNUyvchLFhzgunv3d9xOoyE34ofdoQ==}
+    engines: {node: '>= 10'}
+    dependencies:
+      '@babel/runtime': 7.16.5
+      '@solana/web3.js': 1.31.0
+      bn.js: 5.2.0
+      buffer: 6.0.3
+      buffer-layout: 1.2.2
+      dotenv: 10.0.0
+    transitivePeerDependencies:
+      - bufferutil
+      - utf-8-validate
     dev: false
 
   /@solana/wallet-adapter-base/0.9.0:
@@ -2438,6 +2476,11 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /buffer-layout/1.2.2:
+    resolution: {integrity: sha512-kWSuLN694+KTk8SrYvCqwP2WcgQjoRCiF5b4QDvkkz8EmgD+aWAIceGFKMIAdmF/pH+vpgNV3d3kAKorcdAmWA==}
+    engines: {node: '>=4.5'}
+    dev: false
+
   /buffer-xor/1.0.3:
     resolution: {integrity: sha1-JuYe0UIvtw3ULm42cp7VHYVf6Nk=}
     dev: false
@@ -2649,6 +2692,11 @@ packages:
 
   /detect-node/2.1.0:
     resolution: {integrity: sha512-T0NIuQpnTvFDATNuHN5roPwSBG83rFsuO+MXXH9/3N1eFbn4wcPjttvjMLEPWJ0RGUYgQE7cGgS3tNxbqCGM7g==}
+    dev: false
+
+  /dotenv/10.0.0:
+    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
+    engines: {node: '>=10'}
     dev: false
 
   /earcut/2.2.3:
