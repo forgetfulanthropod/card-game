@@ -11,6 +11,7 @@
         "@solana/wallet-adapter-react-ui": "^0.8.0",
         "@solana/wallet-adapter-wallets": "^0.14.0",
         "@solana/web3.js": "^1.31.0",
+        "ahooks": "^3.1.5",
         "assert": "^2.0.0",
         "beautiful-skill-tree": "^1.7.1",
         "framer-motion": "^5",

@@ -4,7 +4,7 @@ import goodEarthImg from '@/assets/good-earth.png'
 import styles from './UsernameEntry.module.css'
 import { useState } from 'preact/hooks'
 
-export default function UsernameEntry(props: {
+export default function UsernameEntry2(props: {
     onEnter: (username: string) => void
 }): JSXElement {
     const [username, setUsername] = useState('')
