@@ -9,18 +9,15 @@ import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
 
-import { waitForInitialGamestate } from '@/connection/serverListener'
-
 /** Global variables for file */
 const state = {
     gamestate: null as SBaobab<Gamestate> | null,
 }
 
-export async function waitForGameStateToFill(): Promise<void> {
-    state.gamestate = new SBaobab(await waitForInitialGamestate())
-    // @ts-expect-error for debugging:
+export function initializeBoababTree(gamestate: Gamestate): void {
+    state.gamestate = new SBaobab(gamestate)
+    // @ts-expect-error
     window.tree = state.gamestate
-    console.log('gamestate all good')
 }
 
 /** Do not call at the module-level

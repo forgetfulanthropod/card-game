@@ -1,4 +1,3 @@
-import type { Gamestate } from '@shared'
 import type { SBaobab, SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
@@ -38,17 +37,6 @@ export function resolveWhenSocketConfirmed(): Promise<void> {
 
 export function getSocket(): Socket {
     return socket
-}
-
-export async function waitForInitialGamestate(): Promise<Gamestate> {
-    log('hoping for gamestate')
-    maybeMakeSocket()
-    return new Promise(resolve => {
-        socket.once('update', ({ data, _path }) => {
-            log('received gamestate')
-            resolve(data as Gamestate)
-        })
-    })
 }
 
 export function attachServerListener(): void {

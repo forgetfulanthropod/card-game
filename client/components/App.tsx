@@ -5,7 +5,7 @@ import { useEffect, useState } from 'preact/hooks'
 
 import { maybeMakeUser } from '@/actions'
 import { attachServerListener } from '@/connection'
-import { waitForGameStateToFill } from '@/data/rootTree'
+import { initializeBoababTree } from '@/data/rootTree'
 import { startPixi } from '@/elements/main'
 
 import GameManager from './GameManager'
@@ -46,9 +46,11 @@ export default function App(): JSXElement {
 async function fullClientStart(username: string) {
     log('doing full start')
     // await Promise.all([waitForGameStateToFill(), maybeMakeUser({ username })])
-    const p1 = waitForGameStateToFill()
-    await maybeMakeUser({ username })
-    await p1
+    const result = await maybeMakeUser({ username })
+    if (result == null || result?.status === 'error') {
+        throw Error("couldn't make/load user account")
+    }
+    initializeBoababTree(result.result)
     log('everything loaded up')
     log('attaching server data listener')
     attachServerListener()
