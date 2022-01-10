@@ -8,7 +8,7 @@ import { waitForGameStateToFill } from '@/data/rootTree'
 import { startPixi } from '@/elements/main'
 
 import GameManager from './GameManager'
-import UsernameEntry2 from './UsernameEntry2'
+import UsernameEntry from './UsernameEntry'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
@@ -18,7 +18,7 @@ export default function App(): JSXElement {
     return username ? (
         <GameManager username={username} />
     ) : (
-        <UsernameEntry2
+        <UsernameEntry
             onEnter={async username => {
                 await fullClientStart(username)
                 setUsername(username)

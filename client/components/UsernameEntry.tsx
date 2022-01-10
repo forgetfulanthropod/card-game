@@ -1,10 +1,10 @@
 import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 
 import goodEarthImg from '@/assets/good-earth.png'
-import styles from './UsernameEntry2.module.css'
+import styles from './UsernameEntry.module.css'
 import { useState } from 'preact/hooks'
 
-export default function UsernameEntry2(props: {
+export default function UsernameEntry(props: {
     onEnter: (username: string) => void
 }): JSXElement {
     const [username, setUsername] = useState('')
