@@ -1,29 +1,13 @@
 // Default styles that can be overridden by your app
 import '@solana/wallet-adapter-react-ui/styles.css'
 
+import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
-import {
-    ConnectionProvider,
-    WalletProvider,
-} from '@solana/wallet-adapter-react'
-import {
-    WalletDisconnectButton,
-    WalletModalProvider,
-    WalletMultiButton,
-} from '@solana/wallet-adapter-react-ui'
-import {
-    // LedgerWalletAdapter,
-    PhantomWalletAdapter,
-    // SlopeWalletAdapter,
-    // SolflareWalletAdapter,
-    // SolletExtensionWalletAdapter,
-    // SolletWalletAdapter,
-    // TorusWalletAdapter,
-} from '@solana/wallet-adapter-wallets'
-import { clusterApiUrl } from '@solana/web3.js'
-import { useMemo } from 'preact/hooks'
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
+import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
+import { useEffect, useState } from 'preact/hooks'
 
-export default function WalletWidget() {
+/* export default function WalletWidget() {
     // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
     const network = WalletAdapterNetwork.Devnet
 
@@ -46,6 +30,8 @@ export default function WalletWidget() {
         []
         // [network]
     )
+    const phantom = wallets[0]
+    phantom.on('connect')
 
     return (
         <ConnectionProvider endpoint={endpoint}>
@@ -57,4 +43,89 @@ export default function WalletWidget() {
             </WalletProvider>
         </ConnectionProvider>
     )
+} */
+
+export default function WalletWidget() {
+    const [image, setImage] = useState<string | null>(null)
+    useEffect(() => {
+        void getNftImage().then(image => setImage(image))
+        // void bar()
+    }, [])
+    return (
+        <>
+            <h2>Wallet widget</h2>
+            {image != null && <img src={image} />}
+        </>
+    )
+}
+
+async function getNftImage(): Promise<string> {
+    // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
+    const connection = new Connection(
+        clusterApiUrl(WalletAdapterNetwork.Mainnet)
+    )
+    const wallet = new PhantomWalletAdapter()
+    await new Promise(resolve =>
+        wallet.once('readyStateChange', s => {
+            console.log('ready state:', s)
+            resolve(null)
+        })
+    )
+    await wallet.connect()
+    console.log('public key:', wallet.publicKey)
+    if (wallet.publicKey == null) {
+        throw Error('null public key')
+    }
+    // console.log('balance:', await connection.getBalance(wallet.publicKey))
+    // console.log(
+    //     'getTokenAccountsByOwner:',
+    //     await connection.getTokenAccountsByOwner(wallet.publicKey, {
+    //         programId: new PublicKey(
+    //             'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
+    //         ),
+    //     })
+    // )
+    const accounts = await connection.getParsedProgramAccounts(
+        new PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'), // TOKEN_PROGRAM_ID,
+        {
+            filters: [
+                {
+                    dataSize: 165, // number of bytes
+                },
+                {
+                    memcmp: {
+                        offset: 32, // number of bytes
+                        bytes: wallet.publicKey.toBase58(), // base58 encoded string
+                    },
+                },
+            ],
+        }
+    )
+    console.log({ accounts })
+    // @ts-expect-error
+    const mint = accounts[0].account.data.parsed.info.mint
+    console.log({ mint })
+    const METAPLEX_ADDRESS =
+        'metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s' as const
+    const metaplexPub = new PublicKey(METAPLEX_ADDRESS)
+    const [pubkey, _somenum] = await PublicKey.findProgramAddress(
+        [
+            toBuffer('metadata'),
+            metaplexPub.toBuffer(),
+            new PublicKey(mint).toBuffer(),
+        ],
+        metaplexPub
+    )
+    console.log({ pubkey: pubkey.toBase58() })
+    const ownedMetadata = await Metadata.load(connection, pubkey.toBase58()) //tokenPublicKey)
+    console.log({ ownedMetadata })
+    const uri = ownedMetadata.data.data.uri
+    console.log({ uri })
+    const fullData = await (await fetch(uri)).json()
+    console.log({ fullData })
+    return fullData.image as string
+}
+
+function toBuffer(s: string): Uint8Array {
+    return new TextEncoder().encode(s)
 }

@@ -4,9 +4,9 @@ import alias from 'esbuild-plugin-alias'
 import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
-const buildDir = '../build'
-const publicDir = 'public_'
-const entryPoint = 'index.tsx'
+const buildDir = 'build'
+const publicDir = 'client/public_'
+const entryPoint = 'client/index.tsx'
 
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
@@ -38,7 +38,7 @@ function build() {
         minify: true, //!isDevelopment,
         sourcemap: true, //isDevelopment,
         entryPoints: [entryPoint],
-        inject: ['config/preact-shim.js'],
+        inject: ['client/config/preact-shim.js'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
         bundle: true,
@@ -72,8 +72,8 @@ function build() {
         plugins: [
             cssModulesPlugin(),
             alias({
-                react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                react: `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
             }),
         ],
     })

@@ -1,0 +1,185 @@
+#!/bin/bash
+
+set -e # fail on error
+
+# Add npm binaries to path
+export PATH=./node_modules/.bin:$PATH
+
+# declare -a validCommands
+
+## ROOT
+
+function install-all() {
+    set +x # skip printing in this function
+    wd=$(pwd)
+    for d in . client server db crypto-server; do
+        cd $d
+        echo "installing in $d"
+        pnpm install &
+        cd $wd
+    done
+    set -x
+}
+
+function CI() {
+    bash scripts/ci.sh
+}
+
+function lint() {
+    eslint .
+}
+
+function tsc-all() {
+    tsc --project client/tsconfig.json &
+    tsc --project server/tsconfig.json &
+    tsc --project db/tsconfig.json &
+    tsc --project crypto-server/tsconfig.json
+}
+
+function build-all() {
+    echo TODO
+}
+
+function clean-builds() {
+    echo TODO
+}
+
+function simple-fmt() {
+    prettier -w -l .
+    eslint . --fix
+}
+
+function fmt() {
+    pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
+    eslint . --fix
+}
+
+function self-fmt() {
+    ~/go/bin/shfmt -l -w -i 4 ./run
+}
+
+function generate-indices() {
+    vscode-generate-index-standalone ./shared ./client ./server/**/*.ts
+}
+
+function save-staged() {
+    bash scripts/savestaged.sh
+}
+
+function new-todo() {
+    git diff origin/main -G TODO
+}
+
+function clean-branches() {
+    git branch -D $(git branch | grep -v 'main')
+    git fetch
+    git pull
+    git remote prune origin
+}
+
+function lint-watch() {
+    echo 'doesnt work great'
+    esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts
+}
+
+function view-imports-exports() {
+    ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . >imports-and-exports.ignore.txt
+}
+
+function arkit() {
+    npx arkit
+}
+
+function dep-graph() {
+    rm -f deps.svg
+    depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg >deps.svg
+    open deps.svg
+}
+
+function npm-clean() {
+    # previously: /{pnpm-lock.yaml,node_modules}
+    rm -rf {.,client,server,crypto-server,db}/{node_modules}
+}
+
+## CLIENT
+
+function client:build() {
+    node scripts/clientEsbuild.mjs
+}
+function client:build-watch() {
+    npm run build -- watch
+}
+function client:bare-build-watch() {
+    BARE=yes npm run build-watch
+}
+function client:tsc() {
+    tsc --project tsconfig.json
+}
+function client:live-serve() {
+    live-server build --host=localhost --port=3000
+}
+
+## MAIN SERVER
+
+function server:server() {
+    node --enable-source-maps ../server-build/index.js
+}
+function server:server-watch() {
+    nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+}
+function server:server-watch-debug() {
+    nodemon --inspect --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+}
+function server:build() {
+    node ../scripts/serverEsbuild.mjs
+}
+function server:build-watch() {
+    npm run build -- watch
+}
+function server:tsc() {
+    ../node_modules/.bin/tsc --project tsconfig.json
+}
+function server:test() {
+    testyts
+}
+
+## CRYPTO SERVER
+
+function cypto:build() {
+    esbuild index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=build.js
+}
+function cypto:start() {
+    rm -f build.js && npm run build && node build.js
+}
+function cypto:tsc() {
+    tsc
+}
+
+## DATABASE
+
+function db:build() {
+    rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --outfile=db-build.js
+}
+function db:server() {
+    node --enable-source-maps db-build.js
+}
+function db:run() {
+    npm run build && npm run server
+}
+function db:tsc() {
+    ../node_modules/.bin/tsc --project tsconfig.json
+}
+function db:test() {
+    ../node_modules/.bin/testyts
+}
+
+# # Check if command is valid, i.e. in valid list; if so then execute it
+# if [[ " ${validCommands[*]} " =~ " ${1} " ]]; then
+#     set -x # print commands as executed
+#     eval "$@"
+# else
+#     echo "Unknown command: $1"
+# fi
+
+set -x # print commands as executed
+eval "$@"
