@@ -1,17 +1,12 @@
 node_modules/
-.env
 .runenv
-/build/
-/package-lock.json
 .eslintcache
 
 .DS_Store
 
-.vercel
 .pnpm-debug.log
-/storybook-static
 /*.log
 *-800.png
 *.zip
-.parcel-cache
-/server-build
+
+/builds/

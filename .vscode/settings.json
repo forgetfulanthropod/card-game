@@ -19,11 +19,8 @@
     },
     "npm.packageManager": "pnpm",
     "files.exclude": {
-        "**/.keep": true,
         "**/node_modules/": true,
-        "**/pnpm-lock.yaml": true,
-        "build/": true,
-        "server-build/": true
+        "**/pnpm-lock.yaml": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,

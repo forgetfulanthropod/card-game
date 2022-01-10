@@ -1,7 +1,4 @@
-build
-server-build
-crypto-server/build.js
-db/db-build.js
-node_modules
+/builds/
+node_modules/
 
 pnpm-lock.yaml

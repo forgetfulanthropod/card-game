@@ -4,7 +4,7 @@ import alias from 'esbuild-plugin-alias'
 import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
-const buildDir = 'build'
+const buildDir = 'builds/client'
 const publicDir = 'client/public_'
 const entryPoint = 'client/index.tsx'
 

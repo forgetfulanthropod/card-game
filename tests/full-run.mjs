@@ -2,7 +2,7 @@
  * deno run full-run.ts
  * A full-run API test.
  * Separately run this to have fixed seed in the server:
- * $ FIXED_SEED=yes node ../server-build/index.js
+ * $ FIXED_SEED=yes node ../builds/server.js
  * Then use the client and read clientTree.serverCalls to get a recording.
  * Then restart the server (to reset the seed) before running this file with your recording.
  */

@@ -30,18 +30,21 @@ function lint() {
 }
 
 function tsc-all() {
-    tsc --project client/tsconfig.json &
-    tsc --project server/tsconfig.json &
-    tsc --project db/tsconfig.json &
-    tsc --project crypto-server/tsconfig.json
+    client:tsc &
+    server:tsc &
+    db:tsc &
+    crypto:tsc &
 }
 
 function build-all() {
-    echo TODO
+    client:build &
+    server:build &
+    db:build &
+    crypto:build &
 }
 
 function clean-builds() {
-    echo TODO
+    rm -rf builds
 }
 
 function simple-fmt() {
@@ -107,70 +110,72 @@ function client:build() {
     node scripts/clientEsbuild.mjs
 }
 function client:build-watch() {
-    npm run build -- watch
+    client:build watch
 }
 function client:bare-build-watch() {
-    BARE=yes npm run build-watch
+    BARE=yes client:build-watch
 }
 function client:tsc() {
-    tsc --project tsconfig.json
+    tsc --project client/tsconfig.json
 }
 function client:live-serve() {
-    live-server build --host=localhost --port=3000
+    live-server builds/client --host=localhost --port=3000
 }
 
 ## MAIN SERVER
 
 function server:server() {
-    node --enable-source-maps ../server-build/index.js
+    node --enable-source-maps builds/server.js
 }
 function server:server-watch() {
-    nodemon --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+    nodemon --enable-source-maps --watch builds/server.js builds/server.js
 }
 function server:server-watch-debug() {
-    nodemon --inspect --enable-source-maps --watch ../server-build/index.js ../server-build/index.js
+    nodemon --inspect --enable-source-maps --watch builds/server.js builds/server.js
 }
 function server:build() {
-    node ../scripts/serverEsbuild.mjs
+    node scripts/serverEsbuild.mjs
 }
 function server:build-watch() {
-    npm run build -- watch
+    server:build watch
 }
 function server:tsc() {
-    ../node_modules/.bin/tsc --project tsconfig.json
+    tsc --project server/tsconfig.json
 }
 function server:test() {
+    cd server
     testyts
 }
 
 ## CRYPTO SERVER
 
-function cypto:build() {
-    esbuild index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=build.js
+function crypto:build() {
+    esbuild crypto-server/index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=builds/crypto.js
 }
-function cypto:start() {
-    rm -f build.js && npm run build && node build.js
+function crypto:start() {
+    rm -f builds/crypto.js && npm run build && node build.js
 }
-function cypto:tsc() {
-    tsc
+function crypto:tsc() {
+    tsc --project crypto-server/tsconfig.json
 }
 
 ## DATABASE
 
 function db:build() {
-    rm -f db-build.js && ../node_modules/.bin/esbuild index.ts --platform=node --bundle --outfile=db-build.js
+    rm -f builds/db.js && esbuild db/index.ts --platform=node --bundle --outfile=builds/db.js
 }
 function db:server() {
-    node --enable-source-maps db-build.js
+    node --enable-source-maps builds/db.js
 }
 function db:run() {
-    npm run build && npm run server
+    db:build && db:server
 }
 function db:tsc() {
-    ../node_modules/.bin/tsc --project tsconfig.json
+    tsc --project db/tsconfig.json
 }
 function db:test() {
-    ../node_modules/.bin/testyts
+    cd db
+    testyts
 }
 
 # # Check if command is valid, i.e. in valid list; if so then execute it

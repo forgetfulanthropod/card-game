@@ -6,21 +6,21 @@ console.log({ shouldWatch })
 const envObj = makeBuildInfo('SERVER_')
 console.log('build environment:', envObj)
 
-const parentDir = process.env.PWD.split('/').at(-1)
-if (parentDir !== 'server') throw Error("must be run from directory 'server'")
+// const parentDir = process.env.PWD.split('/').at(-1)
+// if (parentDir !== 'server') throw Error("must be run from directory 'server'")
 
 build()
 
 function build() {
     esbuild({
-        entryPoints: ['index.ts'],
+        entryPoints: ['server/index.ts'],
         bundle: true,
         platform: 'node',
         keepNames: true,
-        outfile: '../server-build/index.js',
+        outfile: 'builds/server.js',
         sourcemap: true,
         allowOverwrite: true,
-        tsconfig: './tsconfig.json',
+        tsconfig: 'server/tsconfig.json',
         define: makeBuildInfo('SERVER_'),
         watch: shouldWatch && {
             onRebuild(error, result) {
