@@ -44,7 +44,7 @@
         {
             "label": "esbuild client",
             "type": "shell",
-            "command": "cd client && npm run build-watch",
+            "command": "bash run client:build-watch",
             "presentation": {
                 "group": "builders"
             }
@@ -52,7 +52,7 @@
         {
             "label": "esbuild server",
             "type": "shell",
-            "command": "cd server && npm run build-watch",
+            "command": "bash run server:build-watch",
             "presentation": {
                 "group": "builders"
             }
@@ -60,7 +60,7 @@
         {
             "label": "run server",
             "type": "shell",
-            "command": "cd server && npm run server-watch",
+            "command": "bash run server:server-watch",
             "presentation": {
                 "group": "group3"
             }
