@@ -45,6 +45,7 @@ function build-all() {
 
 function clean-builds() {
     rm -rf builds
+    rm -f db/db-build.js
 }
 
 function simple-fmt() {
@@ -162,10 +163,10 @@ function crypto:tsc() {
 ## DATABASE
 
 function db:build() {
-    rm -f builds/db.js && esbuild db/index.ts --platform=node --bundle --outfile=builds/db.js
+    rm -f db/db-build.js && esbuild db/index.ts --platform=node --bundle --outfile=db/db-build.js
 }
 function db:server() {
-    node --enable-source-maps builds/db.js
+    node --enable-source-maps db/db-build.js
 }
 function db:run() {
     db:build && db:server

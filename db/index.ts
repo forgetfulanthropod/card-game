@@ -1,3 +1,4 @@
+import 'socket.io-client'
 import './config/logger'
 import './config/overrides'
 
