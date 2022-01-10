@@ -1,21 +1,5 @@
 {
     "name": "kaiju-root",
-    "scripts": {
-        "CI": "bash scripts/ci.sh",
-        "lint": "eslint .",
-        "simple-fmt": "prettier -w -l . && eslint . --fix",
-        "fmt": "pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\" && eslint . --fix",
-        "generate-indices": "vscode-generate-index-standalone  ./shared ./client ./server/**/*.ts",
-        "save-staged": "bash scripts/savestaged.sh",
-        "new-todo": "git diff origin/main -G TODO",
-        "clean-branches": "git branch -D $(git branch | grep -v 'main') && git fetch && git pull && git remote prune origin",
-        "lint-watch": "echo 'doesnt work great' && esw -w server/**/*.ts client/**/*.ts{,x} shared/**/*.ts",
-        "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
-        "arkit": "npx arkit",
-        "dep-graph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg",
-        "npm-clean": "rm -rf {.,client,server,crypto-server}/{pnpm-lock.yaml,node_modules}",
-        "install-all": "pnpm i && cd client && pnpm i && cd ../server && pnpm i && cd ../db && pnpm i && cd ../crypto-server && pnpm i"
-    },
     "dependencies": {
         "baobab": "github:qpwo/baobab#more-detailed-types",
         "deep-diff": "^1.0.2",
