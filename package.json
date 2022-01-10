@@ -13,7 +13,8 @@
         "view-imports-exports": "ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . > imports-and-exports.ignore.txt",
         "arkit": "npx arkit",
         "dep-graph": "rm -f deps.svg; depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg > deps.svg && open deps.svg",
-        "npm-clean": "rm -rf {.,client,server,crypto-server}/{pnpm-lock.yaml,node_modules}"
+        "npm-clean": "rm -rf {.,client,server,crypto-server}/{pnpm-lock.yaml,node_modules}",
+        "install-all": "pnpm i && cd client && pnpm i && cd ../server && pnpm i && cd ../db && pnpm i && cd ../crypto-server && pnpm i"
     },
     "dependencies": {
         "baobab": "github:qpwo/baobab#more-detailed-types",
@@ -22,7 +23,9 @@
         "esbuild-css-modules-plugin": "^2.0.9",
         "esbuild-plugin-alias": "^0.2.1",
         "express": "^4.17.2",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "testyts": "^1.5.0",
+        "winston": "^3.3.3"
     },
     "devDependencies": {
         "@mixer/parallel-prettier": "^2.0.1",
@@ -37,6 +40,7 @@
         "eslint-plugin-react-hooks": "^4.3.0",
         "eslint-plugin-simple-import-sort": "^7.0.0",
         "eslint-plugin-unused-imports": "^2.0.0",
+        "nodemon": "^2.0.15",
         "prettier": "^2.5.1",
         "typescript": "^4.5.4",
         "vscode-generate-index-standalone": "^1.6.0"
