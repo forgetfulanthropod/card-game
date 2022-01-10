@@ -75,7 +75,7 @@ app.post('/signup', signupPostRoute)
 if (require.main === module) {
     addUser('user', 'pass')
     app.listen(3000)
-    console.log('Express started on port 3000')
+    logger.info('Express started on port 3000')
 }
 
 // LOGIC

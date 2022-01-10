@@ -19,7 +19,7 @@ export function applyBlessings(
                     ef.target.characterType === characterMeta.name)
             ) {
                 // console.log('you have an effect affecting you')
-                console.log(
+                logger.info(
                     `Character ${characterMeta.name} has effect ${b.name}`
                 )
 

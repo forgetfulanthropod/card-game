@@ -5,7 +5,7 @@ import { getEntryScene } from '@/util'
 export const addSelected: AddSelected = args => {
     const c = args.character
 
-    console.log(args.username)
+    logger.info(args.username)
     const scene = getEntryScene(args.username)
 
     const allCharacters = scene.select('selectedCharacters').get()

@@ -88,7 +88,7 @@ export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
     if (levelInfo == null) {
         throw Error('undefined level info')
     }
-    console.log({ levelInfo, level })
+    logger.info({ levelInfo, level })
 
     if (level > MAX_DATA_LEVEL) {
         levelInfo.damage =
