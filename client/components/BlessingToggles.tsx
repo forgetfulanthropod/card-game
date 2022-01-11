@@ -1,12 +1,10 @@
-import { Fragment, h, JSX } from 'preact' // eslint-disable-line
+import type { BlessingName } from '@shared'
 
+import { toggleBlessing } from '@/actions'
+import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
 import { useCursor } from './util'
-import type { BlessingName } from '@shared'
-import { toggleBlessing } from '@/actions'
-
-import styled from '@/config/mystyled'
 
 const Root = styled.div`
     position: absolute;

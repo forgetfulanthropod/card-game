@@ -1,5 +1,4 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 
 import CraftPage from '@/features/craft/components/CraftPage'

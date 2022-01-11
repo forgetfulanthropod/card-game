@@ -1,7 +1,5 @@
-import { h, JSX } from 'preact' // eslint-disable-line
-import styled from '@/config/mystyled'
-
 import { makeNewUser } from '@/actions'
+import styled from '@/config/mystyled'
 
 const Root = styled.button`
     position: absolute;

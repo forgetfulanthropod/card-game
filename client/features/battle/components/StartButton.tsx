@@ -1,7 +1,5 @@
-//@ts-expect-error
-import styled from 'styled-components'
-
 import { changeScene } from '@/actions'
+import styled from '@/config/mystyled'
 
 const Root = styled.button`
     position: absolute;

@@ -5,7 +5,6 @@ import type {
     OwnedCharacter,
 } from '@shared'
 import { find, sample, sum, values } from 'lodash'
-import { Fragment, h, JSX } from 'preact' // eslint-disable-line
 import { useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 

@@ -1,10 +1,10 @@
-import { h, JSX } from 'preact' // eslint-disable-line
 import { Toaster } from 'react-hot-toast'
 
 import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import { AutoPlay } from './autoplay/AutoPlay'
 import { BlessingToggles } from './BlessingToggles'
 import { FullScreenInfo } from './FullScreenInfo'
 import ResetButton from './ResetButton'
@@ -12,7 +12,6 @@ import { RulebookEditor } from './RulebookEditor'
 import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
 import WalletAddress from './WalletAddress'
-import { AutoPlay } from './autoplay/AutoPlay'
 
 export default function GameManager(props: { username: string }): JSXElement {
     const { username } = props

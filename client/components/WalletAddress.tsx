@@ -1,9 +1,7 @@
-import { h, JSX } from 'preact' // eslint-disable-line
-//@ts-ignore
-import styled from 'styled-components'
+import { useRef } from 'preact/hooks'
 
 import { claimLoot } from '@/actions'
-import { useRef } from 'preact/hooks'
+import styled from '@/config/mystyled'
 import { jss, tl } from '@/util'
 
 const Root = styled.div`

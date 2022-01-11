@@ -1,4 +1,3 @@
-import { h } from 'preact' // eslint-disable-line unused-imports/no-unused-imports
 import { useEffect, useRef } from 'preact/hooks'
 
 import { incrementTestCounter } from '@/actions'

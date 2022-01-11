@@ -1,7 +1,6 @@
 import type { Gamestate } from '@shared'
 import type { SCursor } from 'baobab'
 import { omit } from 'lodash'
-import { h, JSX } from 'preact' // eslint-disable-line
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 

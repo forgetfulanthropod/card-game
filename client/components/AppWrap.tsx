@@ -1,6 +1,4 @@
-import { h, JSX } from 'preact' // eslint-disable-line
-//@ts-expect-error
-import styled from 'styled-components'
+import styled from '@/config/mystyled'
 
 const Relative = styled.div`
     position: relative;
