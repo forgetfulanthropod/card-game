@@ -48,15 +48,15 @@ function clean-builds() {
     rm -f db/db-build.js
 }
 
-function simple-fmt() {
-    prettier -w -l .
+function fmt() {
+    prettier-no-jsx-parens -w -l .
     eslint . --fix
 }
 
-function fmt() {
-    pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
-    eslint . --fix
-}
+# function fmt() {
+#     pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
+#     eslint . --fix
+# }
 
 function self-fmt() {
     ~/go/bin/shfmt -l -w -i 4 ./run

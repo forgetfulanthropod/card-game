@@ -47,5 +47,6 @@
     "searchEverywhere.shouldUseDebounce": false,
     "searchEverywhere.shouldInitOnStartup": true,
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
-    "prettier.configPath": ".prettierrc.json"
+    "prettier.configPath": ".prettierrc.json",
+    "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/"
 }
