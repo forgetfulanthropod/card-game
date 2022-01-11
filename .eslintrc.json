@@ -56,15 +56,15 @@
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error"
     },
-    "ignorePatterns": ["scripts/", "server/lib", "build", "tests", "**/*.js"],
+    "ignorePatterns": [
+        "builds/",
+        "db/db-build.js",
+        "**/node_modules/",
+        "tests/"
+    ],
     "overrides": [
         {
-            "files": [
-                "client/**/*.ts",
-                "client/**/*.tsx",
-                "client/**/*.d.ts",
-                "shared/**/*.ts"
-            ],
+            "files": ["client/**/*", "shared/**/*"],
             "extends": ["plugin:react/recommended"],
             "plugins": ["react", "react-hooks"],
             "parserOptions": {
@@ -92,7 +92,7 @@
             }
         },
         {
-            "files": ["server/**/*.ts"],
+            "files": ["server/**/*"],
             "parserOptions": {
                 "project": "./server/tsconfig.json"
             },
@@ -101,13 +101,13 @@
             }
         },
         {
-            "files": ["crypto-server/**/*.ts"],
+            "files": ["crypto-server/**/*"],
             "parserOptions": {
                 "project": "./crypto-server/tsconfig.json"
             }
         },
         {
-            "files": ["db/**/*.ts"],
+            "files": ["db/**/*"],
             "parserOptions": {
                 "project": "./db/tsconfig.json"
             },
