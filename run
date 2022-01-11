@@ -26,7 +26,7 @@ function CI() {
 }
 
 function lint() {
-    eslint .
+    eslint . --cache
 }
 
 function tsc-all() {
@@ -50,7 +50,7 @@ function clean-builds() {
 
 function fmt() {
     prettier-no-jsx-parens -w -l .
-    eslint . --fix
+    eslint . --fix --cache
 }
 
 # function fmt() {
