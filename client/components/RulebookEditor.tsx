@@ -65,43 +65,33 @@ export function RulebookEditor(props: { username: string }): JSXElement {
         toast.error('null rulebooks')
         return <></>
     }
-    return (
-        <>
-            {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
-            <ButtonGroup>
-                <button onClick={() => setShown(s => !s)}>Open/close</button>
-                <Selector
-                    value={name}
-                    options={rulebooks}
-                    onChoice={async newName => {
-                        await rulebookAction({ do: 'choose', name: newName })
-                        await makeNewUser({ username })
-                    }}
-                />
-                {shown && (
-                    <>
-                        <button
-                            onClick={() =>
-                                addNewRulebook(ref, rulebooks, username)
-                            }
-                        >
-                            Save new
-                        </button>
-                        <button
-                            onClick={() =>
-                                overwriteRulebook(ref, name, username)
-                            }
-                        >
-                            Overwrite
-                        </button>
-                        <button onClick={() => deleteRulebook(name)}>
-                            Delete current
-                        </button>
-                    </>
-                )}
-            </ButtonGroup>
-        </>
-    )
+    return <>
+        {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
+        <ButtonGroup>
+            <button onClick={() => setShown(s => !s)}>Open/close</button>
+            <Selector
+                value={name}
+                options={rulebooks}
+                onChoice={async newName => {
+                    await rulebookAction({ do: 'choose', name: newName })
+                    await makeNewUser({ username })
+                }}
+            />
+            {shown && <>
+                <button
+                    onClick={() => addNewRulebook(ref, rulebooks, username)}
+                >
+                    Save new
+                </button>
+                <button onClick={() => overwriteRulebook(ref, name, username)}>
+                    Overwrite
+                </button>
+                <button onClick={() => deleteRulebook(name)}>
+                    Delete current
+                </button>
+            </>}
+        </ButtonGroup>
+    </>
 }
 
 async function deleteRulebook(name: string): Promise<void> {
@@ -173,17 +163,13 @@ function Selector(props: {
     onChoice: (s: string) => void
     value: string
 }): JSXElement {
-    return (
-        <select
-            value={props.value}
-            // @ts-ignore-error
-            onChange={e => props.onChoice(e?.target?.value)}
-        >
-            {props.options.map(o => (
-                <option key={o} value={o}>
-                    {o}
-                </option>
-            ))}
-        </select>
-    )
+    return <select
+        value={props.value}
+        // @ts-ignore-error
+        onChange={e => props.onChoice(e?.target?.value)}
+    >
+        {props.options.map(o => <option key={o} value={o}>
+            {o}
+        </option>)}
+    </select>
 }

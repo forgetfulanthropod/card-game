@@ -72,25 +72,18 @@ export default function MoveMenu(): JSXElement {
         setMvs(movesOf(selectedCharacter.get()))
     }
 
-    return (
-        <>
-            {isPlayerTurn && (
-                <MoveMenuDiv>
-                    {mvs.map(m => (
-                        <MoveButton
-                            key={m.types[0]}
-                            onClick={async () => {
-                                // window.startTime = Date.now()
-                                await selectMove({ move: m })
-                            }}
-                            isSelected={sm.name === m.name}
-                        >
-                            {m.name} ({m.types.toString()}) [
-                            {m.damageRange?.join('-')}]
-                        </MoveButton>
-                    ))}
-                </MoveMenuDiv>
-            )}
-        </>
-    )
+    return <>
+        {isPlayerTurn && <MoveMenuDiv>
+            {mvs.map(m => <MoveButton
+                key={m.types[0]}
+                onClick={async () => {
+                    // window.startTime = Date.now()
+                    await selectMove({ move: m })
+                }}
+                isSelected={sm.name === m.name}
+            >
+                {m.name} ({m.types.toString()}) [{m.damageRange?.join('-')}]
+            </MoveButton>)}
+        </MoveMenuDiv>}
+    </>
 }

@@ -78,15 +78,13 @@ function FullScreenInfo_(props: Info): JSXElement {
         ref.current.innerHTML = body
     }, [body])
 
-    return (
-        <Modal onClick={onClose}>
-            <div className='content' onClick={e => e.preventDefault()}>
-                <h1 className='title'>{title}</h1>
-                <div ref={ref}></div>
-                <span className='close' onClick={onClose}>
-                    Ⅹ
-                </span>
-            </div>
-        </Modal>
-    )
+    return <Modal onClick={onClose}>
+        <div className='content' onClick={e => e.preventDefault()}>
+            <h1 className='title'>{title}</h1>
+            <div ref={ref}></div>
+            <span className='close' onClick={onClose}>
+                Ⅹ
+            </span>
+        </div>
+    </Modal>
 }

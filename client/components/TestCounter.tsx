@@ -24,21 +24,19 @@ export default function TestCounter(): JSXElement {
         // return unsub
     }, [])
 
-    return (
-        <button
-            style={{ pointerEvents: 'auto' }}
-            onClick={async () => {
-                start.current = Date.now()
-                console.log('making request to incrementTestCounter')
-                await incrementTestCounter()
-                console.log(
-                    'request returned after',
-                    (Date.now() - start.current) / 1000,
-                    'seconds after button press'
-                )
-            }}
-        >
-            Increment test thing
-        </button>
-    )
+    return <button
+        style={{ pointerEvents: 'auto' }}
+        onClick={async () => {
+            start.current = Date.now()
+            console.log('making request to incrementTestCounter')
+            await incrementTestCounter()
+            console.log(
+                'request returned after',
+                (Date.now() - start.current) / 1000,
+                'seconds after button press'
+            )
+        }}
+    >
+        Increment test thing
+    </button>
 }

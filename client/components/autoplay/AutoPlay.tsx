@@ -29,22 +29,20 @@ const Root = styled.button`
 export function AutoPlay(): JSXElement {
     const [running, setRunning] = useState(false)
     const [runner] = useState(() => new Runner())
-    return (
-        <Root
-            onClick={() => {
-                setRunning(r => {
-                    if (r) {
-                        runner.stop()
-                    } else {
-                        runner.start()
-                    }
-                    return !r
-                })
-            }}
-        >
-            {running ? 'Stop' : 'Start'} Autoplay
-        </Root>
-    )
+    return <Root
+        onClick={() => {
+            setRunning(r => {
+                if (r) {
+                    runner.stop()
+                } else {
+                    runner.start()
+                }
+                return !r
+            })
+        }}
+    >
+        {running ? 'Stop' : 'Start'} Autoplay
+    </Root>
 }
 
 const minWait = 2000

@@ -15,9 +15,7 @@ const Root = styled.button`
 `
 
 export default function StartButton(): JSXElement {
-    return (
-        <Root onClick={() => changeScene({ newSceneName: 'battle' })}>
-            start
-        </Root>
-    )
+    return <Root onClick={() => changeScene({ newSceneName: 'battle' })}>
+        start
+    </Root>
 }

@@ -7,12 +7,10 @@ import type { PageProps } from '@/components/PageManager'
 import Minecrafter from '../mc/Minecrafter'
 
 export default function CraftPage(props: PageProps): JSXElement {
-    return (
-        <>
-            <Heading>Crafting page</Heading>
-            <PageHeader setPage={props.setPage} />
-            <Text>We will see...</Text>
-            <Minecrafter />
-        </>
-    )
+    return <>
+        <Heading>Crafting page</Heading>
+        <PageHeader setPage={props.setPage} />
+        <Text>We will see...</Text>
+        <Minecrafter />
+    </>
 }

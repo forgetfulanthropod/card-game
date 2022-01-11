@@ -28,24 +28,22 @@ export function Monaco(props: {
     //     if (!mref.current) return
     //     void mref.current
     // }, [])
-    return (
-        <EditorWrap>
-            {props.onClose && <button onClick={props.onClose}>close</button>}
-            <Editor
-                onMount={
-                    (async (editor, _monaco) => {
-                        mref.current = editor
-                        // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
-                        await editor.getAction('editor.foldRecursively').run()
-                        for (let i = 0; i < foldLevel; i++)
-                            await editor.getAction('editor.unfold').run()
-                        console.log('i tried to fold it ok')
-                    }) as OnMount
-                }
-                height='88vh'
-                defaultLanguage='json'
-                defaultValue={props.defaultValue}
-            />
-        </EditorWrap>
-    )
+    return <EditorWrap>
+        {props.onClose && <button onClick={props.onClose}>close</button>}
+        <Editor
+            onMount={
+                (async (editor, _monaco) => {
+                    mref.current = editor
+                    // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
+                    await editor.getAction('editor.foldRecursively').run()
+                    for (let i = 0; i < foldLevel; i++)
+                        await editor.getAction('editor.unfold').run()
+                    console.log('i tried to fold it ok')
+                }) as OnMount
+            }
+            height='88vh'
+            defaultLanguage='json'
+            defaultValue={props.defaultValue}
+        />
+    </EditorWrap>
 }

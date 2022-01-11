@@ -29,22 +29,18 @@ export function BlessingToggles(): JSXElement {
         'weakPcs',
     ]
     const blessings = useCursor(getTree().select('blessings'))
-    return (
-        <Root>
-            {A.map(b => {
-                const has = blessings.find(bl => bl.name === b) != null
-                return (
-                    <span
-                        onClick={() => {
-                            // alert('you clicked')
-                            void toggleBlessing({ name: b })
-                        }}
-                        key={b}
-                    >
-                        {has ? '✔️' : '☐'} {b}
-                    </span>
-                )
-            })}
-        </Root>
-    )
+    return <Root>
+        {A.map(b => {
+            const has = blessings.find(bl => bl.name === b) != null
+            return <span
+                onClick={() => {
+                    // alert('you clicked')
+                    void toggleBlessing({ name: b })
+                }}
+                key={b}
+            >
+                {has ? '✔️' : '☐'} {b}
+            </span>
+        })}
+    </Root>
 }

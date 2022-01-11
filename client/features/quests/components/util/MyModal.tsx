@@ -21,15 +21,13 @@ export function MyModal(props: {
     const disclosure = useDisclosure()
     props.apiRef.current = disclosure
     const { isOpen, onClose } = disclosure
-    return (
-        <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-                {props.title && <ModalHeader>{props.title}</ModalHeader>}
-                <ModalCloseButton />
-                {props.body && <ModalBody>{props.body}</ModalBody>}
-                {props.footer && <ModalFooter>{props.footer}</ModalFooter>}
-            </ModalContent>
-        </Modal>
-    )
+    return <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+            {props.title && <ModalHeader>{props.title}</ModalHeader>}
+            <ModalCloseButton />
+            {props.body && <ModalBody>{props.body}</ModalBody>}
+            {props.footer && <ModalFooter>{props.footer}</ModalFooter>}
+        </ModalContent>
+    </Modal>
 }

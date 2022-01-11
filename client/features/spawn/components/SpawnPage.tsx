@@ -31,42 +31,38 @@ const tableData = [
 export default function SpawnPage(props: PageProps): JSXElement {
     const choice1 = State(useState('_'))
     const choice2 = State(useState('_'))
-    return (
-        <>
-            <Heading>Spawn page</Heading>
-            <PageHeader setPage={props.setPage} />
-            <RadioExample {...choice1} />
-            <RadioExample {...choice2} />
-            <Text>
-                Spawn the combination of a {choice1.val} and {choice2.val}?
-            </Text>
-            <ChakraTable data={tableData} />
-            <Button onClick={() => alert('spawn button not implemented')}>
-                Spawn?
-            </Button>
-        </>
-    )
+    return <>
+        <Heading>Spawn page</Heading>
+        <PageHeader setPage={props.setPage} />
+        <RadioExample {...choice1} />
+        <RadioExample {...choice2} />
+        <Text>
+            Spawn the combination of a {choice1.val} and {choice2.val}?
+        </Text>
+        <ChakraTable data={tableData} />
+        <Button onClick={() => alert('spawn button not implemented')}>
+            Spawn?
+        </Button>
+    </>
 }
 
 function RadioExample(props: { val: string; set: (s: string) => void }) {
-    return (
-        <RadioGroup onChange={props.set} value={props.val}>
-            <Stack direction='row'>
-                <Radio value='mimic'>
-                    <Image width={'50px'} src={mimic} />
-                </Radio>
-                <Radio value='mushroomFarmer'>
-                    <Image width={'50px'} src={mushroomFarmer} />
-                </Radio>
-                <Radio value='penguinKnight'>
-                    <Image width={'50px'} src={penguinKnight} />
-                </Radio>
-                <Radio value='snacky'>
-                    <Image width={'50px'} src={snacky} />{' '}
-                </Radio>
-            </Stack>
-        </RadioGroup>
-    )
+    return <RadioGroup onChange={props.set} value={props.val}>
+        <Stack direction='row'>
+            <Radio value='mimic'>
+                <Image width={'50px'} src={mimic} />
+            </Radio>
+            <Radio value='mushroomFarmer'>
+                <Image width={'50px'} src={mushroomFarmer} />
+            </Radio>
+            <Radio value='penguinKnight'>
+                <Image width={'50px'} src={penguinKnight} />
+            </Radio>
+            <Radio value='snacky'>
+                <Image width={'50px'} src={snacky} />{' '}
+            </Radio>
+        </Stack>
+    </RadioGroup>
 }
 
 function State<T>(pair: [T, (t: T) => void]) {

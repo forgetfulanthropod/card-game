@@ -44,20 +44,18 @@ export default function QuestsPage(_props: PageProps): JSXElement {
     const dared = useCursor(state.select('dared'))
     const subpageKey = useCursor(state.select('subpage'))
     const Subpage = subpages[subpageKey]
-    return (
-        <Box m={10} p={10}>
-            <GQMenu setSubpage={sp => state.set('subpage', sp)} />
-            <Heading>Genesis quests</Heading>
-            {!dared ? (
-                <WelcomeModal onDare={() => state.set('dared', true)} />
-            ) : (
-                <Text bg='black' color='red' fontWeight='bold'>
-                    YOU HAVE DARED
-                </Text>
-            )}
-            <Subpage />
-        </Box>
-    )
+    return <Box m={10} p={10}>
+        <GQMenu setSubpage={sp => state.set('subpage', sp)} />
+        <Heading>Genesis quests</Heading>
+        {!dared ? (
+            <WelcomeModal onDare={() => state.set('dared', true)} />
+        ) : (
+            <Text bg='black' color='red' fontWeight='bold'>
+                YOU HAVE DARED
+            </Text>
+        )}
+        <Subpage />
+    </Box>
 }
 
 function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSXElement {
@@ -70,16 +68,15 @@ function GQMenu(props: { setSubpage: (s: SubpageKey) => void }): JSXElement {
         ['Manage Assets', 'ManageAssets'],
         ['UI Component Tour', 'UITour'],
     ]
-    return (
-        <Menu>
-            <MenuButton as={Button}>☰</MenuButton>
-            <MenuList>
-                {choices.map(([name, Comp]) => (
-                    <MenuItem key={name} onClick={() => setSubpage(Comp)}>
-                        {name}
-                    </MenuItem>
-                ))}
-            </MenuList>
-        </Menu>
-    )
+    return <Menu>
+        <MenuButton as={Button}>☰</MenuButton>
+        <MenuList>
+            {choices.map(([name, Comp]) => <MenuItem
+                key={name}
+                onClick={() => setSubpage(Comp)}
+            >
+                {name}
+            </MenuItem>)}
+        </MenuList>
+    </Menu>
 }

@@ -102,26 +102,24 @@ export default function MarketplacePage(props: PageProps): JSXElement {
             9,
         ],
     ]
-    return (
-        <Box
-            overflowY={'scroll'}
-            position='fixed'
-            top={0}
-            left={0}
-            right={0}
-            bottom={0}
+    return <Box
+        overflowY={'scroll'}
+        position='fixed'
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+    >
+        <Heading>Marketplace page</Heading>
+        <PageHeader setPage={props.setPage} />
+        <Button
+            fontSize={'2em'}
+            padding={'1em'}
+            margin='1em'
+            onClick={() => alert('unimplemented')}
         >
-            <Heading>Marketplace page</Heading>
-            <PageHeader setPage={props.setPage} />
-            <Button
-                fontSize={'2em'}
-                padding={'1em'}
-                margin='1em'
-                onClick={() => alert('unimplemented')}
-            >
-                List my kaiju for sale
-            </Button>
-            <ChakraTable data={tableData} />
-        </Box>
-    )
+            List my kaiju for sale
+        </Button>
+        <ChakraTable data={tableData} />
+    </Box>
 }

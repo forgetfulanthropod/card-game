@@ -35,13 +35,11 @@ export function TempApp(): JSXElement {
     const Page = nameToPage[pageName]
 
     // const Page = nameToPage['MenuPage']
-    return (
-        <ChakraProvider>
-            <WalletWidget />
-            {/* <Box margin="10" padding="10"> */}
-            <Page setPage={setPageName} />
-            {/* <Page setPage={() => {}} /> */}
-            {/* </Box> */}
-        </ChakraProvider>
-    )
+    return <ChakraProvider>
+        <WalletWidget />
+        {/* <Box margin="10" padding="10"> */}
+        <Page setPage={setPageName} />
+        {/* <Page setPage={() => {}} /> */}
+        {/* </Box> */}
+    </ChakraProvider>
 }

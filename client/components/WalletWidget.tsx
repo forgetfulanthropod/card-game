@@ -51,12 +51,10 @@ export default function WalletWidget() {
         void getNftImage().then(image => setImage(image))
         // void bar()
     }, [])
-    return (
-        <>
-            <h2>Wallet widget</h2>
-            {image != null && <img src={image} />}
-        </>
-    )
+    return <>
+        <h2>Wallet widget</h2>
+        {image != null && <img src={image} />}
+    </>
 }
 
 async function getNftImage(): Promise<string> {

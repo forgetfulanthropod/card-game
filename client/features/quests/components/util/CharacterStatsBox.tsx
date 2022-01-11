@@ -10,31 +10,25 @@ export default function CharacterStatsBox(props: {
         ['rarity', props.rarity],
         ['owned since', props.ownedSince.toLocaleDateString()],
     ]
-    return (
-        <Table>
-            <Thead>
-                <Tr>
-                    <Th>Stat</Th>
-                    <Th>Value</Th>
-                </Tr>
-            </Thead>
-            <Tbody>
-                {data.map(([stat, value]) => (
-                    <Tr key={stat}>
-                        <Td>{stat}</Td>
-                        <Td>{value}</Td>
-                    </Tr>
-                ))}
-            </Tbody>
-        </Table>
-    )
+    return <Table>
+        <Thead>
+            <Tr>
+                <Th>Stat</Th>
+                <Th>Value</Th>
+            </Tr>
+        </Thead>
+        <Tbody>
+            {data.map(([stat, value]) => <Tr key={stat}>
+                <Td>{stat}</Td>
+                <Td>{value}</Td>
+            </Tr>)}
+        </Tbody>
+    </Table>
 }
 export function CharacterStatsBoxExample(): JSXElement {
-    return (
-        <CharacterStatsBox
-            strength={5}
-            rarity='common'
-            ownedSince={new Date()}
-        />
-    )
+    return <CharacterStatsBox
+        strength={5}
+        rarity='common'
+        ownedSince={new Date()}
+    />
 }
