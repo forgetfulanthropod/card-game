@@ -1,7 +1,3 @@
-import MoveMenu from './MoveMenu'
-
-export default function CharacterManager(): JSXElement {
-    return <>
-        <MoveMenu />
-    </>
+export default function Battle(): JSXElement {
+    return <>{/* <MoveMenu /> */}</>
 }
