@@ -16,6 +16,8 @@ import type {
 } from '.'
 
 export type CharacterUid = string & Brandify
+export type CardUid = string & Brandify
+export type PileId = 'draw' | 'hand' | 'discard' | 'removed'
 
 export type ItemName = string & Brandify
 export type ItemUid = string & Brandify

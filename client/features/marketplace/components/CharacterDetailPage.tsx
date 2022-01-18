@@ -15,7 +15,7 @@ import { random } from 'lodash'
 import { Fragment } from 'preact'
 
 import type { PageProps } from '@/components/PageManager'
-import characterSrc from '@/features/battle/assets/cards/PenguinKnight-200.png'
+import characterSrc from '@/features/battle/assets/gen0_cards/PenguinKnight-200.png'
 
 import {
     ChainLightning,

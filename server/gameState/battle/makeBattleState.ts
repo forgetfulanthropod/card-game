@@ -1,5 +1,6 @@
 import type { BattleScene, DungeonName, OwnedCharacter } from '@shared'
 
+import { makeCards } from './cardManagement'
 import { makeCharacters } from './characterManagement'
 
 export function makeBattleState(args: {
@@ -9,6 +10,7 @@ export function makeBattleState(args: {
 }): BattleScene {
     const allCharacters = makeCharacters(args?.chosen, args.username)
 
+    // DEBUG
     // kill most of the characters
     // for (let i = 0; i < 12; i++) {
     //     if (i === 0 || i === 6) continue
@@ -33,6 +35,7 @@ export function makeBattleState(args: {
         isPlayerTurn: playerStarts,
         battleHasBegun: true,
         allCharacters,
+        cards: makeCards(args?.chosen, args.username),
         selectedCharacter: selectedCharacter.uid,
         selectedMove,
         isBasicLoaded: false,

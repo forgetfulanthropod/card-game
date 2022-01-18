@@ -1,13 +1,17 @@
 import type {
+    CardUid,
     CharacterMove,
     CharacterName,
     CharacterStats,
     CharacterUid,
     DungeonName,
+    PileId,
     SceneHas,
 } from '.'
 import type { SpecialDoorName } from './SpecialDoorName'
 
+export type Pile = Record<CardUid, Card>
+export type Cards = Record<PileId, Pile>
 export interface BattleScene extends SceneHas {
     name: 'battle'
     dungeonName: DungeonName
@@ -15,6 +19,7 @@ export interface BattleScene extends SceneHas {
     playerStarts: boolean
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
+    cards: Cards
     selectedCharacter: CharacterUid
     selectedMove: CharacterMove
     isBasicLoaded: boolean
@@ -43,6 +48,16 @@ export interface Effect {
     remainingRounds: number
     damagesByRound: number[]
     dealer?: CharacterUid
+}
+
+export type Card = {
+    name: string
+    url: string
+    text: string[]
+    definitions: string[]
+    type: string
+    characterClass: string
+    deckId: string
 }
 
 export interface CharacterMeta extends CharacterStats {

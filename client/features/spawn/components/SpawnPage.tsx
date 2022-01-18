@@ -12,10 +12,10 @@ import { useState } from 'preact/hooks'
 
 import { PageHeader } from '@/components/PageHeader'
 import type { PageProps } from '@/components/PageManager'
-import mimic from '@/features/battle/assets/cards/mimic-200.png'
-import mushroomFarmer from '@/features/battle/assets/cards/Mushroom_Farmer2-200.png'
-import penguinKnight from '@/features/battle/assets/cards/PenguinKnight-200.png'
-import snacky from '@/features/battle/assets/cards/Snacky-200.png'
+import mimic from '@/features/battle/assets/gen0_cards/mimic-200.png'
+import mushroomFarmer from '@/features/battle/assets/gen0_cards/Mushroom_Farmer2-200.png'
+import penguinKnight from '@/features/battle/assets/gen0_cards/PenguinKnight-200.png'
+import snacky from '@/features/battle/assets/gen0_cards/Snacky-200.png'
 
 import ChakraTable from './ChakraTable'
 

@@ -78,7 +78,7 @@ export type PixiChildren = (
 )[]
 type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 interface ContainerArgs extends DisplayObjectArgs {
-    children: PixiChildren
+    children?: PixiChildren
     onTick?: OnContainerTick
     name?: string
 }
@@ -222,7 +222,7 @@ export function getAppSize(): { width: number; height: number } {
 
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
-    for (const ch of args.children) {
+    for (const ch of args.children || []) {
         if (ch != null && ch !== false) {
             c.addChild(ch)
         }

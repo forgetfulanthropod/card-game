@@ -1,117 +1,52 @@
-import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
-import isEqual from 'lodash/isEqual'
-
-import {
-    chooseDoor,
-    doCharacterAction,
-    exitDungeon,
-    startBattle,
-} from '@/actions'
+import { chooseDoor, exitDungeon, startBattle } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, overlay } from '@/elementsUtil'
-import { keyMap, keys, vals } from '@/util'
+import { Container } from '@/elementsUtil'
 
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
-import { Character } from './Character'
+import { bindCards } from './bindCards'
+import { bindCharacters } from './bindCharacters'
 import Doors from './Doors'
 import InfoBox from './InfoBox'
 
 export function BattleScene(): PixiContainer {
     const scene = getBattleScene()
 
-    const container = Container({ name: 'BattleScene', children: [] })
+    const dungeonName = scene.get('dungeonName')
 
-    bindCharacters(scene, container)
+    const backgroundArgs =
+        dungeonName === 'The Matcha Caves'
+            ? { src: CaveVideo }
+            : { srcs: [backgrounds[dungeonName]] }
+    const charactersContainer = Container({ name: 'CharactersContainer' })
+    const cardsContainer = Container({ name: 'CardsContainer' })
+
+    const container = Container({
+        name: 'BattleScene',
+        children: [
+            background({ scale: 1, ...backgroundArgs }),
+            InfoBox({
+                info: [
+                    `Room ${scene.get('roomsPassed') + 1}`,
+                    scene.get('dungeonName'),
+                ],
+            }),
+            Coin(),
+            charactersContainer,
+            cardsContainer,
+        ],
+    })
+
+    bindCharacters(scene, charactersContainer)
+    bindCards({ scene, container: cardsContainer })
 
     setTimeout(() => makeDoors(container), 0)
     setTimeout(() => startBattle(), 0)
 
     return container
-}
-
-function bindCharacters(scene: SCursor<BattleScene>, container: PixiContainer) {
-    const allCharsCursor = scene.select('allCharacters')
-    let lastKeys = keys(allCharsCursor.get())
-
-    updateScene(scene, container)
-
-    allCharsCursor.on('update', function checkIfKeysChanged() {
-        const allChars = allCharsCursor.get()
-        if (allChars == null) {
-            container.destroy()
-            return
-        }
-        if (
-            vals(allChars)
-                .filter(c => c.health > 0)
-                .every(cm => !cm.hasMoved)
-        ) {
-            // tl()
-            const message = scene.get('isPlayerTurn')
-                ? 'You start round!'
-                : 'Enemy starts round!'
-            overlay({ elementId: 'roundStart', data: { message } })
-        }
-        const newKeys = keys(allChars)
-        if (!isEqual(lastKeys, newKeys)) {
-            // tl('character keys changed!')
-            // console.log('difference between old keys and new keys:', diff(lastKeys, newKeys))
-            lastKeys = newKeys
-            updateScene(scene, container)
-        }
-    })
-}
-
-function updateScene(scene: SCursor<BattleScene>, container: PixiContainer) {
-    const allCharsCursor = scene.select('allCharacters')
-    const children = container.children
-    container.removeChildren()
-
-    for (const x of children) {
-        x.destroy()
-    }
-
-    const allCharacters = allCharsCursor.get()
-    const sortedYs = vals(allCharacters)
-        .map(c => c.y)
-        .sort((y1, y2) => y1 - y2)
-    const childCursors = keyMap(allCharsCursor.get(), k =>
-        allCharsCursor.select(k)
-    )
-    const dungeonName = scene.get('dungeonName')
-    const backgroundArgs =
-        dungeonName === 'The Matcha Caves'
-            ? { src: CaveVideo }
-            : { srcs: [backgrounds[dungeonName]] }
-    const newChildren = [
-        background({ scale: 1, ...backgroundArgs }),
-        InfoBox({
-            info: [
-                `Room ${scene.get('roomsPassed') + 1}`,
-                scene.get('dungeonName'),
-            ],
-        }),
-        ...childCursors.map(childCursor =>
-            Character({
-                cursor: childCursor,
-                onClick: () =>
-                    doCharacterAction({ uid: childCursor.get('uid') }),
-                scale: 1,
-                isSelected: false,
-                zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),
-            })
-        ),
-        Coin(),
-    ]
-    for (const x of newChildren) {
-        container.addChild(x)
-    }
-    container.sortChildren()
 }
 
 function makeDoors(parent: PixiContainer) {
