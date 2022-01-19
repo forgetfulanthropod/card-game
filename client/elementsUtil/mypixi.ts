@@ -54,6 +54,7 @@ interface DisplayObjectArgs {
     zIndex?: number
     visible?: boolean
     angle?: number
+    rotation?: number
 }
 
 // text and sprite but not graphics
@@ -173,6 +174,9 @@ function applyDisplayObjectArgs(
 
     if (args.angle != null) {
         x.angle = args.angle
+    }
+    if (args.rotation != null) {
+        x.rotation = args.rotation
     }
 }
 

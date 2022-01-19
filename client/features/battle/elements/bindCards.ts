@@ -49,7 +49,7 @@ function onCursorKeyChange(cursor: SCursor<any>, callback: () => void) {
     })
 }
 
-function DrawPile(pile: Pile) {
+function DrawPile(pile: Pile): PixiContainer {
     return Container({
         x: BASE_WIDTH * 0.05,
         y: BASE_HEIGHT * 0.9,
@@ -70,7 +70,7 @@ function DrawPile(pile: Pile) {
     })
 }
 
-function DiscardPile(pile: Pile) {
+function DiscardPile(pile: Pile): PixiContainer {
     return Container({
         x: BASE_WIDTH * 0.95,
         y: BASE_HEIGHT * 0.9,
@@ -91,12 +91,18 @@ function DiscardPile(pile: Pile) {
     })
 }
 
-function Hand(pile: Pile) {
-    const children = vals(pile).map(() => {
+function Hand(pile: Pile): PixiContainer {
+    const children = vals(pile).map((card, index) => {
+        const scale = 0.5
         return Sprite({
             src: getCardExampleSrc(),
-            scale: 0.5,
+            scale,
             anchor: [0.5, 0.5],
+            // pivot: [
+            //     (getCardExampleSrc().width / 2) * scale,
+            //     (getCardExampleSrc().height / 2) * scale,
+            // ],
+            ...getXYPivotForNthCard(index + 1, keys(pile).length),
         })
     })
 
@@ -105,6 +111,50 @@ function Hand(pile: Pile) {
         y: BASE_HEIGHT * 1,
         children,
     })
+}
+
+const RIGHT_TO_LEFT = 1
+
+const MAX_HAND_WIDTH = BASE_WIDTH * 0.6
+const MAX_HAND_SIZE = 12
+const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
+// const CENTER_X = BASE_WIDTH / 2
+// const SPREAD_RADIUS = BASE_WIDTH
+// const MAX_PIVOT = 0.3 * Math.PI
+const MAX_CARD_ROTATION = Math.PI / 3
+const Y_MAX_OFFSET = BASE_HEIGHT * 0.06
+
+function getXYPivotForNthCard(
+    n: number,
+    numCardsInHand: number
+): { x: number; y: number; rotation: number } {
+    if (n < 1 || n > numCardsInHand)
+        throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
+
+    const handWidth = Math.min(numCardsInHand * CARD_WIDTH - 15, MAX_HAND_WIDTH)
+
+    // const centerN = (numCardsInHand + 1) / 2
+
+    const xPlacementPortion =
+        RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
+
+    const endCardRotation = (numCardsInHand / MAX_HAND_SIZE) * MAX_CARD_ROTATION
+
+    console.log({
+        n,
+        xPlacementPortion,
+        y:
+            -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
+            Y_MAX_OFFSET * 2,
+    })
+
+    return {
+        x: handWidth * 0.5 * xPlacementPortion,
+        y:
+            -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
+            Y_MAX_OFFSET / 2,
+        rotation: xPlacementPortion * endCardRotation,
+    }
 }
 
 const getCardBackSrc = () =>
