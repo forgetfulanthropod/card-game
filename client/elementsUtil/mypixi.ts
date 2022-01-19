@@ -50,6 +50,8 @@ interface DisplayObjectArgs {
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
     onClick?: (e: InteractionEvent) => void
+    onMouseover?: (e: InteractionEvent) => void
+    onMouseout?: (e: InteractionEvent) => void
     name?: string
     zIndex?: number
     visible?: boolean
@@ -161,6 +163,14 @@ function applyDisplayObjectArgs(
         x.on('click', args.onClick)
     }
 
+    if (args.onMouseover != null) {
+        x.interactive = true
+        x.on('mouseover', args.onMouseover)
+    }
+    if (args.onMouseout != null) {
+        x.interactive = true
+        x.on('mouseout', args.onMouseout)
+    }
     if (args.name != null) {
         x.name = args.name
     }

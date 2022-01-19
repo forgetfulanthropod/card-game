@@ -1,7 +1,7 @@
 import type { BattleScene, Pile } from '@shared'
 import type { SCursor } from 'baobab'
 import isEqual from 'lodash/isEqual'
-import { Loader } from 'pixi.js'
+import { filters, Loader } from 'pixi.js'
 
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
@@ -96,10 +96,14 @@ function Hand(pile: Pile): PixiContainer {
             src: getCardExampleSrc(),
             scale,
             anchor: [0.5, 0.5],
-            // pivot: [
-            //     (getCardExampleSrc().width / 2) * scale,
-            //     (getCardExampleSrc().height / 2) * scale,
-            // ],
+            onMouseover: ({ currentTarget }) => {
+                currentTarget.filters = [new filters.AlphaFilter(0.2)]
+                console.log('onMouseover')
+            },
+            onMouseout: ({ currentTarget }) => {
+                currentTarget.filters = []
+                console.log('onMouseout')
+            },
             ...getXYPivotForNthCard(index + 1, keys(pile).length),
         })
     })
