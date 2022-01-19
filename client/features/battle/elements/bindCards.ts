@@ -19,8 +19,6 @@ export function bindCards({ scene, container }: BindCursorArgs) {
 }
 
 function updateCards({ scene, container }: BindCursorArgs) {
-    console.log('UPDATING CARDS')
-
     const cardsCursor = scene.select('cards')
     const children = container.children
     container.removeChildren()
@@ -115,14 +113,11 @@ function Hand(pile: Pile): PixiContainer {
 
 const RIGHT_TO_LEFT = 1
 
-const MAX_HAND_WIDTH = BASE_WIDTH * 0.6
+const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12
 const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
-// const CENTER_X = BASE_WIDTH / 2
-// const SPREAD_RADIUS = BASE_WIDTH
-// const MAX_PIVOT = 0.3 * Math.PI
-const MAX_CARD_ROTATION = Math.PI / 3
-const Y_MAX_OFFSET = BASE_HEIGHT * 0.06
+const MAX_CARD_ROTATION = Math.PI * 0.2
+const Y_MAX_OFFSET = BASE_HEIGHT * 0.1
 
 function getXYPivotForNthCard(
     n: number,
@@ -133,26 +128,16 @@ function getXYPivotForNthCard(
 
     const handWidth = Math.min(numCardsInHand * CARD_WIDTH - 15, MAX_HAND_WIDTH)
 
-    // const centerN = (numCardsInHand + 1) / 2
-
     const xPlacementPortion =
         RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
 
     const endCardRotation = (numCardsInHand / MAX_HAND_SIZE) * MAX_CARD_ROTATION
 
-    console.log({
-        n,
-        xPlacementPortion,
-        y:
-            -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
-            Y_MAX_OFFSET * 2,
-    })
-
     return {
         x: handWidth * 0.5 * xPlacementPortion,
         y:
             -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
-            Y_MAX_OFFSET / 2,
+            Y_MAX_OFFSET / 8,
         rotation: xPlacementPortion * endCardRotation,
     }
 }

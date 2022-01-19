@@ -4,14 +4,9 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
-import { AutoPlay } from './autoplay/AutoPlay'
-import { BlessingToggles } from './BlessingToggles'
 import { FullScreenInfo } from './FullScreenInfo'
 import ResetButton from './ResetButton'
-import { RulebookEditor } from './RulebookEditor'
-import { Sidebar } from './Sidebar'
 import { useCursor } from './util'
-import WalletAddress from './WalletAddress'
 
 export default function GameManager(props: { username: string }): JSXElement {
     const { username } = props
@@ -24,13 +19,13 @@ export default function GameManager(props: { username: string }): JSXElement {
         </div>
         <Toaster />
         <ResetButton username={username} />
-        <BlessingToggles />
+        {/* <BlessingToggles /> */}
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
-        <Sidebar />
-        <RulebookEditor username={username} />
+        {/* <Sidebar /> */}
+        {/* <RulebookEditor username={username} /> */}
         {/* <TestCounter /> */}
-        <WalletAddress />
-        <AutoPlay />
+        {/* <WalletAddress /> */}
+        {/* <AutoPlay /> */}
     </AppWrap>
 }
