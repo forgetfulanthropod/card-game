@@ -16,12 +16,12 @@ type BindCursorArgs = {
 
 export function bindCards({ scene, container }: BindCursorArgs) {
     updateCards({ scene, container })
-    onCursorKeyChangeRecursive(scene, () => updateCards({ scene, container }))
+    onCursorKeyChangeRecursive<BattleScene>(scene, () =>
+        updateCards({ scene, container })
+    )
 }
 
 function updateCards({ scene, container }: BindCursorArgs) {
-    console.log('>>> cards updating')
-
     const cardsCursor = scene.select('cards')
     const children = container.children
     container.removeChildren()
@@ -38,8 +38,8 @@ function updateCards({ scene, container }: BindCursorArgs) {
     container.addChild(Hand(cards['hand']))
 }
 
-function onCursorKeyChangeRecursive(
-    cursor: SCursor<any>,
+function onCursorKeyChangeRecursive<T>(
+    cursor: SCursor<T>,
     callback: () => void
 ) {
     const lastTree = cursor.get()
