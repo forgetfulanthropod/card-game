@@ -6,7 +6,16 @@ export function makeCards(
 ): Cards {
     return {
         draw: {
-            uuid1: {
+            uuid11: {
+                name: 'string',
+                url: './Sweep The Leg.png',
+                text: ['string'],
+                definitions: ['string'],
+                type: 'string',
+                characterClass: 'string',
+                deckId: 'string',
+            },
+            uuid12: {
                 name: 'string',
                 url: './Sweep The Leg.png',
                 text: ['string'],

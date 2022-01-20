@@ -54,8 +54,11 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
     const cursor = getTree().select(path) as SCursor<unknown>
     const oldState = cursor.get() as unknown
     const differences = calcDiff(oldState, fromServer)
+    // not working on N level tree updates?
+    // cards.hand key value pair removedand no differences..
     if (differences == null) {
         console.warn('no differences')
+        console.log(oldState, fromServer)
         return
     }
     for (const change of differences) {

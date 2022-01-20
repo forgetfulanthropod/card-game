@@ -1,6 +1,6 @@
 import type { BattleScene, DungeonName, OwnedCharacter } from '@shared'
 
-import { makeCards } from './cardManagement'
+import { makeCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'
 
 export function makeBattleState(args: {

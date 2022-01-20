@@ -22,6 +22,8 @@ import type { MakeNewUser as _MakeNewUser } from '@shared'
 export type MakeNewUser = ServerAction<_MakeNewUser>
 import type { MaybeMakeUser as _MaybeMakeUser } from '@shared'
 export type MaybeMakeUser = ServerAction<_MaybeMakeUser>
+import type { PlayCard as _PlayCard } from '@shared'
+export type PlayCard = ServerAction<_PlayCard>
 import type { ResetRandomSeed as _ResetRandomSeed } from '@shared'
 export type ResetRandomSeed = ServerAction<_ResetRandomSeed>
 import type { RulebookAction as _RulebookAction } from '@shared'
