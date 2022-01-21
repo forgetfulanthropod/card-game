@@ -41,8 +41,8 @@ const RIGHT_TO_LEFT = 1
 const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12
 const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
-const MAX_CARD_ROTATION = Math.PI * 0.2
-const Y_MAX_OFFSET = BASE_HEIGHT * 0.1
+const MAX_CARD_ROTATION = Math.PI * 0.1
+const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
 function getXYRotationForNthCard(
     n: number,
     numCardsInHand: number
@@ -50,12 +50,18 @@ function getXYRotationForNthCard(
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 
-    const handWidth = Math.min(numCardsInHand * CARD_WIDTH - 15, MAX_HAND_WIDTH)
+    const handWidth = Math.min(
+        (numCardsInHand - 1) * CARD_WIDTH,
+        MAX_HAND_WIDTH
+    )
 
     const xPlacementPortion =
         RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
 
-    const endCardRotation = (numCardsInHand / MAX_HAND_SIZE) * MAX_CARD_ROTATION
+    // console.log({ xPlacementPortion })
+
+    const endCardRotation =
+        ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
 
     return {
         x: handWidth * 0.5 * xPlacementPortion,
