@@ -1,4 +1,6 @@
 import type { Pile } from '@shared'
+// import { myPIXI } from '@/elementsUtil'
+import { gsap } from 'gsap'
 import { filters, Loader } from 'pixi.js'
 
 import { playCard } from '@/actions'
@@ -9,7 +11,9 @@ import { keys, vals } from '@/util'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
+
     const children = vals(pile).map((card, index) => {
+        let animationForCard
         const scale = 0.5
         return Sprite({
             name: cardUids[index],
@@ -20,12 +24,31 @@ export function Hand(pile: Pile): PixiContainer {
                 await playCard({ cardUid: currentTarget.name })
             },
             onMouseover: ({ currentTarget }) => {
-                currentTarget.filters = [new filters.AlphaFilter(0.2)]
-                // console.log('onMouseover')
+                currentTarget.filters = [new filters.AlphaFilter(0.7)]
+
+                if (animationForCard != null) animationForCard.kill()
+                animationForCard = gsap.to(currentTarget, {
+                    pixi: { y: -150 },
+                    duration: 0.5,
+                })
+                // const tween = PIXI.tween.tweenManager.createTween(currentTarget)
+                // tween.from({ x: 0 }).to({ x: 250 })
+                // tween.time = 1000
+                // tween.repeat = 10
+                // tween.on('start', () => {
+                //     console.log('tween started')
+                // })
+                // tween.on('repeat', (loopCount: number) => {
+                //     console.log('loopCount: ' + loopCount)
+                // })
+                // tween.start()
             },
             onMouseout: ({ currentTarget }) => {
                 currentTarget.filters = []
-                // console.log('onMouseout')
+
+                if (animationForCard == null) return
+
+                animationForCard.reverse().then(() => animationForCard.kill())
             },
             ...getXYRotationForNthCard(index + 1, keys(pile).length),
         })

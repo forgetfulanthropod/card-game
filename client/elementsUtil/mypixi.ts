@@ -1,3 +1,6 @@
+// window.PIXI = PIXI
+import { gsap } from 'gsap'
+import { PixiPlugin } from 'gsap/PixiPlugin'
 import type {
     Filter as PixiFilter,
     InteractionEvent,
@@ -14,8 +17,15 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+import * as PIXI from 'pixi.js'
 
-import { registerPixiInspector } from '@/elementsUtil'
+gsap.registerPlugin(PixiPlugin)
+
+PixiPlugin.registerPIXI(PIXI)
+// import * as tweenManager from 'pixi-tween'
+// void PIXI
+// void tweenManager
+// import { registerPixiInspector } from '@/elementsUtil'
 
 // export { PixiLoader }
 // TODO: export the types instead of constructors
@@ -30,6 +40,12 @@ export {
     PixiTicker,
     PixiVideoResource,
 }
+
+// export const myPIXI = { tweenManager }
+
+// PixiTicker.shared.add((frames: number) => {
+//     tweenManager.update((1000 / 60) * frames)
+// })
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
@@ -221,7 +237,7 @@ export function Application(args: {
     }
     // @ts-expect-error
     window.app = app
-    registerPixiInspector()
+    // registerPixiInspector()
     return app
 }
 export function getPixiApp(): PixiApplication {
