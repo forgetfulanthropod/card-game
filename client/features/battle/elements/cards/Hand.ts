@@ -11,10 +11,11 @@ import { keys, vals } from '@/util'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
+    const unselectedFilter = new filters.AlphaFilter(0.4)
+    const scale = 0.5
 
     const children = vals(pile).map((card, index) => {
         let animationForCard = gsap.to({}, 0, {})
-        const scale = 0.5
         return Sprite({
             name: cardUids[index],
             src: getCardExampleSrc(),
@@ -24,16 +25,26 @@ export function Hand(pile: Pile): PixiContainer {
                 await playCard({ cardUid: currentTarget.name })
             },
             onMouseover: async ({ currentTarget }) => {
-                currentTarget.filters = [new filters.AlphaFilter(0.7)]
+                const parent = currentTarget.parent
+                parent.children.forEach(
+                    card => (card.filters = [unselectedFilter])
+                )
+                parent.removeChild(currentTarget)
+                parent.addChild(currentTarget)
+                currentTarget.filters = []
 
                 if (animationForCard != null) await animationForCard
                 animationForCard = gsap.to(currentTarget, {
-                    pixi: { y: -150 },
-                    duration: 0.5,
+                    pixi: { y: -350, rotation: 0, scale: 1 },
+                    duration: 0.3,
                 })
             },
             onMouseout: async ({ currentTarget }) => {
-                currentTarget.filters = []
+                currentTarget.parent.children.forEach(
+                    card => (card.filters = [])
+                )
+
+                currentTarget.parent.addChildAt(currentTarget, index)
 
                 if (animationForCard == null) return
 
