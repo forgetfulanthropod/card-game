@@ -64,6 +64,7 @@ function self-fmt() {
 
 function generate-indices() {
     vscode-generate-index-standalone ./shared/**/*.ts ./client/**/*.ts ./server/**/*.ts !node_modules
+    vscode-generate-index-standalone ./server/**/**/*.ts !node_modules
 }
 
 function save-staged() {

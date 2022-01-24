@@ -12,6 +12,8 @@ import type { ClaimLoot as _ClaimLoot } from '@shared'
 export type ClaimLoot = ServerAction<_ClaimLoot>
 import type { DoCharacterAction as _DoCharacterAction } from '@shared'
 export type DoCharacterAction = ServerAction<_DoCharacterAction>
+import type { EndTurn as _EndTurn } from '@shared'
+export type EndTurn = ServerAction<_EndTurn>
 import type { ExitDungeon as _ExitDungeon } from '@shared'
 export type ExitDungeon = ServerAction<_ExitDungeon>
 import type { Hello as _Hello } from '@shared'
@@ -43,7 +45,7 @@ type ServerAction<T extends Func> = (
 ) => ReturnType<T>
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Empty {}
+export interface Empty {}
 type Objify<Type> = Type extends Obj ? Type : Empty
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

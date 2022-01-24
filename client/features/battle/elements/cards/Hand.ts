@@ -98,5 +98,7 @@ function getXYRotationForNthCard(
 }
 export const getCardBackSrc = () =>
     Loader.shared.resources?.cardBack?.texture as PixiTexture
+export const getEndTurnButtonSrc = () =>
+    Loader.shared.resources?.endTurnButton?.texture as PixiTexture
 const getCardExampleSrc = () =>
     Loader.shared.resources?.cardExample?.texture as PixiTexture

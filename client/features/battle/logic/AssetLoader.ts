@@ -8,6 +8,7 @@ import hoolgans from '../assets/backgrounds/cave-final.png'
 import fort from '../assets/backgrounds/fort-skeleton-temp.jpg'
 import matcha from '../assets/backgrounds/matcha-caves.jpg'
 import ninth from '../assets/backgrounds/ninth-trash-hole.png'
+import endTurnButton from '../assets/BUTTON_END_TURN.png'
 import gemButton from '../assets/BUTTON_GEMS.png'
 import cardBack from '../assets/cards/card back.png'
 import cardExample from '../assets/cards/Sweep The Leg.png'
@@ -97,6 +98,7 @@ const basicAssets = {
     cardBack,
     cardExample,
     energy,
+    endTurnButton,
 }
 const deluxeAssets = {
     stanceNeutral,
