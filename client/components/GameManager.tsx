@@ -4,6 +4,7 @@ import { getTree } from '@/data/rootTree'
 import Battle from '@/features/battle/components/Battle'
 
 import AppWrap from './AppWrap'
+import { BlessingToggles } from './BlessingToggles'
 import { FullScreenInfo } from './FullScreenInfo'
 import ResetButton from './ResetButton'
 import { useCursor } from './util'
@@ -19,7 +20,7 @@ export default function GameManager(props: { username: string }): JSXElement {
         </div>
         <Toaster />
         <ResetButton username={username} />
-        {/* <BlessingToggles /> */}
+        <BlessingToggles />
         {sceneType === 'battle' && <Battle />}
         <FullScreenInfo />
         {/* <Sidebar /> */}
