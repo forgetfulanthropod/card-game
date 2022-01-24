@@ -8,7 +8,6 @@ import { BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
-import { onCursorKeyChangeRecursive } from '@/util'
 
 type BindCursorArgs = {
     scene: SCursor<BattleScene>
@@ -17,9 +16,9 @@ type BindCursorArgs = {
 
 export function bindEnergy({ scene, container }: BindCursorArgs) {
     update({ scene, container })
-    onCursorKeyChangeRecursive<number>(scene.select('energy'), () =>
+    scene.select('energy').on('update', () => {
         update({ scene, container })
-    )
+    })
 }
 
 function update({ scene, container }: BindCursorArgs) {

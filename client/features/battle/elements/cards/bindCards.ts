@@ -1,4 +1,4 @@
-import type { BattleScene, Cards, Pile } from '@shared'
+import type { BattleScene, Pile } from '@shared'
 import type { SCursor } from 'baobab'
 
 import { endTurn } from '@/actions'
@@ -6,7 +6,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
-import { onCursorKeyChangeRecursive, vals } from '@/util'
+import { vals } from '@/util'
 
 import { getCardBackSrc, getEndTurnButtonSrc, Hand } from './Hand'
 
@@ -17,9 +17,7 @@ type BindCursorArgs = {
 
 export function bindCards({ scene, container }: BindCursorArgs) {
     update({ scene, container })
-    onCursorKeyChangeRecursive<Cards>(scene.select('cards'), () =>
-        update({ scene, container })
-    )
+    scene.select('cards').on('update', () => update({ scene, container }))
 }
 
 function update({ scene, container }: BindCursorArgs) {
