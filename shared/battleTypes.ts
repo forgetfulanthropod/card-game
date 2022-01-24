@@ -58,6 +58,7 @@ export type Card = {
     text: string[]
     definitions: string[]
     type: string
+    characterUid: CharacterUid
     characterClass: string
     deckId: string
 }
