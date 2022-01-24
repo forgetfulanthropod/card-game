@@ -28,12 +28,8 @@ export const playCard: PlayCard = args => {
                 discardPile: discard,
             }))
 
-        // console.log({ ...cards, hand, discard })
-
-        scene.set('cards', cards)
         return { ...cards, draw, hand, discard }
     })
-    // commit(scene, args.username)
 }
 
 const BASE_HAND_SIZE = 5
