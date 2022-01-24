@@ -1,11 +1,11 @@
-import type { BattleScene, Pile } from '@shared'
+import type { BattleScene, Cards, Pile } from '@shared'
 import type { SCursor } from 'baobab'
-import isEqual from 'lodash/isEqual'
 
 import type { PixiContainer } from '@/elementsUtil'
+import { clearContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
-import { vals } from '@/util'
+import { onCursorKeyChangeRecursive, vals } from '@/util'
 
 import { getCardBackSrc, Hand } from './Hand'
 
@@ -15,40 +15,20 @@ type BindCursorArgs = {
 }
 
 export function bindCards({ scene, container }: BindCursorArgs) {
-    updateCards({ scene, container })
-    onCursorKeyChangeRecursive<BattleScene>(scene, () =>
-        updateCards({ scene, container })
+    update({ scene, container })
+    onCursorKeyChangeRecursive<Cards>(scene.select('cards'), () =>
+        update({ scene, container })
     )
 }
 
-function updateCards({ scene, container }: BindCursorArgs) {
-    const cardsCursor = scene.select('cards')
-    const children = container.children
-    container.removeChildren()
+function update({ scene, container }: BindCursorArgs) {
+    clearContainer(container)
 
-    for (const x of children) {
-        x.destroy()
-    }
-
-    const cards = cardsCursor.get()
+    const cards = scene.select('cards').get()
 
     container.addChild(DrawPile(cards['draw']))
     container.addChild(DiscardPile(cards['discard']))
-
     container.addChild(Hand(cards['hand']))
-}
-
-function onCursorKeyChangeRecursive<T>(
-    cursor: SCursor<T>,
-    callback: () => void
-) {
-    const lastTree = cursor.get()
-
-    cursor.on('update', function checkIfKeysChanged() {
-        if (isEqual(cursor.get(), lastTree)) return
-
-        callback()
-    })
 }
 
 function DrawPile(pile: Pile): PixiContainer {

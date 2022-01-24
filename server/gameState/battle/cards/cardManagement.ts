@@ -8,6 +8,7 @@ export function makeCards(
         draw: {
             uuid11: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -17,6 +18,7 @@ export function makeCards(
             },
             uuid12: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -28,6 +30,7 @@ export function makeCards(
         hand: {
             uuid21: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -37,6 +40,7 @@ export function makeCards(
             },
             uuid22: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -46,6 +50,7 @@ export function makeCards(
             },
             uuid23: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -55,6 +60,7 @@ export function makeCards(
             },
             uuid24: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -64,6 +70,7 @@ export function makeCards(
             },
             uuid25: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -73,6 +80,7 @@ export function makeCards(
             },
             uuid26: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -82,6 +90,7 @@ export function makeCards(
             },
             uuid27: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -91,6 +100,7 @@ export function makeCards(
             },
             uuid28: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -100,6 +110,7 @@ export function makeCards(
             },
             uuid29: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -109,6 +120,7 @@ export function makeCards(
             },
             uuid210: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -118,6 +130,7 @@ export function makeCards(
             },
             uuid211: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -127,6 +140,7 @@ export function makeCards(
             },
             uuid212: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -138,6 +152,7 @@ export function makeCards(
         discard: {
             uuid3: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],
@@ -149,6 +164,7 @@ export function makeCards(
         removed: {
             uuid3: {
                 name: 'string',
+                energy: 2,
                 url: './Sweep The Leg.png',
                 text: ['string'],
                 definitions: ['string'],

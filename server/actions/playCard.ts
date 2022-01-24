@@ -1,25 +1,68 @@
 import type { PlayCard } from '@serverActions'
-import type { Pile } from '@shared'
+import type { Card, CardUid, Pile } from '@shared'
 import { omit, shuffle } from 'lodash'
 
+import type { BattleCursor } from '@/util'
 import { getBattleScene, keys, vals } from '@/util'
 
 export const playCard: PlayCard = args => {
-    // console.log('hello from playCard')
     const scene = getBattleScene(args.username)
+    const card = findCard({ cardUid: args.cardUid, scene })
+
+    if (isPlayable({ card, scene })) {
+        play({ card, scene })
+        discard({ cardUid: args.cardUid, card, scene })
+    }
+}
+
+function findCard({
+    cardUid,
+    scene,
+}: {
+    cardUid: CardUid
+    scene: BattleCursor
+}): Card {
     const cards = scene.get('cards')
 
-    const cardIndex = keys(cards.hand).findIndex(
-        cardUid => cardUid === args.cardUid
-    )
+    const cardIndex = keys(cards.hand).findIndex(uid => cardUid === uid)
     const card = vals(cards.hand)[cardIndex]
 
     if (card == null) throw new Error('card Uid not found, something is wrong')
 
-    scene.apply('cards', cards => {
+    return card
+}
+
+function isPlayable({
+    card,
+    scene,
+}: {
+    card: Card
+    scene: BattleCursor
+}): boolean {
+    const hasEnoughEnergy = getEnergy(card) < scene.select('energy').get()
+
+    return hasEnoughEnergy
+}
+
+function getEnergy(card: Card): number {
+    return card.energy
+}
+
+function play({ card, scene }: { card: Card; scene: BattleCursor }): void {
+    scene.set('energy', scene.get('energy') - card.energy)
+
+    //TODO
+}
+
+function discard(args: {
+    cardUid: CardUid
+    card: Card
+    scene: BattleCursor
+}): void {
+    args.scene.apply('cards', cards => {
         let draw = cards.draw
         let hand = omit(cards.hand, args.cardUid)
-        let discard = { ...cards.discard, ...{ [args.cardUid]: card } }
+        let discard = { ...cards.discard, ...{ [args.cardUid]: args.card } }
 
         if (keys(hand).length === 0)
             ({ draw, hand, discard } = drawNewHand({

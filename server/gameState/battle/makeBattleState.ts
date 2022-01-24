@@ -36,6 +36,7 @@ export function makeBattleState(args: {
         battleHasBegun: true,
         allCharacters,
         cards: makeCards(args?.chosen, args.username),
+        energy: 3,
         selectedCharacter: selectedCharacter.uid,
         selectedMove,
         isBasicLoaded: false,

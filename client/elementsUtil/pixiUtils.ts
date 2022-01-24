@@ -59,3 +59,12 @@ export function doFlashElement(
 export function dataOf(assetId: AssetKey): PixiTexture {
     return PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
 }
+
+export function clearContainer(container: PixiContainer): void {
+    const children = container.children
+    container.removeChildren()
+
+    for (const x of children) {
+        x.destroy()
+    }
+}

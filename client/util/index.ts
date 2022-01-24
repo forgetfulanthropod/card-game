@@ -4,4 +4,5 @@ export * from './jsonString'
 export * from './notnull'
 export * from './objectHelpers'
 export * from './windowUtils'
+export * from './treeUtils'
 // @endindex

@@ -18,6 +18,7 @@ import warhog from '../assets/chars/warhog-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 import stanceDefensive from '../assets/defensive stance.png'
+import energy from '../assets/energy.png'
 import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import bloatDemon from '../assets/gen0_cards/bloat_demon-200.png'
 import bogSpirit from '../assets/gen0_cards/BogSpirit-200.png'
@@ -95,6 +96,7 @@ const basicAssets = {
     door,
     cardBack,
     cardExample,
+    energy,
 }
 const deluxeAssets = {
     stanceNeutral,

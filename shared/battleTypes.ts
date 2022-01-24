@@ -20,6 +20,7 @@ export interface BattleScene extends SceneHas {
     isPlayerTurn: boolean
     allCharacters: Record<CharacterUid, CharacterMeta>
     cards: Cards
+    energy: number
     selectedCharacter: CharacterUid
     selectedMove: CharacterMove
     isBasicLoaded: boolean
@@ -52,6 +53,7 @@ export interface Effect {
 
 export type Card = {
     name: string
+    energy: number
     url: string
     text: string[]
     definitions: string[]

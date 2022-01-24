@@ -7,8 +7,9 @@ import { Container } from '@/elementsUtil'
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgrounds } from '../logic/AssetLoader'
 import background from './background'
-import { bindCards } from './cards/bindCards'
 import { bindCharacters } from './bindCharacters'
+import { bindEnergy } from './bindEnergy'
+import { bindCards } from './cards/bindCards'
 import Doors from './Doors'
 import InfoBox from './InfoBox'
 
@@ -23,6 +24,7 @@ export function BattleScene(): PixiContainer {
             : { srcs: [backgrounds[dungeonName]] }
     const charactersContainer = Container({ name: 'CharactersContainer' })
     const cardsContainer = Container({ name: 'CardsContainer' })
+    const energyContainer = Container({ name: 'EnergyContainer' })
 
     const container = Container({
         name: 'BattleScene',
@@ -37,11 +39,13 @@ export function BattleScene(): PixiContainer {
             Coin(),
             charactersContainer,
             cardsContainer,
+            energyContainer,
         ],
     })
 
     bindCharacters(scene, charactersContainer)
     bindCards({ scene, container: cardsContainer })
+    bindEnergy({ scene, container: energyContainer })
 
     setTimeout(() => makeDoors(container), 0)
     setTimeout(() => startBattle(), 0)
