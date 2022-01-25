@@ -1,5 +1,6 @@
 import type {
     AttackData,
+    Card,
     CharacterMeta,
     CharacterMove,
     CharacterStats,
@@ -12,8 +13,19 @@ import type {
 } from '@shared'
 
 import { getRulebook } from '@/rulebook'
+import type { BattleCursor } from '@/util'
 
 import { getTransformed, isSpecial } from './specialMoves'
+
+export function getDamageForCard({
+    card,
+    scene,
+}: {
+    card: Card
+    scene: BattleCursor
+}): number {
+    return scene.get('allCharacters', card.characterUid).strength
+}
 
 export function getCharacterMovesWithDamageRanges(
     character: Readonly<StatsWithStance>

@@ -112,8 +112,15 @@ export type CharacterStats = Readonly<{
     displayName: string
     points: number
     isPc: boolean
-    maxHealth: number // AKA base health
-    damage: number // AKA base attack
+
+    maxHealth: number // deprecated
+    damage: number // deprecated
+
+    constitution: number
+    strength: number
+    magic: number
+    defense: number
+
     moves: CharacterMove[]
     learnableMoves?: LearnableCharacterMove[]
     level: number

@@ -7,6 +7,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 40,
         maxHealth: 160,
         damage: 27,
+
+        constitution: 160,
+        strength: 27,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Bubbling Fire', types: ['ROD3', 'SP'] },
             { name: 'Noxious Fumes', types: ['DOT1', 'SP'] },
@@ -23,6 +29,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 40,
         maxHealth: 224,
         damage: 16,
+
+        constitution: 224,
+        strength: 16,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Raw Stench of Death', types: ['SL', 'DOT1'] },
             { name: 'Talon Swipe', types: ['SP'] },
@@ -39,6 +51,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 60,
         damage: 10,
+
+        constitution: 60,
+        strength: 10,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Kick', types: ['BA'] },
             { name: 'Paper Cut', types: ['SL'] },
@@ -53,6 +71,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 20,
         maxHealth: 58,
         damage: 18,
+
+        constitution: 58,
+        strength: 18,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Maniacal Scream', types: ['SP', 'ROD3'] },
             { name: 'Marked By Death', types: ['DOT2'] },
@@ -68,6 +92,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 72,
         damage: 8,
+
+        constitution: 72,
+        strength: 8,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Dutiful Stab', types: ['BA'] },
             { name: 'Sword Slash', types: ['SL'] },
@@ -86,6 +116,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 25,
         maxHealth: 66,
         damage: 24,
+
+        constitution: 66,
+        strength: 24,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Magic Missile', types: ['ROD1'] },
             { name: 'Vanishing Act', types: ['ROD2'] },
@@ -104,6 +140,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 43,
         damage: 14,
+
+        constitution: 43,
+        strength: 14,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Bombs Away!', types: ['ROD3'] },
             { name: 'Bang Snap Inferno', types: ['SL', 'ROD2'] },
@@ -118,6 +160,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 25,
         maxHealth: 120,
         damage: 13,
+
+        constitution: 120,
+        strength: 13,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Fire Breath', types: ['SL'] },
             { name: 'Chomp', types: ['BA'] },
@@ -136,6 +184,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 40,
         maxHealth: 120,
         damage: 34,
+
+        constitution: 120,
+        strength: 34,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Oh God Oh No Oh God', types: ['ROD3', 'SL'] },
             { name: 'There Is No Punchline', types: ['SP', 'DOT1'] },
@@ -151,6 +205,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 25,
         maxHealth: 86,
         damage: 19,
+
+        constitution: 86,
+        strength: 19,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Telepathic Secrets', types: ['BA'] },
             { name: 'Extended Eye Contact', types: ['ROD1', 'DOT2'] },
@@ -170,6 +230,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 50,
         maxHealth: 250,
         damage: 27,
+
+        constitution: 250,
+        strength: 27,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Death Comes For All', types: ['DC4A'] },
             { name: 'Inhale Soul', types: ['INHSO'] },
@@ -189,6 +255,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 78,
         damage: 7,
+
+        constitution: 78,
+        strength: 7,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Itchy Ooze', types: ['DOT1'] },
             { name: 'Surprise Allergy', types: ['ROD2'] },
@@ -206,6 +278,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 25,
         maxHealth: 130,
         damage: 12,
+
+        constitution: 130,
+        strength: 12,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Mimic', types: ['MIM'] },
             { name: 'Chomp', types: ['BA'] },
@@ -221,6 +299,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 20,
         maxHealth: 112,
         damage: 8,
+
+        constitution: 112,
+        strength: 8,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Whomp', types: ['ROD1'] },
             { name: 'Cloud of Spores', types: ['DOT1', 'ROD3'] },
@@ -239,6 +323,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 20,
         maxHealth: 75,
         damage: 14,
+
+        constitution: 75,
+        strength: 14,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Rapid Fire Bolts', types: ['SL'] },
             { name: 'Hunted By The B.E.A.N', types: ['DOT2'] },
@@ -254,6 +344,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 20,
         maxHealth: 88,
         damage: 12,
+
+        constitution: 88,
+        strength: 12,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Meaty Charge', types: ['BA'] },
             { name: 'Bellow and Sing', types: ['ROD2', 'SP'] },
@@ -268,8 +364,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         displayName: 'Penguin Knight',
         isPc: true,
         points: 15,
-        maxHealth: 66,
         damage: 9,
+        maxHealth: 66,
+        constitution: 66,
+        strength: 9,
+        magic: 0,
+        defense: 0,
         moves: [
             { name: 'Valiant Jab', types: ['BA'] },
             { name: 'Sword Slash', types: ['SL'] },
@@ -288,6 +388,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 10,
         damage: 2,
+
+        constitution: 10,
+        strength: 2,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Sword Whack', types: ['BA'] },
             { name: 'Rusty Poke', types: ['DOT2'] },
@@ -306,6 +412,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 20,
         maxHealth: 67,
         damage: 16,
+
+        constitution: 67,
+        strength: 16,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Hedged Bet', types: ['ROD1', 'SL'] },
             { name: 'Compulsive Gambler', types: ['ROD3'] },
@@ -321,6 +433,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 50,
         maxHealth: 300,
         damage: 22,
+
+        constitution: 300,
+        strength: 22,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Devour', types: ['ROD3'] },
             { name: 'Copious Bleeding', types: ['DOT2', 'ROD1'] },
@@ -338,6 +456,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 25,
         maxHealth: 110,
         damage: 15,
+
+        constitution: 110,
+        strength: 15,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Horrifying Maim', types: ['DOT2'] },
             { name: 'Endless Riddle', types: ['SL'] },
@@ -354,6 +478,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 15,
         maxHealth: 84,
         damage: 6,
+
+        constitution: 84,
+        strength: 6,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'Belly Flop', types: ['ROD2'] },
             { name: 'Roll Around', types: ['SL'] },
@@ -371,6 +501,12 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         points: 40,
         maxHealth: 170,
         damage: 24,
+
+        constitution: 170,
+        strength: 24,
+        magic: 0,
+        defense: 0,
+
         moves: [
             { name: 'A Friend You Can Count On', types: ['ST'] },
             { name: 'Valiant Whomp', types: ['ROD1', 'SL'] },

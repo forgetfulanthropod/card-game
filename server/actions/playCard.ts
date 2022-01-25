@@ -2,7 +2,7 @@ import type { PlayCard } from '@serverActions'
 import type { Card, CardUid, CharacterUid, Pile } from '@shared'
 import { omit, shuffle } from 'lodash'
 
-import { getCharIds } from '@/gameState/battle'
+import { getCharIds, getDamageForCard } from '@/gameState/battle'
 import type { BattleCursor } from '@/util'
 import { getBattleScene, keys, vals } from '@/util'
 
@@ -50,10 +50,13 @@ function getEnergy(card: Card): number {
 }
 
 function play({ card, scene }: { card: Card; scene: BattleCursor }): void {
-    scene.set('energy', scene.get('energy') - card.energy)
+    scene.apply('energy', energy => energy - card.energy)
 
-    // applyDamageToEnemy(getDamage({ card, scene }), getLivingNpcUid(scene))
-    applyDamageToEnemy({ damage: 1, enemyUid: getLivingNpcUid(scene), scene })
+    applyDamageToEnemy({
+        damage: getDamageForCard({ card, scene }),
+        enemyUid: getLivingNpcUid(scene),
+        scene,
+    })
 }
 
 function applyDamageToEnemy({
