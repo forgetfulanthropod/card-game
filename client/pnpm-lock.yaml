@@ -12,7 +12,6 @@ specifiers:
   '@solana/wallet-adapter-wallets': ^0.14.0
   '@solana/web3.js': ^1.31.0
   '@types/marked': ^4.0.1
-  '@types/pixi-tween': github:themoonrat/pixi-tween
   ahooks: ^3.1.5
   assert: ^2.0.0
   beautiful-skill-tree: ^1.7.1
@@ -21,7 +20,6 @@ specifiers:
   marked: ^4.0.8
   monaco-editor: ^0.31.1
   pixi-spine: ^3.0.13
-  pixi-tween: github:themoonrat/pixi-tween
   pixi-viewport: ^4.34.4
   pixi-webfont-loader: ^1.0.2
   pixi.js: ^6.2.1
@@ -49,7 +47,6 @@ dependencies:
   gsap: 3.9.1
   marked: 4.0.8
   pixi-spine: 3.0.13
-  pixi-tween: github.com/themoonrat/pixi-tween/40b413f278ead998ce41947bd872db943b9564a4
   pixi-viewport: 4.34.4
   pixi-webfont-loader: 1.0.2
   pixi.js: 6.2.1
@@ -61,7 +58,6 @@ dependencies:
 
 devDependencies:
   '@types/marked': 4.0.1
-  '@types/pixi-tween': github.com/themoonrat/pixi-tween/40b413f278ead998ce41947bd872db943b9564a4
   monaco-editor: 0.31.1
 
 packages:
@@ -4291,8 +4287,3 @@ packages:
   /yeast/0.1.2:
     resolution: {integrity: sha1-AI4G2AlDIMNy28L47XagymyKxBk=}
     dev: false
-
-  github.com/themoonrat/pixi-tween/40b413f278ead998ce41947bd872db943b9564a4:
-    resolution: {tarball: https://codeload.github.com/themoonrat/pixi-tween/tar.gz/40b413f278ead998ce41947bd872db943b9564a4}
-    name: pixi-tween
-    version: 1.0.0

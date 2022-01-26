@@ -2,9 +2,11 @@ import type { PlayCard } from '@serverActions'
 import type { Card, CardUid, CharacterUid, Pile } from '@shared'
 import { omit, shuffle } from 'lodash'
 
-import { getCharIds, getDamageForCard } from '@/gameState/battle'
+import { getCharIds } from '@/gameState/battle'
 import type { BattleCursor } from '@/util'
 import { getBattleScene, keys, vals } from '@/util'
+
+import { interpretActions } from './interpretActions'
 
 export const playCard: PlayCard = args => {
     const scene = getBattleScene(args.username)
@@ -52,14 +54,22 @@ function getEnergy(card: Card): number {
 function play({ card, scene }: { card: Card; scene: BattleCursor }): void {
     scene.apply('energy', energy => energy - card.energy)
 
-    applyDamageToEnemy({
-        damage: getDamageForCard({ card, scene }),
-        enemyUid: getLivingNpcUid(scene),
-        scene,
-    })
+    interpretActions({ card, scene })
+
+    // applyDamage({
+    //     damage: getDamageForCard({ card, scene }),
+    //     enemyUid: getLivingNpcUid(scene),
+    //     scene,
+    // })
+
+    // applyEffects({
+    //     effects: getEffectsForCard({ card, scene }),
+    //     enemyUid: getLivingNpcUid(scene),
+    //     scene,
+    // })
 }
 
-function applyDamageToEnemy({
+function applyDamage({
     damage,
     enemyUid,
     scene,

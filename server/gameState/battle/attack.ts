@@ -11,6 +11,7 @@ import type {
     StanceName,
     StatsWithStance,
 } from '@shared'
+import { intersection } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
 import type { BattleCursor } from '@/util'
@@ -26,6 +27,16 @@ export function getDamageForCard({
 }): number {
     return scene.get('allCharacters', card.characterUid).strength
 }
+
+// export function getEffectsForCard({
+//     card,
+//     scene,
+// }: {
+//     card: Card
+//     scene: BattleCursor
+// }): number {
+//     return scene.get('allCharacters', card.characterUid).strength
+// }
 
 export function getCharacterMovesWithDamageRanges(
     character: Readonly<StatsWithStance>
@@ -78,6 +89,18 @@ export function getCharacterKeysAndDamages(
 export function getCharacterKeysAndEffects(
     attackData: AttackData
 ): { key: CharacterUid; effect: Effect }[] {
+    const keyOnlyEffects: EffectType[] = ['Debilitated']
+    const matchedKeyOnlyEffects = intersection(
+        attackData.move.types,
+        keyOnlyEffects
+    ) as EffectType[]
+    if (matchedKeyOnlyEffects.length > 0) {
+        return matchedKeyOnlyEffects.map(m => ({
+            key: attackData.defenders[0].uid,
+            effect: { type: m, remainingRounds: 1 },
+        }))
+    }
+
     const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
     if (moveTypeDOT != null) {
         const moveMeta = getRulebook().moveMetaMap[moveTypeDOT]

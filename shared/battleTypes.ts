@@ -43,11 +43,11 @@ export interface MoveMeta {
     isSpecial?: boolean
 }
 
-export type EffectType = 'DOT1' | 'DOT2'
+export type EffectType = 'DOT1' | 'DOT2' | 'Debilitated'
 export interface Effect {
     type: EffectType
     remainingRounds: number
-    damagesByRound: number[]
+    damagesByRound?: number[]
     dealer?: CharacterUid
 }
 
@@ -55,6 +55,7 @@ export type Card = {
     name: string
     energy: number
     url: string
+    actions: string
     text: string[]
     definitions: string[]
     type: string
