@@ -4,6 +4,7 @@ import { gsap } from 'gsap'
 import { filters, Loader } from 'pixi.js'
 
 import { playCard } from '@/actions'
+import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
@@ -22,7 +23,10 @@ export function Hand(pile: Pile): PixiContainer {
             scale,
             anchor: [0.5, 0.5],
             onClick: async ({ currentTarget }) => {
-                await playCard({ cardUid: currentTarget.name })
+                await playCard({
+                    cardUid: currentTarget.name,
+                    targetUids: keys(getBattleScene().get('allCharacters')),
+                })
             },
             onMouseover: async ({ currentTarget }) => {
                 const parent = currentTarget.parent

@@ -1,7 +1,11 @@
-import type { Card } from '@shared'
+import type { Card, CharacterUid } from '@shared'
 import * as angu from 'angu'
 
 import type { BattleCursor } from '@/util'
+
+// import { vals } from '@/util'
+import { explain as explainDeal } from './cardActions/deal'
+import { s } from './cardActions/util/explainHelpers'
 
 type AnguV = angu.Value
 
@@ -22,16 +26,7 @@ export function explainActions(actions: string, locals?: object) {
         chain: (...chain: AnguV[]) => {
             return chain.map(link => link.eval()).join('\n')
         },
-        deal: (damage: AnguV, times: AnguV) => {
-            let explication = 'deals ' + damage.eval() + ' damage'
-
-            if (times != null) {
-                const n = times.eval()
-                explication += ` ${n} time${s(n)}`
-            }
-
-            return explication
-        },
+        deal: explainDeal,
         debilitate: (a: AnguV) => {
             const n = a.eval()
             return `debilitates for ${n} round${s(n)}`
@@ -62,22 +57,25 @@ export function explainActions(actions: string, locals?: object) {
 }
 
 export function interpretActions({
-    card = null,
-    scene = null,
+    card,
+    targetUids,
+    scene,
 }: {
-    card?: Card | null
-    scene?: BattleCursor | null
+    card: Card
+    targetUids: CharacterUid[]
+    scene: BattleCursor
 }) {
-    void card
-    void scene
-
-    // assert.equal(r1.value, 42)
-    // const r2 = angu.evaluate('10 + 4 / 2 * 3', ctx)
-    // assert.equal(r2.value, 16)
-    // const r3 = angu.evaluate('PI * 2', ctx)
-    // assert.equal(r3.value, 6.28)
+    const cardOwner = scene.get('allCharacters', card.characterUid)
+    console.log(
+        explainActions(card.actions, {
+            strength: cardOwner.strength,
+            dexterity: cardOwner.dexterity,
+            magic: cardOwner.magic,
+            constitution: cardOwner.constitution,
+        })
+    )
 }
 
-function s(n: number) {
-    return n > 1 ? 's' : ''
-}
+// function getLivingNpcUid(scene: BattleCursor): CharacterUid {
+//     return getCharIds(vals(scene.get('allCharacters')), { isPc: false })[0]
+// }

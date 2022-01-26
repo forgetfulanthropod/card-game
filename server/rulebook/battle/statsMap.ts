@@ -11,7 +11,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 160,
         strength: 27,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Bubbling Fire', types: ['ROD3', 'SP'] },
@@ -33,7 +33,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 224,
         strength: 16,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Raw Stench of Death', types: ['SL', 'DOT1'] },
@@ -55,7 +55,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 60,
         strength: 10,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Kick', types: ['BA'] },
@@ -75,7 +75,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 58,
         strength: 18,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Maniacal Scream', types: ['SP', 'ROD3'] },
@@ -96,7 +96,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 72,
         strength: 8,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Dutiful Stab', types: ['BA'] },
@@ -120,7 +120,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 66,
         strength: 24,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Magic Missile', types: ['ROD1'] },
@@ -144,7 +144,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 43,
         strength: 14,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Bombs Away!', types: ['ROD3'] },
@@ -164,7 +164,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 120,
         strength: 13,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Fire Breath', types: ['SL'] },
@@ -188,7 +188,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 120,
         strength: 34,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Oh God Oh No Oh God', types: ['ROD3', 'SL'] },
@@ -209,7 +209,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 86,
         strength: 19,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Telepathic Secrets', types: ['BA'] },
@@ -234,7 +234,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 250,
         strength: 27,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Death Comes For All', types: ['DC4A'] },
@@ -259,7 +259,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 78,
         strength: 7,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Itchy Ooze', types: ['DOT1'] },
@@ -282,7 +282,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 130,
         strength: 12,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Mimic', types: ['MIM'] },
@@ -303,7 +303,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 112,
         strength: 8,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Whomp', types: ['ROD1'] },
@@ -327,7 +327,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 75,
         strength: 14,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Rapid Fire Bolts', types: ['SL'] },
@@ -348,7 +348,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 88,
         strength: 12,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Meaty Charge', types: ['BA'] },
@@ -369,7 +369,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 66,
         strength: 9,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
         moves: [
             { name: 'Valiant Jab', types: ['BA'] },
             { name: 'Sword Slash', types: ['SL'] },
@@ -392,7 +392,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 10,
         strength: 2,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Sword Whack', types: ['BA'] },
@@ -416,7 +416,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 67,
         strength: 16,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Hedged Bet', types: ['ROD1', 'SL'] },
@@ -437,7 +437,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 300,
         strength: 22,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Devour', types: ['ROD3'] },
@@ -460,7 +460,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 110,
         strength: 15,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Horrifying Maim', types: ['DOT2'] },
@@ -482,7 +482,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 84,
         strength: 6,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'Belly Flop', types: ['ROD2'] },
@@ -505,7 +505,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         constitution: 170,
         strength: 24,
         magic: 0,
-        defense: 0,
+        dexterity: 0,
 
         moves: [
             { name: 'A Friend You Can Count On', types: ['ST'] },

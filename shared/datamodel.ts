@@ -119,7 +119,7 @@ export type CharacterStats = Readonly<{
     constitution: number
     strength: number
     magic: number
-    defense: number
+    dexterity: number
 
     moves: CharacterMove[]
     learnableMoves?: LearnableCharacterMove[]

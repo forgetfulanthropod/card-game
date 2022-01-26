@@ -2,18 +2,18 @@ import type { PlayCard } from '@serverActions'
 import type { Card, CardUid, CharacterUid, Pile } from '@shared'
 import { omit, shuffle } from 'lodash'
 
-import { getCharIds } from '@/gameState/battle'
+import { interpretActions } from '@/gameState/battle/cards/interpretActions'
 import type { BattleCursor } from '@/util'
 import { getBattleScene, keys, vals } from '@/util'
 
-import { interpretActions } from './interpretActions'
+// import { interpretActions } from './cards/interpretActions'
 
 export const playCard: PlayCard = args => {
     const scene = getBattleScene(args.username)
     const card = findCard({ cardUid: args.cardUid, scene })
 
     if (isPlayable({ card, scene })) {
-        play({ card, scene })
+        play({ card, targetUids: args.targetUids, scene })
         discard({ cardUid: args.cardUid, card, scene })
     }
 }
@@ -51,10 +51,18 @@ function getEnergy(card: Card): number {
     return card.energy
 }
 
-function play({ card, scene }: { card: Card; scene: BattleCursor }): void {
+function play({
+    card,
+    targetUids,
+    scene,
+}: {
+    card: Card
+    targetUids: CharacterUid[]
+    scene: BattleCursor
+}): void {
     scene.apply('energy', energy => energy - card.energy)
 
-    interpretActions({ card, scene })
+    interpretActions({ card, targetUids, scene })
 
     // applyDamage({
     //     damage: getDamageForCard({ card, scene }),
@@ -67,22 +75,6 @@ function play({ card, scene }: { card: Card; scene: BattleCursor }): void {
     //     enemyUid: getLivingNpcUid(scene),
     //     scene,
     // })
-}
-
-function applyDamage({
-    damage,
-    enemyUid,
-    scene,
-}: {
-    damage: number
-    enemyUid: CharacterUid
-    scene: BattleCursor
-}): void {
-    scene.select('allCharacters', enemyUid).apply('health', h => h - damage)
-}
-
-function getLivingNpcUid(scene: BattleCursor): CharacterUid {
-    return getCharIds(vals(scene.get('allCharacters')), { isPc: false })[0]
 }
 
 function discard(args: {
