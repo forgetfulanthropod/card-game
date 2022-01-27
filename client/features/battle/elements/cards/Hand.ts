@@ -39,7 +39,11 @@ export function Hand(pile: Pile): PixiContainer {
 
                 currentTarget.filters = [hideFilter]
 
-                if (expandedCard != null) parent.removeChild(expandedCard)
+                if (expandedCard != null) {
+                    parent.removeChild(expandedCard)
+                    expandedCard.destroy()
+                    expandedCard = null
+                }
                 expandedCard = Sprite({
                     name: `${cardUids[index]}-expanded`,
                     src: getCardExampleSrc(),
@@ -56,13 +60,16 @@ export function Hand(pile: Pile): PixiContainer {
                 })
             },
             onMouseout: async ({ currentTarget }) => {
-                currentTarget.parent.addChildAt(currentTarget, index)
-
                 if (animationForCard == null) return
 
                 await animationForCard.reverse().then(() => {
                     animationForCard.kill()
                     currentTarget.filters = []
+                    if (expandedCard != null) {
+                        currentTarget.parent.removeChild(expandedCard)
+                        expandedCard.destroy()
+                        expandedCard = null
+                    }
                 })
             },
         })
