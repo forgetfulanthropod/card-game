@@ -5,23 +5,27 @@ import { filters, Loader } from 'pixi.js'
 
 import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiTexture } from '@/elementsUtil'
+import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 import { keys, vals } from '@/util'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
-    const unselectedFilter = new filters.AlphaFilter(0.4)
+    const hideFilter = new filters.AlphaFilter(0)
     const scale = 0.5
 
     const children = vals(pile).map((card, index) => {
         let animationForCard = gsap.to({}, 0, {})
+        let expandedCard: PixiSprite | null
+        const XYRotation = getXYRotationForNthCard(index + 1, keys(pile).length)
+
         return Sprite({
             name: cardUids[index],
             src: getCardExampleSrc(),
             scale,
             anchor: [0.5, 0.5],
+            ...XYRotation,
             onClick: async ({ currentTarget }) => {
                 await playCard({
                     cardUid: currentTarget.name,
@@ -29,34 +33,38 @@ export function Hand(pile: Pile): PixiContainer {
                 })
             },
             onMouseover: async ({ currentTarget }) => {
-                const parent = currentTarget.parent
-                parent.children.forEach(
-                    card => (card.filters = [unselectedFilter])
-                )
-                parent.removeChild(currentTarget)
-                parent.addChild(currentTarget)
-                currentTarget.filters = []
-
                 if (animationForCard != null) await animationForCard
-                animationForCard = gsap.to(currentTarget, {
+
+                const parent = currentTarget.parent
+
+                currentTarget.filters = [hideFilter]
+
+                if (expandedCard != null) parent.removeChild(expandedCard)
+                expandedCard = Sprite({
+                    name: `${cardUids[index]}-expanded`,
+                    src: getCardExampleSrc(),
+                    scale,
+                    anchor: [0.5, 0.5],
+                    ...XYRotation,
+                })
+
+                parent.addChild(expandedCard)
+
+                animationForCard = gsap.to(expandedCard, {
                     pixi: { y: -350, rotation: 0, scale: 1 },
                     duration: 0.3,
                 })
             },
             onMouseout: async ({ currentTarget }) => {
-                currentTarget.parent.children.forEach(
-                    card => (card.filters = [])
-                )
-
                 currentTarget.parent.addChildAt(currentTarget, index)
 
                 if (animationForCard == null) return
 
-                await animationForCard
-                    .reverse()
-                    .then(() => animationForCard.kill())
+                await animationForCard.reverse().then(() => {
+                    animationForCard.kill()
+                    currentTarget.filters = []
+                })
             },
-            ...getXYRotationForNthCard(index + 1, keys(pile).length),
         })
     })
 
