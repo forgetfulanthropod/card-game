@@ -1,11 +1,11 @@
 import type { CharacterUid } from '@shared'
-import type { Value } from 'angu'
+import type { Value as VAngu } from 'angu'
 
 import type { BattleCursor } from '@/util'
 
 import { s } from './util/explainHelpers'
 
-export function explain(damage: Value, times: Value) {
+export function explain(damage: VAngu, times: VAngu) {
     let explication = 'deals ' + damage.eval() + ' damage'
 
     if (times != null) {
@@ -16,22 +16,24 @@ export function explain(damage: Value, times: Value) {
     return explication
 }
 
-export function interpret({
-    damage,
-    times = 1,
+export function execute({
+    dslArgs: [damage, numTargets],
+    targetUids,
     scene,
-    defenderUids,
 }: {
-    damage: number
-    times?: number
+    dslArgs: VAngu[]
+    targetUids: CharacterUid[]
     scene: BattleCursor
-    defenderUids: CharacterUid[]
 }) {
-    // for (let i = 0; i < times; i++) {
-    //     if (defenderUids[i] == null)
-    //         throw new Error('more times than defenderIds?')
-    //     applyDamage({ damage, enemyUid: defenderUids[i], scene })
-    // }
+    for (let i = 0; i < (numTargets != null ? numTargets.eval() : 1); i++) {
+        if (targetUids[i] == null)
+            throw new Error('less targetUids than targets!')
+
+        console.log('applying damage')
+        console.log({ damage: damage.eval(), enemyUid: targetUids[i] })
+
+        applyDamage({ damage: damage.eval(), enemyUid: targetUids[i], scene })
+    }
 }
 
 function applyDamage({

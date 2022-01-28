@@ -1,41 +1,95 @@
 import type { Card, CharacterUid } from '@shared'
+import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
 
 import type { BattleCursor } from '@/util'
 
-// import { vals } from '@/util'
+import { checkBattleOver } from '..'
+// @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
+import { explain as explainChain } from './cardActions/chain'
+import { execute as executeChain } from './cardActions/chain'
 import { explain as explainDeal } from './cardActions/deal'
-import { s } from './cardActions/util/explainHelpers'
-
-type AnguV = angu.Value
+import { execute as executeDeal } from './cardActions/deal'
+import { explain as explainDebilitate } from './cardActions/debilitate'
+import { execute as executeDebilitate } from './cardActions/debilitate'
+// @endindex
 
 const standardOperators = {
-    '-': (a: AnguV, b: AnguV) => a.eval() - b.eval(),
-    '+': (a: AnguV, b: AnguV) => a.eval() + b.eval(),
-    '/': (a: AnguV, b: AnguV) => a.eval() / b.eval(),
-    '*': (a: AnguV, b: AnguV) => a.eval() * b.eval(),
+    '-': (a: VAngu, b: VAngu) => a.eval() - b.eval(),
+    '+': (a: VAngu, b: VAngu) => a.eval() + b.eval(),
+    '/': (a: VAngu, b: VAngu) => a.eval() / b.eval(),
+    '*': (a: VAngu, b: VAngu) => a.eval() * b.eval(),
 
-    ';': (a: AnguV, b: AnguV) => {
+    ';': (a: VAngu, b: VAngu) => {
         a.eval()
         return b.eval()
     },
     PI: 3.14,
 }
-export function explainActions(actions: string, locals?: object) {
-    const actionsMap = {
-        chain: (...chain: AnguV[]) => {
-            return chain.map(link => link.eval()).join('\n')
-        },
-        deal: explainDeal,
-        debilitate: (a: AnguV) => {
-            const n = a.eval()
-            return `debilitates for ${n} round${s(n)}`
-        },
-    }
 
-    const ctx: angu.Context = {
+export function explainActions(actions: string, locals?: object) {
+    const ctx = generateAnguContext({
+        // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
+        chain: explainChain,
+        deal: explainDeal,
+        debilitate: explainDebilitate,
+        // @endindex
+    })
+
+    return angu.evaluate(actions, ctx, locals).value
+}
+
+export function executeActions(
+    actions: string,
+    targetUids: CharacterUid[],
+    scene: BattleCursor,
+    locals?: object
+) {
+    const ctx = generateAnguContext({
+        // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
+        // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, targetUids, scene }),`)
+        chain: (...dslArgs: VAngu[]) =>
+            executeChain({ dslArgs, targetUids, scene }),
+        deal: (...dslArgs: VAngu[]) =>
+            executeDeal({ dslArgs, targetUids, scene }),
+        debilitate: (...dslArgs: VAngu[]) =>
+            executeDebilitate({ dslArgs, targetUids, scene }),
+        // @endindex
+    })
+
+    angu.evaluate(actions, ctx, locals)
+
+    checkBattleOver(scene)
+}
+
+export function interpretActions({
+    card,
+    targetUids,
+    scene,
+}: {
+    card: Card
+    targetUids: CharacterUid[]
+    scene: BattleCursor
+}) {
+    const cardOwner = scene.get('allCharacters', card.characterUid)
+    void targetUids
+    const locals = {
+        strength: cardOwner.strength,
+        dexterity: cardOwner.dexterity,
+        magic: cardOwner.magic,
+        constitution: cardOwner.constitution,
+    }
+    const explanation = explainActions(card.actions, locals)
+    //DEBUG
+    console.log(explanation)
+    //END DEBUG
+    executeActions(card.actions, targetUids, scene, locals)
+}
+
+function generateAnguContext(actionsMap: object): angu.Context {
+    return {
         scope: {
-            '=': function (a: AnguV, b: AnguV) {
+            '=': function (a: VAngu, b: VAngu) {
                 const resB = b.eval()
                 if (a.kind() === 'variable') {
                     this.context.scope[a.name()] = resB
@@ -51,31 +105,4 @@ export function explainActions(actions: string, locals?: object) {
         },
         precedence: [['-', '+'], ['='], ['chain', 'deal', 'debilitate'], [';']],
     }
-
-    // Now, we can evaluate things in this context:
-    return angu.evaluate(actions, ctx, locals).value
 }
-
-export function interpretActions({
-    card,
-    targetUids,
-    scene,
-}: {
-    card: Card
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    const cardOwner = scene.get('allCharacters', card.characterUid)
-    console.log(
-        explainActions(card.actions, {
-            strength: cardOwner.strength,
-            dexterity: cardOwner.dexterity,
-            magic: cardOwner.magic,
-            constitution: cardOwner.constitution,
-        })
-    )
-}
-
-// function getLivingNpcUid(scene: BattleCursor): CharacterUid {
-//     return getCharIds(vals(scene.get('allCharacters')), { isPc: false })[0]
-// }

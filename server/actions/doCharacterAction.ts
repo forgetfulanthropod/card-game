@@ -13,7 +13,7 @@ import {
     tl,
     warn,
 } from '@/gameState/battle'
-import { commit, getBattleScene, sleep, vals } from '@/util'
+import { getBattleScene, sleep, vals } from '@/util'
 
 const NOT_YOUR_TURN_REJECTION_WAIT = 1000
 
@@ -25,6 +25,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
     log('received click for ' + clickedUid)
     const clicked = allCharacters[clickedUid]
     const { alivePcs } = getLivingChars(allCharacters)
+
     if (checkWinner(vals(allCharacters)) != null) {
         warn('winner exists')
         return
@@ -48,7 +49,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
             return
         }
         scene.set('selectedCharacter', clicked.uid)
-        commit(scene, args.username)
+
         return
     }
 

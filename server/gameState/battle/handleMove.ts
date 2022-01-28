@@ -9,7 +9,6 @@ import { getLivingChars, getUnmovedPc } from './characterGetters'
 import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
 import { tl, warn } from './logging'
-import { claimLoot } from './loot'
 import applyMove from './move'
 import { incrementXP } from './pcLeveling'
 import { resetRound } from './resetRound'
@@ -49,19 +48,7 @@ export async function handleMove(args: {
 
     // Check battle over
     const { allCharacters: newAllCharacters, selectedCharacter } = scene.get()
-    const winner = checkWinner(vals(newAllCharacters))
-
-    if (winner === 'PC') {
-        scene.set('state', 'won')
-        incrementXP(scene)
-        claimLoot(username)
-        putUpDoors(scene)
-        return
-    } else if (winner === 'NPC') {
-        scene.set('state', 'lost')
-        commit(scene, username)
-        return
-    }
+    checkBattleOver(scene)
 
     // Check reset round
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
@@ -101,4 +88,16 @@ export async function handleMove(args: {
         }
     }
     commit(scene, username)
+}
+
+export function checkBattleOver(scene: BattleCursor) {
+    const winner = checkWinner(vals(scene.get('allCharacters')))
+
+    if (winner === 'PC') {
+        scene.set('state', 'won')
+        incrementXP(scene)
+        putUpDoors(scene)
+    } else if (winner === 'NPC') {
+        scene.set('state', 'lost')
+    }
 }
