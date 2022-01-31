@@ -1,7 +1,12 @@
 import type { CharacterMeta, CharacterMove, CharacterUid } from '@shared'
 
 import { getRulebook } from '@/rulebook'
+import type { BattleCursor } from '@/util'
 import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
+
+export function ac(scene: BattleCursor) {
+    return vals(scene.get('allCharacters'))
+}
 
 export function getLivingChars(allCharacters: Record<string, CharacterMeta>): {
     alivePcs: CharacterMeta[]
@@ -33,6 +38,16 @@ export function getCharIds(
         .map(c => {
             return c.uid
         })
+}
+
+export function livingPcsRemain(ac: CharacterMeta[]): boolean {
+    return getCharIds(ac, { isPc: true, health: 1 }).length > 0
+}
+
+export function readyNpcsRemain(ac: CharacterMeta[]): boolean {
+    return (
+        getCharIds(ac, { isPc: false, health: 1, hasMoved: false }).length > 0
+    )
 }
 
 function getClosestAlive(

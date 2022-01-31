@@ -3,13 +3,11 @@ import type {
     Card,
     CharacterMeta,
     CharacterMove,
-    CharacterStats,
     CharacterUid,
     Effect,
     EffectType,
     StanceMultiplier,
     StanceName,
-    StatsWithStance,
 } from '@shared'
 import { intersection } from 'lodash'
 
@@ -39,7 +37,7 @@ export function getDamageForCard({
 // }
 
 export function getCharacterMovesWithDamageRanges(
-    character: Readonly<StatsWithStance>
+    character: CharacterMeta
 ): CharacterMove[] {
     return character.moves.map(move => {
         const damageRange = getMoveMultiplierRange(move).map(multiplier =>
@@ -52,7 +50,7 @@ export function getCharacterMovesWithDamageRanges(
         }
     })
 
-    function getDamage(character: CharacterStats, multiplier: number): number {
+    function getDamage(character: CharacterMeta, multiplier: number): number {
         const damage = Math.round(
             character.damage * getAttackMultiplier(character) * multiplier
         )
@@ -62,21 +60,23 @@ export function getCharacterMovesWithDamageRanges(
 
 export function getCharacterKeysAndDamages(
     attackData: Readonly<AttackData>,
-    username: string
+    scene: BattleCursor
 ): { key: CharacterUid; damage: number }[] {
     const kds = attackData.defenders.map(defender => ({
         key: defender.uid,
-        damage: getDamage({ ad: attackData, defender, username }),
+        damage: getDamage({ ad: attackData, defender, scene }),
     }))
 
     if (attackData.attacker.effects.length > 0) {
-        attackData.attacker.effects.map(e => {
-            if (e.damagesByRound == null || e.remainingRounds == null) {
+        attackData.attacker.effects.forEach(e => {
+            if (e.damagesByRound == null) return
+            if (e.remainingRounds == null) {
                 throw Error('bad attack effect data')
             }
             if (e.remainingRounds <= 0) {
                 throw Error('trying to apply exhausted effect')
             }
+
             const damage =
                 e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
             kds.push({ key: attackData.attacker.uid, damage })
@@ -135,11 +135,11 @@ export function getCharacterKeysAndEffects(
 function getDamage({
     ad,
     defender,
-    username,
+    scene,
 }: {
     ad: AttackData
     defender: CharacterMeta
-    username: string
+    scene: BattleCursor
 }): number {
     // const blessings = getGameStateCursor(username).select('blessings')
 
@@ -150,7 +150,7 @@ function getDamage({
             move: getTransformed({
                 move: ad.move,
                 charUid: ad.attacker.uid,
-                username,
+                scene,
             }),
         }
 
@@ -164,10 +164,11 @@ function getDamage({
     return dam > 0 ? dam : 1
 }
 
-function getAttackMultiplier(
-    attacker: Partial<CharacterMeta>
-): StanceMultiplier {
-    return getStanceTypeMeta(attacker.stance).attackMultiplier
+function getAttackMultiplier(attacker: CharacterMeta): number {
+    return (
+        getEffectAttackMultiplicand(attacker) *
+        getStanceTypeMeta(attacker.stance).attackMultiplier
+    )
 }
 
 function getMoveMultiplier(d: AttackData): number {
@@ -249,4 +250,16 @@ function getStanceTypeMeta(stance: StanceName | undefined) {
     const { stanceTypeMetaMap } = getRulebook()
 
     return stanceTypeMetaMap[stance as StanceName]
+}
+
+function getEffectAttackMultiplicand(attacker: CharacterMeta): number {
+    let multiplier = 1
+
+    attacker.effects.forEach(e => {
+        if (e.type === 'Debilitated') {
+            multiplier *= 0.5
+        }
+    })
+
+    return multiplier
 }

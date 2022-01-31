@@ -1,4 +1,4 @@
-import type { Pile } from '@shared'
+import type { CharacterUid, Pile } from '@shared'
 // import { myPIXI } from '@/elementsUtil'
 import { gsap } from 'gsap'
 import { filters, Loader } from 'pixi.js'
@@ -29,7 +29,7 @@ export function Hand(pile: Pile): PixiContainer {
             onClick: async ({ currentTarget }) => {
                 await playCard({
                     cardUid: currentTarget.name,
-                    targetUids: keys(getBattleScene().get('allCharacters')),
+                    targetUids: [getFrontEnemyUid()],
                 })
             },
             onMouseover: async ({ currentTarget }) => {
@@ -81,6 +81,17 @@ export function Hand(pile: Pile): PixiContainer {
         children,
     })
 }
+
+function getFrontEnemyUid(): CharacterUid {
+    const frontEnemy = vals(getBattleScene().get('allCharacters'))
+        .sort((a, b) => a.x - b.x)
+        .find(c => !c.isPc && c.health > 0)
+
+    if (frontEnemy == null) throw new Error('there is no enemy...')
+
+    return frontEnemy.uid
+}
+
 const RIGHT_TO_LEFT = 1
 const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12

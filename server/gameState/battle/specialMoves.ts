@@ -5,7 +5,7 @@ import type {
     NetworkEvent,
 } from '@shared'
 
-import { getGameStateCursor } from '@/util'
+import type { BattleCursor } from '@/util'
 
 export function isSpecial(move: CharacterMove): boolean {
     return move.types.includes('MIM')
@@ -14,14 +14,14 @@ export function isSpecial(move: CharacterMove): boolean {
 export function getTransformed({
     move,
     charUid,
-    username,
+    scene,
 }: {
     move: CharacterMove
     charUid: CharacterUid
-    username: string
+    scene: BattleCursor
 }): CharacterMove {
     if (move.types.includes('MIM'))
-        return getMimicMove({ move, charUid, username })
+        return getMimicMove({ move, charUid, scene })
 
     return move
 }
@@ -29,16 +29,18 @@ export function getTransformed({
 function getMimicMove({
     move,
     charUid,
-    username,
+    scene,
 }: {
     move: CharacterMove
     charUid: CharacterUid
-    username: string
+    scene: BattleCursor
 }): CharacterMove {
     const lastAttackOnThisCharacter = [
-        ...(getGameStateCursor(username)
-            .select('events')
-            .get('move$') as NetworkEvent<'move$', AttackData>[]),
+        //@ts-ignore
+        ...(scene.up().get('events', 'move$') as NetworkEvent<
+            'move$',
+            AttackData
+        >[]),
     ]
         ?.reverse()
         ?.find(event => event.data.defenders.find(d => d.uid === charUid))

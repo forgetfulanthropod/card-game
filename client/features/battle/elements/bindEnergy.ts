@@ -15,14 +15,19 @@ type BindCursorArgs = {
 }
 
 export function bindEnergy({ scene, container }: BindCursorArgs) {
-    update({ scene, container })
-    scene.select('energy').on('update', () => {
-        update({ scene, container })
-    })
+    const u = () => update({ scene, container })
+
+    u()
+    scene.select('energy').on('update', u)
+    scene.select('isPlayerTurn').on('update', u)
+    scene.select('state').on('update', u)
 }
 
 function update({ scene, container }: BindCursorArgs) {
     clearContainer(container)
+
+    if (!scene.get('isPlayerTurn')) return
+    if (scene.get('state') !== 'in battle') return
 
     container.addChild(Energy(scene.select('energy').get()))
 }

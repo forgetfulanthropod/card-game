@@ -1,5 +1,6 @@
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared'
 
+import type { BattleCursor } from '@/util'
 import { randomEl } from '@/util'
 
 import { getDefenders, getPCTarget, getUnmovedNpc } from './characterGetters'
@@ -21,24 +22,27 @@ export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
 
 function getRandomMove(
     attacker: CharacterMeta,
-    username: string
+    scene: BattleCursor
 ): CharacterMove {
     const moves = attacker.moves
     let move = randomEl(moves)
 
     if (isSpecial(move))
-        move = getTransformed({ move, charUid: attacker.uid, username })
+        move = getTransformed({ move, charUid: attacker.uid, scene })
 
     return move
 }
 
-export function getNpcMove(ac: CharacterMeta[], username: string): AttackData {
+export function getNpcMove(
+    ac: CharacterMeta[],
+    scene: BattleCursor
+): AttackData {
     const attacker = getUnmovedNpc(ac)
     if (attacker == null) {
         throw Error('no unmoved NPC')
     }
 
-    const move = getRandomMove(attacker, username)
+    const move = getRandomMove(attacker, scene)
     const defender = getPCTarget(ac)
 
     const defenders = getDefenders(defender, move, ac)

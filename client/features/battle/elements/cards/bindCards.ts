@@ -16,12 +16,18 @@ type BindCursorArgs = {
 }
 
 export function bindCards({ scene, container }: BindCursorArgs) {
-    update({ scene, container })
-    scene.select('cards').on('update', () => update({ scene, container }))
+    const u = () => update({ scene, container })
+    u()
+    scene.select('cards').on('update', u)
+    scene.select('isPlayerTurn').on('update', u)
+    scene.select('state').on('update', u)
 }
 
-function update({ scene, container }: BindCursorArgs) {
+function update({ scene, container }: BindCursorArgs): void {
     clearContainer(container)
+
+    if (!scene.get('isPlayerTurn')) return
+    if (scene.get('state') !== 'in battle') return
 
     const cards = scene.select('cards').get()
 

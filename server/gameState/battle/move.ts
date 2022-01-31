@@ -13,14 +13,13 @@ import {
 export default function applyMove(
     scene: BattleCursor,
     lastAllChars: Record<string, CharacterMeta>,
-    attackData: AttackData,
-    username: string
+    attackData: AttackData
 ): void {
     const allChars = scene.select('allCharacters')
 
     markAttackerAsMoved(allChars, attackData)
 
-    applyDamages(attackData, username, lastAllChars, allChars)
+    applyDamages(attackData, scene, lastAllChars, allChars)
 
     decrementEffectStacks(allChars, attackData)
     applyNewEffects(allChars, attackData)
@@ -34,16 +33,14 @@ function markAttackerAsMoved(allChars: AllCharacters, attackData: AttackData) {
 
 function applyDamages(
     attackData: AttackData,
-    username: string,
+    scene: BattleCursor,
     lastAllChars: Record<string, CharacterMeta>,
     allChars: AllCharacters
 ) {
-    getCharacterKeysAndDamages(attackData, username).forEach(
-        ({ key, damage }) => {
-            const newHealth = lastAllChars[key].health - damage
-            allChars.select(key).set('health', newHealth)
-        }
-    )
+    getCharacterKeysAndDamages(attackData, scene).forEach(({ key, damage }) => {
+        const newHealth = lastAllChars[key].health - damage
+        allChars.select(key).set('health', newHealth)
+    })
 }
 
 export function applyNewEffects(
@@ -54,7 +51,7 @@ export function applyNewEffects(
         ({ key, effect: newEffect }) =>
             allChars
                 .select(key)
-                .apply('effects', prev => updateEffect(newEffect, prev))
+                .apply('effects', prev => getUpdatedEffects(newEffect, prev))
     )
 }
 
@@ -69,19 +66,23 @@ function decrementEffectStacks(
     })
 }
 
-function updateEffect(newEffect: Effect, prev: Effect[]): Effect[] {
+export function getUpdatedEffects(newEffect: Effect, prev: Effect[]): Effect[] {
     const prevTypeIndex = findIndex(prev, { type: newEffect.type }) // prev.findIndex(effect => effect.type === newEffect.type)
     if (prevTypeIndex > -1) {
         const prevEffect = prev[prevTypeIndex]
-        const damagesByRound = [
-            ...(prevEffect.damagesByRound ?? []),
-            ...(newEffect.damagesByRound ?? []),
-        ]
+        const damagesByRound =
+            prevEffect.damagesByRound != null &&
+            newEffect.damagesByRound != null
+                ? [
+                      ...(prevEffect.damagesByRound ?? []),
+                      ...(newEffect.damagesByRound ?? []),
+                  ]
+                : null
         const mergedEffect = {
             type: newEffect.type,
             remainingRounds:
                 prevEffect.remainingRounds + newEffect.remainingRounds,
-            damagesByRound,
+            ...(damagesByRound ? { damagesByRound } : {}),
         }
         return [
             ...prev.slice(0, prevTypeIndex),

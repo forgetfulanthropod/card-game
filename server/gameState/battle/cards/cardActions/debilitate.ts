@@ -1,8 +1,9 @@
-import type { CharacterUid } from '@shared'
+import type { CharacterUid, EffectType } from '@shared'
 import type { Value as VAngu } from 'angu'
 
 import type { BattleCursor } from '@/util'
 
+import { getUpdatedEffects } from '../../move'
 import { s } from './util/explainHelpers'
 
 export function explain(rounds: VAngu) {
@@ -21,9 +22,28 @@ export function execute({
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
-    // getCharacterKeysAndEffects()
-    // const effect
-    // scene
-    //     .select('allCharacters', targetUid)
-    //     .apply('effects', effects => [...effects])
+    applyEffect({
+        type: 'Debilitated',
+        targetUids,
+        remainingRounds: rounds.eval(),
+        scene,
+    })
+}
+
+function applyEffect({
+    type,
+    targetUids,
+    remainingRounds,
+    scene,
+}: {
+    type: EffectType
+    targetUids: CharacterUid[]
+    remainingRounds: number
+    scene: BattleCursor
+}) {
+    targetUids.forEach(uid =>
+        scene.apply(['allCharacters', uid, 'effects'], effects => {
+            return getUpdatedEffects({ type, remainingRounds }, effects)
+        })
+    )
 }

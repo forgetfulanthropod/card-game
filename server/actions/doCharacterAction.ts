@@ -34,7 +34,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
         warn('not player turn')
         if (!scene.get('isPlayerTurn')) {
             await sleep(NOT_YOUR_TURN_REJECTION_WAIT)
-            await doNpcMove('NPC has extra turns', args.username)
+            await doNpcMove('NPC has extra turns', scene)
         }
         return
     }
@@ -70,7 +70,7 @@ export const doCharacterAction: DoCharacterAction = async args => {
         move = getTransformed({
             move,
             charUid: selectedCharacter,
-            username: args.username,
+            scene,
         })
 
     const ad: AttackData = {
@@ -82,6 +82,5 @@ export const doCharacterAction: DoCharacterAction = async args => {
         scene,
         allCharacters,
         attackData: ad,
-        username: args.username,
     })
 }

@@ -13,6 +13,7 @@ import type { SpecialDoorName } from './SpecialDoorName'
 export type Pile = Record<CardUid, Card>
 export type Cards = Record<PileId, Pile>
 export interface BattleScene extends SceneHas {
+    username: string
     name: 'battle'
     dungeonName: DungeonName
     state: BattleWinState
@@ -47,6 +48,10 @@ export type EffectType = 'DOT1' | 'DOT2' | 'Debilitated'
 export interface Effect {
     type: EffectType
     remainingRounds: number
+    attackMultiplicand?: number
+    attackAddend?: number
+    blockMultiplicand?: number
+    blockAddend?: number
     damagesByRound?: number[]
     dealer?: CharacterUid
 }

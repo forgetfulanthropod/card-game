@@ -45,11 +45,12 @@ export default function App(): JSXElement {
 
 async function fullClientStart(username: string) {
     log('doing full start')
-    // await Promise.all([waitForGameStateToFill(), maybeMakeUser({ username })])
+
     const result = await maybeMakeUser({ username })
     if (result == null || result?.status === 'error') {
         throw Error("couldn't make/load user account")
     }
+
     initializeBoababTree(result.result)
     log('everything loaded up')
     log('attaching server data listener')

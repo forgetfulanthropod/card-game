@@ -24,12 +24,14 @@ export function makeBattleState(args: {
     }
     const selectedMove = selectedCharacter.moves[0]
     if (selectedCharacter == null) throw Error('no player characters!')
-    const playerStarts = srandom() < 0.5
+    // const playerStarts = srandom() < 0.5
+    const playerStarts = true
 
     return Object.freeze({
+        username: args.username,
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
-        turnCount: 0,
+        turnCount: 1,
         state: 'not started',
         playerStarts,
         isPlayerTurn: playerStarts,

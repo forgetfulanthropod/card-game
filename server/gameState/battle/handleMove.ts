@@ -2,11 +2,11 @@ import type { AttackData, BattleScene } from '@shared'
 
 import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
-import { commit, sleep, vals } from '@/util'
+import { sleep, vals } from '@/util'
 
 import { getCharacterKeysAndDamages } from './attack'
+import { doNpcMove } from './cards/doNpcTurn'
 import { getLivingChars, getUnmovedPc } from './characterGetters'
-import { doNpcMove } from './doNpcMove'
 import { putUpDoors } from './doors'
 import { tl, warn } from './logging'
 import applyMove from './move'
@@ -21,14 +21,13 @@ export async function handleMove(args: {
     scene: BattleCursor
     allCharacters: BattleScene['allCharacters']
     attackData: AttackData
-    username: string
 }): Promise<void> {
-    const { scene, allCharacters, attackData, username } = args
+    const { scene, allCharacters, attackData } = args
 
     // Dispatch move to client to trigger animation
-    const damageMap = getCharacterKeysAndDamages(attackData, username)
+    const damageMap = getCharacterKeysAndDamages(attackData, scene)
     emit({
-        username: args.username,
+        username: scene.get('username'),
         event: {
             type: 'move$',
             sentAt: new Date().toLocaleDateString(),
@@ -44,7 +43,7 @@ export async function handleMove(args: {
     })
 
     // Update health, effects, and hasMoved
-    applyMove(scene, allCharacters, attackData, username)
+    applyMove(scene, allCharacters, attackData)
 
     // Check battle over
     const { allCharacters: newAllCharacters, selectedCharacter } = scene.get()
@@ -54,7 +53,7 @@ export async function handleMove(args: {
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
 
     if (!isMoveAvailable) {
-        await resetRound(scene, args.username)
+        await resetRound(scene)
         return
     }
 
@@ -73,21 +72,20 @@ export async function handleMove(args: {
         // if there's another unmoved NPC then make it strike
         if (aliveNpcs.some(c => !c.hasMoved)) {
             logger.info('will be NPC turn')
-            scene.set('isPlayerTurn', false)
+            // scene.set('isPlayerTurn', false)
             await sleep(TIME_AFTER_PLAYER_MOVE + 500)
-            await doNpcMove('NPC has extra turns', username)
+            await doNpcMove('NPC has extra turns', scene)
         }
     } else {
         if (alivePcs.some(c => !c.hasMoved)) {
             logger.info('will be player turn')
-            scene.set('isPlayerTurn', true)
+            // scene.set('isPlayerTurn', true)
         } else if (aliveNpcs.some(c => !c.hasMoved)) {
             logger.info('will be player turn')
             await sleep(DEFAULT_WAIT)
-            await doNpcMove('no unmoved PC and NPC turn', username)
+            await doNpcMove('no unmoved PC and NPC turn', scene)
         }
     }
-    commit(scene, username)
 }
 
 export function checkBattleOver(scene: BattleCursor) {

@@ -4,7 +4,6 @@ import isEqual from 'lodash/isEqual'
 
 import { doCharacterAction } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
-import { overlay } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
 
 import { Character } from './Character'
@@ -30,10 +29,10 @@ export function bindCharacters(
                 .every(cm => !cm.hasMoved)
         ) {
             // tl()
-            const message = scene.get('isPlayerTurn')
-                ? 'You start round!'
-                : 'Enemy starts round!'
-            overlay({ elementId: 'roundStart', data: { message } })
+            // const message = scene.get('isPlayerTurn')
+            //     ? 'You start round!'
+            //     : 'Enemy starts round!'
+            // overlay({ elementId: 'roundStart', data: { message } })
         }
         const newKeys = keys(allChars)
         if (!isEqual(lastKeys, newKeys)) {
