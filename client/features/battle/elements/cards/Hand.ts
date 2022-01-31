@@ -126,8 +126,6 @@ function getXYRotationForNthCard(
         rotation: xPlacementPortion * endCardRotation,
     }
 }
-export const getCardBackSrc = () =>
-    Loader.shared.resources?.cardBack?.texture as PixiTexture
 export const getEndTurnButtonSrc = () =>
     Loader.shared.resources?.endTurnButton?.texture as PixiTexture
 const getCardExampleSrc = () =>

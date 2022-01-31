@@ -10,7 +10,9 @@ import matcha from '../assets/backgrounds/matcha-caves.jpg'
 import ninth from '../assets/backgrounds/ninth-trash-hole.png'
 import endTurnButton from '../assets/BUTTON_END_TURN.png'
 import gemButton from '../assets/BUTTON_GEMS.png'
+import cardBackPileSizeOverlay from '../assets/cards/card back pile size overlay.png'
 import cardBack from '../assets/cards/card back.png'
+import energy from '../assets/cards/energy cloud pixel 200.png'
 import cardExample from '../assets/cards/Sweep The Leg.png'
 import frogWizard from '../assets/chars/FrogWizard-cropped-200.png'
 import notoriousBEAN from '../assets/chars/NotoriousBEAN200.png'
@@ -19,7 +21,6 @@ import warhog from '../assets/chars/warhog-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 import stanceDefensive from '../assets/defensive stance.png'
-import energy from '../assets/energy.png'
 import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import bloatDemon from '../assets/gen0_cards/bloat_demon-200.png'
 import bogSpirit from '../assets/gen0_cards/BogSpirit-200.png'
@@ -95,6 +96,7 @@ const basicAssets = {
     chestBody,
     chestLid,
     door,
+    cardBackPileSizeOverlay,
     cardBack,
     cardExample,
     energy,

@@ -35,14 +35,16 @@ function update({ scene, container }: BindCursorArgs) {
 function Energy(value: number): PixiContainer {
     return Container({
         name: 'Energy',
-        x: BASE_WIDTH / 8,
+        x: BASE_WIDTH * 0.1,
         y: BASE_HEIGHT * 0.7,
         children: [
             Sprite({ src: getEnergySrc(), anchor: [0.5, 0.5] }),
             Text({
                 text: `${value}`,
                 style: {
-                    fill: 'white',
+                    fill: ['#f3ff30', '#DEBD00', '#B1AC03'],
+                    stroke: 'black',
+                    strokeThickness: 5,
                     fontSize: 100,
                     fontFamily: 'VT323',
                 },
