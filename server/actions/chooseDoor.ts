@@ -2,6 +2,8 @@ import type { ChooseDoor } from '@serverActions'
 
 import { getRoom, modifyRoom, resetRound } from '@/gameState/battle'
 import { putAllCardsInDrawPile } from '@/gameState/battle/cards/putAllCardsInDrawPile'
+import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
+import { resetTurns } from '@/gameState/battle/resetTurns'
 import { getBattleScene, objFilter } from '@/util'
 
 export const chooseDoor: ChooseDoor = async args => {
@@ -25,6 +27,8 @@ export const chooseDoor: ChooseDoor = async args => {
     }))
     scene.set('state', 'in battle')
 
+    clearAllEffects(scene)
+    resetTurns(scene)
     putAllCardsInDrawPile(scene)
     resetRound(scene)
 }
