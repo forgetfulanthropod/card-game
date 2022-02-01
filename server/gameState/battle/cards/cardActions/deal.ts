@@ -61,14 +61,12 @@ function emitMove({
                 attackerIsPc,
                 attacker: card.characterUid,
                 defenders: targetUids,
-                move: { name: card.name },
+                moveName: card.name,
                 damageMap,
             },
         },
     })
 }
-
-function getCharacterKeysAndDamages(targetUids)
 
 function applyDamage({
     damage,

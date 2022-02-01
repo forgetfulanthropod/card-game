@@ -36,7 +36,7 @@ export async function handleMove(args: {
                 attackerIsPc: attackData.attacker.isPc,
                 attacker: attackData.attacker.uid,
                 defenders: attackData.defenders.map(d => d.uid),
-                move: attackData.move,
+                moveName: attackData.move.name,
                 damageMap,
             },
         },

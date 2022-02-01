@@ -115,7 +115,7 @@ export type AttackData = {
 }
 export interface NetworkAttackData {
     attackerIsPc: boolean
-    move: CharacterMove
+    moveName: string
     attacker: CharacterUid
     defenders: CharacterUid[]
     damageMap: {

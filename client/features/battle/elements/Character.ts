@@ -121,7 +121,7 @@ export function Character(args: CharacterProps): PixiContainer {
     getSocket().on(
         'move$',
         function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
-            const { attacker, defenders, move, damageMap } = event.data
+            const { attacker, defenders, moveName, damageMap } = event.data
             // console.log("doCharMove of", JSON.stringify(d))
             const myId = characterMeta.uid
             if (attacker === myId) {
@@ -159,7 +159,7 @@ export function Character(args: CharacterProps): PixiContainer {
                 })
                 doFlashElement(
                     aboveCharacterContainer,
-                    () => MoveInfo({ move: move, offset: -70 }),
+                    () => MoveInfo({ moveName, offset: -70 }),
                     {
                         durationMs: SHOW_HIT_TIME,
                     }
