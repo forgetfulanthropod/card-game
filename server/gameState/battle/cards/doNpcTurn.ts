@@ -1,4 +1,5 @@
 import type { BattleCursor } from '@/util'
+import { commit } from '@/util'
 import { sleep, vals } from '@/util'
 
 import { resetRound } from '..'
@@ -18,6 +19,7 @@ export async function doNpcTurn(scene: BattleCursor) {
     while (!scene.get('isPlayerTurn') && readyNpcsRemain(ac(scene))) {
         logger.info('will be NPC turn')
         await doNpcMove('NPCs have extra turns', scene)
+        commit(scene, scene.get('username'))
         await sleep(TIME_BETWEEN_NPC_MOVES)
     }
 
