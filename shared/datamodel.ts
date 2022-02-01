@@ -129,7 +129,7 @@ export type CharacterStats = Readonly<{
     Brandify
 export type CharacterMove = Readonly<{
     name: string
-    types: MoveMetaName[]
+    types?: MoveMetaName[]
     damageRange?: number[]
 }> &
     Brandify

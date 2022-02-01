@@ -1,9 +1,11 @@
-import type { CharacterUid } from '@shared'
+import type { Card, CharacterUid } from '@shared'
 import type { Value as VAngu } from 'angu'
 
 import type { BattleCursor } from '@/util'
+import { emit } from '@/util'
 
 import { s } from './util/explainHelpers'
+import type { ExecuteArgs } from './util/types'
 
 export function explain(damage: VAngu, times: VAngu) {
     let explication = 'deals ' + damage.eval() + ' damage'
@@ -17,24 +19,56 @@ export function explain(damage: VAngu, times: VAngu) {
 }
 
 export function execute({
-    dslArgs: [damage, numTargets],
+    dslArgs: [damageAngu, numTargetsAngu],
+    card,
     targetUids,
     scene,
-}: {
-    dslArgs: VAngu[]
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    for (let i = 0; i < (numTargets != null ? numTargets.eval() : 1); i++) {
+}: ExecuteArgs) {
+    const damage = damageAngu.eval() as number
+    const numTargets = numTargetsAngu != null ? numTargetsAngu.eval() : 1
+
+    emitMove({ card, damage, targetUids, scene })
+
+    for (let i = 0; i < numTargets; i++) {
         if (targetUids[i] == null)
             throw new Error('less targetUids than targets!')
 
-        console.log('applying damage')
-        console.log({ damage: damage.eval(), enemyUid: targetUids[i] })
-
-        applyDamage({ damage: damage.eval(), enemyUid: targetUids[i], scene })
+        applyDamage({ damage, enemyUid: targetUids[i], scene })
     }
 }
+
+function emitMove({
+    card,
+    damage,
+    targetUids,
+    scene,
+}: {
+    card: Card
+    damage: number
+    targetUids: CharacterUid[]
+    scene: BattleCursor
+}) {
+    const attackerIsPc = scene.get('allCharacters', card.characterUid, 'isPc')
+    const damageMap = targetUids.map(key => ({ key, damage }))
+
+    emit({
+        username: scene.get('username'),
+        event: {
+            type: 'move$',
+            sentAt: new Date().toLocaleDateString(),
+            uid: srandom().toString().slice(6),
+            data: {
+                attackerIsPc,
+                attacker: card.characterUid,
+                defenders: targetUids,
+                move: { name: card.name },
+                damageMap,
+            },
+        },
+    })
+}
+
+function getCharacterKeysAndDamages(targetUids)
 
 function applyDamage({
     damage,

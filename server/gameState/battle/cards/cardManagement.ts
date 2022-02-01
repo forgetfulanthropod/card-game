@@ -8,7 +8,7 @@ export function makeCards(
     return {
         draw: {
             uuid11: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -20,7 +20,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid12: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -34,7 +34,7 @@ export function makeCards(
         },
         hand: {
             uuid21: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -46,7 +46,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid22: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -58,7 +58,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid23: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -70,7 +70,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid24: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -82,7 +82,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid25: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -94,7 +94,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid26: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -106,7 +106,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid27: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -118,7 +118,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid28: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -130,7 +130,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid29: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -142,7 +142,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid210: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -154,7 +154,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid211: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -166,7 +166,7 @@ export function makeCards(
                 deckId: 'string',
             },
             uuid212: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -180,7 +180,7 @@ export function makeCards(
         },
         discard: {
             uuid3: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',
@@ -194,7 +194,7 @@ export function makeCards(
         },
         removed: {
             uuid3: {
-                name: 'string',
+                name: 'Sweep The Leg',
                 energy: 2,
                 url: './Sweep The Leg.png',
                 actions: 'chain(deal(strength), debilitate(1))',

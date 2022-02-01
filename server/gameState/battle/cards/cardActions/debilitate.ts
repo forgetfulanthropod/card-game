@@ -5,6 +5,7 @@ import type { BattleCursor } from '@/util'
 
 import { getUpdatedEffects } from '../../move'
 import { s } from './util/explainHelpers'
+import type { ExecuteArgs } from './util/types'
 
 export function explain(rounds: VAngu) {
     if (rounds == null) throw new Error('no number of rounds passed in!')
@@ -13,15 +14,7 @@ export function explain(rounds: VAngu) {
     return `debilitates for ${n} round${s(n)}`
 }
 
-export function execute({
-    dslArgs: [rounds],
-    targetUids,
-    scene,
-}: {
-    dslArgs: VAngu[]
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
+export function execute({ dslArgs: [rounds], targetUids, scene }: ExecuteArgs) {
     applyEffect({
         type: 'Debilitated',
         targetUids,
