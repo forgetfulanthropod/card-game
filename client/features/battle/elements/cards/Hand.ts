@@ -1,11 +1,12 @@
 import type { CharacterUid, Pile } from '@shared'
 // import { myPIXI } from '@/elementsUtil'
 import { gsap } from 'gsap'
-import { filters, Loader } from 'pixi.js'
+import { filters } from 'pixi.js'
 
 import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 import { keys, vals } from '@/util'
@@ -126,7 +127,5 @@ function getXYRotationForNthCard(
         rotation: xPlacementPortion * endCardRotation,
     }
 }
-export const getEndTurnButtonSrc = () =>
-    Loader.shared.resources?.endTurnButton?.texture as PixiTexture
-const getCardExampleSrc = () =>
-    Loader.shared.resources?.cardExample?.texture as PixiTexture
+export const getEndTurnButtonSrc = () => getTexture('endTurnButton')
+const getCardExampleSrc = () => getTexture('cardExample')

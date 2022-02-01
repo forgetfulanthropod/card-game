@@ -1,9 +1,9 @@
-import effectBleed from '../assets/effects/bleed.png'
-import effectDebilitated from '../assets/effects/debilitated.png'
-import effectPoison from '../assets/effects/poison_skull.png'
+import cardBackPileSizeOverlay from '../assets/cards/card back pile size overlay.png'
+import cardBack from '../assets/cards/card back.png'
+import cardExample from '../assets/cards/Sweep The Leg.png'
 
 export const cardAssets = {
-    effectDebilitated,
-    effectPoison,
-    effectBleed,
+    cardBackPileSizeOverlay,
+    cardBack,
+    cardExample,
 }

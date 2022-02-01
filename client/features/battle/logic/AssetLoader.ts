@@ -6,10 +6,7 @@ import check from '../../../assets/check.png'
 import stanceAggressive from '../assets/aggressive stance.png'
 import endTurnButton from '../assets/BUTTON_END_TURN.png'
 import gemButton from '../assets/BUTTON_GEMS.png'
-import cardBackPileSizeOverlay from '../assets/cards/card back pile size overlay.png'
-import cardBack from '../assets/cards/card back.png'
 import energy from '../assets/cards/energy cloud pixel 200.png'
-import cardExample from '../assets/cards/Sweep The Leg.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 import stanceDefensive from '../assets/defensive stance.png'
@@ -31,8 +28,6 @@ Loader.registerPlugin(WebfontLoaderPlugin)
 export type CharacterName = keyof typeof characterAssets
 
 const basicAssets = {
-    ...characterAssets,
-    ...backgroundAssets,
     fishstick,
     potion,
     swordShield,
@@ -41,11 +36,10 @@ const basicAssets = {
     chestBody,
     chestLid,
     door,
-    cardBackPileSizeOverlay,
-    cardBack,
-    cardExample,
     energy,
     endTurnButton,
+    ...characterAssets,
+    ...backgroundAssets,
     ...effectAssets,
     ...cardAssets,
 }
@@ -58,6 +52,7 @@ const deluxeAssets = {
     healthTexture,
 }
 const allAssets = { ...basicAssets, ...deluxeAssets }
+
 export type AssetKey = keyof typeof allAssets
 // TODO: add back basic and deluxe
 export default function loadAssets(): Promise<void> {

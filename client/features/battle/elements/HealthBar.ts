@@ -12,9 +12,9 @@ import type {
 } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
-import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
+import { Container, Graphics, Sprite, Text } from '@/elementsUtil'
 
-import { getEffectIconSrc } from '../logic/assetGetters'
+import { getEffectIconSrc, getTexture } from '../logic/assetGetters'
 
 type Rect = [
     number, // x
@@ -129,10 +129,10 @@ function makeStanceIndicator(
 
         const stanceSrc =
             stance === 'neutral'
-                ? PixiLoader.shared.resources?.stanceNeutral?.data
+                ? getTexture('stanceNeutral')
                 : stance === 'aggressive'
-                ? PixiLoader.shared.resources?.stanceAggressive?.data
-                : PixiLoader.shared.resources?.stanceDefensive?.data // stance === 'defensive'
+                ? getTexture('stanceAggressive')
+                : getTexture('stanceDefensive')
 
         if (stanceEl != null) mainEl.removeChild(stanceEl)
         stanceEl = Sprite({
@@ -157,7 +157,7 @@ function makeMainEl() {
         zIndex: 2,
         children: [
             Sprite({
-                src: PixiLoader.shared.resources?.healthBorder?.data,
+                src: getTexture('healthBorder'),
                 width: displayWidth,
                 height: displayHeight,
                 zIndex: 2,
@@ -234,12 +234,9 @@ function drawHealthBar(
     const color = utils.string2hex(background)
     g.beginFill(color)
     g.drawRect(...rect)
-    // const healthTexture =
-    // if (isDeluxeLoaded) {
-    const texture = PixiLoader.shared.resources?.healthTexture?.texture
 
     g.beginTextureFill({
-        texture,
+        texture: getTexture('healthTexture'),
         color,
         alpha: 1,
         matrix: new Matrix(0.1, 0, 0, 0.1, 0, 0),

@@ -1,13 +1,14 @@
 import type { BattleScene } from '@shared'
 import type { SCursor } from 'baobab'
-import { Loader } from 'pixi.js'
 
-import type { PixiContainer, PixiTexture } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
+
+import { getTexture } from '../logic/assetGetters'
 
 type BindCursorArgs = {
     scene: SCursor<BattleScene>
@@ -56,5 +57,4 @@ function Energy(value: number): PixiContainer {
     })
 }
 
-export const getEnergySrc = () =>
-    Loader.shared.resources?.energy?.texture as PixiTexture
+export const getEnergySrc = () => getTexture('energy')

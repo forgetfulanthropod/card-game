@@ -1,6 +1,6 @@
 import PlainButton from '@/elements/PlainButton'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, dataOf, getAppSize, Sprite, Text } from '@/elementsUtil'
+import { Container, getAppSize, getTexture, Sprite, Text } from '@/elementsUtil'
 
 const doorWidth = 330
 const BASE_HEIGHT = 1080
@@ -37,7 +37,7 @@ export default function Doors(args: {
 }
 
 function Door(args: { xScaled: number; onClick: Callback }) {
-    const texture = dataOf('door')
+    const texture = getTexture('door')
     const x = doorWidth * args.xScaled
     return Sprite({
         x,

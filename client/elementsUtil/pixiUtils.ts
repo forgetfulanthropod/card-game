@@ -1,9 +1,9 @@
 import type { Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
-import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
-import { PixiLoader } from '@/elementsUtil'
-import type { AssetKey } from '@/features/battle/logic/AssetLoader'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+
+export { getTexture } from '@/features/battle/logic/assetGetters'
 
 export function drawCircle(
     g: PixiGraphics,
@@ -54,10 +54,6 @@ export function doFlashElement(
             s.destroy()
         }
     }, durationMs)
-}
-
-export function dataOf(assetId: AssetKey): PixiTexture {
-    return PixiLoader.shared.resources?.[assetId]?.texture as PixiTexture
 }
 
 export function clearContainer(container: PixiContainer): void {

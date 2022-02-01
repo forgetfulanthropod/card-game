@@ -1,7 +1,7 @@
 import type { Pile } from '@shared'
-import { Loader } from 'pixi.js'
 
-import type { PixiContainer, PixiTexture } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
+import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
 import { vals } from '@/util'
@@ -41,10 +41,9 @@ export function DiscardPile(pile: Pile): PixiContainer {
 }
 
 function getCardBackPileSizeSrc() {
-    return Loader.shared.resources?.cardBackPileSizeOverlay
-        ?.texture as PixiTexture
+    return getTexture('cardBackPileSizeOverlay')
 }
 
 function getCardBackSrc() {
-    return Loader.shared.resources?.cardBack?.texture as PixiTexture
+    return getTexture('cardBack')
 }

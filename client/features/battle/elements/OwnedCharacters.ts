@@ -4,7 +4,7 @@ import type { SCursor } from 'baobab'
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, dataOf, Sprite, Text } from '@/elementsUtil'
+import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
 import { vals } from '@/util'
 
 export function OwnedCharacters(): PixiContainer {
@@ -59,7 +59,7 @@ function makeCharacters() {
             y: Math.floor(((i / NUM_OF_EACH_CHAR) | 0) / 5) * 150,
             children: [
                 Sprite({
-                    src: dataOf(c.name),
+                    src: getTexture(c.name),
                     scale: 0.45,
                     onClick: () => addSelected({ character: c }),
                 }),
@@ -86,7 +86,7 @@ function makeSelectionIndicators(
             )
             characters[indexOfOwned].addChild(
                 Sprite({
-                    src: dataOf('check'),
+                    src: getTexture('check'),
                     width: 50,
                     height: 50,
                 })

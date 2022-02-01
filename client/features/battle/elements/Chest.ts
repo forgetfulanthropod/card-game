@@ -1,5 +1,5 @@
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
-import { Container, dataOf, PixiTexture, Sprite } from '@/elementsUtil'
+import { Container, getTexture, PixiTexture, Sprite } from '@/elementsUtil'
 
 const rotationRate = 1.0
 
@@ -15,7 +15,7 @@ export default function Chest(args: { size: Size }): PixiContainer {
                 name: 'Chest',
                 x: 300,
                 anchor: [1, 0.3],
-                src: dataOf('chestBody'),
+                src: getTexture('chestBody'),
             }),
             Sprite({
                 name: 'Chest',
@@ -23,7 +23,7 @@ export default function Chest(args: { size: Size }): PixiContainer {
                 x: 300,
                 pivot: [-50, 0],
                 anchor: [0.95, 0.4],
-                src: dataOf('chestLid'),
+                src: getTexture('chestLid'),
                 onTick: (lid, elapsed) => {
                     lid.angle = Math.min(lid.angle + rotationRate * elapsed, 45)
                 },
@@ -35,13 +35,18 @@ export default function Chest(args: { size: Size }): PixiContainer {
         c.addChild(
             Sprite({
                 name: 'fishstick',
-                src: dataOf('fishstick'),
+                src: getTexture('fishstick'),
                 x: -220,
                 y: -120,
             })
         )
         c.addChild(
-            Sprite({ name: 'potion', src: dataOf('potion'), x: -100, y: -120 })
+            Sprite({
+                name: 'potion',
+                src: getTexture('potion'),
+                x: -100,
+                y: -120,
+            })
         )
     }, 1000)
 

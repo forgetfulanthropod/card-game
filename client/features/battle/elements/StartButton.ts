@@ -4,7 +4,7 @@ import {
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
-    dataOf,
+    getTexture,
     Sprite,
     Text,
 } from '@/elementsUtil'
@@ -15,7 +15,7 @@ export function StartButton(): PixiContainer {
         y: BASE_HEIGHT * 0.95,
         children: [
             Sprite({
-                src: dataOf('gemButton'),
+                src: getTexture('gemButton'),
                 anchor: [0.5, 1],
                 scale: 0.5,
                 async onClick() {

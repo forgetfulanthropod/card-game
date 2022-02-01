@@ -1,5 +1,5 @@
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, dataOf, Sprite } from '@/elementsUtil'
+import { Container, getTexture, Sprite } from '@/elementsUtil'
 
 import { OwnedCharacters } from './OwnedCharacters'
 
@@ -13,7 +13,7 @@ export function GameMenuItem(
         materials: 'fishstick',
     } as const
 
-    const nounSrc = dataOf(
+    const nounSrc = getTexture(
         nounMap[noun] as typeof nounMap[keyof typeof nounMap]
     )
 

@@ -5,11 +5,11 @@ import type {
     NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
-import { filters, Loader } from 'pixi.js'
+import { filters } from 'pixi.js'
 
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite, PixiTexture } from '@/elementsUtil'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     Container,
     doFlashElement,
@@ -19,7 +19,7 @@ import {
     Sprite,
 } from '@/elementsUtil'
 
-import type { CharacterName } from '../logic/AssetLoader'
+import { assetIdToSrc } from '../logic/assetGetters'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
@@ -203,8 +203,6 @@ function makeSprites(
     const hasMovedCursor = args.cursor.select('hasMoved')
 
     const assetIdCursor = args.cursor.select('name')
-    const assetIdToSrc = (assetId: CharacterName) =>
-        Loader.shared.resources?.[assetId]?.texture as PixiTexture
 
     if (assetIdCursor.get() == null) {
         // TODO: has to do with renewChildren()

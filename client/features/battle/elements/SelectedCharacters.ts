@@ -4,7 +4,7 @@ import {
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
-    dataOf,
+    getTexture,
     Sprite,
 } from '@/elementsUtil'
 
@@ -24,7 +24,7 @@ export function SelectedCharacters(): PixiContainer {
                     children: [
                         Sprite({
                             anchor: [0.5, 0.5],
-                            src: dataOf(c.name),
+                            src: getTexture(c.name),
                             scale: 1,
                         }),
                     ],
