@@ -58,7 +58,9 @@ function makeEffectIndicator(
             children: (characterCursor.select('effects').get() ?? []).map(
                 (e, i) =>
                     Text({
-                        text: `effect: ${e.type}, rounds: ${e.remainingRounds}`,
+                        text: `${e.type} ${e.remainingRounds} round${
+                            e.remainingRounds > 1 ? 's' : ''
+                        }`,
                         y: 50 + 40 * i,
                         style: {
                             fontFamily: 'monospace',

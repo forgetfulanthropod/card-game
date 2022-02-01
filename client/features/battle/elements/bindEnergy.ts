@@ -42,7 +42,7 @@ function Energy(value: number): PixiContainer {
             Text({
                 text: `${value}`,
                 style: {
-                    fill: ['#f3ff30', '#DEBD00', '#B1AC03'],
+                    fill: ['#f3ff30', '#DEBD00', '#D88F00'],
                     stroke: 'black',
                     strokeThickness: 5,
                     fontSize: 100,
