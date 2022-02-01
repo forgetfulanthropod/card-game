@@ -5,7 +5,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 
 import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
-import { backgrounds } from '../logic/AssetLoader'
+import { backgroundAssets } from '../logic/backgroundAssets'
 import background from './background'
 import { bindCharacters } from './bindCharacters'
 import { bindEnergy } from './bindEnergy'
@@ -21,7 +21,7 @@ export function BattleScene(): PixiContainer {
     const backgroundArgs =
         dungeonName === 'The Matcha Caves'
             ? { src: CaveVideo }
-            : { srcs: [backgrounds[dungeonName]] }
+            : { srcs: [backgroundAssets[dungeonName]] }
     const charactersContainer = Container({ name: 'CharactersContainer' })
     const cardsContainer = Container({ name: 'CardsContainer' })
     const energyContainer = Container({ name: 'EnergyContainer' })

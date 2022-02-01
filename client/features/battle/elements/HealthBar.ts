@@ -1,6 +1,6 @@
-import type { CharacterMeta, CharacterUid, EffectType } from '@shared'
+import type { CharacterMeta, CharacterUid } from '@shared'
 import type { SCursor } from 'baobab'
-import { Loader, Matrix, utils } from 'pixi.js'
+import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
@@ -13,6 +13,8 @@ import type {
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
 import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
+
+import { getEffectIconSrc } from '../logic/assetGetters'
 
 type Rect = [
     number, // x
@@ -245,16 +247,4 @@ function drawHealthBar(
     g.drawRect(...rect)
 
     g.endFill()
-}
-
-function getEffectIconSrc(effectType: EffectType) {
-    const effectToIconMap: Record<EffectType, string> = {
-        Debilitated: 'effectDebilitated',
-        DOT1: 'effectPoison',
-        DOT2: 'effectBleed',
-    }
-
-    const iconId = effectToIconMap[effectType]
-
-    return Loader.shared.resources?.[iconId]?.texture
 }

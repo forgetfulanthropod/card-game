@@ -41,7 +41,7 @@ function update({ scene, container }: BindCursorArgs): void {
 function EndTurnButton(): PixiContainer {
     return Container({
         x: BASE_WIDTH * 0.9,
-        y: BASE_HEIGHT * 0.7,
+        y: BASE_HEIGHT * 0.78,
         onClick: async () => {
             await endTurn({})
         },
