@@ -8,8 +8,6 @@ import { discard } from '../gameState/battle/cards/discard'
 import { play } from '../gameState/battle/cards/play'
 import { getEnergy } from '../gameState/battle/energy/getEnergy'
 
-// import { interpretActions } from './cards/interpretActions'
-
 export const BASE_HAND_SIZE = 5
 
 export const playCard: PlayCard = args => {

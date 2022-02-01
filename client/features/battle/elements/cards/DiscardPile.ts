@@ -8,7 +8,7 @@ import { vals } from '@/util'
 
 export function DiscardPile(pile: Pile): PixiContainer {
     return Container({
-        x: BASE_WIDTH * 0.97,
+        x: BASE_WIDTH * 0.96,
         y: BASE_HEIGHT * 0.98,
         scale: 0.7,
         angle: 20,
