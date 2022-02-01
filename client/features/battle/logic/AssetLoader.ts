@@ -21,6 +21,9 @@ import warhog from '../assets/chars/warhog-200.png'
 import chestBody from '../assets/CHEST_BODY.png'
 import chestLid from '../assets/CHEST_LID.png'
 import stanceDefensive from '../assets/defensive stance.png'
+import effectBleed from '../assets/effects/bleed.png'
+import effectDebilitated from '../assets/effects/debilitated.png'
+import effectPoison from '../assets/effects/poison_skull.png'
 import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import bloatDemon from '../assets/gen0_cards/bloat_demon-200.png'
 import bogSpirit from '../assets/gen0_cards/BogSpirit-200.png'
@@ -101,6 +104,9 @@ const basicAssets = {
     cardExample,
     energy,
     endTurnButton,
+    effectDebilitated,
+    effectPoison,
+    effectBleed,
 }
 const deluxeAssets = {
     stanceNeutral,

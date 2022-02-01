@@ -1,6 +1,6 @@
-import type { CharacterMeta, CharacterUid } from '@shared'
+import type { CharacterMeta, CharacterUid, EffectType } from '@shared'
 import type { SCursor } from 'baobab'
-import { Matrix, utils } from 'pixi.js'
+import { Loader, Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
@@ -10,6 +10,8 @@ import type {
     PixiSprite,
     PixiText,
 } from '@/elementsUtil'
+import { BASE_HEIGHT } from '@/elementsUtil'
+import { BASE_WIDTH } from '@/elementsUtil'
 import { Container, Graphics, PixiLoader, Sprite, Text } from '@/elementsUtil'
 
 type Rect = [
@@ -54,14 +56,16 @@ function makeEffectIndicator(
     function updateEffects() {
         mainEl.removeChild(effects)
 
+        let numMatchedEffects = 0
+
         effects = Container({
             children: (characterCursor.select('effects').get() ?? []).map(
-                (e, i) =>
-                    Text({
+                (e, i) => {
+                    let text = Text({
                         text: `${e.type} ${e.remainingRounds} round${
                             e.remainingRounds > 1 ? 's' : ''
                         }`,
-                        y: 50 + 40 * i,
+                        y: 40 * i - numMatchedEffects,
                         style: {
                             fontFamily: 'monospace',
                             fontSize: 30,
@@ -69,6 +73,34 @@ function makeEffectIndicator(
                             letterSpacing: -5,
                         },
                     })
+                    let icon
+                    const iconSrc = getEffectIconSrc(e.type)
+                    if (iconSrc != null) {
+                        icon = Sprite({
+                            src: iconSrc,
+                            width: 80 * (BASE_WIDTH / 1920),
+                            height: 80 * (BASE_WIDTH / 1920),
+                            anchor: [0.5, 0.4],
+                        })
+                        text = Text({
+                            text: `${e.remainingRounds}`,
+                            anchor: [0.5, 1],
+                            style: {
+                                fontFamily: ['VT323', 'monospace'],
+                                fontSize: 30,
+                                fill: 'white',
+                                stroke: 'black',
+                                strokeThickness: 5,
+                            },
+                        })
+                        ++numMatchedEffects
+                    }
+
+                    return Container({
+                        y: 50 * (BASE_HEIGHT / 1080),
+                        children: [...(icon ? [icon] : []), text],
+                    })
+                }
             ),
         })
 
@@ -213,4 +245,16 @@ function drawHealthBar(
     g.drawRect(...rect)
 
     g.endFill()
+}
+
+function getEffectIconSrc(effectType: EffectType) {
+    const effectToIconMap: Record<EffectType, string> = {
+        Debilitated: 'effectDebilitated',
+        DOT1: 'effectPoison',
+        DOT2: 'effectBleed',
+    }
+
+    const iconId = effectToIconMap[effectType]
+
+    return Loader.shared.resources?.[iconId]?.texture
 }
