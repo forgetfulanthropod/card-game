@@ -23,7 +23,7 @@ export async function doNpcTurn(scene: BattleCursor) {
         await sleep(TIME_BETWEEN_NPC_MOVES)
     }
 
-    await resetRound(scene)
+    resetRound(scene)
 }
 
 export async function doNpcMove(
