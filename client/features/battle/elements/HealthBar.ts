@@ -52,6 +52,8 @@ function bindBlockIndicator(
         container.removeChildren()
         const newBlock = characterCursor.get('block')
 
+        if (newBlock === 0) return
+
         container.addChild(
             Container({
                 // y: -50 * (BASE_HEIGHT / 1080),
@@ -191,14 +193,7 @@ function bindMainEl() {
         x: 0,
         y: 0,
         zIndex: 2,
-        children: [
-            Sprite({
-                src: getTexture('healthBorder'),
-                width: displayWidth,
-                height: displayHeight,
-                zIndex: 2,
-            }),
-        ],
+        children: [],
     })
 }
 
@@ -221,6 +216,12 @@ function bindHealthIndicator(
 
         container.addChild(
             Graphics({ draw: g => drawHealthBar(characterCursor, g) }),
+            Sprite({
+                src: getTexture('healthBorder'),
+                width: displayWidth,
+                height: displayHeight,
+                zIndex: 2,
+            }),
             Text({
                 text,
                 zIndex: 1,

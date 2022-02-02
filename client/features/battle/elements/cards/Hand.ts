@@ -30,9 +30,18 @@ export function Hand(pile: Pile): PixiContainer {
             anchor: [0.5, 0.5],
             ...XYRotation,
             onClick: async ({ currentTarget }) => {
+                let targetUids
+                switch (card.targetType) {
+                    case 'enemies':
+                        targetUids = [getFrontEnemyUid()]
+                        break
+                    case 'friends':
+                        targetUids = [getFrontFriendUid()]
+                        break
+                }
                 await playCard({
                     cardUid: currentTarget.name,
-                    targetUids: [getFrontEnemyUid()],
+                    targetUids,
                 })
             },
             onMouseover: async ({ currentTarget }) => {
@@ -85,6 +94,16 @@ export function Hand(pile: Pile): PixiContainer {
     })
 }
 
+function getFrontFriendUid(): CharacterUid {
+    const frontFriend = vals(getBattleScene().get('allCharacters'))
+        .sort((a, b) => b.x - a.x)
+        .find(c => c.isPc && c.health > 0)
+
+    if (frontFriend == null) throw new Error('there is no enemy...')
+
+    return frontFriend.uid
+}
+
 function getFrontEnemyUid(): CharacterUid {
     const frontEnemy = vals(getBattleScene().get('allCharacters'))
         .sort((a, b) => a.x - b.x)
@@ -101,6 +120,7 @@ const MAX_HAND_SIZE = 12
 const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
 const MAX_CARD_ROTATION = Math.PI * 0.1
 const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
+
 function getXYRotationForNthCard(
     n: number,
     numCardsInHand: number
