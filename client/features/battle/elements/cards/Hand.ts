@@ -129,4 +129,3 @@ function getXYRotationForNthCard(
         rotation: xPlacementPortion * endCardRotation,
     }
 }
-export const getEndTurnButtonSrc = () => getTexture('endTurnButton')

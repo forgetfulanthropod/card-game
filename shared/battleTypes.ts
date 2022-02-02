@@ -60,6 +60,8 @@ export type Card = {
     name: string
     energy: number
     id: string
+    targetNum: number
+    targetType: 'friends' | 'enemies'
     actions: string
     text: string[]
     definitions: string[]

@@ -4,12 +4,7 @@ import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type {
-    PixiContainer,
-    PixiGraphics,
-    PixiSprite,
-    PixiText,
-} from '@/elementsUtil'
+import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
 import { Container, Graphics, Sprite, Text } from '@/elementsUtil'
@@ -47,41 +42,41 @@ function bindBlockIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
-    let block: PixiContainer
+    const container = mainEl.addChild(Container({ children: [] }))
 
     u()
 
     characterCursor.select('block').on('update', u)
 
     function u() {
-        mainEl.removeChild(block)
+        container.removeChildren()
         const newBlock = characterCursor.get('block')
 
-        block = Container({
-            // y: -50 * (BASE_HEIGHT / 1080),
-            x: 200,
-            children: [
-                Sprite({
-                    src: getTexture('blockIcon'),
-                    width: 50 * (BASE_WIDTH / 1920),
-                    height: 50 * (BASE_WIDTH / 1920),
-                    anchor: [0.5, 0.4],
-                }),
-                Text({
-                    text: `${newBlock}`,
-                    anchor: [0.6, 1],
-                    style: {
-                        fontFamily: ['VT323', 'monospace'],
-                        fontSize: 30,
-                        fill: 'white',
-                        stroke: 'black',
-                        strokeThickness: 5,
-                    },
-                }),
-            ],
-        })
-
-        mainEl.addChild(block)
+        container.addChild(
+            Container({
+                // y: -50 * (BASE_HEIGHT / 1080),
+                x: 200,
+                children: [
+                    Sprite({
+                        src: getTexture('blockIcon'),
+                        width: 50 * (BASE_WIDTH / 1920),
+                        height: 50 * (BASE_WIDTH / 1920),
+                        anchor: [0.5, 0.4],
+                    }),
+                    Text({
+                        text: `${newBlock}`,
+                        anchor: [0.6, 1],
+                        style: {
+                            fontFamily: ['VT323', 'monospace'],
+                            fontSize: 30,
+                            fill: 'white',
+                            stroke: 'black',
+                            strokeThickness: 5,
+                        },
+                    }),
+                ],
+            })
+        )
     }
 }
 
@@ -89,7 +84,7 @@ function bindEffectIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
-    let effects: PixiContainer
+    const container = mainEl.addChild(Container({ children: [] }))
 
     updateEffects()
 
@@ -98,57 +93,54 @@ function bindEffectIndicator(
     })
 
     function updateEffects() {
-        mainEl.removeChild(effects)
+        container.removeChildren()
 
         let numMatchedEffects = 0
 
-        effects = Container({
-            children: (characterCursor.select('effects').get() ?? []).map(
-                (e, i) => {
-                    let text = Text({
-                        text: `${e.type} ${e.remainingRounds} round${
-                            e.remainingRounds > 1 ? 's' : ''
-                        }`,
-                        y: 40 * i - numMatchedEffects,
+        const effects = (characterCursor.select('effects').get() ?? []).map(
+            (e, i) => {
+                let text = Text({
+                    text: `${e.type} ${e.remainingRounds} round${
+                        e.remainingRounds > 1 ? 's' : ''
+                    }`,
+                    y: 40 * i - numMatchedEffects,
+                    style: {
+                        fontFamily: 'monospace',
+                        fontSize: 30,
+                        fill: 'rgba(255,255,255,.6)',
+                        letterSpacing: -5,
+                    },
+                })
+                let icon
+                const iconSrc = getEffectIconSrc(e.type)
+                if (iconSrc != null) {
+                    icon = Sprite({
+                        src: iconSrc,
+                        width: 80 * (BASE_WIDTH / 1920),
+                        height: 80 * (BASE_WIDTH / 1920),
+                        anchor: [0.5, 0.4],
+                    })
+                    text = Text({
+                        text: `${e.remainingRounds}`,
+                        anchor: [0.6, 1],
                         style: {
-                            fontFamily: 'monospace',
+                            fontFamily: ['VT323', 'monospace'],
                             fontSize: 30,
-                            fill: 'rgba(255,255,255,.6)',
-                            letterSpacing: -5,
+                            fill: 'white',
+                            stroke: 'black',
+                            strokeThickness: 5,
                         },
                     })
-                    let icon
-                    const iconSrc = getEffectIconSrc(e.type)
-                    if (iconSrc != null) {
-                        icon = Sprite({
-                            src: iconSrc,
-                            width: 80 * (BASE_WIDTH / 1920),
-                            height: 80 * (BASE_WIDTH / 1920),
-                            anchor: [0.5, 0.4],
-                        })
-                        text = Text({
-                            text: `${e.remainingRounds}`,
-                            anchor: [0.6, 1],
-                            style: {
-                                fontFamily: ['VT323', 'monospace'],
-                                fontSize: 30,
-                                fill: 'white',
-                                stroke: 'black',
-                                strokeThickness: 5,
-                            },
-                        })
-                        ++numMatchedEffects
-                    }
-
-                    return Container({
-                        y: 50 * (BASE_HEIGHT / 1080),
-                        children: [...(icon ? [icon] : []), text],
-                    })
+                    ++numMatchedEffects
                 }
-            ),
-        })
 
-        if (effects.children.length > 0) mainEl.addChild(effects)
+                return Container({
+                    y: 50 * (BASE_HEIGHT / 1080),
+                    children: [...(icon ? [icon] : []), text],
+                })
+            }
+        )
+        if (effects.length) container.addChild(...effects)
     }
 }
 
@@ -156,7 +148,7 @@ function bindStanceIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
-    let stanceEl: PixiSprite
+    const container = mainEl.addChild(Container({ children: [] }))
 
     updateStance()
 
@@ -176,18 +168,20 @@ function bindStanceIndicator(
                 ? getTexture('stanceAggressive')
                 : getTexture('stanceDefensive')
 
-        if (stanceEl != null) mainEl.removeChild(stanceEl)
-        stanceEl = Sprite({
-            src: stanceSrc,
-            x: displayWidth,
-            y: displayHeight * 1.1,
-            anchor: [1, 0],
-            width: displayWidth / 3,
-            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
-            onClick: () =>
-                toggleStance({ characterUid: characterCursor.get('uid') }),
-        })
-        mainEl.addChild(stanceEl)
+        container.removeChildren()
+
+        container.addChild(
+            Sprite({
+                src: stanceSrc,
+                x: displayWidth,
+                y: displayHeight * 1.1,
+                anchor: [1, 0],
+                width: displayWidth / 3,
+                height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
+                onClick: () =>
+                    toggleStance({ characterUid: characterCursor.get('uid') }),
+            })
+        )
     }
 }
 
@@ -212,8 +206,7 @@ function bindHealthIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
-    let health: PixiGraphics
-    let healthText: PixiText
+    const container = mainEl.addChild(Container({ children: [] }))
 
     updateHealth()
 
@@ -222,27 +215,24 @@ function bindHealthIndicator(
     })
 
     function updateHealth() {
-        if (health != null && healthText != null)
-            mainEl.removeChild(health, healthText)
+        container.removeChildren()
 
         const text = characterCursor.select('health').get()?.toString()
 
-        health = Graphics({ draw: g => drawHealthBar(characterCursor, g) })
-        healthText = Text({
-            text,
-            zIndex: 1,
-            anchor: [0, 1],
-            style: {
-                fontFamily: 'monospace',
-                fontSize: 30,
-                fill: ['#ffeaab', '#f2b600'],
-                letterSpacing: -5,
-            },
-        })
-
-        mainEl.addChildAt(health, 0)
-        mainEl.addChildAt(healthText, 1)
-        // mainEl.sortChildren()
+        container.addChild(
+            Graphics({ draw: g => drawHealthBar(characterCursor, g) }),
+            Text({
+                text,
+                zIndex: 1,
+                anchor: [0, 1],
+                style: {
+                    fontFamily: 'monospace',
+                    fontSize: 30,
+                    fill: ['#ffeaab', '#f2b600'],
+                    letterSpacing: -5,
+                },
+            })
+        )
     }
 }
 

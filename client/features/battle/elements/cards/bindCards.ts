@@ -3,13 +3,14 @@ import type { SCursor } from 'baobab'
 
 import { endTurn } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
+import { getTexture } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
 
 import { DiscardPile } from './DiscardPile'
 import { DrawPile } from './DrawPile'
-import { getEndTurnButtonSrc, Hand } from './Hand'
+import { Hand } from './Hand'
 
 type BindCursorArgs = {
     scene: SCursor<BattleScene>
@@ -47,12 +48,12 @@ function EndTurnButton(): PixiContainer {
         },
         children: [
             Sprite({
-                src: getEndTurnButtonSrc(),
+                src: getTexture('endTurnButton'),
                 anchor: [0.5, 0.5],
                 width: BASE_WIDTH * 0.15,
                 height:
-                    (BASE_WIDTH * 0.15 * getEndTurnButtonSrc().height) /
-                    getEndTurnButtonSrc().width,
+                    (BASE_WIDTH * 0.15 * getTexture('endTurnButton').height) /
+                    getTexture('endTurnButton').width,
             }),
             Text({
                 text: 'End Turn',
