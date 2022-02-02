@@ -113,6 +113,7 @@ export function newPCMeta(args: {
         stance,
         hasMoved: false,
         health: stats.maxHealth,
+        block: 0,
         experience: 0,
         effects: [],
     }
@@ -134,6 +135,7 @@ export function newNPCMeta(args: {
     return {
         ...statsMap[args.name],
         health: statsMap[args.name].maxHealth,
+        block: 0,
         ...getLevelInfo(args.name, args.level),
         uid: args.uid,
         isPc: false,

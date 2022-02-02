@@ -1,8 +1,9 @@
+import frogKnight from '../assets/chars/Frog_Knight_sprite-200.png'
 import frogWizard from '../assets/chars/FrogWizard-cropped-200.png'
 import notoriousBEAN from '../assets/chars/NotoriousBEAN200.png'
 import orcWarrior from '../assets/chars/orcWarrior-200.png'
+import skeletonWarrior from '../assets/chars/Skeleton_Warrior_sprite-200.png'
 import warhog from '../assets/chars/warhog-200.png'
-import frogKnight from '../assets/Frog_Knight_sprite-200.png'
 import bloatDemon from '../assets/gen0_cards/bloat_demon-200.png'
 import bogSpirit from '../assets/gen0_cards/BogSpirit-200.png'
 import bookle from '../assets/gen0_cards/bookle-200.png'
@@ -20,7 +21,6 @@ import snacky from '../assets/gen0_cards/Snacky-200.png'
 import theHatefly from '../assets/gen0_cards/TheHatefly-200.png'
 import trioOfFools from '../assets/gen0_cards/TrioOfFools-200.png'
 import wimpyGuard from '../assets/gen0_cards/WimpyGuard-200.png'
-import skeletonWarrior from '../assets/Skeleton_Warrior_sprite-200.png'
 
 export const characterAssets = {
     bloatDemon,

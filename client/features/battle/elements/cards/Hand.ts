@@ -11,6 +11,8 @@ import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 import { keys, vals } from '@/util'
 
+import type { AssetKey } from '../../logic/AssetLoader'
+
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
     const hideFilter = new filters.AlphaFilter(0)
@@ -23,7 +25,7 @@ export function Hand(pile: Pile): PixiContainer {
 
         return Sprite({
             name: cardUids[index],
-            src: getCardExampleSrc(),
+            src: getTexture(card.id as AssetKey),
             scale,
             anchor: [0.5, 0.5],
             ...XYRotation,
@@ -47,7 +49,7 @@ export function Hand(pile: Pile): PixiContainer {
                 }
                 expandedCard = Sprite({
                     name: `${cardUids[index]}-expanded`,
-                    src: getCardExampleSrc(),
+                    src: getTexture(card.id as AssetKey),
                     scale,
                     anchor: [0.5, 0.5],
                     ...XYRotation,
@@ -128,4 +130,3 @@ function getXYRotationForNthCard(
     }
 }
 export const getEndTurnButtonSrc = () => getTexture('endTurnButton')
-const getCardExampleSrc = () => getTexture('cardExample')

@@ -31,11 +31,11 @@ const displayHeight = displayWidth * widthToHeight
 
 export default function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
-    const mainEl = makeMainEl()
-    makeHealthIndicator(characterCursor, mainEl)
-    makeStanceIndicator(characterCursor, mainEl)
-    makeStanceIndicator(characterCursor, mainEl)
-    makeEffectIndicator(characterCursor, mainEl)
+    const mainEl = bindMainEl()
+    bindHealthIndicator(characterCursor, mainEl)
+    bindStanceIndicator(characterCursor, mainEl)
+    bindEffectIndicator(characterCursor, mainEl)
+    bindBlockIndicator(characterCursor, mainEl)
     return mainEl
 }
 
@@ -43,7 +43,49 @@ function getCharacterCursor(characterUid: string) {
     return getBattleScene().select('allCharacters').select(characterUid)
 }
 
-function makeEffectIndicator(
+function bindBlockIndicator(
+    characterCursor: SCursor<CharacterMeta>,
+    mainEl: PixiContainer
+) {
+    let block: PixiContainer
+
+    u()
+
+    characterCursor.select('block').on('update', u)
+
+    function u() {
+        mainEl.removeChild(block)
+        const newBlock = characterCursor.get('block')
+
+        block = Container({
+            // y: -50 * (BASE_HEIGHT / 1080),
+            x: 200,
+            children: [
+                Sprite({
+                    src: getTexture('blockIcon'),
+                    width: 50 * (BASE_WIDTH / 1920),
+                    height: 50 * (BASE_WIDTH / 1920),
+                    anchor: [0.5, 0.4],
+                }),
+                Text({
+                    text: `${newBlock}`,
+                    anchor: [0.6, 1],
+                    style: {
+                        fontFamily: ['VT323', 'monospace'],
+                        fontSize: 30,
+                        fill: 'white',
+                        stroke: 'black',
+                        strokeThickness: 5,
+                    },
+                }),
+            ],
+        })
+
+        mainEl.addChild(block)
+    }
+}
+
+function bindEffectIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
@@ -86,7 +128,7 @@ function makeEffectIndicator(
                         })
                         text = Text({
                             text: `${e.remainingRounds}`,
-                            anchor: [0.5, 1],
+                            anchor: [0.6, 1],
                             style: {
                                 fontFamily: ['VT323', 'monospace'],
                                 fontSize: 30,
@@ -110,7 +152,7 @@ function makeEffectIndicator(
     }
 }
 
-function makeStanceIndicator(
+function bindStanceIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
@@ -149,7 +191,7 @@ function makeStanceIndicator(
     }
 }
 
-function makeMainEl() {
+function bindMainEl() {
     return Container({
         name: 'HealthBar',
         x: 0,
@@ -166,7 +208,7 @@ function makeMainEl() {
     })
 }
 
-function makeHealthIndicator(
+function bindHealthIndicator(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
@@ -198,8 +240,9 @@ function makeHealthIndicator(
             },
         })
 
-        mainEl.addChild(health, healthText)
-        mainEl.sortChildren()
+        mainEl.addChildAt(health, 0)
+        mainEl.addChildAt(healthText, 1)
+        // mainEl.sortChildren()
     }
 }
 

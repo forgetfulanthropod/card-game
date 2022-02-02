@@ -36,4 +36,15 @@ export class CardAffordances {
             'deals 6 damage\ndebilitates for 1 round'
         )
     }
+    // @Test()
+    // block(): void {
+    //     expect.toBeEqual(
+    //         explainActions('block(dexterity + 2)', {
+    //             block: 1,
+    //             strength: 2,
+    //             dexterity: 3,
+    //         }),
+    //         'target receives 5 block'
+    //     )
+    // }
 }

@@ -59,7 +59,7 @@ export interface Effect {
 export type Card = {
     name: string
     energy: number
-    url: string
+    id: string
     actions: string
     text: string[]
     definitions: string[]
@@ -75,6 +75,7 @@ export interface CharacterMeta extends CharacterStats {
     isPc: boolean
     hasMoved: boolean
     health: number
+    block: number
     experience: number
     x: number
     y: number
