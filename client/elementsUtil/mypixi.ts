@@ -54,6 +54,8 @@ export const BASE_WIDTH = 1920
 
 type Pair = [x: number, y: number]
 
+export type InteractionEventHandler = (e: InteractionEvent) => void
+
 interface DisplayObjectArgs {
     position?: Pair
     scale?: number | Pair
@@ -65,9 +67,9 @@ interface DisplayObjectArgs {
     onTick?: OnPixiTick
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
-    onClick?: (e: InteractionEvent) => void
-    onMouseover?: (e: InteractionEvent) => void
-    onMouseout?: (e: InteractionEvent) => void
+    onClick?: InteractionEventHandler
+    onMouseover?: InteractionEventHandler
+    onMouseout?: InteractionEventHandler
     name?: string
     zIndex?: number
     visible?: boolean
@@ -85,7 +87,7 @@ export type OnPixiTick = (
     self: PixiSprite | PixiContainer,
     delta: number
 ) => void | 'remove'
-interface SpriteArgs extends ShownArgs {
+export interface SpriteArgs extends ShownArgs {
     src: string | PixiTexture
 }
 export type PixiChildren = (

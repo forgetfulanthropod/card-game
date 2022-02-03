@@ -1,4 +1,4 @@
-import type { Gamestate, OwnedCharacter } from '@shared'
+import type { Gamestate, OwnedCharacterStatsMap } from '@shared'
 
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'
@@ -12,10 +12,10 @@ const config = {
     includeRulebook: true,
 }
 
-function initialOwnedCharacters(): Record<string, OwnedCharacter> {
+function initialOwnedCharacters(): OwnedCharacterStatsMap {
     const { characters: statsMap } = getRulebook()
 
-    const oc: Record<string, OwnedCharacter> = {}
+    const oc: OwnedCharacterStatsMap = {}
     const characterIds = keys(statsMap)
     vals(statsMap).forEach((c, i) => {
         for (let j = 0; j < NUM_OF_EACH_CHAR; j++) {
@@ -34,7 +34,7 @@ export function getInitialGameState(username: string): Gamestate {
         inventory: {},
         coin: 0,
         blessings: [],
-        events: { world$: [], move$: [] },
+        events: { world$: [], move$: [], DOT$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook
             ? stringifyRulebook(getRulebook())

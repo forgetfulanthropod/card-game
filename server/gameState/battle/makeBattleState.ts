@@ -1,10 +1,10 @@
-import type { BattleScene, DungeonName, OwnedCharacter } from '@shared'
+import type { BattleScene, DungeonName, OwnedCharacterStats } from '@shared'
 
 import { makeCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'
 
 export function makeBattleState(args: {
-    chosen?: OwnedCharacter[]
+    chosen?: OwnedCharacterStats[]
     dungeonName?: DungeonName
     username: string
 }): BattleScene {

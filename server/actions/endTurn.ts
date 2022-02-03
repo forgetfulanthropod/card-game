@@ -1,6 +1,6 @@
 import type { EndTurn } from '@serverActions'
 
-import { doNpcTurn } from '@/gameState/battle'
+import { doNpcTurn, resetRound } from '@/gameState/battle'
 import { getBattleScene } from '@/util'
 
 import { endRound } from './endRound'
@@ -11,4 +11,6 @@ export const endTurn: EndTurn = async args => {
     endRound(scene)
 
     await doNpcTurn(scene)
+
+    resetRound(scene)
 }

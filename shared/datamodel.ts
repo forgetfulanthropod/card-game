@@ -69,7 +69,7 @@ export type Rulebook = Readonly<{
 
 export type Gamestate = Readonly<{
     scene: Scene
-    ownedCharacters: Record<CharacterUid, OwnedCharacter>
+    ownedCharacters: OwnedCharacterStatsMap
     inventory: Record<ItemUid, ItemName>
     coin: number
     blessings: Blessing[]
@@ -80,13 +80,15 @@ export type Gamestate = Readonly<{
 }> &
     Brandify
 
-export type OwnedCharacter = CharacterStats &
+export type OwnedCharacterStats = CharacterStats &
     Readonly<{
         uid: string
         tokenId: string
         nftName: string
     }> &
     Brandify
+
+export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
 
 export type SceneHas = Readonly<{
     name: SceneName

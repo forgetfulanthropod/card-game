@@ -1,8 +1,8 @@
 import type {
     CharacterMeta,
     CharacterName,
-    CharacterUid,
-    OwnedCharacter,
+    Characters,
+    OwnedCharacterStats,
     StanceName,
 } from '@shared'
 
@@ -16,9 +16,9 @@ const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
-type Characters = Record<CharacterUid, CharacterMeta>
+
 export function makeCharacters(
-    chosen: OwnedCharacter[] = [],
+    chosen: OwnedCharacterStats[] = [],
     username: string
 ): Characters {
     const playerCharacterPositions = makePositions(

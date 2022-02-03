@@ -37,7 +37,7 @@ export function hideElement(
     }, durationMs)
 }
 
-export function doFlashElement(
+export function flashTo(
     parent: PixiContainer,
     makeSprite: () => PixiSprite | PixiContainer,
     { durationMs = 500, sort = true } = {}

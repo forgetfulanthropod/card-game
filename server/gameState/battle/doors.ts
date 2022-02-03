@@ -1,10 +1,4 @@
-import type {
-    BattleScene,
-    CharacterMeta,
-    CharacterUid,
-    Door,
-    DungeonName,
-} from '@shared'
+import type { BattleScene, Characters, Door, DungeonName } from '@shared'
 import type { SpecialDoorName } from '@shared'
 import type { RoomOutcomes } from '@shared'
 import type { SCursor } from 'baobab'
@@ -25,7 +19,7 @@ import { makePositions, newNPCMeta } from './characterManagement'
 
 export type Room = {
     modifier: number
-    enemies: Record<CharacterUid, CharacterMeta>
+    enemies: Characters
 }
 
 function getDoorChoices(args: {

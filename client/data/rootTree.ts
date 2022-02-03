@@ -2,7 +2,7 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
-    OwnedCharacter,
+    OwnedCharacterStats,
     Scene,
 } from '@shared'
 import type { SCursor } from 'baobab'
@@ -49,8 +49,9 @@ export const getEntryScene = (): SCursor<EntryScene> => {
     return getTree().select('scene') as SCursor<EntryScene>
 }
 
-export const getOwnedCharacters = (): SCursor<Record<string, OwnedCharacter>> =>
-    getTree().select('ownedCharacters')
+export const getOwnedCharacters = (): SCursor<
+    Record<string, OwnedCharacterStats>
+> => getTree().select('ownedCharacters')
 export const getScene = (): SCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 

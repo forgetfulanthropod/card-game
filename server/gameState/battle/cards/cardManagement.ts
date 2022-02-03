@@ -1,7 +1,7 @@
-import type { Cards, OwnedCharacter } from '@shared'
+import type { Cards, OwnedCharacterStats } from '@shared'
 
 export function makeCards(
-    chosen: OwnedCharacter[] = [],
+    chosen: OwnedCharacterStats[] = [],
     _username: string
 ): Cards {
     const characterUid = chosen[0].uid
@@ -105,8 +105,6 @@ export function makeCards(
                 characterClass: 'string',
                 deckId: 'string',
             },
-        },
-        hand: {
             uuid26: {
                 name: 'Sweep The Leg',
                 energy: 2,
@@ -122,22 +120,8 @@ export function makeCards(
                 deckId: 'string',
             },
         },
+        hand: {},
         discard: {},
-        removed: {
-            uuid3: {
-                name: 'Sweep The Leg',
-                energy: 2,
-                id: 'cardSweepTheLeg',
-                targetNum: 1,
-                targetType: 'enemies',
-                actions: 'chain(deal(strength), debilitate(1))',
-                text: ['string'],
-                definitions: ['string'],
-                type: 'string',
-                characterUid,
-                characterClass: 'string',
-                deckId: 'string',
-            },
-        },
+        removed: {},
     }
 }

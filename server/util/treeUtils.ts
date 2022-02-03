@@ -44,6 +44,18 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     void setUser(username, getGameStateCursor(username).get())
 }
 
+export function stampedEmit<_A extends string, _B>(args: {
+    username: string
+    event: NetworkEvent<_A, _B>
+}): void {
+    emit({
+        ...args,
+        event: {
+            ...args.event,
+        },
+    })
+}
+
 export function emit<_A extends string, _B>(args: {
     username: string
     event: NetworkEvent<_A, _B>
@@ -51,7 +63,11 @@ export function emit<_A extends string, _B>(args: {
     getGameStateCursor(args.username)
         .select('events')
         .select(args.event.type)
-        .push(args.event)
+        .push({
+            sentAt: new Date().toLocaleDateString(),
+            uid: srandom().toString().slice(6),
+            ...args.event,
+        })
     const socketId = getSocketId(args.username)
     getIo().to(socketId).emit(args.event.type, args.event)
 }

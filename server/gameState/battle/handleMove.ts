@@ -25,7 +25,7 @@ export async function handleMove(args: {
     const { scene, allCharacters, attackData } = args
 
     // Dispatch move to client to trigger animation
-    const damageMap = getCharacterKeysAndDamages(attackData, scene)
+    const damageKVs = getCharacterKeysAndDamages(attackData, scene)
     emit({
         username: scene.get('username'),
         event: {
@@ -34,16 +34,16 @@ export async function handleMove(args: {
             uid: srandom().toString().slice(6),
             data: {
                 attackerIsPc: attackData.attacker.isPc,
-                attacker: attackData.attacker.uid,
-                defenders: attackData.defenders.map(d => d.uid),
+                attackerUid: attackData.attacker.uid,
+                defenderUids: attackData.defenders.map(d => d.uid),
                 moveName: attackData.move.name,
-                damageMap,
+                damageKVs,
             },
         },
     })
 
     // Update health, effects, and hasMoved
-    applyMove(scene, allCharacters, attackData)
+    applyMove(scene, attackData)
 
     // Check battle over
     const { allCharacters: newAllCharacters, selectedCharacter } = scene.get()
@@ -53,7 +53,7 @@ export async function handleMove(args: {
     const isMoveAvailable = checkMoveAvailable(vals(newAllCharacters))
 
     if (!isMoveAvailable) {
-        await resetRound(scene)
+        resetRound(scene)
         return
     }
 

@@ -10,21 +10,11 @@ import { tl } from './logging'
 const DEBUG = false
 
 export function resetRound(scene: BattleCursor): void {
-    if (DEBUG) tl('resetting moves')
+    if (DEBUG) tl('resetting round')
 
     setRoundEnergy(scene)
     clearHasMoved(scene)
     clearBlock(scene)
     scene.set('isPlayerTurn', true)
     drawNewHand(scene)
-
-    // const playerStartsRound = getRulebook().shouldCoinFlipEveryRound
-    //     ? scene.select('playerStarts').get()
-    //     : srandom() < 0.5
-    // scene.set('isPlayerTurn', playerStartsRound)
-    // tl(playerStartsRound ? 'You start' : 'Enemy starts')
-    // if (!playerStartsRound) {
-    //     await sleep(DEFAULT_WAIT)
-    //     await doNpcMove('first move of round', scene)
-    // }
 }

@@ -1,11 +1,16 @@
-import type { CharacterUid, Pile } from '@shared'
+import type { Card, CharacterUid, Pile } from '@shared'
 // import { myPIXI } from '@/elementsUtil'
 import { gsap } from 'gsap'
 import { filters } from 'pixi.js'
 
 import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import type {
+    InteractionEventHandler,
+    PixiContainer,
+    PixiSprite,
+    SpriteArgs,
+} from '@/elementsUtil'
 import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
@@ -15,75 +20,23 @@ import type { AssetKey } from '../../logic/AssetLoader'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
-    const hideFilter = new filters.AlphaFilter(0)
     const scale = 0.5
 
     const children = vals(pile).map((card, index) => {
-        let animationForCard = gsap.to({}, 0, {})
-        let expandedCard: PixiSprite | null
-        const XYRotation = getXYRotationForNthCard(index + 1, keys(pile).length)
+        const xyr = getXYRotationForNthCard(index + 1, keys(pile).length)
 
-        return Sprite({
-            name: cardUids[index],
+        const restingParams: Partial<SpriteArgs> = {
             src: getTexture(card.id as AssetKey),
+            name: cardUids[index],
             scale,
             anchor: [0.5, 0.5],
-            ...XYRotation,
-            onClick: async ({ currentTarget }) => {
-                let targetUids
-                switch (card.targetType) {
-                    case 'enemies':
-                        targetUids = [getFrontEnemyUid()]
-                        break
-                    case 'friends':
-                        targetUids = [getFrontFriendUid()]
-                        break
-                }
-                await playCard({
-                    cardUid: currentTarget.name,
-                    targetUids,
-                })
-            },
-            onMouseover: async ({ currentTarget }) => {
-                if (animationForCard != null) await animationForCard
+            ...xyr,
+        }
 
-                const parent = currentTarget.parent
-
-                currentTarget.filters = [hideFilter]
-
-                if (expandedCard != null) {
-                    parent.removeChild(expandedCard)
-                    expandedCard.destroy()
-                    expandedCard = null
-                }
-                expandedCard = Sprite({
-                    name: `${cardUids[index]}-expanded`,
-                    src: getTexture(card.id as AssetKey),
-                    scale,
-                    anchor: [0.5, 0.5],
-                    ...XYRotation,
-                })
-
-                parent.addChild(expandedCard)
-
-                animationForCard = gsap.to(expandedCard, {
-                    pixi: { y: -350, rotation: 0, scale: 1 },
-                    duration: 0.3,
-                })
-            },
-            onMouseout: async ({ currentTarget }) => {
-                if (animationForCard == null) return
-
-                await animationForCard.reverse().then(() => {
-                    animationForCard.kill()
-                    currentTarget.filters = []
-                    if (expandedCard != null) {
-                        currentTarget.parent.removeChild(expandedCard)
-                        expandedCard.destroy()
-                        expandedCard = null
-                    }
-                })
-            },
+        //@ts-ignore says src type incompatible but it's a PixiTexture
+        return Sprite({
+            ...restingParams,
+            ...getMouseEvents(card, restingParams),
         })
     })
 
@@ -92,6 +45,81 @@ export function Hand(pile: Pile): PixiContainer {
         y: BASE_HEIGHT * 1,
         children,
     })
+}
+
+function getMouseEvents(
+    card: Card,
+    restingParams: Partial<SpriteArgs>
+): {
+    onMouseover: InteractionEventHandler
+    onMouseout: InteractionEventHandler
+    onClick: InteractionEventHandler
+} {
+    const hideFilter = new filters.AlphaFilter(0)
+    let animationForCard = gsap.to({}, 0, {})
+    let expandedCard: PixiSprite | null
+
+    const onMouseover: InteractionEventHandler = async ({ currentTarget }) => {
+        if (animationForCard != null) await animationForCard
+
+        const parent = currentTarget.parent
+
+        currentTarget.filters = [hideFilter]
+
+        if (expandedCard != null) {
+            parent.removeChild(expandedCard)
+            expandedCard.destroy()
+            expandedCard = null
+        }
+
+        //@ts-ignore says src type incompatible but it's a PixiTexture
+        expandedCard = Sprite({
+            ...{ ...restingParams, name: `${restingParams.name}-expanded` },
+        })
+
+        parent.addChild(expandedCard)
+
+        animationForCard = gsap.to(expandedCard, {
+            pixi: { y: -350, rotation: 0, scale: 1 },
+            duration: 0.3,
+        })
+    }
+
+    const onMouseout: InteractionEventHandler = async ({ currentTarget }) => {
+        if (animationForCard == null) return
+
+        await animationForCard.reverse().then(() => {
+            animationForCard.kill()
+            currentTarget.filters = []
+            if (expandedCard != null) {
+                currentTarget.parent.removeChild(expandedCard)
+                expandedCard.destroy()
+                expandedCard = null
+            }
+        })
+    }
+
+    const onClick: InteractionEventHandler = async ({ currentTarget }) => {
+        let targetUids
+        switch (card.targetType) {
+            case 'enemies':
+                targetUids = [getFrontEnemyUid()]
+                break
+            case 'friends':
+                targetUids = [getFrontFriendUid()]
+                break
+        }
+        await playCard({
+            cardUid: currentTarget.name,
+            targetUids,
+        })
+    }
+
+    return {
+        onMouseover,
+        onMouseout,
+        onClick,
+    }
 }
 
 function getFrontFriendUid(): CharacterUid {
@@ -121,10 +149,12 @@ const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
 const MAX_CARD_ROTATION = Math.PI * 0.1
 const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
 
+type XYRotation = { x: number; y: number; rotation: number }
+
 function getXYRotationForNthCard(
     n: number,
     numCardsInHand: number
-): { x: number; y: number; rotation: number } {
+): XYRotation {
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 

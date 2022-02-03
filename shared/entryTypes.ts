@@ -1,7 +1,7 @@
-import type { OwnedCharacter, SceneHas } from './index'
+import type { OwnedCharacterStats, SceneHas } from './index'
 export interface EntryScene extends SceneHas {
     name: 'entry'
-    selectedCharacters: OwnedCharacter[]
+    selectedCharacters: OwnedCharacterStats[]
     selectedLevel: {
         name: string
         num: number

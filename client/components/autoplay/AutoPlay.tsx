@@ -2,7 +2,7 @@ import type {
     BattleScene,
     EntryScene,
     Gamestate,
-    OwnedCharacter,
+    OwnedCharacterStats,
 } from '@shared'
 import { find, sample, sum, values } from 'lodash'
 import { useState } from 'preact/hooks'
@@ -133,7 +133,7 @@ class Runner {
     }
 }
 
-async function addNewCharacter(availableChars: OwnedCharacter[]) {
+async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     console.log(`there are ${availableChars.length} options`)
     if (availableChars.length === 0) {
         throw Error('no chars left')

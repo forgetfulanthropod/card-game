@@ -1,9 +1,10 @@
-import type { Card, CharacterUid } from '@shared'
+import type { Card, CharacterUid, NetworkAttackData } from '@shared'
 import type { Value as VAngu } from 'angu'
 
 import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
 
+import { applyDamage } from './applyDamage'
 import { s } from './util/explainHelpers'
 import type { ExecuteArgs } from './util/types'
 
@@ -33,7 +34,7 @@ export function execute({
         if (targetUids[i] == null)
             throw new Error('less targetUids than targets!')
 
-        applyDamage({ damage, enemyUid: targetUids[i], scene })
+        applyDamage({ damage, targetUid: targetUids[i], scene })
     }
 }
 
@@ -48,34 +49,26 @@ function emitMove({
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
-    const attackerIsPc = scene.get('allCharacters', card.characterUid, 'isPc')
-    const damageMap = targetUids.map(key => ({ key, damage }))
+    const attackerIsPc = scene.get(
+        'allCharacters',
+        card.characterUid,
+        'isPc'
+    ) as boolean
+    const damageKVs = targetUids.map(key => ({ key, damage }))
+
+    const data: NetworkAttackData = {
+        attackerUid: card.characterUid,
+        moveName: card.name,
+        attackerIsPc,
+        defenderUids: targetUids,
+        damageKVs,
+    }
 
     emit({
         username: scene.get('username'),
         event: {
             type: 'move$',
-            sentAt: new Date().toLocaleDateString(),
-            uid: srandom().toString().slice(6),
-            data: {
-                attackerIsPc,
-                attacker: card.characterUid,
-                defenders: targetUids,
-                moveName: card.name,
-                damageMap,
-            },
+            data,
         },
     })
-}
-
-function applyDamage({
-    damage,
-    enemyUid,
-    scene,
-}: {
-    damage: number
-    enemyUid: CharacterUid
-    scene: BattleCursor
-}): void {
-    scene.select('allCharacters', enemyUid).apply('health', h => h - damage)
 }

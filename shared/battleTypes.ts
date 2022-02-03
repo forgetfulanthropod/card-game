@@ -19,7 +19,7 @@ export interface BattleScene extends SceneHas {
     state: BattleWinState
     playerStarts: boolean
     isPlayerTurn: boolean
-    allCharacters: Record<CharacterUid, CharacterMeta>
+    allCharacters: Characters
     cards: Cards
     energy: number
     selectedCharacter: CharacterUid
@@ -87,6 +87,8 @@ export interface CharacterMeta extends CharacterStats {
     effects: Effect[]
 }
 
+export type Characters = Record<CharacterUid, CharacterMeta>
+
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
 export type StanceMultiplier = 0.75 | 1 | 1.25
 export type StanceStats = {
@@ -117,12 +119,17 @@ export type AttackData = {
     move: CharacterMove
 }
 export interface NetworkAttackData {
-    attackerIsPc: boolean
     moveName: string
-    attacker: CharacterUid
-    defenders: CharacterUid[]
-    damageMap: {
+    defenderUids: CharacterUid[]
+    attackerUid: CharacterUid
+    attackerIsPc: boolean
+    damageKVs: {
         key: CharacterUid
         damage: number
     }[]
+}
+
+export type DamageMap = Record<CharacterUid, number>
+export interface NetworkDOTData {
+    damageMap: DamageMap
 }

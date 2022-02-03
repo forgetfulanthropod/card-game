@@ -2,7 +2,6 @@ import type { BattleCursor } from '@/util'
 import { commit } from '@/util'
 import { sleep, vals } from '@/util'
 
-import { resetRound } from '..'
 import { ac, livingPcsRemain, readyNpcsRemain } from '../characterGetters'
 import { handleMove } from '../handleMove'
 import { tl, warn } from '../logging'
@@ -22,8 +21,6 @@ export async function doNpcTurn(scene: BattleCursor) {
         commit(scene, scene.get('username'))
         await sleep(TIME_BETWEEN_NPC_MOVES)
     }
-
-    resetRound(scene)
 }
 
 export async function doNpcMove(

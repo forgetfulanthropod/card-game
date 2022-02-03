@@ -8,18 +8,18 @@ import {
     getCharacterKeysAndDamages,
     getCharacterKeysAndEffects,
 } from './attack'
+import { applyDamage } from './cards/cardActions/applyDamage'
 
 /** Applies health, and effects */
 export default function applyMove(
     scene: BattleCursor,
-    lastAllChars: Record<string, CharacterMeta>,
     attackData: AttackData
 ): void {
     const allChars = scene.select('allCharacters')
 
     markAttackerAsMoved(allChars, attackData)
 
-    applyDamages(attackData, scene, lastAllChars, allChars)
+    applyDamages(attackData, scene)
 
     decrementEffectStacks(allChars, attackData)
     applyNewEffects(allChars, attackData)
@@ -31,16 +31,12 @@ function markAttackerAsMoved(allChars: AllCharacters, attackData: AttackData) {
     allChars.select(attackData.attacker.uid).set('hasMoved', true)
 }
 
-function applyDamages(
-    attackData: AttackData,
-    scene: BattleCursor,
-    lastAllChars: Record<string, CharacterMeta>,
-    allChars: AllCharacters
-) {
-    getCharacterKeysAndDamages(attackData, scene).forEach(({ key, damage }) => {
-        const newHealth = lastAllChars[key].health - damage
-        allChars.select(key).set('health', newHealth)
-    })
+function applyDamages(attackData: AttackData, scene: BattleCursor) {
+    getCharacterKeysAndDamages(attackData, scene).forEach(
+        ({ key: targetUid, damage }) => {
+            applyDamage({ damage, targetUid, scene })
+        }
+    )
 }
 
 export function applyNewEffects(

@@ -1,4 +1,4 @@
-import type { OwnedCharacter } from '@shared'
+import type { OwnedCharacterStats } from '@shared'
 import type { SCursor } from 'baobab'
 
 import { addSelected } from '@/actions'
@@ -70,7 +70,7 @@ function makeCharacters() {
 
 function makeSelectionIndicators(
     characters: PixiContainer[],
-    selectedCharacters: SCursor<OwnedCharacter[]>
+    selectedCharacters: SCursor<OwnedCharacterStats[]>
 ) {
     update()
     selectedCharacters.on('update', update)

@@ -2,6 +2,7 @@ import type {
     CharacterMeta,
     CharacterUid,
     NetworkAttackData,
+    NetworkDOTData,
     NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
@@ -12,12 +13,13 @@ import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     Container,
-    doFlashElement,
     flashElement,
+    flashTo,
     hideElement,
     PixiTicker,
     Sprite,
 } from '@/elementsUtil'
+import { keys } from '@/util'
 
 import { assetIdToSrc } from '../logic/assetGetters'
 import HealthBar from './HealthBar'
@@ -108,30 +110,64 @@ export function Character(args: CharacterProps): PixiContainer {
 
     args.cursor.select('health').on('update', updateDeathAndHealth)
     args.cursor.select('effects').on('update', updateDeathAndHealth)
-    // args.cursor.select('level').on('update', () => {
-    //     doFlashElement(
-    //         aboveCharacterContainer,
-    //         () => LevelUp({ level: args.cursor.select('level').get() }),
-    //         { durationMs: SHOW_LEVEL_UP_TIME }
-    //     )
-    // })
 
-    // const [isHovering, setIsHovering] = useState(false)
+    bindDOT(characterMeta, aboveCharacterContainer)
 
+    bindMoves(
+        characterMeta,
+        attackSprite,
+        healthBar,
+        screenX,
+        screenY,
+        flyingContainer,
+        defendSprite,
+        aboveCharacterContainer
+    )
+
+    updateDeathAndHealth()
+
+    return flyingContainer
+}
+
+function bindDOT(
+    characterMeta: CharacterMeta,
+    aboveCharacterContainer: PixiContainer
+) {
+    getSocket().on('DOT$', (event: NetworkEvent<'move$', NetworkDOTData>) => {
+        const { damageMap } = event.data
+
+        keys(damageMap).forEach(characterUid => {
+            if (characterUid === characterMeta.uid)
+                flashPoisonTo(aboveCharacterContainer, damageMap[characterUid])
+        })
+    })
+}
+
+function bindMoves(
+    characterMeta: CharacterMeta,
+    attackSprite: PixiSprite,
+    healthBar: PixiContainer,
+    screenX: number,
+    screenY: number,
+    flyingContainer: PixiContainer,
+    defendSprite: PixiSprite,
+    aboveCharacterContainer: PixiContainer
+) {
     getSocket().on(
         'move$',
-        function doCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
-            const { attacker, defenders, moveName, damageMap } = event.data
-            // console.log("doCharMove of", JSON.stringify(d))
-            const myId = characterMeta.uid
-            if (attacker === myId) {
+        function showCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
+            const { attackerUid, defenderUids, moveName, damageKVs } =
+                event.data
+
+            const thisUid = characterMeta.uid
+            if (attackerUid === thisUid) {
                 flashElement(attackSprite, {
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
                 hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
                 const defender0 = getBattleScene()
                     .select('allCharacters')
-                    .select(defenders[0])
+                    .select(defenderUids[0])
                     .get()
                 const fly = makeFlyToOnTick(
                     { x: screenX, y: screenY },
@@ -141,51 +177,32 @@ export function Character(args: CharacterProps): PixiContainer {
                     const result = fly(flyingContainer, dt)
                     if (result === 'remove') PixiTicker.shared.remove(cb)
                 })
-                const charDamage =
-                    damageMap.find(d => d.key === myId)?.damage ?? null
-                if (charDamage != null)
-                    doFlashElement(
-                        aboveCharacterContainer,
-                        () => HitInfo({ damage: charDamage, isPoison: true }),
-                        {
-                            durationMs: SHOW_HIT_TIME,
-                        }
-                    )
             }
 
-            if (defenders.findIndex(d => d === myId) > -1) {
+            if (defenderUids.findIndex(d => d === thisUid) > -1) {
                 flashElement(defendSprite, {
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
-                doFlashElement(
+                flashTo(
                     aboveCharacterContainer,
                     () => MoveInfo({ moveName, offset: -70 }),
                     {
                         durationMs: SHOW_HIT_TIME,
                     }
                 )
-                const damageObj = damageMap.find(d => d.key === myId)
+                const damageObj = damageKVs.find(d => d.key === thisUid)
                 if (damageObj == null) {
                     console.warn(
-                        `damageMap did not provide value for defender with id ${myId}. damageMap:`,
-                        damageMap
+                        `damageMap did not provide value for defender with id ${thisUid}. damageMap:`,
+                        damageKVs
                     )
                     return
                 }
-                doFlashElement(
-                    aboveCharacterContainer,
-                    () => HitInfo({ damage: damageObj.damage }),
-                    {
-                        durationMs: SHOW_HIT_TIME,
-                    }
-                )
+
+                flashDamageTo(aboveCharacterContainer, damageObj.damage)
             }
         }
     )
-
-    updateDeathAndHealth()
-
-    return flyingContainer
 }
 
 function makeSprites(
@@ -332,4 +349,26 @@ function makeFlyToOnTick(start: Point, flyTo: Point) {
         }
         return undefined
     }
+}
+
+function flashPoisonTo(
+    aboveCharacterContainer: PixiContainer,
+    damage: number
+): void {
+    flashTo(
+        aboveCharacterContainer,
+        () => HitInfo({ damage, isPoison: true }),
+        {
+            durationMs: SHOW_HIT_TIME,
+        }
+    )
+}
+
+function flashDamageTo(
+    aboveCharacterContainer: PixiContainer,
+    damage: number
+): void {
+    flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
+        durationMs: SHOW_HIT_TIME,
+    })
 }

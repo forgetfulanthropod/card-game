@@ -58,32 +58,16 @@ export function getCharacterMovesWithDamageRanges(
     }
 }
 
+export type DamageKV = { key: CharacterUid; damage: number }
+
 export function getCharacterKeysAndDamages(
     attackData: Readonly<AttackData>,
     scene: BattleCursor
-): { key: CharacterUid; damage: number }[] {
-    const kds = attackData.defenders.map(defender => ({
+): DamageKV[] {
+    return attackData.defenders.map(defender => ({
         key: defender.uid,
         damage: getDamage({ ad: attackData, defender, scene }),
     }))
-
-    if (attackData.attacker.effects.length > 0) {
-        attackData.attacker.effects.forEach(e => {
-            if (e.damagesByRound == null) return
-            if (e.remainingRounds == null) {
-                throw Error('bad attack effect data')
-            }
-            if (e.remainingRounds <= 0) {
-                throw Error('trying to apply exhausted effect')
-            }
-
-            const damage =
-                e.damagesByRound[e.damagesByRound.length - e.remainingRounds]
-            kds.push({ key: attackData.attacker.uid, damage })
-        })
-    }
-
-    return kds
 }
 
 export function getCharacterKeysAndEffects(
