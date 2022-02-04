@@ -56,7 +56,13 @@ export interface Effect {
     dealer?: CharacterUid
 }
 
-export type CardId = 'shieldOfLight' | 'shield' | 'sweepTheLeg' | 'bodySlam'
+export type CardId =
+    | 'shieldOfLight'
+    | 'shield'
+    | 'sweepTheLeg'
+    | 'bodySlam'
+    | 'jab'
+    | 'strike'
 
 export type Card = {
     name: string
