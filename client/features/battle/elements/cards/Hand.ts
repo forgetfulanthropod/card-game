@@ -1,5 +1,4 @@
 import type { Card, CharacterUid, Pile } from '@shared'
-// import { myPIXI } from '@/elementsUtil'
 import { gsap } from 'gsap'
 import { filters } from 'pixi.js'
 
@@ -11,12 +10,11 @@ import type {
     PixiSprite,
     SpriteArgs,
 } from '@/elementsUtil'
-import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 import { keys, vals } from '@/util'
 
-import type { AssetKey } from '../../logic/AssetLoader'
+import { getCardSrc } from '../../logic/assetGetters'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
@@ -26,7 +24,7 @@ export function Hand(pile: Pile): PixiContainer {
         const xyr = getXYRotationForNthCard(index + 1, keys(pile).length)
 
         const restingParams: Partial<SpriteArgs> = {
-            src: getTexture(card.id as AssetKey),
+            src: getCardSrc(card.id),
             name: cardUids[index],
             scale,
             anchor: [0.5, 0.5],

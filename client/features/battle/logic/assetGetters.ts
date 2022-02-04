@@ -1,9 +1,20 @@
-import type { CharacterName, EffectType } from '@shared'
+import type { CardId, CharacterName, EffectType } from '@shared'
+import { startCase } from 'lodash'
 import { Loader } from 'pixi.js'
 
 import type { PixiTexture } from '@/elementsUtil'
 
 import type { AssetKey } from './AssetLoader'
+import type { CardArtAssetId } from './cardAssets'
+
+export function getCardSrc(cardId: CardId) {
+    const assetId = `card${startCase(cardId).replace(
+        / /g,
+        ''
+    )}` as CardArtAssetId
+
+    return getTexture(assetId)
+}
 
 export function getEffectIconSrc(effectType: EffectType) {
     const effectToIconMap: Record<EffectType, AssetKey> = {

@@ -6,14 +6,14 @@ import type { BattleCursor } from '@/util'
 
 import { checkBattleOver } from '..'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
-import {explain as explainBlock} from './cardActions/block'
-import {execute as executeBlock} from './cardActions/block'
-import {explain as explainChain} from './cardActions/chain'
-import {execute as executeChain} from './cardActions/chain'
-import {explain as explainDeal} from './cardActions/deal'
-import {execute as executeDeal} from './cardActions/deal'
-import {explain as explainDebilitate} from './cardActions/debilitate'
-import {execute as executeDebilitate} from './cardActions/debilitate'
+import { explain as explainBlock } from './cardActions/block'
+import { execute as executeBlock } from './cardActions/block'
+import { explain as explainChain } from './cardActions/chain'
+import { execute as executeChain } from './cardActions/chain'
+import { explain as explainDeal } from './cardActions/deal'
+import { execute as executeDeal } from './cardActions/deal'
+import { explain as explainDebilitate } from './cardActions/debilitate'
+import { execute as executeDebilitate } from './cardActions/debilitate'
 // @endindex
 
 export function interpretActions({
@@ -32,6 +32,7 @@ export function interpretActions({
         dexterity: cardOwner.dexterity,
         magic: cardOwner.magic,
         constitution: cardOwner.constitution,
+        block: cardOwner.block,
     }
     const explanation = explainActions(card.actions, locals)
     //DEBUG
@@ -80,10 +81,14 @@ export function executeActions({
     const ctx = generateAnguContext({
         // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
         // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, card, targetUids, scene }),`)
-        block: (...dslArgs: VAngu[]) => executeBlock({ dslArgs, card, targetUids, scene }),
-        chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, card, targetUids, scene }),
-        deal: (...dslArgs: VAngu[]) => executeDeal({ dslArgs, card, targetUids, scene }),
-        debilitate: (...dslArgs: VAngu[]) => executeDebilitate({ dslArgs, card, targetUids, scene }),
+        addBlock: (...dslArgs: VAngu[]) =>
+            executeBlock({ dslArgs, card, targetUids, scene }),
+        chain: (...dslArgs: VAngu[]) =>
+            executeChain({ dslArgs, card, targetUids, scene }),
+        deal: (...dslArgs: VAngu[]) =>
+            executeDeal({ dslArgs, card, targetUids, scene }),
+        debilitate: (...dslArgs: VAngu[]) =>
+            executeDebilitate({ dslArgs, card, targetUids, scene }),
         // @endindex
     })
 
