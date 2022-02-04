@@ -9,7 +9,7 @@ export default function HitInfo(args: {
         text: `-${args.damage}`,
         anchor: [0, 1],
         style: {
-            fontFamily: 'monospace',
+            fontFamily: ['VT323', 'monospace'],
             fontSize: 60,
             fill: args.isPoison
                 ? ['rgb(143,253,49)', 'rgb(43,148,52)']

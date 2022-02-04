@@ -34,12 +34,19 @@ function update({ scene, container }: BindCursorArgs) {
 }
 
 function Energy(value: number): PixiContainer {
+    const energyWidth = 180
+
     return Container({
         name: 'Energy',
-        x: BASE_WIDTH * 0.1,
-        y: BASE_HEIGHT * 0.7,
+        x: BASE_WIDTH * 0.06,
+        y: BASE_HEIGHT * 0.75,
         children: [
-            Sprite({ src: getEnergySrc(), anchor: [0.5, 0.5] }),
+            Sprite({
+                src: getEnergySrc(),
+                anchor: [0.5, 0.5],
+                width: (energyWidth * BASE_WIDTH) / 1920,
+                height: (energyWidth * BASE_WIDTH) / 1920,
+            }),
             Text({
                 text: `${value}`,
                 style: {
@@ -49,8 +56,8 @@ function Energy(value: number): PixiContainer {
                     fontSize: 100,
                     fontFamily: 'VT323',
                 },
-                width: getEnergySrc().width * 0.5,
-                height: getEnergySrc().height * 0.5,
+                width: ((energyWidth / 2) * BASE_WIDTH) / 1920,
+                height: ((energyWidth / 2) * BASE_WIDTH) / 1920,
                 anchor: [0.5, 0.5],
             }),
         ],

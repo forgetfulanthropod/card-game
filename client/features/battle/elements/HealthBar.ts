@@ -61,18 +61,19 @@ function bindBlockIndicator(
                 children: [
                     Sprite({
                         src: getTexture('blockIcon'),
-                        width: 50 * (BASE_WIDTH / 1920),
-                        height: 50 * (BASE_WIDTH / 1920),
-                        anchor: [0.5, 0.4],
+                        width: 60 * (BASE_WIDTH / 1920),
+                        height: 60 * (BASE_WIDTH / 1920),
+                        anchor: [0.5, 0.5],
                     }),
                     Text({
                         text: `${newBlock}`,
-                        anchor: [0.6, 1],
+                        anchor: [0.5, 0.5],
                         style: {
-                            fontFamily: ['VT323', 'monospace'],
-                            fontSize: 30,
-                            fill: 'white',
-                            stroke: 'black',
+                            // fontFamily: ['VT323', 'monospace'],
+                            fontFamily: ['monospace'],
+                            fontSize: 22,
+                            fill: '#eee',
+                            stroke: '#666',
                             strokeThickness: 5,
                         },
                     }),

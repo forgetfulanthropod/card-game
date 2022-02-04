@@ -7,7 +7,7 @@ export default function (args: { moveName: string; offset: number }): PixiText {
         text: args.moveName,
         anchor: [0, 1],
         style: {
-            fontFamily: 'monospace',
+            fontFamily: ['VT323', 'monospace'],
             fontSize: 40,
             fontWeight: '900',
             fill: ['#333', '#000'], // gradient
