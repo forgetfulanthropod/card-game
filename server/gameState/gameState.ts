@@ -32,7 +32,7 @@ export function getInitialGameState(username: string): Gamestate {
         scene: initialEntryState,
         ownedCharacters: initialOwnedCharacters(),
         inventory: {},
-        coin: 0,
+        coin: 99,
         blessings: [],
         events: { world$: [], move$: [], DOT$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,

@@ -213,7 +213,9 @@ function bindHealthIndicator(
     function updateHealth() {
         container.removeChildren()
 
-        const text = characterCursor.select('health').get()?.toString()
+        const char = characterCursor.get()
+        // const text = `${char.health} / ${char.maxHealth}`
+        const text = `${char.health}`
 
         container.addChild(
             Graphics({ draw: g => drawHealthBar(characterCursor, g) }),
@@ -226,12 +228,16 @@ function bindHealthIndicator(
             Text({
                 text,
                 zIndex: 1,
-                anchor: [0, 1],
+                anchor: [0.5, 0.5],
+                x: displayWidth / 2,
+                y: displayHeight / 2,
                 style: {
                     fontFamily: 'monospace',
                     fontSize: 30,
                     fill: ['#ffeaab', '#f2b600'],
-                    letterSpacing: -5,
+                    stroke: '#333',
+                    strokeThickness: 5,
+                    letterSpacing: -3,
                 },
             })
         )

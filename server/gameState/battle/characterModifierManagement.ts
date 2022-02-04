@@ -42,5 +42,6 @@ function copyFinalProperties(
         health: newHealth,
         hasMoved: from.hasMoved,
         experience: from.experience,
+        block: from.block,
     }
 }
