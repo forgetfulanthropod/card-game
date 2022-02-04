@@ -6,9 +6,12 @@ import { keys } from '@/util'
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)
     scene.set('isPlayerTurn', false)
+
     commit(scene, scene.get('username'))
 
     applyDOTDamages(scene)
+
+    commit(scene, scene.get('username'))
 
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)

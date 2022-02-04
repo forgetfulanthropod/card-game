@@ -21,13 +21,13 @@ export function makeCharacters(
     chosen: OwnedCharacterStats[] = [],
     username: string
 ): Characters {
-    const playerCharacterPositions = makePositions(
-        10,
-        50,
-        18,
-        13,
-        chosen.length
-    )
+    const playerCharacterPositions = makePositions({
+        x0: 10,
+        y0: 50,
+        hGap: 18,
+        vGap: 13,
+        n: chosen.length,
+    })
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
@@ -45,7 +45,7 @@ export function makeCharacters(
 }
 
 export function rearrangeNpcs(npcs: Characters): Characters {
-    const positions = makePositions(65, 50, 18, 13, keys(npcs).length)
+    const positions = getEnemyPositions(keys(npcs).length)
 
     const rearrangedNpcs: Characters = {}
 
@@ -65,13 +65,29 @@ export function rearrangeNpcs(npcs: Characters): Characters {
     return rearrangedNpcs
 }
 
-export function makePositions(
-    x0: number,
-    y0: number,
-    hGap: number,
-    vGap: number,
-    n = 6
-): [number, number][] {
+export function getEnemyPositions(n: number) {
+    return makePositions({
+        x0: 70,
+        y0: 50,
+        hGap: 18,
+        vGap: 13,
+        n,
+    })
+}
+
+export function makePositions({
+    x0,
+    y0,
+    hGap,
+    vGap,
+    n = 6,
+}: {
+    x0: number
+    y0: number
+    hGap: number
+    vGap: number
+    n?: number
+}): [number, number][] {
     const A: [number, number][] = [
         [x0, y0],
         [x0 + hGap, y0],

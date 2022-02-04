@@ -15,7 +15,7 @@ import {
     weightedRandom,
 } from '@/util'
 
-import { makePositions, newNPCMeta } from './characterManagement'
+import { getEnemyPositions, newNPCMeta } from './characterManagement'
 
 export type Room = {
     modifier: number
@@ -88,7 +88,9 @@ function makeRoom(args: {
         .map(x => x.name)
     const modifier = args?.modifier ?? 1
     const names = ssampleSize(npcNames, srandInt(1, 5))
-    const positions = makePositions(65, 50, 18, 13, names.length)
+
+    const positions = getEnemyPositions(names.length)
+
     if (args.door === 'random') {
         return {
             modifier,
@@ -119,14 +121,14 @@ function makeRoom(args: {
     const outcome = roomOutcomes.outcomes[index]
     return {
         modifier,
-        enemies: mapToObj(outcome, pair => {
+        enemies: mapToObj(outcome, (pair, i) => {
             const [name, level] = pair
             const uid = makeUid()
             return [
                 uid,
                 newNPCMeta({
-                    x: srandInt(50, 80),
-                    y: srandInt(40, 70),
+                    x: positions[i][0],
+                    y: positions[i][1],
                     name,
                     uid,
                     level: level * modifier,
@@ -168,20 +170,21 @@ export function getRoom(args: {
         case 'skeleton': {
             const v = specialDoorsMap[door].variables
             const uid = makeUid()
-            // if (roomsPassed + 1 === v.levelToAppearOn) {
+
+            const positions = getEnemyPositions(1)
+
             return {
                 modifier: 1,
                 enemies: {
                     [uid]: newNPCMeta({
-                        ...randCoords(),
+                        x: positions[0][0],
+                        y: positions[0][1],
                         name: v.enemyName,
                         uid,
                         level: v.enemyLevel,
                     }),
                 },
             }
-            // }
-            // return makeRandRegularRoom(dungeonName, roomsPassed)
         }
         case 'campfire': {
             const v = specialDoorsMap[door].variables

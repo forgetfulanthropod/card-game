@@ -1,9 +1,4 @@
-import type {
-    AttackData,
-    CharacterMove,
-    CharacterUid,
-    NetworkEvent,
-} from '@shared'
+import type { CharacterMove, CharacterUid, NetworkAttackData } from '@shared'
 
 import type { BattleCursor } from '@/util'
 
@@ -39,11 +34,13 @@ function getMimicMove({
         //@ts-ignore
         ...(scene.up().get('events', 'move$') as NetworkEvent<
             'move$',
-            AttackData
-        >[]),
+            NetworkAttackData
+        >),
     ]
         ?.reverse()
-        ?.find(event => event.data.defenders.find(d => d.uid === charUid))
+        ?.find(({ data }: { data: NetworkAttackData }) =>
+            data.defenderUids.find(uid => uid === charUid)
+        )
 
     const types = lastAttackOnThisCharacter?.data?.move?.types ?? ['MIM']
 

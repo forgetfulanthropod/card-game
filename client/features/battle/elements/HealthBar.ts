@@ -29,7 +29,7 @@ export default function HealthBar(characterUid: CharacterUid): PixiContainer {
     const mainEl = bindMainEl()
     bindHealthIndicator(characterCursor, mainEl)
     bindStanceIndicator(characterCursor, mainEl)
-    bindEffectIndicator(characterCursor, mainEl)
+    bindEffectIndicators(characterCursor, mainEl)
     bindBlockIndicator(characterCursor, mainEl)
     return mainEl
 }
@@ -83,7 +83,7 @@ function bindBlockIndicator(
     }
 }
 
-function bindEffectIndicator(
+function bindEffectIndicators(
     characterCursor: SCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
@@ -139,6 +139,7 @@ function bindEffectIndicator(
 
                 return Container({
                     y: 50 * (BASE_HEIGHT / 1080),
+                    x: (numMatchedEffects - 1) * 50 * (BASE_HEIGHT / 1080),
                     children: [...(icon ? [icon] : []), text],
                 })
             }
@@ -213,9 +214,8 @@ function bindHealthIndicator(
     function updateHealth() {
         container.removeChildren()
 
-        const char = characterCursor.get()
         // const text = `${char.health} / ${char.maxHealth}`
-        const text = `${char.health}`
+        const text = `${characterCursor.get('health')}`
 
         container.addChild(
             Graphics({ draw: g => drawHealthBar(characterCursor, g) }),
