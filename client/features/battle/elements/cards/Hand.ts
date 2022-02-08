@@ -18,7 +18,6 @@ import { getCardSrc } from '../../logic/assetGetters'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)
-    const scale = 0.5
 
     const children = vals(pile).map((card, index) => {
         const xyr = getXYRotationForNthCard(index + 1, keys(pile).length)
@@ -26,7 +25,8 @@ export function Hand(pile: Pile): PixiContainer {
         const restingParams: Partial<SpriteArgs> = {
             src: getCardSrc(card.id),
             name: cardUids[index],
-            scale,
+            width: CARD_WIDTH_IN_HAND,
+            height: CARD_HEIGHT_IN_HAND,
             anchor: [0.5, 0.5],
             ...xyr,
         }
@@ -45,6 +45,12 @@ export function Hand(pile: Pile): PixiContainer {
     })
 }
 
+const CARD_H_TO_W_RATIO = 630 / 450
+const CARD_WIDTH_IN_HAND = 220
+const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
+const CARD_WIDTH_FULL = 350
+const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
+
 function getMouseEvents(
     card: Card,
     restingParams: Partial<SpriteArgs>
@@ -57,66 +63,65 @@ function getMouseEvents(
     let animationForCard = gsap.to({}, 0, {})
     let expandedCard: PixiSprite | null
 
-    const onMouseover: InteractionEventHandler = async ({ currentTarget }) => {
-        if (animationForCard != null) await animationForCard
+    return {
+        onMouseover: async ({ currentTarget }) => {
+            if (animationForCard != null) await animationForCard
 
-        const parent = currentTarget.parent
+            const parent = currentTarget.parent
 
-        currentTarget.filters = [hideFilter]
+            currentTarget.filters = [hideFilter]
 
-        if (expandedCard != null) {
-            parent.removeChild(expandedCard)
-            expandedCard.destroy()
-            expandedCard = null
-        }
-
-        //@ts-ignore says src type incompatible but it's a PixiTexture
-        expandedCard = Sprite({
-            ...{ ...restingParams, name: `${restingParams.name}-expanded` },
-        })
-
-        parent.addChild(expandedCard)
-
-        animationForCard = gsap.to(expandedCard, {
-            pixi: { y: -350, rotation: 0, scale: 1 },
-            duration: 0.3,
-        })
-    }
-
-    const onMouseout: InteractionEventHandler = async ({ currentTarget }) => {
-        if (animationForCard == null) return
-
-        await animationForCard.reverse().then(() => {
-            animationForCard.kill()
-            currentTarget.filters = []
             if (expandedCard != null) {
-                currentTarget.parent.removeChild(expandedCard)
+                parent.removeChild(expandedCard)
                 expandedCard.destroy()
                 expandedCard = null
             }
-        })
-    }
 
-    const onClick: InteractionEventHandler = async ({ currentTarget }) => {
-        let targetUids
-        switch (card.targetType) {
-            case 'enemies':
-                targetUids = [getFrontEnemyUid()]
-                break
-            case 'friends':
-                targetUids = [getFrontFriendUid()]
-                break
-        }
-        await playCard({
-            cardUid: currentTarget.name,
-            targetUids,
-        })
-    }
+            //@ts-ignore says src type incompatible but it's a PixiTexture
+            expandedCard = Sprite({
+                ...{ ...restingParams, name: `${restingParams.name}-expanded` },
+            })
 
-    return {
-        onMouseover,
-        onMouseout,
-        onClick,
+            parent.addChild(expandedCard)
+
+            animationForCard = gsap.to(expandedCard, {
+                pixi: {
+                    y: -CARD_HEIGHT_FULL / 2 - 20,
+                    rotation: 0,
+                    width: CARD_WIDTH_FULL,
+                    height: CARD_HEIGHT_FULL,
+                },
+                duration: 0.3,
+            })
+        },
+        onMouseout: async ({ currentTarget }) => {
+            if (animationForCard == null) return
+
+            await animationForCard.reverse().then(() => {
+                animationForCard.kill()
+                currentTarget.filters = []
+                if (expandedCard != null) {
+                    currentTarget.parent.removeChild(expandedCard)
+                    expandedCard.destroy()
+                    expandedCard = null
+                }
+            })
+        },
+        onClick: async ({ currentTarget }) => {
+            let targetUids
+            switch (card.targetType) {
+                case 'enemies':
+                    targetUids = [getFrontEnemyUid()]
+                    break
+                case 'friends':
+                    targetUids = [getFrontFriendUid()]
+                    break
+            }
+            await playCard({
+                cardUid: currentTarget.name,
+                targetUids,
+            })
+        },
     }
 }
 
