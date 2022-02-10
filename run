@@ -22,12 +22,14 @@ function install-all() {
 }
 
 function CI() {
-    npm i -P
+    source ~/.bashrc
+
+    pnpm i -P
     cd client
-    npm i -P
+    pnpm i -P
 
     cd ../server
-    npm i -P
+    pnpm i -P
 
     cd ..
 
