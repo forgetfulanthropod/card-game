@@ -1,9 +1,9 @@
 set -x
 
-pnpm i -P
+npm i -P
 cd client
-pnpm i -P
-pnpm run build
+npm i -P
+npm run build
 cd ../server
-pnpm i -P
-pnpm run build
+npm i -P
+npm run build
