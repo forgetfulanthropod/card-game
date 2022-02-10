@@ -22,7 +22,17 @@ function install-all() {
 }
 
 function CI() {
-    bash scripts/ci.sh
+    npm i -P
+    cd client
+    npm i -P
+
+    cd ../server
+    npm i -P
+
+    cd ..
+
+    client:build
+    server:build
 }
 
 function lint() {
