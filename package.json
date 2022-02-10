@@ -1,5 +1,8 @@
 {
     "name": "kaiju-root",
+    "scripts": {
+        "CI": "bash run CI"
+    },
     "dependencies": {
         "baobab": "github:qpwo/baobab#more-detailed-types",
         "deep-diff": "^1.0.2",
