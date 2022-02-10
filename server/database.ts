@@ -1,7 +1,7 @@
 import type { Gamestate } from '@shared'
-import { AceBase } from 'acebase'
+// import { AceBase } from 'acebase'
 
-const db = new AceBase('kaiju_db', { logLevel: 'warn' })
+// const db = new AceBase('kaiju_db', { logLevel: 'warn' })
 
 // @ts-ignore
 const getRef = (username: string) => db.ref(`users/${username}`)

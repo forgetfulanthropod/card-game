@@ -2,9 +2,8 @@ import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
 import type { SCursor } from 'baobab'
 import { SBaobab } from 'baobab'
 import { memoize } from 'lodash'
-import winston from 'winston'
 
-import { getAllUsers, setUser } from '@/database'
+// import { getAllUsers, setUser } from '@/database'
 import { getIo, getSocketId } from '@/index'
 
 export function getEntryScene(username: string): SCursor<EntryScene> {
@@ -41,7 +40,7 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     getIo()
         .to(socketId)
         .emit('update', { data: cursor.get(), path: path.slice(3) })
-    void setUser(username, getGameStateCursor(username).get())
+    // void setUser(username, getGameStateCursor(username).get())
 }
 
 export function stampedEmit<_A extends string, _B>(args: {
@@ -82,13 +81,13 @@ export const getRootCursor = memoize(
                 testCounters: { counter0: 0 },
             },
         })
-        void getAllUsers()
-            .then(users => b.select('contents').select('users').set(users))
-            .catch(reason =>
-                winston.error(
-                    'ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)
-                )
-            )
+        // void getAllUsers()
+        //     .then(users => b.select('contents').select('users').set(users))
+        //     .catch(reason =>
+        //         winston.error(
+        //             'ERROR: COULD NOT GET ALL USERS: ' + JSON.stringify(reason)
+        //         )
+        //     )
         const result = b.select('contents')
         return result
     }

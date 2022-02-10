@@ -1,6 +1,6 @@
 import './config/logger'
-import './database'
 
+// import './database'
 import express from 'express'
 import session from 'express-session'
 import type { Server } from 'http'
