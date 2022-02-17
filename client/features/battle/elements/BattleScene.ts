@@ -1,4 +1,4 @@
-import { chooseDoor, exitDungeon, startBattle } from '@/actions'
+import { startBattle } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
@@ -8,9 +8,9 @@ import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
 import { backgroundAssets } from '../logic/backgroundAssets'
 import background from './background'
 import { bindCharacters } from './bindCharacters'
+import { bindDoors } from './bindDoors'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards/bindCards'
-import Doors from './Doors'
 import InfoBox from './InfoBox'
 
 export function BattleScene(): PixiContainer {
@@ -47,38 +47,8 @@ export function BattleScene(): PixiContainer {
     bindCards({ scene, container: cardsContainer })
     bindEnergy({ scene, container: energyContainer })
 
-    setTimeout(() => makeDoors(container), 0)
+    setTimeout(() => bindDoors(container), 0)
     setTimeout(() => startBattle(), 0)
 
     return container
-}
-
-function makeDoors(parent: PixiContainer) {
-    const doorCursor = getBattleScene().select('doors')
-    let doorsContainer: PixiContainer | null = null
-    update()
-    doorCursor.on('update', update)
-
-    function update() {
-        const doors = doorCursor.get()
-        // console.log('doors update...')
-        if (
-            (doors == null || doors.options.length === 0) &&
-            doorsContainer != null
-        ) {
-            parent.removeChild(doorsContainer)
-            doorsContainer.destroy()
-            doorsContainer = null
-        } else if (doors != null) {
-            // console.log('adding some doors')
-            doorsContainer = Doors({
-                callbacks: doors.options.map(
-                    d => () => chooseDoor({ door: d })
-                ),
-                descriptions: doors.descriptions,
-                exit: () => exitDungeon(),
-            })
-            parent.addChild(doorsContainer)
-        }
-    }
 }

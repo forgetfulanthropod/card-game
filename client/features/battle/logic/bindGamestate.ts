@@ -6,16 +6,26 @@ import { BattleScene } from '../elements/BattleScene'
 import Chest from '../elements/Chest'
 import { DungeonEntryScene } from '../elements/DungeonEntryScene'
 
-export function bindGamestate(app: PixiApplication): void {
-    let lastScene: PixiContainer | null = null
+let lastScene: PixiContainer
 
+export function bindGamestate(app: PixiApplication): void {
+    setBodyStyles()
+
+    bindScene(app)
+}
+
+function setBodyStyles() {
     document.body.style.cursor = 'pointer'
     document.body.style.cursor = `url('${pointer}'), pointer`
+}
 
+function bindScene(app: PixiApplication) {
     const sceneTypeCursor = getScene().select('name')
+
     sceneTypeCursor.on('update', () => {
         setScene()
     })
+
     setScene()
 
     function setScene() {

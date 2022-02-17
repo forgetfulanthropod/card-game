@@ -56,6 +56,8 @@ export interface Effect {
     dealer?: CharacterUid
 }
 
+export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
+
 export type CardId =
     | 'shieldOfLight'
     | 'shield'
@@ -64,6 +66,8 @@ export type CardId =
     | 'jab'
     | 'strike'
 
+export type CharacterClass = 'cleric' | 'warrior' | 'wizard' | 'bard' | 'rogue'
+
 export type Card = {
     name: string
     energy: number
@@ -71,12 +75,10 @@ export type Card = {
     targetNum: number
     targetType: 'friends' | 'enemies'
     actions: string
-    text: string[]
-    definitions: string[]
-    type: string
+    type: CardType
+    characterClass: CharacterClass
+
     characterUid: CharacterUid
-    characterClass: string
-    deckId: string
 }
 
 export interface CharacterMeta extends CharacterStats {

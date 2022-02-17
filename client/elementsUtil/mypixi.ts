@@ -2,10 +2,12 @@
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import type {
+    DisplayObject as PixiDisplayObject,
     Filter as PixiFilter,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
+import { Renderer } from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
@@ -93,6 +95,7 @@ export interface SpriteArgs extends ShownArgs {
 export type PixiChildren = (
     | PixiSprite
     | PixiContainer
+    | PixiDisplayObject
     | null
     | false
     | undefined
@@ -245,6 +248,18 @@ export function Application(args: {
 export function getPixiApp(): PixiApplication {
     if (app == null) throw Error('pixi application is null')
     return app
+}
+export function getRenderer(): Renderer {
+    const app = getPixiApp()
+
+    if (
+        !(app instanceof PixiApplication) ||
+        !(app.renderer instanceof Renderer)
+    )
+        throw new Error("The pixi app isn't ready yet sir")
+
+    return app.renderer
+    // return (getPixiApp() as PixiApplication).renderer as Renderer
 }
 export function getAppSize(): { width: number; height: number } {
     if (app == null) throw Error('pixi application is null')

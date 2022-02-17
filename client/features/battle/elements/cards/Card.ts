@@ -1,4 +1,5 @@
-import type { CharacterUid, Pile } from '@shared'
+import type { ColorStop } from '@pixi-essentials/gradients'
+import type { CharacterClass, CharacterUid, Pile } from '@shared'
 import type { Card } from '@shared'
 import { gsap } from 'gsap'
 import { filters } from 'pixi.js'
@@ -7,20 +8,33 @@ import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
+    PixiContainer,
     PixiSprite,
-    SpriteArgs,
+    PixiTexture,
 } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { Sprite } from '@/elementsUtil'
+import { Sprite, Text } from '@/elementsUtil'
+import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
 import { keys, vals } from '@/util'
 
-import { getCardSrc } from '../../logic/assetGetters'
+import { getCardTypeSrc } from '../../logic/assetGetters'
 
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_WIDTH_IN_HAND = 220
-const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
+// const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 const CARD_WIDTH_FULL = 350
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
+
+//maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
+const classToCardColorMap: Record<CharacterClass, [number, number]> = {
+    cleric: [0xbce42d, 0xffab44],
+    warrior: [0xe4a72f, 0xff435a],
+    wizard: [0x4d2fe9, 0x44a0ff],
+    bard: [0x016622, 0x44ff82],
+    rogue: [0x370561, 0xaa44ff],
+}
+
 export function Card({
     index,
     pile,
@@ -32,63 +46,117 @@ export function Card({
     card: Card
     name: string
 }) {
-    const xyr = getXYRotationForNthCard(index + 1, keys(pile).length)
+    const cardFrameTexture = getCardTypeSrc(card.type)
 
-    const restingParams: Partial<SpriteArgs> = {
-        src: getCardSrc(card.id),
+    return Container({
         name,
-        width: CARD_WIDTH_IN_HAND,
-        height: CARD_HEIGHT_IN_HAND,
-        anchor: [0.5, 0.5],
-        ...xyr,
-    }
-
-    //@ts-ignore says src type incompatible but it's a PixiTexture
-    return Sprite({
-        ...restingParams,
-        ...getMouseEvents(card, restingParams),
+        ...getXYRotationScaleForNthCard(
+            index + 1,
+            keys(pile).length,
+            cardFrameTexture
+        ),
+        children: [
+            RoundedRectangleGradientSprite({
+                radius: cardFrameTexture.width / 15,
+                gradientArgs: {
+                    x0: 0,
+                    y0: 0,
+                    x1: 0,
+                    y1: cardFrameTexture.height,
+                    colorStops: getColorStopsFromCharacterClass(
+                        card.characterClass
+                    ),
+                },
+                spriteArgs: {
+                    width: cardFrameTexture.width,
+                    height: cardFrameTexture.height,
+                    anchor: 0.5,
+                },
+            }),
+            Sprite({
+                src: cardFrameTexture,
+                anchor: 0.5,
+                ...getMouseEvents(card, cardFrameTexture),
+            }),
+            Sprite({
+                src: Text({
+                    text: 'asdf1234',
+                    style: {
+                        fontSize: 100,
+                        fontFamily: 'VT323',
+                        fill: 'white',
+                    },
+                }).texture,
+                anchor: 0.5,
+            }),
+        ],
     })
+}
+
+function getColorStopsFromCharacterClass(
+    characterClass: CharacterClass
+): ColorStop[] {
+    const bgGradientColors = classToCardColorMap[characterClass]
+
+    return bgGradientColors.map(
+        (color, i): ColorStop => ({
+            color,
+            offset: i / bgGradientColors.length,
+        })
+    )
 }
 
 function getMouseEvents(
     card: Card,
-    restingParams: Partial<SpriteArgs>
+    cardFrameTexture: PixiTexture
 ): {
     onMouseover: InteractionEventHandler
     onMouseout: InteractionEventHandler
     onClick: InteractionEventHandler
 } {
     const hideFilter = new filters.AlphaFilter(0)
-    let animationForCard = gsap.to({}, 0, {})
-    let expandedCard: PixiSprite | null
+    let animationForCard = getNullAnimation()
+    let expandedCard: PixiContainer | null
 
     return {
         onMouseover: async ({ currentTarget }) => {
-            if (animationForCard != null) await animationForCard
+            await animationForCard
 
             const parent = currentTarget.parent
 
-            currentTarget.filters = [hideFilter]
+            currentTarget.parent.children.forEach(
+                c => (c.filters = [hideFilter])
+            )
 
             if (expandedCard != null) {
-                parent.removeChild(expandedCard)
+                parent.parent.removeChild(expandedCard)
                 expandedCard.destroy()
                 expandedCard = null
             }
 
-            //@ts-ignore says src type incompatible but it's a PixiTexture
-            expandedCard = Sprite({
-                ...{ ...restingParams, name: `${restingParams.name}-expanded` },
+            expandedCard = Container({
+                name: `${parent.name}-expanded`,
+                scale: [parent.scale._x, parent.scale._y],
+                x: parent.x,
+                y: parent.y,
+                children: parent.children.map(c => {
+                    const s = c as PixiSprite
+                    return Sprite({
+                        src: s.texture,
+                        anchor: [s.anchor._x, s.anchor._y],
+                    })
+                }),
             })
 
-            parent.addChild(expandedCard)
+            parent.parent.addChild(expandedCard)
 
             animationForCard = gsap.to(expandedCard, {
                 pixi: {
                     y: -CARD_HEIGHT_FULL / 2 - 20,
                     rotation: 0,
-                    width: CARD_WIDTH_FULL,
-                    height: CARD_HEIGHT_FULL,
+                    scale: CARD_WIDTH_FULL / cardFrameTexture.width,
+                    // width: CARD_WIDTH_FULL,
+                    // height: CARD_HEIGHT_FULL,
                 },
                 duration: 0.3,
             })
@@ -98,7 +166,8 @@ function getMouseEvents(
 
             await animationForCard.reverse().then(() => {
                 animationForCard.kill()
-                currentTarget.filters = []
+                animationForCard = getNullAnimation()
+                currentTarget.parent.children.forEach(c => (c.filters = []))
                 if (expandedCard != null) {
                     currentTarget.parent.removeChild(expandedCard)
                     expandedCard.destroy()
@@ -122,6 +191,10 @@ function getMouseEvents(
             })
         },
     }
+}
+
+function getNullAnimation() {
+    return gsap.to({}, 0, {})
 }
 
 function getFrontFriendUid(): CharacterUid {
@@ -151,12 +224,13 @@ const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
 const MAX_CARD_ROTATION = Math.PI * 0.1
 const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
 
-type XYRotation = { x: number; y: number; rotation: number }
+type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
 
-export function getXYRotationForNthCard(
+export function getXYRotationScaleForNthCard(
     n: number,
-    numCardsInHand: number
-): XYRotation {
+    numCardsInHand: number,
+    cardFrameTexture: PixiTexture
+): XYRotationScale {
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 
@@ -179,5 +253,6 @@ export function getXYRotationForNthCard(
             -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
             Y_MAX_OFFSET / 8,
         rotation: xPlacementPortion * endCardRotation,
+        scale: CARD_WIDTH_IN_HAND / cardFrameTexture.width,
     }
 }
