@@ -10,6 +10,7 @@ import type {
     InteractionEventHandler,
     PixiContainer,
     PixiSprite,
+    PixiText,
     PixiTexture,
 } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
@@ -47,14 +48,15 @@ export function Card({
     name: string
 }) {
     const cardFrameTexture = getCardTypeSrc(card.type)
+    const xyrs = getXYRotationScaleForNthCard(
+        index + 1,
+        keys(pile).length,
+        cardFrameTexture
+    )
 
     return Container({
         name,
-        ...getXYRotationScaleForNthCard(
-            index + 1,
-            keys(pile).length,
-            cardFrameTexture
-        ),
+        ...xyrs,
         children: [
             RoundedRectangleGradientSprite({
                 radius: cardFrameTexture.width / 15,
@@ -76,21 +78,42 @@ export function Card({
             Sprite({
                 src: cardFrameTexture,
                 anchor: 0.5,
-                ...getMouseEvents(card, cardFrameTexture),
+                ...getMouseEvents(card, cardFrameTexture, xyrs),
             }),
-            Sprite({
-                src: Text({
-                    text: 'asdf1234',
-                    style: {
-                        fontSize: 100,
-                        fontFamily: 'VT323',
-                        fill: 'white',
-                    },
-                }).texture,
-                anchor: 0.5,
-            }),
+            ...getTexts(card, cardFrameTexture),
         ],
     })
+}
+
+function getTexts(card: Card, cardFrameTexture: PixiTexture): PixiText[] {
+    const marginH = cardFrameTexture.width / 10
+    const marginV = cardFrameTexture.width / 11
+
+    return [
+        Text({
+            text: card.name,
+            x: -cardFrameTexture.width / 2 + marginH,
+            y: -cardFrameTexture.height / 2 + marginV,
+            style: {
+                fontSize: 32,
+                fontFamily: 'VT323',
+                fill: 'white',
+                stroke: 'black',
+                strokeThickness: 6,
+            },
+        }),
+        Text({
+            text: card.characterClass,
+            x: -cardFrameTexture.width / 2 + marginH,
+            y: cardFrameTexture.width * 0.2,
+            width: cardFrameTexture.width - marginH * 2,
+            style: {
+                fontSize: 26,
+                fontFamily: 'VT323',
+                fill: 'black',
+            },
+        }),
+    ]
 }
 
 function getColorStopsFromCharacterClass(
@@ -108,7 +131,8 @@ function getColorStopsFromCharacterClass(
 
 function getMouseEvents(
     card: Card,
-    cardFrameTexture: PixiTexture
+    cardFrameTexture: PixiTexture,
+    xyrs: XYRotationScale
 ): {
     onMouseover: InteractionEventHandler
     onMouseout: InteractionEventHandler
@@ -136,13 +160,13 @@ function getMouseEvents(
 
             expandedCard = Container({
                 name: `${parent.name}-expanded`,
-                scale: [parent.scale._x, parent.scale._y],
-                x: parent.x,
-                y: parent.y,
+                ...xyrs,
                 children: parent.children.map(c => {
                     const s = c as PixiSprite
                     return Sprite({
                         src: s.texture,
+                        x: s.x,
+                        y: s.y,
                         anchor: [s.anchor._x, s.anchor._y],
                     })
                 }),
