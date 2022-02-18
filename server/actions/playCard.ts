@@ -1,12 +1,9 @@
 import type { PlayCard } from '@serverActions'
 import type { Card, CardUid } from '@shared'
 
+import { discard, getEnergy, play, updateHand } from '@/gameState/battle'
 import type { BattleCursor } from '@/util'
 import { getBattleScene } from '@/util'
-
-import { discard } from '../gameState/battle/cards/discard'
-import { play } from '../gameState/battle/cards/play'
-import { getEnergy } from '../gameState/battle/energy/getEnergy'
 
 export const BASE_HAND_SIZE = 5
 
@@ -18,6 +15,8 @@ export const playCard: PlayCard = args => {
         play({ card, targetUids: args.targetUids, scene })
         discard({ cardUid: args.cardUid, card, scene })
     }
+
+    updateHand(scene)
 }
 
 function findCard({

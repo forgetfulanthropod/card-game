@@ -2,6 +2,7 @@ import type { Card, CardId, Cards, CharacterUid } from '@shared'
 import { set } from 'lodash'
 
 import type { BattleCursor } from '@/util'
+import { keys } from '@/util'
 import { vals } from '@/util'
 
 import { explainActionsForCard, getCharIds } from '..'
@@ -72,8 +73,18 @@ const cardDefinitionsMap: Record<
     },
 }
 
+export function updateHand(scene: BattleCursor) {
+    scene.apply(['cards', 'hand'], hand => {
+        const newHand = { ...hand }
+        keys(hand).forEach(
+            cardUid =>
+                (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
+        )
+        return newHand
+    })
+}
+
 export function setCards(scene: BattleCursor) {
-    console.log('>>>> setting cards')
     scene.set('cards', makeCards(scene))
 }
 
