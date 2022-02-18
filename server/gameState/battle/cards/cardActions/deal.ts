@@ -4,7 +4,7 @@ import type { Value as VAngu } from 'angu'
 import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
 
-import { applyDamage } from './applyDamage'
+import { applyDamage } from './util/applyDamage'
 import { s } from './util/explainHelpers'
 import type { ExecuteArgs } from './util/types'
 

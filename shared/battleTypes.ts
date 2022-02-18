@@ -77,8 +77,9 @@ export type Card = {
     actions: string
     type: CardType
     characterClass: CharacterClass
-
+    // dynamic
     characterUid: CharacterUid
+    explanation: string
 }
 
 export interface CharacterMeta extends CharacterStats {

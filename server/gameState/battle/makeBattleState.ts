@@ -1,6 +1,6 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from '@shared'
 
-import { makeCards } from './cards/cardManagement'
+import { getNullCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'
 
 export function makeBattleState(args: {
@@ -37,7 +37,7 @@ export function makeBattleState(args: {
         isPlayerTurn: playerStarts,
         battleHasBegun: true,
         allCharacters,
-        cards: makeCards(args?.chosen, args.username),
+        cards: getNullCards(),
         energy: 3,
         selectedCharacter: selectedCharacter.uid,
         selectedMove,

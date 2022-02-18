@@ -2,7 +2,7 @@ import type { PlayCard } from '@serverActions'
 import type { Card, CardUid } from '@shared'
 
 import type { BattleCursor } from '@/util'
-import { getBattleScene, keys, vals } from '@/util'
+import { getBattleScene } from '@/util'
 
 import { discard } from '../gameState/battle/cards/discard'
 import { play } from '../gameState/battle/cards/play'
@@ -27,12 +27,10 @@ function findCard({
     cardUid: CardUid
     scene: BattleCursor
 }): Card {
-    const cards = scene.get('cards')
+    const card = scene.select('cards').select('hand').select(cardUid).get()
 
-    const cardIndex = keys(cards.hand).findIndex(uid => cardUid === uid)
-    const card = vals(cards.hand)[cardIndex]
-
-    if (card == null) throw new Error('card Uid not found, something is wrong')
+    if (card == null)
+        throw new Error(`card Uid ${cardUid} not found, something is wrong`)
 
     return card
 }

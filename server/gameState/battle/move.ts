@@ -8,7 +8,7 @@ import {
     getCharacterKeysAndDamages,
     getCharacterKeysAndEffects,
 } from './attack'
-import { applyDamage } from './cards/cardActions/applyDamage'
+import { applyDamage } from './cards/cardActions/util/applyDamage'
 
 /** Applies health, and effects */
 export default function applyMove(

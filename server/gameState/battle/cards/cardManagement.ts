@@ -1,12 +1,15 @@
-import type {
-    Card,
-    CardId,
-    Cards,
-    CharacterUid,
-    OwnedCharacterStats,
-} from '@shared'
+import type { Card, CardId, Cards, CharacterUid } from '@shared'
+import { set } from 'lodash'
 
-const cardDefinitionsMap: Record<CardId, Omit<Card, 'characterUid'>> = {
+import type { BattleCursor } from '@/util'
+import { vals } from '@/util'
+
+import { explainActionsForCard, getCharIds } from '..'
+
+const cardDefinitionsMap: Record<
+    CardId,
+    Omit<Card, 'characterUid' | 'explanation'>
+> = {
     shield: {
         name: 'Shield',
         energy: 1,
@@ -69,36 +72,58 @@ const cardDefinitionsMap: Record<CardId, Omit<Card, 'characterUid'>> = {
     },
 }
 
-export function makeCards(
-    chosen: OwnedCharacterStats[] = [],
-    _username: string
-): Cards {
-    const characterUid = chosen[0].uid
+export function setCards(scene: BattleCursor) {
+    console.log('>>>> setting cards')
+    scene.set('cards', makeCards(scene))
+}
+
+export function getNullCards(): Cards {
+    return { draw: {}, hand: {}, discard: {}, removed: {} }
+}
+
+export function makeCards(scene: BattleCursor): Cards {
+    const cardIds: CardId[] = [
+        'shield',
+        'shield',
+        'shield',
+        'shieldOfLight',
+        'shieldOfLight',
+        'shieldOfLight',
+        'sweepTheLeg',
+        'sweepTheLeg',
+        'bodySlam',
+        'bodySlam',
+        'jab',
+        'strike',
+        'strike',
+    ]
+    const allPCs = getCharIds(vals(scene.get('allCharacters')), {
+        isPc: true,
+    })
+    const characterUid = allPCs[0]
     return {
-        draw: {
-            uuid11: getCardInstance('shield', characterUid),
-            uuid12: getCardInstance('shield', characterUid),
-            uuid22: getCardInstance('shieldOfLight', characterUid),
-            uuid23: getCardInstance('shieldOfLight', characterUid),
-            uuid24: getCardInstance('sweepTheLeg', characterUid),
-            uuid25: getCardInstance('sweepTheLeg', characterUid),
-            uuid26: getCardInstance('sweepTheLeg', characterUid),
-            uuid27: getCardInstance('bodySlam', characterUid),
-            uuid28: getCardInstance('bodySlam', characterUid),
-            uuid29: getCardInstance('jab', characterUid),
-            uuid30: getCardInstance('jab', characterUid),
-            uuid31: getCardInstance('strike', characterUid),
-            uuid32: getCardInstance('strike', characterUid),
-        },
+        draw: cardIds.reduce(
+            (acc, id) =>
+                set(
+                    acc,
+                    `${id}-${srandom().toString().replace('.', '')}`,
+                    updateExplanation(getCardInstance(id, characterUid), scene)
+                ),
+            {}
+        ),
         hand: {},
         discard: {},
         removed: {},
     }
 }
 
+function updateExplanation(card: Card, scene: BattleCursor): Card {
+    return { ...card, explanation: explainActionsForCard(card, scene) }
+}
+
 function getCardInstance(
     id: keyof typeof cardDefinitionsMap,
     characterUid: CharacterUid
 ): Card {
-    return { ...cardDefinitionsMap[id], characterUid }
+    return { ...cardDefinitionsMap[id], characterUid, explanation: 'error!' }
 }

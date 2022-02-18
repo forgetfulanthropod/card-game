@@ -53,6 +53,7 @@ export function Card({
         keys(pile).length,
         cardFrameTexture
     )
+    const colorStops = getColorStopsFromCharacterClass(card.characterClass)
 
     return Container({
         name,
@@ -65,9 +66,7 @@ export function Card({
                     y0: 0,
                     x1: 0,
                     y1: cardFrameTexture.height,
-                    colorStops: getColorStopsFromCharacterClass(
-                        card.characterClass
-                    ),
+                    colorStops,
                 },
                 spriteArgs: {
                     width: cardFrameTexture.width,
@@ -80,12 +79,16 @@ export function Card({
                 anchor: 0.5,
                 ...getMouseEvents(card, cardFrameTexture, xyrs),
             }),
-            ...getTexts(card, cardFrameTexture),
+            ...getTexts(card, cardFrameTexture, colorStops),
         ],
     })
 }
 
-function getTexts(card: Card, cardFrameTexture: PixiTexture): PixiText[] {
+function getTexts(
+    card: Card,
+    cardFrameTexture: PixiTexture,
+    colorStops: ColorStop[]
+): PixiText[] {
     const marginH = cardFrameTexture.width / 11
     const marginV = marginH
 
@@ -103,7 +106,7 @@ function getTexts(card: Card, cardFrameTexture: PixiTexture): PixiText[] {
             },
         }),
         Text({
-            text: card.characterClass,
+            text: card.explanation,
             x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.width * 0.2,
             width: cardFrameTexture.width - marginH * 2,
@@ -111,6 +114,17 @@ function getTexts(card: Card, cardFrameTexture: PixiTexture): PixiText[] {
                 fontSize: 26,
                 fontFamily: 'VT323',
                 fill: 'black',
+                lineHeight: 36,
+            },
+        }),
+        Text({
+            text: card.characterClass,
+            y: cardFrameTexture.width * 0.95,
+            width: cardFrameTexture.width - marginH * 2,
+            style: {
+                fontSize: 40,
+                fontFamily: 'VT323',
+                fill: colorStops[0].color,
             },
         }),
     ]
@@ -210,7 +224,7 @@ function getMouseEvents(
                     break
             }
             await playCard({
-                cardUid: currentTarget.name,
+                cardUid: currentTarget.parent.name,
                 targetUids,
             })
         },

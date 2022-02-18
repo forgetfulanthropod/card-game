@@ -4,7 +4,7 @@ import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
 import { keys } from '@/util'
 
-import { applyDamage } from '../battle/cards/cardActions/applyDamage'
+import { applyDamage } from '../battle/cards/cardActions/util/applyDamage'
 
 export function applyDOTDamages(scene: BattleCursor): void {
     const damageMap = getDOTDamageMap(scene.get('allCharacters'))

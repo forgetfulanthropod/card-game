@@ -43,7 +43,7 @@ export function onCallWrapper<Args, ReturnType>(
             }
             if (options?.disableCommit !== true)
                 commit(getGameStateCursor(username), username)
-            if (config.log) logger.info(`>>>    ${f.name}#${randId} was called`)
+            if (config.log) logger.info(`\n${f.name}#${randId} was called`)
             // logger.info(
             //     `    ${f.name}#${randId} responding with ${JSON.stringify(
             //         result

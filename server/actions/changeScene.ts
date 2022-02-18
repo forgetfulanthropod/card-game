@@ -1,6 +1,6 @@
 import type { ChangeScene } from '@serverActions'
 
-import { makeBattleState, putUpDoors } from '@/gameState/battle'
+import { makeBattleState, putUpDoors, setCards } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
 import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
 
@@ -20,6 +20,8 @@ export const changeScene: ChangeScene = args => {
                 username: args.username,
             })
         )
-        putUpDoors(getBattleScene(args.username))
+        const scene = getBattleScene(args.username)
+        setCards(scene)
+        putUpDoors(scene)
     }
 }

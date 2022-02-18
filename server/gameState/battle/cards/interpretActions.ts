@@ -6,8 +6,8 @@ import type { BattleCursor } from '@/util'
 
 import { checkBattleOver } from '..'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
-import { explain as explainBlock } from './cardActions/block'
-import { execute as executeBlock } from './cardActions/block'
+import { explain as explainAddBlock } from './cardActions/addBlock'
+import { execute as executeAddBlock } from './cardActions/addBlock'
 import { explain as explainChain } from './cardActions/chain'
 import { execute as executeChain } from './cardActions/chain'
 import { explain as explainDeal } from './cardActions/deal'
@@ -25,20 +25,23 @@ export function interpretActions({
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
+    const locals = localsFromCard(card, scene)
+    const explanation = explainActions(card.actions, locals)
+    //DEBUG
+    console.log(explanation)
+    //END DEBUG
+    executeActions({ card, targetUids, scene, locals })
+}
+
+function localsFromCard(card: Card, scene: BattleCursor) {
     const cardOwner = scene.get('allCharacters', card.characterUid)
-    void targetUids
-    const locals = {
+    return {
         strength: cardOwner.strength,
         dexterity: cardOwner.dexterity,
         magic: cardOwner.magic,
         constitution: cardOwner.constitution,
         block: cardOwner.block,
     }
-    const explanation = explainActions(card.actions, locals)
-    //DEBUG
-    console.log(explanation)
-    //END DEBUG
-    executeActions({ card, targetUids, scene, locals })
 }
 
 const standardOperators = {
@@ -54,10 +57,14 @@ const standardOperators = {
     PI: 3.14,
 }
 
+export function explainActionsForCard(card: Card, scene: BattleCursor) {
+    return explainActions(card.actions, localsFromCard(card, scene))
+}
+
 export function explainActions(actions: string, locals?: object) {
     const ctx = generateAnguContext({
         // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
-        block: explainBlock,
+        addBlock: explainAddBlock,
         chain: explainChain,
         deal: explainDeal,
         debilitate: explainDebilitate,
@@ -82,7 +89,7 @@ export function executeActions({
         // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
         // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, card, targetUids, scene }),`)
         addBlock: (...dslArgs: VAngu[]) =>
-            executeBlock({ dslArgs, card, targetUids, scene }),
+            executeAddBlock({ dslArgs, card, targetUids, scene }),
         chain: (...dslArgs: VAngu[]) =>
             executeChain({ dslArgs, card, targetUids, scene }),
         deal: (...dslArgs: VAngu[]) =>
