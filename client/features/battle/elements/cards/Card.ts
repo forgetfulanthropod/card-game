@@ -2,18 +2,16 @@ import type { ColorStop } from '@pixi-essentials/gradients'
 import type { CharacterClass, CharacterUid, Pile } from '@shared'
 import type { Card } from '@shared'
 import { gsap } from 'gsap'
-import { filters } from 'pixi.js'
 
 import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
-    PixiContainer,
-    PixiSprite,
     PixiText,
     PixiTexture,
 } from '@/elementsUtil'
-import { Container } from '@/elementsUtil'
+import { getRenderer } from '@/elementsUtil'
+import { Container, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
@@ -57,29 +55,92 @@ export function Card({
 
     return Container({
         name,
+        // cache: true,
         ...xyrs,
+        ...getMouseEvents(card, cardFrameTexture, xyrs),
+        children: [
+            getGradientBackground(cardFrameTexture, colorStops),
+            getCardFrameSprite(cardFrameTexture),
+            getEnergyContainer(card, cardFrameTexture),
+            ...getTexts(card, cardFrameTexture, colorStops),
+        ],
+    })
+}
+
+function getGradientBackground(
+    cardFrameTexture: PixiTexture,
+    colorStops: ColorStop[]
+) {
+    return RoundedRectangleGradientSprite({
+        radius: cardFrameTexture.width / 15,
+        gradientArgs: {
+            x0: 0,
+            y0: 0,
+            x1: 0,
+            y1: cardFrameTexture.height,
+            colorStops,
+        },
+        spriteArgs: {
+            width: cardFrameTexture.width,
+            height: cardFrameTexture.height,
+            anchor: 0.5,
+        },
+    })
+}
+
+function getCardFrameSprite(cardFrameTexture: PixiTexture) {
+    return Sprite({
+        src: cardFrameTexture,
+        anchor: 0.5,
+    })
+}
+
+function getEnergyContainer(
+    card: Card,
+    cardFrameTexture: PixiTexture
+): PixiContainer {
+    const { marginH, marginV } = getMargins(cardFrameTexture)
+
+    const wh = cardFrameTexture.width / 3
+    return Container({
+        x: cardFrameTexture.width / 2 - marginH,
+        y: -cardFrameTexture.height / 2 + marginV * 1.2,
         children: [
             RoundedRectangleGradientSprite({
-                radius: cardFrameTexture.width / 15,
+                radius: wh / 2,
                 gradientArgs: {
-                    x0: 0,
-                    y0: 0,
-                    x1: 0,
-                    y1: cardFrameTexture.height,
-                    colorStops,
+                    y0: wh / 2,
+                    x1: wh / 2,
+                    x0: wh / 2,
+                    y1: wh / 2,
+                    r0: 0,
+                    r1: wh / 2,
+                    colorStops: [
+                        { color: 0x533a74, offset: 0 },
+                        { color: 0x7e4b71, offset: 0.65 },
+                        { color: 0xfff034, offset: 0.9 },
+                        { color: 0, offset: 1 },
+                    ],
                 },
                 spriteArgs: {
-                    width: cardFrameTexture.width,
-                    height: cardFrameTexture.height,
+                    width: wh,
+                    height: wh,
                     anchor: 0.5,
                 },
             }),
-            Sprite({
-                src: cardFrameTexture,
+            Text({
+                text: `${card.energy}`,
+                style: {
+                    fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+                    stroke: 'black',
+                    strokeThickness: 5,
+                    fontSize: wh,
+                    fontFamily: 'VT323',
+                },
+                width: ((wh / 2) * BASE_WIDTH) / 1920,
+                height: ((wh / 2) * BASE_WIDTH) / 1920,
                 anchor: 0.5,
-                ...getMouseEvents(card, cardFrameTexture, xyrs),
             }),
-            ...getTexts(card, cardFrameTexture, colorStops),
         ],
     })
 }
@@ -89,8 +150,7 @@ function getTexts(
     cardFrameTexture: PixiTexture,
     colorStops: ColorStop[]
 ): PixiText[] {
-    const marginH = cardFrameTexture.width / 11
-    const marginV = marginH
+    const { marginH, marginV } = getMargins(cardFrameTexture)
 
     return [
         Text({
@@ -130,6 +190,12 @@ function getTexts(
     ]
 }
 
+function getMargins(cardFrameTexture: PixiTexture) {
+    const marginH = cardFrameTexture.width / 11
+    const marginV = marginH
+    return { marginH, marginV }
+}
+
 function getColorStopsFromCharacterClass(
     characterClass: CharacterClass
 ): ColorStop[] {
@@ -152,41 +218,36 @@ function getMouseEvents(
     onMouseout: InteractionEventHandler
     onClick: InteractionEventHandler
 } {
-    const hideFilter = new filters.AlphaFilter(0)
     let animationForCard = getNullAnimation()
     let expandedCard: PixiContainer | null
 
     return {
-        onMouseover: async ({ currentTarget }) => {
+        onMouseover: async ({ currentTarget: container }) => {
+            if (!(container instanceof PixiContainer))
+                throw new Error('ERROR! should be bound to container')
+
             await animationForCard
 
-            const parent = currentTarget.parent
-
-            currentTarget.parent.children.forEach(
-                c => (c.filters = [hideFilter])
-            )
-
             if (expandedCard != null) {
-                parent.parent.removeChild(expandedCard)
+                container.parent.removeChild(expandedCard)
                 expandedCard.destroy()
                 expandedCard = null
             }
+            // const texture = getRenderer().generateTexture(container)
 
             expandedCard = Container({
-                name: `${parent.name}-expanded`,
+                name: `${container.name}-expanded`,
                 ...xyrs,
-                children: parent.children.map(c => {
-                    const s = c as PixiSprite
-                    return Sprite({
-                        src: s.texture,
-                        x: s.x,
-                        y: s.y,
-                        anchor: [s.anchor._x, s.anchor._y],
-                    })
-                }),
+                children: [
+                    Sprite({
+                        src: getRenderer().generateTexture(container),
+                        anchor: 0.5,
+                    }),
+                ],
             })
 
-            parent.parent.addChild(expandedCard)
+            container.alpha = 0
+            container.parent.addChild(expandedCard)
 
             animationForCard = gsap.to(expandedCard, {
                 pixi: {
@@ -199,21 +260,25 @@ function getMouseEvents(
                 duration: 0.3,
             })
         },
-        onMouseout: async ({ currentTarget }) => {
+        onMouseout: async ({ currentTarget: container }) => {
+            if (!(container instanceof PixiContainer))
+                throw new Error('ERROR! should be bound to container')
             if (animationForCard == null) return
-
             await animationForCard.reverse().then(() => {
                 animationForCard.kill()
                 animationForCard = getNullAnimation()
-                currentTarget.parent.children.forEach(c => (c.filters = []))
+                container.alpha = 1
                 if (expandedCard != null) {
-                    currentTarget.parent.removeChild(expandedCard)
+                    container.parent.removeChild(expandedCard)
                     expandedCard.destroy()
                     expandedCard = null
                 }
             })
         },
-        onClick: async ({ currentTarget }) => {
+        onClick: async ({ currentTarget: container }) => {
+            if (!(container instanceof PixiContainer))
+                throw new Error('ERROR! should be bound to container')
+
             let targetUids
             switch (card.targetType) {
                 case 'enemies':
@@ -224,7 +289,7 @@ function getMouseEvents(
                     break
             }
             await playCard({
-                cardUid: currentTarget.parent.name,
+                cardUid: container.name,
                 targetUids,
             })
         },

@@ -105,6 +105,7 @@ interface ContainerArgs extends DisplayObjectArgs {
     children?: PixiChildren
     onTick?: OnContainerTick
     name?: string
+    cache?: boolean
 }
 
 interface TextArgs extends ShownArgs {
@@ -283,6 +284,9 @@ export function Container(args: ContainerArgs): PixiContainer {
     }
     if (args.name != null) {
         c.name = args.name
+    }
+    if (args.cache === true) {
+        c.cacheAsBitmap = true
     }
 
     return c

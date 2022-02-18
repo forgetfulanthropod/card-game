@@ -14,6 +14,8 @@ export type GradientArgs = {
     y0: number
     x1: number
     y1: number
+    r0?: number
+    r1?: number
     colorStops: ColorStop[]
 }
 export type GradientSpriteArgs = Required<
@@ -25,13 +27,17 @@ export function GradientRectangleSprite(
     options: GradientArgs,
     spriteArgs: GradientSpriteArgs
 ): PixiSprite {
-    const src = GradientFactory.createLinearGradient(
-        getPixiApp().renderer as Renderer,
-        new RenderTexture(
-            new BaseRenderTexture(pick(spriteArgs, 'width', 'height'))
-        ),
-        options
+    const renderer = getPixiApp().renderer as Renderer
+    const texture = new RenderTexture(
+        new BaseRenderTexture(pick(spriteArgs, 'width', 'height'))
     )
+
+    let src
+
+    if (options.r0 != null && options.r1 != null)
+        //@ts-expect-error
+        src = GradientFactory.createRadialGradient(renderer, texture, options)
+    else src = GradientFactory.createLinearGradient(renderer, texture, options)
 
     return Sprite({ ...spriteArgs, src })
 }
@@ -45,7 +51,7 @@ export function RoundedRectangleGradientSprite({
     radius: number
     gradientArgs: GradientArgs
     spriteArgs: GradientSpriteArgs
-}) {
+}): PixiSprite {
     return Sprite({
         src: getRenderer().generateTexture(
             Graphics({
@@ -56,18 +62,25 @@ export function RoundedRectangleGradientSprite({
                             spriteArgs
                         ).texture,
                     })
-                    g.drawRoundedRect(
-                        0,
-                        0,
-                        spriteArgs.width,
-                        spriteArgs.height,
-                        radius
-                    )
+                    if (
+                        radius >=
+                        Math.max(spriteArgs.width, spriteArgs.height) / 2
+                    ) {
+                        g.drawCircle(radius, radius, radius)
+                    } else {
+                        g.drawRoundedRect(
+                            0,
+                            0,
+                            spriteArgs.width,
+                            spriteArgs.height,
+                            radius
+                        )
+                    }
 
                     g.endFill()
                 },
             })
         ),
-        anchor: spriteArgs.anchor,
+        ...spriteArgs,
     })
 }
