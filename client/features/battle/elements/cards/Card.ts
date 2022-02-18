@@ -86,8 +86,8 @@ export function Card({
 }
 
 function getTexts(card: Card, cardFrameTexture: PixiTexture): PixiText[] {
-    const marginH = cardFrameTexture.width / 10
-    const marginV = cardFrameTexture.width / 11
+    const marginH = cardFrameTexture.width / 11
+    const marginV = marginH
 
     return [
         Text({

@@ -36,7 +36,7 @@ export function GradientRectangleSprite(
     return Sprite({ ...spriteArgs, src })
 }
 
-// a gradient
+// a gradient inside of a rounded corner rectangle
 export function RoundedRectangleGradientSprite({
     radius,
     gradientArgs,
