@@ -116,8 +116,8 @@ function getEnergyContainer(
                     r0: 0,
                     r1: wh / 2,
                     colorStops: [
-                        { color: 0x533a74, offset: 0 },
-                        { color: 0x7e4b71, offset: 0.65 },
+                        { color: 0x432a64, offset: 0 },
+                        { color: 0x7e4b71, offset: 0.8 },
                         { color: 0xfff034, offset: 0.9 },
                         { color: 0, offset: 1 },
                     ],
