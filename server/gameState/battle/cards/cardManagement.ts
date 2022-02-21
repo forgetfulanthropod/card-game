@@ -47,8 +47,7 @@ const cardDefinitionsMap: Record<
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'chain(text("deals damage equal to character block"), deal(block))',
+        actions: 'chain(deal(block), text("(equal to Kauju\'s block)"))',
         type: 'attack',
         characterClass: 'rogue',
     },

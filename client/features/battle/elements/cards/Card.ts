@@ -107,10 +107,10 @@ function getEnergyContainer(
 ): PixiContainer {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
-    const wh = cardFrameTexture.width / 3.6
+    const wh = cardFrameTexture.width / 4.2
     return Container({
         x: cardFrameTexture.width / 2 - marginH,
-        y: -cardFrameTexture.height / 2 + marginV / 2,
+        y: -cardFrameTexture.height / 2 + marginV,
         children: [
             RoundedRectangleGradientSprite({
                 radius: wh / 2,
