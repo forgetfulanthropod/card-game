@@ -14,6 +14,8 @@ import {explain as explainDeal} from './cardActions/deal'
 import {execute as executeDeal} from './cardActions/deal'
 import {explain as explainDebilitate} from './cardActions/debilitate'
 import {execute as executeDebilitate} from './cardActions/debilitate'
+import {explain as explainText} from './cardActions/text'
+import {execute as executeText} from './cardActions/text'
 // @endindex
 
 export function interpretActions({
@@ -68,6 +70,7 @@ export function explainActions(actions: string, locals?: object) {
         chain: explainChain,
         deal: explainDeal,
         debilitate: explainDebilitate,
+        text: explainText,
         // @endindex
     })
 
@@ -92,6 +95,7 @@ export function executeActions({
         chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, card, targetUids, scene }),
         deal: (...dslArgs: VAngu[]) => executeDeal({ dslArgs, card, targetUids, scene }),
         debilitate: (...dslArgs: VAngu[]) => executeDebilitate({ dslArgs, card, targetUids, scene }),
+        text: (...dslArgs: VAngu[]) => executeText({ dslArgs, card, targetUids, scene }),
         // @endindex
     })
 

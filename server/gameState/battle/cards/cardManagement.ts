@@ -47,7 +47,8 @@ const cardDefinitionsMap: Record<
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'deal(block)',
+        actions:
+            'chain(text("deals damage equal to character block"), deal(block))',
         type: 'attack',
         characterClass: 'rogue',
     },

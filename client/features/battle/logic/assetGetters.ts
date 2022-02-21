@@ -39,7 +39,7 @@ export const assetIdToSrc = (assetId: CharacterName) => getTexture(assetId)
 
 export function getTexture(assetId: AssetKey): PixiTexture {
     //eslint-disable-next-line
-    return Loader.shared.resources[assetId].texture! as PixiTexture
+    return Loader.shared.resources?.[assetId]?.texture! as PixiTexture
 }
 
 export function getData(assetId: AssetKey): unknown {

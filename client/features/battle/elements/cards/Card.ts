@@ -57,10 +57,12 @@ export function Card({
         name,
         // cache: true,
         ...xyrs,
-        ...getMouseEvents(card, cardFrameTexture, xyrs),
         children: [
             getGradientBackground(cardFrameTexture, colorStops),
-            getCardFrameSprite(cardFrameTexture),
+            getCardFrameSprite(
+                cardFrameTexture,
+                getMouseEvents(card, cardFrameTexture, xyrs)
+            ),
             getEnergyContainer(card, cardFrameTexture),
             ...getTexts(card, cardFrameTexture, colorStops),
         ],
@@ -88,10 +90,14 @@ function getGradientBackground(
     })
 }
 
-function getCardFrameSprite(cardFrameTexture: PixiTexture) {
+function getCardFrameSprite(
+    cardFrameTexture: PixiTexture,
+    mouseEvents: MouseEvents
+) {
     return Sprite({
         src: cardFrameTexture,
         anchor: 0.5,
+        ...mouseEvents,
     })
 }
 
@@ -101,10 +107,10 @@ function getEnergyContainer(
 ): PixiContainer {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
-    const wh = cardFrameTexture.width / 3
+    const wh = cardFrameTexture.width / 3.6
     return Container({
         x: cardFrameTexture.width / 2 - marginH,
-        y: -cardFrameTexture.height / 2 + marginV * 1.2,
+        y: -cardFrameTexture.height / 2 + marginV / 2,
         children: [
             RoundedRectangleGradientSprite({
                 radius: wh / 2,
@@ -117,8 +123,9 @@ function getEnergyContainer(
                     r1: wh / 2,
                     colorStops: [
                         { color: 0x432a64, offset: 0 },
-                        { color: 0x7e4b71, offset: 0.84 },
-                        { color: 0xfff034, offset: 0.9 },
+                        { color: 0x7e4b71, offset: 0.7 },
+                        { color: 0x916367, offset: 0.88 },
+                        { color: 0xfff034, offset: 0.92 },
                         { color: 0, offset: 1 },
                     ],
                 },
@@ -209,20 +216,22 @@ function getColorStopsFromCharacterClass(
     )
 }
 
+type MouseEvents = {
+    onMouseover: InteractionEventHandler
+    onMouseout: InteractionEventHandler
+    onClick: InteractionEventHandler
+}
+
 function getMouseEvents(
     card: Card,
     cardFrameTexture: PixiTexture,
     xyrs: XYRotationScale
-): {
-    onMouseover: InteractionEventHandler
-    onMouseout: InteractionEventHandler
-    onClick: InteractionEventHandler
-} {
+): MouseEvents {
     let animationForCard = getNullAnimation()
     let expandedCard: PixiContainer | null
 
     return {
-        onMouseover: async ({ currentTarget: container }) => {
+        onMouseover: async ({ currentTarget: { parent: container } }) => {
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
 
@@ -233,7 +242,6 @@ function getMouseEvents(
                 expandedCard.destroy()
                 expandedCard = null
             }
-            // const texture = getRenderer().generateTexture(container)
 
             expandedCard = Container({
                 name: `${container.name}-expanded`,
@@ -260,7 +268,7 @@ function getMouseEvents(
                 duration: 0.3,
             })
         },
-        onMouseout: async ({ currentTarget: container }) => {
+        onMouseout: async ({ currentTarget: { parent: container } }) => {
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
             if (animationForCard == null) return
@@ -275,7 +283,7 @@ function getMouseEvents(
                 }
             })
         },
-        onClick: async ({ currentTarget: container }) => {
+        onClick: async ({ currentTarget: { parent: container } }) => {
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
 
