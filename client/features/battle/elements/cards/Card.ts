@@ -29,9 +29,9 @@ const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 const classToCardColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
     warrior: [0xe4a72f, 0xff435a],
-    wizard: [0x4d2fe9, 0x44a0ff],
-    bard: [0x016622, 0x44ff82],
-    rogue: [0x370561, 0xaa44ff],
+    wizard: [0x44a0ff, 0x4d2fe9],
+    bard: [0x44ff82, 0x016622],
+    rogue: [0xaa44ff, 0x370561],
 }
 
 export function Card({
@@ -195,9 +195,9 @@ function getTexts(
                 fontSize: 40 * cardFrameScale,
                 fontFamily: 'VT323',
                 fill: colorStops[0].color,
-                stroke: 'black',
+                stroke: 'white',
                 strokeThickness: 5,
-                letterSpacing: 4,
+                letterSpacing: 6,
             },
         }),
     ]
