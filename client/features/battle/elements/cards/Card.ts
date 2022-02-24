@@ -159,13 +159,15 @@ function getTexts(
 ): PixiText[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
+    const cardFrameScale = cardFrameTexture.width / 791
+
     return [
         Text({
             text: card.name,
-            x: -cardFrameTexture.width / 2 + marginH,
             y: -cardFrameTexture.height / 2 + marginV,
+            anchor: [0.5, 0],
             style: {
-                fontSize: 32,
+                fontSize: 34 * cardFrameScale,
                 fontFamily: 'VT323',
                 fill: 'white',
                 stroke: 'black',
@@ -176,9 +178,10 @@ function getTexts(
             text: card.explanation,
             x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.width * 0.2,
-            width: cardFrameTexture.width - marginH * 2,
             style: {
-                fontSize: 26,
+                wordWrap: true,
+                wordWrapWidth: cardFrameTexture.width - marginH * 2,
+                fontSize: 26 * cardFrameScale,
                 fontFamily: 'VT323',
                 fill: 'black',
                 lineHeight: 36,
@@ -186,12 +189,15 @@ function getTexts(
         }),
         Text({
             text: card.characterClass,
-            y: cardFrameTexture.width * 0.95,
-            width: cardFrameTexture.width - marginH * 2,
+            y: cardFrameTexture.height * 0.45,
+            anchor: 0.5,
             style: {
-                fontSize: 40,
+                fontSize: 40 * cardFrameScale,
                 fontFamily: 'VT323',
                 fill: colorStops[0].color,
+                stroke: 'black',
+                strokeThickness: 5,
+                letterSpacing: 4,
             },
         }),
     ]
