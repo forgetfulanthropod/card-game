@@ -34,6 +34,7 @@ const basicAssets = {
     door,
     energy,
     endTurnButton,
+    VT323: font,
     ...characterAssets,
     ...characterStatusAssets,
     ...backgroundAssets,
@@ -50,6 +51,7 @@ export type AssetKey = keyof typeof allAssets
 export default function loadAssets(): Promise<void> {
     let basicDone = false
     let deluxeDone = false
+
     const loaded = new Set(
         Object.keys(allAssets).filter(
             name => Loader.shared.resources[name]?.data != null
@@ -64,8 +66,6 @@ export default function loadAssets(): Promise<void> {
             Loader.shared.add(name, url)
         }
     }
-
-    Loader.shared.add({ name: 'VT323', url: font })
 
     Loader.shared.load()
 
