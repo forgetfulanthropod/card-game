@@ -67,6 +67,9 @@ export function clearContainer(container: PixiContainer): void {
 
 export function bringToTop(o: DisplayObject): void {
     const parent = o.parent
+
+    if (parent == null) return
+
     parent.removeChild(o)
     parent.addChild(o)
 }
