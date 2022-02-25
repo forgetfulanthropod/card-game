@@ -56,6 +56,12 @@ export interface Effect {
     dealer?: CharacterUid
 }
 
+export type OrbType = 'lightning' | 'protection'
+export interface Orb {
+    type: OrbType
+    remainingCount: number
+}
+
 export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
 export type CardId =
@@ -97,6 +103,7 @@ export interface CharacterMeta extends CharacterStats {
     screenY: number
     stance: StanceName
     effects: Effect[]
+    orbs: Orb[]
 }
 
 export type Characters = Record<CharacterUid, CharacterMeta>

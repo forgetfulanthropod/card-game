@@ -1,4 +1,7 @@
+import type { CharacterUid, OrbType } from '@shared'
 import type { Value as VAngu } from 'angu'
+
+import type { BattleCursor } from '@/util'
 
 import type { ExecuteArgs } from './util/types'
 
@@ -9,17 +12,41 @@ export function explain(orbTypeAngu: VAngu, numCountersAngu: VAngu) {
     return `creates ${numCounters} ${orbType} orbs`
 }
 
-type OrbType = 'lightning' | 'ice'
-
 export function execute({
-    dslArgs: [orbTypeAngu, numCountersAngu],
+    dslArgs: [orbTypeAngu, countAngu],
     card,
-    targetUids,
+    // targetUids,
     scene,
 }: ExecuteArgs) {
     const orbType = orbTypeAngu.eval() as OrbType
-    const numCounters = numCountersAngu.eval() as number
+    const count = countAngu.eval() as number
 
-    void orbType
-    void numCounters
+    summonOrbs(orbType, count, card.characterUid, scene)
+}
+
+function summonOrbs(
+    orbType: OrbType,
+    count: number,
+    characterUid: CharacterUid,
+    scene: BattleCursor
+) {
+    scene.select('allCharacters').apply(characterUid, character => {
+        let orbs = character.orbs
+
+        const existingOrbOfTypeIndex = orbs.findIndex(o => o.type === orbType)
+
+        if (existingOrbOfTypeIndex === -1) {
+            orbs = [...orbs, { type: orbType, remainingCount: count }]
+        } else {
+            const newOrbOfType = orbs[existingOrbOfTypeIndex]
+            newOrbOfType.remainingCount += count
+            orbs = [
+                ...orbs.slice(0, existingOrbOfTypeIndex),
+                newOrbOfType,
+                ...orbs.slice(existingOrbOfTypeIndex + 1),
+            ]
+        }
+
+        return { ...character, orbs }
+    })
 }

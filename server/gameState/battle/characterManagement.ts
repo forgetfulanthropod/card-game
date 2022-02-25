@@ -132,6 +132,7 @@ export function newPCMeta(args: {
         block: 0,
         experience: 0,
         effects: [],
+        orbs: [],
     }
 }
 export function newNPCMeta(args: {
@@ -162,6 +163,7 @@ export function newNPCMeta(args: {
         stance,
         hasMoved: false,
         effects: [],
+        orbs: [],
         experience: 0,
         // health: 1,
     }

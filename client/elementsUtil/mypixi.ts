@@ -2,11 +2,11 @@
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import type {
-    DisplayObject as PixiDisplayObject,
     Filter as PixiFilter,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
+import { DisplayObject as PixiDisplayObject } from 'pixi.js'
 import { Renderer } from 'pixi.js'
 import {
     Application as PixiApplication,
@@ -19,11 +19,14 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
-import * as PIXI from 'pixi.js'
+// import * as PIXI from 'pixi.js'
 
 gsap.registerPlugin(PixiPlugin)
 
-PixiPlugin.registerPIXI(PIXI)
+PixiPlugin.registerPIXI({
+    // Ticker: PixiTicker.shared,
+    DisplayObject: PixiDisplayObject,
+})
 // import * as tweenManager from 'pixi-tween'
 // void PIXI
 // void tweenManager

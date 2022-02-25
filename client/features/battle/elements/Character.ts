@@ -6,6 +6,7 @@ import type {
     NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
+import { gsap } from 'gsap'
 import { filters } from 'pixi.js'
 
 import { getSocket } from '@/connection'
@@ -16,12 +17,12 @@ import {
     flashElement,
     flashTo,
     hideElement,
-    PixiTicker,
     Sprite,
 } from '@/elementsUtil'
 import { keys } from '@/util'
 
 import { assetIdToSrc } from '../logic/assetGetters'
+import { getNullAnimation } from './cards/Card'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
@@ -143,6 +144,8 @@ function bindDOT(
     })
 }
 
+let flyingAnimation = getNullAnimation()
+
 function bindMoves(
     characterMeta: CharacterMeta,
     attackSprite: PixiSprite,
@@ -155,7 +158,9 @@ function bindMoves(
 ) {
     getSocket().on(
         'move$',
-        function showCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
+        async function showCharMove(
+            event: NetworkEvent<'move$', NetworkAttackData>
+        ) {
             const { attackerUid, defenderUids, moveName, damageKVs } =
                 event.data
 
@@ -165,18 +170,33 @@ function bindMoves(
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
                 hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-                const defender0 = getBattleScene()
-                    .select('allCharacters')
-                    .select(defenderUids[0])
-                    .get()
-                const fly = makeFlyToOnTick(
-                    { x: screenX, y: screenY },
-                    { x: defender0.screenX, y: defender0.screenY }
+                const defender0 = getBattleScene().get(
+                    'allCharacters',
+                    defenderUids[0]
                 )
-                PixiTicker.shared.add(function cb(dt) {
-                    const result = fly(flyingContainer, dt)
-                    if (result === 'remove') PixiTicker.shared.remove(cb)
+
+                const parent = flyingContainer.parent
+                parent.removeChild(flyingContainer)
+                parent.addChild(flyingContainer)
+
+                flyingAnimation = gsap.to(flyingContainer, {
+                    pixi: {
+                        x: defender0.screenX,
+                        y: defender0.screenY,
+                    },
+                    duration: 0.5,
                 })
+
+                await flyingAnimation
+
+                await flyingAnimation
+                    .then(() => {
+                        return flyingAnimation.reverse()
+                    })
+                    .then(() => {
+                        flyingAnimation.kill()
+                        flyingAnimation = getNullAnimation()
+                    })
             }
 
             if (defenderUids.findIndex(d => d === thisUid) > -1) {
@@ -315,39 +335,6 @@ function makeSprites(
         selectedSprite,
         hasMovedSprite,
         initialHeight: charSpriteProps.height,
-    }
-}
-
-const FLY_TIME = 800
-const FLY_TO_TIME = FLY_TIME * 0.6
-const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-type Point = { x: number; y: number }
-
-function makeFlyToOnTick(start: Point, flyTo: Point) {
-    let totalElapsed = 0
-    return (container: PixiContainer, elapsed: number): void | 'remove' => {
-        // const deltaTimeMs = elapsed * 1000 / 60
-        totalElapsed += elapsed * 16.66
-        if (totalElapsed < FLY_TO_TIME) {
-            container.x =
-                start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
-            container.y =
-                start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
-        } else if (totalElapsed < FLY_TIME) {
-            container.x =
-                flyTo.x +
-                ((start.x - flyTo.x) * (totalElapsed - FLY_TO_TIME)) /
-                    FLY_BACK_TIME
-            container.y =
-                flyTo.y +
-                ((start.y - flyTo.y) * (totalElapsed - FLY_TO_TIME)) /
-                    FLY_BACK_TIME
-        } else {
-            container.x = start.x
-            container.y = start.y
-            return 'remove'
-        }
-        return undefined
     }
 }
 

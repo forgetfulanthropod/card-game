@@ -308,7 +308,7 @@ function getMouseEvents(
     }
 }
 
-function getNullAnimation() {
+export function getNullAnimation() {
     return gsap.to({}, 0, {})
 }
 
