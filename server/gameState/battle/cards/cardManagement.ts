@@ -70,6 +70,16 @@ const cardDefinitionsMap: Record<
         type: 'attack',
         characterClass: 'warrior',
     },
+    orbOfLightning: {
+        name: 'Orb of Lightning',
+        energy: 1,
+        id: 'strike',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'orb("lightning", 3)',
+        type: 'enchantment',
+        characterClass: 'wizard',
+    },
 }
 
 export function updateHand(scene: BattleCursor) {
@@ -106,6 +116,8 @@ export function makeCards(scene: BattleCursor): Cards {
         'jab',
         'strike',
         'strike',
+        'orbOfLightning',
+        'orbOfLightning',
     ]
     const allPCs = getCharIds(vals(scene.get('allCharacters')), {
         isPc: true,

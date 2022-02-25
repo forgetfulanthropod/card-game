@@ -65,6 +65,7 @@ export type CardId =
     | 'bodySlam'
     | 'jab'
     | 'strike'
+    | 'orbOfLightning'
 
 export type CharacterClass = 'cleric' | 'warrior' | 'wizard' | 'bard' | 'rogue'
 
