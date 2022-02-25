@@ -1,4 +1,4 @@
-import type { Graphics as PixiGraphics } from 'pixi.js'
+import type { DisplayObject, Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
@@ -63,4 +63,10 @@ export function clearContainer(container: PixiContainer): void {
     for (const x of children) {
         x.destroy()
     }
+}
+
+export function bringToTop(o: DisplayObject): void {
+    const parent = o.parent
+    parent.removeChild(o)
+    parent.addChild(o)
 }
