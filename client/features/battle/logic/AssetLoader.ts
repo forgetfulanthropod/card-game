@@ -18,6 +18,7 @@ import { cardAssets } from './cardAssets'
 import { characterAssets } from './characterAssets'
 import { characterStatusAssets } from './characterStatusAssets'
 import { effectAssets } from './effectAssets'
+import { orbAssets } from './orbAssets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -35,6 +36,7 @@ const basicAssets = {
     energy,
     endTurnButton,
     VT323: font,
+    ...orbAssets,
     ...characterAssets,
     ...characterStatusAssets,
     ...backgroundAssets,

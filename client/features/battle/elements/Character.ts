@@ -11,6 +11,7 @@ import { filters } from 'pixi.js'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { SCALE_UNIVERSAL } from '@/elementsUtil'
 import { bringToTop } from '@/elementsUtil'
 import {
     Container,
@@ -19,10 +20,11 @@ import {
     hideElement,
     PixiTicker,
     Sprite,
+    Text,
 } from '@/elementsUtil'
 import { keys } from '@/util'
 
-import { assetIdToSrc } from '../logic/assetGetters'
+import { getCharTexture, getOrbTexture } from '../logic/assetGetters'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
@@ -35,6 +37,7 @@ const SHOW_HIT_TIME = 1000
 // const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 
+type CharacterCursor = SCursor<CharacterMeta>
 interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
@@ -64,7 +67,6 @@ export function Character(args: CharacterProps): PixiContainer {
         defendSprite,
         mainSprite,
         selectedSprite,
-        hasMovedSprite,
         initialHeight,
     } = sprites
 
@@ -75,13 +77,12 @@ export function Character(args: CharacterProps): PixiContainer {
             selectedSprite,
             attackSprite,
             defendSprite,
-            hasMovedSprite,
             healthBar,
         ],
     })
     mainContainer.sortChildren()
 
-    const aboveCharacterContainer = Container({
+    const hitContainer = Container({
         x: 0,
         y: -initialHeight,
         children: [],
@@ -91,13 +92,17 @@ export function Character(args: CharacterProps): PixiContainer {
         name: 'FlyingContainer',
         x: screenX,
         y: screenY,
-        children: [mainContainer, aboveCharacterContainer],
+        children: [
+            mainContainer,
+            getBoundOrbContainer(args.cursor, initialHeight),
+            hitContainer,
+        ],
     })
 
     // ---Functions and listeners---
 
     function onHeight(height: number) {
-        aboveCharacterContainer.y = -height
+        hitContainer.y = -height
     }
 
     function updateDeathAndHealth() {
@@ -112,22 +117,69 @@ export function Character(args: CharacterProps): PixiContainer {
     args.cursor.select('health').on('update', updateDeathAndHealth)
     args.cursor.select('effects').on('update', updateDeathAndHealth)
 
-    bindDOT(characterMeta, aboveCharacterContainer)
+    bindDOT(characterMeta, hitContainer)
 
     bindMoves(
         characterMeta,
         attackSprite,
         healthBar,
-        screenX,
-        screenY,
         flyingContainer,
         defendSprite,
-        aboveCharacterContainer
+        hitContainer
     )
 
     updateDeathAndHealth()
 
     return flyingContainer
+}
+
+function getBoundOrbContainer(
+    characterCursor: CharacterCursor,
+    offset: number
+): PixiContainer {
+    const orbContainer = Container({
+        x: 0,
+        y: -offset,
+        name: 'OrbContainer',
+        children: [],
+    })
+    const orbWidth = 45
+
+    u()
+    characterCursor.select('orbs').on('update', u)
+
+    function u() {
+        const orbs = characterCursor.get('orbs')
+
+        orbContainer.removeChildren()
+        orbs.forEach((orb, i) => {
+            orbContainer.addChild(
+                Container({
+                    x: i * orbWidth * 1.5,
+                    children: [
+                        Sprite({
+                            src: getOrbTexture(orb.type),
+                            width: orbWidth * SCALE_UNIVERSAL,
+                            height: orbWidth * SCALE_UNIVERSAL,
+                        }),
+                        Text({
+                            text: `${orb.remainingCount}`,
+                            style: {
+                                fontFamily: 'VT323',
+                                fontSize: 14 * SCALE_UNIVERSAL,
+                                fill: ['#fff', '#eee'], // gradient
+                                // letterSpacing: -5,
+                                stroke: '#333',
+                                strokeThickness: 5,
+                            },
+                        }),
+                    ],
+                })
+            )
+        })
+    }
+
+    return orbContainer
 }
 
 function bindDOT(
@@ -148,12 +200,12 @@ function bindMoves(
     characterMeta: CharacterMeta,
     attackSprite: PixiSprite,
     healthBar: PixiContainer,
-    screenX: number,
-    screenY: number,
     flyingContainer: PixiContainer,
     defendSprite: PixiSprite,
     aboveCharacterContainer: PixiContainer
 ) {
+    const { screenX, screenY } = characterMeta
+
     getSocket().on(
         'move$',
         function showCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
@@ -221,8 +273,6 @@ function makeSprites(
     const redFilter = new filters.ColorMatrixFilter()
     redFilter.hue(180, false)
 
-    const hasMovedCursor = args.cursor.select('hasMoved')
-
     const assetIdCursor = args.cursor.select('name')
 
     if (assetIdCursor.get() == null) {
@@ -235,9 +285,9 @@ function makeSprites(
     }
 
     const charSpriteProps = {
-        src: assetIdToSrc(assetIdCursor.get()),
+        src: getCharTexture(assetIdCursor.get()),
         anchor: [0, 1] as [number, number],
-        height: assetIdToSrc(assetIdCursor.get()).height,
+        height: getCharTexture(assetIdCursor.get()).height,
     }
 
     const mainSprite = Sprite({
@@ -262,12 +312,6 @@ function makeSprites(
         zIndex: 0,
         visible: false,
     })
-    const hasMovedSprite = Sprite({
-        ...charSpriteProps,
-        filters: [grayFilter],
-        zIndex: 2,
-        visible: hasMovedCursor.get(),
-    })
     // props.isSelected && !props.characterMeta.hasMoved
     const selectedId = getBattleScene().select('selectedCharacter')
     const selectedSprite = Sprite({
@@ -278,14 +322,9 @@ function makeSprites(
         visible: selectedId.get() === characterMeta.uid,
     })
 
-    hasMovedCursor.on('update', () => {
-        const newVal = hasMovedCursor.get()
-        hasMovedSprite.visible = newVal
-    })
-
     assetIdCursor.on('update', () => {
         // tl('asset update')
-        const texture = assetIdToSrc(assetIdCursor.get())
+        const texture = getCharTexture(assetIdCursor.get())
         if (texture == null) {
             // TODO: this occurs when allCharacters gets new characters and this character is no longer defined.
             // (Unique ID: BqUPq)
@@ -304,7 +343,6 @@ function makeSprites(
         update(mainSprite)
         update(defendSprite)
         update(attackSprite)
-        update(hasMovedSprite)
         onHeight(height)
     })
 
@@ -317,7 +355,6 @@ function makeSprites(
         defendSprite,
         mainSprite,
         selectedSprite,
-        hasMovedSprite,
         initialHeight: charSpriteProps.height,
     }
 }

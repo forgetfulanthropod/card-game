@@ -5,8 +5,7 @@ import { Matrix, utils } from 'pixi.js'
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
-import { BASE_HEIGHT } from '@/elementsUtil'
-import { BASE_WIDTH } from '@/elementsUtil'
+import { SCALE_UNIVERSAL } from '@/elementsUtil'
 import { Container, Graphics, Sprite, Text } from '@/elementsUtil'
 
 import { getEffectIconSrc, getTexture } from '../logic/assetGetters'
@@ -56,13 +55,13 @@ function bindBlockIndicator(
 
         container.addChild(
             Container({
-                // y: -50 * (BASE_HEIGHT / 1080),
+                // y: -50 *  SCALE_UNIVERSAL,
                 x: 200,
                 children: [
                     Sprite({
                         src: getTexture('blockIcon'),
-                        width: 60 * (BASE_WIDTH / 1920),
-                        height: 60 * (BASE_WIDTH / 1920),
+                        width: 60 * SCALE_UNIVERSAL,
+                        height: 60 * SCALE_UNIVERSAL,
                         anchor: [0.5, 0.5],
                     }),
                     Text({
@@ -119,8 +118,8 @@ function bindEffectIndicators(
                 if (iconSrc != null) {
                     icon = Sprite({
                         src: iconSrc,
-                        width: 80 * (BASE_WIDTH / 1920),
-                        height: 80 * (BASE_WIDTH / 1920),
+                        width: 80 * SCALE_UNIVERSAL,
+                        height: 80 * SCALE_UNIVERSAL,
                         anchor: [0.5, 0.4],
                     })
                     text = Text({
@@ -128,7 +127,7 @@ function bindEffectIndicators(
                         anchor: [0.6, 1],
                         style: {
                             fontFamily: ['VT323', 'monospace'],
-                            fontSize: 30,
+                            fontSize: 30 * SCALE_UNIVERSAL,
                             fill: 'white',
                             stroke: 'black',
                             strokeThickness: 5,
@@ -138,8 +137,8 @@ function bindEffectIndicators(
                 }
 
                 return Container({
-                    y: 50 * (BASE_HEIGHT / 1080),
-                    x: (numMatchedEffects - 1) * 50 * (BASE_HEIGHT / 1080),
+                    y: 50 * SCALE_UNIVERSAL,
+                    x: (numMatchedEffects - 1) * 50 * SCALE_UNIVERSAL,
                     children: [...(icon ? [icon] : []), text],
                 })
             }

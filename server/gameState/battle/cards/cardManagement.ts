@@ -18,7 +18,7 @@ const cardDefinitionsMap: Record<
         targetType: 'friends',
         actions: 'addBlock(dexterity + 2)',
         type: 'defense',
-        characterClass: 'warrior',
+        characterClass: 'knight',
     },
     shieldOfLight: {
         name: 'Shield of Light',
@@ -38,7 +38,7 @@ const cardDefinitionsMap: Record<
         targetType: 'enemies',
         actions: 'chain(deal(strength), debilitate(1))',
         type: 'attack',
-        characterClass: 'wizard',
+        characterClass: 'knight',
     },
     bodySlam: {
         name: 'Body Slam',
@@ -68,7 +68,7 @@ const cardDefinitionsMap: Record<
         targetType: 'enemies',
         actions: 'deal(strength + 2)',
         type: 'attack',
-        characterClass: 'warrior',
+        characterClass: 'knight',
     },
     orbOfLightning: {
         name: 'Orb of Lightning',

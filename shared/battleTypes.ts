@@ -73,7 +73,7 @@ export type CardId =
     | 'strike'
     | 'orbOfLightning'
 
-export type CharacterClass = 'cleric' | 'warrior' | 'wizard' | 'bard' | 'rogue'
+export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
 export type Card = {
     name: string

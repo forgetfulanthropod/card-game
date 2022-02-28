@@ -54,6 +54,7 @@ export {
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
+export const SCALE_UNIVERSAL = BASE_WIDTH / 1920
 
 // export type Sprite = PixiSprite
 

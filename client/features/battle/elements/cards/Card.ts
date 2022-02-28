@@ -28,7 +28,7 @@ const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 //maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
 const classToCardColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
-    warrior: [0xe4a72f, 0xff435a],
+    knight: [0xe4a72f, 0xff435a],
     wizard: [0x44a0ff, 0x4d2fe9],
     bard: [0x44ff82, 0x016622],
     rogue: [0xaa44ff, 0x370561],

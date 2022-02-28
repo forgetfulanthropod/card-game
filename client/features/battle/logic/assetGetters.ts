@@ -1,11 +1,18 @@
-import type { CardId, CardType, CharacterName, EffectType } from '@shared'
-import { startCase } from 'lodash'
+import type {
+    CardId,
+    CardType,
+    CharacterName,
+    EffectType,
+    OrbType,
+} from '@shared'
+import { startCase, upperFirst } from 'lodash'
 import { Loader } from 'pixi.js'
 
 import type { PixiTexture } from '@/elementsUtil'
 
 import type { AssetKey } from './AssetLoader'
 import type { CardArtAssetId, CardTypeAssetId } from './cardAssets'
+import type { OrbAssetId } from './orbAssets'
 
 export function getCardSrc(cardId: CardId): PixiTexture {
     const assetId = `card${startCase(cardId).replace(
@@ -35,7 +42,10 @@ export function getEffectIconSrc(effectType: EffectType): PixiTexture {
     return getTexture(iconId)
 }
 
-export const assetIdToSrc = (assetId: CharacterName) => getTexture(assetId)
+export const getCharTexture = (charId: CharacterName) => getTexture(charId)
+
+export const getOrbTexture = (orbType: OrbType) =>
+    getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)
 
 export function getTexture(assetId: AssetKey): PixiTexture {
     //eslint-disable-next-line
