@@ -40,6 +40,15 @@ export function getCharIds(
         })
 }
 
+export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
+    const uids = getCharIds(vals(scene.get('allCharacters')), {
+        isPc: false,
+        health: 1,
+    })
+    const randomIndex = Math.floor(srandom() * uids.length)
+    return uids[randomIndex]
+}
+
 export function livingPcsRemain(ac: CharacterMeta[]): boolean {
     return getCharIds(ac, { isPc: true, health: 1 }).length > 0
 }

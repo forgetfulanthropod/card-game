@@ -1,5 +1,7 @@
 import type { Func } from '@shared'
 // @index(['../../../shared/actions/*.ts', '!../../../shared/actions/index.ts'], f => `import type { ${f.name} as _${f.name} } from '@shared'\nexport type ${f.name} = ServerAction<_${f.name}>`)
+import type { ActivateOrb as _ActivateOrb } from '@shared'
+export type ActivateOrb = ServerAction<_ActivateOrb>
 import type { AddSelected as _AddSelected } from '@shared'
 export type AddSelected = ServerAction<_AddSelected>
 import type { ChangeDungeon as _ChangeDungeon } from '@shared'

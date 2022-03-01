@@ -8,6 +8,7 @@ import type {
 import type { SCursor } from 'baobab'
 import { filters } from 'pixi.js'
 
+import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
@@ -156,6 +157,12 @@ function getBoundOrbContainer(
             orbContainer.addChild(
                 Container({
                     x: i * orbWidth * 1.5,
+                    onClick() {
+                        activateOrb({
+                            characterUid: characterCursor.get('uid'),
+                            orb,
+                        })
+                    },
                     children: [
                         Sprite({
                             src: getOrbTexture(orb.type),

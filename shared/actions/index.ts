@@ -1,4 +1,5 @@
 // @index('./*.ts', f => `export * from '${f.path}'`)
+export * from './ActivateOrb'
 export * from './AddSelected'
 export * from './ChangeDungeon'
 export * from './ChangeScene'

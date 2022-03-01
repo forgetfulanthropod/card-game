@@ -1,6 +1,5 @@
 import type {
     AttackData,
-    Card,
     CharacterMeta,
     CharacterMove,
     CharacterUid,
@@ -16,25 +15,9 @@ import type { BattleCursor } from '@/util'
 
 import { getTransformed, isSpecial } from './specialMoves'
 
-export function getDamageForCard({
-    card,
-    scene,
-}: {
-    card: Card
-    scene: BattleCursor
-}): number {
-    return scene.get('allCharacters', card.characterUid).strength
+export function roundDamage(d: number): number {
+    return Math.ceil(d)
 }
-
-// export function getEffectsForCard({
-//     card,
-//     scene,
-// }: {
-//     card: Card
-//     scene: BattleCursor
-// }): number {
-//     return scene.get('allCharacters', card.characterUid).strength
-// }
 
 export function getCharacterMovesWithDamageRanges(
     character: CharacterMeta

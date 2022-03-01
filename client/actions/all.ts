@@ -4,6 +4,7 @@ import type { ServerResult } from '@shared/actions'
 import { callWrap } from './call'
 
 // @index(['../../shared/actions/*.ts', '!../../shared/actions/index.ts'], f => `export const ${f.name.replace(/\b\w/g, c => c.toLowerCase())} = callWrap<AllTypes.${f.name}>('${f.name.replace(/\b\w/g, c => c.toLowerCase())}')`)
+export const activateOrb = callWrap<AllTypes.ActivateOrb>('activateOrb')
 export const addSelected = callWrap<AllTypes.AddSelected>('addSelected')
 export const changeDungeon = callWrap<AllTypes.ChangeDungeon>('changeDungeon')
 export const changeScene = callWrap<AllTypes.ChangeScene>('changeScene')
