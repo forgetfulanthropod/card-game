@@ -38,7 +38,7 @@ function summonOrbs(
         if (existingOrbOfTypeIndex === -1) {
             orbs = [...orbs, { type: orbType, remainingCount: count }]
         } else {
-            const newOrbOfType = orbs[existingOrbOfTypeIndex]
+            const newOrbOfType = { ...orbs[existingOrbOfTypeIndex] }
             newOrbOfType.remainingCount += count
             orbs = [
                 ...orbs.slice(0, existingOrbOfTypeIndex),

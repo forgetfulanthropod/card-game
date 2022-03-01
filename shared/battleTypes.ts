@@ -72,6 +72,7 @@ export type CardId =
     | 'jab'
     | 'strike'
     | 'orbOfLightning'
+    | 'orbOfProtection'
 
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
@@ -80,7 +81,7 @@ export type Card = {
     energy: number
     id: CardId
     targetNum: number
-    targetType: 'friends' | 'enemies'
+    targetType: 'friends' | 'enemies' | 'self'
     actions: string
     type: CardType
     characterClass: CharacterClass

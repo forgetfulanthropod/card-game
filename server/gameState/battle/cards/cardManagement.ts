@@ -75,8 +75,18 @@ const cardDefinitionsMap: Record<
         energy: 1,
         id: 'strike',
         targetNum: 1,
-        targetType: 'enemies',
+        targetType: 'self',
         actions: 'orb("lightning", 3)',
+        type: 'enchantment',
+        characterClass: 'wizard',
+    },
+    orbOfProtection: {
+        name: 'Orb of Protection',
+        energy: 1,
+        id: 'strike',
+        targetNum: 1,
+        targetType: 'self',
+        actions: 'orb("protection", 3)',
         type: 'enchantment',
         characterClass: 'wizard',
     },
@@ -118,6 +128,8 @@ export function makeCards(scene: BattleCursor): Cards {
         'strike',
         'orbOfLightning',
         'orbOfLightning',
+        'orbOfProtection',
+        'orbOfProtection',
     ]
     const allPCs = getCharIds(vals(scene.get('allCharacters')), {
         isPc: true,

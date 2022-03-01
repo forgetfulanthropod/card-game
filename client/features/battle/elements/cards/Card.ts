@@ -299,6 +299,9 @@ function getMouseEvents(
                 case 'friends':
                     targetUids = [getFrontFriendUid()]
                     break
+                case 'self':
+                    targetUids = [card.characterUid]
+                    break
             }
             await playCard({
                 cardUid: container.name,

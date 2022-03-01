@@ -7,7 +7,11 @@ import type {
 } from '@shared'
 import { isEqual } from 'lodash'
 
-import { getRandomLivingNpcUid, roundDamage } from '@/gameState/battle'
+import {
+    checkBattleOver,
+    getRandomLivingNpcUid,
+    roundDamage,
+} from '@/gameState/battle'
 import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
 import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
@@ -30,7 +34,7 @@ function activate(orb: Orb, character: CharacterMeta, scene: BattleCursor) {
     if (orb.type === 'lightning') {
         activateLightning(character, scene)
     } else if (orb.type === 'protection') {
-        // activateProtection(character, scene)
+        activateProtection(character, scene)
     }
     decrementCounter(character, orb, scene)
 }
@@ -61,6 +65,11 @@ function decrementCounter(
             ...orbs.slice(orbIndex + 1),
         ]
     })
+}
+
+function activateProtection(character: CharacterMeta, scene: BattleCursor) {
+    const block = roundDamage(character.magic * 0.5)
+    scene.apply(['allCharacters', character.uid, 'block'], b => b + block)
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
@@ -104,4 +113,6 @@ function emitDamage({
             data,
         },
     })
+
+    checkBattleOver(scene)
 }
