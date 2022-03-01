@@ -45,18 +45,13 @@
     <div class="wrap">
         <div class="relwrap">
             <canvas id="pixi-root"></canvas>
-            <div id="preact-root">
+            <div id="preact-root" onmouseover="this.style.pointerEvents = 'none'">
                 <h1 style="color: white">
                     Waiting for socket connection with server
                 </h1>
             </div>
         </div>
     </div>
-    <script>
-        window['preact-root'].onclick = window['preact-root'].onmouseenter = e => {
-            e.target.style.pointerEvents = 'none'
-        }
-    </script>
     <script src="out.js"></script>
 </body>
 
