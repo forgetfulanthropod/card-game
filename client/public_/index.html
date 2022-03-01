@@ -52,6 +52,11 @@
             </div>
         </div>
     </div>
+    <script>
+        window['preact-root'].onclick = window['preact-root'].onmouseenter = e => {
+            e.target.style.pointerEvents = 'none'
+        }
+    </script>
     <script src="out.js"></script>
 </body>
 
