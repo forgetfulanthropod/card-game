@@ -7,7 +7,7 @@ export function clearAllEffects(scene: BattleCursor): void {
         const newAllCharacters = { ...ac }
 
         keys(ac).forEach(k => {
-            newAllCharacters[k] = { ...ac[k], effects: [] }
+            newAllCharacters[k] = { ...ac[k], effects: [], orbs: [] }
         })
 
         return newAllCharacters

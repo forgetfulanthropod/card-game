@@ -241,6 +241,7 @@ export function Application(args: {
         // backgroundColor: 0x6495ed,
         width: 1920,
         height: 1080,
+        antialias: true,
     })
     for (const c of args.children) {
         app.stage.addChild(c)

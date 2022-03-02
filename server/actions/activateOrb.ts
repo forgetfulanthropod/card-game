@@ -17,17 +17,24 @@ import type { BattleCursor } from '@/util'
 import { emit } from '@/util'
 import { getBattleScene } from '@/util'
 
-export const activateOrb: ActivateOrb = args => {
-    const scene = getBattleScene(args.username)
-    const character = scene.get('allCharacters', args.characterUid)
+export const activateOrb: ActivateOrb = ({ username, orb, characterUid }) => {
+    const scene = getBattleScene(username)
+    const character = scene.get('allCharacters', characterUid)
 
-    if (character.orbs.find(o => isEqual(o, args.orb)) == null)
+    validate(character, orb)
+
+    activate(orb, character, scene)
+
+    updateCards(scene)
+    checkBattleOver(scene)
+}
+
+function validate(character: CharacterMeta, orb: Orb) {
+    if (character.orbs.find(o => isEqual(o, orb)) == null)
         throw new Error("hmm you don't seem to have that orb")
 
     if (character.isPc === false)
         throw new Error('why would an npc perform this action?')
-
-    activate(args.orb, character, scene)
 }
 
 function activate(orb: Orb, character: CharacterMeta, scene: BattleCursor) {
@@ -36,6 +43,7 @@ function activate(orb: Orb, character: CharacterMeta, scene: BattleCursor) {
     } else if (orb.type === 'protection') {
         activateProtection(character, scene)
     }
+
     decrementCounter(character, orb, scene)
 }
 
@@ -113,6 +121,7 @@ function emitDamage({
             data,
         },
     })
-
-    checkBattleOver(scene)
+}
+function updateCards(scene: BattleCursor) {
+    throw new Error('Function not implemented.')
 }
