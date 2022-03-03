@@ -11,6 +11,7 @@ import {
     checkBattleOver,
     getRandomLivingNpcUid,
     roundDamage,
+    updateHand,
 } from '@/gameState/battle'
 import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
 import type { BattleCursor } from '@/util'
@@ -25,7 +26,7 @@ export const activateOrb: ActivateOrb = ({ username, orb, characterUid }) => {
 
     activate(orb, character, scene)
 
-    updateCards(scene)
+    updateHand(scene)
     checkBattleOver(scene)
 }
 
@@ -121,7 +122,4 @@ function emitDamage({
             data,
         },
     })
-}
-function updateCards(scene: BattleCursor) {
-    throw new Error('Function not implemented.')
 }

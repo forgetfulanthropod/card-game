@@ -157,8 +157,8 @@ function getBoundOrbContainer(
             orbContainer.addChild(
                 Container({
                     x: i * orbWidth * 1.5,
-                    onClick() {
-                        activateOrb({
+                    onClick: async () => {
+                        await activateOrb({
                             characterUid: characterCursor.get('uid'),
                             orb,
                         })
