@@ -51,19 +51,13 @@ const allAssets = { ...basicAssets, ...deluxeAssets }
 export type AssetKey = keyof typeof allAssets
 // TODO: add back basic and deluxe
 export default function loadAssets(): Promise<void> {
-    let basicDone = false
-    let deluxeDone = false
-
     const loaded = new Set(
         Object.keys(allAssets).filter(
             name => Loader.shared.resources[name]?.data != null
         )
     )
 
-    for (const [name, url] of Object.entries({
-        ...basicAssets,
-        ...deluxeAssets,
-    })) {
+    for (const [name, url] of Object.entries(allAssets)) {
         if (Loader.shared.resources[name]?.data == null) {
             Loader.shared.add(name, url)
         }
@@ -71,6 +65,8 @@ export default function loadAssets(): Promise<void> {
 
     Loader.shared.load()
 
+    let basicDone = false
+    let deluxeDone = false
     return new Promise(resolve => {
         // @ts-ignore
         Loader.shared.onLoad.add((_, { name }) => {
