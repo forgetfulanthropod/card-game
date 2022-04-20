@@ -60,7 +60,8 @@
         "builds/",
         "db/db-build.js",
         "**/node_modules/",
-        "tests/"
+        "tests/",
+        "client/public_"
     ],
     "overrides": [
         {

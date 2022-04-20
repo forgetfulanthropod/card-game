@@ -28,7 +28,7 @@
         "allowJs": true,
         "skipLibCheck": true,
         "resolveJsonModule": true
-    }
+    },
     // "include": ["./**/*.ts", "./**/*.tsx", "../shared/**/*"],
-    // "exclude": ["public_", "node_modules"]
+    "exclude": ["public_", "node_modules"]
 }
