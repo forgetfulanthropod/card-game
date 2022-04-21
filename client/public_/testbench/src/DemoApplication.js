@@ -134,14 +134,14 @@ export default class DemoApplication extends Application {
         }
 
         // Setup the tiling sprite
-        this.overlay = new TilingSprite(
-            resources.overlay.texture,
-            initWidth,
-            initHeight,
-        );
+        // this.overlay = new TilingSprite(
+        //     resources.overlay.texture,
+        //     initWidth,
+        //     initHeight,
+        // );
 
         // Add the overlay
-        this.pond.addChild(this.overlay);
+        // this.pond.addChild(this.overlay);
 
         // Handle window resize event
         window.addEventListener('resize', this.handleResize.bind(this));
@@ -155,7 +155,7 @@ export default class DemoApplication extends Application {
      * Resize the demo when the window resizes
      */
     handleResize() {
-        const { padding, bg, overlay, filterArea, bounds } = this;
+        const { padding, bg, filterArea, bounds } = this;
 
         const width = this.domElement.offsetWidth;
         const height = this.domElement.offsetHeight;
@@ -177,8 +177,8 @@ export default class DemoApplication extends Application {
         bg.x = (width - bg.width) / 2;
         bg.y = (height - bg.height) / 2;
 
-        overlay.width = width;
-        overlay.height = height;
+        // overlay.width = width;
+        // overlay.height = height;
 
         bounds.x = -padding;
         bounds.y = -padding;
@@ -204,7 +204,7 @@ export default class DemoApplication extends Application {
     animate(delta) {
         this.animateTimer += delta;
 
-        const { bounds, animateTimer, overlay } = this;
+        const { bounds, animateTimer } = this;
 
         this.events.emit('animate', delta, animateTimer);
 
@@ -213,8 +213,8 @@ export default class DemoApplication extends Application {
         }
 
         // Animate the overlay
-        overlay.tilePosition.x = animateTimer * -1;
-        overlay.tilePosition.y = animateTimer * -1;
+        // overlay.tilePosition.x = animateTimer * -1;
+        // overlay.tilePosition.y = animateTimer * -1;
 
         for (let i = 0; i < this.fishes.length; i++) {
             const fish = this.fishes[i];
