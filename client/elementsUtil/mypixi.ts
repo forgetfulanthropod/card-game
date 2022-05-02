@@ -19,6 +19,7 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+import { registerPixiInspector } from './pixiInspector'
 // import * as PIXI from 'pixi.js'
 
 gsap.registerPlugin(PixiPlugin)
@@ -248,7 +249,7 @@ export function Application(args: {
     }
     // @ts-expect-error
     window.app = app
-    // registerPixiInspector()
+    registerPixiInspector()
     return app
 }
 export function getPixiApp(): PixiApplication {
