@@ -7,6 +7,7 @@ specifiers:
   '@metaplex-foundation/mpl-token-metadata': ^0.0.2
   '@monaco-editor/react': ^4.3.1
   '@pixi-essentials/gradients': ^0.0.4
+  '@pixi-spine/all-4.0': ^3.0.13
   '@solana/wallet-adapter-base': ^0.9.0
   '@solana/wallet-adapter-react': ^0.15.0
   '@solana/wallet-adapter-react-ui': ^0.8.0
@@ -20,7 +21,6 @@ specifiers:
   gsap: ^3.9.1
   marked: ^4.0.8
   monaco-editor: ^0.31.1
-  pixi-spine: ^3.0.13
   pixi-viewport: ^4.34.4
   pixi-webfont-loader: ^1.0.2
   pixi.js: ^6.2.1
@@ -37,6 +37,7 @@ dependencies:
   '@metaplex-foundation/mpl-token-metadata': 0.0.2
   '@monaco-editor/react': 4.3.1_monaco-editor@0.31.1
   '@pixi-essentials/gradients': 0.0.4
+  '@pixi-spine/all-4.0': 3.0.13
   '@solana/wallet-adapter-base': 0.9.0
   '@solana/wallet-adapter-react': 0.15.0
   '@solana/wallet-adapter-react-ui': 0.8.0
@@ -48,7 +49,6 @@ dependencies:
   framer-motion: 5.5.5
   gsap: 3.9.1
   marked: 4.0.8
-  pixi-spine: 3.0.13
   pixi-viewport: 4.34.4
   pixi-webfont-loader: 1.0.2
   pixi.js: 6.2.1
@@ -1207,6 +1207,28 @@ packages:
       '@pixi/sprite': ^6.0.0
     dev: false
 
+  /@pixi-spine/all-4.0/3.0.13:
+    resolution: {integrity: sha512-ByhvPlUXkIjdgn2iaPLFl3ffo+dsN+hpp7BIuC7OC4x6NS2HIe9sSKfBMRXBcP5r1LlRvK5c+Gu/K3D7GbhfVw==}
+    dependencies:
+      '@pixi-spine/base': 3.0.13
+      '@pixi-spine/loader-4.0': 3.0.13
+      '@pixi-spine/loader-base': 3.0.13
+      '@pixi-spine/runtime-4.0': 3.0.13
+    transitivePeerDependencies:
+      - '@pixi/app'
+      - '@pixi/constants'
+      - '@pixi/core'
+      - '@pixi/display'
+      - '@pixi/graphics'
+      - '@pixi/loaders'
+      - '@pixi/math'
+      - '@pixi/mesh'
+      - '@pixi/mesh-extras'
+      - '@pixi/sprite'
+      - '@pixi/utils'
+      - resource-loader
+    dev: false
+
   /@pixi-spine/base/3.0.13:
     resolution: {integrity: sha512-JKgK+nw81/UwoRS5YBZhU5nIHsYGO5u3HY2QsKRJjvgz2EBLYKNhQ8KpVmx8C9CV9VnmectIjKlHkMFDiP3/Dg==}
     peerDependencies:
@@ -1219,6 +1241,28 @@ packages:
       '@pixi/mesh-extras': ^6.1.0
       '@pixi/sprite': ^6.1.0
       '@pixi/utils': ^6.1.0
+    dev: false
+
+  /@pixi-spine/loader-4.0/3.0.13:
+    resolution: {integrity: sha512-EnRCWs6DnENmujZWZC4OBUdxih7pCx4E4wdC8D3lcsWpEmRJVQ/hbxlaE6Y0BjCwu5BxkHX3HNrk4GtRe76cug==}
+    peerDependencies:
+      '@pixi/app': ^6.1.0
+      '@pixi/core': ^6.1.0
+      '@pixi/display': ^6.1.0
+      '@pixi/loaders': ^6.1.0
+      resource-loader: ~3.0.1
+    dependencies:
+      '@pixi-spine/base': 3.0.13
+      '@pixi-spine/loader-base': 3.0.13
+      '@pixi-spine/runtime-4.0': 3.0.13
+    transitivePeerDependencies:
+      - '@pixi/constants'
+      - '@pixi/graphics'
+      - '@pixi/math'
+      - '@pixi/mesh'
+      - '@pixi/mesh-extras'
+      - '@pixi/sprite'
+      - '@pixi/utils'
     dev: false
 
   /@pixi-spine/loader-base/3.0.13:
@@ -1235,64 +1279,6 @@ packages:
     transitivePeerDependencies:
       - '@pixi/graphics'
       - '@pixi/math'
-      - '@pixi/mesh'
-      - '@pixi/mesh-extras'
-      - '@pixi/sprite'
-      - '@pixi/utils'
-    dev: false
-
-  /@pixi-spine/loader-uni/3.0.13:
-    resolution: {integrity: sha512-iUEAn6F1mPOzIuc3eDXKa/+lX5ZPFI5e9hS08yggLWimrfgOTMSenLsg5eC0EokMfQwjsMeVGWz2Bst4LeHxuA==}
-    peerDependencies:
-      '@pixi/loaders': ^6.1.0
-    dependencies:
-      '@pixi-spine/base': 3.0.13
-      '@pixi-spine/loader-base': 3.0.13
-      '@pixi-spine/runtime-3.7': 3.0.13
-      '@pixi-spine/runtime-3.8': 3.0.13
-      '@pixi-spine/runtime-4.0': 3.0.13
-    transitivePeerDependencies:
-      - '@pixi/app'
-      - '@pixi/constants'
-      - '@pixi/core'
-      - '@pixi/display'
-      - '@pixi/graphics'
-      - '@pixi/math'
-      - '@pixi/mesh'
-      - '@pixi/mesh-extras'
-      - '@pixi/sprite'
-      - '@pixi/utils'
-      - resource-loader
-    dev: false
-
-  /@pixi-spine/runtime-3.7/3.0.13:
-    resolution: {integrity: sha512-EoXz4997WPpqttNEmyCaFzY2lsv15QXahEfF5+EueLJaqcW6uiLzK8z7zWUA5FJ3UTeb3B9tvpT7IibLD/dltw==}
-    peerDependencies:
-      '@pixi/constants': ^6.1.0
-      '@pixi/math': ^6.1.0
-    dependencies:
-      '@pixi-spine/base': 3.0.13
-    transitivePeerDependencies:
-      - '@pixi/core'
-      - '@pixi/display'
-      - '@pixi/graphics'
-      - '@pixi/mesh'
-      - '@pixi/mesh-extras'
-      - '@pixi/sprite'
-      - '@pixi/utils'
-    dev: false
-
-  /@pixi-spine/runtime-3.8/3.0.13:
-    resolution: {integrity: sha512-Ve8WCqwMg4FzpUEO0kMlf0IuKum96pxLQi1Kv8J1fIGqtzsJUrpS3eAUfWo9CMdWT8YPOOGkMdjKl7ZE5ZLJHA==}
-    peerDependencies:
-      '@pixi/constants': ^6.1.0
-      '@pixi/math': ^6.1.0
-    dependencies:
-      '@pixi-spine/base': 3.0.13
-    transitivePeerDependencies:
-      - '@pixi/core'
-      - '@pixi/display'
-      - '@pixi/graphics'
       - '@pixi/mesh'
       - '@pixi/mesh-extras'
       - '@pixi/sprite'
@@ -3567,30 +3553,6 @@ packages:
       ripemd160: 2.0.2
       safe-buffer: 5.2.1
       sha.js: 2.4.11
-    dev: false
-
-  /pixi-spine/3.0.13:
-    resolution: {integrity: sha512-OvnkRV1VlNroaoYdIY+srcYfnJLl0v1y616eZNqv4fpt1WF2iTeC63MhIjA/GlLy3FLFghQF4isVq2baJ0IL9w==}
-    dependencies:
-      '@pixi-spine/base': 3.0.13
-      '@pixi-spine/loader-base': 3.0.13
-      '@pixi-spine/loader-uni': 3.0.13
-      '@pixi-spine/runtime-3.7': 3.0.13
-      '@pixi-spine/runtime-3.8': 3.0.13
-      '@pixi-spine/runtime-4.0': 3.0.13
-    transitivePeerDependencies:
-      - '@pixi/app'
-      - '@pixi/constants'
-      - '@pixi/core'
-      - '@pixi/display'
-      - '@pixi/graphics'
-      - '@pixi/loaders'
-      - '@pixi/math'
-      - '@pixi/mesh'
-      - '@pixi/mesh-extras'
-      - '@pixi/sprite'
-      - '@pixi/utils'
-      - resource-loader
     dev: false
 
   /pixi-viewport/4.34.4:

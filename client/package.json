@@ -18,7 +18,7 @@
         "framer-motion": "^5",
         "gsap": "^3.9.1",
         "marked": "^4.0.8",
-        "pixi-spine": "^3.0.13",
+        "@pixi-spine/all-4.0": "^3.0.13",
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.2.1",
