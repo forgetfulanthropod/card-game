@@ -1,4 +1,5 @@
 import 'preact/debug'
+import './config/nullUtil'
 
 import { render } from 'preact'
 

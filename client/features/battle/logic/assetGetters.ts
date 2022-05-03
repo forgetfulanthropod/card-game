@@ -48,8 +48,10 @@ export const getOrbTexture = (orbType: OrbType) =>
     getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)
 
 export function getTexture(assetId: AssetKey): PixiTexture {
-    //eslint-disable-next-line
-    return Loader.shared.resources?.[assetId]?.texture! as PixiTexture
+    return (
+        Loader.shared.resources?.[assetId]?.texture ??
+        throwNull(`texture '${assetId}'`)
+    )
 }
 
 export function getData(assetId: AssetKey): unknown {

@@ -30,6 +30,7 @@ import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
+import { Spine } from '@/elementsUtil/myspine'
 
 const RED = 0xff0000
 const BLUE = 0x0000ff
@@ -79,6 +80,7 @@ export function Character(args: CharacterProps): PixiContainer {
             attackSprite,
             defendSprite,
             healthBar,
+            Spine({ name: 'frogKnightSpine', animation: 'Idle' }),
         ],
     })
     mainContainer.sortChildren()
