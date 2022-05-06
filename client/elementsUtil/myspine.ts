@@ -1,9 +1,13 @@
-import { AnimationsOf, SpineAsset } from '@/features/battle/logic/spineAssets'
-import { onUpdate } from '@/util/onUpdate'
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
-import { SCursor } from 'baobab'
+import type { SCursor } from 'baobab'
 import { Loader } from 'pixi.js'
+
+import type {
+    AnimationsOf,
+    SpineAsset,
+} from '@/features/battle/logic/spineAssets'
+import { onUpdate } from '@/util/onUpdate'
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name
@@ -37,18 +41,13 @@ export function Spine<Name extends SpineAsset>(props: {
 
     const destroy = spine.destroy
     spine.destroy = (...args) => {
-        unsub && unsub()
+        void (unsub && unsub())
         destroy.call(spine, ...args)
     }
     return spine
 }
 
 function spineData(name: SpineAsset): SkeletonData {
-    // console.log('resource: ', Loader.shared.resources[name])
-    // console.log(
-    //     'spineData stringified:',
-    //     JSON.stringify(Loader.shared.resources[name].spineData)
-    // )
     return (
         Loader.shared.resources[name].spineData ??
         throwNull(`spineData '${name}'`)

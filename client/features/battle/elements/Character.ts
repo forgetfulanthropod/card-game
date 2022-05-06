@@ -6,7 +6,7 @@ import type {
     NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
-import { filters } from 'pixi.js'
+import { filters, Loader } from 'pixi.js'
 
 import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'
@@ -23,14 +23,15 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
+import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
 
 import { getCharTexture, getOrbTexture } from '../logic/assetGetters'
+import type { SpineAsset } from '../logic/spineAssets'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
 import MoveInfo from './MoveInfo'
-import { Spine } from '@/elementsUtil/myspine'
 
 const RED = 0xff0000
 const BLUE = 0x0000ff
@@ -72,15 +73,40 @@ export function Character(args: CharacterProps): PixiContainer {
         initialHeight,
     } = sprites
 
+    // const spineResourceName = `frogKnightSpine`
+    // @ts-expect-error TODO: remove when all spines loaded
+    const spineResourceName: SpineAsset = `${characterMeta.name}Spine`
+
+    let mainAnimation = null
+
+    console.log({ resources: Loader.shared.resources })
+
+    if (Loader.shared.resources[spineResourceName]) {
+        mainAnimation = Spine({
+            name: spineResourceName,
+            animation: 'Idle',
+        })
+
+        const desiredHeight = 260 // TODO: what is it tho
+        const desiredScale = desiredHeight / mainAnimation.height
+        mainAnimation.scale.set(
+            (characterMeta.isPc ? 1 : -1) * desiredScale,
+            desiredScale
+        )
+
+        mainAnimation.x +=
+            ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
+
+        mainAnimation.y -= 20
+    }
+
     const mainContainer = Container({
         zIndex: args.zIndex,
         children: [
-            mainSprite,
-            selectedSprite,
             attackSprite,
             defendSprite,
             healthBar,
-            Spine({ name: 'frogKnightSpine', animation: 'Idle' }),
+            ...(mainAnimation ? [mainAnimation] : [mainSprite, selectedSprite]),
         ],
     })
     mainContainer.sortChildren()
@@ -97,7 +123,7 @@ export function Character(args: CharacterProps): PixiContainer {
         y: screenY,
         children: [
             mainContainer,
-            getBoundOrbContainer(args.cursor, initialHeight),
+            getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
     })
