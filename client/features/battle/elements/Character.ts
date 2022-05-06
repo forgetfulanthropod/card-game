@@ -131,7 +131,8 @@ export function Character(args: CharacterProps): PixiContainer {
         healthBar,
         flyingContainer,
         defendSprite,
-        hitContainer
+        hitContainer,
+        mainAnimation
     )
 
     updateDeathAndHealth()
@@ -249,7 +250,8 @@ function bindMoves(
     healthBar: PixiContainer,
     flyingContainer: PixiContainer,
     defendSprite: PixiSprite,
-    aboveCharacterContainer: PixiContainer
+    aboveCharacterContainer: PixiContainer,
+    mainAnimation: PixiSpine | null
 ) {
     const { screenX, screenY } = characterMeta
 
@@ -261,6 +263,14 @@ function bindMoves(
 
             const thisUid = characterMeta.uid
             if (attackerUid === thisUid) {
+                if (mainAnimation) {
+                    mainAnimation.state.setAnimation(0, 'Attack', false)
+                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                    // mainAnimation.state.
+                    // mainAnimation.state.addAnimation(0, 'Idle', true)
+                    return
+                }
+
                 flashElement(attackSprite, {
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
@@ -283,9 +293,15 @@ function bindMoves(
             }
 
             if (defenderUids.findIndex(d => d === thisUid) > -1) {
-                flashElement(defendSprite, {
-                    durationMs: ATTACK_ANIMATION_TIME,
-                })
+                if (mainAnimation) {
+                    mainAnimation.state.setAnimation(0, 'Damage', false)
+                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                } else {
+                    flashElement(defendSprite, {
+                        durationMs: ATTACK_ANIMATION_TIME,
+                    })
+                }
+
                 flashTo(
                     aboveCharacterContainer,
                     () => MoveInfo({ moveName, offset: -70 }),
