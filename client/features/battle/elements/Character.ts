@@ -1,5 +1,6 @@
 import type {
     CharacterMeta,
+    CharacterName,
     CharacterUid,
     NetworkAttackData,
     NetworkDOTData,
@@ -23,6 +24,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
+import type { PixiSpine } from '@/elementsUtil/myspine'
 import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
 
@@ -73,32 +75,7 @@ export function Character(args: CharacterProps): PixiContainer {
         initialHeight,
     } = sprites
 
-    // const spineResourceName = `frogKnightSpine`
-    // @ts-expect-error TODO: remove when all spines loaded
-    const spineResourceName: SpineAsset = `${characterMeta.name}Spine`
-
-    let mainAnimation = null
-
-    console.log({ resources: Loader.shared.resources })
-
-    if (Loader.shared.resources[spineResourceName]) {
-        mainAnimation = Spine({
-            name: spineResourceName,
-            animation: 'Idle',
-        })
-
-        const desiredHeight = 260 // TODO: what is it tho
-        const desiredScale = desiredHeight / mainAnimation.height
-        mainAnimation.scale.set(
-            (characterMeta.isPc ? 1 : -1) * desiredScale,
-            desiredScale
-        )
-
-        mainAnimation.x +=
-            ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
-
-        mainAnimation.y -= 20
-    }
+    const mainAnimation = MainCharacterAnimation(characterMeta)
 
     const mainContainer = Container({
         zIndex: args.zIndex,
@@ -162,6 +139,32 @@ export function Character(args: CharacterProps): PixiContainer {
     return flyingContainer
 }
 
+export function MainCharacterAnimation(
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>
+): PixiSpine | null {
+    const spineAssetName = getValidSpineAssetName(characterMeta.name)
+
+    if (!spineAssetName) return null
+
+    const mainAnimation = Spine({
+        name: spineAssetName,
+        animation: 'Idle',
+    })
+
+    const desiredHeight = 260 // TODO: what is it tho
+    const desiredScale = desiredHeight / mainAnimation.height
+    mainAnimation.scale.set(
+        (characterMeta.isPc ? 1 : -1) * desiredScale,
+        desiredScale
+    )
+
+    mainAnimation.x += ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
+
+    mainAnimation.y -= 20
+
+    return mainAnimation
+}
+
 function getBoundOrbContainer(
     characterCursor: CharacterCursor,
     offset: number
@@ -215,6 +218,15 @@ function getBoundOrbContainer(
     }
 
     return orbContainer
+}
+
+function getValidSpineAssetName(name: CharacterName): SpineAsset | null {
+    //@ts-expect-error TODO this goes away when all characters have spines...
+    const assetName: SpineAsset = `${name}Spine`
+
+    if (Loader.shared.resources[assetName]) return assetName
+
+    return null
 }
 
 function bindDOT(

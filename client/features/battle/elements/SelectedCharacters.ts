@@ -8,6 +8,8 @@ import {
     Sprite,
 } from '@/elementsUtil'
 
+import { MainCharacterAnimation } from './Character'
+
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
@@ -17,19 +19,28 @@ export function SelectedCharacters(): PixiContainer {
 
     function setSelectedCharacters() {
         const characters =
-            selectedCharacters.get().map((c, i) =>
-                Container({
+            selectedCharacters.get().map((c, i) => {
+                const animation = MainCharacterAnimation(c)
+
+                if (animation != null) {
+                    animation.x -= animation.width / 2
+                    animation.y += animation.height / 2
+                }
+
+                return Container({
                     x: Math.ceil(i / 2) * 200 * (i % 2 > 0 ? 1 : -1),
                     y: 0,
                     children: [
-                        Sprite({
-                            anchor: [0.5, 0.5],
-                            src: getTexture(c.name),
-                            scale: 1,
-                        }),
+                        animation ??
+                            Sprite({
+                                anchor: [0.5, 0.5],
+                                src: getTexture(c.name),
+                                scale: 1,
+                            }),
                     ],
                 })
-            ) ?? []
+            }) ?? []
+
         root.removeChildren()
         if (Array.isArray(characters) && characters.length > 0)
             // @ts-ignore
