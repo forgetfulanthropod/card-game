@@ -19,6 +19,7 @@ import { characterAssets } from './characterAssets'
 import { characterStatusAssets } from './characterStatusAssets'
 import { effectAssets } from './effectAssets'
 import { orbAssets } from './orbAssets'
+import { spineAssets } from './spineAssets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -42,6 +43,7 @@ const basicAssets = {
     ...backgroundAssets,
     ...effectAssets,
     ...cardAssets,
+    ...spineAssets,
 }
 const deluxeAssets = {
     gemButton,
@@ -71,7 +73,7 @@ export default function loadAssets(): Promise<void> {
         // @ts-ignore
         Loader.shared.onLoad.add((_, { name }) => {
             loaded.add(name)
-            if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
+            if (Object.keys(basicAssets).every(k => loaded.has(k))) {
                 // TODO:
                 // dispatch({ a: 'setIsBasicLoaded', v: true })
                 basicDone = true

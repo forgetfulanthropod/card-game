@@ -19,6 +19,7 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+import { registerPixiInspector } from './pixiInspector'
 // import * as PIXI from 'pixi.js'
 
 gsap.registerPlugin(PixiPlugin)
@@ -81,6 +82,7 @@ interface DisplayObjectArgs {
     visible?: boolean
     angle?: number
     rotation?: number
+    onDestroy?: Callback[]
 }
 
 // text and sprite but not graphics
@@ -214,6 +216,14 @@ function applyDisplayObjectArgs(
     if (args.rotation != null) {
         x.rotation = args.rotation
     }
+
+    if (args.onDestroy != null) {
+        const destroy = x.destroy
+        x.destroy = (...destroyArgs) => {
+            destroy.call(x, ...destroyArgs)
+            args.onDestroy?.forEach(cb => cb())
+        }
+    }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
@@ -248,7 +258,7 @@ export function Application(args: {
     }
     // @ts-expect-error
     window.app = app
-    // registerPixiInspector()
+    registerPixiInspector()
     return app
 }
 export function getPixiApp(): PixiApplication {

@@ -1,12 +1,13 @@
 import type {
     CharacterMeta,
+    CharacterName,
     CharacterUid,
     NetworkAttackData,
     NetworkDOTData,
     NetworkEvent,
 } from '@shared'
 import type { SCursor } from 'baobab'
-import { filters } from 'pixi.js'
+import { filters, Loader } from 'pixi.js'
 
 import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'
@@ -23,9 +24,12 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
+import type { PixiSpine } from '@/elementsUtil/myspine'
+import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
 
 import { getCharTexture, getOrbTexture } from '../logic/assetGetters'
+import type { SpineAsset } from '../logic/spineAssets'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
@@ -71,14 +75,15 @@ export function Character(args: CharacterProps): PixiContainer {
         initialHeight,
     } = sprites
 
+    const mainAnimation = MainCharacterAnimation(characterMeta)
+
     const mainContainer = Container({
         zIndex: args.zIndex,
         children: [
-            mainSprite,
-            selectedSprite,
             attackSprite,
             defendSprite,
             healthBar,
+            ...(mainAnimation ? [mainAnimation] : [mainSprite, selectedSprite]),
         ],
     })
     mainContainer.sortChildren()
@@ -95,7 +100,7 @@ export function Character(args: CharacterProps): PixiContainer {
         y: screenY,
         children: [
             mainContainer,
-            getBoundOrbContainer(args.cursor, initialHeight),
+            getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
     })
@@ -126,12 +131,39 @@ export function Character(args: CharacterProps): PixiContainer {
         healthBar,
         flyingContainer,
         defendSprite,
-        hitContainer
+        hitContainer,
+        mainAnimation
     )
 
     updateDeathAndHealth()
 
     return flyingContainer
+}
+
+export function MainCharacterAnimation(
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>
+): PixiSpine | null {
+    const spineAssetName = getValidSpineAssetName(characterMeta.name)
+
+    if (!spineAssetName) return null
+
+    const mainAnimation = Spine({
+        name: spineAssetName,
+        animation: 'Idle',
+    })
+
+    const desiredHeight = 260 // TODO: what is it tho
+    const desiredScale = desiredHeight / mainAnimation.height
+    mainAnimation.scale.set(
+        (characterMeta.isPc ? 1 : -1) * desiredScale,
+        desiredScale
+    )
+
+    mainAnimation.x += ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
+
+    mainAnimation.y -= 20
+
+    return mainAnimation
 }
 
 function getBoundOrbContainer(
@@ -189,6 +221,15 @@ function getBoundOrbContainer(
     return orbContainer
 }
 
+function getValidSpineAssetName(name: CharacterName): SpineAsset | null {
+    //@ts-expect-error TODO this goes away when all characters have spines...
+    const assetName: SpineAsset = `${name}Spine`
+
+    if (Loader.shared.resources[assetName]) return assetName
+
+    return null
+}
+
 function bindDOT(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer
@@ -209,7 +250,8 @@ function bindMoves(
     healthBar: PixiContainer,
     flyingContainer: PixiContainer,
     defendSprite: PixiSprite,
-    aboveCharacterContainer: PixiContainer
+    aboveCharacterContainer: PixiContainer,
+    mainAnimation: PixiSpine | null
 ) {
     const { screenX, screenY } = characterMeta
 
@@ -221,6 +263,14 @@ function bindMoves(
 
             const thisUid = characterMeta.uid
             if (attackerUid === thisUid) {
+                if (mainAnimation) {
+                    mainAnimation.state.setAnimation(0, 'Attack', false)
+                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                    // mainAnimation.state.
+                    // mainAnimation.state.addAnimation(0, 'Idle', true)
+                    return
+                }
+
                 flashElement(attackSprite, {
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
@@ -243,9 +293,15 @@ function bindMoves(
             }
 
             if (defenderUids.findIndex(d => d === thisUid) > -1) {
-                flashElement(defendSprite, {
-                    durationMs: ATTACK_ANIMATION_TIME,
-                })
+                if (mainAnimation) {
+                    mainAnimation.state.setAnimation(0, 'Damage', false)
+                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                } else {
+                    flashElement(defendSprite, {
+                        durationMs: ATTACK_ANIMATION_TIME,
+                    })
+                }
+
                 flashTo(
                     aboveCharacterContainer,
                     () => MoveInfo({ moveName, offset: -70 }),
