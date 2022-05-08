@@ -167,7 +167,7 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         energy: 1,
         id: 'arcanePower',
         targetNum: 1,
-        targetType: 'card',
+        targetType: ['orb', 'cardAttack', 'cardEnchantment'],
         actions: 'doubleEnchantmentOrToken()',
         type: 'utility',
         characterClass: 'wizard',
@@ -304,7 +304,13 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         energy: 0,
         id: 'prayerOfGoodFortune',
         targetNum: 1,
-        targetType: 'unknown',
+        targetType: [
+            { type: 'friends' },
+            {
+                type: 'enemies',
+                constraint: { key: 'health', comparator: '<=', value: 3 },
+            },
+        ],
         actions:
             'chain(choice(killEnemy(constraint(health < 3)), addBlock(3)), momentary())',
         type: 'utility',
