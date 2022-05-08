@@ -73,6 +73,32 @@ export type CardId =
     | 'strike'
     | 'orbOfLightning'
     | 'orbOfProtection'
+    | 'basicMagicAttackWizard'
+    | 'basicMagicAttackCleric'
+    | 'magicRitual'
+    | 'chainLightning'
+    | 'spellBook'
+    | 'fireball'
+    | 'arcanePower'
+    | 'scatterBrained'
+    | 'magicalStorm'
+    | 'orbOfFrost'
+    | 'basicAttackCleric'
+    | 'basicAttackKnight'
+    | 'blockCleric'
+    | 'blockKnight'
+    | 'blockWizard'
+    | 'swordSlash'
+    | 'dutifulStab'
+    | 'charge'
+    | 'tetsudoFormation'
+    | 'guidingBolt'
+    | 'smite'
+    | 'bless'
+    | 'prayerOfGoodFortune'
+    | 'orbOfHolyLight'
+    | 'mantraOfPatience'
+    | 'helpingHand'
 
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
@@ -81,7 +107,7 @@ export type Card = {
     energy: number
     id: CardId
     targetNum: number
-    targetType: 'friends' | 'enemies' | 'self'
+    targetType: 'friends' | 'enemies' | 'self' | 'card' | 'unknown'
     actions: string
     type: CardType
     characterClass: CharacterClass

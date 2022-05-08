@@ -302,6 +302,12 @@ function getMouseEvents(
                 case 'self':
                     targetUids = [card.characterUid]
                     break
+                case 'unknown':
+                    throw Error('TODO: handle this')
+                case 'card':
+                    throw Error('TODO: handle this')
+                default:
+                    throw Error('unreachable')
             }
             await playCard({
                 cardUid: container.name,
