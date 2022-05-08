@@ -188,7 +188,9 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         id: 'magicalStorm',
         targetNum: 0,
         targetType: 'self',
-        actions: 'increaseThisRound("enemy", "damage", 4)',
+        // round.enemyDamageBonus += 4
+        // if (blockBroken) health -= (damage + round.enemyDamageBonus)
+        actions: 'roundBuff("enemyDamageBonus", 4)',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -355,3 +357,27 @@ export const cardDefinitionsMap: CardDefinitionMap = {
 // Vulnerable (Debuff): Vulnerable characters receive 50% more damage.
 // Fatigue (Debuff):  Characters with fatigue deal 25% less damage.
 // Unguarded (Debuff): Unguarded characters receive 25% more damage.
+
+/*
+round:
+    inEffect: ActiveEffect
+    buffs:[]
+    draw:[]
+    hand:[
+        {
+            id: 'somecard'
+            buffs: []
+        }
+    ]
+    discard:[]
+    orbs:
+        buffs:[]
+        kind:''
+        val:4
+    characters:
+
+ActiveEffect:
+    step()
+    isDone()
+
+*/
