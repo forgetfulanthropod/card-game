@@ -128,7 +128,7 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         id: 'magicRitual',
         targetNum: 1,
         targetType: 'self',
-        actions: 'addEnergy(2)',
+        actions: 'chain(addEnergy(2), momentary())',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -305,7 +305,8 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         id: 'prayerOfGoodFortune',
         targetNum: 1,
         targetType: 'unknown',
-        actions: 'choice(killEnemy(constraint(health < 3)), addBlock(3))',
+        actions:
+            'chain(choice(killEnemy(constraint(health < 3)), addBlock(3)), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -325,7 +326,7 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'atNextTurn(addEnergy(2))',
+        actions: 'chain(atNextTurn(addEnergy(2)), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -341,3 +342,10 @@ export const cardDefinitionsMap: CardDefinitionMap = {
         characterClass: 'cleric',
     },
 }
+
+// TODO: dwindle, vulnerable, fatigue, unguarded, momentary
+// Dwindle:  Increase its cost by 1 every time you play it (till the end of the dungeon room).
+// Momentary:  Like Exhaust, but only goes away until the end of the room, not the run.
+// Vulnerable (Debuff): Vulnerable characters receive 50% more damage.
+// Fatigue (Debuff):  Characters with fatigue deal 25% less damage.
+// Unguarded (Debuff): Unguarded characters receive 25% more damage.
