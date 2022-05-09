@@ -19,6 +19,7 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+
 import { registerPixiInspector } from './pixiInspector'
 // import * as PIXI from 'pixi.js'
 
@@ -188,16 +189,16 @@ function applyDisplayObjectArgs(
 
     if (args.onClick != null) {
         x.interactive = true
-        x.on('click', args.onClick)
+        x.on('pointerdown', args.onClick)
     }
 
     if (args.onMouseover != null) {
         x.interactive = true
-        x.on('mouseover', args.onMouseover)
+        x.on('pointerover', args.onMouseover)
     }
     if (args.onMouseout != null) {
         x.interactive = true
-        x.on('mouseout', args.onMouseout)
+        x.on('pointerout', args.onMouseout)
     }
     if (args.name != null) {
         x.name = args.name
@@ -245,14 +246,44 @@ export function Application(args: {
     canvas: HTMLCanvasElement
     children: (PixiSprite | PixiContainer)[]
 }): PixiApplication {
+    const resW = (1920 * 2) / 2
+    const resH = (1080 * 2) / 2
+
     app = new PixiApplication({
         view: args.canvas,
-        resolution: window.devicePixelRatio || 1,
+        // resolution: window.devicePixelRatio || 1,
         // backgroundColor: 0x6495ed,
-        width: 1920,
-        height: 1080,
+        width: resW,
+        height: resH,
         antialias: true,
     })
+
+    app.stage.scale.set(resW / 1920)
+    app.ticker.maxFPS = 30
+
+    let frames = 0
+    const delay = 10_000
+    app.ticker.add(() => frames++)
+    setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
+
+    setTimeout(function CornerEl() {
+        const div = document.createElement('div')
+        div.style.fontSize = '14px'
+        div.style.fontFamily = 'monospace'
+        div.style.color = 'white'
+        div.style.position = 'absolute'
+        div.style.top = '0px'
+
+        // eslint-disable-next-line
+        app!.ticker.add(_ => {
+            div.innerText = `${Math.round(
+                // eslint-disable-next-line
+                app!.ticker.FPS
+            )} frames per second`
+        })
+        document.body.appendChild(div)
+    }, 10)
+
     for (const c of args.children) {
         app.stage.addChild(c)
     }

@@ -19,6 +19,10 @@ export async function startPixi(canvas: HTMLCanvasElement): Promise<void> {
         canvas,
         children: [],
     })
+    // @ts-expect-error
+    window.app = app
+    app.ticker.maxFPS = 30
+    app.ticker.minFPS = 10
 
     // app.stage.addChild(Graphics({ draw: g => {
     //     g.draw
