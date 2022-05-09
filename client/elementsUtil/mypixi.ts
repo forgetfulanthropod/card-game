@@ -246,8 +246,8 @@ export function Application(args: {
     canvas: HTMLCanvasElement
     children: (PixiSprite | PixiContainer)[]
 }): PixiApplication {
-    const resW = 1920 * 2
-    const resH = 1080 * 2
+    const resW = (1920 * 2) / 2
+    const resH = (1080 * 2) / 2
 
     app = new PixiApplication({
         view: args.canvas,
