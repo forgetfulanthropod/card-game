@@ -19,6 +19,7 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+
 import { registerPixiInspector } from './pixiInspector'
 // import * as PIXI from 'pixi.js'
 
@@ -188,16 +189,16 @@ function applyDisplayObjectArgs(
 
     if (args.onClick != null) {
         x.interactive = true
-        x.on('click', args.onClick)
+        x.on('pointerdown', args.onClick)
     }
 
     if (args.onMouseover != null) {
         x.interactive = true
-        x.on('mouseover', args.onMouseover)
+        x.on('pointerover', args.onMouseover)
     }
     if (args.onMouseout != null) {
         x.interactive = true
-        x.on('mouseout', args.onMouseout)
+        x.on('pointerout', args.onMouseout)
     }
     if (args.name != null) {
         x.name = args.name
