@@ -4,9 +4,11 @@ import alias from 'esbuild-plugin-alias'
 import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
+const password = 'hackin'
 const buildDir = 'builds/client'
 const publicDir = 'client/public_'
 const entryPoint = 'client/index.tsx'
+const outFile = `${buildDir}/${password}.js`
 
 const args = process.argv.slice(2)
 const shouldWatch = args[0] === 'watch'
@@ -36,7 +38,7 @@ function build() {
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
         bundle: true,
-        outfile: buildDir + '/out.js',
+        outfile: outFile,
         target: 'es6',
         loader: {
             '.ts': 'ts',
