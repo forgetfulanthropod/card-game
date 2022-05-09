@@ -4,7 +4,6 @@ import './config/nullUtil'
 import { render } from 'preact'
 
 import App from './components/App'
-import { TempApp } from './components/PageManager'
 import { resolveWhenSocketConfirmed } from './connection'
 
 const clientBuildInfo = {
@@ -21,11 +20,4 @@ async function main() {
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)
 }
-
-if (process.env.BARE === 'yes') {
-    console.log('it is bare')
-    render(<TempApp />, preactRoot)
-} else {
-    console.log('it is NOT bare')
-    void main()
-}
+void main()
