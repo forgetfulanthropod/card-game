@@ -56,12 +56,14 @@
         const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
 
         try {
-            fetch(window.location.href + '/' + pwd + '.js')
+            const href = window.location.href
+            const hrefSlash = href.endsWith('/') ? href : href + '/'
+            fetch(hrefSlash + pwd + '.js')
                 .then(response => response.text())
                 .then(text => eval(text))
                 .then(() => localStorage.setItem('pwd', pwd))
             var link = document.createElement("link")
-            link.href = window.location.href + '/' + pwd + '.css'
+            link.href = hrefSlash + pwd + '.css'
             link.type = "text/css"
             link.rel = "stylesheet"
             link.media = "screen,print"
