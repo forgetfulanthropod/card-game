@@ -425,7 +425,6 @@ function makeSprites(
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * 0.6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-type Point = { x: number; y: number }
 
 function makeFlyToOnTick(start: Point, flyTo: Point, ease = true) {
     let totalElapsed = 0
