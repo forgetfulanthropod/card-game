@@ -67,8 +67,12 @@ function updateCharacters(
         ...childCursors.map(childCursor =>
             Character({
                 cursor: childCursor,
-                onClick: () =>
-                    doCharacterAction({ uid: childCursor.get('uid') }),
+                onClick: () => {
+                    console.log('clicked a character')
+                    scene
+                        .select('selectedTargets')
+                        .apply(arr => [...arr, childCursor.get().uid])
+                },
                 scale: 1,
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),

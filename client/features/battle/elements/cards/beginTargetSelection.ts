@@ -1,16 +1,20 @@
 import type { Card, CharacterUid } from '@shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import type { InteractionEvent } from 'pixi.js'
+import { InteractionEvent, InteractionManager } from 'pixi.js'
 
 import type { PixiContainer } from '@/elementsUtil'
 import { PixiGraphics } from '@/elementsUtil'
 import { Container, getPixiApp } from '@/elementsUtil'
+import { getBattleScene } from '@/data/rootTree'
+import { onUpdate } from '@/util/onUpdate'
+import { doCharacterAction, playCard } from '@/actions'
 
-export async function beginTargetSelection(
+export function beginTargetSelection(
     cardEl: PixiContainer,
     cardMeta: Card
-): Promise<CharacterUid[]> {
+): void {
+    const numTargets = cardMeta.targetNum
     console.log('beginning target selection')
 
     const app = getPixiApp()
@@ -22,20 +26,47 @@ export async function beginTargetSelection(
 
     const destination = datum({ x: x0, y: y0 })
 
-    const interaction = app.renderer.plugins.interaction
-    interaction.on('stagemove', (e: InteractionEvent) => {
-        console.log('stagemove')
+    const handlePointerMove = (e: InteractionEvent) => {
         destination.set({ x: e.data.global.x, y: e.data.global.y })
-    })
+    }
+    app.stage.interactive = true
+    // app.stage.interactiveChildren = true
 
-    setTimeout(() => app.stage.addChild(Arrow(origin, destination)), 0)
+    // app.stage.interactive = true
+    // const interaction = app.renderer.plugins.interaction
+    app.stage.on('pointermove', handlePointerMove)
 
-    return new Promise(resolve => {
-        interaction.on('stageout', () => {
-            alert("shit they're gone!")
-            resolve([])
-        })
+    const arrow = Arrow(origin, destination)
+    app.stage.addChild(arrow)
+
+    const scene = getBattleScene()
+
+    const selectedTargetsCursor = scene.select('selectedTargets')
+    const unsub = onUpdate(selectedTargetsCursor, targets => {
+        if (targets.length >= numTargets) {
+            doCharacterAction({ uid: targets[0] })
+            playCard({
+                cardUid: cardEl.name, //cardMeta.id
+                targetUids: [targets[0]],
+            })
+            cleanup()
+        }
     })
+    function cleanup() {
+        unsub()
+        selectedTargetsCursor.set([])
+        app.stage.off('pointermove', handlePointerMove)
+        app.stage.removeChild(arrow)
+        arrow.destroy({ children: true })
+        app.stage.interactive = false
+        // app.stage.interactiveChildren = false
+    }
+    // return new Promise(resolve => {
+    //     app.stage.on('stageout', () => {
+    //         alert("shit they're gone!")
+    //         resolve([])
+    //     })
+    // })
 
     // listeningForeground
 
@@ -64,9 +95,6 @@ function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
 
     function draw() {
         g.clear()
-
-        console.log({ originVal: origin.val, destinationVal: destination.val })
-
         g.beginFill(0xffffff)
         g.drawCircle(origin.val.x, origin.val.y, pointRadius)
         g.drawCircle(destination.val.x, destination.val.y, pointRadius)

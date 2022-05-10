@@ -294,7 +294,7 @@ function getMouseEvents(
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
 
-            const targetUids = await beginTargetSelection(container, card)
+            beginTargetSelection(container, card)
 
             // let targetUids
             // switch (card.targetType) {
@@ -308,10 +308,10 @@ function getMouseEvents(
             //         targetUids = [card.characterUid]
             //         break
             // }
-            await playCard({
-                cardUid: container.name,
-                targetUids,
-            })
+            // playCard({
+            //     cardUid: container.name,
+            //     targetUids,
+            // })
         },
     }
 }
