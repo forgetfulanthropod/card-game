@@ -1,5 +1,5 @@
 import type { OwnedCharacterStats } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'

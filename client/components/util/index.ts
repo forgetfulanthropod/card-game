@@ -1,4 +1,4 @@
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { useEffect, useState } from 'preact/hooks'
 
 export function useCursor<T>(cursor: SCursor<T>): T {

@@ -1,7 +1,7 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
 export { PixiSpine }
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { Loader } from 'pixi.js'
 
 import type {

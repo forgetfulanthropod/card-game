@@ -5,8 +5,8 @@ import type {
     OwnedCharacterStats,
     Scene,
 } from '@shared'
-import type { SCursor } from 'baobab'
-import { SBaobab } from 'baobab'
+import type { SCursor } from 'sbaobab'
+import { SBaobab } from 'sbaobab'
 import { memoize } from 'lodash'
 
 /** Global variables for file */

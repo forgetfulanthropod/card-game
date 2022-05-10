@@ -1,5 +1,5 @@
 import type { Gamestate } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { omit } from 'lodash'
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'

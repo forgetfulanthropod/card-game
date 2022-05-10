@@ -1,4 +1,4 @@
-import type { SBaobab, SCursor } from 'baobab'
+import type { SBaobab, SCursor } from 'sbaobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
 import type { Socket } from 'socket.io-client'

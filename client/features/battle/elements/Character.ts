@@ -6,7 +6,7 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { filters, Loader } from 'pixi.js'
 
 import { activateOrb } from '@/actions'

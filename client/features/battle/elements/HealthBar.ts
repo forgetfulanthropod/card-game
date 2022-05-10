@@ -1,5 +1,5 @@
 import type { CharacterMeta, CharacterUid } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'

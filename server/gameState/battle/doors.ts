@@ -1,7 +1,7 @@
 import type { BattleScene, Characters, Door, DungeonName } from '@shared'
 import type { SpecialDoorName } from '@shared'
 import type { RoomOutcomes } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 import { keys, zip } from 'lodash'
 
 import { getRulebook } from '@/rulebook'

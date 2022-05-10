@@ -1,4 +1,4 @@
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 
 type Unsubscribe = () => void
 export function onUpdate<T>(

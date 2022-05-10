@@ -1,5 +1,5 @@
 import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
