@@ -1,15 +1,14 @@
-import type { Card, CharacterUid } from '@shared'
+import type { Card } from '@shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import { InteractionEvent, InteractionManager } from 'pixi.js'
+import type { InteractionEvent } from 'pixi.js'
 
+import { playCard } from '@/actions'
+import { localTree } from '@/data/localTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { PixiGraphics } from '@/elementsUtil'
 import { Container, getPixiApp } from '@/elementsUtil'
-import { getBattleScene } from '@/data/rootTree'
 import { onUpdate } from '@/util/onUpdate'
-import { doCharacterAction, playCard } from '@/actions'
-import { localTree } from '@/data/localTree'
 
 export function beginTargetSelection(
     cardEl: PixiContainer,
@@ -40,13 +39,13 @@ export function beginTargetSelection(
     const arrow = Arrow(origin, destination)
     app.stage.addChild(arrow)
 
-    const scene = getBattleScene()
+    // const scene = getBattleScene()
 
     const selectedTargetsCursor = localTree.select('selectedTargets')
-    const unsub = onUpdate(selectedTargetsCursor, targets => {
+    const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
         if (targets.length >= numTargets) {
-            doCharacterAction({ uid: targets[0] })
-            playCard({
+            // await doCharacterAction({ uid: targets[0] })
+            await playCard({
                 cardUid: cardEl.name, //cardMeta.id
                 targetUids: [targets[0]],
             })
