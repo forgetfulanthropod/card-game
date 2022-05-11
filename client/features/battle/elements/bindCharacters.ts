@@ -72,7 +72,7 @@ function updateCharacters(
                     console.log('clicked a character')
                     localTree
                         .select('selectedTargets')
-                        .push(childCursor.get('uid'))
+                        .apply(arr => [...arr, childCursor.get('uid')])
                 },
                 scale: 1,
                 isSelected: false,

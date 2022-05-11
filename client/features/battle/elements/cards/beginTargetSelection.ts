@@ -84,8 +84,8 @@ export function beginTargetSelection(
 }
 
 function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
-    const pointRadius = 20
-
+    const arcCurve = 100 // px
+    const pointRadius = 10
     const g = new PixiGraphics()
 
     return Container({
@@ -96,6 +96,12 @@ function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
 
     function draw() {
         g.clear()
+        const { x: x0, y: y0 } = origin.val
+        const { x: x1, y: y1 } = destination.val
+        const [xc, yc] = [(x0 + x1) / 2, (y0 + y1) / 2 + arcCurve]
+        g.lineStyle(5, 0xaa0000, 1)
+        g.moveTo(x0, y0)
+        g.bezierCurveTo(x0, y0, xc, yc, x1, y1)
         g.beginFill(0xffffff)
         g.drawCircle(origin.val.x, origin.val.y, pointRadius)
         g.drawCircle(destination.val.x, destination.val.y, pointRadius)
