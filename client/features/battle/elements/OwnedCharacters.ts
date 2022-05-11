@@ -1,5 +1,5 @@
 import type { OwnedCharacterStats } from '@shared'
-import type { SCursor } from 'sbaobab'
+import type { ROCursor } from 'sbaobab'
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
@@ -70,7 +70,7 @@ function makeCharacters() {
 
 function makeSelectionIndicators(
     characters: PixiContainer[],
-    selectedCharacters: SCursor<OwnedCharacterStats[]>
+    selectedCharacters: ROCursor<OwnedCharacterStats[]>
 ) {
     update()
     selectedCharacters.on('update', update)

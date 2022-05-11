@@ -1,8 +1,8 @@
-import type { SCursor } from 'sbaobab'
+import type { ROCursor, SCursor } from 'sbaobab'
 
 type Unsubscribe = () => void
 export function onUpdate<T>(
-    cursor: SCursor<T>,
+    cursor: ROCursor<T> | SCursor<T>,
     callback: (t: T) => void,
     runImmediately = false
 ): Unsubscribe {

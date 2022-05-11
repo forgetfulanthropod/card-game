@@ -21,7 +21,7 @@ specifiers:
   lodash: ^4.17.21
   nodemon: ^2.0.15
   prettier-no-jsx-parens: ^2.6.1
-  sbaobab: ^2.6.2
+  sbaobab: ^2.6.4
   testyts: ^1.5.0
   typescript: ^4.5.4
   vscode-generate-index-standalone: ^1.6.0
@@ -34,7 +34,7 @@ dependencies:
   esbuild-plugin-alias: 0.2.1
   express: 4.17.2
   lodash: 4.17.21
-  sbaobab: 2.6.2
+  sbaobab: 2.6.4
   testyts: 1.5.0
   winston: 3.3.3
 
@@ -2704,8 +2704,8 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
     dev: false
 
-  /sbaobab/2.6.2:
-    resolution: {integrity: sha512-hYkKYIEjOODAcOLoRg4B29Ad5LDW3nnYU0rn4vKbvE4qozQM3/xdNknkNNpeZuLsjVDDvhdoz/Bax/NM0NGfqw==}
+  /sbaobab/2.6.4:
+    resolution: {integrity: sha512-j0Ns+o4Qg1VYwy8mB7ZyxklPlmUnDd8anJZ33rfCyC6rdBwW3CdqwtiryVPdzHq8Jk52siYT59d1dTeUJooT8Q==}
     dependencies:
       emmett: 3.2.0
     dev: false

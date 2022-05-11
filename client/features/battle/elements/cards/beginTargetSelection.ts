@@ -9,6 +9,7 @@ import { Container, getPixiApp } from '@/elementsUtil'
 import { getBattleScene } from '@/data/rootTree'
 import { onUpdate } from '@/util/onUpdate'
 import { doCharacterAction, playCard } from '@/actions'
+import { localTree } from '@/data/localTree'
 
 export function beginTargetSelection(
     cardEl: PixiContainer,
@@ -41,7 +42,7 @@ export function beginTargetSelection(
 
     const scene = getBattleScene()
 
-    const selectedTargetsCursor = scene.select('selectedTargets')
+    const selectedTargetsCursor = localTree.select('selectedTargets')
     const unsub = onUpdate(selectedTargetsCursor, targets => {
         if (targets.length >= numTargets) {
             doCharacterAction({ uid: targets[0] })

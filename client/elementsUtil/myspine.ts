@@ -1,7 +1,7 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
 export { PixiSpine }
-import type { SCursor } from 'sbaobab'
+import type { ROCursor } from 'sbaobab'
 import { Loader } from 'pixi.js'
 
 import type {
@@ -12,7 +12,7 @@ import { onUpdate } from '@/util/onUpdate'
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name
-    animation?: AnimationsOf<Name> | SCursor<AnimationsOf<Name>>
+    animation?: AnimationsOf<Name> | ROCursor<AnimationsOf<Name>>
     x?: number
     y?: number
     size?: [number, number]
