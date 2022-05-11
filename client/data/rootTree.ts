@@ -5,13 +5,13 @@ import type {
     OwnedCharacterStats,
     Scene,
 } from '@shared'
-import type { SCursor } from 'baobab'
-import { SBaobab } from 'baobab'
+import type { ROBaobab, ROCursor } from 'sbaobab'
+import { SBaobab } from 'sbaobab'
 import { memoize } from 'lodash'
 
 /** Global variables for file */
 const state = {
-    gamestate: null as SBaobab<Gamestate> | null,
+    gamestate: null as ROBaobab<Gamestate> | null,
 }
 
 export function initializeBoababTree(gamestate: Gamestate): void {
@@ -25,7 +25,7 @@ export function initializeBoababTree(gamestate: Gamestate): void {
  *  write synchronous code everywhere in app, we just need to
  *  wait for callbacks in onRulebook and onGamestate
  */
-export function getTree(): SBaobab<Gamestate> {
+export function getTree(): ROBaobab<Gamestate> {
     if (state.gamestate == null) {
         throw Error(
             'tried to get tree before it was loaded. Did you wait for onGamestate?'
@@ -34,25 +34,25 @@ export function getTree(): SBaobab<Gamestate> {
     return state.gamestate
 }
 
-export const getBattleScene = (): SCursor<BattleScene> => {
+export const getBattleScene = (): ROCursor<BattleScene> => {
     const sceneName = getTree().select('scene').get('name')
     if (sceneName !== 'battle') {
         throw new Error(`tried to get battle scene when you're in ${sceneName}`)
     }
-    return getTree().select('scene') as SCursor<BattleScene>
+    return getTree().select('scene') as ROCursor<BattleScene>
 }
-export const getEntryScene = (): SCursor<EntryScene> => {
+export const getEntryScene = (): ROCursor<EntryScene> => {
     const curType = getTree().select('scene').select('name').get()
     if (curType !== 'entry') {
         throw new Error(`tried to get entry scene when you're in ${curType}`)
     }
-    return getTree().select('scene') as SCursor<EntryScene>
+    return getTree().select('scene') as ROCursor<EntryScene>
 }
 
-export const getOwnedCharacters = (): SCursor<
+export const getOwnedCharacters = (): ROCursor<
     Record<string, OwnedCharacterStats>
 > => getTree().select('ownedCharacters')
-export const getScene = (): SCursor<Scene> => getTree().select('scene')
+export const getScene = (): ROCursor<Scene> => getTree().select('scene')
 export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 
 export interface ClientTree {

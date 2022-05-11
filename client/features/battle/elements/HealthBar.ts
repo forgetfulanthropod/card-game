@@ -1,5 +1,5 @@
 import type { CharacterMeta, CharacterUid } from '@shared'
-import type { SCursor } from 'baobab'
+import type { ROCursor } from 'sbaobab'
 import { Matrix, utils } from 'pixi.js'
 
 import { toggleStance } from '@/actions'
@@ -38,7 +38,7 @@ function getCharacterCursor(characterUid: string) {
 }
 
 function bindBlockIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -83,7 +83,7 @@ function bindBlockIndicator(
 }
 
 function bindEffectIndicators(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -148,7 +148,7 @@ function bindEffectIndicators(
 }
 
 function bindStanceIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -199,7 +199,7 @@ function bindMainEl() {
 }
 
 function bindHealthIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -244,7 +244,7 @@ function bindHealthIndicator(
 }
 
 function drawHealthBar(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     g: PixiGraphics
 ) {
     const xMargin = 0.01869158878

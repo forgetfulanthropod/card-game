@@ -1,5 +1,5 @@
 import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
+import type { ROCursor } from 'sbaobab'
 
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
@@ -11,7 +11,7 @@ import { clearContainer } from '@/elementsUtil'
 import { getTexture } from '../logic/assetGetters'
 
 type BindCursorArgs = {
-    scene: SCursor<BattleScene>
+    scene: ROCursor<BattleScene>
     container: PixiContainer
 }
 

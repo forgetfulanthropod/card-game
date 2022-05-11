@@ -29,7 +29,6 @@ export interface BattleScene extends SceneHas {
     turnCount: number
     doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
-    selectedTargets: CharacterUid[]
     // loot: Record<ItemUid, ItemName>
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'

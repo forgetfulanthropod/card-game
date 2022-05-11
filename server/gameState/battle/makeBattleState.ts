@@ -45,6 +45,5 @@ export function makeBattleState(args: {
         isDeluxeLoaded: false,
         doors: { options: [], descriptions: [] },
         roomsPassed: 0,
-        selectedTargets: [],
     })
 }

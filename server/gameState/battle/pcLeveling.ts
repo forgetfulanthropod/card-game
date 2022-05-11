@@ -1,6 +1,6 @@
 // import type { BattleScene, CharacterMeta } from '@shared'
 import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
+import type { SCursor } from 'sbaobab'
 
 // import { getRulebook } from '@/rulebook'
 // import { vals } from '@/util'

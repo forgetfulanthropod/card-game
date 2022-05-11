@@ -1,6 +1,6 @@
 import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
-import type { SCursor } from 'baobab'
-import { SBaobab } from 'baobab'
+import type { SCursor } from 'sbaobab'
+import { SBaobab } from 'sbaobab'
 import { memoize } from 'lodash'
 
 // import { getAllUsers, setUser } from '@/database'
