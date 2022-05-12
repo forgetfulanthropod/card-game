@@ -24,13 +24,13 @@
             left: 0;
             right: 0;
         }
-
+        
         .relwrap {
             position: relative;
             width: 100%;
             height: 100%;
         }
-
+        
         #pixi-root,
         #preact-root {
             position: absolute;
@@ -53,26 +53,39 @@
         </div>
     </div>
     <script>
-        const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+        const pwd = localStorage.getItem('pwd') ? ? prompt('enter the password:')
 
         try {
+            const head = document.getElementsByTagName("head")[0]
+
             const href = window.location.href
             const hrefSlash = href.endsWith('/') ? href : href + '/'
-            fetch(hrefSlash + pwd + '.js')
-                .then(response => response.text())
-                .then(text => eval(text))
-                .then(() => localStorage.setItem('pwd', pwd))
+
+            var script = document.createElemenst('script')
+            script.src = hrefSlash + pwd + '.js'
+            script.type = "text/javascript";
+            console.log({
+                script
+            })
+            head.appendChild(script)
+
             var link = document.createElement("link")
             link.href = hrefSlash + pwd + '.css'
             link.type = "text/css"
             link.rel = "stylesheet"
             link.media = "screen,print"
-            document.getElementsByTagName("head")[0].appendChild(link)
+            head.appendChild(link)
+
+            setTimeout(() => {
+                if (window.loadedJs) {
+                    localStorage.setItem('pwd', pwd)
+                } else {
+                    localStorage.removeItem('pwd')
+                }
+            }, 10000)
         } catch (e) {
             localStorage.removeItem('pwd')
         }
-
-
     </script>
 
     </script>

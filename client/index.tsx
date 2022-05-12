@@ -6,6 +6,9 @@ import { render } from 'preact'
 import App from './components/App'
 import { resolveWhenSocketConfirmed, startRetrying } from './connection'
 
+// @ts-expect-error
+window.loadedJs = true
+
 const clientBuildInfo = {
     gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
     gitCommit: process.env.CLIENT_GIT_COMMIT ?? '',
