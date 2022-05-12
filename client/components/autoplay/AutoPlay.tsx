@@ -1,3 +1,4 @@
+/** NOT MAINTAINED OR WORKING */
 import type {
     BattleScene,
     EntryScene,
