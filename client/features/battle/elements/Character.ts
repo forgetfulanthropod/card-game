@@ -6,8 +6,8 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from '@shared'
-import type { ROCursor } from 'sbaobab'
 import { filters, Loader } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 
 import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'
@@ -75,7 +75,9 @@ export function Character(args: CharacterProps): PixiContainer {
         initialHeight,
     } = sprites
 
-    const mainAnimation = MainCharacterAnimation(characterMeta)
+    const mainAnimation = MainCharacterAnimation(characterMeta, () =>
+        args.onClick(characterMeta.uid)
+    )
 
     const mainContainer = Container({
         zIndex: args.zIndex,
@@ -141,7 +143,8 @@ export function Character(args: CharacterProps): PixiContainer {
 }
 
 export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
+    onClick?: () => void
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
 
@@ -150,6 +153,7 @@ export function MainCharacterAnimation(
     const mainAnimation = Spine({
         name: spineAssetName,
         animation: 'Idle',
+        onClick,
     })
 
     const desiredHeight = 260 // TODO: what is it tho
