@@ -2,7 +2,7 @@ import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
 // import { KVS } from 'kvslite'
 import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
-import type { SCursor } from 'sbaobab'
+import type { ROCursor, SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
 
 // import { getAllUsers, setUser } from '@/database'
@@ -32,6 +32,7 @@ export function getEntryScene(username: string): SCursor<EntryScene> {
     return scene as SCursor<EntryScene>
 }
 
+export type ROBattleCursor = ROCursor<BattleScene>
 export type BattleCursor = SCursor<BattleScene>
 export function getBattleScene(username: string): BattleCursor {
     const scene = getGameStateCursor(username).select('scene')

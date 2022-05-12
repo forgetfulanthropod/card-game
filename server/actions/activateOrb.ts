@@ -8,7 +8,7 @@ import type {
 import { isEqual } from 'lodash'
 
 import {
-    checkBattleOver,
+    checkBattleOverMut,
     getRandomLivingNpcUid,
     roundDamage,
     updateHand,
@@ -27,7 +27,7 @@ export const activateOrb: ActivateOrb = ({ username, orb, characterUid }) => {
     activate(orb, character, scene)
 
     updateHand(scene)
-    checkBattleOver(scene)
+    checkBattleOverMut(scene)
 }
 
 function validate(character: CharacterMeta, orb: Orb) {
