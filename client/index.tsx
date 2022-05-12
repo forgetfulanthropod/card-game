@@ -7,7 +7,7 @@ import App from './components/App'
 import { resolveWhenSocketConfirmed, startRetrying } from './connection'
 
 // @ts-expect-error
-window.loadedJs = true
+window.loadedJs = true // for the password logic in index.html
 
 const clientBuildInfo = {
     gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
