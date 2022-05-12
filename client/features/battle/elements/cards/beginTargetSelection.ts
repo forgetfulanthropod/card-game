@@ -26,40 +26,46 @@ export function beginTargetSelection(
 
     const destination = datum({ x: x0, y: y0 })
 
-    const handlePointerMove = (e: InteractionEvent) => {
+    const updateDestination = (e: InteractionEvent) => {
         destination.set({ x: e.data.global.x, y: e.data.global.y })
     }
     app.stage.interactive = true
-    // app.stage.interactiveChildren = true
+    app.stage.on('pointermove', updateDestination)
 
-    // app.stage.interactive = true
-    // const interaction = app.renderer.plugins.interaction
-    app.stage.on('pointermove', handlePointerMove)
+    window.addEventListener(
+        'keydown',
+        e => {
+            if (e.key === 'Escape') cleanup()
+        },
+        false
+    )
 
     const arrow = Arrow(origin, destination)
     app.stage.addChild(arrow)
 
-    // const scene = getBattleScene()
-
     const selectedTargetsCursor = localTree.select('selectedTargets')
+
     const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
         if (targets.length >= numTargets) {
+            console.log('selected targets cursor')
             // await doCharacterAction({ uid: targets[0] })
+            console.log(cardMeta)
+
             await playCard({
-                cardUid: cardEl.name, //cardMeta.id
+                cardUid: cardEl.name, //cardMeta.id,
                 targetUids: [targets[0]],
             })
             cleanup()
         }
     })
+
     function cleanup() {
         unsub()
         selectedTargetsCursor.set([])
-        app.stage.off('pointermove', handlePointerMove)
+        app.stage.off('pointermove', updateDestination)
         app.stage.removeChild(arrow)
         arrow.destroy({ children: true })
         app.stage.interactive = false
-        // app.stage.interactiveChildren = false
     }
     // return new Promise(resolve => {
     //     app.stage.on('stageout', () => {
@@ -83,7 +89,7 @@ export function beginTargetSelection(
 }
 
 function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
-    const arcCurve = 100 // px
+    // const arcCurve = 100 // px dropped in favor of x1,y0 for max droop?
     const pointRadius = 10
     const g = new PixiGraphics()
 
@@ -97,7 +103,7 @@ function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
         g.clear()
         const { x: x0, y: y0 } = origin.val
         const { x: x1, y: y1 } = destination.val
-        const [xc, yc] = [(x0 + x1) / 2, (y0 + y1) / 2 + arcCurve]
+        const [xc, yc] = [x1, y0]
         g.lineStyle(5, 0xaa0000, 1)
         g.moveTo(x0, y0)
         g.bezierCurveTo(x0, y0, xc, yc, x1, y1)
