@@ -68,29 +68,9 @@ export function beginTargetSelection(
         arrow.destroy({ children: true })
         app.stage.interactive = false
     }
-    // return new Promise(resolve => {
-    //     app.stage.on('stageout', () => {
-    //         alert("shit they're gone!")
-    //         resolve([])
-    //     })
-    // })
-
-    // listeningForeground
-
-    // interaction.on('stageup', this.onMouseUp);
-    // interaction.on('stagein', this.onMouseIn);
-    // interaction.on('stageout', this.onMouseOut);
-
-    // cardEl.parent.addChild()
-
-    // listeningForeground.on('pointermove')
-
-    // const x1 = 1
-    // const y1 = 1
 }
 
 function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
-    // const arcCurve = 100 // px dropped in favor of x1,y0 for max droop?
     const pointRadius = 10
     const g = new PixiGraphics()
 
@@ -104,7 +84,7 @@ function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
         g.clear()
         const { x: x0, y: y0 } = origin.val
         const { x: x1, y: y1 } = destination.val
-        const [xc, yc] = [x1, y0]
+        const [xc, yc] = [x0, y1 - Math.abs(y0 - y1) * 0.33] // curve up 33% past targetfirst
         g.lineStyle(5, 0xaa0000, 1)
         g.moveTo(x0, y0)
         g.bezierCurveTo(x0, y0, xc, yc, x1, y1)
