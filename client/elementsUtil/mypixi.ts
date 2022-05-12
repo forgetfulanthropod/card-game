@@ -1,5 +1,5 @@
 // window.PIXI = PIXI
-import { RODatum } from 'datums'
+import type { RODatum } from 'datums'
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import type {
