@@ -1,6 +1,6 @@
 import type { AttackData, CharacterMeta, CharacterUid, Effect } from '@shared'
-import type { SCursor } from 'sbaobab'
 import { findIndex } from 'lodash'
+import type { SCursor } from 'sbaobab'
 
 import type { BattleCursor } from '@/util'
 

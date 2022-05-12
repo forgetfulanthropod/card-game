@@ -1,8 +1,8 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
 export { PixiSpine }
-import type { ROCursor } from 'sbaobab'
 import { Loader } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 
 import type {
     AnimationsOf,

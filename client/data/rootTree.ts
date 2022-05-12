@@ -5,9 +5,9 @@ import type {
     OwnedCharacterStats,
     Scene,
 } from '@shared'
+import { memoize } from 'lodash'
 import type { ROBaobab, ROCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
-import { memoize } from 'lodash'
 
 /** Global variables for file */
 const state = {
