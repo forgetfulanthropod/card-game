@@ -27,6 +27,9 @@ export function Spine<Name extends SpineAsset>(props: {
         spine.on('pointerdown', () => {
             if (props.onClick != null) props.onClick()
         })
+        spine.on('pointerup', () => {
+            if (props.onClick != null) props.onClick()
+        })
     }
 
     let unsub: null | Callback = null
