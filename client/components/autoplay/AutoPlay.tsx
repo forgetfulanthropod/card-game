@@ -1,3 +1,4 @@
+/** NOT MAINTAINED OR WORKING */
 import type {
     BattleScene,
     EntryScene,
@@ -8,13 +9,7 @@ import { find, sample, sum, values } from 'lodash'
 import { useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 
-import {
-    addSelected,
-    changeDungeon,
-    changeScene,
-    chooseDoor,
-    doCharacterAction,
-} from '@/actions'
+import { addSelected, changeDungeon, changeScene, chooseDoor } from '@/actions'
 import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
@@ -129,7 +124,6 @@ class Runner {
             throw Error('null enemy')
         }
         toast(`hitting enemy ${enemy.name} (${enemy.uid})`)
-        await doCharacterAction({ uid: enemy.uid })
     }
 }
 

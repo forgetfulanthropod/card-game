@@ -49,7 +49,6 @@ export function beginTargetSelection(
     const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
         if (targets.length >= numTargets) {
             console.log('selected targets cursor')
-            // await doCharacterAction({ uid: targets[0] })
             console.log(cardMeta)
 
             await playCard({

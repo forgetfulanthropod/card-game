@@ -1,5 +1,6 @@
-import { Orb } from '@shared'
-import { CharacterUid } from '../datamodel'
+import type { Orb } from '@shared'
+
+import type { CharacterUid } from '../datamodel'
 
 export type ActivateOrb = (args: {
     characterUid: CharacterUid

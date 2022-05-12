@@ -48,5 +48,6 @@
     "searchEverywhere.shouldInitOnStartup": true,
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
     "prettier.configPath": ".prettierrc.json",
-    "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/"
+    "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/",
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

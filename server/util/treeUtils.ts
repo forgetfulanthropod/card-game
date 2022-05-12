@@ -1,10 +1,27 @@
 import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
+// import { KVS } from 'kvslite'
+import { memoize } from 'lodash'
+import { JSONFile, Low } from 'lowdb'
 import type { SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
-import { memoize } from 'lodash'
 
 // import { getAllUsers, setUser } from '@/database'
 import { getIo, getSocketId } from '@/index'
+const db = new Low<{ users: Record<string, Gamestate> }>(
+    new JSONFile(__dirname + '/db.json')
+)
+void db.read().then(() => {
+    db.data = db.data ?? { users: {} }
+    void db.write()
+})
+
+export function getDb() {
+    return db
+}
+// const db = new KVS<Gamestate>('db.db')
+// export function getDb() {
+//     return db
+// }
 
 export function getEntryScene(username: string): SCursor<EntryScene> {
     const scene = getGameStateCursor(username).select('scene')
@@ -37,6 +54,11 @@ export function commit<A>(cursor: SCursor<A>, username: string): void {
     const socketId = getSocketId(username)
     const path = cursor.path as string[]
     logger.info(`committing to user ${username} (id ${socketId})`)
+    if (db.data) {
+        db.data.users[username] = getRootCursor().select('users').get(username)
+        void db.write()
+    }
+    // db.set(username, getRootCursor().select('users').get(username))
     getIo()
         .to(socketId)
         .emit('update', { data: cursor.get(), path: path.slice(3) })
