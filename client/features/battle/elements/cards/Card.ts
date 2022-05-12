@@ -289,28 +289,13 @@ function getMouseEvents(
                 }
             })
         },
-        onClick: async ({ currentTarget: { parent: container } }) => {
+        onClick: ({ currentTarget: { parent: container } }) => {
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
 
-            beginTargetSelection(container, card)
-
-            // let targetUids
-            // switch (card.targetType) {
-            //     case 'enemies':
-            //         targetUids = [getFrontEnemyUid()]
-            //         break
-            //     case 'friends':
-            //         targetUids = [getFrontFriendUid()]
-            //         break
-            //     case 'self':
-            //         targetUids = [card.characterUid]
-            //         break
-            // }
-            // playCard({
-            //     cardUid: container.name,
-            //     targetUids,
-            // })
+            if (getBattleScene().get().energy >= card.energy) {
+                beginTargetSelection(container, card)
+            }
         },
     }
 }

@@ -73,15 +73,63 @@ export type CardId =
     | 'strike'
     | 'orbOfLightning'
     | 'orbOfProtection'
+    | 'basicMagicAttackWizard'
+    | 'basicMagicAttackCleric'
+    | 'magicRitual'
+    | 'chainLightning'
+    | 'spellBook'
+    | 'fireball'
+    | 'arcanePower'
+    | 'scatterBrained'
+    | 'magicalStorm'
+    | 'orbOfFrost'
+    | 'basicAttackCleric'
+    | 'basicAttackKnight'
+    | 'blockCleric'
+    | 'blockKnight'
+    | 'blockWizard'
+    | 'swordSlash'
+    | 'dutifulStab'
+    | 'charge'
+    | 'tetsudoFormation'
+    | 'guidingBolt'
+    | 'smite'
+    | 'bless'
+    | 'prayerOfGoodFortune'
+    | 'orbOfHolyLight'
+    | 'mantraOfPatience'
+    | 'helpingHand'
 
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
+type BasicTargetType =
+    | 'friends'
+    | 'enemies'
+    | 'self'
+    | 'card'
+    | 'cardAttack'
+    | 'cardEnchantment'
+    | 'orb'
+
+type TargetType =
+    | BasicTargetType
+    | Array<
+          | BasicTargetType
+          | {
+                type: BasicTargetType
+                constraint?: {
+                    key: string
+                    comparator: '<=' | '>='
+                    value: number
+                }
+            }
+      >
 export type Card = {
     name: string
     energy: number
     id: CardId
     targetNum: number
-    targetType: 'friends' | 'enemies' | 'self'
+    targetType: TargetType
     actions: string
     type: CardType
     characterClass: CharacterClass
