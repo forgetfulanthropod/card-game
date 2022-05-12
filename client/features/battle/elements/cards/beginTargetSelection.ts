@@ -31,6 +31,7 @@ export function beginTargetSelection(
     }
     app.stage.interactive = true
     app.stage.on('pointermove', updateDestination)
+    app.stage.on('pointerout', () => cleanup())
 
     window.addEventListener(
         'keydown',
