@@ -27,8 +27,13 @@ import {
 import type { PixiSpine } from '@/elementsUtil/myspine'
 import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
+import { onUpdate } from '@/util/onUpdate'
 
-import { getCharTexture, getOrbTexture } from '../logic/assetGetters'
+import {
+    getCharTexture,
+    getOrbTexture,
+    hasTexture,
+} from '../logic/assetGetters'
 import type { SpineAsset } from '../logic/spineAssets'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
@@ -182,45 +187,49 @@ function getBoundOrbContainer(
     })
     const orbWidth = 45
 
-    u()
-    characterCursor.select('orbs').on('update', u)
-
-    function u() {
-        const orbs = characterCursor.get('orbs')
-
-        orbContainer.removeChildren()
-        orbs.forEach((orb, i) => {
-            orbContainer.addChild(
-                Container({
-                    x: i * orbWidth * 1.5,
-                    onClick: async () => {
-                        await activateOrb({
-                            characterUid: characterCursor.get('uid'),
-                            orb,
-                        })
-                    },
-                    children: [
-                        Sprite({
-                            src: getOrbTexture(orb.type),
-                            width: orbWidth * SCALE_UNIVERSAL,
-                            height: orbWidth * SCALE_UNIVERSAL,
-                        }),
-                        Text({
-                            text: `${orb.remainingCount}`,
-                            style: {
-                                fontFamily: 'VT323',
-                                fontSize: 14 * SCALE_UNIVERSAL,
-                                fill: ['#fff', '#eee'], // gradient
-                                // letterSpacing: -5,
-                                stroke: '#333',
-                                strokeThickness: 5,
-                            },
-                        }),
-                    ],
-                })
-            )
-        })
-    }
+    const orbsCursor = characterCursor.select('orbs')
+    const unsub = onUpdate(
+        orbsCursor,
+        orbs => {
+            if (orbs == null) {
+                unsub?.()
+                return
+            }
+            orbContainer.removeChildren()
+            orbs.forEach((orb, i) => {
+                orbContainer.addChild(
+                    Container({
+                        x: i * orbWidth * 1.5,
+                        onClick: async () => {
+                            await activateOrb({
+                                characterUid: characterCursor.get('uid'),
+                                orb,
+                            })
+                        },
+                        children: [
+                            Sprite({
+                                src: getOrbTexture(orb.type),
+                                width: orbWidth * SCALE_UNIVERSAL,
+                                height: orbWidth * SCALE_UNIVERSAL,
+                            }),
+                            Text({
+                                text: `${orb.remainingCount}`,
+                                style: {
+                                    fontFamily: 'VT323',
+                                    fontSize: 14 * SCALE_UNIVERSAL,
+                                    fill: ['#fff', '#eee'], // gradient
+                                    // letterSpacing: -5,
+                                    stroke: '#333',
+                                    strokeThickness: 5,
+                                },
+                            }),
+                        ],
+                    })
+                )
+            })
+        },
+        true
+    )
 
     return orbContainer
 }
@@ -342,12 +351,32 @@ function makeSprites(
 
     const assetIdCursor = args.cursor.select('name')
 
+    const unsub = onUpdate(assetIdCursor, assetId => {
+        // tl('asset update')
+        if (!hasTexture(assetId)) {
+            unsub()
+            return
+        }
+        const texture = getCharTexture(assetId)
+        const height = texture.height
+        const update = (s: PixiSprite) => {
+            s.texture = texture
+            s.height = height
+        }
+        update(selectedSprite)
+        update(mainSprite)
+        update(defendSprite)
+        update(attackSprite)
+        onHeight(height)
+    })
+
     if (assetIdCursor.get() == null) {
         // TODO: has to do with renewChildren()
         // should never occur...
         console.error(
             'null character assetId. probably character was removed or uid was changed.'
         )
+        unsub()
         return null
     }
 
@@ -363,6 +392,7 @@ function makeSprites(
         onClick: () => {
             args.onClick(characterMeta.uid)
         },
+        onDestroy: [unsub],
         zIndex: 1,
     })
     const defendSprite = Sprite({
@@ -387,30 +417,6 @@ function makeSprites(
         tint: WHITE,
         zIndex: 0,
         visible: selectedId.get() === characterMeta.uid,
-    })
-
-    assetIdCursor.on('update', () => {
-        // tl('asset update')
-        const texture = getCharTexture(assetIdCursor.get())
-        if (texture == null) {
-            // TODO: this occurs when allCharacters gets new characters and this character is no longer defined.
-            // (Unique ID: BqUPq)
-            // The parent destroys the child but not before this listener fires.
-            // Or perhaps tree listeners are not destroyed when a child is destroyed.
-            // In that case, the mypixi/Sprite thing needs to take an onDestroy argument that removes the listeners.
-            // Anyway, for now we can just return.
-            return
-        }
-        const height = texture.height
-        const update = (s: PixiSprite) => {
-            s.texture = texture
-            s.height = height
-        }
-        update(selectedSprite)
-        update(mainSprite)
-        update(defendSprite)
-        update(attackSprite)
-        onHeight(height)
     })
 
     selectedId.on('update', () => {
