@@ -1,6 +1,6 @@
-import type { SBaobab, ROCursor } from 'sbaobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
+import type { ROCursor, SBaobab } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
@@ -33,6 +33,16 @@ export function resolveWhenSocketConfirmed(): Promise<void> {
             resolve()
         })
     })
+}
+
+export function startRetrying(): void {
+    const interval = 3000
+    setInterval(() => {
+        if (!socket.connected) {
+            console.log('connection died!! retrying')
+            socket.connect()
+        }
+    }, interval)
 }
 
 export function getSocket(): Socket {

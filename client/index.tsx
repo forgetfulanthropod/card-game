@@ -4,7 +4,7 @@ import './config/nullUtil'
 import { render } from 'preact'
 
 import App from './components/App'
-import { resolveWhenSocketConfirmed } from './connection'
+import { resolveWhenSocketConfirmed, startRetrying } from './connection'
 
 const clientBuildInfo = {
     gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
@@ -17,6 +17,7 @@ const preactRoot = document.getElementById('preact-root') as HTMLDivElement
 
 async function main() {
     await resolveWhenSocketConfirmed()
+    startRetrying()
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)
 }
