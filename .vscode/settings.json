@@ -21,7 +21,8 @@
     "files.exclude": {
         "**/node_modules/": true,
         "**/pnpm-lock.yaml": true,
-        "**/tsconfig.tsbuildinfo": true
+        "**/tsconfig.tsbuildinfo": true,
+        ".eslintcache": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
