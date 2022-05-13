@@ -6,6 +6,7 @@
     <link rel="icon" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="theme-color" content="#FFCD70" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- <meta name="description" content="" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -64,9 +65,7 @@
             var script = document.createElement('script')
             script.src = hrefSlash + pwd + '.js'
             script.type = "text/javascript"
-            console.log({
-                script
-            })
+
             head.appendChild(script)
 
             var link = document.createElement("link")
