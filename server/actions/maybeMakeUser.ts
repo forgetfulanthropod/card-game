@@ -16,16 +16,7 @@ export const maybeMakeUser = (req: any): Gamestate => {
     const username: string = req.body.username
     req.session.username = username
     setSocketId(username, req.session.socketio)
-    // const users = getRootCursor().get('users')
-    // if (await hasUser(username)) {
-    //     logger.info(`already has user ${username}`)
-    // } else {
-    // const maybeUser = getDb().get(username)
-    // if (maybeUser) {
-    //     getRootCursor().select('users').set(username, maybeUser)
-    // }
     const maybeUser = getDb().data?.users?.[username]
-    logger.info(JSON.stringify({ maybeUser }))
     if (maybeUser) {
         getRootCursor().select('users').set(username, maybeUser)
     }
