@@ -3,7 +3,6 @@ import type { CharacterClass, CharacterUid, Pile } from '@shared'
 import type { Card } from '@shared'
 import { gsap } from 'gsap'
 
-import { playCard } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
@@ -18,6 +17,7 @@ import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
 import { keys, vals } from '@/util'
 
 import { getCardTypeSrc } from '../../logic/assetGetters'
+import { beginTargetSelection } from './beginTargetSelection'
 
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_WIDTH_IN_HAND = 220
@@ -53,7 +53,7 @@ export function Card({
     )
     const colorStops = getColorStopsFromCharacterClass(card.characterClass)
 
-    return Container({
+    const root = Container({
         name,
         // cache: true,
         ...xyrs,
@@ -67,6 +67,8 @@ export function Card({
             ...getTexts(card, cardFrameTexture, colorStops),
         ],
     })
+
+    return root
 }
 
 function getGradientBackground(
@@ -287,26 +289,13 @@ function getMouseEvents(
                 }
             })
         },
-        onClick: async ({ currentTarget: { parent: container } }) => {
+        onClick: ({ currentTarget: { parent: container } }) => {
             if (!(container instanceof PixiContainer))
                 throw new Error('ERROR! should be bound to container')
 
-            let targetUids
-            switch (card.targetType) {
-                case 'enemies':
-                    targetUids = [getFrontEnemyUid()]
-                    break
-                case 'friends':
-                    targetUids = [getFrontFriendUid()]
-                    break
-                case 'self':
-                    targetUids = [card.characterUid]
-                    break
+            if (getBattleScene().get().energy >= card.energy) {
+                beginTargetSelection(container, card)
             }
-            await playCard({
-                cardUid: container.name,
-                targetUids,
-            })
         },
     }
 }

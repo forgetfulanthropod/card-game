@@ -1,6 +1,6 @@
 import type { AttackData, CharacterMeta, CharacterUid, Effect } from '@shared'
-import type { SCursor } from 'baobab'
 import { findIndex } from 'lodash'
+import type { SCursor } from 'sbaobab'
 
 import type { BattleCursor } from '@/util'
 
@@ -55,7 +55,14 @@ function decrementEffectStacks(
     allChars: AllCharacters,
     attackData: AttackData
 ) {
-    allChars.select(attackData.attacker.uid).apply('effects', e => {
+    const attacker = allChars.select(attackData.attacker.uid)
+    if (attacker.get() == null) {
+        logger.warn(
+            `decrementEffectStacks: attacker not found: '${attackData.attacker.uid}'`
+        )
+        return
+    }
+    attacker.apply('effects', e => {
         return e
             .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
             .filter(e => e.remainingRounds > 0)

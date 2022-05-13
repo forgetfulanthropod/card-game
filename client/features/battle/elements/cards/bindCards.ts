@@ -1,5 +1,5 @@
 import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
+import type { ROCursor } from 'sbaobab'
 
 import { endTurn } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
@@ -13,7 +13,7 @@ import { DrawPile } from './DrawPile'
 import { Hand } from './Hand'
 
 type BindCursorArgs = {
-    scene: SCursor<BattleScene>
+    scene: ROCursor<BattleScene>
     container: PixiContainer
 }
 

@@ -56,24 +56,39 @@
         const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
 
         try {
-            fetch(window.location.href + '/' + pwd + '.js')
-                .then(response => response.text())
-                .then(text => eval(text))
-                .then(() => localStorage.setItem('pwd', pwd))
+            const head = document.getElementsByTagName("head")[0]
+
+            const href = window.location.href
+            const hrefSlash = href.endsWith('/') ? href : href + '/'
+
+            var script = document.createElement('script')
+            script.src = hrefSlash + pwd + '.js'
+            script.type = "text/javascript"
+            console.log({
+                script
+            })
+            head.appendChild(script)
+
             var link = document.createElement("link")
-            link.href = window.location.href + '/' + pwd + '.css'
+            link.href = hrefSlash + pwd + '.css'
             link.type = "text/css"
             link.rel = "stylesheet"
             link.media = "screen,print"
-            document.getElementsByTagName("head")[0].appendChild(link)
+            head.appendChild(link)
+
+            setTimeout(() => {
+                if (window.loadedJs) {
+                    localStorage.setItem('pwd', pwd)
+                } else {
+                    localStorage.removeItem('pwd')
+                }
+            }, 10000)
         } catch (e) {
+            console.error(e)
             localStorage.removeItem('pwd')
         }
-
-
     </script>
 
-    </script>
     <!-- <script src="out.js"></script> -->
 </body>
 

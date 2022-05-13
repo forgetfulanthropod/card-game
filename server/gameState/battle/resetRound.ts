@@ -1,4 +1,5 @@
 import type { BattleCursor } from '@/util'
+import { commit } from '@/util'
 
 import { drawNewHand } from './cards/drawNewHand'
 import { clearBlock } from './clearBlock'
@@ -17,4 +18,5 @@ export function resetRound(scene: BattleCursor): void {
     clearBlock(scene)
     scene.set('isPlayerTurn', true)
     drawNewHand(scene)
+    commit(scene, scene.get('username'))
 }

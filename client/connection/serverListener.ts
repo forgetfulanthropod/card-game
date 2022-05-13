@@ -1,6 +1,6 @@
-import type { SBaobab, SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
+import type { ROCursor, SBaobab } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
@@ -35,6 +35,16 @@ export function resolveWhenSocketConfirmed(): Promise<void> {
     })
 }
 
+export function startRetrying(): void {
+    const interval = 3000
+    setInterval(() => {
+        if (!socket.connected) {
+            console.log('connection died!! retrying')
+            socket.connect()
+        }
+    }, interval)
+}
+
 export function getSocket(): Socket {
     return socket
 }
@@ -51,7 +61,7 @@ export function attachServerListener(): void {
 
 function updateBoabab(fromServer: unknown, path: string[]): void {
     // @ts-expect-error
-    const cursor = getTree().select(path) as SCursor<unknown>
+    const cursor = getTree().select(path) as ROCursor<unknown>
     const oldState = cursor.get() as unknown
     const differences = calcDiff(oldState, fromServer)
     // not working on N level tree updates?
@@ -90,7 +100,7 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
     }
 }
 
-function applyChange<T>(change: Diff<T, T>, cursor: SCursor<T> | SBaobab<T>) {
+function applyChange<T>(change: Diff<T, T>, cursor: ROCursor<T> | SBaobab<T>) {
     log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': {

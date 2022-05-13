@@ -1,7 +1,9 @@
 // window.PIXI = PIXI
+import type { RODatum } from 'datums'
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import type {
+    DisplayObject,
     Filter as PixiFilter,
     InteractionEvent,
     ITextStyle,
@@ -385,4 +387,23 @@ export function PngLayersBackground(args: {
             })
         ),
     })
+}
+
+export function If(
+    condition: RODatum<boolean>,
+    render: () => DisplayObject
+): PixiContainer {
+    const root = Container({
+        children: [],
+        onDestroy: [
+            condition.onChange(val => {
+                root.children.forEach(c => c.destroy(true))
+                root.removeChildren()
+                if (val) {
+                    root.addChild(render())
+                }
+            }, true),
+        ],
+    })
+    return root
 }

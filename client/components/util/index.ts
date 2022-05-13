@@ -1,7 +1,7 @@
-import type { SCursor } from 'baobab'
 import { useEffect, useState } from 'preact/hooks'
+import type { ROCursor } from 'sbaobab'
 
-export function useCursor<T>(cursor: SCursor<T>): T {
+export function useCursor<T>(cursor: ROCursor<T>): T {
     const [v, setV] = useState(cursor.get())
     useEffect(() => {
         const cb = () => setV(cursor.get())

@@ -1,8 +1,8 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
 export { PixiSpine }
-import type { SCursor } from 'baobab'
 import { Loader } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 
 import type {
     AnimationsOf,
@@ -12,7 +12,7 @@ import { onUpdate } from '@/util/onUpdate'
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name
-    animation?: AnimationsOf<Name> | SCursor<AnimationsOf<Name>>
+    animation?: AnimationsOf<Name> | ROCursor<AnimationsOf<Name>>
     x?: number
     y?: number
     size?: [number, number]
@@ -25,6 +25,9 @@ export function Spine<Name extends SpineAsset>(props: {
     if (props.onClick != null) {
         spine.interactive = true
         spine.on('pointerdown', () => {
+            if (props.onClick != null) props.onClick()
+        })
+        spine.on('pointerup', () => {
             if (props.onClick != null) props.onClick()
         })
     }

@@ -53,6 +53,9 @@ export function getTexture(assetId: AssetKey): PixiTexture {
         throwNull(`texture '${assetId}'`)
     )
 }
+export function hasTexture(assetId: AssetKey): boolean {
+    return Loader.shared.resources?.[assetId] != null
+}
 
 export function getData(assetId: AssetKey): unknown {
     return Loader.shared.resources?.[assetId]?.data

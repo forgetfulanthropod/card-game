@@ -1,7 +1,11 @@
 import type { Gamestate } from '@shared'
 
 // import { hasUser } from '@/database'
-import { getRootCursor } from '@/util'
+import {
+    getDb,
+    //  getDb,
+    getRootCursor,
+} from '@/util'
 import { addNewUser } from '@/util/addNewUser'
 
 import { setSocketId } from '..'
@@ -12,10 +16,10 @@ export const maybeMakeUser = (req: any): Gamestate => {
     const username: string = req.body.username
     req.session.username = username
     setSocketId(username, req.session.socketio)
-    // const users = getRootCursor().get('users')
-    // if (await hasUser(username)) {
-    //     logger.info(`already has user ${username}`)
-    // } else {
+    const maybeUser = getDb().data?.users?.[username]
+    if (maybeUser) {
+        getRootCursor().select('users').set(username, maybeUser)
+    }
     const userCursor = getRootCursor().select('users')
     if (!userCursor.exists(username)) {
         logger.info(`adding user ${username} with initial gamestate`)

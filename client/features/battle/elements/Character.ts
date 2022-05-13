@@ -6,8 +6,8 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from '@shared'
-import type { SCursor } from 'baobab'
 import { filters, Loader } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 
 import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'
@@ -27,8 +27,13 @@ import {
 import type { PixiSpine } from '@/elementsUtil/myspine'
 import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
+import { onUpdate } from '@/util/onUpdate'
 
-import { getCharTexture, getOrbTexture } from '../logic/assetGetters'
+import {
+    getCharTexture,
+    getOrbTexture,
+    hasTexture,
+} from '../logic/assetGetters'
 import type { SpineAsset } from '../logic/spineAssets'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
@@ -42,11 +47,11 @@ const SHOW_HIT_TIME = 1000
 // const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
 
-type CharacterCursor = SCursor<CharacterMeta>
+type CharacterCursor = ROCursor<CharacterMeta>
 interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
-    cursor: SCursor<CharacterMeta>
+    cursor: ROCursor<CharacterMeta>
     zIndex: number
     isSelected?: boolean
 }
@@ -75,7 +80,9 @@ export function Character(args: CharacterProps): PixiContainer {
         initialHeight,
     } = sprites
 
-    const mainAnimation = MainCharacterAnimation(characterMeta)
+    const mainAnimation = MainCharacterAnimation(characterMeta, () =>
+        args.onClick(characterMeta.uid)
+    )
 
     const mainContainer = Container({
         zIndex: args.zIndex,
@@ -141,7 +148,8 @@ export function Character(args: CharacterProps): PixiContainer {
 }
 
 export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
+    onClick?: () => void
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
 
@@ -150,6 +158,7 @@ export function MainCharacterAnimation(
     const mainAnimation = Spine({
         name: spineAssetName,
         animation: 'Idle',
+        onClick,
     })
 
     const desiredHeight = 260 // TODO: what is it tho
@@ -178,45 +187,50 @@ function getBoundOrbContainer(
     })
     const orbWidth = 45
 
-    u()
-    characterCursor.select('orbs').on('update', u)
-
-    function u() {
-        const orbs = characterCursor.get('orbs')
-
-        orbContainer.removeChildren()
-        orbs.forEach((orb, i) => {
-            orbContainer.addChild(
-                Container({
-                    x: i * orbWidth * 1.5,
-                    onClick: async () => {
-                        await activateOrb({
-                            characterUid: characterCursor.get('uid'),
-                            orb,
-                        })
-                    },
-                    children: [
-                        Sprite({
-                            src: getOrbTexture(orb.type),
-                            width: orbWidth * SCALE_UNIVERSAL,
-                            height: orbWidth * SCALE_UNIVERSAL,
-                        }),
-                        Text({
-                            text: `${orb.remainingCount}`,
-                            style: {
-                                fontFamily: 'VT323',
-                                fontSize: 14 * SCALE_UNIVERSAL,
-                                fill: ['#fff', '#eee'], // gradient
-                                // letterSpacing: -5,
-                                stroke: '#333',
-                                strokeThickness: 5,
-                            },
-                        }),
-                    ],
-                })
-            )
-        })
-    }
+    const orbsCursor = characterCursor.select('orbs')
+    // @ts-expect-error: "instantiation is excessively deep or possibly infinite"
+    const unsub = onUpdate(
+        orbsCursor,
+        orbs => {
+            if (orbs == null) {
+                unsub?.()
+                return
+            }
+            orbContainer.removeChildren()
+            orbs.forEach((orb, i) => {
+                orbContainer.addChild(
+                    Container({
+                        x: i * orbWidth * 1.5,
+                        onClick: async () => {
+                            await activateOrb({
+                                characterUid: characterCursor.get('uid'),
+                                orb,
+                            })
+                        },
+                        children: [
+                            Sprite({
+                                src: getOrbTexture(orb.type),
+                                width: orbWidth * SCALE_UNIVERSAL,
+                                height: orbWidth * SCALE_UNIVERSAL,
+                            }),
+                            Text({
+                                text: `${orb.remainingCount}`,
+                                style: {
+                                    fontFamily: 'VT323',
+                                    fontSize: 14 * SCALE_UNIVERSAL,
+                                    fill: ['#fff', '#eee'], // gradient
+                                    // letterSpacing: -5,
+                                    stroke: '#333',
+                                    strokeThickness: 5,
+                                },
+                            }),
+                        ],
+                    })
+                )
+            })
+        },
+        true
+    )
 
     return orbContainer
 }
@@ -338,12 +352,32 @@ function makeSprites(
 
     const assetIdCursor = args.cursor.select('name')
 
+    const unsub = onUpdate(assetIdCursor, assetId => {
+        // tl('asset update')
+        if (!hasTexture(assetId)) {
+            unsub()
+            return
+        }
+        const texture = getCharTexture(assetId)
+        const height = texture.height
+        const update = (s: PixiSprite) => {
+            s.texture = texture
+            s.height = height
+        }
+        update(selectedSprite)
+        update(mainSprite)
+        update(defendSprite)
+        update(attackSprite)
+        onHeight(height)
+    })
+
     if (assetIdCursor.get() == null) {
         // TODO: has to do with renewChildren()
         // should never occur...
         console.error(
             'null character assetId. probably character was removed or uid was changed.'
         )
+        unsub()
         return null
     }
 
@@ -359,6 +393,7 @@ function makeSprites(
         onClick: () => {
             args.onClick(characterMeta.uid)
         },
+        onDestroy: [unsub],
         zIndex: 1,
     })
     const defendSprite = Sprite({
@@ -385,30 +420,6 @@ function makeSprites(
         visible: selectedId.get() === characterMeta.uid,
     })
 
-    assetIdCursor.on('update', () => {
-        // tl('asset update')
-        const texture = getCharTexture(assetIdCursor.get())
-        if (texture == null) {
-            // TODO: this occurs when allCharacters gets new characters and this character is no longer defined.
-            // (Unique ID: BqUPq)
-            // The parent destroys the child but not before this listener fires.
-            // Or perhaps tree listeners are not destroyed when a child is destroyed.
-            // In that case, the mypixi/Sprite thing needs to take an onDestroy argument that removes the listeners.
-            // Anyway, for now we can just return.
-            return
-        }
-        const height = texture.height
-        const update = (s: PixiSprite) => {
-            s.texture = texture
-            s.height = height
-        }
-        update(selectedSprite)
-        update(mainSprite)
-        update(defendSprite)
-        update(attackSprite)
-        onHeight(height)
-    })
-
     selectedId.on('update', () => {
         selectedSprite.visible = selectedId.get() === characterMeta.uid
     })
@@ -425,7 +436,6 @@ function makeSprites(
 const FLY_TIME = 800
 const FLY_TO_TIME = FLY_TIME * 0.6
 const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-type Point = { x: number; y: number }
 
 function makeFlyToOnTick(start: Point, flyTo: Point, ease = true) {
     let totalElapsed = 0
