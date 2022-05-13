@@ -8,8 +8,8 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
 
 ### Core patterns
 
--   ~~Flyweight~~ **Table keys**: Keep objects flat and reference nested data using a key in a table.
-    -   Suppose a move set is a very large object. Then you can store one move set for each character class and have a character store the name of its own character class. That is a key to the table.
+-   ~~Flyweight~~ **Table keys**: Avoid data duplication in objects by using ID & UID references.
+    -   The player's hand is a collection of cards, but instead of putting the entire description on every card, the card has a name which is a key in the definition table.
     -   Tables often look like this and we end them in the word `map`:
         ```ts
         export const cardDefinitionsMap: CardDefinitionMap = {
@@ -36,15 +36,18 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
         }
         ```
 -   **Observer**: Listen for changes on data.
-    -   Datum or baobab. Suppose component `CheckBox` is a child of component `CheckList`. Instead of passing `onChecked` down as an argument, or back up as a child API, you can have `CheckBox` pass down a **datum** `checked: boolean` which the child calls `.set(true)` on and the parent calls e.g. `.onChange(updateTotal)`. This reduces the callbacks passing _between components_ and keeps them more often _within_ components.
+    -   Baobab for singleton data tree exporting many cursors -> datum for primitive-level reactivity
     -   The client's entire render system is largely an observer on the game state it receives from the server. **The component tree roughly follows the gamestate tree.**
--   **Components**: Break a large thing into a collection of children.
+    -   A great place to start understanding the app is `tree.get()` in the console 
+    -   Datum Example: Suppose component `CheckBox` is a child of component `CheckList`. Instead of passing `onChecked` down as an argument, or back up as a child API, you can have `CheckBox` pass down a **datum** `checked: boolean` which the child calls `.set(true)` on and the parent calls e.g. `.onChange(updateTotal)`. This reduces the callbacks passing _between components_ and keeps them more often _within_ components.
+
+-   **Components**: Create a tree of component instances. The relationships are `.parent`, `.children`
     -   Universally recognized at this point, each visual object in our game is a component, but GPP shows a useful example I haven't seen before: in large components, you can **split it up by domain**:
     ```ts
     function Character(props: {x, y, isAttacking, ...}) {
         const data = datum(x, y, isAttacking, ...)
         return Container({
-            children: [ Display(), Audio(), Input() ]
+            children: [ Display(data), Audio(data), Input(data) ]
         })
     }
     ```
