@@ -76,11 +76,14 @@ export function emit<_A extends string, _B>(args: {
     getGameStateCursor(args.username)
         .select('events')
         .select(args.event.type)
-        .push({
-            sentAt: new Date().toLocaleDateString(),
-            uid: srandom().toString().slice(6),
-            ...args.event,
-        })
+        .apply(arr => [
+            ...arr,
+            {
+                sentAt: new Date().toLocaleDateString(),
+                uid: srandom().toString().slice(6),
+                ...args.event,
+            },
+        ])
     const socketId = getSocketId(args.username)
     getIo().to(socketId).emit(args.event.type, args.event)
 }

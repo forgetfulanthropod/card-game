@@ -188,7 +188,6 @@ function getBoundOrbContainer(
     const orbWidth = 45
 
     const orbsCursor = characterCursor.select('orbs')
-    // @ts-expect-error: "instantiation is excessively deep or possibly infinite"
     const unsub = onUpdate(
         orbsCursor,
         orbs => {
