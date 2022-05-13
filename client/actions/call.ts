@@ -14,11 +14,16 @@ export function callWrap<F extends Func>(name: string): Caller<F> {
     const randId = Math.random().toString().slice(2, 6)
     const doCall: Caller<F> = async (...args) => {
         if (config.shouldSaveCalls) {
-            getClientTree().select('serverCalls').push({
-                name,
-                args: args[0],
-                time: new Date().toLocaleTimeString(),
-            })
+            getClientTree()
+                .select('serverCalls')
+                .apply(calls => [
+                    ...calls,
+                    {
+                        name,
+                        args: args[0],
+                        time: new Date().toLocaleTimeString(),
+                    },
+                ])
         }
         if (config.shouldLog) {
             console.log(

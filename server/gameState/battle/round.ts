@@ -1,9 +1,10 @@
 import type { AttackData, CharacterMeta, CharacterMove } from '@shared'
 
 import type { BattleCursor } from '@/util'
+import { vals } from '@/util'
 import { randomEl } from '@/util'
 
-import { getDefenders, getPCTarget, getUnmovedNpc } from './characterGetters'
+import { getDefenders, getPCTarget } from './characterGetters'
 import { getTransformed, isSpecial } from './specialMoves'
 
 export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
@@ -34,13 +35,10 @@ function getRandomMove(
 }
 
 export function getNpcMove(
-    ac: CharacterMeta[],
-    scene: BattleCursor
+    scene: BattleCursor,
+    attacker: CharacterMeta
 ): AttackData {
-    const attacker = getUnmovedNpc(ac)
-    if (attacker == null) {
-        throw Error('no unmoved NPC')
-    }
+    const ac = vals(scene.get('allCharacters'))
 
     const move = getRandomMove(attacker, scene)
     const defender = getPCTarget(ac)
@@ -48,4 +46,10 @@ export function getNpcMove(
     const defenders = getDefenders(defender, move, ac)
 
     return { attacker, defenders, move }
+}
+
+export function getNpcMoves(scene: BattleCursor): AttackData[] {
+    const ac = vals(scene.get('allCharacters'))
+    const movable = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
+    return movable.map(attacker => getNpcMove(scene, attacker))
 }

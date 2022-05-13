@@ -1,7 +1,13 @@
 import type { ChangeScene } from '@serverActions'
 
-import { makeBattleState, putUpDoors, setCards } from '@/gameState/battle'
+import {
+    getNpcMoves,
+    makeBattleState,
+    putUpDoors,
+    setCards,
+} from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
+import type { BattleCursor } from '@/util'
 import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
 
 export const changeScene: ChangeScene = args => {
@@ -20,6 +26,9 @@ export const changeScene: ChangeScene = args => {
                 username: args.username,
             })
         )
+        const battleScene_ = tree.select('scene') as BattleCursor
+        // TODO: put getNpcMoves in makeBattleState. Will require retyping of getNpcMoves's call chain.
+        battleScene_.set('nextNpcMoves', getNpcMoves(battleScene_))
         const scene = getBattleScene(args.username)
         setCards(scene)
         putUpDoors(scene)
