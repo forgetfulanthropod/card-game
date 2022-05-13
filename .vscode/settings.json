@@ -20,7 +20,8 @@
     "npm.packageManager": "pnpm",
     "files.exclude": {
         "**/node_modules/": true,
-        "**/pnpm-lock.yaml": true
+        "**/pnpm-lock.yaml": true,
+        "**/tsconfig.tsbuildinfo": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
