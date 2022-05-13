@@ -4,7 +4,7 @@ import * as angu from 'angu'
 
 import type { BattleCursor } from '@/util'
 
-import { checkBattleOver } from '..'
+import { checkBattleOverMut } from '..'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
 import { explain as explainAddBlock } from './cardActions/addBlock'
 import { execute as executeAddBlock } from './cardActions/addBlock'
@@ -111,7 +111,7 @@ export function executeActions({
 
     angu.evaluate(card.actions, ctx, locals)
 
-    checkBattleOver(scene)
+    checkBattleOverMut(scene)
 }
 
 function generateAnguContext(actionsMap: object): angu.Context {

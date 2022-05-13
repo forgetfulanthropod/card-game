@@ -30,6 +30,7 @@ export interface BattleScene extends SceneHas {
     doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
+    nextNpcMoves: AttackData[]
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
