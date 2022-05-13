@@ -12,9 +12,27 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
     -   Suppose a move set is a very large object. Then you can store one move set for each character class and have a character store the name of its own character class. That is a key to the table.
     -   Tables often look like this and we end them in the word `map`:
         ```ts
-        const attacksMap = {
-            slash: { id: 'slash', displayName: 'Slash Attack', damage: 3 },
-            bodySlam: { id: 'bodySlam' displayName: 'Body Slam' damage: 6 },
+        export const cardDefinitionsMap: CardDefinitionMap = {
+            shield: {
+                name: 'Shield',
+                energy: 1,
+                id: 'shield',
+                targetNum: 1,
+                targetType: 'friends',
+                actions: 'addBlock(dexterity + 2)',
+                type: 'defense',
+                characterClass: 'knight',
+            },
+            shieldOfLight: {
+                name: 'Shield of Light',
+                energy: 1,
+                id: 'shieldOfLight',
+                targetNum: 1,
+                targetType: 'friends',
+                actions: 'addBlock(magic + 3)',
+                type: 'defense',
+                characterClass: 'cleric',
+            },
         }
         ```
 -   **Observer**: Listen for changes on data.
