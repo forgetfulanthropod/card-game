@@ -7,6 +7,7 @@ import type {
     NetworkEvent,
 } from '@shared'
 import { filters, Loader } from 'pixi.js'
+import { GlowFilter } from 'pixi-filters'
 import type { ROCursor } from 'sbaobab'
 
 import { activateOrb } from '@/actions'
@@ -147,6 +148,13 @@ export function Character(args: CharacterProps): PixiContainer {
     return flyingContainer
 }
 
+const glowFilter = new GlowFilter({
+    innerStrength: 0,
+    outerStrength: 2,
+    color: 0xffffff,
+    knockout: false,
+})
+
 export function MainCharacterAnimation(
     characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
     onClick?: () => void
@@ -158,7 +166,18 @@ export function MainCharacterAnimation(
     const mainAnimation = Spine({
         name: spineAssetName,
         animation: 'Idle',
-        onClick,
+        events: onClick
+            ? {
+                  pointerup: onClick,
+                  pointerover: () => {
+                      console.log('pointer enter!!!')
+                      mainAnimation.filters = [glowFilter]
+                  },
+                  pointerout: () => {
+                      mainAnimation.filters = []
+                  },
+              }
+            : undefined,
     })
 
     const desiredHeight = 260 // TODO: what is it tho
@@ -390,8 +409,17 @@ function makeSprites(
     const mainSprite = Sprite({
         ...charSpriteProps,
         name: 'mainCharacterSprite',
-        onClick: () => {
-            args.onClick(characterMeta.uid)
+        events: {
+            pointerup: () => {
+                args.onClick(characterMeta.uid)
+            },
+            pointerover: () => {
+                console.log('pointer enter!!!')
+                mainSprite.filters = [glowFilter]
+            },
+            pointerout: () => {
+                mainSprite.filters = []
+            },
         },
         onDestroy: [unsub],
         zIndex: 1,

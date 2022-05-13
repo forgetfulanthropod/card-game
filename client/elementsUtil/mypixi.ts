@@ -22,6 +22,8 @@ import {
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
 
+import type { InteractionEvents } from './InteractionEvents'
+import { bindEvents } from './InteractionEvents'
 import { registerPixiInspector } from './pixiInspector'
 // import * as PIXI from 'pixi.js'
 
@@ -77,9 +79,13 @@ interface DisplayObjectArgs {
     onTick?: OnPixiTick
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
+    // deprecated
     onClick?: InteractionEventHandler
+    // deprecated
     onMouseover?: InteractionEventHandler
+    // deprecated
     onMouseout?: InteractionEventHandler
+    events?: InteractionEvents
     name?: string
     zIndex?: number
     visible?: boolean
@@ -139,91 +145,94 @@ export function Sprite(args: SpriteArgs): PixiSprite {
 }
 
 function applyDisplayObjectArgs(
-    x: PixiContainer | PixiSprite | PixiText | PixiGraphics,
+    el: PixiContainer | PixiSprite | PixiText | PixiGraphics,
     args: DisplayObjectArgs
 ) {
+    bindEvents(args.events, el)
+
+    if (args.onClick != null) {
+        el.interactive = true
+        el.on('pointerdown', args.onClick)
+    }
+
+    if (args.onMouseover != null) {
+        el.interactive = true
+        el.on('pointerover', args.onMouseover)
+    }
+    if (args.onMouseout != null) {
+        el.interactive = true
+        el.on('pointerout', args.onMouseout)
+    }
+
     if (args.position != null) {
-        x.position.set(...args.position)
+        el.position.set(...args.position)
     }
     if (args.scale != null) {
         if (Array.isArray(args.scale)) {
-            x.scale.set(...args.scale)
+            el.scale.set(...args.scale)
         } else {
-            x.scale.set(args.scale)
+            el.scale.set(args.scale)
         }
     }
 
     if (args.width != null) {
-        x.width = args.width
+        el.width = args.width
     }
     if (args.height != null) {
-        x.height = args.height
+        el.height = args.height
     }
     if (args.pivot != null) {
         if (Array.isArray(args.pivot)) {
-            x.pivot.set(...args.pivot)
+            el.pivot.set(...args.pivot)
         } else {
-            x.pivot.set(args.pivot)
+            el.pivot.set(args.pivot)
         }
     }
     if (args.x != null) {
-        x.x = args.x
+        el.x = args.x
     }
     if (args.y != null) {
-        x.y = args.y
+        el.y = args.y
     }
 
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick && args.onTick(x, dt)
+            const result = args.onTick && args.onTick(el, dt)
             if (result === 'remove') PixiTicker.shared.remove(cb)
         })
     }
 
     if (args.alpha != null) {
-        x.alpha = args.alpha
+        el.alpha = args.alpha
     }
 
     if (args.filters != null) {
         const filters = args.filters.filter(Boolean) as PixiFilter[]
-        x.filters = filters
+        el.filters = filters
     }
 
-    if (args.onClick != null) {
-        x.interactive = true
-        x.on('pointerdown', args.onClick)
-    }
-
-    if (args.onMouseover != null) {
-        x.interactive = true
-        x.on('pointerover', args.onMouseover)
-    }
-    if (args.onMouseout != null) {
-        x.interactive = true
-        x.on('pointerout', args.onMouseout)
-    }
     if (args.name != null) {
-        x.name = args.name
+        el.name = args.name
     }
 
     if (args.zIndex != null) {
-        x.zIndex = args.zIndex
+        el.zIndex = args.zIndex
     }
     if (args.visible != null) {
-        x.visible = args.visible
+        el.visible = args.visible
     }
 
     if (args.angle != null) {
-        x.angle = args.angle
+        el.angle = args.angle
     }
     if (args.rotation != null) {
-        x.rotation = args.rotation
+        el.rotation = args.rotation
     }
 
     if (args.onDestroy != null) {
-        const destroy = x.destroy
-        x.destroy = (...destroyArgs) => {
-            destroy.call(x, ...destroyArgs)
+        const destroy = el.destroy
+        el.destroy = (...destroyArgs) => {
+            destroy.call(el, ...destroyArgs)
             args.onDestroy?.forEach(cb => cb())
         }
     }
