@@ -8,13 +8,14 @@ export function LevelInfo(): PixiContainer {
 
     const level = scene.select('selectedLevel').get()
 
-    scene.select('selectedLevel').on('update', () => {
-        const selectedLevel = scene.get().selectedLevel ?? {}
+    // ALPHA NO LEVELS!
+    // scene.select('selectedLevel').on('update', () => {
 
-        levelNumText.text = `Level ${selectedLevel.num}`
-        levelNameText.text = selectedLevel.name
-        pointLimitText.text = `point limit: ${selectedLevel.pointLimit}`
-    })
+    // const selectedLevel = scene.get().selectedLevel ?? {}
+
+    // levelNumText.text = `Level ${selectedLevel.num}`
+    // levelNameText.text = selectedLevel.name
+    // })
 
     const levelNumText = Text({
         text: `Level ${level?.num}`,
@@ -75,29 +76,10 @@ export function LevelInfo(): PixiContainer {
         },
     })
 
-    const pointLimitText = Text({
-        text: `point limit: ${level?.pointLimit}`,
-        anchor: [0.5, 0],
-        y: 90,
-        style: {
-            fontFamily: 'VT323',
-            fontSize: 30,
-            fill: '#fff',
-            stroke: '#999',
-            strokeThickness: 5,
-        },
-    })
-
     const root = Container({
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 10,
-        children: [
-            leftButton,
-            levelNumText,
-            rightButton,
-            levelNameText,
-            pointLimitText,
-        ],
+        children: [leftButton, levelNumText, rightButton, levelNameText],
     })
 
     return root

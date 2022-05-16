@@ -367,13 +367,29 @@ export function VideoBackground(args: {
     scale: number
     src: string
 }): PixiSprite {
-    const r = new PixiVideoResource(args.src, { updateFPS: 24 })
+    const r = new PixiVideoResource(args.src, { updateFPS: 30 })
+
     const source = r.source as HTMLVideoElement
     source.muted = true
     source.loop = true
     const sprite = PixiSprite.from(PixiTexture.from(r.source))
-    sprite.width = BASE_WIDTH * args.scale
-    sprite.height = BASE_HEIGHT * args.scale
+    sprite.anchor.set(0.5, 0.5)
+    sprite.x = BASE_WIDTH / 2
+    sprite.y = BASE_HEIGHT / 2
+
+    void r.load().then(async () => {
+        await new Promise(resolve => setTimeout(resolve, 0))
+
+        if (sprite.width / sprite.height >= BASE_WIDTH / BASE_HEIGHT) {
+            // too wide
+            sprite.scale.set(BASE_HEIGHT / sprite.height)
+        } else {
+            // too square
+            sprite.scale.set(BASE_WIDTH / sprite.width)
+        }
+    })
+    // sprite.width = BASE_WIDTH * args.scale
+    // sprite.height = BASE_HEIGHT * args.scale
     if (args.name) {
         sprite.name = args.name
     }

@@ -5,7 +5,7 @@ import type {
     Gamestate,
     OwnedCharacterStats,
 } from '@shared'
-import { find, sample, sum, values } from 'lodash'
+import { sample, values } from 'lodash'
 import { useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 
@@ -140,15 +140,17 @@ async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
 }
 
 function getAvailableChars(scene: EntryScene, tree: Gamestate) {
-    const pointsRemaining =
-        scene.selectedLevel.pointLimit -
-        sum(scene.selectedCharacters.map(sc => sc.points))
-    const availableChars = values(tree.ownedCharacters).filter(
-        oc =>
-            find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected
-            oc.points < pointsRemaining // within point limit
-    )
-    return availableChars
+    return values(tree.ownedCharacters)
+
+    // const pointsRemaining =
+    //     scene.selectedLevel.pointLimit -
+    //     sum(scene.selectedCharacters.map(sc => sc.points))
+    // const availableChars = values(tree.ownedCharacters).filter(
+    //     oc =>
+    //         find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected
+    //         oc.points < pointsRemaining // within point limit
+    // )
+    // return availableChars
 }
 
 function flip(probTrue: number): boolean {

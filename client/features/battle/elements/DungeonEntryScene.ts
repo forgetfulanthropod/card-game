@@ -2,7 +2,7 @@ import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 
-import DungeonEntryPng from '../assets/backgrounds/temple_background.png'
+import DungeonEntryBg from '../assets/backgrounds/temple_loop_fractal.mp4'
 import background from './background'
 import { GameMenu } from './GameMenu'
 import { LevelInfo } from './LevelInfo'
@@ -12,7 +12,7 @@ import { StartButton } from './StartButton'
 export function DungeonEntryScene(): PixiContainer {
     return Container({
         children: [
-            background({ scale: 1, srcs: [DungeonEntryPng] }),
+            background({ scale: 1, src: DungeonEntryBg }),
             SelectedCharacters(),
             StartButton(),
             LevelInfo(),
