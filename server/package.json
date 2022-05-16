@@ -1,0 +1,15 @@
+{
+    "name": "kaiju-server",
+    "dependencies": {
+        "game": "link:../game",
+        "angu": "^0.12.0",
+        "express-session": "^1.17.2",
+        "lowdb": "^3.0.0",
+        "seedrandom": "^3.0.5",
+        "socket.io": "^4.4.0"
+    },
+    "devDependencies": {
+        "@types/express-session": "^1.17.4",
+        "@types/seedrandom": "^3.0.1"
+    }
+}

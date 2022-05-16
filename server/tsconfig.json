@@ -1,0 +1,23 @@
+// Server
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "incremental": true,
+        "noEmit": true,
+        "strict": true,
+        "target": "es2017",
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "paths": {
+            "@serverActions": ["./actions/types/serverActions"],
+            "@shared": ["../shared/index"],
+            "@shared/code": ["../shared/code/index"],
+            "@/*": ["./*"]
+        }
+    },
+    "compileOnSave": true,
+    "include": ["./**/*.ts", "../shared"]
+}
