@@ -1,3 +1,4 @@
+import { intersection } from 'lodash'
 import type {
     AttackData,
     CharacterMeta,
@@ -8,10 +9,9 @@ import type {
     StanceMultiplier,
     StanceName,
 } from 'shared'
-import { intersection } from 'lodash'
+import type { BattleCursor } from 'shared'
 
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from 'shared'
 
 import { getTransformed, isSpecial } from './specialMoves'
 

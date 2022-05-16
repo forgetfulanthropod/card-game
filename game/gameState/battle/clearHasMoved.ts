@@ -1,4 +1,5 @@
 import type { BattleCursor } from 'shared'
+
 import { keys } from '@/util'
 
 export function clearHasMoved(scene: BattleCursor) {

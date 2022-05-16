@@ -1,4 +1,5 @@
 import type { ChangeScene } from '@serverActions'
+import type { BattleCursor } from 'shared'
 
 import {
     getNpcMoves,
@@ -7,7 +8,6 @@ import {
     setCards,
 } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from 'shared'
 import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
 
 export const changeScene: ChangeScene = args => {

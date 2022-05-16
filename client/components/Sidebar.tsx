@@ -1,8 +1,8 @@
-import type { Gamestate } from 'shared'
 import { omit } from 'lodash'
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
 import type { ROCursor } from 'sbaobab'
+import type { Gamestate } from 'shared'
 
 import styled from '@/config/mystyled'
 import { getClientTree, getTree } from '@/data/rootTree'

@@ -1,6 +1,6 @@
 import type { AttackData } from 'shared'
-
 import type { BattleCursor } from 'shared'
+
 import { emit } from '@/util'
 import { vals } from '@/util'
 

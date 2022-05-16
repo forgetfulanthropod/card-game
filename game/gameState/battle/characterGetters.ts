@@ -1,7 +1,7 @@
 import type { CharacterMeta, CharacterMove, CharacterUid } from 'shared'
+import type { BattleCursor } from 'shared'
 
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from 'shared'
 import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
 
 export function ac(scene: BattleCursor) {

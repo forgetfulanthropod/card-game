@@ -1,5 +1,5 @@
-import { Gamestate, NetworkEvent, BattleCursor, EntryScene } from 'shared'
-import { SCursor } from 'sbaobab'
+import type { SCursor } from 'sbaobab'
+import type { BattleCursor, EntryScene, Gamestate, NetworkEvent } from 'shared'
 
 export function emit<_A extends string, _B>(args: {
     username: string

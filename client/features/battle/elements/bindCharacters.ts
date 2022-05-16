@@ -1,6 +1,6 @@
-import type { BattleScene } from 'shared'
 import isEqual from 'lodash/isEqual'
 import type { ROCursor } from 'sbaobab'
+import type { BattleScene } from 'shared'
 
 import { localTree } from '@/data/localTree'
 import type { PixiContainer } from '@/elementsUtil'

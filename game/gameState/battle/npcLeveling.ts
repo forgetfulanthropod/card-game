@@ -1,5 +1,5 @@
-import type { CharacterMeta, CharacterName, DungeonName } from 'shared'
 import { cloneDeep, keys } from 'lodash'
+import type { CharacterMeta, CharacterName, DungeonName } from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { vals } from '@/util'

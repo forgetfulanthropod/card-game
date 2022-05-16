@@ -1,3 +1,6 @@
+import { filters, Loader } from 'pixi.js'
+import { GlowFilter } from 'pixi-filters'
+import type { ROCursor } from 'sbaobab'
 import type {
     CharacterMeta,
     CharacterName,
@@ -6,9 +9,6 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from 'shared'
-import { filters, Loader } from 'pixi.js'
-import { GlowFilter } from 'pixi-filters'
-import type { ROCursor } from 'sbaobab'
 
 import { activateOrb } from '@/actions'
 import { getSocket } from '@/connection'

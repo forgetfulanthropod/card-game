@@ -1,4 +1,4 @@
-import { NetworkEvent } from 'shared'
+import type { NetworkEvent } from 'shared'
 export * as actions from './actions/index'
 export { getInitialGameState } from './gameState/index'
 
@@ -7,6 +7,6 @@ type Emit<_A extends string, _B> = (args: {
     event: NetworkEvent<_A, _B>
 }) => void
 
-let state = {
+const state = {
     emit: (() => {}) as Emit<any, unknown>,
 }

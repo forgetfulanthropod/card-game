@@ -1,7 +1,7 @@
-import type { Card } from 'shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { InteractionEvent } from 'pixi.js'
+import type { Card } from 'shared'
 
 import { playCard } from '@/actions'
 import { localTree } from '@/data/localTree'

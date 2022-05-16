@@ -1,5 +1,5 @@
-import type { OwnedCharacterStats } from 'shared'
 import type { ROCursor } from 'sbaobab'
+import type { OwnedCharacterStats } from 'shared'
 
 import { addSelected } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'

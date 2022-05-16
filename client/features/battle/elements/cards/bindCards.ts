@@ -1,5 +1,5 @@
-import type { BattleScene } from 'shared'
 import type { ROCursor } from 'sbaobab'
+import type { BattleScene } from 'shared'
 
 import { endTurn } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'

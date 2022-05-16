@@ -36,9 +36,10 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
         }
         ```
 -   **Observer**: Listen for changes on data.
+
     -   Baobab for singleton data tree exporting many cursors -> datum for primitive-level reactivity
     -   The client's entire render system is largely an observer on the game state it receives from the server. **The component tree roughly follows the gamestate tree.**
-    -   A great place to start understanding the app is `tree.get()` in the console 
+    -   A great place to start understanding the app is `tree.get()` in the console
     -   Datum Example: Suppose component `CheckBox` is a child of component `CheckList`. Instead of passing `onChecked` down as an argument, or back up as a child API, you can have `CheckBox` pass down a **datum** `checked: boolean` which the child calls `.set(true)` on and the parent calls e.g. `.onChange(updateTotal)`. This reduces the callbacks passing _between components_ and keeps them more often _within_ components.
 
 -   **Components**: Create a tree of component instances. The relationships are `.parent`, `.children`

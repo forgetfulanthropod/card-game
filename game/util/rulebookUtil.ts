@@ -1,11 +1,9 @@
-import type { Gamestate, Rulebook } from 'shared'
 import { existsSync, mkdirSync, readdirSync } from 'fs'
 import { difference } from 'lodash'
 import { homedir } from 'os'
+import type { Gamestate, Rulebook } from 'shared'
 
 import { getRulebook } from '@/rulebook'
-
-import { commit, getGameStateCursor } from '.'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'

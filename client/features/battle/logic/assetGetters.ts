@@ -1,3 +1,5 @@
+import { startCase, upperFirst } from 'lodash'
+import { Loader } from 'pixi.js'
 import type {
     CardId,
     CardType,
@@ -5,8 +7,6 @@ import type {
     EffectType,
     OrbType,
 } from 'shared'
-import { startCase, upperFirst } from 'lodash'
-import { Loader } from 'pixi.js'
 
 import type { PixiTexture } from '@/elementsUtil'
 

@@ -1,6 +1,5 @@
-import type { CharacterUid, OrbType } from 'shared'
 import type { Value as VAngu } from 'angu'
-
+import type { CharacterUid, OrbType } from 'shared'
 import type { BattleCursor } from 'shared'
 
 import type { ExecuteArgs } from './util/types'

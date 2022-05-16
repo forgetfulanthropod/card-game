@@ -1,11 +1,12 @@
 import type { ActivateOrb } from '@serverActions'
+import { isEqual } from 'lodash'
 import type {
     CharacterMeta,
     CharacterUid,
     NetworkAttackData,
     Orb,
 } from 'shared'
-import { isEqual } from 'lodash'
+import type { BattleCursor } from 'shared'
 
 import {
     checkBattleOverMut,
@@ -14,7 +15,6 @@ import {
     updateHand,
 } from '@/gameState/battle'
 import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
-import type { BattleCursor } from 'shared'
 import { emit } from '@/util'
 import { getBattleScene } from '@/util'
 

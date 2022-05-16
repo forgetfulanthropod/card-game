@@ -1,5 +1,4 @@
 import { keys } from 'lodash'
-
 import type { BattleCursor } from 'shared'
 
 export function clearAllEffects(scene: BattleCursor): void {

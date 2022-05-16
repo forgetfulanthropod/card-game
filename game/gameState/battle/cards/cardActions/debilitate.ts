@@ -1,6 +1,5 @@
-import type { CharacterUid, EffectType } from 'shared'
 import type { Value as VAngu } from 'angu'
-
+import type { CharacterUid, EffectType } from 'shared'
 import type { BattleCursor } from 'shared'
 
 import { getUpdatedEffects } from '../../move'

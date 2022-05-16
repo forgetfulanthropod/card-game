@@ -1,6 +1,6 @@
-import type { CharacterMeta, CharacterUid } from 'shared'
 import { Matrix, utils } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
+import type { CharacterMeta, CharacterUid } from 'shared'
 
 import { toggleStance } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'

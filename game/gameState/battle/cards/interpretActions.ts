@@ -1,7 +1,6 @@
-import type { Card, CharacterUid } from 'shared'
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
-
+import type { Card, CharacterUid } from 'shared'
 import type { BattleCursor } from 'shared'
 
 import { checkBattleOverMut } from '..'
