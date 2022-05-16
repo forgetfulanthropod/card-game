@@ -12,10 +12,10 @@
         "experimentalDecorators": true,
         "skipLibCheck": true,
         "paths": {
-            "@serverActions": ["./actions/types/serverActions"],
+            "@serverActions": ["../game/actions/types/serverActions"],
             "@shared": ["../shared/index"],
             "@shared/code": ["../shared/code/index"],
-            "@/*": ["./*"]
+            "@/*": ["../game/*"]
         }
     },
     "compileOnSave": true,

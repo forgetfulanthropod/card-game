@@ -4,7 +4,7 @@ import { JSONFile, Low } from 'lowdb'
 import type { ROCursor, SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
 
-import { getIo, getSocketId } from '@/index'
+import { getIo, getSocketId } from './index'
 const db = new Low<{ users: Record<string, Gamestate> }>(
     new JSONFile(__dirname + '/db.json')
 )

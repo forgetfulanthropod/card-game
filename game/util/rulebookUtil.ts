@@ -6,7 +6,7 @@ import { homedir } from 'os'
 import { getRulebook } from '@/rulebook'
 
 import { commit, getGameStateCursor } from '.'
-import { getRootCursor } from './treeUtils'
+import { getRootCursor } from '../../server/treeUtils'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'

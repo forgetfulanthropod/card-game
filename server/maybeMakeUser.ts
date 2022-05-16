@@ -1,14 +1,13 @@
 import type { Gamestate } from '@shared'
 
+import { addNewUser } from './addNewUser'
+import { setSocketId } from './index'
 // import { hasUser } from '@/database'
 import {
     getDb,
     //  getDb,
     getRootCursor,
-} from '@/util'
-import { addNewUser } from '@/util/addNewUser'
-
-import { setSocketId } from '..'
+} from './treeUtils'
 
 /** Very special case! */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any

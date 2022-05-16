@@ -19,5 +19,10 @@
         }
     },
     "compileOnSave": true,
-    "include": ["./**/*.ts", "../shared"]
+    "include": [
+        "./**/*.ts",
+        "../shared",
+        "../server/maybeMakeUser.ts",
+        "../server/treeUtils.ts"
+    ]
 }

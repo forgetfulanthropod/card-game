@@ -1,6 +1,6 @@
-import { getApp } from '@/index'
+import { commit, getGameStateCursor } from 'game/util'
 
-import { commit, getGameStateCursor } from '.'
+import { getApp } from './index'
 
 const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)

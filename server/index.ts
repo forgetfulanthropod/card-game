@@ -1,19 +1,14 @@
-import './config/logger'
+import '../game/config/logger'
 
 // import './database'
 import express from 'express'
 import session from 'express-session'
+import { setGlobalRandomSeed } from 'game/config/seedrand'
 import type { Server } from 'http'
 import { findKey, has } from 'lodash'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
-import { setGlobalRandomSeed } from './config/seedrand'
-import { addNewUser } from './util'
-
-const config = {
-    addNewUserOnStart: false,
-}
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
@@ -22,10 +17,6 @@ if (process.env.FIXED_SEED === 'yes') {
 
 if (process.env.FORCE_NEW_DB === 'yes') {
     // TODO
-}
-
-if (config.addNewUserOnStart) {
-    addNewUser({ username: 'defaultUser' })
 }
 
 const port = process.env.PORT ?? 3000
@@ -62,6 +53,7 @@ export function getApp(): typeof app {
 
 attachAPIRoutes()
 
+// eslint-disable-next-line no-console
 console.log('DIRNAME:', __dirname)
 app.use('/', express.static(__dirname + '/client', { extensions: ['.atlas'] }))
 
