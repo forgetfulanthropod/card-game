@@ -1,15 +1,9 @@
 {
     "name": "game",
-    "main": "./dist/index.js",
-    "module": "./dist/index.js",
-    "types": "./dist/index.d.ts",
+    "main": "./index.ts",
     "scripts": {
         "build": "rm -rf dist && tsc && esbuild --bundle index.ts --platform=node --outfile=./dist/index.js"
     },
-    "files": [
-        "dist/**",
-        "package.json"
-    ],
     "dependencies": {
         "angu": "^0.12.0",
         "seedrandom": "^3.0.5",

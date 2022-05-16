@@ -9,6 +9,7 @@
         "target": "es2017",
         "noImplicitAny": true,
         "esModuleInterop": true,
+        "moduleResolution": "node",
         "baseUrl": ".",
         "experimentalDecorators": true,
         "skipLibCheck": true

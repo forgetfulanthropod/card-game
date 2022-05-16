@@ -11,7 +11,7 @@ const entryPoint = 'client/index.tsx'
 const outFile = `${buildDir}/${password}.js`
 
 const args = process.argv.slice(2)
-const shouldWatch = args[0] === 'watch'
+const shouldWatchArgv = args[0] === 'watch'
 
 console.log('process.env.PWD:', process.env.PWD)
 
@@ -24,9 +24,9 @@ function makeSubstitutions() {
     }
 }
 
-build()
+if (import.meta.url === process.argv[1]) buildClient()
 
-function build() {
+export function buildClient(shouldWatch = shouldWatchArgv) {
     rmSync(buildDir, { recursive: true, force: true })
     mkdirSync(buildDir, { recursive: true })
     cpSync(publicDir, buildDir, { recursive: true })
@@ -55,11 +55,11 @@ function build() {
         },
         define: makeSubstitutions(),
         watch: shouldWatch && {
-            onRebuild(_error, result) {
-                if (_error) {
-                    console.log(`${time()}: REBUID FAILED`)
+            onRebuild(err, result) {
+                if (err) {
+                    console.error(`${time()}: CLIENT REBUILD FAILED`, err)
                 } else {
-                    console.log(`${time()}: rebuild succeeded`)
+                    console.log(`${time()}: client rebuilt`)
                 }
                 // result.stop()
                 // build()
@@ -73,12 +73,8 @@ function build() {
             }),
         ],
     })
-        .then(() => {
-            console.log(`${time()}: build succeeded`)
-        })
-        .catch(err => {
-            console.error(err)
-        })
+        .then(() => console.log(`${time()}: client build succeeded`))
+        .catch(err => console.error('CLIENT BUILD FAILED:', err))
 }
 
 function time() {

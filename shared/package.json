@@ -1,8 +1,8 @@
 {
     "name": "shared",
     "exports": {
-        ".": "./dist/index.js",
-        "./actions": "./dist/actions/index.js",
-        "./code": "./code/index.js"
+        ".": "./dist/index.ts",
+        "./actions": "./dist/actions/index.ts",
+        "./code": "./code/index.ts"
     }
 }

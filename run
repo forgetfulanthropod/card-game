@@ -46,10 +46,7 @@ function tsc-all() {
 }
 
 function build-all() {
-    client:build &
-    server:build &
-    db:build &
-    crypto:build &
+    node scripts/buildAll.mjs
 }
 
 function clean-builds() {
