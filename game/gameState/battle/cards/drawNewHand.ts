@@ -1,7 +1,7 @@
 import type { Cards, Pile } from '@shared'
 import { omit } from 'lodash'
 
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 import { keys } from '@/util'
 
 import { BASE_HAND_SIZE } from '../../../actions/playCard'

@@ -1,4 +1,4 @@
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 
 import { shufflePile } from './shufflePile'
 

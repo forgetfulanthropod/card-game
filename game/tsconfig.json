@@ -1,9 +1,9 @@
 // Server
 {
     "compilerOptions": {
-        "module": "commonjs",
+        "module": "CommonJS",
+        "moduleResolution": "node",
         "incremental": true,
-        "noEmit": true,
         "strict": true,
         "target": "es2017",
         "noImplicitAny": true,
@@ -11,6 +11,10 @@
         "baseUrl": ".",
         "experimentalDecorators": true,
         "skipLibCheck": true,
+        "declaration": true,
+        // "emitDeclarationOnly": true,
+        // "outFile": "./dist/index.js",
+        "outDir": "./dist",
         "paths": {
             "@serverActions": ["./actions/types/serverActions"],
             "@shared": ["../shared/index"],
@@ -19,10 +23,6 @@
         }
     },
     "compileOnSave": true,
-    "include": [
-        "./**/*.ts",
-        "../shared",
-        "../server/maybeMakeUser.ts",
-        "../server/treeUtils.ts"
-    ]
+    "include": ["./**/*.ts", "../shared"],
+    "exclude": ["dist", "node_modules"]
 }

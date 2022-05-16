@@ -12,10 +12,8 @@
         "experimentalDecorators": true,
         "skipLibCheck": true,
         "paths": {
-            "@serverActions": ["../game/actions/types/serverActions"],
             "@shared": ["../shared/index"],
-            "@shared/code": ["../shared/code/index"],
-            "@/*": ["../game/*"]
+            "@shared/code": ["../shared/code/index"]
         }
     },
     "compileOnSave": true,

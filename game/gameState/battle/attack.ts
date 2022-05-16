@@ -11,7 +11,7 @@ import type {
 import { intersection } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 
 import { getTransformed, isSpecial } from './specialMoves'
 

@@ -1,4 +1,4 @@
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 import { commit } from '@/util'
 import { sleep } from '@/util'
 

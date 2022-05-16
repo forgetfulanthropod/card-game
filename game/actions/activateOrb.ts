@@ -14,7 +14,7 @@ import {
     updateHand,
 } from '@/gameState/battle'
 import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 import { emit } from '@/util'
 import { getBattleScene } from '@/util'
 

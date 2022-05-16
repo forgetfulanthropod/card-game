@@ -1,9 +1,9 @@
-import * as all from 'game/actions'
+import { actions as all } from 'game'
 
+import { maybeMakeUser } from './maybeMakeUser'
 import { onCallWrapper } from './onCallWrapper'
-
-const noCommit: unknown[] = [all.hello, all.maybeMakeUser]
-const wholeRequests: unknown[] = [all.maybeMakeUser]
+const noCommit: unknown[] = [all.hello, maybeMakeUser]
+const wholeRequests: unknown[] = [maybeMakeUser]
 
 export function attachAPIRoutes(): void {
     vals(all).forEach(f =>

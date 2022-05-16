@@ -1,0 +1,86 @@
+import { build as esbuild } from 'esbuild'
+import cssModulesPlugin from 'esbuild-css-modules-plugin'
+import alias from 'esbuild-plugin-alias'
+import { cpSync, mkdirSync, rmSync } from 'fs'
+import { makeBuildInfo } from './makeBuildInfo.mjs'
+
+const password = 'hackin'
+const buildDir = 'builds/client'
+const publicDir = 'client/public_'
+const entryPoint = 'client/index.tsx'
+const outFile = `${buildDir}/${password}.js`
+
+const args = process.argv.slice(2)
+const shouldWatch = args[0] === 'watch'
+
+console.log('process.env.PWD:', process.env.PWD)
+
+console.log('substitutions:', makeSubstitutions())
+
+function makeSubstitutions() {
+    return {
+        ...makeBuildInfo('CLIENT_'),
+        global: 'window',
+    }
+}
+
+build()
+
+function build() {
+    rmSync(buildDir, { recursive: true, force: true })
+    mkdirSync(buildDir, { recursive: true })
+    cpSync(publicDir, buildDir, { recursive: true })
+    esbuild({
+        minify: true, //!isDevelopment,
+        sourcemap: true, //isDevelopment,
+        entryPoints: [entryPoint],
+        inject: ['client/config/preact-shim.js'],
+        jsxFactory: 'h',
+        jsxFragment: 'Fragment',
+        bundle: true,
+        outfile: outFile,
+        target: 'es6',
+        loader: {
+            '.ts': 'ts',
+            '.tsx': 'tsx',
+            '.svg': 'dataurl',
+            '.css': 'css',
+            '.png': 'file',
+            '.jpg': 'file',
+            '.mp4': 'file',
+            '.webm': 'file',
+            '.ttf': 'file',
+            '.atlas': 'file',
+            '.json': 'file',
+        },
+        define: makeSubstitutions(),
+        watch: shouldWatch && {
+            onRebuild(_error, result) {
+                if (_error) {
+                    console.log(`${time()}: REBUID FAILED`)
+                } else {
+                    console.log(`${time()}: rebuild succeeded`)
+                }
+                // result.stop()
+                // build()
+            },
+        },
+        plugins: [
+            cssModulesPlugin(),
+            alias({
+                react: `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
+            }),
+        ],
+    })
+        .then(() => {
+            console.log(`${time()}: build succeeded`)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
+
+function time() {
+    return new Date().toLocaleTimeString()
+}

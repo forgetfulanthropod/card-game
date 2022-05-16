@@ -6,7 +6,6 @@ import { homedir } from 'os'
 import { getRulebook } from '@/rulebook'
 
 import { commit, getGameStateCursor } from '.'
-import { getRootCursor } from '../../server/treeUtils'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
@@ -17,6 +16,7 @@ export function updateClientRulebookData(username: string): void {
     // Q: Update all users or just one?
     const rulebookNames = getRulebookNames()
     const curRulebook = stringifyRulebook(getRulebook())
+    /*
     const users = getRootCursor().select('users')
     const usernames = Object.keys(users.get())
     for (const username of usernames) {
@@ -25,6 +25,7 @@ export function updateClientRulebookData(username: string): void {
         user.select('curRulebook').set(curRulebook)
     }
     commit(getGameStateCursor(username), username)
+    */
 }
 
 export function getRulebookNames(): Gamestate['rulebooks'] {

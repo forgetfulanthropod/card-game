@@ -8,6 +8,7 @@ export * from './DungeonRooms'
 export * from './entryTypes'
 export * from './EventTrigger'
 export * from './immutable'
+export * from './misc'
 export * from './NetworkEvent'
 export * from './SpecialDoorName'
 // @endindex

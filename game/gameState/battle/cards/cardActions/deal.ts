@@ -1,7 +1,7 @@
 import type { Card, CharacterUid, NetworkAttackData } from '@shared'
 import type { Value as VAngu } from 'angu'
 
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 import { emit } from '@/util'
 
 import { applyDamage } from './util/applyDamage'

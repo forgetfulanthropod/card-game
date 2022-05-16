@@ -1,6 +1,6 @@
 // import { setUser } from '@/database'
 
-import { getInitialGameState } from 'game/gameState'
+import { getInitialGameState } from 'game'
 
 import { getRootCursor } from './treeUtils'
 export function addNewUser(args: { username: string }): void {

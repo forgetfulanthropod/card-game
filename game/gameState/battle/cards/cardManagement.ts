@@ -2,7 +2,7 @@ import type { Card, CardId, Cards, CharacterUid } from '@shared'
 import { set } from 'lodash'
 
 import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 import { keys, vals } from '@/util'
 
 import { explainActionsForCard, getCharIds } from '..'

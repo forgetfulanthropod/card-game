@@ -1,17 +1,21 @@
 {
     "name": "game",
-    "main": "index.ts",
-    "exports": {
-        "./actions": "./actions/index.ts",
-        "./config/seedrand": "./config/seedrand.ts",
-        "./gameState": "./gameState/index.ts",
-        "./util": "./util/index.ts"
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "rm -rf dist && tsc && esbuild --bundle index.ts --platform=node --outfile=./dist/index.js"
     },
+    "files": [
+        "dist/**",
+        "package.json"
+    ],
     "dependencies": {
         "angu": "^0.12.0",
         "seedrandom": "^3.0.5"
     },
     "devDependencies": {
         "@types/seedrandom": "^3.0.2"
-    }
+    },
+    "private": true
 }

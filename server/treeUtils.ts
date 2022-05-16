@@ -1,4 +1,10 @@
-import type { BattleScene, EntryScene, Gamestate, NetworkEvent } from '@shared'
+import type {
+    BattleCursor,
+    BattleScene,
+    EntryScene,
+    Gamestate,
+    NetworkEvent,
+} from '@shared'
 import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
 import type { ROCursor, SCursor } from 'sbaobab'
@@ -25,8 +31,6 @@ export function getEntryScene(username: string): SCursor<EntryScene> {
     return scene as SCursor<EntryScene>
 }
 
-export type ROBattleCursor = ROCursor<BattleScene>
-export type BattleCursor = SCursor<BattleScene>
 export function getBattleScene(username: string): BattleCursor {
     const scene = getGameStateCursor(username).select('scene')
     if (scene.get('name') !== 'battle') {

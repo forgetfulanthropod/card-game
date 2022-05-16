@@ -1,7 +1,7 @@
 import type { Card, CardUid } from '@shared'
 import { omit } from 'lodash'
 
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 
 export function discard(args: {
     cardUid: CardUid

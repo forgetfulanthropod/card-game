@@ -1,7 +1,7 @@
 import type { Card, CharacterUid } from '@shared'
 
 import { interpretActions } from '@/gameState/battle/cards/interpretActions'
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 
 export function play({
     card,

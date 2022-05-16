@@ -1,14 +1,14 @@
-import 'game/config/logger'
+import '../game/config/logger'
 
 // import './database'
 import express from 'express'
 import session from 'express-session'
+import { setGlobalRandomSeed } from 'game/config/seedrand'
 import type { Server } from 'http'
 import { findKey, has } from 'lodash'
 import { Server as SocketServer } from 'socket.io'
 
 import { attachAPIRoutes } from './attachActions'
-import { setGlobalRandomSeed } from 'game/config/seedrand'
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')

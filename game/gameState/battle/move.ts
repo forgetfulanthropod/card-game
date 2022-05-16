@@ -2,7 +2,7 @@ import type { AttackData, CharacterMeta, CharacterUid, Effect } from '@shared'
 import { findIndex } from 'lodash'
 import type { SCursor } from 'sbaobab'
 
-import type { BattleCursor } from '@/util'
+import type { BattleCursor } from '@shared'
 
 import {
     getCharacterKeysAndDamages,
