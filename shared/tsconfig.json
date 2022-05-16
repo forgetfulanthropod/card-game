@@ -1,26 +1,20 @@
-// Server
+// Shared
 {
     "compilerOptions": {
         "composite": true,
         "module": "commonjs",
         "incremental": true,
-        "noEmit": true,
+        // "noEmit": true,
         "strict": true,
         "target": "es2017",
         "noImplicitAny": true,
         "esModuleInterop": true,
         "baseUrl": ".",
         "experimentalDecorators": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "outDir": "./dist"
     },
     "compileOnSave": true,
     "include": ["./**/*.ts"],
-    "references": [
-        {
-            "path": "../game"
-        },
-        {
-            "path": "../shared"
-        }
-    ]
+    "exclude": ["dist", "node_modules"]
 }

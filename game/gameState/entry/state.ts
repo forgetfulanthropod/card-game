@@ -1,4 +1,4 @@
-import type { EntryScene } from '@shared'
+import type { EntryScene } from 'shared'
 
 import { getRulebook } from '@/rulebook'
 

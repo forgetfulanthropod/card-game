@@ -1,8 +1,8 @@
-import type { Card, CharacterUid } from '@shared'
+import type { Card, CharacterUid } from 'shared'
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
 
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 
 import { checkBattleOverMut } from '..'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)

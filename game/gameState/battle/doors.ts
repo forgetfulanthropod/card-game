@@ -1,6 +1,6 @@
-import type { BattleScene, Characters, Door, DungeonName } from '@shared'
-import type { SpecialDoorName } from '@shared'
-import type { RoomOutcomes } from '@shared'
+import type { BattleScene, Characters, Door, DungeonName } from 'shared'
+import type { SpecialDoorName } from 'shared'
+import type { RoomOutcomes } from 'shared'
 import { keys, zip } from 'lodash'
 import type { SCursor } from 'sbaobab'
 

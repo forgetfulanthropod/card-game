@@ -1,5 +1,5 @@
 /** Exports all the API routes as functions */
-import type { Caller, Func } from '@shared'
+import type { Caller, Func } from 'shared'
 
 import { getClientTree } from '@/data/rootTree'
 import { entryMap } from '@/util'

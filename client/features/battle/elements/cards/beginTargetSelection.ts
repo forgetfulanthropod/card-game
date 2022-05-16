@@ -1,4 +1,4 @@
-import type { Card } from '@shared'
+import type { Card } from 'shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { InteractionEvent } from 'pixi.js'

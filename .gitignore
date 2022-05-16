@@ -17,3 +17,7 @@ node_modules/
 
 tsconfig.tsbuildinfo
 pnpm-lock.yaml
+
+**/dist
+**/*.js
+**/*.d.ts

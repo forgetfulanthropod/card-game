@@ -5,7 +5,7 @@ import type {
     NetworkAttackData,
     NetworkDOTData,
     NetworkEvent,
-} from '@shared'
+} from 'shared'
 import { filters, Loader } from 'pixi.js'
 import { GlowFilter } from 'pixi-filters'
 import type { ROCursor } from 'sbaobab'

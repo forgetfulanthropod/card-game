@@ -1,6 +1,6 @@
-import type { CharacterMove, CharacterUid, NetworkAttackData } from '@shared'
+import type { CharacterMove, CharacterUid, NetworkAttackData } from 'shared'
 
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 
 export function isSpecial(move: CharacterMove): boolean {
     return move.types.includes('MIM')

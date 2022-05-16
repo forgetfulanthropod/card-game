@@ -1,4 +1,4 @@
-import type { CharacterMeta, CharacterUid } from '@shared'
+import type { CharacterMeta, CharacterUid } from 'shared'
 import { Matrix, utils } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 

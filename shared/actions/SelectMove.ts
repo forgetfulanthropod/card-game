@@ -1,3 +1,3 @@
-import type { CharacterMove } from '@shared'
+import type { CharacterMove } from '..'
 
 export type SelectMove = (args: { move: CharacterMove }) => void

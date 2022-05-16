@@ -1,4 +1,4 @@
-import type { Immutable } from '@shared'
+import type { Immutable } from 'shared'
 
 /** Does deep freeze in place and returns result */
 // eslint-disable-next-line @typescript-eslint/ban-types

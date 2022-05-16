@@ -1,4 +1,4 @@
-import type { Orb } from '@shared'
+import type { Orb } from '..'
 
 import type { CharacterUid } from '../datamodel'
 

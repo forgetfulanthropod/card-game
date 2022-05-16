@@ -1,4 +1,4 @@
-import type { CharacterName, CharacterStats } from '@shared'
+import type { CharacterName, CharacterStats } from 'shared'
 export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
         name: 'bloatDemon',

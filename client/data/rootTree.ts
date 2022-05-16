@@ -1,13 +1,13 @@
+import { memoize } from 'lodash'
+import type { ROBaobab, ROCursor } from 'sbaobab'
+import { SBaobab } from 'sbaobab'
 import type {
     BattleScene,
     EntryScene,
     Gamestate,
     OwnedCharacterStats,
     Scene,
-} from '@shared'
-import { memoize } from 'lodash'
-import type { ROBaobab, ROCursor } from 'sbaobab'
-import { SBaobab } from 'sbaobab'
+} from 'shared'
 
 /** Global variables for file */
 const state = {

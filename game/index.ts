@@ -1,4 +1,4 @@
-import { NetworkEvent } from '@shared'
+import { NetworkEvent } from 'shared'
 export * as actions from './actions/index'
 export { getInitialGameState } from './gameState/index'
 

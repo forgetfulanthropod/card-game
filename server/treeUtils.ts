@@ -4,7 +4,7 @@ import type {
     EntryScene,
     Gamestate,
     NetworkEvent,
-} from '@shared'
+} from 'shared'
 import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
 import type { ROCursor, SCursor } from 'sbaobab'

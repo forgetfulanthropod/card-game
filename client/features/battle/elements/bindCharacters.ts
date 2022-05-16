@@ -1,4 +1,4 @@
-import type { BattleScene } from '@shared'
+import type { BattleScene } from 'shared'
 import isEqual from 'lodash/isEqual'
 import type { ROCursor } from 'sbaobab'
 

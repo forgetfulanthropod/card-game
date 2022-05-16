@@ -1,4 +1,4 @@
-import { Gamestate, NetworkEvent, BattleCursor, EntryScene } from '@shared'
+import { Gamestate, NetworkEvent, BattleCursor, EntryScene } from 'shared'
 import { SCursor } from 'sbaobab'
 
 export function emit<_A extends string, _B>(args: {

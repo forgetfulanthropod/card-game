@@ -1,4 +1,4 @@
-import type { StanceName, StanceStats } from '@shared'
+import type { StanceName, StanceStats } from 'shared'
 export const stanceTypeMetaMap: Record<StanceName, StanceStats> = {
     defensive: {
         name: 'defensive',

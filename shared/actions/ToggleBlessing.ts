@@ -1,5 +1,5 @@
 /** Admin-only */
 
-import type { BlessingName } from '@shared'
+import type { BlessingName } from '..'
 
 export type ToggleBlessing = (args: { name: BlessingName }) => void

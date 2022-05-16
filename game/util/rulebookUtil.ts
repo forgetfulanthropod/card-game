@@ -1,4 +1,4 @@
-import type { Gamestate, Rulebook } from '@shared'
+import type { Gamestate, Rulebook } from 'shared'
 import { existsSync, mkdirSync, readdirSync } from 'fs'
 import { difference } from 'lodash'
 import { homedir } from 'os'

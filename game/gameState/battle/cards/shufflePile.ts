@@ -1,4 +1,4 @@
-import type { Pile } from '@shared'
+import type { Pile } from 'shared'
 import { shuffle } from 'lodash'
 
 import { keys } from '@/util'

@@ -1,4 +1,4 @@
-import type { CharacterMeta, CharacterName, DungeonName } from '@shared'
+import type { CharacterMeta, CharacterName, DungeonName } from 'shared'
 import { cloneDeep, keys } from 'lodash'
 
 import { getRulebook } from '@/rulebook'

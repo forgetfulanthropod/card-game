@@ -1,4 +1,4 @@
-import type { EventTriggersMap } from '@shared'
+import type { EventTriggersMap } from 'shared'
 
 import { dedent } from '@/util'
 

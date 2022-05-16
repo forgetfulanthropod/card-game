@@ -1,6 +1,6 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
-import type { CharacterClass, CharacterUid, Pile } from '@shared'
-import type { Card } from '@shared'
+import type { CharacterClass, CharacterUid, Pile } from 'shared'
+import type { Card } from 'shared'
 import { gsap } from 'gsap'
 
 import { getBattleScene } from '@/data/rootTree'

@@ -1,4 +1,4 @@
-import type { Gamestate } from '@shared'
+import type { Gamestate } from 'shared'
 import { omit } from 'lodash'
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'

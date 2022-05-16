@@ -1,4 +1,4 @@
-import type { Card, CardId } from '@shared'
+import type { Card, CardId } from 'shared'
 
 // cardDefinitionsMap
 const basicMagicAttackBase = {

@@ -1,4 +1,4 @@
-import type { CharacterUid, Gamestate, OwnedCharacterStatsMap } from '@shared'
+import type { CharacterUid, Gamestate, OwnedCharacterStatsMap } from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'

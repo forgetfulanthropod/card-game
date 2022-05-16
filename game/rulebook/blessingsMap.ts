@@ -1,4 +1,4 @@
-import type { Blessing, BlessingName } from '@shared'
+import type { Blessing, BlessingName } from 'shared'
 
 export const blessingsMap: Record<BlessingName, Blessing> = {
     strongPcs: {

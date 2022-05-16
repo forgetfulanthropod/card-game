@@ -1,3 +1,3 @@
-import type { SpecialDoorName } from '@shared'
+import type { SpecialDoorName } from '..'
 
 export type ChooseDoor = (args: { door: SpecialDoorName }) => void

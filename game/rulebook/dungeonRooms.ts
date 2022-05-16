@@ -1,4 +1,4 @@
-import type { CharacterName, DungeonRooms } from '@shared'
+import type { CharacterName, DungeonRooms } from 'shared'
 
 const config = {
     doValidation: false,

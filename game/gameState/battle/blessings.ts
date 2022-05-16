@@ -1,4 +1,4 @@
-import type { CharacterMeta } from '@shared'
+import type { CharacterMeta } from 'shared'
 
 import { getGameStateCursor } from '@/util'
 

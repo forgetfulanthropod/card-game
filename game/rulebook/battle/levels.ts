@@ -1,4 +1,4 @@
-import type { NpcLevelStatsMap } from '@shared'
+import type { NpcLevelStatsMap } from 'shared'
 
 export const npcLevelStatsMap: NpcLevelStatsMap = {
     skeletonWarrior: {

@@ -1,4 +1,4 @@
-import type { BattleScene, DungeonName, OwnedCharacterStats } from '@shared'
+import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'

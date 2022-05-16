@@ -7,11 +7,11 @@ import type {
     EffectType,
     StanceMultiplier,
     StanceName,
-} from '@shared'
+} from 'shared'
 import { intersection } from 'lodash'
 
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 
 import { getTransformed, isSpecial } from './specialMoves'
 

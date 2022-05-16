@@ -1,5 +1,5 @@
 import type { ToggleStance } from '@serverActions'
-import type { StanceName } from '@shared'
+import type { StanceName } from 'shared'
 
 import { getModified } from '@/gameState/battle'
 import { getBattleScene } from '@/util'

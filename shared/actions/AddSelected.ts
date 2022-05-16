@@ -1,3 +1,3 @@
-import type { OwnedCharacterStats } from '@shared'
+import type { OwnedCharacterStats } from '..'
 
 export type AddSelected = (args: { character: OwnedCharacterStats }) => void

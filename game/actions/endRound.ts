@@ -1,5 +1,5 @@
 import { applyDOTDamages } from '@/gameState/effects/applyDOTDamages'
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 import { commit } from '@/util'
 import { keys } from '@/util'
 

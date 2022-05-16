@@ -1,6 +1,7 @@
 // Server
 {
     "compilerOptions": {
+        "composite": true,
         "module": "CommonJS",
         "moduleResolution": "node",
         "incremental": true,
@@ -15,14 +16,18 @@
         // "emitDeclarationOnly": true,
         // "outFile": "./dist/index.js",
         "outDir": "./dist",
+        // "rootDir": ".",
         "paths": {
             "@serverActions": ["./actions/types/serverActions"],
-            "@shared": ["../shared/index"],
-            "@shared/code": ["../shared/code/index"],
             "@/*": ["./*"]
         }
     },
     "compileOnSave": true,
-    "include": ["./**/*.ts", "../shared"],
-    "exclude": ["dist", "node_modules"]
+    "include": ["./**/*.ts"],
+    "exclude": ["dist", "node_modules"],
+    "references": [
+        {
+            "path": "../shared"
+        }
+    ]
 }

@@ -1,4 +1,4 @@
-import type { BlessingName } from '@shared'
+import type { BlessingName } from 'shared'
 
 import { toggleBlessing } from '@/actions'
 import styled from '@/config/mystyled'

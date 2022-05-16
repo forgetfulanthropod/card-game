@@ -1,5 +1,5 @@
-import type { DungeonLevel, Rulebook } from '@shared'
-import { rulebookVersion } from '@shared/code'
+import type { DungeonLevel, Rulebook } from 'shared'
+import { rulebookVersion } from 'shared/code'
 
 import {
     moveMetaMap,

@@ -1,4 +1,4 @@
-import type { Gamestate } from '@shared'
+import type { Gamestate } from 'shared'
 
 import { addNewUser } from './addNewUser'
 import { setSocketId } from './index'

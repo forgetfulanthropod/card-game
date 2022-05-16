@@ -1,4 +1,4 @@
-import type { MoveMeta, MoveMetaName } from '@shared'
+import type { MoveMeta, MoveMetaName } from 'shared'
 
 // Basic Attack: 100% of attack damage, no modifiers
 // Slash: 50% of attack damage, affects up to one adjacent target (rounded up at .5 or greater, down otherwise)

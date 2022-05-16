@@ -4,7 +4,7 @@ import type {
     EntryScene,
     Gamestate,
     OwnedCharacterStats,
-} from '@shared'
+} from 'shared'
 import { find, sample, sum, values } from 'lodash'
 import { useState } from 'preact/hooks'
 import toast from 'react-hot-toast'

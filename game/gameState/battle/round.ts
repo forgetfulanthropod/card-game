@@ -1,6 +1,6 @@
-import type { AttackData, CharacterMeta, CharacterMove } from '@shared'
+import type { AttackData, CharacterMeta, CharacterMove } from 'shared'
 
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 import { vals } from '@/util'
 import { randomEl } from '@/util'
 

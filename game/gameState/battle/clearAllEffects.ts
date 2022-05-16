@@ -1,6 +1,6 @@
 import { keys } from 'lodash'
 
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 
 export function clearAllEffects(scene: BattleCursor): void {
     scene.apply('allCharacters', ac => {

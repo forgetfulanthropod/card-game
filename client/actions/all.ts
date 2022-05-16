@@ -1,5 +1,5 @@
-import type * as AllTypes from '@shared/actions'
-import type { ServerResult } from '@shared/actions'
+import type * as AllTypes from 'shared/actions'
+import type { ServerResult } from 'shared/actions'
 
 import { callWrap } from './call'
 

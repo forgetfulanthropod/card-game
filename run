@@ -42,10 +42,7 @@ function lint() {
 }
 
 function tsc-all() {
-    client:tsc &
-    server:tsc &
-    db:tsc &
-    crypto:tsc &
+    tsc -b server game shared client
 }
 
 function build-all() {

@@ -1,4 +1,4 @@
-import type { Pile } from '@shared'
+import type { Pile } from 'shared'
 
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'

@@ -1,4 +1,4 @@
-import type { CharacterMeta } from '@shared'
+import type { CharacterMeta } from 'shared'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
 import { applyBlessings } from './blessings'

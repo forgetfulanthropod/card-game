@@ -1,4 +1,4 @@
-import type { BattleScene } from '@shared'
+import type { BattleScene } from 'shared'
 import type { ROCursor } from 'sbaobab'
 
 import type { PixiContainer } from '@/elementsUtil'

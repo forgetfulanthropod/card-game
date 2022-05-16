@@ -1,4 +1,4 @@
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 
 const BASE_ENERGY = 3
 const TURNS_PER_INCREASE = 3

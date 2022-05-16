@@ -1,4 +1,4 @@
-import type { Rulebook } from '@shared'
+import type { Rulebook } from '..'
 
 export type RulebookAction = (args: Args) => void
 type Args =

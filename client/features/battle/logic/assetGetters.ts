@@ -4,7 +4,7 @@ import type {
     CharacterName,
     EffectType,
     OrbType,
-} from '@shared'
+} from 'shared'
 import { startCase, upperFirst } from 'lodash'
 import { Loader } from 'pixi.js'
 

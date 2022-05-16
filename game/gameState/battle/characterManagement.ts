@@ -4,7 +4,7 @@ import type {
     Characters,
     OwnedCharacterStats,
     StanceName,
-} from '@shared'
+} from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { keys, vals } from '@/util'

@@ -1,4 +1,4 @@
-import type { OwnedCharacterStats } from '@shared'
+import type { OwnedCharacterStats } from 'shared'
 import type { ROCursor } from 'sbaobab'
 
 import { addSelected } from '@/actions'

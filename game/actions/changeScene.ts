@@ -7,7 +7,7 @@ import {
     setCards,
 } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
 
 export const changeScene: ChangeScene = args => {

@@ -1,4 +1,4 @@
-import type { BattleCursor } from '@shared'
+import type { BattleCursor } from 'shared'
 import { commit } from '@/util'
 
 import { drawNewHand } from './cards/drawNewHand'
