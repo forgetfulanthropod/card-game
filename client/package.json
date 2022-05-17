@@ -5,7 +5,6 @@
         "@pixi-essentials/gradients": "^0.0.4",
         "@pixi-spine/all-4.0": "^3.0.13",
         "ahooks": "^3.1.5",
-        "datums": "^1.0.6",
         "gsap": "^3.9.1",
         "pixi-filters": "^4.1.6",
         "pixi-tweener": "^0.12.2",

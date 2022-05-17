@@ -1,7 +1,7 @@
-import type { StartBattle } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
-export const startBattle: StartBattle = _args => {
-    // const scene = getBattleScene(args.username)
+export const startBattle: GameActions['StartBattle'] = _args => {
+    // const scene = getBattleSceneIn(args.game)
     // if (scene.get('state') === 'in battle') {
     //     // already in game
     //     logger.warn('already started game')

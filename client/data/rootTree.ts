@@ -53,9 +53,8 @@ export const getOwnedCharacters = (): ROCursor<
     Record<string, OwnedCharacterStats>
 > => getTree().select('ownedCharacters')
 export const getScene = (): ROCursor<Scene> => getTree().select('scene')
-export const getBattleSceneData = (): BattleScene => getBattleScene().get()
 
-export interface ClientTree {
+interface ClientTree {
     serverCalls: unknown[]
     // modal: null | { title: string, body: string, onClose: Callback }
 }

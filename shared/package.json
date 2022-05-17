@@ -2,7 +2,6 @@
     "name": "shared",
     "exports": {
         ".": "./dist/index.ts",
-        "./actions": "./dist/actions/index.ts",
         "./code": "./code/index.ts"
     }
 }

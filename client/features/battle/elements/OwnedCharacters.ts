@@ -1,7 +1,7 @@
 import type { ROCursor } from 'sbaobab'
 import type { OwnedCharacterStats } from 'shared'
 
-import { addSelected } from '@/actions'
+import { callApi } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
@@ -59,7 +59,8 @@ function makeCharacters() {
                 Sprite({
                     src: getTexture(c.name),
                     scale: 0.45,
-                    onClick: () => addSelected({ character: c, index: 0 }),
+                    onClick: () =>
+                        callApi('AddSelected', { character: c, index: 0 }),
                 }),
             ],
         })

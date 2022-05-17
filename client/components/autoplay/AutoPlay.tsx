@@ -9,7 +9,7 @@ import type {
     OwnedCharacterStats,
 } from 'shared'
 
-import { addSelected, changeDungeon, changeScene, chooseDoor } from '@/actions'
+import { callApi } from '@/actions'
 import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
@@ -82,7 +82,7 @@ class Runner {
         const scene = tree.scene as EntryScene
         if (scene.selectedCharacters.length === 0 && flip(probChangeLevel)) {
             toast('changing dungeon')
-            await changeDungeon({ direction: flip(0.5) ? -1 : 1 })
+            await callApi('ChangeDungeon', { direction: flip(0.5) ? -1 : 1 })
             return
         }
         const availableChars = getAvailableChars(scene, tree)
@@ -92,7 +92,7 @@ class Runner {
             return
         }
         toast('out of points. starting battle.')
-        await changeScene({ newSceneName: 'battle' })
+        await callApi('ChangeScene', { newSceneName: 'battle' })
     }
 
     async battleStep(tree: Gamestate) {
@@ -104,7 +104,7 @@ class Runner {
             if (door == null) {
                 throw Error('null door')
             }
-            await chooseDoor({ door })
+            await callApi('ChooseDoor', { door })
         }
         if (!scene.isPlayerTurn) {
             toast('not my turn - doing nothing')
@@ -136,7 +136,7 @@ async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     if (charChoice == null) {
         throw Error('null char')
     }
-    await addSelected({
+    await callApi('AddSelected', {
         character: charChoice,
         //TODO: HOW??
         index: 0,

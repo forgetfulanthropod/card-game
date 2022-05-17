@@ -3,18 +3,16 @@ import { difference } from 'lodash'
 import { homedir } from 'os'
 import type { Gamestate, Rulebook } from 'shared'
 
-import { getRulebook } from '@/rulebook'
-
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
 const removeExtension = (filename: string): string =>
     filename.replace(/\.[^/.]+$/, '')
 
-export function updateClientRulebookData(username: string): void {
+export function updateClientRulebookData(_username: string): void {
     // Q: Update all users or just one?
+    /*
     const rulebookNames = getRulebookNames()
     const curRulebook = stringifyRulebook(getRulebook())
-    /*
     const users = getRootCursor().select('users')
     const usernames = Object.keys(users.get())
     for (const username of usernames) {

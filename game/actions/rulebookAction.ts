@@ -1,16 +1,10 @@
-import type { RulebookAction } from '@serverActions'
+import type { GameActions } from '@serverActions'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 
 import { resetRulebook, setRulebook } from '@/rulebook/rulebook'
-import {
-    pacificDate,
-    prefix,
-    stringifyRulebook,
-    toPath,
-    updateClientRulebookData,
-} from '@/util'
+import { pacificDate, prefix, stringifyRulebook, toPath } from '@/util'
 
-export const rulebookAction: RulebookAction = args => {
+export const rulebookAction: GameActions['RulebookAction'] = args => {
     logger.info(`rulebookAction performing action ${args.do}`)
     if (!existsSync(prefix)) {
         mkdirSync(prefix)
@@ -20,7 +14,7 @@ export const rulebookAction: RulebookAction = args => {
             logger.info(`choosing rulebook ${args.name}`)
             if (args.name === 'default') {
                 resetRulebook()
-                updateClientRulebookData(args.username)
+                // updateClientRulebookData(args.username)
                 return
             }
             const p = toPath(args.name)
@@ -28,7 +22,7 @@ export const rulebookAction: RulebookAction = args => {
                 throw Error('chosen rulebook does not exist')
             }
             setRulebook(JSON.parse(readFileSync(p, 'utf-8')))
-            updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.username)
             return
         }
         case 'delete': {
@@ -42,7 +36,7 @@ export const rulebookAction: RulebookAction = args => {
             }
             rmSync(p)
             resetRulebook()
-            updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.username)
             return
         }
         case 'new': {
@@ -60,7 +54,7 @@ export const rulebookAction: RulebookAction = args => {
             writeFileSync(p, s, { encoding: 'utf-8' })
             // json-parsing ensures good key order:
             setRulebook(JSON.parse(s))
-            updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.username)
             return
         }
         default: {

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks'
 
-import { incrementTestCounter } from '@/actions'
+import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 
 export default function TestCounter(): JSXElement {
@@ -28,7 +28,7 @@ export default function TestCounter(): JSXElement {
         onClick={async () => {
             start.current = Date.now()
             console.log('making request to incrementTestCounter')
-            await incrementTestCounter()
+            await callApi('IncrementTestCounter', {})
             console.log(
                 'request returned after',
                 (Date.now() - start.current) / 1000,

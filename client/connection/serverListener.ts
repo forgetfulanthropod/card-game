@@ -17,7 +17,7 @@ const urlPrefix = window.location.href.split('/')[3]
 
 // MARK
 let socket: Socket = null as unknown as Socket
-export function maybeMakeSocket(): void {
+function maybeMakeSocket(): void {
     if (socket == null)
         socket = io({
             path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',

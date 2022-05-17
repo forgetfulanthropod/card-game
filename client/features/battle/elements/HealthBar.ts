@@ -2,7 +2,7 @@ import { Matrix, utils } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type { CharacterMeta, CharacterUid } from 'shared'
 
-import { toggleStance } from '@/actions'
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
 import { SCALE_UNIVERSAL } from '@/elementsUtil'
@@ -182,7 +182,9 @@ function bindStanceIndicator(
                 width: displayWidth / 3,
                 height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
                 onClick: () =>
-                    toggleStance({ characterUid: characterCursor.get('uid') }),
+                    callApi('ToggleStance', {
+                        characterUid: characterCursor.get('uid'),
+                    }),
             })
         )
     }

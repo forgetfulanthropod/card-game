@@ -1,4 +1,4 @@
-import type { ChangeScene } from '@serverActions'
+import type { GameActions } from '@serverActions'
 import type { BattleCursor } from 'shared'
 
 import {
@@ -8,27 +8,27 @@ import {
     setCards,
 } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
-import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
+import { getBattleSceneIn, getEntrySceneIn } from '@/util'
 
-export const changeScene: ChangeScene = args => {
+export const changeScene: GameActions['ChangeScene'] = args => {
+    const { game } = args
     logger.info('changing scene to', args.newSceneName)
-    const tree = getGameStateCursor(args.username)
     if (args.newSceneName === 'battle') {
-        const entrySceneData = getEntryScene(args.username).get()
+        const entrySceneData = getEntrySceneIn(args.game).get()
         const { selectedCharacters, selectedLevel } = entrySceneData
         const dungeonName = getRulebook().dungeonLevels[selectedLevel.num].name
-        tree.set(
+        game.set(
             'scene',
             makeBattleState({
                 chosen: selectedCharacters,
                 dungeonName,
-                username: args.username,
+                game: args.game,
             })
         )
-        const battleScene_ = tree.select('scene') as BattleCursor
+        const battleScene_ = game.select('scene') as BattleCursor
         // TODO: put getNpcMoves in makeBattleState. Will require retyping of getNpcMoves's call chain.
         battleScene_.set('nextNpcMoves', getNpcMoves(battleScene_))
-        const scene = getBattleScene(args.username)
+        const scene = getBattleSceneIn(args.game)
         setCards(scene)
         putUpDoors(scene)
     }

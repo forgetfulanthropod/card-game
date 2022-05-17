@@ -1,12 +1,11 @@
-import type { AddSelected } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
-import { getEntryScene } from '@/util'
+import { getEntrySceneIn } from '@/util'
 
-export const addSelected: AddSelected = args => {
+export const addSelected: GameActions['AddSelected'] = args => {
     const c = args.character
 
-    logger.info(args.username)
-    const scene = getEntryScene(args.username)
+    const scene = getEntrySceneIn(args.game)
 
     const allCharacters = scene.select('selectedCharacters').get()
 

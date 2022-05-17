@@ -1,12 +1,12 @@
-import type { ToggleStance } from '@serverActions'
+import type { GameActions } from '@serverActions'
 import type { StanceName } from 'shared'
 
 import { getModified } from '@/gameState/battle'
-import { getBattleScene } from '@/util'
+import { getBattleSceneIn } from '@/util'
 
-export const toggleStance: ToggleStance = args => {
+export const toggleStance: GameActions['ToggleStance'] = args => {
     const { characterUid } = args
-    const scene = getBattleScene(args.username)
+    const scene = getBattleSceneIn(args.game)
 
     const characterCursor = scene.select('allCharacters').select(characterUid)
     const character = characterCursor.get()
@@ -29,5 +29,5 @@ export const toggleStance: ToggleStance = args => {
 
     stanceCursor.set(stances[nextIndex])
 
-    characterCursor.apply(ch => getModified(ch, args.username))
+    characterCursor.apply(ch => getModified(args.game.get('blessings'), ch))
 }

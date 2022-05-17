@@ -1,16 +1,16 @@
-import type { CharacterMeta } from 'shared'
+import type { Blessing, CharacterMeta } from 'shared'
 
 import { getCharacterMovesWithDamageRanges } from './attack'
 import { applyBlessings } from './blessings'
 import { newNPCMeta, newPCMeta } from './characterManagement'
 
 export function getModified(
-    prev: Readonly<CharacterMeta>,
-    username: string
+    blessings: Blessing[],
+    prev: Readonly<CharacterMeta>
 ): CharacterMeta {
     const clean = cleanMeta(prev)
 
-    const blessed = applyBlessings(clean, username)
+    const blessed = applyBlessings(blessings, clean)
     const stanced = {
         ...blessed,
         moves: getCharacterMovesWithDamageRanges(blessed),

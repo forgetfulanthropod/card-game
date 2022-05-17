@@ -3,5 +3,6 @@ export * from './debug'
 export * from './jsonString'
 export * from './notnull'
 export * from './objectHelpers'
+export * from './onUpdate'
 export * from './windowUtils'
 // @endindex

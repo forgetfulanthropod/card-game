@@ -1,9 +1,8 @@
-import { attachServerMethods } from 'game'
 import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
 import type { SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
-import type { BattleCursor, EntryScene, Gamestate, NetworkEvent } from 'shared'
+import type { Gamestate, NetworkEvent } from 'shared'
 
 import { getIo, getSocketId } from './index'
 const db = new Low<{ users: Record<string, Gamestate> }>(
@@ -18,24 +17,8 @@ export function getDb() {
     return db
 }
 
-export function getEntryScene(username: string): SCursor<EntryScene> {
-    const scene = getGameStateCursor(username).select('scene')
-    if (scene.get('name') !== 'entry') {
-        throw Error('getEntryScene called when not in entry scene')
-    }
-    return scene as SCursor<EntryScene>
-}
-
-export function getBattleScene(username: string): BattleCursor {
-    const scene = getGameStateCursor(username).select('scene')
-    if (scene.get('name') !== 'battle') {
-        throw Error('getBattleScene called when not in battle scene')
-    }
-    return scene as BattleCursor
-}
-
 export function getGameStateCursor(username: string): SCursor<Gamestate> {
-    return getRootCursor().select('users').select(username)
+    return getRootCursor().select('users', username)
 }
 
 interface RootTree {
@@ -101,12 +84,3 @@ export const getRootCursor = memoize(
         return result
     }
 )
-
-logger.warn('attaching server methods')
-attachServerMethods({
-    emit,
-    commit,
-    getGameStateCursor,
-    getBattleScene,
-    getEntryScene,
-})

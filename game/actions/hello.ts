@@ -1,6 +1,6 @@
-import type { Hello } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
-export const hello: Hello = () => {
+export const hello: GameActions['Hello'] = () => {
     // console.log(args.username)
     return 'hello'
 }

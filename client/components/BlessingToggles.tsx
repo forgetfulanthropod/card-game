@@ -1,6 +1,6 @@
 import type { BlessingName } from 'shared'
 
-import { toggleBlessing } from '@/actions'
+import { callApi } from '@/actions'
 import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
@@ -33,7 +33,7 @@ export function BlessingToggles(): JSXElement {
             return <span
                 onClick={() => {
                     // alert('you clicked')
-                    void toggleBlessing({ name: b })
+                    void callApi('ToggleBlessing', { name: b })
                 }}
                 key={b}
             >

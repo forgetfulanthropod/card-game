@@ -1,4 +1,4 @@
-import { resetRandomSeed } from '@/actions'
+import { callApi } from '@/actions'
 import { getClientTree } from '@/data/rootTree'
 
 import { jss } from './jsonString'
@@ -14,7 +14,7 @@ async function runRecording(
     setSeed = true
 ): Promise<void> {
     if (setSeed) {
-        await resetRandomSeed()
+        await callApi('ResetRandomSeed', {})
     }
     for (const { name, args } of recording) {
         console.log(jss`running ${name}(${args})`)
