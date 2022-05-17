@@ -1,8 +1,8 @@
-import type { AddSelected } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 
 import { getEntryScene } from '@/util'
 
-export const addSelected: AddSelected = args => {
+export const addSelected: ServerActions['AddSelected'] = args => {
     const c = args.character
 
     logger.info(args.username)

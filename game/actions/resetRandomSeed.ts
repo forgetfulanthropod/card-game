@@ -1,4 +1,6 @@
-import type { ResetRandomSeed } from '@/../shared/actions/ResetRandomSeed'
+import type { ServerActions } from '@serverActions'
+
 import { setGlobalRandomSeed } from '@/config/seedrand'
 
-export const resetRandomSeed: ResetRandomSeed = () => setGlobalRandomSeed()
+export const resetRandomSeed: ServerActions['ResetRandomSeed'] = () =>
+    setGlobalRandomSeed()

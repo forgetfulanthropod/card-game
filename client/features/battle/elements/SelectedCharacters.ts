@@ -1,4 +1,5 @@
-import type { CharacterPlaceIndex, OwnedCharacterStats } from '@/../shared'
+import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
+
 import { addSelected } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'

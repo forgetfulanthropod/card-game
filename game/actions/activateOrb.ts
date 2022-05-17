@@ -1,4 +1,4 @@
-import type { ActivateOrb } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import { isEqual } from 'lodash'
 import type {
     CharacterMeta,
@@ -18,7 +18,11 @@ import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDama
 import { emit } from '@/util'
 import { getBattleScene } from '@/util'
 
-export const activateOrb: ActivateOrb = ({ username, orb, characterUid }) => {
+export const activateOrb: ServerActions['ActivateOrb'] = ({
+    username,
+    orb,
+    characterUid,
+}) => {
     const scene = getBattleScene(username)
     const character = scene.get('allCharacters', characterUid)
 

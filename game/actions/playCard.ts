@@ -1,4 +1,4 @@
-import type { PlayCard } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import type { Card, CardUid } from 'shared'
 import type { BattleCursor } from 'shared'
 
@@ -7,7 +7,7 @@ import { getBattleScene } from '@/util'
 
 export const BASE_HAND_SIZE = 5
 
-export const playCard: PlayCard = args => {
+export const playCard: ServerActions['PlayCard'] = args => {
     const scene = getBattleScene(args.username)
     const card = findCard({ cardUid: args.cardUid, scene })
 

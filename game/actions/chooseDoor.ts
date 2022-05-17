@@ -1,4 +1,4 @@
-import type { ChooseDoor } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 
 import {
     getNpcMoves,
@@ -11,7 +11,7 @@ import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
 import { resetTurns } from '@/gameState/battle/resetTurns'
 import { getBattleScene, objFilter } from '@/util'
 
-export const chooseDoor: ChooseDoor = args => {
+export const chooseDoor: ServerActions['ChooseDoor'] = args => {
     const scene = getBattleScene(args.username)
 
     const room = modifyRoom(

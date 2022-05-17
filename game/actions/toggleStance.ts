@@ -1,10 +1,10 @@
-import type { ToggleStance } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import type { StanceName } from 'shared'
 
 import { getModified } from '@/gameState/battle'
 import { getBattleScene } from '@/util'
 
-export const toggleStance: ToggleStance = args => {
+export const toggleStance: ServerActions['ToggleStance'] = args => {
     const { characterUid } = args
     const scene = getBattleScene(args.username)
 

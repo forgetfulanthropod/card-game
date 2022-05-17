@@ -1,4 +1,4 @@
-import type { ToggleBlessing } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import { findIndex, values } from 'lodash'
 import type { BlessingName } from 'shared'
 
@@ -6,7 +6,7 @@ import { getModified } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
 import { getBattleScene, getGameStateCursor } from '@/util'
 
-export const toggleBlessing: ToggleBlessing = args => {
+export const toggleBlessing: ServerActions['ToggleBlessing'] = args => {
     const name = args.name as BlessingName
     const { blessings: blessingsMap } = getRulebook()
     const gameState = getGameStateCursor(args.username)

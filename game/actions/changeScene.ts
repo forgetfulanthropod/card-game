@@ -1,4 +1,4 @@
-import type { ChangeScene } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import type { BattleCursor } from 'shared'
 
 import {
@@ -10,7 +10,7 @@ import {
 import { getRulebook } from '@/rulebook'
 import { getBattleScene, getEntryScene, getGameStateCursor } from '@/util'
 
-export const changeScene: ChangeScene = args => {
+export const changeScene: ServerActions['ChangeScene'] = args => {
     logger.info('changing scene to', args.newSceneName)
     const tree = getGameStateCursor(args.username)
     if (args.newSceneName === 'battle') {

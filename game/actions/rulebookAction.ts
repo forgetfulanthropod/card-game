@@ -1,4 +1,4 @@
-import type { RulebookAction } from '@serverActions'
+import type { ServerActions } from '@serverActions'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 
 import { resetRulebook, setRulebook } from '@/rulebook/rulebook'
@@ -10,7 +10,7 @@ import {
     updateClientRulebookData,
 } from '@/util'
 
-export const rulebookAction: RulebookAction = args => {
+export const rulebookAction: ServerActions['RulebookAction'] = args => {
     logger.info(`rulebookAction performing action ${args.do}`)
     if (!existsSync(prefix)) {
         mkdirSync(prefix)
