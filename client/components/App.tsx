@@ -15,7 +15,7 @@ const log = (...args: unknown[]) => true && console.log(...args)
 
 export default function App(): JSXElement {
     // const [username, setUsername] = useState('')
-    const [username_, setUsername] = useLocalStorageState('username')
+    const [username_, setUsername] = useLocalStorageState<string>('username')
     const username = username_ ?? ''
     const [ready, setReady] = useState(false)
     console.log({ username })

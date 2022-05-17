@@ -15,7 +15,6 @@
         "winston": "^3.3.3"
     },
     "devDependencies": {
-        "@mixer/parallel-prettier": "^2.0.1",
         "@types/deep-diff": "^1.0.1",
         "@types/express": "^4.17.13",
         "@types/lodash": "^4.14.178",
