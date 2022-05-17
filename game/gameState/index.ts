@@ -22,7 +22,13 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
             const uid = `${characterIds[i]}-${j}` as CharacterUid
             oc = {
                 ...oc,
-                [uid]: { uid, tokenId: j.toString(), nftName: uid, ...c },
+                [uid]: {
+                    ...c,
+                    uid,
+                    tokenId: j.toString(),
+                    nftName: uid,
+                    isPc: true,
+                },
             }
         }
     })

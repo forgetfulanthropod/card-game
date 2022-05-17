@@ -10,16 +10,15 @@ export const addSelected: AddSelected = args => {
 
     const allCharacters = scene.select('selectedCharacters').get()
 
-    const indexInselected = allCharacters.findIndex(
+    const indexInSelected = allCharacters.findIndex(
         character => c.uid === character.uid
     )
-    if (indexInselected !== -1)
-        scene.apply('selectedCharacters', sel => [
-            ...sel.slice(0, indexInselected),
-            ...sel.slice(indexInselected + 1),
-        ])
-    else {
-        scene.apply('selectedCharacters', sel => [...sel, c])
+    if (indexInSelected === -1) {
+        scene.apply('selectedCharacters', s => {
+            const newS = [...s]
+            newS[args.index] = c
+            return newS
+        })
     }
     // debugger
 }

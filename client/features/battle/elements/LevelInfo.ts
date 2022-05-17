@@ -38,10 +38,12 @@ export function LevelInfo(): PixiContainer {
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
-            fill: ['#fff', '#eee'], // gradient
+            // fill: ['#fff', '#eee'], // gradient
+            fill: ['#aaa'],
             stroke: '#999',
             strokeThickness: 5,
         },
+        alpha: 0,
         async onClick() {
             await changeDungeon({ direction: -1 })
         },
@@ -54,10 +56,12 @@ export function LevelInfo(): PixiContainer {
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
-            fill: ['#fff', '#eee'], // gradient
+            // fill: ['#fff', '#eee'], // gradient
+            fill: ['#aaa'],
             stroke: '#999',
             strokeThickness: 5,
         },
+        alpha: 0,
         async onClick() {
             await changeDungeon({ direction: +1 })
         },

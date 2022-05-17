@@ -148,7 +148,7 @@ export function Character(args: CharacterProps): PixiContainer {
     return flyingContainer
 }
 
-const glowFilter = new GlowFilter({
+export const glowFilter = new GlowFilter({
     innerStrength: 0,
     outerStrength: 2,
     color: 0xffffff,

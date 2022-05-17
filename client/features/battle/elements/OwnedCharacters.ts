@@ -59,7 +59,7 @@ function makeCharacters() {
                 Sprite({
                     src: getTexture(c.name),
                     scale: 0.45,
-                    onClick: () => addSelected({ character: c }),
+                    onClick: () => addSelected({ character: c, index: 0 }),
                 }),
             ],
         })

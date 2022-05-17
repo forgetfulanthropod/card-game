@@ -9,19 +9,33 @@ import {
     Text,
 } from '@/elementsUtil'
 
+import { glowFilter } from './Character'
+
 export function StartButton(): PixiContainer {
+    const bg = Sprite({
+        src: getTexture('gemButton'),
+        anchor: [0.5, 1],
+        scale: 0.5,
+        async onClick() {
+            await changeScene({ newSceneName: 'battle' })
+        },
+        events: {
+            pointerover() {
+                bg.filters = [glowFilter]
+            },
+            pointerout() {
+                bg.filters = []
+            },
+        },
+    })
+
+    bg.cursor = 'pointer'
+
     const root = Container({
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT * 0.95,
+        x: BASE_WIDTH * 0.87,
+        y: BASE_HEIGHT * 0.6,
         children: [
-            Sprite({
-                src: getTexture('gemButton'),
-                anchor: [0.5, 1],
-                scale: 0.5,
-                async onClick() {
-                    await changeScene({ newSceneName: 'battle' })
-                },
-            }),
+            bg,
             Text({
                 text: 'GO!',
                 anchor: [0.5, 1.5],
