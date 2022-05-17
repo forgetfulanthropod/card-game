@@ -22,7 +22,8 @@
         "**/node_modules/": true,
         "**/pnpm-lock.yaml": true,
         "**/tsconfig.tsbuildinfo": true,
-        ".eslintcache": true
+        ".eslintcache": true,
+        "**/dist/": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,

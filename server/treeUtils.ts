@@ -1,3 +1,4 @@
+import { attachServerMethods } from 'game'
 import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
 import type { SCursor } from 'sbaobab'
@@ -100,3 +101,12 @@ export const getRootCursor = memoize(
         return result
     }
 )
+
+logger.warn('attaching server methods')
+attachServerMethods({
+    emit,
+    commit,
+    getGameStateCursor,
+    getBattleScene,
+    getEntryScene,
+})
