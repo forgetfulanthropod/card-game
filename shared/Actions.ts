@@ -23,7 +23,6 @@ export interface Action {
     ChooseDoor: (args: { door: SpecialDoorName }) => void
     ClaimLoot: (args: { walletAddress: string }) => void
 
-    DoCharacterAction: (args: { uid: CharacterUid }) => void
     EndTurn: (args: Empty) => void
     ExitDungeon: () => void
     Hello: () => string
@@ -62,7 +61,7 @@ export type Caller<F extends Func> = (
     ...args: Parameters<F>
 ) => Promise<CallReturn<F> | null>
 
-type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
+export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 
 export type ServerResult<T> =
     | { status: 'success'; result: T }

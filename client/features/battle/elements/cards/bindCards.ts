@@ -1,7 +1,7 @@
 import type { ROCursor } from 'sbaobab'
 import type { BattleScene } from 'shared'
 
-import { endTurn } from '@/actions'
+import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
 import { getTexture } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
@@ -44,7 +44,7 @@ function EndTurnButton(): PixiContainer {
         x: BASE_WIDTH * 0.9,
         y: BASE_HEIGHT * 0.78,
         onClick: async () => {
-            await endTurn({})
+            await callApi('EndTurn', {})
         },
         children: [
             Sprite({

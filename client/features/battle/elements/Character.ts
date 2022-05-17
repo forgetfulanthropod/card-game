@@ -10,7 +10,7 @@ import type {
     NetworkEvent,
 } from 'shared'
 
-import { activateOrb } from '@/actions'
+import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
@@ -220,7 +220,7 @@ function getBoundOrbContainer(
                     Container({
                         x: i * orbWidth * 1.5,
                         onClick: async () => {
-                            await activateOrb({
+                            await callApi('ActivateOrb', {
                                 characterUid: characterCursor.get('uid'),
                                 orb,
                             })

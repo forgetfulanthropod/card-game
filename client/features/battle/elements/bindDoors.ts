@@ -1,4 +1,4 @@
-import { chooseDoor, exitDungeon } from '@/actions'
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 
@@ -24,10 +24,10 @@ export function bindDoors(parent: PixiContainer) {
             // console.log('adding some doors')
             doorsContainer = Doors({
                 callbacks: doors.options.map(
-                    d => () => chooseDoor({ door: d })
+                    d => () => callApi('ChooseDoor', { door: d })
                 ),
                 descriptions: doors.descriptions,
-                exit: () => exitDungeon(),
+                exit: () => callApi('ExitDungeon', undefined),
             })
             parent.addChild(doorsContainer)
         }

@@ -1,4 +1,4 @@
-import { changeScene } from '@/actions'
+import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     BASE_HEIGHT,
@@ -17,7 +17,7 @@ export function StartButton(): PixiContainer {
         anchor: [0.5, 1],
         scale: 0.5,
         async onClick() {
-            await changeScene({ newSceneName: 'battle' })
+            await callApi('ChangeScene', { newSceneName: 'battle' })
         },
         events: {
             pointerover() {

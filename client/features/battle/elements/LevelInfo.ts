@@ -1,4 +1,4 @@
-import { changeDungeon } from '@/actions'
+import { callApi } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
@@ -45,7 +45,7 @@ export function LevelInfo(): PixiContainer {
         },
         alpha: 0,
         async onClick() {
-            await changeDungeon({ direction: -1 })
+            await callApi('ChangeDungeon', { direction: -1 })
         },
     })
     const rightButton = Text({
@@ -63,7 +63,7 @@ export function LevelInfo(): PixiContainer {
         },
         alpha: 0,
         async onClick() {
-            await changeDungeon({ direction: +1 })
+            await callApi('ChangeDungeon', { direction: +1 })
         },
     })
 

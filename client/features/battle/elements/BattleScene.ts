@@ -1,4 +1,4 @@
-import { startBattle } from '@/actions'
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
@@ -48,7 +48,7 @@ export function BattleScene(): PixiContainer {
     bindEnergy({ scene, container: energyContainer })
 
     setTimeout(() => bindDoors(container), 0)
-    setTimeout(() => startBattle(), 0)
+    setTimeout(() => callApi('StartBattle', undefined), 0)
 
     return container
 }

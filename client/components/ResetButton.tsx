@@ -1,4 +1,4 @@
-import { makeNewUser } from '@/actions'
+import { callApi } from '@/actions'
 import styled from '@/config/mystyled'
 
 const Root = styled.button`
@@ -14,7 +14,9 @@ const Root = styled.button`
 `
 
 export default function ResetButton(props: { username: string }): JSXElement {
-    return <Root onClick={() => makeNewUser({ username: props.username })}>
+    return <Root
+        onClick={() => callApi('MakeNewUser', { username: props.username })}
+    >
         ↺
     </Root>
 }

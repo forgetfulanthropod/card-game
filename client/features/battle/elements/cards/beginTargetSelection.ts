@@ -3,7 +3,7 @@ import { datum } from 'datums'
 import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
-import { playCard } from '@/actions'
+import { callApi } from '@/actions'
 import { localTree } from '@/data/localTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { PixiGraphics } from '@/elementsUtil'
@@ -51,7 +51,7 @@ export function beginTargetSelection(
             console.log('selected targets cursor')
             console.log(cardMeta)
 
-            await playCard({
+            await callApi('PlayCard', {
                 cardUid: cardEl.name, //cardMeta.id,
                 targetUids: [targets[0]],
             })
