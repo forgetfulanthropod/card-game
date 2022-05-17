@@ -2,19 +2,20 @@
 import type { RODatum } from 'datums'
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
+import { sortBy, uniq } from 'lodash'
 import type {
     DisplayObject,
     Filter as PixiFilter,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
-import { DisplayObject as PixiDisplayObject } from 'pixi.js'
-import { Renderer } from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
+    DisplayObject as PixiDisplayObject,
     Graphics as PixiGraphics,
     Loader as PixiLoader,
+    Renderer,
     Sprite as PixiSprite,
     Text as PixiText,
     Texture as PixiTexture,
@@ -454,11 +455,11 @@ export function If(
     onDestroy.push(condition.onChange(handleChange, true))
     return root
     function handleChange(val: boolean) {
-                root.children.forEach(c => c.destroy(true))
-                root.removeChildren()
-                if (val) {
-                    root.addChild(render())
-                }
+        root.children.forEach(c => c.destroy(true))
+        root.removeChildren()
+        if (val) {
+            root.addChild(render())
+        }
     }
 }
 
@@ -492,7 +493,7 @@ export function For<T extends { key: string | number }[]>(
             const c = render(it) as KeyedDisplayObject
             c.key = it.key
             return c
-    })
+        })
         const oldChildren = root.children
         root.removeChildren()
         const sortedChildren = sortBy([...newChildren, ...oldChildren], x =>
