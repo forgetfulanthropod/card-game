@@ -1,5 +1,4 @@
-import type { SCursor } from 'sbaobab'
-import type { Empty, Gamestate, InternalAction } from 'shared'
+import type { Empty, InternalAction } from 'shared'
 
 import { drawNewHand } from '@/gameState/battle/cards/drawNewHand'
 import { clearBlock } from '@/gameState/battle/clearBlock'
@@ -12,7 +11,7 @@ import { getBattleSceneIn } from '@/util'
 const DEBUG = false
 
 export const resetRound: InternalAction['resetRound'] = (
-    game: SCursor<Gamestate>,
+    game: Gamecursor,
     _args: Empty
 ): undefined => {
     const scene = getBattleSceneIn(game)

@@ -1,6 +1,4 @@
-import type { SCursor } from 'sbaobab'
 import type {
-    Gamestate,
     InternalAction,
     InternalActionName,
     NextAction,
@@ -16,7 +14,7 @@ const internalActions: InternalAction = { doNpcTurn, resetRound } as const
 // }
 
 export function step<K extends InternalActionName>(
-    game: SCursor<Gamestate>,
+    game: Gamecursor,
     action: NextAction<K>
 ): ReturnType<InternalAction[K]> {
     const func = internalActions[action.type]

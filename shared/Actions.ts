@@ -44,13 +44,11 @@ export interface Action {
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }
 
+export type Gamecursor = SCursor<Gamestate>
 /** A no-input game action */
 export interface InternalAction {
-    doNpcTurn(
-        game: SCursor<Gamestate>,
-        args: { index: number }
-    ): undefined | NextAction
-    resetRound(game: SCursor<Gamestate>, args: Empty): undefined
+    doNpcTurn(game: Gamecursor, args: { index: number }): undefined | NextAction
+    resetRound(game: Gamecursor, args: Empty): undefined
 }
 export type InternalActionName = keyof InternalAction
 /** Means there is nothing for the player to do right now. */

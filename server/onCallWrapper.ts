@@ -1,7 +1,6 @@
 import { clearHappened, getHappened, step } from 'game'
 import { sleep } from 'game/util'
-import type { SCursor } from 'sbaobab'
-import type { Gamestate, NextAction } from 'shared'
+import type { Gamecursor, NextAction } from 'shared'
 
 import { getApp } from './index'
 import { commit, emit, getGameStateCursor } from './treeUtils'
@@ -63,7 +62,7 @@ export function onCallWrapper<Args, ReturnType>(
 
 type Func<T> = (u: T) => Promise<unknown> | unknown
 async function doActionAndTakeSteps<T>(
-    game: SCursor<Gamestate>,
+    game: Gamecursor,
     f: Func<T>,
     args: T,
     options: CallOptions

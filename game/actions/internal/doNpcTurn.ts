@@ -1,5 +1,4 @@
-import type { SCursor } from 'sbaobab'
-import type { Gamestate, NextAction } from 'shared'
+import type { NextAction } from 'shared'
 
 import { checkBattleOverMut, handleMove } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
@@ -7,7 +6,7 @@ import { getBattleSceneIn } from '@/util'
 const TIME_BETWEEN_NPC_MOVES = 1000
 
 export function doNpcTurn(
-    game: SCursor<Gamestate>,
+    game: Gamecursor,
     args: { index: number }
 ): undefined | NextAction {
     const scene = getBattleSceneIn(game)
