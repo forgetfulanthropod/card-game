@@ -1,3 +1,4 @@
+import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
 import { callApi } from '@/actions'
@@ -10,6 +11,7 @@ import {
     getTexture,
     Sprite,
 } from '@/elementsUtil'
+import { brightBackLightIsShining } from '@/util'
 import { onUpdate } from '@/util/onUpdate'
 
 import { MainCharacterAnimation } from './Character'
@@ -107,17 +109,17 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 //     // blue: 1,
 // })
 
-// const preselectFilter = new OldFilmFilter({
-//     sepia: 0.02,
-//     noise: 0,
-//     noiseSize: 1,
-//     scratch: 0.5,
-//     scratchDensity: 0.3,
-//     scratchWidth: 1,
-//     vignetting: 0.682,
-//     vignettingAlpha: 0.669,
-//     vignettingBlur: 0.3,
-// })
+const darkenFilter = new OldFilmFilter({
+    sepia: 0,
+    noise: 0,
+    noiseSize: 1,
+    scratch: 0.5,
+    scratchDensity: 0.3,
+    scratchWidth: 1,
+    vignetting: 0.8,
+    vignettingAlpha: 0.669,
+    vignettingBlur: 0.3,
+})
 
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
@@ -186,6 +188,11 @@ export function SelectedCharacters(): PixiContainer {
                     ],
                 })
             }) ?? []
+
+        brightBackLightIsShining.onChange((is, _, unsub) => {
+            unsub()
+            characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
+        })
 
         root.removeChildren()
         if (Array.isArray(characters) && characters.length > 0)
