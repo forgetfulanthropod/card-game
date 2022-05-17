@@ -1,6 +1,5 @@
 import type {
     BlessingName,
-    CharacterMove,
     Orb,
     OwnedCharacterStats,
     Rulebook,
@@ -21,7 +20,6 @@ export interface Action {
     ChangeScene: (args: { newSceneName: SceneType }) => void
 
     ChooseDoor: (args: { door: SpecialDoorName }) => void
-    ClaimLoot: (args: { walletAddress: string }) => void
 
     EndTurn: (args: Empty) => void
     ExitDungeon: () => void
@@ -36,7 +34,6 @@ export interface Action {
 
     RulebookAction: (args: RulebookArgs) => void
 
-    SelectMove: (args: { move: CharacterMove }) => void
     StartBattle: () => void
 
     ToggleBlessing: (args: { name: BlessingName }) => void
