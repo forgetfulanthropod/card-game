@@ -1,8 +1,10 @@
 import { actions } from 'game'
-const all = [...vals(actions), maybeMakeUser]
+import { makeNewUser as makeNewUser } from 'makeNewUser'
 
 import { maybeMakeUser } from './maybeMakeUser'
 import { onCallWrapper } from './onCallWrapper'
+
+const all = [...vals(actions), maybeMakeUser, makeNewUser]
 const noCommit: unknown[] = [actions.hello, maybeMakeUser]
 const wholeRequests: unknown[] = [maybeMakeUser]
 

@@ -1,7 +1,7 @@
 import type { Gamestate } from 'shared'
 
-import { addNewUser } from './addNewUser'
 import { setSocketId } from './index'
+import { makeNewUser } from './makeNewUser'
 // import { hasUser } from '@/database'
 import {
     getDb,
@@ -22,7 +22,7 @@ export const maybeMakeUser = (req: any): Gamestate => {
     const userCursor = getRootCursor().select('users')
     if (!userCursor.exists(username)) {
         logger.info(`adding user ${username} with initial gamestate`)
-        addNewUser({ username })
+        makeNewUser({ username })
     }
     // commit(getRootCursor().select('users').select(username), username)
     return userCursor.get(username)

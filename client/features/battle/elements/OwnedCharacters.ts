@@ -13,29 +13,27 @@ export function OwnedCharacters(): PixiContainer {
 
     makeSelectionIndicators(characters, selectedCharacters)
 
-    const hoverTexts = [
-        Text({
-            text: `OK!`,
-            anchor: [0, 0],
-            y: 5,
-            style: {
-                fontFamily: 'VT323',
-                fontSize: 60,
-                fill: '#fff',
-                stroke: '#333',
-                strokeThickness: 5,
-            },
-        }),
-    ]
+    const hoverText = Text({
+        text: `OK!`,
+        anchor: [0, 0],
+        y: 5,
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 60,
+            fill: '#fff',
+            stroke: '#333',
+            strokeThickness: 5,
+        },
+    })
 
-    characters.forEach((c, i) =>
+    characters.forEach(c =>
         c.children[0].on('mouseover', () => {
-            c.addChild(hoverTexts[i])
+            c.addChild(hoverText)
         })
     )
-    characters.forEach((c, i) =>
+    characters.forEach(c =>
         c.children[0].on('mouseout', () => {
-            c.removeChild(hoverTexts[i])
+            c.removeChild(hoverText)
         })
     )
 
