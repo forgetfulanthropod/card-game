@@ -28,7 +28,7 @@ export default function TestCounter(): JSXElement {
         onClick={async () => {
             start.current = Date.now()
             console.log('making request to incrementTestCounter')
-            await callApi('IncrementTestCounter', undefined)
+            await callApi('IncrementTestCounter', {})
             console.log(
                 'request returned after',
                 (Date.now() - start.current) / 1000,

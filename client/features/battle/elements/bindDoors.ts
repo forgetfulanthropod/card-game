@@ -27,7 +27,7 @@ export function bindDoors(parent: PixiContainer) {
                     d => () => callApi('ChooseDoor', { door: d })
                 ),
                 descriptions: doors.descriptions,
-                exit: () => callApi('ExitDungeon', undefined),
+                exit: () => callApi('ExitDungeon', {}),
             })
             parent.addChild(doorsContainer)
         }

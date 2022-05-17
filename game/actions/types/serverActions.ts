@@ -1,12 +1,12 @@
-import type { Action, Func } from 'shared'
+import type { Action, Func, Gamestate } from 'shared'
 
 export type ServerActions = { [K in keyof Action]: ServerAction<Action[K]> }
+export type GameActions = { [K in keyof Action]: GameAction<Action[K]> }
+
+type GameAction<T extends Func> = {
+    args: Parameters<T>[0] & { gamestate: Gamestate }
+}
 
 type ServerAction<T extends Func> = (
-    args: Objify<Parameters<T>[0]> & { username: string; socketId: string }
+    args: Parameters<T>[0] & { username: string; socketId: string }
 ) => ReturnType<T>
-
-type Objify<Type> = Type extends Obj ? Type : Record<string, never>
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Obj = Record<string | number | symbol, any>

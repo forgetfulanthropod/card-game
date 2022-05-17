@@ -48,7 +48,7 @@ export function BattleScene(): PixiContainer {
     bindEnergy({ scene, container: energyContainer })
 
     setTimeout(() => bindDoors(container), 0)
-    setTimeout(() => callApi('StartBattle', undefined), 0)
+    setTimeout(() => callApi('StartBattle', {}), 0)
 
     return container
 }

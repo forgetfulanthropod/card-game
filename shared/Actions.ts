@@ -9,36 +9,36 @@ import type {
 import type { CharacterUid, Gamestate } from './datamodel'
 
 export interface Action {
-    ActivateOrb: (args: { characterUid: CharacterUid; orb: Orb }) => void
+    ActivateOrb: (_: { characterUid: CharacterUid; orb: Orb }) => void
 
-    AddSelected: (args: {
+    AddSelected: (_: {
         character: OwnedCharacterStats
         index: CharacterPlaceIndex
     }) => void
-    ChangeDungeon: (args: { direction: -1 | 1 }) => void
+    ChangeDungeon: (_: { direction: -1 | 1 }) => void
 
-    ChangeScene: (args: { newSceneName: SceneType }) => void
+    ChangeScene: (_: { newSceneName: SceneType }) => void
 
-    ChooseDoor: (args: { door: SpecialDoorName }) => void
+    ChooseDoor: (_: { door: SpecialDoorName }) => void
 
-    EndTurn: (args: Empty) => void
-    ExitDungeon: () => void
-    Hello: () => string
-    IncrementTestCounter: () => void
-    MakeNewUser: (args: { username: string }) => void
+    EndTurn: (_: Empty) => void
+    ExitDungeon: (_: Empty) => void
+    Hello: (_: Empty) => string
+    IncrementTestCounter: (_: Empty) => void
+    MakeNewUser: (_: { username: string }) => void
 
-    MaybeMakeUser: (args: { username: string }) => Gamestate
+    MaybeMakeUser: (_: { username: string }) => Gamestate
 
-    PlayCard: (args: { cardUid: string; targetUids: CharacterUid[] }) => void
-    ResetRandomSeed: () => void
+    PlayCard: (_: { cardUid: string; targetUids: CharacterUid[] }) => void
+    ResetRandomSeed: (_: Empty) => void
 
-    RulebookAction: (args: RulebookArgs) => void
+    RulebookAction: (_: RulebookArgs) => void
 
-    StartBattle: () => void
+    StartBattle: (_: Empty) => void
 
-    ToggleBlessing: (args: { name: BlessingName }) => void
+    ToggleBlessing: (_: { name: BlessingName }) => void
 
-    ToggleStance: (args: { characterUid: CharacterUid }) => void
+    ToggleStance: (_: { characterUid: CharacterUid }) => void
 }
 
 type Empty = Record<string, never>
@@ -51,7 +51,7 @@ type RulebookArgs =
     | { do: 'choose'; name: string }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Func = (...args: any[]) => any
+export type Func = (..._: any[]) => any
 
 export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 
