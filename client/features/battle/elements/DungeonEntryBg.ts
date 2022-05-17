@@ -1,42 +1,47 @@
+import { getTree } from '@/data/rootTree'
 import type { PlayablePixiSprite } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
-import { localBus } from '@/util'
+import { bgLoopEnded, waitingForSceneExitAnimationToFinish } from '@/util'
 
 import bgOnTransitionSrc from '../assets/backgrounds/Kaiju_Character_select_barf.mp4'
 import bgSrc from '../assets/backgrounds/Kaiju_Character_select_loop.mp4'
 import Background from './background'
 
+const TIME_FOR_OUTRO_MS = 2500
 export function DungeonEntryBg() {
     const bgOnTransition = Background({
         scale: 1,
         src: bgOnTransitionSrc,
     }) as PlayablePixiSprite
 
-    localBus.bgLoopEnded.on(() => console.log('bg loop cycle event  hi'))
+    bgLoopEnded.onChange(() => console.log('bg loop cycle event  hi'))
+    // localBus.bgLoopEnded.on(() => console.log('bg loop cycle event  hi'))
+    const sceneTypeCursor = getTree().select('scene', 'name')
 
-    localBus.sceneChange.on(async sceneType => {
-        if (sceneType !== 'battle')
+    sceneTypeCursor.once('update', () => {
+        waitingForSceneExitAnimationToFinish.set(true)
+
+        if (sceneTypeCursor.get() !== 'battle')
             console.error('WE CAN ONLY GO TO BATTLE :CRY:')
 
-        const unsubCycleFinish = localBus.bgLoopEnded.on(() => {
-            unsubCycleFinish()
+        bgLoopEnded.onChange((_, __, unsub) => {
+            unsub()
 
             root.children.forEach(c => c.destroy())
             root.removeChildren()
 
-            const unsubFinished = localBus.bgLoopEnded.on(() => {
+            const unsubFinished = bgLoopEnded.onChange(() => {
                 unsubFinished()
-
-                resolve()
             })
 
             bgOnTransition.play()
+            setTimeout(
+                () => waitingForSceneExitAnimationToFinish.set(false),
+                TIME_FOR_OUTRO_MS
+            )
 
             root.addChild(bgOnTransition)
         })
-
-        let resolve: () => void
-        return new Promise(r => (resolve = r))
     })
 
     const root = Container({ children: [Background({ scale: 1, src: bgSrc })] })

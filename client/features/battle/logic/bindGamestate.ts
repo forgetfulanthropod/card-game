@@ -6,7 +6,7 @@ import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
-import { localBus } from '@/util'
+import { waitingForSceneExitAnimationToFinish } from '@/util'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
@@ -39,8 +39,21 @@ function bindScene(app: PixiApplication) {
         const sceneType = sceneTypeCursor.get()
 
         if (lastScene != null) {
-            await localBus.sceneChange(sceneType)
-            await animateTo(lastScene, sceneType)
+            await new Promise(resolve => {
+                setTimeout(resolve, 0)
+            })
+            if (waitingForSceneExitAnimationToFinish.val === true) {
+                await new Promise(resolve =>
+                    waitingForSceneExitAnimationToFinish.onChange(
+                        (_, __, unsub) => {
+                            unsub()
+                            resolve(null)
+                        }
+                    )
+                )
+            }
+
+            await transitionSceneTo(lastScene, sceneType)
 
             app.stage.removeChild(lastScene)
         }
@@ -64,7 +77,9 @@ const twistFilter = new TwistFilter({
 twistFilter.offset.x = BASE_WIDTH / 2
 twistFilter.offset.y = BASE_HEIGHT / 2
 
-async function animateTo(
+export const TRANSITION_OUT_TIME = 1
+
+async function transitionSceneTo(
     sceneEl: PixiContainer,
     sceneType: SceneType
 ): Promise<void> {
@@ -72,11 +87,17 @@ async function animateTo(
         sceneEl.filters = [twistFilter]
 
         await Tweener.add(
-            { target: twistFilter, duration: 1, ease: Easing.easeInExpo },
+            {
+                target: twistFilter,
+                duration: TRANSITION_OUT_TIME,
+                ease: Easing.easeInExpo,
+            },
             {
                 radius: 1080,
             }
-        )
+        ).then(() => {
+            twistFilter.radius = 0
+        })
     }
 }
 

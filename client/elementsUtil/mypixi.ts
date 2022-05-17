@@ -23,7 +23,7 @@ import {
 } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
 
-import { localBus } from '@/util'
+import { bgLoopEnded } from '@/util'
 
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
@@ -388,7 +388,7 @@ export function VideoBackground(args: {
 
     // source.loop = true // must do manually for event!
     source.addEventListener('ended', () => {
-        void localBus.bgLoopEnded()
+        bgLoopEnded.set(Date.now())
         void source.play()
     })
 

@@ -1,10 +1,4 @@
-import { createEventBus, slot } from 'ts-event-bus'
+import { datum } from 'datums'
 
-import type { SceneType } from '@/../shared'
-
-export const localBus = createEventBus({
-    events: {
-        sceneChange: slot<SceneType>(),
-        bgLoopEnded: slot<void>(),
-    },
-})
+export const bgLoopEnded = datum<number | null>(null)
+export const waitingForSceneExitAnimationToFinish = datum<boolean>(false)
