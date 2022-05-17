@@ -33,5 +33,5 @@ export const chooseDoor: GameActions['ChooseDoor'] = args => {
     clearAllEffects(scene)
     resetTurns(scene)
     putAllCardsInDrawPile(scene)
-    resetRound(args.game, undefined)
+    resetRound(args.game, {})
 }

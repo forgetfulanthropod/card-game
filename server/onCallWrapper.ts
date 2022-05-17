@@ -1,8 +1,7 @@
-import type { NextAction } from 'game'
 import { clearHappened, getHappened, step } from 'game'
 import { sleep } from 'game/util'
 import type { SCursor } from 'sbaobab'
-import type { Gamestate } from 'shared'
+import type { Gamestate, NextAction } from 'shared'
 
 import { getApp } from './index'
 import { commit, emit, getGameStateCursor } from './treeUtils'
@@ -74,8 +73,8 @@ async function doActionAndTakeSteps<T>(
     logger.info({ maybeNextAction })
     while (isNextAction(maybeNextAction)) {
         logger.info({ maybeNextAction })
-        await sleep(maybeNextAction.delay)
         updateClient(username, options)
+        await sleep(maybeNextAction.delay)
         maybeNextAction = step(game, maybeNextAction)
     }
     updateClient(username, options)
@@ -91,6 +90,7 @@ function updateClient(username: string, options: CallOptions) {
         commit(getGameStateCursor(username), username)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isNextAction(x: any): x is NextAction {
     return x?.delay != null
 }

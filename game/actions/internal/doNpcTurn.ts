@@ -1,10 +1,8 @@
 import type { SCursor } from 'sbaobab'
-import type { Gamestate } from 'shared'
+import type { Gamestate, NextAction } from 'shared'
 
 import { checkBattleOverMut, handleMove } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
-
-import type { NextAction } from './step'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
 
@@ -22,7 +20,7 @@ export function doNpcTurn(
 
     if (args.index >= nextMoves.length - 1) {
         return {
-            args: undefined,
+            args: {},
             delay: TIME_BETWEEN_NPC_MOVES,
             type: 'resetRound',
         }
@@ -31,7 +29,6 @@ export function doNpcTurn(
         args: { index: args.index + 1 },
         delay: TIME_BETWEEN_NPC_MOVES,
         type: 'doNpcTurn',
-        origin: 'doNpcTurn',
     }
 }
 
