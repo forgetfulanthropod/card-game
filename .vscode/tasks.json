@@ -3,12 +3,7 @@
     "tasks": [
         {
             "label": "Do everything",
-            "dependsOn": [
-                "tsc all",
-                "esbuild all",
-                "esbuild server",
-                "run server"
-            ],
+            "dependsOn": ["tsc all", "esbuild all", "run server"],
             "dependsOrder": "parallel",
             "group": {
                 "kind": "build",
@@ -23,15 +18,17 @@
             "type": "shell",
             "command": "tsc --build --watch server game shared client",
             "problemMatcher": ["$tsc-watch"],
-            "group": "build"
+            "group": "build",
+            "presentation": {
+                "group": "group1"
+            }
         },
         {
             "label": "esbuild all",
             "type": "shell",
             "command": "node scripts/buildAll.mjs watch",
             "presentation": {
-                "group": "builders",
-                "clear": true
+                "group": "group1"
             }
         },
         {
