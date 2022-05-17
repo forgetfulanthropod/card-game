@@ -21,10 +21,14 @@ import {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+import { Tweener } from 'pixi-tweener'
 
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
 import { registerPixiInspector } from './pixiInspector'
+
+// ...
+
 // import * as PIXI from 'pixi.js'
 
 gsap.registerPlugin(PixiPlugin)
@@ -272,10 +276,12 @@ export function Application(args: {
     app.stage.scale.set(resW / 1920)
     app.ticker.maxFPS = 30
 
-    let frames = 0
-    const delay = 10_000
-    app.ticker.add(() => frames++)
-    setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
+    // const delay = 10_000
+    // let frames = 0
+    // app.ticker.add(() => frames++)
+    // setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
+
+    Tweener.init(app.ticker)
 
     setTimeout(function CornerEl() {
         const div = document.createElement('div')

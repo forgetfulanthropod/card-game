@@ -28,7 +28,7 @@ export function DungeonEntryScene(): PixiContainer {
             onUpdate(
                 selectedCharactersCursor,
                 selected => {
-                    startButton.visible = selected.length === 3
+                    startButton.visible = selected?.length === 3
                 },
                 true
             ),
