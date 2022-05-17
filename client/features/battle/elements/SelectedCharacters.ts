@@ -13,6 +13,88 @@ import { onUpdate } from '@/util/onUpdate'
 
 import { MainCharacterAnimation } from './Character'
 
+const defaultOwnedCharacters: OwnedCharacterStats[] = [
+    {
+        name: 'skeletonWarrior',
+        displayName: 'Skeleton Warrior',
+        isPc: true,
+        maxHealth: 10,
+        damage: 2,
+        constitution: 10,
+        strength: 2,
+        magic: 5,
+        dexterity: 5,
+        moves: [
+            { name: 'Sword Whack', types: ['BA'] },
+            { name: 'Rusty Poke', types: ['DOT2'] },
+        ],
+        learnableMoves: [
+            { minLevel: 2, name: 'Parry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Shield', types: ['BLK'] },
+        ],
+        modifier: 1,
+        level: 1,
+        uid: 'pc-1',
+        tokenId: '4',
+        nftName: 'skeletonWarrior-4',
+    },
+    {
+        name: 'frogKnight',
+        displayName: 'Frog Knight',
+        isPc: true,
+        maxHealth: 72,
+        damage: 8,
+        constitution: 72,
+        strength: 8,
+        magic: 5,
+        dexterity: 5,
+        moves: [
+            { name: 'Dutiful Stab', types: ['BA'] },
+            { name: 'Sword Slash', types: ['SL'] },
+        ],
+        learnableMoves: [
+            { minLevel: 2, name: 'Parry', types: ['DBF2'] },
+            { minLevel: 2, name: 'Shield', types: ['BLK'] },
+        ],
+        modifier: 1,
+        level: 1,
+        uid: 'pc-2',
+        tokenId: '4',
+        nftName: 'frogKnight-4',
+    },
+    {
+        name: 'mushroomFarmer',
+        displayName: 'Mushroom Farmer',
+        isPc: true,
+        maxHealth: 112,
+        damage: 8,
+        constitution: 112,
+        strength: 8,
+        magic: 9,
+        dexterity: 6,
+        moves: [
+            { name: 'Whomp', types: ['ROD1'] },
+            {
+                name: 'Cloud of Spores',
+                types: ['DOT1', 'ROD3'],
+            },
+            { name: 'Bash', types: ['BA'] },
+        ],
+        learnableMoves: [
+            {
+                minLevel: 2,
+                name: 'Tighten Fibers',
+                types: ['BLK'],
+            },
+        ],
+        modifier: 2,
+        level: 1,
+        uid: 'pc-3',
+        tokenId: '4',
+        nftName: 'mushroomFarmer-4',
+    },
+]
+
 // const preselectFilter = new AdjustmentFilter({
 //     contrast: 0,
 //     alpha: 0.542,
@@ -63,13 +145,30 @@ export function SelectedCharacters(): PixiContainer {
 
         const characters =
             charactersData.map((c, i) => {
-                const animation = MainCharacterAnimation(c)
+                const animation = MainCharacterAnimation(c, () => {
+                    const nextIndex =
+                        (defaultOwnedCharacters.findIndex(
+                            oc => oc.name === c.name
+                        ) +
+                            1) %
+                        3
+                    const nextChoice = defaultOwnedCharacters[nextIndex]
+                    console.log({ nextIndex, nextChoice })
+                    void addSelected({
+                        character: {
+                            ...nextChoice,
+                            uid: `pc-${i + 1}`,
+                        },
+                        index: i as CharacterPlaceIndex,
+                    })
+                })
 
                 if (animation != null) {
                     animation.x -= animation.width / 2
                     animation.y += animation.height / 2
                     // animation.filters = [preselectFilter]
-                    animation.filters = []
+                    // animation.filters = []
+                    animation.cursor = 'pointer'
                 }
 
                 return Container({
@@ -96,90 +195,9 @@ export function SelectedCharacters(): PixiContainer {
 
 function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
     if (charactersData.length === 0) {
-        const fillerData: OwnedCharacterStats[] = [
-            {
-                name: 'skeletonWarrior',
-                displayName: 'Skeleton Warrior',
-                isPc: true,
-                maxHealth: 10,
-                damage: 2,
-                constitution: 10,
-                strength: 2,
-                magic: 5,
-                dexterity: 5,
-                moves: [
-                    { name: 'Sword Whack', types: ['BA'] },
-                    { name: 'Rusty Poke', types: ['DOT2'] },
-                ],
-                learnableMoves: [
-                    { minLevel: 2, name: 'Parry', types: ['DBF2'] },
-                    { minLevel: 2, name: 'Shield', types: ['BLK'] },
-                ],
-                modifier: 1,
-                level: 1,
-                uid: 'skeletonWarrior-4',
-                tokenId: '4',
-                nftName: 'skeletonWarrior-4',
-            },
-            {
-                name: 'frogKnight',
-                displayName: 'Frog Knight',
-                isPc: true,
-                maxHealth: 72,
-                damage: 8,
-                constitution: 72,
-                strength: 8,
-                magic: 5,
-                dexterity: 5,
-                moves: [
-                    { name: 'Dutiful Stab', types: ['BA'] },
-                    { name: 'Sword Slash', types: ['SL'] },
-                ],
-                learnableMoves: [
-                    { minLevel: 2, name: 'Parry', types: ['DBF2'] },
-                    { minLevel: 2, name: 'Shield', types: ['BLK'] },
-                ],
-                modifier: 1,
-                level: 1,
-                uid: 'frogKnight-4',
-                tokenId: '4',
-                nftName: 'frogKnight-4',
-            },
-            {
-                name: 'mushroomFarmer',
-                displayName: 'Mushroom Farmer',
-                isPc: true,
-                maxHealth: 112,
-                damage: 8,
-                constitution: 112,
-                strength: 8,
-                magic: 9,
-                dexterity: 6,
-                moves: [
-                    { name: 'Whomp', types: ['ROD1'] },
-                    {
-                        name: 'Cloud of Spores',
-                        types: ['DOT1', 'ROD3'],
-                    },
-                    { name: 'Bash', types: ['BA'] },
-                ],
-                learnableMoves: [
-                    {
-                        minLevel: 2,
-                        name: 'Tighten Fibers',
-                        types: ['BLK'],
-                    },
-                ],
-                modifier: 2,
-                level: 1,
-                uid: 'mushroomFarmer-4',
-                tokenId: '4',
-                nftName: 'mushroomFarmer-4',
-            },
-        ]
         for (let index = charactersData.length; index <= 2; index++) {
             void addSelected({
-                character: fillerData[index],
+                character: defaultOwnedCharacters[index],
                 index: index as CharacterPlaceIndex,
             })
         }
