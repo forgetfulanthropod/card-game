@@ -3,6 +3,7 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
 import { cpSync, mkdirSync, rmSync } from 'fs'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { fileURLToPath } from 'url'
 
 const password = 'hackin'
 const buildDir = 'builds/client'
@@ -24,9 +25,10 @@ function makeSubstitutions() {
     }
 }
 
-if (import.meta.url === process.argv[1]) buildClient()
+if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
+    console.log('BUILDING')
     rmSync(buildDir, { recursive: true, force: true })
     mkdirSync(buildDir, { recursive: true })
     cpSync(publicDir, buildDir, { recursive: true })
