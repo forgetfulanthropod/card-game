@@ -19,8 +19,6 @@ export function DungeonEntryBg() {
         src: bgOnTransitionSrc,
     }) as PlayablePixiSprite
 
-    bgLoopEnded.onChange(() => console.log('bg loop cycle event  hi'))
-    // localBus.bgLoopEnded.on(() => console.log('bg loop cycle event  hi'))
     const sceneTypeCursor = getTree().select('scene', 'name')
 
     sceneTypeCursor.once('update', () => {
@@ -34,10 +32,6 @@ export function DungeonEntryBg() {
 
             root.children.forEach(c => c.destroy())
             root.removeChildren()
-
-            const unsubFinished = bgLoopEnded.onChange(() => {
-                unsubFinished()
-            })
 
             bgOnTransition.play()
             setTimeout(() => {

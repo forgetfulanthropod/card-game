@@ -388,24 +388,21 @@ export function VideoBackground(args: {
     source.muted = true
 
     // source.loop = true // must do manually for event!
-    source.addEventListener('ended', () => {
+    const endedCallback = () => {
         bgLoopEnded.set(Date.now())
         void source.play()
-    })
-
-    source.onanimationend = () => {
-        console.log('on animation start')
     }
+    source.addEventListener('ended', endedCallback)
 
-    const sprite = PixiSprite.from(
-        PixiTexture.from(r.source)
-    ) as PlayablePixiSprite
+    const sprite = Sprite({
+        src: PixiTexture.from(r.source),
+        onDestroy: [() => r.destroy()],
+        anchor: 0.5,
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2,
+    }) as PlayablePixiSprite
 
     sprite.play = source.play.bind(source)
-
-    sprite.anchor.set(0.5, 0.5)
-    sprite.x = BASE_WIDTH / 2
-    sprite.y = BASE_HEIGHT / 2
 
     void r.load().then(async () => {
         await new Promise(resolve => setTimeout(resolve, 0))

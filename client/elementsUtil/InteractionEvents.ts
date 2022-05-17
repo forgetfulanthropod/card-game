@@ -17,7 +17,7 @@ export function bindEvents(
 ) {
     if (events == null || Object.keys(events).length === 0) return
 
-    console.log('binding', events)
+    // console.log('binding', events)
 
     el.interactive = true
     //@ts-expect-error
