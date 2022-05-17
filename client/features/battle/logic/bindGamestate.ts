@@ -25,19 +25,18 @@ function bindScene(app: PixiApplication) {
     const sceneTypeCursor = getScene().select('name')
 
     sceneTypeCursor.on('update', () => {
-        setScene()
+        void setScene()
     })
 
-    setScene()
+    void setScene()
 
-    function setScene() {
+    async function setScene(): Promise<void> {
         const sceneType = sceneTypeCursor.get()
 
         if (lastScene != null) {
-            void animateTo(lastScene, sceneType).then(() => {
-                app.stage.removeChild(lastScene)
-            })
-            return
+            await animateTo(lastScene, sceneType)
+
+            app.stage.removeChild(lastScene)
         }
 
         if (sceneType === 'battle') {
