@@ -91,7 +91,7 @@ export type OwnedCharacterStats = CharacterStats &
 export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
 
 export type SceneHas = Readonly<{
-    name: SceneName
+    name: SceneType
 }> &
     Brandify
 
@@ -106,7 +106,7 @@ interface CraftingScene extends SceneHas {
     selectedRecipe: RecipeName
 }
 
-export type SceneName = 'map' | 'craft' | 'entry' | 'battle'
+export type SceneType = 'map' | 'craft' | 'entry' | 'battle'
 export type Scene = MapScene | BattleScene | CraftingScene | EntryScene
 
 export type CharacterStats = Readonly<{
