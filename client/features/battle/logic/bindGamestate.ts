@@ -72,74 +72,13 @@ async function animateTo(
         sceneEl.filters = [twistFilter]
 
         await Tweener.add(
-            { target: twistFilter, duration: 3, ease: Easing.easeInOutCubic },
+            { target: twistFilter, duration: 1, ease: Easing.easeInExpo },
             {
                 radius: 1080,
             }
         )
-
-        // debugger
-
-        // const startTime = Date.now()
-        // setInterval(() => {
-        //     darkenFilter.
-        // }, 33)
-
-        // await fromTo(
-        //     darkenFilter,
-        //     1,
-        //     {
-        //         contrast: 1,
-        //         brightness: 1,
-        //     },
-        //     {
-        //         contrast: 0,
-        //         brightness: 0.5,
-        //     }
-        // )
-
-        // await gsap.fromTo(
-        //     darkenFilter,
-        //     {
-        //         contrast: 1,
-        //         birghtness: 1,
-        //     },
-        //     {
-        //         contrast: 0,
-        //         birghtness: 0.5,
-        //         duration: 10,
-        //     }
-        // )
-
-        // debugger
     }
 }
-
-// function fromTo<T>(
-//     graphicsObject: T,
-//     //@seconds
-//     duration: number,
-//     from: Partial<T>,
-//     to: Partial<T>
-// ): Promise<void> {
-//     Object.keys(from).forEach(
-//         //@ts-expect-error
-//         fromKey => (graphicsObject[fromKey] = from[fromKey])
-//     )
-
-//     const app = getPixiApp()
-//     app.ticker.add(tween)
-
-//     app.ticker.remove(tween)
-
-//     const resolveOnComplete = (resolve: () => void) => {
-//         resolve()
-//     }
-
-//     return new Promise(resolveOnComplete)
-
-//     function tween() {}
-// }
 
 function bindBattleState(app: PixiApplication) {
     const stateCursor = getBattleScene().select('state')

@@ -7,9 +7,6 @@ import bgSrc from '../assets/backgrounds/Kaiju_Character_select_loop.mp4'
 import Background from './background'
 
 export function DungeonEntryBg() {
-    // if (!Loader.shared.resources.bgOnTransitionSrc)
-    //     Loader.shared.add('bgOnTransitionSrc', bgOnTransitionSrc)
-    // Loader.shared.load()
     const bgOnTransition = Background({
         scale: 1,
         src: bgOnTransitionSrc,
