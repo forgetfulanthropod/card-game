@@ -13,9 +13,9 @@ export function OwnedCharacters(): PixiContainer {
 
     makeSelectionIndicators(characters, selectedCharacters)
 
-    const hoverTexts = vals(getOwnedCharacters().get()).map((c, _i) => {
-        return Text({
-            text: `${c.points}`,
+    const hoverTexts = [
+        Text({
+            text: `OK!`,
             anchor: [0, 0],
             y: 5,
             style: {
@@ -25,8 +25,8 @@ export function OwnedCharacters(): PixiContainer {
                 stroke: '#333',
                 strokeThickness: 5,
             },
-        })
-    })
+        }),
+    ]
 
     characters.forEach((c, i) =>
         c.children[0].on('mouseover', () => {

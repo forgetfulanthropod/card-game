@@ -19,17 +19,7 @@ export const addSelected: AddSelected = args => {
             ...sel.slice(indexInselected + 1),
         ])
     else {
-        const totalPoints = [...allCharacters, c].reduce((acc, curr) => {
-            return acc + curr.points
-        }, 0)
-
-        const pointLimit = scene
-            .select('selectedLevel')
-            .select('pointLimit')
-            .get()
-
-        if (totalPoints <= pointLimit)
-            scene.apply('selectedCharacters', sel => [...sel, c])
+        scene.apply('selectedCharacters', sel => [...sel, c])
     }
     // debugger
 }

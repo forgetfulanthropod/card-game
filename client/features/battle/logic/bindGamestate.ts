@@ -1,3 +1,5 @@
+import type { SceneType } from 'shared'
+
 import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 
@@ -29,9 +31,15 @@ function bindScene(app: PixiApplication) {
     setScene()
 
     function setScene() {
-        if (lastScene !== null) app.stage.removeChild(lastScene)
-
         const sceneType = sceneTypeCursor.get()
+
+        if (lastScene != null) {
+            void animateTo(lastScene, sceneType).then(() => {
+                app.stage.removeChild(lastScene)
+            })
+            return
+        }
+
         if (sceneType === 'battle') {
             lastScene = BattleScene()
             bindBattleState(app)
@@ -42,6 +50,14 @@ function bindScene(app: PixiApplication) {
         }
         app.stage.addChild(lastScene)
     }
+}
+
+async function animateTo(
+    _sceneEl: PixiContainer,
+    _sceneType: SceneType
+): Promise<void> {
+    //TODO:STUB ALERT
+    return await new Promise(resolve => resolve())
 }
 
 function bindBattleState(app: PixiApplication) {

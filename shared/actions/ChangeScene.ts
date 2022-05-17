@@ -1,3 +1,3 @@
-import type { SceneName } from '..'
+import type { SceneType } from '..'
 
-export type ChangeScene = (args: { newSceneName: SceneName }) => void
+export type ChangeScene = (args: { newSceneName: SceneType }) => void

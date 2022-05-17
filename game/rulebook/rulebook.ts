@@ -13,13 +13,13 @@ import { dungeonRooms } from './dungeonRooms'
 import { eventTriggersMap } from './eventTriggersMap'
 
 const dungeonLevels: DungeonLevel[] = [
-    { name: 'Hooligan’s Bluff', num: 1, pointLimit: 20, modifier: 1 },
-    { name: 'The Matcha Caves', num: 2, pointLimit: 40, modifier: 2 },
-    { name: 'Fort Skeleton', num: 3, pointLimit: 65, modifier: 3 },
+    { name: 'Skelepit Dungeon', num: 0, modifier: 1 },
+    { name: 'Hooligan’s Bluff', num: 1, modifier: 1 },
+    { name: 'The Matcha Caves', num: 2, modifier: 2 },
+    { name: 'Fort Skeleton', num: 3, modifier: 3 },
     {
         name: 'The Ninth Trash Hole of Hell',
         num: 4,
-        pointLimit: 100,
         modifier: 5,
     },
 ]
