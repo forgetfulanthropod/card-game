@@ -1,15 +1,12 @@
 import type { GameActions } from '@serverActions'
 
-import {
-    getNpcMoves,
-    getRoom,
-    modifyRoom,
-    resetRound,
-} from '@/gameState/battle'
+import { getNpcMoves, getRoom, modifyRoom } from '@/gameState/battle'
 import { putAllCardsInDrawPile } from '@/gameState/battle/cards/putAllCardsInDrawPile'
 import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
 import { resetTurns } from '@/gameState/battle/resetTurns'
 import { getBattleSceneIn, objFilter } from '@/util'
+
+import { resetRound } from './internal/resetRound'
 
 export const chooseDoor: GameActions['ChooseDoor'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -36,5 +33,5 @@ export const chooseDoor: GameActions['ChooseDoor'] = args => {
     clearAllEffects(scene)
     resetTurns(scene)
     putAllCardsInDrawPile(scene)
-    resetRound(scene)
+    resetRound(args.game, {})
 }

@@ -1,7 +1,7 @@
 import type { SCursor } from 'sbaobab'
-import type { BattleCursor, EntryScene, Gamestate, NetworkEvent } from 'shared'
+import type { BattleCursor, EntryScene, NetworkEvent } from 'shared'
 
-export function getBattleSceneIn(game: SCursor<Gamestate>): BattleCursor {
+export function getBattleSceneIn(game: Gamecursor): BattleCursor {
     const scene = game.select('scene')
     if (scene.get('name') !== 'battle') {
         throw Error('getBattleScene called when not in battle scene')
@@ -9,7 +9,7 @@ export function getBattleSceneIn(game: SCursor<Gamestate>): BattleCursor {
     return scene as BattleCursor
 }
 
-export function getEntrySceneIn(game: SCursor<Gamestate>): SCursor<EntryScene> {
+export function getEntrySceneIn(game: Gamecursor): SCursor<EntryScene> {
     const scene = game.select('scene')
     if (scene.get('name') !== 'entry') {
         throw Error('getEntryScene called when not in entry scene')

@@ -5,7 +5,6 @@ import type {
     Characters,
     Door,
     DungeonName,
-    Gamestate,
 } from 'shared'
 import type { SpecialDoorName } from 'shared'
 import type { RoomOutcomes } from 'shared'
@@ -148,7 +147,7 @@ export function getRoom(args: {
     door: SpecialDoorName
     dungeonName: DungeonName
     roomsPassed: number
-    game: SCursor<Gamestate>
+    game: Gamecursor
 }): Room {
     const { specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
     const { door, dungeonName, roomsPassed } = args

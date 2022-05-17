@@ -17,10 +17,11 @@ global.logger = winston.createLogger({
         winston.format.colorize(),
         winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        winston.format.json(),
         winston.format.printf(
             (info: winston.Logform.TransformableInfo) =>
-                `${info.timestamp} [${info.level}] [${gitBranch}]: ${info.message}`
+                `${info.timestamp} [${
+                    info.level
+                }] [${gitBranch}]: ${JSON.stringify(info.message)}`
         )
     ),
     transports: [

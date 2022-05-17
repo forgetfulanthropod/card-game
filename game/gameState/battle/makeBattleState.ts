@@ -1,10 +1,4 @@
-import type { SCursor } from 'sbaobab'
-import type {
-    BattleScene,
-    DungeonName,
-    Gamestate,
-    OwnedCharacterStats,
-} from 'shared'
+import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'
@@ -12,7 +6,7 @@ import { makeCharacters } from './characterManagement'
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
     dungeonName?: DungeonName
-    game: SCursor<Gamestate>
+    game: Gamecursor
 }): BattleScene {
     const allCharacters = makeCharacters(
         args?.chosen,

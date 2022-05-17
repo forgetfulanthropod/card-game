@@ -2,7 +2,7 @@ import { memoize } from 'lodash'
 import { JSONFile, Low } from 'lowdb'
 import type { SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
-import type { Gamestate, NetworkEvent } from 'shared'
+import type { Gamecursor, Gamestate, NetworkEvent } from 'shared'
 
 import { getIo, getSocketId } from './index'
 const db = new Low<{ users: Record<string, Gamestate> }>(
@@ -17,7 +17,7 @@ export function getDb() {
     return db
 }
 
-export function getGameStateCursor(username: string): SCursor<Gamestate> {
+export function getGameStateCursor(username: string): Gamecursor {
     return getRootCursor().select('users', username)
 }
 

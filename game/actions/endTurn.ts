@@ -1,17 +1,26 @@
-import type { GameActions } from '@serverActions'
+import type { NextAction } from 'shared'
 
-import { doNpcTurns, getNpcMoves, resetRound } from '@/gameState/battle'
+import { getNpcMoves } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
 
 import { endRound } from './endRound'
+const TIME_AFTER_PLAYER_MOVE = 1000
 
-export const endTurn: GameActions['EndTurn'] = async args => {
+// GameActions['EndTurn']
+export const endTurn = (args: { game: Gamecursor }): NextAction => {
     const scene = getBattleSceneIn(args.game)
 
     endRound(scene)
-
-    await doNpcTurns(scene)
-
     scene.select('nextNpcMoves').set(getNpcMoves(scene))
-    resetRound(scene)
+    return {
+        type: 'doNpcTurn',
+        args: { index: 0 },
+        delay: TIME_AFTER_PLAYER_MOVE,
+    }
+
+    // await doNpcTurns(scene)
+
+    // resetRound(scene)
 }
+
+export function doInternalAction() {}
