@@ -23,8 +23,6 @@ import { spineAssets } from './spineAssets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
-export type CharacterName = keyof typeof characterAssets
-
 const basicAssets = {
     fishstick,
     potion,

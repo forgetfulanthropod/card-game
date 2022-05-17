@@ -29,10 +29,7 @@ export function interpretActions({
     scene: BattleCursor
 }) {
     const locals = localsFromCard(card, scene)
-    const explanation = explainActions(card.actions, locals)
-    //DEBUG
-    console.log(explanation)
-    //END DEBUG
+    // const explanation = explainActions(card.actions, locals)
     executeActions({ card, targetUids, scene, locals })
 }
 

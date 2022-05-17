@@ -1,6 +1,6 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { gsap } from 'gsap'
-import type { CharacterClass, CharacterUid, Pile } from 'shared'
+import type { CharacterClass, Pile } from 'shared'
 import type { Card } from 'shared'
 
 import { getBattleScene } from '@/data/rootTree'
@@ -14,7 +14,7 @@ import { Container, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
-import { keys, vals } from '@/util'
+import { keys } from '@/util'
 
 import { getCardTypeSrc } from '../../logic/assetGetters'
 import { beginTargetSelection } from './beginTargetSelection'
@@ -304,26 +304,6 @@ export function getNullAnimation() {
     return gsap.to({}, 0, {})
 }
 
-function getFrontFriendUid(): CharacterUid {
-    const frontFriend = vals(getBattleScene().get('allCharacters'))
-        .sort((a, b) => b.x - a.x)
-        .find(c => c.isPc && c.health > 0)
-
-    if (frontFriend == null) throw new Error('there is no enemy...')
-
-    return frontFriend.uid
-}
-
-function getFrontEnemyUid(): CharacterUid {
-    const frontEnemy = vals(getBattleScene().get('allCharacters'))
-        .sort((a, b) => a.x - b.x)
-        .find(c => !c.isPc && c.health > 0)
-
-    if (frontEnemy == null) throw new Error('there is no enemy...')
-
-    return frontEnemy.uid
-}
-
 const RIGHT_TO_LEFT = 1
 const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12
@@ -333,7 +313,7 @@ const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
 
 type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
 
-export function getXYRotationScaleForNthCard(
+function getXYRotationScaleForNthCard(
     n: number,
     numCardsInHand: number,
     cardFrameTexture: PixiTexture

@@ -1,27 +1,12 @@
 import { startCase, upperFirst } from 'lodash'
 import { Loader } from 'pixi.js'
-import type {
-    CardId,
-    CardType,
-    CharacterName,
-    EffectType,
-    OrbType,
-} from 'shared'
+import type { CardType, CharacterName, EffectType, OrbType } from 'shared'
 
 import type { PixiTexture } from '@/elementsUtil'
 
 import type { AssetKey } from './AssetLoader'
-import type { CardArtAssetId, CardTypeAssetId } from './cardAssets'
+import type { CardTypeAssetId } from './cardAssets'
 import type { OrbAssetId } from './orbAssets'
-
-export function getCardSrc(cardId: CardId): PixiTexture {
-    const assetId = `card${startCase(cardId).replace(
-        / /g,
-        ''
-    )}` as CardArtAssetId
-
-    return getTexture(assetId)
-}
 
 export function getCardTypeSrc(cardType: CardType): PixiTexture {
     const assetId = `cardType${startCase(cardType)}` as CardTypeAssetId
@@ -55,8 +40,4 @@ export function getTexture(assetId: AssetKey): PixiTexture {
 }
 export function hasTexture(assetId: AssetKey): boolean {
     return Loader.shared.resources?.[assetId] != null
-}
-
-export function getData(assetId: AssetKey): unknown {
-    return Loader.shared.resources?.[assetId]?.data
 }

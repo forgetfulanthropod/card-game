@@ -245,7 +245,3 @@ export function putUpDoors(scene: SCursor<BattleScene>): void {
 function makeUid(): string {
     return 'charUid-fromDoors-' + srandom().toString().slice(2, 6)
 }
-
-function randCoords() {
-    return { x: srandInt(50, 95), y: srandInt(40, 80) }
-}

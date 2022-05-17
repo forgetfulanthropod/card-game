@@ -6,9 +6,7 @@ type ServerAction<T extends Func> = (
     args: Objify<Parameters<T>[0]> & { username: string; socketId: string }
 ) => ReturnType<T>
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Empty {}
-type Objify<Type> = Type extends Obj ? Type : Empty
+type Objify<Type> = Type extends Obj ? Type : Record<string, never>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Obj = Record<string | number | symbol, any>
