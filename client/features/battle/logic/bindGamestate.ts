@@ -6,6 +6,7 @@ import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT } from '@/elementsUtil'
 import { BASE_WIDTH } from '@/elementsUtil'
+import { localBus } from '@/util'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
@@ -38,6 +39,7 @@ function bindScene(app: PixiApplication) {
         const sceneType = sceneTypeCursor.get()
 
         if (lastScene != null) {
+            await localBus.sceneChange(sceneType)
             await animateTo(lastScene, sceneType)
 
             app.stage.removeChild(lastScene)

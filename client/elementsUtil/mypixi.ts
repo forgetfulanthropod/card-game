@@ -23,6 +23,8 @@ import {
 } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
 
+import { localBus } from '@/util'
+
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
 import { registerPixiInspector } from './pixiInspector'
@@ -368,17 +370,38 @@ export function Graphics(args: GraphicsArgs): PixiGraphics {
     return g
 }
 
+export type PlayablePixiSprite = PixiSprite & { play: () => void }
+
 export function VideoBackground(args: {
     name?: string
     scale: number
     src: string
-}): PixiSprite {
-    const r = new PixiVideoResource(args.src, { updateFPS: 30 })
+    autoPlay?: boolean
+}): PlayablePixiSprite {
+    const r = new PixiVideoResource(args.src, {
+        updateFPS: 30,
+        autoPlay: args.autoPlay ?? true,
+    })
 
     const source = r.source as HTMLVideoElement
     source.muted = true
-    source.loop = true
-    const sprite = PixiSprite.from(PixiTexture.from(r.source))
+
+    // source.loop = true // must do manually for event!
+    source.addEventListener('ended', () => {
+        void localBus.bgLoopEnded()
+        void source.play()
+    })
+
+    source.onanimationend = () => {
+        console.log('on animation start')
+    }
+
+    const sprite = PixiSprite.from(
+        PixiTexture.from(r.source)
+    ) as PlayablePixiSprite
+
+    sprite.play = source.play.bind(source)
+
     sprite.anchor.set(0.5, 0.5)
     sprite.x = BASE_WIDTH / 2
     sprite.y = BASE_HEIGHT / 2
@@ -393,6 +416,8 @@ export function VideoBackground(args: {
             // too square
             sprite.scale.set(BASE_WIDTH / sprite.width)
         }
+
+        sprite.on('animationEnd', () => {})
     })
     // sprite.width = BASE_WIDTH * args.scale
     // sprite.height = BASE_HEIGHT * args.scale
