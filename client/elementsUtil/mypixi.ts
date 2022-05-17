@@ -238,12 +238,17 @@ function applyDisplayObjectArgs(
     }
 
     if (args.onDestroy != null) {
-        const destroy = el.destroy
-        el.destroy = (...destroyArgs) => {
-            destroy.call(el, ...destroyArgs)
-            args.onDestroy?.forEach(cb => cb())
-        }
+        el.on('destroyed', () => {
+            args?.onDestroy?.forEach(cb => cb())
+        })
     }
+    // if (args.onDestroy != null) {
+    //     const destroy = el.destroy
+    //     el.destroy = (...destroyArgs) => {
+    //         destroy.call(el, ...destroyArgs)
+    //         args.onDestroy?.forEach(cb => cb())
+    //     }
+    // }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
@@ -521,9 +526,11 @@ export function For<T extends { key: string | number }[]>(
 
 function duplicated<T>(arr: T[]): T[] {
     const seen = new Set<T>()
-    return arr.filter(x => {
-        if (seen.has(x)) return true
+    const dups = new Set<T>()
+    arr.forEach(x => {
+        if (seen.has(x)) dups.add(x)
         seen.add(x)
         return false
     })
+    return Array.from(dups)
 }
