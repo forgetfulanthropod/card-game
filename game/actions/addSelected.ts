@@ -13,12 +13,17 @@ export const addSelected: ServerActions['AddSelected'] = args => {
     const indexInSelected = allCharacters.findIndex(
         character => c.uid === character.uid
     )
-    if (indexInSelected === -1) {
+    if (indexInSelected === -1 || indexInSelected === args.index) {
         scene.apply('selectedCharacters', s => {
             const newS = [...s]
             newS[args.index] = c
+            logger.info(JSON.stringify({ s }))
+            logger.info('\n\n\n')
+            logger.info(JSON.stringify({ newS }))
             return newS
         })
+    } else {
+        logger.warn('tried to add already selected character!')
     }
     // debugger
 }
