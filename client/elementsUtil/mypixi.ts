@@ -469,7 +469,8 @@ interface KeyedContainer extends PixiContainer {
 }
 export function For<T extends { key: string | number }[]>(
     items: RODatum<T>,
-    render: (item: T[number]) => DisplayObject
+    render: (item: T[number]) => DisplayObject,
+    position?: (index: number) => { x?: number; y?: number }
 ): PixiContainer {
     const onDestroy: Callback[] = []
     const root = Container({ children: [], onDestroy }) as KeyedContainer
@@ -487,19 +488,28 @@ export function For<T extends { key: string | number }[]>(
                 root.removeChild(c)
             }
         })
-        const curKeys = root.children.map(c => c.key)
-        const newItems = items.filter(it => !curKeys.includes(it.key))
+        const oldChildren = root.children.filter(c => keys.includes(c.key))
+        const oldKeys = oldChildren.map(c => c.key)
+        const newItems = items.filter(it => !oldKeys.includes(it.key))
         const newChildren = newItems.map(it => {
             const c = render(it) as KeyedDisplayObject
             c.key = it.key
             return c
         })
-        const oldChildren = root.children
+        // redundant filter is necessary because children doesn't necessarily update immediately
         root.removeChildren()
         const sortedChildren = sortBy([...newChildren, ...oldChildren], x =>
             keys.indexOf(x.key)
         )
-        root.addChild(...sortedChildren)
+        if (sortedChildren.length > 0) root.addChild(...sortedChildren)
+        if (position != null) {
+            for (let i = 0; i < root.children.length; i++) {
+                const c = root.children[i]
+                const { x, y } = position(i)
+                if (x != null) c.x = x
+                if (y != null) c.y = y
+            }
+        }
     }
 }
 
