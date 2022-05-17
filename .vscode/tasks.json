@@ -16,7 +16,7 @@
         {
             "label": "tsc all",
             "type": "shell",
-            "command": "tsc --build --watch server game shared client",
+            "command": "./node_modules/.bin/tsc --build --watch server game shared client",
             "problemMatcher": ["$tsc-watch"],
             "group": "build",
             "presentation": {
