@@ -1,7 +1,11 @@
+import { TwistFilter } from 'pixi-filters'
+import { Easing, Tweener } from 'pixi-tweener'
 import type { SceneType } from 'shared'
 
 import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
+import { BASE_HEIGHT } from '@/elementsUtil'
+import { BASE_WIDTH } from '@/elementsUtil'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
@@ -51,13 +55,89 @@ function bindScene(app: PixiApplication) {
     }
 }
 
+const twistFilter = new TwistFilter({
+    angle: 4,
+    radius: 0,
+})
+twistFilter.offset.x = BASE_WIDTH / 2
+twistFilter.offset.y = BASE_HEIGHT / 2
+
 async function animateTo(
-    _sceneEl: PixiContainer,
-    _sceneType: SceneType
+    sceneEl: PixiContainer,
+    sceneType: SceneType
 ): Promise<void> {
-    //TODO:STUB ALERT
-    return await new Promise(resolve => resolve())
+    if (sceneType === 'battle') {
+        sceneEl.filters = [twistFilter]
+
+        await Tweener.add(
+            { target: twistFilter, duration: 3, ease: Easing.easeInOutCubic },
+            {
+                radius: 1080,
+            }
+        )
+
+        // debugger
+
+        // const startTime = Date.now()
+        // setInterval(() => {
+        //     darkenFilter.
+        // }, 33)
+
+        // await fromTo(
+        //     darkenFilter,
+        //     1,
+        //     {
+        //         contrast: 1,
+        //         brightness: 1,
+        //     },
+        //     {
+        //         contrast: 0,
+        //         brightness: 0.5,
+        //     }
+        // )
+
+        // await gsap.fromTo(
+        //     darkenFilter,
+        //     {
+        //         contrast: 1,
+        //         birghtness: 1,
+        //     },
+        //     {
+        //         contrast: 0,
+        //         birghtness: 0.5,
+        //         duration: 10,
+        //     }
+        // )
+
+        // debugger
+    }
 }
+
+// function fromTo<T>(
+//     graphicsObject: T,
+//     //@seconds
+//     duration: number,
+//     from: Partial<T>,
+//     to: Partial<T>
+// ): Promise<void> {
+//     Object.keys(from).forEach(
+//         //@ts-expect-error
+//         fromKey => (graphicsObject[fromKey] = from[fromKey])
+//     )
+
+//     const app = getPixiApp()
+//     app.ticker.add(tween)
+
+//     app.ticker.remove(tween)
+
+//     const resolveOnComplete = (resolve: () => void) => {
+//         resolve()
+//     }
+
+//     return new Promise(resolveOnComplete)
+
+//     function tween() {}
+// }
 
 function bindBattleState(app: PixiApplication) {
     const stateCursor = getBattleScene().select('state')
