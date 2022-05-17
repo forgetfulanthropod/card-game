@@ -1,17 +1,28 @@
-import type { GameActions } from '@serverActions'
+import type { SCursor } from 'sbaobab'
 
-import { doNpcTurns, getNpcMoves, resetRound } from '@/gameState/battle'
+import type { Gamestate } from '@/../shared'
+import { getNpcMoves } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
 
 import { endRound } from './endRound'
+import type { NextAction } from './internal/step'
+const TIME_AFTER_PLAYER_MOVE = 1000
 
-export const endTurn: GameActions['EndTurn'] = async args => {
+// GameActions['EndTurn']
+export const endTurn = (args: { game: SCursor<Gamestate> }): NextAction => {
     const scene = getBattleSceneIn(args.game)
 
     endRound(scene)
-
-    await doNpcTurns(scene)
-
     scene.select('nextNpcMoves').set(getNpcMoves(scene))
-    resetRound(scene)
+    return {
+        type: 'doNpcTurn',
+        args: { index: 0 },
+        delay: TIME_AFTER_PLAYER_MOVE,
+    }
+
+    // await doNpcTurns(scene)
+
+    // resetRound(scene)
 }
+
+export function doInternalAction() {}

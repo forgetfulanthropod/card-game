@@ -1,4 +1,5 @@
 import type {
+    Action,
     CardUid,
     CharacterMove,
     CharacterName,
@@ -12,6 +13,21 @@ import type { SpecialDoorName } from './SpecialDoorName'
 
 export type Pile = Record<CardUid, Card>
 export type Cards = Record<PileId, Pile>
+
+/** Means there is nothing for the player to do right now. */
+type NextAction<T extends keyof Action> = {
+    type: T
+    delay: number
+    args: Parameters<Action[T]>[0]
+}
+
+// step(game)
+
+// type ___ = () => NextAction | undefined
+
+// const maybeNextAction = performAction(userAction, game)
+// if (maybeNextAction) { performAction(maybeNextAction, game) }
+
 export interface BattleScene extends SceneHas {
     username: string
     name: 'battle'
@@ -31,6 +47,7 @@ export interface BattleScene extends SceneHas {
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
     nextNpcMoves: AttackData[]
+    // nextAction: null | NextAction
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
