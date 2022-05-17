@@ -1,6 +1,6 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
 import { setGlobalRandomSeed } from '@/config/seedrand'
 
-export const resetRandomSeed: ServerActions['ResetRandomSeed'] = () =>
+export const resetRandomSeed: GameActions['ResetRandomSeed'] = () =>
     setGlobalRandomSeed()

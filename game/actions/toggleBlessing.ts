@@ -1,16 +1,15 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 import { findIndex, values } from 'lodash'
 import type { BlessingName } from 'shared'
 
 import { getModified } from '@/gameState/battle'
 import { getRulebook } from '@/rulebook'
-import { getBattleScene, getGameStateCursor } from '@/util'
+import { getBattleSceneIn } from '@/util'
 
-export const toggleBlessing: ServerActions['ToggleBlessing'] = args => {
+export const toggleBlessing: GameActions['ToggleBlessing'] = args => {
     const name = args.name as BlessingName
     const { blessings: blessingsMap } = getRulebook()
-    const gameState = getGameStateCursor(args.username)
-    gameState.apply('blessings', blessings => {
+    args.game.apply('blessings', blessings => {
         const i = findIndex(blessings, { name: name })
         if (i === -1) {
             return [...blessings, blessingsMap[name]]
@@ -18,15 +17,15 @@ export const toggleBlessing: ServerActions['ToggleBlessing'] = args => {
         return drop(blessings, i)
     })
 
-    if (
-        getGameStateCursor(args.username).select('scene').get('name') ===
-        'battle'
-    ) {
-        const allCharactersCursor = getBattleScene(args.username).select(
+    if (args.game.get('scene', 'name') === 'battle') {
+        const allCharactersCursor = getBattleSceneIn(args.game).select(
             'allCharacters'
         )
         for (const cm of values(allCharactersCursor.get())) {
-            allCharactersCursor.set(cm.uid, getModified(cm, args.username))
+            allCharactersCursor.set(
+                cm.uid,
+                getModified(args.game.get('blessings'), cm)
+            )
         }
     }
 }

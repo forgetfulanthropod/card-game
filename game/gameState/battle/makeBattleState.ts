@@ -1,4 +1,10 @@
-import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
+import type { SCursor } from 'sbaobab'
+import type {
+    BattleScene,
+    DungeonName,
+    Gamestate,
+    OwnedCharacterStats,
+} from 'shared'
 
 import { getNullCards } from './cards/cardManagement'
 import { makeCharacters } from './characterManagement'
@@ -6,9 +12,12 @@ import { makeCharacters } from './characterManagement'
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
     dungeonName?: DungeonName
-    username: string
+    game: SCursor<Gamestate>
 }): BattleScene {
-    const allCharacters = makeCharacters(args?.chosen, args.username)
+    const allCharacters = makeCharacters(
+        args?.chosen,
+        args.game.get('blessings')
+    )
 
     // DEBUG
     // kill most of the characters
@@ -28,7 +37,7 @@ export function makeBattleState(args: {
     const playerStarts = true
 
     return Object.freeze({
-        username: args.username,
+        username: args.game.get('username'),
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 1,

@@ -4,7 +4,7 @@
         "composite": true,
         "module": "esnext",
         "moduleResolution": "node",
-        "incremental": true,
+        // "incremental": true,
         "strict": true,
         "target": "es2017",
         "noImplicitAny": true,
@@ -23,7 +23,7 @@
         }
     },
     "compileOnSave": true,
-    // "files": ["index.ts"],
+    "files": ["index.ts"],
     "include": ["./**/*.ts"],
     "exclude": ["dist", "node_modules"],
     "references": [

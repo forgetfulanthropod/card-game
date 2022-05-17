@@ -1,11 +1,11 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
 import { getRulebook } from '@/rulebook'
-import { getEntryScene } from '@/util'
+import { getEntrySceneIn } from '@/util'
 
-export const changeDungeon: ServerActions['ChangeDungeon'] = args => {
+export const changeDungeon: GameActions['ChangeDungeon'] = args => {
     const levels = getRulebook().dungeonLevels
-    const scene = getEntryScene(args.username)
+    const scene = getEntrySceneIn(args.game)
 
     let l = scene.select('selectedLevel').get().num + args.direction
 

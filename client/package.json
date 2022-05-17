@@ -5,17 +5,16 @@
         "@pixi-essentials/gradients": "^0.0.4",
         "@pixi-spine/all-4.0": "^3.0.13",
         "ahooks": "^3.1.5",
-        "datums": "^1.0.6",
         "gsap": "^3.9.1",
+        "pixi-filters": "^4.1.6",
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.2.1",
-        "pixi-filters": "^4.1.6",
         "preact": "^10.6.4",
         "react-hot-toast": "^2.1.1",
+        "shared": "workspace:shared@*",
         "socket.io-client": "^4.4.0",
-        "styled-components": "^5.3.3",
-        "shared": "workspace:shared@*"
+        "styled-components": "^5.3.3"
     },
     "devDependencies": {
         "@types/marked": "^4.0.1",

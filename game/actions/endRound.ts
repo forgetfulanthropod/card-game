@@ -1,18 +1,18 @@
 import type { BattleCursor } from 'shared'
 
 import { applyDOTDamages } from '@/gameState/effects/applyDOTDamages'
-import { commit } from '@/util'
 import { keys } from '@/util'
 
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)
     scene.set('isPlayerTurn', false)
 
-    commit(scene, scene.get('username'))
+    // TODO
+    // commit(scene, scene.get('username'))
 
     applyDOTDamages(scene)
 
-    commit(scene, scene.get('username'))
+    // commit(scene, scene.get('username'))
 
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)

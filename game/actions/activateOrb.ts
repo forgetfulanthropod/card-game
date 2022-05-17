@@ -1,4 +1,4 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 import { isEqual } from 'lodash'
 import type {
     CharacterMeta,
@@ -16,14 +16,14 @@ import {
 } from '@/gameState/battle'
 import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
 import { emit } from '@/util'
-import { getBattleScene } from '@/util'
+import { getBattleSceneIn } from '@/util/treeHelpers'
 
-export const activateOrb: ServerActions['ActivateOrb'] = ({
-    username,
+export const activateOrb: GameActions['ActivateOrb'] = ({
+    game,
     orb,
     characterUid,
 }) => {
-    const scene = getBattleScene(username)
+    const scene = getBattleSceneIn(game)
     const character = scene.get('allCharacters', characterUid)
 
     validate(character, orb)

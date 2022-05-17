@@ -4,13 +4,14 @@
         "CI": "bash run CI"
     },
     "dependencies": {
+        "datums": "^1.0.7",
         "deep-diff": "^1.0.2",
         "esbuild": "^0.14.9",
         "esbuild-css-modules-plugin": "^2.0.9",
         "esbuild-plugin-alias": "^0.2.1",
         "express": "^4.17.2",
-        "sbaobab": "npm:@qpwo/baobab-not-deep@2.6.9",
         "lodash": "^4.17.21",
+        "sbaobab": "npm:@qpwo/baobab-not-deep@2.6.9",
         "testyts": "^1.5.0",
         "winston": "^3.3.3"
     },

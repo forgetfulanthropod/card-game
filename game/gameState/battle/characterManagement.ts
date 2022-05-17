@@ -1,4 +1,5 @@
 import type {
+    Blessing,
     CharacterMeta,
     CharacterName,
     Characters,
@@ -19,7 +20,7 @@ const X_NEUTRAL_THRESH = 9
 
 export function makeCharacters(
     chosen: OwnedCharacterStats[] = [],
-    username: string
+    blessings: Blessing[]
 ): Characters {
     const playerCharacterPositions = makePositions({
         x0: 10,
@@ -32,8 +33,8 @@ export function makeCharacters(
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
             return getModified(
-                newPCMeta({ uid: c.uid, name: c.name, x, y }),
-                username
+                blessings,
+                newPCMeta({ uid: c.uid, name: c.name, x, y })
             )
         }),
     ]

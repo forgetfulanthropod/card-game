@@ -1,6 +1,5 @@
 import type { BattleCursor } from 'shared'
 
-import { commit } from '@/util'
 import { sleep } from '@/util'
 
 import { checkBattleOverMut, handleMove, resetRound } from '..'
@@ -21,10 +20,11 @@ export async function doNpcTurns(scene: BattleCursor) {
 
         // Check battle over
 
-        commit(scene, scene.get('username'))
+        // TODO
+        // commit(scene, scene.get('username'))
         await sleep(TIME_BETWEEN_NPC_MOVES)
     }
-    commit(scene, scene.get('username'))
+    // commit(scene, scene.get('username'))
     resetRound(scene)
 }
 

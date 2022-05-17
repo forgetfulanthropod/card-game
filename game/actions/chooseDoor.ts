@@ -1,4 +1,4 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
 import {
     getNpcMoves,
@@ -9,17 +9,17 @@ import {
 import { putAllCardsInDrawPile } from '@/gameState/battle/cards/putAllCardsInDrawPile'
 import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
 import { resetTurns } from '@/gameState/battle/resetTurns'
-import { getBattleScene, objFilter } from '@/util'
+import { getBattleSceneIn, objFilter } from '@/util'
 
-export const chooseDoor: ServerActions['ChooseDoor'] = args => {
-    const scene = getBattleScene(args.username)
+export const chooseDoor: GameActions['ChooseDoor'] = args => {
+    const scene = getBattleSceneIn(args.game)
 
     const room = modifyRoom(
         getRoom({
             door: args.door,
             dungeonName: scene.get('dungeonName'),
             roomsPassed: scene.get('roomsPassed'),
-            username: args.username,
+            game: args.game,
         }),
         scene.get('dungeonName')
     )

@@ -1,12 +1,12 @@
-import type { ServerActions } from '@serverActions'
+import type { GameActions } from '@serverActions'
 
 import { doNpcTurns, getNpcMoves, resetRound } from '@/gameState/battle'
-import { getBattleScene } from '@/util'
+import { getBattleSceneIn } from '@/util'
 
 import { endRound } from './endRound'
 
-export const endTurn: ServerActions['EndTurn'] = async args => {
-    const scene = getBattleScene(args.username)
+export const endTurn: GameActions['EndTurn'] = async args => {
+    const scene = getBattleSceneIn(args.game)
 
     endRound(scene)
 

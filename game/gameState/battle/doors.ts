@@ -1,6 +1,12 @@
 import { keys, zip } from 'lodash'
 import type { SCursor } from 'sbaobab'
-import type { BattleScene, Characters, Door, DungeonName } from 'shared'
+import type {
+    BattleScene,
+    Characters,
+    Door,
+    DungeonName,
+    Gamestate,
+} from 'shared'
 import type { SpecialDoorName } from 'shared'
 import type { RoomOutcomes } from 'shared'
 
@@ -142,7 +148,7 @@ export function getRoom(args: {
     door: SpecialDoorName
     dungeonName: DungeonName
     roomsPassed: number
-    username: string
+    game: SCursor<Gamestate>
 }): Room {
     const { specialDoorsMap, dungeonRooms, eventTriggersMap } = getRulebook()
     const { door, dungeonName, roomsPassed } = args
@@ -201,7 +207,7 @@ export function getRoom(args: {
         case 'randomEvent': {
             const worldEvent = ssample(vals(eventTriggersMap))
             emit({
-                username: args.username,
+                username: args.game.get('username'),
                 event: {
                     sentAt: new Date().toLocaleDateString(),
                     uid: srandom().toString().slice(6),
