@@ -6,6 +6,7 @@ import { sortBy, uniq } from 'lodash'
 import type {
     DisplayObject,
     Filter as PixiFilter,
+    IDestroyOptions,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
@@ -445,17 +446,21 @@ export function PngLayersBackground(args: {
 
 export function If(
     condition: RODatum<boolean>,
-    render: () => DisplayObject
+    ifRender: () => DisplayObject,
+    elseRender?: () => DisplayObject,
+    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
     const onDestroy: Callback[] = []
     const root = Container({ children: [], onDestroy })
     onDestroy.push(condition.onChange(handleChange, true))
     return root
     function handleChange(val: boolean) {
-        root.children.forEach(c => c.destroy(true))
+        root.children.forEach(c => c.destroy(destroyOptions))
         root.removeChildren()
         if (val) {
-            root.addChild(render())
+            root.addChild(ifRender())
+        } else if (elseRender != null) {
+            root.addChild(elseRender())
         }
     }
 }
@@ -466,41 +471,59 @@ interface KeyedContainer extends PixiContainer {
 }
 export function For<T extends { key: string | number }[]>(
     items: RODatum<T>,
-    render: (item: T[number]) => DisplayObject
+    render: (item: T[number]) => DisplayObject,
+    position?: (index: number) => { x?: number; y?: number },
+    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
     const onDestroy: Callback[] = []
     const root = Container({ children: [], onDestroy }) as KeyedContainer
     onDestroy.push(items.onChange(handleUpdate, true))
 
+    let warnedAlready = false
     return root
     function handleUpdate(items: T) {
         const keys = items.map(v => v.key)
-        if (uniq(keys).length !== keys.length)
+        if (uniq(keys).length !== keys.length && !warnedAlready) {
             console.warn('duplicate keys in For:', duplicated(keys))
+            warnedAlready = true
+        }
 
         root.children.forEach(c => {
             if (!keys.includes(c.key)) {
-                c.destroy(true)
+                c.destroy(destroyOptions)
                 root.removeChild(c)
             }
         })
-        const curKeys = root.children.map(c => c.key)
-        const newItems = items.filter(it => !curKeys.includes(it.key))
+        const oldChildren = root.children.filter(c => keys.includes(c.key))
+        const oldKeys = oldChildren.map(c => c.key)
+        const newItems = items.filter(it => !oldKeys.includes(it.key))
         const newChildren = newItems.map(it => {
             const c = render(it) as KeyedDisplayObject
             c.key = it.key
             return c
         })
-        const oldChildren = root.children
+        // redundant filter is necessary because children doesn't necessarily update immediately
         root.removeChildren()
         const sortedChildren = sortBy([...newChildren, ...oldChildren], x =>
             keys.indexOf(x.key)
         )
-        root.addChild(...sortedChildren)
+        if (sortedChildren.length > 0) root.addChild(...sortedChildren)
+        if (position != null) {
+            for (let i = 0; i < root.children.length; i++) {
+                const c = root.children[i]
+                const { x, y } = position(i)
+                if (x != null) c.x = x
+                if (y != null) c.y = y
+            }
+        }
     }
 }
 
 function duplicated<T>(arr: T[]): T[] {
-    const unique = uniq(arr)
-    return arr.filter(v => !unique.includes(v))
+    const seen = new Set<T>()
+    return arr.filter(x => {
+        if (seen.has(x)) return true
+        seen.add(x)
+        return false
+    })
 }
