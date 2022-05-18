@@ -14,6 +14,8 @@ import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { Adjust } from '@/elementsUtil'
+import { onDestroyed } from '@/elementsUtil'
 import { SCALE_UNIVERSAL } from '@/elementsUtil'
 import { bringToTop } from '@/elementsUtil'
 import {
@@ -91,6 +93,7 @@ export function Character(args: CharacterProps): PixiContainer {
             attackSprite,
             defendSprite,
             healthBar,
+            Adjust(ActionIntent(characterMeta.uid), { y: healthBar.height }),
             ...(mainAnimation ? [mainAnimation] : [mainSprite, selectedSprite]),
         ],
     })
@@ -146,6 +149,28 @@ export function Character(args: CharacterProps): PixiContainer {
     updateDeathAndHealth()
 
     return flyingContainer
+}
+
+function ActionIntent(uid: CharacterUid) {
+    const battle = getBattleScene()
+    const root = Text({
+        text: '',
+        style: { fontSize: 20, fill: 'red' },
+    })
+    onDestroyed(
+        root,
+        onUpdate(
+            battle.select('nextNpcMoves'),
+            nextMoves => {
+                const moveName = nextMoves.find(
+                    move => move.attacker.uid === uid
+                )?.move?.name
+                root.text = moveName ?? ''
+            },
+            true
+        )
+    )
+    return root
 }
 
 export const glowFilter = new GlowFilter({
