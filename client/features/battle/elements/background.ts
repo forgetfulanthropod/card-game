@@ -1,3 +1,5 @@
+import type { Datum } from 'datums'
+
 import type { PixiContainer, PlayablePixiSprite } from '@/elementsUtil'
 import { Container, PngLayersBackground, VideoBackground } from '@/elementsUtil'
 
@@ -9,12 +11,14 @@ export default function Background({
     scale,
     src,
     srcs,
-    autoPlay: autoplay,
+    autoPlay,
+    bgLoopEnded,
 }: {
     scale: number
     src?: string
     srcs?: string[]
     autoPlay?: boolean
+    bgLoopEnded?: Datum<number>
 }): PlayablePixiSprite | PixiContainer {
     if (!config.enableBackground) {
         return Container({ children: [] })
@@ -24,7 +28,8 @@ export default function Background({
             name: 'Background',
             src,
             scale,
-            autoPlay: autoplay,
+            autoPlay,
+            bgLoopEnded,
         })
     }
 

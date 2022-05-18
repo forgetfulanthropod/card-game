@@ -1,5 +1,5 @@
 // window.PIXI = PIXI
-import type { RODatum } from 'datums'
+import type { Datum, RODatum } from 'datums'
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
 import { sortBy, uniq } from 'lodash'
@@ -24,8 +24,6 @@ import {
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
-
-import { bgLoopEnded } from '@/util'
 
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
@@ -385,6 +383,7 @@ export function VideoBackground(args: {
     scale: number
     src: string
     autoPlay?: boolean
+    bgLoopEnded?: Datum<number>
 }): PlayablePixiSprite {
     const r = new PixiVideoResource(args.src, {
         updateFPS: 30,
@@ -396,7 +395,7 @@ export function VideoBackground(args: {
 
     // source.loop = true // must do manually for event!
     const endedCallback = () => {
-        bgLoopEnded.set(Date.now())
+        args.bgLoopEnded?.set(Date.now())
         void source.play()
     }
     source.addEventListener('ended', endedCallback)
