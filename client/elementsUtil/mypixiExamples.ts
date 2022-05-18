@@ -2,7 +2,7 @@ import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { delayChain } from 'shared/code'
 
-import { Container, For, If, portalize, Sprite, Text } from './mypixi'
+import { Adjust, Container, For, If, portalize, Sprite, Text } from './mypixi'
 import { getTexture } from './pixiUtils'
 
 export function ForExample() {
@@ -104,4 +104,26 @@ export function PortalizeExample() {
     })
     startToggling(shown)
     return Container({ children: [hideShow, cont] })
+}
+
+export function AdjustExample() {
+    const sprite = Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+    const adjustedOnce = Adjust(sprite, {
+        x: 100,
+        y: 0,
+        onClick: () => console.log('clicked'),
+        anchor: 0.5,
+    })
+    const testContainer = Container({ children: [] })
+    // no anchor!
+    // @ts-expect-error
+    Adjust(testContainer, { anchor: 0.5 })
+    return Container({
+        children: [
+            Adjust(adjustedOnce, {
+                x: adjustedOnce.x + 100,
+                y: 50,
+            }),
+        ],
+    })
 }

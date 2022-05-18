@@ -136,7 +136,8 @@ interface TextArgs extends ShownArgs {
     style?: Partial<ITextStyle>
 }
 
-interface GraphicsArgs extends ShownArgs {
+interface GraphicsArgs extends DisplayObjectArgs {
+    tint?: number
     draw: (g: PixiGraphics) => void
 }
 
@@ -348,15 +349,15 @@ export function Container(args: ContainerArgs): PixiContainer {
         }
     }
     applyDisplayObjectArgs(c, args)
-    if (args.onTick != null) {
-        PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick && args.onTick(c, dt)
-            if (result === 'remove') PixiTicker.shared.remove(cb)
-        })
-    }
-    if (args.name != null) {
-        c.name = args.name
-    }
+    // if (args.onTick != null) {
+    //     PixiTicker.shared.add(function cb(dt) {
+    //         const result = args.onTick && args.onTick(c, dt)
+    //         if (result === 'remove') PixiTicker.shared.remove(cb)
+    //     })
+    // }
+    // if (args.name != null) {
+    //     c.name = args.name
+    // }
     if (args.cache === true) {
         c.cacheAsBitmap = true
     }
@@ -539,6 +540,23 @@ export function portalize(args: {
         to.removeChild(content)
         content.destroy({ children: true })
     })
+}
+
+type TypeArgPairs =
+    | [PixiGraphics, DisplayObjectArgs]
+    | [PixiText, ShownArgs]
+    | [PixiContainer, DisplayObjectArgs]
+    | [PixiSprite, ShownArgs]
+    | [DisplayObject, DisplayObjectArgs]
+
+export function Adjust<T extends TypeArgPairs>(...args_: T): T[0] {
+    const [el, args] = args_
+    if (el instanceof PixiSprite || el instanceof PixiText) {
+        applyShownArgs(el, args)
+    } else if (el instanceof PixiContainer) {
+        applyDisplayObjectArgs(el, args)
+    }
+    return el
 }
 
 function duplicated<T>(arr: T[]): T[] {
