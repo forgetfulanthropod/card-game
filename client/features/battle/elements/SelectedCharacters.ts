@@ -171,8 +171,7 @@ export function SelectedCharacters(): PixiContainer {
                     if (animation != null) {
                         animation.x -= animation.width / 2
                         animation.y += animation.height / 2
-                        // animation.filters = [preselectFilter]
-                        // animation.filters = []
+
                         animation.cursor = 'pointer'
                     }
 
@@ -193,6 +192,7 @@ export function SelectedCharacters(): PixiContainer {
 
         brightBackLightIsShining.onChange((is, _, unsub) => {
             unsub()
+
             characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
         })
 

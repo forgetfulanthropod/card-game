@@ -34,11 +34,9 @@ export function DungeonEntryBg() {
         bgLoopEnded.onChange((_, __, unsub) => {
             unsub()
 
-            root.children.forEach(c => c.destroy())
-            root.removeChildren()
-
             bgOnTransition.play()
             setTimeout(() => {
+                brightBackLightIsShining.set(false)
                 brightBackLightIsShining.set(true)
             }, TIME_FOR_OUTRO_BRIGHTNESS_MS)
             setTimeout(() => {
@@ -46,6 +44,7 @@ export function DungeonEntryBg() {
             }, TIME_FOR_OUTRO_MS)
 
             root.addChild(bgOnTransition)
+            // setTimeout(() => root.removeChildAt(0).destroy(), 0)
         })
     })
 

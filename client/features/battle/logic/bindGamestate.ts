@@ -55,7 +55,6 @@ function bindScene(app: PixiApplication) {
 
             await transitionSceneTo(lastScene, sceneType)
 
-            console.log('destroying the last scene...')
             app.stage.removeChild(lastScene)
             lastScene.destroy({ children: true })
         }
