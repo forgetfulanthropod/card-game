@@ -4,6 +4,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'bloatDemon',
         displayName: 'Bloat Demon',
         isPc: true,
+        class: 'knight',
         maxHealth: 160,
         damage: 27,
 
@@ -25,6 +26,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'bogSpirit',
         displayName: 'Bog Spirit',
         isPc: true,
+        class: 'knight',
         maxHealth: 224,
         damage: 16,
 
@@ -46,6 +48,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'bookle',
         displayName: 'Bookle',
         isPc: true,
+        class: 'knight',
         maxHealth: 60,
         damage: 10,
 
@@ -65,6 +68,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'bumbit',
         displayName: 'Bumbit',
         isPc: true,
+        class: 'knight',
         maxHealth: 58,
         damage: 18,
 
@@ -85,6 +89,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'frogKnight',
         displayName: 'Frog Knight',
         isPc: true,
+        class: 'knight',
         maxHealth: 72,
         damage: 8,
 
@@ -108,6 +113,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'frogWizard',
         displayName: 'Frog Wizard',
         isPc: true,
+        class: 'knight',
         maxHealth: 66,
         damage: 24,
 
@@ -131,6 +137,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'gnomeHooligan',
         displayName: 'Gnome Hooligan',
         isPc: true,
+        class: 'knight',
         maxHealth: 43,
         damage: 14,
 
@@ -150,6 +157,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'goblinDragon',
         displayName: 'Goblin Dragon',
         isPc: true,
+        class: 'knight',
         maxHealth: 120,
         damage: 13,
 
@@ -173,6 +181,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'greenJester',
         displayName: 'Green Jester',
         isPc: true,
+        class: 'knight',
         maxHealth: 120,
         damage: 34,
 
@@ -193,6 +202,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'jerry',
         displayName: 'Jerry',
         isPc: true,
+        class: 'knight',
         maxHealth: 86,
         damage: 19,
 
@@ -217,6 +227,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'lichLord',
         displayName: 'Lich Lord',
         isPc: true,
+        class: 'knight',
         maxHealth: 250,
         damage: 27,
 
@@ -241,6 +252,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'matchaGelatinCube',
         displayName: 'Matcha Gelatin Cube',
         isPc: false,
+        class: 'knight',
         maxHealth: 78,
         damage: 7,
 
@@ -263,6 +275,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'mimic',
         displayName: 'Mimic',
         isPc: false,
+        class: 'knight',
         maxHealth: 130,
         damage: 12,
 
@@ -283,6 +296,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'mushroomFarmer',
         displayName: 'Mushroom Farmer',
         isPc: true,
+        class: 'bard',
         maxHealth: 112,
         damage: 8,
 
@@ -306,6 +320,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'notoriousBEAN',
         displayName: 'Notorious B.E.A.N',
         isPc: true,
+        class: 'knight',
         maxHealth: 75,
         damage: 14,
 
@@ -326,6 +341,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'orcWarrior',
         displayName: 'Orc Warrior',
         isPc: false,
+        class: 'knight',
         maxHealth: 88,
         damage: 12,
 
@@ -347,6 +363,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'penguinKnight',
         displayName: 'Penguin Knight',
         isPc: true,
+        class: 'knight',
         damage: 9,
         maxHealth: 66,
         constitution: 66,
@@ -368,6 +385,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'skeletonWarrior',
         displayName: 'Skeleton Warrior',
         isPc: false,
+        class: 'wizard',
         maxHealth: 10,
         damage: 2,
 
@@ -391,6 +409,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'snacky',
         displayName: 'Snacky',
         isPc: true,
+        class: 'knight',
         maxHealth: 67,
         damage: 16,
 
@@ -411,6 +430,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'theHatefly',
         displayName: 'The Hatefly',
         isPc: true,
+        class: 'knight',
         maxHealth: 300,
         damage: 22,
 
@@ -433,6 +453,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'trioOfFools',
         displayName: 'Trio of Fools',
         isPc: true,
+        class: 'knight',
         maxHealth: 110,
         damage: 15,
 
@@ -454,6 +475,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'warhog',
         displayName: 'Warhog',
         isPc: true,
+        class: 'knight',
         maxHealth: 84,
         damage: 6,
 
@@ -476,6 +498,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'wimpyGuard',
         displayName: 'Wimpy Guard',
         isPc: true,
+        class: 'knight',
         maxHealth: 170,
         damage: 24,
 

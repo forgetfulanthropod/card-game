@@ -4,6 +4,7 @@
 // The gamestate reads from the rulebook, but not vice versa
 import type {
     BattleScene,
+    CharacterClass,
     CharacterName,
     DungeonRooms,
     EntryScene,
@@ -113,6 +114,7 @@ export type CharacterStats = Readonly<{
     name: CharacterName
     displayName: string
     isPc: boolean
+    class: CharacterClass
 
     maxHealth: number // deprecated
     damage: number // deprecated

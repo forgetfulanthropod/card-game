@@ -145,6 +145,7 @@ export interface CharacterMeta extends CharacterStats {
     name: CharacterName
     uid: CharacterUid
     isPc: boolean
+    class: CharacterClass
     hasMoved: boolean
     health: number
     block: number

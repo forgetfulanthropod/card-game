@@ -1,11 +1,11 @@
 import { set } from 'lodash'
-import type { Card, CardId, Cards, CharacterUid } from 'shared'
+import type { Card, CardId, Cards, CharacterClass, CharacterUid } from 'shared'
 import type { BattleCursor } from 'shared'
 
 import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
 import { keys, vals } from '@/util'
 
-import { explainActionsForCard, getCharIds } from '..'
+import { explainActionsForCard } from '..'
 
 // TODO: repeated cards: block, basic attack, basic magic attack
 // probably want to take characterClass off of the card type?
@@ -49,20 +49,31 @@ export function makeCards(scene: BattleCursor): Cards {
         'orbOfProtection',
         'orbOfProtection',
     ]
-    const allPCs = getCharIds(vals(scene.get('allCharacters')), {
-        isPc: true,
-    })
-    const characterUid = allPCs[0]
+    const allCharacters = vals(scene.get('allCharacters'))
+
     return {
-        draw: cardIds.reduce(
-            (acc, id) =>
-                set(
-                    acc,
-                    `${id}-${srandom().toString().replace('.', '')}`,
-                    updateExplanation(getCardInstance(id, characterUid), scene)
-                ),
-            {}
-        ),
+        draw: cardIds.reduce((acc, id) => {
+            logger.info(JSON.stringify(allCharacters, null, '\n'))
+            let firstCharacterUidForClass = allCharacters.find(
+                c => c?.class === getCardClass(id)
+            )?.uid
+
+            if (firstCharacterUidForClass == null) {
+                logger.info(
+                    'TODO: no character class matches this card, going with character 0'
+                )
+                firstCharacterUidForClass = allCharacters[0].uid
+            }
+
+            return set(
+                acc,
+                `${id}-${srandom().toString().replace('.', '')}`,
+                updateExplanation(
+                    getCardInstance(id, firstCharacterUidForClass),
+                    scene
+                )
+            )
+        }, {}),
         hand: {},
         discard: {},
         removed: {},
@@ -78,4 +89,8 @@ function getCardInstance(
     characterUid: CharacterUid
 ): Card {
     return { ...cardDefinitionsMap[id], characterUid, explanation: 'error!' }
+}
+
+function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
+    return cardDefinitionsMap[id].characterClass
 }
