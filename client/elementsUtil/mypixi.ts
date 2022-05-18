@@ -524,6 +524,23 @@ export function For<T extends { key: string | number }[]>(
     }
 }
 
+export function portalize(args: {
+    from: DisplayObject
+    content: DisplayObject
+    to?: PixiContainer
+}): void {
+    if (args.to == null && app?.stage == null) {
+        throw Error('no app.stage')
+    }
+    const { from, content, to = app?.stage } = args
+    if (to == null) throw Error('unreachable: portal: to == null')
+    to.addChild(content)
+    from.on('destroyed', () => {
+        to.removeChild(content)
+        content.destroy({ children: true })
+    })
+}
+
 function duplicated<T>(arr: T[]): T[] {
     const seen = new Set<T>()
     const dups = new Set<T>()

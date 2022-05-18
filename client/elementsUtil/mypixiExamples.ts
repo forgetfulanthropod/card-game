@@ -1,7 +1,8 @@
+import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { delayChain } from 'shared/code'
 
-import { For, If, Sprite, Text } from './mypixi'
+import { Container, For, If, portalize, Sprite, Text } from './mypixi'
 import { getTexture } from './pixiUtils'
 
 export function ForExample() {
@@ -44,6 +45,16 @@ function randStrArr(length = 100): string[] {
 
 export function IfExample() {
     const cond = datum(true)
+    startToggling(cond)
+    return If(
+        cond,
+        () =>
+            Text({ text: 'it is true', style: { fontSize: 100, fill: 'red' } }),
+        () => Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+    )
+}
+
+function startToggling(cond: Datum<boolean>) {
     delayChain([
         () => cond.set(false),
         () => cond.set(false),
@@ -63,10 +74,34 @@ export function IfExample() {
         () => cond.set(false),
         () => cond.set(true),
     ])
-    return If(
-        cond,
-        () =>
-            Text({ text: 'it is true', style: { fontSize: 100, fill: 'red' } }),
-        () => Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
-    )
+}
+
+export function PortalizeExample() {
+    const shown = datum(false)
+    const hideShow = Text({
+        text: 'hide/show',
+        onClick: () => shown.set(!shown.val),
+        style: { fontSize: 100, fill: 'red' },
+    })
+    const cont = If(shown, () => {
+        const sprite = Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+
+        const t1 = Text({
+            text: 'in sprite',
+            x: 200,
+            y: 200,
+            style: { fontSize: 100, fill: 'red' },
+        })
+        sprite.addChild(t1)
+        const t2 = Text({
+            text: 'on stage',
+            x: 200,
+            y: 200,
+            style: { fontSize: 100, fill: 'red' },
+        })
+        portalize({ from: sprite, content: t2 })
+        return sprite
+    })
+    startToggling(shown)
+    return Container({ children: [hideShow, cont] })
 }
