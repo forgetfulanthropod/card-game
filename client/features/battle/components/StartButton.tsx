@@ -1,4 +1,4 @@
-import { changeScene } from '@/actions'
+import { callApi } from '@/actions'
 import styled from '@/config/mystyled'
 
 const Root = styled.button`
@@ -13,7 +13,9 @@ const Root = styled.button`
 `
 
 export default function StartButton(): JSXElement {
-    return <Root onClick={() => changeScene({ newSceneName: 'battle' })}>
+    return <Root
+        onClick={() => callApi('ChangeScene', { newSceneName: 'battle' })}
+    >
         start
     </Root>
 }

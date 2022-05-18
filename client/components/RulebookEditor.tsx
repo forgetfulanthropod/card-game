@@ -2,10 +2,10 @@ import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
 
 import styled from '@/config/mystyled'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { makeNewUser, rulebookAction } from '@/actions'
+import { callApi } from '@/actions'
 import { useCursor } from './util'
 import { getTree } from '@/data/rootTree'
-import type { Rulebook } from '@shared'
+import type { Rulebook } from 'shared'
 import toast from 'react-hot-toast'
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
@@ -73,8 +73,11 @@ export function RulebookEditor(props: { username: string }): JSXElement {
                 value={name}
                 options={rulebooks}
                 onChoice={async newName => {
-                    await rulebookAction({ do: 'choose', name: newName })
-                    await makeNewUser({ username })
+                    await callApi('RulebookAction', {
+                        do: 'choose',
+                        name: newName,
+                    })
+                    await callApi('MakeNewUser', { username })
                 }}
             />
             {shown && <>
@@ -99,7 +102,7 @@ async function deleteRulebook(name: string): Promise<void> {
         toast.error('cannot delete default rulebook')
         return
     }
-    await rulebookAction({ do: 'delete', name })
+    await callApi('RulebookAction', { do: 'delete', name })
     toast('deleted')
 }
 
@@ -118,8 +121,8 @@ async function addNewRulebook(
         toast.error('already have rulebook with that name')
         return
     }
-    await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username })
+    await callApi('RulebookAction', { do: 'new', rulebook: newRulebook })
+    await callApi('MakeNewUser', { username })
     toast('added')
 }
 
@@ -152,9 +155,9 @@ async function overwriteRulebook(
         toast.error('cannot overwrite default. save new instead.')
         return
     }
-    await rulebookAction({ do: 'delete', name })
-    await rulebookAction({ do: 'new', rulebook: newRulebook })
-    await makeNewUser({ username })
+    await callApi('RulebookAction', { do: 'delete', name })
+    await callApi('RulebookAction', { do: 'new', rulebook: newRulebook })
+    await callApi('MakeNewUser', { username })
     toast('overwritten')
 }
 

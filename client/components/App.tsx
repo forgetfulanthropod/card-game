@@ -3,7 +3,7 @@ import '../global.css'
 import { useLocalStorageState } from 'ahooks'
 import { useEffect, useState } from 'preact/hooks'
 
-import { maybeMakeUser } from '@/actions'
+import { callApi } from '@/actions'
 import { attachServerListener } from '@/connection'
 import { initializeBoababTree } from '@/data/rootTree'
 import { startPixi } from '@/elements/main'
@@ -15,7 +15,7 @@ const log = (...args: unknown[]) => true && console.log(...args)
 
 export default function App(): JSXElement {
     // const [username, setUsername] = useState('')
-    const [username_, setUsername] = useLocalStorageState('username')
+    const [username_, setUsername] = useLocalStorageState<string>('username')
     const username = username_ ?? ''
     const [ready, setReady] = useState(false)
     console.log({ username })
@@ -46,7 +46,7 @@ export default function App(): JSXElement {
 async function fullClientStart(username: string) {
     log('doing full start')
 
-    const result = await maybeMakeUser({ username })
+    const result = await callApi('MaybeMakeUser', { username })
     if (result == null || result?.status === 'error') {
         throw Error("couldn't make/load user account")
     }

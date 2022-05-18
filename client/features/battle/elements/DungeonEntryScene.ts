@@ -1,23 +1,40 @@
+import { getEntryScene } from '@/data/rootTree'
 import Coin from '@/elements/Coin'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
+import { onUpdate } from '@/util/onUpdate'
 
-import DungeonEntryPng from '../assets/backgrounds/temple_background.png'
-import background from './background'
-import { GameMenu } from './GameMenu'
+import { DungeonEntryBg } from './DungeonEntryBg'
 import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
 
+const NUM_CHARACTERS_REQUIRED = 3
+
 export function DungeonEntryScene(): PixiContainer {
+    const selectedCharactersCursor =
+        getEntryScene().select('selectedCharacters')
+
+    const startButton = StartButton()
+
     return Container({
         children: [
-            background({ scale: 1, srcs: [DungeonEntryPng] }),
+            DungeonEntryBg(),
             SelectedCharacters(),
-            StartButton(),
+            startButton,
             LevelInfo(),
-            GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
+            // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
             Coin(),
+        ],
+        onDestroy: [
+            onUpdate(
+                selectedCharactersCursor,
+                selected => {
+                    startButton.visible =
+                        selected?.length === NUM_CHARACTERS_REQUIRED
+                },
+                true
+            ),
         ],
     })
 }

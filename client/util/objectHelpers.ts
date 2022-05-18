@@ -1,4 +1,4 @@
-import type { Immutable } from '@shared'
+import type { Immutable } from 'shared'
 
 /** Does deep freeze in place and returns result */
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -23,11 +23,14 @@ export function deepFreeze<T extends object>(obj: T): Immutable<T> {
 export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
     return Object.values(obj)
 }
-export function keys<K extends string | number, V>(
-    obj: Record<K, V>
-): string[] {
+export function keys<K extends string | number, V>(obj: Record<K, V>): K[] {
+    // @ts-expect-error
     return Object.keys(obj)
 }
+
+// export function keys2<T>(obj: T): { [K in keyof T]: K } {
+//     return Object.keys(obj)
+// }
 
 export function length<K extends string | number>(
     obj: Record<K, unknown>

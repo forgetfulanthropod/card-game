@@ -58,14 +58,14 @@
     },
     "ignorePatterns": [
         "builds/",
-        "db/db-build.js",
+        "**/dist/",
         "**/node_modules/",
         "tests/",
         "client/public_"
     ],
     "overrides": [
         {
-            "files": ["client/**/*", "shared/**/*"],
+            "files": ["client/**/*"],
             "extends": ["plugin:react/recommended"],
             "plugins": ["react", "react-hooks"],
             "parserOptions": {
@@ -102,15 +102,21 @@
             }
         },
         {
-            "files": ["crypto-server/**/*"],
+            "files": ["shared/**/*"],
             "parserOptions": {
-                "project": "./crypto-server/tsconfig.json"
+                "project": "./shared/tsconfig.json"
             }
         },
         {
-            "files": ["db/**/*"],
+            "files": ["shared/**/*"],
             "parserOptions": {
-                "project": "./db/tsconfig.json"
+                "project": "./shared/tsconfig.json"
+            }
+        },
+        {
+            "files": ["game/**/*"],
+            "parserOptions": {
+                "project": "./game/tsconfig.json"
             },
             "rules": {
                 "no-console": "error"

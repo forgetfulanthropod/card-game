@@ -6,6 +6,7 @@
     <link rel="icon" href="favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="theme-color" content="#FFCD70" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <!-- <meta name="description" content="" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -56,24 +57,37 @@
         const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
 
         try {
-            fetch(window.location.href + '/' + pwd + '.js')
-                .then(response => response.text())
-                .then(text => eval(text))
-                .then(() => localStorage.setItem('pwd', pwd))
+            const head = document.getElementsByTagName("head")[0]
+
+            const href = window.location.href
+            const hrefSlash = href.endsWith('/') ? href : href + '/'
+
+            var script = document.createElement('script')
+            script.src = hrefSlash + pwd + '.js'
+            script.type = "text/javascript"
+
+            head.appendChild(script)
+
             var link = document.createElement("link")
-            link.href = window.location.href + '/' + pwd + '.css'
+            link.href = hrefSlash + pwd + '.css'
             link.type = "text/css"
             link.rel = "stylesheet"
             link.media = "screen,print"
-            document.getElementsByTagName("head")[0].appendChild(link)
+            head.appendChild(link)
+
+            setTimeout(() => {
+                if (window.loadedJs) {
+                    localStorage.setItem('pwd', pwd)
+                } else {
+                    localStorage.removeItem('pwd')
+                }
+            }, 10000)
         } catch (e) {
+            console.error(e)
             localStorage.removeItem('pwd')
         }
-
-
     </script>
 
-    </script>
     <!-- <script src="out.js"></script> -->
 </body>
 

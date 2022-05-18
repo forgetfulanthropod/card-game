@@ -20,7 +20,27 @@
     "npm.packageManager": "pnpm",
     "files.exclude": {
         "**/node_modules/": true,
-        "**/pnpm-lock.yaml": true
+        "**/pnpm-lock.yaml": true,
+        "**/tsconfig.tsbuildinfo": true,
+        ".eslintcache": true,
+        "**/dist/": true,
+
+        ".vscode": true,
+        ".github": true,
+        "builds": true,
+        "ignore": true,
+        ".eslintrc.json": true,
+        ".gitignore": true,
+        ".prettierignore": true,
+        ".prettierrc.json": true,
+        "arkit.json": true,
+        "package.json": true,
+        "pnpm-lock.yaml": true,
+        "pnpm-workspace.yaml": true,
+        "README.md": true,
+        "run": true,
+        "server.log": true,
+        "scripts": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
@@ -48,5 +68,6 @@
     "searchEverywhere.shouldInitOnStartup": true,
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
     "prettier.configPath": ".prettierrc.json",
-    "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/"
+    "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/",
+    "typescript.tsdk": "node_modules/typescript/lib"
 }

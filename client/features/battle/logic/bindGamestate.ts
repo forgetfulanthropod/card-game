@@ -1,5 +1,12 @@
+import { TwistFilter } from 'pixi-filters'
+import { Easing, Tweener } from 'pixi-tweener'
+import type { SceneType } from 'shared'
+
 import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
+import { BASE_HEIGHT } from '@/elementsUtil'
+import { BASE_WIDTH } from '@/elementsUtil'
+import { waitingForSceneExitAnimationToFinish } from '@/util'
 
 import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
@@ -23,15 +30,35 @@ function bindScene(app: PixiApplication) {
     const sceneTypeCursor = getScene().select('name')
 
     sceneTypeCursor.on('update', () => {
-        setScene()
+        void setScene()
     })
 
-    setScene()
+    void setScene()
 
-    function setScene() {
-        if (lastScene !== null) app.stage.removeChild(lastScene)
-
+    async function setScene(): Promise<void> {
         const sceneType = sceneTypeCursor.get()
+
+        if (lastScene != null) {
+            await new Promise(resolve => {
+                setTimeout(resolve, 0)
+            })
+            if (waitingForSceneExitAnimationToFinish.val === true) {
+                await new Promise(resolve =>
+                    waitingForSceneExitAnimationToFinish.onChange(
+                        (_, __, unsub) => {
+                            unsub()
+                            resolve(null)
+                        }
+                    )
+                )
+            }
+
+            await transitionSceneTo(lastScene, sceneType)
+
+            app.stage.removeChild(lastScene)
+            lastScene.destroy({ children: true })
+        }
+
         if (sceneType === 'battle') {
             lastScene = BattleScene()
             bindBattleState(app)
@@ -41,6 +68,37 @@ function bindScene(app: PixiApplication) {
             throw new Error('what!')
         }
         app.stage.addChild(lastScene)
+    }
+}
+
+const twistFilter = new TwistFilter({
+    angle: 4,
+    radius: 0,
+})
+twistFilter.offset.x = BASE_WIDTH / 2
+twistFilter.offset.y = BASE_HEIGHT / 2
+
+export const TRANSITION_OUT_TIME = 1
+
+async function transitionSceneTo(
+    sceneEl: PixiContainer,
+    sceneType: SceneType
+): Promise<void> {
+    if (sceneType === 'battle') {
+        sceneEl.filters = [twistFilter]
+
+        await Tweener.add(
+            {
+                target: twistFilter,
+                duration: TRANSITION_OUT_TIME,
+                ease: Easing.easeInExpo,
+            },
+            {
+                radius: 1080,
+            }
+        ).then(() => {
+            twistFilter.radius = 0
+        })
     }
 }
 

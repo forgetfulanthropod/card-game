@@ -1,16 +1,23 @@
-import { onCallWrapper, vals } from '@/util'
+import { actions } from 'game'
 
-import * as all from './actions'
+import { makeNewUser as makeNewUser } from './actions/makeNewUser'
+import { maybeMakeUser } from './actions/maybeMakeUser'
+import { onCallWrapper } from './onCallWrapper'
 
-const noCommit: unknown[] = [all.hello, all.maybeMakeUser]
-const wholeRequests: unknown[] = [all.maybeMakeUser]
+const all = [...vals(actions), maybeMakeUser, makeNewUser]
+const noCommit: unknown[] = [actions.hello, maybeMakeUser]
+const wholeRequests: unknown[] = [maybeMakeUser]
 
 export function attachAPIRoutes(): void {
-    vals(all).forEach(f =>
+    all.forEach(f =>
         // @ts-ignore
         onCallWrapper(f, {
             disableCommit: noCommit.includes(f),
             wholeRequest: wholeRequests.includes(f),
         })
     )
+}
+
+function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
+    return Object.values(obj)
 }

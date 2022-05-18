@@ -1,7 +1,7 @@
-import type { OwnedCharacterStats } from '@shared'
-import type { SCursor } from 'baobab'
+import type { ROCursor } from 'sbaobab'
+import type { OwnedCharacterStats } from 'shared'
 
-import { addSelected } from '@/actions'
+import { callApi } from '@/actions'
 import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
@@ -13,29 +13,27 @@ export function OwnedCharacters(): PixiContainer {
 
     makeSelectionIndicators(characters, selectedCharacters)
 
-    const hoverTexts = vals(getOwnedCharacters().get()).map((c, _i) => {
-        return Text({
-            text: `${c.points}`,
-            anchor: [0, 0],
-            y: 5,
-            style: {
-                fontFamily: 'VT323',
-                fontSize: 60,
-                fill: '#fff',
-                stroke: '#333',
-                strokeThickness: 5,
-            },
-        })
+    const hoverText = Text({
+        text: `OK!`,
+        anchor: [0, 0],
+        y: 5,
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 60,
+            fill: '#fff',
+            stroke: '#333',
+            strokeThickness: 5,
+        },
     })
 
-    characters.forEach((c, i) =>
+    characters.forEach(c =>
         c.children[0].on('mouseover', () => {
-            c.addChild(hoverTexts[i])
+            c.addChild(hoverText)
         })
     )
-    characters.forEach((c, i) =>
+    characters.forEach(c =>
         c.children[0].on('mouseout', () => {
-            c.removeChild(hoverTexts[i])
+            c.removeChild(hoverText)
         })
     )
 
@@ -61,7 +59,8 @@ function makeCharacters() {
                 Sprite({
                     src: getTexture(c.name),
                     scale: 0.45,
-                    onClick: () => addSelected({ character: c }),
+                    onClick: () =>
+                        callApi('AddSelected', { character: c, index: 0 }),
                 }),
             ],
         })
@@ -70,7 +69,7 @@ function makeCharacters() {
 
 function makeSelectionIndicators(
     characters: PixiContainer[],
-    selectedCharacters: SCursor<OwnedCharacterStats[]>
+    selectedCharacters: ROCursor<OwnedCharacterStats[]>
 ) {
     update()
     selectedCharacters.on('update', update)

@@ -5,6 +5,5 @@ export interface EntryScene extends SceneHas {
     selectedLevel: {
         name: string
         num: number
-        pointLimit: number
     }
 }

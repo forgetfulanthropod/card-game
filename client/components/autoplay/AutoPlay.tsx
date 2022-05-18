@@ -1,20 +1,15 @@
+/** NOT MAINTAINED OR WORKING */
+import { sample, values } from 'lodash'
+import { useState } from 'preact/hooks'
+import toast from 'react-hot-toast'
 import type {
     BattleScene,
     EntryScene,
     Gamestate,
     OwnedCharacterStats,
-} from '@shared'
-import { find, sample, sum, values } from 'lodash'
-import { useState } from 'preact/hooks'
-import toast from 'react-hot-toast'
+} from 'shared'
 
-import {
-    addSelected,
-    changeDungeon,
-    changeScene,
-    chooseDoor,
-    doCharacterAction,
-} from '@/actions'
+import { callApi } from '@/actions'
 import styled from '@/config/mystyled'
 import { getTree } from '@/data/rootTree'
 
@@ -87,7 +82,7 @@ class Runner {
         const scene = tree.scene as EntryScene
         if (scene.selectedCharacters.length === 0 && flip(probChangeLevel)) {
             toast('changing dungeon')
-            await changeDungeon({ direction: flip(0.5) ? -1 : 1 })
+            await callApi('ChangeDungeon', { direction: flip(0.5) ? -1 : 1 })
             return
         }
         const availableChars = getAvailableChars(scene, tree)
@@ -97,7 +92,7 @@ class Runner {
             return
         }
         toast('out of points. starting battle.')
-        await changeScene({ newSceneName: 'battle' })
+        await callApi('ChangeScene', { newSceneName: 'battle' })
     }
 
     async battleStep(tree: Gamestate) {
@@ -109,7 +104,7 @@ class Runner {
             if (door == null) {
                 throw Error('null door')
             }
-            await chooseDoor({ door })
+            await callApi('ChooseDoor', { door })
         }
         if (!scene.isPlayerTurn) {
             toast('not my turn - doing nothing')
@@ -129,7 +124,6 @@ class Runner {
             throw Error('null enemy')
         }
         toast(`hitting enemy ${enemy.name} (${enemy.uid})`)
-        await doCharacterAction({ uid: enemy.uid })
     }
 }
 
@@ -142,19 +136,25 @@ async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     if (charChoice == null) {
         throw Error('null char')
     }
-    await addSelected({ character: charChoice })
+    await callApi('AddSelected', {
+        character: charChoice,
+        //TODO: HOW??
+        index: 0,
+    })
 }
 
 function getAvailableChars(scene: EntryScene, tree: Gamestate) {
-    const pointsRemaining =
-        scene.selectedLevel.pointLimit -
-        sum(scene.selectedCharacters.map(sc => sc.points))
-    const availableChars = values(tree.ownedCharacters).filter(
-        oc =>
-            find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected
-            oc.points < pointsRemaining // within point limit
-    )
-    return availableChars
+    return values(tree.ownedCharacters)
+
+    // const pointsRemaining =
+    //     scene.selectedLevel.pointLimit -
+    //     sum(scene.selectedCharacters.map(sc => sc.points))
+    // const availableChars = values(tree.ownedCharacters).filter(
+    //     oc =>
+    //         find(scene.selectedCharacters, { tokenId: oc.tokenId }) == null && // not selected
+    //         oc.points < pointsRemaining // within point limit
+    // )
+    // return availableChars
 }
 
 function flip(probTrue: number): boolean {

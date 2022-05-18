@@ -3,13 +3,7 @@
     "tasks": [
         {
             "label": "Do everything",
-            "dependsOn": [
-                "tsc server",
-                "tsc client",
-                "esbuild client",
-                "esbuild server",
-                "run server"
-            ],
+            "dependsOn": ["tsc all", "esbuild all", "run server"],
             "dependsOrder": "parallel",
             "group": {
                 "kind": "build",
@@ -20,50 +14,27 @@
             // "runOptions": { "runOn": "folderOpen", }
         },
         {
-            "label": "tsc server",
-            "type": "typescript",
-            "tsconfig": "server/tsconfig.json",
-            "option": "watch",
+            "label": "tsc all",
+            "type": "shell",
+            "command": "./node_modules/.bin/tsc --build --watch server game shared client",
             "problemMatcher": ["$tsc-watch"],
             "group": "build",
             "presentation": {
-                "group": "checkers"
+                "group": "group1"
             }
         },
         {
-            "label": "tsc client",
-            "type": "typescript",
-            "tsconfig": "client/tsconfig.json",
-            "option": "watch",
-            "problemMatcher": ["$tsc-watch"],
-            "group": "build",
-            "presentation": {
-                "group": "checkers"
-            }
-        },
-        {
-            "label": "esbuild client",
+            "label": "esbuild all",
             "type": "shell",
-            "command": "bash run client:build-watch",
+            "command": "node scripts/buildAll.mjs watch",
             "presentation": {
-                "group": "builders"
-            }
-        },
-        {
-            "label": "esbuild server",
-            "type": "shell",
-            "command": "bash run server:build-watch",
-            "presentation": {
-                "group": "builders"
+                "group": "group1"
             }
         },
         {
             "label": "run server",
             "type": "shell",
-            "command": "bash run server:server-watch",
-            "presentation": {
-                "group": "group3"
-            }
+            "command": "bash run server:server-watch"
         }
     ]
 }

@@ -1,35 +1,28 @@
 {
     "name": "kaiju-client",
     "dependencies": {
-        "@chakra-ui/react": "^1.7.3",
-        "@emotion/react": "^11",
-        "@emotion/styled": "^11",
-        "@metaplex-foundation/mpl-token-metadata": "^0.0.2",
         "@monaco-editor/react": "^4.3.1",
         "@pixi-essentials/gradients": "^0.0.4",
-        "@solana/wallet-adapter-base": "^0.9.0",
-        "@solana/wallet-adapter-react": "^0.15.0",
-        "@solana/wallet-adapter-react-ui": "^0.8.0",
-        "@solana/wallet-adapter-wallets": "^0.14.0",
-        "@solana/web3.js": "^1.31.0",
-        "ahooks": "^3.1.5",
-        "assert": "^2.0.0",
-        "beautiful-skill-tree": "^1.7.1",
-        "framer-motion": "^5",
-        "gsap": "^3.9.1",
-        "marked": "^4.0.8",
         "@pixi-spine/all-4.0": "^3.0.13",
+        "ahooks": "^3.1.5",
+        "gsap": "^3.9.1",
+        "pixi-filters": "^4.1.6",
+        "pixi-tweener": "^0.12.2",
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.2.1",
         "preact": "^10.6.4",
         "react-hot-toast": "^2.1.1",
+        "shared": "workspace:shared@*",
         "socket.io-client": "^4.4.0",
-        "stream": "^0.0.2",
         "styled-components": "^5.3.3"
     },
     "devDependencies": {
         "@types/marked": "^4.0.1",
         "monaco-editor": "^0.31.1"
+    },
+    "bookmarks": {
+        "beautiful-skill-tree": "^1.7.1",
+        "marked": "^4.0.8"
     }
 }

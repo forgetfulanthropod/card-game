@@ -14,3 +14,11 @@ node_modules/
 *.acebase
 
 /ignore/
+
+tsconfig.tsbuildinfo
+pnpm-lock.yaml
+
+**/dist
+**/*.js
+**/*.d.ts
+db.json

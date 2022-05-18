@@ -1,6 +1,6 @@
-import type { SBaobab, SCursor } from 'baobab'
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
+import type { ROCursor, SBaobab } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
@@ -17,7 +17,7 @@ const urlPrefix = window.location.href.split('/')[3]
 
 // MARK
 let socket: Socket = null as unknown as Socket
-export function maybeMakeSocket(): void {
+function maybeMakeSocket(): void {
     if (socket == null)
         socket = io({
             path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
@@ -33,6 +33,16 @@ export function resolveWhenSocketConfirmed(): Promise<void> {
             resolve()
         })
     })
+}
+
+export function startRetrying(): void {
+    const interval = 3000
+    setInterval(() => {
+        if (!socket.connected) {
+            console.log('connection died!! retrying')
+            socket.connect()
+        }
+    }, interval)
 }
 
 export function getSocket(): Socket {
@@ -51,7 +61,7 @@ export function attachServerListener(): void {
 
 function updateBoabab(fromServer: unknown, path: string[]): void {
     // @ts-expect-error
-    const cursor = getTree().select(path) as SCursor<unknown>
+    const cursor = getTree().select(path) as ROCursor<unknown>
     const oldState = cursor.get() as unknown
     const differences = calcDiff(oldState, fromServer)
     // not working on N level tree updates?
@@ -90,7 +100,7 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
     }
 }
 
-function applyChange<T>(change: Diff<T, T>, cursor: SCursor<T> | SBaobab<T>) {
+function applyChange<T>(change: Diff<T, T>, cursor: ROCursor<T> | SBaobab<T>) {
     log('applying tree change:', change, 'at:', cursor.toString())
     switch (change.kind) {
         case 'N': {

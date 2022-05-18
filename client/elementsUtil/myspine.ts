@@ -1,8 +1,8 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
 export { PixiSpine }
-import type { SCursor } from 'baobab'
 import { Loader } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 
 import type {
     AnimationsOf,
@@ -10,24 +10,23 @@ import type {
 } from '@/features/battle/logic/spineAssets'
 import { onUpdate } from '@/util/onUpdate'
 
+import type { InteractionEvents } from './InteractionEvents'
+import { bindEvents } from './InteractionEvents'
+
 export function Spine<Name extends SpineAsset>(props: {
     name: Name
-    animation?: AnimationsOf<Name> | SCursor<AnimationsOf<Name>>
+    animation?: AnimationsOf<Name> | ROCursor<AnimationsOf<Name>>
     x?: number
     y?: number
     size?: [number, number]
-    onClick?: () => void
+    events?: InteractionEvents
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
     if (props.x != null) spine.x = props.x
     if (props.y != null) spine.y = props.y
     if (props.size != null) [spine.width, spine.height] = props.size
-    if (props.onClick != null) {
-        spine.interactive = true
-        spine.on('pointerdown', () => {
-            if (props.onClick != null) props.onClick()
-        })
-    }
+
+    bindEvents(props.events, spine)
 
     let unsub: null | Callback = null
     if (typeof props.animation === 'string') {

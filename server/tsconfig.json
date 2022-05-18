@@ -1,22 +1,27 @@
 // Server
 {
     "compilerOptions": {
+        "composite": true,
         "module": "commonjs",
+        // "incremental": true,
         "noEmit": true,
         "strict": true,
         "target": "es2017",
         "noImplicitAny": true,
         "esModuleInterop": true,
+        "moduleResolution": "node",
         "baseUrl": ".",
         "experimentalDecorators": true,
-        "skipLibCheck": true,
-        "paths": {
-            "@serverActions": ["./actions/types/serverActions"],
-            "@shared": ["../shared/index"],
-            "@shared/code": ["../shared/code/index"],
-            "@/*": ["./*"]
-        }
+        "skipLibCheck": true
     },
     "compileOnSave": true,
-    "include": ["./**/*.ts", "../shared"]
+    "include": ["./**/*.ts"],
+    "references": [
+        {
+            "path": "../game"
+        },
+        {
+            "path": "../shared"
+        }
+    ]
 }

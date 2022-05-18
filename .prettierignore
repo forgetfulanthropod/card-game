@@ -3,3 +3,10 @@ node_modules/
 
 pnpm-lock.yaml
 db/db-build.js
+
+client/public_/spine
+client/public_/index.html
+**/package.json
+**/testy.json
+**/dist/
+db.json

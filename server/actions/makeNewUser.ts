@@ -1,8 +1,10 @@
-import type { MakeNewUser } from '@serverActions'
+// import { setUser } from '@/database'
 
-import { addNewUser } from '@/util/addNewUser'
+import { getInitialGameState } from 'game'
 
-export const makeNewUser: MakeNewUser = args => {
-    logger.info(`adding user ${args.username} with initial gamestate`)
-    addNewUser(args)
+import { getRootCursor } from '../treeUtils'
+export function makeNewUser(args: { username: string }): void {
+    const gs = getInitialGameState(args.username)
+    getRootCursor().select('users').set(args.username, gs)
+    // void setUser(args.username, gs)
 }

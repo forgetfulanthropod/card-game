@@ -1,8 +1,8 @@
-import type { Gamestate } from '@shared'
-import type { SCursor } from 'baobab'
 import { omit } from 'lodash'
 import { useRef, useState } from 'preact/hooks'
 import toast from 'react-hot-toast'
+import type { ROCursor } from 'sbaobab'
+import type { Gamestate } from 'shared'
 
 import styled from '@/config/mystyled'
 import { getClientTree, getTree } from '@/data/rootTree'
@@ -20,7 +20,10 @@ export function Sidebar(): JSXElement {
             top='0'
         />
         <OneSidebar
-            cursor={getClientTree().select('serverCalls')}
+            cursor={
+                // @ts-ignore
+                getClientTree().select('serverCalls')
+            }
             title='Server calls'
             top='1em'
         />
@@ -54,6 +57,7 @@ function GamestateEditor(props: { top: string }): JSXElement {
                     toast.error('json parse error')
                     return
                 }
+                // @ts-expect-error
                 getTree().merge(parsed)
                 setShown(false)
             }}
@@ -65,7 +69,7 @@ function GamestateEditor(props: { top: string }): JSXElement {
 }
 
 function OneSidebar<T>(props: {
-    cursor: SCursor<T[]>
+    cursor: ROCursor<T[]>
     title: string
     top: string
 }): JSXElement {

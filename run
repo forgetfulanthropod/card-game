@@ -12,7 +12,7 @@ export PATH=./node_modules/.bin:$PATH
 function install-all() {
     set +x # skip printing in this function
     wd=$(pwd)
-    for d in . client server db crypto-server; do
+    for d in . client server game shared; do
         cd $d
         echo "installing in $d"
         pnpm install &
@@ -42,17 +42,11 @@ function lint() {
 }
 
 function tsc-all() {
-    client:tsc &
-    server:tsc &
-    db:tsc &
-    crypto:tsc &
+    tsc -b server game shared client
 }
 
 function build-all() {
-    client:build &
-    server:build &
-    db:build &
-    crypto:build &
+    node scripts/buildAll.mjs
 }
 
 function clean-builds() {

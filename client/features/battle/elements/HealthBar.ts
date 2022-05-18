@@ -1,8 +1,8 @@
-import type { CharacterMeta, CharacterUid } from '@shared'
-import type { SCursor } from 'baobab'
 import { Matrix, utils } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
+import type { CharacterMeta, CharacterUid } from 'shared'
 
-import { toggleStance } from '@/actions'
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
 import { SCALE_UNIVERSAL } from '@/elementsUtil'
@@ -38,7 +38,7 @@ function getCharacterCursor(characterUid: string) {
 }
 
 function bindBlockIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -83,7 +83,7 @@ function bindBlockIndicator(
 }
 
 function bindEffectIndicators(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -148,7 +148,7 @@ function bindEffectIndicators(
 }
 
 function bindStanceIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -182,7 +182,9 @@ function bindStanceIndicator(
                 width: displayWidth / 3,
                 height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
                 onClick: () =>
-                    toggleStance({ characterUid: characterCursor.get('uid') }),
+                    callApi('ToggleStance', {
+                        characterUid: characterCursor.get('uid'),
+                    }),
             })
         )
     }
@@ -199,7 +201,7 @@ function bindMainEl() {
 }
 
 function bindHealthIndicator(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     mainEl: PixiContainer
 ) {
     const container = mainEl.addChild(Container({ children: [] }))
@@ -244,7 +246,7 @@ function bindHealthIndicator(
 }
 
 function drawHealthBar(
-    characterCursor: SCursor<CharacterMeta>,
+    characterCursor: ROCursor<CharacterMeta>,
     g: PixiGraphics
 ) {
     const xMargin = 0.01869158878

@@ -1,4 +1,4 @@
-import { changeDungeon } from '@/actions'
+import { callApi } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
@@ -8,13 +8,14 @@ export function LevelInfo(): PixiContainer {
 
     const level = scene.select('selectedLevel').get()
 
-    scene.select('selectedLevel').on('update', () => {
-        const selectedLevel = scene.get().selectedLevel ?? {}
+    // ALPHA NO LEVELS!
+    // scene.select('selectedLevel').on('update', () => {
 
-        levelNumText.text = `Level ${selectedLevel.num}`
-        levelNameText.text = selectedLevel.name
-        pointLimitText.text = `point limit: ${selectedLevel.pointLimit}`
-    })
+    // const selectedLevel = scene.get().selectedLevel ?? {}
+
+    // levelNumText.text = `Level ${selectedLevel.num}`
+    // levelNameText.text = selectedLevel.name
+    // })
 
     const levelNumText = Text({
         text: `Level ${level?.num}`,
@@ -37,12 +38,14 @@ export function LevelInfo(): PixiContainer {
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
-            fill: ['#fff', '#eee'], // gradient
+            // fill: ['#fff', '#eee'], // gradient
+            fill: ['#aaa'],
             stroke: '#999',
             strokeThickness: 5,
         },
+        alpha: 0,
         async onClick() {
-            await changeDungeon({ direction: -1 })
+            await callApi('ChangeDungeon', { direction: -1 })
         },
     })
     const rightButton = Text({
@@ -53,12 +56,14 @@ export function LevelInfo(): PixiContainer {
         style: {
             fontFamily: 'VT323',
             fontSize: 80,
-            fill: ['#fff', '#eee'], // gradient
+            // fill: ['#fff', '#eee'], // gradient
+            fill: ['#aaa'],
             stroke: '#999',
             strokeThickness: 5,
         },
+        alpha: 0,
         async onClick() {
-            await changeDungeon({ direction: +1 })
+            await callApi('ChangeDungeon', { direction: +1 })
         },
     })
 
@@ -75,29 +80,10 @@ export function LevelInfo(): PixiContainer {
         },
     })
 
-    const pointLimitText = Text({
-        text: `point limit: ${level?.pointLimit}`,
-        anchor: [0.5, 0],
-        y: 90,
-        style: {
-            fontFamily: 'VT323',
-            fontSize: 30,
-            fill: '#fff',
-            stroke: '#999',
-            strokeThickness: 5,
-        },
-    })
-
     const root = Container({
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 10,
-        children: [
-            leftButton,
-            levelNumText,
-            rightButton,
-            levelNameText,
-            pointLimitText,
-        ],
+        children: [leftButton, levelNumText, rightButton, levelNameText],
     })
 
     return root

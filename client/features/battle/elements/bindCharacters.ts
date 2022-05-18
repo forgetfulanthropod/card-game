@@ -1,15 +1,15 @@
-import type { BattleScene } from '@shared'
-import type { SCursor } from 'baobab'
 import isEqual from 'lodash/isEqual'
+import type { ROCursor } from 'sbaobab'
+import type { BattleScene } from 'shared'
 
-import { doCharacterAction } from '@/actions'
+import { localTree } from '@/data/localTree'
 import type { PixiContainer } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
 
 import { Character } from './Character'
 
 export function bindCharacters(
-    scene: SCursor<BattleScene>,
+    scene: ROCursor<BattleScene>,
     container: PixiContainer
 ) {
     const allCharsCursor = scene.select('allCharacters')
@@ -45,7 +45,7 @@ export function bindCharacters(
 }
 
 function updateCharacters(
-    scene: SCursor<BattleScene>,
+    scene: ROCursor<BattleScene>,
     container: PixiContainer
 ) {
     const allCharsCursor = scene.select('allCharacters')
@@ -67,8 +67,12 @@ function updateCharacters(
         ...childCursors.map(childCursor =>
             Character({
                 cursor: childCursor,
-                onClick: () =>
-                    doCharacterAction({ uid: childCursor.get('uid') }),
+                onClick: () => {
+                    console.log('clicked a character')
+                    localTree
+                        .select('selectedTargets')
+                        .apply(arr => [...arr, childCursor.get('uid')])
+                },
                 scale: 1,
                 isSelected: false,
                 zIndex: sortedYs.findIndex(y => y === childCursor.get('y')),

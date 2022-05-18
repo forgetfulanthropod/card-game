@@ -1,0 +1,21 @@
+// Shared
+{
+    "compilerOptions": {
+        "composite": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        // "incremental": true,
+        // "noEmit": true,
+        "strict": true,
+        "target": "es2017",
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "baseUrl": ".",
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "outDir": "./dist"
+    },
+    "compileOnSave": true,
+    "include": ["./**/*.ts"],
+    "exclude": ["dist", "node_modules"]
+}

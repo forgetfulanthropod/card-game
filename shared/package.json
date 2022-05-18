@@ -1,0 +1,7 @@
+{
+    "name": "shared",
+    "exports": {
+        ".": "./dist/index.ts",
+        "./code": "./code/index.ts"
+    }
+}

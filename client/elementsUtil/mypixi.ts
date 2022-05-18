@@ -1,26 +1,36 @@
 // window.PIXI = PIXI
+import type { Datum, RODatum } from 'datums'
 import { gsap } from 'gsap'
 import { PixiPlugin } from 'gsap/PixiPlugin'
+import { sortBy, uniq } from 'lodash'
 import type {
+    DisplayObject,
     Filter as PixiFilter,
+    IDestroyOptions,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
-import { DisplayObject as PixiDisplayObject } from 'pixi.js'
-import { Renderer } from 'pixi.js'
 import {
     Application as PixiApplication,
     Container as PixiContainer,
+    DisplayObject as PixiDisplayObject,
     Graphics as PixiGraphics,
     Loader as PixiLoader,
+    Renderer,
     Sprite as PixiSprite,
     Text as PixiText,
     Texture as PixiTexture,
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+import { Tweener } from 'pixi-tweener'
 
+import type { InteractionEvents } from './InteractionEvents'
+import { bindEvents } from './InteractionEvents'
 import { registerPixiInspector } from './pixiInspector'
+
+// ...
+
 // import * as PIXI from 'pixi.js'
 
 gsap.registerPlugin(PixiPlugin)
@@ -75,9 +85,13 @@ interface DisplayObjectArgs {
     onTick?: OnPixiTick
     alpha?: number
     filters?: (PixiFilter | null | false | undefined)[]
+    // deprecated
     onClick?: InteractionEventHandler
+    // deprecated
     onMouseover?: InteractionEventHandler
+    // deprecated
     onMouseout?: InteractionEventHandler
+    events?: InteractionEvents
     name?: string
     zIndex?: number
     visible?: boolean
@@ -120,7 +134,8 @@ interface TextArgs extends ShownArgs {
     style?: Partial<ITextStyle>
 }
 
-interface GraphicsArgs extends ShownArgs {
+interface GraphicsArgs extends DisplayObjectArgs {
+    tint?: number
     draw: (g: PixiGraphics) => void
 }
 
@@ -137,94 +152,102 @@ export function Sprite(args: SpriteArgs): PixiSprite {
 }
 
 function applyDisplayObjectArgs(
-    x: PixiContainer | PixiSprite | PixiText | PixiGraphics,
+    el: PixiContainer | PixiSprite | PixiText | PixiGraphics,
     args: DisplayObjectArgs
 ) {
+    bindEvents(args.events, el)
+
+    if (args.onClick != null) {
+        el.interactive = true
+        el.on('pointerdown', args.onClick)
+    }
+
+    if (args.onMouseover != null) {
+        el.interactive = true
+        el.on('pointerover', args.onMouseover)
+    }
+    if (args.onMouseout != null) {
+        el.interactive = true
+        el.on('pointerout', args.onMouseout)
+    }
+
     if (args.position != null) {
-        x.position.set(...args.position)
+        el.position.set(...args.position)
     }
     if (args.scale != null) {
         if (Array.isArray(args.scale)) {
-            x.scale.set(...args.scale)
+            el.scale.set(...args.scale)
         } else {
-            x.scale.set(args.scale)
+            el.scale.set(args.scale)
         }
     }
 
     if (args.width != null) {
-        x.width = args.width
+        el.width = args.width
     }
     if (args.height != null) {
-        x.height = args.height
+        el.height = args.height
     }
     if (args.pivot != null) {
         if (Array.isArray(args.pivot)) {
-            x.pivot.set(...args.pivot)
+            el.pivot.set(...args.pivot)
         } else {
-            x.pivot.set(args.pivot)
+            el.pivot.set(args.pivot)
         }
     }
     if (args.x != null) {
-        x.x = args.x
+        el.x = args.x
     }
     if (args.y != null) {
-        x.y = args.y
+        el.y = args.y
     }
 
     if (args.onTick != null) {
         PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick && args.onTick(x, dt)
+            const result = args.onTick && args.onTick(el, dt)
             if (result === 'remove') PixiTicker.shared.remove(cb)
         })
     }
 
     if (args.alpha != null) {
-        x.alpha = args.alpha
+        el.alpha = args.alpha
     }
 
     if (args.filters != null) {
         const filters = args.filters.filter(Boolean) as PixiFilter[]
-        x.filters = filters
+        el.filters = filters
     }
 
-    if (args.onClick != null) {
-        x.interactive = true
-        x.on('pointerdown', args.onClick)
-    }
-
-    if (args.onMouseover != null) {
-        x.interactive = true
-        x.on('pointerover', args.onMouseover)
-    }
-    if (args.onMouseout != null) {
-        x.interactive = true
-        x.on('pointerout', args.onMouseout)
-    }
     if (args.name != null) {
-        x.name = args.name
+        el.name = args.name
     }
 
     if (args.zIndex != null) {
-        x.zIndex = args.zIndex
+        el.zIndex = args.zIndex
     }
     if (args.visible != null) {
-        x.visible = args.visible
+        el.visible = args.visible
     }
 
     if (args.angle != null) {
-        x.angle = args.angle
+        el.angle = args.angle
     }
     if (args.rotation != null) {
-        x.rotation = args.rotation
+        el.rotation = args.rotation
     }
 
     if (args.onDestroy != null) {
-        const destroy = x.destroy
-        x.destroy = (...destroyArgs) => {
-            destroy.call(x, ...destroyArgs)
-            args.onDestroy?.forEach(cb => cb())
-        }
+        el.on('destroyed', () => {
+            args?.onDestroy?.forEach(cb => cb())
+        })
     }
+    // if (args.onDestroy != null) {
+    //     const destroy = el.destroy
+    //     el.destroy = (...destroyArgs) => {
+    //         destroy.call(el, ...destroyArgs)
+    //         args.onDestroy?.forEach(cb => cb())
+    //     }
+    // }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
@@ -261,10 +284,12 @@ export function Application(args: {
     app.stage.scale.set(resW / 1920)
     app.ticker.maxFPS = 30
 
-    let frames = 0
-    const delay = 10_000
-    app.ticker.add(() => frames++)
-    setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
+    // const delay = 10_000
+    // let frames = 0
+    // app.ticker.add(() => frames++)
+    // setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
+
+    Tweener.init(app.ticker)
 
     setTimeout(function CornerEl() {
         const div = document.createElement('div')
@@ -322,15 +347,15 @@ export function Container(args: ContainerArgs): PixiContainer {
         }
     }
     applyDisplayObjectArgs(c, args)
-    if (args.onTick != null) {
-        PixiTicker.shared.add(function cb(dt) {
-            const result = args.onTick && args.onTick(c, dt)
-            if (result === 'remove') PixiTicker.shared.remove(cb)
-        })
-    }
-    if (args.name != null) {
-        c.name = args.name
-    }
+    // if (args.onTick != null) {
+    //     PixiTicker.shared.add(function cb(dt) {
+    //         const result = args.onTick && args.onTick(c, dt)
+    //         if (result === 'remove') PixiTicker.shared.remove(cb)
+    //     })
+    // }
+    // if (args.name != null) {
+    //     c.name = args.name
+    // }
     if (args.cache === true) {
         c.cacheAsBitmap = true
     }
@@ -351,18 +376,55 @@ export function Graphics(args: GraphicsArgs): PixiGraphics {
     return g
 }
 
+export type PlayablePixiSprite = PixiSprite & { play: () => void }
+
 export function VideoBackground(args: {
     name?: string
     scale: number
     src: string
-}): PixiSprite {
-    const r = new PixiVideoResource(args.src, { updateFPS: 24 })
+    autoPlay?: boolean
+    bgLoopEnded?: Datum<number>
+}): PlayablePixiSprite {
+    const r = new PixiVideoResource(args.src, {
+        updateFPS: 30,
+        autoPlay: args.autoPlay ?? true,
+    })
+
     const source = r.source as HTMLVideoElement
     source.muted = true
-    source.loop = true
-    const sprite = PixiSprite.from(PixiTexture.from(r.source))
-    sprite.width = BASE_WIDTH * args.scale
-    sprite.height = BASE_HEIGHT * args.scale
+
+    // source.loop = true // must do manually for event!
+    const endedCallback = () => {
+        args.bgLoopEnded?.set(Date.now())
+        void source.play()
+    }
+    source.addEventListener('ended', endedCallback)
+
+    const sprite = Sprite({
+        src: PixiTexture.from(r.source),
+        onDestroy: [() => r.destroy()],
+        anchor: 0.5,
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2,
+    }) as PlayablePixiSprite
+
+    sprite.play = source.play.bind(source)
+
+    void r.load().then(async () => {
+        await new Promise(resolve => setTimeout(resolve, 0))
+
+        if (sprite.width / sprite.height >= BASE_WIDTH / BASE_HEIGHT) {
+            // too wide
+            sprite.scale.set(BASE_HEIGHT / sprite.height)
+        } else {
+            // too square
+            sprite.scale.set(BASE_WIDTH / sprite.width)
+        }
+
+        sprite.on('animationEnd', () => {})
+    })
+    // sprite.width = BASE_WIDTH * args.scale
+    // sprite.height = BASE_HEIGHT * args.scale
     if (args.name) {
         sprite.name = args.name
     }
@@ -385,4 +447,124 @@ export function PngLayersBackground(args: {
             })
         ),
     })
+}
+
+export function If(
+    condition: RODatum<boolean>,
+    ifRender: () => DisplayObject,
+    elseRender?: () => DisplayObject,
+    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+): PixiContainer {
+    const onDestroy: Callback[] = []
+    const root = Container({ children: [], onDestroy })
+    onDestroy.push(condition.onChange(handleChange, true))
+    return root
+    function handleChange(val: boolean) {
+        root.children.forEach(c => c.destroy(destroyOptions))
+        root.removeChildren()
+        if (val) {
+            root.addChild(ifRender())
+        } else if (elseRender != null) {
+            root.addChild(elseRender())
+        }
+    }
+}
+
+type KeyedDisplayObject = DisplayObject & { key: string | number }
+interface KeyedContainer extends PixiContainer {
+    children: KeyedDisplayObject[]
+}
+export function For<T extends { key: string | number }[]>(
+    items: RODatum<T>,
+    render: (item: T[number]) => DisplayObject,
+    position?: (index: number) => { x?: number; y?: number },
+    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+): PixiContainer {
+    const onDestroy: Callback[] = []
+    const root = Container({ children: [], onDestroy }) as KeyedContainer
+    onDestroy.push(items.onChange(handleUpdate, true))
+
+    let warnedAlready = false
+    return root
+    function handleUpdate(items: T) {
+        const keys = items.map(v => v.key)
+        if (uniq(keys).length !== keys.length && !warnedAlready) {
+            console.warn('duplicate keys in For:', duplicated(keys))
+            warnedAlready = true
+        }
+
+        root.children.forEach(c => {
+            if (!keys.includes(c.key)) {
+                c.destroy(destroyOptions)
+                root.removeChild(c)
+            }
+        })
+        const oldChildren = root.children.filter(c => keys.includes(c.key))
+        const oldKeys = oldChildren.map(c => c.key)
+        const newItems = items.filter(it => !oldKeys.includes(it.key))
+        const newChildren = newItems.map(it => {
+            const c = render(it) as KeyedDisplayObject
+            c.key = it.key
+            return c
+        })
+        // redundant filter is necessary because children doesn't necessarily update immediately
+        root.removeChildren()
+        const sortedChildren = sortBy([...newChildren, ...oldChildren], x =>
+            keys.indexOf(x.key)
+        )
+        if (sortedChildren.length > 0) root.addChild(...sortedChildren)
+        if (position != null) {
+            for (let i = 0; i < root.children.length; i++) {
+                const c = root.children[i]
+                const { x, y } = position(i)
+                if (x != null) c.x = x
+                if (y != null) c.y = y
+            }
+        }
+    }
+}
+
+export function portalize(args: {
+    from: DisplayObject
+    content: DisplayObject
+    to?: PixiContainer
+}): void {
+    if (args.to == null && app?.stage == null) {
+        throw Error('no app.stage')
+    }
+    const { from, content, to = app?.stage } = args
+    if (to == null) throw Error('unreachable: portal: to == null')
+    to.addChild(content)
+    from.on('destroyed', () => {
+        to.removeChild(content)
+        content.destroy({ children: true })
+    })
+}
+
+type TypeArgPairs =
+    | [PixiGraphics, DisplayObjectArgs]
+    | [PixiText, ShownArgs]
+    | [PixiContainer, DisplayObjectArgs]
+    | [PixiSprite, ShownArgs]
+    | [DisplayObject, DisplayObjectArgs]
+
+export function Adjust<T extends TypeArgPairs>(...args_: T): T[0] {
+    const [el, args] = args_
+    if (el instanceof PixiSprite || el instanceof PixiText) {
+        applyShownArgs(el, args)
+    } else if (el instanceof PixiContainer) {
+        applyDisplayObjectArgs(el, args)
+    }
+    return el
+}
+
+function duplicated<T>(arr: T[]): T[] {
+    const seen = new Set<T>()
+    const dups = new Set<T>()
+    arr.forEach(x => {
+        if (seen.has(x)) dups.add(x)
+        seen.add(x)
+        return false
+    })
+    return Array.from(dups)
 }

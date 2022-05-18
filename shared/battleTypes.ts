@@ -12,6 +12,7 @@ import type { SpecialDoorName } from './SpecialDoorName'
 
 export type Pile = Record<CardUid, Card>
 export type Cards = Record<PileId, Pile>
+
 export interface BattleScene extends SceneHas {
     username: string
     name: 'battle'
@@ -30,6 +31,8 @@ export interface BattleScene extends SceneHas {
     doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
     // loot: Record<ItemUid, ItemName>
+    nextNpcMoves: AttackData[]
+    // nextAction: null | NextAction
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
