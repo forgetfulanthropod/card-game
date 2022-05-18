@@ -147,47 +147,49 @@ export function SelectedCharacters(): PixiContainer {
         void fillUnselectedSlots(charactersData)
 
         const characters =
-            charactersData.map((c, i) => {
-                const animation = MainCharacterAnimation(c, () => {
-                    const nextIndex =
-                        (defaultOwnedCharacters.findIndex(
-                            oc => oc.name === c.name
-                        ) +
-                            1) %
-                        3
-                    const nextChoice = defaultOwnedCharacters[nextIndex]
-                    console.log({ nextIndex, nextChoice })
-                    void callApi('AddSelected', {
-                        character: {
-                            ...nextChoice,
-                            uid: `pc-${i + 1}`,
-                        },
-                        index: i as CharacterPlaceIndex,
+            charactersData
+                .filter(c => c != null)
+                .map((c, i) => {
+                    const animation = MainCharacterAnimation(c, () => {
+                        const nextIndex =
+                            (defaultOwnedCharacters.findIndex(
+                                oc => oc.name === c.name
+                            ) +
+                                1) %
+                            3
+                        const nextChoice = defaultOwnedCharacters[nextIndex]
+                        console.log({ nextIndex, nextChoice })
+                        void callApi('AddSelected', {
+                            character: {
+                                ...nextChoice,
+                                uid: `pc-${i + 1}`,
+                            },
+                            index: i as CharacterPlaceIndex,
+                        })
                     })
-                })
 
-                if (animation != null) {
-                    animation.x -= animation.width / 2
-                    animation.y += animation.height / 2
-                    // animation.filters = [preselectFilter]
-                    // animation.filters = []
-                    animation.cursor = 'pointer'
-                }
+                    if (animation != null) {
+                        animation.x -= animation.width / 2
+                        animation.y += animation.height / 2
+                        // animation.filters = [preselectFilter]
+                        // animation.filters = []
+                        animation.cursor = 'pointer'
+                    }
 
-                return Container({
-                    x: i === 0 ? -200 : i === 2 ? 0 : 200,
-                    y: i === 2 ? 43 : 0,
-                    scale: i === 2 ? 1.1 : 1,
-                    children: [
-                        animation ??
-                            Sprite({
-                                anchor: [0.5, 0.5],
-                                src: getTexture(c.name),
-                                scale: 1,
-                            }),
-                    ],
-                })
-            }) ?? []
+                    return Container({
+                        x: i === 0 ? -200 : i === 2 ? 0 : 200,
+                        y: i === 2 ? 43 : 0,
+                        scale: i === 2 ? 1.1 : 1,
+                        children: [
+                            animation ??
+                                Sprite({
+                                    anchor: [0.5, 0.5],
+                                    src: getTexture(c.name),
+                                    scale: 1,
+                                }),
+                        ],
+                    })
+                }) ?? []
 
         brightBackLightIsShining.onChange((is, _, unsub) => {
             unsub()
