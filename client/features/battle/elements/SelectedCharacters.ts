@@ -124,8 +124,6 @@ const darkenFilter = new OldFilmFilter({
 export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
-    // selectedCharacters.on('update', )
-
     const root = Container({
         x: (BASE_WIDTH * 1037) / 1920,
         y: (BASE_HEIGHT * 698) / 1080,
@@ -137,6 +135,7 @@ export function SelectedCharacters(): PixiContainer {
         ],
     })
 
+    const listenerStack: (() => void)[] = []
     setSelectedCharacters()
 
     return root
@@ -190,15 +189,18 @@ export function SelectedCharacters(): PixiContainer {
                     })
                 }) ?? []
 
-        brightBackLightIsShining.onChange((is, _, unsub) => {
-            unsub()
+        listenerStack.pop()?.()
 
-            characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
-        })
+        listenerStack.push(
+            brightBackLightIsShining.onChange((is, _, unsub) => {
+                if (is) unsub()
+
+                characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
+            })
+        )
 
         root.removeChildren()
         if (Array.isArray(characters) && characters.length > 0)
-            // @ts-ignore
             root.addChild(...characters)
     }
 }
