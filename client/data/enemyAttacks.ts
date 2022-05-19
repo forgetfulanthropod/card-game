@@ -52,9 +52,8 @@ export const enemyAttacks = {
 } as const // prettier-ignore
 
 type BaseHealth = number | `${number}-${number}` | `>${number}`
-type EnemyAttacks = Record<string, EnemyAttack>
 type Selfkeys<T> = { [K in keyof T]: { name: K } }
-type EnemyAttack = {
+export type EnemyAttack = {
     displayName: string
     level: number | string | null
     name: string
@@ -62,17 +61,17 @@ type EnemyAttack = {
     baseAttack: number
     baseBlock: number
     moves: readonly [
-        AttackName,
-        AttackName | null,
-        AttackName | null,
-        AttackName | null,
-        AttackName | null
+        EnemyAttackName,
+        EnemyAttackName | null,
+        EnemyAttackName | null,
+        EnemyAttackName | null,
+        EnemyAttackName | null
     ]
 }
-satisfies<EnemyAttacks>(enemyAttacks)
+satisfies<Record<string, EnemyAttack>>(enemyAttacks)
 satisfies<Selfkeys<typeof enemyAttacks>>(enemyAttacks)
 
-const attackNames = {
+export const attackNames = {
     swordWack: 'Sword Whack (BA)',
     mimicAttack:
         'Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).',
@@ -128,7 +127,7 @@ const _parameterizedAttacks = {
         'Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after)',
 }
 
-type AttackName =
+export type EnemyAttackName =
     | keyof typeof attackNames
     | `startlingSpook(${number},${number})`
     | `supriseAllergy(${number},${number})`
