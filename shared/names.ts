@@ -1,4 +1,4 @@
-import type { Brandify } from 'datamodel'
+import type { Brandify } from '.'
 
 export type CharacterName =
     | 'bloatDemon'

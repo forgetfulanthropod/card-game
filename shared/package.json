@@ -1,7 +1,5 @@
 {
     "name": "shared",
-    "exports": {
-        ".": "./dist/index.ts",
-        "./code": "./code/index.ts"
-    }
+    "main": "./dist/exports.js",
+    "types": "./dist/exports.d.ts"
 }

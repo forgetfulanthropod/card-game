@@ -1,4 +1,4 @@
-import type { StanceName } from 'names'
+import type { StanceName } from '..'
 
 export type StanceMultiplier = 0.75 | 1 | 1.25
 export type StanceStats = {
