@@ -22,16 +22,16 @@ export const enemyAttacks = {
     matcha8      : {displayName: 'Matcha'             , level : 8       ,  name : 'matcha8'      ,  baseHealth : 160      ,  baseAttack : 19 , baseBlock : 41 , moves: ['basicAttack'     ,  'supriseAllergy(4,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
     matcha9      : {displayName: 'Matcha'             , level : 9       ,  name : 'matcha9'      ,  baseHealth : 175      ,  baseAttack : 22 , baseBlock : 48 , moves: ['basicAttack'     ,  'supriseAllergy(4,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
     matcha10     : {displayName: 'Matcha'             , level : 10      ,  name : 'matcha10'     ,  baseHealth : 200      ,  baseAttack : 25 , baseBlock : 56 , moves: ['basicAttack'     ,  'supriseAllergy(5,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
-    orcWarrior1  : {displayName: 'Orc Warrior'        , level : 1       ,  name : 'orcWarrior1'  ,  baseHealth : 15       ,  baseAttack : 3  , baseBlock : 6  , moves: ['meatyChargy(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
-    orcWarrior2  : {displayName: 'Orc Warrior'        , level : 2       ,  name : 'orcWarrior2'  ,  baseHealth : 33       ,  baseAttack : 4  , baseBlock : 8  , moves: ['meatyChargy(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
-    orcWarrior3  : {displayName: 'Orc Warrior'        , level : 3       ,  name : 'orcWarrior3'  ,  baseHealth : 50       ,  baseAttack : 6  , baseBlock : 10 , moves: ['meatyChargy(1)'  ,  'slash'              ,  null                ,  'block'         ,  null                      ]},
-    orcWarrior4  : {displayName: 'Orc Warrior'        , level : 4       ,  name : 'orcWarrior4'  ,  baseHealth : 75       ,  baseAttack : 9  , baseBlock : 12 , moves: ['meatyChargy(1)'  ,  'slash'              ,  'bellowAndSing(1,1)',  'block'         ,  null                      ]},
-    orcWarrior5  : {displayName: 'Orc Warrior'        , level : 5       ,  name : 'orcWarrior5'  ,  baseHealth : 88       ,  baseAttack : 12 , baseBlock : 14 , moves: ['meatyChargy(1)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
-    orcWarrior6  : {displayName: 'Orc Warrior'        , level : 6       ,  name : 'orcWarrior6'  ,  baseHealth : 103      ,  baseAttack : 14 , baseBlock : 16 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
-    orcWarrior7  : {displayName: 'Orc Warrior'        , level : 7       ,  name : 'orcWarrior7'  ,  baseHealth : 118      ,  baseAttack : 16 , baseBlock : 19 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,2)'  ]},
-    orcWarrior8  : {displayName: 'Orc Warrior'        , level : 8       ,  name : 'orcWarrior8'  ,  baseHealth : 133      ,  baseAttack : 18 , baseBlock : 22 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
-    orcWarrior9  : {displayName: 'Orc Warrior'        , level : 9       ,  name : 'orcWarrior9'  ,  baseHealth : 148      ,  baseAttack : 20 , baseBlock : 25 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,1)',  'block'         ,  'screamAndCharge(125,2)'  ]},
-    orcWarrior10 : {displayName: 'Orc Warrior'        , level : 10      ,  name : 'orcWarrior10' ,  baseHealth : 163      ,  baseAttack : 23 , baseBlock : 28 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    orcWarrior1  : {displayName: 'Orc Warrior'        , level : 1       ,  name : 'orcWarrior1'  ,  baseHealth : 15       ,  baseAttack : 3  , baseBlock : 6  , moves: ['meatyCharge(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior2  : {displayName: 'Orc Warrior'        , level : 2       ,  name : 'orcWarrior2'  ,  baseHealth : 33       ,  baseAttack : 4  , baseBlock : 8  , moves: ['meatyCharge(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior3  : {displayName: 'Orc Warrior'        , level : 3       ,  name : 'orcWarrior3'  ,  baseHealth : 50       ,  baseAttack : 6  , baseBlock : 10 , moves: ['meatyCharge(1)'  ,  'slash'              ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior4  : {displayName: 'Orc Warrior'        , level : 4       ,  name : 'orcWarrior4'  ,  baseHealth : 75       ,  baseAttack : 9  , baseBlock : 12 , moves: ['meatyCharge(1)'  ,  'slash'              ,  'bellowAndSing(1,1)',  'block'         ,  null                      ]},
+    orcWarrior5  : {displayName: 'Orc Warrior'        , level : 5       ,  name : 'orcWarrior5'  ,  baseHealth : 88       ,  baseAttack : 12 , baseBlock : 14 , moves: ['meatyCharge(1)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
+    orcWarrior6  : {displayName: 'Orc Warrior'        , level : 6       ,  name : 'orcWarrior6'  ,  baseHealth : 103      ,  baseAttack : 14 , baseBlock : 16 , moves: ['meatyCharge(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
+    orcWarrior7  : {displayName: 'Orc Warrior'        , level : 7       ,  name : 'orcWarrior7'  ,  baseHealth : 118      ,  baseAttack : 16 , baseBlock : 19 , moves: ['meatyCharge(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,2)'  ]},
+    orcWarrior8  : {displayName: 'Orc Warrior'        , level : 8       ,  name : 'orcWarrior8'  ,  baseHealth : 133      ,  baseAttack : 18 , baseBlock : 22 , moves: ['meatyCharge(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    orcWarrior9  : {displayName: 'Orc Warrior'        , level : 9       ,  name : 'orcWarrior9'  ,  baseHealth : 148      ,  baseAttack : 20 , baseBlock : 25 , moves: ['meatyCharge(2)'  ,  'slash'              ,  'bellowAndSing(2,1)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    orcWarrior10 : {displayName: 'Orc Warrior'        , level : 10      ,  name : 'orcWarrior10' ,  baseHealth : 163      ,  baseAttack : 23 , baseBlock : 28 , moves: ['meatyCharge(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
     bosshogJurgen: {displayName: 'Bosshog Jürgen'     , level : null    ,  name : 'bosshogJurgen',  baseHealth : 190      ,  baseAttack : 30 , baseBlock : 30 , moves: ['jurgenBellyFlop' ,  'jurgenRollAround'   ,  'jurgenStampSnort'  ,  'block'         ,  'jurgenSitUpon'           ]},
     mimic1       : {displayName: 'Mimic'              , level : 1       ,  name : 'mimic1'       ,  baseHealth : 39       ,  baseAttack : 3  , baseBlock : 8  , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(2)' ,  'block'         ,  null                      ]},
     mimic2       : {displayName: 'Mimic'              , level : 2       ,  name : 'mimic2'       ,  baseHealth : 66       ,  baseAttack : 4  , baseBlock : 12 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(2)' ,  'block'         ,  null                      ]},
@@ -111,19 +111,18 @@ export const attackNames = {
 } as const
 
 const _parameterizedAttacks = {
-    _startlingSpook: 'Startling Spook (Applies Unguarded x, Fatigue x)',
-    _supriseAllergy:
+    startlingSpook: 'Startling Spook (Applies Unguarded x, Fatigue x)',
+    supriseAllergy:
         'Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X)',
-    _itchyOoze: 'Itchy Ooze (DOT X)',
-    _infectiousBite:
+    itchyOoze: 'Itchy Ooze (DOT X)',
+    infectiousBite:
         'Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked)',
-    _engulf:
-        'Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked)',
-    _meatyCharge:
+    engulf: 'Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked)',
+    meatyCharge:
         'Meaty Charge (BA, applies bleed (X) if any damage goes unblocked)',
-    _bellowAndSing:
+    bellowAndSing:
         'Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked)',
-    _screamAndCharge:
+    screamAndCharge:
         'Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after)',
 }
 
@@ -134,6 +133,6 @@ export type EnemyAttackName =
     | `itchyOoze(${number})`
     | `infectiousBite(${number})`
     | `engulf(${number})`
-    | `meatyChargy(${number})`
+    | `meatyCharge(${number})`
     | `bellowAndSing(${number},${number})`
     | `screamAndCharge(${number},${number})`
