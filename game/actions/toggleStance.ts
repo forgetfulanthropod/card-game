@@ -14,8 +14,8 @@ export const toggleStance: GameActions['ToggleStance'] = args => {
     if (
         !character.isPc ||
         character.hasMoved ||
-        !scene.get().isPlayerTurn ||
-        scene.get().selectedCharacter !== character.uid
+        !scene.get().isPlayerTurn
+        //  || scene.get().selectedCharacter !== character.uid
     )
         return
 

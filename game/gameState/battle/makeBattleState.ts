@@ -21,12 +21,6 @@ export function makeBattleState(args: {
     //     // allCharacters
     // }
 
-    const selectedCharacter = Object.values(allCharacters).find(c => c.isPc)
-    if (!selectedCharacter) {
-        throw Error('could not find any initial player characters')
-    }
-    const selectedMove = selectedCharacter.moves[0]
-    if (selectedCharacter == null) throw Error('no player characters!')
     // const playerStarts = srandom() < 0.5
     const playerStarts = true
 
@@ -42,8 +36,6 @@ export function makeBattleState(args: {
         allCharacters,
         cards: getNullCards(),
         energy: 3,
-        selectedCharacter: selectedCharacter.uid,
-        selectedMove,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         doors: { options: [], descriptions: [] },

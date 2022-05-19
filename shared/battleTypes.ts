@@ -23,16 +23,12 @@ export interface BattleScene extends SceneHas {
     allCharacters: Characters
     cards: Cards
     energy: number
-    selectedCharacter: CharacterUid
-    selectedMove: CharacterMove
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
     doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
-    // loot: Record<ItemUid, ItemName>
     nextNpcMoves: AttackData[]
-    // nextAction: null | NextAction
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 

@@ -75,13 +75,7 @@ export function Character(args: CharacterProps): PixiContainer {
     if (sprites == null) {
         return Container({ children: [] })
     }
-    const {
-        attackSprite,
-        defendSprite,
-        mainSprite,
-        selectedSprite,
-        initialHeight,
-    } = sprites
+    const { attackSprite, defendSprite, mainSprite, initialHeight } = sprites
 
     const mainAnimation = MainCharacterAnimation(characterMeta, () =>
         args.onClick(characterMeta.uid)
@@ -94,7 +88,7 @@ export function Character(args: CharacterProps): PixiContainer {
             defendSprite,
             healthBar,
             Adjust(ActionIntent(characterMeta.uid), { y: healthBar.height }),
-            ...(mainAnimation ? [mainAnimation] : [mainSprite, selectedSprite]),
+            ...(mainAnimation ? [mainAnimation] : [mainSprite]),
         ],
     })
     mainContainer.sortChildren()
@@ -407,7 +401,6 @@ function makeSprites(
             s.texture = texture
             s.height = height
         }
-        update(selectedSprite)
         update(mainSprite)
         update(defendSprite)
         update(attackSprite)
@@ -462,25 +455,11 @@ function makeSprites(
         zIndex: 0,
         visible: false,
     })
-    // props.isSelected && !props.characterMeta.hasMoved
-    const selectedId = getBattleScene().select('selectedCharacter')
-    const selectedSprite = Sprite({
-        ...charSpriteProps,
-        filters: [blurFilter],
-        tint: WHITE,
-        zIndex: 0,
-        visible: selectedId.get() === characterMeta.uid,
-    })
-
-    selectedId.on('update', () => {
-        selectedSprite.visible = selectedId.get() === characterMeta.uid
-    })
 
     return {
         attackSprite,
         defendSprite,
         mainSprite,
-        selectedSprite,
         initialHeight: charSpriteProps.height,
     }
 }
