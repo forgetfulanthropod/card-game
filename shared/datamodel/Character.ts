@@ -1,4 +1,4 @@
-import type { CharacterName, MoveMetaName, StanceName } from '..'
+import type { CharacterName, MoveMetaName } from '..'
 import type { Brandify } from './misc'
 
 const Character = null
@@ -43,7 +43,3 @@ export type OwnedCharacterStats = CharacterStats &
     Brandify
 
 export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
-
-export type StatsWithStance = CharacterStats &
-    Readonly<{ stance: StanceName }> &
-    Brandify

@@ -21,7 +21,7 @@ export interface BattleScene extends SceneHas {
     nextNpcMoves: AttackData[]
 }
 
-export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
+type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
 
 export * from './Card'
 export * from './Characters'

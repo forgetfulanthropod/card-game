@@ -1,4 +1,4 @@
-export interface EventTrigger {
+interface EventTrigger {
     name: EventTriggerName
     shortDescription: string
     fullDescription: string

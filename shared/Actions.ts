@@ -75,6 +75,6 @@ export type Func = (..._: any[]) => any
 
 export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 
-export type ServerResult<T> =
+type ServerResult<T> =
     | { status: 'success'; result: T }
     | { status: 'error'; message: string }
