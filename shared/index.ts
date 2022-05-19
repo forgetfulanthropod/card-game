@@ -2,7 +2,6 @@
 // @index(['./*.ts', './actions/index.ts','!./baobabEventEmitter.ts'], f => `export * from '${f.path}'`)
 export * from './Actions'
 export * from './CharacterName'
-export * from './datamodel'
 export * from './DungeonRooms'
 export * from './entryTypes'
 export * from './EventTrigger'
@@ -13,3 +12,4 @@ export * from './SpecialDoorName'
 // @endindex
 
 export * from './battle/index'
+export * from './datamodel'
