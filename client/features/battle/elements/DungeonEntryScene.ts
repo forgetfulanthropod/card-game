@@ -9,6 +9,8 @@ import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
 
+const NUM_CHARACTERS_REQUIRED = 3
+
 export function DungeonEntryScene(): PixiContainer {
     const selectedCharactersCursor =
         getEntryScene().select('selectedCharacters')
@@ -28,7 +30,8 @@ export function DungeonEntryScene(): PixiContainer {
             onUpdate(
                 selectedCharactersCursor,
                 selected => {
-                    startButton.visible = selected?.length === 3
+                    startButton.visible =
+                        selected?.length === NUM_CHARACTERS_REQUIRED
                 },
                 true
             ),

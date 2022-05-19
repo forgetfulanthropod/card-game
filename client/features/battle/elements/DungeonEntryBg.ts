@@ -35,8 +35,8 @@ export function DungeonEntryBg() {
             unsub()
 
             bgOnTransition.play()
+            brightBackLightIsShining.set(false)
             setTimeout(() => {
-                brightBackLightIsShining.set(false)
                 brightBackLightIsShining.set(true)
             }, TIME_FOR_OUTRO_BRIGHTNESS_MS)
             setTimeout(() => {
