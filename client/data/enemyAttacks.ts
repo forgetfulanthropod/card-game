@@ -1,74 +1,78 @@
 import { satisfies } from 'shared/code'
-import { tableToRecord } from 'table-to-record'
+
+// align by regex: (, )|:|\[
+export const enemyAttacks = {
+    skeleton1    : {displayName: 'Skeleton'           , level : 1       ,  name : 'skeleton1'    ,  baseHealth : 18       ,  baseAttack : 4  , baseBlock : 7  , moves: ['swordWack'       ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    skeleton2    : {displayName: 'Skeleton'           , level : 2       ,  name : 'skeleton2'    ,  baseHealth : 27       ,  baseAttack : 6  , baseBlock : 9  , moves: ['swordWack'       ,  'rustyPokeLow'       ,  null                ,  'block'         ,  null                      ]},
+    skeleton3    : {displayName: 'Skeleton'           , level : 3       ,  name : 'skeleton3'    ,  baseHealth : 36       ,  baseAttack : 8  , baseBlock : 12 , moves: ['swordWack'       ,  'rustyPokeLow'       ,  'slash'             ,  'block'         ,  null                      ]},
+    skeleton4    : {displayName: 'Skeleton'           , level : 4       ,  name : 'skeleton4'    ,  baseHealth : 50       ,  baseAttack : 11 , baseBlock : 16 , moves: ['swordWack'       ,  'rustyPokeLow'       ,  'slash'             ,  'block'         ,  null                      ]},
+    skeleton5    : {displayName: 'Skeleton'           , level : 5       ,  name : 'skeleton5'    ,  baseHealth : 65       ,  baseAttack : 14 , baseBlock : 19 , moves: ['swordWack'       ,  'rustyPokeLow'       ,  'slash'             ,  'block'         ,  null                      ]},
+    skeleton6    : {displayName: 'Skeleton'           , level : 6       ,  name : 'skeleton6'    ,  baseHealth : 87       ,  baseAttack : 17 , baseBlock : 22 , moves: ['swordWack'       ,  'rustyPokeHigh'      ,  'slash'             ,  'block'         ,  'startlingSpook(1,1)'     ]},
+    skeleton7    : {displayName: 'Skeleton'           , level : 7       ,  name : 'skeleton7'    ,  baseHealth : 101      ,  baseAttack : 20 , baseBlock : 25 , moves: ['swordWack'       ,  'rustyPokeHigh'      ,  'slash'             ,  'block'         ,  'startlingSpook(2,2)'     ]},
+    skeleton8    : {displayName: 'Skeleton'           , level : 8       ,  name : 'skeleton8'    ,  baseHealth : 121      ,  baseAttack : 23 , baseBlock : 28 , moves: ['swordWack'       ,  'rustyPokeHigh'      ,  'slash'             ,  'block'         ,  'startlingSpook(2,2)'     ]},
+    skeleton9    : {displayName: 'Skeleton'           , level : 9       ,  name : 'skeleton9'    ,  baseHealth : 135      ,  baseAttack : 26 , baseBlock : 31 , moves: ['swordWack'       ,  'rustyPokeHigh'      ,  'slash'             ,  'block'         ,  'startlingSpook(3,3)'     ]},
+    skeleton10   : {displayName: 'Skeleton'           , level : 10      ,  name : 'skeleton10'   ,  baseHealth : 150      ,  baseAttack : 29 , baseBlock : 34 , moves: ['swordWack'       ,  'rustyPokeHigh'      ,  'slash'             ,  'block'         ,  'startlingSpook(3,3)'     ]},
+    matcha1      : {displayName: 'Matcha'             , level : 1       ,  name : 'matcha1'      ,  baseHealth : 24       ,  baseAttack : 3  , baseBlock : 10 , moves: ['basicAttack'     ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    matcha2      : {displayName: 'Matcha'             , level : 2       ,  name : 'matcha2'      ,  baseHealth : 36       ,  baseAttack : 4  , baseBlock : 14 , moves: ['basicAttack'     ,  'supriseAllergy(1,1)',  null                ,  'block'         ,  null                      ]},
+    matcha3      : {displayName: 'Matcha'             , level : 3       ,  name : 'matcha3'      ,  baseHealth : 55       ,  baseAttack : 6  , baseBlock : 17 , moves: ['basicAttack'     ,  'supriseAllergy(1,1)',  'itchyOoze(1)'      ,  'block'         ,  null                      ]},
+    matcha4      : {displayName: 'Matcha'             , level : 4       ,  name : 'matcha4'      ,  baseHealth : 72       ,  baseAttack : 8  , baseBlock : 22 , moves: ['basicAttack'     ,  'supriseAllergy(2,1)',  'itchyOoze(2)'      ,  'block'         ,  null                      ]},
+    matcha5      : {displayName: 'Matcha'             , level : 5       ,  name : 'matcha5'      ,  baseHealth : 80       ,  baseAttack : 11 , baseBlock : 26 , moves: ['basicAttack'     ,  'supriseAllergy(2,1)',  'itchyOozeSpecial'  ,  'block'         ,  null                      ]},
+    matcha6      : {displayName: 'Matcha'             , level : 6       ,  name : 'matcha6'      ,  baseHealth : 105      ,  baseAttack : 14 , baseBlock : 31 , moves: ['basicAttack'     ,  'supriseAllergy(3,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(50)'              ]},
+    matcha7      : {displayName: 'Matcha'             , level : 7       ,  name : 'matcha7'      ,  baseHealth : 130      ,  baseAttack : 15 , baseBlock : 36 , moves: ['basicAttack'     ,  'supriseAllergy(3,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(50)'              ]},
+    matcha8      : {displayName: 'Matcha'             , level : 8       ,  name : 'matcha8'      ,  baseHealth : 160      ,  baseAttack : 19 , baseBlock : 41 , moves: ['basicAttack'     ,  'supriseAllergy(4,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
+    matcha9      : {displayName: 'Matcha'             , level : 9       ,  name : 'matcha9'      ,  baseHealth : 175      ,  baseAttack : 22 , baseBlock : 48 , moves: ['basicAttack'     ,  'supriseAllergy(4,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
+    matcha10     : {displayName: 'Matcha'             , level : 10      ,  name : 'matcha10'     ,  baseHealth : 200      ,  baseAttack : 25 , baseBlock : 56 , moves: ['basicAttack'     ,  'supriseAllergy(5,2)',  'itchyOoze(2)'      ,  'block'         ,  'engulf(75)'              ]},
+    orcWarrior1  : {displayName: 'Orc Warrior'        , level : 1       ,  name : 'orcWarrior1'  ,  baseHealth : 15       ,  baseAttack : 3  , baseBlock : 6  , moves: ['meatyChargy(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior2  : {displayName: 'Orc Warrior'        , level : 2       ,  name : 'orcWarrior2'  ,  baseHealth : 33       ,  baseAttack : 4  , baseBlock : 8  , moves: ['meatyChargy(1)'  ,  null                 ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior3  : {displayName: 'Orc Warrior'        , level : 3       ,  name : 'orcWarrior3'  ,  baseHealth : 50       ,  baseAttack : 6  , baseBlock : 10 , moves: ['meatyChargy(1)'  ,  'slash'              ,  null                ,  'block'         ,  null                      ]},
+    orcWarrior4  : {displayName: 'Orc Warrior'        , level : 4       ,  name : 'orcWarrior4'  ,  baseHealth : 75       ,  baseAttack : 9  , baseBlock : 12 , moves: ['meatyChargy(1)'  ,  'slash'              ,  'bellowAndSing(1,1)',  'block'         ,  null                      ]},
+    orcWarrior5  : {displayName: 'Orc Warrior'        , level : 5       ,  name : 'orcWarrior5'  ,  baseHealth : 88       ,  baseAttack : 12 , baseBlock : 14 , moves: ['meatyChargy(1)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
+    orcWarrior6  : {displayName: 'Orc Warrior'        , level : 6       ,  name : 'orcWarrior6'  ,  baseHealth : 103      ,  baseAttack : 14 , baseBlock : 16 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,1)'  ]},
+    orcWarrior7  : {displayName: 'Orc Warrior'        , level : 7       ,  name : 'orcWarrior7'  ,  baseHealth : 118      ,  baseAttack : 16 , baseBlock : 19 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(100,2)'  ]},
+    orcWarrior8  : {displayName: 'Orc Warrior'        , level : 8       ,  name : 'orcWarrior8'  ,  baseHealth : 133      ,  baseAttack : 18 , baseBlock : 22 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    orcWarrior9  : {displayName: 'Orc Warrior'        , level : 9       ,  name : 'orcWarrior9'  ,  baseHealth : 148      ,  baseAttack : 20 , baseBlock : 25 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,1)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    orcWarrior10 : {displayName: 'Orc Warrior'        , level : 10      ,  name : 'orcWarrior10' ,  baseHealth : 163      ,  baseAttack : 23 , baseBlock : 28 , moves: ['meatyChargy(2)'  ,  'slash'              ,  'bellowAndSing(2,2)',  'block'         ,  'screamAndCharge(125,2)'  ]},
+    bosshogJurgen: {displayName: 'Bosshog Jürgen'     , level : null    ,  name : 'bosshogJurgen',  baseHealth : 190      ,  baseAttack : 30 , baseBlock : 30 , moves: ['jurgenBellyFlop' ,  'jurgenRollAround'   ,  'jurgenStampSnort'  ,  'block'         ,  'jurgenSitUpon'           ]},
+    mimic1       : {displayName: 'Mimic'              , level : 1       ,  name : 'mimic1'       ,  baseHealth : 39       ,  baseAttack : 3  , baseBlock : 8  , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(2)' ,  'block'         ,  null                      ]},
+    mimic2       : {displayName: 'Mimic'              , level : 2       ,  name : 'mimic2'       ,  baseHealth : 66       ,  baseAttack : 4  , baseBlock : 12 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(2)' ,  'block'         ,  null                      ]},
+    mimic3       : {displayName: 'Mimic'              , level : 3       ,  name : 'mimic3'       ,  baseHealth : 103      ,  baseAttack : 6  , baseBlock : 16 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(2)' ,  'block'         ,  null                      ]},
+    mimic4       : {displayName: 'Mimic'              , level : 4       ,  name : 'mimic4'       ,  baseHealth : 129      ,  baseAttack : 8  , baseBlock : 20 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(3)' ,  'block'         ,  null                      ]},
+    mimic5       : {displayName: 'Mimic'              , level : 5       ,  name : 'mimic5'       ,  baseHealth : 155      ,  baseAttack : 12 , baseBlock : 24 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(3)' ,  'block'         ,  null                      ]},
+    mimic6       : {displayName: 'Mimic'              , level : 6       ,  name : 'mimic6'       ,  baseHealth : 172      ,  baseAttack : 14 , baseBlock : 28 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(3)' ,  'block'         ,  null                      ]},
+    mimic7       : {displayName: 'Mimic'              , level : 7       ,  name : 'mimic7'       ,  baseHealth : 205      ,  baseAttack : 16 , baseBlock : 32 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(3)' ,  'block'         ,  null                      ]},
+    mimic8       : {displayName: 'Mimic'              , level : 8       ,  name : 'mimic8'       ,  baseHealth : 222      ,  baseAttack : 18 , baseBlock : 35 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(4)' ,  'block'         ,  null                      ]},
+    mimic9       : {displayName: 'Mimic'              , level : 9       ,  name : 'mimic9'       ,  baseHealth : 245      ,  baseAttack : 20 , baseBlock : 38 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(4)' ,  'block'         ,  null                      ]},
+    mimic10      : {displayName: 'Mimic'              , level : 10      ,  name : 'mimic10'      ,  baseHealth : 264      ,  baseAttack : 22 , baseBlock : 42 , moves: ['mimicAttack'     ,  'chomp'              ,  'infectiousBite(5)' ,  'block'         ,  null                      ]},
+    toadmaw      : {displayName: 'Hans Toadmaw'       , level : null    ,  name : 'toadmaw'      ,  baseHealth : 132      ,  baseAttack : 25 , baseBlock : 9  , moves: ["hansBuffBlock"   ,  "hansMagicMissile"   ,  "hansGuards"        ,  "hansCurse"     ,  null                      ]},
+    cultist      : {displayName: 'Cultist Guard'      , level : null    ,  name : 'cultist'      ,  baseHealth : 18       ,  baseAttack : 4  , baseBlock : 0  , moves: ['attack4'         ,  null                 ,  null                ,  null            ,  null                      ]},
+    halfdan      : {displayName: 'Halfdan The Ancient', level : null    ,  name : 'halfdan'      ,  baseHealth : 250      ,  baseAttack : 25 , baseBlock : 20 , moves: ['rest'            ,  'evisceratingSweep'  ,  'passiveBlock'      ,  'ancientStrike' ,  null                       ]},
+    matchaLarge  : {displayName: 'Mega Matcha'        , level : 'large' ,  name : 'matchaLarge'  ,  baseHealth : '200-100', baseAttack  : 15 , baseBlock : 20 , moves: ['matchaMash'      ,  'matchaMadness'      ,  'matchaMeld'        ,  null            ,  null                      ]},
+    matchaMedium : {displayName: 'Matcha'             , level : 'medium',  name : 'matchaMedium' ,  baseHealth : '99-30'  ,  baseAttack : 10 , baseBlock : 10 , moves: ['matchaMash'      ,  null                 ,  null                ,  null            ,  null                      ]},
+    matchaSmall  : {displayName: 'Matcha'             , level : 'small' ,  name : 'matchaSmall'  ,  baseHealth : '>29'    ,  baseAttack : 10 , baseBlock : 5  , moves: ['matchaMash'      ,  null                 ,  null                ,  null            ,  null                      ]},
+} as const // prettier-ignore
 
 type BaseHealth = number | `${number}-${number}` | `>${number}`
-const header =
-    ['Enemy',        'Level',             'id', 'baseHealth', 'baseAttack', 'baseBlock', 'move1',   'move2',         'move3',                      'move4',          'move5'] as const // prettier-ignore
-type Rows =    ReadonlyArray<readonly
-    [string,      number | string | null,  string,      BaseHealth,  number,number,Attack|null,    Attack|null,            Attack|null,            Attack|null,      Attack|null ]> // prettier-ignore
-const rows = [
-    ['Skeleton',              1,         'skeleton1',       18,         4,   7,   'swordWack',        null,                   null,                  'block',          null                      ],
-    ['Skeleton',              2,         'skeleton2',       27,         6,   9,   'swordWack',        'rustyPokeLow',         null,                  'block',          null                      ],
-    ['Skeleton',              3,         'skeleton3',       36,         8,   12,  'swordWack',        'rustyPokeLow',         'slash',               'block',          null                      ],
-    ['Skeleton',              4,         'skeleton4',       50,         11,  16,  'swordWack',        'rustyPokeLow',         'slash',               'block',          null                      ],
-    ['Skeleton',              5,         'skeleton5',       65,         14,  19,  'swordWack',        'rustyPokeLow',         'slash',               'block',          null                      ],
+type EnemyAttacks = Record<string, EnemyAttack>
+type Selfkeys<T> = { [K in keyof T]: { name: K } }
+type EnemyAttack = {
+    displayName: string
+    level: number | string | null
+    name: string
+    baseHealth: BaseHealth
+    baseAttack: number
+    baseBlock: number
+    moves: readonly [
+        AttackName,
+        AttackName | null,
+        AttackName | null,
+        AttackName | null,
+        AttackName | null
+    ]
+}
+satisfies<EnemyAttacks>(enemyAttacks)
+satisfies<Selfkeys<typeof enemyAttacks>>(enemyAttacks)
 
-    ['Skeleton',              6,         'skeleton6',       87,         17,  22,  'swordWack',        'rustyPokeHigh',        'slash',               'block',          'startlingSpook(1,1)'     ],
-    ['Skeleton',              7,         'skeleton7',       101,        20,  25,  'swordWack',        'rustyPokeHigh',        'slash',               'block',          'startlingSpook(2,2)'     ],
-    ['Skeleton',              8,         'skeleton8',       121,        23,  28,  'swordWack',        'rustyPokeHigh',        'slash',               'block',          'startlingSpook(2,2)'     ],
-    ['Skeleton',              9,         'skeleton9',       135,        26,  31,  'swordWack',        'rustyPokeHigh',        'slash',               'block',          'startlingSpook(3,3)'     ],
-    ['Skeleton',              10,        'skeleton10',      150,        29,  34,  'swordWack',        'rustyPokeHigh',        'slash',               'block',          'startlingSpook(3,3)'     ],
-
-    ['Matcha',                1,         'matcha1',         24,         3,   10,  'basicAttack',      null,                   null,                  'block',          null                      ],
-    ['Matcha',                2,         'matcha2',         36,         4,   14,  'basicAttack',      'supriseAllergy(1,1)',  null,                  'block',          null                      ],
-    ['Matcha',                3,         'matcha3',         55,         6,   17,  'basicAttack',      'supriseAllergy(1,1)',  'itchyOoze(1)',        'block',          null                      ],
-    ['Matcha',                4,         'matcha4',         72,         8,   22,  'basicAttack',      'supriseAllergy(2,1)',  'itchyOoze(2)',        'block',          null                      ],
-    ['Matcha',                5,         'matcha5',         80,         11,  26,  'basicAttack',      'supriseAllergy(2,1)',  'itchyOozeSpecial',    'block',          null                      ],
-
-    ['Matcha',                6,         'matcha6',         105,        14,  31,  'basicAttack',      'supriseAllergy(3,2)',  'itchyOoze(2)',        'block',          'engulf(50)'              ],
-    ['Matcha',                7,         'matcha7',         130,        15,  36,  'basicAttack',      'supriseAllergy(3,2)',  'itchyOoze(2)',        'block',          'engulf(50)'              ],
-    ['Matcha',                8,         'matcha8',         160,        19,  41,  'basicAttack',      'supriseAllergy(4,2)',  'itchyOoze(2)',        'block',          'engulf(75)'              ],
-    ['Matcha',                9,         'matcha9',         175,        22,  48,  'basicAttack',      'supriseAllergy(4,2)',  'itchyOoze(2)',        'block',          'engulf(75)'              ],
-    ['Matcha',                10,        'matcha10',        200,        25,  56,  'basicAttack',      'supriseAllergy(5,2)',  'itchyOoze(2)',        'block',          'engulf(75)'              ],
-
-    ['Orc Warrior',           1,         'orcWarrior1',     15,         3,   6,   'meatyChargy(1)',   null,                   null,                  'block',          null                      ],
-    ['Orc Warrior',           2,         'orcWarrior2',     33,         4,   8,   'meatyChargy(1)',   null,                   null,                  'block',          null                      ],
-    ['Orc Warrior',           3,         'orcWarrior3',     50,         6,   10,  'meatyChargy(1)',   'slash',                null,                  'block',          null                      ],
-    ['Orc Warrior',           4,         'orcWarrior4',     75,         9,   12,  'meatyChargy(1)',   'slash',                'bellowAndSing(1,1)',  'block',          null                      ],
-    ['Orc Warrior',           5,         'orcWarrior5',     88,         12,  14,  'meatyChargy(1)',   'slash',                'bellowAndSing(2,2)',  'block',          'screamAndCharge(100,1)'  ],
-    ['Orc Warrior',           6,         'orcWarrior6',     103,        14,  16,  'meatyChargy(2)',   'slash',                'bellowAndSing(2,2)',  'block',          'screamAndCharge(100,1)'  ],
-    ['Orc Warrior',           7,         'orcWarrior7',     118,        16,  19,  'meatyChargy(2)',   'slash',                'bellowAndSing(2,2)',  'block',          'screamAndCharge(100,2)'  ],
-    ['Orc Warrior',           8,         'orcWarrior8',     133,        18,  22,  'meatyChargy(2)',   'slash',                'bellowAndSing(2,2)',  'block',          'screamAndCharge(125,2)'  ],
-    ['Orc Warrior',           9,         'orcWarrior9',     148,        20,  25,  'meatyChargy(2)',   'slash',                'bellowAndSing(2,1)',  'block',          'screamAndCharge(125,2)'  ],
-    ['Orc Warrior',           10,        'orcWarrior10',    163,        23,  28,  'meatyChargy(2)',   'slash',                'bellowAndSing(2,2)',  'block',          'screamAndCharge(125,2)'  ],
-
-    ['Bosshog Jürgen',       null,       'bosshogJurgen',   190,        30,  30,  'jurgenBellyFlop',  'jurgenRollAround',     'jurgenStampSnort',    'block',          'jurgenSitUpon'           ],
-
-    ['Mimic',                 1,         'mimic1',          39,         3,   8,   'mimicAttack',      'chomp',                'infectiousBite(2)',   'block',          null                      ],
-    ['Mimic',                 2,         'mimic2',          66,         4,   12,  'mimicAttack',      'chomp',                'infectiousBite(2)',   'block',          null                      ],
-    ['Mimic',                 3,         'mimic3',          103,        6,   16,  'mimicAttack',      'chomp',                'infectiousBite(2)',   'block',          null                      ],
-    ['Mimic',                 4,         'mimic4',          129,        8,   20,  'mimicAttack',      'chomp',                'infectiousBite(3)',   'block',          null                      ],
-    ['Mimic',                 5,         'mimic5',          155,        12,  24,  'mimicAttack',      'chomp',                'infectiousBite(3)',   'block',          null                      ],
-    ['Mimic',                 6,         'mimic6',          172,        14,  28,  'mimicAttack',      'chomp',                'infectiousBite(3)',   'block',          null                      ],
-    ['Mimic',                 7,         'mimic7',          205,        16,  32,  'mimicAttack',      'chomp',                'infectiousBite(3)',   'block',          null                      ],
-    ['Mimic',                 8,         'mimic8',          222,        18,  35,  'mimicAttack',      'chomp',                'infectiousBite(4)',   'block',          null                      ],
-    ['Mimic',                 9,         'mimic9',          245,        20,  38,  'mimicAttack',      'chomp',                'infectiousBite(4)',   'block',          null                      ],
-    ['Mimic',                 10,        'mimic10',         264,        22,  42,  'mimicAttack',      'chomp',                'infectiousBite(5)',   'block',          null                      ],
-
-    ['Hans Toadmaw',         null,       'toadmaw',         132,        25,  9,   "hansBuffBlock",    "hansMagicMissile",     "hansGuards",          "hansCurse",      null                      ],
-    ['Cultist Guard',        null,       'cultist',         18,         4,   0,   'attack4',          null,                   null,                  null,             null                      ],
-
-    ['Halfdan The Ancient',  null,       'halfdan',         250,        25,  20,  'rest',             'evisceratingSweep',    'passiveBlock',        'ancientStrike', null                       ],
-
-    ['Mega Matcha',          'large',    'matchaLarge',    '200-100',   15,  20,  'matchaMash',       'matchaMadness',        'matchaMeld',          null,             null                      ],
-    ['Matcha',               'medium',   'matchaMedium',   '99-30',     10,  10,  null,               null,                   null,                  null,             null                      ],
-    ['Matcha',               'small',    'matchaLarge',    '>29',       10,  5,   null,               null,                   null,                  null,             null                      ],
-] as const // prettier-ignore
-satisfies<Rows>(rows)
-
-// align by regex: ('.*?'|".*?"| \d+|null),
-
-const attacks = {
+const attackNames = {
     swordWack: 'Sword Whack (BA)',
     mimicAttack:
         'Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).',
@@ -124,8 +128,8 @@ const _parameterizedAttacks = {
         'Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after)',
 }
 
-type Attack =
-    | keyof typeof attacks
+type AttackName =
+    | keyof typeof attackNames
     | `startlingSpook(${number},${number})`
     | `supriseAllergy(${number},${number})`
     | `itchyOoze(${number})`
@@ -134,5 +138,3 @@ type Attack =
     | `meatyChargy(${number})`
     | `bellowAndSing(${number},${number})`
     | `screamAndCharge(${number},${number})`
-
-export const enemyAttacks = tableToRecord(rows, header, '2')
