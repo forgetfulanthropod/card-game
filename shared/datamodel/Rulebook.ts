@@ -7,16 +7,10 @@ import type {
     StanceName,
     StanceStats,
 } from '..'
-import type { Blessing, BlessingName } from './Blessing'
+import type { BlessingName, ItemName, LocationName, RecipeName } from '../names'
+import type { Blessing } from './Blessing'
 import type { CharacterStats } from './Character'
-import type {
-    Brandify,
-    DungeonLevel,
-    ItemName,
-    LocationName,
-    NpcLevelStatsMap,
-    RecipeName,
-} from './misc'
+import type { Brandify, DungeonLevel, NpcLevelStatsMap } from './misc'
 
 export type Rulebook = Readonly<{
     version: string

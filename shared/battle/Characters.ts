@@ -1,7 +1,11 @@
-import type { CharacterName, CharacterStats, CharacterUid } from '..'
+import type {
+    CharacterName,
+    CharacterStats,
+    CharacterUid,
+    StanceName,
+} from '..'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
-import { StanceName } from './Stance'
 
 export type Characters = Record<CharacterUid, CharacterMeta>
 
