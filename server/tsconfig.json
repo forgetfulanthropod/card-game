@@ -3,7 +3,7 @@
     "compilerOptions": {
         "composite": true,
         "module": "commonjs",
-        // "incremental": true,
+        "incremental": true,
         "noEmit": true,
         "strict": true,
         "target": "es2017",

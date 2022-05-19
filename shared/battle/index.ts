@@ -1,0 +1,32 @@
+import type { DungeonName, SceneHas } from '..'
+import type { SpecialDoorName } from '../SpecialDoorName'
+import type { Cards } from './Card'
+import type { Characters } from './Characters'
+import type { AttackData } from './Moves'
+
+export interface BattleScene extends SceneHas {
+    username: string
+    name: 'battle'
+    dungeonName: DungeonName
+    state: BattleWinState
+    playerStarts: boolean
+    isPlayerTurn: boolean
+    allCharacters: Characters
+    cards: Cards
+    energy: number
+    isBasicLoaded: boolean
+    isDeluxeLoaded: boolean
+    turnCount: number
+    doors: { options: SpecialDoorName[]; descriptions: string[] }
+    roomsPassed: number
+    nextNpcMoves: AttackData[]
+}
+
+export type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
+
+export * from './Card'
+export * from './Characters'
+export * from './Effect'
+export * from './Moves'
+export * from './Orb'
+export * from './Stance'
