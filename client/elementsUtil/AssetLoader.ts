@@ -21,6 +21,8 @@ import {
     orbAssets,
     spineAssets,
 } from '@/features/battle/elements/logic/allAssets'
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { cardAssets } from '@/features/battle/elements/cards/cardAssets'
 import { font, check } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
@@ -43,6 +45,7 @@ const basicAssets = {
     ...backgroundAssets,
     ...effectAssets,
     ...spineAssets,
+    ...cardAssets,
 }
 const deluxeAssets = {
     gemButton,
