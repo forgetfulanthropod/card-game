@@ -1,4 +1,4 @@
-import type { Brandify } from '.'
+import type { Brandify } from './index'
 
 export type CharacterName =
     | 'bloatDemon'

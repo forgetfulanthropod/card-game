@@ -2,20 +2,23 @@
 {
     "compilerOptions": {
         "composite": true,
-        "module": "commonjs",
+        "module": "esnext",
+        "disableSourceOfProjectReferenceRedirect": true /* Disable preferring source files instead of declaration files when referencing composite projects */,
+        "disableSolutionSearching": true /* Opt a project out of multi-project reference checking when editing. */,
+        // "noResolve": true /* Disallow `import`s, `require`s or `<reference>`s from expanding the number of files TypeScript should add to a project. */,
         "incremental": true,
+        "isolatedModules": true /* Ensure that each file can be safely transpiled without relying on other imports. */,
         "noEmit": true,
         "strict": true,
+        "rootDir": ".",
         "target": "es2017",
         "noImplicitAny": true,
         "esModuleInterop": true,
         "moduleResolution": "node",
-        "baseUrl": ".",
         "experimentalDecorators": true,
         "skipLibCheck": true
     },
     "compileOnSave": true,
-    "include": ["./**/*.ts"],
     "references": [
         {
             "path": "../game"

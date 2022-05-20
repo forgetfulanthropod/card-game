@@ -3,7 +3,7 @@ import type {
     CharacterStats,
     CharacterUid,
     StanceName,
-} from '..'
+} from '../index'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
 

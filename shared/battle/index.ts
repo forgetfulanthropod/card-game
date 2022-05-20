@@ -1,4 +1,4 @@
-import type { DungeonName, SceneHas, SpecialDoorName } from '..'
+import type { DungeonName, SceneHas, SpecialDoorName } from '../index'
 import type { Cards } from './Card'
 import type { Characters } from './Characters'
 import type { AttackData } from './Moves'

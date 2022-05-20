@@ -1,4 +1,4 @@
-// Server
+// Game
 {
     "compilerOptions": {
         "composite": true,
@@ -7,24 +7,21 @@
         "incremental": true,
         "strict": true,
         "target": "es2017",
+        "isolatedModules": true,
         "noImplicitAny": true,
+        "rootDir": ".",
         "esModuleInterop": true,
-        "baseUrl": ".",
         "experimentalDecorators": true,
         "skipLibCheck": true,
-        "declaration": true,
-        // "emitDeclarationOnly": true,
-        // "outFile": "./dist/index.js",
         "outDir": "./dist",
-        // "rootDir": ".",
         "paths": {
             "@serverActions": ["./actions/types/serverActions"],
             "@/*": ["./*"]
         }
     },
     "compileOnSave": true,
-    "files": ["index.ts"],
-    "include": ["./**/*.ts"],
+    "files": ["./exports.ts"],
+    "include": ["**/*.ts"],
     "exclude": ["dist", "node_modules"],
     "references": [
         {

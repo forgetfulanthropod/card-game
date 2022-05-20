@@ -5,8 +5,8 @@
         "module": "esnext",
         "moduleResolution": "node",
         "incremental": true,
-        // "noEmit": true,
         "strict": true,
+        // "noEmit": true,
         "target": "es2017",
         "noImplicitAny": true,
         "esModuleInterop": true,
@@ -14,6 +14,8 @@
         "skipLibCheck": true,
         "outDir": "./dist"
     },
-    "compileOnSave": true,
-    "exclude": ["dist", "node_modules"]
+    // "compileOnSave": true,
+    // "include": ["**/*.ts"],
+    // "files": ["./exports.ts"],
+    "exclude": ["**/*.d.ts", "node_modules"]
 }

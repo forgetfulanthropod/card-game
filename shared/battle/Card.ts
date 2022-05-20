@@ -1,4 +1,4 @@
-import type { CardUid, CharacterUid, PileId } from '..'
+import type { CardUid, CharacterUid, PileId } from '../index'
 import type { CharacterClass } from './Characters'
 
 export interface Card {

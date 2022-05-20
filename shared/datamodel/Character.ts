@@ -1,7 +1,6 @@
-import type { CharacterName, MoveMetaName } from '..'
+import type { CharacterName, MoveMetaName } from '../index'
 import type { Brandify } from './misc'
 
-const Character = null
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     name: CharacterName

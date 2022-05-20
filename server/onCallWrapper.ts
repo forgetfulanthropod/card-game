@@ -1,6 +1,6 @@
 import { clearHappened, getHappened, step } from 'game'
-import { sleep } from 'game/util'
 import type { Gamecursor, NextAction } from 'shared'
+import { sleep } from 'shared/code'
 
 import { getApp } from './index'
 import { commit, emit, getGameStateCursor } from './treeUtils'
@@ -21,7 +21,7 @@ export function onCallWrapper<Args, ReturnType>(
     f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
     options?: CallOptions
 ): void {
-    logger.info(`attaching route  ${JSON.stringify(f.name)}`)
+    logger.info(`attaching route  ${f.name}`)
     getApp().post('/' + f.name, async (request, response) => {
         const randId = makeRandId()
         try {

@@ -1,5 +1,6 @@
 import type { SCursor } from 'sbaobab'
 
+import type { CharacterUid, Gamestate } from './datamodel'
 import type {
     BlessingName,
     Orb,
@@ -7,8 +8,7 @@ import type {
     Rulebook,
     SceneType,
     SpecialDoorName,
-} from '.'
-import type { CharacterUid, Gamestate } from './datamodel'
+} from './index'
 
 /** A server action */
 export interface Action {

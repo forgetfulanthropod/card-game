@@ -1,14 +1,20 @@
-import 'game/config/logger'
-
 // import './database'
 import express from 'express'
 import session from 'express-session'
-import { setGlobalRandomSeed } from 'game/config/seedrand'
+import { getLogger } from 'game'
+import { setGlobalRandomSeed } from 'game'
 import type { Server } from 'http'
 import { findKey, has } from 'lodash'
 import { Server as SocketServer } from 'socket.io'
+import type { Logger } from 'winston'
 
 import { attachAPIRoutes } from './attachActions'
+
+declare global {
+    // eslint-disable-next-line no-var
+    var logger: Logger
+}
+global.logger = getLogger()
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')

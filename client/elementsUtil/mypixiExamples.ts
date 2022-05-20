@@ -12,7 +12,7 @@ export function ForExample() {
         strings
     )
 
-    delayChain([
+    void delayChain([
         () => strings.set(['d', 'c', 'b', 'f']),
         () => strings.set([]),
         () => strings.set(randStrArr(100)),
@@ -55,7 +55,7 @@ export function IfExample() {
 }
 
 function startToggling(cond: Datum<boolean>) {
-    delayChain([
+    void delayChain([
         () => cond.set(false),
         () => cond.set(false),
         () => cond.set(true),

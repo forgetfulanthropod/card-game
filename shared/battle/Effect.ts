@@ -1,4 +1,4 @@
-import type { CharacterUid } from '..'
+import type { CharacterUid } from '../index'
 
 export type EffectType = 'DOT1' | 'DOT2' | 'Debilitated'
 export interface Effect {

@@ -1,8 +1,9 @@
 {
     "name": "game",
-    "main": "./index.ts",
+    "main": "./dist/exports.js",
+    "types": "./dist/exports.d.ts",
     "scripts": {
-        "build": "rm -rf dist && tsc && esbuild --bundle index.ts --platform=node --outfile=./dist/index.js"
+        "build": "rm -rf dist && tsc && esbuild --bundle exports.ts --platform=node --outfile=./dist/exports.js"
     },
     "dependencies": {
         "angu": "^0.12.0",
@@ -11,6 +12,5 @@
     },
     "devDependencies": {
         "@types/seedrandom": "^3.0.2"
-    },
-    "private": true
+    }
 }

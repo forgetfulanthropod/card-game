@@ -15,13 +15,10 @@
         "noEmit": true,
         "jsxImportSource": "preact",
         "jsx": "react-jsx",
-        // "jsxFactory": "h",
-        // "jsxFragmentFactory": "Fragment",
-        "baseUrl": ".",
         "paths": {
             "@/*": ["./*"],
-            "react": ["node_modules/preact/compat"],
-            "react-dom": ["node_modules/preact/compat"]
+            "react": ["./node_modules/preact/compat"],
+            "react-dom": ["./node_modules/preact/compat"]
         },
         "allowJs": true,
         "skipLibCheck": true,
