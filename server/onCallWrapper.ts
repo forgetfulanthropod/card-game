@@ -1,9 +1,5 @@
-import { clearHappened, getHappened, step } from 'game'
-import type { Gamecursor, NextAction } from 'shared'
-import { sleep } from 'shared/code'
-
-import { commit, emit, getGameStateCursor } from './treeUtils'
-import { getApp } from './index'
+import type { Application } from 'express'
+import { doActionAndTakeSteps } from './sleepLoop'
 
 const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)
@@ -12,17 +8,18 @@ function makeRandId() {
     return srandom().toString().slice(2, 6)
 }
 
-type CallOptions = {
+export type CallOptions = {
     disableCommit?: boolean
     wholeRequest?: boolean
 }
 
 export function onCallWrapper<Args, ReturnType>(
+    app: Application,
     f: ((u: Args) => ReturnType) | ((u: Args) => Promise<ReturnType>),
     options?: CallOptions
 ): void {
     logger.info(`attaching route  ${f.name}`)
-    getApp().post('/' + f.name, async (request, response) => {
+    app.post('/' + f.name, async (request, response) => {
         const randId = makeRandId()
         try {
             let result: ReturnType | null = null
@@ -41,10 +38,8 @@ export function onCallWrapper<Args, ReturnType>(
             } else {
                 const body = { ...request.body }
 
-                const game = getGameStateCursor(username)
-                body.game = game
                 // @ts-expect-error
-                result = await doActionAndTakeSteps(game, f, body, options)
+                result = await doActionAndTakeSteps(username, f, body, options)
             }
 
             if (config.log) logger.info(`\n${f.name}#${randId} was called`)
@@ -58,38 +53,4 @@ export function onCallWrapper<Args, ReturnType>(
             response.send({ status: 'error', message: JSON.stringify(e) })
         }
     })
-}
-
-type Func<T> = (u: T) => Promise<unknown> | unknown
-async function doActionAndTakeSteps<T>(
-    game: Gamecursor,
-    f: Func<T>,
-    args: T,
-    options: CallOptions
-) {
-    const username = game.get('username')
-    let maybeNextAction = f(args)
-    logger.info({ maybeNextAction })
-    while (isNextAction(maybeNextAction)) {
-        logger.info({ maybeNextAction })
-        updateClient(username, options)
-        await sleep(maybeNextAction.delay)
-        maybeNextAction = step(game, maybeNextAction)
-    }
-    updateClient(username, options)
-}
-
-function updateClient(username: string, options: CallOptions) {
-    for (const event of getHappened(username)) {
-        emit({ username, event })
-    }
-    clearHappened(username)
-
-    if (options?.disableCommit !== true)
-        commit(getGameStateCursor(username), username)
-}
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isNextAction(x: any): x is NextAction {
-    return x?.delay != null
 }

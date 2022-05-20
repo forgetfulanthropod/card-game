@@ -1,3 +1,4 @@
+import type { Application } from 'express'
 import { actions } from 'game'
 
 import { makeNewUser as makeNewUser, maybeMakeUser } from './actions'
@@ -7,10 +8,10 @@ const all = [...vals(actions), maybeMakeUser, makeNewUser]
 const noCommit: unknown[] = [actions.hello, maybeMakeUser]
 const wholeRequests: unknown[] = [maybeMakeUser]
 
-export function attachAPIRoutes(): void {
+export function attachAPIRoutes(app: Application): void {
     all.forEach(f =>
         // @ts-ignore
-        onCallWrapper(f, {
+        onCallWrapper(app, f, {
             disableCommit: noCommit.includes(f),
             wholeRequest: wholeRequests.includes(f),
         })

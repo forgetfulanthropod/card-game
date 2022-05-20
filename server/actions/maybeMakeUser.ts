@@ -1,7 +1,7 @@
 import type { Gamestate } from 'shared'
 
 import { makeNewUser } from './makeNewUser'
-import { setSocketId } from '@/index'
+import { setSocketId } from '@/IO'
 // import { hasUser } from '@/database'
 import {
     getDb,

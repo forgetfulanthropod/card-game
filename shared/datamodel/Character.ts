@@ -1,5 +1,5 @@
-import type { CharacterName, MoveMetaName } from '@'
 import type { Brandify } from './misc'
+import type { CharacterName, MoveMetaName } from '@'
 
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{

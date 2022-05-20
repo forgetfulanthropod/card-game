@@ -1,5 +1,5 @@
-import type { BlessingName, CharacterName, SpecialDoorName } from '@'
 import type { Brandify, TargetType } from './misc'
+import type { BlessingName, CharacterName, SpecialDoorName } from '@'
 
 export type Blessing = Readonly<{
     name: BlessingName

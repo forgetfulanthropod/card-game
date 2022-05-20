@@ -1,5 +1,5 @@
-import type { CharacterMove, CharacterUid, MoveMetaName } from '@'
 import type { CharacterMeta } from './Characters'
+import type { CharacterMove, CharacterUid, MoveMetaName } from '@'
 
 export interface MoveMeta {
     name: MoveMetaName
