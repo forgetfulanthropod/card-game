@@ -69,5 +69,9 @@
     "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
     "prettier.configPath": ".prettierrc.json",
     "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/",
-    "typescript.tsdk": "node_modules/typescript/lib"
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "tidyExplorer.pockets": [
+        { "name": "typescript", "selectors": ["**/*.ts"] },
+        { "name": "packages", "selectors": ["**/package.json"] }
+    ]
 }
