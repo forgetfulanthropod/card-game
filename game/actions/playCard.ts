@@ -4,8 +4,6 @@ import type { Card, CardUid, BattleCursor } from 'shared'
 import { discard, getEnergy, play, updateHand } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
 
-export const BASE_HAND_SIZE = 5
-
 export const playCard: GameActions['PlayCard'] = args => {
     const scene = getBattleSceneIn(args.game)
     const card = findCard({ cardUid: args.cardUid, scene })

@@ -1,6 +1,6 @@
 import type { GameActions } from '@serverActions'
 
-import { resetRound } from './internal/resetRound'
+import { resetRound } from './internal'
 import { getNpcMoves, getRoom, modifyRoom } from '@/gameState/battle'
 import { putAllCardsInDrawPile } from '@/gameState/battle/cards/putAllCardsInDrawPile'
 import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
