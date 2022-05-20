@@ -1,22 +1,29 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { gsap } from 'gsap'
+import { omit } from 'lodash'
+import type { InteractionEvent } from 'pixi.js'
+import { Easing, Tweener } from 'pixi-tweener'
+// import { gsap } from 'gsap'
 import type { CharacterClass, Pile } from 'shared'
 import type { Card } from 'shared'
 
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
+    MyPixiContainer,
     PixiText,
     PixiTexture,
 } from '@/elementsUtil'
+import { TweenableContainer } from '@/elementsUtil'
 import { getRenderer } from '@/elementsUtil'
 import { Container, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
-import { keys } from '@/util'
+import type { InteractionEvents } from '@/elementsUtil/InteractionEvents'
+import { hoveredCardUid, hoveredCharacterUid, keys } from '@/util'
 
 import { getCardTypeSrc } from '../../logic/assetGetters'
+import { glowFilter } from '../Character'
 import { beginTargetSelection } from './beginTargetSelection'
 
 const CARD_H_TO_W_RATIO = 630 / 450
@@ -61,7 +68,7 @@ export function Card({
             getGradientBackground(cardFrameTexture, colorStops),
             getCardFrameSprite(
                 cardFrameTexture,
-                getMouseEvents(card, cardFrameTexture, xyrs)
+                getEvents(card, cardFrameTexture, xyrs)
             ),
             getEnergyContainer(card, cardFrameTexture),
             ...getTexts(card, cardFrameTexture, colorStops),
@@ -94,12 +101,12 @@ function getGradientBackground(
 
 function getCardFrameSprite(
     cardFrameTexture: PixiTexture,
-    mouseEvents: MouseEvents
+    events: InteractionEvents
 ) {
     return Sprite({
         src: cardFrameTexture,
         anchor: 0.5,
-        ...mouseEvents,
+        events,
     })
 }
 
@@ -222,34 +229,42 @@ function getColorStopsFromCharacterClass(
     )
 }
 
-type MouseEvents = {
-    onMouseover: InteractionEventHandler
-    onMouseout: InteractionEventHandler
-    onClick: InteractionEventHandler
-}
-
-function getMouseEvents(
+function getEvents(
     card: Card,
     cardFrameTexture: PixiTexture,
     xyrs: XYRotationScale
-): MouseEvents {
+): InteractionEvents {
     let animationForCard = getNullAnimation()
-    let expandedCard: PixiContainer | null
+    let expandedCard: MyPixiContainer | null
 
-    return {
-        onMouseover: async ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
+    hoveredCardUid.onChange(uid => {
+        if (expandedCard == null || card.uid === uid) return
 
-            await animationForCard
+        pointerout({
+            currentTarget: { parent: expandedCard?.parent },
+        } as InteractionEvent)
+    })
 
-            if (expandedCard != null) {
-                container.parent.removeChild(expandedCard)
-                expandedCard.destroy()
-                expandedCard = null
-            }
+    hoveredCharacterUid.onChange(uid => {
+        if (expandedCard == null || card.characterUid === uid) return
 
-            expandedCard = Container({
+        pointerout({
+            currentTarget: { parent: expandedCard?.parent },
+        } as InteractionEvent)
+    })
+
+    const pointerover: InteractionEventHandler = async function ({
+        currentTarget: { parent: container },
+    }) {
+        if (!(container instanceof PixiContainer))
+            throw new Error('ERROR! should be bound to container')
+
+        hoveredCharacterUid.set(card.characterUid)
+        hoveredCardUid.set(card.uid)
+        container.filters = [glowFilter]
+
+        if (expandedCard == null) {
+            expandedCard = TweenableContainer({
                 name: `${container.name}-expanded`,
                 ...xyrs,
                 children: [
@@ -259,66 +274,84 @@ function getMouseEvents(
                     }),
                 ],
             })
-
-            container.alpha = 0
             container.parent.addChild(expandedCard)
 
-            animationForCard = gsap.to(expandedCard, {
-                pixi: {
-                    y: -CARD_HEIGHT_FULL / 2 - 20,
-                    rotation: 0,
-                    scale: CARD_WIDTH_FULL / cardFrameTexture.width,
-                    // width: CARD_WIDTH_FULL,
-                    // height: CARD_HEIGHT_FULL,
-                },
-                duration: 0.3,
-            })
-        },
-        onMouseout: async ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
-            if (animationForCard == null) return
-            await animationForCard.reverse().then(() => {
-                animationForCard.kill()
-                animationForCard = getNullAnimation()
-                container.alpha = 1
-                if (expandedCard != null) {
-                    container.parent.removeChild(expandedCard)
-                    expandedCard.destroy()
-                    expandedCard = null
-                }
-            })
-        },
-        onClick: ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
+            expandedCard.filters = [glowFilter]
+        }
 
-            // let targetUids
-            // switch (card.targetType) {
-            //     case 'enemies':
-            //         targetUids = [getFrontEnemyUid()]
-            //         break
-            //     case 'friends':
-            //         targetUids = [getFrontFriendUid()]
-            //         break
-            //     case 'self':
-            //         targetUids = [card.characterUid]
-            //         break
-            //     case 'unknown':
-            //         throw Error('TODO: handle this')
-            //     case 'card':
-            //         throw Error('TODO: handle this')
-            //     default:
-            //         throw Error('unreachable')
-            if (getBattleScene().get().energy >= card.energy) {
-                beginTargetSelection(container, card)
+        container.alpha = 0
+        expandedCard.alpha = 1
+
+        await animationForCard
+        animationForCard = Tweener.add(
+            {
+                target: expandedCard,
+                duration: 0.3,
+                ease: Easing.easeInExpo,
+            },
+            {
+                y: -CARD_HEIGHT_FULL / 2 - 20,
+                rotation: 0,
+                tweenableScale: CARD_WIDTH_FULL / cardFrameTexture.width,
+                // scale: new Point(CARD_WIDTH_FULL / cardFrameTexture.width),
             }
-        },
+        )
+    }
+    const pointerout: InteractionEventHandler = async function ({
+        currentTarget: { parent: container },
+    }) {
+        if (!(container instanceof PixiContainer))
+            throw new Error('ERROR! should be bound to container')
+        if (animationForCard == null || expandedCard == null) return
+
+        await animationForCard
+        await (animationForCard = Tweener.add(
+            {
+                target: expandedCard,
+                duration: 0.3,
+            },
+            {
+                ...omit(xyrs, 'scale'),
+                tweenableScale: xyrs.scale,
+            }
+        ))
+        container.alpha = 1
+        expandedCard.alpha = 0
+    }
+    const pointerdown: InteractionEventHandler = function ({
+        currentTarget: { parent: container },
+    }) {
+        //for mobile
+        pointerover({
+            currentTarget: { parent: container },
+        } as InteractionEvent)
+
+        if (!(container instanceof PixiContainer))
+            throw new Error('ERROR! should be bound to container')
+
+        if (getBattleScene().get().energy >= card.energy) {
+            beginTargetSelection(container, card)
+        }
+    }
+    const pointerup: InteractionEventHandler = function ({
+        currentTarget: { parent: container },
+    }) {
+        //for mobile
+        pointerout({
+            currentTarget: { parent: container },
+        } as InteractionEvent)
+    }
+
+    return {
+        pointerover,
+        pointerout,
+        pointerdown,
+        pointerup,
     }
 }
 
 export function getNullAnimation() {
-    return gsap.to({}, 0, {})
+    return Tweener.add({ target: {}, duration: 0 }, {})
 }
 
 const RIGHT_TO_LEFT = 1

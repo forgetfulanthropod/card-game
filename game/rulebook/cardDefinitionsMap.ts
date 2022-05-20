@@ -27,7 +27,9 @@ const blockBase = {
 } as const
 /** Enforces correct self-id */
 type CardDefinitionMap = {
-    [Key in CardId]: Omit<Card, 'characterUid' | 'explanation'> & { id: Key }
+    [Key in CardId]: Omit<Card, 'uid' | 'characterUid' | 'explanation'> & {
+        id: Key
+    }
 }
 export const cardDefinitionsMap: CardDefinitionMap = {
     shield: {

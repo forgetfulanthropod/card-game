@@ -339,28 +339,37 @@ export function getAppSize(): { width: number; height: number } {
     return { width, height }
 }
 
+export class MyPixiContainer extends PixiContainer {
+    set tweenableScale(scale: number) {
+        this.scale.set(scale)
+    }
+    get tweenableScale() {
+        return this.scale.x
+    }
+}
+
+export function TweenableContainer(args: ContainerArgs): MyPixiContainer {
+    const c = new MyPixiContainer()
+    applyContainerArgs(args, c)
+    return c
+}
+
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
+    applyContainerArgs(args, c)
+    return c
+}
+
+function applyContainerArgs(args: ContainerArgs, c: PixiContainer) {
     for (const ch of args.children || []) {
         if (ch != null && ch !== false) {
             c.addChild(ch)
         }
     }
     applyDisplayObjectArgs(c, args)
-    // if (args.onTick != null) {
-    //     PixiTicker.shared.add(function cb(dt) {
-    //         const result = args.onTick && args.onTick(c, dt)
-    //         if (result === 'remove') PixiTicker.shared.remove(cb)
-    //     })
-    // }
-    // if (args.name != null) {
-    //     c.name = args.name
-    // }
     if (args.cache === true) {
         c.cacheAsBitmap = true
     }
-
-    return c
 }
 
 export function Text(args: TextArgs): PixiText {

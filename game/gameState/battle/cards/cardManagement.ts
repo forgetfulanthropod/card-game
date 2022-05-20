@@ -1,5 +1,12 @@
 import { set } from 'lodash'
-import type { Card, CardId, Cards, CharacterClass, CharacterUid } from 'shared'
+import type {
+    Card,
+    CardId,
+    Cards,
+    CardUid,
+    CharacterClass,
+    CharacterUid,
+} from 'shared'
 import type { BattleCursor } from 'shared'
 
 import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
@@ -65,11 +72,12 @@ export function makeCards(scene: BattleCursor): Cards {
                 firstCharacterUidForClass = allCharacters[0].uid
             }
 
+            const cardUid = `${id}-${srandom().toString().replace('.', '')}`
             return set(
                 acc,
-                `${id}-${srandom().toString().replace('.', '')}`,
+                cardUid,
                 updateExplanation(
-                    getCardInstance(id, firstCharacterUidForClass),
+                    getCardInstance(id, cardUid, firstCharacterUidForClass),
                     scene
                 )
             )
@@ -86,9 +94,15 @@ function updateExplanation(card: Card, scene: BattleCursor): Card {
 
 function getCardInstance(
     id: keyof typeof cardDefinitionsMap,
+    uid: CardUid,
     characterUid: CharacterUid
 ): Card {
-    return { ...cardDefinitionsMap[id], characterUid, explanation: 'error!' }
+    return {
+        ...cardDefinitionsMap[id],
+        uid,
+        characterUid,
+        explanation: 'error!',
+    }
 }
 
 function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {

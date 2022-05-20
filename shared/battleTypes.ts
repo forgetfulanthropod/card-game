@@ -130,6 +130,7 @@ type TargetType =
 export type Card = {
     name: string
     energy: number
+    uid: CardUid
     id: CardId
     targetNum: number
     targetType: TargetType
