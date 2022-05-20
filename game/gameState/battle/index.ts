@@ -1,15 +1,7 @@
 export { applyDamage } from './applyDamage'
 
 export { roundDamage } from './attack'
-export {
-    discard,
-    drawNewHand,
-    explainActionsForCard,
-    play,
-    putAllCardsInDrawPile,
-    setCards,
-    updateHand,
-} from './cards'
+export * from './cards'
 export { getCharIds, getRandomLivingNpcUid } from './characterGetters'
 export { getModified } from './characterManagement'
 export { clearAllEffects } from './clearAllEffects'

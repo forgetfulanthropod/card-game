@@ -100,7 +100,7 @@ function makePositions({
     return A.slice(0, n)
 }
 
-export function newPCMeta(args: {
+function newPCMeta(args: {
     x: number
     y: number
     uid: string
