@@ -261,7 +261,6 @@ function getEvents(
 
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
-        container.filters = [glowFilter]
 
         if (expandedCard == null) {
             expandedCard = TweenableContainer({
