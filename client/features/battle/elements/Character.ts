@@ -11,7 +11,7 @@ import type {
 } from 'shared'
 
 import type { SpineAsset } from './logic'
-import { getCharTexture, getOrbTexture, hasTexture } from './logic'
+import { getCharTexture, getOrbTexture } from './logic'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
@@ -20,6 +20,7 @@ import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
+    hasTexture,
     Adjust,
     onDestroyed,
     SCALE_UNIVERSAL,

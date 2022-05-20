@@ -1,8 +1,8 @@
 import type { Pile } from 'shared'
 
+import { getTexture } from './getCardTypeSrc'
 import type { PixiContainer } from '@/elementsUtil'
 import {
-    getTexture,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,

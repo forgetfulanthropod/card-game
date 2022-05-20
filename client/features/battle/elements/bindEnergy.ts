@@ -1,9 +1,8 @@
 import type { ROCursor } from 'sbaobab'
 import type { BattleScene } from 'shared'
 
-import { getTexture } from './logic'
-import type { PixiContainer } from '@/elementsUtil'
 import {
+    getTexture,
     BASE_HEIGHT,
     BASE_WIDTH,
     Sprite,
@@ -11,6 +10,7 @@ import {
     Container,
     clearContainer,
 } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
 
 type BindCursorArgs = {
     scene: ROCursor<BattleScene>

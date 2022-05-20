@@ -5,7 +5,7 @@ import { BlessingToggles } from './BlessingToggles'
 import { FullScreenInfo } from './FullScreenInfo'
 import ResetButton from './ResetButton'
 import { useCursor } from './util'
-import Battle from '@/features/battle/components/Battle'
+import { Battle } from '@/features/battle'
 import { getTree } from '@/data/rootTree'
 
 export default function GameManager(props: { username: string }): JSXElement {

@@ -30,10 +30,11 @@ const cardTypeAssets = {
 export type CardArtAssetId = keyof typeof cardArtAssets
 
 export type CardTypeAssetId = keyof typeof cardTypeAssets
+export type CardAssetId = keyof typeof cardAssets
 
 export const cardAssets = {
     cardBackPileSizeOverlay,
     cardBack,
     ...cardArtAssets,
     ...cardTypeAssets,
-}
+} as const

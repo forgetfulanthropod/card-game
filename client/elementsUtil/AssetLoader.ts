@@ -11,13 +11,13 @@ import potion from '@battleAssets/misc-png/INVENTORY_POTION.png'
 import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
 import door from '@battleAssets/misc-png/temp-door.png'
-import { backgroundAssets } from './backgroundAssets'
-import { cardAssets } from './cardAssets'
-import { characterAssets } from './characterAssets'
-import { characterStatusAssets } from './characterStatusAssets'
-import { effectAssets } from './effectAssets'
-import { orbAssets } from './orbAssets'
-import { spineAssets } from './spineAssets'
+import type { PixiTexture } from './mypixi'
+import { backgroundAssets } from '@/features/battle/elements/logic/backgroundAssets'
+import { characterAssets } from '@/features/battle/elements/logic/characterAssets'
+import { characterStatusAssets } from '@/features/battle/elements/logic/characterStatusAssets'
+import { effectAssets } from '@/features/battle/elements/logic/effectAssets'
+import { orbAssets } from '@/features/battle/elements/logic/orbAssets'
+import { spineAssets } from '@/features/battle/elements/logic/spineAssets'
 import font from '@/assets/ARCADE_N_.ttf'
 import check from '@/assets/check.png'
 
@@ -40,7 +40,6 @@ const basicAssets = {
     ...characterStatusAssets,
     ...backgroundAssets,
     ...effectAssets,
-    ...cardAssets,
     ...spineAssets,
 }
 const deluxeAssets = {
@@ -86,4 +85,14 @@ export default function loadAssets(): Promise<void> {
         })
     })
     // return () => Loader.shared.onLoad.detach(cb)
+}
+
+export function getTexture(assetId: AssetKey): PixiTexture {
+    return (
+        Loader.shared.resources?.[assetId]?.texture ??
+        throwNull(`texture '${assetId}'`)
+    )
+}
+export function hasTexture(assetId: AssetKey): boolean {
+    return Loader.shared.resources?.[assetId] != null
 }

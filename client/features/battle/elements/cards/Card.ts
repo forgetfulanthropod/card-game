@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import type { CharacterClass, Pile, Card } from 'shared'
 
 import { beginTargetSelection } from './beginTargetSelection'
-import { getCardTypeSrc } from '@/features/battle/elements/logic'
+import { getCardTypeSrc } from './getCardTypeSrc'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,

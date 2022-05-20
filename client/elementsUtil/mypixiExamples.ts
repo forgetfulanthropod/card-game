@@ -1,10 +1,10 @@
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { delayChain } from 'shared/code'
+import { getTexture } from './AssetLoader'
 
 import type { PixiContainer } from './mypixi'
 import { Adjust, Container, For, If, portalize, Sprite, Text } from './mypixi'
-import { getTexture } from './pixiUtils'
 
 export function ForExample(): PixiContainer {
     const strings = datum(['a', 'b', 'c', 'd'])
