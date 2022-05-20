@@ -13,6 +13,8 @@ export async function doActionAndTakeSteps<T>(
     options: CallOptions
 ) {
     const game = getGameStateCursor(username)
+    // @ts-expect-error
+    args.game = game
     let maybeNextAction = f(args)
     logger.info({ maybeNextAction })
     while (isNextAction(maybeNextAction)) {
