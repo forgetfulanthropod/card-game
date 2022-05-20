@@ -6,7 +6,8 @@ import type {
     NetworkAttackData,
 } from 'shared'
 import type { ExecuteArgs } from './util'
-import { applyDamage, s } from './util'
+import { s } from './util'
+import { applyDamage } from '@/gameState'
 import { emit } from '@/util'
 
 export function explain(damage: VAngu, times: VAngu) {

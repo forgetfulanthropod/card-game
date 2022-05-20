@@ -1,7 +1,7 @@
 import type { GameActions } from '@serverActions'
 import type { Card, CardUid, BattleCursor } from 'shared'
 
-import { discard, getEnergy, play, updateHand } from '@/gameState/battle'
+import { discard, getEnergy, play, updateHand } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 export const playCard: GameActions['PlayCard'] = args => {

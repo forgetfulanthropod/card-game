@@ -2,8 +2,8 @@ import { set } from 'lodash'
 import type { Card, CardId, Cards, CharacterUid, BattleCursor } from 'shared'
 
 import { explainActionsForCard } from './interpretActions'
-import { getCharIds } from '@/gameState/battle'
-import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
+import { getCharIds } from '@/gameState'
+import { cardDefinitionsMap } from '@/rulebook'
 import { keys, vals } from '@/util'
 
 // TODO: repeated cards: block, basic attack, basic magic attack

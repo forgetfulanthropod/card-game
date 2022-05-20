@@ -2,7 +2,7 @@ import type { GameActions } from '@serverActions'
 import { findIndex, values } from 'lodash'
 import type { BlessingName } from 'shared'
 
-import { getModified } from '@/gameState/battle'
+import { getModified } from '@/gameState'
 import { getRulebook } from '@/rulebook'
 import { getBattleSceneIn } from '@/util'
 

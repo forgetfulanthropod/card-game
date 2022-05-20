@@ -3,7 +3,7 @@ import type { CharacterUid, EffectType, BattleCursor } from 'shared'
 
 import { s } from './util'
 import type { ExecuteArgs } from './util'
-import { getUpdatedEffects } from '@/gameState/battle'
+import { getUpdatedEffects } from '@/gameState'
 
 export function explain(rounds: VAngu) {
     if (rounds == null) throw new Error('no number of rounds passed in!')

@@ -1,6 +1,6 @@
 import type { NextAction } from 'shared'
 
-import { checkBattleOverMut, handleMove } from '@/gameState/battle'
+import { checkBattleOverMut, handleMove } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000

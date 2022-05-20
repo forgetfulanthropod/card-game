@@ -1,9 +1,11 @@
 import type { Empty, InternalAction } from 'shared'
 
-import { drawNewHand } from '@/gameState/battle/cards/drawNewHand'
-import { clearBlock } from '@/gameState/battle/clearBlock'
-import { clearHasMoved } from '@/gameState/battle/clearHasMoved'
-import { setRoundEnergy } from '@/gameState/battle/energy/getRoundEnergy'
+import {
+    drawNewHand,
+    clearBlock,
+    clearHasMoved,
+    setRoundEnergy,
+} from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 // const DEFAULT_WAIT = 1000

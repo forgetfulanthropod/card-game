@@ -7,12 +7,12 @@ import type {
     Effect,
     BattleCursor,
 } from 'shared'
+import { applyDamage } from './applyDamage'
 
 import {
     getCharacterKeysAndDamages,
     getCharacterKeysAndEffects,
 } from './attack'
-import { applyDamage } from './cards'
 
 /** Applies health, and effects */
 export function applyMove(scene: BattleCursor, attackData: AttackData): void {

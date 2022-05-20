@@ -1,7 +1,7 @@
 import type { NextAction } from 'shared'
 
 import { endRound } from './endRound'
-import { getNpcMoves } from '@/gameState/battle'
+import { getNpcMoves } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_AFTER_PLAYER_MOVE = 1000

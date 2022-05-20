@@ -45,8 +45,8 @@
                     "game/*",
                     "shared/*",
                     "!shared/code",
-                    "shared/code/*"
-                    // "@/*/*"
+                    "shared/code/*",
+                    "@/*/*"
                 ]
             }
         ],

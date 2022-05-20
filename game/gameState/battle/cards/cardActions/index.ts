@@ -1,5 +1,3 @@
-export { applyDamage } from './util'
-
 export {
     explain as explainAddBlock,
     execute as executeAddBlock,

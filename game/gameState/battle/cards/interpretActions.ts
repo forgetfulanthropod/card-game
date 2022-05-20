@@ -15,7 +15,7 @@ import {
     explainText,
     executeText,
 } from './cardActions'
-import { checkBattleOverMut } from '@/gameState/battle'
+import { checkBattleOverMut } from '@/gameState'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
 // @endindex
 
