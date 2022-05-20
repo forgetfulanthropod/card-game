@@ -1,6 +1,6 @@
-import Doors from './Doors'
+import { Doors } from './Doors'
 import { callApi } from '@/actions'
-import { getBattleScene } from '@/data/rootTree'
+import { getBattleScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 
 export function bindDoors(parent: PixiContainer) {

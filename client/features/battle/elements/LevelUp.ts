@@ -1,7 +1,7 @@
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, Text } from '@/elementsUtil'
 
-export default function HitInfo(args: { level: number }): PixiContainer {
+export function HitInfo(args: { level: number }): PixiContainer {
     return Container({
         children: [
             Text({

@@ -1,5 +1,5 @@
-import styled from '@/config/mystyled'
-export default function Table(props: {
+import { styled } from '@/config'
+export function Table(props: {
     rows: string[][]
     header?: string
 }): JSXElement {

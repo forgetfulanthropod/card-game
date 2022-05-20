@@ -15,10 +15,7 @@ import {
 import { applyDamage } from './cards'
 
 /** Applies health, and effects */
-export default function applyMove(
-    scene: BattleCursor,
-    attackData: AttackData
-): void {
+export function applyMove(scene: BattleCursor, attackData: AttackData): void {
     const allChars = scene.select('allCharacters')
 
     markAttackerAsMoved(allChars, attackData)

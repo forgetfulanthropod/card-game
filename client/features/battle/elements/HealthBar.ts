@@ -4,7 +4,7 @@ import type { CharacterMeta, CharacterUid } from 'shared'
 
 import { getEffectIconSrc } from './logic'
 import { callApi } from '@/actions'
-import { getBattleScene } from '@/data/rootTree'
+import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
 import {
     getTexture,
@@ -28,7 +28,7 @@ const rawHeight = 161
 const widthToHeight = rawHeight / rawWidth
 const displayHeight = displayWidth * widthToHeight
 
-export default function HealthBar(characterUid: CharacterUid): PixiContainer {
+export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
     const mainEl = bindMainEl()
     bindHealthIndicator(characterCursor, mainEl)

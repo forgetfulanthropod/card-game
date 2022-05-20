@@ -12,13 +12,13 @@ import type {
 
 import type { SpineAsset } from './logic'
 import { getCharTexture, getOrbTexture } from './logic'
-import HealthBar from './HealthBar'
-import HitInfo from './HitInfo'
-import MoveInfo from './MoveInfo'
+import { HealthBar } from './HealthBar'
+import { HitInfo } from './HitInfo'
+import { MoveInfo } from './MoveInfo'
 import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
-import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { getBattleScene } from '@/data'
+import type { PixiContainer, PixiSprite, PixiSpine } from '@/elementsUtil'
 import {
     hasTexture,
     Adjust,
@@ -32,11 +32,9 @@ import {
     PixiTicker,
     Sprite,
     Text,
+    Spine,
 } from '@/elementsUtil'
-import type { PixiSpine } from '@/elementsUtil/myspine'
-import { Spine } from '@/elementsUtil/myspine'
-import { keys } from '@/util'
-import { onUpdate } from '@/util/onUpdate'
+import { keys, onUpdate } from '@/util'
 
 // import LevelUp from './LevelUp'
 

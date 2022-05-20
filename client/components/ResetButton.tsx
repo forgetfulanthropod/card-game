@@ -1,5 +1,5 @@
 import { callApi } from '@/actions'
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 const Root = styled.button`
     position: absolute;
@@ -13,7 +13,7 @@ const Root = styled.button`
     cursor: pointer;
 `
 
-export default function ResetButton(props: { username: string }): JSXElement {
+export function ResetButton(props: { username: string }): JSXElement {
     return <Root
         onClick={() => callApi('MakeNewUser', { username: props.username })}
     >

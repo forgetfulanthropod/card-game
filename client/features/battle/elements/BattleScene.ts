@@ -1,15 +1,15 @@
 import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { backgroundAssets } from './logic'
-import background from './background'
+import { Background } from './background'
 import { bindCharacters } from './bindCharacters'
 import { bindDoors } from './bindDoors'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards'
-import InfoBox from './InfoBox'
+import { InfoBox } from './InfoBox'
 import { Container } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
-import Coin from '@/elements/Coin'
-import { getBattleScene } from '@/data/rootTree'
+import { Coin } from '@/elements'
+import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
 
 export function BattleScene(): PixiContainer {
@@ -28,7 +28,7 @@ export function BattleScene(): PixiContainer {
     const container = Container({
         name: 'BattleScene',
         children: [
-            background({ scale: 1, ...backgroundArgs }),
+            Background({ scale: 1, ...backgroundArgs }),
             InfoBox({
                 info: [
                     `Room ${scene.get('roomsPassed') + 1}`,

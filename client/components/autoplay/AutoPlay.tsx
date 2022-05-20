@@ -10,8 +10,8 @@ import type {
 } from 'shared'
 
 import { callApi } from '@/actions'
-import styled from '@/config/mystyled'
-import { getTree } from '@/data/rootTree'
+import { styled } from '@/config'
+import { getTree } from '@/data'
 
 const Root = styled.button`
     pointer-events: auto;

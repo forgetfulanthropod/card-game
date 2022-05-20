@@ -1,1 +1,1 @@
-export { default as Battle } from './Battle'
+export { Battle } from './Battle'

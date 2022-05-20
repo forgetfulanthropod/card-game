@@ -1,8 +1,8 @@
-import { getTree } from '@/data/rootTree'
+import { getTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
-export default function Coin(): PixiContainer {
+export function Coin(): PixiContainer {
     const coin = getTree().get('coin')
     getTree()
         .select('coin')

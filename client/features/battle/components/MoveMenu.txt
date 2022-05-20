@@ -3,11 +3,11 @@ export {}
 // import { useState } from 'preact/hooks'
 
 // import { selectMove } from '@/actions'
-// import { getBattleScene } from '@/data/rootTree'
+// import { getBattleScene } from '@/data'
 
 // import { MoveButton, MoveMenuDiv } from './Styles'
 
-// export default function MoveMenu(): JSXElement {
+// export function MoveMenu(): JSXElement {
 //     const scene = getBattleScene()
 //     const selectedMove = scene.select('selectedMove')
 

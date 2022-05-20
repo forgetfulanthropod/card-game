@@ -7,7 +7,7 @@ const config = {
     enableBackground: true,
 }
 
-export default function Background({
+export function Background({
     scale,
     src,
     srcs,

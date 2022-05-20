@@ -3,7 +3,7 @@ import { Fragment, h, JSX, RefObject } from 'preact' // eslint-disable-line
 import type { OnMount } from '@monaco-editor/react'
 import Editor from '@monaco-editor/react'
 import type { editor } from 'monaco-editor'
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 export type MonacoRef = RefObject<editor.IStandaloneCodeEditor>
 

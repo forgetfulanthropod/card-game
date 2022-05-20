@@ -3,16 +3,16 @@ import './global.css'
 import { useLocalStorageState } from 'ahooks'
 import { useEffect, useState } from 'preact/hooks'
 
-import GameManager from './GameManager'
-import UsernameEntry from './UsernameEntry'
+import { GameManager } from './GameManager'
+import { UsernameEntry } from './UsernameEntry'
 import { callApi } from '@/actions'
 import { attachServerListener } from '@/connection'
-import { initializeBoababTree } from '@/data/rootTree'
-import { startPixi } from '@/elements/main'
+import { initializeBoababTree } from '@/data'
+import { startPixi } from '@/elements'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 
-export default function App(): JSXElement {
+export function App(): JSXElement {
     // const [username, setUsername] = useState('')
     const [username_, setUsername] = useLocalStorageState<string>('username')
     const username = username_ ?? ''

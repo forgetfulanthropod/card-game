@@ -2,7 +2,7 @@ import type { AttackData, BattleCursor } from 'shared'
 
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
-import applyMove from './move'
+import { applyMove } from './move'
 import { incrementXP } from './pcLeveling'
 import { checkWinner } from './round'
 import { vals, emit } from '@/util'

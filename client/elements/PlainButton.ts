@@ -1,7 +1,7 @@
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, PixiTexture, Sprite, Text } from '@/elementsUtil'
 
-export default function PlainButton(args: {
+export function PlainButton(args: {
     text: string
     onClick: Callback
     fontSize?: number

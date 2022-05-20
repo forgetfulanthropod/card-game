@@ -1,5 +1,5 @@
 import { callApi } from '@/actions'
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 const Root = styled.button`
     position: absolute;
@@ -12,7 +12,7 @@ const Root = styled.button`
     pointer-events: auto;
 `
 
-export default function StartButton(): JSXElement {
+export function StartButton(): JSXElement {
     return <Root
         onClick={() => callApi('ChangeScene', { newSceneName: 'battle' })}
     >

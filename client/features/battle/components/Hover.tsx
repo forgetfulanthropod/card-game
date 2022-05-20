@@ -1,6 +1,6 @@
 // import type { JSX } from 'preact'
 
-// import { getRulebook } from '@/data/rootTree'
+// import { getRulebook } from '@/data'
 // import type { CharacterMeta } from 'shared'
 
 // import { EnemyHoverDiv, PCHoverDiv } from './Styles'
@@ -33,4 +33,4 @@
 //     </>
 // }
 
-export default null
+export {}

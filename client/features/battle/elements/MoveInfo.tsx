@@ -1,7 +1,7 @@
 import type { PixiText } from '@/elementsUtil'
 import { Text } from '@/elementsUtil'
 
-export default function (args: { moveName: string; offset: number }): PixiText {
+export function MoveInfo(args: { moveName: string; offset: number }): PixiText {
     return Text({
         y: args.offset,
         text: args.moveName,

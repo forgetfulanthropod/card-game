@@ -1,5 +1,5 @@
 import { callApi } from '@/actions'
-import { getEntryScene } from '@/data/rootTree'
+import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 

@@ -1,6 +1,6 @@
 import { jss } from './jsonString'
 import { callApi } from '@/actions'
-import { getClientTree } from '@/data/rootTree'
+import { getClientTree } from '@/data'
 
 // @ts-expect-error
 window.runRecording = runRecording

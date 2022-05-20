@@ -4,7 +4,7 @@ import type { CharacterClass, Pile, Card } from 'shared'
 
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
-import { getBattleScene } from '@/data/rootTree'
+import { getBattleScene } from '@/data'
 import type {
     InteractionEventHandler,
     PixiText,
@@ -18,8 +18,8 @@ import {
     BASE_WIDTH,
     Sprite,
     Text,
+    RoundedRectangleGradientSprite,
 } from '@/elementsUtil'
-import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
 import { keys } from '@/util'
 
 const CARD_H_TO_W_RATIO = 630 / 450

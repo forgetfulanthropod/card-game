@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'preact/hooks'
 import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 
-export default function TestCounter(): JSXElement {
+export function TestCounter(): JSXElement {
     const start = useRef(0)
     useEffect(() => {
         console.log('attaching test counter listener')

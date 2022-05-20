@@ -1,7 +1,7 @@
 // import { parse } from 'marked'
 import { useEffect, useRef, useState } from 'preact/hooks'
 
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 import { getSocket } from '@/connection'
 
 const Modal = styled.div`

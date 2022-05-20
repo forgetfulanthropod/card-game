@@ -6,9 +6,9 @@ import toast from 'react-hot-toast'
 import { useCursor } from './util'
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
-import { getTree } from '@/data/rootTree'
+import { getTree } from '@/data'
 import { callApi } from '@/actions'
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 const ButtonGroup = styled.div`
     // z-index: 11;

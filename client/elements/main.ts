@@ -1,7 +1,6 @@
 import type { PixiContainer } from '@/elementsUtil'
-import { Application } from '@/elementsUtil'
-import loadAssets from '@/elementsUtil/AssetLoader'
-import { bindGamestate } from '@/features/battle'
+import { Application, loadAssets } from '@/elementsUtil'
+import { bindGamestate } from '@/features'
 
 const config = {
     showOneThing: null as null | (() => PixiContainer),

@@ -12,14 +12,16 @@ import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
 import door from '@battleAssets/misc-png/temp-door.png'
 import type { PixiTexture } from './mypixi'
-import { backgroundAssets } from '@/features/battle/elements/logic/backgroundAssets'
-import { characterAssets } from '@/features/battle/elements/logic/characterAssets'
-import { characterStatusAssets } from '@/features/battle/elements/logic/characterStatusAssets'
-import { effectAssets } from '@/features/battle/elements/logic/effectAssets'
-import { orbAssets } from '@/features/battle/elements/logic/orbAssets'
-import { spineAssets } from '@/features/battle/elements/logic/spineAssets'
-import font from '@/assets/ARCADE_N_.ttf'
-import check from '@/assets/check.png'
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import {
+    backgroundAssets,
+    characterAssets,
+    characterStatusAssets,
+    effectAssets,
+    orbAssets,
+    spineAssets,
+} from '@/features/battle/elements/logic/allAssets'
+import { font, check } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -49,7 +51,7 @@ const allAssets = { ...basicAssets, ...deluxeAssets }
 
 export type AssetKey = keyof typeof allAssets
 // TODO: add back basic and deluxe
-export default function loadAssets(): Promise<void> {
+export function loadAssets(): Promise<void> {
     const loaded = new Set(
         Object.keys(allAssets).filter(
             name => Loader.shared.resources[name]?.data != null

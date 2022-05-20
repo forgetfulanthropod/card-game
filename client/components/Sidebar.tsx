@@ -7,8 +7,8 @@ import type { Gamestate } from 'shared'
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
 import { useCursor } from './util'
-import styled from '@/config/mystyled'
-import { getClientTree, getTree } from '@/data/rootTree'
+import { styled } from '@/config'
+import { getClientTree, getTree } from '@/data'
 import { stringify } from '@/util'
 
 export function Sidebar(): JSXElement {
