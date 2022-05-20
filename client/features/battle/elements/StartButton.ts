@@ -1,7 +1,7 @@
-import { glowFilter } from './Character'
 import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    glowFilter,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,

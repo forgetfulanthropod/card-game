@@ -1,5 +1,4 @@
 import { filters, Loader } from 'pixi.js'
-import { GlowFilter } from 'pixi-filters'
 import type { ROCursor } from 'sbaobab'
 import type {
     CharacterMeta,
@@ -9,32 +8,32 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from 'shared'
-
-import type { SpineAsset } from './logic'
-import { getCharTexture, getOrbTexture } from './logic'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
+import type { SpineAsset } from './logic'
+import { getCharTexture, getOrbTexture } from './logic'
 import { MoveInfo } from './MoveInfo'
-import { callApi } from '@/actions'
-import { getSocket } from '@/connection'
-import { getBattleScene } from '@/data'
-import type { PixiContainer, PixiSprite, PixiSpine } from '@/elementsUtil'
+import { hoveredCharacterUid, keys, onUpdate } from '@/util'
 import {
-    hasTexture,
     Adjust,
-    onDestroyed,
-    SCALE_UNIVERSAL,
     bringToTop,
     Container,
     flashElement,
     flashTo,
+    glowFilter,
+    hasTexture,
     hideElement,
+    onDestroyed,
     PixiTicker,
+    SCALE_UNIVERSAL,
+    Spine,
     Sprite,
     Text,
-    Spine,
 } from '@/elementsUtil'
-import { keys, onUpdate } from '@/util'
+import type { PixiContainer, PixiSpine, PixiSprite } from '@/elementsUtil'
+import { getBattleScene } from '@/data'
+import { getSocket } from '@/connection'
+import { callApi } from '@/actions'
 
 // import LevelUp from './LevelUp'
 
@@ -76,6 +75,15 @@ export function Character(args: CharacterProps): PixiContainer {
         args.onClick(characterMeta.uid)
     )
 
+    const unsub = hoveredCharacterUid.onChange(hoveredCharacterUid => {
+        if (mainAnimation == null) return
+        if (hoveredCharacterUid === characterMeta.uid) {
+            mainAnimation.filters = [glowFilter]
+        } else {
+            mainAnimation.filters = []
+        }
+    })
+
     const mainContainer = Container({
         zIndex: args.zIndex,
         children: [
@@ -103,6 +111,7 @@ export function Character(args: CharacterProps): PixiContainer {
             getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
+        onDestroy: [unsub],
     })
 
     // ---Functions and listeners---
@@ -162,15 +171,8 @@ function ActionIntent(uid: CharacterUid) {
     return root
 }
 
-export const glowFilter = new GlowFilter({
-    innerStrength: 0,
-    outerStrength: 2,
-    color: 0xffffff,
-    knockout: false,
-})
-
 export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
     onClick?: () => void
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
@@ -184,11 +186,10 @@ export function MainCharacterAnimation(
             ? {
                   pointerup: onClick,
                   pointerover: () => {
-                      console.log('pointer enter!!!')
-                      mainAnimation.filters = [glowFilter]
+                      hoveredCharacterUid.set(characterMeta.uid)
                   },
                   pointerout: () => {
-                      mainAnimation.filters = []
+                      hoveredCharacterUid.set(null)
                   },
               }
             : undefined,
@@ -426,7 +427,6 @@ function makeSprites(
                 args.onClick(characterMeta.uid)
             },
             pointerover: () => {
-                console.log('pointer enter!!!')
                 mainSprite.filters = [glowFilter]
             },
             pointerout: () => {

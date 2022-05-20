@@ -5,6 +5,7 @@ export interface Card {
     name: string
     energy: number
     id: CardId
+    uid: CardUid
     targetNum: number
     targetType: TargetType
     actions: string

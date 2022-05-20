@@ -1,10 +1,11 @@
 import type { Brandify } from './misc'
-import type { CharacterName, MoveMetaName } from '@'
+import type { CharacterClass, CharacterName, MoveMetaName } from '@'
 
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     name: CharacterName
     displayName: string
+    class: CharacterClass
     isPc: boolean
 
     maxHealth: number // deprecated

@@ -1,8 +1,15 @@
 import { set } from 'lodash'
-import type { Card, CardId, Cards, CharacterUid, BattleCursor } from 'shared'
+import type {
+    Card,
+    CardId,
+    Cards,
+    CharacterUid,
+    BattleCursor,
+    CharacterClass,
+    CardUid,
+} from 'shared'
 
 import { explainActionsForCard } from './interpretActions'
-import { getCharIds } from '@/gameState'
 import { cardDefinitionsMap } from '@/rulebook'
 import { keys, vals } from '@/util'
 
@@ -48,20 +55,32 @@ function makeCards(scene: BattleCursor): Cards {
         'orbOfProtection',
         'orbOfProtection',
     ]
-    const allPCs = getCharIds(vals(scene.get('allCharacters')), {
-        isPc: true,
-    })
-    const characterUid = allPCs[0]
+    const allCharacters = vals(scene.get('allCharacters'))
+
     return {
-        draw: cardIds.reduce(
-            (acc, id) =>
-                set(
-                    acc,
-                    `${id}-${srandom().toString().replace('.', '')}`,
-                    updateExplanation(getCardInstance(id, characterUid), scene)
-                ),
-            {}
-        ),
+        draw: cardIds.reduce((acc, id) => {
+            logger.info(JSON.stringify(allCharacters, null, '\n'))
+            let firstCharacterUidForClass = allCharacters.find(
+                c => c?.class === getCardClass(id)
+            )?.uid
+
+            if (firstCharacterUidForClass == null) {
+                logger.info(
+                    'TODO: no character class matches this card, going with character 0'
+                )
+                firstCharacterUidForClass = allCharacters[0].uid
+            }
+
+            const cardUid = `${id}-${srandom().toString().replace('.', '')}`
+            return set(
+                acc,
+                cardUid,
+                updateExplanation(
+                    getCardInstance(id, cardUid, firstCharacterUidForClass),
+                    scene
+                )
+            )
+        }, {}),
         hand: {},
         discard: {},
         removed: {},
@@ -74,7 +93,17 @@ function updateExplanation(card: Card, scene: BattleCursor): Card {
 
 function getCardInstance(
     id: keyof typeof cardDefinitionsMap,
+    uid: CardUid,
     characterUid: CharacterUid
 ): Card {
-    return { ...cardDefinitionsMap[id], characterUid, explanation: 'error!' }
+    return {
+        ...cardDefinitionsMap[id],
+        uid,
+        characterUid,
+        explanation: 'error!',
+    }
+}
+
+function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
+    return cardDefinitionsMap[id].characterClass
 }
