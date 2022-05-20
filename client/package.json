@@ -1,25 +1,25 @@
 {
     "name": "kaiju-client",
     "dependencies": {
-        "@monaco-editor/react": "^4.3.1",
-        "@pixi-essentials/gradients": "^0.0.4",
+        "@monaco-editor/react": "^4.4.5",
+        "@pixi-essentials/gradients": "^0.0.5",
         "@pixi-spine/all-4.0": "^3.0.13",
-        "ahooks": "^3.1.5",
-        "gsap": "^3.9.1",
+        "ahooks": "^3.3.12",
+        "gsap": "^3.10.4",
         "pixi-filters": "^4.1.6",
         "pixi-tweener": "^0.12.2",
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
-        "pixi.js": "^6.2.1",
-        "preact": "^10.6.4",
-        "react-hot-toast": "^2.1.1",
+        "pixi.js": "^6.3.2",
+        "preact": "^10.7.2",
+        "react-hot-toast": "^2.2.0",
         "shared": "workspace:shared@*",
-        "socket.io-client": "^4.4.0",
-        "styled-components": "^5.3.3"
+        "socket.io-client": "^4.5.1",
+        "styled-components": "^5.3.5"
     },
     "devDependencies": {
-        "@types/marked": "^4.0.1",
-        "monaco-editor": "^0.31.1"
+        "@types/marked": "^4.0.3",
+        "monaco-editor": "^0.33.0"
     },
     "bookmarks": {
         "beautiful-skill-tree": "^1.7.1",
