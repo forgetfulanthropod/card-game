@@ -1,5 +1,9 @@
-import type { CharacterMeta, CharacterMove, CharacterUid } from 'shared'
-import type { BattleCursor } from 'shared'
+import type {
+    CharacterMeta,
+    CharacterMove,
+    CharacterUid,
+    BattleCursor,
+} from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { randomEl, stringKeys, vals, weightedRandom } from '@/util'

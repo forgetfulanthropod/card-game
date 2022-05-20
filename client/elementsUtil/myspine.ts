@@ -4,14 +4,13 @@ export { PixiSpine }
 import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 
+import type { InteractionEvents } from './InteractionEvents'
+import { bindEvents } from './InteractionEvents'
 import type {
     AnimationsOf,
     SpineAsset,
 } from '@/features/battle/logic/spineAssets'
 import { onUpdate } from '@/util/onUpdate'
-
-import type { InteractionEvents } from './InteractionEvents'
-import { bindEvents } from './InteractionEvents'
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name

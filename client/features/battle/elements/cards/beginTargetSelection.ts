@@ -6,8 +6,7 @@ import type { Card } from 'shared'
 import { callApi } from '@/actions'
 import { localTree } from '@/data/localTree'
 import type { PixiContainer } from '@/elementsUtil'
-import { PixiGraphics } from '@/elementsUtil'
-import { Container, getPixiApp } from '@/elementsUtil'
+import { PixiGraphics, Container, getPixiApp } from '@/elementsUtil'
 import { onUpdate } from '@/util/onUpdate'
 
 export function beginTargetSelection(

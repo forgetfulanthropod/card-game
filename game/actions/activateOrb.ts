@@ -5,8 +5,8 @@ import type {
     CharacterUid,
     NetworkAttackData,
     Orb,
+    BattleCursor,
 } from 'shared'
-import type { BattleCursor } from 'shared'
 
 import {
     checkBattleOverMut,

@@ -1,13 +1,11 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { GradientFactory } from '@pixi-essentials/gradients'
 import { pick } from 'lodash'
-import type { Renderer } from 'pixi.js'
-import type { Sprite as PixiSprite } from 'pixi.js'
+import type { Renderer, Sprite as PixiSprite } from 'pixi.js'
 import { BaseRenderTexture, RenderTexture } from 'pixi.js'
 
 import type { SpriteArgs } from './mypixi'
-import { getRenderer, Graphics } from './mypixi'
-import { getPixiApp, Sprite } from './mypixi'
+import { getRenderer, Graphics, getPixiApp, Sprite } from './mypixi'
 
 export type GradientArgs = {
     x0: number

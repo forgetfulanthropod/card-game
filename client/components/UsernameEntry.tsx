@@ -1,8 +1,7 @@
 import { useState } from 'preact/hooks'
 
-import goodEarthImg from '@/assets/good-earth.png'
-
 import styles from './UsernameEntry.module.css'
+import goodEarthImg from '@/assets/good-earth.png'
 
 export default function UsernameEntry2(props: {
     onEnter: (username: string) => void

@@ -1,5 +1,4 @@
-import type { CharacterUid } from 'shared'
-import type { BattleCursor } from 'shared'
+import type { CharacterUid, BattleCursor } from 'shared'
 
 export function applyDamage({
     damage,

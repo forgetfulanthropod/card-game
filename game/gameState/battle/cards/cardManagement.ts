@@ -1,11 +1,9 @@
 import { set } from 'lodash'
-import type { Card, CardId, Cards, CharacterUid } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
-import { keys, vals } from '@/util'
+import type { Card, CardId, Cards, CharacterUid, BattleCursor } from 'shared'
 
 import { explainActionsForCard, getCharIds } from '..'
+import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
+import { keys, vals } from '@/util'
 
 // TODO: repeated cards: block, basic attack, basic magic attack
 // probably want to take characterClass off of the card type?

@@ -10,15 +10,24 @@ import type {
     NetworkEvent,
 } from 'shared'
 
+import {
+    getCharTexture,
+    getOrbTexture,
+    hasTexture,
+} from '../logic/assetGetters'
+import type { SpineAsset } from '../logic/spineAssets'
+import HealthBar from './HealthBar'
+import HitInfo from './HitInfo'
+import MoveInfo from './MoveInfo'
 import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
-import { Adjust } from '@/elementsUtil'
-import { onDestroyed } from '@/elementsUtil'
-import { SCALE_UNIVERSAL } from '@/elementsUtil'
-import { bringToTop } from '@/elementsUtil'
 import {
+    Adjust,
+    onDestroyed,
+    SCALE_UNIVERSAL,
+    bringToTop,
     Container,
     flashElement,
     flashTo,
@@ -32,16 +41,7 @@ import { Spine } from '@/elementsUtil/myspine'
 import { keys } from '@/util'
 import { onUpdate } from '@/util/onUpdate'
 
-import {
-    getCharTexture,
-    getOrbTexture,
-    hasTexture,
-} from '../logic/assetGetters'
-import type { SpineAsset } from '../logic/spineAssets'
-import HealthBar from './HealthBar'
-import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
-import MoveInfo from './MoveInfo'
 
 const RED = 0xff0000
 const BLUE = 0x0000ff

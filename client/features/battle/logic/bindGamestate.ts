@@ -2,16 +2,14 @@ import { TwistFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import type { SceneType } from 'shared'
 
-import { getBattleScene, getScene } from '@/data/rootTree'
-import type { PixiApplication, PixiContainer } from '@/elementsUtil'
-import { BASE_HEIGHT } from '@/elementsUtil'
-import { BASE_WIDTH } from '@/elementsUtil'
-import { waitingForSceneExitAnimationToFinish } from '@/util'
-
-import pointer from '../../../assets/mouse.png'
 import { BattleScene } from '../elements/BattleScene'
 import Chest from '../elements/Chest'
 import { DungeonEntryScene } from '../elements/DungeonEntryScene'
+import pointer from '@/assets/mouse.png'
+import { getBattleScene, getScene } from '@/data/rootTree'
+import type { PixiApplication, PixiContainer } from '@/elementsUtil'
+import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
+import { waitingForSceneExitAnimationToFinish } from '@/util'
 
 let lastScene: PixiContainer
 

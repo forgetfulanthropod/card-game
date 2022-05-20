@@ -7,11 +7,10 @@ import type {
     StanceName,
 } from 'shared'
 
-import { getRulebook } from '@/rulebook'
-import { keys, vals } from '@/util'
-
 import { getModified } from './characterModifierManagement'
 import { getLevelInfo } from './npcLeveling'
+import { getRulebook } from '@/rulebook'
+import { keys, vals } from '@/util'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080

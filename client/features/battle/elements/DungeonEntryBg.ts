@@ -1,5 +1,8 @@
 import { datum } from 'datums'
 
+import bgOnTransitionSrc from '@battleAssets/backgrounds/Kaiju_Character_select_barf.mp4'
+import bgSrc from '@battleAssets/backgrounds/Kaiju_Character_select_loop.mp4'
+import Background from './background'
 import { getTree } from '@/data/rootTree'
 import type { PlayablePixiSprite } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
@@ -7,10 +10,6 @@ import {
     brightBackLightIsShining,
     waitingForSceneExitAnimationToFinish,
 } from '@/util'
-
-import bgOnTransitionSrc from '../assets/backgrounds/Kaiju_Character_select_barf.mp4'
-import bgSrc from '../assets/backgrounds/Kaiju_Character_select_loop.mp4'
-import Background from './background'
 
 const TIME_FOR_OUTRO_BRIGHTNESS_MS = 400
 const TIME_FOR_OUTRO_MS = 2500

@@ -1,10 +1,4 @@
-import { callApi } from '@/actions'
-import { getBattleScene } from '@/data/rootTree'
-import Coin from '@/elements/Coin'
-import type { PixiContainer } from '@/elementsUtil'
-import { Container } from '@/elementsUtil'
-
-import CaveVideo from '../assets/backgrounds/matcha-cave.webm'
+import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { backgroundAssets } from '../logic/backgroundAssets'
 import background from './background'
 import { bindCharacters } from './bindCharacters'
@@ -12,6 +6,11 @@ import { bindDoors } from './bindDoors'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards/bindCards'
 import InfoBox from './InfoBox'
+import { Container } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
+import Coin from '@/elements/Coin'
+import { getBattleScene } from '@/data/rootTree'
+import { callApi } from '@/actions'
 
 export function BattleScene(): PixiContainer {
     const scene = getBattleScene()

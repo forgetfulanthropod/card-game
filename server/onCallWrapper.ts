@@ -2,8 +2,8 @@ import { clearHappened, getHappened, step } from 'game'
 import type { Gamecursor, NextAction } from 'shared'
 import { sleep } from 'shared/code'
 
-import { getApp } from './index'
 import { commit, emit, getGameStateCursor } from './treeUtils'
+import { getApp } from './index'
 
 const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)

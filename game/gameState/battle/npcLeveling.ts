@@ -1,11 +1,10 @@
 import { cloneDeep, keys } from 'lodash'
 import type { CharacterMeta, CharacterName, DungeonName } from 'shared'
 
-import { getRulebook } from '@/rulebook'
-import { vals } from '@/util'
-
 import { rearrangeNpcs } from './characterManagement'
 import type { Room } from './doors'
+import { getRulebook } from '@/rulebook'
+import { vals } from '@/util'
 
 export function modifyRoom(room: Room, dungeonName: DungeonName): Room {
     let enemies = room.enemies

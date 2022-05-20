@@ -1,3 +1,4 @@
+import { glowFilter } from './Character'
 import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
 import {
@@ -8,8 +9,6 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-
-import { glowFilter } from './Character'
 
 export function StartButton(): PixiContainer {
     const bg = Sprite({

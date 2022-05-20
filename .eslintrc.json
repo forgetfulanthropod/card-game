@@ -56,27 +56,34 @@
         // ],
         "@typescript-eslint/consistent-type-imports": [
             "warn",
-            {
-                "prefer": "type-imports"
-            }
+            { "prefer": "type-imports" }
         ],
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "warn",
-        "unused-imports/no-unused-vars": [
-            "warn",
-            {
-                "vars": "all",
-                "varsIgnorePattern": "^h$|^_",
-                "args": "after-used",
-                "argsIgnorePattern": "^_"
-            }
-        ],
-        "simple-import-sort/imports": "error",
+        // "unused-imports/no-unused-vars": [
+        //     "warn",
+        //     {
+        //         "vars": "all",
+        //         "varsIgnorePattern": "^h$|^_",
+        //         "args": "after-used",
+        //         "argsIgnorePattern": "^_"
+        //     }
+        // ],
+        // "simple-import-sort/imports": "error",
         // "simple-import-sort/exports": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error",
-        "import/no-internal-modules": "error"
+        "import/no-internal-modules": "error",
+        "import/no-self-import": "error",
+        "import/no-cycle": "error",
+        "import/no-useless-path-segments": "error",
+        "import/no-relative-parent-imports": "error",
+        "import/no-mutable-exports": "error",
+        "import/no-unused-modules": "warn",
+        "import/no-duplicates": "warn",
+        "import/order": "warn"
+        // "import/no-extraneous-dependencies": "warn" // <-- won't work, doesnt respect
     },
     "ignorePatterns": [
         "builds/",
@@ -110,12 +117,7 @@
                 "import/no-internal-modules": [
                     "error",
                     {
-                        "allow": [
-                            "**/assets/**",
-                            "preact/*",
-                            "lodash/*",
-                            "gsap/PixiPlugin"
-                        ]
+                        "allow": ["preact/*", "lodash/*", "gsap/PixiPlugin"]
                     }
                 ]
             },

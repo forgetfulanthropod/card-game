@@ -1,6 +1,7 @@
 import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
+import { MainCharacterAnimation } from './Character'
 import { callApi } from '@/actions'
 import { getEntryScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
@@ -13,8 +14,6 @@ import {
 } from '@/elementsUtil'
 import { brightBackLightIsShining } from '@/util'
 import { onUpdate } from '@/util/onUpdate'
-
-import { MainCharacterAnimation } from './Character'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {

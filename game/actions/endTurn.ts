@@ -1,9 +1,9 @@
 import type { NextAction } from 'shared'
 
+import { endRound } from './endRound'
 import { getNpcMoves } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'
 
-import { endRound } from './endRound'
 const TIME_AFTER_PLAYER_MOVE = 1000
 
 // GameActions['EndTurn']

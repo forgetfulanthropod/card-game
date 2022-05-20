@@ -1,12 +1,15 @@
 import type { Value as VAngu } from 'angu'
-import type { Card, CharacterUid, NetworkAttackData } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { emit } from '@/util'
+import type {
+    Card,
+    CharacterUid,
+    NetworkAttackData,
+    BattleCursor,
+} from 'shared'
 
 import { applyDamage } from './util/applyDamage'
 import { s } from './util/explainHelpers'
 import type { ExecuteArgs } from './util/types'
+import { emit } from '@/util'
 
 export function explain(damage: VAngu, times: VAngu) {
     let explication = 'deals ' + damage.eval() + ' damage'

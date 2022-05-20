@@ -1,15 +1,14 @@
-import '../global.css'
+import './global.css'
 
 import { useLocalStorageState } from 'ahooks'
 import { useEffect, useState } from 'preact/hooks'
 
+import GameManager from './GameManager'
+import UsernameEntry from './UsernameEntry'
 import { callApi } from '@/actions'
 import { attachServerListener } from '@/connection'
 import { initializeBoababTree } from '@/data/rootTree'
 import { startPixi } from '@/elements/main'
-
-import GameManager from './GameManager'
-import UsernameEntry from './UsernameEntry'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 

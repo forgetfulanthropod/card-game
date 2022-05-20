@@ -1,11 +1,13 @@
-import type { AttackData, CharacterMeta, CharacterMove } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { vals } from '@/util'
-import { randomEl } from '@/util'
+import type {
+    AttackData,
+    CharacterMeta,
+    CharacterMove,
+    BattleCursor,
+} from 'shared'
 
 import { getDefenders, getPCTarget } from './characterGetters'
 import { getTransformed, isSpecial } from './specialMoves'
+import { vals, randomEl } from '@/util'
 
 export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     if (ac.every(c => c.isPc || c.health <= 0)) return 'PC'

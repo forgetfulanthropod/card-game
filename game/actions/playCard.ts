@@ -1,6 +1,5 @@
 import type { GameActions } from '@serverActions'
-import type { Card, CardUid } from 'shared'
-import type { BattleCursor } from 'shared'
+import type { Card, CardUid, BattleCursor } from 'shared'
 
 import { discard, getEnergy, play, updateHand } from '@/gameState/battle'
 import { getBattleSceneIn } from '@/util'

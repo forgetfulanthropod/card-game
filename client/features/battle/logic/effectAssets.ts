@@ -1,6 +1,6 @@
-import effectBleed from '../assets/effects/bleed.png'
-import effectDebilitated from '../assets/effects/debilitated.png'
-import effectPoison from '../assets/effects/poison_skull.png'
+import effectBleed from '@battleAssets/effects/bleed.png'
+import effectDebilitated from '@battleAssets/effects/debilitated.png'
+import effectPoison from '@battleAssets/effects/poison_skull.png'
 
 export const effectAssets = {
     effectDebilitated,

@@ -1,7 +1,12 @@
 import { findIndex } from 'lodash'
 import type { SCursor } from 'sbaobab'
-import type { AttackData, CharacterMeta, CharacterUid, Effect } from 'shared'
-import type { BattleCursor } from 'shared'
+import type {
+    AttackData,
+    CharacterMeta,
+    CharacterUid,
+    Effect,
+    BattleCursor,
+} from 'shared'
 
 import {
     getCharacterKeysAndDamages,

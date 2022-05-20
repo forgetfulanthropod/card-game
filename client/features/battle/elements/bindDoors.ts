@@ -1,8 +1,7 @@
+import Doors from './Doors'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer } from '@/elementsUtil'
-
-import Doors from './Doors'
 
 export function bindDoors(parent: PixiContainer) {
     const doorCursor = getBattleScene().select('doors')

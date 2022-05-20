@@ -2,13 +2,17 @@ import { Matrix, utils } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type { CharacterMeta, CharacterUid } from 'shared'
 
+import { getEffectIconSrc, getTexture } from '../logic/assetGetters'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
-import { SCALE_UNIVERSAL } from '@/elementsUtil'
-import { Container, Graphics, Sprite, Text } from '@/elementsUtil'
-
-import { getEffectIconSrc, getTexture } from '../logic/assetGetters'
+import {
+    SCALE_UNIVERSAL,
+    Container,
+    Graphics,
+    Sprite,
+    Text,
+} from '@/elementsUtil'
 
 type Rect = [
     number, // x
