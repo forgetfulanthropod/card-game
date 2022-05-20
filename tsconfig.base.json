@@ -1,0 +1,20 @@
+// Client
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "incremental": true,
+        "strict": true,
+        "composite": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["esnext"],
+        "isolatedModules": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+        "rootDir": ".",
+        "outDir": "./builds/tsc/"
+    }
+}

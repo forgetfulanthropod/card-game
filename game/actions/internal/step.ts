@@ -1,8 +1,4 @@
-import type {
-    InternalAction,
-    InternalActionName,
-    NextAction,
-} from 'shared'
+import type { InternalAction, InternalActionName, NextAction } from 'shared'
 
 import { doNpcTurn } from './doNpcTurn'
 import { resetRound } from './resetRound'

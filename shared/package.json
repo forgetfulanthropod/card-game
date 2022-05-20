@@ -1,5 +1,3 @@
 {
-    "name": "shared",
-    "main": "./dist/exports.js",
-    "types": "./dist/exports.d.ts"
+    "name": "shared"
 }

@@ -1,4 +1,5 @@
 // import './database'
+import type { Application } from 'express'
 import express from 'express'
 import session from 'express-session'
 import { getLogger } from 'game'
@@ -35,7 +36,7 @@ const buildInfo = {
 }
 logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 
-const app = express()
+const app: Application = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

@@ -1,34 +1,16 @@
 // Client
 {
+    "extends": "../tsconfig.base.json",
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
-        "incremental": true,
-        "strict": true,
-        "moduleResolution": "node",
-        "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": true,
         "lib": ["dom", "dom.iterable", "esnext"],
-        "noFallthroughCasesInSwitch": true,
-        "isolatedModules": true,
-        "noEmit": true,
         "jsxImportSource": "preact",
         "jsx": "react-jsx",
         "paths": {
             "@/*": ["./*"],
             "react": ["./node_modules/preact/compat"],
             "react-dom": ["./node_modules/preact/compat"]
-        },
-        "allowJs": true,
-        "skipLibCheck": true,
-        "resolveJsonModule": true
-    },
-    // "include": ["./**/*.ts", "./**/*.tsx", "../shared/**/*"],
-    "exclude": ["public_", "node_modules"],
-    "references": [
-        {
-            "path": "../shared"
         }
-    ]
+    },
+    "exclude": ["public_"],
+    "references": [{ "path": "../shared" }]
 }

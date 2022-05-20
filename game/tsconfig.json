@@ -1,31 +1,11 @@
 // Game
 {
+    "extends": "../tsconfig.base.json",
     "compilerOptions": {
-        "composite": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "incremental": true,
-        "strict": true,
-        "target": "es2017",
-        "isolatedModules": true,
-        "noImplicitAny": true,
-        "rootDir": ".",
-        "esModuleInterop": true,
-        "experimentalDecorators": true,
-        "skipLibCheck": true,
-        "outDir": "./dist",
         "paths": {
             "@serverActions": ["./actions/types/serverActions"],
             "@/*": ["./*"]
         }
     },
-    "compileOnSave": true,
-    "files": ["./exports.ts"],
-    "include": ["**/*.ts"],
-    "exclude": ["dist", "node_modules"],
-    "references": [
-        {
-            "path": "../shared"
-        }
-    ]
+    "references": [{ "path": "../shared" }]
 }
