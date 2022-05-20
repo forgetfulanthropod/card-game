@@ -9,9 +9,9 @@ import type { Card } from 'shared'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
-    MyPixiContainer,
     PixiText,
     PixiTexture,
+    TweenablePixiContainer,
 } from '@/elementsUtil'
 import { TweenableContainer } from '@/elementsUtil'
 import { getRenderer } from '@/elementsUtil'
@@ -235,7 +235,8 @@ function getEvents(
     xyrs: XYRotationScale
 ): InteractionEvents {
     let animationForCard = getNullAnimation()
-    let expandedCard: MyPixiContainer | null
+    let expandedCard: TweenablePixiContainer | null
+    let eventBoundContainer: PixiContainer
     const listeners = [
         hoveredCardUid.onChange(uid => {
             if (expandedCard == null || card.uid === uid) return
@@ -245,11 +246,13 @@ function getEvents(
             } as InteractionEvent)
         }),
         hoveredCharacterUid.onChange(uid => {
-            if (expandedCard == null || card.characterUid === uid) return
+            if (expandedCard == null) return
 
-            pointerout({
-                currentTarget: { parent: expandedCard?.parent },
-            } as InteractionEvent)
+            if (card.characterUid === uid) {
+                eventBoundContainer.filters = [glowFilter]
+            } else {
+                eventBoundContainer.filters = []
+            }
         }),
     ]
 
@@ -263,6 +266,7 @@ function getEvents(
         hoveredCardUid.set(card.uid)
 
         if (expandedCard == null) {
+            eventBoundContainer = container
             expandedCard = TweenableContainer({
                 name: `${container.name}-expanded`,
                 ...xyrs,

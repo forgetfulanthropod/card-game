@@ -166,7 +166,7 @@ export const glowFilter = new GlowFilter({
 })
 
 export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
     onClick?: () => void
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
@@ -180,11 +180,10 @@ export function MainCharacterAnimation(
             ? {
                   pointerup: onClick,
                   pointerover: () => {
-                      console.log('pointer enter!!!')
-                      mainAnimation.filters = [glowFilter]
+                      hoveredCharacterUid.set(characterMeta.uid)
                   },
                   pointerout: () => {
-                      mainAnimation.filters = []
+                      hoveredCharacterUid.set(null)
                   },
               }
             : undefined,
@@ -423,7 +422,6 @@ function makeSprites(
                 args.onClick(characterMeta.uid)
             },
             pointerover: () => {
-                console.log('pointer enter!!!')
                 mainSprite.filters = [glowFilter]
             },
             pointerout: () => {

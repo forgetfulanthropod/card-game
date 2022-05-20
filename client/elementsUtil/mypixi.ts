@@ -339,7 +339,7 @@ export function getAppSize(): { width: number; height: number } {
     return { width, height }
 }
 
-export class MyPixiContainer extends PixiContainer {
+export class TweenablePixiContainer extends PixiContainer {
     set tweenableScale(scale: number) {
         this.scale.set(scale)
     }
@@ -348,8 +348,10 @@ export class MyPixiContainer extends PixiContainer {
     }
 }
 
-export function TweenableContainer(args: ContainerArgs): MyPixiContainer {
-    const c = new MyPixiContainer()
+export function TweenableContainer(
+    args: ContainerArgs
+): TweenablePixiContainer {
+    const c = new TweenablePixiContainer()
     applyContainerArgs(args, c)
     return c
 }
