@@ -27,7 +27,7 @@ import {
 } from '@/elementsUtil'
 import type { PixiSpine } from '@/elementsUtil/myspine'
 import { Spine } from '@/elementsUtil/myspine'
-import { keys } from '@/util'
+import { hoveredCharacterUid, keys } from '@/util'
 import { onUpdate } from '@/util/onUpdate'
 
 import {
@@ -84,6 +84,15 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainAnimation = MainCharacterAnimation(characterMeta, () =>
         args.onClick(characterMeta.uid)
     )
+
+    const unsub = hoveredCharacterUid.onChange(hoveredCharacterUid => {
+        if (mainAnimation == null) return
+        if (hoveredCharacterUid === characterMeta.uid) {
+            mainAnimation.filters = [glowFilter]
+        } else {
+            mainAnimation.filters = []
+        }
+    })
 
     const mainContainer = Container({
         zIndex: args.zIndex,
