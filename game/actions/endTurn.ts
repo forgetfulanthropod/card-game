@@ -17,10 +17,4 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
         args: { index: 0 },
         delay: TIME_AFTER_PLAYER_MOVE,
     }
-
-    // await doNpcTurns(scene)
-
-    // resetRound(scene)
 }
-
-export function doInternalAction() {}

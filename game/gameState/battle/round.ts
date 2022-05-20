@@ -15,14 +15,6 @@ export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     return null
 }
 
-// TODO: should be at least one person...
-export function checkMoveAvailable(ac: CharacterMeta[]): boolean {
-    return (
-        ac.some(c => c.isPc && c.health > 0 && !c.hasMoved) ||
-        ac.some(c => !c.isPc && c.health > 0 && !c.hasMoved)
-    )
-}
-
 function getRandomMove(
     attacker: CharacterMeta,
     scene: BattleCursor
@@ -36,10 +28,7 @@ function getRandomMove(
     return move
 }
 
-export function getNpcMove(
-    scene: BattleCursor,
-    attacker: CharacterMeta
-): AttackData {
+function getNpcMove(scene: BattleCursor, attacker: CharacterMeta): AttackData {
     const ac = vals(scene.get('allCharacters'))
 
     const move = getRandomMove(attacker, scene)

@@ -29,7 +29,7 @@ export default function applyMove(
     applyNewEffects(allChars, attackData)
 }
 
-export type AllCharacters = SCursor<Record<CharacterUid, CharacterMeta>>
+type AllCharacters = SCursor<Record<CharacterUid, CharacterMeta>>
 
 function markAttackerAsMoved(allChars: AllCharacters, attackData: AttackData) {
     allChars.select(attackData.attacker.uid).set('hasMoved', true)
@@ -43,10 +43,7 @@ function applyDamages(attackData: AttackData, scene: BattleCursor) {
     )
 }
 
-export function applyNewEffects(
-    allChars: AllCharacters,
-    attackData: AttackData
-) {
+function applyNewEffects(allChars: AllCharacters, attackData: AttackData) {
     getCharacterKeysAndEffects(attackData).forEach(
         ({ key, effect: newEffect }) =>
             allChars

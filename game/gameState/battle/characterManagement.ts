@@ -75,7 +75,7 @@ export function getEnemyPositions(n: number) {
     })
 }
 
-export function makePositions({
+function makePositions({
     x0,
     y0,
     hGap,

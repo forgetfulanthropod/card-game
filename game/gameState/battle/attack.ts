@@ -40,7 +40,7 @@ export function getCharacterMovesWithDamageRanges(
     }
 }
 
-export type DamageKV = { key: CharacterUid; damage: number }
+type DamageKV = { key: CharacterUid; damage: number }
 
 export function getCharacterKeysAndDamages(
     attackData: Readonly<AttackData>,

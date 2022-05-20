@@ -9,7 +9,7 @@ export function drawNewHand(scene: BattleCursor): void {
     scene.set('cards', discardAndDrawAndGetPiles(scene.get('cards')))
 }
 
-export function discardAndDrawAndGetPiles({
+function discardAndDrawAndGetPiles({
     draw: drawPile,
     hand,
     discard: discardPile,

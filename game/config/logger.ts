@@ -33,5 +33,3 @@ global.logger = winston.createLogger({
 export function getLogger() {
     return logger
 }
-
-export default null

@@ -27,7 +27,7 @@ export function getNullCards(): Cards {
     return { draw: {}, hand: {}, discard: {}, removed: {} }
 }
 
-export function makeCards(scene: BattleCursor): Cards {
+function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
         'shield',
         'shield',

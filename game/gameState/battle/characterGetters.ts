@@ -6,20 +6,12 @@ import type {
 } from 'shared'
 
 import { getRulebook } from '@/rulebook'
-import { randomEl, stringKeys, vals, weightedRandom } from '@/util'
+import { stringKeys, vals, weightedRandom } from '@/util'
 
-export function ac(scene: BattleCursor) {
+function ac(scene: BattleCursor) {
     return vals(scene.get('allCharacters'))
 }
 
-export function getLivingChars(allCharacters: Record<string, CharacterMeta>): {
-    alivePcs: CharacterMeta[]
-    aliveNpcs: CharacterMeta[]
-} {
-    const alivePcs = vals(allCharacters).filter(c => c.isPc && c.health > 0)
-    const aliveNpcs = vals(allCharacters).filter(c => !c.isPc && c.health > 0)
-    return { alivePcs, aliveNpcs }
-}
 type CharacterFilters = Partial<CharacterMeta>
 export function getCharIds(
     ac: CharacterMeta[],
@@ -53,16 +45,6 @@ export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
     return uids[randomIndex]
 }
 
-export function livingPcsRemain(ac: CharacterMeta[]): boolean {
-    return getCharIds(ac, { isPc: true, health: 1 }).length > 0
-}
-
-export function readyNpcsRemain(ac: CharacterMeta[]): boolean {
-    return (
-        getCharIds(ac, { isPc: false, health: 1, hasMoved: false }).length > 0
-    )
-}
-
 function getClosestAlive(
     allCharacters: CharacterMeta[],
     character: CharacterMeta,
@@ -79,26 +61,7 @@ function getClosestAlive(
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
-export function getUnmovedNpc(ac: CharacterMeta[]): CharacterMeta | null {
-    const chars = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
-    if (chars.length === 0) {
-        return null
-    }
-    return randomEl(chars)
-}
 
-export function getUnmovedPc(
-    ac: CharacterMeta[],
-    excludeId: string
-): CharacterMeta | null {
-    const chars = ac.filter(
-        c => c.isPc && c.health > 0 && !c.hasMoved && c.uid !== excludeId
-    )
-    if (chars.length === 0) {
-        return null
-    }
-    return randomEl(chars)
-}
 export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)

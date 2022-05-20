@@ -84,7 +84,7 @@ export function explainActions(actions: string, locals?: object) {
     return angu.evaluate(actions, ctx, locals).value
 }
 
-export function executeActions({
+function executeActions({
     card,
     targetUids,
     scene,
