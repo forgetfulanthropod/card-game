@@ -14,6 +14,8 @@ import { callApi } from '@/actions'
 import { getSocket } from '@/connection'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { Adjust } from '@/elementsUtil'
+import { onDestroyed } from '@/elementsUtil'
 import { SCALE_UNIVERSAL } from '@/elementsUtil'
 import { bringToTop } from '@/elementsUtil'
 import {
@@ -73,13 +75,7 @@ export function Character(args: CharacterProps): PixiContainer {
     if (sprites == null) {
         return Container({ children: [] })
     }
-    const {
-        attackSprite,
-        defendSprite,
-        mainSprite,
-        selectedSprite,
-        initialHeight,
-    } = sprites
+    const { attackSprite, defendSprite, mainSprite, initialHeight } = sprites
 
     const mainAnimation = MainCharacterAnimation(characterMeta, () =>
         args.onClick(characterMeta.uid)
@@ -100,7 +96,8 @@ export function Character(args: CharacterProps): PixiContainer {
             attackSprite,
             defendSprite,
             healthBar,
-            ...(mainAnimation ? [mainAnimation] : [mainSprite, selectedSprite]),
+            Adjust(ActionIntent(characterMeta.uid), { y: healthBar.height }),
+            ...(mainAnimation ? [mainAnimation] : [mainSprite]),
         ],
     })
     mainContainer.sortChildren()
@@ -156,6 +153,28 @@ export function Character(args: CharacterProps): PixiContainer {
     updateDeathAndHealth()
 
     return flyingContainer
+}
+
+function ActionIntent(uid: CharacterUid) {
+    const battle = getBattleScene()
+    const root = Text({
+        text: '',
+        style: { fontSize: 20, fill: 'red' },
+    })
+    onDestroyed(
+        root,
+        onUpdate(
+            battle.select('nextNpcMoves'),
+            nextMoves => {
+                const moveName = nextMoves.find(
+                    move => move.attacker.uid === uid
+                )?.move?.name
+                root.text = moveName ?? ''
+            },
+            true
+        )
+    )
+    return root
 }
 
 export const glowFilter = new GlowFilter({
@@ -391,7 +410,6 @@ function makeSprites(
             s.texture = texture
             s.height = height
         }
-        update(selectedSprite)
         update(mainSprite)
         update(defendSprite)
         update(attackSprite)
@@ -445,25 +463,11 @@ function makeSprites(
         zIndex: 0,
         visible: false,
     })
-    // props.isSelected && !props.characterMeta.hasMoved
-    const selectedId = getBattleScene().select('selectedCharacter')
-    const selectedSprite = Sprite({
-        ...charSpriteProps,
-        filters: [blurFilter],
-        tint: WHITE,
-        zIndex: 0,
-        visible: selectedId.get() === characterMeta.uid,
-    })
-
-    selectedId.on('update', () => {
-        selectedSprite.visible = selectedId.get() === characterMeta.uid
-    })
 
     return {
         attackSprite,
         defendSprite,
         mainSprite,
-        selectedSprite,
         initialHeight: charSpriteProps.height,
     }
 }

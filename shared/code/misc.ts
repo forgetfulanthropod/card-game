@@ -8,3 +8,6 @@ export async function delayChain(callbacks: (() => unknown)[], delay = 1000) {
         cb()
     }
 }
+
+/** Ensures argument satisfies given type */
+export function satisfies<T>(_: T) {}

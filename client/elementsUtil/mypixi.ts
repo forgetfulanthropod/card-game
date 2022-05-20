@@ -579,3 +579,13 @@ function duplicated<T>(arr: T[]): T[] {
     })
     return Array.from(dups)
 }
+
+export function onDestroyed<T extends DisplayObject>(
+    el: T,
+    ...callbacks: Callback[]
+): T {
+    for (const cb of callbacks) {
+        el.on('destroyed', cb)
+    }
+    return el
+}

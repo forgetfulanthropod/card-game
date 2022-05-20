@@ -3,7 +3,7 @@
     "compilerOptions": {
         "target": "esnext",
         "module": "esnext",
-        // "incremental": true,
+        "incremental": true,
         "strict": true,
         "moduleResolution": "node",
         "esModuleInterop": true,

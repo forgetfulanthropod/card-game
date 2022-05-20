@@ -12,6 +12,7 @@
         "express": "^4.17.2",
         "lodash": "^4.17.21",
         "sbaobab": "npm:@qpwo/baobab-not-deep@2.6.9",
+        "table-to-record": "^1.0.2",
         "testyts": "^1.5.0",
         "winston": "^3.3.3"
     },
