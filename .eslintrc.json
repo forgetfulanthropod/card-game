@@ -12,6 +12,16 @@
     "settings": {
         "import/parsers": {
             "@typescript-eslint/parser": [".ts", ".tsx"]
+        },
+        "import/resolver": {
+            "typescript": {
+                "project": [
+                    "client/tsconfig.json",
+                    "server/tsconfig.json",
+                    "game/tsconfig.json",
+                    "shared/tsconfig.json"
+                ]
+            }
         }
     },
     "plugins": [
@@ -74,7 +84,12 @@
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error",
-        "import/no-internal-modules": "error",
+        "import/no-internal-modules": [
+            "error",
+            {
+                "allow": ["shared/code"]
+            }
+        ],
         "import/no-self-import": "error",
         "import/no-cycle": "error",
         "import/no-useless-path-segments": "error",
@@ -117,7 +132,12 @@
                 "import/no-internal-modules": [
                     "error",
                     {
-                        "allow": ["preact/*", "lodash/*", "gsap/PixiPlugin"]
+                        "allow": [
+                            "preact/*",
+                            "lodash/*",
+                            "gsap/PixiPlugin",
+                            "shared/code"
+                        ]
                     }
                 ]
             },

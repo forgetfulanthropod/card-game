@@ -1,8 +1,9 @@
 import type { CharacterUid, Gamestate, OwnedCharacterStatsMap } from 'shared'
-
-import { initialEntryState } from './entry/state'
+import { initialEntryState } from './entryState'
 import { getRulebook } from '@/rulebook'
-import { keys, vals, getRulebookNames, stringifyRulebook } from '@/util'
+import { getRulebookNames, keys, stringifyRulebook, vals } from '@/util'
+
+export { applyDamage } from './battle'
 
 const NUM_OF_EACH_CHAR = 5
 

@@ -1,9 +1,8 @@
 /** Shared types for /actions and /client. */
 // before: '!./Actions.ts'
-// @index(['./*.ts', './*/index.ts', '!./code/index.ts', '!./exports.ts'], f => `export * from '${f.path}'`)
 export * from './Actions'
-export * from './battle/index'
-export * from './datamodel/index'
+export * from './battle'
+export * from './datamodel'
 export * from './DungeonRooms'
 export * from './entryTypes'
 export * from './EventTrigger'

@@ -1,7 +1,6 @@
 import { startCase, upperFirst } from 'lodash'
 import { Loader } from 'pixi.js'
 import type { CardType, CharacterName, EffectType, OrbType } from 'shared'
-
 import type { AssetKey } from './AssetLoader'
 import type { CardTypeAssetId } from './cardAssets'
 import type { OrbAssetId } from './orbAssets'

@@ -1,6 +1,6 @@
 import type { GameActions } from '@serverActions'
 
-import { initialEntryState } from '@/gameState/entry/state'
+import { initialEntryState } from '@/gameState/entryState'
 
 export const exitDungeon: GameActions['ExitDungeon'] = args => {
     if (args.game.select('scene').get('name') !== 'battle') {

@@ -1,7 +1,6 @@
 import { actions } from 'game'
 
-import { makeNewUser as makeNewUser } from './actions/makeNewUser'
-import { maybeMakeUser } from './actions/maybeMakeUser'
+import { makeNewUser as makeNewUser, maybeMakeUser } from './actions'
 import { onCallWrapper } from './onCallWrapper'
 
 const all = [...vals(actions), maybeMakeUser, makeNewUser]

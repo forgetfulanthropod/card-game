@@ -2,7 +2,7 @@ import { Matrix, utils } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type { CharacterMeta, CharacterUid } from 'shared'
 
-import { getEffectIconSrc, getTexture } from '../logic/assetGetters'
+import { getEffectIconSrc, getTexture } from '..'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type { PixiContainer, PixiGraphics } from '@/elementsUtil'

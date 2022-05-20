@@ -1,7 +1,7 @@
 import type { ROCursor } from 'sbaobab'
 import type { BattleScene } from 'shared'
 
-import { getTexture } from '../logic/assetGetters'
+import { getTexture } from '..'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     BASE_HEIGHT,

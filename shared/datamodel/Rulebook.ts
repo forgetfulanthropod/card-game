@@ -6,7 +6,7 @@ import type {
     MoveMetaName,
     StanceName,
     StanceStats,
-} from '../index'
+} from '..'
 import type { BlessingName, ItemName, LocationName, RecipeName } from '../names'
 import type { Blessing } from './Blessing'
 import type { CharacterStats } from './Character'

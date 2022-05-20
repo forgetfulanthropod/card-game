@@ -1,7 +1,7 @@
 import { cloneDeep, keys } from 'lodash'
-import type { CharacterMeta, CharacterName, DungeonName } from 'shared'
+import type { CharacterMeta, DungeonName } from 'shared'
 
-import { rearrangeNpcs } from './characterManagement'
+import { getLevelInfo, rearrangeNpcs } from './characterManagement'
 import type { Room } from './doors'
 import { getRulebook } from '@/rulebook'
 import { vals } from '@/util'
@@ -66,38 +66,4 @@ function levelUpEnemy(
         ...enemy,
         ...getLevelInfo(enemy.name, enemy.level + levelIncrease),
     }
-}
-
-type LevelInfo = {
-    damage: number
-    maxHealth: number
-    level?: number
-    health?: number
-}
-
-//For enemies above level 10, add +3 attack/+21 health per level.
-const MAX_DATA_LEVEL = 10
-const OVER_MAX_ATTACK = 3
-const OVER_MAX_HEALTH = 21
-export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
-    const { npcLevelStatsMap } = getRulebook()
-
-    const index = Math.min(level, MAX_DATA_LEVEL)
-    const levelInfo: LevelInfo | undefined = npcLevelStatsMap[name]?.[index]
-    if (levelInfo == null) {
-        throw Error('undefined level info')
-    }
-    logger.info({ levelInfo, level })
-
-    if (level > MAX_DATA_LEVEL) {
-        levelInfo.damage =
-            levelInfo.damage + ((OVER_MAX_ATTACK * level) % MAX_DATA_LEVEL)
-        levelInfo.maxHealth =
-            levelInfo.maxHealth + ((OVER_MAX_HEALTH * level) % MAX_DATA_LEVEL)
-    }
-
-    levelInfo.health = levelInfo.maxHealth
-    levelInfo.level = level
-
-    return levelInfo
 }

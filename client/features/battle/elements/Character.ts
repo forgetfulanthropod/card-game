@@ -10,12 +10,8 @@ import type {
     NetworkEvent,
 } from 'shared'
 
-import {
-    getCharTexture,
-    getOrbTexture,
-    hasTexture,
-} from '../logic/assetGetters'
-import type { SpineAsset } from '../logic/spineAssets'
+import { getCharTexture, getOrbTexture, hasTexture } from '..'
+import type { SpineAsset } from '..'
 import HealthBar from './HealthBar'
 import HitInfo from './HitInfo'
 import MoveInfo from './MoveInfo'
