@@ -1,9 +1,4 @@
-import type {
-    BattleScene,
-    CharacterName,
-    DungeonName,
-    EntryScene,
-} from '../index'
+import type { BattleScene, CharacterName, DungeonName, EntryScene } from '@'
 
 export type CardUid = string & Brandify
 /** Intersecting a type with this makes the type not get aliased to its definition by typescript & vscode. Useful for e.g. auto-refactors and function return types. */

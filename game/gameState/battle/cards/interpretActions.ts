@@ -1,8 +1,6 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
 import type { Card, CharacterUid, BattleCursor } from 'shared'
-import { checkBattleOverMut } from '..'
-// @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
 import {
     explainAddBlock,
     executeAddBlock,
@@ -17,6 +15,8 @@ import {
     explainText,
     executeText,
 } from './cardActions'
+import { checkBattleOverMut } from '@/gameState/battle'
+// @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
 // @endindex
 
 export function interpretActions({

@@ -3,7 +3,7 @@ import { utils } from 'pixi.js'
 
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 
-export { getTexture } from '@/features/battle/logic/assetGetters'
+export { getTexture } from '@/features/battle/elements/logic/assetGetters'
 
 export function drawCircle(
     g: PixiGraphics,

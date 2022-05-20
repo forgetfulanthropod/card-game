@@ -1,5 +1,5 @@
 import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
-import { backgroundAssets } from '..'
+import { backgroundAssets } from './logic'
 import background from './background'
 import { bindCharacters } from './bindCharacters'
 import { bindDoors } from './bindDoors'

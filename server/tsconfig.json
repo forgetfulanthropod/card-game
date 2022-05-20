@@ -1,5 +1,6 @@
 // Server
 {
     "extends": "../tsconfig.base.json",
+    "compilerOptions": { "paths": { "@/*": ["./*"] } },
     "references": [{ "path": "../game" }, { "path": "../shared" }]
 }

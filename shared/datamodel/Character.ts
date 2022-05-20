@@ -1,4 +1,4 @@
-import type { CharacterName, MoveMetaName } from '../index'
+import type { CharacterName, MoveMetaName } from '@'
 import type { Brandify } from './misc'
 
 export type CharacterUid = string & Brandify

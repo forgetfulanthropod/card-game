@@ -1,7 +1,7 @@
-import type { DungeonName, SceneHas, SpecialDoorName } from '../index'
 import type { Cards } from './Card'
 import type { Characters } from './Characters'
 import type { AttackData } from './Moves'
+import type { DungeonName, SceneHas, SpecialDoorName } from '@'
 
 export interface BattleScene extends SceneHas {
     username: string

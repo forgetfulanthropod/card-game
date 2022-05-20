@@ -2,7 +2,7 @@ import { TwistFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import type { SceneType } from 'shared'
 
-import { BattleScene, Chest, DungeonEntryScene } from '..'
+import { BattleScene, Chest, DungeonEntryScene } from '@/features/battle'
 import pointer from '@/assets/mouse.png'
 import { getBattleScene, getScene } from '@/data/rootTree'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'

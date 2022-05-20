@@ -1,3 +1,6 @@
 {
+    "compilerOptions": {
+        "paths": { "@": ["./index.ts"] }
+    },
     "extends": "../tsconfig.base.json"
 }

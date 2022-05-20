@@ -97,7 +97,8 @@
         "import/no-mutable-exports": "error",
         "import/no-unused-modules": "warn",
         "import/no-duplicates": "warn",
-        "import/order": "warn"
+        "import/order": "warn",
+        "import/export": "warn"
         // "import/no-extraneous-dependencies": "warn" // <-- won't work, doesnt respect
     },
     "ignorePatterns": [

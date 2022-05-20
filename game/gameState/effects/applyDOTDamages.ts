@@ -1,6 +1,6 @@
 import type { Characters, DamageMap, Effect, BattleCursor } from 'shared'
 
-import { applyDamage } from '..'
+import { applyDamage } from '@/gameState/battle'
 import { emit, keys } from '@/util'
 
 export function applyDOTDamages(scene: BattleCursor): void {

@@ -1,9 +1,9 @@
 import type { Value as VAngu } from 'angu'
 import type { CharacterUid, EffectType, BattleCursor } from 'shared'
 
-import { getUpdatedEffects } from '../../move'
 import { s } from './util'
 import type { ExecuteArgs } from './util'
+import { getUpdatedEffects } from '@/gameState/battle'
 
 export function explain(rounds: VAngu) {
     if (rounds == null) throw new Error('no number of rounds passed in!')

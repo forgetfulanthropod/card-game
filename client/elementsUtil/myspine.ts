@@ -9,7 +9,7 @@ import { bindEvents } from './InteractionEvents'
 import type {
     AnimationsOf,
     SpineAsset,
-} from '@/features/battle/logic/spineAssets'
+} from '@/features/battle/elements/logic/spineAssets'
 import { onUpdate } from '@/util/onUpdate'
 
 export function Spine<Name extends SpineAsset>(props: {

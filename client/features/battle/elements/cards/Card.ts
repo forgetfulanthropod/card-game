@@ -2,8 +2,8 @@ import type { ColorStop } from '@pixi-essentials/gradients'
 import { gsap } from 'gsap'
 import type { CharacterClass, Pile, Card } from 'shared'
 
-import { getCardTypeSrc } from '../..'
 import { beginTargetSelection } from './beginTargetSelection'
+import { getCardTypeSrc } from '@/features/battle/elements/logic'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,

@@ -1,8 +1,8 @@
 import { set } from 'lodash'
 import type { Card, CardId, Cards, CharacterUid, BattleCursor } from 'shared'
 
-import { getCharIds } from '..'
 import { explainActionsForCard } from './interpretActions'
+import { getCharIds } from '@/gameState/battle'
 import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
 import { keys, vals } from '@/util'
 

@@ -1,4 +1,4 @@
-import type { CharacterMove, CharacterUid, MoveMetaName } from '../index'
+import type { CharacterMove, CharacterUid, MoveMetaName } from '@'
 import type { CharacterMeta } from './Characters'
 
 export interface MoveMeta {
