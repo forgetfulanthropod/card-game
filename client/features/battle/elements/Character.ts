@@ -120,6 +120,7 @@ export function Character(args: CharacterProps): PixiContainer {
             getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
+        onDestroy: [unsub],
     })
 
     // ---Functions and listeners---

@@ -236,22 +236,22 @@ function getEvents(
 ): InteractionEvents {
     let animationForCard = getNullAnimation()
     let expandedCard: MyPixiContainer | null
+    const listeners = [
+        hoveredCardUid.onChange(uid => {
+            if (expandedCard == null || card.uid === uid) return
 
-    hoveredCardUid.onChange(uid => {
-        if (expandedCard == null || card.uid === uid) return
+            pointerout({
+                currentTarget: { parent: expandedCard?.parent },
+            } as InteractionEvent)
+        }),
+        hoveredCharacterUid.onChange(uid => {
+            if (expandedCard == null || card.characterUid === uid) return
 
-        pointerout({
-            currentTarget: { parent: expandedCard?.parent },
-        } as InteractionEvent)
-    })
-
-    hoveredCharacterUid.onChange(uid => {
-        if (expandedCard == null || card.characterUid === uid) return
-
-        pointerout({
-            currentTarget: { parent: expandedCard?.parent },
-        } as InteractionEvent)
-    })
+            pointerout({
+                currentTarget: { parent: expandedCard?.parent },
+            } as InteractionEvent)
+        }),
+    ]
 
     const pointerover: InteractionEventHandler = async function ({
         currentTarget: { parent: container },
@@ -273,6 +273,11 @@ function getEvents(
                     }),
                 ],
             })
+
+            container.on('destroyed', () => {
+                listeners.forEach(cb => cb())
+            })
+
             container.parent.addChild(expandedCard)
 
             expandedCard.filters = [glowFilter]
