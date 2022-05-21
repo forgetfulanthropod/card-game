@@ -1,20 +1,36 @@
 import type { CharacterClass } from './Characters'
-import type { CardUid, CharacterUid, PileId } from '@'
+import type { Brandify, CardUid, CharacterUid, PileId } from '@'
 
-export interface Card {
+type EnemyIntentId = string & Brandify
+type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
+
+/** See client/data/enemyAttacks.ts:129 */
+type EnemyAttackName = string & Brandify
+export interface EnemyIntentDefinition {
+    id: EnemyIntentId
+    displayName: string
+    actions: EnemyAttackName // "startlingSpook(1,2)"
+    description: string
+}
+export type EnemyIntent = EnemyIntentDefinition
+
+export interface Card extends CardDefinition {
+    uid: CardUid
+    explanation: string
+    characterUid: CharacterUid
+}
+
+export interface CardDefinition {
+    id: CardId
     name: string
     energy: number
-    id: CardId
-    uid: CardUid
     targetNum: number
     targetType: TargetType
-    actions: string
+    actions: CardAction
     type: CardType
     characterClass: CharacterClass
-    // dynamic
-    characterUid: CharacterUid
-    explanation: string
 }
+
 export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
 export type CardId =

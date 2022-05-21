@@ -9,6 +9,7 @@ export function isSpecial(move: CharacterMove): boolean {
     return move.types.includes('MIM')
 }
 
+/** special effects such as mimic */
 export function getTransformed({
     move,
     charUid,

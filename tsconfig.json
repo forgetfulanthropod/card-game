@@ -1,0 +1,5 @@
+// Server
+{
+    "extends": "./tsconfig.base.json",
+    "references": [{ "path": "./client" }, { "path": "./server" }]
+}

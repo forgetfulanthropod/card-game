@@ -2,7 +2,6 @@ import type { SCursor } from 'sbaobab'
 
 import type { CharacterUid, Gamestate } from './datamodel'
 import type {
-    BlessingName,
     Orb,
     OwnedCharacterStats,
     Rulebook,
@@ -38,8 +37,6 @@ export interface Action {
     RulebookAction: (_: RulebookArgs) => void
 
     StartBattle: (_: Empty) => void
-
-    ToggleBlessing: (_: { name: BlessingName }) => void
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }

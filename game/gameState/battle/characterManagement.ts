@@ -134,39 +134,6 @@ function newPCMeta(args: {
         orbs: [],
     }
 }
-export function newNPCMeta(args: {
-    x: number
-    y: number
-    name: CharacterName
-    uid: string
-    level: number
-}): CharacterMeta {
-    const { characters: statsMap } = getRulebook()
-    // debugger
-    logger.info(`making new npc with ${JSON.stringify(args)}`)
-    // const scale = window.innerWidth / BASE_WIDTH
-    const scale = 1
-
-    const stance: StanceName = 'neutral'
-    return {
-        ...statsMap[args.name],
-        health: statsMap[args.name].maxHealth,
-        block: 0,
-        ...getLevelInfo(args.name, args.level),
-        uid: args.uid,
-        isPc: false,
-        x: args.x,
-        y: args.y,
-        screenX: (scale * BASE_WIDTH * args.x) / 100,
-        screenY: (scale * BASE_HEIGHT * args.y) / 100,
-        stance,
-        hasMoved: false,
-        effects: [],
-        orbs: [],
-        experience: 0,
-        // health: 1,
-    }
-}
 
 export function getModified(
     blessings: Blessing[],

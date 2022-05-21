@@ -1,5 +1,5 @@
 import type { Brandify } from './misc'
-import type { CharacterClass, CharacterName, MoveMetaName } from '@'
+import type { CharacterClass, CharacterName } from '@'
 
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
@@ -7,31 +7,15 @@ export type CharacterStats = Readonly<{
     displayName: string
     class: CharacterClass
     isPc: boolean
-
-    maxHealth: number // deprecated
-    damage: number // deprecated
-
+    /** base health */
     constitution: number
+    /** base attack */
     strength: number
+    /** base magic */
     magic: number
+    /** base block */
     dexterity: number
-
-    moves: CharacterMove[]
-    learnableMoves?: LearnableCharacterMove[]
-    level: number
-    modifier: number
 }> &
-    Brandify
-export type CharacterMove = Readonly<{
-    name: string
-    types: MoveMetaName[]
-    damageRange?: number[]
-}> &
-    Brandify
-type LearnableCharacterMove = CharacterMove &
-    Readonly<{
-        minLevel: number
-    }> &
     Brandify
 
 export type OwnedCharacterStats = CharacterStats &

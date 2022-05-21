@@ -6,41 +6,16 @@ import type {
 } from 'shared'
 
 import { getRulebook } from '@/rulebook'
-import { stringKeys, vals, weightedRandom } from '@/util'
+import { vals, weightedRandom } from '@/util'
 
 function ac(scene: BattleCursor) {
     return vals(scene.get('allCharacters'))
 }
 
-type CharacterFilters = Partial<CharacterMeta>
-export function getCharIds(
-    ac: CharacterMeta[],
-    filters: CharacterFilters
-): CharacterUid[] {
-    if (filters == null) return []
-
-    return ac
-        .filter(c => {
-            //@ts-expect-error
-            return stringKeys(filters).every((filterKey): boolean => {
-                if (typeof filters[filterKey] === 'boolean')
-                    return c[filterKey] === filters[filterKey]
-                if (typeof filters[filterKey] === 'number')
-                    //@ts-expect-error
-                    return c[filterKey] >= filters[filterKey]
-                throw Error('invalid filterKey')
-            })
-        })
-        .map(c => {
-            return c.uid
-        })
-}
-
 export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
-    const uids = getCharIds(vals(scene.get('allCharacters')), {
-        isPc: false,
-        health: 1,
-    })
+    const uids = vals(scene.get('allCharacters')).filter(
+        c => c.isPc === false && c.health > 0
+    )
     const randomIndex = Math.floor(srandom() * uids.length)
     return uids[randomIndex]
 }

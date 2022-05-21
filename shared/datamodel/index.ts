@@ -3,7 +3,6 @@
  * The gamestate reads from the rulebook, but not vice versa
  */
 
-export * from './Blessing'
 export * from './Character'
 export * from './Rulebook'
 export * from './Gamestate'

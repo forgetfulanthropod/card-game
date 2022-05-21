@@ -103,6 +103,12 @@ function view-imports-exports() {
     ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . >imports-and-exports.ignore.txt
 }
 
+function exports() {
+    dir=$1
+
+    ag --nogroup '^export [A-z]+ [A-z]+' $dir | sed -e 's/export /,/' | column -t -s,
+}
+
 function arkit() {
     npx arkit
 }

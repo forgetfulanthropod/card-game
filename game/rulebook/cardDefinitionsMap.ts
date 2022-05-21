@@ -1,4 +1,4 @@
-import type { Card, CardId } from 'shared'
+import type { CardDefinition, CardId } from 'shared'
 
 // cardDefinitionsMap
 const basicMagicAttackBase = {
@@ -27,9 +27,7 @@ const blockBase = {
 } as const
 /** Enforces correct self-id */
 type CardDefinitionMap = {
-    [Key in CardId]: Omit<Card, 'uid' | 'characterUid' | 'explanation'> & {
-        id: Key
-    }
+    [Id in CardId]: CardDefinition & { id: Id }
 }
 export const cardDefinitionsMap: CardDefinitionMap = {
     shield: {

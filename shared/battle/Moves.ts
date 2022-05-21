@@ -1,22 +1,5 @@
-import type { CharacterMeta } from './Characters'
-import type { CharacterMove, CharacterUid, MoveMetaName } from '@'
+import type { CharacterUid } from '@'
 
-export interface MoveMeta {
-    name: MoveMetaName
-    numTargets: number | number[]
-    multiplier?: number
-    multiplierRange?: [number, number]
-    multipliers?: number[] // number of targets varying damage
-    effectMultipliers?: number[] // for damage over time
-    defaultSpriteUrl?: string
-    isSpecial?: boolean
-}
-
-export type AttackData = {
-    attacker: CharacterMeta
-    defenders: CharacterMeta[]
-    move: CharacterMove
-}
 export interface NetworkAttackData {
     moveName: string
     defenderUids: CharacterUid[]

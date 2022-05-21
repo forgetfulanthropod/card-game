@@ -1,16 +1,9 @@
-import type { Blessing } from './Blessing'
 import type { CharacterStats } from './Character'
 import type { Brandify, DungeonLevel, NpcLevelStatsMap } from './misc'
 import type {
-    BlessingName,
-    ItemName,
-    LocationName,
-    RecipeName,
     CharacterName,
     DungeonRooms,
     EventTriggersMap,
-    MoveMeta,
-    MoveMetaName,
     StanceName,
     StanceStats,
 } from '@'
@@ -21,30 +14,9 @@ export type Rulebook = Readonly<{
     name: string
     shouldCoinFlipEveryRound: boolean
     characters: Record<CharacterName, CharacterStats>
-    moveMetaMap: Record<MoveMetaName, MoveMeta>
-    blessings: Record<BlessingName, Blessing>
-    recipes: Record<
-        RecipeName,
-        { name: RecipeName; ingredients: ItemName[]; result: ItemName }
-    >
-    locations: Record<
-        LocationName,
-        {
-            displayName: string
-            name: LocationName
-        }
-    >
     npcLevelStatsMap: NpcLevelStatsMap
     dungeonLevels: DungeonLevel[]
     dungeonRooms: DungeonRooms
-    items: Record<
-        ItemName,
-        {
-            name: ItemName
-            displayName: string
-            description: string
-        }
-    >
     stanceTypeMetaMap: Record<StanceName, StanceStats>
     levelThresholds: Record<number, number>
     // npcNames: CharacterName[]

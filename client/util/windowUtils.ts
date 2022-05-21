@@ -1,4 +1,4 @@
-import { jss } from './jsonString'
+import { jss } from 'shared/code/jsonString'
 import { callApi } from '@/actions'
 import { getClientTree } from '@/data'
 
