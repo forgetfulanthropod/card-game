@@ -106,7 +106,7 @@ function view-imports-exports() {
 function exports() {
     dir=$1
 
-    ag --nogroup '^export [A-z]+ [A-z]+' $dir | sed -e 's/export /,/' | column -t -s,
+    ag --ts --nogroup '^export [A-z]+ [A-z]+' $dir | sed -e 's/export /,/' | column -t -s,
 }
 
 function arkit() {

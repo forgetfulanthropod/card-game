@@ -2,7 +2,7 @@
 export * from './debug'
 export * from 'shared/code/jsonString'
 export * from './localBus'
-export * from './notnull'
+export * from 'shared/code/notnull'
 export * from './objectHelpers'
 export * from './onUpdate'
 // @endindex

@@ -17,7 +17,3 @@ export function attachAPIRoutes(app: Application): void {
         })
     )
 }
-
-function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
-    return Object.values(obj)
-}
