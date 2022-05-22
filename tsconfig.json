@@ -1,5 +1,11 @@
 // Server
 {
+    "include": [
+        "client/**/*.ts",
+        "server/**/*.ts",
+        "shared/**/*.ts",
+        "game/**/*.ts"
+    ],
     "extends": "./tsconfig.base.json",
     "references": [{ "path": "./client" }, { "path": "./server" }]
 }

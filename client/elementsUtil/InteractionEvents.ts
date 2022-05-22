@@ -1,7 +1,7 @@
 import type { DisplayObject } from 'pixi.js'
 
+import { keys } from 'shared/code'
 import type { InteractionEventHandler } from './mypixi'
-import { keys } from '@/util'
 
 export interface InteractionEvents {
     pointerdown?: InteractionEventHandler

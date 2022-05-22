@@ -1,6 +1,6 @@
-import type { Cards, EnemyIntent } from './Card'
+import type { Card, Cards } from './Card'
 import type { Characters } from './Characters'
-import type { DungeonName, SceneHas, SpecialDoorName } from '@'
+import type { DungeonName, SceneHas } from '@'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -15,8 +15,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    doors: { options: SpecialDoorName[]; descriptions: string[] }
     roomsPassed: number
-    nextNpcMoves: EnemyIntent[]
+    nextEnemyCards: Card[]
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'

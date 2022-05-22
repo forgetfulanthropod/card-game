@@ -16,8 +16,6 @@ import {
     executeText,
 } from './cardActions'
 import { checkBattleOverMut } from '@/gameState'
-// @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
-// @endindex
 
 export function interpretActions({
     card,
@@ -63,7 +61,7 @@ export function explainActionsForCard(card: Card, scene: BattleCursor) {
 
 export function explainActions(actions: string, locals?: object) {
     const ctx = generateAnguContext({
-        // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
+        // @index(['./cardActions/*.ts', '!./cardActions/index.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
         addBlock: explainAddBlock,
         chain: explainChain,
         deal: explainDeal,
@@ -89,7 +87,7 @@ function executeActions({
 }) {
     const ctx = generateAnguContext({
         // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
-        // @index(['./cardActions/*.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, card, targetUids, scene }),`)
+        // @index(['./cardActions/*.ts', '!./cardActions/index.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, card, targetUids, scene }),`)
         addBlock: (...dslArgs: VAngu[]) =>
             executeAddBlock({ dslArgs, card, targetUids, scene }),
         chain: (...dslArgs: VAngu[]) =>

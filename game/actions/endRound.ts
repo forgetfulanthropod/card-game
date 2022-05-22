@@ -1,7 +1,7 @@
 import type { BattleCursor } from 'shared'
 
+import { keys } from 'shared/code'
 import { applyDOTDamages } from '@/gameState'
-import { keys } from '@/util'
 
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)

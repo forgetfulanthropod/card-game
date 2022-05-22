@@ -1,7 +1,7 @@
 import { omit } from 'lodash'
 import type { BattleCursor, Cards, Pile } from 'shared'
 import { shufflePile } from './shufflePile'
-import { keys } from '@/util'
+import { keys } from 'shared/code'
 
 const BASE_HAND_SIZE = 5
 

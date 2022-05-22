@@ -1,21 +1,17 @@
-import type {
-    CharacterMeta,
-    CharacterMove,
-    CharacterUid,
-    BattleCursor,
-} from 'shared'
+import type { CharacterMeta, CharacterUid, BattleCursor, Card } from 'shared'
 
+import { vals } from 'shared/code'
 import { getRulebook } from '@/rulebook'
-import { vals, weightedRandom } from '@/util'
+import { weightedRandom } from '@/util'
 
 function ac(scene: BattleCursor) {
     return vals(scene.get('allCharacters'))
 }
 
 export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
-    const uids = vals(scene.get('allCharacters')).filter(
-        c => c.isPc === false && c.health > 0
-    )
+    const uids = vals(scene.get('allCharacters'))
+        .filter(c => c.isPc === false && c.health > 0)
+        .map(x => x.uid)
     const randomIndex = Math.floor(srandom() * uids.length)
     return uids[randomIndex]
 }
@@ -50,30 +46,11 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     return allLivingPlayerCharacters[targetIndex]
 }
 
+// TODO
 export function getDefenders(
     defender: CharacterMeta,
-    move: CharacterMove,
+    card: Card,
     ac: CharacterMeta[]
 ): CharacterMeta[] {
-    const { moveMetaMap } = getRulebook()
-    const defenders = [defender]
-
-    let numTargets = 1
-    move.types
-        .map(t => moveMetaMap[t])
-        .forEach(moveMeta => {
-            const numForMove =
-                typeof moveMeta.numTargets === 'number'
-                    ? moveMeta.numTargets
-                    : moveMeta.numTargets[moveMeta.numTargets.length - 1]
-            if (numForMove > numTargets) numTargets = numForMove
-        })
-    if (numTargets > 1) {
-        for (let i = 1; i < numTargets; i++) {
-            const closest = getClosestAlive(ac, defender, i)
-            if (closest != null) defenders.push(closest)
-        }
-    }
-
-    return defenders
+    return [ac[0]]
 }

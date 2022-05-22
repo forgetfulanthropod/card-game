@@ -1,10 +1,6 @@
 import type { Value as VAngu } from 'angu'
-import type {
-    BattleCursor,
-    Card,
-    CharacterUid,
-    NetworkAttackData,
-} from 'shared'
+import type { CardHit } from 'shared'
+import { mapToObj } from 'shared/code'
 import type { ExecuteArgs } from './util'
 import { s } from './util'
 import { applyDamage } from '@/gameState'
@@ -28,9 +24,19 @@ export function execute({
     scene,
 }: ExecuteArgs) {
     const damage = damageAngu.eval() as number
-    const numTargets = numTargetsAngu != null ? numTargetsAngu.eval() : 1
+    const numTargets: number =
+        numTargetsAngu != null ? numTargetsAngu.eval() : 1
 
-    emitMove({ card, damage, targetUids, scene })
+    const damages = mapToObj(targetUids, (uid, i) => [uid, damage])
+    const cardHit: CardHit = {
+        attacker: card.characterUid,
+        cardName: card.name,
+        damages,
+    }
+    emit({
+        username: scene.get('username'),
+        event: { type: 'damage$', data: cardHit },
+    })
 
     for (let i = 0; i < numTargets; i++) {
         if (targetUids[i] == null)
@@ -38,39 +44,4 @@ export function execute({
 
         applyDamage({ damage, targetUid: targetUids[i], scene })
     }
-}
-
-function emitMove({
-    card,
-    damage,
-    targetUids,
-    scene,
-}: {
-    card: Card
-    damage: number
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    const attackerIsPc = scene.get(
-        'allCharacters',
-        card.characterUid,
-        'isPc'
-    ) as boolean
-    const damageKVs = targetUids.map(key => ({ key, damage }))
-
-    const data: NetworkAttackData = {
-        attackerUid: card.characterUid,
-        moveName: card.name,
-        attackerIsPc,
-        defenderUids: targetUids,
-        damageKVs,
-    }
-
-    emit({
-        username: scene.get('username'),
-        event: {
-            type: 'move$',
-            data,
-        },
-    })
 }

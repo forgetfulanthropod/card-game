@@ -1,1 +1,1 @@
-export { Battle, bindGamestate } from './battle'
+export { bindGamestate } from './battle'

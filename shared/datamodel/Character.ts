@@ -3,6 +3,7 @@ import type { CharacterClass, CharacterName } from '@'
 
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
+    /** TODO: rename this to ID  */
     name: CharacterName
     displayName: string
     class: CharacterClass

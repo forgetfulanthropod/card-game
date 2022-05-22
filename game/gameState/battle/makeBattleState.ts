@@ -8,10 +8,7 @@ export function makeBattleState(args: {
     dungeonName?: DungeonName
     game: Gamecursor
 }): BattleScene {
-    const allCharacters = makeCharacters(
-        args?.chosen,
-        args.game.get('blessings')
-    )
+    const allCharacters = makeCharacters(args?.chosen)
 
     // DEBUG
     // kill most of the characters
@@ -40,6 +37,6 @@ export function makeBattleState(args: {
         isDeluxeLoaded: false,
         doors: { options: [], descriptions: [] },
         roomsPassed: 0,
-        nextNpcMoves: [], // set later
+        nextEnemyCards: [], // set later
     })
 }

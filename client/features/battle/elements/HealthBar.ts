@@ -220,7 +220,7 @@ function bindHealthIndicator(
     function updateHealth() {
         container.removeChildren()
 
-        // const text = `${char.health} / ${char.maxHealth}`
+        // const text = `${char.health} / ${char.constitution}`
         const text = `${characterCursor.get('health')}`
 
         container.addChild(
@@ -264,7 +264,7 @@ function drawHealthBar(
 
     const portion =
         characterCursor.select('health').get() /
-        characterCursor.select('maxHealth').get()
+        characterCursor.select('constitution').get()
     const background = (
         [...colorStops]
             .sort((cs1, cs2) => cs1.stop - cs2.stop)

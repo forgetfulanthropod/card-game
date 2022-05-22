@@ -74,9 +74,13 @@ function self-fmt() {
 }
 
 function generate-indices() {
-    vscode-generate-index-standalone ./shared/**/*.ts ./client/**/*.ts ./server/**/*.ts !node_modules
-    vscode-generate-index-standalone ./server/**/**/*.ts !node_modules
-    vscode-generate-index-standalone ./server/**/**/**/*.ts !node_modules
+    # vscode-generate-index-standalone '!node_modules/' server client game shared '!node_modules/'
+    # vscode-generate-index-standalone './shared/**/*.ts' '!**/node_modules' './client/**/*.ts' '!**/node_modules' './game/**/*.ts' '!**/node_modules' './server/**/*.ts' '!**/node_modules'
+
+    vscode-generate-index-standalone './shared/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './client/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './game/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './server/**/*.ts' '!**/node_modules'
 }
 
 function save-staged() {

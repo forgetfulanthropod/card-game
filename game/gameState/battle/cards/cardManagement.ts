@@ -9,9 +9,9 @@ import type {
     CardUid,
 } from 'shared'
 
+import { keys, vals } from 'shared/code'
 import { explainActionsForCard } from './interpretActions'
 import { cardDefinitionsMap } from '@/rulebook'
-import { keys, vals } from '@/util'
 
 // TODO: repeated cards: block, basic attack, basic magic attack
 // probably want to take characterClass off of the card type?

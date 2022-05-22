@@ -1,129 +1,31 @@
-import { intersection } from 'lodash'
-import type {
-    AttackData,
-    CharacterMeta,
-    CharacterMove,
-    CharacterUid,
-    Effect,
-    EffectType,
-    StanceMultiplier,
-    StanceName,
-    BattleCursor,
-} from 'shared'
 
-import { getTransformed, isSpecial } from './specialMoves'
-import { getRulebook } from '@/rulebook'
-
-export function roundDamage(d: number): number {
-    return Math.ceil(d)
-}
-
-export function getCharacterMovesWithDamageRanges(
-    character: CharacterMeta
-): CharacterMove[] {
-    return character.moves.map(move => {
-        const damageRange = getMoveMultiplierRange(move).map(multiplier =>
-            getDamage(character, multiplier)
-        )
-
-        return {
-            ...move,
-            damageRange,
-        }
-    })
-
-    function getDamage(character: CharacterMeta, multiplier: number): number {
-        const damage = Math.round(
-            character.damage * getAttackMultiplier(character) * multiplier
-        )
-        return damage < 1 ? 1 : damage
-    }
-}
-
-type DamageKV = { key: CharacterUid; damage: number }
-
-export function getCharacterKeysAndDamages(
-    attackData: Readonly<AttackData>,
-    scene: BattleCursor
-): DamageKV[] {
-    return attackData.defenders.map(defender => ({
-        key: defender.uid,
-        damage: getDamage({ ad: attackData, defender, scene }),
-    }))
-}
-
-export function getCharacterKeysAndEffects(
-    attackData: AttackData
-): { key: CharacterUid; effect: Effect }[] {
-    const keyOnlyEffects: EffectType[] = ['Debilitated']
-    const matchedKeyOnlyEffects = intersection(
-        attackData.move.types,
-        keyOnlyEffects
-    ) as EffectType[]
-    if (matchedKeyOnlyEffects.length > 0) {
-        return matchedKeyOnlyEffects.map(m => ({
-            key: attackData.defenders[0].uid,
-            effect: { type: m, remainingRounds: 1 },
-        }))
-    }
-
-    const moveTypeDOT = attackData.move.types.find(m => m.indexOf('DOT') > -1)
-    if (moveTypeDOT != null) {
-        const moveMeta = getRulebook().moveMetaMap[moveTypeDOT]
-
-        if (moveMeta.effectMultipliers == null) {
-            throw Error('bad move meta')
-        }
-        const effectMultipliers = moveMeta.effectMultipliers
-        return attackData.defenders.map(d => ({
-            key: d.uid,
-            effect: {
-                type: moveTypeDOT as EffectType,
-                remainingRounds: effectMultipliers.length - 1,
-                damagesByRound: [
-                    ...effectMultipliers.map(m =>
-                        Math.max(
-                            1,
-                            (attackData.attacker.damage *
-                                m *
-                                getDefenseMultiplier(d)) |
-                                0
-                        )
-                    ),
-                ],
-            },
-        }))
-    }
-
-    return []
-}
 
 function getDamage({
     ad,
     defender,
     scene,
 }: {
-    ad: AttackData
+    ad: CardHit
     defender: CharacterMeta
     scene: BattleCursor
 }): number {
     // const blessings = getGameStateCursor(username).select('blessings')
 
-    let attackData = ad
-    if (isSpecial(ad.move))
-        attackData = {
+    let cardHit = ad
+    if (isSpecial(ad.card))
+        cardHit = {
             ...ad,
-            move: getTransformed({
-                move: ad.move,
+            card: getTransformed({
+                card: ad.card,
                 charUid: ad.attacker.uid,
                 scene,
             }),
         }
 
     const dam = Math.round(
-        attackData.attacker.damage *
-            getAttackMultiplier(attackData.attacker) *
-            getMoveMultiplier(attackData) *
+        cardHit.attacker.damage *
+            getAttackMultiplier(cardHit.attacker) *
+            getMoveMultiplier(cardHit) *
             getDefenseMultiplier(defender)
     )
 
@@ -137,8 +39,8 @@ function getAttackMultiplier(attacker: CharacterMeta): number {
     )
 }
 
-function getMoveMultiplier(d: AttackData): number {
-    return d.move.types.reduce((multiplier, nextType) => {
+function getMoveMultiplier(d: CardHit): number {
+    return d.card.types.reduce((multiplier, nextType) => {
         const typeMeta = getRulebook().moveMetaMap[nextType]
 
         let typeMultiplier: number
@@ -175,13 +77,13 @@ function getMoveMultiplier(d: AttackData): number {
 }
 
 function getMoveMultiplierRange(
-    move: CharacterMove
+    card: CharacterMove
 ): [number] | [number, number] {
     // return [1,5]
     let min = Number.POSITIVE_INFINITY
     let max = Number.NEGATIVE_INFINITY
 
-    move.types.forEach(type => {
+    card.types.forEach(type => {
         const moveMeta = getRulebook().moveMetaMap[type]
         let multipliers
         if (moveMeta.multiplier != null) multipliers = [moveMeta.multiplier]
@@ -228,4 +130,61 @@ function getEffectAttackMultiplicand(attacker: CharacterMeta): number {
     })
 
     return multiplier
+}
+
+
+
+type DamageKV = { key: CharacterUid; damage: number }
+
+export function getCharacterKeysAndDamages(
+    cardHit: Readonly<CardHit>,
+    scene: BattleCursor
+): DamageKV[] {
+    return []
+}
+
+export function getCharacterKeysAndEffects(
+    cardHit: CardHit
+): { key: CharacterUid; effect: Effect }[] {
+    const keyOnlyEffects: EffectType[] = ['Debilitated']
+    const matchedKeyOnlyEffects = intersection(
+        cardHit.card.types,
+        keyOnlyEffects
+    ) as EffectType[]
+    if (matchedKeyOnlyEffects.length > 0) {
+        return matchedKeyOnlyEffects.map(m => ({
+            key: cardHit.defenders[0].uid,
+            effect: { type: m, remainingRounds: 1 },
+        }))
+    }
+
+    const moveTypeDOT = cardHit.card.types.find(m => m.indexOf('DOT') > -1)
+    if (moveTypeDOT != null) {
+        const moveMeta = getRulebook().moveMetaMap[moveTypeDOT]
+
+        if (moveMeta.effectMultipliers == null) {
+            throw Error('bad card meta')
+        }
+        const effectMultipliers = moveMeta.effectMultipliers
+        return cardHit.defenders.map(d => ({
+            key: d.uid,
+            effect: {
+                type: moveTypeDOT as EffectType,
+                remainingRounds: effectMultipliers.length - 1,
+                damagesByRound: [
+                    ...effectMultipliers.map(m =>
+                        Math.max(
+                            1,
+                            (cardHit.attacker.damage *
+                                m *
+                                getDefenseMultiplier(d)) |
+                                0
+                        )
+                    ),
+                ],
+            },
+        }))
+    }
+
+    return []
 }

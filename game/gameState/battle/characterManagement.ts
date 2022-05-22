@@ -1,14 +1,11 @@
 import type {
-    Blessing,
     CharacterMeta,
     CharacterName,
     Characters,
     OwnedCharacterStats,
     StanceName,
 } from 'shared'
-import { getCharacterMovesWithDamageRanges } from './attack'
-import { applyBlessings } from './blessings'
-import { keys, vals } from '@/util'
+import { keys, vals } from 'shared/code'
 import { getRulebook } from '@/rulebook'
 
 const BASE_WIDTH = 1920
@@ -16,10 +13,7 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-export function makeCharacters(
-    chosen: OwnedCharacterStats[] = [],
-    blessings: Blessing[]
-): Characters {
+export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     const playerCharacterPositions = makePositions({
         x0: 10,
         y0: 50,
@@ -30,10 +24,7 @@ export function makeCharacters(
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return getModified(
-                blessings,
-                newPCMeta({ uid: c.uid, name: c.name, x, y })
-            )
+            return newPCMeta({ uid: c.uid, name: c.name, x, y })
         }),
     ]
     const o: Characters = {}
@@ -116,7 +107,6 @@ function newPCMeta(args: {
             ? 'neutral'
             : 'defensive'
     const stats = statsMap[args.name]
-    // HERE: mutateCharacterForBlessingsCurrentlyEnabledByTheAdminInterface__LaterWillBeEventBasedBlessingsButItDoesntEffectThisFunction__PART2(stats)
     return {
         ...stats,
         uid: args.uid,
@@ -127,86 +117,9 @@ function newPCMeta(args: {
         screenY: (scale * BASE_HEIGHT * args.y) / 100,
         stance,
         hasMoved: false,
-        health: stats.maxHealth,
+        health: stats.constitution,
         block: 0,
-        experience: 0,
         effects: [],
         orbs: [],
     }
-}
-
-export function getModified(
-    blessings: Blessing[],
-    prev: Readonly<CharacterMeta>
-): CharacterMeta {
-    const clean = cleanMeta(prev)
-
-    const blessed = applyBlessings(blessings, clean)
-    const stanced = {
-        ...blessed,
-        moves: getCharacterMovesWithDamageRanges(blessed),
-    }
-
-    const final = copyFinalProperties(stanced, prev)
-
-    return final
-}
-
-function cleanMeta(cm: Readonly<CharacterMeta>): CharacterMeta {
-    const character = cm.isPc ? newPCMeta(cm) : newNPCMeta(cm)
-
-    return {
-        ...character,
-        stance: cm.stance,
-        effects: cm.effects,
-    }
-}
-
-function copyFinalProperties(
-    to: Readonly<CharacterMeta>,
-    from: CharacterMeta
-): CharacterMeta {
-    const deltaHealth = to.maxHealth - from.maxHealth
-    const newHealth = Math.max(from.health + deltaHealth, 1)
-    return {
-        ...to,
-        health: newHealth,
-        hasMoved: from.hasMoved,
-        experience: from.experience,
-        block: from.block,
-    }
-}
-
-type LevelInfo = {
-    damage: number
-    maxHealth: number
-    level?: number
-    health?: number
-}
-
-//For enemies above level 10, add +3 attack/+21 health per level.
-const MAX_DATA_LEVEL = 10
-const OVER_MAX_ATTACK = 3
-const OVER_MAX_HEALTH = 21
-export function getLevelInfo(name: CharacterName, level: number): LevelInfo {
-    const { npcLevelStatsMap } = getRulebook()
-
-    const index = Math.min(level, MAX_DATA_LEVEL)
-    const levelInfo: LevelInfo | undefined = npcLevelStatsMap[name]?.[index]
-    if (levelInfo == null) {
-        throw Error('undefined level info')
-    }
-    logger.info({ levelInfo, level })
-
-    if (level > MAX_DATA_LEVEL) {
-        levelInfo.damage =
-            levelInfo.damage + ((OVER_MAX_ATTACK * level) % MAX_DATA_LEVEL)
-        levelInfo.maxHealth =
-            levelInfo.maxHealth + ((OVER_MAX_HEALTH * level) % MAX_DATA_LEVEL)
-    }
-
-    levelInfo.health = levelInfo.maxHealth
-    levelInfo.level = level
-
-    return levelInfo
 }

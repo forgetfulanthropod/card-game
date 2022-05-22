@@ -2,13 +2,11 @@ import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { backgroundAssets } from './logic'
 import { Background } from './background'
 import { bindCharacters } from './bindCharacters'
-import { bindDoors } from './bindDoors'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards'
 import { InfoBox } from './InfoBox'
 import { Container } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
-import { Coin } from '@/elements'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
 
@@ -35,7 +33,6 @@ export function BattleScene(): PixiContainer {
                     scene.get('dungeonName'),
                 ],
             }),
-            Coin(),
             charactersContainer,
             cardsContainer,
             energyContainer,
@@ -46,7 +43,6 @@ export function BattleScene(): PixiContainer {
     bindCards({ scene, container: cardsContainer })
     bindEnergy({ scene, container: energyContainer })
 
-    setTimeout(() => bindDoors(container), 0)
     setTimeout(() => callApi('StartBattle', {}), 0)
 
     return container

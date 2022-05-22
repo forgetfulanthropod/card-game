@@ -3,10 +3,9 @@ import { Easing, Tweener } from 'pixi-tweener'
 import type { SceneType } from 'shared'
 
 import { BattleScene } from './BattleScene'
-import { Chest } from './Chest'
 import { DungeonEntryScene } from './DungeonEntryScene'
 import { pointer } from '@/assets'
-import { getBattleScene, getScene } from '@/data'
+import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { waitingForSceneExitAnimationToFinish } from '@/util'
@@ -59,7 +58,7 @@ function bindScene(app: PixiApplication) {
 
         if (sceneType === 'battle') {
             lastScene = BattleScene()
-            bindBattleState(app)
+            // bindBattleState(app)
         } else if (sceneType === 'entry') {
             lastScene = DungeonEntryScene()
         } else {
@@ -100,19 +99,19 @@ async function transitionSceneTo(
     }
 }
 
-function bindBattleState(app: PixiApplication) {
-    const stateCursor = getBattleScene().select('state')
-    let chest: PixiContainer | null = null
-    stateCursor.on('update', () => {
-        if (stateCursor.get() === 'won') {
-            chest = Chest({
-                size: { width: app.stage.width, height: app.stage.height },
-            })
-            app.stage.addChild(chest)
-        } else if (chest != null) {
-            app.stage.removeChild(chest)
-            chest.destroy()
-            chest = null
-        }
-    })
-}
+// function bindBattleState(app: PixiApplication) {
+//     const stateCursor = getBattleScene().select('state')
+//     let chest: PixiContainer | null = null
+//     stateCursor.on('update', () => {
+//         if (stateCursor.get() === 'won') {
+//             chest = Chest({
+//                 size: { width: app.stage.width, height: app.stage.height },
+//             })
+//             app.stage.addChild(chest)
+//         } else if (chest != null) {
+//             app.stage.removeChild(chest)
+//             chest.destroy()
+//             chest = null
+//         }
+//     })
+// }

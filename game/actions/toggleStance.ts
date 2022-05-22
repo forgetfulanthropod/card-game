@@ -1,7 +1,6 @@
 import type { GameActions } from '@serverActions'
 import type { StanceName } from 'shared'
 
-import { getModified } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 export const toggleStance: GameActions['ToggleStance'] = args => {
@@ -29,5 +28,5 @@ export const toggleStance: GameActions['ToggleStance'] = args => {
 
     stanceCursor.set(stances[nextIndex])
 
-    characterCursor.apply(ch => getModified(args.game.get('blessings'), ch))
+    // characterCursor.apply(ch => getModified(ch))
 }

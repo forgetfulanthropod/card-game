@@ -1,5 +1,6 @@
 import type { Pile } from 'shared'
 
+import { vals } from 'shared/code'
 import { getTexture } from './getCardTypeSrc'
 import type { PixiContainer } from '@/elementsUtil'
 import {
@@ -9,7 +10,6 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { vals } from '@/util'
 
 export function DiscardPile(pile: Pile): PixiContainer {
     return Container({

@@ -1,62 +1,40 @@
-import { findIndex } from 'lodash'
 import type { SCursor } from 'sbaobab'
 import type {
-    AttackData,
     CharacterMeta,
     CharacterUid,
     Effect,
     BattleCursor,
+    CardHit,
 } from 'shared'
-import { applyDamage } from './applyDamage'
-
-import {
-    getCharacterKeysAndDamages,
-    getCharacterKeysAndEffects,
-} from './attack'
 
 /** Applies health, and effects */
-export function applyMove(scene: BattleCursor, attackData: AttackData): void {
+export function applyMove(scene: BattleCursor, cardHit: CardHit): void {
     const allChars = scene.select('allCharacters')
 
-    markAttackerAsMoved(allChars, attackData)
+    // markAttackerAsMoved(allChars, cardHit)
 
-    applyDamages(attackData, scene)
+    // applyDamages(cardHit, scene)
 
-    decrementEffectStacks(allChars, attackData)
-    applyNewEffects(allChars, attackData)
+    decrementEffectStacks(allChars, cardHit)
+    applyNewEffects(allChars, cardHit)
 }
 
 type AllCharacters = SCursor<Record<CharacterUid, CharacterMeta>>
 
-function markAttackerAsMoved(allChars: AllCharacters, attackData: AttackData) {
-    allChars.select(attackData.attacker.uid).set('hasMoved', true)
+function applyNewEffects(allChars: AllCharacters, cardHit: CardHit) {
+    // getCharacterKeysAndEffects(cardHit).forEach(
+    //     ({ key, effect: newEffect }) =>
+    //         allChars
+    //             .select(key)
+    //             .apply('effects', prev => getUpdatedEffects(newEffect, prev))
+    // )
 }
 
-function applyDamages(attackData: AttackData, scene: BattleCursor) {
-    getCharacterKeysAndDamages(attackData, scene).forEach(
-        ({ key: targetUid, damage }) => {
-            applyDamage({ damage, targetUid, scene })
-        }
-    )
-}
-
-function applyNewEffects(allChars: AllCharacters, attackData: AttackData) {
-    getCharacterKeysAndEffects(attackData).forEach(
-        ({ key, effect: newEffect }) =>
-            allChars
-                .select(key)
-                .apply('effects', prev => getUpdatedEffects(newEffect, prev))
-    )
-}
-
-function decrementEffectStacks(
-    allChars: AllCharacters,
-    attackData: AttackData
-) {
-    const attacker = allChars.select(attackData.attacker.uid)
+function decrementEffectStacks(allChars: AllCharacters, cardHit: CardHit) {
+    const attacker = allChars.select(cardHit.attacker)
     if (attacker.get() == null) {
         logger.warn(
-            `decrementEffectStacks: attacker not found: '${attackData.attacker.uid}'`
+            `decrementEffectStacks: attacker not found: '${cardHit.attacker}'`
         )
         return
     }
@@ -68,28 +46,29 @@ function decrementEffectStacks(
 }
 
 export function getUpdatedEffects(newEffect: Effect, prev: Effect[]): Effect[] {
-    const prevTypeIndex = findIndex(prev, { type: newEffect.type }) // prev.findIndex(effect => effect.type === newEffect.type)
-    if (prevTypeIndex > -1) {
-        const prevEffect = prev[prevTypeIndex]
-        const damagesByRound =
-            prevEffect.damagesByRound != null &&
-            newEffect.damagesByRound != null
-                ? [
-                      ...(prevEffect.damagesByRound ?? []),
-                      ...(newEffect.damagesByRound ?? []),
-                  ]
-                : null
-        const mergedEffect = {
-            type: newEffect.type,
-            remainingRounds:
-                prevEffect.remainingRounds + newEffect.remainingRounds,
-            ...(damagesByRound ? { damagesByRound } : {}),
-        }
-        return [
-            ...prev.slice(0, prevTypeIndex),
-            mergedEffect,
-            ...prev.slice(prevTypeIndex + 1),
-        ]
-    }
-    return [...prev, newEffect]
+    return prev
+    // const prevTypeIndex = findIndex(prev, { type: newEffect.type }) // prev.findIndex(effect => effect.type === newEffect.type)
+    // if (prevTypeIndex > -1) {
+    //     const prevEffect = prev[prevTypeIndex]
+    //     const damagesByRound =
+    //         prevEffect.damagesByRound != null &&
+    //         newEffect.damagesByRound != null
+    //             ? [
+    //                   ...(prevEffect.damagesByRound ?? []),
+    //                   ...(newEffect.damagesByRound ?? []),
+    //               ]
+    //             : null
+    //     const mergedEffect = {
+    //         type: newEffect.type,
+    //         remainingRounds:
+    //             prevEffect.remainingRounds + newEffect.remainingRounds,
+    //         ...(damagesByRound ? { damagesByRound } : {}),
+    //     }
+    //     return [
+    //         ...prev.slice(0, prevTypeIndex),
+    //         mergedEffect,
+    //         ...prev.slice(prevTypeIndex + 1),
+    //     ]
+    // }
+    // return [...prev, newEffect]
 }

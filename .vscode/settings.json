@@ -40,7 +40,12 @@
         "README.md": true,
         "run": true,
         "server.log": true,
-        "scripts": true
+        "scripts": true,
+        "tsconfig.json": true,
+        "tsconfig.base.json": true,
+
+        "server": true,
+        "client": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,

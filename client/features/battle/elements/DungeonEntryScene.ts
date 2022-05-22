@@ -3,7 +3,6 @@ import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
 import { getEntryScene } from '@/data'
-import { Coin } from '@/elements'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { onUpdate } from '@/util'
@@ -23,7 +22,6 @@ export function DungeonEntryScene(): PixiContainer {
             startButton,
             LevelInfo(),
             // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
-            Coin(),
         ],
         onDestroy: [
             onUpdate(

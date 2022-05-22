@@ -3,11 +3,7 @@
 export * from './Actions'
 export * from './battle'
 export * from './datamodel'
-export * from './DungeonRooms'
 export * from './entryTypes'
-export * from './EventTrigger'
-export * from './immutable'
 export * from './misc'
 export * from './names'
 export * from './NetworkEvent'
-// @endindex

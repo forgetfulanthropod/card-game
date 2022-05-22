@@ -95,17 +95,17 @@ class Runner {
         await callApi('ChangeScene', { newSceneName: 'battle' })
     }
 
-    async battleStep(tree: Gamestate) {
+    battleStep(tree: Gamestate) {
         const scene = tree.scene as BattleScene
-        const doorOptions = scene.doors.options
-        if (doorOptions.length > 0) {
-            toast('doors detected. picking random door.')
-            const door = sample(doorOptions)
-            if (door == null) {
-                throw Error('null door')
-            }
-            await callApi('ChooseDoor', { door })
-        }
+        // const doorOptions = scene.doors.options
+        // if (doorOptions.length > 0) {
+        //     toast('doors detected. picking random door.')
+        //     const door = sample(doorOptions)
+        //     if (door == null) {
+        //         throw Error('null door')
+        //     }
+        //     await callApi('NextRoom', { door })
+        // }
         if (!scene.isPlayerTurn) {
             toast('not my turn - doing nothing')
             return

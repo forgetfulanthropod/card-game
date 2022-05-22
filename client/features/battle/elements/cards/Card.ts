@@ -3,7 +3,7 @@ import type { CharacterClass, Pile, Card } from 'shared'
 
 import type { InteractionEvent } from 'pixi.js'
 import { Easing, Tweener } from 'pixi-tweener'
-import { omit } from 'lodash'
+import { keys, omit } from 'lodash'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
 import { getBattleScene } from '@/data'
@@ -26,7 +26,7 @@ import {
     Text,
     RoundedRectangleGradientSprite,
 } from '@/elementsUtil'
-import { hoveredCardUid, hoveredCharacterUid, keys } from '@/util'
+import { hoveredCardUid, hoveredCharacterUid } from '@/util'
 
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_WIDTH_IN_HAND = 220

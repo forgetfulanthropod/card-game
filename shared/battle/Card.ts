@@ -1,18 +1,7 @@
 import type { CharacterClass } from './Characters'
-import type { Brandify, CardUid, CharacterUid, PileId } from '@'
+import type { CardUid, CharacterUid, PileId } from '@'
 
-type EnemyIntentId = string & Brandify
 type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
-
-/** See client/data/enemyAttacks.ts:129 */
-type EnemyAttackName = string & Brandify
-export interface EnemyIntentDefinition {
-    id: EnemyIntentId
-    displayName: string
-    actions: EnemyAttackName // "startlingSpook(1,2)"
-    description: string
-}
-export type EnemyIntent = EnemyIntentDefinition
 
 export interface Card extends CardDefinition {
     uid: CardUid

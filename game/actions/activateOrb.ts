@@ -3,15 +3,15 @@ import { isEqual } from 'lodash'
 import type {
     CharacterMeta,
     CharacterUid,
-    NetworkAttackData,
+    CardHit,
     Orb,
     BattleCursor,
 } from 'shared'
 
+import { mapToObj } from 'shared/code'
 import {
     checkBattleOverMut,
     getRandomLivingNpcUid,
-    roundDamage,
     updateHand,
     applyDamage,
 } from '@/gameState'
@@ -80,12 +80,12 @@ function decrementCounter(
 }
 
 function activateProtection(character: CharacterMeta, scene: BattleCursor) {
-    const block = roundDamage(character.magic * 0.5)
+    const block = Math.ceil(character.magic * 0.5)
     scene.apply(['allCharacters', character.uid, 'block'], b => b + block)
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
-    const damage = roundDamage(character.magic * 0.5)
+    const damage = Math.ceil(character.magic * 0.5)
     const targetUids = [getRandomLivingNpcUid(scene)]
     applyDamage({ damage, targetUid: targetUids[0], scene })
     emitDamage({
@@ -110,18 +110,17 @@ function emitDamage({
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
-    const data: NetworkAttackData = {
-        attackerUid,
-        moveName,
-        attackerIsPc: true,
-        defenderUids: targetUids,
-        damageKVs: targetUids.map(key => ({ key, damage })),
+    const damages = mapToObj(targetUids, targetUid => [targetUid, damage])
+    const data: CardHit = {
+        cardName: moveName,
+        attacker: attackerUid,
+        damages,
     }
 
     emit({
         username: scene.get('username'),
         event: {
-            type: 'move$',
+            type: 'damage$',
             data,
         },
     })

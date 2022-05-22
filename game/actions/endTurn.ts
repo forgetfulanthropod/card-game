@@ -11,7 +11,7 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
     const scene = getBattleSceneIn(args.game)
 
     endRound(scene)
-    scene.select('nextNpcMoves').set(getNpcMoves(scene))
+    scene.select('nextEnemyCards').set(getNpcMoves(scene))
     return {
         type: 'doNpcTurn',
         args: { index: 0 },

@@ -3,6 +3,8 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "paths": {
+            "shared": ["../shared"],
+            "shared/code": ["../shared/code"],
             "@serverActions": ["./actions/types/serverActions"],
             "@/*": ["./*"]
         }

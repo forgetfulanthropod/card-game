@@ -8,12 +8,13 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from 'shared'
+import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import type { SpineAsset } from './logic'
 import { getCharTexture, getOrbTexture } from './logic'
 import { MoveInfo } from './MoveInfo'
-import { hoveredCharacterUid, keys, onUpdate } from '@/util'
+import { hoveredCharacterUid, onUpdate } from '@/util'
 import {
     Adjust,
     bringToTop,

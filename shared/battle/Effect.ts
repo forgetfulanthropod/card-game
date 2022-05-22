@@ -1,6 +1,7 @@
 import type { CharacterUid } from '@'
 
 export type EffectType = 'DOT1' | 'DOT2' | 'Debilitated'
+// TODO
 export interface Effect {
     type: EffectType
     remainingRounds: number

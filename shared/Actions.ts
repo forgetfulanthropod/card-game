@@ -1,13 +1,7 @@
 import type { SCursor } from 'sbaobab'
 
 import type { CharacterUid, Gamestate } from './datamodel'
-import type {
-    Orb,
-    OwnedCharacterStats,
-    Rulebook,
-    SceneType,
-    SpecialDoorName,
-} from './index'
+import type { Orb, OwnedCharacterStats, Rulebook, SceneType } from './index'
 
 /** A server action */
 export interface Action {
@@ -21,7 +15,7 @@ export interface Action {
 
     ChangeScene: (_: { newSceneName: SceneType }) => void
 
-    ChooseDoor: (_: { door: SpecialDoorName }) => void
+    NextRoom: (_: Empty) => void
 
     EndTurn: (_: Empty) => void
     ExitDungeon: (_: Empty) => void

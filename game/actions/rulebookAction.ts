@@ -1,8 +1,9 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import type { GameActions } from '@serverActions'
 
+import { pacificDate } from 'shared/code'
 import { resetRulebook, setRulebook } from '@/rulebook'
-import { pacificDate, prefix, stringifyRulebook, toPath } from '@/util'
+import { prefix, stringifyRulebook, toPath } from '@/util'
 
 export const rulebookAction: GameActions['RulebookAction'] = args => {
     logger.info(`rulebookAction performing action ${args.do}`)

@@ -1,6 +1,6 @@
 import type { BattleCursor } from 'shared'
 
-import { keys } from '@/util'
+import { keys } from 'shared/code'
 
 export function clearHasMoved(scene: BattleCursor) {
     scene.apply('allCharacters', ac => {
