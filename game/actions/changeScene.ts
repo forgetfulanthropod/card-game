@@ -1,5 +1,5 @@
-import type { GameActions } from '@serverActions'
 import type { BattleCursor } from 'shared'
+import type { GameActions } from './types'
 
 import { getNpcMoves, makeBattleState, setCards } from '@/gameState'
 import { getRulebook } from '@/rulebook'

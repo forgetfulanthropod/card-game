@@ -34,5 +34,6 @@ export function doNpcTurn(
 
 /** TODO */
 function determinePcTargets(scene: BattleScene, card: Card): CharacterUid[] {
-    return [vals(scene.allCharacters).find(x => x.isPc)!.uid]
+    const pc = vals(scene.allCharacters).find(x => x.isPc)
+    return pc ? [pc.uid] : []
 }

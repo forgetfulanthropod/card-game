@@ -8,7 +8,7 @@ import type {
 } from 'shared'
 
 /** Applies health, and effects */
-export function applyMove(scene: BattleCursor, cardHit: CardHit): void {
+function applyMove(scene: BattleCursor, cardHit: CardHit): void {
     const allChars = scene.select('allCharacters')
 
     // markAttackerAsMoved(allChars, cardHit)

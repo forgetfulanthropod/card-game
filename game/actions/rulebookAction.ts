@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
-import type { GameActions } from '@serverActions'
-
 import { pacificDate } from 'shared/code'
+import type { GameActions } from './types'
+
 import { resetRulebook, setRulebook } from '@/rulebook'
 import { prefix, stringifyRulebook, toPath } from '@/util'
 

@@ -1,4 +1,4 @@
-import type { GameActions } from '@serverActions'
+import type { GameActions } from './types'
 
 export const startBattle: GameActions['StartBattle'] = _args => {
     // const scene = getBattleSceneIn(args.game)

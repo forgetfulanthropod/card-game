@@ -1,5 +1,5 @@
-import type { GameActions } from '@serverActions'
 import type { StanceName } from 'shared'
+import type { GameActions } from './types'
 
 import { getBattleSceneIn } from '@/util'
 

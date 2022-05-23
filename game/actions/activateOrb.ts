@@ -1,4 +1,3 @@
-import type { GameActions } from '@serverActions'
 import { isEqual } from 'lodash'
 import type {
     CharacterMeta,
@@ -9,6 +8,7 @@ import type {
 } from 'shared'
 
 import { mapToObj } from 'shared/code'
+import type { GameActions } from './types'
 import {
     checkBattleOverMut,
     getRandomLivingNpcUid,

@@ -1,7 +1,6 @@
-import type { GameActions } from '@serverActions'
-
 import { objFilter } from 'shared/code'
 import type { BattleCursor } from 'shared'
+import type { GameActions } from './types'
 import { resetRound } from './internal'
 import { getBattleSceneIn } from '@/util'
 import {
