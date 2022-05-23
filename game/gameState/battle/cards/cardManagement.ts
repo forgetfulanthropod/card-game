@@ -13,9 +13,6 @@ import { keys, vals } from 'shared/code'
 import { explainActionsForCard } from './interpretActions'
 import { cardDefinitionsMap } from '@/rulebook'
 
-// TODO: repeated cards: block, basic attack, basic magic attack
-// probably want to take characterClass off of the card type?
-
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
         const newHand = { ...hand }

@@ -1,30 +1,50 @@
 import type { GameActions } from '@serverActions'
 
-// import { objFilter } from 'shared/code'
-// import { resetRound } from './internal/resetRound'
-// import { getBattleSceneIn } from '@/util'
+import { objFilter } from 'shared/code'
+import type { BattleCursor } from 'shared'
+import { resetRound } from './internal'
+import { getBattleSceneIn } from '@/util'
+import {
+    clearAllEffects,
+    getNpcMoves,
+    putAllCardsInDrawPile,
+} from '@/gameState'
+import { getRulebook } from '@/rulebook'
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { newNPCMeta } from '@/gameState/battle/characterManagement'
 
 export const nextRoom: GameActions['NextRoom'] = args => {
-    // const scene = getBattleSceneIn(args.game)
-    // const room = modifyRoom(
-    //     getRoom({
-    //         door: args.door,
-    //         dungeonName: scene.get('dungeonName'),
-    //         roomsPassed: scene.get('roomsPassed'),
-    //         game: args.game,
-    //     }),
-    //     scene.get('dungeonName')
-    // )
-    // scene.set('doors', { options: [], descriptions: [] })
-    // scene.set('roomsPassed', scene.get('roomsPassed') + 1)
-    // scene.apply('allCharacters', ac => ({
-    //     ...objFilter(ac, (_, c) => c.isPc),
-    //     ...room.enemies,
-    // }))
-    // scene.set('state', 'in battle')
-    // scene.set('nextEnemyCards', getNpcMoves(scene))
-    // clearAllEffects(scene)
-    // resetTurns(scene)
-    // putAllCardsInDrawPile(scene)
-    // resetRound(args.game, {})
+    const scene = getBattleSceneIn(args.game)
+    scene.set('roomsPassed', scene.get('roomsPassed') + 1)
+    const nextRoom = getNextRoom(scene)
+    const newNpcs = Object.fromEntries(
+        nextRoom.map(({ name, level }) => {
+            const uid = srandom.toString().slice(6)
+            return [
+                uid,
+                newNPCMeta({
+                    name,
+                    level,
+                    uid: uid,
+                    x: 0,
+                    y: 0,
+                }),
+            ]
+        })
+    )
+    scene.apply('allCharacters', ac => ({
+        ...objFilter(ac, (_, c) => c.isPc),
+        ...newNpcs,
+    }))
+    scene.set('state', 'in battle')
+    scene.set('nextEnemyCards', getNpcMoves(scene))
+    clearAllEffects(scene)
+    scene.set('turnCount', 1)
+    putAllCardsInDrawPile(scene)
+    resetRound(args.game, {})
+}
+function getNextRoom(scene: BattleCursor) {
+    const dungeonName = scene.get('dungeonName')
+    const roomsPassed = scene.get('roomsPassed')
+    return getRulebook().dungeonRooms[dungeonName][roomsPassed]
 }

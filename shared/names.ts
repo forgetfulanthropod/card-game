@@ -10,11 +10,8 @@ export type CharacterName =
     | 'greenJester'
     | 'jerry'
     | 'lichLord'
-    | 'matchaGelatinCube'
-    | 'mimic'
     | 'mushroomFarmer'
     | 'notoriousBEAN'
-    | 'orcWarrior'
     | 'penguinKnight'
     | 'skeletonWarrior'
     | 'snacky'
@@ -22,7 +19,17 @@ export type CharacterName =
     | 'trioOfFools'
     | 'warhog'
     | 'wimpyGuard'
+    | EnemyCharacterName
 
+export type EnemyCharacterName =
+    | 'skeletonWarrior'
+    | 'matchaGelatinCube'
+    | 'mimic'
+    | 'orcWarrior'
+    | 'bosshogJurgen'
+    | 'toadmaw'
+    | 'cultist'
+    | 'halfdan'
 export type DungeonName =
     | 'Skelepit Dungeon'
     | 'Hooligan’s Bluff'

@@ -1,12 +1,12 @@
-export function mapToObj<T, K extends PropertyKey, V>(
-    A: T[],
-    f: (t: T, i: number) => [K, V]
+export function mapToObj<K extends PropertyKey, V>(
+    A: K[] | readonly K[],
+    f: (t: K, i: number) => V
 ): Record<K, V> {
     // @ts-expect-error
     const o: Record<K, V> = {}
     A.forEach((x, i) => {
-        const [k, v] = f(x, i)
-        o[k] = v
+        const v = f(x, i)
+        o[x] = v
     })
     return o
 }

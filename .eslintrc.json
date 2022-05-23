@@ -96,7 +96,10 @@
         "import/no-useless-path-segments": "error",
         "import/no-relative-parent-imports": "error",
         "import/no-mutable-exports": "error",
-        "import/no-unused-modules": "warn",
+        "import/no-unused-modules": [
+            "warn",
+            { "unusedExports": true, "missingExports": true }
+        ],
         "import/no-duplicates": "warn",
         "import/order": "warn",
         "import/export": "warn",

@@ -1,5 +1,6 @@
 import type { BattleScene, Card, CharacterUid, NextAction } from 'shared'
 
+import { vals } from 'shared/code'
 import { checkBattleOverMut, play } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -33,5 +34,5 @@ export function doNpcTurn(
 
 /** TODO */
 function determinePcTargets(scene: BattleScene, card: Card): CharacterUid[] {
-    return []
+    return [vals(scene.allCharacters).find(x => x.isPc)!.uid]
 }
