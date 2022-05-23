@@ -1,11 +1,14 @@
 import type { EnemyCharacterName } from 'shared'
 
+const strike = 'strike' as EnemyAttackName
+/** debug only */
+const jab = 'jab' as EnemyAttackName
 type Level = string
 // align by regex: (, )|:|\[
-const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
+export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { constitution: 18, strength: 4, dexterity: 7, moves: ['swordWack', null, null, 'block', null] },
-        1: { constitution: 18, strength: 4, dexterity: 7, moves: ['sweepTheLeg' as EnemyAttackName, null, null, 'block', null] },
+        1: { constitution: 18, strength: 4, dexterity: 7, moves: [strike, jab, jab, strike, jab] },
         2: { constitution: 27, strength: 6, dexterity: 9, moves: ['swordWack', 'rustyPokeLow', null, 'block', null] },
         3: { constitution: 36, strength: 8, dexterity: 12, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', null] },
         4: { constitution: 50, strength: 11, dexterity: 16, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', null] },

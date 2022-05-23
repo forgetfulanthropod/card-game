@@ -10,3 +10,7 @@ export function mapToObj<K extends PropertyKey, V>(
     })
     return o
 }
+
+export function nonNulls<T>(arr: (null | undefined | T)[]): T[] {
+    return arr.filter(x => x != null) as T[]
+}

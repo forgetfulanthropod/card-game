@@ -5,6 +5,7 @@ import {
     clearBlock,
     clearHasMoved,
     setRoundEnergy,
+    getNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -17,6 +18,7 @@ export const resetRound: InternalAction['resetRound'] = (
 ): undefined => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('resetting round')
+    scene.select('nextEnemyCards').set(getNpcMoves(scene))
 
     setRoundEnergy(scene)
     clearHasMoved(scene)
