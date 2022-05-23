@@ -464,11 +464,15 @@ export function If(
     condition: RODatum<boolean>,
     ifRender: () => DisplayObject,
     elseRender?: () => DisplayObject,
+    displayArgs?: DisplayObjectArgs,
     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
     const onDestroy: Callback[] = []
     const root = Container({ children: [], onDestroy })
     onDestroy.push(condition.onChange(handleChange, true))
+    if (displayArgs != null) {
+        applyDisplayObjectArgs(root, displayArgs)
+    }
     return root
     function handleChange(val: boolean) {
         root.children.forEach(c => c.destroy(destroyOptions))
