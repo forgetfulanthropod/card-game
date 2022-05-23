@@ -19,19 +19,27 @@ export function beginTargetSelection(
 
     const app = getPixiApp()
 
-    const cardBounds = cardEl.getBounds()
-    const x0 = (cardBounds.left + cardBounds.right) / 2
-    const y0 = cardBounds.top
-    const origin = datum({ x: x0, y: y0 })
+    const origin = datum({ x: 0, y: 0 })
 
-    const destination = datum({ x: x0, y: y0 })
+    const destination = datum({ x: origin.val.x, y: origin.val.y })
 
     const updateDestination = (e: InteractionEvent) => {
-        destination.set({ x: e.data.global.x, y: e.data.global.y })
+        const cardBounds = cardEl.children[0].getBounds()
+        const x0 = (cardBounds.left + cardBounds.right) / 2
+        const y0 = cardBounds.top
+
+        destination.set({
+            x: e.data.global.x - x0,
+            y: e.data.global.y - y0,
+        })
     }
     app.stage.interactive = true
     app.stage.on('pointermove', updateDestination)
     app.stage.on('pointerout', () => cleanup())
+
+    cardEl.on('event', () => {
+        console.log('el moved')
+    })
 
     window.addEventListener(
         'keydown',
@@ -42,7 +50,8 @@ export function beginTargetSelection(
     )
 
     const arrow = Arrow(origin, destination)
-    app.stage.addChild(arrow)
+    cardEl.addChild(arrow)
+    console.log('arrow index: ' + cardEl.getChildIndex(arrow))
 
     const selectedTargetsCursor = localTree.select('selectedTargets')
 
@@ -63,7 +72,7 @@ export function beginTargetSelection(
         unsub()
         selectedTargetsCursor.set([])
         app.stage.off('pointermove', updateDestination)
-        app.stage.removeChild(arrow)
+        cardEl.removeChild(arrow)
         arrow.destroy({ children: true })
         app.stage.interactive = false
     }

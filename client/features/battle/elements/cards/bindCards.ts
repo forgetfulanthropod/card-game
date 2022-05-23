@@ -3,8 +3,8 @@ import type { BattleScene } from 'shared'
 
 import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
-import { getTexture } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
+import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
 
@@ -26,7 +26,9 @@ export function bindCards({ scene, container }: BindCursorArgs) {
 }
 
 function update({ scene, container }: BindCursorArgs): void {
+    console.log('clearing card container')
     clearContainer(container)
+    console.log('done clearing card container')
 
     if (!scene.get('isPlayerTurn')) return
     if (scene.get('state') !== 'in battle') return

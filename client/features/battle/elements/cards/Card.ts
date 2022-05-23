@@ -1,4 +1,5 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
+import { omit } from 'lodash'
 import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
@@ -63,30 +64,40 @@ export function Card({
         // name is card uid
         name,
         // cache: true,
-        ...xyrs,
-        events: getEvents(card),
+        x: xyrs.x,
+        y: xyrs.y,
+
         children: [
-            getGradientBackground(cardFrameTexture, colorStops),
-            getCardFrameSprite(cardFrameTexture),
-            getEnergyContainer(card, cardFrameTexture),
-            ...getTexts(card, cardFrameTexture, colorStops),
-            PointerAreaExtender(CARD_HEIGHT_FULL * -0.5),
-            PointerAreaExtender(CARD_HEIGHT_FULL * 1.5),
+            TweenableContainer({
+                events: getEvents(card),
+                ...omit(xyrs, 'x', 'y'),
+                y: (cardFrameTexture.height / 2) * xyrs.scale,
+                children: [
+                    getGradientBackground(cardFrameTexture, colorStops),
+                    getCardFrameSprite(cardFrameTexture),
+                    getEnergyContainer(card, cardFrameTexture),
+                    ...getTexts(card, cardFrameTexture, colorStops),
+                    PointerAreaExtender(
+                        cardFrameTexture.width,
+                        cardFrameTexture.height
+                    ),
+                ],
+            }),
         ],
     })
 
     return root
 }
 
-function PointerAreaExtender(y: number): PixiContainer {
+function PointerAreaExtender(width: number, height: number): PixiContainer {
     return Container({
-        y,
         children: [
             Sprite({
                 src: Texture.WHITE,
-                width: 1,
-                height: 1,
+                width,
+                height,
                 alpha: 0,
+                anchor: [0.5, 0],
             }),
         ],
     })
@@ -248,7 +259,7 @@ function getEvents(card: Card): InteractionEvents {
         currentTarget: cardEl,
     }) {
         setTimeout(() => {
-            if (hoveredCardUid.val === cardEl.name) {
+            if (hoveredCardUid.val === cardEl.parent.name) {
                 hoveredCardUid.set(null)
             }
         }, 0)
@@ -265,7 +276,7 @@ function getEvents(card: Card): InteractionEvents {
             throw new Error('ERROR! should be bound to container')
 
         if (getBattleScene().get().energy >= card.energy) {
-            beginTargetSelection(cardEl, card)
+            beginTargetSelection(cardEl.parent, card)
         }
     }
     const pointerup: InteractionEventHandler = function ({
@@ -294,7 +305,8 @@ const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12
 const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
 const MAX_CARD_ROTATION = Math.PI * 0.1
-const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
+const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
+const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
 
 type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
 
@@ -320,8 +332,8 @@ function getXYRotationScaleForNthCard(
     return {
         x: handWidth * 0.5 * xPlacementPortion,
         y:
-            -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
-            Y_MAX_OFFSET / 8,
+            -Y_MIN_OFFSET -
+            (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
         rotation: xPlacementPortion * endCardRotation,
         scale: CARD_WIDTH_IN_HAND / cardFrameTexture.width,
     }
