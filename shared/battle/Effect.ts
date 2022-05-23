@@ -1,7 +1,7 @@
 import type { CharacterUid } from '@'
 
 export type EffectType = 'DOT1' | 'DOT2' | 'Debilitated'
-// TODO
+/** TODO: Improve or remove this (consider Dwindle, Momentary, Vulnerable, Fatigue, Unguarded, ...) */
 export interface Effect {
     type: EffectType
     remainingRounds: number

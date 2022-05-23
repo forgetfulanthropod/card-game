@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks'
 
 import { callApi } from '@/actions'
-import { getSocket } from '@/connection'
 
 export function TestCounter(): JSXElement {
     const start = useRef(0)
@@ -15,12 +14,6 @@ export function TestCounter(): JSXElement {
                 'seconds after button press'
             )
         }
-        // getSocket().on('counterChange', onChange) // RETIRED
-        return () => getSocket().off('counuterChange', onChange)
-        // TODO:
-        // const unsub = onSnapshot(doc(db, 'testCounters', 'counter0'), doc =>
-        //     console.log('doc is', doc.data(), (Date.now() - start.current) / 1000, 'seconds after button press'))
-        // return unsub
     }, [])
 
     return <button
