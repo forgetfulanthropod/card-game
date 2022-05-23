@@ -23,15 +23,13 @@ function install-all() {
 
 function CI() {
     source ~/.bashrc
-
-    pnpm i -P
-    cd client
-    pnpm i -P
-
-    cd ../server
-    pnpm i -P
-
-    cd ..
+    wd=$(pwd)
+    for d in . client server game shared; do
+        cd $d
+        echo "installing in $d"
+        pnpm install -P &
+        cd $wd
+    done
 
     client:build
     server:build
