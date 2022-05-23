@@ -1,7 +1,7 @@
 import type { BattleScene, Card, CharacterUid, NextAction } from 'shared'
 
 import { vals } from 'shared/code'
-import { checkBattleOverMut, play } from '@/gameState'
+import { checkBattleOverMut, play, getPCTarget } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
@@ -32,8 +32,6 @@ export function doNpcTurn(
     }
 }
 
-/** TODO */
 function determinePcTargets(scene: BattleScene, card: Card): CharacterUid[] {
-    const pc = vals(scene.allCharacters).find(x => x.isPc)
-    return pc ? [pc.uid] : []
+    return [getPCTarget(vals(scene.allCharacters)).uid]
 }

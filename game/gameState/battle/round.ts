@@ -9,9 +9,10 @@ export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     return null
 }
 
+// TODO
 function getNpcMove(scene: BattleCursor, attacker: CharacterMeta): Card {
     return {
-        ...cardDefinitionsMap.shieldOfLight,
+        ...cardDefinitionsMap.strike,
         uid: srandom().toString().slice(6),
         explanation: '', // TODO
         characterUid: attacker.uid,
