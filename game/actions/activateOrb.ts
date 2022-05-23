@@ -110,7 +110,7 @@ function emitDamage({
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
-    const damages = mapToObj(targetUids, targetUid => [targetUid, damage])
+    const damages = mapToObj(targetUids, () => damage)
     const data: CardHit = {
         cardName: moveName,
         attacker: attackerUid,

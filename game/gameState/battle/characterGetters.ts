@@ -1,4 +1,4 @@
-import type { CharacterMeta, CharacterUid, BattleCursor, Card } from 'shared'
+import type { CharacterMeta, CharacterUid, BattleCursor } from 'shared'
 
 import { vals } from 'shared/code'
 import { getRulebook } from '@/rulebook'
@@ -44,13 +44,4 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     )
 
     return allLivingPlayerCharacters[targetIndex]
-}
-
-// TODO
-export function getDefenders(
-    defender: CharacterMeta,
-    card: Card,
-    ac: CharacterMeta[]
-): CharacterMeta[] {
-    return [ac[0]]
 }

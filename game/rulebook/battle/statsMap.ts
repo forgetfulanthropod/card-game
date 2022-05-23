@@ -1,4 +1,13 @@
 import type { CharacterName, CharacterStats } from 'shared'
+
+const unknownEnemyFiller = {
+    class: 'knight',
+    constitution: 100,
+    strength: 20,
+    magic: 5,
+    dexterity: 5,
+} as const
+
 export const statsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
         name: 'bloatDemon',
@@ -251,5 +260,29 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         strength: 24,
         magic: 5,
         dexterity: 5,
+    },
+    bosshogJurgen: {
+        name: 'bosshogJurgen',
+        displayName: 'bosshogJurgen',
+        isPc: false,
+        ...unknownEnemyFiller,
+    },
+    toadmaw: {
+        name: 'toadmaw',
+        displayName: 'toadmaw',
+        isPc: false,
+        ...unknownEnemyFiller,
+    },
+    cultist: {
+        name: 'cultist',
+        displayName: 'cultist',
+        isPc: false,
+        ...unknownEnemyFiller,
+    },
+    halfdan: {
+        name: 'halfdan',
+        displayName: 'halfdan',
+        isPc: false,
+        ...unknownEnemyFiller,
     },
 }

@@ -27,7 +27,7 @@ export function execute({
     const numTargets: number =
         numTargetsAngu != null ? numTargetsAngu.eval() : 1
 
-    const damages = mapToObj(targetUids, (uid, i) => [uid, damage])
+    const damages = mapToObj(targetUids, () => damage)
     const cardHit: CardHit = {
         attacker: card.characterUid,
         cardName: card.name,

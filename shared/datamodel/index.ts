@@ -3,7 +3,10 @@
  * The gamestate reads from the rulebook, but not vice versa
  */
 
+// @index('./*', f => `export * from '${f.path}'`)
 export * from './Character'
-export * from './Rulebook'
+export * from './DungeonRoom'
 export * from './Gamestate'
 export * from './misc'
+export * from './Rulebook'
+// @endindex

@@ -123,3 +123,34 @@ function newPCMeta(args: {
         orbs: [],
     }
 }
+
+export function newNPCMeta(args: {
+    x: number
+    y: number
+    name: CharacterName
+    uid: string
+    level: string | number | null
+}): CharacterMeta {
+    const { characters: statsMap } = getRulebook()
+    // debugger
+    logger.info(`making new npc with ${JSON.stringify(args)}`)
+    // const scale = window.innerWidth / BASE_WIDTH
+    const scale = 1
+
+    const stance: StanceName = 'neutral'
+    return {
+        ...statsMap[args.name],
+        health: statsMap[args.name].constitution,
+        block: 0,
+        uid: args.uid,
+        isPc: false,
+        x: args.x,
+        y: args.y,
+        screenX: (scale * BASE_WIDTH * args.x) / 100,
+        screenY: (scale * BASE_HEIGHT * args.y) / 100,
+        stance,
+        hasMoved: false,
+        effects: [],
+        orbs: [],
+    }
+}

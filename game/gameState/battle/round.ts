@@ -14,7 +14,7 @@ function getNpcMove(scene: BattleCursor, attacker: CharacterMeta): Card {
         ...cardDefinitionsMap.shieldOfLight,
         uid: srandom().toString().slice(6),
         explanation: '', // TODO
-        characterUid: '',
+        characterUid: attacker.uid,
     }
 }
 
