@@ -101,3 +101,7 @@ export function getTexture(assetId: AssetKey): PixiTexture {
 export function hasTexture(assetId: AssetKey): boolean {
     return Loader.shared.resources?.[assetId] != null
 }
+
+export function isTextureKey(key: string): key is AssetKey {
+    return hasTexture(key as AssetKey)
+}

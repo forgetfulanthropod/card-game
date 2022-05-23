@@ -16,7 +16,7 @@
         {
             "label": "tsc all",
             "type": "shell",
-            "command": "./node_modules/.bin/tsc --build --watch .",
+            "command": "./node_modules/.bin/tsc --build --watch shared client game server",
             "problemMatcher": ["$tsc-watch"],
             "group": "build",
             "detail": "check types on all files",
@@ -37,7 +37,7 @@
             "label": "run server",
             "type": "shell",
             "group": "build",
-            "command": "bash run server:server-watch",
+            "command": "bash run server:server-watch-debug",
             "detail": "node builds/server/server.js"
         },
         {

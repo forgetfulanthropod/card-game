@@ -21,7 +21,7 @@ export function makeBattleState(args: {
     // const playerStarts = srandom() < 0.5
     const playerStarts = true
 
-    return Object.freeze({
+    const bs: BattleScene = {
         username: args.game.get('username'),
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
@@ -29,14 +29,13 @@ export function makeBattleState(args: {
         state: 'not started',
         playerStarts,
         isPlayerTurn: playerStarts,
-        battleHasBegun: true,
         allCharacters,
         cards: getNullCards(),
         energy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        doors: { options: [], descriptions: [] },
         roomsPassed: 0,
         nextEnemyCards: [], // set later
-    })
+    }
+    return bs
 }

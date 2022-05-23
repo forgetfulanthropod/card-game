@@ -5,6 +5,7 @@ import { bindCharacters } from './bindCharacters'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards'
 import { InfoBox } from './InfoBox'
+import { StartRoomButton } from './StartRoomButton'
 import { Container } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
@@ -36,6 +37,7 @@ export function BattleScene(): PixiContainer {
             charactersContainer,
             cardsContainer,
             energyContainer,
+            StartRoomButton(),
         ],
     })
 

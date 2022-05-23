@@ -6,6 +6,8 @@ import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    isTextureKey,
+    PixiTexture,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
@@ -143,7 +145,9 @@ export function SelectedCharacters(): PixiContainer {
                             animation ??
                                 Sprite({
                                     anchor: [0.5, 0.5],
-                                    src: getTexture(c.name),
+                                    src: isTextureKey(c.name)
+                                        ? getTexture(c.name)
+                                        : PixiTexture.WHITE,
                                     scale: 1,
                                 }),
                         ],

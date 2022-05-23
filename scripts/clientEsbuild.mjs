@@ -33,8 +33,9 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
     mkdirSync(buildDir, { recursive: true })
     cpSync(publicDir, buildDir, { recursive: true })
     esbuild({
-        minify: true, //!isDevelopment,
+        minify: false, //!isDevelopment,
         sourcemap: true, //isDevelopment,
+        keepNames: true,
         entryPoints: [entryPoint],
         inject: ['client/config/preact-shim.js'],
         jsxFactory: 'h',

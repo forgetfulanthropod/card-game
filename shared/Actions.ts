@@ -52,7 +52,8 @@ export type NextAction<K extends InternalActionName = InternalActionName> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Param1<T extends (...args: any[]) => any> = Parameters<T>[1]
 
-export type Empty = Record<string, never>
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Empty {}
 
 export type CharacterPlaceIndex = 0 | 1 | 2
 

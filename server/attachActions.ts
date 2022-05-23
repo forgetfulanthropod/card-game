@@ -1,5 +1,6 @@
 import type { Application } from 'express'
 import { actions } from 'game'
+import { vals } from 'shared/code'
 
 import { makeNewUser as makeNewUser, maybeMakeUser } from './actions'
 import { onCallWrapper } from './onCallWrapper'

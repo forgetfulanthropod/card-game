@@ -71,7 +71,7 @@ class Runner {
         if (sceneName === 'entry') {
             await this.entryStep(tree)
         } else if (sceneName === 'battle') {
-            await this.battleStep(tree)
+            this.battleStep(tree)
         }
         if (this.running) {
             requestAnimationFrame(() => this.step())

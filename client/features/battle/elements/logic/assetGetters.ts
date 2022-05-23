@@ -1,8 +1,8 @@
 import { upperFirst } from 'lodash'
 import type { CharacterName, EffectType, OrbType } from 'shared'
 import type { OrbAssetId } from './orbAssets'
-import type { AssetKey, PixiTexture } from '@/elementsUtil'
-import { getTexture } from '@/elementsUtil'
+import type { AssetKey } from '@/elementsUtil'
+import { isTextureKey, PixiTexture, getTexture } from '@/elementsUtil'
 
 export function getEffectIconSrc(effectType: EffectType): PixiTexture {
     const effectToIconMap: Record<EffectType, AssetKey> = {
@@ -16,7 +16,8 @@ export function getEffectIconSrc(effectType: EffectType): PixiTexture {
     return getTexture(iconId)
 }
 
-export const getCharTexture = (charId: CharacterName) => getTexture(charId)
+export const getCharTexture = (charId: CharacterName) =>
+    isTextureKey(charId) ? getTexture(charId) : PixiTexture.WHITE
 
 export const getOrbTexture = (orbType: OrbType) =>
     getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)

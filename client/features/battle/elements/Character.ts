@@ -4,9 +4,9 @@ import type {
     CharacterMeta,
     CharacterName,
     CharacterUid,
-    NetworkAttackData,
     NetworkDOTData,
     NetworkEvent,
+    CardHit,
 } from 'shared'
 import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
@@ -159,12 +159,12 @@ function ActionIntent(uid: CharacterUid) {
     onDestroyed(
         root,
         onUpdate(
-            battle.select('nextNpcMoves'),
-            nextMoves => {
-                const moveName = nextMoves.find(
-                    move => move.attacker.uid === uid
-                )?.move?.name
-                root.text = moveName ?? ''
+            battle.select('nextEnemyCards'),
+            nextCards => {
+                const cardName = nextCards.find(
+                    card => card.characterUid === uid
+                )?.name
+                root.text = cardName ?? ''
             },
             true
         )
@@ -282,7 +282,7 @@ function bindDOT(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer
 ) {
-    getSocket().on('DOT$', (event: NetworkEvent<'move$', NetworkDOTData>) => {
+    getSocket().on('DOT$', (event: NetworkEvent<'damage$', NetworkDOTData>) => {
         const { damageMap } = event.data
 
         keys(damageMap).forEach(characterUid => {
@@ -304,13 +304,13 @@ function bindMoves(
     const { screenX, screenY } = characterMeta
 
     getSocket().on(
-        'move$',
-        function showCharMove(event: NetworkEvent<'move$', NetworkAttackData>) {
-            const { attackerUid, defenderUids, moveName, damageKVs } =
-                event.data
+        'damage$',
+        function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
+            const { attacker, cardName, damages } = event.data
+            const defenderUids: CharacterUid[] = Object.keys(damages)
 
             const thisUid = characterMeta.uid
-            if (attackerUid === thisUid) {
+            if (attacker === thisUid) {
                 if (mainAnimation) {
                     mainAnimation.state.setAnimation(0, 'Attack', false)
                     mainAnimation.state.addAnimation(0, 'Idle', true)
@@ -352,21 +352,13 @@ function bindMoves(
 
                 flashTo(
                     aboveCharacterContainer,
-                    () => MoveInfo({ moveName, offset: -70 }),
+                    () => MoveInfo({ moveName: cardName, offset: -70 }),
                     {
                         durationMs: SHOW_HIT_TIME,
                     }
                 )
-                const damageObj = damageKVs.find(d => d.key === thisUid)
-                if (damageObj == null) {
-                    console.warn(
-                        `damageMap did not provide value for defender with id ${thisUid}. damageMap:`,
-                        damageKVs
-                    )
-                    return
-                }
 
-                flashDamageTo(aboveCharacterContainer, damageObj.damage)
+                flashDamageTo(aboveCharacterContainer, damages[thisUid])
             }
         }
     )
@@ -388,6 +380,7 @@ function makeSprites(
 
     const unsub = onUpdate(assetIdCursor, assetId => {
         // tl('asset update')
+        // @ts-expect-error TODO
         if (!hasTexture(assetId)) {
             unsub()
             return

@@ -9,4 +9,5 @@ client/public_/index.html
 **/package.json
 **/testy.json
 **/dist/
+**/ignore/
 db.json
