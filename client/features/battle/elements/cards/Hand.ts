@@ -44,8 +44,6 @@ export function Hand(pile: Pile): PixiContainer {
 }
 
 function bindHandAnimations(rootEl: PixiContainerWithTweenableChildren) {
-    console.log('ready to bind ' + rootEl.children.length + ' cards!!!')
-
     const initialDisplayVals = getInitialDisplayVals(rootEl)
 
     const unfocus = getUnfocus(rootEl, initialDisplayVals)
@@ -71,11 +69,7 @@ function bindHandAnimations(rootEl: PixiContainerWithTweenableChildren) {
         })
     )
 
-    console.log('binding ondestroyed')
-    onDestroyed(rootEl, () => {
-        console.log('unsubscribing')
-        unsubs.forEach(u => u())
-    })
+    onDestroyed(rootEl, ...unsubs)
 }
 
 interface InitialDisplayVal {
@@ -125,7 +119,7 @@ function getFocus(
         animateTo(cardEl, {
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: -CARD_HEIGHT_FULL * 0.78,
+            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.78,
             scale:
                 (CARD_WIDTH_FULL / CARD_WIDTH_IN_HAND) *
                 initialDisplayVal.scale,

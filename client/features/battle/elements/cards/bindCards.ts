@@ -26,9 +26,7 @@ export function bindCards({ scene, container }: BindCursorArgs) {
 }
 
 function update({ scene, container }: BindCursorArgs): void {
-    console.log('clearing card container')
     clearContainer(container)
-    console.log('done clearing card container')
 
     if (!scene.get('isPlayerTurn')) return
     if (scene.get('state') !== 'in battle') return
