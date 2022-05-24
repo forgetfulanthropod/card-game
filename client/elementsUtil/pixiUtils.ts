@@ -56,11 +56,15 @@ export function flashTo(
 
 export function clearContainer(container: PixiContainer): void {
     const children = container.children
-    container.removeChildren()
 
-    for (const x of children) {
-        x.destroy()
+    container.children.forEach(c => console.log({ containerName: c.name }))
+
+    for (const x of [...children]) {
+        console.log('destroying', { x, name: x.name })
+        x.destroy({ children: true })
     }
+
+    container.removeChildren()
 }
 
 export function bringToTop(o: DisplayObject): void {
