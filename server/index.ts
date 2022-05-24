@@ -8,6 +8,8 @@ import type { Logger } from 'winston'
 import { attachAPIRoutes } from './attachActions'
 import { mountIo } from './IO'
 
+export { mountIo }
+
 declare global {
     // eslint-disable-next-line no-var
     var logger: Logger
