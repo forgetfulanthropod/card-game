@@ -75,6 +75,6 @@
     "tidyExplorer.pockets": [
         { "name": "typescript", "selectors": ["**/*.ts"] },
         { "name": "packages", "selectors": ["**/package.json"] }
-    ],
-    "debug.javascript.autoAttachFilter": "smart"
+    ]
+    // "debug.javascript.autoAttachFilter": "smart"
 }
