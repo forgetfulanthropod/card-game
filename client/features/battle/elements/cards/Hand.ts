@@ -202,7 +202,7 @@ function animateTo(
     void Tweener.add(
         {
             target: cardEl.children[0] as TweenablePixiContainer,
-            duration: 0.2,
+            duration: 0.1,
         },
         {
             ...pick(initialDisplayVal, 'rotation'),
