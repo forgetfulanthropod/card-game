@@ -26,10 +26,10 @@ const blockBase = {
     type: 'defense',
 } as const
 /** Enforces correct self-id */
-type CardDefinitionMap = {
+type CardDefinitionsMap = {
     [Id in CardId]: CardDefinition & { id: Id }
 }
-export const cardDefinitionsMap: CardDefinitionMap = {
+export const cardDefinitionsMap: CardDefinitionsMap = {
     shield: {
         name: 'Shield',
         energy: 1,

@@ -1,9 +1,9 @@
 import type { Value as VAngu } from 'angu'
-import type { Card, CharacterUid, BattleCursor } from 'shared'
+import type { Command, CharacterUid, BattleCursor } from 'shared'
 
 export type ExecuteArgs = {
     dslArgs: VAngu[]
-    card: Card
+    command: Command
     targetUids: CharacterUid[]
     scene: BattleCursor
 }

@@ -159,11 +159,11 @@ function ActionIntent(uid: CharacterUid) {
     onDestroyed(
         root,
         onUpdate(
-            battle.select('nextEnemyCards'),
-            nextCards => {
-                const cardName = nextCards.find(
-                    card => card.characterUid === uid
-                )?.name
+            battle.select('nextNpcCommands'),
+            nextCmds => {
+                const cardName = nextCmds.find(
+                    ({ command }) => command.characterUid === uid
+                )?.command?.name
                 root.text = cardName ?? ''
             },
             true

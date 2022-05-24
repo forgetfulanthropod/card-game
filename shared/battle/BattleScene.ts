@@ -1,6 +1,11 @@
-import type { Card, Cards } from './Card'
-import type { Characters } from './Characters'
-import type { DungeonName, SceneHas } from '@'
+import type {
+    Cards,
+    Command,
+    Characters,
+    DamageMap,
+    DungeonName,
+    SceneHas,
+} from '@'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -16,6 +21,6 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     roomsPassed: number
-    nextEnemyCards: Card[]
+    nextNpcCommands: { command: Command; damages: DamageMap }[]
 }
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'

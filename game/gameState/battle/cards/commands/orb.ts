@@ -12,14 +12,14 @@ export function explain(orbTypeAngu: VAngu, numCountersAngu: VAngu) {
 
 export function execute({
     dslArgs: [orbTypeAngu, countAngu],
-    card,
+    command,
     // targetUids,
     scene,
 }: ExecuteArgs) {
     const orbType = orbTypeAngu.eval() as OrbType
     const count = countAngu.eval() as number
 
-    summonOrbs(orbType, count, card.characterUid, scene)
+    summonOrbs(orbType, count, command.characterUid, scene)
 }
 
 function summonOrbs(

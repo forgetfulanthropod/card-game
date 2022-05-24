@@ -19,7 +19,7 @@ export function explain(damage: VAngu, times: VAngu) {
 
 export function execute({
     dslArgs: [damageAngu, numTargetsAngu],
-    card,
+    command,
     targetUids,
     scene,
 }: ExecuteArgs) {
@@ -29,8 +29,8 @@ export function execute({
 
     const damages = mapToObj(targetUids, () => damage)
     const cardHit: CardHit = {
-        attacker: card.characterUid,
-        cardName: card.name,
+        attacker: command.characterUid,
+        cardName: command.name,
         damages,
     }
     emit({

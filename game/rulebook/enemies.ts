@@ -1,14 +1,11 @@
-import type { EnemyCharacterName } from 'shared'
-
-const strike = 'strike' as EnemyAttackName
-/** debug only */
-const jab = 'jab' as EnemyAttackName
+import type { EnemyCharacterName, NpcCommandId } from 'shared'
 type Level = string
 // align by regex: (, )|:|\[
+// @ts-expect-error // TODO
 export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { constitution: 18, strength: 4, dexterity: 7, moves: ['swordWack', null, null, 'block', null] },
-        1: { constitution: 18, strength: 4, dexterity: 7, moves: [strike, jab, jab, strike, jab] },
+        1: { constitution: 18, strength: 4, dexterity: 7, moves: ['swordWack', 'swordWack', 'jab', 'strike', 'jab'] },
         2: { constitution: 27, strength: 6, dexterity: 9, moves: ['swordWack', 'rustyPokeLow', null, 'block', null] },
         3: { constitution: 36, strength: 8, dexterity: 12, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', null] },
         4: { constitution: 50, strength: 11, dexterity: 16, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', null] },
@@ -81,80 +78,6 @@ export type EnemyDefinition = {
     constitution: BaseHealth
     strength: number
     dexterity: number
-    moves: readonly [
-        EnemyAttackName,
-        EnemyAttackName | null,
-        EnemyAttackName | null,
-        EnemyAttackName | null,
-        EnemyAttackName | null
-    ]
+    // TODO: rename to commands
+    moves: readonly (NpcCommandId | null)[]
 }
-// satisfies<Record<string, EnemyDefinition>>(enemies)
-// satisfies<Selfkeys<typeof enemies>>(enemies)
-
-/** TODO: Break this down into the DSL. Do one!! */
-export const attackNames = {
-    swordWack: 'Sword Whack (BA)',
-    mimicAttack:
-        'Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).',
-    rustyPokeHigh: 'Rusty Poke (DOT 2, also applies Fatigue 1)',
-    rustyPokeLow: 'Rusty Poke (DOT 2)',
-    slash: 'Slash (SL)',
-    block: 'Block',
-    basicAttack: 'Basic Attack',
-    chomp: 'Chomp (BA)',
-    itchyOozeSpecial:
-        'Itchy Ooze (DOT 2, applies Poison 1 if any damage goes unblocked.)',
-    jurgenBellyFlop:
-        'Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes.',
-    jurgenRollAround: 'Roll Around (same as Belly Flop, but with Slash damage)',
-    jurgenStampSnort:
-        'Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn.',
-    jurgenSitUpon:
-        'Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target.',
-    attack4: 'Attack (Attacks for 4)',
-    rest: 'Rest (does nothing)',
-    matchaMash: 'Matcha Mash: Matcha will deal damage equal to ATK.',
-    matchaMadness: 'Matcha Madness: Apply poison 3 to ALL characters.',
-    matchaMeld:
-        'Matcha Meld: Block equal to DEF and Level 1 and 2 matchas, will attempt to rejoin the matcha with the highest HP. If successful, the lesser Matcha will add their HP to the greater matcha and the lesser Matcha will be removed from the field. The targeted matcha will level up if it exceeds the minimum health threshold for the next level of matcha.',
-    evisceratingSweep:
-        'Eviscerating Sweep (Deals 100%, Splash Damage) applies vulnerable (3)',
-    passiveBlock:
-        'Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block.',
-    ancientStrike:
-        'Ancient Strike (Deals 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn.',
-    hansBuffBlock:
-        "Buff/Block (Gives +3 damage to all of Hans' Guards and Hans himself till the end of the following turn).",
-    hansMagicMissile: 'Magic Missile (attacks for 25)',
-    hansGuards: 'Guards!!! (summons up to 2 cultist guards)',
-    hansCurse:
-        'Blood Moon Curse (all player characters receive fatigue (2), unguarded (2))',
-} as const
-
-const _parameterizedAttacks = {
-    startlingSpook: 'Startling Spook (Applies Unguarded x, Fatigue x)',
-    supriseAllergy:
-        'Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X)',
-    itchyOoze: 'Itchy Ooze (DOT X)',
-    infectiousBite:
-        'Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked)',
-    engulf: 'Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked)',
-    meatyCharge:
-        'Meaty Charge (BA, applies bleed (X) if any damage goes unblocked)',
-    bellowAndSing:
-        'Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked)',
-    screamAndCharge:
-        'Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after)',
-}
-
-export type EnemyAttackName =
-    | keyof typeof attackNames
-    | `startlingSpook(${number},${number})`
-    | `supriseAllergy(${number},${number})`
-    | `itchyOoze(${number})`
-    | `infectiousBite(${number})`
-    | `engulf(${number})`
-    | `meatyCharge(${number})`
-    | `bellowAndSing(${number},${number})`
-    | `screamAndCharge(${number},${number})`

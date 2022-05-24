@@ -10,7 +10,7 @@ import type {
 } from 'shared'
 
 import { keys, vals } from 'shared/code'
-import { explainActionsForCard } from './interpretActions'
+import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 
 export function updateHand(scene: BattleCursor) {
@@ -85,7 +85,7 @@ function makeCards(scene: BattleCursor): Cards {
 }
 
 function updateExplanation(card: Card, scene: BattleCursor): Card {
-    return { ...card, explanation: explainActionsForCard(card, scene) }
+    return { ...card, explanation: explainCommand(card, scene) }
 }
 
 function getCardInstance(

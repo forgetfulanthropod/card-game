@@ -1,6 +1,6 @@
 import { expect, Test, TestSuite } from 'testyts'
 
-import { explainActions } from './interpretActions'
+import { explainActions } from './interpretCommand'
 
 @TestSuite()
 export class CardAffordances {

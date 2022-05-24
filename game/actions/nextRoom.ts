@@ -40,7 +40,7 @@ export const nextRoom: GameActions['NextRoom'] = args => {
         ...newNpcs,
     }))
     scene.set('state', 'in battle')
-    scene.set('nextEnemyCards', getNpcMoves(scene))
+    scene.set('nextNpcCommands', getNpcMoves(scene))
     clearAllEffects(scene)
     scene.set('turnCount', 1)
     putAllCardsInDrawPile(scene)

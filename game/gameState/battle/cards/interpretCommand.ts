@@ -1,38 +1,38 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
-import type { Card, CharacterUid, BattleCursor } from 'shared'
+import type { BattleCursor, CharacterUid, Command } from 'shared'
 import {
-    explainAddBlock,
     executeAddBlock,
-    explainChain,
     executeChain,
-    explainDeal,
     executeDeal,
-    explainDebilitate,
     executeDebilitate,
-    explainOrb,
     executeOrb,
-    explainText,
     executeText,
-} from './cardActions'
+    explainAddBlock,
+    explainChain,
+    explainDeal,
+    explainDebilitate,
+    explainOrb,
+    explainText,
+} from './commands'
 import { checkBattleOverMut } from '@/gameState'
 
-export function interpretActions({
-    card,
+export function interpretCommand({
+    command,
     targetUids,
     scene,
 }: {
-    card: Card
+    command: Command
     targetUids: CharacterUid[]
     scene: BattleCursor
 }) {
-    const locals = localsFromCard(card, scene)
-    // const explanation = explainActions(card.actions, locals)
-    executeActions({ card, targetUids, scene, locals })
+    const locals = localsFromCard(command, scene)
+    // const explanation = explainActions(command.actions, locals)
+    executeActions({ command, targetUids, scene, locals })
 }
 
-function localsFromCard(card: Card, scene: BattleCursor) {
-    const cardOwner = scene.get('allCharacters', card.characterUid)
+function localsFromCard(command: Command, scene: BattleCursor) {
+    const cardOwner = scene.get('allCharacters', command.characterUid)
     return {
         strength: cardOwner.strength,
         dexterity: cardOwner.dexterity,
@@ -55,13 +55,13 @@ const standardOperators = {
     PI: 3.14,
 }
 
-export function explainActionsForCard(card: Card, scene: BattleCursor) {
-    return explainActions(card.actions, localsFromCard(card, scene))
+export function explainCommand(command: Command, scene: BattleCursor) {
+    return explainActions(command.actions, localsFromCard(command, scene))
 }
 
 export function explainActions(actions: string, locals?: object) {
     const ctx = generateAnguContext({
-        // @index(['./cardActions/*.ts', '!./cardActions/index.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
+        // @index(['./commands/*.ts', '!./commands/index.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
         addBlock: explainAddBlock,
         chain: explainChain,
         deal: explainDeal,
@@ -75,35 +75,38 @@ export function explainActions(actions: string, locals?: object) {
 }
 
 function executeActions({
-    card,
+    command,
     targetUids,
     scene,
     locals,
-}: {
-    card: Card
+}: // dry,
+{
+    command: Command
     targetUids: CharacterUid[]
     scene: BattleCursor
     locals?: object
-}) {
+    // dry?: boolean
+}): void {
+    // TODO?: change to * import + loop?
     const ctx = generateAnguContext({
         // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
-        // @index(['./cardActions/*.ts', '!./cardActions/index.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, card, targetUids, scene }),`)
+        // @index(['./commands/*.ts', '!./commands/index.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, command, targetUids, scene }),`)
         addBlock: (...dslArgs: VAngu[]) =>
-            executeAddBlock({ dslArgs, card, targetUids, scene }),
+            executeAddBlock({ dslArgs, command, targetUids, scene }),
         chain: (...dslArgs: VAngu[]) =>
-            executeChain({ dslArgs, card, targetUids, scene }),
+            executeChain({ dslArgs, command, targetUids, scene }),
         deal: (...dslArgs: VAngu[]) =>
-            executeDeal({ dslArgs, card, targetUids, scene }),
+            executeDeal({ dslArgs, command, targetUids, scene }),
         debilitate: (...dslArgs: VAngu[]) =>
-            executeDebilitate({ dslArgs, card, targetUids, scene }),
+            executeDebilitate({ dslArgs, command, targetUids, scene }),
         orb: (...dslArgs: VAngu[]) =>
-            executeOrb({ dslArgs, card, targetUids, scene }),
+            executeOrb({ dslArgs, command, targetUids, scene }),
         text: (...dslArgs: VAngu[]) =>
-            executeText({ dslArgs, card, targetUids, scene }),
+            executeText({ dslArgs, command, targetUids, scene }),
         // @endindex
     })
 
-    angu.evaluate(card.actions, ctx, locals)
+    angu.evaluate(command.actions, ctx, locals)
 
     checkBattleOverMut(scene)
 }

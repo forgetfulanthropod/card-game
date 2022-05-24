@@ -22,7 +22,7 @@ export const changeScene: GameActions['ChangeScene'] = args => {
         )
         const battleScene_ = game.select('scene') as BattleCursor
         // TODO: put getNpcMoves in makeBattleState. Will require retyping of getNpcMoves's call chain.
-        battleScene_.set('nextEnemyCards', getNpcMoves(battleScene_))
+        battleScene_.set('nextNpcCommands', getNpcMoves(battleScene_))
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
         // putUpDoors(scene) // MARK

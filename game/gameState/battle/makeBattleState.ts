@@ -35,7 +35,7 @@ export function makeBattleState(args: {
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         roomsPassed: 0,
-        nextEnemyCards: [], // set later
+        nextNpcCommands: [], // set later
     }
     return bs
 }

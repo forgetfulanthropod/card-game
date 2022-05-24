@@ -18,7 +18,7 @@ export const resetRound: InternalAction['resetRound'] = (
 ): undefined => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('resetting round')
-    scene.select('nextEnemyCards').set(getNpcMoves(scene))
+    scene.select('nextNpcCommands').set(getNpcMoves(scene))
 
     setRoundEnergy(scene)
     clearHasMoved(scene)
