@@ -57,3 +57,7 @@ if (process.env.USE_ROUTER !== 'yes') {
     })
     mountIo(server, sessionMiddleware, buildInfo, '')
 }
+
+export function getApp(): typeof app {
+    return app
+}
