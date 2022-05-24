@@ -1,20 +1,8 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
 import type { BattleCursor, CharacterUid, Command } from 'shared'
-import {
-    executeAddBlock,
-    executeChain,
-    executeDeal,
-    executeDebilitate,
-    executeOrb,
-    executeText,
-    explainAddBlock,
-    explainChain,
-    explainDeal,
-    explainDebilitate,
-    explainOrb,
-    explainText,
-} from './commands'
+import { entryMap } from 'shared/code'
+import { explainers, executors } from './commands'
 import { checkBattleOverMut } from '@/gameState'
 
 export function interpretCommand({
@@ -60,51 +48,37 @@ export function explainCommand(command: Command, scene: BattleCursor) {
 }
 
 export function explainActions(actions: string, locals?: object) {
-    const ctx = generateAnguContext({
-        // @index(['./commands/*.ts', '!./commands/index.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
-        addBlock: explainAddBlock,
-        chain: explainChain,
-        deal: explainDeal,
-        debilitate: explainDebilitate,
-        orb: explainOrb,
-        text: explainText,
-        // @endindex
-    })
+    const ctx = generateAnguContext(explainers)
 
     return angu.evaluate(actions, ctx, locals).value
 }
+
+// function getCommandOutcome({
+//     command,
+//     targetUids,
+//     scene,
+//     locals
+// })
 
 function executeActions({
     command,
     targetUids,
     scene,
     locals,
-}: // dry,
-{
+}: {
     command: Command
     targetUids: CharacterUid[]
     scene: BattleCursor
     locals?: object
-    // dry?: boolean
 }): void {
     // TODO?: change to * import + loop?
-    const ctx = generateAnguContext({
-        // chain: (...dslArgs: VAngu[]) => executeChain({ dslArgs, targetUids, scene }),
-        // @index(['./commands/*.ts', '!./commands/index.ts'], (f, _) => `${f.name}: (...dslArgs: VAngu[]) => execute${_.pascalCase(f.name)}({ dslArgs, command, targetUids, scene }),`)
-        addBlock: (...dslArgs: VAngu[]) =>
-            executeAddBlock({ dslArgs, command, targetUids, scene }),
-        chain: (...dslArgs: VAngu[]) =>
-            executeChain({ dslArgs, command, targetUids, scene }),
-        deal: (...dslArgs: VAngu[]) =>
-            executeDeal({ dslArgs, command, targetUids, scene }),
-        debilitate: (...dslArgs: VAngu[]) =>
-            executeDebilitate({ dslArgs, command, targetUids, scene }),
-        orb: (...dslArgs: VAngu[]) =>
-            executeOrb({ dslArgs, command, targetUids, scene }),
-        text: (...dslArgs: VAngu[]) =>
-            executeText({ dslArgs, command, targetUids, scene }),
-        // @endindex
-    })
+    const wrappedExecutors = entryMap(
+        executors,
+        (_, func) =>
+            (...dslArgs: VAngu[]) =>
+                func({ dslArgs, command, targetUids, scene })
+    )
+    const ctx = generateAnguContext(wrappedExecutors)
 
     angu.evaluate(command.actions, ctx, locals)
 

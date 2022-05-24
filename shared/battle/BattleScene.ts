@@ -21,6 +21,11 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     roomsPassed: number
-    nextNpcCommands: { command: Command; damages: DamageMap }[]
+    nextNpcCommands: { command: Command; outcome: CommandOutcome }[]
 }
+
+export interface CommandOutcome {
+    damages: DamageMap
+}
+
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'

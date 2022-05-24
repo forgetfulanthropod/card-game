@@ -3,7 +3,7 @@ import type {
     BattleCursor,
     EnemyCharacterName,
     Command,
-    DamageMap,
+    CommandOutcome,
 } from 'shared'
 
 import { nonNulls, vals } from 'shared/code'
@@ -40,13 +40,13 @@ function getNpcMove(
 
 export function getNpcMoves(
     scene: BattleCursor
-): { command: Command; damages: DamageMap }[] {
+): { command: Command; outcome: CommandOutcome }[] {
     const ac = vals(scene.get('allCharacters'))
     const movable = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
     const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
     return cmds.map(command => ({
         command,
         // TODO: actually calculate damages ahead of time
-        damages: {},
+        outcome: { damages: {} },
     }))
 }

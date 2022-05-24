@@ -24,10 +24,11 @@ export function keyMap<K extends string | number, V, X>(
 }
 export function entryMap<K extends string | number, V, X>(
     obj: Record<K, V>,
-    f: (k: string, v: V) => X
-): X[] {
-    // eslint-disable-next-line no-extra-parens
-    return (Object.entries(obj) as [string, V][]).map(([k, v]) => f(k, v))
+    f: (k: K, v: V) => X
+): Record<K, X> {
+    return Object.fromEntries(
+        (Object.entries(obj) as [K, V][]).map(([k, v]) => [k, f(k, v)])
+    ) as Record<K, X>
 }
 
 export function stringify(obj: Record<string, unknown>): string {

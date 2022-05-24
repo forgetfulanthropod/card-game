@@ -16,8 +16,8 @@ export function doNpcTurn(
     const processedCmds = scene.get('nextNpcCommands')
     const processedCmd = processedCmds[args.index]
     if (processedCmd == null) return undefined // safety check
-    const { command, damages: _damages } = processedCmd
-    // TODO supposed to be: keys(damages)
+    const { command, outcome: _outcome } = processedCmd
+    // TODO supposed to be: keys(_outcome.damages)
     const targetUids = determinePcTargets(scene.get(), command)
     interpretCommand({ command, targetUids: targetUids, scene })
     // play({ card: command, targetUids, scene })
