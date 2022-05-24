@@ -1,5 +1,4 @@
 import { pick } from 'lodash'
-import { GlowFilter } from 'pixi-filters'
 import { Tweener } from 'pixi-tweener'
 import type { CardUid, Pile } from 'shared'
 
@@ -10,6 +9,7 @@ import { Container } from '@/elementsUtil'
 import { hoveredCardUid, hoveredCharacterUid, keys, vals } from '@/util'
 
 import type { PixiContainerWithTweenableChildren } from '../../../../elementsUtil/PixiContainerWithTweenableChildren'
+import { glowFilter } from '../Character'
 import {
     Card,
     CARD_HEIGHT_FULL,
@@ -155,13 +155,13 @@ function spreadOthers(
     })
 }
 
-const glowFilter = new GlowFilter({
-    innerStrength: 0,
-    outerStrength: 3,
-    distance: 40,
-    color: 0xffffff,
-    knockout: false,
-})
+// const glowFilter = new GlowFilter({
+//     innerStrength: 0,
+//     outerStrength: 3,
+//     distance: 40,
+//     color: 0xffffff,
+//     knockout: false,
+// })
 
 function updateGlowFilters(handEl: PixiContainerWithTweenableChildren) {
     handEl.children.forEach(el => {
