@@ -9,6 +9,7 @@ export interface InteractionEvents {
     pointerup?: InteractionEventHandler
     pointerover?: InteractionEventHandler
     pointerout?: InteractionEventHandler
+    pointermove?: InteractionEventHandler
 }
 
 export function bindEvents(

@@ -301,12 +301,17 @@ function getEvents(card: Card): InteractionEvents {
                 currentTarget: cardEl,
             } as InteractionEvent)
     }
+    // const pointermove: InteractionEventHandler = function (e) {
+    //     console.log({ e })
+    //     // if (hasMovedEnough) pointerdown
+    // }
 
     return {
         pointerover,
         pointerout,
         pointerdown,
         pointerup,
+        // pointermove,
     }
 }
 
