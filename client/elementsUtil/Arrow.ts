@@ -1,15 +1,15 @@
 import type { RODatum } from 'datums'
-import { PixiGraphics, Container } from '@/elementsUtil'
+import { onDestroyed } from './mypixi'
+import { PixiGraphics } from '@/elementsUtil'
 
 export function Arrow(origin: RODatum<Point>, destination: RODatum<Point>) {
     const pointRadius = 10
     const g = new PixiGraphics()
-
-    return Container({
-        name: 'Arrow',
-        children: [g],
-        onDestroy: [destination.onChange(draw, true)],
-    })
+    return onDestroyed(
+        g,
+        destination.onChange(draw, true),
+        origin.onChange(draw, true)
+    )
 
     function draw() {
         g.clear()

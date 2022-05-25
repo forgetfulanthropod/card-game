@@ -25,17 +25,14 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
     })
     onDestroyed(
         text,
-        nextCmd.onChange(c => {
-            text.text = c?.command?.name ?? ''
-        }, true)
+        nextCmd.onChange(c => (text.text = c?.command?.name ?? ''), true)
     )
     const arrows = IntentArrows(uid, nextCmd, isHovered)
-    // const arrow = Arrow(orig, dest)
     const root = Container({
         children: [text],
         onDestroy: [nextCmd.destroy],
     })
-    setTimeout(() => portalize({ from: root, content: arrows }), 0)
+    portalize({ from: root, content: arrows, nextFrame: true })
 
     return root
 }
@@ -50,23 +47,17 @@ function IntentArrows(
             x: cm.screenX,
             y: cm.screenY,
         }))
-    const orig = locationOf(uid)
 
-    const targets = compose(
-        ([cmd]) => cmd?.targetUids?.map(x => ({ key: x })) ?? [],
-        nextCmd
-    )
-    return If(
-        isHovered,
-        () => For(targets, ({ key }) => IntentArrow(key)),
-        undefined,
-        { onDestroy: [orig.destroy] }
+    const orig = locationOf(uid)
+    const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
+
+    return onDestroyed(
+        If(isHovered, () => For(targets, key => IntentArrow(key))),
+        orig.destroy
     )
 
     function IntentArrow(uid: CharacterUid) {
-        {
-            const dest = locationOf(uid)
-            return onDestroyed(Arrow(orig, dest), dest.destroy)
-        }
+        const dest = locationOf(uid)
+        return onDestroyed(Arrow(orig, dest), dest.destroy)
     }
 }
