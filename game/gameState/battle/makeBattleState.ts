@@ -1,7 +1,7 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
-import { makeCharacters } from './characterManagement'
+import { makeCharacters } from './util'
 
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
