@@ -250,6 +250,7 @@ function getColorStopsFromCharacterClass(
     )
 }
 
+let clearLastTargetSelection = () => {}
 function getEvents(card: Card): InteractionEvents {
     const pointerover: InteractionEventHandler = _ => {
         hoveredCharacterUid.set(card.characterUid)
@@ -275,8 +276,10 @@ function getEvents(card: Card): InteractionEvents {
         if (!(cardEl instanceof PixiContainer))
             throw new Error('ERROR! should be bound to container')
 
+        clearLastTargetSelection()
+
         if (getBattleScene().get().energy >= card.energy) {
-            beginTargetSelection(cardEl.parent, card)
+            clearLastTargetSelection = beginTargetSelection(cardEl.parent, card)
         }
     }
     const pointerup: InteractionEventHandler = function ({

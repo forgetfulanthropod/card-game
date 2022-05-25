@@ -13,7 +13,7 @@ import { onUpdate } from '@/util/onUpdate'
 export function beginTargetSelection(
     cardEl: PixiContainer,
     cardMeta: Card
-): void {
+): () => void {
     const numTargets = cardMeta.targetNum
     console.log('beginning target selection')
 
@@ -76,6 +76,8 @@ export function beginTargetSelection(
         arrow.destroy({ children: true })
         app.stage.interactive = false
     }
+
+    return cleanup
 }
 
 function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
