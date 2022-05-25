@@ -1,33 +1,41 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
-import type { BattleCursor, CharacterUid, Command } from 'shared'
+import type {
+    BattleCursor,
+    CharacterMeta,
+    CharacterUid,
+    Command,
+    CommandOutcome,
+} from 'shared'
 import { entryMap } from 'shared/code'
+import { SBaobab } from 'sbaobab'
+import { pick } from 'lodash'
 import { explainers, executors } from './commands'
+import { extractDamages } from './outcomeUtil'
 import { checkBattleOverMut } from '@/gameState'
+import { clearHappened, emit, getHappened } from '@/util'
 
 export function interpretCommand({
     command,
     targetUids,
     scene,
-}: {
-    command: Command
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    const locals = localsFromCard(command, scene)
+}: CommandDetail): void {
+    const locals = localsFromCommand(command, scene)
     // const explanation = explainActions(command.actions, locals)
-    executeActions({ command, targetUids, scene, locals })
+    executeCommand({ command, targetUids, scene, locals })
 }
 
-function localsFromCard(command: Command, scene: BattleCursor) {
+const localKeys = [
+    'strength',
+    'dexterity',
+    'magic',
+    'constitution',
+    'block',
+] as const
+type Locals = Pick<CharacterMeta, typeof localKeys[number]>
+function localsFromCommand(command: Command, scene: BattleCursor): Locals {
     const cardOwner = scene.get('allCharacters', command.characterUid)
-    return {
-        strength: cardOwner.strength,
-        dexterity: cardOwner.dexterity,
-        magic: cardOwner.magic,
-        constitution: cardOwner.constitution,
-        block: cardOwner.block,
-    }
+    return pick(cardOwner, localKeys)
 }
 
 const standardOperators = {
@@ -44,7 +52,7 @@ const standardOperators = {
 }
 
 export function explainCommand(command: Command, scene: BattleCursor) {
-    return explainActions(command.actions, localsFromCard(command, scene))
+    return explainActions(command.actions, localsFromCommand(command, scene))
 }
 
 export function explainActions(actions: string, locals?: object) {
@@ -53,25 +61,33 @@ export function explainActions(actions: string, locals?: object) {
     return angu.evaluate(actions, ctx, locals).value
 }
 
-// function getCommandOutcome({
-//     command,
-//     targetUids,
-//     scene,
-//     locals
-// })
+interface CommandDetail {
+    command: Command
+    targetUids: CharacterUid[]
+    scene: BattleCursor
+}
 
-function executeActions({
+/** Does not modify game state (or shouldn't) */
+export function simulateCommand(args: CommandDetail): CommandOutcome {
+    const locals = localsFromCommand(args.command, args.scene)
+    const sceneCopy = new SBaobab(args.scene.deepClone()).select()
+    const username = args.scene.get('username')
+    const happened = getHappened(username)
+    executeCommand({ ...args, locals, scene: sceneCopy })
+    clearHappened(username)
+    for (const event of happened) {
+        emit({ username, event })
+    }
+    const damages = extractDamages(args.scene.get(), sceneCopy.get())
+    return { damages }
+}
+
+function executeCommand({
     command,
     targetUids,
     scene,
     locals,
-}: {
-    command: Command
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-    locals?: object
-}): void {
-    // TODO?: change to * import + loop?
+}: CommandDetail & { locals?: Locals }): void {
     const wrappedExecutors = entryMap(
         executors,
         (_, func) =>

@@ -3,10 +3,12 @@ import type {
     BattleCursor,
     EnemyCharacterName,
     Command,
-    CommandOutcome,
+    NextCommand,
 } from 'shared'
 
 import { nonNulls, vals } from 'shared/code'
+import { simulateCommand } from './cards'
+import { getPcTargets } from './characterGetters'
 import { enemies } from '@/rulebook'
 
 // TODO: move command definitions into rulebook object
@@ -38,15 +40,17 @@ function getNpcMove(
     }
 }
 
-export function getNpcMoves(
-    scene: BattleCursor
-): { command: Command; outcome: CommandOutcome }[] {
+export function getNpcMoves(scene: BattleCursor): NextCommand[] {
     const ac = vals(scene.get('allCharacters'))
     const movable = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
     const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
-    return cmds.map(command => ({
-        command,
-        // TODO: actually calculate damages ahead of time
-        outcome: { damages: {} },
-    }))
+    return cmds.map(command => {
+        const targetUids = getPcTargets(scene.get(), command)
+        const outcome = simulateCommand({ command, scene, targetUids })
+        return {
+            command,
+            targetUids,
+            outcome: outcome,
+        }
+    })
 }

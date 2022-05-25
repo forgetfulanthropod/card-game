@@ -1,6 +1,6 @@
 export { getNullCards, setCards, updateHand } from './cardManagement'
 export { discard } from './discard'
 export { drawNewHand } from './drawNewHand'
-export { interpretCommand } from './interpretCommand'
+export { interpretCommand, simulateCommand } from './interpretCommand'
 export { play } from './play'
 export { putAllCardsInDrawPile } from './putAllCardsInDrawPile'

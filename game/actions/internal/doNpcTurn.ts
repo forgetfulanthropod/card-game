@@ -1,7 +1,6 @@
-import type { BattleScene, CharacterUid, Command, NextAction } from 'shared'
+import type { NextAction } from 'shared'
 
-import { vals } from 'shared/code'
-import { checkBattleOverMut, getPCTarget, interpretCommand } from '@/gameState'
+import { checkBattleOverMut, interpretCommand } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
@@ -16,10 +15,9 @@ export function doNpcTurn(
     const processedCmds = scene.get('nextNpcCommands')
     const processedCmd = processedCmds[args.index]
     if (processedCmd == null) return undefined // safety check
-    const { command, outcome: _outcome } = processedCmd
+    const { targetUids, command, outcome: _outcome } = processedCmd
     // TODO supposed to be: keys(_outcome.damages)
-    const targetUids = determinePcTargets(scene.get(), command)
-    interpretCommand({ command, targetUids: targetUids, scene })
+    interpretCommand({ command, targetUids, scene })
     // play({ card: command, targetUids, scene })
     if (args.index >= processedCmds.length - 1) {
         return {
@@ -33,11 +31,4 @@ export function doNpcTurn(
         delay: TIME_BETWEEN_NPC_MOVES,
         type: 'doNpcTurn',
     }
-}
-
-function determinePcTargets(
-    scene: BattleScene,
-    command: Command
-): CharacterUid[] {
-    return [getPCTarget(vals(scene.allCharacters)).uid]
 }

@@ -1,12 +1,14 @@
-import type { CharacterMeta, CharacterUid, BattleCursor } from 'shared'
+import type {
+    CharacterMeta,
+    CharacterUid,
+    BattleCursor,
+    BattleScene,
+    Command,
+} from 'shared'
 
 import { vals } from 'shared/code'
 import { getRulebook } from '@/rulebook'
 import { weightedRandom } from '@/util'
-
-function ac(scene: BattleCursor) {
-    return vals(scene.get('allCharacters'))
-}
 
 export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
     const uids = vals(scene.get('allCharacters'))
@@ -44,4 +46,11 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     )
 
     return allLivingPlayerCharacters[targetIndex]
+}
+
+export function getPcTargets(
+    scene: BattleScene,
+    command: Command
+): CharacterUid[] {
+    return [getPCTarget(vals(scene.allCharacters)).uid]
 }

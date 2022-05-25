@@ -5,6 +5,7 @@ import type {
     DamageMap,
     DungeonName,
     SceneHas,
+    CharacterUid,
 } from '@'
 
 export interface BattleScene extends SceneHas {
@@ -21,11 +22,19 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     roomsPassed: number
-    nextNpcCommands: { command: Command; outcome: CommandOutcome }[]
+    nextNpcCommands: NextCommand[]
 }
 
+/** May later have e.g. DOT effects */
 export interface CommandOutcome {
     damages: DamageMap
+}
+
+export interface NextCommand {
+    command: Command
+    outcome: CommandOutcome
+    /** Not sure if we'll need other kinds of targets later or not...  */
+    targetUids: CharacterUid[]
 }
 
 type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
