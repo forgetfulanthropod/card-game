@@ -9,12 +9,11 @@ import { Monaco } from './Monaco'
 import { useCursor } from './util'
 import { styled } from '@/config'
 import { getClientTree, getTree } from '@/data'
-import { stringify } from '@/util'
 
 export function Sidebar(): JSXElement {
     return <div style={{ pointerEvents: 'auto' }}>
         <OneSidebar
-            cursor={getTree().select('events').select('move$')}
+            cursor={getTree().select('events').select('damage$')}
             title='Event History'
             top='0'
         />
@@ -45,7 +44,11 @@ function GamestateEditor(props: { top: string }): JSXElement {
         </span>
         {shown && <Monaco
             mref={ref}
-            defaultValue={stringify(omit(data, ['curRulebook', 'rulebooks']))}
+            defaultValue={JSON.stringify(
+                omit(data, ['curRulebook', 'rulebooks']),
+                null,
+                4
+            )}
             onClose={() => {
                 if (ref.current == null) return
                 const curString = ref.current.getValue()

@@ -40,7 +40,9 @@
         "README.md": true,
         "run": true,
         "server.log": true,
-        "scripts": true
+        "scripts": true,
+        "tsconfig.json": true,
+        "tsconfig.base.json": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
@@ -74,4 +76,5 @@
         { "name": "typescript", "selectors": ["**/*.ts"] },
         { "name": "packages", "selectors": ["**/package.json"] }
     ]
+    // "debug.javascript.autoAttachFilter": "smart"
 }

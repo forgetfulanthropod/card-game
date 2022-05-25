@@ -1,4 +1,4 @@
-import type { GameActions } from '@serverActions'
+import type { GameActions } from './types'
 
 import { initialEntryState } from '@/gameState'
 

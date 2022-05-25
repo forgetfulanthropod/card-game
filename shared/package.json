@@ -1,3 +1,4 @@
 {
-    "name": "shared"
+    "name": "shared",
+    "main": "index.ts"
 }

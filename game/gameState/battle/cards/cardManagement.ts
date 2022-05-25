@@ -9,12 +9,9 @@ import type {
     CardUid,
 } from 'shared'
 
-import { explainActionsForCard } from './interpretActions'
+import { keys, vals } from 'shared/code'
+import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
-import { keys, vals } from '@/util'
-
-// TODO: repeated cards: block, basic attack, basic magic attack
-// probably want to take characterClass off of the card type?
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
@@ -88,7 +85,7 @@ function makeCards(scene: BattleCursor): Cards {
 }
 
 function updateExplanation(card: Card, scene: BattleCursor): Card {
-    return { ...card, explanation: explainActionsForCard(card, scene) }
+    return { ...card, explanation: explainCommand(card, scene) }
 }
 
 function getCardInstance(

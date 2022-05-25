@@ -1,7 +1,8 @@
 import type { CharacterUid, Gamestate, OwnedCharacterStatsMap } from 'shared'
+import { keys, vals } from 'shared/code'
 import { initialEntryState } from './entryState'
 import { getRulebook } from '@/rulebook'
-import { getRulebookNames, keys, stringifyRulebook, vals } from '@/util'
+import { getRulebookNames, stringifyRulebook } from '@/util'
 
 const initial = null
 const NUM_OF_EACH_CHAR = 5
@@ -36,10 +37,7 @@ export function getInitialGameState(username: string): Gamestate {
     return {
         scene: initialEntryState,
         ownedCharacters: initialOwnedCharacters(),
-        inventory: {},
-        coin: 99,
-        blessings: [],
-        events: { world$: [], move$: [], DOT$: [] },
+        events: { world$: [], damage$: [], DOT$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook
             ? stringifyRulebook(getRulebook())

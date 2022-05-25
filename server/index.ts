@@ -1,4 +1,5 @@
 // import './database'
+import type { Server } from 'http'
 import type { Application, RequestHandler } from 'express'
 import express from 'express'
 import session from 'express-session'
@@ -6,7 +7,12 @@ import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
 
 import { attachAPIRoutes } from './attachActions'
-import { mountIo } from './IO'
+import { mountIo as fullMountIo } from './IO'
+
+/** Required for kaiju-router */
+export function mountIo(server: Server, prefix: string): void {
+    fullMountIo(server, sessionMiddleware, buildInfo, prefix)
+}
 
 declare global {
     // eslint-disable-next-line no-var
@@ -55,5 +61,10 @@ if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {
         logger.info(`Serving on http://localhost:${port}`)
     })
-    mountIo(server, sessionMiddleware, buildInfo, '')
+    fullMountIo(server, sessionMiddleware, buildInfo, '')
+}
+
+/** Required for kaiju-router */
+export function getApp(): typeof app {
+    return app
 }

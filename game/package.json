@@ -1,5 +1,6 @@
 {
     "name": "game",
+    "main": "index.ts",
     "scripts": {
         "build": "rm -rf dist && tsc && esbuild --bundle exports.ts --platform=node --outfile=./dist/exports.js"
     },

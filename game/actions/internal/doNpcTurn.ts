@@ -1,6 +1,6 @@
 import type { NextAction } from 'shared'
 
-import { checkBattleOverMut, handleMove } from '@/gameState'
+import { checkBattleOverMut, interpretCommand } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
@@ -12,12 +12,14 @@ export function doNpcTurn(
     const scene = getBattleSceneIn(game)
     const isBattleOver = checkBattleOverMut(scene)
     if (isBattleOver) return undefined
-    const nextMoves = scene.get('nextNpcMoves')
-    const move = nextMoves[args.index]
-    if (move == null) return undefined // safety check
-    handleMove({ scene, attackData: move })
-
-    if (args.index >= nextMoves.length - 1) {
+    const processedCmds = scene.get('nextNpcCommands')
+    const processedCmd = processedCmds[args.index]
+    if (processedCmd == null) return undefined // safety check
+    const { targetUids, command, outcome: _outcome } = processedCmd
+    // TODO supposed to be: keys(_outcome.damages)
+    interpretCommand({ command, targetUids, scene })
+    // play({ card: command, targetUids, scene })
+    if (args.index >= processedCmds.length - 1) {
         return {
             args: {},
             delay: TIME_BETWEEN_NPC_MOVES,
@@ -30,8 +32,3 @@ export function doNpcTurn(
         type: 'doNpcTurn',
     }
 }
-
-// doNpcTurn -> makeMove -> doMove -> shouldGoAgain() ?-> A -> B -> C ...
-// getMoves
-// |  |  |
-// do do do

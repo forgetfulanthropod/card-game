@@ -1,0 +1,95 @@
+import type { ROCursor } from 'sbaobab'
+import type { OwnedCharacterStats } from 'shared'
+
+import { callApi } from '@/actions'
+import { getEntryScene, getOwnedCharacters } from '@/data'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
+import { vals } from 'shared/code'
+
+export function OwnedCharacters(): PixiContainer {
+    const characters = makeCharacters()
+    const selectedCharacters = getEntryScene().select('selectedCharacters')
+
+    makeSelectionIndicators(characters, selectedCharacters)
+
+    const hoverText = Text({
+        text: `OK!`,
+        anchor: [0, 0],
+        y: 5,
+        style: {
+            fontFamily: 'VT323',
+            fontSize: 60,
+            fill: '#fff',
+            stroke: '#333',
+            strokeThickness: 5,
+        },
+    })
+
+    characters.forEach(c =>
+        c.children[0].on('mouseover', () => {
+            c.addChild(hoverText)
+        })
+    )
+    characters.forEach(c =>
+        c.children[0].on('mouseout', () => {
+            c.removeChild(hoverText)
+        })
+    )
+
+    const root = Container({
+        x: 200,
+        y: -200,
+        children: characters,
+    })
+
+    return root
+}
+
+const NUM_OF_EACH_CHAR = 5
+
+function makeCharacters() {
+    return vals(getOwnedCharacters().get()).map((c, i) =>
+        Container({
+            x:
+                (((i / NUM_OF_EACH_CHAR) | 0) % 5) * 150 +
+                ((i / NUM_OF_EACH_CHAR) % 5) * 100,
+            y: Math.floor(((i / NUM_OF_EACH_CHAR) | 0) / 5) * 150,
+            children: [
+                Sprite({
+                    src: getTexture(c.name),
+                    scale: 0.45,
+                    onClick: () =>
+                        callApi('AddSelected', { character: c, index: 0 }),
+                }),
+            ],
+        })
+    )
+}
+
+function makeSelectionIndicators(
+    characters: PixiContainer[],
+    selectedCharacters: ROCursor<OwnedCharacterStats[]>
+) {
+    update()
+    selectedCharacters.on('update', update)
+
+    function update() {
+        characters.forEach(characterContainer => {
+            if (characterContainer.children.length > 1)
+                characterContainer.removeChildren(1)
+        })
+        selectedCharacters.get()?.map(c => {
+            const indexOfOwned = vals(getOwnedCharacters().get()).findIndex(
+                oc => c.uid === oc.uid
+            )
+            characters[indexOfOwned].addChild(
+                Sprite({
+                    src: getTexture('check'),
+                    width: 50,
+                    height: 50,
+                })
+            )
+        })
+    }
+}

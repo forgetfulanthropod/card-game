@@ -12,7 +12,6 @@ import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
 import door from '@battleAssets/misc-png/temp-door.png'
 import type { PixiTexture } from './mypixi'
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import {
     backgroundAssets,
     characterAssets,
@@ -20,9 +19,8 @@ import {
     effectAssets,
     orbAssets,
     spineAssets,
-} from '@/features/battle/elements/logic/allAssets'
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { cardAssets } from '@/features/battle/elements/cards/cardAssets'
+    cardAssets,
+} from '@/scenes'
 import { font, check } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
@@ -100,4 +98,8 @@ export function getTexture(assetId: AssetKey): PixiTexture {
 }
 export function hasTexture(assetId: AssetKey): boolean {
     return Loader.shared.resources?.[assetId] != null
+}
+
+export function isTextureKey(key: string): key is AssetKey {
+    return hasTexture(key as AssetKey)
 }

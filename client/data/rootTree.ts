@@ -58,6 +58,7 @@ interface ClientTree {
     serverCalls: unknown[]
     // modal: null | { title: string, body: string, onClose: Callback }
 }
+/** TODO: merge with localTree */
 export const getClientTree: () => SBaobab<ClientTree> = memoize(() => {
     return new SBaobab<ClientTree>({
         serverCalls: [],

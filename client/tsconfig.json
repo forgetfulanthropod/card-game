@@ -6,8 +6,10 @@
         "jsxImportSource": "preact",
         "jsx": "react-jsx",
         "paths": {
+            "shared": ["../shared"],
+            "shared/code": ["../shared/code"],
             "@/*": ["./*"],
-            "@battleAssets/*": ["./features/battle/assets/*"],
+            "@battleAssets/*": ["./scenes/assets/*"],
             "react": ["./node_modules/preact/compat"],
             "react-dom": ["./node_modules/preact/compat"]
         }

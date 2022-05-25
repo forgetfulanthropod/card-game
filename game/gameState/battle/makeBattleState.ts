@@ -1,17 +1,14 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
-import { makeCharacters } from './characterManagement'
+import { makeCharacters } from './util'
 
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
     dungeonName?: DungeonName
     game: Gamecursor
 }): BattleScene {
-    const allCharacters = makeCharacters(
-        args?.chosen,
-        args.game.get('blessings')
-    )
+    const allCharacters = makeCharacters(args?.chosen)
 
     // DEBUG
     // kill most of the characters
@@ -24,7 +21,7 @@ export function makeBattleState(args: {
     // const playerStarts = srandom() < 0.5
     const playerStarts = true
 
-    return Object.freeze({
+    const bs: BattleScene = {
         username: args.game.get('username'),
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
@@ -32,14 +29,13 @@ export function makeBattleState(args: {
         state: 'not started',
         playerStarts,
         isPlayerTurn: playerStarts,
-        battleHasBegun: true,
         allCharacters,
         cards: getNullCards(),
         energy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        doors: { options: [], descriptions: [] },
         roomsPassed: 0,
-        nextNpcMoves: [], // set later
-    })
+        nextNpcCommands: [], // set later
+    }
+    return bs
 }

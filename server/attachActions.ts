@@ -1,5 +1,6 @@
 import type { Application } from 'express'
 import { actions } from 'game'
+import { vals } from 'shared/code'
 
 import { makeNewUser as makeNewUser, maybeMakeUser } from './actions'
 import { onCallWrapper } from './onCallWrapper'
@@ -16,8 +17,4 @@ export function attachAPIRoutes(app: Application): void {
             wholeRequest: wholeRequests.includes(f),
         })
     )
-}
-
-function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
-    return Object.values(obj)
 }

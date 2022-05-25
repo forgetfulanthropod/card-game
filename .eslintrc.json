@@ -85,6 +85,7 @@
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/no-extra-semi": "off",
         "import/no-internal-modules": [
             "error",
             {
@@ -96,7 +97,7 @@
         "import/no-useless-path-segments": "error",
         "import/no-relative-parent-imports": "error",
         "import/no-mutable-exports": "error",
-        "import/no-unused-modules": "warn",
+        // "import/no-unused-modules": ["warn", { "unusedExports": true }],
         "import/no-duplicates": "warn",
         "import/order": "warn",
         "import/export": "warn",
@@ -105,6 +106,7 @@
     },
     "ignorePatterns": [
         "builds/",
+        "**/ignore/",
         "**/dist/",
         "**/node_modules/",
         "tests/",

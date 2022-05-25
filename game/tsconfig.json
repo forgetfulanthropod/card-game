@@ -3,7 +3,9 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "paths": {
-            "@serverActions": ["./actions/types/serverActions"],
+            // just makes the good import come first in list
+            "shared": ["../shared"],
+            "shared/code": ["../shared/code"],
             "@/*": ["./*"]
         }
     },

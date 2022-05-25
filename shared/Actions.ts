@@ -1,14 +1,7 @@
 import type { SCursor } from 'sbaobab'
 
 import type { CharacterUid, Gamestate } from './datamodel'
-import type {
-    BlessingName,
-    Orb,
-    OwnedCharacterStats,
-    Rulebook,
-    SceneType,
-    SpecialDoorName,
-} from './index'
+import type { Orb, OwnedCharacterStats, Rulebook, SceneType } from './index'
 
 /** A server action */
 export interface Action {
@@ -22,7 +15,7 @@ export interface Action {
 
     ChangeScene: (_: { newSceneName: SceneType }) => void
 
-    ChooseDoor: (_: { door: SpecialDoorName }) => void
+    NextRoom: (_: Empty) => void
 
     EndTurn: (_: Empty) => void
     ExitDungeon: (_: Empty) => void
@@ -38,8 +31,6 @@ export interface Action {
     RulebookAction: (_: RulebookArgs) => void
 
     StartBattle: (_: Empty) => void
-
-    ToggleBlessing: (_: { name: BlessingName }) => void
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }
@@ -61,7 +52,8 @@ export type NextAction<K extends InternalActionName = InternalActionName> = {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Param1<T extends (...args: any[]) => any> = Parameters<T>[1]
 
-export type Empty = Record<string, never>
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface Empty {}
 
 export type CharacterPlaceIndex = 0 | 1 | 2
 

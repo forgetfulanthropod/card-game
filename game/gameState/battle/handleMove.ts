@@ -1,47 +1,18 @@
-import type { AttackData, BattleCursor } from 'shared'
+import type { BattleCursor } from 'shared'
 
-import { getCharacterKeysAndDamages } from './attack'
-import { putUpDoors } from './doors'
-import { applyMove } from './move'
-import { incrementXP } from './pcLeveling'
+import { vals } from 'shared/code'
 import { checkWinner } from './round'
-import { vals, emit } from '@/util'
 
-export function handleMove(args: {
-    scene: BattleCursor
-    attackData: AttackData
-}) {
-    const { scene, attackData } = args
-
-    // Dispatch move to client to trigger animation
-    const damageKVs = getCharacterKeysAndDamages(attackData, scene)
-    emit({
-        username: scene.get('username'),
-        event: {
-            type: 'move$',
-            sentAt: new Date().toLocaleDateString(),
-            uid: srandom().toString().slice(6),
-            data: {
-                attackerIsPc: attackData.attacker.isPc,
-                attackerUid: attackData.attacker.uid,
-                defenderUids: attackData.defenders.map(d => d.uid),
-                moveName: attackData.move.name,
-                damageKVs,
-            },
-        },
-    })
-
-    // Update health, effects, and hasMoved
-    applyMove(scene, attackData)
-}
+// function sort(array) {array[2] = 1} // error
+// function sort(mut array)
 
 export function checkBattleOverMut(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
         scene.set('state', 'won')
-        incrementXP(scene)
-        putUpDoors(scene)
+        // incrementXP(scene)
+        // putUpDoors(scene)
         return true
     } else if (winner === 'NPC') {
         scene.set('state', 'lost')

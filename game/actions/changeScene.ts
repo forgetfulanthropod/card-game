@@ -1,7 +1,7 @@
-import type { GameActions } from '@serverActions'
 import type { BattleCursor } from 'shared'
+import type { GameActions } from './types'
 
-import { getNpcMoves, makeBattleState, putUpDoors, setCards } from '@/gameState'
+import { getNpcMoves, makeBattleState, setCards } from '@/gameState'
 import { getRulebook } from '@/rulebook'
 import { getBattleSceneIn, getEntrySceneIn } from '@/util'
 
@@ -22,9 +22,9 @@ export const changeScene: GameActions['ChangeScene'] = args => {
         )
         const battleScene_ = game.select('scene') as BattleCursor
         // TODO: put getNpcMoves in makeBattleState. Will require retyping of getNpcMoves's call chain.
-        battleScene_.set('nextNpcMoves', getNpcMoves(battleScene_))
+        battleScene_.set('nextNpcCommands', getNpcMoves(battleScene_))
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
-        putUpDoors(scene)
+        // putUpDoors(scene) // MARK
     }
 }

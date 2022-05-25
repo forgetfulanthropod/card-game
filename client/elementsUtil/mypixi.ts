@@ -98,6 +98,8 @@ interface DisplayObjectArgs {
     angle?: number
     rotation?: number
     onDestroy?: Callback[]
+    /** will be bound to pointerover and pointerout */
+    isHoveredDatum?: Datum<boolean>
 }
 
 // text and sprite but not graphics
@@ -248,6 +250,12 @@ function applyDisplayObjectArgs(
     //         args.onDestroy?.forEach(cb => cb())
     //     }
     // }
+    const isHoveredDatum = args.isHoveredDatum
+    if (isHoveredDatum != null) {
+        el.interactive = true
+        el.on('pointerover', () => isHoveredDatum.set(true))
+        el.on('pointerout', () => isHoveredDatum.set(false))
+    }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
@@ -464,14 +472,15 @@ export function If(
     condition: RODatum<boolean>,
     ifRender: () => DisplayObject,
     elseRender?: () => DisplayObject,
+    displayArgs?: DisplayObjectArgs,
     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
-    const onDestroy: Callback[] = []
-    const root = Container({ children: [], onDestroy })
-    onDestroy.push(condition.onChange(handleChange, true))
+    const root = Container({ children: [] })
+    onDestroyed(root, condition.onChange(handleChange, true))
+    if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
     return root
     function handleChange(val: boolean) {
-        root.children.forEach(c => c.destroy(destroyOptions))
+        ;[...root.children].forEach(c => c.destroy(destroyOptions))
         root.removeChildren()
         if (val) {
             root.addChild(ifRender())
@@ -481,30 +490,57 @@ export function If(
     }
 }
 
+// export function BareIf<T extends PixiDisplayObject>(
+//     condition: RODatum<boolean>,
+//     ifRender: () => T,
+//     elseRender?: () => T,
+//     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+// ): T {
+//     // condition.onChange()
+//     return root
+//     function handleChange(val: boolean) {
+//         root.children.forEach(c => c.destroy(destroyOptions))
+//         root.removeChildren()
+//         if (val) {
+//             root.addChild(ifRender())
+//         } else if (elseRender != null) {
+//             root.addChild(elseRender())
+//         }
+//     }
+// }
+
 type KeyedDisplayObject = DisplayObject & { key: string | number }
 interface KeyedContainer extends PixiContainer {
     children: KeyedDisplayObject[]
 }
-export function For<T extends { key: string | number }[]>(
+
+// TODO: accept array of strings or numbers
+export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T>,
     render: (item: T[number]) => DisplayObject,
     position?: (index: number) => { x?: number; y?: number },
     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
-    const onDestroy: Callback[] = []
-    const root = Container({ children: [], onDestroy }) as KeyedContainer
-    onDestroy.push(items.onChange(handleUpdate, true))
+    const root = Container({ children: [] }) as KeyedContainer
+    onDestroyed(root, items.onChange(handleUpdate, true))
 
     let warnedAlready = false
     return root
+
     function handleUpdate(items: T) {
-        const keys = items.map(v => v.key)
-        if (uniq(keys).length !== keys.length && !warnedAlready) {
+        const hasKey = isKeyedArray(items)
+        const keys = hasKey
+            ? items.map(v => v.key)
+            : (items as (string | number)[])
+        if (
+            uniq<string | number>(keys).length !== keys.length &&
+            !warnedAlready
+        ) {
             console.warn('duplicate keys in For:', duplicated(keys))
             warnedAlready = true
         }
 
-        root.children.forEach(c => {
+        ;[...root.children].forEach(c => {
             if (!keys.includes(c.key)) {
                 c.destroy(destroyOptions)
                 root.removeChild(c)
@@ -512,10 +548,12 @@ export function For<T extends { key: string | number }[]>(
         })
         const oldChildren = root.children.filter(c => keys.includes(c.key))
         const oldKeys = oldChildren.map(c => c.key)
-        const newItems = items.filter(it => !oldKeys.includes(it.key))
+        const newItems = hasKey
+            ? items.filter(v => !oldKeys.includes(v.key))
+            : items.filter(k => !oldKeys.includes(k))
         const newChildren = newItems.map(it => {
             const c = render(it) as KeyedDisplayObject
-            c.key = it.key
+            c.key = typeof it === 'object' ? it.key : it
             return c
         })
         // redundant filter is necessary because children doesn't necessarily update immediately
@@ -535,21 +573,32 @@ export function For<T extends { key: string | number }[]>(
     }
 }
 
+function isKeyedArray(
+    arr: { key: string | number }[] | (string | number)[]
+): arr is { key: string | number }[] {
+    return typeof arr[0] === 'object'
+}
+
 export function portalize(args: {
     from: DisplayObject
     content: DisplayObject
     to?: PixiContainer
+    nextFrame?: boolean
 }): void {
-    if (args.to == null && app?.stage == null) {
-        throw Error('no app.stage')
+    const { from, content } = args
+    const to = args.to ?? app?.stage ?? throwNull('app.stage and args.to')
+    function attach() {
+        to.addChild(content)
+        from.on('destroyed', () => {
+            to.removeChild(content)
+            content.destroy({ children: true })
+        })
     }
-    const { from, content, to = app?.stage } = args
-    if (to == null) throw Error('unreachable: portal: to == null')
-    to.addChild(content)
-    from.on('destroyed', () => {
-        to.removeChild(content)
-        content.destroy({ children: true })
-    })
+    if (args.nextFrame) {
+        setTimeout(attach, 0)
+    } else {
+        attach()
+    }
 }
 
 type TypeArgPairs =

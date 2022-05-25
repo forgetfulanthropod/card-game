@@ -1,7 +1,7 @@
 import type { Action, CallReturn } from 'shared'
 
+import { jss } from 'shared/code'
 import { getClientTree } from '@/data'
-import { jss } from '@/util'
 
 const config = {
     shouldLog: false,

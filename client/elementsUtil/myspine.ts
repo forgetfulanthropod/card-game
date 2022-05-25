@@ -6,11 +6,7 @@ import type { ROCursor } from 'sbaobab'
 
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import type {
-    AnimationsOf,
-    SpineAsset,
-} from '@/features/battle/elements/logic/spineAssets'
+import type { AnimationsOf, SpineAsset } from '@/scenes'
 import { onUpdate } from '@/util'
 
 export function Spine<Name extends SpineAsset>(props: {

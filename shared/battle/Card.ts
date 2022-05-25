@@ -1,21 +1,40 @@
 import type { CharacterClass } from './Characters'
 import type { CardUid, CharacterUid, PileId } from '@'
 
-export interface Card {
+type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
+
+export interface Command extends CommandDefinition {
+    characterUid: CharacterUid
+}
+
+export interface CommandDefinition {
+    id: CommandId
     name: string
-    energy: number
-    id: CardId
-    uid: CardUid
+    actions: CardAction
     targetNum: number
     targetType: TargetType
-    actions: string
-    type: CardType
-    characterClass: CharacterClass
-    // dynamic
+}
+
+/** Matches interface Command! */
+export interface Card extends CardDefinition {
     characterUid: CharacterUid
+    uid: CardUid
     explanation: string
 }
+
+// CardBase
+
+export interface CardDefinition extends CommandDefinition {
+    id: CardId
+    energy: number
+    type: CardType
+    characterClass: CharacterClass
+}
+
 export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
+
+export type NpcCommandId = 'swordWack' | 'jab' | 'strike' // REMOVE
+export type CommandId = NpcCommandId | CardId
 
 export type CardId =
     | 'shieldOfLight'

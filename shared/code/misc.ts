@@ -11,3 +11,5 @@ export async function delayChain(callbacks: (() => unknown)[], delay = 1000) {
 
 /** Ensures argument satisfies given type */
 export function satisfies<T>(_: T) {}
+
+// export function notnull

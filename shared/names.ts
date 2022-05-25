@@ -1,5 +1,3 @@
-import type { Brandify } from './index'
-
 export type CharacterName =
     | 'bloatDemon'
     | 'bogSpirit'
@@ -12,11 +10,8 @@ export type CharacterName =
     | 'greenJester'
     | 'jerry'
     | 'lichLord'
-    | 'matchaGelatinCube'
-    | 'mimic'
     | 'mushroomFarmer'
     | 'notoriousBEAN'
-    | 'orcWarrior'
     | 'penguinKnight'
     | 'skeletonWarrior'
     | 'snacky'
@@ -24,22 +19,17 @@ export type CharacterName =
     | 'trioOfFools'
     | 'warhog'
     | 'wimpyGuard'
+    | EnemyCharacterName
 
-// TODO: reconcile duplicate definitions
-export type SpecialDoorName =
-    | 'bigScary'
-    | 'candyBaby'
-    | 'normal'
-    | 'matcha'
-    | 'skeleton'
-    | 'rareItem'
-    | 'bossDoor'
-    | 'face'
-    | 'tiny'
-    | 'jumbo'
-    | 'randomEvent'
-    | 'campfire'
-
+export type EnemyCharacterName =
+    | 'skeletonWarrior'
+    | 'matchaGelatinCube'
+    | 'mimic'
+    | 'orcWarrior'
+    | 'bosshogJurgen'
+    | 'toadmaw'
+    | 'cultist'
+    | 'halfdan'
 export type DungeonName =
     | 'Skelepit Dungeon'
     | 'Hooligan’s Bluff'
@@ -47,34 +37,5 @@ export type DungeonName =
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
 
-export type PileId = 'draw' | 'hand' | 'discard' | 'removed'
-export type ItemName = string & Brandify
-export type ItemUid = string & Brandify
-export type LocationName = string & Brandify
-export type RecipeName = string & Brandify
-
-export type MoveMetaName =
-    | 'BA'
-    | 'SL'
-    | 'SP'
-    | 'ROD1'
-    | 'ROD2'
-    | 'ROD3'
-    | 'DOT1'
-    | 'DOT2'
-    | 'ST'
-    | 'INHSO'
-    | 'DC4A'
-    | 'MIM'
-    | 'DBF1'
-    | 'DBF2'
-    | 'BLK'
-
-export type BlessingName =
-    | 'ptbotflax'
-    | 'strongPcs'
-    | 'strongEnemies'
-    | 'weakEnemies'
-    | 'weakPcs'
-
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
+export type PileId = 'draw' | 'hand' | 'discard' | 'removed'

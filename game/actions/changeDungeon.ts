@@ -1,4 +1,4 @@
-import type { GameActions } from '@serverActions'
+import type { GameActions } from './types'
 
 import { getRulebook } from '@/rulebook'
 import { getEntrySceneIn } from '@/util'

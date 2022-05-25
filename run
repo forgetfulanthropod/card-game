@@ -23,15 +23,13 @@ function install-all() {
 
 function CI() {
     source ~/.bashrc
-
-    pnpm i -P
-    cd client
-    pnpm i -P
-
-    cd ../server
-    pnpm i -P
-
-    cd ..
+    wd=$(pwd)
+    for d in . client server game shared; do
+        cd $d
+        echo "installing in $d"
+        pnpm install -P &
+        cd $wd
+    done
 
     client:build
     server:build
@@ -64,6 +62,12 @@ function fmt() {
     eslint . --fix --cache
 }
 
+# sorts the directories in the project by the number of files in each
+function biggest-dirs() {
+    set +x
+    fd -t d | while read -r line; do echo $(ls "$line" | wc -l) $line; done | sort -n
+}
+
 # function fmt() {
 #     pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
 #     eslint . --fix
@@ -74,9 +78,13 @@ function self-fmt() {
 }
 
 function generate-indices() {
-    vscode-generate-index-standalone ./shared/**/*.ts ./client/**/*.ts ./server/**/*.ts !node_modules
-    vscode-generate-index-standalone ./server/**/**/*.ts !node_modules
-    vscode-generate-index-standalone ./server/**/**/**/*.ts !node_modules
+    # vscode-generate-index-standalone '!node_modules/' server client game shared '!node_modules/'
+    # vscode-generate-index-standalone './shared/**/*.ts' '!**/node_modules' './client/**/*.ts' '!**/node_modules' './game/**/*.ts' '!**/node_modules' './server/**/*.ts' '!**/node_modules'
+
+    vscode-generate-index-standalone './shared/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './client/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './game/**/*.ts' '!**/node_modules'
+    vscode-generate-index-standalone './server/**/*.ts' '!**/node_modules'
 }
 
 function save-staged() {
@@ -101,6 +109,12 @@ function lint-watch() {
 
 function view-imports-exports() {
     ag --nonumbers --only-matching --group 'import.*$|(export [A-z]+ [A-z]+)' . >imports-and-exports.ignore.txt
+}
+
+function exports() {
+    dir=$1
+
+    ag --ts --nogroup '^export [A-z]+ [A-z]+' $dir | sed -e 's/export /,/' | column -t -s,
 }
 
 function arkit() {

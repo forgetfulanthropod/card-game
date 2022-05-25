@@ -10,15 +10,16 @@
                 "isDefault": true
             },
             "isBackground": true,
-            "detail": "see https://stackoverflow.com/a/58181330"
+            "detail": "tsc + esbuild + node"
             // "runOptions": { "runOn": "folderOpen", }
         },
         {
             "label": "tsc all",
             "type": "shell",
-            "command": "./node_modules/.bin/tsc --build --watch server game shared client",
+            "command": "./node_modules/.bin/tsc --build --watch shared client game server",
             "problemMatcher": ["$tsc-watch"],
             "group": "build",
+            "detail": "check types on all files",
             "presentation": {
                 "group": "group1"
             }
@@ -27,6 +28,7 @@
             "label": "esbuild all",
             "type": "shell",
             "command": "node scripts/buildAll.mjs watch",
+            "detail": "build client + server",
             "presentation": {
                 "group": "group1"
             }
@@ -34,17 +36,16 @@
         {
             "label": "run server",
             "type": "shell",
-            "command": "bash run server:server-watch"
+            "group": "build",
+            "command": "bash run server:server-watch-debug",
+            "detail": "node builds/server/server.js"
         },
         {
             "label": "eslint all cached",
             "type": "shell",
             "command": "bash run lint",
             "problemMatcher": ["$eslint-stylish"],
-            "group": "build",
-            "presentation": {
-                "group": "group1"
-            }
+            "detail": "node builds/server/server.js"
         }
     ]
 }

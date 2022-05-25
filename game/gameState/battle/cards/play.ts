@@ -1,6 +1,6 @@
 import type { Card, CharacterUid, BattleCursor } from 'shared'
 
-import { interpretActions } from './interpretActions'
+import { interpretCommand } from './interpretCommand'
 
 export function play({
     card,
@@ -13,5 +13,5 @@ export function play({
 }): void {
     scene.apply('energy', energy => energy - card.energy)
 
-    interpretActions({ card, targetUids, scene })
+    interpretCommand({ command: card, targetUids, scene })
 }

@@ -11,7 +11,7 @@ export interface CharacterMeta extends CharacterStats {
     hasMoved: boolean
     health: number
     block: number
-    experience: number
+    /** TODO: client should handle positioning  */
     x: number
     y: number
     screenX: number

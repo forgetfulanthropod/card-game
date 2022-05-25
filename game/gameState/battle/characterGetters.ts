@@ -1,46 +1,19 @@
 import type {
     CharacterMeta,
-    CharacterMove,
     CharacterUid,
     BattleCursor,
+    BattleScene,
+    Command,
 } from 'shared'
 
+import { vals } from 'shared/code'
 import { getRulebook } from '@/rulebook'
-import { stringKeys, vals, weightedRandom } from '@/util'
-
-function ac(scene: BattleCursor) {
-    return vals(scene.get('allCharacters'))
-}
-
-type CharacterFilters = Partial<CharacterMeta>
-export function getCharIds(
-    ac: CharacterMeta[],
-    filters: CharacterFilters
-): CharacterUid[] {
-    if (filters == null) return []
-
-    return ac
-        .filter(c => {
-            //@ts-expect-error
-            return stringKeys(filters).every((filterKey): boolean => {
-                if (typeof filters[filterKey] === 'boolean')
-                    return c[filterKey] === filters[filterKey]
-                if (typeof filters[filterKey] === 'number')
-                    //@ts-expect-error
-                    return c[filterKey] >= filters[filterKey]
-                throw Error('invalid filterKey')
-            })
-        })
-        .map(c => {
-            return c.uid
-        })
-}
+import { weightedRandom } from '@/util'
 
 export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
-    const uids = getCharIds(vals(scene.get('allCharacters')), {
-        isPc: false,
-        health: 1,
-    })
+    const uids = vals(scene.get('allCharacters'))
+        .filter(c => c.isPc === false && c.health > 0)
+        .map(x => x.uid)
     const randomIndex = Math.floor(srandom() * uids.length)
     return uids[randomIndex]
 }
@@ -75,30 +48,9 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     return allLivingPlayerCharacters[targetIndex]
 }
 
-export function getDefenders(
-    defender: CharacterMeta,
-    move: CharacterMove,
-    ac: CharacterMeta[]
-): CharacterMeta[] {
-    const { moveMetaMap } = getRulebook()
-    const defenders = [defender]
-
-    let numTargets = 1
-    move.types
-        .map(t => moveMetaMap[t])
-        .forEach(moveMeta => {
-            const numForMove =
-                typeof moveMeta.numTargets === 'number'
-                    ? moveMeta.numTargets
-                    : moveMeta.numTargets[moveMeta.numTargets.length - 1]
-            if (numForMove > numTargets) numTargets = numForMove
-        })
-    if (numTargets > 1) {
-        for (let i = 1; i < numTargets; i++) {
-            const closest = getClosestAlive(ac, defender, i)
-            if (closest != null) defenders.push(closest)
-        }
-    }
-
-    return defenders
+export function getPcTargets(
+    scene: BattleScene,
+    command: Command
+): CharacterUid[] {
+    return [getPCTarget(vals(scene.allCharacters)).uid]
 }
