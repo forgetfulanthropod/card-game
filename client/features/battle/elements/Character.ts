@@ -29,7 +29,7 @@ import {
 } from '@/elementsUtil'
 import type { PixiSpine } from '@/elementsUtil/myspine'
 import { Spine } from '@/elementsUtil/myspine'
-import { keys } from '@/util'
+import { hoveredCharacterUid, keys } from '@/util'
 import { onUpdate } from '@/util/onUpdate'
 
 import {
@@ -81,6 +81,15 @@ export function Character(args: CharacterProps): PixiContainer {
         args.onClick(characterMeta.uid)
     )
 
+    const unsub = hoveredCharacterUid.onChange(hoveredCharacterUid => {
+        if (mainAnimation == null) return
+        if (hoveredCharacterUid === characterMeta.uid) {
+            mainAnimation.filters = [glowFilter]
+        } else {
+            mainAnimation.filters = []
+        }
+    })
+
     const mainContainer = Container({
         zIndex: args.zIndex,
         children: [
@@ -108,6 +117,7 @@ export function Character(args: CharacterProps): PixiContainer {
             getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
+        onDestroy: [unsub],
     })
 
     // ---Functions and listeners---
@@ -175,7 +185,7 @@ export const glowFilter = new GlowFilter({
 })
 
 export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc'>,
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
     onClick?: () => void
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
@@ -189,11 +199,10 @@ export function MainCharacterAnimation(
             ? {
                   pointerup: onClick,
                   pointerover: () => {
-                      console.log('pointer enter!!!')
-                      mainAnimation.filters = [glowFilter]
+                      hoveredCharacterUid.set(characterMeta.uid)
                   },
                   pointerout: () => {
-                      mainAnimation.filters = []
+                      hoveredCharacterUid.set(null)
                   },
               }
             : undefined,
@@ -431,7 +440,6 @@ function makeSprites(
                 args.onClick(characterMeta.uid)
             },
             pointerover: () => {
-                console.log('pointer enter!!!')
                 mainSprite.filters = [glowFilter]
             },
             pointerout: () => {

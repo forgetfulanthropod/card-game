@@ -1,29 +1,35 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { gsap } from 'gsap'
+import { omit } from 'lodash'
+import type { InteractionEvent } from 'pixi.js'
+import { Texture } from 'pixi.js'
+import { Tweener } from 'pixi-tweener'
+// import { gsap } from 'gsap'
 import type { CharacterClass, Pile } from 'shared'
 import type { Card } from 'shared'
 
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
     PixiText,
     PixiTexture,
 } from '@/elementsUtil'
-import { getRenderer } from '@/elementsUtil'
+import { TweenableContainer } from '@/elementsUtil'
 import { Container, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Sprite, Text } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
-import { keys } from '@/util'
+import type { InteractionEvents } from '@/elementsUtil/InteractionEvents'
+import { hoveredCardUid, hoveredCharacterUid, keys } from '@/util'
 
 import { getCardTypeSrc } from '../../logic/assetGetters'
 import { beginTargetSelection } from './beginTargetSelection'
 
-const CARD_H_TO_W_RATIO = 630 / 450
-const CARD_WIDTH_IN_HAND = 220
+export const CARD_H_TO_W_RATIO = 630 / 450
+export const CARD_WIDTH_IN_HAND = 220
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
-const CARD_WIDTH_FULL = 350
-const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
+export const CARD_WIDTH_FULL = 350
+export const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 
 //maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
 const classToCardColorMap: Record<CharacterClass, [number, number]> = {
@@ -39,11 +45,13 @@ export function Card({
     pile,
     card,
     name,
-}: {
+}: // hoveredCardUid,
+{
     index: number
     pile: Pile
     card: Card
     name: string
+    // hoveredCardUid: string
 }) {
     const cardFrameTexture = getCardTypeSrc(card.type)
     const xyrs = getXYRotationScaleForNthCard(
@@ -53,22 +61,47 @@ export function Card({
     )
     const colorStops = getColorStopsFromCharacterClass(card.characterClass)
 
-    const root = Container({
+    const root = TweenableContainer({
+        // name is card uid
         name,
         // cache: true,
-        ...xyrs,
+        x: xyrs.x,
+        y: xyrs.y,
+
         children: [
-            getGradientBackground(cardFrameTexture, colorStops),
-            getCardFrameSprite(
-                cardFrameTexture,
-                getMouseEvents(card, cardFrameTexture, xyrs)
-            ),
-            getEnergyContainer(card, cardFrameTexture),
-            ...getTexts(card, cardFrameTexture, colorStops),
+            TweenableContainer({
+                events: getEvents(card),
+                ...omit(xyrs, 'x', 'y'),
+                y: (cardFrameTexture.height / 2) * xyrs.scale,
+                children: [
+                    getGradientBackground(cardFrameTexture, colorStops),
+                    getCardFrameSprite(cardFrameTexture),
+                    getEnergyContainer(card, cardFrameTexture),
+                    ...getTexts(card, cardFrameTexture, colorStops),
+                    PointerAreaExtender(
+                        cardFrameTexture.width,
+                        cardFrameTexture.height
+                    ),
+                ],
+            }),
         ],
     })
 
     return root
+}
+
+function PointerAreaExtender(width: number, height: number): PixiContainer {
+    return Container({
+        children: [
+            Sprite({
+                src: Texture.WHITE,
+                width,
+                height,
+                alpha: 0,
+                anchor: [0.5, 0],
+            }),
+        ],
+    })
 }
 
 function getGradientBackground(
@@ -92,14 +125,10 @@ function getGradientBackground(
     })
 }
 
-function getCardFrameSprite(
-    cardFrameTexture: PixiTexture,
-    mouseEvents: MouseEvents
-) {
+function getCardFrameSprite(cardFrameTexture: PixiTexture) {
     return Sprite({
         src: cardFrameTexture,
         anchor: 0.5,
-        ...mouseEvents,
     })
 }
 
@@ -222,86 +251,72 @@ function getColorStopsFromCharacterClass(
     )
 }
 
-type MouseEvents = {
-    onMouseover: InteractionEventHandler
-    onMouseout: InteractionEventHandler
-    onClick: InteractionEventHandler
-}
+let clearLastTargetSelection = () => {}
+function getEvents(card: Card): InteractionEvents {
+    const pointerover: InteractionEventHandler = _ => {
+        hoveredCharacterUid.set(card.characterUid)
+        hoveredCardUid.set(card.uid)
+    }
+    const pointerout: InteractionEventHandler = function ({
+        currentTarget: cardEl,
+    }) {
+        setTimeout(() => {
+            if (hoveredCardUid.val === cardEl.parent.name) {
+                hoveredCardUid.set(null)
+            }
+        }, 0)
+    }
+    const pointerdown: InteractionEventHandler = function ({
+        currentTarget: cardEl,
+    }) {
+        //for mobile
+        pointerover({
+            currentTarget: cardEl,
+        } as InteractionEvent)
 
-function getMouseEvents(
-    card: Card,
-    cardFrameTexture: PixiTexture,
-    xyrs: XYRotationScale
-): MouseEvents {
-    let animationForCard = getNullAnimation()
-    let expandedCard: PixiContainer | null
+        if (!(cardEl instanceof PixiContainer))
+            throw new Error('ERROR! should be bound to container')
+
+        clearLastTargetSelection()
+
+        if (getBattleScene().get().energy >= card.energy) {
+            if (card.targetType !== 'self')
+                clearLastTargetSelection = beginTargetSelection(
+                    cardEl.parent,
+                    card
+                )
+        }
+    }
+    const pointerup: InteractionEventHandler = function ({
+        currentTarget: cardEl,
+    }) {
+        if (card.targetType === 'self')
+            void callApi('PlayCard', {
+                cardUid: card.uid,
+                targetUids: [],
+            })
+        //for mobile
+        else
+            pointerout({
+                currentTarget: cardEl,
+            } as InteractionEvent)
+    }
+    // const pointermove: InteractionEventHandler = function (e) {
+    //     console.log({ e })
+    //     // if (hasMovedEnough) pointerdown
+    // }
 
     return {
-        onMouseover: async ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
-
-            await animationForCard
-
-            if (expandedCard != null) {
-                container.parent.removeChild(expandedCard)
-                expandedCard.destroy()
-                expandedCard = null
-            }
-
-            expandedCard = Container({
-                name: `${container.name}-expanded`,
-                ...xyrs,
-                children: [
-                    Sprite({
-                        src: getRenderer().generateTexture(container),
-                        anchor: 0.5,
-                    }),
-                ],
-            })
-
-            container.alpha = 0
-            container.parent.addChild(expandedCard)
-
-            animationForCard = gsap.to(expandedCard, {
-                pixi: {
-                    y: -CARD_HEIGHT_FULL / 2 - 20,
-                    rotation: 0,
-                    scale: CARD_WIDTH_FULL / cardFrameTexture.width,
-                    // width: CARD_WIDTH_FULL,
-                    // height: CARD_HEIGHT_FULL,
-                },
-                duration: 0.3,
-            })
-        },
-        onMouseout: async ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
-            if (animationForCard == null) return
-            await animationForCard.reverse().then(() => {
-                animationForCard.kill()
-                animationForCard = getNullAnimation()
-                container.alpha = 1
-                if (expandedCard != null) {
-                    container.parent.removeChild(expandedCard)
-                    expandedCard.destroy()
-                    expandedCard = null
-                }
-            })
-        },
-        onClick: ({ currentTarget: { parent: container } }) => {
-            if (!(container instanceof PixiContainer))
-                throw new Error('ERROR! should be bound to container')
-
-            if (getBattleScene().get().energy >= card.energy) {
-                beginTargetSelection(container, card)
-            }
-        },
+        pointerover,
+        pointerout,
+        pointerdown,
+        pointerup,
+        // pointermove,
     }
 }
 
 export function getNullAnimation() {
-    return gsap.to({}, 0, {})
+    return Tweener.add({ target: {}, duration: 0 }, {})
 }
 
 const RIGHT_TO_LEFT = 1
@@ -309,7 +324,8 @@ const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
 const MAX_HAND_SIZE = 12
 const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
 const MAX_CARD_ROTATION = Math.PI * 0.1
-const Y_MAX_OFFSET = BASE_HEIGHT * 0.04
+const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
+const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
 
 type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
 
@@ -329,16 +345,14 @@ function getXYRotationScaleForNthCard(
     const xPlacementPortion =
         RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
 
-    // console.log({ xPlacementPortion })
-
     const endCardRotation =
         ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
 
     return {
         x: handWidth * 0.5 * xPlacementPortion,
         y:
-            -Y_MAX_OFFSET * (1 - Math.abs(xPlacementPortion)) ||
-            Y_MAX_OFFSET / 8,
+            -Y_MIN_OFFSET -
+            (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
         rotation: xPlacementPortion * endCardRotation,
         scale: CARD_WIDTH_IN_HAND / cardFrameTexture.width,
     }

@@ -3,8 +3,8 @@ import type { BattleScene } from 'shared'
 
 import { callApi } from '@/actions'
 import type { PixiContainer } from '@/elementsUtil'
-import { getTexture } from '@/elementsUtil'
 import { clearContainer } from '@/elementsUtil'
+import { getTexture } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { Container, Sprite, Text } from '@/elementsUtil'
 

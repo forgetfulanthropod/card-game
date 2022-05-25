@@ -1,4 +1,9 @@
-import type { CharacterName, MoveMetaName, StanceName } from '..'
+import type {
+    CharacterClass,
+    CharacterName,
+    MoveMetaName,
+    StanceName,
+} from '..'
 import type { Brandify } from './misc'
 
 const Character = null
@@ -6,6 +11,7 @@ export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     name: CharacterName
     displayName: string
+    class: CharacterClass
     isPc: boolean
 
     maxHealth: number // deprecated
