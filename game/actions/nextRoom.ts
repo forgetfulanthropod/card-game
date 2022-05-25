@@ -2,39 +2,20 @@ import { objFilter } from 'shared/code'
 import type { BattleCursor } from 'shared'
 import type { GameActions } from './types'
 import { resetRound } from './internal'
-import { getBattleSceneIn } from '@/util'
 import {
+    makeRoomNpcs,
     clearAllEffects,
     getNpcMoves,
     putAllCardsInDrawPile,
 } from '@/gameState'
+import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import {
-    newNPCMeta,
-    rearrangeNpcs,
-} from '@/gameState/battle/characterManagement'
 
 export const nextRoom: GameActions['NextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
     scene.set('roomsPassed', scene.get('roomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
-    let newNpcs = Object.fromEntries(
-        nextRoom.map(({ name, level }) => {
-            const uid = srandom().toString().slice(6)
-            return [
-                uid,
-                newNPCMeta({
-                    name,
-                    level,
-                    uid: uid,
-                    x: 0,
-                    y: 0,
-                }),
-            ]
-        })
-    )
-    newNpcs = rearrangeNpcs(newNpcs)
+    const newNpcs = makeRoomNpcs(nextRoom)
     scene.apply('allCharacters', ac => ({
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
@@ -46,6 +27,7 @@ export const nextRoom: GameActions['NextRoom'] = args => {
     putAllCardsInDrawPile(scene)
     resetRound(args.game, {})
 }
+
 function getNextRoom(scene: BattleCursor) {
     const dungeonName = scene.get('dungeonName')
     const roomsPassed = scene.get('roomsPassed')

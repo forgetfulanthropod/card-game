@@ -1,10 +1,9 @@
 import { datum } from 'datums'
-import { filters, Loader } from 'pixi.js'
+import { filters } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type {
     CardHit,
     CharacterMeta,
-    CharacterName,
     CharacterUid,
     NetworkDOTData,
     NetworkEvent,
@@ -12,10 +11,9 @@ import type {
 import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
-import type { SpineAsset } from './logic'
-import { getCharTexture, getOrbTexture } from './logic'
 import { MoveInfo } from './MoveInfo'
 import { ActionIntent } from './ActionIntent'
+import { MainCharacterAnimation, getCharTexture, getOrbTexture } from '@/scenes'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import {
     Adjust,
@@ -28,7 +26,6 @@ import {
     hideElement,
     PixiTicker,
     SCALE_UNIVERSAL,
-    Spine,
     Sprite,
     Text,
 } from '@/elementsUtil'
@@ -156,44 +153,6 @@ export function Character(args: CharacterProps): PixiContainer {
     return flyingContainer
 }
 
-export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
-    onClick?: () => void
-): PixiSpine | null {
-    const spineAssetName = getValidSpineAssetName(characterMeta.name)
-
-    if (!spineAssetName) return null
-
-    const mainAnimation = Spine({
-        name: spineAssetName,
-        animation: 'Idle',
-        events: onClick
-            ? {
-                  pointerup: onClick,
-                  pointerover: () => {
-                      hoveredCharacterUid.set(characterMeta.uid)
-                  },
-                  pointerout: () => {
-                      hoveredCharacterUid.set(null)
-                  },
-              }
-            : undefined,
-    })
-
-    const desiredHeight = 260 // TODO: what is it tho
-    const desiredScale = desiredHeight / mainAnimation.height
-    mainAnimation.scale.set(
-        (characterMeta.isPc ? 1 : -1) * desiredScale,
-        desiredScale
-    )
-
-    mainAnimation.x += ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
-
-    mainAnimation.y -= 20
-
-    return mainAnimation
-}
-
 function getBoundOrbContainer(
     characterCursor: CharacterCursor,
     offset: number
@@ -251,15 +210,6 @@ function getBoundOrbContainer(
     )
 
     return orbContainer
-}
-
-function getValidSpineAssetName(name: CharacterName): SpineAsset | null {
-    //@ts-expect-error TODO this goes away when all characters have spines...
-    const assetName: SpineAsset = `${name}Spine`
-
-    if (Loader.shared.resources[assetName]) return assetName
-
-    return null
 }
 
 function bindDOT(

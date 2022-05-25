@@ -1,7 +1,7 @@
 import { startCase } from 'lodash'
 import type { CardType } from 'shared'
 import { Loader } from 'pixi.js'
-import type { CardAssetId, CardTypeAssetId } from './cardAssets'
+import type { CardAssetId, CardTypeAssetId } from '@/scenes'
 import type { PixiTexture } from '@/elementsUtil'
 
 export function getCardTypeSrc(cardType: CardType): PixiTexture {

@@ -1,6 +1,5 @@
 import type { RODatum } from 'datums'
-import { onDestroyed } from './mypixi'
-import { PixiGraphics } from '@/elementsUtil'
+import { onDestroyed, PixiGraphics } from '@/elementsUtil'
 
 export function Arrow(origin: RODatum<Point>, destination: RODatum<Point>) {
     const pointRadius = 10

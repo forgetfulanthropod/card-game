@@ -1,7 +1,7 @@
 import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
-import { MainCharacterAnimation } from './Character'
+import { MainCharacterAnimation } from '@/scenes'
 import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'

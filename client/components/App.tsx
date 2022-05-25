@@ -8,7 +8,7 @@ import { UsernameEntry } from './UsernameEntry'
 import { callApi } from '@/actions'
 import { attachServerListener } from '@/connection'
 import { initializeBoababTree } from '@/data'
-import { startPixi } from '@/elements'
+import { startPixi } from '@/elementsUtil'
 
 const log = (...args: unknown[]) => true && console.log(...args)
 

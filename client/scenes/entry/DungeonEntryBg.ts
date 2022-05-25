@@ -1,11 +1,10 @@
-import { datum } from 'datums'
-
 import bgOnTransitionSrc from '@battleAssets/backgrounds/Kaiju_Character_select_barf.mp4'
 import bgSrc from '@battleAssets/backgrounds/Kaiju_Character_select_loop.mp4'
-import { Background } from './background'
+import { datum } from 'datums'
 import { getTree } from '@/data'
 import type { PlayablePixiSprite } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
+import { Background } from '@/scenes'
 import {
     brightBackLightIsShining,
     waitingForSceneExitAnimationToFinish,

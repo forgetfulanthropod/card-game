@@ -3,6 +3,7 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "paths": {
+            // just makes the good import come first in list
             "shared": ["../shared"],
             "shared/code": ["../shared/code"],
             "@/*": ["./*"]
