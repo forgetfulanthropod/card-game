@@ -1,11 +1,8 @@
 import type { GameActions } from '@serverActions'
-import type { Card, CardUid } from 'shared'
-import type { BattleCursor } from 'shared'
+import type { Card, CardUid, BattleCursor } from 'shared'
 
-import { discard, getEnergy, play, updateHand } from '@/gameState/battle'
+import { discard, getEnergy, play, updateHand } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
-
-export const BASE_HAND_SIZE = 5
 
 export const playCard: GameActions['PlayCard'] = args => {
     const scene = getBattleSceneIn(args.game)

@@ -1,14 +1,11 @@
-import type { AttackData } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { emit } from '@/util'
-import { vals } from '@/util'
+import type { AttackData, BattleCursor } from 'shared'
 
 import { getCharacterKeysAndDamages } from './attack'
 import { putUpDoors } from './doors'
-import applyMove from './move'
+import { applyMove } from './move'
 import { incrementXP } from './pcLeveling'
 import { checkWinner } from './round'
+import { vals, emit } from '@/util'
 
 export function handleMove(args: {
     scene: BattleCursor

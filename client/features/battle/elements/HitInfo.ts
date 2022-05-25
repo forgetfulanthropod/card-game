@@ -1,7 +1,7 @@
 import type { PixiText } from '@/elementsUtil'
 import { Text } from '@/elementsUtil'
 
-export default function HitInfo(args: {
+export function HitInfo(args: {
     damage: number | string
     isPoison?: boolean
 }): PixiText {

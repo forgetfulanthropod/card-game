@@ -16,9 +16,6 @@ export const addSelected: GameActions['AddSelected'] = args => {
         scene.apply('selectedCharacters', s => {
             const newS = [...s]
             newS[args.index] = c
-            logger.info(JSON.stringify({ s }))
-            logger.info('\n\n\n')
-            logger.info(JSON.stringify({ newS }))
             return newS
         })
     } else {

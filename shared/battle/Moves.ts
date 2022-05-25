@@ -1,5 +1,5 @@
-import type { CharacterMove, CharacterUid } from '..'
 import type { CharacterMeta } from './Characters'
+import type { CharacterMove, CharacterUid, MoveMetaName } from '@'
 
 export interface MoveMeta {
     name: MoveMetaName
@@ -12,22 +12,6 @@ export interface MoveMeta {
     isSpecial?: boolean
 }
 
-export type MoveMetaName =
-    | 'BA'
-    | 'SL'
-    | 'SP'
-    | 'ROD1'
-    | 'ROD2'
-    | 'ROD3'
-    | 'DOT1'
-    | 'DOT2'
-    | 'ST'
-    | 'INHSO'
-    | 'DC4A'
-    | 'MIM'
-    | 'DBF1'
-    | 'DBF2'
-    | 'BLK'
 export type AttackData = {
     attacker: CharacterMeta
     defenders: CharacterMeta[]

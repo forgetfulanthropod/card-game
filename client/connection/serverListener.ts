@@ -4,7 +4,7 @@ import type { ROCursor, SBaobab } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import { getTree } from '@/data/rootTree'
+import { getTree } from '@/data'
 
 const config = {
     enableExpensiveUpdateValidation: false,

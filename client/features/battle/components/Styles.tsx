@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 export const HoverDiv = styled.div`
     background: black;

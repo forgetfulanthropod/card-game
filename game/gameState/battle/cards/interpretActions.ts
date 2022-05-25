@@ -1,22 +1,22 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
-import type { Card, CharacterUid } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { checkBattleOverMut } from '..'
+import type { Card, CharacterUid, BattleCursor } from 'shared'
+import {
+    explainAddBlock,
+    executeAddBlock,
+    explainChain,
+    executeChain,
+    explainDeal,
+    executeDeal,
+    explainDebilitate,
+    executeDebilitate,
+    explainOrb,
+    executeOrb,
+    explainText,
+    executeText,
+} from './cardActions'
+import { checkBattleOverMut } from '@/gameState'
 // @index(['./cardActions/*.ts'], (f, _) => `import {explain as explain${_.pascalCase(f.name)}} from '${f.path}'\nimport {execute as execute${_.pascalCase(f.name)}} from '${f.path}'`)
-import { explain as explainAddBlock } from './cardActions/addBlock'
-import { execute as executeAddBlock } from './cardActions/addBlock'
-import { explain as explainChain } from './cardActions/chain'
-import { execute as executeChain } from './cardActions/chain'
-import { explain as explainDeal } from './cardActions/deal'
-import { execute as executeDeal } from './cardActions/deal'
-import { explain as explainDebilitate } from './cardActions/debilitate'
-import { execute as executeDebilitate } from './cardActions/debilitate'
-import { explain as explainOrb } from './cardActions/orb'
-import { execute as executeOrb } from './cardActions/orb'
-import { explain as explainText } from './cardActions/text'
-import { execute as executeText } from './cardActions/text'
 // @endindex
 
 export function interpretActions({
@@ -76,7 +76,7 @@ export function explainActions(actions: string, locals?: object) {
     return angu.evaluate(actions, ctx, locals).value
 }
 
-export function executeActions({
+function executeActions({
     card,
     targetUids,
     scene,

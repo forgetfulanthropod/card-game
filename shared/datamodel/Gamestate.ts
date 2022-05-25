@@ -1,6 +1,7 @@
 import type { Blessing } from './Blessing'
 import type { OwnedCharacterStatsMap } from './Character'
-import type { Brandify, ItemName, ItemUid, Scene } from './misc'
+import type { Brandify, Scene } from './misc'
+import type { ItemName, ItemUid } from '@'
 
 export type Gamestate = Readonly<{
     scene: Scene

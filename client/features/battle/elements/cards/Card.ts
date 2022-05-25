@@ -1,32 +1,36 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { omit } from 'lodash'
+import { Tweener } from 'pixi-tweener'
 import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import { Tweener } from 'pixi-tweener'
-// import { gsap } from 'gsap'
-import type { CharacterClass, Pile } from 'shared'
-import type { Card } from 'shared'
-
-import { callApi } from '@/actions'
-import { getBattleScene } from '@/data/rootTree'
+import type { Card, CharacterClass, Pile } from 'shared'
+import { beginTargetSelection } from './beginTargetSelection'
+import { getCardTypeSrc } from './getCardTypeSrc'
+import { hoveredCardUid, hoveredCharacterUid, keys } from '@/util'
+import {
+    RoundedRectangleGradientSprite,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    PixiContainer,
+    Sprite,
+    Text,
+    TweenableContainer,
+} from '@/elementsUtil'
 import type {
     InteractionEventHandler,
+    InteractionEvents,
     PixiText,
     PixiTexture,
 } from '@/elementsUtil'
-import { TweenableContainer } from '@/elementsUtil'
-import { Container, PixiContainer } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { Sprite, Text } from '@/elementsUtil'
-import { RoundedRectangleGradientSprite } from '@/elementsUtil/gradients'
-import type { InteractionEvents } from '@/elementsUtil/InteractionEvents'
-import { hoveredCardUid, hoveredCharacterUid, keys } from '@/util'
-
-import { getCardTypeSrc } from '../../logic/assetGetters'
-import { beginTargetSelection } from './beginTargetSelection'
+import { getBattleScene } from '@/data'
+import { callApi } from '@/actions'
 
 export const CARD_H_TO_W_RATIO = 630 / 450
 export const CARD_WIDTH_IN_HAND = 220
+
+const CARD_H_TO_W_RATIO = 630 / 450
+const CARD_WIDTH_IN_HAND = 220
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 export const CARD_WIDTH_FULL = 350
 export const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO

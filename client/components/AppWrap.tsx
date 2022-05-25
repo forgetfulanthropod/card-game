@@ -1,4 +1,4 @@
-import styled from '@/config/mystyled'
+import { styled } from '@/config'
 
 const Relative = styled.div`
     position: relative;
@@ -7,6 +7,6 @@ const Relative = styled.div`
     font-size: 1.3vw;
 `
 
-export default function AppWrap(props: { children: Children }): JSXElement {
+export function AppWrap(props: { children: Children }): JSXElement {
     return <Relative>{props.children}</Relative>
 }

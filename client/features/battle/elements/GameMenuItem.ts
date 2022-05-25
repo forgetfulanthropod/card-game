@@ -1,7 +1,6 @@
+import { OwnedCharacters } from './OwnedCharacters'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getTexture, Sprite } from '@/elementsUtil'
-
-import { OwnedCharacters } from './OwnedCharacters'
 
 export function GameMenuItem(
     noun: 'characters' | 'items' | 'materials',

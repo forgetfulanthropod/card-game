@@ -1,25 +1,29 @@
 import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
-import font from '../../../assets/ARCADE_N_.ttf'
-import check from '../../../assets/check.png'
-import energy from '../assets/cards/energy cloud pixel 200.png'
-import endTurnButton from '../assets/misc-png/BUTTON_END_TURN.png'
-import gemButton from '../assets/misc-png/BUTTON_GEMS.png'
-import chestBody from '../assets/misc-png/CHEST_BODY.png'
-import chestLid from '../assets/misc-png/CHEST_LID.png'
-import fishstick from '../assets/misc-png/INVENTORY_FISHSTICK.png'
-import potion from '../assets/misc-png/INVENTORY_POTION.png'
-import swordShield from '../assets/misc-png/INVENTORY_SWORDSHIELD.png'
-import bread from '../assets/misc-png/ITEM_BREAD.png'
-import door from '../assets/misc-png/temp-door.png'
-import { backgroundAssets } from './backgroundAssets'
-import { cardAssets } from './cardAssets'
-import { characterAssets } from './characterAssets'
-import { characterStatusAssets } from './characterStatusAssets'
-import { effectAssets } from './effectAssets'
-import { orbAssets } from './orbAssets'
-import { spineAssets } from './spineAssets'
+import energy from '@battleAssets/cards/energy cloud pixel 200.png'
+import endTurnButton from '@battleAssets/misc-png/BUTTON_END_TURN.png'
+import gemButton from '@battleAssets/misc-png/BUTTON_GEMS.png'
+import chestBody from '@battleAssets/misc-png/CHEST_BODY.png'
+import chestLid from '@battleAssets/misc-png/CHEST_LID.png'
+import fishstick from '@battleAssets/misc-png/INVENTORY_FISHSTICK.png'
+import potion from '@battleAssets/misc-png/INVENTORY_POTION.png'
+import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
+import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
+import door from '@battleAssets/misc-png/temp-door.png'
+import type { PixiTexture } from './mypixi'
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import {
+    backgroundAssets,
+    characterAssets,
+    characterStatusAssets,
+    effectAssets,
+    orbAssets,
+    spineAssets,
+} from '@/features/battle/elements/logic/allAssets'
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { cardAssets } from '@/features/battle/elements/cards/cardAssets'
+import { font, check } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -40,8 +44,8 @@ const basicAssets = {
     ...characterStatusAssets,
     ...backgroundAssets,
     ...effectAssets,
-    ...cardAssets,
     ...spineAssets,
+    ...cardAssets,
 }
 const deluxeAssets = {
     gemButton,
@@ -50,7 +54,7 @@ const allAssets = { ...basicAssets, ...deluxeAssets }
 
 export type AssetKey = keyof typeof allAssets
 // TODO: add back basic and deluxe
-export default function loadAssets(): Promise<void> {
+export function loadAssets(): Promise<void> {
     const loaded = new Set(
         Object.keys(allAssets).filter(
             name => Loader.shared.resources[name]?.data != null
@@ -86,4 +90,14 @@ export default function loadAssets(): Promise<void> {
         })
     })
     // return () => Loader.shared.onLoad.detach(cb)
+}
+
+export function getTexture(assetId: AssetKey): PixiTexture {
+    return (
+        Loader.shared.resources?.[assetId]?.texture ??
+        throwNull(`texture '${assetId}'`)
+    )
+}
+export function hasTexture(assetId: AssetKey): boolean {
+    return Loader.shared.resources?.[assetId] != null
 }

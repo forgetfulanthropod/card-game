@@ -8,12 +8,11 @@ import type {
     EffectType,
     StanceMultiplier,
     StanceName,
+    BattleCursor,
 } from 'shared'
-import type { BattleCursor } from 'shared'
-
-import { getRulebook } from '@/rulebook'
 
 import { getTransformed, isSpecial } from './specialMoves'
+import { getRulebook } from '@/rulebook'
 
 export function roundDamage(d: number): number {
     return Math.ceil(d)
@@ -41,7 +40,7 @@ export function getCharacterMovesWithDamageRanges(
     }
 }
 
-export type DamageKV = { key: CharacterUid; damage: number }
+type DamageKV = { key: CharacterUid; damage: number }
 
 export function getCharacterKeysAndDamages(
     attackData: Readonly<AttackData>,

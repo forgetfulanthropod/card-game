@@ -4,11 +4,10 @@ import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
 import { callApi } from '@/actions'
-import { localTree } from '@/data/localTree'
+import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { PixiGraphics } from '@/elementsUtil'
-import { Container, getPixiApp } from '@/elementsUtil'
-import { onUpdate } from '@/util/onUpdate'
+import { PixiGraphics, Container, getPixiApp } from '@/elementsUtil'
+import { onUpdate } from '@/util'
 
 export function beginTargetSelection(
     cardEl: PixiContainer,

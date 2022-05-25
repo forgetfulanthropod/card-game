@@ -1,19 +1,21 @@
 import { findIndex } from 'lodash'
 import type { SCursor } from 'sbaobab'
-import type { AttackData, CharacterMeta, CharacterUid, Effect } from 'shared'
-import type { BattleCursor } from 'shared'
+import type {
+    AttackData,
+    CharacterMeta,
+    CharacterUid,
+    Effect,
+    BattleCursor,
+} from 'shared'
+import { applyDamage } from './applyDamage'
 
 import {
     getCharacterKeysAndDamages,
     getCharacterKeysAndEffects,
 } from './attack'
-import { applyDamage } from './cards/cardActions/util/applyDamage'
 
 /** Applies health, and effects */
-export default function applyMove(
-    scene: BattleCursor,
-    attackData: AttackData
-): void {
+export function applyMove(scene: BattleCursor, attackData: AttackData): void {
     const allChars = scene.select('allCharacters')
 
     markAttackerAsMoved(allChars, attackData)
@@ -24,7 +26,7 @@ export default function applyMove(
     applyNewEffects(allChars, attackData)
 }
 
-export type AllCharacters = SCursor<Record<CharacterUid, CharacterMeta>>
+type AllCharacters = SCursor<Record<CharacterUid, CharacterMeta>>
 
 function markAttackerAsMoved(allChars: AllCharacters, attackData: AttackData) {
     allChars.select(attackData.attacker.uid).set('hasMoved', true)
@@ -38,10 +40,7 @@ function applyDamages(attackData: AttackData, scene: BattleCursor) {
     )
 }
 
-export function applyNewEffects(
-    allChars: AllCharacters,
-    attackData: AttackData
-) {
+function applyNewEffects(allChars: AllCharacters, attackData: AttackData) {
     getCharacterKeysAndEffects(attackData).forEach(
         ({ key, effect: newEffect }) =>
             allChars

@@ -1,15 +1,13 @@
 /** Shared types for /actions and /client. */
-// @index(['./*.ts', './actions/index.ts','!./baobabEventEmitter.ts'], f => `export * from '${f.path}'`)
+// before: '!./Actions.ts'
 export * from './Actions'
-export * from './CharacterName'
+export * from './battle'
+export * from './datamodel'
 export * from './DungeonRooms'
 export * from './entryTypes'
 export * from './EventTrigger'
 export * from './immutable'
 export * from './misc'
+export * from './names'
 export * from './NetworkEvent'
-export * from './SpecialDoorName'
 // @endindex
-
-export * from './battle/index'
-export * from './datamodel'

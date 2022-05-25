@@ -1,15 +1,14 @@
 import { Toaster } from 'react-hot-toast'
 
-import { getTree } from '@/data/rootTree'
-import Battle from '@/features/battle/components/Battle'
-
-import AppWrap from './AppWrap'
+import { AppWrap } from './AppWrap'
 import { BlessingToggles } from './BlessingToggles'
 import { FullScreenInfo } from './FullScreenInfo'
-import ResetButton from './ResetButton'
+import { ResetButton } from './ResetButton'
 import { useCursor } from './util'
+import { Battle } from '@/features'
+import { getTree } from '@/data'
 
-export default function GameManager(props: { username: string }): JSXElement {
+export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
     const sceneType = useCursor(getTree().select('scene').select('name'))
     return <AppWrap>

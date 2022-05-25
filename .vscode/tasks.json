@@ -35,6 +35,16 @@
             "label": "run server",
             "type": "shell",
             "command": "bash run server:server-watch"
+        },
+        {
+            "label": "eslint all cached",
+            "type": "shell",
+            "command": "bash run lint",
+            "problemMatcher": ["$eslint-stylish"],
+            "group": "build",
+            "presentation": {
+                "group": "group1"
+            }
         }
     ]
 }

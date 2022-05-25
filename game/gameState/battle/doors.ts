@@ -5,10 +5,11 @@ import type {
     Characters,
     Door,
     DungeonName,
+    SpecialDoorName,
+    RoomOutcomes,
 } from 'shared'
-import type { SpecialDoorName } from 'shared'
-import type { RoomOutcomes } from 'shared'
 
+import { getEnemyPositions, newNPCMeta } from './characterManagement'
 import { getRulebook } from '@/rulebook'
 import {
     emit,
@@ -19,8 +20,6 @@ import {
     vals,
     weightedRandom,
 } from '@/util'
-
-import { getEnemyPositions, newNPCMeta } from './characterManagement'
 
 export type Room = {
     modifier: number

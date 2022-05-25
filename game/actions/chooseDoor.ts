@@ -1,12 +1,15 @@
 import type { GameActions } from '@serverActions'
 
-import { getNpcMoves, getRoom, modifyRoom } from '@/gameState/battle'
-import { putAllCardsInDrawPile } from '@/gameState/battle/cards/putAllCardsInDrawPile'
-import { clearAllEffects } from '@/gameState/battle/clearAllEffects'
-import { resetTurns } from '@/gameState/battle/resetTurns'
+import { resetRound } from './internal'
+import {
+    getNpcMoves,
+    getRoom,
+    modifyRoom,
+    putAllCardsInDrawPile,
+    clearAllEffects,
+    resetTurns,
+} from '@/gameState'
 import { getBattleSceneIn, objFilter } from '@/util'
-
-import { resetRound } from './internal/resetRound'
 
 export const chooseDoor: GameActions['ChooseDoor'] = args => {
     const scene = getBattleSceneIn(args.game)

@@ -15,13 +15,14 @@ declare global {
 global.logger = winston.createLogger({
     format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.json(),
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf(
             (info: winston.Logform.TransformableInfo) =>
-                `${info.timestamp} [${
-                    info.level
-                }] [${gitBranch}]: ${JSON.stringify(info.message)}`
+                `${info.timestamp} [${info.level}] [${gitBranch}]: ${
+                    typeof info.message === 'string'
+                        ? info.message
+                        : JSON.stringify(info.message)
+                }`
         )
     ),
     transports: [
@@ -29,5 +30,6 @@ global.logger = winston.createLogger({
         new winston.transports.File({ filename: __dirname + '/../server.log' }),
     ],
 })
-
-export default null
+export function getLogger() {
+    return logger
+}

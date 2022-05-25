@@ -4,7 +4,7 @@ import type { SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
 import type { Gamecursor, Gamestate, NetworkEvent } from 'shared'
 
-import { getIo, getSocketId } from './index'
+import { getIo, getSocketId } from './IO'
 const db = new Low<{ users: Record<string, Gamestate> }>(
     new JSONFile(__dirname + '/db.json')
 )

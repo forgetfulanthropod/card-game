@@ -1,4 +1,4 @@
-import losePng from '../assets/fainted.png'
+import losePng from '@battleAssets/fainted.png'
 import { IdleScreenOverlay, Lose, Reset } from './Styles'
 
 export function LoseScreen(props: { reset: () => void }): JSXElement {

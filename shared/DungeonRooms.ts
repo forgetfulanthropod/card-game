@@ -1,4 +1,4 @@
-import type { CharacterName } from '.'
+import type { CharacterName } from './index'
 
 type EnemyLevel = number
 type Probability = number

@@ -1,17 +1,15 @@
 import { omit } from 'lodash'
-import type { Cards, Pile } from 'shared'
-import type { BattleCursor } from 'shared'
-
+import type { BattleCursor, Cards, Pile } from 'shared'
+import { shufflePile } from './shufflePile'
 import { keys } from '@/util'
 
-import { BASE_HAND_SIZE } from '../../../actions/playCard'
-import { shufflePile } from './shufflePile'
+const BASE_HAND_SIZE = 5
 
 export function drawNewHand(scene: BattleCursor): void {
     scene.set('cards', discardAndDrawAndGetPiles(scene.get('cards')))
 }
 
-export function discardAndDrawAndGetPiles({
+function discardAndDrawAndGetPiles({
     draw: drawPile,
     hand,
     discard: discardPile,

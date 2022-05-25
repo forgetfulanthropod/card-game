@@ -2,11 +2,10 @@ import isEqual from 'lodash/isEqual'
 import type { ROCursor } from 'sbaobab'
 import type { BattleScene } from 'shared'
 
-import { localTree } from '@/data/localTree'
+import { Character } from './Character'
+import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { keyMap, keys, vals } from '@/util'
-
-import { Character } from './Character'
 
 export function bindCharacters(
     scene: ROCursor<BattleScene>,

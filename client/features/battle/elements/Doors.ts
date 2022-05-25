@@ -1,11 +1,11 @@
-import PlainButton from '@/elements/PlainButton'
+import { PlainButton } from '@/elements'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getAppSize, getTexture, Sprite, Text } from '@/elementsUtil'
 
 const doorWidth = 330
 const BASE_HEIGHT = 1080
 
-export default function Doors(args: {
+export function Doors(args: {
     callbacks: Callback[]
     descriptions?: string[]
     exit: Callback

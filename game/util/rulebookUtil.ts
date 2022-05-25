@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, readdirSync } from 'fs'
-import { difference } from 'lodash'
 import { homedir } from 'os'
+import { difference } from 'lodash'
 import type { Gamestate, Rulebook } from 'shared'
 
 export const prefix = homedir() + '/rulebooks/'

@@ -1,5 +1,4 @@
 import { filters, Loader } from 'pixi.js'
-import { GlowFilter } from 'pixi-filters'
 import type { ROCursor } from 'sbaobab'
 import type {
     CharacterMeta,
@@ -9,43 +8,38 @@ import type {
     NetworkDOTData,
     NetworkEvent,
 } from 'shared'
-
-import { callApi } from '@/actions'
-import { getSocket } from '@/connection'
-import { getBattleScene } from '@/data/rootTree'
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
-import { Adjust } from '@/elementsUtil'
-import { onDestroyed } from '@/elementsUtil'
-import { SCALE_UNIVERSAL } from '@/elementsUtil'
-import { bringToTop } from '@/elementsUtil'
+import { HealthBar } from './HealthBar'
+import { HitInfo } from './HitInfo'
+import type { SpineAsset } from './logic'
+import { getCharTexture, getOrbTexture } from './logic'
+import { MoveInfo } from './MoveInfo'
+import { hoveredCharacterUid, keys, onUpdate } from '@/util'
 import {
+    Adjust,
+    bringToTop,
     Container,
     flashElement,
     flashTo,
+    glowFilter,
+    hasTexture,
     hideElement,
+    onDestroyed,
     PixiTicker,
+    SCALE_UNIVERSAL,
+    Spine,
     Sprite,
     Text,
 } from '@/elementsUtil'
-import type { PixiSpine } from '@/elementsUtil/myspine'
-import { Spine } from '@/elementsUtil/myspine'
-import { hoveredCharacterUid, keys } from '@/util'
-import { onUpdate } from '@/util/onUpdate'
+import type { PixiContainer, PixiSpine, PixiSprite } from '@/elementsUtil'
+import { getBattleScene } from '@/data'
+import { getSocket } from '@/connection'
+import { callApi } from '@/actions'
 
-import {
-    getCharTexture,
-    getOrbTexture,
-    hasTexture,
-} from '../logic/assetGetters'
-import type { SpineAsset } from '../logic/spineAssets'
-import HealthBar from './HealthBar'
-import HitInfo from './HitInfo'
 // import LevelUp from './LevelUp'
-import MoveInfo from './MoveInfo'
 
 const RED = 0xff0000
 const BLUE = 0x0000ff
-const WHITE = 0xffffff
+const _WHITE = 0xffffff
 const SHOW_HIT_TIME = 1000
 // const SHOW_LEVEL_UP_TIME = 2000
 const ATTACK_ANIMATION_TIME = 1000
@@ -176,13 +170,6 @@ function ActionIntent(uid: CharacterUid) {
     )
     return root
 }
-
-export const glowFilter = new GlowFilter({
-    innerStrength: 0,
-    outerStrength: 2,
-    color: 0xffffff,
-    knockout: false,
-})
 
 export function MainCharacterAnimation(
     characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,

@@ -1,11 +1,6 @@
-import { BattleScene, CharacterName, EntryScene } from '..'
+import type { BattleScene, CharacterName, DungeonName, EntryScene } from '@'
 
 export type CardUid = string & Brandify
-export type PileId = 'draw' | 'hand' | 'discard' | 'removed'
-export type ItemName = string & Brandify
-export type ItemUid = string & Brandify
-export type LocationName = string & Brandify
-export type RecipeName = string & Brandify
 /** Intersecting a type with this makes the type not get aliased to its definition by typescript & vscode. Useful for e.g. auto-refactors and function return types. */
 
 export type Brandify = {
@@ -28,13 +23,6 @@ interface DungeonLevelI {
     num: number
     modifier: number
 }
-
-export type DungeonName =
-    | 'Skelepit Dungeon'
-    | 'Hooligan’s Bluff'
-    | 'The Matcha Caves'
-    | 'Fort Skeleton'
-    | 'The Ninth Trash Hole of Hell'
 
 export type TargetType = 'party' | 'enemies'
 

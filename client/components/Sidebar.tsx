@@ -4,13 +4,12 @@ import toast from 'react-hot-toast'
 import type { ROCursor } from 'sbaobab'
 import type { Gamestate } from 'shared'
 
-import styled from '@/config/mystyled'
-import { getClientTree, getTree } from '@/data/rootTree'
-import { stringify } from '@/util'
-
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
 import { useCursor } from './util'
+import { styled } from '@/config'
+import { getClientTree, getTree } from '@/data'
+import { stringify } from '@/util'
 
 export function Sidebar(): JSXElement {
     return <div style={{ pointerEvents: 'auto' }}>

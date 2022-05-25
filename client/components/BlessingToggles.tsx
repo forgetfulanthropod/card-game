@@ -1,10 +1,9 @@
 import type { BlessingName } from 'shared'
 
-import { callApi } from '@/actions'
-import styled from '@/config/mystyled'
-import { getTree } from '@/data/rootTree'
-
 import { useCursor } from './util'
+import { callApi } from '@/actions'
+import { styled } from '@/config'
+import { getTree } from '@/data'
 
 const Root = styled.div`
     position: absolute;

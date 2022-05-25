@@ -1,9 +1,9 @@
 import type { NextAction } from 'shared'
 
-import { getNpcMoves } from '@/gameState/battle'
+import { endRound } from './endRound'
+import { getNpcMoves } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
-import { endRound } from './endRound'
 const TIME_AFTER_PLAYER_MOVE = 1000
 
 // GameActions['EndTurn']
@@ -17,10 +17,4 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
         args: { index: 0 },
         delay: TIME_AFTER_PLAYER_MOVE,
     }
-
-    // await doNpcTurns(scene)
-
-    // resetRound(scene)
 }
-
-export function doInternalAction() {}

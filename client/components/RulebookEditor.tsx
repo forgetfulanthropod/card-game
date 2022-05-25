@@ -1,14 +1,14 @@
 import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
 
-import styled from '@/config/mystyled'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { callApi } from '@/actions'
-import { useCursor } from './util'
-import { getTree } from '@/data/rootTree'
 import type { Rulebook } from 'shared'
 import toast from 'react-hot-toast'
+import { useCursor } from './util'
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
+import { getTree } from '@/data'
+import { callApi } from '@/actions'
+import { styled } from '@/config'
 
 const ButtonGroup = styled.div`
     // z-index: 11;

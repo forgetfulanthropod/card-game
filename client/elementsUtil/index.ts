@@ -1,6 +1,11 @@
 // @index(['./*.ts'], f => `export * from '${f.path}'`)
+export * from './AssetLoader'
+export * from './filters'
 export * from './gradients'
+export * from './InteractionEvents'
 export * from './mypixi'
+export * from './mypixiExamples'
+export * from './myspine'
 export * from './overlay'
 export * from './pixiInspector'
 export * from './pixiManaged'

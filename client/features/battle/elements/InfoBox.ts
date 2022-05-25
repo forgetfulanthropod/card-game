@@ -1,7 +1,7 @@
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
-export default function InfoBox(args: { info: string[] }): PixiContainer {
+export function InfoBox(args: { info: string[] }): PixiContainer {
     const levelNumText = Text({
         text: args.info.join('\n'),
         anchor: [0.5, 1],

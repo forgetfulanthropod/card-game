@@ -3,7 +3,7 @@ import { Container, getTexture, PixiTexture, Sprite } from '@/elementsUtil'
 
 const rotationRate = 1.0
 
-export default function Chest(args: { size: Size }): PixiContainer {
+export function Chest(args: { size: Size }): PixiContainer {
     const c = Container({
         scale: 1,
         // anchor: 0.5,

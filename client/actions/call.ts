@@ -1,6 +1,6 @@
 import type { Action, CallReturn } from 'shared'
 
-import { getClientTree } from '@/data/rootTree'
+import { getClientTree } from '@/data'
 import { jss } from '@/util'
 
 const config = {

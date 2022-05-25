@@ -1,13 +1,12 @@
-import { getEntryScene } from '@/data/rootTree'
-import Coin from '@/elements/Coin'
-import type { PixiContainer } from '@/elementsUtil'
-import { Container } from '@/elementsUtil'
-import { onUpdate } from '@/util/onUpdate'
-
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
 import { StartButton } from './StartButton'
+import { getEntryScene } from '@/data'
+import { Coin } from '@/elements'
+import type { PixiContainer } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
+import { onUpdate } from '@/util'
 
 const NUM_CHARACTERS_REQUIRED = 3
 

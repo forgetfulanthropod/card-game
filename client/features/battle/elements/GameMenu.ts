@@ -1,7 +1,6 @@
+import { GameMenuItem } from './GameMenuItem'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
-
-import { GameMenuItem } from './GameMenuItem'
 
 const BASE_HEIGHT = 1080
 

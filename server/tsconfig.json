@@ -1,27 +1,6 @@
 // Server
 {
-    "compilerOptions": {
-        "composite": true,
-        "module": "commonjs",
-        "incremental": true,
-        "noEmit": true,
-        "strict": true,
-        "target": "es2017",
-        "noImplicitAny": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "baseUrl": ".",
-        "experimentalDecorators": true,
-        "skipLibCheck": true
-    },
-    "compileOnSave": true,
-    "include": ["./**/*.ts"],
-    "references": [
-        {
-            "path": "../game"
-        },
-        {
-            "path": "../shared"
-        }
-    ]
+    "extends": "../tsconfig.base.json",
+    "compilerOptions": { "paths": { "@/*": ["./*"] } },
+    "references": [{ "path": "../game" }, { "path": "../shared" }]
 }

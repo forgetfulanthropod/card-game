@@ -4,7 +4,6 @@ export * from './dedent'
 export * from './objectMethods'
 export * from './rand'
 export * from './rulebookUtil'
-export * from './sleep'
 export * from './timezones'
 export * from './treeHelpers'
 // @endindex

@@ -5,18 +5,17 @@ import type {
     CharacterUid,
     NetworkAttackData,
     Orb,
+    BattleCursor,
 } from 'shared'
-import type { BattleCursor } from 'shared'
 
 import {
     checkBattleOverMut,
     getRandomLivingNpcUid,
     roundDamage,
     updateHand,
-} from '@/gameState/battle'
-import { applyDamage } from '@/gameState/battle/cards/cardActions/util/applyDamage'
-import { emit } from '@/util'
-import { getBattleSceneIn } from '@/util/treeHelpers'
+    applyDamage,
+} from '@/gameState'
+import { emit, getBattleSceneIn } from '@/util'
 
 export const activateOrb: GameActions['ActivateOrb'] = ({
     game,

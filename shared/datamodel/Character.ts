@@ -1,12 +1,6 @@
-import type {
-    CharacterClass,
-    CharacterName,
-    MoveMetaName,
-    StanceName,
-} from '..'
 import type { Brandify } from './misc'
+import type { CharacterClass, CharacterName, MoveMetaName } from '@'
 
-const Character = null
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     name: CharacterName
@@ -49,7 +43,3 @@ export type OwnedCharacterStats = CharacterStats &
     Brandify
 
 export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
-
-export type StatsWithStance = CharacterStats &
-    Readonly<{ stance: StanceName }> &
-    Brandify

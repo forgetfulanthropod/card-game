@@ -1,21 +1,25 @@
 import { pick } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { CardUid, Pile } from 'shared'
-
-import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
-import { onDestroyed } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { Container } from '@/elementsUtil'
-import { hoveredCardUid, hoveredCharacterUid, keys, vals } from '@/util'
-
-import type { PixiContainerWithTweenableChildren } from '../../../../elementsUtil/PixiContainerWithTweenableChildren'
-import { glowFilter } from '../Character'
 import {
     Card,
     CARD_HEIGHT_FULL,
     CARD_WIDTH_FULL,
     CARD_WIDTH_IN_HAND,
 } from './Card'
+import type {
+    PixiContainerWithTweenableChildren,
+    PixiContainer,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
+import {
+    glowFilter,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    onDestroyed,
+} from '@/elementsUtil'
+import { hoveredCardUid, hoveredCharacterUid, keys, vals } from '@/util'
 
 export function Hand(pile: Pile): PixiContainer {
     const cardUids = keys(pile)

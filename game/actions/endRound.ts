@@ -1,6 +1,6 @@
 import type { BattleCursor } from 'shared'
 
-import { applyDOTDamages } from '@/gameState/effects/applyDOTDamages'
+import { applyDOTDamages } from '@/gameState'
 import { keys } from '@/util'
 
 export function endRound(scene: BattleCursor) {

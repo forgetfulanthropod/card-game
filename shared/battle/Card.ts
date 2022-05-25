@@ -1,5 +1,5 @@
-import type { CardUid, CharacterUid, PileId } from '..'
 import type { CharacterClass } from './Characters'
+import type { CardUid, CharacterUid, PileId } from '@'
 
 export interface Card {
     name: string

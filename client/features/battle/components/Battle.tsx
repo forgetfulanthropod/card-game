@@ -1,3 +1,3 @@
-export default function Battle(): JSXElement {
+export function Battle(): JSXElement {
     return <>{/* <MoveMenu /> */}</>
 }

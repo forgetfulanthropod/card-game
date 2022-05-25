@@ -2,7 +2,7 @@ import type { ROCursor } from 'sbaobab'
 import type { OwnedCharacterStats } from 'shared'
 
 import { callApi } from '@/actions'
-import { getEntryScene, getOwnedCharacters } from '@/data/rootTree'
+import { getEntryScene, getOwnedCharacters } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
 import { vals } from '@/util'

@@ -1,18 +1,19 @@
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { delayChain } from 'shared/code'
+import { getTexture } from './AssetLoader'
 
+import type { PixiContainer } from './mypixi'
 import { Adjust, Container, For, If, portalize, Sprite, Text } from './mypixi'
-import { getTexture } from './pixiUtils'
 
-export function ForExample() {
+export function ForExample(): PixiContainer {
     const strings = datum(['a', 'b', 'c', 'd'])
     const keyed = compose(
         ([strings]) => strings.map(s => ({ key: s })),
         strings
     )
 
-    delayChain([
+    void delayChain([
         () => strings.set(['d', 'c', 'b', 'f']),
         () => strings.set([]),
         () => strings.set(randStrArr(100)),
@@ -43,7 +44,7 @@ function randStrArr(length = 100): string[] {
         .map(() => Math.random().toString().slice(3, 6))
 }
 
-export function IfExample() {
+export function IfExample(): PixiContainer {
     const cond = datum(true)
     startToggling(cond)
     return If(
@@ -55,7 +56,7 @@ export function IfExample() {
 }
 
 function startToggling(cond: Datum<boolean>) {
-    delayChain([
+    void delayChain([
         () => cond.set(false),
         () => cond.set(false),
         () => cond.set(true),
@@ -76,7 +77,7 @@ function startToggling(cond: Datum<boolean>) {
     ])
 }
 
-export function PortalizeExample() {
+export function PortalizeExample(): PixiContainer {
     const shown = datum(false)
     const hideShow = Text({
         text: 'hide/show',
@@ -106,7 +107,7 @@ export function PortalizeExample() {
     return Container({ children: [hideShow, cont] })
 }
 
-export function AdjustExample() {
+export function AdjustExample(): PixiContainer {
     const sprite = Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
     const adjustedOnce = Adjust(sprite, {
         x: 100,

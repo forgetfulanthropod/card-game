@@ -1,6 +1,6 @@
 import type { Value as VAngu } from 'angu'
 
-import type { ExecuteArgs } from './util/types'
+import type { ExecuteArgs } from './util'
 
 export function explain(text: VAngu) {
     return text.eval()

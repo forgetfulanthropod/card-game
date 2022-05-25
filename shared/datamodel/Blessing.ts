@@ -1,8 +1,8 @@
-import type { CharacterName, SpecialDoorName } from '..'
 import type { Brandify, TargetType } from './misc'
+import type { BlessingName, CharacterName, SpecialDoorName } from '@'
 
 export type Blessing = Readonly<{
-    name: string
+    name: BlessingName
     displayName?: string
     after?: {
         doorType?: SpecialDoorName
@@ -16,9 +16,3 @@ export type Blessing = Readonly<{
     }[]
 }> &
     Brandify
-export type BlessingName =
-    | 'ptbotflax'
-    | 'strongPcs'
-    | 'strongEnemies'
-    | 'weakEnemies'
-    | 'weakPcs'

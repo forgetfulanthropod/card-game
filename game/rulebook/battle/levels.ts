@@ -1,3 +1,4 @@
+/** @deprecated */
 import type { NpcLevelStatsMap } from 'shared'
 
 export const npcLevelStatsMap: NpcLevelStatsMap = {
@@ -48,28 +49,5 @@ export const npcLevelStatsMap: NpcLevelStatsMap = {
         8: { maxHealth: 205, damage: 18 },
         9: { maxHealth: 230, damage: 20 },
         10: { maxHealth: 255, damage: 22 },
-    },
-}
-
-export const levelMinMoveMap = {
-    skeleton: {
-        'Sword Whack': 0,
-        'Rusty Poke': 2,
-        Slash: 3,
-    },
-    matcha: {
-        'Basic Attack': 0,
-        'Surprise Allergy': 2,
-        'Itchy Ooze': 3,
-    },
-    orcWarrior: {
-        'Meaty Charge': 0,
-        Slash: 4,
-        'Bellow and Sing': 6,
-    },
-    mimic: {
-        Mimic: 0,
-        Chomp: 0,
-        'Infectious Bite': 0,
     },
 }

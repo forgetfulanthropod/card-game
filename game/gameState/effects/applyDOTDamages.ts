@@ -1,10 +1,7 @@
-import type { Characters, DamageMap, Effect } from 'shared'
-import type { BattleCursor } from 'shared'
+import type { Characters, DamageMap, Effect, BattleCursor } from 'shared'
 
-import { emit } from '@/util'
-import { keys } from '@/util'
-
-import { applyDamage } from '../battle/cards/cardActions/util/applyDamage'
+import { emit, keys } from '@/util'
+import { applyDamage } from '@/gameState'
 
 export function applyDOTDamages(scene: BattleCursor): void {
     const damageMap = getDOTDamageMap(scene.get('allCharacters'))

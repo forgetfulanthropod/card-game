@@ -3,16 +3,15 @@ import type {
     Card,
     CardId,
     Cards,
-    CardUid,
-    CharacterClass,
     CharacterUid,
+    BattleCursor,
+    CharacterClass,
+    CardUid,
 } from 'shared'
-import type { BattleCursor } from 'shared'
 
-import { cardDefinitionsMap } from '@/rulebook/cardDefinitionsMap'
+import { explainActionsForCard } from './interpretActions'
+import { cardDefinitionsMap } from '@/rulebook'
 import { keys, vals } from '@/util'
-
-import { explainActionsForCard } from '..'
 
 // TODO: repeated cards: block, basic attack, basic magic attack
 // probably want to take characterClass off of the card type?
@@ -36,7 +35,7 @@ export function getNullCards(): Cards {
     return { draw: {}, hand: {}, discard: {}, removed: {} }
 }
 
-export function makeCards(scene: BattleCursor): Cards {
+function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
         'shield',
         'shield',

@@ -41,6 +41,11 @@ function lint() {
     eslint . --cache
 }
 
+function clean-tsc-all() {
+    rm -rf **/dist **/tsconfig.tsbuildinfo
+    tsc-all
+}
+
 function tsc-all() {
     tsc -b server game shared client
 }

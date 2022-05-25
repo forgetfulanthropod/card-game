@@ -17,7 +17,7 @@ export type PSet<T> = (cb: T | ((old: T) => T)) => void
 const instructions =
     'Click on an ingredient from your inventory, then click on a cell of your crafting table to place this ingredient.'
 
-export default function Minecrafter(): JSXElement {
+export function Minecrafter(): JSXElement {
     const [inventory, setInventory] = useState(initialInventory)
     const [result, setResult] = useState<null | [string, number]>(null)
     const [selected, setSelected] = useState(inventory[0])

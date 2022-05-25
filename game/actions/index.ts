@@ -1,3 +1,5 @@
+export { step } from './internal'
+
 // @index('./*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
 export { activateOrb } from './activateOrb'
 export { addSelected } from './addSelected'

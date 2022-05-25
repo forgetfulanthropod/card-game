@@ -1,9 +1,10 @@
 import 'preact/debug'
-import './config/nullUtil'
+
+import './config/nullUtil' // eslint-disable-line import/no-internal-modules
 
 import { render } from 'preact'
 
-import App from './components/App'
+import { App } from './components'
 import { resolveWhenSocketConfirmed, startRetrying } from './connection'
 
 // @ts-expect-error
