@@ -7,6 +7,7 @@ import { Tweener } from 'pixi-tweener'
 import type { CharacterClass, Pile } from 'shared'
 import type { Card } from 'shared'
 
+import { callApi } from '@/actions'
 import { getBattleScene } from '@/data/rootTree'
 import type {
     InteractionEventHandler,
@@ -279,7 +280,16 @@ function getEvents(card: Card): InteractionEvents {
         clearLastTargetSelection()
 
         if (getBattleScene().get().energy >= card.energy) {
-            clearLastTargetSelection = beginTargetSelection(cardEl.parent, card)
+            if (card.targetType === 'self')
+                void callApi('PlayCard', {
+                    cardUid: card.uid,
+                    targetUids: [],
+                })
+            else
+                clearLastTargetSelection = beginTargetSelection(
+                    cardEl.parent,
+                    card
+                )
         }
     }
     const pointerup: InteractionEventHandler = function ({
