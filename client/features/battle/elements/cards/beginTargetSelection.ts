@@ -1,4 +1,3 @@
-import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
@@ -6,7 +5,7 @@ import type { Card } from 'shared'
 import { callApi } from '@/actions'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { PixiGraphics, Container, getPixiApp } from '@/elementsUtil'
+import { getPixiApp, Arrow } from '@/elementsUtil'
 import { onUpdate } from '@/util'
 
 export function beginTargetSelection(
@@ -76,68 +75,3 @@ export function beginTargetSelection(
         app.stage.interactive = false
     }
 }
-
-function Arrow(origin: Datum<Point>, destination: Datum<Point>) {
-    const pointRadius = 10
-    const g = new PixiGraphics()
-
-    return Container({
-        name: 'Arrow',
-        children: [g],
-        onDestroy: [destination.onChange(draw, true)],
-    })
-
-    function draw() {
-        g.clear()
-        const { x: x0, y: y0 } = origin.val
-        const { x: x1, y: y1 } = destination.val
-        const [xc, yc] = [x0, y1 - Math.abs(y0 - y1) * 0.33] // curve up 33% past targetfirst
-        g.lineStyle(5, 0xaa0000, 1)
-        g.moveTo(x0, y0)
-        g.bezierCurveTo(x0, y0, xc, yc, x1, y1)
-        g.beginFill(0xffffff)
-        g.drawCircle(origin.val.x, origin.val.y, pointRadius)
-        g.drawCircle(destination.val.x, destination.val.y, pointRadius)
-        g.endFill()
-    }
-}
-
-// ==========================
-
-// function Parent() {
-//     const pos = datum({ x: 0, y: 0 })
-//     function handleClick(newPos) {
-//         pos.set(newPos)
-//     }
-//     return Arrow2(pos)
-// }
-// type Point = { x: number; y: number }
-// function Arrow2(pos: Datum<Point>) {
-//     pos.onChange(({ x, y }) => {
-//         tip.x = x
-//         tip.y = y
-//     }, true)
-//     return arrow
-// }
-
-// function Character1(glow: Datum<boolean>) {}
-// interface Targets {
-//     cards: Id[]
-//     characters: Id[]
-//     orbs: Id[] //attack orbs
-//     // allies: Id[] //allies aggressive
-// }
-// // function Character2(targets: Datum<Targets>) {
-
-// function Character2() {
-//     targetsCursor.onChange(() => {
-//         if (iAmValidTarget(characterMeta.uid)) doThing()
-//     })
-// }
-
-// on('attack', (gotHit: ID[]) => {
-//     if (gotHit.includes(myId)) {
-//     }
-// })
-
-// function amITarget() {}

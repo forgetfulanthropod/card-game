@@ -1,12 +1,13 @@
+import { datum } from 'datums'
 import { filters, Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type {
+    CardHit,
     CharacterMeta,
     CharacterName,
     CharacterUid,
     NetworkDOTData,
     NetworkEvent,
-    CardHit,
 } from 'shared'
 import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
@@ -14,6 +15,7 @@ import { HitInfo } from './HitInfo'
 import type { SpineAsset } from './logic'
 import { getCharTexture, getOrbTexture } from './logic'
 import { MoveInfo } from './MoveInfo'
+import { ActionIntent } from './ActionIntent'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import {
     Adjust,
@@ -24,7 +26,6 @@ import {
     glowFilter,
     hasTexture,
     hideElement,
-    onDestroyed,
     PixiTicker,
     SCALE_UNIVERSAL,
     Spine,
@@ -85,13 +86,18 @@ export function Character(args: CharacterProps): PixiContainer {
         }
     })
 
+    const isHovered = datum(false)
     const mainContainer = Container({
         zIndex: args.zIndex,
+        isHoveredDatum: isHovered,
         children: [
             attackSprite,
             defendSprite,
             healthBar,
-            Adjust(ActionIntent(characterMeta.uid), { y: healthBar.height }),
+
+            Adjust(ActionIntent(characterMeta.uid, isHovered), {
+                y: healthBar.height,
+            }),
             ...(mainAnimation ? [mainAnimation] : [mainSprite]),
         ],
     })
@@ -148,28 +154,6 @@ export function Character(args: CharacterProps): PixiContainer {
     updateDeathAndHealth()
 
     return flyingContainer
-}
-
-function ActionIntent(uid: CharacterUid) {
-    const battle = getBattleScene()
-    const root = Text({
-        text: '',
-        style: { fontSize: 20, fill: 'red' },
-    })
-    onDestroyed(
-        root,
-        onUpdate(
-            battle.select('nextNpcCommands'),
-            nextCmds => {
-                const cardName = nextCmds.find(
-                    ({ command }) => command.characterUid === uid
-                )?.command?.name
-                root.text = cardName ?? ''
-            },
-            true
-        )
-    )
-    return root
 }
 
 export function MainCharacterAnimation(

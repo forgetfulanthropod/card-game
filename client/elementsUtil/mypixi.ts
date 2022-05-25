@@ -98,6 +98,8 @@ interface DisplayObjectArgs {
     angle?: number
     rotation?: number
     onDestroy?: Callback[]
+    /** will be bound to pointerover and pointerout */
+    isHoveredDatum?: Datum<boolean>
 }
 
 // text and sprite but not graphics
@@ -248,6 +250,12 @@ function applyDisplayObjectArgs(
     //         args.onDestroy?.forEach(cb => cb())
     //     }
     // }
+    const isHoveredDatum = args.isHoveredDatum
+    if (isHoveredDatum != null) {
+        el.interactive = true
+        el.on('pointerover', () => isHoveredDatum.set(true))
+        el.on('pointerout', () => isHoveredDatum.set(false))
+    }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
@@ -485,10 +493,30 @@ export function If(
     }
 }
 
+// export function BareIf<T extends PixiDisplayObject>(
+//     condition: RODatum<boolean>,
+//     ifRender: () => T,
+//     elseRender?: () => T,
+//     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+// ): T {
+//     // condition.onChange()
+//     return root
+//     function handleChange(val: boolean) {
+//         root.children.forEach(c => c.destroy(destroyOptions))
+//         root.removeChildren()
+//         if (val) {
+//             root.addChild(ifRender())
+//         } else if (elseRender != null) {
+//             root.addChild(elseRender())
+//         }
+//     }
+// }
+
 type KeyedDisplayObject = DisplayObject & { key: string | number }
 interface KeyedContainer extends PixiContainer {
     children: KeyedDisplayObject[]
 }
+// TODO: accept array of strings or numbers
 export function For<T extends { key: string | number }[]>(
     items: RODatum<T>,
     render: (item: T[number]) => DisplayObject,
