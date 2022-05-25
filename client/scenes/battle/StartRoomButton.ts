@@ -1,8 +1,7 @@
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data'
-import { PlainButton } from '@/elements'
+import { PlainButton, If, BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
-import { If, BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { toDatum } from '@/util'
 
 export function StartRoomButton(): PixiContainer {

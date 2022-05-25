@@ -1,1 +1,0 @@
-export { bindGamestate } from './battle'
