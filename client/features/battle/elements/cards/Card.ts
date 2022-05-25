@@ -280,12 +280,7 @@ function getEvents(card: Card): InteractionEvents {
         clearLastTargetSelection()
 
         if (getBattleScene().get().energy >= card.energy) {
-            if (card.targetType === 'self')
-                void callApi('PlayCard', {
-                    cardUid: card.uid,
-                    targetUids: [],
-                })
-            else
+            if (card.targetType !== 'self')
                 clearLastTargetSelection = beginTargetSelection(
                     cardEl.parent,
                     card
@@ -295,10 +290,16 @@ function getEvents(card: Card): InteractionEvents {
     const pointerup: InteractionEventHandler = function ({
         currentTarget: cardEl,
     }) {
+        if (card.targetType === 'self')
+            void callApi('PlayCard', {
+                cardUid: card.uid,
+                targetUids: [],
+            })
         //for mobile
-        pointerout({
-            currentTarget: cardEl,
-        } as InteractionEvent)
+        else
+            pointerout({
+                currentTarget: cardEl,
+            } as InteractionEvent)
     }
 
     return {

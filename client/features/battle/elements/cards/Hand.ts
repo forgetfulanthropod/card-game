@@ -188,6 +188,8 @@ function animateTo(
     cardEl: TweenablePixiContainer,
     initialDisplayVal: InitialDisplayVal
 ) {
+    if (cardEl == null) return
+
     Tweener.killTweensOf(cardEl)
     Tweener.killTweensOf(cardEl.children[0])
     void Tweener.add(
