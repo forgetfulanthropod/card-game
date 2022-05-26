@@ -64,7 +64,7 @@ function EndTurnButton(): PixiContainer {
                 style: {
                     fill: 0xffffff,
                     fontSize: 24,
-                    fontFamily: 'VT323',
+                    fontFamily: 'bigFont',
                 },
             }),
         ],

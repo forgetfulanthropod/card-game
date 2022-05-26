@@ -7,7 +7,7 @@ export function MoveInfo(args: { moveName: string; offset: number }): PixiText {
         text: args.moveName,
         anchor: [0, 1],
         style: {
-            fontFamily: ['VT323', 'monospace'],
+            fontFamily: ['bigFont', 'monospace'],
             fontSize: 40,
             fontWeight: '900',
             fill: ['#333', '#000'], // gradient

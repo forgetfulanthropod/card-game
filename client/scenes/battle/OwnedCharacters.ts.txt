@@ -18,7 +18,7 @@ export function OwnedCharacters(): PixiContainer {
         anchor: [0, 0],
         y: 5,
         style: {
-            fontFamily: 'VT323',
+            fontFamily: 'bigFont',
             fontSize: 60,
             fill: '#fff',
             stroke: '#333',

@@ -1,7 +1,6 @@
 import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
-import energy from '@battleAssets/cards/energy cloud pixel 200.png'
 import endTurnButton from '@battleAssets/misc-png/BUTTON_END_TURN.png'
 import gemButton from '@battleAssets/misc-png/BUTTON_GEMS.png'
 import chestBody from '@battleAssets/misc-png/CHEST_BODY.png'
@@ -21,7 +20,7 @@ import {
     spineAssets,
     cardAssets,
 } from '@/scenes'
-import { font, check } from '@/assets'
+import { check, fontAssets } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -34,9 +33,8 @@ const basicAssets = {
     chestBody,
     chestLid,
     door,
-    energy,
     endTurnButton,
-    VT323: font,
+    ...fontAssets,
     ...orbAssets,
     ...characterAssets,
     ...characterStatusAssets,

@@ -73,7 +73,7 @@ function bindBlockIndicator(
                         text: `${newBlock}`,
                         anchor: [0.5, 0.5],
                         style: {
-                            // fontFamily: ['VT323', 'monospace'],
+                            // fontFamily: ['bigFont', 'monospace'],
                             fontFamily: ['monospace'],
                             fontSize: 22,
                             fill: '#eee',
@@ -131,7 +131,7 @@ function bindEffectIndicators(
                         text: `${e.remainingRounds}`,
                         anchor: [0.6, 1],
                         style: {
-                            fontFamily: ['VT323', 'monospace'],
+                            fontFamily: ['bigFont', 'monospace'],
                             fontSize: 30 * SCALE_UNIVERSAL,
                             fill: 'white',
                             stroke: 'black',
