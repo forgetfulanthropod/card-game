@@ -60,7 +60,9 @@ function IntentArrows(
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
     return onDestroyed(
-        If(isHovered, () => For(targets, key => IntentArrow(key))),
+        If(isHovered, () => For(targets, key => IntentArrow(key)), undefined, {
+            name: 'intentArrows',
+        }),
         orig.destroy
     )
 

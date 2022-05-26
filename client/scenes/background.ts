@@ -1,7 +1,7 @@
 import type { Datum } from 'datums'
 
 import type { PixiContainer, PlayablePixiSprite } from '@/elementsUtil'
-import { Container, PngLayersBackground, VideoBackground } from '@/elementsUtil'
+import { PngLayersBackground, VideoBackground } from '@/elementsUtil'
 
 const config = {
     enableBackground: true,
@@ -19,13 +19,13 @@ export function Background({
     srcs?: string[]
     autoPlay?: boolean
     bgLoopEnded?: Datum<number>
-}): PlayablePixiSprite | PixiContainer {
+}): PlayablePixiSprite | PixiContainer | null {
     if (!config.enableBackground) {
-        return Container({ children: [] })
+        return null
     }
     if (src != null) {
         return VideoBackground({
-            name: 'Background',
+            name: Background.name,
             src,
             scale,
             autoPlay,
@@ -35,7 +35,7 @@ export function Background({
 
     if (srcs != null) {
         return PngLayersBackground({
-            name: 'Background',
+            name: Background.name,
             srcs,
             scale,
         })

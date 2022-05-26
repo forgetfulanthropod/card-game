@@ -20,6 +20,6 @@ export function StartRoomButton(): PixiContainer {
                 y: BASE_HEIGHT / 2,
             }),
         undefined,
-        { onDestroy: [notInBattle.destroy] }
+        { onDestroy: [notInBattle.destroy], name: StartRoomButton.name }
     )
 }

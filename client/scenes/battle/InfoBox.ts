@@ -17,6 +17,7 @@ export function InfoBox(args: { info: string[] }): PixiContainer {
     })
 
     const root = Container({
+        name: InfoBox.name,
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 8,
         children: [levelNumText],

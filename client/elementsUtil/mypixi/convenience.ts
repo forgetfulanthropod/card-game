@@ -73,6 +73,7 @@ export function PngLayersBackground(args: {
     srcs: string[] | PixiTexture[]
 }): PixiContainer {
     return Container({
+        name: args.name,
         children: args.srcs.map(src =>
             Sprite({
                 src,
