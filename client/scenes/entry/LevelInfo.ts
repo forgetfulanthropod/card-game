@@ -3,6 +3,14 @@ import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
+const arrowStyle = {
+    fontFamily: 'VT323',
+    fontSize: 80,
+    // fill: ['#fff', '#eee'], // gradient
+    fill: ['#aaa'],
+    stroke: '#999',
+    strokeThickness: 5,
+}
 export function LevelInfo(): PixiContainer {
     const scene = getEntryScene()
 
@@ -35,14 +43,7 @@ export function LevelInfo(): PixiContainer {
         anchor: [0.5, 1],
         x: -300,
         y: 0,
-        style: {
-            fontFamily: 'VT323',
-            fontSize: 80,
-            // fill: ['#fff', '#eee'], // gradient
-            fill: ['#aaa'],
-            stroke: '#999',
-            strokeThickness: 5,
-        },
+        style: arrowStyle,
         alpha: 0,
         async onClick() {
             await callApi('ChangeDungeon', { direction: -1 })
@@ -53,14 +54,7 @@ export function LevelInfo(): PixiContainer {
         anchor: [0.5, 1],
         x: 300,
         y: 0,
-        style: {
-            fontFamily: 'VT323',
-            fontSize: 80,
-            // fill: ['#fff', '#eee'], // gradient
-            fill: ['#aaa'],
-            stroke: '#999',
-            strokeThickness: 5,
-        },
+        style: arrowStyle,
         alpha: 0,
         async onClick() {
             await callApi('ChangeDungeon', { direction: +1 })

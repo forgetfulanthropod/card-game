@@ -71,7 +71,7 @@ export function beginTargetSelection(
         selectedTargetsCursor.set([])
         app.stage.off('pointermove', updateDestination)
         cardEl.removeChild(arrow)
-        arrow.destroy({ children: true })
+        if (!arrow.destroyed) arrow.destroy({ children: true })
         app.stage.interactive = false
     }
 

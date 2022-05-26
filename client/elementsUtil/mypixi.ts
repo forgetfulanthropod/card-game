@@ -28,10 +28,7 @@ import { Tweener } from 'pixi-tweener'
 import type { InteractionEvents } from './InteractionEvents'
 import { bindEvents } from './InteractionEvents'
 import { registerPixiInspector } from './pixiInspector'
-
-// ...
-
-// import * as PIXI from 'pixi.js'
+import { assertFinite } from '@/util'
 
 gsap.registerPlugin(PixiPlugin)
 
@@ -174,9 +171,11 @@ function applyDisplayObjectArgs(
     }
 
     if (args.position != null) {
+        assertFinite(args.position)
         el.position.set(...args.position)
     }
     if (args.scale != null) {
+        assertFinite(args.scale)
         if (Array.isArray(args.scale)) {
             el.scale.set(...args.scale)
         } else {
@@ -185,12 +184,15 @@ function applyDisplayObjectArgs(
     }
 
     if (args.width != null) {
+        assertFinite(args.width)
         el.width = args.width
     }
     if (args.height != null) {
+        assertFinite(args.height)
         el.height = args.height
     }
     if (args.pivot != null) {
+        assertFinite(args.pivot)
         if (Array.isArray(args.pivot)) {
             el.pivot.set(...args.pivot)
         } else {
@@ -198,9 +200,11 @@ function applyDisplayObjectArgs(
         }
     }
     if (args.x != null) {
+        assertFinite(args.x)
         el.x = args.x
     }
     if (args.y != null) {
+        assertFinite(args.y)
         el.y = args.y
     }
 
@@ -212,6 +216,7 @@ function applyDisplayObjectArgs(
     }
 
     if (args.alpha != null) {
+        assertFinite(args.alpha)
         el.alpha = args.alpha
     }
 
@@ -232,9 +237,11 @@ function applyDisplayObjectArgs(
     }
 
     if (args.angle != null) {
+        assertFinite(args.angle)
         el.angle = args.angle
     }
     if (args.rotation != null) {
+        assertFinite(args.rotation)
         el.rotation = args.rotation
     }
 
@@ -254,17 +261,25 @@ function applyDisplayObjectArgs(
     if (isHoveredDatum != null) {
         el.interactive = true
         el.on('pointerover', () => isHoveredDatum.set(true))
-        el.on('pointerout', () => isHoveredDatum.set(false))
+        const setFalse = () => isHoveredDatum.set(false)
+        el.on('pointerout', setFalse)
+        app?.stage.on('pointerout', setFalse)
+        el.on('destroyed', () => {
+            isHoveredDatum.set(false)
+            app?.stage.off('pointerout', setFalse)
+        })
     }
 }
 
 function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
     applyDisplayObjectArgs(x, args)
     if (args.tint != null) {
+        assertFinite(args.tint)
         x.tint = args.tint
     }
 
     if (args.anchor != null) {
+        assertFinite(args.anchor)
         if (Array.isArray(args.anchor)) {
             x.anchor.set(...args.anchor)
         } else {

@@ -6,7 +6,7 @@ import { Texture } from 'pixi.js'
 import type { Card, CharacterClass, Pile } from 'shared'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
-import { hoveredCardUid, hoveredCharacterUid } from '@/util'
+import { assertFinite, hoveredCardUid, hoveredCharacterUid } from '@/util'
 import {
     BASE_HEIGHT,
     BASE_WIDTH,
@@ -320,14 +320,6 @@ export function getNullAnimation() {
     return Tweener.add({ target: {}, duration: 0 }, {})
 }
 
-const RIGHT_TO_LEFT = 1
-const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
-const MAX_HAND_SIZE = 12
-const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
-const MAX_CARD_ROTATION = Math.PI * 0.1
-const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
-const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
-
 type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
 
 function getXYRotationScaleForNthCard(
@@ -335,6 +327,15 @@ function getXYRotationScaleForNthCard(
     numCardsInHand: number,
     cardFrameTexture: PixiTexture
 ): XYRotationScale {
+    // circular imports require defining constants here
+    const RIGHT_TO_LEFT = 1
+    const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
+    const MAX_HAND_SIZE = 12
+    const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
+    const MAX_CARD_ROTATION = Math.PI * 0.1
+    const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
+    const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
+
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 
@@ -349,12 +350,12 @@ function getXYRotationScaleForNthCard(
     const endCardRotation =
         ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
 
-    return {
+    return assertFinite({
         x: handWidth * 0.5 * xPlacementPortion,
         y:
             -Y_MIN_OFFSET -
             (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
         rotation: xPlacementPortion * endCardRotation,
         scale: CARD_WIDTH_IN_HAND / cardFrameTexture.width,
-    }
+    })
 }
