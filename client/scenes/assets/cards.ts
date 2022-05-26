@@ -10,6 +10,7 @@ import cardShieldOfLight from '@battleAssets/cards/Shield of Light.png'
 import cardShield from '@battleAssets/cards/Shield.png'
 import cardStrike from '@battleAssets/cards/Strike.png'
 import cardSweepTheLeg from '@battleAssets/cards/Sweep The Leg.png'
+import energy from '@battleAssets/cards/energy flame.png'
 
 const cardArtAssets = {
     cardBodySlam,
@@ -33,6 +34,7 @@ export type CardTypeAssetId = keyof typeof cardTypeAssets
 export type CardAssetId = keyof typeof cardAssets
 
 export const cardAssets = {
+    energy,
     cardBackPileSizeOverlay,
     cardBack,
     ...cardArtAssets,

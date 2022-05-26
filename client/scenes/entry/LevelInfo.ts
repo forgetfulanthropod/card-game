@@ -4,7 +4,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
 
 const arrowStyle = {
-    fontFamily: 'VT323',
+    fontFamily: 'bigFont',
     fontSize: 80,
     // fill: ['#fff', '#eee'], // gradient
     fill: ['#aaa'],
@@ -29,7 +29,7 @@ export function LevelInfo(): PixiContainer {
         text: `Level ${level?.num}`,
         anchor: [0.5, 1],
         style: {
-            fontFamily: 'VT323',
+            fontFamily: 'bigFont',
             fontSize: 60,
             fill: ['#fff', '#eee'], // gradient
             // letterSpacing: -5,
@@ -66,7 +66,7 @@ export function LevelInfo(): PixiContainer {
         anchor: [0.5, 0],
         y: 25,
         style: {
-            fontFamily: 'VT323',
+            fontFamily: 'bigFont',
             fontSize: 45,
             fill: '#fff',
             stroke: '#999',

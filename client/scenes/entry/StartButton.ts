@@ -39,7 +39,7 @@ export function StartButton(): PixiContainer {
                 text: 'GO!',
                 anchor: [0.5, 1.5],
                 style: {
-                    fontFamily: 'VT323',
+                    fontFamily: 'bigFont',
                     fontSize: 80,
                     fill: ['#fff', '#eee'],
                     stroke: '#999',

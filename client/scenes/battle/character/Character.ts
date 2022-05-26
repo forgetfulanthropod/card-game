@@ -192,7 +192,7 @@ function getBoundOrbContainer(
                             Text({
                                 text: `${orb.remainingCount}`,
                                 style: {
-                                    fontFamily: 'VT323',
+                                    fontFamily: 'bigFont',
                                     fontSize: 14 * SCALE_UNIVERSAL,
                                     fill: ['#fff', '#eee'], // gradient
                                     // letterSpacing: -5,

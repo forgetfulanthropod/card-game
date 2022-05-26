@@ -6,7 +6,7 @@ export function InfoBox(args: { info: string[] }): PixiContainer {
         text: args.info.join('\n'),
         anchor: [0.5, 1],
         style: {
-            fontFamily: 'VT323',
+            fontFamily: 'bigFont',
             fontSize: 30,
             fill: ['#fff', '#eee'],
 

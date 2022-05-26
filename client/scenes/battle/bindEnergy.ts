@@ -60,7 +60,7 @@ function Energy(value: number): PixiContainer {
                     stroke: 'black',
                     strokeThickness: 5,
                     fontSize: 100,
-                    fontFamily: 'VT323',
+                    fontFamily: 'bigFont',
                 },
                 width: ((energyWidth / 2) * BASE_WIDTH) / 1920,
                 height: ((energyWidth / 2) * BASE_WIDTH) / 1920,

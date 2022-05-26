@@ -38,7 +38,7 @@ export function DiscardPile(pile: Pile): PixiContainer {
                 style: {
                     fill: 0xffffff,
                     fontSize: 150,
-                    fontFamily: 'VT323',
+                    fontFamily: 'bigFont',
                 },
             }),
         ],
