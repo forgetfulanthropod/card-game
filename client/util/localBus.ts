@@ -8,4 +8,3 @@ export const brightBackLightIsShining = datum<boolean>(false)
 
 //battle
 export const hoveredCharacterUid = datum<CharacterUid | null>(null)
-export const hoveredCardUid = datum<CharacterUid | null>(null)

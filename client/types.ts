@@ -21,4 +21,5 @@ declare global {
     }
     type JSXElement = JSX.Element
     type Point = { x: number; y: number }
+    type Unbind = () => void
 }

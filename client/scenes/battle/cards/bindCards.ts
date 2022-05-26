@@ -1,5 +1,6 @@
 import type { ROCursor } from 'sbaobab'
-import type { BattleScene } from 'shared'
+import type { BattleScene, CharacterUid } from 'shared'
+import type { Datum } from 'datums'
 import { DiscardPile } from './DiscardPile'
 import { DrawPile } from './DrawPile'
 import { Hand } from './Hand'
@@ -14,21 +15,27 @@ import {
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/actions'
+import { onUpdate } from '@/util'
 
 type BindCursorArgs = {
     scene: ROCursor<BattleScene>
     container: PixiContainer
+    hoveredCardUid: Datum<CharacterUid | null>
 }
 
-export function bindCards({ scene, container }: BindCursorArgs) {
-    const u = () => update({ scene, container })
+export function bindCards(args: BindCursorArgs): Unbind {
+    const u = () => update(args)
     u()
-    scene.select('cards').on('update', u)
-    scene.select('isPlayerTurn').on('update', u)
-    scene.select('state').on('update', u)
+    const { scene } = args
+    const unsubs = [
+        onUpdate(scene.select('cards'), u),
+        onUpdate(scene.select('isPlayerTurn'), u),
+        onUpdate(scene.select('state'), u),
+    ]
+    return () => unsubs.forEach(unsub => unsub())
 }
 
-function update({ scene, container }: BindCursorArgs): void {
+function update({ scene, container, hoveredCardUid }: BindCursorArgs): void {
     clearContainer(container)
 
     if (!scene.get('isPlayerTurn')) return
@@ -39,7 +46,7 @@ function update({ scene, container }: BindCursorArgs): void {
     container.addChild(EndTurnButton())
     container.addChild(DrawPile(cards['draw']))
     container.addChild(DiscardPile(cards['discard']))
-    container.addChild(Hand(cards['hand']))
+    container.addChild(Hand(cards['hand'], hoveredCardUid))
 }
 
 function EndTurnButton(): PixiContainer {

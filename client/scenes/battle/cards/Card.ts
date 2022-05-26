@@ -3,10 +3,11 @@ import { keys, omit } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type { Card, CharacterClass, Pile } from 'shared'
+import type { Card, CardUid, CharacterClass, CharacterUid, Pile } from 'shared'
+import type { Datum } from 'datums'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
-import { assertFinite, hoveredCardUid, hoveredCharacterUid } from '@/util'
+import { assertFinite, hoveredCharacterUid } from '@/util'
 import {
     BASE_HEIGHT,
     BASE_WIDTH,
@@ -46,12 +47,14 @@ export function Card({
     pile,
     card,
     name,
+    hoveredCardUid,
 }: // hoveredCardUid,
 {
     index: number
     pile: Pile
     card: Card
     name: string
+    hoveredCardUid: Datum<CharacterUid | null>
     // hoveredCardUid: string
 }) {
     const cardFrameTexture = getCardTypeSrc(card.type)
@@ -71,7 +74,7 @@ export function Card({
 
         children: [
             TweenableContainer({
-                events: getEvents(card),
+                events: getEvents(card, hoveredCardUid),
                 ...omit(xyrs, 'x', 'y'),
                 y: (cardFrameTexture.height / 2) * xyrs.scale,
                 children: [
@@ -258,7 +261,10 @@ function getColorStopsFromCharacterClass(
 }
 
 let clearLastTargetSelection = () => {}
-function getEvents(card: Card): InteractionEvents {
+function getEvents(
+    card: Card,
+    hoveredCardUid: Datum<CardUid | null>
+): InteractionEvents {
     const pointerover: InteractionEventHandler = _ => {
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)

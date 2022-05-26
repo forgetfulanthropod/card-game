@@ -1,23 +1,24 @@
 import isEqual from 'lodash/isEqual'
 import type { ROCursor } from 'sbaobab'
-import type { BattleScene } from 'shared'
+import type { BattleScene, Characters } from 'shared'
 
 import { keyMap, keys, vals } from 'shared/code'
 import { Character } from './Character'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
+import { onUpdate } from '@/util'
 
 export function bindCharacters(
     scene: ROCursor<BattleScene>,
     container: PixiContainer
-) {
+): Unbind {
     const allCharsCursor = scene.select('allCharacters')
     let lastKeys = keys(allCharsCursor.get())
 
     updateCharacters(scene, container)
 
-    allCharsCursor.on('update', function checkIfKeysChanged() {
-        const allChars = allCharsCursor.get()
+    return onUpdate(allCharsCursor, checkIfKeysChanged)
+    function checkIfKeysChanged(allChars: Characters) {
         if (allChars == null) {
             container.destroy()
             return
@@ -40,7 +41,7 @@ export function bindCharacters(
             lastKeys = newKeys
             updateCharacters(scene, container)
         }
-    })
+    }
 }
 
 function updateCharacters(
