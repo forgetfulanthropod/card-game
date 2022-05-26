@@ -54,17 +54,18 @@ function Energy(value: number): PixiContainer {
                 height: (energyWidth * BASE_WIDTH) / 1920,
             }),
             Text({
-                text: `${value}`,
+                //TODO: dynamic energy based on round
+                text: `${value} / 3`,
                 style: {
-                    fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+                    // fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+                    fill: '#eee',
                     stroke: 'black',
-                    strokeThickness: 5,
-                    fontSize: 100,
+                    strokeThickness: 10,
+                    fontSize: 76,
                     fontFamily: 'bigFont',
+                    letterSpacing: -6,
                 },
-                width: ((energyWidth / 2) * BASE_WIDTH) / 1920,
-                height: ((energyWidth / 2) * BASE_WIDTH) / 1920,
-                anchor: [0.5, 0.5],
+                anchor: [0.5, 0],
             }),
         ],
     })
