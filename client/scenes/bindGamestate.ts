@@ -1,14 +1,14 @@
 import { TwistFilter } from 'pixi-filters'
-import { Easing, Tweener } from 'pixi-tweener'
 import type { SceneType } from 'shared'
 
+import { Easing, Tweener } from 'pixi-tweener'
 import { BattleScene } from './battle'
 import { DungeonEntryScene } from './entry'
 import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { waitingForSceneExitAnimationToFinish } from '@/util'
+import { nextFrame, waitingForSceneExitAnimationToFinish } from '@/util'
 
 let lastScene: PixiContainer
 
@@ -36,9 +36,7 @@ function bindScene(app: PixiApplication) {
         const sceneType = sceneTypeCursor.get()
 
         if (lastScene != null) {
-            await new Promise(resolve => {
-                setTimeout(resolve, 0)
-            })
+            await nextFrame()
             if (waitingForSceneExitAnimationToFinish.val === true) {
                 await new Promise(resolve =>
                     waitingForSceneExitAnimationToFinish.onChange(
@@ -68,26 +66,24 @@ function bindScene(app: PixiApplication) {
     }
 }
 
-const twistFilter = new TwistFilter({
-    angle: 4,
-    radius: 0,
-})
-twistFilter.offset.x = BASE_WIDTH / 2
-twistFilter.offset.y = BASE_HEIGHT / 2
-
-export const TRANSITION_OUT_TIME = 1
+export const TRANSITION_OUT_SECONDS = 1
 
 async function transitionSceneTo(
     sceneEl: PixiContainer,
     sceneType: SceneType
 ): Promise<void> {
+    const twistFilter = new TwistFilter({
+        angle: 4,
+        radius: 0,
+    })
+    twistFilter.offset.x = BASE_WIDTH / 2
+    twistFilter.offset.y = BASE_HEIGHT / 2
     if (sceneType === 'battle') {
         sceneEl.filters = [twistFilter]
-
         await Tweener.add(
             {
                 target: twistFilter,
-                duration: TRANSITION_OUT_TIME,
+                duration: TRANSITION_OUT_SECONDS,
                 ease: Easing.easeInExpo,
             },
             {

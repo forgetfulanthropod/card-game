@@ -16,6 +16,7 @@ export function DungeonEntryScene(): PixiContainer {
     const startButton = StartButton()
 
     return Container({
+        name: DungeonEntryScene.name,
         children: [
             DungeonEntryBg(),
             SelectedCharacters(),
