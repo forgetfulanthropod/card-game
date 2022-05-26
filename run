@@ -129,7 +129,7 @@ function dep-graph() {
 
 function npm-clean() {
     # previously: /{pnpm-lock.yaml,node_modules}
-    rm -rf {.,client,server,crypto-server,db}/{node_modules}
+    rm -rf {.,client,server,shared,game}/{node_modules,pnpm-lock.yaml}
 }
 
 ## CLIENT
