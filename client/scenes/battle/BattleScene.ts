@@ -1,13 +1,13 @@
 import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { datum } from 'datums'
 import type { CharacterUid } from 'shared'
-import { bindEnergy } from './bindEnergy'
 import { Cards } from './cards'
+import { Characters } from './character'
+import { Energy } from './Energy'
 import { InfoBox } from './InfoBox'
 import { StartRoomButton } from './StartRoomButton'
-import { Characters } from './character'
 import { Background, backgroundAssets } from '@/scenes'
-import { Container, onDestroyed } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
@@ -25,9 +25,6 @@ export function BattleScene(): PixiContainer {
             : { srcs: [backgroundAssets[dungeonName]] }
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-
-    const energyContainer = Container({ name: 'EnergyContainer' })
-
     const container = Container({
         name: 'BattleScene',
         children: [
@@ -41,12 +38,10 @@ export function BattleScene(): PixiContainer {
             intentArrowContainer,
             Characters(scene),
             Cards({ scene, hoveredCardUid }),
-            energyContainer,
+            Energy({ scene }),
             StartRoomButton(),
         ],
     })
-
-    onDestroyed(container, bindEnergy({ scene, container: energyContainer }))
 
     setTimeout(() => callApi('StartBattle', {}), 0)
 

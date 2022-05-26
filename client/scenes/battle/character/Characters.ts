@@ -26,6 +26,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 scale: 1,
             }),
         undefined,
-        { name: 'CharactersContainer' }
+        { name: 'CharactersContainer', onDestroy: [aliveUids.destroy] }
     )
 }
