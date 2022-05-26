@@ -92,6 +92,31 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
     export function makeFireSkeleton() {return deepClone(baseFireSkeleton)}
     ```
 
+## Gotchas
+
+-   Import order
+
+    -   Module level imports are not necessarily defined within module scope in time, so harmless-seeming patterns like below can sometimes cause bugs:
+
+    ```ts
+    // a.ts
+    export const x = 5
+    // b.ts
+    import { x } from './a'
+    export const y = x * 2
+    // x is undefined briefly, so `y = x * undefined (= NaN)`
+    ```
+
+        - Salve: **Prefer to define and mutate and operate on values within the same module**
+
+    -   Certain libraries, such as pixi filters, are not perfect modules, and do some registration on global state when imported. Therefore, instantiating instances or calling functions from those libraries at the module level can be precarious.
+        -   Salve: **Whenever possible, call constructors and functions from libraries inside functions, not at the module level.**
+
+-   Pixi
+    -   Prefer destroying elements to hiding them or only removing them from their parents
+    -   Conditionals and loops that generate elements are tricky, prefer using `If` and `For`
+    -   Any listeners, filters, etc that are created with an elements should be destroyed with it too, using `onDestroy:` in the constructor, or `onDestroyed()` elsewhere.
+
 ## Install and run
 
 ```
