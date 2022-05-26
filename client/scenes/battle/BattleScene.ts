@@ -1,11 +1,11 @@
 import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { datum } from 'datums'
 import type { CharacterUid } from 'shared'
-import { bindCharacters } from './character'
 import { bindEnergy } from './bindEnergy'
-import { bindCards } from './cards'
+import { Cards } from './cards'
 import { InfoBox } from './InfoBox'
 import { StartRoomButton } from './StartRoomButton'
+import { Characters } from './character'
 import { Background, backgroundAssets } from '@/scenes'
 import { Container, onDestroyed } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
@@ -23,9 +23,9 @@ export function BattleScene(): PixiContainer {
         dungeonName === 'The Matcha Caves'
             ? { src: CaveVideo }
             : { srcs: [backgroundAssets[dungeonName]] }
+    /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-    const charactersContainer = Container({ name: 'CharactersContainer' })
-    const cardsContainer = Container({ name: 'CardsContainer' })
+
     const energyContainer = Container({ name: 'EnergyContainer' })
 
     const container = Container({
@@ -39,19 +39,14 @@ export function BattleScene(): PixiContainer {
                 ],
             }),
             intentArrowContainer,
-            charactersContainer,
-            cardsContainer,
+            Characters(scene),
+            Cards({ scene, hoveredCardUid }),
             energyContainer,
             StartRoomButton(),
         ],
     })
 
-    onDestroyed(
-        container,
-        bindCharacters(scene, charactersContainer),
-        bindCards({ scene, container: cardsContainer, hoveredCardUid }),
-        bindEnergy({ scene, container: energyContainer })
-    )
+    onDestroyed(container, bindEnergy({ scene, container: energyContainer }))
 
     setTimeout(() => callApi('StartBattle', {}), 0)
 

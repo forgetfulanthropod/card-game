@@ -24,6 +24,7 @@ import {
     glowFilter,
     hasTexture,
     hideElement,
+    onDestroyed,
     PixiTicker,
     SCALE_UNIVERSAL,
     Sprite,
@@ -48,8 +49,6 @@ interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
     cursor: ROCursor<CharacterMeta>
-    zIndex: number
-    isSelected?: boolean
 }
 
 export function Character(args: CharacterProps): PixiContainer {
@@ -85,7 +84,6 @@ export function Character(args: CharacterProps): PixiContainer {
 
     const isHovered = datum(false)
     const mainContainer = Container({
-        zIndex: args.zIndex,
         isHoveredDatum: isHovered,
         children: [
             attackSprite,
@@ -138,7 +136,7 @@ export function Character(args: CharacterProps): PixiContainer {
 
     bindDOT(characterMeta, hitContainer)
 
-    bindMoves(
+    const unbindMoves = bindMoves(
         characterMeta,
         attackSprite,
         healthBar,
@@ -147,6 +145,7 @@ export function Character(args: CharacterProps): PixiContainer {
         hitContainer,
         mainAnimation
     )
+    onDestroyed(flyingContainer, unbindMoves)
 
     updateDeathAndHealth()
 
@@ -234,68 +233,69 @@ function bindMoves(
     defendSprite: PixiSprite,
     aboveCharacterContainer: PixiContainer,
     mainAnimation: PixiSpine | null
-) {
+): Unbind {
     const { screenX, screenY } = characterMeta
 
-    getSocket().on(
-        'damage$',
-        function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
-            const { attacker, cardName, damages } = event.data
-            const defenderUids: CharacterUid[] = Object.keys(damages)
+    const socket = getSocket()
+    socket.on('damage$', showCharMove)
 
-            const thisUid = characterMeta.uid
-            if (attacker === thisUid) {
-                if (mainAnimation) {
-                    mainAnimation.state.setAnimation(0, 'Attack', false)
-                    mainAnimation.state.addAnimation(0, 'Idle', true)
-                    // mainAnimation.state.
-                    // mainAnimation.state.addAnimation(0, 'Idle', true)
-                    return
-                }
+    return () => socket.off('damage$', showCharMove)
+    function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
+        const { attacker, cardName, damages } = event.data
+        const defenderUids: CharacterUid[] = Object.keys(damages)
 
-                flashElement(attackSprite, {
+        const thisUid = characterMeta.uid
+        if (attacker === thisUid) {
+            if (mainAnimation) {
+                mainAnimation.state.setAnimation(0, 'Attack', false)
+                mainAnimation.state.addAnimation(0, 'Idle', true)
+                // mainAnimation.state.
+                // mainAnimation.state.addAnimation(0, 'Idle', true)
+                return
+            }
+
+            flashElement(attackSprite, {
+                durationMs: ATTACK_ANIMATION_TIME,
+            })
+            hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
+            const defender0 = getBattleScene().get(
+                'allCharacters',
+                defenderUids[0]
+            )
+
+            bringToTop(flyingContainer)
+
+            const fly = makeFlyToOnTick(
+                { x: screenX, y: screenY },
+                { x: defender0.screenX, y: defender0.screenY }
+            )
+            PixiTicker.shared.add(function cb(dt) {
+                const result = fly(flyingContainer, dt)
+                if (result === 'remove') PixiTicker.shared.remove(cb)
+            })
+        }
+
+        if (defenderUids.findIndex(d => d === thisUid) > -1) {
+            if (mainAnimation) {
+                mainAnimation.state.setAnimation(0, 'Damage', false)
+                mainAnimation.state.addAnimation(0, 'Idle', true)
+            } else {
+                flashElement(defendSprite, {
                     durationMs: ATTACK_ANIMATION_TIME,
                 })
-                hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-                const defender0 = getBattleScene().get(
-                    'allCharacters',
-                    defenderUids[0]
-                )
-
-                bringToTop(flyingContainer)
-
-                const fly = makeFlyToOnTick(
-                    { x: screenX, y: screenY },
-                    { x: defender0.screenX, y: defender0.screenY }
-                )
-                PixiTicker.shared.add(function cb(dt) {
-                    const result = fly(flyingContainer, dt)
-                    if (result === 'remove') PixiTicker.shared.remove(cb)
-                })
             }
 
-            if (defenderUids.findIndex(d => d === thisUid) > -1) {
-                if (mainAnimation) {
-                    mainAnimation.state.setAnimation(0, 'Damage', false)
-                    mainAnimation.state.addAnimation(0, 'Idle', true)
-                } else {
-                    flashElement(defendSprite, {
-                        durationMs: ATTACK_ANIMATION_TIME,
-                    })
+            flashTo(
+                aboveCharacterContainer,
+                () => MoveInfo({ moveName: cardName, offset: -70 }),
+                {
+                    durationMs: SHOW_HIT_TIME,
                 }
+            )
 
-                flashTo(
-                    aboveCharacterContainer,
-                    () => MoveInfo({ moveName: cardName, offset: -70 }),
-                    {
-                        durationMs: SHOW_HIT_TIME,
-                    }
-                )
-
-                flashDamageTo(aboveCharacterContainer, damages[thisUid])
-            }
+            flashDamageTo(aboveCharacterContainer, damages[thisUid])
         }
-    )
+    }
 }
 
 function makeSprites(
