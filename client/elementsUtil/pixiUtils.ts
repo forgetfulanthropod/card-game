@@ -49,7 +49,7 @@ export function flashTo(
     setTimeout(() => {
         if (parent != null) {
             parent.removeChild(s)
-            s.destroy()
+            if (!s.destroyed) s.destroy()
         }
     }, durationMs)
 }

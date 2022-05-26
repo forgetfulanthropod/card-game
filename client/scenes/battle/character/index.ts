@@ -1,1 +1,1 @@
-export { bindCharacters } from './bindCharacters'
+export { Characters } from './Characters'

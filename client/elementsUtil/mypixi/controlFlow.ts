@@ -4,7 +4,7 @@ import type { DisplayObject, IDestroyOptions } from 'pixi.js'
 import { Ticker } from 'pixi.js'
 import type { PixiContainer } from './aliases'
 import { applyDisplayObjectArgs } from './_applyArgs'
-import type { DisplayObjectArgs } from './_types'
+import type { ContainerArgs, DisplayObjectArgs } from './_types'
 import { onDestroyed } from './convenience'
 import { Container } from './core'
 import { getPixiApp } from './application'
@@ -58,10 +58,13 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T>,
     render: (item: T[number]) => DisplayObject,
     position?: (index: number) => { x?: number; y?: number },
+    displayArgs?: ContainerArgs,
     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
     const root = Container({ children: [] }) as KeyedContainer
     onDestroyed(root, items.onChange(handleUpdate, true))
+
+    if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
 
     let warnedAlready = false
     return root
