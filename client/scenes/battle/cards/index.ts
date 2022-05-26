@@ -1,1 +1,1 @@
-export { bindCards } from './bindCards'
+export { Cards } from './Cards'

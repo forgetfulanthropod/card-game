@@ -9,11 +9,12 @@ import { onDestroyed } from './convenience'
 import { Container } from './core'
 import { getPixiApp } from './application'
 
+type Falsy = false | null | 0 | '' | undefined
 const controlFlow = null
-export function If(
-    condition: RODatum<boolean>,
-    ifRender: () => DisplayObject,
-    elseRender?: () => DisplayObject,
+export function If<T = unknown>(
+    condition: RODatum<T>,
+    ifRender: (x: Exclude<T, Falsy>) => DisplayObject,
+    elseRender?: (x: T & Falsy) => DisplayObject,
     displayArgs?: DisplayObjectArgs,
     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
 ): PixiContainer {
@@ -21,16 +22,23 @@ export function If(
     onDestroyed(root, condition.onChange(handleChange, true))
     if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
     return root
-    function handleChange(val: boolean) {
+    function handleChange(val: T) {
         ;[...root.children].forEach(c => c.destroy(destroyOptions))
         root.removeChildren()
         if (val) {
-            root.addChild(ifRender())
+            // @ts-expect-error
+            root.addChild(ifRender(val))
         } else if (elseRender != null) {
-            root.addChild(elseRender())
+            // @ts-expect-error
+            root.addChild(elseRender(val))
         }
     }
 }
+
+function isTruthy<T>(x: T): x is Exclude<T, Falsy> {
+    return !!x
+}
+
 // export function BareIf<T extends PixiDisplayObject>(
 //     condition: RODatum<boolean>,
 //     ifRender: () => T,

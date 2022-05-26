@@ -7,46 +7,37 @@ import { Hand } from './Hand'
 import {
     BASE_HEIGHT,
     BASE_WIDTH,
-    clearContainer,
     Container,
     getTexture,
+    If,
     Sprite,
     Text,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/actions'
-import { onUpdate } from '@/util'
+import { toDatum } from '@/util'
 
-type BindCursorArgs = {
+type CardsArgs = {
     scene: ROCursor<BattleScene>
-    container: PixiContainer
     hoveredCardUid: Datum<CharacterUid | null>
 }
 
-export function bindCards(args: BindCursorArgs): Unbind {
-    const u = () => update(args)
-    u()
-    const { scene } = args
-    const unsubs = [
-        onUpdate(scene.select('cards'), u),
-        onUpdate(scene.select('isPlayerTurn'), u),
-        onUpdate(scene.select('state'), u),
-    ]
-    return () => unsubs.forEach(unsub => unsub())
-}
-
-function update({ scene, container, hoveredCardUid }: BindCursorArgs): void {
-    clearContainer(container)
-
-    if (!scene.get('isPlayerTurn')) return
-    if (scene.get('state') !== 'in battle') return
-
-    const cards = scene.select('cards').get()
-
-    container.addChild(EndTurnButton())
-    container.addChild(DrawPile(cards['draw']))
-    container.addChild(DiscardPile(cards['discard']))
-    container.addChild(Hand(cards['hand'], hoveredCardUid))
+export function Cards(args: CardsArgs) {
+    const cardsDatum = toDatum(args.scene, scene => {
+        if (!scene.isPlayerTurn) return false
+        if (scene.state !== 'in battle') return false
+        return scene.cards
+    })
+    return If(cardsDatum, cards =>
+        Container({
+            children: [
+                EndTurnButton(),
+                DrawPile(cards['draw']),
+                DiscardPile(cards['discard']),
+                Hand(cards['hand'], args.hoveredCardUid),
+            ],
+        })
+    )
 }
 
 function EndTurnButton(): PixiContainer {
