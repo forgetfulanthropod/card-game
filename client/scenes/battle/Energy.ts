@@ -25,17 +25,18 @@ function EnergyEl(value: ROCursor<number>): PixiContainer {
     const energyWidth = 180
 
     const text = Text({
+        //TODO: dynamic energy based on round
         text: '',
         style: {
-            fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+            // fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+            fill: '#eee',
             stroke: 'black',
-            strokeThickness: 5,
-            fontSize: 100,
+            strokeThickness: 10,
+            fontSize: 76,
             fontFamily: 'bigFont',
+            letterSpacing: -6,
         },
-        width: ((energyWidth / 2) * BASE_WIDTH) / 1920,
-        height: ((energyWidth / 2) * BASE_WIDTH) / 1920,
-        anchor: [0.5, 0.5],
+        anchor: [0.5, 0],
     })
     return Container({
         name: 'Energy',
@@ -50,7 +51,7 @@ function EnergyEl(value: ROCursor<number>): PixiContainer {
             }),
             text,
         ],
-        onDestroy: [onUpdate(value, v => (text.text = `${v}`), true)],
+        onDestroy: [onUpdate(value, v => (text.text = `${v} / 3`), true)],
     })
 }
 

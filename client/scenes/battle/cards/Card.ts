@@ -156,7 +156,8 @@ function getEnergyContainer(
                     r1: wh / 2,
                     colorStops: [
                         { color: 0xee41eb, offset: 0 },
-                        { color: 0x432a64, offset: 0.8 },
+                        { color: 0xee41eb, offset: 0.8 },
+                        // { color: 0x432a64, offset: 0.8 },
                         { color: 0x1b081c, offset: 0.88 },
                         // { color: 0xffffff, offset: 0.92 },
                         { color: 0, offset: 1 },
@@ -176,15 +177,14 @@ function getEnergyContainer(
             Text({
                 text: `${card.energy}`,
                 style: {
-                    fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+                    // fill: ['#f3ff30', '#DEBD00', '#D88F00'],
+                    fill: '#eee',
                     stroke: 'black',
-                    strokeThickness: 5,
-                    fontSize: wh,
+                    strokeThickness: 22,
+                    fontSize: wh * 1.4,
                     fontFamily: 'bigFont',
                 },
-                width: ((wh / 2) * BASE_WIDTH) / 1920,
-                height: ((wh / 2) * BASE_WIDTH) / 1920,
-                anchor: 0.5,
+                anchor: [0.5, 0.7],
             }),
         ],
     })

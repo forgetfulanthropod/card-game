@@ -7,14 +7,13 @@ import {
     Container,
     getTexture,
     Sprite,
-    Text,
 } from '@/elementsUtil'
 
 export function StartButton(): PixiContainer {
     const bg = Sprite({
         src: getTexture('gemButton'),
-        anchor: [0.5, 1],
-        scale: 0.5,
+        anchor: 0.5,
+        scale: (1920 * 0.25) / getTexture('gemButton').width,
         async onClick() {
             await callApi('ChangeScene', { newSceneName: 'battle' })
         },
@@ -32,20 +31,20 @@ export function StartButton(): PixiContainer {
 
     const root = Container({
         x: BASE_WIDTH * 0.87,
-        y: BASE_HEIGHT * 0.6,
+        y: BASE_HEIGHT * 0.5,
         children: [
             bg,
-            Text({
-                text: 'GO!',
-                anchor: [0.5, 1.5],
-                style: {
-                    fontFamily: 'bigFont',
-                    fontSize: 80,
-                    fill: ['#fff', '#eee'],
-                    stroke: '#999',
-                    strokeThickness: 5,
-                },
-            }),
+            // Text({
+            //     text: 'GO!',
+            //     anchor: 0.5,
+            //     style: {
+            //         fontFamily: 'bigFont',
+            //         fontSize: 100,
+            //         fill: ['#fff', '#eee'],
+            //         stroke: '#999',
+            //         strokeThickness: 5,
+            //     },
+            // }),
         ],
     })
 
