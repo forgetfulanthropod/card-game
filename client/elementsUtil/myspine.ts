@@ -4,8 +4,8 @@ export { PixiSpine }
 import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 
-import type { InteractionEvents } from './InteractionEvents'
-import { bindEvents } from './InteractionEvents'
+import type { InteractionEvents } from './mypixi'
+import { bindEvents } from './mypixi'
 import type { AnimationsOf, SpineAsset } from '@/scenes'
 import { onUpdate } from '@/util'
 

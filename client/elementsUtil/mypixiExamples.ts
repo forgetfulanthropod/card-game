@@ -4,7 +4,7 @@ import { delayChain } from 'shared/code'
 import { getTexture } from './AssetLoader'
 
 import type { PixiContainer } from './mypixi'
-import { Adjust, Container, For, If, portalize, Sprite, Text } from './mypixi'
+import { Adjust, Container, Sprite, Text, For, If, portalize } from './mypixi'
 
 export function ForExample(): PixiContainer {
     const strings = datum(['a', 'b', 'c', 'd'])

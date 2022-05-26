@@ -1,5 +1,5 @@
 import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
-import { bindCharacters } from './bindCharacters'
+import { bindCharacters } from './character'
 import { bindEnergy } from './bindEnergy'
 import { bindCards } from './cards'
 import { InfoBox } from './InfoBox'

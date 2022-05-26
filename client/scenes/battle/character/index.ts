@@ -1,0 +1,1 @@
+export { bindCharacters } from './bindCharacters'
