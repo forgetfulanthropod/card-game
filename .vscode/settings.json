@@ -52,29 +52,14 @@
     "workbench.colorCustomizations": {
         "activityBar.background": "#1C3314",
         "titleBar.activeBackground": "#27481C",
-        "titleBar.activeForeground": "#F8FCF7"
+        "titleBar.activeForeground": "#F8FCF7",
+        "breadcrumb.foreground": "#000000"
     },
     "javascript.format.semicolons": "remove",
     "typescript.format.semicolons": "remove",
     "editor.formatOnSave": true,
-    "searchEverywhere.exclude": [
-        "**/.git",
-        "**/.DS_Store",
-        "**/package-lock.json",
-        "**/node_modules/**",
-        "**/.vscode/**",
-        "**/pnpm-lock.yaml"
-    ],
-    "searchEverywhere.include": "**/*.{ts,tsx,mjs}",
-    "searchEverywhere.shouldUseDebounce": false,
-    "searchEverywhere.shouldInitOnStartup": true,
-    "random-string.charctors": "abcdefghijklmnopqrstuvwxyz",
     "prettier.configPath": ".prettierrc.json",
     "prettier.prettierPath": "./node_modules/prettier-no-jsx-parens/",
-    "typescript.tsdk": "node_modules/typescript/lib",
-    "tidyExplorer.pockets": [
-        { "name": "typescript", "selectors": ["**/*.ts"] },
-        { "name": "packages", "selectors": ["**/package.json"] }
-    ]
+    "typescript.tsdk": "node_modules/typescript/lib"
     // "debug.javascript.autoAttachFilter": "smart"
 }
