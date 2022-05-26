@@ -12,6 +12,7 @@ import {
 import type { ShownArgs, DisplayObjectArgs } from './_types'
 import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import { Sprite, BASE_WIDTH, BASE_HEIGHT, Container } from './core'
+import { getPixiApp } from './application'
 export type PlayablePixiSprite = PixiSprite & { play: () => void }
 export function VideoBackground(args: {
     name?: string
@@ -105,4 +106,27 @@ export function onDestroyed<T extends DisplayObject>(
         el.on('destroyed', cb)
     }
     return el
+}
+
+export function getElByPath(args: {
+    root?: PixiContainer
+    path: string[]
+    strict?: boolean
+}) {
+    const { root = getPixiApp().stage, path, strict = true } = args
+    let el = root
+    path.forEach((name, i) => {
+        if (strict && !(el instanceof PixiContainer)) {
+            const pathHere = JStr(path.slice(0, i))
+            throw Error(`path ${pathHere} is not a container on root ${root}`)
+        }
+        el = el.getChildByName(name) as PixiContainer
+    })
+    if (strict && !(el instanceof PixiContainer))
+        throw Error(`path ${JStr(path)} is not a container on root ${root}`)
+    return el
+}
+
+function JStr(obj: unknown): string {
+    return JSON.stringify(obj)
 }

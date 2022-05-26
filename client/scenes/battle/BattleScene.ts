@@ -19,6 +19,7 @@ export function BattleScene(): PixiContainer {
         dungeonName === 'The Matcha Caves'
             ? { src: CaveVideo }
             : { srcs: [backgroundAssets[dungeonName]] }
+    const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
     const charactersContainer = Container({ name: 'CharactersContainer' })
     const cardsContainer = Container({ name: 'CardsContainer' })
     const energyContainer = Container({ name: 'EnergyContainer' })
@@ -33,6 +34,7 @@ export function BattleScene(): PixiContainer {
                     scene.get('dungeonName'),
                 ],
             }),
+            intentArrowContainer,
             charactersContainer,
             cardsContainer,
             energyContainer,

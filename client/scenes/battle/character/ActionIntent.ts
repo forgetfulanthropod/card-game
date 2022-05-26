@@ -3,6 +3,7 @@ import { compose } from 'datums'
 import type { CharacterUid, NextCommand } from 'shared'
 import { getBattleScene } from '@/data'
 import {
+    getElByPath,
     Arrow,
     Container,
     For,
@@ -32,7 +33,14 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
         children: [text],
         onDestroy: [nextCmd.destroy],
     })
-    portalize({ from: root, content: arrows, nextFrame: true })
+    const intentArrowsContainer = () =>
+        getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] })
+    portalize({
+        from: root,
+        content: arrows,
+        nextFrame: true,
+        to: intentArrowsContainer,
+    })
 
     return root
 }

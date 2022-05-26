@@ -1,6 +1,7 @@
 import type { RODatum } from 'datums'
 import { sortBy, uniq } from 'lodash'
 import type { DisplayObject, IDestroyOptions } from 'pixi.js'
+import { Ticker } from 'pixi.js'
 import type { PixiContainer } from './aliases'
 import { applyDisplayObjectArgs } from './_applyArgs'
 import type { DisplayObjectArgs } from './_types'
@@ -128,21 +129,31 @@ function isKeyedArray(
 export function portalize(args: {
     from: DisplayObject
     content: DisplayObject
-    to?: PixiContainer
+    to?: () => PixiContainer | PixiContainer
+    /** Name of child of `to` to insert child before */
+    before?: string
     nextFrame?: boolean
 }): void {
-    const { from, content } = args
-    const to =
+    const { from, content, before } = args
+    const to_ =
         args.to ?? getPixiApp()?.stage ?? throwNull('app.stage and args.to')
     function attach() {
-        to.addChild(content)
+        const to = typeof to_ === 'function' ? to_() : to_
+        if (before != null) {
+            const i = to.children.findIndex(c => c.name === before)
+            const j = i === -1 ? to.children.length : i
+            to.addChildAt(content, j)
+        } else {
+            to.addChild(content)
+        }
         from.on('destroyed', () => {
             to.removeChild(content)
             content.destroy({ children: true })
         })
     }
     if (args.nextFrame) {
-        setTimeout(attach, 0)
+        Ticker.shared.addOnce(() => attach())
+        // setTimeout(attach, 0)
     } else {
         attach()
     }
