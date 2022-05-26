@@ -1,14 +1,15 @@
 import { pick } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { CardUid, Pile } from 'shared'
+import type { CardUid, CharacterUid, Pile } from 'shared'
 import { keys, vals } from 'shared/code'
+import type { Datum } from 'datums'
 import {
     Card,
     CARD_HEIGHT_FULL,
     CARD_WIDTH_FULL,
     CARD_WIDTH_IN_HAND,
 } from './Card'
-import { hoveredCardUid, hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid } from '@/util'
 import {
     BASE_HEIGHT,
     BASE_WIDTH,
@@ -22,17 +23,19 @@ import type {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 
-export function Hand(pile: Pile): PixiContainer {
+export function Hand(
+    pile: Pile,
+    hoveredCardUid: Datum<CharacterUid | null>
+): PixiContainer {
     const cardUids = keys(pile)
 
-    // const hoveredCardUid = datum<CharacterUid | null>(null)
     const children = vals(pile).map((card, index) => {
         return Card({
             index,
             pile,
             card,
             name: cardUids[index],
-            // hoveredCardUid,
+            hoveredCardUid,
         })
     })
 
@@ -43,12 +46,16 @@ export function Hand(pile: Pile): PixiContainer {
         children,
     }) as PixiContainerWithTweenableChildren
 
-    bindHandAnimations(root)
+    bindHandAnimations(root, hoveredCardUid)
 
     return root
 }
 
-function bindHandAnimations(rootEl: PixiContainerWithTweenableChildren) {
+function bindHandAnimations(
+    rootEl: PixiContainerWithTweenableChildren,
+
+    hoveredCardUid: Datum<CardUid | null>
+) {
     const initialDisplayVals = getInitialDisplayVals(rootEl)
 
     const unfocus = getUnfocus(rootEl, initialDisplayVals)
@@ -57,13 +64,13 @@ function bindHandAnimations(rootEl: PixiContainerWithTweenableChildren) {
     const unsubs: (() => void)[] = []
     unsubs.push(
         hoveredCharacterUid.onChange(_ => {
-            updateGlowFilters(rootEl)
+            updateGlowFilters(rootEl, hoveredCardUid)
         })
     )
 
     unsubs.push(
         hoveredCardUid.onChange(uid => {
-            updateGlowFilters(rootEl)
+            updateGlowFilters(rootEl, hoveredCardUid)
 
             if (uid == null) {
                 unfocus()
@@ -168,7 +175,10 @@ function spreadOthers(
 //     knockout: false,
 // })
 
-function updateGlowFilters(handEl: PixiContainerWithTweenableChildren) {
+function updateGlowFilters(
+    handEl: PixiContainerWithTweenableChildren,
+    hoveredCardUid: Datum<CardUid | null>
+) {
     handEl.children.forEach(el => {
         const filteredEl = (el as PixiContainer).children[0]
         if (hoveredCardUid.val != null) {

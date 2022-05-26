@@ -11,19 +11,23 @@ import {
     clearContainer,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
+import { onUpdate } from '@/util'
 
 type BindCursorArgs = {
     scene: ROCursor<BattleScene>
     container: PixiContainer
 }
 
-export function bindEnergy({ scene, container }: BindCursorArgs) {
+export function bindEnergy({ scene, container }: BindCursorArgs): Unbind {
     const u = () => update({ scene, container })
 
     u()
-    scene.select('energy').on('update', u)
-    scene.select('isPlayerTurn').on('update', u)
-    scene.select('state').on('update', u)
+    const unsubs = [
+        onUpdate(scene.select('energy'), u),
+        onUpdate(scene.select('isPlayerTurn'), u),
+        onUpdate(scene.select('state'), u),
+    ]
+    return () => unsubs.forEach(unsub => unsub())
 }
 
 function update({ scene, container }: BindCursorArgs) {

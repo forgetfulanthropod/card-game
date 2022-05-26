@@ -55,15 +55,7 @@ export function flashTo(
 }
 
 export function clearContainer(container: PixiContainer): void {
-    const children = container.children
-
-    container.children.forEach(c => console.log({ containerName: c.name }))
-
-    for (const x of [...children]) {
-        console.log('destroying', { x, name: x.name })
-        x.destroy({ children: true })
-    }
-
+    ;[...container.children].forEach(c => c.destroy({ children: true }))
     container.removeChildren()
 }
 
