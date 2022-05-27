@@ -5,10 +5,7 @@ import { getTree } from '@/data'
 import type { PlayablePixiSprite } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { Background } from '@/scenes'
-import {
-    brightBackLightIsShining,
-    waitingForSceneExitAnimationToFinish,
-} from '@/util'
+import { animation$, brightBackLightIsShining } from '@/util'
 
 const TIME_FOR_OUTRO_BRIGHTNESS_MS = 400
 const TIME_FOR_OUTRO_MS = 2500
@@ -24,8 +21,6 @@ export function DungeonEntryBg() {
     const sceneTypeCursor = getTree().select('scene', 'name')
 
     sceneTypeCursor.once('update', () => {
-        waitingForSceneExitAnimationToFinish.set(true)
-
         if (sceneTypeCursor.get() !== 'battle')
             console.error('WE CAN ONLY GO TO BATTLE :CRY:')
 
@@ -34,12 +29,14 @@ export function DungeonEntryBg() {
 
             bgOnTransition.play()
             brightBackLightIsShining.set(false)
-            setTimeout(() => {
-                brightBackLightIsShining.set(true)
-            }, TIME_FOR_OUTRO_BRIGHTNESS_MS)
-            setTimeout(() => {
-                waitingForSceneExitAnimationToFinish.set(false)
-            }, TIME_FOR_OUTRO_MS)
+            setTimeout(
+                () => brightBackLightIsShining.set(true),
+                TIME_FOR_OUTRO_BRIGHTNESS_MS
+            )
+            setTimeout(
+                () => void animation$.send('scene exit done'),
+                TIME_FOR_OUTRO_MS
+            )
 
             root.addChild(bgOnTransition)
             // setTimeout(() => root.removeChildAt(0).destroy(), 0)

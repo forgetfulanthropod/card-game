@@ -58,6 +58,17 @@ export class Channel<T> {
         }
         return p
     }
+
+    async readAssert(expected: T): Promise<void> {
+        const actual = await this.read()
+        if (actual !== expected)
+            throw Error(
+                `channel '${this.name}' readAssert failed. ` +
+                    `expected: ${JSON.stringify(expected)}, ` +
+                    `actual: ${JSON.stringify(actual)}`
+            )
+    }
+
     private revalidate() {
         if (!(this.sendQ.isEmpty() || this.readQ.isEmpty()))
             throw Error(

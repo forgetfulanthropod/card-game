@@ -196,9 +196,15 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
 function HealthBarLine(characterCursor: ROCursor<CharacterMeta>) {
     const g = new PixiGraphics()
-    onDestroyed(g, onUpdate(characterCursor, draw, true))
+    g.name = HealthBarLine.name
+    const unsub = onUpdate(characterCursor, draw, true)
+    onDestroyed(g, unsub)
     return g
     function draw(cm: CharacterMeta) {
+        if (cm == null) {
+            unsub()
+            return
+        }
         const xMargin = 0.01869158878
         const yMargin = 0.16883116883
         const colorStops = [
