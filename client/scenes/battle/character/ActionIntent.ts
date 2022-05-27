@@ -1,6 +1,7 @@
 import type { RODatum } from 'datums'
 import { compose } from 'datums'
 import type { CharacterUid, NextCommand } from 'shared'
+import { vals } from 'shared/code'
 import { HEALTH_BAR_WIDTH } from './HealthBar'
 import { getBattleScene } from '@/data'
 import {
@@ -23,11 +24,25 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
 
     const text = Text({
         text: '',
-        style: { fontSize: 20, fill: 'red' },
+        style: {
+            fontSize: 34,
+            fill: 'white',
+            fontFamily: 'sansFont',
+            // stroke: 'white',
+            // strokeThickness: 4,
+        },
+        anchor: [1.1, 1.7],
     })
     onDestroyed(
         text,
-        nextCmd.onChange(c => (text.text = c?.command?.name ?? ''), true)
+        isHovered.onChange(is => {
+            if (!is) text.text = ''
+            else text.text = getIntentText(nextCmd)
+        }),
+        nextCmd.onChange(
+            c => (text.text = isHovered.val ? c?.command?.name ?? '' : ''),
+            true
+        )
     )
     const arrows = IntentArrows(uid, nextCmd, isHovered)
     const root = Container({
@@ -46,23 +61,22 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
     return root
 }
 
+function getIntentText(
+    nextCmd: RODatum<NextCommand | undefined> & { destroy: Callback }
+): string {
+    const command = nextCmd.val
+    if (command == null) return ''
+
+    return `${command.command.name} (${vals(command.outcome.damages).join(
+        ', '
+    )})`
+}
+
 function IntentArrows(
     uid: CharacterUid,
     nextCmd: RODatum<NextCommand | undefined> & { destroy: Callback },
     isHovered: RODatum<boolean>
 ) {
-    const allCharacters = getBattleScene().select('allCharacters')
-    const bottomLeftCornerOf = (uid: CharacterUid) =>
-        toDatum(allCharacters.select(uid), cm => ({
-            x: cm.screenX,
-            y: cm.screenY,
-        }))
-    const bottomRightCornerOf = (uid: CharacterUid) =>
-        toDatum(allCharacters.select(uid), cm => ({
-            x: cm.screenX + HEALTH_BAR_WIDTH,
-            y: cm.screenY,
-        }))
-
     const orig = bottomLeftCornerOf(uid)
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
@@ -77,6 +91,25 @@ function IntentArrows(
         const dest = bottomRightCornerOf(uid)
         return onDestroyed(EnemyIntentArrow(orig, dest), dest.destroy)
     }
+}
+
+function bottomLeftCornerOf(uid: CharacterUid) {
+    return toDatum(
+        getBattleScene().select('allCharacters').select(uid),
+        cm => ({
+            x: cm.screenX,
+            y: cm.screenY,
+        })
+    )
+}
+function bottomRightCornerOf(uid: CharacterUid) {
+    return toDatum(
+        getBattleScene().select('allCharacters').select(uid),
+        cm => ({
+            x: cm.screenX + HEALTH_BAR_WIDTH,
+            y: cm.screenY,
+        })
+    )
 }
 
 function EnemyIntentArrow(origin: RODatum<Point>, destination: RODatum<Point>) {
