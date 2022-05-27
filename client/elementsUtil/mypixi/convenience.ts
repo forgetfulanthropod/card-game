@@ -1,6 +1,7 @@
 // window.PIXI = PIXI
 import type { Datum } from 'datums'
 import type { DisplayObject } from 'pixi.js'
+import type { AssetKey } from '../AssetLoader'
 import type { PixiGraphics } from './aliases'
 import {
     PixiContainer,
@@ -70,7 +71,7 @@ export function VideoBackground(args: {
 export function PngLayersBackground(args: {
     name?: string
     scale: number
-    srcs: string[] | PixiTexture[]
+    srcs: AssetKey[] | PixiTexture[]
 }): PixiContainer {
     return Container({
         name: args.name,

@@ -1,6 +1,10 @@
 import type { Datum } from 'datums'
 
-import type { PixiContainer, PlayablePixiSprite } from '@/elementsUtil'
+import type {
+    AssetKey,
+    PixiContainer,
+    PlayablePixiSprite,
+} from '@/elementsUtil'
 import { PngLayersBackground, VideoBackground } from '@/elementsUtil'
 
 const config = {
@@ -16,7 +20,7 @@ export function Background({
 }: {
     scale: number
     src?: string
-    srcs?: string[]
+    srcs?: AssetKey[]
     autoPlay?: boolean
     bgLoopEnded?: Datum<number>
 }): PlayablePixiSprite | PixiContainer | null {
