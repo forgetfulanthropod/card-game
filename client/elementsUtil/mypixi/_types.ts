@@ -6,6 +6,7 @@ import type {
     ITextStyle,
 } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
+import type { AssetKey } from '../AssetLoader'
 import type {
     PixiContainer,
     PixiGraphics,
@@ -73,7 +74,7 @@ export type OnPixiTick = (
     delta: number
 ) => void | 'remove'
 export interface SpriteArgs extends ShownArgs {
-    src: string | PixiTexture
+    src: AssetKey | PixiTexture
 }
 export type PixiChildren = (
     | PixiSprite

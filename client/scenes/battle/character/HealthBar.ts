@@ -26,11 +26,11 @@ type Rect = [
     number // height
 ]
 
-const displayWidth = 200
+export const HEALTH_BAR_WIDTH = 200
 const rawWidth = 1841
 const rawHeight = 161
 const widthToHeight = rawHeight / rawWidth
-const displayHeight = displayWidth * widthToHeight
+const displayHeight = HEALTH_BAR_WIDTH * widthToHeight
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
@@ -155,11 +155,11 @@ function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
                 : getTexture('stanceDefensive')
         return Sprite({
             src: stanceSrc,
-            x: displayWidth,
+            x: HEALTH_BAR_WIDTH,
             y: displayHeight * 1.1,
             anchor: [1, 0],
-            width: displayWidth / 3,
-            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
+            width: HEALTH_BAR_WIDTH / 3,
+            height: (HEALTH_BAR_WIDTH / 3 / stanceSrc.width) * stanceSrc.height,
             onClick: () => callApi('ToggleStance', { characterUid: uid }),
         })
     })
@@ -171,7 +171,7 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             HealthBarLine(characterCursor),
             Sprite({
                 src: getTexture('healthBorder'),
-                width: displayWidth,
+                width: HEALTH_BAR_WIDTH,
                 height: displayHeight,
                 zIndex: 2,
             }),
@@ -179,7 +179,7 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
                 text: characterCursor.select('health'),
                 zIndex: 1,
                 anchor: [0.5, 0.5],
-                x: displayWidth / 2,
+                x: HEALTH_BAR_WIDTH / 2,
                 y: displayHeight / 2,
                 style: {
                     fontFamily: 'monospace',
@@ -214,9 +214,9 @@ function HealthBarLine(characterCursor: ROCursor<CharacterMeta>) {
                 .find(cs => portion <= cs.stop) || { color: 'pink' }
         ).color
         const rect: Rect = [
-            displayWidth * xMargin,
+            HEALTH_BAR_WIDTH * xMargin,
             displayHeight * yMargin,
-            portion * displayWidth * (1 - 2 * xMargin),
+            portion * HEALTH_BAR_WIDTH * (1 - 2 * xMargin),
             displayHeight * (1 - 2 * yMargin),
         ]
 

@@ -121,7 +121,7 @@ export function SelectedCharacters(): PixiContainer {
                             3
                         const nextChoice = defaultOwnedCharacters[nextIndex]
                         console.log({ nextIndex, nextChoice })
-                        void callApi('AddSelected', {
+                        void callApi('PlaceSelectedCharacter', {
                             character: {
                                 ...nextChoice,
                                 uid: `pc-${i + 1}`,
@@ -173,7 +173,7 @@ export function SelectedCharacters(): PixiContainer {
 function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
     if (charactersData.length === 0) {
         for (let index = charactersData.length; index <= 2; index++) {
-            void callApi('AddSelected', {
+            void callApi('PlaceSelectedCharacter', {
                 character: defaultOwnedCharacters[index],
                 index: index as CharacterPlaceIndex,
             })

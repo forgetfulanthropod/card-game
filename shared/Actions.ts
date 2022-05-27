@@ -7,7 +7,7 @@ import type { Orb, OwnedCharacterStats, Rulebook, SceneType } from './index'
 export interface Action {
     ActivateOrb: (_: { characterUid: CharacterUid; orb: Orb }) => void
 
-    AddSelected: (_: {
+    PlaceSelectedCharacter: (_: {
         character: OwnedCharacterStats
         index: CharacterPlaceIndex
     }) => void

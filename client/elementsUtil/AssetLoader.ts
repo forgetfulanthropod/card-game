@@ -10,6 +10,7 @@ import potion from '@battleAssets/misc-png/INVENTORY_POTION.png'
 import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
 import door from '@battleAssets/misc-png/temp-door.png'
+import enemyIntentArrow from '@battleAssets/misc-png/enemy intent arrow.png'
 import type { PixiTexture } from './mypixi'
 import {
     backgroundAssets,
@@ -34,6 +35,7 @@ const basicAssets = {
     chestLid,
     door,
     endTurnButton,
+    enemyIntentArrow,
     ...fontAssets,
     ...orbAssets,
     ...characterAssets,

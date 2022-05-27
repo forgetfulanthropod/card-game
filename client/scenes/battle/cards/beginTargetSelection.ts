@@ -5,7 +5,7 @@ import type { Card } from 'shared'
 import { callApi } from '@/actions'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { getPixiApp, Arrow } from '@/elementsUtil'
+import { getPixiApp, TargetSelectGraphic } from '@/elementsUtil'
 import { onUpdate } from '@/util'
 
 export function beginTargetSelection(
@@ -47,7 +47,7 @@ export function beginTargetSelection(
         false
     )
 
-    const arrow = Arrow(origin, destination)
+    const arrow = TargetSelectGraphic(origin, destination)
     cardEl.addChild(arrow)
     console.log('arrow index: ' + cardEl.getChildIndex(arrow))
 

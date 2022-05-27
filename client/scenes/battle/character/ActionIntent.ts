@@ -1,16 +1,17 @@
 import type { RODatum } from 'datums'
 import { compose } from 'datums'
 import type { CharacterUid, NextCommand } from 'shared'
+import { HEALTH_BAR_WIDTH } from './HealthBar'
 import { getBattleScene } from '@/data'
 import {
     getElByPath,
-    Arrow,
     Container,
     For,
     If,
     onDestroyed,
     portalize,
     Text,
+    Sprite,
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 
@@ -44,19 +45,25 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
 
     return root
 }
+
 function IntentArrows(
     uid: CharacterUid,
     nextCmd: RODatum<NextCommand | undefined> & { destroy: Callback },
     isHovered: RODatum<boolean>
 ) {
     const allCharacters = getBattleScene().select('allCharacters')
-    const locationOf = (uid: CharacterUid) =>
+    const bottomLeftCornerOf = (uid: CharacterUid) =>
         toDatum(allCharacters.select(uid), cm => ({
             x: cm.screenX,
             y: cm.screenY,
         }))
+    const bottomRightCornerOf = (uid: CharacterUid) =>
+        toDatum(allCharacters.select(uid), cm => ({
+            x: cm.screenX + HEALTH_BAR_WIDTH,
+            y: cm.screenY,
+        }))
 
-    const orig = locationOf(uid)
+    const orig = bottomLeftCornerOf(uid)
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
     return onDestroyed(
@@ -67,7 +74,38 @@ function IntentArrows(
     )
 
     function IntentArrow(uid: CharacterUid) {
-        const dest = locationOf(uid)
-        return onDestroyed(Arrow(orig, dest), dest.destroy)
+        const dest = bottomRightCornerOf(uid)
+        return onDestroyed(EnemyIntentArrow(orig, dest), dest.destroy)
+    }
+}
+
+function EnemyIntentArrow(origin: RODatum<Point>, destination: RODatum<Point>) {
+    const root = Container({
+        children: [],
+    })
+    return onDestroyed(
+        root,
+        destination.onChange(update),
+        origin.onChange(update, true)
+    )
+
+    function update() {
+        root.removeChildren()
+
+        const xDistance = origin.val.x - destination.val.x
+        const yDistance = origin.val.y - destination.val.y
+        const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2)
+
+        root.addChild(
+            Sprite({
+                src: 'enemyIntentArrow',
+                width: distance,
+                anchor: [1, 0.5],
+                pivot: [1, 0.5],
+                rotation: Math.asin(yDistance / distance),
+                x: origin.val.x,
+                y: origin.val.y,
+            })
+        )
     }
 }

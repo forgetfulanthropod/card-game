@@ -1,7 +1,10 @@
 import type { RODatum } from 'datums'
 import { onDestroyed, PixiGraphics } from '@/elementsUtil'
 
-export function Arrow(origin: RODatum<Point>, destination: RODatum<Point>) {
+export function TargetSelectGraphic(
+    origin: RODatum<Point>,
+    destination: RODatum<Point>
+) {
     const pointRadius = 10
     const g = new PixiGraphics()
     return onDestroyed(
