@@ -22,6 +22,7 @@ import type {
     PixiContainerWithTweenableChildren,
     TweenablePixiContainer,
 } from '@/elementsUtil'
+import { getBattleScene } from '@/data'
 
 export function Hand(
     pile: Pile,
@@ -188,7 +189,11 @@ function updateGlowFilters(
                 filteredEl.filters = []
             }
         } else if (hoveredCharacterUid.val != null) {
-            if (hoveredCardUid.val === el.name) {
+            const card = getBattleScene()
+                .select('cards', 'hand')
+                .select(el.name as CardUid)
+                .get()
+            if (hoveredCharacterUid.val === card.characterUid) {
                 filteredEl.filters = [glowFilter]
             } else {
                 filteredEl.filters = []
