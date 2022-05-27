@@ -14,7 +14,7 @@ const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
 export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
-    const playerCharacterPositions = makePositions({
+    const playerCharacterPositions = makeLeftPositions({
         x0: 10,
         y0: 50,
         hGap: 18,
@@ -63,6 +63,34 @@ export function getEnemyPositions(n: number) {
         vGap: 13,
         n,
     })
+}
+
+function makeLeftPositions({
+    x0,
+    y0,
+    hGap,
+    vGap,
+    n = 6,
+}: {
+    x0: number
+    y0: number
+    hGap: number
+    vGap: number
+    n?: number
+}): [[number, number], [number, number], [number, number]] {
+    const measureWFull = 1577
+    const measureHFull = 886
+
+    const measurements = [
+        [477, 333],
+        [358, 495],
+        [271, 655],
+    ]
+
+    return measurements.map(m => [
+        (m[0] / measureWFull) * 100,
+        (m[1] / measureHFull) * 100,
+    ]) as [[number, number], [number, number], [number, number]]
 }
 
 function makePositions({
