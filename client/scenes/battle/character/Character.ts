@@ -52,11 +52,8 @@ interface CharacterProps {
 }
 
 export function Character(args: CharacterProps): PixiContainer {
-    // NOTE: necessary so the onClick sends the correct data after a character change.
-    const characterMeta = { ...args.cursor.get() }
-    args.cursor.on('update', () => {
-        Object.assign(characterMeta, args.cursor.get())
-    })
+    const isHovered = datum(false)
+    const characterMeta = args.cursor.get()
     const { screenX, screenY } = characterMeta
 
     // ---Sprites and containers---
@@ -73,16 +70,6 @@ export function Character(args: CharacterProps): PixiContainer {
         args.onClick(characterMeta.uid)
     )
 
-    const unsub = hoveredCharacterUid.onChange(hoveredCharacterUid => {
-        if (mainAnimation == null) return
-        if (hoveredCharacterUid === characterMeta.uid) {
-            mainAnimation.filters = [glowFilter]
-        } else {
-            mainAnimation.filters = []
-        }
-    })
-
-    const isHovered = datum(false)
     const mainContainer = Container({
         isHoveredDatum: isHovered,
         children: [
@@ -113,10 +100,36 @@ export function Character(args: CharacterProps): PixiContainer {
             getBoundOrbContainer(args.cursor, mainContainer.height),
             hitContainer,
         ],
-        onDestroy: [unsub],
+        onDestroy: [
+            hoveredCharacterUid.onChange(updateGlow),
+            onUpdate(args.cursor.select('health'), updateDeathAndHealth, true),
+            onUpdate(args.cursor.select('effects'), updateDeathAndHealth),
+        ],
     })
 
-    // ---Functions and listeners---
+    const unbindDot = bindDOT(characterMeta, hitContainer)
+
+    const unbindMoves = bindMoves(
+        characterMeta,
+        attackSprite,
+        healthBar,
+        flyingContainer,
+        defendSprite,
+        hitContainer,
+        mainAnimation
+    )
+    onDestroyed(flyingContainer, unbindMoves, unbindDot)
+
+    return flyingContainer
+
+    function updateGlow(hoveredCharacterUid: CharacterUid | null) {
+        if (mainAnimation == null) return
+        if (hoveredCharacterUid === characterMeta.uid) {
+            mainAnimation.filters = [glowFilter]
+        } else {
+            mainAnimation.filters = []
+        }
+    }
 
     function onHeight(height: number) {
         hitContainer.y = -height
@@ -130,26 +143,6 @@ export function Character(args: CharacterProps): PixiContainer {
             flyingContainer.removeChildren()
         }
     }
-
-    args.cursor.select('health').on('update', updateDeathAndHealth)
-    args.cursor.select('effects').on('update', updateDeathAndHealth)
-
-    bindDOT(characterMeta, hitContainer)
-
-    const unbindMoves = bindMoves(
-        characterMeta,
-        attackSprite,
-        healthBar,
-        flyingContainer,
-        defendSprite,
-        hitContainer,
-        mainAnimation
-    )
-    onDestroyed(flyingContainer, unbindMoves)
-
-    updateDeathAndHealth()
-
-    return flyingContainer
 }
 
 function getBoundOrbContainer(
@@ -214,15 +207,18 @@ function getBoundOrbContainer(
 function bindDOT(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer
-) {
-    getSocket().on('DOT$', (event: NetworkEvent<'damage$', NetworkDOTData>) => {
+): Unbind {
+    const socket = getSocket()
+    socket.on('DOT$', handleDOT)
+    return () => socket.off('DOT$', handleDOT)
+    function handleDOT(event: NetworkEvent<'damage$', NetworkDOTData>) {
         const { damageMap } = event.data
 
         keys(damageMap).forEach(characterUid => {
             if (characterUid === characterMeta.uid)
                 flashPoisonTo(aboveCharacterContainer, damageMap[characterUid])
         })
-    })
+    }
 }
 
 function bindMoves(

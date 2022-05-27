@@ -1,10 +1,11 @@
-import type { Datum } from 'datums'
+import type { Datum, RODatum } from 'datums'
 import type {
     DisplayObject,
     Filter as PixiFilter,
     InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
+import type { ROCursor } from 'sbaobab'
 import type {
     PixiContainer,
     PixiGraphics,
@@ -53,7 +54,13 @@ export interface ContainerArgs extends DisplayObjectArgs {
     cache?: boolean
 }
 export interface TextArgs extends ShownArgs {
-    text: string
+    text:
+        | string
+        | number
+        | ROCursor<string>
+        | ROCursor<number>
+        | RODatum<string>
+        | RODatum<number>
     style?: Partial<ITextStyle>
 }
 export interface GraphicsArgs extends DisplayObjectArgs {

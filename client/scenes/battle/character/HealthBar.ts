@@ -5,15 +5,19 @@ import type { CharacterMeta, CharacterUid } from 'shared'
 import { getEffectIconSrc } from '@/scenes'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data'
-import type { PixiContainer, PixiGraphics } from '@/elementsUtil'
+import type { PixiContainer } from '@/elementsUtil'
 import {
+    clearContainer,
+    If,
+    onDestroyed,
+    PixiGraphics,
     getTexture,
     SCALE_UNIVERSAL,
     Container,
-    Graphics,
     Sprite,
     Text,
 } from '@/elementsUtil'
+import { onUpdate, toDatum } from '@/util'
 
 type Rect = [
     number, // x
@@ -30,77 +34,62 @@ const displayHeight = displayWidth * widthToHeight
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
-    const mainEl = bindMainEl()
-    bindHealthIndicator(characterCursor, mainEl)
-    bindStanceIndicator(characterCursor, mainEl)
-    bindEffectIndicators(characterCursor, mainEl)
-    bindBlockIndicator(characterCursor, mainEl)
-    return mainEl
+    return Container({
+        name: 'HealthBar',
+        x: 0,
+        y: 0,
+        zIndex: 2,
+        children: [
+            HealthIndicator(characterCursor),
+            StanceIndicator(characterCursor),
+            EffectIndicators(characterCursor),
+            BlockIndicator(characterCursor),
+        ],
+    })
 }
 
 function getCharacterCursor(characterUid: string) {
     return getBattleScene().select('allCharacters').select(characterUid)
 }
 
-function bindBlockIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    mainEl: PixiContainer
-) {
-    const container = mainEl.addChild(Container({ children: [] }))
-
-    u()
-
-    characterCursor.select('block').on('update', u)
-
-    function u() {
-        container.removeChildren()
-        const newBlock = characterCursor.get('block')
-
-        if (newBlock === 0) return
-
-        container.addChild(
-            Container({
-                // y: -50 *  SCALE_UNIVERSAL,
-                x: 200,
-                children: [
-                    Sprite({
-                        src: getTexture('blockIcon'),
-                        width: 60 * SCALE_UNIVERSAL,
-                        height: 60 * SCALE_UNIVERSAL,
-                        anchor: [0.5, 0.5],
-                    }),
-                    Text({
-                        text: `${newBlock}`,
-                        anchor: [0.5, 0.5],
-                        style: {
-                            // fontFamily: ['bigFont', 'monospace'],
-                            fontFamily: ['monospace'],
-                            fontSize: 22,
-                            fill: '#eee',
-                            stroke: '#666',
-                            strokeThickness: 5,
-                        },
-                    }),
-                ],
-            })
-        )
-    }
+function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
+    const data = toDatum(characterCursor.select('block'), b => b)
+    return If(data, block =>
+        Container({
+            // y: -50 *  SCALE_UNIVERSAL,
+            x: 200,
+            children: [
+                Sprite({
+                    src: getTexture('blockIcon'),
+                    width: 60 * SCALE_UNIVERSAL,
+                    height: 60 * SCALE_UNIVERSAL,
+                    anchor: [0.5, 0.5],
+                }),
+                Text({
+                    text: `${block}`,
+                    anchor: [0.5, 0.5],
+                    style: {
+                        // fontFamily: ['bigFont', 'monospace'],
+                        fontFamily: ['monospace'],
+                        fontSize: 22,
+                        fill: '#eee',
+                        stroke: '#666',
+                        strokeThickness: 5,
+                    },
+                }),
+            ],
+        })
+    )
 }
 
-function bindEffectIndicators(
-    characterCursor: ROCursor<CharacterMeta>,
-    mainEl: PixiContainer
-) {
-    const container = mainEl.addChild(Container({ children: [] }))
-
-    updateEffects()
-
-    characterCursor.select('effects').on('update', () => {
-        updateEffects()
+function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
+    const container = Container({
+        children: [],
+        onDestroy: [onUpdate(characterCursor.select('effects'), updateEffects)],
     })
-
+    return container
     function updateEffects() {
-        container.removeChildren()
+        clearContainer(container)
 
         let numMatchedEffects = 0
 
@@ -152,79 +141,34 @@ function bindEffectIndicators(
     }
 }
 
-function bindStanceIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    mainEl: PixiContainer
-) {
-    const container = mainEl.addChild(Container({ children: [] }))
-
-    updateStance()
-
-    characterCursor.select('stance').on('update', () => {
-        updateStance()
+function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
+    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
+        if (!isPc) return false
+        return { stance, uid }
     })
-
-    function updateStance() {
-        if (!characterCursor.select('isPc').get()) return
-
-        const stance = characterCursor.select('stance').get()
-
+    return If(data, ({ stance, uid }) => {
         const stanceSrc =
             stance === 'neutral'
                 ? getTexture('stanceNeutral')
                 : stance === 'aggressive'
                 ? getTexture('stanceAggressive')
                 : getTexture('stanceDefensive')
-
-        container.removeChildren()
-
-        container.addChild(
-            Sprite({
-                src: stanceSrc,
-                x: displayWidth,
-                y: displayHeight * 1.1,
-                anchor: [1, 0],
-                width: displayWidth / 3,
-                height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
-                onClick: () =>
-                    callApi('ToggleStance', {
-                        characterUid: characterCursor.get('uid'),
-                    }),
-            })
-        )
-    }
+        return Sprite({
+            src: stanceSrc,
+            x: displayWidth,
+            y: displayHeight * 1.1,
+            anchor: [1, 0],
+            width: displayWidth / 3,
+            height: (displayWidth / 3 / stanceSrc.width) * stanceSrc.height,
+            onClick: () => callApi('ToggleStance', { characterUid: uid }),
+        })
+    })
 }
 
-function bindMainEl() {
+function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
     return Container({
-        name: 'HealthBar',
-        x: 0,
-        y: 0,
-        zIndex: 2,
-        children: [],
-    })
-}
-
-function bindHealthIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    mainEl: PixiContainer
-) {
-    const container = mainEl.addChild(Container({ children: [] }))
-
-    updateHealth()
-
-    characterCursor.select('health').on('update', () => {
-        updateHealth()
-    })
-
-    function updateHealth() {
-        container.removeChildren()
-
-        // const text = `${char.health} / ${char.constitution}`
-        const text = `${characterCursor.get('health')}`
-
-        container.addChild(
-            Graphics({ draw: g => drawHealthBar(characterCursor, g) }),
+        children: [
+            HealthBarLine(characterCursor),
             Sprite({
                 src: getTexture('healthBorder'),
                 width: displayWidth,
@@ -232,7 +176,7 @@ function bindHealthIndicator(
                 zIndex: 2,
             }),
             Text({
-                text,
+                text: characterCursor.select('health'),
                 zIndex: 1,
                 anchor: [0.5, 0.5],
                 x: displayWidth / 2,
@@ -245,50 +189,50 @@ function bindHealthIndicator(
                     strokeThickness: 5,
                     letterSpacing: -3,
                 },
-            })
-        )
-    }
+            }),
+        ],
+    })
 }
 
-function drawHealthBar(
-    characterCursor: ROCursor<CharacterMeta>,
-    g: PixiGraphics
-) {
-    const xMargin = 0.01869158878
-    const yMargin = 0.16883116883
-    const colorStops = [
-        { color: '#98040c', stop: 0.2 },
-        { color: '#fff133', stop: 0.4 },
-        { color: '#91ff85', stop: 1 },
-    ]
+function HealthBarLine(characterCursor: ROCursor<CharacterMeta>) {
+    const g = new PixiGraphics()
+    onDestroyed(g, onUpdate(characterCursor, draw, true))
+    return g
+    function draw(cm: CharacterMeta) {
+        const xMargin = 0.01869158878
+        const yMargin = 0.16883116883
+        const colorStops = [
+            { color: '#98040c', stop: 0.2 },
+            { color: '#fff133', stop: 0.4 },
+            { color: '#91ff85', stop: 1 },
+        ]
 
-    const portion =
-        characterCursor.select('health').get() /
-        characterCursor.select('constitution').get()
-    const background = (
-        [...colorStops]
-            .sort((cs1, cs2) => cs1.stop - cs2.stop)
-            .find(cs => portion <= cs.stop) || { color: 'pink' }
-    ).color
-    const rect: Rect = [
-        displayWidth * xMargin,
-        displayHeight * yMargin,
-        portion * displayWidth * (1 - 2 * xMargin),
-        displayHeight * (1 - 2 * yMargin),
-    ]
+        const portion = cm.health / cm.constitution
+        const background = (
+            [...colorStops]
+                .sort((cs1, cs2) => cs1.stop - cs2.stop)
+                .find(cs => portion <= cs.stop) || { color: 'pink' }
+        ).color
+        const rect: Rect = [
+            displayWidth * xMargin,
+            displayHeight * yMargin,
+            portion * displayWidth * (1 - 2 * xMargin),
+            displayHeight * (1 - 2 * yMargin),
+        ]
 
-    g.clear()
-    const color = utils.string2hex(background)
-    g.beginFill(color)
-    g.drawRect(...rect)
+        g.clear()
+        const color = utils.string2hex(background)
+        g.beginFill(color)
+        g.drawRect(...rect)
 
-    g.beginTextureFill({
-        texture: getTexture('healthTexture'),
-        color,
-        alpha: 1,
-        matrix: new Matrix(0.1, 0, 0, 0.1, 0, 0),
-    })
-    g.drawRect(...rect)
+        g.beginTextureFill({
+            texture: getTexture('healthTexture'),
+            color,
+            alpha: 1,
+            matrix: new Matrix(0.1, 0, 0, 0.1, 0, 0),
+        })
+        g.drawRect(...rect)
 
-    g.endFill()
+        g.endFill()
+    }
 }

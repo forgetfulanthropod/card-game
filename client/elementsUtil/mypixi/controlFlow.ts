@@ -1,4 +1,5 @@
-import type { RODatum } from 'datums'
+import type { Composed, RODatum } from 'datums'
+import { compose } from 'datums'
 import { sortBy, uniq } from 'lodash'
 import type { DisplayObject, IDestroyOptions } from 'pixi.js'
 import { Ticker } from 'pixi.js'
@@ -9,17 +10,25 @@ import { onDestroyed } from './convenience'
 import { Container } from './core'
 import { getPixiApp } from './application'
 
+type DestroyOptions = IDestroyOptions | boolean | undefined
+
 type Falsy = false | null | 0 | '' | undefined
-const controlFlow = null
+/** NOTE: condition datum is automatically destroyed if it has .destroy.
+ *  Wrap condition with noDestroy() if you don't want this.
+ */
 export function If<T = unknown>(
-    condition: RODatum<T>,
+    condition: RODatum<T> & { destroy?: Callback },
     ifRender: (x: Exclude<T, Falsy>) => DisplayObject,
     elseRender?: (x: T & Falsy) => DisplayObject,
     displayArgs?: DisplayObjectArgs,
-    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+    destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
     const root = Container({ children: [] })
-    onDestroyed(root, condition.onChange(handleChange, true))
+    onDestroyed(
+        root,
+        condition.onChange(handleChange, true),
+        () => condition?.destroy?.(),
+    ) // prettier-ignore
     if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
     return root
     function handleChange(val: T) {
@@ -35,15 +44,19 @@ export function If<T = unknown>(
     }
 }
 
-function isTruthy<T>(x: T): x is Exclude<T, Falsy> {
-    return !!x
+/** Wraps a cursor with compose so you don't destroy the original */
+export function noDestroy<T>(d: RODatum<T> & { destroy: Callback }) {
+    const c = compose(([d]) => d, d)
+    // @ts-expect-error
+    c.destroy = c.unsub
+    return c as Composed<T, [RODatum<T>]> & { destroy: Callback }
 }
 
 // export function BareIf<T extends PixiDisplayObject>(
 //     condition: RODatum<boolean>,
 //     ifRender: () => T,
 //     elseRender?: () => T,
-//     destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+//     destroyOptions: DestroyOptions = { children: true }
 // ): T {
 //     // condition.onChange()
 //     return root
@@ -67,7 +80,7 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
     render: (item: T[number]) => DisplayObject,
     position?: (index: number) => { x?: number; y?: number },
     displayArgs?: ContainerArgs,
-    destroyOptions: IDestroyOptions | boolean | undefined = { children: true }
+    destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
     const root = Container({ children: [] }) as KeyedContainer
     onDestroyed(root, items.onChange(handleUpdate, true))

@@ -8,7 +8,11 @@ import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { nextFrame, waitingForSceneExitAnimationToFinish } from '@/util'
+import {
+    nextFrame,
+    onUpdate,
+    waitingForSceneExitAnimationToFinish,
+} from '@/util'
 
 let lastScene: PixiContainer
 
@@ -23,18 +27,9 @@ function setBodyStyles() {
     document.body.style.cursor = `url('${pointer}'), pointer`
 }
 
-function bindScene(app: PixiApplication) {
-    const sceneTypeCursor = getScene().select('name')
-
-    sceneTypeCursor.on('update', () => {
-        void setScene()
-    })
-
-    void setScene()
-
-    async function setScene(): Promise<void> {
-        const sceneType = sceneTypeCursor.get()
-
+function bindScene(app: PixiApplication): Unbind {
+    return onUpdate(getScene().select('name'), setScene, true)
+    async function setScene(sceneType: SceneType): Promise<void> {
         if (lastScene != null) {
             await nextFrame()
             if (waitingForSceneExitAnimationToFinish.val === true) {

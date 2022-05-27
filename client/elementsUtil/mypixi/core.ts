@@ -1,3 +1,4 @@
+import type { ROCursor } from 'sbaobab'
 import {
     PixiContainer,
     PixiGraphics,
@@ -16,6 +17,7 @@ import type {
     GraphicsArgs,
     SpriteArgs,
 } from './_types'
+import { onUpdate } from '@/util'
 
 const core = null
 export const BASE_HEIGHT = 1080
@@ -39,9 +41,29 @@ export function Container(args: ContainerArgs): PixiContainer {
     return c
 }
 export function Text(args: TextArgs): PixiText {
-    const text = new PixiText(args.text, args.style)
-    applyShownArgs(text, args)
-    return text
+    const text = args.text
+    if (typeof text === 'object') {
+        if ('get' in text) {
+            const textEl = new PixiText(String(text.get()), args.style)
+            applyShownArgs(textEl, args)
+            const unsub = onUpdate(
+                text as ROCursor<string>,
+                val => (textEl.text = String(val))
+            )
+            textEl.on('destroyed', unsub)
+            return textEl
+        }
+        if ('val' in text) {
+            const textEl = new PixiText(String(text.val), args.style)
+            applyShownArgs(textEl, args)
+            const unsub = text.onChange(val => (textEl.text = String(val)))
+            textEl.on('destroyed', unsub)
+            return textEl
+        }
+    }
+    const textEl = new PixiText(String(text), args.style)
+    applyShownArgs(textEl, args)
+    return textEl
 }
 export function Graphics(args: GraphicsArgs): PixiGraphics {
     const g = new PixiGraphics()
