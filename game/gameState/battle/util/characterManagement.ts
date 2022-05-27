@@ -65,7 +65,7 @@ function makeLeftPositions(): [
 
     const measurements = [
         [477, 333],
-        [358, 495],
+        [358, 475],
         [271, 655],
     ]
 
