@@ -140,10 +140,10 @@ function getEnergyContainer(
     card: Card,
     cardFrameTexture: PixiTexture
 ): PixiContainer {
-    const wh = cardFrameTexture.width / 5
+    const wh = cardFrameTexture.width / 3
     return Container({
-        x: cardFrameTexture.width * 0.498,
-        y: -cardFrameTexture.height * 0.498,
+        x: cardFrameTexture.width * 0.474,
+        y: -cardFrameTexture.height * 0.496,
         children: [
             RoundedRectangleGradientSprite({
                 radius: wh / 2,
@@ -156,7 +156,7 @@ function getEnergyContainer(
                     r1: wh / 2,
                     colorStops: [
                         { color: 0xee41eb, offset: 0 },
-                        { color: 0xee41eb, offset: 0.8 },
+                        { color: 0xee41eb, offset: 0.88 },
                         // { color: 0x432a64, offset: 0.8 },
                         { color: 0x1b081c, offset: 0.88 },
                         // { color: 0xffffff, offset: 0.92 },
@@ -181,10 +181,10 @@ function getEnergyContainer(
                     fill: '#eee',
                     stroke: 'black',
                     strokeThickness: 22,
-                    fontSize: wh * 1.4,
+                    fontSize: wh * 0.8,
                     fontFamily: 'bigFont',
                 },
-                anchor: [0.5, 0.7],
+                anchor: [0.5, 0.5],
             }),
         ],
     })
