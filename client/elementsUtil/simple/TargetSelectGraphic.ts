@@ -7,6 +7,7 @@ export function TargetSelectGraphic(
 ) {
     const pointRadius = 10
     const g = new PixiGraphics()
+    g.name = Arrow.name
     return onDestroyed(
         g,
         destination.onChange(draw, true),

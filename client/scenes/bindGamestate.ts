@@ -8,11 +8,7 @@ import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import {
-    nextFrame,
-    onUpdate,
-    waitingForSceneExitAnimationToFinish,
-} from '@/util'
+import { animation$, nextFrame, onUpdate } from '@/util'
 
 let lastScene: PixiContainer
 
@@ -32,16 +28,8 @@ function bindScene(app: PixiApplication): Unbind {
     async function setScene(sceneType: SceneType): Promise<void> {
         if (lastScene != null) {
             await nextFrame()
-            if (waitingForSceneExitAnimationToFinish.val === true) {
-                await new Promise(resolve =>
-                    waitingForSceneExitAnimationToFinish.onChange(
-                        (_, __, unsub) => {
-                            unsub()
-                            resolve(null)
-                        }
-                    )
-                )
-            }
+            if (sceneType === 'battle')
+                await animation$.readAssert('scene exit done')
 
             await transitionSceneTo(lastScene, sceneType)
 
