@@ -14,13 +14,7 @@ const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
 export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
-    const playerCharacterPositions = makeLeftPositions({
-        x0: 10,
-        y0: 50,
-        hGap: 18,
-        vGap: 13,
-        n: chosen.length,
-    })
+    const playerCharacterPositions = makeLeftPositions()
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
@@ -57,27 +51,15 @@ export function rearrangeNpcs(npcs: Characters): Characters {
 
 export function getEnemyPositions(n: number) {
     return makePositions({
-        x0: 70,
-        y0: 50,
-        hGap: 18,
-        vGap: 13,
         n,
     })
 }
 
-function makeLeftPositions({
-    x0,
-    y0,
-    hGap,
-    vGap,
-    n = 6,
-}: {
-    x0: number
-    y0: number
-    hGap: number
-    vGap: number
-    n?: number
-}): [[number, number], [number, number], [number, number]] {
+function makeLeftPositions(): [
+    [number, number],
+    [number, number],
+    [number, number]
+] {
     const measureWFull = 1577
     const measureHFull = 886
 
@@ -93,30 +75,28 @@ function makeLeftPositions({
     ]) as [[number, number], [number, number], [number, number]]
 }
 
-function makePositions({
-    x0,
-    y0,
-    hGap,
-    vGap,
-    n = 6,
-}: {
-    x0: number
-    y0: number
-    hGap: number
-    vGap: number
-    n?: number
-}): [number, number][] {
-    const A: [number, number][] = [
-        [x0, y0],
-        [x0 + hGap, y0],
-        [x0 - hGap / 2, y0 + vGap],
-        [x0 + hGap / 2, y0 + vGap],
-        [x0, y0 + vGap * 2],
-        [x0 + hGap, y0 + vGap * 2],
-        [x0 - hGap, y0 + vGap * 2],
-        [x0 - hGap, y0 - vGap * 2],
+function makePositions({ n = 6 }: { n?: number }): [number, number][] {
+    const measureWFull = 711
+    const measureHFull = 400
+
+    const measurements = [
+        [458, 160],
+        [433, 220],
+        [405, 300],
+        [533, 220],
+        [558, 160],
+        [505, 300],
     ]
-    return A.slice(0, n)
+
+    return measurements
+        .map(
+            m =>
+                [(m[0] / measureWFull) * 100, (m[1] / measureHFull) * 100] as [
+                    number,
+                    number
+                ]
+        )
+        .slice(0, n)
 }
 
 function newPCMeta(args: {
