@@ -3,19 +3,13 @@ import type { CharacterName, EffectId, OrbType } from 'shared'
 import { Loader } from 'pixi.js'
 import type { OrbAssetId } from './orbs'
 import type { SpineAsset } from './spines'
-import type { AssetKey } from '@/elementsUtil'
 import { isTextureKey, PixiTexture, getTexture } from '@/elementsUtil'
 
-export function getEffectIconSrc(effectType: EffectId): PixiTexture {
-    const effectToIconMap: Partial<Record<EffectId, AssetKey>> = {
-        debilitated: 'effectDebilitated',
-        poison: 'effectPoison',
-        bleed: 'effectBleed',
-    }
-
-    const iconId = effectToIconMap[effectType]
-
-    return iconId != null ? getTexture(iconId) : PixiTexture.WHITE
+export function getEffectIconSrc<T extends EffectId>(
+    effectType: T
+): PixiTexture {
+    const id = `effect${upperFirst(effectType)}` as `effect${Capitalize<T>}`
+    return getTexture(id)
 }
 
 export const getCharTexture = (charId: CharacterName) =>
