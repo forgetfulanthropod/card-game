@@ -203,13 +203,14 @@ function getTexts(
         Text({
             text: card.name,
             y: -cardFrameTexture.height / 2 + marginV,
-            anchor: [0.5, 0],
+            anchor: [0.5, 0.2],
             style: {
-                fontSize: 34 * cardFrameScale,
+                fontSize: 54 * cardFrameScale,
                 fontFamily: 'bigFont',
                 fill: 'white',
                 stroke: 'black',
                 strokeThickness: 6,
+                lineHeight: 0,
             },
         }),
         Text({
@@ -219,8 +220,8 @@ function getTexts(
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: 26 * cardFrameScale,
-                fontFamily: 'bigFont',
+                fontSize: 36 * cardFrameScale,
+                fontFamily: 'monoFont',
                 fill: 'black',
                 lineHeight: 36,
             },
@@ -230,11 +231,11 @@ function getTexts(
             y: cardFrameTexture.height * 0.45,
             anchor: 0.5,
             style: {
-                fontSize: 40 * cardFrameScale,
+                fontSize: 90 * cardFrameScale,
                 fontFamily: 'bigFont',
                 fill: colorStops[0].color,
-                stroke: 'white',
-                strokeThickness: 5,
+                stroke: 'black',
+                strokeThickness: 8,
                 letterSpacing: 6,
             },
         }),
