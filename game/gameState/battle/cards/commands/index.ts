@@ -5,10 +5,6 @@ import {
 } from './addBlock'
 import { explain as explainChain, execute as executeChain } from './chain'
 import { explain as explainDeal, execute as executeDeal } from './deal'
-import {
-    explain as explainDebilitate,
-    execute as executeDebilitate,
-} from './debilitate'
 import { explain as explainOrb, execute as executeOrb } from './orb'
 import { explain as explainText, execute as executeText } from './text'
 // @endindex
@@ -18,7 +14,6 @@ export const explainers = {
     addBlock: explainAddBlock,
     chain: explainChain,
     deal: explainDeal,
-    debilitate: explainDebilitate,
     orb: explainOrb,
     text: explainText,
     // @endindex
@@ -29,7 +24,6 @@ export const executors = {
     addBlock: executeAddBlock,
     chain: executeChain,
     deal: executeDeal,
-    debilitate: executeDebilitate,
     orb: executeOrb,
     text: executeText,
     // @endindex

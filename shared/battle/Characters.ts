@@ -4,6 +4,7 @@ import type { CharacterName, CharacterStats, CharacterUid, StanceName } from '@'
 
 export type Characters = Record<CharacterUid, CharacterMeta>
 
+/** TODO: simplify CharacterMeta, CharacterStats, OwnedCharacterStats,   */
 export interface CharacterMeta extends CharacterStats {
     name: CharacterName
     uid: CharacterUid

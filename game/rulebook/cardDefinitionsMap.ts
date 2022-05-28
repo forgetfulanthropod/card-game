@@ -350,34 +350,3 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'cleric',
     },
 }
-
-// TODO: dwindle, vulnerable, fatigue, unguarded, momentary
-// Dwindle:  Increase its cost by 1 every time you play it (till the end of the dungeon room).
-// Momentary:  Like Exhaust, but only goes away until the end of the room, not the run.
-// Vulnerable (Debuff): Vulnerable characters receive 50% more damage.
-// Fatigue (Debuff):  Characters with fatigue deal 25% less damage.
-// Unguarded (Debuff): Unguarded characters receive 25% more damage.
-
-/*
-round:
-    inEffect: ActiveEffect
-    buffs:[]
-    draw:[]
-    hand:[
-        {
-            id: 'somecard'
-            buffs: []
-        }
-    ]
-    discard:[]
-    orbs:
-        buffs:[]
-        kind:''
-        val:4
-    characters:
-
-ActiveEffect:
-    step()
-    isDone()
-
-*/

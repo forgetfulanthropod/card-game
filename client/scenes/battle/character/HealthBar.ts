@@ -96,8 +96,8 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
         const effects = (characterCursor.select('effects').get() ?? []).map(
             (e, i) => {
                 let text = Text({
-                    text: `${e.type} ${e.remainingRounds} round${
-                        e.remainingRounds > 1 ? 's' : ''
+                    text: `${e.id} ${e.counter} round${
+                        e.counter > 1 ? 's' : ''
                     }`,
                     y: 40 * i - numMatchedEffects,
                     style: {
@@ -108,7 +108,7 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
                     },
                 })
                 let icon
-                const iconSrc = getEffectIconSrc(e.type)
+                const iconSrc = getEffectIconSrc(e.id)
                 if (iconSrc != null) {
                     icon = Sprite({
                         src: iconSrc,
@@ -117,7 +117,7 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
                         anchor: [0.5, 0.4],
                     })
                     text = Text({
-                        text: `${e.remainingRounds}`,
+                        text: `${e.counter}`,
                         anchor: [0.6, 1],
                         style: {
                             fontFamily: ['bigFont', 'monospace'],
