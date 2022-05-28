@@ -2,17 +2,16 @@ import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
 import type {
     BattleCursor,
-    CharacterMeta,
+    CalculatedCharacterStats,
     CharacterUid,
     Command,
     CommandOutcome,
 } from 'shared'
 import { entryMap } from 'shared/code'
 import { SBaobab } from 'sbaobab'
-import { pick } from 'lodash'
 import { explainers, executors } from './commands'
 import { extractDamages } from './outcomeUtil'
-import { checkBattleOverMut } from '@/gameState'
+import { calcPostEffectStats, checkBattleOverMut } from '@/gameState'
 import { clearHappened, emit, getHappened } from '@/util'
 
 export function interpretCommand({
@@ -21,21 +20,15 @@ export function interpretCommand({
     scene,
 }: CommandDetail): void {
     const locals = localsFromCommand(command, scene)
+    if (locals.isSkipped) return
     // const explanation = explainActions(command.actions, locals)
     executeCommand({ command, targetUids, scene, locals })
 }
 
-const localKeys = [
-    'strength',
-    'dexterity',
-    'magic',
-    'constitution',
-    'block',
-] as const
-type Locals = Pick<CharacterMeta, typeof localKeys[number]>
+type Locals = CalculatedCharacterStats
 function localsFromCommand(command: Command, scene: BattleCursor): Locals {
     const cardOwner = scene.get('allCharacters', command.characterUid)
-    return pick(cardOwner, localKeys)
+    return calcPostEffectStats(cardOwner)
 }
 
 const standardOperators = {
@@ -70,6 +63,7 @@ interface CommandDetail {
 /** Does not modify game state (or shouldn't) */
 export function simulateCommand(args: CommandDetail): CommandOutcome {
     const locals = localsFromCommand(args.command, args.scene)
+    if (locals.isSkipped) return { damages: {} }
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
     const username = args.scene.get('username')
     const happened = getHappened(username)
@@ -87,12 +81,18 @@ function executeCommand({
     targetUids,
     scene,
     locals,
-}: CommandDetail & { locals?: Locals }): void {
+}: CommandDetail & { locals: Locals }): void {
     const wrappedExecutors = entryMap(
         executors,
         (_, func) =>
             (...dslArgs: VAngu[]) =>
-                func({ dslArgs, command, targetUids, scene })
+                func({
+                    dslArgs,
+                    command,
+                    targetUids,
+                    scene,
+                    calculatedStats: locals,
+                })
     )
     const ctx = generateAnguContext(wrappedExecutors)
 

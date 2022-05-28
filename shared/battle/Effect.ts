@@ -1,7 +1,5 @@
 /** An effect is a function on the game state! */
 
-import type { CalculatedCharacterStats, CharacterMeta } from '@'
-
 /*
 Counters:
 
@@ -28,13 +26,6 @@ export const effectIds = [
 ] as const
 
 export type EffectId = typeof effectIds[number]
-
-/** Mutate stats in place */
-export type EffectFunc = (
-    original: Readonly<CharacterMeta>,
-    stats: CalculatedCharacterStats,
-    counter: number
-) => void
 
 export interface Effect {
     counter: number

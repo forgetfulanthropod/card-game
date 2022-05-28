@@ -2,7 +2,6 @@ import type {
     BattleCursor,
     CalculatedCharacterStats,
     CharacterMeta,
-    EffectFunc,
     EffectId,
 } from 'shared'
 
@@ -16,37 +15,35 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         strength: cm.strength,
         isSkipped: false,
         damageTakeMultiplier: 1,
-        damageDealMultiplier: 1,
     }
     cm.effects.forEach(effect => {
-        effectFuncs[effect.id](cm, stats, effect.counter)
+        effectFuncs[effect.id](stats)
     })
     return stats
 }
 
-const effectFuncs: Record<EffectId, EffectFunc> = {
-    bleed(original, stats, counter) {
-        // TODO: start of turn
-    },
-    debilitated(original, stats, counter) {
-        stats.damageDealMultiplier *= 0.5
-    },
-    fatigue(original, stats, counter) {
-        stats.damageDealMultiplier *= 0.25
-    },
-    poison(original, stats, counter) {
-        // TODO: start of turn
-    },
-    stunned(original, stats, counter) {
-        stats.isSkipped = true
-    },
-    unguarded(original, stats, counter) {
-        stats.damageTakeMultiplier *= 1.25
-    },
-    vulnerable(original, stats, counter) {
-        stats.damageTakeMultiplier *= 1.5
-    },
-}
+const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
+    {
+        /** see applyTurnStartEffects */
+        bleed(_stats) {},
+        debilitated(stats) {
+            stats.strength *= 0.5
+        },
+        fatigue(stats) {
+            stats.strength *= 0.25
+        },
+        /** see applyTurnStartEffects */
+        poison(_stats) {},
+        stunned(stats) {
+            stats.isSkipped = true
+        },
+        unguarded(stats) {
+            stats.damageTakeMultiplier *= 1.25
+        },
+        vulnerable(stats) {
+            stats.damageTakeMultiplier *= 1.5
+        },
+    }
 
 /** bleed and poison happen at turn start */
 export function applyTurnStartEffects(
@@ -77,6 +74,18 @@ export function decrementEffects(scene: BattleCursor, finished: 'pc' | 'npc') {
                 cm.effects.forEach(e => (e.counter -= 1))
                 cm.effects = cm.effects.filter(e => e.counter > 0)
             }
+        })
+    )
+}
+
+export function clearAllEffects(scene: BattleCursor): void {
+    scene.apply(
+        'allCharacters',
+        produce(ac => {
+            Object.values(ac).forEach(cm => {
+                cm.effects = []
+                cm.orbs = []
+            })
         })
     )
 }
