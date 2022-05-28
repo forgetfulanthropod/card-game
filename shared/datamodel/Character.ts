@@ -20,14 +20,15 @@ export type CharacterStats = Readonly<{
     Brandify
 
 /** Result of applying effects to character */
-export type CalculatedCharacterStats = Readonly<{
+export interface CalculatedCharacterStats {
     isSkipped: boolean
     constitution: number
     strength: number
     magic: number
     dexterity: number
-}> &
-    Brandify
+    damageTakeMultiplier: number
+    damageDealMultiplier: number
+}
 
 export type OwnedCharacterStats = CharacterStats &
     Readonly<{

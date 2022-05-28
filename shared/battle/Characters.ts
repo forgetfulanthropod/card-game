@@ -9,6 +9,7 @@ export interface CharacterMeta extends CharacterStats {
     name: CharacterName
     uid: CharacterUid
     isPc: boolean
+    /** TODO: remove */
     hasMoved: boolean
     health: number
     block: number

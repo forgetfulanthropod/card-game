@@ -277,7 +277,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'guidingBolt',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(magic), unguarded(2))',
+        actions: 'chain(deal(magic), effect("unguarded", 2))',
         type: 'attack',
         characterClass: 'cleric',
     },
