@@ -20,6 +20,7 @@ export function applyDisplayObjectArgs(
 
     if (args.onClick != null) {
         el.interactive = true
+        el.cursor = 'pointer'
         el.on('pointerdown', args.onClick)
     }
 

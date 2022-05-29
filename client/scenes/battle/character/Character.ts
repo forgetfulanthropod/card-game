@@ -73,12 +73,14 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainContainer = Container({
         isHoveredDatum: isHovered,
         children: [
-            attackSprite,
-            defendSprite,
-            healthBar,
+            // attackSprite,
+            // defendSprite,
 
             Adjust(ActionIntent(characterMeta.uid, isHovered), {
                 y: healthBar.height,
+            }),
+            Adjust(healthBar, {
+                y: 22,
             }),
             ...(mainAnimation ? [mainAnimation] : [mainSprite]),
         ],
@@ -97,7 +99,7 @@ export function Character(args: CharacterProps): PixiContainer {
         y: screenY,
         children: [
             mainContainer,
-            getBoundOrbContainer(args.cursor, mainContainer.height),
+            getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
             hitContainer,
         ],
         onDestroy: [

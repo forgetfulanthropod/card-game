@@ -1,16 +1,15 @@
-import { Matrix, utils } from 'pixi.js'
+import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
 import { getEffectIconSrc } from '@/scenes'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data'
-import type { PixiContainer } from '@/elementsUtil'
+import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
     For,
     If,
     onDestroyed,
-    PixiGraphics,
     getTexture,
     SCALE_UNIVERSAL,
     Container,
@@ -26,19 +25,16 @@ type Rect = [
     number // height
 ]
 
-export const HEALTH_BAR_WIDTH = 200
-const rawWidth = 1841
-const rawHeight = 161
-const widthToHeight = rawHeight / rawWidth
-const displayHeight = HEALTH_BAR_WIDTH * widthToHeight
+export const HEALTH_BAR_WIDTH = 300
+// const rawWidth = 1841
+// const rawHeight = 161
+// const widthToHeight = rawHeight / rawWidth
+// const displayHeight = HEALTH_BAR_WIDTH * widthToHeight
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
     return Container({
         name: 'HealthBar',
-        x: 0,
-        y: 0,
-        zIndex: 2,
         children: [
             HealthIndicator(characterCursor),
             StanceIndicator(characterCursor),
@@ -132,90 +128,116 @@ function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
                 : getTexture('stanceDefensive')
         return Sprite({
             src: stanceSrc,
-            x: HEALTH_BAR_WIDTH,
-            y: displayHeight * 1.1,
+            x: HEALTH_BAR_WIDTH * 0.7,
+            y: 20,
             anchor: [1, 0],
-            width: HEALTH_BAR_WIDTH / 3,
-            height: (HEALTH_BAR_WIDTH / 3 / stanceSrc.width) * stanceSrc.height,
+            width: HEALTH_BAR_WIDTH / 4,
+            height: (HEALTH_BAR_WIDTH / 4 / stanceSrc.width) * stanceSrc.height,
             onClick: () => callApi('ToggleStance', { characterUid: uid }),
         })
     })
 }
 
+function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
+    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
+        if (!isPc) return false
+        return { stance, uid }
+    })
+    return If(data, ({ stance, uid }) => {
+        if (stance === 'neutral') {
+            return Container({ children: [] })
+        }
+
+        return Sprite({
+            src:
+                stance === 'aggressive'
+                    ? 'healthBarAggressive'
+                    : 'healthBarAvoidant',
+            anchor: spriteAnchor,
+        })
+    })
+}
+
+const spriteAnchor: [number, number] = [0, 0.5]
+
 function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
     return Container({
+        x: -HEALTH_BAR_WIDTH * 0.2,
         children: [
-            HealthBarLine(characterCursor),
             Sprite({
-                src: getTexture('healthBorder'),
-                width: HEALTH_BAR_WIDTH,
-                height: displayHeight,
-                zIndex: 2,
+                src: 'healthBarBacking',
+                anchor: spriteAnchor,
             }),
+            BaseHealth(characterCursor),
+            Sprite({
+                src: 'healthBarHighlight',
+                anchor: spriteAnchor,
+            }),
+            Sprite({
+                src: 'healthBarShadow',
+                anchor: spriteAnchor,
+            }),
+            StanceBarIndicator(characterCursor),
+
+            // todo: projected damage and DoT
+            // ProjectedDamage(characterCursor),
+            // ProjectedDoT(characterCursor),
+
             Text({
                 text: characterCursor.select('health'),
                 zIndex: 1,
-                anchor: [0.5, 0.5],
+                anchor: [0.5, 0.6],
                 x: HEALTH_BAR_WIDTH / 2,
-                y: displayHeight / 2,
                 style: {
-                    fontFamily: 'monospace',
-                    fontSize: 30,
-                    fill: ['#ffeaab', '#f2b600'],
-                    stroke: '#333',
-                    strokeThickness: 5,
-                    letterSpacing: -3,
+                    fontFamily: 'bigFont',
+                    fontSize: 20,
+                    fill: 'white',
+                    stroke: '#111',
+                    strokeThickness: 4,
+                    // letterSpacing: -3,
                 },
             }),
         ],
     })
 }
 
-function HealthBarLine(characterCursor: ROCursor<CharacterMeta>) {
-    const g = new PixiGraphics()
-    g.name = HealthBarLine.name
-    const unsub = onUpdate(characterCursor, draw, true)
-    onDestroyed(g, unsub)
-    return g
-    function draw(cm: CharacterMeta) {
-        if (cm == null) {
-            unsub()
-            return
-        }
-        const xMargin = 0.01869158878
-        const yMargin = 0.16883116883
-        const colorStops = [
-            { color: '#98040c', stop: 0.2 },
-            { color: '#fff133', stop: 0.4 },
-            { color: '#91ff85', stop: 1 },
-        ]
+function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
+    const originalTexture = getTexture('healthBarHealth')
+    const texture = new Texture(originalTexture.baseTexture)
+    const el = Sprite({
+        src: texture,
+        scale: HEALTH_BAR_WIDTH / texture.width,
+        anchor: spriteAnchor,
+        x: originalTexture.width * 0.1,
+    })
 
+    let lastHealth: number
+
+    return onDestroyed(el, onUpdate(characterCursor, update, true))
+
+    function update(cm: CharacterMeta) {
         const portion = cm.health / cm.constitution
-        const background = (
-            [...colorStops]
-                .sort((cs1, cs2) => cs1.stop - cs2.stop)
-                .find(cs => portion <= cs.stop) || { color: 'pink' }
-        ).color
-        const rect: Rect = [
-            HEALTH_BAR_WIDTH * xMargin,
-            displayHeight * yMargin,
-            portion * HEALTH_BAR_WIDTH * (1 - 2 * xMargin),
-            displayHeight * (1 - 2 * yMargin),
-        ]
 
-        g.clear()
-        const color = utils.string2hex(background)
-        g.beginFill(color)
-        g.drawRect(...rect)
+        if (cm.health !== lastHealth) updateFrame(texture, 0, portion)
 
-        g.beginTextureFill({
-            texture: getTexture('healthTexture'),
-            color,
-            alpha: 1,
-            matrix: new Matrix(0.1, 0, 0, 0.1, 0, 0),
-        })
-        g.drawRect(...rect)
-
-        g.endFill()
+        lastHealth = characterCursor.get('health')
     }
+}
+
+function updateFrame(
+    texture: PixiTexture,
+    portionFrom: number,
+    portionTo: number
+) {
+    const textureRef = getTexture('healthBarBacking')
+    const startingWidth = textureRef.width
+    const startingHeight = textureRef.height
+
+    texture.frame = new Rectangle(
+        startingWidth * (portionFrom + 0.1),
+        0,
+        startingWidth * (portionTo * 0.8),
+        startingHeight
+    )
+    texture.updateUvs()
 }

@@ -20,6 +20,7 @@ import {
     orbAssets,
     spineAssets,
     cardAssets,
+    healthBarAssets,
 } from '@/scenes'
 import { check, fontAssets } from '@/assets'
 
@@ -44,6 +45,7 @@ const basicAssets = {
     ...effectAssets,
     ...spineAssets,
     ...cardAssets,
+    ...healthBarAssets,
 }
 const deluxeAssets = {
     gemButton,
