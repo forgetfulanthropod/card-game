@@ -7,7 +7,7 @@ import type { ExecuteArgs } from './util'
 export function explain(id: VAngu<string>, increase: VAngu<number>): string {
     notnull({ id, increase })
 
-    return `add ${increase.eval()} to the ${id.eval()} counter`
+    return `+ ${increase.eval()} ${id.eval()}`
 }
 
 export function execute({ dslArgs, targetUids, scene }: ExecuteArgs) {

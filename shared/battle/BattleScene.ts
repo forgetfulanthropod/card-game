@@ -1,5 +1,5 @@
 import type {
-    Cards,
+    Piles,
     Command,
     Characters,
     DamageMap,
@@ -16,7 +16,8 @@ export interface BattleScene extends SceneHas {
     playerStarts: boolean
     isPlayerTurn: boolean
     allCharacters: Characters
-    cards: Cards
+    cards: Piles
+
     energy: number
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
@@ -37,4 +38,4 @@ export interface NextCommand {
     targetUids: CharacterUid[]
 }
 
-type BattleWinState = 'not started' | 'in battle' | 'won' | 'lost'
+type BattleWinState = 'in battle' | 'won' | 'lost' | 'choosing cards'

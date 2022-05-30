@@ -26,11 +26,10 @@ export interface Action {
     MaybeMakeUser: (_: { username: string }) => Gamestate
 
     PlayCard: (_: { cardUid: string; targetUids: CharacterUid[] }) => void
+    AddCardToDeck: (_: { cardUid: string }) => void
     ResetRandomSeed: (_: Empty) => void
 
     RulebookAction: (_: RulebookArgs) => void
-
-    StartBattle: (_: Empty) => void
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }

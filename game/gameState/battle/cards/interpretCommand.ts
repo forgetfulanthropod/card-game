@@ -11,7 +11,7 @@ import { entryMap } from 'shared/code'
 import { SBaobab } from 'sbaobab'
 import { explainers, executors } from './commands'
 import { extractDamages } from './outcomeUtil'
-import { calcPostEffectStats, checkBattleOverMut } from '@/gameState'
+import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 import { clearHappened, emit, getHappened } from '@/util'
 
 export function interpretCommand({
@@ -98,7 +98,7 @@ function executeCommand({
 
     angu.evaluate(command.actions, ctx, locals)
 
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function generateAnguContext(actionsMap: object): angu.Context {

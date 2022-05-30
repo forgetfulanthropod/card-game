@@ -6,11 +6,14 @@ import { checkWinner } from './round'
 // function sort(array) {array[2] = 1} // error
 // function sort(mut array)
 
-export function checkBattleOverMut(scene: BattleCursor): boolean {
+const MAX_ROOMS = 5
+export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
-        scene.set('state', 'won')
+        if (scene.get('roomsPassed') < MAX_ROOMS) {
+            scene.set('state', 'choosing cards')
+        } else scene.set('state', 'won')
         // incrementXP(scene)
         // putUpDoors(scene)
         return true

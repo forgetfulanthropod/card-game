@@ -2,7 +2,7 @@ import { set } from 'lodash'
 import type {
     Card,
     CardId,
-    Cards,
+    Piles,
     CharacterUid,
     BattleCursor,
     CharacterClass,
@@ -28,11 +28,11 @@ export function setCards(scene: BattleCursor) {
     scene.set('cards', makeCards(scene))
 }
 
-export function getNullCards(): Cards {
+export function getNullCards(): Piles {
     return { draw: {}, hand: {}, discard: {}, removed: {} }
 }
 
-function makeCards(scene: BattleCursor): Cards {
+function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
         'guidingBolt',
         'guidingBolt',

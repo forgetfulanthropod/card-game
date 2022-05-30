@@ -1,5 +1,5 @@
 import { omit } from 'lodash'
-import type { BattleCursor, Cards, Pile } from 'shared'
+import type { BattleCursor, Piles, Pile } from 'shared'
 import { keys } from 'shared/code'
 import { shufflePile } from './shufflePile'
 
@@ -14,7 +14,7 @@ function discardAndDrawAndGetPiles({
     hand,
     discard: discardPile,
     removed,
-}: Cards): Cards {
+}: Piles): Piles {
     let newDrawPile = drawPile
     let newHand = {}
     let newDiscardPile = { ...discardPile, ...hand }

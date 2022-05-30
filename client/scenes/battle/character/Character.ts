@@ -19,7 +19,6 @@ import {
     Adjust,
     bringToTop,
     Container,
-    flashElement,
     flashTo,
     glowFilter,
     hasTexture,
@@ -64,7 +63,7 @@ export function Character(args: CharacterProps): PixiContainer {
     if (sprites == null) {
         return Container({ children: [] })
     }
-    const { attackSprite, defendSprite, mainSprite, initialHeight } = sprites
+    const { mainSprite, initialHeight } = sprites
 
     const mainAnimation = MainCharacterAnimation(characterMeta, () =>
         args.onClick(characterMeta.uid)
@@ -73,9 +72,6 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainContainer = Container({
         isHoveredDatum: isHovered,
         children: [
-            // attackSprite,
-            // defendSprite,
-
             Adjust(ActionIntent(characterMeta.uid, isHovered), {
                 y: healthBar.height,
             }),
@@ -113,10 +109,8 @@ export function Character(args: CharacterProps): PixiContainer {
 
     const unbindMoves = bindMoves(
         characterMeta,
-        attackSprite,
         healthBar,
         flyingContainer,
-        defendSprite,
         hitContainer,
         mainAnimation
     )
@@ -225,10 +219,8 @@ function bindDOT(
 
 function bindMoves(
     characterMeta: CharacterMeta,
-    attackSprite: PixiSprite,
     healthBar: PixiContainer,
     flyingContainer: PixiContainer,
-    defendSprite: PixiSprite,
     aboveCharacterContainer: PixiContainer,
     mainAnimation: PixiSpine | null
 ): Unbind {
@@ -252,9 +244,6 @@ function bindMoves(
                 return
             }
 
-            flashElement(attackSprite, {
-                durationMs: ATTACK_ANIMATION_TIME,
-            })
             hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
             const defender0 = getBattleScene().get(
                 'allCharacters',
@@ -277,10 +266,6 @@ function bindMoves(
             if (mainAnimation) {
                 mainAnimation.state.setAnimation(0, 'Damage', false)
                 mainAnimation.state.addAnimation(0, 'Idle', true)
-            } else {
-                flashElement(defendSprite, {
-                    durationMs: ATTACK_ANIMATION_TIME,
-                })
             }
 
             flashTo(
@@ -324,8 +309,6 @@ function makeSprites(
             s.height = height
         }
         update(mainSprite)
-        update(defendSprite)
-        update(attackSprite)
         onHeight(height)
     })
 
@@ -362,24 +345,8 @@ function makeSprites(
         onDestroy: [unsub],
         zIndex: 1,
     })
-    const defendSprite = Sprite({
-        ...charSpriteProps,
-        filters: [blurFilter],
-        tint: RED,
-        zIndex: 0,
-        visible: false,
-    })
-    const attackSprite = Sprite({
-        ...charSpriteProps,
-        filters: [blurFilter],
-        tint: BLUE,
-        zIndex: 0,
-        visible: false,
-    })
 
     return {
-        attackSprite,
-        defendSprite,
         mainSprite,
         initialHeight: charSpriteProps.height,
     }

@@ -10,7 +10,7 @@ import type {
 import { mapToObj } from 'shared/code'
 import type { GameActions } from './types'
 import {
-    checkBattleOverMut,
+    maybeTransitionBattleState,
     getRandomLivingNpcUid,
     updateHand,
     applyDamage,
@@ -31,7 +31,7 @@ export const activateOrb: GameActions['ActivateOrb'] = ({
     activate(orb, character, scene)
 
     updateHand(scene)
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function validate(character: CharacterMeta, orb: Orb) {

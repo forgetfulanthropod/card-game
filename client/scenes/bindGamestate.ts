@@ -7,7 +7,7 @@ import { DungeonEntryScene } from './entry'
 import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
+import { ROOT_SCALE, BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { animation$, nextFrame, onUpdate } from '@/util'
 
 let lastScene: PixiContainer
@@ -59,8 +59,8 @@ async function transitionSceneTo(
         angle: 4,
         radius: 0,
     })
-    twistFilter.offset.x = BASE_WIDTH / 2
-    twistFilter.offset.y = BASE_HEIGHT / 2
+    twistFilter.offset.x = (BASE_WIDTH / 2) * ROOT_SCALE
+    twistFilter.offset.y = (BASE_HEIGHT / 2) * ROOT_SCALE
     if (sceneType === 'battle') {
         sceneEl.filters = [twistFilter]
         await Tweener.add(

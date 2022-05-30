@@ -1,6 +1,6 @@
 import type { NextAction } from 'shared'
 
-import { checkBattleOverMut, interpretCommand } from '@/gameState'
+import { maybeTransitionBattleState, interpretCommand } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
@@ -10,7 +10,7 @@ export function doNpcTurn(
     args: { index: number }
 ): undefined | NextAction {
     const scene = getBattleSceneIn(game)
-    const isBattleOver = checkBattleOverMut(scene)
+    const isBattleOver = maybeTransitionBattleState(scene)
     if (isBattleOver) return undefined
     const processedCmds = scene.get('nextNpcCommands')
     const processedCmd = processedCmds[args.index]

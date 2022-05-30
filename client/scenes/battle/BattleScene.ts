@@ -5,12 +5,11 @@ import { Cards } from './cards'
 import { Characters } from './character'
 import { Energy } from './Energy'
 import { InfoBox } from './InfoBox'
-import { StartRoomButton } from './StartRoomButton'
+import { CardAdder } from './CardAdder'
 import { Background } from '@/scenes'
 import { Container } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { callApi } from '@/actions'
 
 export function BattleScene(): PixiContainer {
     const hoveredCardUid = datum<CharacterUid | null>(null)
@@ -35,11 +34,9 @@ export function BattleScene(): PixiContainer {
             Characters(scene),
             Cards({ scene, hoveredCardUid }),
             Energy({ scene }),
-            StartRoomButton(),
+            CardAdder(),
         ],
     })
-
-    setTimeout(() => callApi('StartBattle', {}), 0)
 
     return container
 }

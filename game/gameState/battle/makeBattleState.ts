@@ -26,7 +26,7 @@ export function makeBattleState(args: {
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 1,
-        state: 'not started',
+        state: 'in battle',
         playerStarts,
         isPlayerTurn: playerStarts,
         allCharacters,
