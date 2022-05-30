@@ -6,6 +6,8 @@ import {
     clearHasMoved,
     setRoundEnergy,
     getNpcMoves,
+    decrementEffects,
+    applyTurnStartEffects,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -23,7 +25,9 @@ export const resetRound: InternalAction['resetRound'] = (
     setRoundEnergy(scene)
     clearHasMoved(scene)
     clearBlock(scene)
+    decrementEffects(scene, 'npc')
     scene.set('isPlayerTurn', true)
+    applyTurnStartEffects(scene, 'pc')
     drawNewHand(scene)
     return undefined
 }

@@ -141,7 +141,7 @@ export function newNPCMeta(args: {
 }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // debugger
-    logger.info(`making new npc with ${JSON.stringify(args)}`)
+    // logger.info(`making new npc with ${JSON.stringify(args)}`)
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
 

@@ -14,6 +14,7 @@ import {
     getRandomLivingNpcUid,
     updateHand,
     applyDamage,
+    calcPostEffectStats,
 } from '@/gameState'
 import { emit, getBattleSceneIn } from '@/util'
 
@@ -86,13 +87,14 @@ function activateProtection(character: CharacterMeta, scene: BattleCursor) {
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
     const damage = Math.ceil(character.magic * 0.5)
-    const targetUids = [getRandomLivingNpcUid(scene)]
-    applyDamage({ damage, targetUid: targetUids[0], scene })
+    const targetUid = getRandomLivingNpcUid(scene)
+    const multiplier = calcPostEffectStats(character).damageTakeMultiplier
+    applyDamage({ damage, targetUid, scene, multiplier })
     emitDamage({
         moveName: 'Lightning!',
         attackerUid: character.uid,
         damage,
-        targetUids,
+        targetUids: [targetUid],
         scene,
     })
 }

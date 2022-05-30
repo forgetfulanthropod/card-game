@@ -14,3 +14,10 @@ export function mapToObj<K extends PropertyKey, V>(
 export function nonNulls<T>(arr: (null | undefined | T)[]): T[] {
     return arr.filter(x => x != null) as T[]
 }
+
+/** Make copy and set in copy */
+export function setAt<T>(arr: T[], i: number, x: T): T[] {
+    const copy = [...arr]
+    copy[i] = x
+    return copy
+}

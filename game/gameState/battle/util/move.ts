@@ -40,8 +40,8 @@ function decrementEffectStacks(allChars: AllCharacters, cardHit: CardHit) {
     }
     attacker.apply('effects', e => {
         return e
-            .map(e => ({ ...e, remainingRounds: e.remainingRounds - 1 }))
-            .filter(e => e.remainingRounds > 0)
+            .map(e => ({ ...e, counter: e.counter - 1 }))
+            .filter(e => e.counter > 0)
     })
 }
 
@@ -60,8 +60,8 @@ export function getUpdatedEffects(newEffect: Effect, prev: Effect[]): Effect[] {
     //             : null
     //     const mergedEffect = {
     //         type: newEffect.type,
-    //         remainingRounds:
-    //             prevEffect.remainingRounds + newEffect.remainingRounds,
+    //         counter:
+    //             prevEffect.counter + newEffect.counter,
     //         ...(damagesByRound ? { damagesByRound } : {}),
     //     }
     //     return [

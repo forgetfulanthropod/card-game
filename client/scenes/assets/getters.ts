@@ -1,21 +1,15 @@
 import { upperFirst } from 'lodash'
-import type { CharacterName, EffectType, OrbType } from 'shared'
+import type { CharacterName, EffectId, OrbType } from 'shared'
 import { Loader } from 'pixi.js'
 import type { OrbAssetId } from './orbs'
 import type { SpineAsset } from './spines'
-import type { AssetKey } from '@/elementsUtil'
 import { isTextureKey, PixiTexture, getTexture } from '@/elementsUtil'
 
-export function getEffectIconSrc(effectType: EffectType): PixiTexture {
-    const effectToIconMap: Record<EffectType, AssetKey> = {
-        Debilitated: 'effectDebilitated',
-        DOT1: 'effectPoison',
-        DOT2: 'effectBleed',
-    }
-
-    const iconId = effectToIconMap[effectType]
-
-    return getTexture(iconId)
+export function getEffectIconSrc<T extends EffectId>(
+    effectType: T
+): PixiTexture {
+    const id = `effect${upperFirst(effectType)}` as `effect${Capitalize<T>}`
+    return getTexture(id)
 }
 
 export const getCharTexture = (charId: CharacterName) =>

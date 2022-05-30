@@ -34,29 +34,38 @@ export function getNullCards(): Cards {
 
 function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
+        'guidingBolt',
+        'guidingBolt',
+        // 'guidingBolt',
+        // 'guidingBolt',
+        // 'guidingBolt',
+        // 'guidingBolt',
+        // 'guidingBolt',
+        // 'shield',
+        // 'shield',
         'shield',
-        'shield',
-        'shield',
-        'shieldOfLight',
-        'shieldOfLight',
+        // 'shieldOfLight',
+        // 'shieldOfLight',
         'shieldOfLight',
         'sweepTheLeg',
         'sweepTheLeg',
+        'sweepTheLeg',
+        'sweepTheLeg',
         'bodySlam',
-        'bodySlam',
+        // 'bodySlam',
         'jab',
         'strike',
         'strike',
         'orbOfLightning',
-        'orbOfLightning',
+        // 'orbOfLightning',
         'orbOfProtection',
-        'orbOfProtection',
+        // 'orbOfProtection',
     ]
     const allCharacters = vals(scene.get('allCharacters'))
 
     return {
         draw: cardIds.reduce((acc, id) => {
-            logger.info(JSON.stringify(allCharacters, null, '\n'))
+            // logger.info(JSON.stringify(allCharacters, null, '\n'))
             let firstCharacterUidForClass = allCharacters.find(
                 c => c?.class === getCardClass(id)
             )?.uid

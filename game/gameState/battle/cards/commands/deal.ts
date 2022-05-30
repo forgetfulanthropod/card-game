@@ -22,6 +22,7 @@ export function execute({
     command,
     targetUids,
     scene,
+    calculatedStats,
 }: ExecuteArgs) {
     const damage = damageAngu.eval() as number
     const numTargets: number =
@@ -42,6 +43,11 @@ export function execute({
         if (targetUids[i] == null)
             throw new Error('less targetUids than targets!')
 
-        applyDamage({ damage, targetUid: targetUids[i], scene })
+        applyDamage({
+            damage,
+            targetUid: targetUids[i],
+            scene,
+            multiplier: calculatedStats.damageTakeMultiplier,
+        })
     }
 }

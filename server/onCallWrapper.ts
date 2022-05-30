@@ -1,7 +1,7 @@
 import type { Application } from 'express'
 import { doActionAndTakeSteps } from './sleepLoop'
 
-const config = { log: true }
+const config = { log: false }
 // const log = (...args: unknown[]) => true && logger.info(...args)
 
 function makeRandId() {

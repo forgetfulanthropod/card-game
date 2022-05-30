@@ -3,7 +3,10 @@ import type { InternalAction, InternalActionName, NextAction } from 'shared'
 import { doNpcTurn } from './doNpcTurn'
 import { resetRound } from './resetRound'
 
-const internalActions: InternalAction = { doNpcTurn, resetRound } as const
+const internalActions: InternalAction = {
+    doNpcTurn,
+    resetRound,
+} as const
 
 // type ArgsOf = {
 //     [K in ActionName]: Param1<InternalAction[K]>

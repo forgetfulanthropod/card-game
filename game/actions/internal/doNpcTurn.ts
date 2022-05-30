@@ -16,9 +16,10 @@ export function doNpcTurn(
     const processedCmd = processedCmds[args.index]
     if (processedCmd == null) return undefined // safety check
     const { targetUids, command, outcome: _outcome } = processedCmd
-    // TODO supposed to be: keys(_outcome.damages)
-    interpretCommand({ command, targetUids, scene })
-    // play({ card: command, targetUids, scene })
+    if (scene.get('allCharacters', command.characterUid, 'health') ?? 0 > 0) {
+        interpretCommand({ command, targetUids, scene })
+    }
+
     if (args.index >= processedCmds.length - 1) {
         return {
             args: {},

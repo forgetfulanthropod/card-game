@@ -1,12 +1,11 @@
 import type { BattleCursor } from 'shared'
 
 import { keys } from 'shared/code'
-import { applyDOTDamages } from '@/gameState'
 
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)
     scene.set('isPlayerTurn', false)
-    applyDOTDamages(scene)
+    // applyDOTDamages(scene)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)
 }

@@ -7,5 +7,14 @@
         "game/**/*.ts"
     ],
     "extends": "./tsconfig.base.json",
-    "references": [{ "path": "./client" }, { "path": "./server" }]
+    "compilerOptions": {
+        "noEmit": true,
+        "composite": false
+    },
+    "references": [
+        { "path": "./client" },
+        { "path": "./server" },
+        { "path": "./shared" },
+        { "path": "./game" }
+    ]
 }

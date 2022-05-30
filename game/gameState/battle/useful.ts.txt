@@ -124,7 +124,7 @@ function getEffectAttackMultiplicand(attacker: CharacterMeta): number {
     let multiplier = 1
 
     attacker.effects.forEach(e => {
-        if (e.type === 'Debilitated') {
+        if (e.type === 'debilitated') {
             multiplier *= 0.5
         }
     })
@@ -146,7 +146,7 @@ export function getCharacterKeysAndDamages(
 export function getCharacterKeysAndEffects(
     cardHit: CardHit
 ): { key: CharacterUid; effect: Effect }[] {
-    const keyOnlyEffects: EffectType[] = ['Debilitated']
+    const keyOnlyEffects: EffectType[] = ['debilitated']
     const matchedKeyOnlyEffects = intersection(
         cardHit.card.types,
         keyOnlyEffects
@@ -154,7 +154,7 @@ export function getCharacterKeysAndEffects(
     if (matchedKeyOnlyEffects.length > 0) {
         return matchedKeyOnlyEffects.map(m => ({
             key: cardHit.defenders[0].uid,
-            effect: { type: m, remainingRounds: 1 },
+            effect: { type: m, counter: 1 },
         }))
     }
 
@@ -170,7 +170,7 @@ export function getCharacterKeysAndEffects(
             key: d.uid,
             effect: {
                 type: moveTypeDOT as EffectType,
-                remainingRounds: effectMultipliers.length - 1,
+                counter: effectMultipliers.length - 1,
                 damagesByRound: [
                     ...effectMultipliers.map(m =>
                         Math.max(

@@ -15,9 +15,13 @@
         },
         {
             "label": "tsc all",
-            "type": "shell",
-            "command": "./node_modules/.bin/tsc --build --watch shared client game server",
-            "problemMatcher": ["$tsc-watch"],
+            "type": "typescript",
+            "tsconfig": "./tsconfig.json",
+            "problemMatcher": "$tsc-watch",
+            "option": "watch",
+            // "type": "shell",
+            // "command": "./node_modules/.bin/tsc --build --watch .",
+            // "problemMatcher": ["$tsc-watch"],
             "group": "build",
             "detail": "check types on all files",
             "presentation": {

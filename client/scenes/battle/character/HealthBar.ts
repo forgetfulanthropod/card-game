@@ -1,13 +1,13 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid } from 'shared'
+import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
 import { getEffectIconSrc } from '@/scenes'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
-    clearContainer,
+    For,
     If,
     onDestroyed,
     getTexture,
@@ -33,7 +33,14 @@ export const HEALTH_BAR_WIDTH = 300
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
-    return Container({
+    // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
+    const unsub = onUpdate(characterCursor, char => {
+        if (char == null) {
+            unsub()
+            root.destroy({ children: true })
+        }
+    })
+    const root = Container({
         name: 'HealthBar',
         children: [
             HealthIndicator(characterCursor),
@@ -41,7 +48,9 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
             EffectIndicators(characterCursor),
             BlockIndicator(characterCursor),
         ],
+        onDestroy: [unsub],
     })
+    return root
 }
 
 function getCharacterCursor(characterUid: string) {
@@ -79,62 +88,39 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
 }
 
 function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
-    const container = Container({
-        children: [],
-        onDestroy: [onUpdate(characterCursor.select('effects'), updateEffects)],
+    const effectsCursor = characterCursor.select('effects')
+    const data = toDatum(effectsCursor, effects =>
+        effects.map(e => ({ ...e, key: e.id + e.counter }))
+    )
+    return For(
+        data,
+        effect => SingleEffect(effect),
+        idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
+    )
+}
+
+function SingleEffect(effect: Effect): PixiContainer {
+    return Container({
+        children: [
+            Sprite({
+                src: getEffectIconSrc(effect.id),
+                width: 80 * SCALE_UNIVERSAL,
+                height: 80 * SCALE_UNIVERSAL,
+                anchor: [0.5, 0.4],
+            }),
+            Text({
+                text: `${effect.counter}`,
+                anchor: [0.6, 1],
+                style: {
+                    fontFamily: ['bigFont', 'monospace'],
+                    fontSize: 30 * SCALE_UNIVERSAL,
+                    fill: 'white',
+                    stroke: 'black',
+                    strokeThickness: 5,
+                },
+            }),
+        ],
     })
-    return container
-    function updateEffects() {
-        clearContainer(container)
-
-        let numMatchedEffects = 0
-
-        const effects = (characterCursor.select('effects').get() ?? []).map(
-            (e, i) => {
-                let text = Text({
-                    text: `${e.type} ${e.remainingRounds} round${
-                        e.remainingRounds > 1 ? 's' : ''
-                    }`,
-                    y: 40 * i - numMatchedEffects,
-                    style: {
-                        fontFamily: 'monospace',
-                        fontSize: 30,
-                        fill: 'rgba(255,255,255,.6)',
-                        letterSpacing: -5,
-                    },
-                })
-                let icon
-                const iconSrc = getEffectIconSrc(e.type)
-                if (iconSrc != null) {
-                    icon = Sprite({
-                        src: iconSrc,
-                        width: 80 * SCALE_UNIVERSAL,
-                        height: 80 * SCALE_UNIVERSAL,
-                        anchor: [0.5, 0.4],
-                    })
-                    text = Text({
-                        text: `${e.remainingRounds}`,
-                        anchor: [0.6, 1],
-                        style: {
-                            fontFamily: ['bigFont', 'monospace'],
-                            fontSize: 30 * SCALE_UNIVERSAL,
-                            fill: 'white',
-                            stroke: 'black',
-                            strokeThickness: 5,
-                        },
-                    })
-                    ++numMatchedEffects
-                }
-
-                return Container({
-                    y: 50 * SCALE_UNIVERSAL,
-                    x: (numMatchedEffects - 1) * 50 * SCALE_UNIVERSAL,
-                    children: [...(icon ? [icon] : []), text],
-                })
-            }
-        )
-        if (effects.length) container.addChild(...effects)
-    }
 }
 
 function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
@@ -239,6 +225,7 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
     return onDestroyed(el, onUpdate(characterCursor, update, true))
 
     function update(cm: CharacterMeta) {
+        if (cm == null) return
         const portion = cm.health / cm.constitution
 
         if (cm.health !== lastHealth) updateFrame(texture, 0, portion)
