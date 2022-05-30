@@ -6,6 +6,7 @@
         "@pixi-spine/all-4.0": "^3.0.13",
         "ahooks": "^3.3.12",
         "gsap": "^3.10.4",
+        "mobile-device-detect": "^0.4.3",
         "pixi-filters": "^4.1.6",
         "pixi-tweener": "^0.12.2",
         "pixi-viewport": "^4.34.4",

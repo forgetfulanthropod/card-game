@@ -1,8 +1,11 @@
 import { Tweener } from 'pixi-tweener'
 import { Renderer } from 'pixi.js'
+import { isMobile } from 'mobile-device-detect'
 import { registerPixiInspector } from './pixiInspector'
 import type { PixiContainer, PixiSprite } from './aliases'
 import { PixiApplication } from './aliases'
+
+export const ROOT_SCALE = isMobile ? 1 : 2
 
 const application = null
 let app: null | PixiApplication = null
@@ -10,8 +13,8 @@ export function Application(args: {
     canvas: HTMLCanvasElement
     children: (PixiSprite | PixiContainer)[]
 }): PixiApplication {
-    const resW = (1920 * 2) / 2
-    const resH = (1080 * 2) / 2
+    const resW = 1920 * ROOT_SCALE
+    const resH = 1080 * ROOT_SCALE
 
     app = new PixiApplication({
         view: args.canvas,
@@ -20,9 +23,10 @@ export function Application(args: {
         width: resW,
         height: resH,
         antialias: true,
+        powerPreference: 'high-performance',
     })
 
-    app.stage.scale.set(resW / 1920)
+    app.stage.scale.set(ROOT_SCALE)
     app.ticker.maxFPS = 30
 
     // const delay = 10_000
