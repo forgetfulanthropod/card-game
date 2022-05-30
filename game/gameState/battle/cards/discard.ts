@@ -1,4 +1,4 @@
-import { omit } from 'lodash'
+import produce from 'immer'
 import type { Card, CardUid, BattleCursor } from 'shared'
 
 export function discard(args: {
@@ -6,17 +6,14 @@ export function discard(args: {
     card: Card
     scene: BattleCursor
 }): void {
-    args.scene.apply('cards', cards => {
-        const draw = cards.draw
-        const hand = omit(cards.hand, args.cardUid)
-        const discard = { ...cards.discard, ...{ [args.cardUid]: args.card } }
-
-        // if (keys(hand).length === 0)
-        //     ({ draw, hand, discard } = drawNewHand({
-        //         drawPile: draw,
-        //         hand,
-        //         discardPile: discard,
-        //     }))
-        return { ...cards, draw, hand, discard }
-    })
+    args.scene.apply(
+        'cards',
+        produce(cards => {
+            const card = cards.hand[args.cardUid]
+            delete cards.hand[args.cardUid]
+            if (card) {
+                cards.discard[args.cardUid] = card
+            }
+        })
+    )
 }

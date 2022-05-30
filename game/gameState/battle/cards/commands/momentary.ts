@@ -11,6 +11,7 @@ export function execute({ scene, cardUid }: ExecuteArgs) {
     scene.apply(
         'cards',
         produce(piles => {
+            // card should be in hand but better safe than sorry
             const card =
                 piles.hand[cardUid] ??
                 piles.discard[cardUid] ??

@@ -1,7 +1,6 @@
 // window.PIXI = PIXI
 import type { Datum } from 'datums'
 import type { DisplayObject } from 'pixi.js'
-import type { AssetKey } from '../AssetLoader'
 import type { PixiGraphics } from './aliases'
 import {
     PixiContainer,
@@ -14,6 +13,7 @@ import type { ShownArgs, DisplayObjectArgs } from './_types'
 import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import { Sprite, BASE_WIDTH, BASE_HEIGHT, Container } from './core'
 import { getPixiApp } from './application'
+import type { AssetKey } from '@/elementsUtil'
 export type PlayablePixiSprite = PixiSprite & { play: () => void }
 export function VideoBackground(args: {
     name?: string
@@ -120,12 +120,16 @@ export function getElByPath(args: {
     path.forEach((name, i) => {
         if (strict && !(el instanceof PixiContainer)) {
             const pathHere = JStr(path.slice(0, i))
-            throw Error(`path ${pathHere} is not a container on root ${root}`)
+            throw Error(
+                `path ${pathHere} is not a container on root '${root?.name}'`
+            )
         }
         el = el.getChildByName(name) as PixiContainer
     })
     if (strict && !(el instanceof PixiContainer))
-        throw Error(`path ${JStr(path)} is not a container on root ${root}`)
+        throw Error(
+            `path ${JStr(path)} is not a container on root '${root?.name}'`
+        )
     return el
 }
 

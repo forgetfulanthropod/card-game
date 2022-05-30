@@ -15,7 +15,8 @@ export function assertFinite<
             if (!isFinite(v))
                 throw Error(`value '${v}' at key ${k} is not a finite number`)
     } else {
-        if (!isFinite(val)) throw Error(`value '${val}' is not a finite number`)
+        if (!isFinite(val))
+            throw Error(`value ${JSON.stringify(val)} is not a finite number`)
     }
     return val
 }

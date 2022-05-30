@@ -6,7 +6,6 @@ import type {
     ITextStyle,
 } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { AssetKey } from '../AssetLoader'
 import type {
     PixiContainer,
     PixiGraphics,
@@ -14,6 +13,7 @@ import type {
     PixiTexture,
 } from './aliases'
 import type { InteractionEvents } from './InteractionEvents'
+import type { AssetKey } from '@/elementsUtil'
 
 export interface DisplayObjectArgs {
     position?: Pair

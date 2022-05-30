@@ -38,4 +38,4 @@ export type DungeonName =
     | 'The Ninth Trash Hole of Hell'
 
 export type StanceName = 'defensive' | 'neutral' | 'aggressive'
-export type PileId = 'draw' | 'hand' | 'discard' | 'removed'
+export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
