@@ -81,12 +81,12 @@ function decrementCounter(
 }
 
 function activateProtection(character: CharacterMeta, scene: BattleCursor) {
-    const block = Math.ceil(character.magic * 0.5)
+    const block = Math.ceil(character.wisdom * 0.5)
     scene.apply(['allCharacters', character.uid, 'block'], b => b + block)
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
-    const damage = Math.ceil(character.magic * 0.5)
+    const damage = Math.ceil(character.wisdom * 0.5)
     const targetUid = getRandomLivingNpcUid(scene)
     const multiplier = calcPostEffectStats(character).damageTakeMultiplier
     applyDamage({ damage, targetUid, scene, multiplier })

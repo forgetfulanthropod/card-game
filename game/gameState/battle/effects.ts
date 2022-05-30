@@ -11,7 +11,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
     const stats: CalculatedCharacterStats = {
         constitution: cm.constitution,
         dexterity: cm.dexterity,
-        magic: cm.magic,
+        wisdom: cm.wisdom,
         strength: cm.strength,
         isSkipped: false,
         damageTakeMultiplier: 1,

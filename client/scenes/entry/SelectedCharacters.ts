@@ -24,7 +24,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'wizard',
         constitution: 10,
         strength: 2,
-        magic: 5,
+        wisdom: 5,
         dexterity: 5,
 
         uid: 'pc-1',
@@ -38,7 +38,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'knight',
         constitution: 72,
         strength: 8,
-        magic: 5,
+        wisdom: 5,
         dexterity: 5,
 
         uid: 'pc-2',
@@ -52,7 +52,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'bard',
         constitution: 112,
         strength: 8,
-        magic: 9,
+        wisdom: 9,
         dexterity: 6,
 
         uid: 'pc-3',
