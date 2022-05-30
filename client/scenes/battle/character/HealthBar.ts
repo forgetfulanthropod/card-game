@@ -81,7 +81,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
 function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
     const data = toDatum(effectsCursor, effects =>
-        effects.map(e => ({ ...e, key: e.id }))
+        effects.map(e => ({ ...e, key: e.id + e.counter }))
     )
     return For(
         data,
