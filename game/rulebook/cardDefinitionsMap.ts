@@ -56,7 +56,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'sweepTheLeg',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), debilitate(1))',
+        actions: 'chain(deal(strength), effect("debilitated",1))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -245,8 +245,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'dutifulStab',
         targetNum: 1,
         targetType: 'enemies',
-        // TODO: is fatigue same as debilitate?
-        actions: 'chain(deal(strength), ifFirstPlay(debilitate(1)))',
+        actions: 'chain(deal(strength), ifFirstPlay(effect("debilitated",1)))',
         type: 'attack',
         characterClass: 'knight',
     },
