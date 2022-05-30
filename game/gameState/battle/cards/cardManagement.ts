@@ -29,7 +29,7 @@ export function setCards(scene: BattleCursor) {
 }
 
 export function getNullCards(): Cards {
-    return { draw: {}, hand: {}, discard: {}, removed: {} }
+    return { draw: {}, hand: {}, discard: {}, removedRoom: {}, removedRun: {} }
 }
 
 function makeCards(scene: BattleCursor): Cards {
@@ -89,7 +89,8 @@ function makeCards(scene: BattleCursor): Cards {
         }, {}),
         hand: {},
         discard: {},
-        removed: {},
+        removedRoom: {},
+        removedRun: {},
     }
 }
 

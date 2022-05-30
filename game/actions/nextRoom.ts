@@ -7,6 +7,7 @@ import {
     clearAllEffects,
     getNpcMoves,
     putAllCardsInDrawPile,
+    clearRoomCardModifiers,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
@@ -23,6 +24,7 @@ export const nextRoom: GameActions['NextRoom'] = args => {
     scene.set('state', 'in battle')
     scene.set('nextNpcCommands', getNpcMoves(scene))
     clearAllEffects(scene)
+    clearRoomCardModifiers(scene)
     scene.set('turnCount', 1)
     putAllCardsInDrawPile(scene)
     resetRound(args.game, {})

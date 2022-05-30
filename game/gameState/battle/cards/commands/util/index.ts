@@ -4,12 +4,14 @@ import type {
     CharacterUid,
     BattleCursor,
     CalculatedCharacterStats,
+    CardUid,
 } from 'shared'
 
 export type ExecuteArgs = {
     dslArgs: VAngu[]
     command: Command
     targetUids: CharacterUid[]
+    cardUid?: CardUid
     scene: BattleCursor
     calculatedStats: CalculatedCharacterStats
 }

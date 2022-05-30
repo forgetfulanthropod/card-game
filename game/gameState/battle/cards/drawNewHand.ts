@@ -13,7 +13,8 @@ function discardAndDrawAndGetPiles({
     draw: drawPile,
     hand,
     discard: discardPile,
-    removed,
+    removedRoom,
+    removedRun,
 }: Cards): Cards {
     let newDrawPile = drawPile
     let newHand = {}
@@ -42,7 +43,8 @@ function discardAndDrawAndGetPiles({
         draw: newDrawPile,
         hand: newHand,
         discard: newDiscardPile,
-        removed,
+        removedRoom,
+        removedRun,
     }
 }
 function drawUpToNCards({
