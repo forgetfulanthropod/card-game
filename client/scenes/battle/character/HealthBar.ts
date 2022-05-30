@@ -33,7 +33,14 @@ export const HEALTH_BAR_WIDTH = 300
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
-    return Container({
+    // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
+    const unsub = onUpdate(characterCursor, char => {
+        if (char == null) {
+            unsub()
+            root.destroy({ children: true })
+        }
+    })
+    const root = Container({
         name: 'HealthBar',
         children: [
             HealthIndicator(characterCursor),
@@ -41,7 +48,9 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
             EffectIndicators(characterCursor),
             BlockIndicator(characterCursor),
         ],
+        onDestroy: [unsub],
     })
+    return root
 }
 
 function getCharacterCursor(characterUid: string) {
@@ -216,6 +225,7 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
     return onDestroyed(el, onUpdate(characterCursor, update, true))
 
     function update(cm: CharacterMeta) {
+        if (cm == null) return
         const portion = cm.health / cm.constitution
 
         if (cm.health !== lastHealth) updateFrame(texture, 0, portion)
