@@ -1,5 +1,5 @@
 import type { Value as VAngu } from 'angu'
-import type { EffectId, TargetType } from 'shared'
+import type { EffectId } from 'shared'
 import { notnull, setAt } from 'shared/code'
 
 import type { ExecuteArgs } from './util'
@@ -19,12 +19,12 @@ export function execute({
     if (dslArgs.length < 2) throw Error('id and increase are required')
     const id: EffectId = dslArgs[0].eval()
     const increase: number = dslArgs[1].eval()
-    const targetType: TargetType | null = dslArgs[2]?.eval() ?? null
+    const targetType: 'friends' | 'enemies' | null = dslArgs[2]?.eval() ?? null
     let targetUids = givenUids
     if (targetType) {
         const ac = scene.get('allCharacters')
         const isPcSource = ac[command.characterUid].isPc
-        const shouldBePc = isPcSource === (targetType === 'party') // NOR
+        const shouldBePc = isPcSource === (targetType === 'friends') // NOR
         targetUids = Object.values(ac)
             .filter(x => x.isPc === shouldBePc)
             .map(x => x.uid)

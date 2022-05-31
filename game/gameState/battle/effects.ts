@@ -18,6 +18,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         strength: cm.strength,
         isSkipped: false,
         damageTakeMultiplier: 1,
+        damageTakeAddend: 0,
     }
     cm.effects.forEach(effect => {
         effectFuncs[effect.id](stats)
@@ -29,6 +30,9 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
     {
         /** see applyTurnStartEffects */
         bleed(_stats) {},
+        smallDamageIncrease(stats) {
+            stats.damageTakeAddend += 4
+        },
         debilitated(stats) {
             stats.strength *= 0.5
         },
@@ -40,7 +44,7 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
         stunned(stats) {
             stats.isSkipped = true
         },
-        tetsudo(stats) {
+        strongblock(stats) {
             stats.blockMultiplier *= 1.5
         },
         unguarded(stats) {

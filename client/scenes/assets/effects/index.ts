@@ -7,7 +7,7 @@ import effectFatigue from './fatigue.png'
 import effectPoison from './poison_skull.png'
 import effectStunned from './stunned.png'
 import effectUnguarded from './unguarded_v2.png'
-const invisibleEffects_ = ['tetsudo'] as const
+const invisibleEffects_ = ['strongblock', 'smallDamageIncrease'] as const
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_
 export type VisibleEffect = Exclude<EffectId, typeof invisibleEffects_[number]>
 export const effectAssets: {

@@ -134,9 +134,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Chain Lightning',
         energy: 2,
         id: 'chainLightning',
-        targetNum: 1,
+        targetNum: 3,
         targetType: 'enemies',
-        actions: 'chainAttack(3, 0.75 * wisdom)',
+        actions: 'deal(0.75 * wisdom)',
         type: 'attack',
         characterClass: 'wizard',
     },
@@ -188,7 +188,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         // round.enemyDamageBonus += 4
         // if (blockBroken) health -= (damage + round.enemyDamageBonus)
-        actions: 'roundBuff("enemyDamageBonus", 4)',
+        actions: 'addEffect("smallDamageIncrease", 1)',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -264,7 +264,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         // TODO: "You may only play this card if this character is in an avoidant stance."
-        actions: 'chain(addBlock(dexterity), effect("tetsudo", 1, "party"))',
+        actions:
+            'chain(addBlock(dexterity), effect("strongblock", 1, "friends"))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -293,8 +294,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 2,
         id: 'bless',
         targetNum: 1,
-        targetType: 'self',
-        actions: 'forTurns(2, addBlock(dexterity * .5))',
+        targetType: 'friends',
+        actions: 'effect("strongblock", 2)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -331,7 +332,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(atNextTurn(addEnergy(2)), momentary())',
+        actions: 'chain(queue(1, addEnergy(2))), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -348,4 +349,5 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
 }
 
-// increaseThisRound ifTargetDied forTurns choice killEnemy constraint atNextTurn
+// remaining verbs: doubleEnchantmentOrToken ifTargetDied queue choice killEnemy constraint
+// weird choice / target type: arcanePower prayerOfGoodFortune
