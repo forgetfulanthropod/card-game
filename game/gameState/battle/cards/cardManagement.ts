@@ -34,10 +34,7 @@ export function getNullCards(): Cards {
 
 function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
-        'dutifulStab',
-        'dutifulStab',
-        'dutifulStab',
-        'dutifulStab',
+        'charge',
         'dutifulStab',
         'swordSlash',
         'magicRitual',

@@ -253,7 +253,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'charge',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), vulnerable(1))',
+        actions: 'chain(deal(strength), effect("vulnerable", 1))',
         type: 'attack',
         characterClass: 'knight',
     },
