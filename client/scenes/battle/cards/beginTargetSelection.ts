@@ -60,7 +60,7 @@ export function beginTargetSelection(
 
             await callApi('PlayCard', {
                 cardUid: cardEl.name, //cardMeta.id,
-                targetUids: [targets[0]],
+                targetUids: targets,
             })
             cleanup()
         }

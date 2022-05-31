@@ -34,9 +34,21 @@ export function getNullCards(): Cards {
 
 function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
+        'swordSlash',
         'magicRitual',
-        'magicRitual',
-        'magicRitual',
+        // 'magicRitual',
+        // 'magicRitual',
         'guidingBolt',
         'guidingBolt',
         // 'guidingBolt',
