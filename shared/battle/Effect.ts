@@ -12,6 +12,13 @@ addCounter(targetUid, counterId)
 **Stunned *(Debuff)*:** Stunned NPCs skip their next turn.  Stunned player characters cannot play any cards, nor can they switch stances.
 **Unguarded** ***(Debuff)*:** Unguarded characters receive 25% more damage.
 **Vulnerable *(Debuff*):** Vulnerable characters receive 50% more damage.
+
+TODO:
+"fatigue"
+"doubleDamage"
+"stun"
+"passiveBlock"
+"smallDamageBonus"
 */
 
 /** Effects are applied in the order of this array */

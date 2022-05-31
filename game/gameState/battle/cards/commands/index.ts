@@ -48,3 +48,8 @@ export const executors: Executors = {
     text: executeText,
     // @endindex
 }
+
+// remaining verbs: doubleEnchantmentOrToken ifTargetDied queue choice killEnemy constraint
+// weird choice / target type: arcanePower prayerOfGoodFortune
+
+// Verbs enemies need: mimicAttack dot ifDamageDealt damageTaken rest matchaMeld summon

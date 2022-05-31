@@ -1,6 +1,5 @@
 import type { CardDefinition, CardId } from 'shared'
 
-// cardDefinitionsMap
 const basicMagicAttackBase = {
     name: 'Basic Magic Attack',
     energy: 1,
@@ -348,6 +347,3 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'cleric',
     },
 }
-
-// remaining verbs: doubleEnchantmentOrToken ifTargetDied queue choice killEnemy constraint
-// weird choice / target type: arcanePower prayerOfGoodFortune
