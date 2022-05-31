@@ -1,14 +1,10 @@
-import type {
-    BattleScene,
-    CardId,
-    CharacterClass,
-    CharacterMeta,
-    Pile,
-} from 'shared'
-import { vals } from 'shared/code'
+import type { BattleScene, CharacterMeta, Pile } from 'shared'
 import { getAllPcs } from './characterGetters'
-import { getCardInstance, updateExplanation } from './cards/cardManagement'
-import { cardDefinitionsMap } from '@/rulebook'
+import {
+    getCardInstance,
+    getRandomCardIdOfClass,
+    updateExplanation,
+} from './cards/cardManagement'
 import { toCursor } from '@/util'
 
 export const NUM_CARD_OPTIONS = 5
@@ -40,12 +36,4 @@ function newCard(allPcs: CharacterMeta[], i: number) {
         getRandomCardIdOfClass(character.class),
         character.uid
     )
-}
-
-function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
-    const idPool: CardId[] = vals(cardDefinitionsMap)
-        .filter(card => card.characterClass === characterClass)
-        .map(c => c.id)
-
-    return idPool[Math.floor(idPool.length * srandom())]
 }

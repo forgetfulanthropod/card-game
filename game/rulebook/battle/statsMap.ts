@@ -156,7 +156,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'mushroomFarmer',
         displayName: 'Mushroom Farmer',
         isPc: true,
-        class: 'bard',
+        class: 'cleric',
 
         constitution: 112,
         strength: 8,
@@ -199,7 +199,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         name: 'skeletonWarrior',
         displayName: 'Skeleton Warrior',
         isPc: false,
-        class: 'wizard',
+        class: 'knight',
 
         constitution: 10,
         strength: 2,

@@ -1,4 +1,4 @@
-import { set } from 'lodash'
+import { set, upperFirst } from 'lodash'
 import type {
     Card,
     CardId,
@@ -33,36 +33,34 @@ export function getNullCards(): Piles {
 
 function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
-        'guidingBolt',
-        'guidingBolt',
-        // 'guidingBolt',
-        // 'guidingBolt',
-        // 'guidingBolt',
         // 'guidingBolt',
         // 'guidingBolt',
         // 'shield',
-        // 'shield',
-        'shield',
         // 'shieldOfLight',
-        // 'shieldOfLight',
-        'shieldOfLight',
-        'sweepTheLeg',
-        'sweepTheLeg',
         // 'sweepTheLeg',
         // 'sweepTheLeg',
-        'bodySlam',
         // 'bodySlam',
-        'jab',
-        'strike',
-        'strike',
-        'strike',
-        'strike',
-        'orbOfLightning',
+        // 'jab',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
         // 'orbOfLightning',
-        'orbOfProtection',
         // 'orbOfProtection',
     ]
+
     const allCharacters = vals(scene.get('allCharacters'))
+    allCharacters.forEach(c => {
+        const ccuf = upperFirst(c.class)
+        cardIds.push(
+            //@ts-expect-error
+            `basicAttack${ccuf}`,
+            `basicAttack${ccuf}`,
+            `block${ccuf}`,
+            `block${ccuf}`
+        )
+        cardIds.push(getRandomCardIdOfClass(c.class))
+    })
 
     return {
         draw: cardIds.reduce((acc, id) => {
@@ -86,6 +84,30 @@ function makeCards(scene: BattleCursor): Piles {
         hand: {},
         discard: {},
         removed: {},
+    }
+}
+/**
+ * random but not a basic starter...
+ */
+export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
+    const idPool = keys(cardDefinitionsMap).filter(
+        cardId => cardDefinitionsMap[cardId].characterClass === characterClass
+    )
+
+    let cardId = get()
+
+    while (
+        //can't be these..
+        cardId.includes(`basicAttack${characterClass}`) ||
+        cardId.includes(`block${characterClass}`)
+    ) {
+        cardId = get()
+    }
+
+    return cardId
+
+    function get() {
+        return idPool[Math.floor(srandom() * idPool.length)]
     }
 }
 
