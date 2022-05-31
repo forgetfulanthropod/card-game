@@ -66,9 +66,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        // TODO: dwindle
-        actions:
-            'chain(deal(block), text("(equal to Kauju\'s block)"), dwindle())',
+        actions: 'chain(deal(block), text("(equal to Kauju\'s block)"))', // , dwindle()
         type: 'attack',
         characterClass: 'knight',
     },

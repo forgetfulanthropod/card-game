@@ -22,6 +22,7 @@ export type CharacterStats = Readonly<{
 /** Result of applying effects to character */
 export interface CalculatedCharacterStats {
     isSkipped: boolean
+    block: number
     constitution: number
     strength: number
     wisdom: number

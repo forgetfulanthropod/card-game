@@ -9,6 +9,7 @@ import produce from 'immer'
 
 export function calcPostEffectStats(cm: CharacterMeta) {
     const stats: CalculatedCharacterStats = {
+        block: cm.block,
         constitution: cm.constitution,
         dexterity: cm.dexterity,
         wisdom: cm.wisdom,

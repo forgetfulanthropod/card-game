@@ -41,8 +41,16 @@ const standardOperators = {
     PI: 3.14,
 }
 
-export function explainCommand(command: Command, scene: BattleCursor) {
-    return explainActions(command.actions, localsFromCommand(command, scene))
+export function explainCommand(command: Command, scene: BattleCursor): string {
+    const res = explainActions(
+        command.actions,
+        localsFromCommand(command, scene)
+    )
+    if (typeof res !== 'string') {
+        logger.error(['non-string result:', res])
+        return 'error!'
+    }
+    return res
 }
 
 export function explainActions(actions: string, locals?: object) {
