@@ -28,6 +28,7 @@ export interface CalculatedCharacterStats {
     wisdom: number
     dexterity: number
     damageTakeMultiplier: number
+    blockMultiplier: number
 }
 
 export type OwnedCharacterStats = CharacterStats &

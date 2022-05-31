@@ -13,8 +13,12 @@ export function execute({
     dslArgs: [blockAgnu],
     targetUids,
     scene,
+    calculatedStats,
 }: ExecuteArgs) {
     const block = blockAgnu.eval() as number
 
-    scene.apply(['allCharacters', targetUids[0], 'block'], b => b + block)
+    scene.apply(
+        ['allCharacters', targetUids[0], 'block'],
+        b => b + block * calculatedStats.blockMultiplier
+    )
 }

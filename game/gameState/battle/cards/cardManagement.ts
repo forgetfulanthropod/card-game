@@ -34,6 +34,7 @@ export function getNullCards(): Cards {
 
 function makeCards(scene: BattleCursor): Cards {
     const cardIds: CardId[] = [
+        'tetsudoFormation',
         'charge',
         'dutifulStab',
         'swordSlash',

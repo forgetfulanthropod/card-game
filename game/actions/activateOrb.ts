@@ -82,7 +82,11 @@ function decrementCounter(
 
 function activateProtection(character: CharacterMeta, scene: BattleCursor) {
     const block = Math.ceil(character.wisdom * 0.5)
-    scene.apply(['allCharacters', character.uid, 'block'], b => b + block)
+    const multiplier = calcPostEffectStats(character).blockMultiplier
+    scene.apply(
+        ['allCharacters', character.uid, 'block'],
+        b => b + block * multiplier
+    )
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {

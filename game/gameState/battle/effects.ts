@@ -4,12 +4,14 @@ import type {
     CharacterMeta,
     EffectId,
 } from 'shared'
+import { turnEndClearEffects } from 'shared'
 
 import produce from 'immer'
 
 export function calcPostEffectStats(cm: CharacterMeta) {
     const stats: CalculatedCharacterStats = {
         block: cm.block,
+        blockMultiplier: 1,
         constitution: cm.constitution,
         dexterity: cm.dexterity,
         wisdom: cm.wisdom,
@@ -37,6 +39,9 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
         poison(_stats) {},
         stunned(stats) {
             stats.isSkipped = true
+        },
+        tetsudo(stats) {
+            stats.blockMultiplier *= 1.5
         },
         unguarded(stats) {
             stats.damageTakeMultiplier *= 1.25
@@ -73,7 +78,9 @@ export function decrementEffects(scene: BattleCursor, finished: 'pc' | 'npc') {
             for (const cm of Object.values(ac)) {
                 if (cm.isPc !== isPcStart) continue
                 cm.effects.forEach(e => (e.counter -= 1))
-                cm.effects = cm.effects.filter(e => e.counter > 0)
+                cm.effects = cm.effects.filter(
+                    e => e.counter > 0 && !turnEndClearEffects.includes(e.id)
+                )
             }
         })
     )

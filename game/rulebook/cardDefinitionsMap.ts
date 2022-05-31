@@ -262,9 +262,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 1,
         id: 'tetsudoFormation',
         targetNum: 1,
-        targetType: 'self',
-        actions:
-            'chain(addBlock(dexterity), increaseThisRound("cards", "block", 0.5 * dexterity))',
+        targetType: 'friends',
+        // TODO: "You may only play this card if this character is in an avoidant stance."
+        actions: 'chain(addBlock(dexterity), effect("tetsudo", 1, "party"))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -347,3 +347,5 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'cleric',
     },
 }
+
+// increaseThisRound ifTargetDied forTurns choice killEnemy constraint atNextTurn

@@ -2,7 +2,8 @@ import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
-import { getEffectIconSrc } from '@/scenes'
+import type { VisibleEffect as VisibleEffectId } from '@/scenes'
+import { getEffectIconSrc, invisibleEffects } from '@/scenes'
 import { callApi } from '@/actions'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
@@ -90,7 +91,13 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
 function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
     const data = toDatum(effectsCursor, effects =>
-        effects.map(e => ({ ...e, key: e.id + e.counter }))
+        effects
+            .filter(e => !invisibleEffects.includes(e.id))
+            .map(e => ({
+                ...e,
+                key: e.id + e.counter,
+                id: e.id as VisibleEffectId,
+            }))
     )
     return For(
         data,
@@ -99,7 +106,7 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-function SingleEffect(effect: Effect): PixiContainer {
+function SingleEffect(effect: Effect & { id: VisibleEffectId }): PixiContainer {
     return Container({
         children: [
             Sprite({
