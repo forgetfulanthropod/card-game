@@ -1,12 +1,12 @@
 import produce from 'immer'
 
-import type { ExecuteArgs } from './util'
+import type { Executors, Explainers } from './util'
 
-export function explain() {
+export const explain: Explainers['momentary'] = _dslArgs => {
     return `Removed until end of room`
 }
 
-export function execute({ scene, cardUid }: ExecuteArgs) {
+export const execute: Executors['momentary'] = ({ scene, cardUid }) => {
     if (cardUid == null) throw Error('momentary did not receive a cardUid')
     scene.apply(
         'cards',

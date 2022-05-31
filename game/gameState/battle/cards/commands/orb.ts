@@ -1,23 +1,16 @@
-import type { Value as VAngu } from 'angu'
 import type { CharacterUid, OrbType, BattleCursor } from 'shared'
 
-import type { ExecuteArgs } from './util'
+import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 
-export function explain(orbTypeAngu: VAngu, numCountersAngu: VAngu) {
-    const orbType = orbTypeAngu.eval() as OrbType
-    const numCounters = numCountersAngu.eval() as number
+export const explain: Explainers['orb'] = args => {
+    const [orbType, count] = evalAll(args)
 
-    return `creates ${numCounters} ${orbType} orbs`
+    return `creates ${count} ${orbType} orbs`
 }
 
-export function execute({
-    dslArgs: [orbTypeAngu, countAngu],
-    command,
-    // targetUids,
-    scene,
-}: ExecuteArgs) {
-    const orbType = orbTypeAngu.eval() as OrbType
-    const count = countAngu.eval() as number
+export const execute: Executors['orb'] = ({ dslArgs, command, scene }) => {
+    const [orbType, count] = evalAll(dslArgs)
 
     summonOrbs(orbType, count, command.characterUid, scene)
 }

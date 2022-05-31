@@ -1,25 +1,20 @@
-import type { Value as VAngu } from 'angu'
-import type { EffectId } from 'shared'
-import { notnull, setAt } from 'shared/code'
+import { setAt } from 'shared/code'
 
-import type { ExecuteArgs } from './util'
+import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 
-export function explain(id: VAngu<string>, increase: VAngu<number>): string {
-    notnull({ id, increase })
-
-    return `add ${increase.eval()} to the ${id.eval()} counter`
+export const explain: Explainers['effect'] = dslArgs => {
+    const [id, increase] = evalAll(dslArgs)
+    return `add ${increase} to the ${id} counter`
 }
 
-export function execute({
+export const execute: Executors['effect'] = ({
     dslArgs,
     targetUids: givenUids,
     scene,
     command,
-}: ExecuteArgs) {
-    if (dslArgs.length < 2) throw Error('id and increase are required')
-    const id: EffectId = dslArgs[0].eval()
-    const increase: number = dslArgs[1].eval()
-    const targetType: 'friends' | 'enemies' | null = dslArgs[2]?.eval() ?? null
+}) => {
+    const [id, increase, targetType] = evalAll(dslArgs)
     let targetUids = givenUids
     if (targetType) {
         const ac = scene.get('allCharacters')

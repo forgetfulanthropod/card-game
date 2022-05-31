@@ -1,17 +1,13 @@
-import type { Value as VAngu } from 'angu'
-import { notnull } from 'shared/code'
+import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 
-import type { ExecuteArgs } from './util'
-
-export function explain(amount: VAngu) {
-    notnull({ amount })
-
-    const n = amount.eval()
-    return `+${n} energy`
+export const explain: Explainers['addEnergy'] = dslArgs => {
+    const [amount] = evalAll(dslArgs)
+    return `+${amount} energy`
 }
 
-export function execute({ dslArgs: [amount], scene }: ExecuteArgs) {
-    const energy = amount.eval() as number
+export const execute: Executors['addEnergy'] = ({ dslArgs, scene }) => {
+    const [amount] = evalAll(dslArgs)
 
-    scene.apply('energy', e => e + energy)
+    scene.apply('energy', e => e + amount)
 }

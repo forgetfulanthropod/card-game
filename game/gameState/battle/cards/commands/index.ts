@@ -18,9 +18,10 @@ import {
 } from './momentary'
 import { explain as explainOrb, execute as executeOrb } from './orb'
 import { explain as explainText, execute as executeText } from './text'
+import type { Executors, Explainers } from './util'
 // @endindex
 
-export const explainers = {
+export const explainers: Explainers = {
     // @index(['./*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
     addBlock: explainAddBlock,
     addEnergy: explainAddEnergy,
@@ -34,7 +35,7 @@ export const explainers = {
     // @endindex
 }
 
-export const executors = {
+export const executors: Executors = {
     // @index(['./*.ts'], (f, _) => `${f.name}: execute${_.pascalCase(f.name)},`)
     addBlock: executeAddBlock,
     addEnergy: executeAddEnergy,
