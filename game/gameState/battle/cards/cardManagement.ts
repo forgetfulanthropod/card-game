@@ -89,7 +89,7 @@ function makeCards(scene: BattleCursor): Piles {
     }
 }
 
-function updateExplanation(card: Card, scene: BattleCursor): Card {
+export function updateExplanation(card: Card, scene: BattleCursor): Card {
     return { ...card, explanation: explainCommand(card, scene) }
 }
 

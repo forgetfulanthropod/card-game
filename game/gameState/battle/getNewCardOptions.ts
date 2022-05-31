@@ -7,8 +7,9 @@ import type {
 } from 'shared'
 import { vals } from 'shared/code'
 import { getAllPcs } from './characterGetters'
-import { getCardInstance } from './cards/cardManagement'
+import { getCardInstance, updateExplanation } from './cards/cardManagement'
 import { cardDefinitionsMap } from '@/rulebook'
+import { toCursor } from '@/util'
 
 export const NUM_CARD_OPTIONS = 5
 export const NUM_KAIJUS_IN_PARTY = 3
@@ -22,7 +23,7 @@ export function getNewCardOptions(scene: BattleScene): Pile {
         )
 
     for (let i = 0; i < NUM_CARD_OPTIONS; i++) {
-        const card = newCard(allPcs, i)
+        const card = updateExplanation(newCard(allPcs, i), toCursor(scene))
         newPile[card.uid] = card
     }
 

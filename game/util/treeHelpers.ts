@@ -1,4 +1,5 @@
 import type { SCursor } from 'sbaobab'
+import { SBaobab } from 'sbaobab'
 import type { BattleCursor, EntryScene, NetworkEvent } from 'shared'
 
 export function getBattleSceneIn(game: Gamecursor): BattleCursor {
@@ -7,6 +8,10 @@ export function getBattleSceneIn(game: Gamecursor): BattleCursor {
         throw Error('getBattleScene called when not in battle scene')
     }
     return scene as BattleCursor
+}
+
+export function toCursor<T>(tree: T): SCursor<T> {
+    return new SBaobab(tree).select()
 }
 
 export function getEntrySceneIn(game: Gamecursor): SCursor<EntryScene> {
