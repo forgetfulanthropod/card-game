@@ -1,14 +1,23 @@
 import type {
+    BattleCursor,
     CharacterMeta,
     CharacterUid,
-    BattleCursor,
     BattleScene,
     Command,
 } from 'shared'
 
 import { vals } from 'shared/code'
+import { SCursor } from 'sbaobab'
 import { getRulebook } from '@/rulebook'
 import { weightedRandom } from '@/util'
+
+export function getAllPcs(scene: BattleCursor | BattleScene): CharacterMeta[] {
+    return vals(
+        scene instanceof SCursor
+            ? scene.get('allCharacters')
+            : scene.allCharacters
+    ).filter((c: CharacterMeta) => c.isPc)
+}
 
 export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
     const uids = vals(scene.get('allCharacters'))

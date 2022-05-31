@@ -1,11 +1,12 @@
 import type {
-    Piles,
-    Command,
     Characters,
+    CharacterUid,
+    Command,
     DamageMap,
     DungeonName,
+    Pile,
+    Piles,
     SceneHas,
-    CharacterUid,
 } from '@'
 
 export interface BattleScene extends SceneHas {
@@ -17,7 +18,7 @@ export interface BattleScene extends SceneHas {
     isPlayerTurn: boolean
     allCharacters: Characters
     cards: Piles
-
+    newCardOptions: Pile
     energy: number
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean

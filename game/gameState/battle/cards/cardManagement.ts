@@ -6,7 +6,6 @@ import type {
     CharacterUid,
     BattleCursor,
     CharacterClass,
-    CardUid,
 } from 'shared'
 
 import { keys, vals } from 'shared/code'
@@ -49,11 +48,13 @@ function makeCards(scene: BattleCursor): Piles {
         'shieldOfLight',
         'sweepTheLeg',
         'sweepTheLeg',
-        'sweepTheLeg',
-        'sweepTheLeg',
+        // 'sweepTheLeg',
+        // 'sweepTheLeg',
         'bodySlam',
         // 'bodySlam',
         'jab',
+        'strike',
+        'strike',
         'strike',
         'strike',
         'orbOfLightning',
@@ -76,16 +77,11 @@ function makeCards(scene: BattleCursor): Piles {
                 )
                 firstCharacterUidForClass = allCharacters[0].uid
             }
-
-            const cardUid = `${id}-${srandom().toString().replace('.', '')}`
-            return set(
-                acc,
-                cardUid,
-                updateExplanation(
-                    getCardInstance(id, cardUid, firstCharacterUidForClass),
-                    scene
-                )
+            const card = updateExplanation(
+                getCardInstance(id, firstCharacterUidForClass),
+                scene
             )
+            return set(acc, card.uid, card)
         }, {}),
         hand: {},
         discard: {},
@@ -97,14 +93,10 @@ function updateExplanation(card: Card, scene: BattleCursor): Card {
     return { ...card, explanation: explainCommand(card, scene) }
 }
 
-function getCardInstance(
-    id: keyof typeof cardDefinitionsMap,
-    uid: CardUid,
-    characterUid: CharacterUid
-): Card {
+export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
     return {
         ...cardDefinitionsMap[id],
-        uid,
+        uid: `${id}-${makeRandId()}`,
         characterUid,
         explanation: 'error!',
     }
@@ -112,4 +104,8 @@ function getCardInstance(
 
 function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
     return cardDefinitionsMap[id].characterClass
+}
+
+function makeRandId() {
+    return srandom().toString().slice(2)
 }

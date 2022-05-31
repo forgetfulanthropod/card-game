@@ -31,6 +31,7 @@ export function makeBattleState(args: {
         isPlayerTurn: playerStarts,
         allCharacters,
         cards: getNullCards(),
+        newCardOptions: {},
         energy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,

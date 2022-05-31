@@ -2,17 +2,17 @@ import type { BattleCursor } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
+import { getNewCardOptions } from './getNewCardOptions'
 
-// function sort(array) {array[2] = 1} // error
-// function sort(mut array)
+const NUM_ROOMS_BEFORE_GAME_OVER = 5
 
-const MAX_ROOMS = 5
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
-        if (scene.get('roomsPassed') < MAX_ROOMS) {
+        if (scene.get('roomsPassed') < NUM_ROOMS_BEFORE_GAME_OVER) {
             scene.set('state', 'choosing cards')
+            scene.set('newCardOptions', getNewCardOptions(scene.get()))
         } else scene.set('state', 'won')
         // incrementXP(scene)
         // putUpDoors(scene)
