@@ -3,7 +3,7 @@ import type { CardHit } from 'shared'
 import { mapToObj } from 'shared/code'
 import type { ExecuteArgs } from './util'
 import { s } from './util'
-import { applyDamage } from '@/gameState'
+import { applyDamage, calcPostEffectStats } from '@/gameState'
 import { emit } from '@/util'
 
 export function explain(damage: VAngu, times: VAngu) {
@@ -49,8 +49,9 @@ export function execute({
             damage,
             targetUid,
             scene,
-            // TODO:
-            multiplier: calculatedStats.damageTakeMultiplier,
+            multiplier: calcPostEffectStats(
+                scene.get('allCharacters', targetUid)
+            ).damageTakeMultiplier,
         })
     )
 }
