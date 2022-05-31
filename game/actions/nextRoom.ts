@@ -27,6 +27,7 @@ export const nextRoom: GameActions['NextRoom'] = args => {
     clearRoomCardModifiers(scene)
     scene.set('turnCount', 1)
     putAllCardsInDrawPile(scene)
+    scene.set('cardsPlayedThisRoom', [])
     resetRound(args.game, {})
 }
 

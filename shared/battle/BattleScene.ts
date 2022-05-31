@@ -6,6 +6,7 @@ import type {
     DungeonName,
     SceneHas,
     CharacterUid,
+    Card,
 } from '@'
 
 export interface BattleScene extends SceneHas {
@@ -23,6 +24,7 @@ export interface BattleScene extends SceneHas {
     turnCount: number
     roomsPassed: number
     nextNpcCommands: NextCommand[]
+    cardsPlayedThisRoom: (Card & { timestamp: string })[]
 }
 
 /** May later have e.g. DOT effects */

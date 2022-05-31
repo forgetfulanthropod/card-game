@@ -1,8 +1,6 @@
+// prettier-ignore
 // @index(['./*.ts'], (f, _) => `import {explain as explain${pascalCase(f.name)}, execute as execute${pascalCase(f.name)}} from '${f.path}'`)
-import {
-    explain as explainAddBlock,
-    execute as executeAddBlock,
-} from './addBlock'
+import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
 import {
     explain as explainAddEnergy,
     execute as executeAddEnergy,
@@ -10,6 +8,10 @@ import {
 import { explain as explainChain, execute as executeChain } from './chain'
 import { explain as explainDeal, execute as executeDeal } from './deal'
 import { explain as explainEffect, execute as executeEffect } from './effect'
+import {
+    explain as explainIfFirstPlay,
+    execute as executeIfFirstPlay,
+} from './ifFirstPlay'
 import {
     explain as explainMomentary,
     execute as executeMomentary,
@@ -25,6 +27,7 @@ export const explainers = {
     chain: explainChain,
     deal: explainDeal,
     effect: explainEffect,
+    ifFirstPlay: explainIfFirstPlay,
     momentary: explainMomentary,
     orb: explainOrb,
     text: explainText,
@@ -38,6 +41,7 @@ export const executors = {
     chain: executeChain,
     deal: executeDeal,
     effect: executeEffect,
+    ifFirstPlay: executeIfFirstPlay,
     momentary: executeMomentary,
     orb: executeOrb,
     text: executeText,

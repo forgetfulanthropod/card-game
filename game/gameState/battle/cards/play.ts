@@ -14,4 +14,8 @@ export function play({
     scene.apply('energy', energy => energy - card.energy)
 
     interpretCommand({ command: card, targetUids, scene })
+    scene.apply('cardsPlayedThisRoom', cards => [
+        ...cards,
+        { ...card, timestamp: new Date().toISOString() },
+    ])
 }

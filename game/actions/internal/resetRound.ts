@@ -29,5 +29,6 @@ export const resetRound: InternalAction['resetRound'] = (
     scene.set('isPlayerTurn', true)
     applyTurnStartEffects(scene, 'pc')
     drawNewHand(scene)
+
     return undefined
 }
