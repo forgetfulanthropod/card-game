@@ -1,16 +1,13 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { keys, omit } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type { Card, CardUid, CharacterClass, CharacterUid, Pile } from 'shared'
+import type { Card, CardUid, CharacterClass, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
-import { assertFinite, hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid } from '@/util'
 import {
-    BASE_HEIGHT,
-    BASE_WIDTH,
     Container,
     PixiContainer,
     RoundedRectangleGradientSprite,
@@ -23,15 +20,10 @@ import type {
     InteractionEvents,
     PixiText,
     PixiTexture,
+    TweenablePixiContainer,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
-
-export const CARD_H_TO_W_RATIO = 630 / 450
-export const CARD_WIDTH_IN_HAND = 220
-// const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
-export const CARD_WIDTH_FULL = 350
-export const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 
 //maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
 const classToCardColorMap: Record<CharacterClass, [number, number]> = {
@@ -43,40 +35,34 @@ const classToCardColorMap: Record<CharacterClass, [number, number]> = {
 }
 
 export function Card({
-    index,
-    pile,
+    rotation,
+    width,
     card,
-    name,
     hoveredCardUid,
-}: // hoveredCardUid,
-{
-    index: number
-    pile: Pile
+    events,
+}: {
+    rotation?: number
+    width: number
     card: Card
-    name: string
-    hoveredCardUid: Datum<CharacterUid | null>
-    // hoveredCardUid: string
-}) {
+    hoveredCardUid?: Datum<CharacterUid | null>
+    events?: InteractionEvents
+}): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeSrc(card.type)
-    const xyrs = getXYRotationScaleForNthCard(
-        index + 1,
-        keys(pile).length,
-        cardFrameTexture
-    )
     const colorStops = getColorStopsFromCharacterClass(card.characterClass)
+    const scale = width / cardFrameTexture.width
 
-    const root = TweenableContainer({
-        // name is card uid
-        name,
-        // cache: true,
-        x: xyrs.x,
-        y: xyrs.y,
+    return TweenableContainer({
+        name: card.uid,
+        // cache: true, // doesn't update...
 
         children: [
             TweenableContainer({
-                events: getEvents(card, hoveredCardUid),
-                ...omit(xyrs, 'x', 'y'),
-                y: (cardFrameTexture.height / 2) * xyrs.scale,
+                events:
+                    events ??
+                    (hoveredCardUid ? getEvents(card, hoveredCardUid) : {}),
+                rotation,
+                scale,
+                y: (cardFrameTexture.height / 2) * scale,
                 children: [
                     getGradientBackground(cardFrameTexture, colorStops),
                     getCardFrameSprite(cardFrameTexture),
@@ -90,8 +76,6 @@ export function Card({
             }),
         ],
     })
-
-    return root
 }
 
 function PointerAreaExtender(width: number, height: number): PixiContainer {
@@ -314,6 +298,8 @@ function getEvents(
                 currentTarget: cardEl,
             } as InteractionEvent)
     }
+
+    // todo: detect pointermove for mobile to begin target selection..
     // const pointermove: InteractionEventHandler = function (e) {
     //     console.log({ e })
     //     // if (hasMovedEnough) pointerdown
@@ -330,44 +316,4 @@ function getEvents(
 
 export function getNullAnimation() {
     return Tweener.add({ target: {}, duration: 0 }, {})
-}
-
-type XYRotationScale = { x: number; y: number; rotation: number; scale: number }
-
-function getXYRotationScaleForNthCard(
-    n: number,
-    numCardsInHand: number,
-    cardFrameTexture: PixiTexture
-): XYRotationScale {
-    // circular imports require defining constants here
-    const RIGHT_TO_LEFT = 1
-    const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
-    const MAX_HAND_SIZE = 12
-    const CARD_WIDTH = (150 * BASE_WIDTH) / 1920
-    const MAX_CARD_ROTATION = Math.PI * 0.1
-    const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
-    const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
-
-    if (n < 1 || n > numCardsInHand)
-        throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
-
-    const handWidth = Math.min(
-        (numCardsInHand - 1) * CARD_WIDTH,
-        MAX_HAND_WIDTH
-    )
-
-    const xPlacementPortion =
-        RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
-
-    const endCardRotation =
-        ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
-
-    return assertFinite({
-        x: handWidth * 0.5 * xPlacementPortion,
-        y:
-            -Y_MIN_OFFSET -
-            (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
-        rotation: xPlacementPortion * endCardRotation,
-        scale: CARD_WIDTH_IN_HAND / cardFrameTexture.width,
-    })
 }
