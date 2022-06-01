@@ -1,21 +1,18 @@
-import type { Value as VAngu } from 'angu'
+import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 
-import type { ExecuteArgs } from './util'
-
-export function explain(rounds: VAngu) {
-    if (rounds == null) throw new Error('no number of rounds passed in!')
-
-    const n = rounds.eval()
-    return `target receives ${n} block`
+export const explain: Explainers['addBlock'] = dslArgs => {
+    const [block] = evalAll(dslArgs)
+    return `target receives ${block} block`
 }
 
-export function execute({
-    dslArgs: [blockAgnu],
+export const execute: Executors['addBlock'] = ({
+    dslArgs,
     targetUids,
     scene,
     calculatedStats,
-}: ExecuteArgs) {
-    const block = blockAgnu.eval() as number
+}) => {
+    const [block] = evalAll(dslArgs)
 
     scene.apply(
         ['allCharacters', targetUids[0], 'block'],

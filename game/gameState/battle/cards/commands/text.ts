@@ -1,11 +1,11 @@
-import type { Value as VAngu } from 'angu'
+import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 
-import type { ExecuteArgs } from './util'
-
-export function explain(text: VAngu) {
-    return text.eval()
+export const explain: Explainers['text'] = dslArgs => {
+    const [text] = evalAll(dslArgs)
+    return text
 }
 
-export function execute(_: ExecuteArgs) {
-    // do nothing
+export const execute: Executors['text'] = () => {
+    // pass
 }

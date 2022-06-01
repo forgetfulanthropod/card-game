@@ -1,16 +1,7 @@
 // Server
 {
-    "include": [
-        "client/**/*.ts",
-        "server/**/*.ts",
-        "shared/**/*.ts",
-        "game/**/*.ts"
-    ],
     "extends": "./tsconfig.base.json",
-    "compilerOptions": {
-        "noEmit": true,
-        "composite": false
-    },
+    "include": [],
     "references": [
         { "path": "./client" },
         { "path": "./server" },

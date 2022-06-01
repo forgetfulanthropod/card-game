@@ -1,15 +1,17 @@
-import type { Value as VAngu } from 'angu'
+import type { Executors, Explainers } from './util'
 
-import type { ExecuteArgs } from './util'
-
-export function explain(...chain: VAngu[]): string {
+export const explain: Explainers['ifFirstPlay'] = dslArgs => {
     return (
         'if first use in room:' +
-        chain.map(link => ' - ' + link.eval()).join('\n')
+        dslArgs.map(link => ' - ' + link.eval()).join('\n')
     )
 }
 
-export function execute({ dslArgs, scene, cardUid }: ExecuteArgs) {
+export const execute: Executors['ifFirstPlay'] = ({
+    dslArgs,
+    scene,
+    cardUid,
+}) => {
     if (cardUid == null) throw Error('cardUid is null')
 
     const thisId = scene.select('cards', 'hand', cardUid).get('id')

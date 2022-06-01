@@ -54,7 +54,14 @@ export function explainCommand(command: Command, scene: BattleCursor): string {
 }
 
 export function explainActions(actions: string, locals?: object) {
-    const ctx = generateAnguContext(explainers)
+    const wrappedExplainers = entryMap(
+        explainers,
+        (_, func) =>
+            (...args: VAngu[]) =>
+                // @ts-expect-error
+                func(args)
+    )
+    const ctx = generateAnguContext(wrappedExplainers)
 
     return angu.evaluate(actions, ctx, locals).value
 }
@@ -93,6 +100,7 @@ function executeCommand({
         (_, func) =>
             (...dslArgs: VAngu[]) =>
                 func({
+                    // @ts-expect-error
                     dslArgs,
                     command,
                     targetUids,
