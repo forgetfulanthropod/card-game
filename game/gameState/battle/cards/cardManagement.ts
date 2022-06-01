@@ -66,20 +66,13 @@ function makeCards(scene: BattleCursor): Piles {
     })
 
     return {
-        draw: cardIds.reduce((acc, id) => {
+        draw: cardIds.reduce((acc, id, i) => {
             // logger.info(JSON.stringify(allCharacters, null, '\n'))
-            let firstCharacterUidForClass = allCharacters.find(
-                c => c?.class === getCardClass(id)
-            )?.uid
+            const owningCharUid =
+                allCharacters[Math.floor(i / cardIds.length)].uid
 
-            if (firstCharacterUidForClass == null) {
-                logger.info(
-                    'TODO: no character class matches this card, going with character 0'
-                )
-                firstCharacterUidForClass = allCharacters[0].uid
-            }
             const card = updateExplanation(
-                getCardInstance(id, firstCharacterUidForClass),
+                getCardInstance(id, owningCharUid),
                 scene
             )
             return set(acc, card.uid, card)
