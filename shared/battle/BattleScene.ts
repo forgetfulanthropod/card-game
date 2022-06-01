@@ -1,4 +1,5 @@
 import type {
+    Card,
     Characters,
     CharacterUid,
     Command,
@@ -25,6 +26,7 @@ export interface BattleScene extends SceneHas {
     turnCount: number
     roomsPassed: number
     nextNpcCommands: NextCommand[]
+    cardsPlayedThisRoom: (Card & { timestamp: string })[]
 }
 
 /** May later have e.g. DOT effects */

@@ -28,11 +28,16 @@ export function setCards(scene: BattleCursor) {
 }
 
 export function getNullCards(): Piles {
-    return { draw: {}, hand: {}, discard: {}, removed: {} }
+    return { draw: {}, hand: {}, discard: {}, removedRoom: {}, removedRun: {} }
 }
 
 function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
+        // 'tetsudoFormation',
+        // 'charge',
+        // 'dutifulStab',
+        // 'swordSlash',
+        // 'magicRitual',
         // 'guidingBolt',
         // 'guidingBolt',
         // 'shield',
@@ -41,8 +46,6 @@ function makeCards(scene: BattleCursor): Piles {
         // 'sweepTheLeg',
         // 'bodySlam',
         // 'jab',
-        // 'strike',
-        // 'strike',
         // 'strike',
         // 'strike',
         // 'orbOfLightning',
@@ -83,7 +86,8 @@ function makeCards(scene: BattleCursor): Piles {
         }, {}),
         hand: {},
         discard: {},
-        removed: {},
+        removedRoom: {},
+        removedRun: {},
     }
 }
 /**

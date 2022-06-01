@@ -48,3 +48,5 @@ export class CardAffordances {
     //     )
     // }
 }
+
+/** TODO: iterate through all cards and enemies and make sure they all explain() and execute() ok */

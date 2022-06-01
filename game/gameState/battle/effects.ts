@@ -4,17 +4,21 @@ import type {
     CharacterMeta,
     EffectId,
 } from 'shared'
+import { turnEndClearEffects } from 'shared'
 
 import produce from 'immer'
 
 export function calcPostEffectStats(cm: CharacterMeta) {
     const stats: CalculatedCharacterStats = {
+        block: cm.block,
+        blockMultiplier: 1,
         constitution: cm.constitution,
         dexterity: cm.dexterity,
-        magic: cm.magic,
+        wisdom: cm.wisdom,
         strength: cm.strength,
         isSkipped: false,
         damageTakeMultiplier: 1,
+        damageTakeAddend: 0,
     }
     cm.effects.forEach(effect => {
         effectFuncs[effect.id](stats)
@@ -26,6 +30,9 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
     {
         /** see applyTurnStartEffects */
         bleed(_stats) {},
+        smallDamageIncrease(stats) {
+            stats.damageTakeAddend += 4
+        },
         debilitated(stats) {
             stats.strength *= 0.5
         },
@@ -36,6 +43,9 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
         poison(_stats) {},
         stunned(stats) {
             stats.isSkipped = true
+        },
+        strongblock(stats) {
+            stats.blockMultiplier *= 1.5
         },
         unguarded(stats) {
             stats.damageTakeMultiplier *= 1.25
@@ -72,7 +82,9 @@ export function decrementEffects(scene: BattleCursor, finished: 'pc' | 'npc') {
             for (const cm of Object.values(ac)) {
                 if (cm.isPc !== isPcStart) continue
                 cm.effects.forEach(e => (e.counter -= 1))
-                cm.effects = cm.effects.filter(e => e.counter > 0)
+                cm.effects = cm.effects.filter(
+                    e => e.counter > 0 && !turnEndClearEffects.includes(e.id)
+                )
             }
         })
     )

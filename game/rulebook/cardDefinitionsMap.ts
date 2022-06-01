@@ -6,7 +6,7 @@ const basicMagicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'deal(magic)',
+    actions: 'deal(wisdom)',
     type: 'attack',
 } as const
 const basicAttackBase = {
@@ -46,7 +46,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shieldOfLight',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'addBlock(magic + 3)',
+        actions: 'addBlock(wisdom + 3)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -66,9 +66,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        // TODO: dwindle
-        actions:
-            'chain(deal(block), text("(equal to Kauju\'s block)"), dwindle())',
+        actions: 'chain(deal(block), text("(equal to Kauju\'s block)"))', // , dwindle()
         type: 'attack',
         characterClass: 'knight',
     },
@@ -136,9 +134,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Chain Lightning',
         energy: 2,
         id: 'chainLightning',
-        targetNum: 1,
+        targetNum: 3,
         targetType: 'enemies',
-        actions: 'chainAttack(3, 0.75 * magic)',
+        actions: 'deal(0.75 * wisdom)',
         type: 'attack',
         characterClass: 'wizard',
     },
@@ -158,7 +156,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'fireball',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'deal(magic * 2.5)',
+        actions: 'deal(wisdom * 2.5)',
         type: 'attack',
         characterClass: 'wizard',
     },
@@ -190,7 +188,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         // round.enemyDamageBonus += 4
         // if (blockBroken) health -= (damage + round.enemyDamageBonus)
-        actions: 'roundBuff("enemyDamageBonus", 4)',
+        actions: 'addEffect("smallDamageIncrease", 1)',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -233,9 +231,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Sword Slash',
         energy: 1,
         id: 'swordSlash',
-        targetNum: 1,
+        targetNum: 2,
         targetType: 'enemies',
-        actions: 'chainAttack(2, 0.5 * strength)',
+        actions: 'deal(0.5 * strength)',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -255,7 +253,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'charge',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), vulnerable(1))',
+        actions: 'chain(deal(strength), effect("vulnerable", 1))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -264,9 +262,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 1,
         id: 'tetsudoFormation',
         targetNum: 1,
-        targetType: 'self',
+        targetType: 'friends',
+        // TODO: "You may only play this card if this character is in an avoidant stance."
         actions:
-            'chain(addBlock(dexterity), increaseThisRound("cards", "block", 0.5 * dexterity))',
+            'chain(addBlock(dexterity), effect("strongblock", 1, "friends"))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -276,7 +275,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'guidingBolt',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(magic), effect("unguarded", 2))',
+        actions: 'chain(deal(wisdom), effect("unguarded", 2))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -286,7 +285,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(magic), ifTargetDied(addBlock(dexterity)))',
+        actions: 'chain(deal(wisdom), ifTargetDied(addBlock(dexterity)))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -295,8 +294,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 2,
         id: 'bless',
         targetNum: 1,
-        targetType: 'self',
-        actions: 'forTurns(2, addBlock(dexterity * .5))',
+        targetType: 'friends',
+        actions: 'effect("strongblock", 2)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -333,7 +332,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(atNextTurn(addEnergy(2)), momentary())',
+        actions: 'chain(queue(1, addEnergy(2))), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -344,8 +343,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions:
-            'choice(addBlock(dexterity + 2), addMagic(magic+2), addAttack(attack+2))',
+            'choice(addBlock(dexterity + 2), addMagic(wisdom+2), addAttack(attack+2))',
         type: 'utility',
         characterClass: 'cleric',
     },
 }
+
+// remaining verbs: doubleEnchantmentOrToken ifTargetDied queue choice killEnemy constraint
+// weird choice / target type: arcanePower prayerOfGoodFortune

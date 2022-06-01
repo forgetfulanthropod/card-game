@@ -10,10 +10,25 @@ export function explain(id: VAngu<string>, increase: VAngu<number>): string {
     return `+ ${increase.eval()} ${id.eval()}`
 }
 
-export function execute({ dslArgs, targetUids, scene }: ExecuteArgs) {
+export function execute({
+    dslArgs,
+    targetUids: givenUids,
+    scene,
+    command,
+}: ExecuteArgs) {
     if (dslArgs.length < 2) throw Error('id and increase are required')
     const id: EffectId = dslArgs[0].eval()
     const increase: number = dslArgs[1].eval()
+    const targetType: 'friends' | 'enemies' | null = dslArgs[2]?.eval() ?? null
+    let targetUids = givenUids
+    if (targetType) {
+        const ac = scene.get('allCharacters')
+        const isPcSource = ac[command.characterUid].isPc
+        const shouldBePc = isPcSource === (targetType === 'friends') // NOR
+        targetUids = Object.values(ac)
+            .filter(x => x.isPc === shouldBePc)
+            .map(x => x.uid)
+    }
 
     const ac = scene.select('allCharacters')
     for (const uid of targetUids) {

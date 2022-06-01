@@ -37,6 +37,7 @@ export function makeBattleState(args: {
         isDeluxeLoaded: false,
         roomsPassed: 0,
         nextNpcCommands: [], // set later
+        cardsPlayedThisRoom: [],
     }
     return bs
 }

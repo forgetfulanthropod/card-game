@@ -13,7 +13,8 @@ export function putAllCardsInDrawPile(scene: BattleCursor): void {
             }),
             hand: {},
             discard: {},
-            removed: {},
+            removedRoom: {},
+            removedRun: {},
         }
     })
 }

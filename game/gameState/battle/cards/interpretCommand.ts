@@ -3,6 +3,7 @@ import * as angu from 'angu'
 import type {
     BattleCursor,
     CalculatedCharacterStats,
+    Card,
     CharacterUid,
     Command,
     CommandOutcome,
@@ -14,15 +15,11 @@ import { extractDamages } from './outcomeUtil'
 import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 import { clearHappened, emit, getHappened } from '@/util'
 
-export function interpretCommand({
-    command,
-    targetUids,
-    scene,
-}: CommandDetail): void {
-    const locals = localsFromCommand(command, scene)
+export function interpretCommand(args: CommandDetail): void {
+    const locals = localsFromCommand(args.command, args.scene)
     if (locals.isSkipped) return
     // const explanation = explainActions(command.actions, locals)
-    executeCommand({ command, targetUids, scene, locals })
+    executeCommand({ ...args, locals })
 }
 
 type Locals = CalculatedCharacterStats
@@ -44,8 +41,16 @@ const standardOperators = {
     PI: 3.14,
 }
 
-export function explainCommand(command: Command, scene: BattleCursor) {
-    return explainActions(command.actions, localsFromCommand(command, scene))
+export function explainCommand(command: Command, scene: BattleCursor): string {
+    const res = explainActions(
+        command.actions,
+        localsFromCommand(command, scene)
+    )
+    if (typeof res !== 'string') {
+        logger.error(['non-string result:', res])
+        return 'error!'
+    }
+    return res
 }
 
 export function explainActions(actions: string, locals?: object) {
@@ -55,7 +60,7 @@ export function explainActions(actions: string, locals?: object) {
 }
 
 interface CommandDetail {
-    command: Command
+    command: Command | Card
     targetUids: CharacterUid[]
     scene: BattleCursor
 }
@@ -82,6 +87,7 @@ function executeCommand({
     scene,
     locals,
 }: CommandDetail & { locals: Locals }): void {
+    const cardUid = 'uid' in command ? command?.['uid'] : undefined
     const wrappedExecutors = entryMap(
         executors,
         (_, func) =>
@@ -92,6 +98,7 @@ function executeCommand({
                     targetUids,
                     scene,
                     calculatedStats: locals,
+                    cardUid,
                 })
     )
     const ctx = generateAnguContext(wrappedExecutors)

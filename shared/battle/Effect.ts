@@ -23,7 +23,15 @@ export const effectIds = [
     'stunned',
     'unguarded',
     'vulnerable',
+    'strongblock',
+    'smallDamageIncrease',
 ] as const
+
+/** Effects which are cleared on turn end */
+export const turnEndClearEffects: EffectId[] = [
+    'strongblock',
+    'smallDamageIncrease',
+]
 
 export type EffectId = typeof effectIds[number]
 

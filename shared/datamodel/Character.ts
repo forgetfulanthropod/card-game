@@ -13,7 +13,7 @@ export type CharacterStats = Readonly<{
     /** base attack */
     strength: number
     /** base magic */
-    magic: number
+    wisdom: number
     /** base block */
     dexterity: number
 }> &
@@ -22,11 +22,14 @@ export type CharacterStats = Readonly<{
 /** Result of applying effects to character */
 export interface CalculatedCharacterStats {
     isSkipped: boolean
+    block: number
     constitution: number
     strength: number
-    magic: number
+    wisdom: number
     dexterity: number
     damageTakeMultiplier: number
+    damageTakeAddend: number
+    blockMultiplier: number
 }
 
 export type OwnedCharacterStats = CharacterStats &

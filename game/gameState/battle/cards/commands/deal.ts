@@ -3,7 +3,7 @@ import type { CardHit } from 'shared'
 import { mapToObj } from 'shared/code'
 import type { ExecuteArgs } from './util'
 import { s } from './util'
-import { applyDamage } from '@/gameState'
+import { applyDamage, calcPostEffectStats } from '@/gameState'
 import { emit } from '@/util'
 
 export function explain(damage: VAngu, times: VAngu) {
@@ -18,15 +18,20 @@ export function explain(damage: VAngu, times: VAngu) {
 }
 
 export function execute({
-    dslArgs: [damageAngu, numTargetsAngu],
+    dslArgs: [damageAngu],
     command,
     targetUids,
     scene,
     calculatedStats,
 }: ExecuteArgs) {
     const damage = damageAngu.eval() as number
-    const numTargets: number =
-        numTargetsAngu != null ? numTargetsAngu.eval() : 1
+    const expectedNumTargets = command.targetNum
+    if (expectedNumTargets !== targetUids.length) {
+        logger.error(
+            `command ${command.id} received ${targetUids.length} targets, but ${expectedNumTargets} were expected`
+        )
+        return
+    }
 
     const damages = mapToObj(targetUids, () => damage)
     const cardHit: CardHit = {
@@ -39,15 +44,14 @@ export function execute({
         event: { type: 'damage$', data: cardHit },
     })
 
-    for (let i = 0; i < numTargets; i++) {
-        if (targetUids[i] == null)
-            throw new Error('less targetUids than targets!')
-
+    targetUids.forEach(targetUid =>
         applyDamage({
             damage,
-            targetUid: targetUids[i],
+            targetUid,
             scene,
-            multiplier: calculatedStats.damageTakeMultiplier,
+            multiplier: calcPostEffectStats(
+                scene.get('allCharacters', targetUid)
+            ).damageTakeMultiplier,
         })
-    }
+    )
 }
