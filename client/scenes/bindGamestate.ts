@@ -1,13 +1,12 @@
-import { TwistFilter } from 'pixi-filters'
 import type { SceneType } from 'shared'
 
+import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import { BattleScene } from './battle'
 import { DungeonEntryScene } from './entry'
 import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
-import { ROOT_SCALE, BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { animation$, nextFrame, onUpdate } from '@/util'
 
 let lastScene: PixiContainer
@@ -31,7 +30,7 @@ function bindScene(app: PixiApplication): Unbind {
             if (sceneType === 'battle')
                 await animation$.readAssert('scene exit done')
 
-            await transitionSceneTo(lastScene, sceneType)
+            await transitionScene(lastScene, 'out')
 
             app.stage.removeChild(lastScene)
             lastScene.destroy({ children: true })
@@ -46,36 +45,39 @@ function bindScene(app: PixiApplication): Unbind {
             throw new Error('what!')
         }
         app.stage.addChild(lastScene)
+
+        await transitionScene(lastScene, 'in')
     }
 }
 
-export const TRANSITION_OUT_SECONDS = 1
+export const TRANSITION_SECONDS = 0.25
 
-async function transitionSceneTo(
+async function transitionScene(
     sceneEl: PixiContainer,
-    sceneType: SceneType
+    direction: 'out' | 'in'
 ): Promise<void> {
-    const twistFilter = new TwistFilter({
-        angle: 4,
-        radius: 0,
+    const brightnessFrom = direction === 'out' ? 1 : 0
+    const brightnessTo = direction === 'out' ? 0 : 1
+
+    const filter = new AdjustmentFilter({
+        brightness: brightnessFrom,
     })
-    twistFilter.offset.x = (BASE_WIDTH / 2) * ROOT_SCALE
-    twistFilter.offset.y = (BASE_HEIGHT / 2) * ROOT_SCALE
-    if (sceneType === 'battle') {
-        sceneEl.filters = [twistFilter]
-        await Tweener.add(
-            {
-                target: twistFilter,
-                duration: TRANSITION_OUT_SECONDS,
-                ease: Easing.easeInExpo,
-            },
-            {
-                radius: 1080,
-            }
-        ).then(() => {
-            twistFilter.radius = 0
-        })
-    }
+    sceneEl.filters = [filter]
+    await Tweener.add(
+        {
+            target: filter,
+            duration: TRANSITION_SECONDS,
+            ease: Easing.easeInExpo,
+        },
+        {
+            brightness: brightnessTo,
+        }
+    ).then(() => {
+        sceneEl.filters = []
+        Tweener.killTweensOf(filter)
+        setTimeout(() => filter.destroy(), 1000) // next frame destruction no bueno...
+        // filter.destroy()
+    })
 }
 
 // function bindBattleState(app: PixiApplication) {
