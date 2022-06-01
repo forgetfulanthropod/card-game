@@ -73,7 +73,7 @@ async function transitionScene(
             brightness: brightnessTo,
         }
     ).then(() => {
-        sceneEl.filters = []
+        sceneEl.filters = null
         Tweener.killTweensOf(filter)
         setTimeout(() => filter.destroy(), 1000) // next frame destruction no bueno...
         // filter.destroy()

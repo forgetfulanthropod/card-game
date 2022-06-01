@@ -192,7 +192,7 @@ function updateGlowFilters(
             if (hoveredCardUid.val === el.name) {
                 filteredEl.filters = [glowFilter]
             } else {
-                filteredEl.filters = []
+                filteredEl.filters = null
             }
         } else if (hoveredCharacterUid.val != null) {
             const card = getBattleScene()
@@ -202,10 +202,10 @@ function updateGlowFilters(
             if (hoveredCharacterUid.val === card.characterUid) {
                 filteredEl.filters = [glowFilter]
             } else {
-                filteredEl.filters = []
+                filteredEl.filters = null
             }
         } else {
-            filteredEl.filters = []
+            filteredEl.filters = null
         }
     })
 }

@@ -123,7 +123,7 @@ export function Character(args: CharacterProps): PixiContainer {
         if (hoveredCharacterUid === characterMeta.uid) {
             mainAnimation.filters = [glowFilter]
         } else {
-            mainAnimation.filters = []
+            mainAnimation.filters = null
         }
     }
 
@@ -339,7 +339,7 @@ function makeSprites(
                 mainSprite.filters = [glowFilter]
             },
             pointerout: () => {
-                mainSprite.filters = []
+                mainSprite.filters = null
             },
         },
         onDestroy: [unsub],

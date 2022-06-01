@@ -3,7 +3,7 @@ import { vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { CardUid } from 'shared'
-import { KawaseBlurFilter } from 'pixi-filters'
+import { AdjustmentFilter } from 'pixi-filters'
 import { Card } from './Card'
 import { getBattleScene } from '@/data'
 import {
@@ -50,15 +50,16 @@ function NewCardOptions(): PixiContainer {
 const NUM_CARD_OPTIONS = 5
 function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
     const cardPile = getBattleScene().get('newCardOptions')
-    const blurFilter = new KawaseBlurFilter(4.6)
+    const lessImportantFilter = new AdjustmentFilter({ saturation: 0.5 })
 
     const hoveredCardUid = datum(null)
     const cardWidth = 260
     const cardEls = vals(cardPile).map((card, i) => {
         const pointerover = () => {
-            if (selectedCardUid.val == null) return
-            cardEls.forEach(el => (el.filters = []))
-            cardEl.filters = [glowFilter]
+            if (selectedCardUid.val == null)
+                cardEls.forEach(el => (el.filters = null))
+
+            cardEl.filters = [...(cardEl.filters ?? []), glowFilter]
         }
         const cardEl = Adjust(
             Card({
@@ -66,13 +67,24 @@ function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
                 width: cardWidth,
                 events: {
                     pointerup() {
-                        cardEls.forEach(el => (el.filters = [blurFilter]))
+                        cardEls.forEach(el => {
+                            el.scale.set(1)
+                            el.filters = [lessImportantFilter]
+                        })
                         cardEl.filters = [glowFilter]
+                        cardEl.scale.set(1.1)
 
                         selectedCardUid.set(card.uid)
                     },
                     pointerdown: pointerover,
                     pointerover,
+                    pointerout() {
+                        if (cardEl.filters == null) return
+
+                        cardEl.filters = cardEl.filters.filter(
+                            filter => filter !== glowFilter
+                        )
+                    },
                 },
             }),
             {

@@ -7,9 +7,10 @@ import { Energy } from './Energy'
 import { InfoBox } from './InfoBox'
 import { CardAdder } from './cards/CardAdder'
 import { Background } from '@/scenes'
-import { Container } from '@/elementsUtil'
+import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
+import { toDatum } from '@/util'
 
 export function BattleScene(): PixiContainer {
     const hoveredCardUid = datum<CharacterUid | null>(null)
@@ -34,7 +35,13 @@ export function BattleScene(): PixiContainer {
             Characters(scene),
             Cards({ scene, hoveredCardUid }),
             Energy({ scene }),
-            CardAdder(),
+            If(
+                toDatum(
+                    scene.select('state'),
+                    state => state === 'choosing cards'
+                ),
+                () => CardAdder()
+            ),
         ],
     })
 

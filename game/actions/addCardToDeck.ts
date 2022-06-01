@@ -1,4 +1,5 @@
 import type { GameActions } from './types'
+import { nextRoom } from './nextRoom'
 import { getBattleSceneIn } from '@/util'
 
 export const addCardToDeck: GameActions['AddCardToDeck'] = args => {
@@ -17,4 +18,6 @@ export const addCardToDeck: GameActions['AddCardToDeck'] = args => {
             },
         }
     })
+
+    nextRoom(args)
 }
