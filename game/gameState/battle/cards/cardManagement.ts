@@ -69,7 +69,7 @@ function makeCards(scene: BattleCursor): Piles {
         draw: cardIds.reduce((acc, id, i) => {
             // logger.info(JSON.stringify(allCharacters, null, '\n'))
             const owningCharUid =
-                allCharacters[Math.floor(i / cardIds.length)].uid
+                allCharacters[Math.floor((i * 3) / cardIds.length)].uid
 
             const card = updateExplanation(
                 getCardInstance(id, owningCharUid),
