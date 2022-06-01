@@ -7,6 +7,16 @@ export interface Command extends CommandDefinition {
     characterUid: CharacterUid
 }
 
+type AliasedCommandId =
+    | `startlingSpook(${number},${number})`
+    | `surpriseAllergy(${number},${number})`
+    | `itchyOoze(${number})`
+    | `infectiousBite(${number})`
+    | `engulf(${number})`
+    | `meatyCharge(${number})`
+    | `bellowAndSing(${number},${number})`
+    | `screamAndCharge(${number},${number})`
+
 export interface CommandDefinition {
     id: CommandId
     name: string
@@ -33,7 +43,7 @@ export interface CardDefinition extends CommandDefinition {
 
 export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
-export type NpcCommandId = 'swordWack' | 'jab' | 'strike' // REMOVE
+export type NpcCommandId = 'swordWack' | 'jab' | 'strike' | AliasedCommandId
 export type CommandId = NpcCommandId | CardId
 
 export type CardId =

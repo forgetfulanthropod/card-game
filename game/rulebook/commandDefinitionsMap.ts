@@ -1,5 +1,6 @@
 import type { CommandDefinition, NpcCommandId } from 'shared'
-
+import { enemies } from './enemies'
+import * as alias from './commandAliases'
 // TODO eventually: remove ? before : below
 type CommandDefinitionsMap = {
     [Id in NpcCommandId]: CommandDefinition & { id: Id }
@@ -29,6 +30,30 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: 'deal(strength + 2)',
     },
 }
+
+function generateParameterizedCommands() {
+    for (const levelObj of Object.values(enemies))
+        for (const enemy of Object.values(levelObj))
+            for (const commandId of enemy.moves) {
+                if (commandId == null || !commandId.includes('(')) continue
+                const baseId = commandId.split('(')[0]
+                const args = [...commandId.matchAll(/\d+/g)].map(x =>
+                    Number(x[0])
+                )
+                args.forEach(x => {
+                    if (!isFinite(x))
+                        throw Error(
+                            `command '${commandId}' has non-finite argument '${x}'`
+                        )
+                })
+                if (!(baseId in alias))
+                    throw Error(`'${baseId}' is not a known alias`)
+                // @ts-expect-error
+                const baseCommand = alias[baseId]
+                commandDefinitionsMap[commandId] = baseCommand(...args)
+            }
+}
+generateParameterizedCommands()
 
 const toAction = {
     swordWack: 'deal(strength)',
@@ -82,29 +107,3 @@ const toAction = {
     hansCurse:
         'effect("fatigue", 2, "enemies"); effect("unguarded", 2, "enemies")',
 } as const
-
-const parameterizedCommandDescriptions = {
-    startlingSpook: 'Startling Spook (Applies Unguarded x, Fatigue x)',
-    supriseAllergy:
-        'Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X)',
-    itchyOoze: 'Itchy Ooze (DOT X)',
-    infectiousBite:
-        'Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked)',
-    engulf: 'Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked)',
-    meatyCharge:
-        'Meaty Charge (BA, applies bleed (X) if any damage goes unblocked)',
-    bellowAndSing:
-        'Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked)',
-    screamAndCharge:
-        'Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after)',
-} as const
-
-// no longer relevant?:
-// | `startlingSpook(${number},${number})`
-// | `supriseAllergy(${number},${number})`
-// | `itchyOoze(${number})`
-// | `infectiousBite(${number})`
-// | `engulf(${number})`
-// | `meatyCharge(${number})`
-// | `bellowAndSing(${number},${number})`
-// | `screamAndCharge(${number},${number})`
