@@ -41,7 +41,7 @@
         "run": true,
         "server.log": true,
         "scripts": true,
-        "tsconfig.json": true,
+        // "tsconfig.json": true,
         "tsconfig.base.json": true
     },
     "editor.codeActionsOnSave": {
