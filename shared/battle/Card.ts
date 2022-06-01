@@ -43,7 +43,36 @@ export interface CardDefinition extends CommandDefinition {
 
 export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
-export type NpcCommandId = 'swordWack' | 'jab' | 'strike' | AliasedCommandId
+export type NpcCommandId =
+    | 'swordWack'
+    | 'jab'
+    | 'strike'
+    | 'slash'
+    | 'jurgenRollAround'
+    | 'mimicAttack'
+    | 'rustyPokeHigh'
+    | 'rustyPokeLow'
+    | 'block'
+    | 'basicAttack'
+    | 'chomp'
+    | 'itchyOozeSpecial'
+    | 'jurgenBellyFlop'
+    | 'jurgenStampSnort'
+    | 'jurgenRollAround'
+    | 'jurgenSitUpon'
+    | 'attack4'
+    | 'rest'
+    | 'matchaMash'
+    | 'matchaMadness'
+    | 'matchaMeld'
+    | 'evisceratingSweep'
+    | 'passiveBlock'
+    | 'ancientStrike'
+    | 'hansBuffBlock'
+    | 'hansMagicMissile'
+    | 'hansGuards'
+    | 'hansCurse'
+    | AliasedCommandId
 export type CommandId = NpcCommandId | CardId
 
 export type CardId =

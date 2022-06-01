@@ -1,6 +1,5 @@
 import type { EnemyCharacterName, NpcCommandId } from 'shared'
 type Level = string
-// @ts-expect-error // TODO
 export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { wisdom: 0, constitution: 18, strength: 4, dexterity: 7, moves: ['swordWack', null, null, 'block', null] },
