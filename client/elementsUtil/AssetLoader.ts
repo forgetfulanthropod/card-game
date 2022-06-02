@@ -2,7 +2,7 @@ import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
 import endTurnButton from '@battleAssets/core-ui/end turn.png'
-import confirmButton from '@battleAssets/core-ui/confirm.png'
+import confirmButton from '@battleAssets/core-ui/confirm_.png'
 import gemButton from '@battleAssets/misc-png/BUTTON_GO.png'
 import chestBody from '@battleAssets/misc-png/CHEST_BODY.png'
 import chestLid from '@battleAssets/misc-png/CHEST_LID.png'

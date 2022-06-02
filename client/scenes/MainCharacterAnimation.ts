@@ -1,8 +1,8 @@
-import type { CharacterMeta } from 'shared'
+import type { CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/scenes'
 import { hoveredCharacterUid } from '@/util'
 import type { PixiSpine } from '@/elementsUtil'
-import { Spine } from '@/elementsUtil'
+import { glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation(
     characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
@@ -12,7 +12,7 @@ export function MainCharacterAnimation(
 
     if (!spineAssetName) return null
 
-    const mainAnimation = Spine({
+    const root = Spine({
         name: spineAssetName,
         animation: 'Idle',
         events: onClick
@@ -26,18 +26,25 @@ export function MainCharacterAnimation(
                   },
               }
             : undefined,
+        onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
     const desiredHeight = 260 // TODO: what is it tho
-    const desiredScale = desiredHeight / mainAnimation.height
-    mainAnimation.scale.set(
-        (characterMeta.isPc ? 1 : -1) * desiredScale,
-        desiredScale
-    )
+    const desiredScale = desiredHeight / root.height
+    root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    mainAnimation.x += ((characterMeta.isPc ? 1 : -1) * mainAnimation.width) / 4
+    root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
 
-    mainAnimation.y -= 20
+    root.y -= 20
 
-    return mainAnimation
+    return root
+
+    function updateGlow(hoveredCharacterUid: CharacterUid | null) {
+        if (root == null) return
+        if (hoveredCharacterUid === characterMeta.uid) {
+            root.filters = [glowFilter]
+        } else {
+            root.filters = null
+        }
+    }
 }

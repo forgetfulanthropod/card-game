@@ -1,7 +1,7 @@
 import { vals } from 'shared/code'
 import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
-import { For } from '@/elementsUtil'
+import { For, If } from '@/elementsUtil'
 import { localTree } from '@/data'
 import { toDatum } from '@/util'
 
@@ -15,16 +15,20 @@ export function Characters(scene: ROBattleScene): PixiContainer {
     return For(
         aliveUids,
         uid =>
-            Character({
-                cursor: allCharsC.select(uid),
-                onClick: () => {
-                    console.log('clicked a character')
-                    localTree
-                        .select('selectedTargets')
-                        .apply(arr => [...arr, uid])
-                },
-                scale: 1,
-            }),
+            If(
+                toDatum(scene.select('allCharacters', uid), c => c.health > 0),
+                () =>
+                    Character({
+                        cursor: allCharsC.select(uid),
+                        onClick: () => {
+                            console.log('clicked a character')
+                            localTree
+                                .select('selectedTargets')
+                                .apply(arr => [...arr, uid])
+                        },
+                        scale: 1,
+                    })
+            ),
         undefined,
         { name: 'CharactersContainer', onDestroy: [aliveUids.destroy] }
     )

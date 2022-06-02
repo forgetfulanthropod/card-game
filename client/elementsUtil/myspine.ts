@@ -16,6 +16,7 @@ export function Spine<Name extends SpineAsset>(props: {
     y?: number
     size?: [number, number]
     events?: InteractionEvents
+    onDestroy?: Callback[]
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
     if (props.x != null) spine.x = props.x
@@ -40,6 +41,13 @@ export function Spine<Name extends SpineAsset>(props: {
         void (unsub && unsub())
         destroy.call(spine, ...args)
     }
+
+    if (props.onDestroy != null) {
+        spine.on('destroyed', () => {
+            props?.onDestroy?.forEach(cb => cb())
+        })
+    }
+
     return spine
 }
 

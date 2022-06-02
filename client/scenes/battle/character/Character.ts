@@ -1,5 +1,4 @@
 import { datum } from 'datums'
-import { filters } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 import type {
     CardHit,
@@ -13,24 +12,17 @@ import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { MoveInfo } from './MoveInfo'
 import { ActionIntent } from './ActionIntent'
-import { MainCharacterAnimation, getCharTexture, getOrbTexture } from '@/scenes'
-import { hoveredCharacterUid, onUpdate } from '@/util'
+import { MainCharacterAnimation, getOrbTexture } from '@/scenes'
+import { onUpdate } from '@/util'
 import {
     Adjust,
-    bringToTop,
     Container,
     flashTo,
-    glowFilter,
-    hasTexture,
-    hideElement,
-    onDestroyed,
-    PixiTicker,
     SCALE_UNIVERSAL,
     Sprite,
     Text,
 } from '@/elementsUtil'
-import type { PixiContainer, PixiSpine, PixiSprite } from '@/elementsUtil'
-import { getBattleScene } from '@/data'
+import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 import { getSocket } from '@/connection'
 import { callApi } from '@/actions'
 
@@ -55,16 +47,6 @@ export function Character(args: CharacterProps): PixiContainer {
     const characterMeta = args.cursor.get()
     const { screenX, screenY } = characterMeta
 
-    // ---Sprites and containers---
-
-    const healthBar = HealthBar(characterMeta.uid)
-
-    const sprites = makeSprites(args, characterMeta, onHeight)
-    if (sprites == null) {
-        return Container({ children: [] })
-    }
-    const { mainSprite, initialHeight } = sprites
-
     const mainAnimation = MainCharacterAnimation(characterMeta, () =>
         args.onClick(characterMeta.uid)
     )
@@ -73,24 +55,26 @@ export function Character(args: CharacterProps): PixiContainer {
         isHoveredDatum: isHovered,
         children: [
             Adjust(ActionIntent(characterMeta.uid, isHovered), {
-                y: healthBar.height,
-            }),
-            Adjust(healthBar, {
                 y: 22,
             }),
-            ...(mainAnimation ? [mainAnimation] : [mainSprite]),
+            Adjust(HealthBar(characterMeta.uid), {
+                y: 22,
+            }),
+            mainAnimation,
         ],
     })
-    mainContainer.sortChildren()
 
     const hitContainer = Container({
         x: 0,
-        y: -initialHeight,
+        y: -mainContainer.height,
         children: [],
     })
 
-    const flyingContainer = Container({
-        name: 'FlyingContainer',
+    const unbindMoves = bindMoves(characterMeta, hitContainer, mainAnimation)
+    const unbindDot = bindDOT(characterMeta, hitContainer)
+
+    const root = Container({
+        name: 'Character Wrap',
         x: screenX,
         y: screenY,
         children: [
@@ -98,47 +82,10 @@ export function Character(args: CharacterProps): PixiContainer {
             getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
             hitContainer,
         ],
-        onDestroy: [
-            hoveredCharacterUid.onChange(updateGlow),
-            onUpdate(args.cursor.select('health'), updateDeathAndHealth, true),
-            onUpdate(args.cursor.select('effects'), updateDeathAndHealth),
-        ],
+        onDestroy: [unbindMoves, unbindDot],
     })
 
-    const unbindDot = bindDOT(characterMeta, hitContainer)
-
-    const unbindMoves = bindMoves(
-        characterMeta,
-        healthBar,
-        flyingContainer,
-        hitContainer,
-        mainAnimation
-    )
-    onDestroyed(flyingContainer, unbindMoves, unbindDot)
-
-    return flyingContainer
-
-    function updateGlow(hoveredCharacterUid: CharacterUid | null) {
-        if (mainAnimation == null) return
-        if (hoveredCharacterUid === characterMeta.uid) {
-            mainAnimation.filters = [glowFilter]
-        } else {
-            mainAnimation.filters = null
-        }
-    }
-
-    function onHeight(height: number) {
-        hitContainer.y = -height
-    }
-
-    function updateDeathAndHealth() {
-        const char = args.cursor.get()
-        if (char == null) return
-
-        if (char.health <= 0) {
-            flyingContainer.removeChildren()
-        }
-    }
+    return root
 }
 
 function getBoundOrbContainer(
@@ -219,13 +166,9 @@ function bindDOT(
 
 function bindMoves(
     characterMeta: CharacterMeta,
-    healthBar: PixiContainer,
-    flyingContainer: PixiContainer,
     aboveCharacterContainer: PixiContainer,
     mainAnimation: PixiSpine | null
 ): Unbind {
-    const { screenX, screenY } = characterMeta
-
     const socket = getSocket()
     socket.on('damage$', showCharMove)
 
@@ -236,33 +179,11 @@ function bindMoves(
 
         const thisUid = characterMeta.uid
         if (attacker === thisUid) {
-            if (mainAnimation) {
-                mainAnimation.state.setAnimation(0, 'Attack', false)
-                mainAnimation.state.addAnimation(0, 'Idle', true)
-                // mainAnimation.state.
-                // mainAnimation.state.addAnimation(0, 'Idle', true)
-                return
-            }
+            if (mainAnimation == null) return
 
-            hideElement(healthBar, { durationMs: ATTACK_ANIMATION_TIME })
-            const defender0 = getBattleScene().get(
-                'allCharacters',
-                defenderUids[0]
-            )
-
-            bringToTop(flyingContainer)
-
-            const fly = makeFlyToOnTick(
-                { x: screenX, y: screenY },
-                { x: defender0.screenX, y: defender0.screenY }
-            )
-            PixiTicker.shared.add(function cb(dt) {
-                const result = fly(flyingContainer, dt)
-                if (result === 'remove') PixiTicker.shared.remove(cb)
-            })
-        }
-
-        if (defenderUids.findIndex(d => d === thisUid) > -1) {
+            mainAnimation.state.setAnimation(0, 'Attack', false)
+            mainAnimation.state.addAnimation(0, 'Idle', true)
+        } else if (defenderUids.includes(thisUid)) {
             if (mainAnimation) {
                 mainAnimation.state.setAnimation(0, 'Damage', false)
                 mainAnimation.state.addAnimation(0, 'Idle', true)
@@ -278,119 +199,6 @@ function bindMoves(
 
             flashDamageTo(aboveCharacterContainer, damages[thisUid])
         }
-    }
-}
-
-function makeSprites(
-    args: CharacterProps,
-    characterMeta: CharacterMeta,
-    onHeight: (height: number) => void
-) {
-    const blurFilter = new filters.BlurFilter()
-    blurFilter.blur = 20
-    const grayFilter = new filters.ColorMatrixFilter()
-    grayFilter.saturate(-0.7, false)
-    const redFilter = new filters.ColorMatrixFilter()
-    redFilter.hue(180, false)
-
-    const assetIdCursor = args.cursor.select('name')
-
-    const unsub = onUpdate(assetIdCursor, assetId => {
-        // tl('asset update')
-        // @ts-expect-error TODO
-        if (!hasTexture(assetId)) {
-            unsub()
-            return
-        }
-        const texture = getCharTexture(assetId)
-        const height = texture.height
-        const update = (s: PixiSprite) => {
-            s.texture = texture
-            s.height = height
-        }
-        update(mainSprite)
-        onHeight(height)
-    })
-
-    if (assetIdCursor.get() == null) {
-        // TODO: has to do with renewChildren()
-        // should never occur...
-        console.error(
-            'null character assetId. probably character was removed or uid was changed.'
-        )
-        unsub()
-        return null
-    }
-
-    const charSpriteProps = {
-        src: getCharTexture(assetIdCursor.get()),
-        anchor: [0, 1] as [number, number],
-        height: getCharTexture(assetIdCursor.get()).height,
-    }
-
-    const mainSprite = Sprite({
-        ...charSpriteProps,
-        name: 'mainCharacterSprite',
-        events: {
-            pointerup: () => {
-                args.onClick(characterMeta.uid)
-            },
-            pointerover: () => {
-                mainSprite.filters = [glowFilter]
-            },
-            pointerout: () => {
-                mainSprite.filters = null
-            },
-        },
-        onDestroy: [unsub],
-        zIndex: 1,
-    })
-
-    return {
-        mainSprite,
-        initialHeight: charSpriteProps.height,
-    }
-}
-
-const FLY_TIME = 800
-const FLY_TO_TIME = FLY_TIME * 0.6
-const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-
-function makeFlyToOnTick(start: Point, flyTo: Point, ease = true) {
-    let totalElapsed = 0
-    let flewTo: { x: number; y: number } | null = null
-    const easingFactor = 0.1
-
-    return (container: PixiContainer, elapsed: number): void | 'remove' => {
-        // const deltaTimeMs = elapsed * 1000 / 60
-        totalElapsed += elapsed * 16.66
-        if (totalElapsed < FLY_TO_TIME) {
-            if (ease) {
-                container.x += (flyTo.x - container.x) * easingFactor
-                container.y += (flyTo.y - container.y) * easingFactor
-            } else {
-                container.x =
-                    start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
-                container.y =
-                    start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
-            }
-        } else if (totalElapsed < FLY_TIME) {
-            if (flewTo == null) flewTo = { x: container.x, y: container.y }
-
-            container.x =
-                flewTo.x +
-                ((start.x - flewTo.x) * (totalElapsed - FLY_TO_TIME)) /
-                    FLY_BACK_TIME
-            container.y =
-                flewTo.y +
-                ((start.y - flewTo.y) * (totalElapsed - FLY_TO_TIME)) /
-                    FLY_BACK_TIME
-        } else {
-            container.x = start.x
-            container.y = start.y
-            return 'remove'
-        }
-        return undefined
     }
 }
 
@@ -415,3 +223,116 @@ function flashDamageTo(
         durationMs: SHOW_HIT_TIME,
     })
 }
+
+// function makeSprites(
+//     args: CharacterProps,
+//     characterMeta: CharacterMeta,
+//     onHeight: (height: number) => void
+// ) {
+//     const blurFilter = new filters.BlurFilter()
+//     blurFilter.blur = 20
+//     const grayFilter = new filters.ColorMatrixFilter()
+//     grayFilter.saturate(-0.7, false)
+//     const redFilter = new filters.ColorMatrixFilter()
+//     redFilter.hue(180, false)
+
+//     const assetIdCursor = args.cursor.select('name')
+
+//     const unsub = onUpdate(assetIdCursor, assetId => {
+//         // tl('asset update')
+//         // @ts-expect-error TODO
+//         if (!hasTexture(assetId)) {
+//             unsub()
+//             return
+//         }
+//         const texture = getCharTexture(assetId)
+//         const height = texture.height
+//         const update = (s: PixiSprite) => {
+//             s.texture = texture
+//             s.height = height
+//         }
+//         update(mainSprite)
+//         onHeight(height)
+//     })
+
+//     if (assetIdCursor.get() == null) {
+//         // TODO: has to do with renewChildren()
+//         // should never occur...
+//         console.error(
+//             'null character assetId. probably character was removed or uid was changed.'
+//         )
+//         unsub()
+//         return null
+//     }
+
+//     const charSpriteProps = {
+//         src: getCharTexture(assetIdCursor.get()),
+//         anchor: [0, 1] as [number, number],
+//         height: getCharTexture(assetIdCursor.get()).height,
+//     }
+
+//     const mainSprite = Sprite({
+//         ...charSpriteProps,
+//         name: 'mainCharacterSprite',
+//         events: {
+//             pointerup: () => {
+//                 args.onClick(characterMeta.uid)
+//             },
+//             pointerover: () => {
+//                 mainSprite.filters = [glowFilter]
+//             },
+//             pointerout: () => {
+//                 mainSprite.filters = null
+//             },
+//         },
+//         onDestroy: [unsub],
+//         zIndex: 1,
+//     })
+
+//     return {
+//         mainSprite,
+//         initialHeight: charSpriteProps.height,
+//     }
+// }
+
+// const FLY_TIME = 800
+// const FLY_TO_TIME = FLY_TIME * 0.6
+// const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
+
+// function makeFlyToOnTick(start: Point, flyTo: Point, ease = true) {
+//     let totalElapsed = 0
+//     let flewTo: { x: number; y: number } | null = null
+//     const easingFactor = 0.1
+
+//     return (container: PixiContainer, elapsed: number): void | 'remove' => {
+//         // const deltaTimeMs = elapsed * 1000 / 60
+//         totalElapsed += elapsed * 16.66
+//         if (totalElapsed < FLY_TO_TIME) {
+//             if (ease) {
+//                 container.x += (flyTo.x - container.x) * easingFactor
+//                 container.y += (flyTo.y - container.y) * easingFactor
+//             } else {
+//                 container.x =
+//                     start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
+//                 container.y =
+//                     start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
+//             }
+//         } else if (totalElapsed < FLY_TIME) {
+//             if (flewTo == null) flewTo = { x: container.x, y: container.y }
+
+//             container.x =
+//                 flewTo.x +
+//                 ((start.x - flewTo.x) * (totalElapsed - FLY_TO_TIME)) /
+//                     FLY_BACK_TIME
+//             container.y =
+//                 flewTo.y +
+//                 ((start.y - flewTo.y) * (totalElapsed - FLY_TO_TIME)) /
+//                     FLY_BACK_TIME
+//         } else {
+//             container.x = start.x
+//             container.y = start.y
+//             return 'remove'
+//         }
+//         return undefined
+//     }
+// }
