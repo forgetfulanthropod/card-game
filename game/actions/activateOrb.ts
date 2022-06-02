@@ -1,13 +1,6 @@
 import { isEqual } from 'lodash'
-import type {
-    CharacterMeta,
-    CharacterUid,
-    CardHit,
-    Orb,
-    BattleCursor,
-} from 'shared'
+import type { CharacterMeta, Orb, BattleCursor } from 'shared'
 
-import { mapToObj } from 'shared/code'
 import type { GameActions } from './types'
 import {
     checkBattleOverMut,
@@ -15,8 +8,9 @@ import {
     updateHand,
     applyDamage,
     calcPostEffectStats,
+    emitDamage,
 } from '@/gameState'
-import { emit, getBattleSceneIn } from '@/util'
+import { getBattleSceneIn } from '@/util'
 
 export const activateOrb: GameActions['ActivateOrb'] = ({
     game,
@@ -100,34 +94,5 @@ function activateLightning(character: CharacterMeta, scene: BattleCursor) {
         damage,
         targetUids: [targetUid],
         scene,
-    })
-}
-
-function emitDamage({
-    moveName,
-    attackerUid,
-    damage,
-    targetUids,
-    scene,
-}: {
-    moveName: string
-    attackerUid: CharacterUid
-    damage: number
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    const damages = mapToObj(targetUids, () => damage)
-    const data: CardHit = {
-        cardName: moveName,
-        attacker: attackerUid,
-        damages,
-    }
-
-    emit({
-        username: scene.get('username'),
-        event: {
-            type: 'damage$',
-            data,
-        },
     })
 }

@@ -21,5 +21,3 @@ interface DungeonLevelI {
     num: number
     modifier: number
 }
-
-export type TargetType = 'party' | 'enemies'

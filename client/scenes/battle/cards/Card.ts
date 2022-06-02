@@ -5,9 +5,10 @@ import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type { Card, CardUid, CharacterClass, CharacterUid, Pile } from 'shared'
 import type { Datum } from 'datums'
+import { assertFinite } from 'shared/code'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
-import { assertFinite, hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid } from '@/util'
 import {
     BASE_HEIGHT,
     BASE_WIDTH,

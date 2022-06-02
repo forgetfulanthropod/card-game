@@ -7,6 +7,7 @@ import type {
     SceneHas,
     CharacterUid,
     Card,
+    CommandQueue,
 } from '@'
 
 export interface BattleScene extends SceneHas {
@@ -25,6 +26,7 @@ export interface BattleScene extends SceneHas {
     roomsPassed: number
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    queue: CommandQueue
 }
 
 /** May later have e.g. DOT effects */

@@ -4,7 +4,6 @@ import { initialEntryState } from './entryState'
 import { getRulebook } from '@/rulebook'
 import { getRulebookNames, stringifyRulebook } from '@/util'
 
-const initial = null
 const NUM_OF_EACH_CHAR = 5
 const config = {
     includeRulebook: true,
