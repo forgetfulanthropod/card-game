@@ -1,10 +1,10 @@
 import { pick } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { CardUid, CharacterUid, Pile } from 'shared'
-import { keys, vals } from 'shared/code'
+import { assertFinite, keys, vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { Card } from './Card'
-import { assertFinite, hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid } from '@/util'
 import {
     Adjust,
     BASE_HEIGHT,

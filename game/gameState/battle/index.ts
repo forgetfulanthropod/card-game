@@ -1,6 +1,7 @@
 export * from './cards'
 export * from './util'
 export * from './effects'
+export * from './queueUtil'
 export { getRandomLivingNpcUid } from './characterGetters'
 export { getEnergy, setRoundEnergy } from './energy'
 export { maybeTransitionBattleState } from './transition'

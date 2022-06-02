@@ -3,6 +3,7 @@ import type {
     Characters,
     CharacterUid,
     Command,
+    CommandQueue,
     DamageMap,
     DungeonName,
     Pile,
@@ -27,6 +28,7 @@ export interface BattleScene extends SceneHas {
     roomsPassed: number
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    queue: CommandQueue
 }
 
 /** May later have e.g. DOT effects */

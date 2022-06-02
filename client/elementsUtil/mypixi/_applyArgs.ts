@@ -1,4 +1,5 @@
 import type { Filter as PixiFilter } from 'pixi.js'
+import { assertFinite } from 'shared/code'
 import { bindEvents } from './InteractionEvents'
 import { PixiTicker } from './aliases'
 import type {
@@ -9,7 +10,6 @@ import type {
 } from './aliases'
 import type { DisplayObjectArgs, ShownArgs, ContainerArgs } from './_types'
 import { bindIsHovered } from './_bindIsHovered'
-import { assertFinite } from '@/util'
 
 const applyArgs = null
 export function applyDisplayObjectArgs(

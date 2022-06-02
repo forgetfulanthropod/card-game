@@ -16,7 +16,7 @@ export type ExecuteArgs<T = VAngu[]> = {
     targetUids: CharacterUid[]
     cardUid?: CardUid
     scene: BattleCursor
-    calculatedStats: CalculatedCharacterStats
+    calculatedStats: Locals
 }
 
 export function s(n: number) {
@@ -34,6 +34,15 @@ export interface ArgsOf {
     momentary: []
     orb: [type: OrbType, count: number]
     text: [str: string]
+    ifTargetDied: [mainMove: any, conditionalMove: any]
+    queue: [numTurns: number, move: any]
+
+    killIf: [condition: boolean]
+}
+
+export type Locals = CalculatedCharacterStats & {
+    /** only defined when there is exactly 1 target and it is a character */
+    targetHealth: number | undefined
 }
 
 type IdxOf<T extends any[]> = Exclude<keyof T, keyof any[]>
@@ -51,3 +60,8 @@ export function evalAll<T extends any[]>(angus: Anguify<T>): T {
     // @ts-expect-error
     return angus.map(angu => angu.eval())
 }
+
+// remaining verbs: doubleEnchantmentOrToken
+// weird choice / target type: arcanePower prayerOfGoodFortune
+
+// Verbs enemies need: mimicAttack dot ifDamageDealt damageTaken rest matchaMeld summon

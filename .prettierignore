@@ -11,3 +11,5 @@ client/public_/index.html
 **/dist/
 **/ignore/
 db.json
+
+game/gameState/battle/cards/commands/index.ts

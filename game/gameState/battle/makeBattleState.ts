@@ -38,6 +38,7 @@ export function makeBattleState(args: {
         roomsPassed: 0,
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
+        queue: [],
     }
     return bs
 }

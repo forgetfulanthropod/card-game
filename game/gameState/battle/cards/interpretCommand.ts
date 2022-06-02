@@ -1,50 +1,42 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
+import { SBaobab } from 'sbaobab'
 import type {
     BattleCursor,
-    CalculatedCharacterStats,
     Card,
     CharacterUid,
     Command,
     CommandOutcome,
 } from 'shared'
 import { entryMap } from 'shared/code'
-import { SBaobab } from 'sbaobab'
-import { explainers, executors } from './commands'
+import type { Locals } from './commands'
+import { executors, explainers } from './commands'
 import { extractDamages } from './outcomeUtil'
-import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
+import { standardOperators } from './standardOperators'
 import { clearHappened, emit, getHappened } from '@/util'
+import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 
 export function interpretCommand(args: CommandDetail): void {
-    const locals = localsFromCommand(args.command, args.scene)
+    const locals = localsFromCommand(args)
     if (locals.isSkipped) return
     // const explanation = explainActions(command.actions, locals)
     executeCommand({ ...args, locals })
 }
 
-type Locals = CalculatedCharacterStats
-function localsFromCommand(command: Command, scene: BattleCursor): Locals {
+function localsFromCommand(args: CommandDetail): Locals {
+    const { scene, command, targetUids } = args
     const cardOwner = scene.get('allCharacters', command.characterUid)
-    return calcPostEffectStats(cardOwner)
-}
-
-const standardOperators = {
-    '-': (a: VAngu, b: VAngu) => a.eval() - b.eval(),
-    '+': (a: VAngu, b: VAngu) => a.eval() + b.eval(),
-    '/': (a: VAngu, b: VAngu) => a.eval() / b.eval(),
-    '*': (a: VAngu, b: VAngu) => a.eval() * b.eval(),
-
-    ';': (a: VAngu, b: VAngu) => {
-        a.eval()
-        return b.eval()
-    },
-    PI: 3.14,
+    const targetHealth =
+        targetUids.length === 1
+            ? scene.get('allCharacters', targetUids[0])?.health
+            : undefined
+    return { ...calcPostEffectStats(cardOwner), targetHealth }
 }
 
 export function explainCommand(command: Command, scene: BattleCursor): string {
     const res = explainActions(
         command.actions,
-        localsFromCommand(command, scene)
+        localsFromCommand({ command, scene, targetUids: [] })
     )
     if (typeof res !== 'string') {
         logger.error(['non-string result:', res])
@@ -74,7 +66,7 @@ interface CommandDetail {
 
 /** Does not modify game state (or shouldn't) */
 export function simulateCommand(args: CommandDetail): CommandOutcome {
-    const locals = localsFromCommand(args.command, args.scene)
+    const locals = localsFromCommand(args)
     if (locals.isSkipped) return { damages: {} }
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
     const username = args.scene.get('username')

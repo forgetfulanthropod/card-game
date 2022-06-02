@@ -5,6 +5,7 @@
 
 // @index('./*', f => `export * from '${f.path}'`)
 export * from './Character'
+export * from './CommandQueue'
 export * from './DungeonRoom'
 export * from './Gamestate'
 export * from './misc'

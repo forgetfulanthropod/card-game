@@ -1,5 +1,7 @@
 import type { CharacterClass } from './Characters'
-import type { CardUid, CharacterUid, PileId } from '@'
+import type { Brandify, CardUid, CharacterUid, PileId } from '@'
+
+export type DSLString = string & Brandify
 
 type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
 
@@ -73,7 +75,11 @@ export type NpcCommandId =
     | 'hansGuards'
     | 'hansCurse'
     | AliasedCommandId
-export type CommandId = NpcCommandId | CardId
+export type CommandId =
+    | NpcCommandId
+    | CardId
+    /** For enqueueAction() */
+    | `generated-command-${number}`
 
 export type CardId =
     | 'shieldOfLight'
@@ -110,7 +116,7 @@ export type CardId =
     | 'orbOfHolyLight'
     | 'mantraOfPatience'
     | 'helpingHand'
-type BasicTargetType =
+export type BasicTargetType =
     | 'friends'
     | 'enemies'
     | 'self'
@@ -118,7 +124,7 @@ type BasicTargetType =
     | 'cardAttack'
     | 'cardEnchantment'
     | 'orb'
-type TargetType =
+export type TargetType =
     | BasicTargetType
     | Array<
           | BasicTargetType
