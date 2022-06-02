@@ -16,7 +16,6 @@ node_modules/
 /ignore/
 
 tsconfig.tsbuildinfo
-pnpm-lock.yaml
 
 **/dist
 **/*.js
