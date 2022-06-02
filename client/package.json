@@ -1,5 +1,5 @@
 {
-    "name": "kaiju-client",
+    "name": "client",
     "dependencies": {
         "@monaco-editor/react": "^4.4.5",
         "@pixi-essentials/gradients": "^0.0.5",

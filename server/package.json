@@ -1,5 +1,5 @@
 {
-    "name": "kaiju-server",
+    "name": "server",
     "dependencies": {
         "angu": "^0.12.0",
         "express-session": "^1.17.3",

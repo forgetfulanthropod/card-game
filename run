@@ -10,27 +10,12 @@ export PATH=./node_modules/.bin:$PATH
 ## ROOT
 
 function install-all() {
-    set +x # skip printing in this function
-    wd=$(pwd)
-    for d in . client server game shared; do
-        cd $d
-        echo "installing in $d"
-        pnpm install &
-        cd $wd
-    done
-    set -x
+    pnpm i
 }
 
 function CI() {
     source ~/.bashrc
-    wd=$(pwd)
-    for d in . client server game shared; do
-        cd $d
-        echo "installing in $d"
-        pnpm install -P &
-        cd $wd
-    done
-
+    pnpm i -P
     client:build
     server:build
 }
@@ -128,8 +113,7 @@ function dep-graph() {
 }
 
 function npm-clean() {
-    # previously: /{pnpm-lock.yaml,node_modules}
-    rm -rf {.,client,server,shared,game}/{node_modules,pnpm-lock.yaml}
+    rm -rf pnpm-lock.yaml node_modules **/node_modules
 }
 
 ## CLIENT
