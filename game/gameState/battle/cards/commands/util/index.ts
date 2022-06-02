@@ -10,7 +10,7 @@ import type {
     OrbType,
 } from 'shared'
 
-export type ExecuteArgs<T = VAngu[]> = {
+type ExecuteArgs<T = VAngu[]> = {
     dslArgs: T
     command: Command
     targetUids: CharacterUid[]
@@ -23,7 +23,7 @@ export function s(n: number) {
     return n > 1 ? 's' : ''
 }
 
-export interface ArgsOf {
+interface ArgsOf {
     addBlock: [block: number]
     addEnergy: [energy: number]
 
@@ -45,10 +45,8 @@ export type Locals = CalculatedCharacterStats & {
     targetHealth: number | undefined
 }
 
-type IdxOf<T extends any[]> = Exclude<keyof T, keyof any[]>
-type Anguify<T extends any[]> = VAngu<T[number]>[] & {
-    [Idx in IdxOf<T>]: VAngu<T[Idx]>
-}
+export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }
+
 export type Executors = {
     [K in keyof ArgsOf]: (args: ExecuteArgs<Anguify<ArgsOf[K]>>) => void
 }
