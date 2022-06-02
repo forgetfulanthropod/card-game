@@ -15,7 +15,6 @@ import {
     glowFilter,
     If,
     Sprite,
-    Text,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { toDatum } from '@/util'
@@ -113,7 +112,7 @@ function Backdrop(): PixiSprite {
 }
 
 function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {
-    const texture = getTexture('endTurnButton')
+    const texture = getTexture('confirmButton')
 
     return If(selectedCardUid, cardUid =>
         Container({
@@ -131,15 +130,15 @@ function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {
                     height:
                         (BASE_WIDTH * 0.15 * texture.height) / texture.width,
                 }),
-                Text({
-                    text: 'Confirm',
-                    anchor: [0.5, 0.5],
-                    style: {
-                        fill: 0xffffff,
-                        fontSize: 44,
-                        fontFamily: 'bigFont',
-                    },
-                }),
+                // Text({
+                //     text: 'Confirm',
+                //     anchor: [0.5, 0.5],
+                //     style: {
+                //         fill: 0xffffff,
+                //         fontSize: 44,
+                //         fontFamily: 'bigFont',
+                //     },
+                // }),
             ],
         })
     )

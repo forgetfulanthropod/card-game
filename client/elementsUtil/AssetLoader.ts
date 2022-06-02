@@ -1,7 +1,8 @@
 import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 
-import endTurnButton from '@battleAssets/misc-png/BUTTON_END_TURN.png'
+import endTurnButton from '@battleAssets/core-ui/end turn.png'
+import confirmButton from '@battleAssets/core-ui/confirm.png'
 import gemButton from '@battleAssets/misc-png/BUTTON_GO.png'
 import chestBody from '@battleAssets/misc-png/CHEST_BODY.png'
 import chestLid from '@battleAssets/misc-png/CHEST_LID.png'
@@ -36,6 +37,7 @@ const basicAssets = {
     chestLid,
     door,
     endTurnButton,
+    confirmButton,
     enemyIntentArrow,
     ...fontAssets,
     ...orbAssets,
