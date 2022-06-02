@@ -21,7 +21,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                     Character({
                         cursor: allCharsC.select(uid),
                         onClick: () => {
-                            console.log('clicked a character')
                             localTree
                                 .select('selectedTargets')
                                 .apply(arr => [...arr, uid])

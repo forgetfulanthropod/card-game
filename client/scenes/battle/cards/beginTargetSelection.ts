@@ -13,7 +13,6 @@ export function beginTargetSelection(
     cardMeta: Card
 ): () => void {
     const numTargets = cardMeta.targetNum
-    console.log('beginning target selection')
 
     const app = getPixiApp()
 
@@ -35,10 +34,6 @@ export function beginTargetSelection(
     app.stage.on('pointermove', updateDestination)
     app.stage.on('pointerout', () => cleanup())
 
-    cardEl.on('event', () => {
-        console.log('el moved')
-    })
-
     window.addEventListener(
         'keydown',
         e => {
@@ -49,15 +44,11 @@ export function beginTargetSelection(
 
     const arrow = TargetSelectGraphic(origin, destination)
     cardEl.addChild(arrow)
-    console.log('arrow index: ' + cardEl.getChildIndex(arrow))
 
     const selectedTargetsCursor = localTree.select('selectedTargets')
 
     const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
         if (targets.length >= numTargets) {
-            console.log('selected targets cursor')
-            console.log(cardMeta)
-
             await callApi('PlayCard', {
                 cardUid: cardEl.name, //cardMeta.id,
                 targetUids: targets,
