@@ -1,32 +1,36 @@
-import type { Value as VAngu } from 'angu'
 import type { CardHit } from 'shared'
 import { mapToObj } from 'shared/code'
-import type { ExecuteArgs } from './util'
-import { s } from './util'
-import { applyDamage } from '@/gameState'
-import { emit } from '@/util'
+import { s, evalAll } from './util'
 
-export function explain(damage: VAngu, times: VAngu) {
-    let explication = 'deals ' + damage.eval() + ' damage'
+import type { Executors, Explainers } from './util'
+import { emit } from '@/util'
+import { applyDamage, calcPostEffectStats } from '@/gameState'
+
+export const explain: Explainers['deal'] = dslArgs => {
+    const [damage, times] = evalAll(dslArgs)
+    let explication = 'deals ' + damage + ' damage'
 
     if (times != null) {
-        const n = times.eval()
-        explication += ` ${n} time${s(n)}`
+        explication += ` ${times} time${s(times)}`
     }
 
     return explication
 }
 
-export function execute({
-    dslArgs: [damageAngu, numTargetsAngu],
+export const execute: Executors['deal'] = ({
+    dslArgs,
+    scene,
     command,
     targetUids,
-    scene,
-    calculatedStats,
-}: ExecuteArgs) {
-    const damage = damageAngu.eval() as number
-    const numTargets: number =
-        numTargetsAngu != null ? numTargetsAngu.eval() : 1
+}) => {
+    const [damage, times] = evalAll(dslArgs)
+    const expectedNumTargets = command.targetNum
+    if (expectedNumTargets !== targetUids.length) {
+        logger.error(
+            `command ${command.id} received ${targetUids.length} targets, but ${expectedNumTargets} were expected`
+        )
+        return
+    }
 
     const damages = mapToObj(targetUids, () => damage)
     const cardHit: CardHit = {
@@ -39,15 +43,14 @@ export function execute({
         event: { type: 'damage$', data: cardHit },
     })
 
-    for (let i = 0; i < numTargets; i++) {
-        if (targetUids[i] == null)
-            throw new Error('less targetUids than targets!')
-
+    targetUids.forEach(targetUid =>
         applyDamage({
             damage,
-            targetUid: targetUids[i],
+            targetUid,
             scene,
-            multiplier: calculatedStats.damageTakeMultiplier,
+            multiplier: calcPostEffectStats(
+                scene.get('allCharacters', targetUid)
+            ).damageTakeMultiplier,
         })
-    }
+    )
 }

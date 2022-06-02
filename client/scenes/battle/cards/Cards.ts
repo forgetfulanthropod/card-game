@@ -11,7 +11,6 @@ import {
     getTexture,
     If,
     Sprite,
-    Text,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/actions'
@@ -45,6 +44,7 @@ export function Cards(args: CardsArgs) {
 }
 
 function EndTurnButton(): PixiContainer {
+    const buttonTexture = getTexture('endTurnButton')
     return Container({
         x: BASE_WIDTH * 0.9,
         y: BASE_HEIGHT * 0.78,
@@ -53,22 +53,19 @@ function EndTurnButton(): PixiContainer {
         },
         children: [
             Sprite({
-                src: getTexture('endTurnButton'),
+                src: buttonTexture,
                 anchor: [0.5, 0.5],
-                width: BASE_WIDTH * 0.15,
-                height:
-                    (BASE_WIDTH * 0.15 * getTexture('endTurnButton').height) /
-                    getTexture('endTurnButton').width,
+                scale: (BASE_WIDTH * 0.15) / buttonTexture.width,
             }),
-            Text({
-                text: 'End Turn',
-                anchor: [0.5, 0.5],
-                style: {
-                    fill: 0xffffff,
-                    fontSize: 44,
-                    fontFamily: 'bigFont',
-                },
-            }),
+            // Text({
+            //     text: 'End Turn',
+            //     anchor: [0.5, 0.5],
+            //     style: {
+            //         fill: 0xffffff,
+            //         fontSize: 44,
+            //         fontFamily: 'bigFont',
+            //     },
+            // }),
         ],
     })
 }

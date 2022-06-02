@@ -38,10 +38,9 @@
         "pnpm-lock.yaml": true,
         "pnpm-workspace.yaml": true,
         "README.md": true,
-        "run": true,
         "server.log": true,
         "scripts": true,
-        "tsconfig.json": true,
+        // "tsconfig.json": true,
         "tsconfig.base.json": true
     },
     "editor.codeActionsOnSave": {

@@ -1,7 +1,13 @@
 import type { SCursor } from 'sbaobab'
 
 import type { CharacterUid, Gamestate } from './datamodel'
-import type { Orb, OwnedCharacterStats, Rulebook, SceneType } from './index'
+import type {
+    CardUid,
+    Orb,
+    OwnedCharacterStats,
+    Rulebook,
+    SceneType,
+} from './index'
 
 /** A server action */
 export interface Action {
@@ -26,11 +32,10 @@ export interface Action {
     MaybeMakeUser: (_: { username: string }) => Gamestate
 
     PlayCard: (_: { cardUid: string; targetUids: CharacterUid[] }) => void
+    AddCardToDeck: (_: { cardUid: CardUid }) => void
     ResetRandomSeed: (_: Empty) => void
 
     RulebookAction: (_: RulebookArgs) => void
-
-    StartBattle: (_: Empty) => void
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }

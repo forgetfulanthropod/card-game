@@ -3,14 +3,10 @@ import { Tweener } from 'pixi-tweener'
 import type { CardUid, CharacterUid, Pile } from 'shared'
 import { keys, vals } from 'shared/code'
 import type { Datum } from 'datums'
+import { Card } from './Card'
+import { assertFinite, hoveredCharacterUid } from '@/util'
 import {
-    Card,
-    CARD_HEIGHT_FULL,
-    CARD_WIDTH_FULL,
-    CARD_WIDTH_IN_HAND,
-} from './Card'
-import { hoveredCharacterUid } from '@/util'
-import {
+    Adjust,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
@@ -24,20 +20,30 @@ import type {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 
+const CARD_H_TO_W_RATIO = 630 / 450
+const CARD_WIDTH_IN_HAND = 220
+// const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
+const CARD_WIDTH_FULL = 350
+const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
+const CARD_WIDTH = 220
+
 export function Hand(
     pile: Pile,
     hoveredCardUid: Datum<CharacterUid | null>
 ): PixiContainer {
-    const cardUids = keys(pile)
+    const total = keys(pile).length
 
     const children = vals(pile).map((card, index) => {
-        return Card({
-            index,
-            pile,
-            card,
-            name: cardUids[index],
-            hoveredCardUid,
-        })
+        const { x, y, rotation } = getXYRotationForNthCard(index + 1, total)
+        return Adjust(
+            Card({
+                rotation,
+                width: CARD_WIDTH,
+                card,
+                hoveredCardUid,
+            }),
+            { x, y }
+        )
     })
 
     const root = Container({
@@ -186,7 +192,7 @@ function updateGlowFilters(
             if (hoveredCardUid.val === el.name) {
                 filteredEl.filters = [glowFilter]
             } else {
-                filteredEl.filters = []
+                filteredEl.filters = null
             }
         } else if (hoveredCharacterUid.val != null) {
             const card = getBattleScene()
@@ -196,17 +202,17 @@ function updateGlowFilters(
             if (hoveredCharacterUid.val === card.characterUid) {
                 filteredEl.filters = [glowFilter]
             } else {
-                filteredEl.filters = []
+                filteredEl.filters = null
             }
         } else {
-            filteredEl.filters = []
+            filteredEl.filters = null
         }
     })
 }
 
 function animateTo(
     cardEl: TweenablePixiContainer,
-    initialDisplayVal: InitialDisplayVal
+    displayVal: InitialDisplayVal
 ) {
     if (cardEl == null) return
 
@@ -218,7 +224,7 @@ function animateTo(
             duration: 0.2,
         },
         {
-            ...pick(initialDisplayVal, 'x', 'y'),
+            ...pick(displayVal, 'x', 'y'),
         }
     )
     void Tweener.add(
@@ -227,8 +233,44 @@ function animateTo(
             duration: 0.1,
         },
         {
-            ...pick(initialDisplayVal, 'rotation'),
-            tweenableScale: initialDisplayVal.scale,
+            ...pick(displayVal, 'rotation'),
+            tweenableScale: displayVal.scale,
         }
     )
+}
+type XYRotation = { x: number; y: number; rotation: number }
+
+function getXYRotationForNthCard(
+    n: number,
+    numCardsInHand: number
+): XYRotation {
+    // circular imports require defining constants here
+    const RIGHT_TO_LEFT = 1
+    const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
+    const MAX_HAND_SIZE = 12
+    const MAX_CARD_ROTATION = Math.PI * 0.1
+    const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
+    const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
+
+    if (n < 1 || n > numCardsInHand)
+        throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
+
+    const handWidth = Math.min(
+        (numCardsInHand - 1) * CARD_WIDTH,
+        MAX_HAND_WIDTH
+    )
+
+    const xPlacementPortion =
+        RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
+
+    const endCardRotation =
+        ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
+
+    return assertFinite({
+        x: handWidth * 0.5 * xPlacementPortion,
+        y:
+            -Y_MIN_OFFSET -
+            (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
+        rotation: xPlacementPortion * endCardRotation,
+    })
 }

@@ -26,16 +26,18 @@ export function makeBattleState(args: {
         name: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 1,
-        state: 'not started',
+        state: 'in battle',
         playerStarts,
         isPlayerTurn: playerStarts,
         allCharacters,
         cards: getNullCards(),
+        newCardOptions: {},
         energy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         roomsPassed: 0,
         nextNpcCommands: [], // set later
+        cardsPlayedThisRoom: [],
     }
     return bs
 }

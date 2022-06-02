@@ -150,6 +150,12 @@ function isKeyedArray(
 ): arr is { key: string | number }[] {
     return typeof arr[0] === 'object'
 }
+/**
+ * Portalize inserts content at a desired location,
+ * but attaches its lifecycle to `from`.
+ * It's for binding destroy to one DisplayObject
+ * placing within another Container.
+ */
 export function portalize(args: {
     from: DisplayObject
     content: DisplayObject

@@ -10,7 +10,7 @@ import type {
 import { mapToObj } from 'shared/code'
 import type { GameActions } from './types'
 import {
-    checkBattleOverMut,
+    maybeTransitionBattleState,
     getRandomLivingNpcUid,
     updateHand,
     applyDamage,
@@ -31,7 +31,7 @@ export const activateOrb: GameActions['ActivateOrb'] = ({
     activate(orb, character, scene)
 
     updateHand(scene)
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function validate(character: CharacterMeta, orb: Orb) {
@@ -81,12 +81,16 @@ function decrementCounter(
 }
 
 function activateProtection(character: CharacterMeta, scene: BattleCursor) {
-    const block = Math.ceil(character.magic * 0.5)
-    scene.apply(['allCharacters', character.uid, 'block'], b => b + block)
+    const block = Math.ceil(character.wisdom * 0.5)
+    const multiplier = calcPostEffectStats(character).blockMultiplier
+    scene.apply(
+        ['allCharacters', character.uid, 'block'],
+        b => b + block * multiplier
+    )
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
-    const damage = Math.ceil(character.magic * 0.5)
+    const damage = Math.ceil(character.wisdom * 0.5)
     const targetUid = getRandomLivingNpcUid(scene)
     const multiplier = calcPostEffectStats(character).damageTakeMultiplier
     applyDamage({ damage, targetUid, scene, multiplier })

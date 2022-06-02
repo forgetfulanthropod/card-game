@@ -3,6 +3,7 @@ import * as angu from 'angu'
 import type {
     BattleCursor,
     CalculatedCharacterStats,
+    Card,
     CharacterUid,
     Command,
     CommandOutcome,
@@ -11,18 +12,14 @@ import { entryMap } from 'shared/code'
 import { SBaobab } from 'sbaobab'
 import { explainers, executors } from './commands'
 import { extractDamages } from './outcomeUtil'
-import { calcPostEffectStats, checkBattleOverMut } from '@/gameState'
+import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 import { clearHappened, emit, getHappened } from '@/util'
 
-export function interpretCommand({
-    command,
-    targetUids,
-    scene,
-}: CommandDetail): void {
-    const locals = localsFromCommand(command, scene)
+export function interpretCommand(args: CommandDetail): void {
+    const locals = localsFromCommand(args.command, args.scene)
     if (locals.isSkipped) return
     // const explanation = explainActions(command.actions, locals)
-    executeCommand({ command, targetUids, scene, locals })
+    executeCommand({ ...args, locals })
 }
 
 type Locals = CalculatedCharacterStats
@@ -44,18 +41,33 @@ const standardOperators = {
     PI: 3.14,
 }
 
-export function explainCommand(command: Command, scene: BattleCursor) {
-    return explainActions(command.actions, localsFromCommand(command, scene))
+export function explainCommand(command: Command, scene: BattleCursor): string {
+    const res = explainActions(
+        command.actions,
+        localsFromCommand(command, scene)
+    )
+    if (typeof res !== 'string') {
+        logger.error(['non-string result:', res])
+        return 'error!'
+    }
+    return res
 }
 
 export function explainActions(actions: string, locals?: object) {
-    const ctx = generateAnguContext(explainers)
+    const wrappedExplainers = entryMap(
+        explainers,
+        (_, func) =>
+            (...args: VAngu[]) =>
+                // @ts-expect-error
+                func(args)
+    )
+    const ctx = generateAnguContext(wrappedExplainers)
 
     return angu.evaluate(actions, ctx, locals).value
 }
 
 interface CommandDetail {
-    command: Command
+    command: Command | Card
     targetUids: CharacterUid[]
     scene: BattleCursor
 }
@@ -82,23 +94,26 @@ function executeCommand({
     scene,
     locals,
 }: CommandDetail & { locals: Locals }): void {
+    const cardUid = 'uid' in command ? command?.['uid'] : undefined
     const wrappedExecutors = entryMap(
         executors,
         (_, func) =>
             (...dslArgs: VAngu[]) =>
                 func({
+                    // @ts-expect-error
                     dslArgs,
                     command,
                     targetUids,
                     scene,
                     calculatedStats: locals,
+                    cardUid,
                 })
     )
     const ctx = generateAnguContext(wrappedExecutors)
 
     angu.evaluate(command.actions, ctx, locals)
 
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function generateAnguContext(actionsMap: object): angu.Context {

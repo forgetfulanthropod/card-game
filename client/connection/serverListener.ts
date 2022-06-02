@@ -101,7 +101,9 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
 }
 
 function applyChange<T>(change: Diff<T, T>, cursor: ROCursor<T> | SBaobab<T>) {
-    log('applying tree change:', change, 'at:', cursor.toString())
+    // @ts-expect-error (I don't have this in the wrapper right now)
+    const path = cursor.path
+    log('applying tree change:', change, 'at:', path)
     switch (change.kind) {
         case 'N': {
             // new property

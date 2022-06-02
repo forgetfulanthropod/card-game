@@ -1,6 +1,5 @@
 import type { EnemyCharacterName, NpcCommandId } from 'shared'
 type Level = string
-// @ts-expect-error // TODO
 export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { wisdom: 0, constitution: 18, strength: 4, dexterity: 7, moves: ['swordWack', null, null, 'block', null] },
@@ -17,15 +16,15 @@ export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>>
     },
     matchaGelatinCube: {
         1: { wisdom: 0, constitution: 24, strength: 3, dexterity: 10, moves: ['basicAttack', null, null, 'block', null] },
-        2: { wisdom: 0, constitution: 36, strength: 4, dexterity: 14, moves: ['basicAttack', 'supriseAllergy(1,1)', null, 'block', null] },
-        3: { wisdom: 0, constitution: 55, strength: 6, dexterity: 17, moves: ['basicAttack', 'supriseAllergy(1,1)', 'itchyOoze(1)', 'block', null] },
-        4: { wisdom: 0, constitution: 72, strength: 8, dexterity: 22, moves: ['basicAttack', 'supriseAllergy(2,1)', 'itchyOoze(2)', 'block', null] },
-        5: { wisdom: 0, constitution: 80, strength: 11, dexterity: 26, moves: ['basicAttack', 'supriseAllergy(2,1)', 'itchyOozeSpecial', 'block', null] },
-        6: { wisdom: 0, constitution: 105, strength: 14, dexterity: 31, moves: ['basicAttack', 'supriseAllergy(3,2)', 'itchyOoze(2)', 'block', 'engulf(50)'] },
-        7: { wisdom: 0, constitution: 130, strength: 15, dexterity: 36, moves: ['basicAttack', 'supriseAllergy(3,2)', 'itchyOoze(2)', 'block', 'engulf(50)'] },
-        8: { wisdom: 0, constitution: 160, strength: 19, dexterity: 41, moves: ['basicAttack', 'supriseAllergy(4,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
-        9: { wisdom: 0, constitution: 175, strength: 22, dexterity: 48, moves: ['basicAttack', 'supriseAllergy(4,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
-        10: { wisdom: 0, constitution: 200, strength: 25, dexterity: 56, moves: ['basicAttack', 'supriseAllergy(5,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
+        2: { wisdom: 0, constitution: 36, strength: 4, dexterity: 14, moves: ['basicAttack', 'surpriseAllergy(1,1)', null, 'block', null] },
+        3: { wisdom: 0, constitution: 55, strength: 6, dexterity: 17, moves: ['basicAttack', 'surpriseAllergy(1,1)', 'itchyOoze(1)', 'block', null] },
+        4: { wisdom: 0, constitution: 72, strength: 8, dexterity: 22, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'itchyOoze(2)', 'block', null] },
+        5: { wisdom: 0, constitution: 80, strength: 11, dexterity: 26, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'itchyOozeSpecial', 'block', null] },
+        6: { wisdom: 0, constitution: 105, strength: 14, dexterity: 31, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(2)', 'block', 'engulf(50)'] },
+        7: { wisdom: 0, constitution: 130, strength: 15, dexterity: 36, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(2)', 'block', 'engulf(50)'] },
+        8: { wisdom: 0, constitution: 160, strength: 19, dexterity: 41, moves: ['basicAttack', 'surpriseAllergy(4,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
+        9: { wisdom: 0, constitution: 175, strength: 22, dexterity: 48, moves: ['basicAttack', 'surpriseAllergy(4,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
+        10: { wisdom: 0, constitution: 200, strength: 25, dexterity: 56, moves: ['basicAttack', 'surpriseAllergy(5,2)', 'itchyOoze(2)', 'block', 'engulf(75)'] },
         large: { wisdom: 0, constitution: '200-100', strength: 15, dexterity: 20, moves: ['matchaMash', 'matchaMadness', 'matchaMeld', null, null] },
         medium: { wisdom: 0, constitution: '99-30', strength: 10, dexterity: 10, moves: ['matchaMash', null, null, null, null] },
         small: { wisdom: 0, constitution: '>29', strength: 10, dexterity: 5, moves: ['matchaMash', null, null, null, null] },

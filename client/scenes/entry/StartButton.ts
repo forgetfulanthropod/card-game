@@ -23,7 +23,7 @@ export function StartButton(): PixiContainer {
                 bg.filters = [glowFilter]
             },
             pointerout() {
-                bg.filters = []
+                bg.filters = null
             },
         },
     })

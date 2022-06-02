@@ -1,12 +1,11 @@
-import { set } from 'lodash'
+import { set, upperFirst } from 'lodash'
 import type {
     Card,
     CardId,
-    Cards,
+    Piles,
     CharacterUid,
     BattleCursor,
     CharacterClass,
-    CardUid,
 } from 'shared'
 
 import { keys, vals } from 'shared/code'
@@ -28,83 +27,108 @@ export function setCards(scene: BattleCursor) {
     scene.set('cards', makeCards(scene))
 }
 
-export function getNullCards(): Cards {
-    return { draw: {}, hand: {}, discard: {}, removed: {} }
+export function getNullCards(): Piles {
+    return { draw: {}, hand: {}, discard: {}, removedRoom: {}, removedRun: {} }
 }
 
-function makeCards(scene: BattleCursor): Cards {
+function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
-        'guidingBolt',
-        'guidingBolt',
-        // 'guidingBolt',
-        // 'guidingBolt',
-        // 'guidingBolt',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'strike',
+        // 'tetsudoFormation',
+        // 'charge',
+        // 'dutifulStab',
+        // 'swordSlash',
+        // 'magicRitual',
         // 'guidingBolt',
         // 'guidingBolt',
         // 'shield',
-        // 'shield',
-        'shield',
         // 'shieldOfLight',
-        // 'shieldOfLight',
-        'shieldOfLight',
-        'sweepTheLeg',
-        'sweepTheLeg',
-        'sweepTheLeg',
-        'sweepTheLeg',
-        'bodySlam',
+        // 'sweepTheLeg',
+        // 'sweepTheLeg',
         // 'bodySlam',
-        'jab',
-        'strike',
-        'strike',
-        'orbOfLightning',
+        // 'jab',
+        // 'strike',
+        // 'strike',
         // 'orbOfLightning',
-        'orbOfProtection',
         // 'orbOfProtection',
     ]
+
     const allCharacters = vals(scene.get('allCharacters'))
+    allCharacters.forEach(c => {
+        const ccuf = upperFirst(c.class)
+        cardIds.push(
+            //@ts-expect-error
+            `basicAttack${ccuf}`,
+            `basicAttack${ccuf}`,
+            `block${ccuf}`,
+            `block${ccuf}`
+        )
+        cardIds.push(getRandomCardIdOfClass(c.class))
+    })
 
     return {
-        draw: cardIds.reduce((acc, id) => {
+        draw: cardIds.reduce((acc, id, i) => {
             // logger.info(JSON.stringify(allCharacters, null, '\n'))
-            let firstCharacterUidForClass = allCharacters.find(
-                c => c?.class === getCardClass(id)
-            )?.uid
+            const owningCharUid =
+                allCharacters[Math.floor((i * 3) / cardIds.length)].uid
 
-            if (firstCharacterUidForClass == null) {
-                logger.info(
-                    'TODO: no character class matches this card, going with character 0'
-                )
-                firstCharacterUidForClass = allCharacters[0].uid
-            }
-
-            const cardUid = `${id}-${srandom().toString().replace('.', '')}`
-            return set(
-                acc,
-                cardUid,
-                updateExplanation(
-                    getCardInstance(id, cardUid, firstCharacterUidForClass),
-                    scene
-                )
+            const card = updateExplanation(
+                getCardInstance(id, owningCharUid),
+                scene
             )
+            return set(acc, card.uid, card)
         }, {}),
         hand: {},
         discard: {},
-        removed: {},
+        removedRoom: {},
+        removedRun: {},
+    }
+}
+/**
+ * random but not a basic starter...
+ */
+export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
+    const idPool = keys(cardDefinitionsMap).filter(
+        cardId => cardDefinitionsMap[cardId].characterClass === characterClass
+    )
+
+    let cardId = get()
+
+    while (
+        //can't be these..
+        cardId.includes(`basicAttack${characterClass}`) ||
+        cardId.includes(`block${characterClass}`)
+    ) {
+        cardId = get()
+    }
+
+    return cardId
+
+    function get() {
+        return idPool[Math.floor(srandom() * idPool.length)]
     }
 }
 
-function updateExplanation(card: Card, scene: BattleCursor): Card {
+export function updateExplanation(card: Card, scene: BattleCursor): Card {
     return { ...card, explanation: explainCommand(card, scene) }
 }
 
-function getCardInstance(
-    id: keyof typeof cardDefinitionsMap,
-    uid: CardUid,
-    characterUid: CharacterUid
-): Card {
+export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
     return {
         ...cardDefinitionsMap[id],
-        uid,
+        uid: `${id}-${makeRandId()}`,
         characterUid,
         explanation: 'error!',
     }
@@ -112,4 +136,8 @@ function getCardInstance(
 
 function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
     return cardDefinitionsMap[id].characterClass
+}
+
+function makeRandId() {
+    return srandom().toString().slice(2)
 }

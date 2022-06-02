@@ -12,6 +12,13 @@ addCounter(targetUid, counterId)
 **Stunned *(Debuff)*:** Stunned NPCs skip their next turn.  Stunned player characters cannot play any cards, nor can they switch stances.
 **Unguarded** ***(Debuff)*:** Unguarded characters receive 25% more damage.
 **Vulnerable *(Debuff*):** Vulnerable characters receive 50% more damage.
+
+TODO:
+"fatigue"
+"doubleDamage"
+"stun"
+"passiveBlock"
+"smallDamageBonus"
 */
 
 /** Effects are applied in the order of this array */
@@ -23,7 +30,15 @@ export const effectIds = [
     'stunned',
     'unguarded',
     'vulnerable',
+    'strongblock',
+    'smallDamageIncrease',
 ] as const
+
+/** Effects which are cleared on turn end */
+export const turnEndClearEffects: EffectId[] = [
+    'strongblock',
+    'smallDamageIncrease',
+]
 
 export type EffectId = typeof effectIds[number]
 

@@ -11,17 +11,23 @@
             },
             "isBackground": true,
             "detail": "tsc + esbuild + node"
-            // "runOptions": { "runOn": "folderOpen", }
         },
         {
             "label": "tsc all",
-            "type": "typescript",
-            "tsconfig": "./tsconfig.json",
-            "problemMatcher": "$tsc-watch",
-            "option": "watch",
+            // "type": "typescript",
+            // "tsconfig": "./tsconfig.json",
+            // "problemMatcher": "$tsc-watch",
+            // "option": "watch",
+            "type": "shell",
+            "command": "./node_modules/.bin/tsc --build --watch server client shared game",
+            "problemMatcher": ["$tsc-watch"],
+            // "type": "typescript",
+            // "tsconfig": "./tsconfig.json",
+            // "problemMatcher": "$tsc-watch",
+            // "option": "watch",
             // "type": "shell",
             // "command": "./node_modules/.bin/tsc --build --watch .",
-            // "problemMatcher": ["$tsc-watch"],
+            // "problemMatcher": "$tsc-watch",
             "group": "build",
             "detail": "check types on all files",
             "presentation": {
@@ -35,7 +41,9 @@
             "detail": "build client + server",
             "presentation": {
                 "group": "group1"
-            }
+            },
+            "problemMatcher": ["$esbuild-watch"],
+            "isBackground": true
         },
         {
             "label": "run server",

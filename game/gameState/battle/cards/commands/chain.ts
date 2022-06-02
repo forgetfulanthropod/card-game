@@ -1,11 +1,9 @@
-import type { Value as VAngu } from 'angu'
+import type { Executors, Explainers } from './util'
 
-import type { ExecuteArgs } from './util'
-
-export function explain(...chain: VAngu[]) {
-    return chain.map(link => link.eval()).join('\n')
+export const explain: Explainers['chain'] = dslArgs => {
+    return dslArgs.map(link => link.eval()).join('\n')
 }
 
-export function execute({ dslArgs }: ExecuteArgs) {
+export const execute: Executors['chain'] = ({ dslArgs }) => {
     dslArgs.forEach(a => a.eval())
 }
