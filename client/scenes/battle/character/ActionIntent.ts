@@ -147,7 +147,8 @@ function EnemyIntentArrow(
         root.addChild(
             Sprite({
                 src,
-                scale: distance / src.width,
+                scale: (1920 * 0.5) / src.width,
+                width: distance,
                 anchor: [1, 0.5],
                 pivot: [1, 0.5],
                 rotation,

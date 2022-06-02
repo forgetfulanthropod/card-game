@@ -3,7 +3,7 @@ import type { CharacterMeta, Orb, BattleCursor } from 'shared'
 
 import type { GameActions } from './types'
 import {
-    checkBattleOverMut,
+    maybeTransitionBattleState,
     getRandomLivingNpcUid,
     updateHand,
     applyDamage,
@@ -25,7 +25,7 @@ export const activateOrb: GameActions['ActivateOrb'] = ({
     activate(orb, character, scene)
 
     updateHand(scene)
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function validate(character: CharacterMeta, orb: Orb) {

@@ -139,4 +139,4 @@ export type TargetType =
       >
 
 export type Pile = Record<CardUid, Card>
-export type Cards = Record<PileId, Pile>
+export type Piles = Record<PileId, Pile>

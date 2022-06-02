@@ -1,6 +1,7 @@
 // window.PIXI = PIXI
 import type { Datum } from 'datums'
-import type { DisplayObject } from 'pixi.js'
+import { DisplayObject } from 'pixi.js'
+
 import type { PixiGraphics } from './aliases'
 import {
     PixiContainer,
@@ -91,6 +92,11 @@ type TypeArgPairs =
     | [PixiContainer, DisplayObjectArgs]
     | [PixiSprite, ShownArgs]
     | [DisplayObject, DisplayObjectArgs]
+
+/**
+ * Modifies an element in place and returns it.
+ * Eliminates Containers.
+ */
 export function Adjust<T extends TypeArgPairs>(...args_: T): T[0] {
     const [el, args] = args_
     if (el instanceof PixiSprite || el instanceof PixiText) {
@@ -121,14 +127,16 @@ export function getElByPath(args: {
         if (strict && !(el instanceof PixiContainer)) {
             const pathHere = JStr(path.slice(0, i))
             throw Error(
-                `path ${pathHere} is not a container on root '${root?.name}'`
+                `path ${pathHere} is not a Container on root ${root?.name}`
             )
         }
         el = el.getChildByName(name) as PixiContainer
     })
-    if (strict && !(el instanceof PixiContainer))
+    if (strict && !(el instanceof DisplayObject))
         throw Error(
-            `path ${JStr(path)} is not a container on root '${root?.name}'`
+            `target of ${JStr(path)} is not a DisplayObject on root ${
+                root?.name
+            }`
         )
     return el
 }

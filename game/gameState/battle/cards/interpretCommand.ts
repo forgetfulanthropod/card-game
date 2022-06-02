@@ -1,5 +1,6 @@
 import type { Value as VAngu } from 'angu'
 import * as angu from 'angu'
+import { SBaobab } from 'sbaobab'
 import type {
     BattleCursor,
     Card,
@@ -8,13 +9,12 @@ import type {
     CommandOutcome,
 } from 'shared'
 import { entryMap } from 'shared/code'
-import { SBaobab } from 'sbaobab'
 import type { Locals } from './commands'
-import { explainers, executors } from './commands'
+import { executors, explainers } from './commands'
 import { extractDamages } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
-import { calcPostEffectStats, checkBattleOverMut } from '@/gameState'
 import { clearHappened, emit, getHappened } from '@/util'
+import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 
 export function interpretCommand(args: CommandDetail): void {
     const locals = localsFromCommand(args)
@@ -105,7 +105,7 @@ function executeCommand({
 
     angu.evaluate(command.actions, ctx, locals)
 
-    checkBattleOverMut(scene)
+    maybeTransitionBattleState(scene)
 }
 
 function generateAnguContext(actionsMap: object): angu.Context {
