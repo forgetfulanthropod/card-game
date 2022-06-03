@@ -44,7 +44,7 @@ export type Gamecursor = SCursor<Gamestate>
 /** A no-input game action */
 export interface InternalAction {
     doNpcTurn(game: Gamecursor, args: { index: number }): undefined | NextAction
-    resetRound(game: Gamecursor, args: Empty): undefined
+    endNpcTurn(game: Gamecursor, args: Empty): void
 }
 export type InternalActionName = keyof InternalAction
 /** Means there is nothing for the player to do right now. */

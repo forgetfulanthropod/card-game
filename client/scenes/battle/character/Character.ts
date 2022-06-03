@@ -57,10 +57,10 @@ export function Character(args: CharacterProps): PixiContainer {
             Adjust(ActionIntent(characterMeta.uid, isHovered), {
                 y: 22,
             }),
+            mainAnimation,
             Adjust(HealthBar(characterMeta.uid), {
                 y: 22,
             }),
-            mainAnimation,
         ],
     })
 

@@ -35,7 +35,7 @@ export function makeBattleState(args: {
         energy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        roomsPassed: 0,
+        numRoomsPassed: 0,
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         queue: [],

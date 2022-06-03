@@ -4,6 +4,8 @@ export const spineAssets = {
         'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
     skeletonWarriorSpine:
         'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
+    matchaGelatinCubeSpine:
+        'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
 } as const
 
 export type SpineAsset = keyof typeof spineAssets

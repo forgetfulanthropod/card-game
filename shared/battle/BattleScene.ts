@@ -25,7 +25,7 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
-    roomsPassed: number
+    numRoomsPassed: number
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
     queue: CommandQueue

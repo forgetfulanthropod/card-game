@@ -1,2 +1,2 @@
-export { resetRound } from './resetRound'
+export { endNpcTurn as resetRound } from './endNpcTurn'
 export { step } from './step'

@@ -112,23 +112,27 @@ export function SelectedCharacters(): PixiContainer {
             charactersData
                 .filter(c => c != null)
                 .map((c, i) => {
-                    const animation = MainCharacterAnimation(c, () => {
-                        const nextIndex =
-                            (defaultOwnedCharacters.findIndex(
-                                oc => oc.name === c.name
-                            ) +
-                                1) %
-                            3
-                        const nextChoice = defaultOwnedCharacters[nextIndex]
-                        console.log({ nextIndex, nextChoice })
-                        void callApi('PlaceSelectedCharacter', {
-                            character: {
-                                ...nextChoice,
-                                uid: `pc-${i + 1}`,
-                            },
-                            index: i as CharacterPlaceIndex,
-                        })
-                    })
+                    const animation = MainCharacterAnimation(
+                        c,
+                        () => {
+                            const nextIndex =
+                                (defaultOwnedCharacters.findIndex(
+                                    oc => oc.name === c.name
+                                ) +
+                                    1) %
+                                3
+                            const nextChoice = defaultOwnedCharacters[nextIndex]
+                            console.log({ nextIndex, nextChoice })
+                            void callApi('PlaceSelectedCharacter', {
+                                character: {
+                                    ...nextChoice,
+                                    uid: `pc-${i + 1}`,
+                                },
+                                index: i as CharacterPlaceIndex,
+                            })
+                        },
+                        260
+                    )
 
                     if (animation != null) {
                         animation.x -= animation.width / 2

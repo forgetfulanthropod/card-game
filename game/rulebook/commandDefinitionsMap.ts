@@ -7,8 +7,11 @@ type CommandDefinitionsMap = {
     [Id in NpcCommandId]: CommandDefinition & { id: Id }
 }
 
-/** For the sake of brevity: */
-const toAction = {
+/**
+ * simple commands which targe one opponent
+ * no friendly targets allowed!!!
+ **/
+const singleOpponentTargetCommands = {
     swordWack: ['Sword Wack', 'deal(strength)'],
     /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).*/
     mimicAttack: ['Mimic Attack', 'mimicAttack()'],
@@ -16,8 +19,6 @@ const toAction = {
     rustyPokeHigh: ['Rusty Poke High', 'dot(2); effect("fatigue", 1)'],
     /**Rusty Poke (DOT 2) */
     rustyPokeLow: ['Rusty Poke Low', 'dot(2)'],
-    /**'Block' */
-    block: ['Block', 'addBlock(dexterity)'],
     /**Basic Attack */
     basicAttack: ['Basic Attack', 'deal(strength)'],
     /**Chomp (BA) */
@@ -35,61 +36,91 @@ const toAction = {
     jurgenSitUpon: ['Jurgen Sit Upon', 'deal(strength/2); effect("stun",1)'],
     /**Attack (Attacks for 4) */
     attack4: ['Attack4', 'deal(4)'],
-    /**Rest (does nothing) */
-    rest: ['Rest', 'rest()'],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
     matchaMadness: ['Matcha Madness', 'effect("poison", 3, "all")'],
     /**Matcha Meld: Block equal to DEF and Level 1 and 2 matchas, will attempt to rejoin the matcha with the highest HP. If successful, the lesser Matcha will add their HP to the greater matcha and the lesser Matcha will be removed from the field. The targeted matcha will level up if it exceeds the minimum health threshold for the next level of matcha. */
     matchaMeld: ['Matcha Meld', 'TODO'],
-    /**Eviscerating Sweep (Deals 100%, Splash Damage) applies vulnerable (3) */
-    evisceratingSweep: [
-        'Eviscerating Sweep',
-        'deal(strength); effect("vulnerable", 3)',
-    ],
-    /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
-    passiveBlock: ['Passive Block', 'effect("passiveBlock", 20)'],
     /**Ancient Strike (Deals 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn. */
     ancientStrike: [
         'Ancient Strike',
         'ifDamageDealt(deal(strength * 2), effect("stun", 1))',
     ],
-    /**Buff/Block (Gives +3 damage to all of Hans' Guards and Hans himself till the end of the following turn). */
-    hansBuffBlock: [
-        'Hans Buff Block',
-        'effect("smallDamageBonus", 2, "friends")',
-    ],
     /**Magic Missile (attacks for 25) */
     hansMagicMissile: ['Hans Magic Missile', 'deal(25)'],
-    /**Guards!!! (summons up to 2 cultist guards) */
-    hansGuards: [
-        'Hans Guards',
-        'summon("cultistGuard"); summon("cultistGuard")',
-    ],
-    /**Blood Moon Curse (all player characters receive fatigue (2), unguarded (2)) */
-    hansCurse: [
-        'Hans Curse',
-        'effect("fatigue", 2, "enemies"); effect("unguarded", 2, "enemies")',
-    ],
+    /**Jab */
+    jab: ['Jab', 'deal(strength * .5)'],
+    /**Strike */
+    strike: ['Strike', 'deal(strength + 2)'],
 } as const
 
 // @ts-expect-error // our shorthand doesn't have perfect type inference...
 export const commandDefinitionsMap: CommandDefinitionsMap = {
-    jab: {
-        name: 'Jab',
-        id: 'jab',
-        targetNum: 1,
+    /**Eviscerating Sweep (Deals 100%, Splash Damage) applies vulnerable (3) */
+    evisceratingSweep: {
+        name: 'Eviscerating Sweep',
+        id: 'evisceratingSweep',
+        targetNum: 2,
         targetType: 'enemies',
-        actions: 'deal(strength * .5)',
+        actions: 'deal(strength); effect{"vulnerable", 3}',
     },
-    strike: {
-        name: 'Strike',
-        id: 'strike',
+
+    /**Blood Moon Curse (all player characters receive fatigue (2), unguarded (2)) */
+    hansCurse: {
+        name: 'Hans Curse',
+        id: 'hansCurse',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions:
+            'effect("fatigue", 2, "enemies"); effect("unguarded", 2, "enemies")',
+    },
+
+    /**Guards!!! (summons up to 2 cultist guards) */
+    hansGuards: {
+        name: 'Hans Guards',
+        id: 'hansGuards',
+        targetNum: 0,
+        targetType: 'self',
+        actions: 'summon("cultistGuard"); summon("cultistGuard")',
+    },
+
+    /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
+    passiveBlock: {
+        name: 'Passive Block',
+        id: 'passiveBlock',
+        targetNum: 0,
+        targetType: 'self',
+        actions: 'effect("passiveBlock", 20)',
+    },
+
+    /**Buff/Block (Gives +3 damage to all of Hans' Guards and Hans himself till the end of the following turn). */
+    hansBuffBlock: {
+        name: 'Hans Buff Block',
+        id: 'hansBuffBlock',
+        targetNum: 0,
+        targetType: 'self',
+        actions: 'effect("smallDamageBonus", 2, "friends")',
+    },
+
+    /**Rest (does nothing) */
+    rest: {
+        name: 'Rest',
+        id: 'rest',
+        targetNum: 0,
+        targetType: 'self',
+        actions: 'rest()',
+    },
+
+    /**'Block' */
+    block: {
+        name: 'Block',
+        id: 'block',
         targetNum: 1,
-        targetType: 'enemies',
-        actions: 'deal(strength + 2)',
+        targetType: 'self',
+        actions: 'addBlock(dexterity)',
     },
+
     /**Slash (SL) */
     slash: {
         name: 'Slash',
@@ -106,7 +137,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
         actions: 'deal(strength/2)',
     },
-    ...entryMap(toAction, (id, [displayName, actions]) => ({
+    ...entryMap(singleOpponentTargetCommands, (id, [displayName, actions]) => ({
         actions,
         id,
         name: displayName,
@@ -115,6 +146,9 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     })),
 }
 
+/**
+ * mutates commandDefinitionsMap in place
+ */
 function generateParameterizedCommands() {
     for (const levelObj of Object.values(enemies))
         for (const enemy of Object.values(levelObj))

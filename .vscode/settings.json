@@ -52,7 +52,7 @@
         "activityBar.background": "#1C3314",
         "titleBar.activeBackground": "#27481C",
         "titleBar.activeForeground": "#F8FCF7",
-        "breadcrumb.foreground": "#000000"
+        // "breadcrumb.foreground": "#000000"
     },
     "javascript.format.semicolons": "remove",
     "typescript.format.semicolons": "remove",

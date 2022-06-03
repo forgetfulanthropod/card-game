@@ -4,10 +4,12 @@ import type {
     CharacterUid,
     BattleScene,
     Command,
+    EnemyCharacterMeta,
 } from 'shared'
 
 import { vals } from 'shared/code'
 import { SCursor } from 'sbaobab'
+import { range } from 'lodash'
 import { getRulebook } from '@/rulebook'
 import { weightedRandom } from '@/util'
 
@@ -27,6 +29,17 @@ export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
     return uids[randomIndex]
 }
 
+export function getLivingNpcs(scene: BattleScene): EnemyCharacterMeta[] {
+    //@ts-expect-error
+    return vals(scene.allCharacters).filter(
+        c => !c.isPc && c.health > 0
+    ) as EnemyCharacterMeta[]
+}
+
+export function getLivingPcs(scene: BattleScene): CharacterMeta[] {
+    return vals(scene.allCharacters).filter(c => c.isPc && c.health > 0)
+}
+
 function getClosestAlive(
     allCharacters: CharacterMeta[],
     character: CharacterMeta,
@@ -44,7 +57,7 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
 
-export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)
 
@@ -57,9 +70,19 @@ export function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     return allLivingPlayerCharacters[targetIndex]
 }
 
-export function getPcTargets(
+export function getCommandTargets(
     scene: BattleScene,
     command: Command
 ): CharacterUid[] {
-    return [getPCTarget(vals(scene.allCharacters)).uid]
+    if (command.targetType === 'enemies') {
+        return range(command.targetNum).map(
+            () => getPCTarget(vals(scene.allCharacters)).uid
+        )
+    } else if (command.targetType === 'allEnemies') {
+        return getLivingPcs(scene).map(c => c.uid)
+    } else if (command.targetType === 'self') {
+        return [command.characterUid]
+    }
+
+    return []
 }

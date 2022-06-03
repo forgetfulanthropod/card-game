@@ -6,7 +6,8 @@ import { glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation(
     characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
-    onClick?: () => void
+    onClick?: () => void,
+    height = 190
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
 
@@ -29,11 +30,16 @@ export function MainCharacterAnimation(
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
-    const desiredHeight = 260 // TODO: what is it tho
+    const heightOverrides = {
+        matchaGelatinCube: 14 / 19,
+    }
+
+    //@ts-expect-error
+    const desiredHeight = (heightOverrides?.[characterMeta.name] ?? 1) * height // TODO: what is it tho
     const desiredScale = desiredHeight / root.height
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
+    root.x += ((characterMeta.isPc ? 1 : -2) * root.width) / 4
 
     root.y -= 20
 

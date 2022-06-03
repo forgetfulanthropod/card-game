@@ -1,7 +1,11 @@
 import type { DungeonLevel, Rulebook } from 'shared'
 import { rulebookVersion } from 'shared/code'
 
-import { dungeonRooms, stanceTypeMetaMap, statsMap } from './battle'
+import {
+    dungeonRooms,
+    stanceTypeMetaMap,
+    playerCharacterStatsMap,
+} from './battle'
 
 const dungeonLevels: DungeonLevel[] = [
     { name: 'Skelepit Dungeon', num: 0, modifier: 1 },
@@ -18,10 +22,10 @@ const dungeonLevels: DungeonLevel[] = [
 const defaultRulebook: Rulebook = {
     version: rulebookVersion,
     name: 'default',
-    characters: statsMap,
+    characters: playerCharacterStatsMap,
     dungeonLevels,
     stanceTypeMetaMap,
-    dungeonRooms: dungeonRooms,
+    dungeonRooms,
     // npcNames,
 }
 let rulebook = defaultRulebook
