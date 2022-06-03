@@ -34,6 +34,7 @@ interface ArgsOf {
     momentary: []
     orb: [type: OrbType, count: number]
     text: [str: string]
+    ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifTargetDied: [mainMove: any, conditionalMove: any]
     queue: [numTurns: number, move: any]
 

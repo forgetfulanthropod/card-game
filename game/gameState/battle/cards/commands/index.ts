@@ -7,6 +7,7 @@ import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEne
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainDeal, execute as executeDeal} from './deal'
 import {explain as explainEffect, execute as executeEffect} from './effect'
+import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
 import {explain as explainIfTargetDied, execute as executeIfTargetDied} from './ifTargetDied'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
@@ -23,6 +24,7 @@ export const explainers: Explainers = {
     chain: explainChain,
     deal: explainDeal,
     effect: explainEffect,
+    ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
     ifTargetDied: explainIfTargetDied,
     killIf: explainKillIf,
@@ -40,6 +42,7 @@ export const executors: Executors = {
     chain: executeChain,
     deal: executeDeal,
     effect: executeEffect,
+    ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
     ifTargetDied: executeIfTargetDied,
     killIf: executeKillIf,

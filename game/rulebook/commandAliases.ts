@@ -10,7 +10,7 @@ export const startlingSpook = (x: number, y: number): CommandDefinition => ({
 })
 /**Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X) */
 export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
-    actions: `deal(strength/2); ifDamageDealt(effect("poison",${x}), effect("fatigue",${y}))`,
+    actions: `ifDamageDealt(deal(strength/2), effect("poison",${x}), effect("fatigue",${y}))`,
     id: `surpriseAllergy(${x},${y})`,
     name: `Surprise Allergy ${x}-${y}`,
     targetNum: 1,
@@ -26,7 +26,7 @@ export const itchyOoze = (x: number): CommandDefinition => ({
 })
 /**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
 export const infectiousBite = (x: number): CommandDefinition => ({
-    actions: `dot(1); ifDamageDealtExceeds(5, effect("poison",${x}))`,
+    actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
     id: `infectiousBite(${x})`,
     name: `Infectious Bite ${x}`,
     targetNum: 1,
@@ -34,7 +34,7 @@ export const infectiousBite = (x: number): CommandDefinition => ({
 })
 /**Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked) */
 export const engulf = (x: number): CommandDefinition => ({
-    actions: `deal(strength*0.${x}); ifDamageDealt(effect("stun",1))`,
+    actions: `ifDamageDealt(deal(strength*0.${x}), effect("stun",1))`,
     id: `engulf(${x})`,
     name: `Engulf ${x}`,
     targetNum: 1,
@@ -42,7 +42,7 @@ export const engulf = (x: number): CommandDefinition => ({
 })
 /**Meaty Charge (BA, applies bleed (X) if any damage goes unblocked) */
 export const meatyCharge = (x: number): CommandDefinition => ({
-    actions: `deal(strength); ifDamageDealt(effect("bleed",${x}))`,
+    actions: `ifDamageDealt(deal(strength), effect("bleed",${x}))`,
     id: `meatyCharge(${x})`,
     name: `Meaty Charge ${x}`,
     targetNum: 1,
@@ -50,7 +50,7 @@ export const meatyCharge = (x: number): CommandDefinition => ({
 })
 /**Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked) */
 export const bellowAndSing = (x: number, y: number): CommandDefinition => ({
-    actions: `deal(strength/2); effect("fatigue",${x}); ifDamageDealt(effect("debilatated",${y}))`,
+    actions: `ifDamageDealt(deal(strength/2), effect("debilatated",${y})); effect("fatigue",${x})`,
     id: `bellowAndSing(${x},${y})`,
     name: `Bellow and Sing ${x}-${y}`,
     targetNum: 1,
