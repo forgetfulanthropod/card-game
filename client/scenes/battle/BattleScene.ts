@@ -27,7 +27,7 @@ export function BattleScene(): PixiContainer {
             Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
             InfoBox({
                 info: [
-                    `Room ${scene.get('roomsPassed') + 1}`,
+                    `Room ${scene.get('numRoomsPassed') + 1}`,
                     scene.get('dungeonName'),
                 ],
             }),

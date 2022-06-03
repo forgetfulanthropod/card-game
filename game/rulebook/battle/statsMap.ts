@@ -190,6 +190,7 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         displayName: 'Penguin Knight',
         isPc: true,
         class: 'knight',
+
         constitution: 66,
         strength: 9,
         wisdom: 5,
@@ -201,10 +202,10 @@ export const statsMap: Record<CharacterName, CharacterStats> = {
         isPc: false,
         class: 'knight',
 
-        constitution: 10,
-        strength: 2,
-        wisdom: 5,
-        dexterity: 5,
+        constitution: 54,
+        strength: 11,
+        wisdom: 4,
+        dexterity: 4,
     },
     snacky: {
         name: 'snacky',

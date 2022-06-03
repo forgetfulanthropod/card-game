@@ -1,14 +1,14 @@
 import type {
     CharacterMeta,
     BattleCursor,
-    EnemyCharacterName,
     Command,
     NextCommand,
+    EnemyCharacterMeta,
 } from 'shared'
 
-import { nonNulls, vals } from 'shared/code'
+import { nonNulls } from 'shared/code'
 import { simulateCommand } from './cards'
-import { getPcTargets } from './characterGetters'
+import { getLivingNpcs, getPcTargets } from './characterGetters'
 import { enemies } from '@/rulebook'
 
 // TODO: move command definitions into rulebook object
@@ -23,34 +23,35 @@ export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
 
 function getNpcMove(
     scene: BattleCursor,
-    attacker: CharacterMeta
+    attacker: EnemyCharacterMeta
 ): Command | null {
-    const attackerName = attacker.name as EnemyCharacterName
     // TODO: handle levels correctly instead of just using the first defined level
-    const enemy = vals(enemies[attackerName])[0]
+    const enemy = enemies[attacker.name][attacker.level]
     const moves = enemy.moves
-    const move = moves[scene.get('turnCount') % moves.length]
+    const move = moves[(scene.get('turnCount') - 1) % moves.length]
     if (move == null) return move
 
-    // TODO: reconcile CardId with EnemyAttackName
     return {
         ...commandDefinitionsMap[move],
-        // uid: srandom().toString().slice(6),
         characterUid: attacker.uid,
     }
 }
 
 export function getNpcMoves(scene: BattleCursor): NextCommand[] {
-    const ac = vals(scene.get('allCharacters'))
-    const movable = ac.filter(c => !c.isPc && c.health > 0 && !c.hasMoved)
+    const movable = getLivingNpcs(scene)
+
     const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
+
+    logger.info(JSON.stringify({ movable, cmds }))
+
     return cmds.map(command => {
         const targetUids = getPcTargets(scene.get(), command)
         const outcome = simulateCommand({ command, scene, targetUids })
+
         return {
             command,
             targetUids,
-            outcome: outcome,
+            outcome,
         }
     })
 }

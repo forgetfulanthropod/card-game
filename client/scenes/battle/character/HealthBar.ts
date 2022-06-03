@@ -43,6 +43,7 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
     })
     const root = Container({
         name: 'HealthBar',
+        scale: 0.8,
         children: [
             HealthIndicator(characterCursor),
             StanceIndicator(characterCursor),

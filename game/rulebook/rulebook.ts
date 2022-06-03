@@ -21,7 +21,7 @@ const defaultRulebook: Rulebook = {
     characters: statsMap,
     dungeonLevels,
     stanceTypeMetaMap,
-    dungeonRooms: dungeonRooms,
+    dungeonRooms,
     // npcNames,
 }
 let rulebook = defaultRulebook

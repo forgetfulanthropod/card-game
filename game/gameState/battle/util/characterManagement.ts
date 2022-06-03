@@ -2,11 +2,15 @@ import type {
     CharacterMeta,
     CharacterName,
     Characters,
+    EnemyCharacterMeta,
+    EnemyCharacterName,
+    EnemyCharacters,
     OwnedCharacterStats,
     StanceName,
 } from 'shared'
 import { keys, vals } from 'shared/code'
-import { getRulebook } from '@/rulebook'
+import { enemies, getRulebook } from '@/rulebook'
+import type { BaseHealth, EnemyDefinition } from '@/rulebook/enemies'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -28,10 +32,10 @@ export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     return o
 }
 
-export function rearrangeNpcs(npcs: Characters): Characters {
+export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
     const positions = getEnemyPositions(keys(npcs).length)
 
-    const rearrangedNpcs: Characters = {}
+    const rearrangedNpcs: EnemyCharacters = {}
 
     const npcKeys = keys(npcs)
     vals(npcs).forEach((npc, i) => {
@@ -80,12 +84,12 @@ function makePositions({ n = 6 }: { n?: number }): [number, number][] {
     const measureHFull = 400
 
     const measurements = [
-        [458, 160],
-        [433, 220],
-        [405, 300],
-        [533, 220],
+        [468, 160],
+        [433, 230],
+        [395, 300],
+        [543, 230],
         [558, 160],
-        [505, 300],
+        [495, 300],
     ]
 
     return measurements
@@ -135,30 +139,33 @@ function newPCMeta(args: {
 export function newNPCMeta(args: {
     x: number
     y: number
-    name: CharacterName
+    name: EnemyCharacterName
     uid: string
-    level: string | number | null
-}): CharacterMeta {
-    const { characters: statsMap } = getRulebook()
+    level: string | number
+}): EnemyCharacterMeta {
+    const { name, level } = args
+    const enemyDefinition = enemies[name][level] as EnemyDefinition
     // debugger
-    // logger.info(`making new npc with ${JSON.stringify(args)}`)
-    // const scale = window.innerWidth / BASE_WIDTH
-    const scale = 1
 
-    const stance: StanceName = 'neutral'
     return {
-        ...statsMap[args.name],
-        health: statsMap[args.name].constitution,
+        ...enemyDefinition,
+        name,
+        displayName: '',
+        health: getHealthFromBase(enemyDefinition.constitution),
+        constitution: getHealthFromBase(enemyDefinition.constitution),
         block: 0,
         uid: args.uid,
         isPc: false,
         x: args.x,
         y: args.y,
-        screenX: (scale * BASE_WIDTH * args.x) / 100,
-        screenY: (scale * BASE_HEIGHT * args.y) / 100,
-        stance,
+        screenX: (BASE_WIDTH * args.x) / 100,
+        screenY: (BASE_HEIGHT * args.y) / 100,
         hasMoved: false,
         effects: [],
         orbs: [],
     }
+}
+
+function getHealthFromBase(base: BaseHealth): number {
+    return parseInt(`${base}`)
 }

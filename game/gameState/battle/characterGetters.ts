@@ -4,6 +4,7 @@ import type {
     CharacterUid,
     BattleScene,
     Command,
+    EnemyCharacterMeta,
 } from 'shared'
 
 import { vals } from 'shared/code'
@@ -25,6 +26,13 @@ export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
         .map(x => x.uid)
     const randomIndex = Math.floor(srandom() * uids.length)
     return uids[randomIndex]
+}
+
+export function getLivingNpcs(scene: BattleCursor): EnemyCharacterMeta[] {
+    //@ts-expect-error
+    return vals(scene.get('allCharacters')).filter(
+        c => !c.isPc && c.health > 0 && !c.hasMoved
+    ) as EnemyCharacterMeta[]
 }
 
 function getClosestAlive(

@@ -29,11 +29,16 @@ export function MainCharacterAnimation(
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
-    const desiredHeight = 260 // TODO: what is it tho
+    const heightOverrides = {
+        matchaGelatinCube: 140,
+    }
+
+    //@ts-expect-error
+    const desiredHeight = heightOverrides?.[characterMeta.name] ?? 190 // TODO: what is it tho
     const desiredScale = desiredHeight / root.height
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
+    root.x += ((characterMeta.isPc ? 1 : -2) * root.width) / 4
 
     root.y -= 20
 
