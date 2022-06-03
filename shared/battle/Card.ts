@@ -119,6 +119,7 @@ export type CardId =
 export type BasicTargetType =
     | 'friends'
     | 'enemies'
+    | 'allEnemies'
     | 'self'
     | 'card'
     | 'cardAttack'

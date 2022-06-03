@@ -24,7 +24,7 @@ export function doNpcTurn(
         return {
             args: {},
             delay: TIME_BETWEEN_NPC_MOVES,
-            type: 'resetRound',
+            type: 'endNpcTurn',
         }
     }
     return {

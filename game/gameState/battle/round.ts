@@ -8,7 +8,7 @@ import type {
 
 import { nonNulls } from 'shared/code'
 import { simulateCommand } from './cards'
-import { getLivingNpcs, getPcTargets } from './characterGetters'
+import { getLivingNpcs, getCommandTargets } from './characterGetters'
 import { enemies } from '@/rulebook'
 
 // TODO: move command definitions into rulebook object
@@ -38,14 +38,12 @@ function getNpcMove(
 }
 
 export function getNpcMoves(scene: BattleCursor): NextCommand[] {
-    const movable = getLivingNpcs(scene)
+    const movable = getLivingNpcs(scene.get())
 
     const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
 
-    logger.info(JSON.stringify({ movable, cmds }))
-
     return cmds.map(command => {
-        const targetUids = getPcTargets(scene.get(), command)
+        const targetUids = getCommandTargets(scene.get(), command)
         const outcome = simulateCommand({ command, scene, targetUids })
 
         return {

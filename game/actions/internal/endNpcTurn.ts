@@ -14,21 +14,20 @@ import { getBattleSceneIn } from '@/util'
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
 
-export const resetRound: InternalAction['resetRound'] = (
+export const endNpcTurn: InternalAction['endNpcTurn'] = (
     game: Gamecursor,
     _args: Empty
-): undefined => {
+): void => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('resetting round')
     scene.select('nextNpcCommands').set(getNpcMoves(scene))
 
     setRoundEnergy(scene)
     clearHasMoved(scene)
-    clearBlock(scene)
+
     decrementEffects(scene, 'npc')
     scene.set('isPlayerTurn', true)
+    clearBlock(scene, 'pc')
     applyTurnStartEffects(scene, 'pc')
     drawNewHand(scene)
-
-    return undefined
 }

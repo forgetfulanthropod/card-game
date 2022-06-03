@@ -10,7 +10,7 @@ import type {
 } from 'shared'
 import { keys, vals } from 'shared/code'
 import { enemies, getRulebook } from '@/rulebook'
-import type { BaseHealth, EnemyDefinition } from '@/rulebook/enemies'
+import type { BaseHealth, EnemyDefinition } from '@/rulebook'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080

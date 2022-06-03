@@ -8,7 +8,7 @@ const unknownEnemyFiller = {
     dexterity: 5,
 } as const
 
-export const statsMap: Record<CharacterName, CharacterStats> = {
+export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
     bloatDemon: {
         name: 'bloatDemon',
         displayName: 'Bloat Demon',

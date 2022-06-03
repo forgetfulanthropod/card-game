@@ -1,15 +1,15 @@
+import produce from 'immer'
 import type { BattleCursor } from 'shared'
 
-import { keys } from 'shared/code'
+import { vals } from 'shared/code'
 
-export function clearBlock(scene: BattleCursor) {
-    scene.apply('allCharacters', ac => {
-        const newAc = { ...ac }
-
-        keys(newAc).forEach(
-            cKey => (newAc[cKey] = { ...newAc[cKey], block: 0 })
-        )
-
-        return newAc
-    })
+export function clearBlock(scene: BattleCursor, which: 'pc' | 'npc') {
+    scene.apply(
+        'allCharacters',
+        produce(ac => {
+            vals(ac)
+                .filter(c => c.isPc === (which === 'pc'))
+                .forEach(c => (c.block = 0))
+        })
+    )
 }

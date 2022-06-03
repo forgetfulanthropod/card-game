@@ -1,11 +1,11 @@
 import type { InternalAction, InternalActionName, NextAction } from 'shared'
 
 import { doNpcTurn } from './doNpcTurn'
-import { resetRound } from './resetRound'
+import { endNpcTurn } from './endNpcTurn'
 
 const internalActions: InternalAction = {
     doNpcTurn,
-    resetRound,
+    endNpcTurn: endNpcTurn,
 } as const
 
 // type ArgsOf = {

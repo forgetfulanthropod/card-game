@@ -4,5 +4,5 @@ export { resetRulebook, setRulebook } from './rulebook'
 
 export { cardDefinitionsMap } from './cardDefinitionsMap'
 // todo: integrate into rulebook
-export { enemies } from './enemies'
 export { getRulebook } from './rulebook'
+export * from './enemies'

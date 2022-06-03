@@ -2,7 +2,11 @@ import type { NextAction } from 'shared'
 
 import { endRound } from './endRound'
 import { getBattleSceneIn } from '@/util'
-import { applyTurnStartEffects, decrementEffects } from '@/gameState'
+import {
+    applyTurnStartEffects,
+    clearBlock,
+    decrementEffects,
+} from '@/gameState'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 
@@ -12,6 +16,7 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
 
     decrementEffects(scene, 'pc')
     endRound(scene)
+    clearBlock(scene, 'npc')
     applyTurnStartEffects(scene, 'npc')
 
     return {
