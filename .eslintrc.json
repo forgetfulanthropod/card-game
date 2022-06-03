@@ -33,7 +33,7 @@
     "rules": {
         // "@typescript-eslint/no-use-before-define": [ "warn", { "functions": false, "classes": false, "variables": true } ],
         // auto-fixable stuff for formatter:
-        "no-unused-expressions": "warn",
+        "@typescript-eslint/no-unused-expressions": "warn",
         "consistent-return": "warn",
         "no-useless-return": "warn",
         "@typescript-eslint/ban-ts-comment": "off",
@@ -58,30 +58,12 @@
                 "null": "ignore"
             }
         ],
-        // "no-extra-parens": "warn",
-        // "@typescript-eslint/no-extra-parens": "warn",
-        // "@typescript-eslint/no-unused-vars": [ "warn", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^h$|^_" } ],
-        // for import organizing:
-        // "sort-imports": [
-        //     "warn"
-        // ],
         "@typescript-eslint/consistent-type-imports": [
             "warn",
             { "prefer": "type-imports" }
         ],
         "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "warn",
-        // "unused-imports/no-unused-vars": [
-        //     "warn",
-        //     {
-        //         "vars": "all",
-        //         "varsIgnorePattern": "^h$|^_",
-        //         "args": "after-used",
-        //         "argsIgnorePattern": "^_"
-        //     }
-        // ],
-        // "simple-import-sort/imports": "error",
-        // "simple-import-sort/exports": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",
         "@typescript-eslint/no-floating-promises": "error",
@@ -98,12 +80,34 @@
         "import/no-useless-path-segments": "error",
         "import/no-relative-parent-imports": "error",
         "import/no-mutable-exports": "error",
-        // "import/no-unused-modules": ["warn", { "unusedExports": true }],
         "import/no-duplicates": "warn",
         "import/order": "warn",
         "import/export": "warn",
-        "import/no-default-export": "warn"
-        // "import/no-extraneous-dependencies": "warn" // <-- won't work, doesnt respect
+        "import/no-default-export": "warn",
+        "import/first": "warn"
+        // "import/newline-after-import": "warn", <-- enable later
+        // "import/no-unused-modules": ["warn", { "unusedExports": true }], <-- broken with '@/*' aliasing
+        // "import/no-extraneous-dependencies": "warn" // <-- broken with `@/*` aliasing
+        // some rules of interest, could enable later:
+        // "@typescript-eslint/explicit-module-boundary-types": "warn",
+        // "@typescript-eslint/no-confusing-non-null-assertion": "warn", // Disallow non-null assertion in locations that may be confusing
+        // "@typescript-eslint/no-extra-non-null-assertion": "warn", // Disallow extra non-null assertion
+        // "@typescript-eslint/no-for-in-array": "warn",
+        // "@typescript-eslint/no-inferrable-types": "warn",
+        // "@typescript-eslint/no-meaningless-void-operator": "warn",
+        // "@typescript-eslint/no-misused-promises": "warn",
+        // "@typescript-eslint/no-redundant-type-constituents": "warn", // Disallow members of unions and intersections that do nothing or override type information
+        // "@typescript-eslint/no-unnecessary-condition": "warn", // Prevents conditionals where the type is always truthy or always falsy
+        // "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+        // "@typescript-eslint/prefer-ts-expect-error": "warn", // Enforce using @ts-expect-error over @ts-ignore
+
+        // "@typescript-eslint/non-nullable-type-assertion-style": "warn",
+        // "@typescript-eslint/require-array-sort-compare": "warn", // Require Array#sort calls to always provide a compareFunction
+        // "@typescript-eslint/restrict-plus-operands": "warn", // Require both operands of addition to have type number or string
+        // "@typescript-eslint/switch-exhaustiveness-check": "warn", // Require switch-case statements to be exhaustive with union type
+        // "@typescript-eslint/no-implied-eval": "warn",
+        // "@typescript-eslint/no-loop-func": "warn",
+        // "@typescript-eslint/no-useless-constructor": "warn"
     },
     "ignorePatterns": [
         "builds/",
