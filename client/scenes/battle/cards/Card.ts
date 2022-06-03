@@ -2,8 +2,9 @@ import type { ColorStop } from '@pixi-essentials/gradients'
 import { Tweener } from 'pixi-tweener'
 import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type { Card, CardUid, CharacterClass, CharacterUid } from 'shared'
+import type { Card, CardType, CardUid, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
+import { upperFirst } from 'lodash'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
@@ -24,14 +25,14 @@ import type {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
+import type { CardTypeAssetId } from '@/scenes'
 
 //maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
-const classToCardColorMap: Record<CharacterClass, [number, number]> = {
-    cleric: [0xbce42d, 0xffab44],
-    knight: [0xe4a72f, 0xff435a],
-    wizard: [0x44a0ff, 0x4d2fe9],
-    bard: [0x44ff82, 0x016622],
-    rogue: [0xaa44ff, 0x370561],
+const classToCardColorMap: Record<CardTypeAssetId, number[]> = {
+    cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
+    cardTypeDefense: [0xfef3d7, 0xe5f8e1, 0x5df6fd, 0x00b6fc, 0x0012de],
+    cardTypeUtility: [0xfff4d8, 0xf3f5ce, 0x9eff87, 0x42f93a, 0x1be515],
+    cardTypeEnchantment: [0xfef3d7, 0xffee98, 0xfedc41, 0xf2b90d, 0xdf8e01],
 }
 
 export function Card({
@@ -48,7 +49,7 @@ export function Card({
     events?: InteractionEvents
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeSrc(card.type)
-    const colorStops = getColorStopsFromCharacterClass(card.characterClass)
+    const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
 
     return TweenableContainer({
@@ -164,7 +165,7 @@ function getEnergyContainer(
                     // fill: ['#f3ff30', '#DEBD00', '#D88F00'],
                     fill: '#eee',
                     stroke: 'black',
-                    strokeThickness: 22,
+                    strokeThickness: 8,
                     fontSize: wh * 0.8,
                     fontFamily: 'bigFont',
                 },
@@ -207,7 +208,7 @@ function getTexts(
                 fontSize: 36 * cardFrameScale,
                 fontFamily: 'monoFont',
                 fill: 'black',
-                lineHeight: 36,
+                lineHeight: 36 * cardFrameScale,
             },
         }),
         Text({
@@ -232,10 +233,10 @@ function getMargins(cardFrameTexture: PixiTexture) {
     return { marginH, marginV }
 }
 
-function getColorStopsFromCharacterClass(
-    characterClass: CharacterClass
-): ColorStop[] {
-    const bgGradientColors = classToCardColorMap[characterClass]
+function getColorStopsFromCardType(cardType: CardType): ColorStop[] {
+    const bgGradientColors =
+        //@ts-expect-error
+        classToCardColorMap[`cardType${upperFirst(cardType)}`] as number[]
 
     return bgGradientColors.map(
         (color, i): ColorStop => ({
