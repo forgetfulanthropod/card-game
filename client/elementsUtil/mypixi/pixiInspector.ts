@@ -1,4 +1,4 @@
-/* eslint-disable no-extra-parens, no-unused-expressions, @typescript-eslint/no-explicit-any, @typescript-eslint/no-extra-semi */
+/* eslint-disable @typescript-eslint/no-unused-expressions, @typescript-eslint/no-explicit-any */
 import * as PIXI from 'pixi.js'
 
 // https://github.com/bfanger/pixi-inspector

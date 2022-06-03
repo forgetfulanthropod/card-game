@@ -1,5 +1,4 @@
-// @index(['./*.ts', '!./windowUtils.ts'], f => `export * from '${f.path}'`)
-export * from './channel.spec'
+// @index(['./*.ts', '!./windowUtils.ts', '!./channel.spec.ts'], f => `export * from '${f.path}'`)
 export * from './channel'
 export * from './debug'
 export * from './localBus'

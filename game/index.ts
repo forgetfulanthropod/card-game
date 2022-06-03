@@ -4,11 +4,11 @@
 import './config/logger'
 import './config/seedrand'
 
+import * as actions from './actions'
+
 export { setGlobalRandomSeed } from './config/seedrand'
 
 export { clearHappened, getHappened } from './util'
-
-import * as actions from './actions'
 
 // satisfies<GameActions>(actions)
 export { actions }

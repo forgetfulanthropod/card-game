@@ -4,7 +4,7 @@ import {
     getCardInstance,
     getRandomCardIdOfClass,
     updateExplanation,
-} from './cards/cardManagement'
+} from './cards'
 import { toCursor } from '@/util'
 
 export const NUM_CARD_OPTIONS = 5

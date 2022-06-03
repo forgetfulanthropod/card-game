@@ -1,6 +1,5 @@
 import type { SkeletonData } from '@pixi-spine/all-4.0'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
-export { PixiSpine }
 import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 
@@ -8,6 +7,8 @@ import type { InteractionEvents } from './mypixi'
 import { bindEvents } from './mypixi'
 import type { AnimationsOf, SpineAsset } from '@/scenes'
 import { onUpdate } from '@/util'
+
+export { PixiSpine }
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name

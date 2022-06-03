@@ -1,6 +1,4 @@
 import type { Executors, Explainers } from './util'
-
-export type { Locals } from './util'
 // @index(['./*.ts'], (f, _) => `import {explain as explain${pascalCase(f.name)}, execute as execute${pascalCase(f.name)}} from '${f.path}'`)
 import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
@@ -15,6 +13,8 @@ import {explain as explainMomentary, execute as executeMomentary} from './moment
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainQueue, execute as executeQueue} from './queue'
 import {explain as explainText, execute as executeText} from './text'
+
+export type { Locals } from './util'
 // @endindex
 
 export const explainers: Explainers = {
