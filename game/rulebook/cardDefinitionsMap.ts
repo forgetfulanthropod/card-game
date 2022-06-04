@@ -5,7 +5,7 @@ const basicMagicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'chain(deal(wisdom), " (wisdom)")',
+    actions: 'chain(deal(wisdom), "(wisdom)")',
     type: 'attack',
 } as const
 const basicAttackBase = {
@@ -13,7 +13,7 @@ const basicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'chain(deal(strength), " (strength)")',
+    actions: 'chain(deal(strength), "(strength)")',
     type: 'attack',
 } as const
 const blockBase = {
