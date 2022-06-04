@@ -82,7 +82,6 @@ function IntentArrows(
     const orig = bottomLeftCornerOf(uid)
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
-    if (nextCmd.val?.command.targetType === 'self') return null
     const hasIntentArrow = datum(false)
 
     return onDestroyed(
