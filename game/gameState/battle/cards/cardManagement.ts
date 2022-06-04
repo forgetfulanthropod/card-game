@@ -73,7 +73,8 @@ function makeCards(scene: BattleCursor): Piles {
             `basicAttack${ccuf}`,
             // `basicAttack${ccuf}`,
             `block${ccuf}`
-            // `block${ccuf}`
+            // `block${ccuf}`,
+            // 'helpingHand'
         )
         cardIds.push(getRandomCardIdOfClass(c.class))
     })

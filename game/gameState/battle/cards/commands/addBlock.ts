@@ -3,7 +3,7 @@ import { evalAll } from './util'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
     const [block] = evalAll(dslArgs)
-    return `target receives ${block} block`
+    return `+${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({

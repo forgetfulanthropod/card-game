@@ -5,7 +5,7 @@ const basicMagicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'chain(deal(wisdom), "(wisdom)")',
+    actions: 'deal(wisdom)',
     type: 'attack',
 } as const
 const basicAttackBase = {
@@ -13,7 +13,7 @@ const basicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'chain(deal(strength), "(strength)")',
+    actions: 'deal(strength)',
     type: 'attack',
 } as const
 const blockBase = {
@@ -331,7 +331,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(queue(1, addEnergy(2))), momentary())',
+        actions:
+            'chain(queue(1, addEnergy(2))), "+2 energy next turn", momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -342,7 +343,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions:
-            'choice(addBlock(dexterity + 2), addMagic(wisdom+2), addAttack(attack+2))',
+            'choice(addBlock(dexterity + 2), addWisdom(2), addStrength(2))',
         type: 'utility',
         characterClass: 'cleric',
     },
