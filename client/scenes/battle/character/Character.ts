@@ -58,9 +58,7 @@ export function Character(args: CharacterProps): PixiContainer {
                 y: 22,
             }),
             mainAnimation,
-            Adjust(HealthBar(characterMeta.uid), {
-                y: 22,
-            }),
+            Adjust(HealthBar(characterMeta.uid), { y: 11 }),
         ],
     })
 

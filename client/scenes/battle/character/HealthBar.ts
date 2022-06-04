@@ -43,7 +43,7 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
     })
     const root = Container({
         name: 'HealthBar',
-        scale: 0.8,
+        scale: 0.7,
         children: [
             HealthIndicator(characterCursor),
             StanceIndicator(characterCursor),
@@ -146,7 +146,7 @@ function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
         return Sprite({
             src: stanceSrc,
             x: HEALTH_BAR_WIDTH * 0.7,
-            y: 20,
+            y: 10,
             anchor: [1, 0],
             width: HEALTH_BAR_WIDTH / 4,
             height: (HEALTH_BAR_WIDTH / 4 / stanceSrc.width) * stanceSrc.height,
