@@ -5,7 +5,7 @@ import { evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase] = evalAll(dslArgs)
-    return `+ ${increase} ${id}`
+    return `+${increase} ${id}`
 }
 
 export const execute: Executors['effect'] = ({
