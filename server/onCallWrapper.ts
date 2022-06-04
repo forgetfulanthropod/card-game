@@ -1,7 +1,7 @@
 import type { Application } from 'express'
 import { doActionAndTakeSteps } from './sleepLoop'
 
-const config = { log: false }
+const config = { log: true }
 // const log = (...args: unknown[]) => true && logger.info(...args)
 
 function makeRandId() {
@@ -23,8 +23,7 @@ export function onCallWrapper<Args, ReturnType>(
         const randId = makeRandId()
         try {
             let result: ReturnType | null = null
-            // @ts-expect-error
-            const username = request.session.username as string
+            const username = request.body.username
             if (typeof username !== 'string') logger.error('no username!')
             if (config.log)
                 logger.info(

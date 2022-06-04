@@ -5,7 +5,7 @@ import './config/nullUtil' // eslint-disable-line import/no-internal-modules
 import { render } from 'preact'
 
 import { App } from './components'
-import { resolveWhenSocketConfirmed, startRetrying } from './connection'
+import { resolveWhenSocketConfirmed } from './connection'
 
 // @ts-expect-error
 window.loadedJs = true // for the password logic in index.html
@@ -21,7 +21,6 @@ const preactRoot = document.getElementById('preact-root') as HTMLDivElement
 
 async function main() {
     await resolveWhenSocketConfirmed()
-    startRetrying()
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)
 }

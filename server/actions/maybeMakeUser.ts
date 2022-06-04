@@ -1,7 +1,6 @@
 import type { Gamestate } from 'shared'
 
 import { makeNewUser } from './makeNewUser'
-import { setSocketId } from '@/IO'
 // import { hasUser } from '@/database'
 import {
     getDb,
@@ -13,8 +12,6 @@ import {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
 export const maybeMakeUser = (req: any): Gamestate => {
     const username: string = req.body.username
-    req.session.username = username
-    setSocketId(username, req.session.socketio)
     const maybeUser = getDb().data?.users?.[username]
     if (maybeUser) {
         getRootCursor().select('users').set(username, maybeUser)

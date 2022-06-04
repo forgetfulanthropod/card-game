@@ -33,10 +33,16 @@ export async function callApi<K extends keyof Action>(
         )
     }
     try {
+        const username = localStorage.getItem('username')
+        console.log(`callApi: username: ${username}`)
+        if (username == null)
+            throw Error("No username in localstorage. Can't call API.")
+
+        const fullArgs = { ...(args ?? {}), username }
         const startTime = Date.now()
         let json: CallReturn<F> | null = null
         if (config.method === 'get') {
-            const pairs = Object.entries(args ?? {})
+            const pairs = Object.entries(fullArgs)
                 .map((k, v) => `${k}=${v}`)
                 .join('&')
             const res = await fetch(`${name}?${pairs}`)
@@ -48,7 +54,7 @@ export async function callApi<K extends keyof Action>(
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(args),
+                body: JSON.stringify(fullArgs),
             })
 
             try {

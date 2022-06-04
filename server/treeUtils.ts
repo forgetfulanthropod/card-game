@@ -27,6 +27,7 @@ interface RootTree {
 }
 
 export function commit<A>(cursor: SCursor<A>, username: string): void {
+    logger.info('attempting to commit tree')
     const socketId = getSocketId(username)
     const path = cursor.path as string[]
     logger.info(`committing to user ${username} (id ${socketId})`)
@@ -55,6 +56,7 @@ export function emit<_A extends string, _B>(args: {
     username: string
     event: NetworkEvent<_A, _B>
 }): void {
+    logger.info('attempting to emit event')
     getGameStateCursor(args.username)
         .select('events')
         .select(args.event.type)

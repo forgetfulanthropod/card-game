@@ -8,7 +8,7 @@ import { getTree } from '@/data'
 
 const config = {
     enableExpensiveUpdateValidation: false,
-    shouldLog: false,
+    shouldLog: true,
 }
 
 const log = (...args: unknown[]) => config.shouldLog && console.log(...args)
@@ -17,32 +17,27 @@ const urlPrefix = window.location.href.split('/')[3]
 
 // MARK
 let socket: Socket = null as unknown as Socket
+// window.socket = socket
 function maybeMakeSocket(): void {
-    if (socket == null)
+    if (socket == null) {
         socket = io({
             path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
         })
+        // window.socket = socket
+        socket.once('connect', () =>
+            console.log('connected but i threw away the confirmation')
+        )
+    }
 }
 export function resolveWhenSocketConfirmed(): Promise<void> {
     maybeMakeSocket()
     log('waiting for socket connection with server')
     return new Promise(resolve => {
-        socket.once('receivedConnection', data => {
-            log('got server socket connection')
-            console.log(`'hey' data from server: ${JSON.stringify(data)}`)
+        socket.once('connect', () => {
+            log('connection confirmed with server')
             resolve()
         })
     })
-}
-
-export function startRetrying(): void {
-    const interval = 3000
-    setInterval(() => {
-        if (!socket.connected) {
-            console.log('connection died!! retrying')
-            socket.connect()
-        }
-    }, interval)
 }
 
 export function getSocket(): Socket {
