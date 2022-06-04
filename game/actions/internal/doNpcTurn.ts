@@ -1,6 +1,10 @@
-import type { NextAction } from 'shared'
+import type { BattleScene, Command, NextAction } from 'shared'
 
-import { maybeTransitionBattleState, interpretCommand } from '@/gameState'
+import {
+    maybeTransitionBattleState,
+    interpretCommand,
+    isAlive,
+} from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 const TIME_BETWEEN_NPC_MOVES = 1000
@@ -14,9 +18,9 @@ export function doNpcTurn(
     if (isBattleOver) return undefined
     const processedCmds = scene.get('nextNpcCommands')
     const processedCmd = processedCmds[args.index]
-    if (processedCmd == null) return undefined // safety check
+
     const { targetUids, command, outcome: _outcome } = processedCmd
-    if (scene.get('allCharacters', command.characterUid, 'health') ?? 0 > 0) {
+    if (validateCommand(scene.get(), command)) {
         interpretCommand({ command, targetUids, scene })
     }
 
@@ -32,4 +36,8 @@ export function doNpcTurn(
         delay: TIME_BETWEEN_NPC_MOVES,
         type: 'doNpcTurn',
     }
+}
+
+function validateCommand(scene: BattleScene, command: Command): boolean {
+    return command != null && isAlive(scene, command.characterUid)
 }
