@@ -71,9 +71,9 @@ function makeCards(scene: BattleCursor): Piles {
         cardIds.push(
             //@ts-expect-error
             `basicAttack${ccuf}`,
-            `basicAttack${ccuf}`,
-            `block${ccuf}`,
+            // `basicAttack${ccuf}`,
             `block${ccuf}`
+            // `block${ccuf}`
         )
         cardIds.push(getRandomCardIdOfClass(c.class))
     })
@@ -108,8 +108,9 @@ export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
 
     while (
         //can't be these..
-        cardId.includes(`basicAttack${characterClass}`) ||
-        cardId.includes(`block${characterClass}`)
+        ~cardId.indexOf('basicAttack') ||
+        ~cardId.indexOf('strike') ||
+        ~cardId.indexOf('block')
     ) {
         cardId = get()
     }
