@@ -249,8 +249,8 @@ function getXYRotationForNthCard(
     const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
     const MAX_HAND_SIZE = 12
     const MAX_CARD_ROTATION = Math.PI * 0.1
-    const Y_MAX_OFFSET = BASE_HEIGHT * 0.2
-    const Y_MIN_OFFSET = BASE_HEIGHT * 0.15
+    const Y_MAX_OFFSET = BASE_HEIGHT * 0.22
+    const Y_MIN_OFFSET = BASE_HEIGHT * 0.2
 
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
