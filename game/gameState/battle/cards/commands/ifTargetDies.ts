@@ -1,12 +1,12 @@
 import { assertFinite } from 'shared/code'
 import type { Executors, Explainers } from './util'
+import { evalOne } from './util'
 
-export const explain: Explainers['ifTargetDied'] = dslArgs => {
-    const conditionalMove = dslArgs[1].toString()
-    return `if target dies, then ${conditionalMove}`
+export const explain: Explainers['ifTargetDies'] = dslArgs => {
+    return `${evalOne(dslArgs[0])}\nif target dies, \n ${evalOne(dslArgs[1])}`
 }
 
-export const execute: Executors['ifTargetDied'] = ({
+export const execute: Executors['ifTargetDies'] = ({
     dslArgs,
     targetUids,
     scene,

@@ -10,7 +10,7 @@ import {explain as explainDeal, execute as executeDeal} from './deal'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
-import {explain as explainIfTargetDied, execute as executeIfTargetDied} from './ifTargetDied'
+import {explain as explainIfTargetDies, execute as executeIfTargetDies} from './ifTargetDies'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
 import {explain as explainOrb, execute as executeOrb} from './orb'
@@ -31,7 +31,7 @@ export const explainers: Explainers = {
     effect: explainEffect,
     ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
-    ifTargetDied: explainIfTargetDied,
+    ifTargetDies: explainIfTargetDies,
     killIf: explainKillIf,
     momentary: explainMomentary,
     orb: explainOrb,
@@ -52,7 +52,7 @@ export const executors: Executors = {
     effect: executeEffect,
     ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
-    ifTargetDied: executeIfTargetDied,
+    ifTargetDies: executeIfTargetDies,
     killIf: executeKillIf,
     momentary: executeMomentary,
     orb: executeOrb,

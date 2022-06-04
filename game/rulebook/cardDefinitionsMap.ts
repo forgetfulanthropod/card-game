@@ -284,7 +284,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'ifTargetDied(deal(wisdom),addBlock(dexterity)))',
+        actions: 'ifTargetDied(deal(wisdom),addBlock(dexterity))',
         type: 'attack',
         characterClass: 'cleric',
     },
