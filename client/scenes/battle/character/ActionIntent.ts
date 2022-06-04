@@ -1,5 +1,5 @@
 import type { RODatum } from 'datums'
-import { compose } from 'datums'
+import { datum, compose } from 'datums'
 import type { CharacterUid, NextCommand } from 'shared'
 import { vals } from 'shared/code'
 import { HEALTH_BAR_WIDTH } from './HealthBar'
@@ -82,11 +82,27 @@ function IntentArrows(
     const orig = bottomLeftCornerOf(uid)
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
+    if (nextCmd.val?.command.targetType === 'self') return null
+    const hasIntentArrow = datum(false)
+
     return onDestroyed(
-        If(isHovered, () => For(targets, key => IntentArrow(key)), undefined, {
-            name: 'intentArrows',
+        If(
+            hasIntentArrow,
+            () => For(targets, key => IntentArrow(key)),
+            undefined,
+            {
+                name: 'intentArrows',
+            }
+        ),
+        orig.destroy,
+        nextCmd.onChange(cmd => {
+            if (!commandHasIntentArrow(cmd)) hasIntentArrow.set(false)
+            else hasIntentArrow.set(isHovered.val)
         }),
-        orig.destroy
+        isHovered.onChange(is => {
+            if (is) hasIntentArrow.set(commandHasIntentArrow(nextCmd.val))
+            else hasIntentArrow.set(false)
+        })
     )
 
     function IntentArrow(uid: CharacterUid) {
@@ -97,6 +113,10 @@ function IntentArrows(
             dest.destroy
         )
     }
+}
+
+function commandHasIntentArrow(cmd: NextCommand | undefined) {
+    return cmd?.command.targetType !== 'self'
 }
 
 function bottomLeftCornerOf(uid: CharacterUid) {
