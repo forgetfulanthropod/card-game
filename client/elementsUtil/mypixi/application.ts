@@ -35,23 +35,23 @@ export function Application(args: {
     // setTimeout(() => console.log('TRUE FPS:', frames / (delay / 1000)), delay)
     Tweener.init(app.ticker)
 
-    setTimeout(function CornerEl() {
-        const div = document.createElement('div')
-        div.style.fontSize = '14px'
-        div.style.fontFamily = 'monospace'
-        div.style.color = 'white'
-        div.style.position = 'absolute'
-        div.style.top = '0px'
+    // setTimeout(function CornerEl() {
+    //     const div = document.createElement('div')
+    //     div.style.fontSize = '14px'
+    //     div.style.fontFamily = 'monospace'
+    //     div.style.color = 'white'
+    //     div.style.position = 'absolute'
+    //     div.style.top = '0px'
 
-        // eslint-disable-next-line
-        app!.ticker.add(_ => {
-            div.innerText = `${Math.round(
-                // eslint-disable-next-line
-                app!.ticker.FPS
-            )} frames per second`
-        })
-        document.body.appendChild(div)
-    }, 10)
+    //     // eslint-disable-next-line
+    //     app!.ticker.add(_ => {
+    //         div.innerText = `${Math.round(
+    //             // eslint-disable-next-line
+    //             app!.ticker.FPS
+    //         )} frames per second`
+    //     })
+    //     document.body.appendChild(div)
+    // }, 10)
 
     for (const c of args.children) {
         app.stage.addChild(c)
