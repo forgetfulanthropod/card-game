@@ -1,6 +1,7 @@
 import cardBodySlam from '@battleAssets/cards/Body Slam.png'
 import cardBackPileSizeOverlay from '@battleAssets/cards/card back pile size overlay.png'
 import cardBack from '@battleAssets/cards/card back.png'
+import cardEnergy from '@battleAssets/cards/parts/energy.png'
 import cardJab from '@battleAssets/cards/Jab.png'
 import cardTypeAttack from '@battleAssets/cards/parts/Attack.png'
 import cardTypeDefense from '@battleAssets/cards/parts/Defense.png'
@@ -10,7 +11,7 @@ import cardShieldOfLight from '@battleAssets/cards/Shield of Light.png'
 import cardShield from '@battleAssets/cards/Shield.png'
 import cardStrike from '@battleAssets/cards/Strike.png'
 import cardSweepTheLeg from '@battleAssets/cards/Sweep The Leg.png'
-import energy from '@battleAssets/cards/energy flame.png'
+import remainingEnergy from '@battleAssets/cards/energy flame.png'
 
 const cardArtAssets = {
     cardBodySlam,
@@ -34,7 +35,8 @@ export type CardTypeAssetId = keyof typeof cardTypeAssets
 export type CardAssetId = keyof typeof cardAssets
 
 export const cardAssets = {
-    energy,
+    remainingEnergy,
+    cardEnergy,
     cardBackPileSizeOverlay,
     cardBack,
     ...cardArtAssets,

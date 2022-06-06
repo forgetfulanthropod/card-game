@@ -125,44 +125,20 @@ function getEnergyContainer(
     card: Card,
     cardFrameTexture: PixiTexture
 ): PixiContainer {
-    const wh = cardFrameTexture.width / 4
+    const wh = cardFrameTexture.width * 0.15
     return Container({
-        x: cardFrameTexture.width * 0.47,
-        y: -cardFrameTexture.height * 0.47,
+        x: cardFrameTexture.width * 0.4,
+        y: -cardFrameTexture.height * 0.42,
         children: [
-            RoundedRectangleGradientSprite({
-                radius: wh / 2,
-                gradientArgs: {
-                    y0: wh / 2,
-                    x1: wh / 2,
-                    x0: wh / 2,
-                    y1: wh / 2,
-                    r0: 0,
-                    r1: wh / 2,
-                    colorStops: [
-                        { color: 0xee41eb, offset: 0 },
-                        { color: 0xee41eb, offset: 0.88 },
-                        // { color: 0x432a64, offset: 0.8 },
-                        { color: 0x1b081c, offset: 0.88 },
-                        // { color: 0xffffff, offset: 0.92 },
-                        { color: 0, offset: 1 },
-                        // { color: 0x432a64, offset: 0 },
-                        // { color: 0x7e4b71, offset: 0.7 },
-                        // { color: 0x916367, offset: 0.88 },
-                        // { color: 0xfff034, offset: 0.92 },
-                        // { color: 0, offset: 1 },
-                    ],
-                },
-                spriteArgs: {
-                    width: wh,
-                    height: wh,
-                    anchor: 0.5,
-                },
+            Sprite({
+                src: 'cardEnergy',
+                width: wh,
+                height: wh,
+                anchor: 0.5,
             }),
             Text({
                 text: `${card.energy}`,
                 style: {
-                    // fill: ['#f3ff30', '#DEBD00', '#D88F00'],
                     fill: '#eee',
                     stroke: 'black',
                     strokeThickness: 8,

@@ -24,18 +24,17 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
         cmds.find(({ command }) => command.characterUid === uid)
     )
 
-    const arrows = IntentArrows(uid, nextCmd, isHovered)
     const root = Container({
         children: [],
         onDestroy: [nextCmd.destroy],
     })
-    const intentArrowsContainer = () =>
-        getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] })
+
     portalize({
         from: root,
-        content: arrows,
+        content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: intentArrowsContainer,
+        to: () =>
+            getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] }),
     })
 
     return root
