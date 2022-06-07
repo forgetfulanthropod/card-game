@@ -1,4 +1,4 @@
-import { set, upperFirst } from 'lodash'
+import { set } from 'lodash'
 import type {
     Card,
     CardId,
@@ -51,34 +51,61 @@ function makeCards(scene: BattleCursor): Piles {
         // 'dutifulStab',
         // 'swordSlash',
         // 'magicRitual',
-        // 'guidingBolt',
+        // // 'guidingBolt',
         // 'guidingBolt',
         // 'shield',
         // 'shieldOfLight',
         // 'sweepTheLeg',
-        // 'sweepTheLeg',
+        // // 'sweepTheLeg',
         // 'bodySlam',
         // 'jab',
-        // 'strike',
-        // 'strike',
+        // // 'strike',
+        // // 'strike',
         // 'orbOfLightning',
         // 'orbOfProtection',
+
+        'basicMagicAttackWizard',
+        'basicMagicAttackCleric',
+        'magicRitual',
+        'chainLightning',
+        'spellBook',
+        'fireball',
+        'arcanePower',
+        'scatterBrained',
+        'magicalStorm',
+        'orbOfFrost',
+        'basicAttackCleric',
+        'basicAttackKnight',
+        'blockCleric',
+        'blockKnight',
+        'blockWizard',
+        'swordSlash',
+        'dutifulStab',
+        'charge',
+        'tetsudoFormation',
+        'guidingBolt',
+        'smite',
+        'bless',
+        'prayerOfGoodFortune',
+        'orbOfHolyLight',
+        'mantraOfPatience',
+        'helpingHand',
     ]
 
     const allCharacters = vals(scene.get('allCharacters'))
-    allCharacters.forEach(c => {
-        const ccuf = upperFirst(c.class)
-        cardIds.push(
-            //@ts-expect-error
-            `basicAttack${ccuf}`,
-            // `basicAttack${ccuf}`,
-            `block${ccuf}`
-            // `block${ccuf}`,
-            // 'helpingHand',
-            // 'smite'
-        )
-        cardIds.push(getRandomCardIdOfClass(c.class))
-    })
+    // allCharacters.forEach(c => {
+    //     const ccuf = upperFirst(c.class)
+    //     cardIds.push(
+    //         //@ts-expect-error
+    //         `basicAttack${ccuf}`,
+    //         // `basicAttack${ccuf}`,
+    //         `block${ccuf}`
+    //         // `block${ccuf}`,
+    //         // 'helpingHand',
+    //         // 'smite'
+    //     )
+    //     cardIds.push(getRandomCardIdOfClass(c.class))
+    // })
 
     return {
         draw: cardIds.reduce((acc, id, i) => {

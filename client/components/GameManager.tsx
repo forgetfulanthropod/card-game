@@ -6,11 +6,11 @@ import { ResetButton } from './ResetButton'
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
     return <AppWrap>
-        <div>
+        {/* <div>
             On branch {"'"}
             {process.env.CLIENT_GIT_BRANCH}
             {"'"}
-        </div>
+        </div> */}
         <Toaster />
         <ResetButton username={username} />
         {/* <Sidebar /> */}
