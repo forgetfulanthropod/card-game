@@ -22,6 +22,7 @@ export function buildServer(shouldWatch = shouldWatchArgv) {
         outfile: 'builds/server.js',
         sourcemap: true,
         allowOverwrite: true,
+        external: ['classic-level'],
         // tsconfig: 'server/tsconfig.json',
         define: makeBuildInfo('SERVER_'),
         watch: shouldWatch && {

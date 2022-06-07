@@ -21,3 +21,5 @@ tsconfig.tsbuildinfo
 **/*.js
 **/*.d.ts
 db.json
+server/leveldb
+server/temp

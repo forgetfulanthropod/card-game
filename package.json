@@ -4,6 +4,7 @@
         "CI": "bash run CI"
     },
     "dependencies": {
+        "classic-level": "^1.2.0",
         "datums": "^1.0.7",
         "deep-diff": "^1.0.2",
         "esbuild": "^0.14.39",

@@ -1,26 +1,15 @@
 import type { Gamestate } from 'shared'
 
 import { makeNewUser } from './makeNewUser'
-// import { hasUser } from '@/database'
-import {
-    getDb,
-    //  getDb,
-    getRootCursor,
-} from '@/treeUtils'
+import { getGamestate } from '@/db'
 
-/** Very special case! */
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
-export const maybeMakeUser = (req: any): Gamestate => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const maybeMakeUser = async (req: any): Promise<Gamestate> => {
     const username: string = req.body.username
-    const maybeUser = getDb().data?.users?.[username]
-    if (maybeUser) {
-        getRootCursor().select('users').set(username, maybeUser)
-    }
-    const userCursor = getRootCursor().select('users')
-    if (!userCursor.exists(username)) {
-        logger.info(`adding user ${username} with initial gamestate`)
-        makeNewUser({ username })
-    }
-    // commit(getRootCursor().select('users').select(username), username)
-    return userCursor.get(username)
+    if (typeof username !== 'string')
+        throw Error(`username '${username}' is not string`)
+    const maybeGamestate = await getGamestate(username)
+    if (maybeGamestate != null) return maybeGamestate
+    logger.info(`adding user ${username} with initial gamestate`)
+    return await makeNewUser(req)
 }

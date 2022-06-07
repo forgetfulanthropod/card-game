@@ -1,6 +1,7 @@
 import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
+import { range } from 'lodash'
 import { MainCharacterAnimation } from '@/scenes'
 import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
@@ -123,12 +124,16 @@ export function SelectedCharacters(): PixiContainer {
                                 3
                             const nextChoice = defaultOwnedCharacters[nextIndex]
                             console.log({ nextIndex, nextChoice })
-                            void callApi('PlaceSelectedCharacter', {
-                                character: {
-                                    ...nextChoice,
-                                    uid: `pc-${i + 1}`,
-                                },
-                                index: i as CharacterPlaceIndex,
+                            void callApi('PlaceSelectedCharacters', {
+                                characters: [
+                                    {
+                                        character: {
+                                            ...nextChoice,
+                                            uid: `pc-${i + 1}`,
+                                        },
+                                        index: i as CharacterPlaceIndex,
+                                    },
+                                ],
                             })
                         },
                         260
@@ -174,13 +179,12 @@ export function SelectedCharacters(): PixiContainer {
     }
 }
 
-function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
-    if (charactersData.length === 0) {
-        for (let index = charactersData.length; index <= 2; index++) {
-            void callApi('PlaceSelectedCharacter', {
-                character: defaultOwnedCharacters[index],
-                index: index as CharacterPlaceIndex,
-            })
-        }
-    }
+async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
+    const additions = range(3)
+        .filter(i => charactersData[i] == null)
+        .map(i => ({
+            character: defaultOwnedCharacters[i],
+            index: i as CharacterPlaceIndex,
+        }))
+    await callApi('PlaceSelectedCharacters', { characters: additions })
 }

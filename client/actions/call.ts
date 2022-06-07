@@ -5,7 +5,6 @@ import { getClientTree } from '@/data'
 
 const config = {
     shouldLog: false,
-    method: 'post' as 'get' | 'post',
     shouldSaveCalls: true,
 }
 
@@ -38,30 +37,22 @@ export async function callApi<K extends keyof Action>(
         if (username == null)
             throw Error("No username in localstorage. Can't call API.")
 
-        const fullArgs = { ...(args ?? {}), username }
+        const fullArgs = { ...(args ?? {}), username, method: name }
         const startTime = Date.now()
         let json: CallReturn<F> | null = null
-        if (config.method === 'get') {
-            const pairs = Object.entries(fullArgs)
-                .map((k, v) => `${k}=${v}`)
-                .join('&')
-            const res = await fetch(`${name}?${pairs}`)
-            json = await res.json()
-        } else {
-            const res = await fetch(`${name}`, {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(fullArgs),
-            })
+        const res = await fetch(`api`, {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(fullArgs),
+        })
 
-            try {
-                json = await res.json()
-            } catch (e) {
-                console.log(`${name}#${randId} did not return json`)
-            }
+        try {
+            json = await res.json()
+        } catch (e) {
+            console.log(`${name}#${randId} did not return json`)
         }
         if (config.shouldLog) {
             console.log(

@@ -13,9 +13,11 @@ import type {
 export interface Action {
     ActivateOrb: (_: { characterUid: CharacterUid; orb: Orb }) => void
 
-    PlaceSelectedCharacter: (_: {
-        character: OwnedCharacterStats
-        index: CharacterPlaceIndex
+    PlaceSelectedCharacters: (_: {
+        characters: {
+            character: OwnedCharacterStats
+            index: CharacterPlaceIndex
+        }[]
     }) => void
     ChangeDungeon: (_: { direction: -1 | 1 }) => void
 

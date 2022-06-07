@@ -5,7 +5,7 @@ import express from 'express'
 import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
 
-import { attachAPIRoutes } from './attachActions'
+import { api } from './attachActions'
 import { mountIo as fullMountIo } from './IO'
 
 /** Required for kaiju-router */
@@ -43,7 +43,7 @@ const app: Application = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-attachAPIRoutes(app)
+app.post('/api', api)
 
 // eslint-disable-next-line no-console
 console.log('DIRNAME:', __dirname)

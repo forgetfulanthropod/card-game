@@ -1,5 +1,6 @@
 import type { Server } from 'http'
 import { has } from 'lodash'
+import type { Gamestate, NetworkEvent } from 'shared'
 import { Server as SocketServer } from 'socket.io'
 
 const usernameToSocketId: Record<string, string> = {}
@@ -11,9 +12,20 @@ export function getSocketId(username: string): string {
     throw Error(`no socket for user ${username}`)
 }
 let io: null | SocketServer = null
-export function getIo(): SocketServer {
-    if (io == null) throw Error('socket.io was not initialized')
-    return io
+
+export function emitNewGamestate(username: string, gamestate: Gamestate) {
+    if (io == null) throw Error('io is null')
+    const socketId = getSocketId(username)
+    io.to(socketId).emit('update', { data: gamestate })
+}
+
+export function emitNetworkEvent<_A extends string, _B>(args: {
+    username: string
+    event: NetworkEvent<_A, _B>
+}): void {
+    if (io == null) throw Error('io is null')
+    const socketId = getSocketId(args.username)
+    io.to(socketId).emit(args.event.type, args.event)
 }
 
 export function mountIo(

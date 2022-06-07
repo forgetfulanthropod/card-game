@@ -127,7 +127,7 @@ class Runner {
     }
 }
 
-async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
+function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     console.log(`there are ${availableChars.length} options`)
     if (availableChars.length === 0) {
         throw Error('no chars left')
@@ -136,11 +136,11 @@ async function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     if (charChoice == null) {
         throw Error('null char')
     }
-    await callApi('PlaceSelectedCharacter', {
-        character: charChoice,
-        //TODO: HOW??
-        index: 0,
-    })
+    // await callApi('PlaceSelectedCharacters', {
+    //     character: charChoice,
+    //     //TODO: HOW??
+    //     index: 0,
+    // })
 }
 
 function getAvailableChars(scene: EntryScene, tree: Gamestate) {
