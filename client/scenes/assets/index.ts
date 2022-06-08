@@ -7,6 +7,7 @@ export { characterStatusAssets } from './characterStatuses'
 export * from './effects'
 export { healthBarAssets } from './healthBar'
 export { orbAssets } from './orbs'
+export { intentAssets } from './intentAssets'
 export { spineAssets } from './spines'
 
 export * from './cards'

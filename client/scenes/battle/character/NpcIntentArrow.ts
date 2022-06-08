@@ -18,7 +18,7 @@ import {
 } from '@/elementsUtil'
 import { highlightIntentFrom, toDatum } from '@/util'
 
-export function NpcIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
+export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
     const battle = getBattleScene()
     const nextCmd = toDatum(battle.select('nextNpcCommands'), cmds =>
         cmds.find(({ command }) => command.characterUid === uid)

@@ -4,7 +4,7 @@ import type {
     CharacterUid,
     Command,
     CommandQueue,
-    DamageMap,
+    StatChangeMap,
     DungeonName,
     Pile,
     Piles,
@@ -33,7 +33,8 @@ export interface BattleScene extends SceneHas {
 
 /** May later have e.g. DOT effects */
 export interface CommandOutcome {
-    damages: DamageMap
+    damages: StatChangeMap
+    blocks: StatChangeMap
 }
 
 export interface NextCommand {

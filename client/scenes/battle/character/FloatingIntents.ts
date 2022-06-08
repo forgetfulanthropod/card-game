@@ -35,16 +35,9 @@ function FloatingIntent(
             .find(cmd => cmd.command.characterUid === intenderUid)
         if (nextCmd == null) throw new Error("shit it's broken")
 
-        const textEl = Text({
-            text: nextCmd.outcome.damages[cuid],
-            anchor: 0.5,
-            style: {
-                fill: 'black',
-                strokeThickness: 5,
-                stroke: 'white',
-                fontFamily: 'monoFont',
-            },
-        })
+        let children = DamageIntended(nextCmd.outcome.damages[cuid])
+        if (nextCmd.command.targetType === 'self')
+            children = BlockIntended(nextCmd.outcome.blocks[intenderUid])
 
         const root = Container({
             events: {
@@ -54,14 +47,7 @@ function FloatingIntent(
                 pointerout: stopInteracting,
             },
             x: index * 44,
-            children: [
-                Sprite({
-                    scale: 46 / getTexture('floatingIntentAmount').width,
-                    src: 'floatingIntentAmount',
-                    anchor: 0.5,
-                }),
-                textEl,
-            ],
+            children,
         })
 
         return root
@@ -78,4 +64,44 @@ function FloatingIntent(
             root.filters = []
         }
     }
+}
+
+function DamageIntended(amount: number) {
+    return [
+        Sprite({
+            scale: 46 / getTexture('floatingIntentAmount').width,
+            src: 'floatingIntentAmount',
+            anchor: 0.5,
+        }),
+        Text({
+            text: `${amount}`,
+            anchor: 0.5,
+            style: {
+                fill: 'black',
+                strokeThickness: 5,
+                stroke: 'white',
+                fontFamily: 'monoFont',
+            },
+        }),
+    ]
+}
+
+function BlockIntended(amount: number) {
+    return [
+        Sprite({
+            scale: 86 / getTexture('blockIntent').width,
+            src: 'blockIntent',
+            anchor: 0.5,
+        }),
+        Text({
+            text: `${amount}`,
+            anchor: 0.5,
+            style: {
+                fill: 'black',
+                strokeThickness: 5,
+                stroke: 'white',
+                fontFamily: 'monoFont',
+            },
+        }),
+    ]
 }
