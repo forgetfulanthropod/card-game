@@ -25,7 +25,7 @@
         ".eslintcache": true,
         "**/dist/": true,
 
-        ".vscode": true,
+        // ".vscode": true,
         ".github": true,
         "builds": true,
         "ignore": true,
@@ -34,7 +34,7 @@
         ".prettierignore": true,
         ".prettierrc.json": true,
         "arkit.json": true,
-        "package.json": true,
+        // "package.json": true,
         "pnpm-lock.yaml": true,
         "pnpm-workspace.yaml": true,
         "README.md": true,

@@ -45,7 +45,7 @@ export function explainCommand(command: Command, scene: BattleCursor): string {
     return res
 }
 
-export function explainActions(actions: string, locals?: object) {
+export function explainActions(actions: string, locals?: object): string {
     const wrappedExplainers = entryMap(
         explainers,
         (_, func) =>

@@ -154,10 +154,6 @@ function server:build-watch() {
 function server:tsc() {
     tsc --project server/tsconfig.json
 }
-function server:test() {
-    cd server
-    testyts
-}
 
 ## CRYPTO SERVER
 
@@ -184,10 +180,6 @@ function db:run() {
 }
 function db:tsc() {
     tsc --project db/tsconfig.json
-}
-function db:test() {
-    cd db
-    testyts
 }
 
 # # Check if command is valid, i.e. in valid list; if so then execute it
