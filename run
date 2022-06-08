@@ -30,19 +30,15 @@ function clean-tsc-all() {
 }
 
 function tsc-all() {
-    tsc -b server game shared client
+    tsc -b .
 }
 
 function build-all() {
     node scripts/buildAll.mjs
 }
 
-function clean-builds() {
-    rm -rf builds
-    rm -f db/db-build.js
-}
-
 function fmt() {
+    generate-indices
     prettier-no-jsx-parens -w -l .
     eslint . --fix --cache
 }
@@ -51,15 +47,6 @@ function fmt() {
 function biggest-dirs() {
     set +x
     fd -t d | while read -r line; do echo $(ls "$line" | wc -l) $line; done | sort -n
-}
-
-# function fmt() {
-#     pprettier --write \"**/*.{ts,tsx,json,css,mjs,js}\"
-#     eslint . --fix
-# }
-
-function self-fmt() {
-    ~/go/bin/shfmt -l -w -i 4 ./run
 }
 
 function generate-indices() {
@@ -128,7 +115,7 @@ function client:bare-build-watch() {
     BARE=yes client:build-watch
 }
 function client:tsc() {
-    tsc --project client/tsconfig.json
+    tsc --build client
 }
 function client:live-serve() {
     live-server builds/client --host=localhost --port=3000
@@ -152,43 +139,8 @@ function server:build-watch() {
     node scripts/serverEsbuild.mjs watch
 }
 function server:tsc() {
-    tsc --project server/tsconfig.json
+    tsc -b server
 }
-
-## CRYPTO SERVER
-
-function crypto:build() {
-    esbuild crypto-server/index.ts --bundle --minify --tree-shaking=true --platform=node --outfile=builds/crypto.js
-}
-function crypto:start() {
-    rm -f builds/crypto.js && npm run build && node build.js
-}
-function crypto:tsc() {
-    tsc --project crypto-server/tsconfig.json
-}
-
-## DATABASE
-
-function db:build() {
-    rm -f db/db-build.js && esbuild db/index.ts --platform=node --bundle --outfile=db/db-build.js
-}
-function db:server() {
-    node --enable-source-maps db/db-build.js
-}
-function db:run() {
-    db:build && db:server
-}
-function db:tsc() {
-    tsc --project db/tsconfig.json
-}
-
-# # Check if command is valid, i.e. in valid list; if so then execute it
-# if [[ " ${validCommands[*]} " =~ " ${1} " ]]; then
-#     set -x # print commands as executed
-#     eval "$@"
-# else
-#     echo "Unknown command: $1"
-# fi
 
 set -x # print commands as executed
 eval "$@"
