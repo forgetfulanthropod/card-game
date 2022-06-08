@@ -284,7 +284,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'ifTargetDied(deal(wisdom),addBlock(dexterity))',
+        actions: 'smite()',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -311,7 +311,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             },
         ],
         actions:
-            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 3)], momentary())',
+            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)], momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },

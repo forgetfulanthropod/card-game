@@ -15,6 +15,7 @@ export const execute: Executors['ifFirstPlay'] = ({
     if (cardUid == null) throw Error('cardUid is null')
 
     const thisId = scene.select('cards', 'hand', cardUid).get('id')
+    if (thisId == null) throw Error('card is not in hand!')
     if (!scene.get('cardsPlayedThisRoom').some(c => c.id === thisId)) {
         dslArgs.forEach(a => a.eval())
     }

@@ -30,6 +30,7 @@ export interface CalculatedCharacterStats {
     damageTakeMultiplier: number
     damageTakeAddend: number
     blockMultiplier: number
+    health: number
 }
 
 export type OwnedCharacterStats = CharacterStats &

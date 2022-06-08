@@ -14,15 +14,20 @@ export const execute: Executors['killIf'] = ({
     scene,
     command,
 }) => {
+    console.log(0)
     const [condition] = evalAll(dslArgs)
+    console.log(1)
     if (targetUids.length !== 1) throw Error('killIf only works on one target')
     const targetUid = targetUids[0]
     const healthBefore = scene.get('allCharacters', targetUid, 'health')
+    console.log(2)
 
     if (healthBefore <= 0) {
         logger.warn('killIf: target already dead')
         return
     }
+    console.log(3)
+
     if (condition) {
         emitDamage({
             moveName: 'Kill',

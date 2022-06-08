@@ -80,6 +80,8 @@ export type CommandId =
     | CardId
     /** For enqueueAction() */
     | `generated-command-${number}`
+    /** For test suites */
+    | 'unknown'
 
 export type CardId =
     | 'shieldOfLight'

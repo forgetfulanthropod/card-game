@@ -19,6 +19,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         isSkipped: false,
         damageTakeMultiplier: 1,
         damageTakeAddend: 0,
+        health: cm.health,
     }
     cm.effects.forEach(effect => {
         effectFuncs[effect.id](stats)

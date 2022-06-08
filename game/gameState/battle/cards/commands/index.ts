@@ -1,21 +1,42 @@
 import type { Executors, Explainers } from './util'
 // @index(['./*.ts'], (f, _) => `import {explain as explain${pascalCase(f.name)}, execute as execute${pascalCase(f.name)}} from '${f.path}'`)
-import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
-import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
-import {explain as explainAddStrength, execute as executeAddStrength} from './addStrength'
-import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWisdom'
-import {explain as explainChain, execute as executeChain} from './chain'
-import {explain as explainChoice, execute as executeChoice} from './choice'
-import {explain as explainDeal, execute as executeDeal} from './deal'
-import {explain as explainEffect, execute as executeEffect} from './effect'
-import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
-import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
-import {explain as explainIfTargetDies, execute as executeIfTargetDies} from './ifTargetDies'
-import {explain as explainKillIf, execute as executeKillIf} from './killIf'
-import {explain as explainMomentary, execute as executeMomentary} from './momentary'
-import {explain as explainOrb, execute as executeOrb} from './orb'
-import {explain as explainQueue, execute as executeQueue} from './queue'
-import {explain as explainText, execute as executeText} from './text'
+import {
+    explain as explainAddBlock,
+    execute as executeAddBlock,
+} from './addBlock'
+import {
+    explain as explainAddEnergy,
+    execute as executeAddEnergy,
+} from './addEnergy'
+import {
+    explain as explainAddStrength,
+    execute as executeAddStrength,
+} from './addStrength'
+import {
+    explain as explainAddWisdom,
+    execute as executeAddWisdom,
+} from './addWisdom'
+import { explain as explainChain, execute as executeChain } from './chain'
+import { explain as explainChoice, execute as executeChoice } from './choice'
+import { explain as explainDeal, execute as executeDeal } from './deal'
+import { explain as explainEffect, execute as executeEffect } from './effect'
+import {
+    explain as explainIfDamageDealt,
+    execute as executeIfDamageDealt,
+} from './ifDamageDealt'
+import {
+    explain as explainIfFirstPlay,
+    execute as executeIfFirstPlay,
+} from './ifFirstPlay'
+import { explain as explainSmite, execute as executeSmite } from './smite'
+import { explain as explainKillIf, execute as executeKillIf } from './killIf'
+import {
+    explain as explainMomentary,
+    execute as executeMomentary,
+} from './momentary'
+import { explain as explainOrb, execute as executeOrb } from './orb'
+import { explain as explainQueue, execute as executeQueue } from './queue'
+import { explain as explainText, execute as executeText } from './text'
 // @endindex
 export type { Locals } from './util'
 
@@ -31,7 +52,7 @@ export const explainers: Explainers = {
     effect: explainEffect,
     ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
-    ifTargetDies: explainIfTargetDies,
+    smite: explainSmite,
     killIf: explainKillIf,
     momentary: explainMomentary,
     orb: explainOrb,
@@ -52,7 +73,7 @@ export const executors: Executors = {
     effect: executeEffect,
     ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
-    ifTargetDies: executeIfTargetDies,
+    smite: executeSmite,
     killIf: executeKillIf,
     momentary: executeMomentary,
     orb: executeOrb,

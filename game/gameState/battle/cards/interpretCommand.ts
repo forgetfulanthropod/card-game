@@ -8,7 +8,7 @@ import type {
     Command,
     CommandOutcome,
 } from 'shared'
-import { entryMap } from 'shared/code'
+import { entryMap, jss } from 'shared/code'
 import type { Locals } from './commands'
 import { executors, explainers } from './commands'
 import { extractBlocks, extractDamages } from './outcomeUtil'
@@ -104,7 +104,11 @@ function executeCommand({
     )
     const ctx = generateAnguContext(wrappedExecutors)
 
-    angu.evaluate(command.actions, ctx, locals)
+    const output = angu.evaluate(command.actions, ctx, locals)
+    if (output.kind === 'err') {
+        logger.error(['error in command:', output.value])
+        throw Error(jss`error in command: ${output.value}`)
+    }
 
     maybeTransitionBattleState(scene)
 }
