@@ -16,11 +16,15 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
     const nextNpcCommandsCursor = getBattleScene().select('nextNpcCommands')
 
     return For(
-        toDatum(nextNpcCommandsCursor, all => {
-            return all
-                .filter(cmd => cmd.targetUids.includes(cuid))
+        toDatum(getBattleScene(), ({ nextNpcCommands, allCharacters }) =>
+            nextNpcCommands
+                .filter(
+                    cmd =>
+                        cmd.targetUids.includes(cuid) &&
+                        allCharacters[cmd.command.characterUid].health > 0
+                )
                 .map(cmd => cmd.command.characterUid)
-        }),
+        ),
         FloatingIntent(nextNpcCommandsCursor, cuid)
     )
 }
