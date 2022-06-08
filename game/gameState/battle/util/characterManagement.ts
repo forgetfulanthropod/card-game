@@ -86,10 +86,10 @@ function makePositions({ n = 6 }: { n?: number }): [number, number][] {
     const measurements = [
         [395, 130],
         [433, 200],
-        [468, 270],
+        [484, 270],
         [543, 200],
-        [558, 130],
-        [495, 270],
+        [495, 130],
+        [584, 270],
     ]
 
     return measurements
