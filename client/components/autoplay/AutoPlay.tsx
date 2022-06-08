@@ -88,7 +88,7 @@ class Runner {
         const availableChars = getAvailableChars(scene, tree)
         if (availableChars.length > 0) {
             toast('adding another character')
-            await addNewCharacter(availableChars)
+            addNewCharacter(availableChars)
             return
         }
         toast('out of points. starting battle.')

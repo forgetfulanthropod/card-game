@@ -2,9 +2,10 @@
 
 import { getInitialGameState } from 'game'
 import type { Gamestate } from 'shared'
+import type { Request } from 'express'
 import { setGamestate } from '@/db'
 
-export const makeNewUser = async (req: any): Promise<Gamestate> => {
+export const makeNewUser = async (req: Request): Promise<Gamestate> => {
     logger.info('making new user')
     const gs = getInitialGameState(req.body.username)
     logger.info([
