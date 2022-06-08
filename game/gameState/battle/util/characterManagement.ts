@@ -68,9 +68,9 @@ function makeLeftPositions(): [
     const measureHFull = 886
 
     const measurements = [
-        [477, 333],
-        [358, 475],
-        [271, 655],
+        [477, 303],
+        [358, 445],
+        [221, 595],
     ]
 
     return measurements.map(m => [
@@ -84,12 +84,12 @@ function makePositions({ n = 6 }: { n?: number }): [number, number][] {
     const measureHFull = 400
 
     const measurements = [
-        [468, 160],
-        [433, 230],
-        [395, 300],
-        [543, 230],
-        [558, 160],
-        [495, 300],
+        [395, 130],
+        [433, 200],
+        [468, 270],
+        [543, 200],
+        [558, 130],
+        [495, 270],
     ]
 
     return measurements

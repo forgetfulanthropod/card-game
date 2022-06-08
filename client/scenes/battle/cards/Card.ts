@@ -142,7 +142,7 @@ function getEnergyContainer(
                     fill: '#eee',
                     stroke: 'black',
                     strokeThickness: 8,
-                    fontSize: wh * 0.8,
+                    fontSize: wh * 1.1,
                     fontFamily: 'bigFont',
                 },
                 anchor: [0.5, 0.5],

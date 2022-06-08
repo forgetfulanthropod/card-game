@@ -75,6 +75,7 @@ export function Character(args: CharacterProps): PixiContainer {
         name: 'Character Wrap',
         x: screenX,
         y: screenY,
+        scale: (characterMeta.y / 100) * 0.3 + 0.9,
         children: [
             mainContainer,
             getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
