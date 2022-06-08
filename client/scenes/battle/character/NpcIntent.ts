@@ -16,9 +16,9 @@ import {
     Sprite,
     getTexture,
 } from '@/elementsUtil'
-import { toDatum } from '@/util'
+import { highlightIntentFrom, toDatum } from '@/util'
 
-export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
+export function NpcIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
     const battle = getBattleScene()
     const nextCmd = toDatum(battle.select('nextNpcCommands'), cmds =>
         cmds.find(({ command }) => command.characterUid === uid)
@@ -93,6 +93,10 @@ function IntentArrows(
             }
         ),
         orig.destroy,
+        // overrides everything
+        highlightIntentFrom.onChange(_uid => {
+            hasIntentArrow.set(_uid === uid)
+        }),
         nextCmd.onChange(cmd => {
             if (!commandHasIntentArrow(cmd)) hasIntentArrow.set(false)
             else hasIntentArrow.set(isHovered.val)

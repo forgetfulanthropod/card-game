@@ -11,7 +11,8 @@ import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { MoveInfo } from './MoveInfo'
-import { ActionIntent } from './ActionIntent'
+import { NpcIntent } from './NpcIntent'
+import { FloatingIntents } from './FloatingIntents'
 import { MainCharacterAnimation, getOrbTexture } from '@/scenes'
 import { onUpdate } from '@/util'
 import {
@@ -54,10 +55,13 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainContainer = Container({
         isHoveredDatum: isHovered,
         children: [
-            Adjust(ActionIntent(characterMeta.uid, isHovered), {
+            Adjust(NpcIntent(characterMeta.uid, isHovered), {
                 y: 22,
             }),
             mainAnimation,
+            Adjust(FloatingIntents(characterMeta.uid), {
+                y: -(mainAnimation?.height ?? 0),
+            }),
             Adjust(HealthBar(characterMeta.uid), { y: 11 }),
         ],
     })

@@ -9,5 +9,6 @@ export const brightBackLightIsShining = datum<boolean>(false)
 
 //battle
 export const hoveredCharacterUid = datum<CharacterUid | null>(null)
+export const highlightIntentFrom = datum<CharacterUid | null>(null)
 
 export const animation$ = new Channel<'scene exit done'>('animation')

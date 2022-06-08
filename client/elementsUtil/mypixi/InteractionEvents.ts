@@ -20,6 +20,7 @@ export function bindEvents(
     // console.log('binding', events)
 
     el.interactive = true
+    el.cursor = 'pointer'
     //@ts-expect-error
     keys(events).map(eventId => {
         //@ts-expect-error
