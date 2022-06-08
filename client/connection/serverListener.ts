@@ -52,6 +52,13 @@ export function attachServerListener(): void {
         // getTree().set(data)
         updateBoabab(data, path)
     })
+    socket.on('connect', () => {
+        const username = localStorage.getItem('username')
+        if (username != null) {
+            socket.emit('username', { username, socketId: socket.id })
+        }
+    })
+    // socket.on()
 }
 
 function updateBoabab(fromServer: unknown, path: string[]): void {
