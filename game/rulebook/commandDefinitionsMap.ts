@@ -16,9 +16,9 @@ const singleOpponentTargetCommands = {
     /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).*/
     mimicAttack: ['Mimic Attack', 'mimicAttack()'],
     /**Rusty Poke (DOT 2, also applies Fatigue 1) */
-    rustyPokeHigh: ['Rusty Poke High', 'dot(2); effect("fatigue", 1)'],
+    rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigue", 1)'],
     /**Rusty Poke (DOT 2) */
-    rustyPokeLow: ['Rusty Poke Low', 'dot(2)'],
+    rustyPokeLow: ['Rusty Poke Low', 'deal(strength)'],
     /**Basic Attack */
     basicAttack: ['Basic Attack', 'deal(strength)'],
     /**Chomp (BA) */

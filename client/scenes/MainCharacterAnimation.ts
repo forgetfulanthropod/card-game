@@ -31,7 +31,7 @@ export function MainCharacterAnimation(
     })
 
     const heightOverrides = {
-        matchaGelatinCube: 14 / 19,
+        matchaGelatinCube: 15 / 19,
     }
 
     //@ts-expect-error

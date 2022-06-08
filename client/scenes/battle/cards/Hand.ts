@@ -138,7 +138,7 @@ function getFocus(
         animateTo(cardEl, {
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.78,
+            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.7,
             scale:
                 (CARD_WIDTH_FULL / CARD_WIDTH_IN_HAND) *
                 initialDisplayVal.scale,

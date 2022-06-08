@@ -11,7 +11,8 @@ import { keys } from 'shared/code'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { MoveInfo } from './MoveInfo'
-import { ActionIntent } from './ActionIntent'
+import { NpcIntentArrow } from './NpcIntentArrow'
+import { FloatingIntents } from './FloatingIntents'
 import { MainCharacterAnimation, getOrbTexture } from '@/scenes'
 import { onUpdate } from '@/util'
 import {
@@ -54,10 +55,13 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainContainer = Container({
         isHoveredDatum: isHovered,
         children: [
-            Adjust(ActionIntent(characterMeta.uid, isHovered), {
+            Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
                 y: 22,
             }),
             mainAnimation,
+            Adjust(FloatingIntents(characterMeta.uid), {
+                y: -(mainAnimation?.height ?? 0),
+            }),
             Adjust(HealthBar(characterMeta.uid), { y: 11 }),
         ],
     })
@@ -75,6 +79,8 @@ export function Character(args: CharacterProps): PixiContainer {
         name: 'Character Wrap',
         x: screenX,
         y: screenY,
+        // scale: (characterMeta.y / 100) * 0.3 + 0.9,
+        scale: 0.3 * 0.3 + 0.9,
         children: [
             mainContainer,
             getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),

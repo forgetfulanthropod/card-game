@@ -11,7 +11,7 @@ import type {
 import { entryMap } from 'shared/code'
 import type { Locals } from './commands'
 import { executors, explainers } from './commands'
-import { extractDamages } from './outcomeUtil'
+import { extractBlocks, extractDamages } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
 import { clearHappened, emit, getHappened } from '@/util'
 import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
@@ -67,7 +67,7 @@ interface CommandDetail {
 /** Does not modify game state (or shouldn't) */
 export function simulateCommand(args: CommandDetail): CommandOutcome {
     const locals = localsFromCommand(args)
-    if (locals.isSkipped) return { damages: {} }
+    if (locals.isSkipped) return { damages: {}, blocks: {} }
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
     const username = args.scene.get('username')
     const happened = getHappened(username)
@@ -77,7 +77,8 @@ export function simulateCommand(args: CommandDetail): CommandOutcome {
         emit({ username, event })
     }
     const damages = extractDamages(args.scene.get(), sceneCopy.get())
-    return { damages }
+    const blocks = extractBlocks(args.scene.get(), sceneCopy.get())
+    return { damages, blocks }
 }
 
 function executeCommand({

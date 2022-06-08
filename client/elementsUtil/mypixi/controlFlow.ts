@@ -77,7 +77,7 @@ interface KeyedContainer extends PixiContainer {
 // TODO: accept array of strings or numbers
 export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T>,
-    render: (item: T[number]) => DisplayObject,
+    render: (item: T[number], index: number) => DisplayObject,
     position?: (index: number) => { x?: number; y?: number },
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
@@ -114,8 +114,8 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
         const newItems = hasKey
             ? items.filter(v => !oldKeys.includes(v.key))
             : items.filter(k => !oldKeys.includes(k))
-        const newChildren = newItems.map(it => {
-            const c = render(it) as KeyedDisplayObject
+        const newChildren = newItems.map((it, i) => {
+            const c = render(it, i) as KeyedDisplayObject
             c.key = typeof it === 'object' ? it.key : it
             return c
         })
