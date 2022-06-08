@@ -176,8 +176,8 @@ function EnemyIntentArrow(
                 rotation,
                 x: origin.val.x,
                 y: origin.val.y,
-            }),
-            text
+            })
+            // text
         )
     }
 }
