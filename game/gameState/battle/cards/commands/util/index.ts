@@ -25,8 +25,11 @@ export function s(n: number) {
 
 interface ArgsOf {
     addBlock: [block: number]
+    addWisdom: [block: number]
+    addStrength: [block: number]
     addEnergy: [energy: number]
 
+    choice: any[]
     chain: any[]
     deal: [damage: number, times?: number]
     effect: [id: EffectId, increase: number, targetType?: 'friends' | 'enemies']
@@ -35,7 +38,7 @@ interface ArgsOf {
     orb: [type: OrbType, count: number]
     text: [str: string]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
-    ifTargetDied: [mainMove: any, conditionalMove: any]
+    ifTargetDies: [mainMove: any, conditionalMove: any]
     queue: [numTurns: number, move: any]
 
     killIf: [condition: boolean]
@@ -53,6 +56,10 @@ export type Executors = {
 }
 export type Explainers = {
     [K in keyof ArgsOf]: (dslArgs: Anguify<ArgsOf[K]>) => string
+}
+
+export function evalOne(angu: VAngu) {
+    return angu.eval()
 }
 
 export function evalAll<T extends any[]>(angus: Anguify<T>): T {

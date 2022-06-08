@@ -1,7 +1,7 @@
 import type { CardDefinition, CardId } from 'shared'
 
 const basicMagicAttackBase = {
-    name: 'Basic Magic Attack',
+    name: 'Magic Strike',
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
@@ -9,15 +9,15 @@ const basicMagicAttackBase = {
     type: 'attack',
 } as const
 const basicAttackBase = {
-    name: 'Basic Attack',
-    energy: 0,
+    name: 'Strike',
+    energy: 1,
     targetNum: 1,
     targetType: 'enemies',
     actions: 'deal(strength)',
     type: 'attack',
 } as const
 const blockBase = {
-    name: 'Block',
+    name: 'Shield',
     energy: 1,
     targetNum: 1,
     targetType: 'friends',
@@ -232,7 +232,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'swordSlash',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'deal(0.5 * strength)',
+        actions: 'chain(deal(0.5 * strength), "to two targets")',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -284,7 +284,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'ifTargetDied(deal(wisdom),addBlock(dexterity)))',
+        actions: 'ifTargetDied(deal(wisdom),addBlock(dexterity))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -331,7 +331,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(queue(1, addEnergy(2))), momentary())',
+        actions:
+            'chain(queue(1, addEnergy(2))), "+2 energy next turn", momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -342,7 +343,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions:
-            'choice(addBlock(dexterity + 2), addMagic(wisdom+2), addAttack(attack+2))',
+            'choice(addBlock(dexterity + 2), addWisdom(2), addStrength(2))',
         type: 'utility',
         characterClass: 'cleric',
     },

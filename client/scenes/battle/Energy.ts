@@ -55,4 +55,4 @@ function EnergyEl(value: ROCursor<number>): PixiContainer {
     })
 }
 
-export const getEnergySrc = () => getTexture('energy')
+export const getEnergySrc = () => getTexture('remainingEnergy')

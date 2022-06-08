@@ -19,7 +19,7 @@ export const endNpcTurn: InternalAction['endNpcTurn'] = (
     _args: Empty
 ): void => {
     const scene = getBattleSceneIn(game)
-    if (DEBUG) logger.info('resetting round')
+    if (DEBUG) logger.info('ending NPC turn')
     scene.select('nextNpcCommands').set(getNpcMoves(scene))
 
     setRoundEnergy(scene)

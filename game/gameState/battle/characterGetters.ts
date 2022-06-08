@@ -40,6 +40,10 @@ export function getLivingPcs(scene: BattleScene): CharacterMeta[] {
     return vals(scene.allCharacters).filter(c => c.isPc && c.health > 0)
 }
 
+export function isAlive(scene: BattleScene, uid: CharacterUid): boolean {
+    return scene.allCharacters[uid]?.health > 0
+}
+
 function getClosestAlive(
     allCharacters: CharacterMeta[],
     character: CharacterMeta,

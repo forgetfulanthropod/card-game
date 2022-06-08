@@ -2,8 +2,8 @@ import type { Executors, Explainers } from './util'
 
 export const explain: Explainers['ifFirstPlay'] = dslArgs => {
     return (
-        'if first use in room:' +
-        dslArgs.map(link => ' - ' + link.eval()).join('\n')
+        '\nif first use in room:\n ' +
+        dslArgs.map(link => `${link.eval()}`).join('\n')
     )
 }
 

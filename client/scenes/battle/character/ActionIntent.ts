@@ -1,5 +1,5 @@
 import type { RODatum } from 'datums'
-import { compose } from 'datums'
+import { datum, compose } from 'datums'
 import type { CharacterUid, NextCommand } from 'shared'
 import { vals } from 'shared/code'
 import { HEALTH_BAR_WIDTH } from './HealthBar'
@@ -24,18 +24,17 @@ export function ActionIntent(uid: CharacterUid, isHovered: RODatum<boolean>) {
         cmds.find(({ command }) => command.characterUid === uid)
     )
 
-    const arrows = IntentArrows(uid, nextCmd, isHovered)
     const root = Container({
         children: [],
         onDestroy: [nextCmd.destroy],
     })
-    const intentArrowsContainer = () =>
-        getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] })
+
     portalize({
         from: root,
-        content: arrows,
+        content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: intentArrowsContainer,
+        to: () =>
+            getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] }),
     })
 
     return root
@@ -82,11 +81,26 @@ function IntentArrows(
     const orig = bottomLeftCornerOf(uid)
     const targets = compose(([cmd]) => cmd?.targetUids ?? [], nextCmd)
 
+    const hasIntentArrow = datum(false)
+
     return onDestroyed(
-        If(isHovered, () => For(targets, key => IntentArrow(key)), undefined, {
-            name: 'intentArrows',
+        If(
+            hasIntentArrow,
+            () => For(targets, key => IntentArrow(key)),
+            undefined,
+            {
+                name: 'intentArrows',
+            }
+        ),
+        orig.destroy,
+        nextCmd.onChange(cmd => {
+            if (!commandHasIntentArrow(cmd)) hasIntentArrow.set(false)
+            else hasIntentArrow.set(isHovered.val)
         }),
-        orig.destroy
+        isHovered.onChange(is => {
+            if (is) hasIntentArrow.set(commandHasIntentArrow(nextCmd.val))
+            else hasIntentArrow.set(false)
+        })
     )
 
     function IntentArrow(uid: CharacterUid) {
@@ -97,6 +111,10 @@ function IntentArrows(
             dest.destroy
         )
     }
+}
+
+function commandHasIntentArrow(cmd: NextCommand | undefined) {
+    return cmd?.command.targetType !== 'self'
 }
 
 function bottomLeftCornerOf(uid: CharacterUid) {
