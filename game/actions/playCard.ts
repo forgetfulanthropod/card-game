@@ -1,7 +1,13 @@
 import type { Card, CardUid, BattleCursor } from 'shared'
 import type { GameActions } from './types'
 
-import { discard, getEnergy, play, updateHand } from '@/gameState'
+import {
+    discard,
+    getEnergy,
+    getLivingNpcs,
+    play,
+    updateHand,
+} from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 export const playCard: GameActions['PlayCard'] = args => {
@@ -13,6 +19,7 @@ export const playCard: GameActions['PlayCard'] = args => {
         discard({ cardUid: args.cardUid, card, scene })
     }
 
+    clearDead(scene)
     updateHand(scene)
 }
 
@@ -41,4 +48,25 @@ function isPlayable({
     const hasEnoughEnergy = getEnergy(card) <= scene.select('energy').get()
 
     return hasEnoughEnergy
+}
+
+function clearDead(scene: BattleCursor) {
+    //todo
+    // clearDeadCharacters(scene)
+    clearDeadCommands(scene)
+}
+
+function clearDeadCommands(scene: BattleCursor) {
+    const livingNpcUids = getLivingNpcs(scene.get()).map(npc => npc.uid)
+    if (scene.get('nextNpcCommands').length !== livingNpcUids.length) {
+        scene.apply('nextNpcCommands', nextCommands =>
+            nextCommands.filter(cmd =>
+                livingNpcUids.includes(cmd.command.characterUid)
+            )
+        )
+    }
+}
+
+function clearDeadCharacters(scene: BattleCursor) {
+    throw new Error('Function not implemented.')
 }
