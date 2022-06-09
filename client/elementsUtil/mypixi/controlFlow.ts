@@ -3,6 +3,7 @@ import { compose } from 'datums'
 import { sortBy, uniq } from 'lodash'
 import type { DisplayObject, IDestroyOptions } from 'pixi.js'
 import { Ticker } from 'pixi.js'
+import { keys as getKeys } from 'shared/code'
 import type { PixiContainer } from './aliases'
 import { applyDisplayObjectArgs } from './_applyArgs'
 import type { ContainerArgs, DisplayObjectArgs } from './_types'
@@ -74,11 +75,15 @@ type KeyedDisplayObject = DisplayObject & { key: string | number }
 interface KeyedContainer extends PixiContainer {
     children: KeyedDisplayObject[]
 }
-// TODO: accept array of strings or numbers
+
+/**
+ * @args
+ *   @getDisplayArgsForIndex is a callback which assigns properties to the root DisplayObject when the index changes
+ */
 export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T>,
-    render: (item: T[number], index: number) => DisplayObject,
-    position?: (index: number) => { x?: number; y?: number },
+    render: (item: T[number]) => DisplayObject,
+    getDisplayArgsForIndex?: (index: number) => Partial<DisplayObject>,
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
@@ -115,7 +120,7 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
             ? items.filter(v => !oldKeys.includes(v.key))
             : items.filter(k => !oldKeys.includes(k))
         const newChildren = newItems.map((it, i) => {
-            const c = render(it, i) as KeyedDisplayObject
+            const c = render(it) as KeyedDisplayObject
             c.key = typeof it === 'object' ? it.key : it
             return c
         })
@@ -125,12 +130,13 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
             keys.indexOf(x.key)
         )
         if (sortedChildren.length > 0) root.addChild(...sortedChildren)
-        if (position != null) {
+        if (getDisplayArgsForIndex != null) {
             for (let i = 0; i < root.children.length; i++) {
                 const c = root.children[i]
-                const { x, y } = position(i)
-                if (x != null) c.x = x
-                if (y != null) c.y = y
+                const args = getDisplayArgsForIndex(i)
+
+                //@ts-expect-error
+                getKeys(args).forEach(key => (c[key] = args[key]))
             }
         }
     }

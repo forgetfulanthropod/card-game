@@ -1,5 +1,4 @@
 import type { CharacterUid, NextCommand } from 'shared'
-import type { ROCursor } from 'sbaobab'
 import { highlightIntentFrom, toDatum } from '@/util'
 import type { DisplayObject, PixiContainer } from '@/elementsUtil'
 import {
@@ -12,68 +11,63 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 
+const INTENT_ICON_WIDTH = 44
+
 export function FloatingIntents(cuid: CharacterUid): PixiContainer {
     const nextNpcCommandsCursor = getBattleScene().select('nextNpcCommands')
 
     return For(
         toDatum(getBattleScene(), ({ nextNpcCommands, allCharacters }) =>
             nextNpcCommands
-                .filter(
-                    cmd =>
-                        cmd.targetUids.includes(cuid) &&
-                        allCharacters[cmd.command.characterUid].health > 0
-                )
-                .map(cmd => cmd.command.characterUid)
+                .filter(cmd => cmd.targetUids.includes(cuid))
+                .map(cmd => ({ key: cmd.command.characterUid, ...cmd }))
         ),
-        FloatingIntent(nextNpcCommandsCursor, cuid)
+        nextCmd => FloatingIntent(nextCmd, cuid),
+        index => ({ x: index * INTENT_ICON_WIDTH })
     )
 }
 
 function FloatingIntent(
-    nextNpcCommandsCursor: ROCursor<NextCommand[]>,
+    nextCmd: NextCommand,
     cuid: CharacterUid
-): (item: CharacterUid, index: number) => DisplayObject {
-    return (intenderUid, index) => {
-        const nextCmd = nextNpcCommandsCursor
-            .get()
-            .find(cmd => cmd.command.characterUid === intenderUid)
-        if (nextCmd == null) throw new Error("shit it's broken")
+): DisplayObject {
+    if (nextCmd == null) throw new Error("it's broken")
 
-        let children = DamageIntended(nextCmd.outcome.damages[cuid])
-        if (nextCmd.command.targetType === 'self')
-            children = BlockIntended(nextCmd.outcome.blocks[intenderUid])
+    let children = DamageIntended(nextCmd.outcome.damages[cuid])
+    if (nextCmd.command.targetType === 'self')
+        children = BlockIntended(
+            nextCmd.outcome.blocks[nextCmd.command.characterUid]
+        )
 
-        const root = Container({
-            events: {
-                pointerover: interact,
-                pointerdown: interact,
-                pointerup: stopInteracting,
-                pointerout: stopInteracting,
-            },
-            x: index * 44,
-            children,
-        })
+    const root = Container({
+        events: {
+            pointerover: interact,
+            pointerdown: interact,
+            pointerup: stopInteracting,
+            pointerout: stopInteracting,
+        },
+        children,
+    })
 
-        return root
+    return root
 
-        function interact() {
-            // highlight attacker & show arrow
-            highlightIntentFrom.set(intenderUid)
-            root.filters = [glowFilter]
-            // describe intent in a black box?
-        }
+    function interact() {
+        // highlight attacker & show arrow
+        highlightIntentFrom.set(nextCmd.command.characterUid)
+        root.filters = [glowFilter]
+        // describe intent in a black box?
+    }
 
-        function stopInteracting() {
-            highlightIntentFrom.set(null)
-            root.filters = []
-        }
+    function stopInteracting() {
+        highlightIntentFrom.set(null)
+        root.filters = []
     }
 }
 
 function DamageIntended(amount: number) {
     return [
         Sprite({
-            scale: 46 / getTexture('floatingIntentAmount').width,
+            scale: INTENT_ICON_WIDTH / getTexture('floatingIntentAmount').width,
             src: 'floatingIntentAmount',
             anchor: 0.5,
         }),
@@ -93,7 +87,7 @@ function DamageIntended(amount: number) {
 function BlockIntended(amount: number) {
     return [
         Sprite({
-            scale: 86 / getTexture('blockIntent').width,
+            scale: (INTENT_ICON_WIDTH * 2) / getTexture('blockIntent').width,
             src: 'blockIntent',
             anchor: 0.5,
         }),
