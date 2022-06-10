@@ -15,7 +15,10 @@
 
 .kaiju {
     width: 400px;
-    margin-top: 20px;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /* .welcome {
@@ -65,10 +68,10 @@
 
 .enterWrapWrap {
     position: absolute;
-    top: 98%;
+    top: 510px;
     left: 50%;
     transform: translate(-50%, -100%);
-    width: 25%;
+    width: 180px;
     transition: opacity 2s;
 }
 
@@ -78,27 +81,18 @@
     width: 100%;
 }
 
-.enter {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 60px;
-    color: white;
-    outline: none;
-    border: none;
-    border-radius: 12px;
-}
-
-/* .enterWrap:hover {
-  opacity: 1;
-} */
-
 .svgimage {
     cursor: pointer;
 }
 
 .enter {
+    padding: 60px;
+    color: white;
+    outline: none;
+    border: none;
+    border-radius: 12px;
+
+
     font-family: 'Permanent Marker';
     position: absolute;
     top: 50%;

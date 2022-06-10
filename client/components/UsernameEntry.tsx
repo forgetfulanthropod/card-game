@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 
 import styles from './UsernameEntry.module.css'
 import { goodEarthImg } from '@/assets'
@@ -8,8 +8,23 @@ export function UsernameEntry(props: {
 }): JSXElement {
     const [username, setUsername] = useState('')
 
+    const [scale, setScale] = useState(document.body.clientWidth / 1000)
+
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            setScale(document.body.clientWidth / 1000)
+        })
+    }, [])
+
     return <section class={styles.background}>
-        <div style='position: relative; width: 100%; height: 100%;'>
+        <div
+            style={{
+                transform: `scale(${scale})`,
+                // position: 'relative',
+                // width: '100%',
+                // height: '100%',
+            }}
+        >
             <img
                 class={styles.kaiju}
                 src='./logos/kaiju-cards-transparent-bg.webp'
