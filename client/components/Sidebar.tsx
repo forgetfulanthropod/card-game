@@ -8,7 +8,7 @@ import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
 import { useCursor } from './util'
 import { styled } from '@/config'
-import { getClientTree, getTree } from '@/data'
+import { getTree, localTree } from '@/data'
 
 export function Sidebar(): JSXElement {
     return <div style={{ pointerEvents: 'auto' }}>
@@ -20,7 +20,7 @@ export function Sidebar(): JSXElement {
         <OneSidebar
             cursor={
                 // @ts-ignore
-                getClientTree().select('serverCalls')
+                localTree.select('serverCalls')
             }
             title='Server calls'
             top='1em'
