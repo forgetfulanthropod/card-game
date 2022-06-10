@@ -12,7 +12,7 @@ export function UsernameEntry(props: {
         <div style='position: relative; width: 100%; height: 100%;'>
             <img
                 class={styles.kaiju}
-                src='https://assets.codepen.io/195953/kaiju-cards-transparent-bg.png'
+                src='/logos/kaiju-cards-transparent-bg.webp'
             />
             {username.length > 1 ? (
                 <></>
@@ -24,7 +24,7 @@ export function UsernameEntry(props: {
             <input
                 class={styles.input}
                 id='name_input'
-                spellcheck={false}
+                spellCheck={false}
                 autoComplete='off'
                 autoCapitalize='off'
                 value={username}
