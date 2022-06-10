@@ -49,6 +49,7 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
             '.svg': 'dataurl',
             '.css': 'css',
             '.png': 'file',
+            '.webp': 'file',
             '.jpg': 'file',
             '.mp4': 'file',
             '.webm': 'file',

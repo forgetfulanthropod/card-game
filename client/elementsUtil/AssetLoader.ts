@@ -22,6 +22,7 @@ import {
     cardAssets,
     healthBarAssets,
     intentAssets,
+    signAssets,
 } from '@/scenes'
 import { check, fontAssets } from '@/assets'
 
@@ -44,6 +45,7 @@ const basicAssets = {
     ...characterAssets,
     ...characterStatusAssets,
     ...backgroundAssets,
+    ...signAssets,
     ...effectAssets,
     ...spineAssets,
     ...cardAssets,

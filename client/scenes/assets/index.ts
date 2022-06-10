@@ -2,6 +2,7 @@ export * from './getters'
 export type { SpineAsset, AnimationsOf } from './spines'
 
 export { backgroundAssets } from './backgrounds'
+export { signAssets } from './signs'
 export { characterAssets } from './characters'
 export { characterStatusAssets } from './characterStatuses'
 export * from './effects'

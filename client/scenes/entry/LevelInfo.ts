@@ -1,6 +1,12 @@
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Text } from '@/elementsUtil'
+import {
+    getTexture,
+    Sprite,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+} from '@/elementsUtil'
 
 const arrowStyle = {
     fontFamily: 'bigFont',
@@ -10,10 +16,28 @@ const arrowStyle = {
     stroke: '#999',
     strokeThickness: 5,
 }
+
 export function LevelInfo(): PixiContainer {
     const scene = getEntryScene()
 
     const level = scene.select('selectedLevel').get()
+
+    const root = Container({
+        x: BASE_WIDTH * 0.15,
+        y: BASE_HEIGHT * 0.85,
+        // children: [leftButton, levelNumText, rightButton, levelNameText],
+        children: [
+            Sprite({
+                src: 'skelepitDungeonSign',
+                anchor: 0.5,
+                scale:
+                    (BASE_WIDTH * 0.3) /
+                    (getTexture('skelepitDungeonSign')?.width ?? 1000),
+            }),
+        ],
+    })
+
+    return root
 
     // ALPHA NO LEVELS!
     // scene.select('selectedLevel').on('update', () => {
@@ -60,24 +84,15 @@ export function LevelInfo(): PixiContainer {
     //     },
     // })
 
-    const levelNameText = Text({
-        text: `${level?.name}`,
-        anchor: [0.5, 0],
-        style: {
-            fontFamily: 'bigFont',
-            fontSize: 45,
-            fill: '#fff',
-            stroke: '#000',
-            strokeThickness: 8,
-        },
-    })
-
-    const root = Container({
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT * 0.01,
-        // children: [leftButton, levelNumText, rightButton, levelNameText],
-        children: [levelNameText],
-    })
-
-    return root
+    // const levelNameText = Text({
+    //     text: `${level?.name}`,
+    //     anchor: [0.5, 0],
+    //     style: {
+    //         fontFamily: 'bigFont',
+    //         fontSize: 45,
+    //         fill: '#fff',
+    //         stroke: '#000',
+    //         strokeThickness: 8,
+    //     },
+    // })
 }

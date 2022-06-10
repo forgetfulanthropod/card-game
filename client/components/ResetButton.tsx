@@ -14,8 +14,20 @@ const Root = styled.button`
 `
 
 export function ResetButton(props: { username: string }): JSXElement {
+    let release = false
     return <Root
-        onClick={() => callApi('MakeNewUser', { username: props.username })}
+        onPointerDown={() => {
+            setTimeout(() => {
+                if (!release) {
+                    localStorage.removeItem('username')
+                    window.location.reload()
+                }
+            }, 2500)
+        }}
+        onPointerUp={async () => {
+            release = true
+            await callApi('MakeNewUser', { username: props.username })
+        }}
     >
         ↺
     </Root>
