@@ -21,7 +21,10 @@ import snacky from '@battleAssets/gen0_cards/Snacky-200.png'
 import theHatefly from '@battleAssets/gen0_cards/TheHatefly-200.png'
 import trioOfFools from '@battleAssets/gen0_cards/TrioOfFools-200.png'
 import wimpyGuard from '@battleAssets/gen0_cards/WimpyGuard-200.png'
-
+import halfdan from '@battleAssets/chars/halfdan.png'
+import cultist from '@battleAssets/chars/cultist.png'
+import toadmaw from '@battleAssets/chars/toadmaw.png'
+import bosshogJurgen from '@battleAssets/chars/bosshogJurgen.png'
 export const characterAssets = {
     bloatDemon,
     bogSpirit,
@@ -46,4 +49,8 @@ export const characterAssets = {
     trioOfFools,
     warhog,
     wimpyGuard,
+    halfdan,
+    cultist,
+    toadmaw,
+    bosshogJurgen,
 }
