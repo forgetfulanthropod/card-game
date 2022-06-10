@@ -42,6 +42,9 @@ interface ArgsOf {
     queue: [numTurns: number, move: any]
 
     killIf: [condition: boolean]
+
+    draw: [numCards: number]
+    discard: [numCards: number]
 }
 
 export type Locals = CalculatedCharacterStats & {

@@ -4,6 +4,7 @@ import type { Card, CharacterUid, Command, Gamestate, TargetType } from 'shared'
 import { interpretCommand, play } from './cards'
 // @ts-ignore
 import exampleBattleScene_ from './exampleBattlescene.json'
+import { explainCommand } from './cards/interpretCommand'
 import { getBattleSceneIn } from '@/util'
 
 const exampleBattleScene = exampleBattleScene_ as unknown as Gamestate
@@ -155,9 +156,19 @@ const effectsSuite = {
     smallDamageIncrease() {},
 } as const
 
+const explainSuite = {
+    scatterBrained() {
+        const scene = freshBattleScene()
+        const cmd = makeCmd(pc1, 'chain(draw(3), discard(2))')
+        const explanation = explainCommand(cmd, scene)
+        truthy(typeof explanation === 'string')
+    },
+}
+
 export const suites = {
     interpretCommandSuite,
-    //  effectsSuite
+    //  effectsSuite,
+    explainSuite,
 } as const
 
 function uid() {

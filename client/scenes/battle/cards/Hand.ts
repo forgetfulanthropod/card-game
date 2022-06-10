@@ -218,6 +218,10 @@ function animateTo(
 
     Tweener.killTweensOf(cardEl)
     Tweener.killTweensOf(cardEl.children[0])
+    onDestroyed(cardEl, () => {
+        Tweener.killTweensOf(cardEl)
+        Tweener.killTweensOf(cardEl.children[0])
+    })
     void Tweener.add(
         {
             target: cardEl,

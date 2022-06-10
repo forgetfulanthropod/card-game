@@ -7,6 +7,8 @@ import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWis
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
+import {explain as explainDiscard, execute as executeDiscard} from './discard'
+import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
@@ -28,6 +30,8 @@ export const explainers: Explainers = {
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
+    discard: explainDiscard,
+    draw: explainDraw,
     effect: explainEffect,
     ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
@@ -49,6 +53,8 @@ export const executors: Executors = {
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
+    discard: executeDiscard,
+    draw: executeDraw,
     effect: executeEffect,
     ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
