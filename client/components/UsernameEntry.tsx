@@ -12,7 +12,7 @@ export function UsernameEntry(props: {
         <div style='position: relative; width: 100%; height: 100%;'>
             <img
                 class={styles.kaiju}
-                src='/logos/kaiju-cards-transparent-bg.webp'
+                src='./logos/kaiju-cards-transparent-bg.webp'
             />
             {username.length > 1 ? (
                 <></>

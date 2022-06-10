@@ -4,7 +4,7 @@
     color: white;
     font-family: sans-serif;
     text-align: center;
-    background: url('/mushroom-bg.jpg')
+    background: url('./mushroom-bg.jpg')
         no-repeat center center fixed;
     background-size: contain;
     /* background-size: max(100vw, 2 * 100vh); */
