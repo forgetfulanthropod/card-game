@@ -37,9 +37,9 @@ function makeCards(scene: BattleCursor): Piles {
         // 'chainLightning',
         // 'spellBook',
         // 'fireball',
-        // 'arcanePower',
-        // 'scatterBrained',
-        // 'magicalStorm',
+        'arcanePower',
+        'scatterBrained',
+        'magicalStorm',
         // 'orbOfFrost',
         // 'basicAttackCleric',
         // 'basicAttackKnight',
@@ -50,27 +50,27 @@ function makeCards(scene: BattleCursor): Piles {
         // 'dutifulStab',
         // 'charge',
         // 'tetsudoFormation',
-        // 'guidingBolt',
-        // 'smite',
-        // 'bless',
-        // 'prayerOfGoodFortune', // todo?
-        // 'orbOfHolyLight', // todo
-        // 'mantraOfPatience', // todo?
-        // 'helpingHand',
+        'guidingBolt',
+        'smite',
+        'bless',
+        'prayerOfGoodFortune', // todo?
+        'orbOfHolyLight', // todo
+        'mantraOfPatience', // todo?
+        'helpingHand',
     ]
 
     const allCharacters = vals(scene.get('allCharacters'))
     allCharacters.forEach(c => {
         const ccuf = upperFirst(c.class)
-        cardIds.push(
-            //@ts-expect-error
-            `basicAttack${ccuf}`,
-            // `basicAttack${ccuf}`,
-            `block${ccuf}`
-            // `block${ccuf}`,
-            // 'helpingHand',
-            // 'smite'
-        )
+        // cardIds.push(
+        //     //@ts-expect-error
+        //     `basicAttack${ccuf}`,
+        //     // `basicAttack${ccuf}`,
+        //     `block${ccuf}`
+        //     // `block${ccuf}`,
+        //     // 'helpingHand',
+        //     // 'smite'
+        // )
         cardIds.push(getRandomCardIdOfClass(c.class))
     })
 
