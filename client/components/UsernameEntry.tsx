@@ -2,17 +2,18 @@ import { useState, useEffect } from 'preact/hooks'
 
 import styles from './UsernameEntry.module.css'
 import { goodEarthImg } from '@/assets'
+import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 
 export function UsernameEntry(props: {
     onEnter: (username: string) => void
 }): JSXElement {
     const [username, setUsername] = useState('')
 
-    const [scale, setScale] = useState(document.body.clientWidth / 1000)
+    const [scale, setScale] = useState(getScale())
 
     useEffect(() => {
         window.addEventListener('resize', () => {
-            setScale(document.body.clientWidth / 1000)
+            setScale(getScale())
         })
     }, [])
 
@@ -59,6 +60,16 @@ export function UsernameEntry(props: {
             />
         </div>
     </section>
+}
+
+function getScale(): number {
+    const sizedWidth = 1000
+    const sizedHeight = (sizedWidth / BASE_WIDTH) * BASE_HEIGHT
+
+    return Math.min(
+        window.innerWidth / sizedWidth,
+        window.innerHeight / sizedHeight
+    )
 }
 
 function EnterButton(props: { onClick: Callback; show: boolean }) {
