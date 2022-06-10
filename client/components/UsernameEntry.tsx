@@ -14,11 +14,19 @@ export function UsernameEntry(props: {
                 class={styles.kaiju}
                 src='https://assets.codepen.io/195953/kaiju-cards-transparent-bg.png'
             />
-            <div class={styles.instructions}>to continue, enter your name</div>
+            {username.length > 1 ? (
+                <></>
+            ) : (
+                <div class={styles.instructions}>
+                    to continue, enter your name
+                </div>
+            )}
             <input
                 class={styles.input}
                 id='name_input'
-                spellCheck={false}
+                spellcheck={false}
+                autoComplete='off'
+                autoCapitalize='off'
                 value={username}
                 onChange={e => {
                     setUsername((e?.target as HTMLInputElement)?.value)
