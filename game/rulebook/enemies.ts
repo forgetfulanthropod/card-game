@@ -63,7 +63,7 @@ export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>>
         default: { level: 'default', wisdom: 0, constitution: 18, strength: 4, dexterity: 0, moves: ['attack4', null, null, null, null] },
     },
     halfdan: {
-        default: { level: 'default', wisdom: 0, constitution: 250, strength: 25, dexterity: 20, moves: ['rest', 'evisceratingSweep', 'passiveBlock', 'ancientStrike', null] },
+        default: { level: 'default', wisdom: 0, constitution: 250, strength: 25, dexterity: 20, moves: ['rest', 'evisceratingSweep', 'passiveBlockCmd', 'ancientStrike', null] },
     },
 } as const // prettier-ignore
 

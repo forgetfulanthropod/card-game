@@ -54,6 +54,11 @@ const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
         vulnerable(stats) {
             stats.damageTakeMultiplier *= 1.5
         },
+        doubleDamage(stats) {
+            stats.strength *= 2
+        },
+        /** see applyTurnStartEffects */
+        passiveBlock(stats) {},
     }
 
 /** bleed and poison happen at turn start */
@@ -66,11 +71,14 @@ export function applyTurnStartEffects(
         produce(ac => {
             for (const cm of Object.values(ac)) {
                 if (cm.isPc !== isPcStart) continue
-
-                const bleed = cm.effects.find(e => e.id === 'bleed')
+                const getEffect = (id: EffectId) =>
+                    cm.effects.find(e => e.id === id)
+                const bleed = getEffect('bleed')
                 if (bleed) cm.health -= Math.floor(cm.constitution * 0.05)
                 const poison = cm.effects.find(e => e.id === 'poison')
                 if (poison) cm.health -= poison.counter
+                const passiveBlock = getEffect('passiveBlock')
+                if (passiveBlock) cm.block += passiveBlock.counter
             }
         })
     )

@@ -34,7 +34,7 @@ export const infectiousBite = (x: number): CommandDefinition => ({
 })
 /**Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked) */
 export const engulf = (x: number): CommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength*0.${x}), effect("stun",1))`,
+    actions: `ifDamageDealt(deal(strength*0.${x}), effect("stunned",1))`,
     id: `engulf(${x})`,
     name: `Engulf ${x}`,
     targetNum: 1,

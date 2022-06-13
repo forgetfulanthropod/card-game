@@ -33,7 +33,7 @@ const singleOpponentTargetCommands = {
     /**Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn. */
     jurgenStampSnort: ['Jurgen Stamp Snort', 'effect("doubleDamage", 1)'],
     /**Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target. */
-    jurgenSitUpon: ['Jurgen Sit Upon', 'deal(strength/2); effect("stun",1)'],
+    jurgenSitUpon: ['Jurgen Sit Upon', 'deal(strength/2); effect("stunned",1)'],
     /**Attack (Attacks for 4) */
     attack4: ['Attack4', 'deal(4)'],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
@@ -45,7 +45,7 @@ const singleOpponentTargetCommands = {
     /**Ancient Strike (Deals 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn. */
     ancientStrike: [
         'Ancient Strike',
-        'ifDamageDealt(deal(strength * 2), effect("stun", 1))',
+        'ifDamageDealt(deal(strength * 2), effect("stunned", 1))',
     ],
     /**Magic Missile (attacks for 25) */
     hansMagicMissile: ['Hans Magic Missile', 'deal(25)'],
@@ -86,9 +86,9 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
 
     /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
-    passiveBlock: {
+    passiveBlockCmd: {
         name: 'Passive Block',
-        id: 'passiveBlock',
+        id: 'passiveBlockCmd',
         targetNum: 0,
         targetType: 'self',
         actions: 'effect("passiveBlock", 20)',
@@ -100,7 +100,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         id: 'hansBuffBlock',
         targetNum: 0,
         targetType: 'self',
-        actions: 'effect("smallDamageBonus", 2, "friends")',
+        actions: 'effect("smallDamageIncrease", 2, "friends")',
     },
 
     /**Rest (does nothing) */
