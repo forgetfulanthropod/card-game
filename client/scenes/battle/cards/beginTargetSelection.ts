@@ -2,10 +2,11 @@ import { datum } from 'datums'
 import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
+import { TargetSelectGraphic } from '@sharedElements'
 import { callApi } from '@/actions'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { getPixiApp, TargetSelectGraphic } from '@/elementsUtil'
+import { getPixiApp } from '@/elementsUtil'
 import { onUpdate } from '@/util'
 
 export function beginTargetSelection(

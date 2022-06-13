@@ -2,7 +2,7 @@ import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
 import { range } from 'lodash'
-import { MainCharacterAnimation } from '@/scenes'
+import { MainCharacterAnimation } from '@sharedElements'
 import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
@@ -115,26 +115,8 @@ export function SelectedCharacters(): PixiContainer {
                 .map((c, i) => {
                     const animation = MainCharacterAnimation(
                         c,
-                        () => {
-                            const nextIndex =
-                                (defaultOwnedCharacters.findIndex(
-                                    oc => oc.name === c.name
-                                ) +
-                                    1) %
-                                3
-                            const nextChoice = defaultOwnedCharacters[nextIndex]
-                            console.log({ nextIndex, nextChoice })
-                            void callApi('PlaceSelectedCharacters', {
-                                characters: [
-                                    {
-                                        character: {
-                                            ...nextChoice,
-                                            uid: `pc-${i + 1}`,
-                                        },
-                                        index: i as CharacterPlaceIndex,
-                                    },
-                                ],
-                            })
+                        {
+                            pointerup: () => toggleSelectedCharacter(c, i),
                         },
                         260
                     )
@@ -177,6 +159,24 @@ export function SelectedCharacters(): PixiContainer {
         if (Array.isArray(characters) && characters.length > 0)
             root.addChild(...characters)
     }
+}
+
+function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
+    const nextIndex =
+        (defaultOwnedCharacters.findIndex(oc => oc.name === c.name) + 1) % 3
+    const nextChoice = defaultOwnedCharacters[nextIndex]
+    console.log({ nextIndex, nextChoice })
+    void callApi('PlaceSelectedCharacters', {
+        characters: [
+            {
+                character: {
+                    ...nextChoice,
+                    uid: `pc-${i + 1}`,
+                },
+                index: i as CharacterPlaceIndex,
+            },
+        ],
+    })
 }
 
 async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {

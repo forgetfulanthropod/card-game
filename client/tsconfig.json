@@ -9,6 +9,7 @@
             "shared": ["../shared"],
             "shared/code": ["../shared/code"],
             "@/*": ["./*"],
+            "@sharedElements": ["./scenes/shared"],
             "@battleAssets/*": ["./scenes/assets/*"],
             "react": ["./node_modules/preact/compat"],
             "react-dom": ["./node_modules/preact/compat"]

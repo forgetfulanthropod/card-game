@@ -8,12 +8,14 @@ import type {
     NetworkEvent,
 } from 'shared'
 import { keys } from 'shared/code'
+import { MainCharacterAnimation } from '@sharedElements'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { MoveInfo } from './MoveInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
-import { MainCharacterAnimation, getOrbTexture, getCharTexture } from '@/scenes'
+
+import {  getOrbTexture, getCharTexture } from '@/scenes'
 import { onUpdate } from '@/util'
 import {
     Adjust,
@@ -48,9 +50,10 @@ export function Character(args: CharacterProps): PixiContainer {
     const characterMeta = args.cursor.get()
     const { screenX, screenY } = characterMeta
 
-    const mainAnimation = MainCharacterAnimation(characterMeta, () =>
-        args.onClick(characterMeta.uid)
-    )
+    const mainAnimation = MainCharacterAnimation(characterMeta, {
+        pointerup: () => args.onClick(characterMeta.uid),
+        pointerdown: () => args.onClick(characterMeta.uid),
+    })
 
     const mainContainer = Container({
         isHoveredDatum: isHovered,
