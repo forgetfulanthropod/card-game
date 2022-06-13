@@ -81,14 +81,18 @@ interface KeyedContainer extends PixiContainer {
  *   @getDisplayArgsForIndex is a callback which assigns properties to the root DisplayObject when the index changes
  */
 export function For<T extends { key: string | number }[] | (string | number)[]>(
-    items: RODatum<T>,
+    items: RODatum<T> & { destroy?: Callback },
     render: (item: T[number]) => DisplayObject,
     getDisplayArgsForIndex?: (index: number) => Partial<DisplayObject>,
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
     const root = Container({ children: [] }) as KeyedContainer
-    onDestroyed(root, items.onChange(handleUpdate, true))
+    onDestroyed(
+        root,
+        () => items?.destroy?.(),
+        items.onChange(handleUpdate, true)
+    )
 
     if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
 

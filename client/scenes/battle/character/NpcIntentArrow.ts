@@ -88,9 +88,7 @@ function IntentArrows(
             hasIntentArrow,
             () => For(targets, key => IntentArrow(key)),
             undefined,
-            {
-                name: 'intentArrows',
-            }
+            { name: 'intentArrows' }
         ),
         orig.destroy,
         // overrides everything

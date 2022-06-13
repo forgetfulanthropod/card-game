@@ -18,9 +18,11 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
 
     return For(
         toDatum(getBattleScene(), ({ nextNpcCommands, allCharacters }) =>
-            nextNpcCommands
-                .filter(cmd => cmd.targetUids.includes(cuid))
-                .map(cmd => ({ key: cmd.command.characterUid, ...cmd }))
+            nextNpcCommands == null
+                ? []
+                : nextNpcCommands
+                      .filter(cmd => cmd.targetUids.includes(cuid))
+                      .map(cmd => ({ key: cmd.command.characterUid, ...cmd }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
         index => ({ x: index * INTENT_ICON_WIDTH })
