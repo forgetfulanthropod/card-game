@@ -10,3 +10,5 @@ export * from './tweenable'
 // @endindex
 
 export type { InteractionEventHandler, SpriteArgs } from './_types'
+
+export { startChecking } from './_util'

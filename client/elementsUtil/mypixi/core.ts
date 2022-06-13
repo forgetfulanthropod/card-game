@@ -17,9 +17,9 @@ import type {
     GraphicsArgs,
     SpriteArgs,
 } from './_types'
+import { startChecking } from './_util'
 import { onUpdate } from '@/util'
 
-const core = null
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
 export const SCALE_UNIVERSAL = BASE_WIDTH / 1920
@@ -33,11 +33,13 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     const s = PixiSprite.from(args.src)
 
     applyShownArgs(s, args)
+    startChecking(s)
     return s
 }
 export function Container(args: ContainerArgs): PixiContainer {
     const c = new PixiContainer()
     applyContainerArgs(args, c)
+    startChecking(c)
     return c
 }
 export function Text(args: TextArgs): PixiText {
@@ -63,11 +65,13 @@ export function Text(args: TextArgs): PixiText {
     }
     const textEl = new PixiText(String(text), args.style)
     applyShownArgs(textEl, args)
+    startChecking(textEl)
     return textEl
 }
 export function Graphics(args: GraphicsArgs): PixiGraphics {
     const g = new PixiGraphics()
     args.draw(g)
     applyDisplayObjectArgs(g, args)
+    startChecking(g)
     return g
 }

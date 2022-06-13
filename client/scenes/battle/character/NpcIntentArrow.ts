@@ -138,10 +138,11 @@ function bottomRightCornerOf(uid: CharacterUid) {
     )
 }
 
+/** Destroys the text el passed in */
 function EnemyIntentArrow(
     origin: RODatum<Point>,
     destination: RODatum<Point>,
-    text: PixiText
+    textEl: PixiText
 ) {
     const root = Container({
         children: [],
@@ -149,7 +150,8 @@ function EnemyIntentArrow(
     return onDestroyed(
         root,
         destination.onChange(update),
-        origin.onChange(update, true)
+        origin.onChange(update, true),
+        () => !textEl.destroyed && textEl.destroy(true)
     )
 
     function update() {
@@ -159,9 +161,9 @@ function EnemyIntentArrow(
         const yDistance = origin.val.y - destination.val.y
         const distance = Math.sqrt(xDistance ** 2 + yDistance ** 2)
         const rotation = Math.asin(yDistance / distance)
-        text.x = (origin.val.x + destination.val.x) / 2
-        text.y = (origin.val.y + destination.val.y) / 2
-        text.rotation = rotation
+        textEl.x = (origin.val.x + destination.val.x) / 2
+        textEl.y = (origin.val.y + destination.val.y) / 2
+        textEl.rotation = rotation
 
         const src = getTexture('enemyIntentArrow')
         root.addChild(

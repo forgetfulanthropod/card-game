@@ -35,11 +35,12 @@ function FloatingIntent(
 ): DisplayObject {
     if (nextCmd == null) throw new Error("it's broken")
 
-    let children = DamageIntended(nextCmd.outcome.damages[cuid])
-    if (nextCmd.command.targetType === 'self')
-        children = BlockIntended(
-            nextCmd.outcome.blocks[nextCmd.command.characterUid]
-        )
+    const children =
+        nextCmd.command.targetType === 'self'
+            ? BlockIntended(
+                  nextCmd.outcome.blocks[nextCmd.command.characterUid]
+              )
+            : DamageIntended(nextCmd.outcome.damages[cuid])
 
     const root = Container({
         events: {
