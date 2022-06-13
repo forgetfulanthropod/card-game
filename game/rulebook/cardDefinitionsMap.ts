@@ -187,7 +187,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         // round.enemyDamageBonus += 4
         // if (blockBroken) health -= (damage + round.enemyDamageBonus)
-        actions: 'addEffect("smallDamageIncrease", 1)',
+        actions: 'effect("smallDamageIncrease", 1)',
         type: 'utility',
         characterClass: 'wizard',
     },
