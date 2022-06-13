@@ -53,9 +53,9 @@ function makeCards(scene: BattleCursor): Piles {
         'guidingBolt',
         'smite',
         'bless',
-        'prayerOfGoodFortune', // todo?
+        'prayerOfGoodFortune', // todo
         'orbOfHolyLight', // todo
-        'mantraOfPatience', // todo?
+        'mantraOfPatience',
         'helpingHand',
     ]
 
