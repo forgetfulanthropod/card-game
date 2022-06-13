@@ -45,6 +45,8 @@ interface ArgsOf {
 
     draw: [numCards: number]
     discard: [numCards: number]
+    orbOfHolyLight: []
+    doubleEnchantmentOrToken: []
 }
 
 export type Locals = CalculatedCharacterStats & {

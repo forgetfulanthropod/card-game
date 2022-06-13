@@ -164,6 +164,12 @@ const explainSuite = {
         const explanation = explainCommand(cmd, scene)
         truthy(typeof explanation === 'string')
     },
+    mantraOfPatience() {
+        const scene = freshBattleScene()
+        const cmd = makeCmd(pc1, 'chain(queue(1, addEnergy(2)), momentary())')
+        const explanation = explainCommand(cmd, scene)
+        truthy(typeof explanation === 'string')
+    },
 }
 
 export const suites = {

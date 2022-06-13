@@ -6,6 +6,7 @@ import {
     applyTurnStartEffects,
     clearBlock,
     decrementEffects,
+    popAndRunQueue,
 } from '@/gameState'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
@@ -18,6 +19,7 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
     endRound(scene)
     clearBlock(scene, 'npc')
     applyTurnStartEffects(scene, 'npc')
+    popAndRunQueue(scene, 'npc')
 
     return {
         type: 'doNpcTurn',

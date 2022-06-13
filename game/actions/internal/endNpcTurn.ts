@@ -8,6 +8,7 @@ import {
     getNpcMoves,
     decrementEffects,
     applyTurnStartEffects,
+    popAndRunQueue,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -30,4 +31,5 @@ export const endNpcTurn: InternalAction['endNpcTurn'] = (
     clearBlock(scene, 'pc')
     applyTurnStartEffects(scene, 'pc')
     drawNewHand(scene)
+    popAndRunQueue(scene, 'pc')
 }

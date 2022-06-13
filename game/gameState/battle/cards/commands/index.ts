@@ -8,6 +8,7 @@ import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
 import {explain as explainDiscard, execute as executeDiscard} from './discard'
+import {explain as explainDoubleEnchantmentOrToken, execute as executeDoubleEnchantmentOrToken} from './doubleEnchantmentOrToken'
 import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
@@ -15,6 +16,7 @@ import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './if
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
 import {explain as explainOrb, execute as executeOrb} from './orb'
+import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
 import {explain as explainQueue, execute as executeQueue} from './queue'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
@@ -31,6 +33,7 @@ export const explainers: Explainers = {
     choice: explainChoice,
     deal: explainDeal,
     discard: explainDiscard,
+    doubleEnchantmentOrToken: explainDoubleEnchantmentOrToken,
     draw: explainDraw,
     effect: explainEffect,
     ifDamageDealt: explainIfDamageDealt,
@@ -38,6 +41,7 @@ export const explainers: Explainers = {
     killIf: explainKillIf,
     momentary: explainMomentary,
     orb: explainOrb,
+    orbOfHolyLight: explainOrbOfHolyLight,
     queue: explainQueue,
     smite: explainSmite,
     text: explainText,
@@ -54,6 +58,7 @@ export const executors: Executors = {
     choice: executeChoice,
     deal: executeDeal,
     discard: executeDiscard,
+    doubleEnchantmentOrToken: executeDoubleEnchantmentOrToken,
     draw: executeDraw,
     effect: executeEffect,
     ifDamageDealt: executeIfDamageDealt,
@@ -61,6 +66,7 @@ export const executors: Executors = {
     killIf: executeKillIf,
     momentary: executeMomentary,
     orb: executeOrb,
+    orbOfHolyLight: executeOrbOfHolyLight,
     queue: executeQueue,
     smite: executeSmite,
     text: executeText,
