@@ -3,6 +3,7 @@ import type {
     BattleCursor,
     CharacterUid,
     CommandId,
+    CommandQueue,
     DSLString,
     QueuedCommand,
     TargetType,
@@ -50,16 +51,20 @@ export function popAndRunQueue(
     scene: BattleCursor,
     starting: 'pc' | 'npc'
 ): void {
-    scene.select('queue').apply(q => {
-        const now = q.filter(c => c.side === starting && c.turnsAway <= 0)
-        for (const { command, targetUids } of now) {
-            interpretCommand({ command, scene, targetUids })
+    const nextQ: CommandQueue = []
+    for (const qc of scene.get('queue')) {
+        if (qc.side === starting) {
+            const turnsAway = qc.turnsAway - 1
+            if (turnsAway <= 0) {
+                const { command, targetUids } = qc
+                interpretCommand({ command, scene, targetUids })
+            } else {
+                nextQ.push({ ...qc, turnsAway })
+            }
+        } else {
+            nextQ.push(qc)
         }
-        return q
-            .filter(c => c.turnsAway > 0)
-            .map(c =>
-                c.side === 'pc' ? { ...c, turnsAway: c.turnsAway - 1 } : c
-            )
-        // return result
-    })
+    }
+
+    scene.set('queue', nextQ)
 }
