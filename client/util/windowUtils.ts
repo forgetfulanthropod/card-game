@@ -1,6 +1,6 @@
 import { jss } from 'shared/code'
 import { callApi } from '@/actions'
-import { getClientTree } from '@/data'
+import { localTree } from '@/data'
 
 // @ts-expect-error
 window.runRecording = runRecording
@@ -47,7 +47,7 @@ async function copyHistory() {
     await sleep(1000)
     try {
         await navigator.clipboard.writeText(
-            JSON.stringify(getClientTree().get().serverCalls)
+            JSON.stringify(localTree.get().serverCalls)
         )
         console.log('copied!')
     } catch (e) {

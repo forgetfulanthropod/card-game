@@ -14,7 +14,8 @@ import { HitInfo } from './HitInfo'
 import { MoveInfo } from './MoveInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
-import { getOrbTexture } from '@/scenes'
+
+import {  getOrbTexture, getCharTexture } from '@/scenes'
 import { onUpdate } from '@/util'
 import {
     Adjust,
@@ -61,6 +62,7 @@ export function Character(args: CharacterProps): PixiContainer {
                 y: 22,
             }),
             mainAnimation,
+            mainAnimation == null && FallBackCharacterSprite(characterMeta),
             Adjust(FloatingIntents(characterMeta.uid), {
                 y: -(mainAnimation?.height ?? 0),
             }),
@@ -92,6 +94,15 @@ export function Character(args: CharacterProps): PixiContainer {
     })
 
     return root
+}
+
+function FallBackCharacterSprite(characterMeta: CharacterMeta) {
+    const charSrc = getCharTexture(characterMeta.name)
+    return Sprite({
+        src: charSrc,
+        y: -20,
+        x: ((characterMeta.isPc ? 1 : -2) * charSrc.width) / 4,
+    })
 }
 
 function getBoundOrbContainer(

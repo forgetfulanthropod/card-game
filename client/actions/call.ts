@@ -1,7 +1,7 @@
 import type { Action, CallReturn } from 'shared'
 
 import { jss } from 'shared/code'
-import { getClientTree } from '@/data'
+import { localTree } from '@/data'
 
 const config = {
     shouldLog: false,
@@ -15,16 +15,14 @@ export async function callApi<K extends keyof Action>(
     type F = Action[K]
     const randId = Math.random().toString().slice(2, 6)
     if (config.shouldSaveCalls) {
-        getClientTree()
-            .select('serverCalls')
-            .apply(calls => [
-                ...calls,
-                {
-                    name,
-                    args: args,
-                    time: new Date().toLocaleTimeString(),
-                },
-            ])
+        localTree.select('serverCalls').apply(calls => [
+            ...calls,
+            {
+                name,
+                args: args,
+                time: new Date().toLocaleTimeString(),
+            },
+        ])
     }
     if (config.shouldLog) {
         console.log(

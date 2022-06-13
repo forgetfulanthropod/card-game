@@ -9,8 +9,15 @@ import type {
     SceneType,
 } from './index'
 
+export interface ServerOnlyAction {
+    Hello: (_: Empty) => string
+    IncrementTestCounter: (_: Empty) => void
+    MakeNewUser: (_: { username: string }) => void
+    MaybeMakeUser: (_: { username: string }) => Gamestate
+}
+
 /** A server action */
-export interface Action {
+export interface GameOnlyAction {
     ActivateOrb: (_: { characterUid: CharacterUid; orb: Orb }) => void
 
     PlaceSelectedCharacters: (_: {
@@ -27,11 +34,6 @@ export interface Action {
 
     EndTurn: (_: Empty) => void
     ExitDungeon: (_: Empty) => void
-    Hello: (_: Empty) => string
-    IncrementTestCounter: (_: Empty) => void
-    MakeNewUser: (_: { username: string }) => void
-
-    MaybeMakeUser: (_: { username: string }) => Gamestate
 
     PlayCard: (_: { cardUid: string; targetUids: CharacterUid[] }) => void
     AddCardToDeck: (_: { cardUid: CardUid }) => void
@@ -41,6 +43,7 @@ export interface Action {
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
 }
+export interface Action extends GameOnlyAction, ServerOnlyAction {}
 
 export type Gamecursor = SCursor<Gamestate>
 /** A no-input game action */
