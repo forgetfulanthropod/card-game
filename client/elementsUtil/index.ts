@@ -8,6 +8,5 @@ export * from './myspine'
 export * from './overlay'
 export * from './pixiManaged'
 export * from './pixiUtils'
-export * from './simple'
 export * from './startPixi'
 // @endindex

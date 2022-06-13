@@ -1,12 +1,12 @@
 import type { CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/scenes'
 import { hoveredCharacterUid } from '@/util'
-import type { PixiSpine } from '@/elementsUtil'
+import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
 import { glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation(
     characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
-    onClick?: () => void,
+    events?: InteractionEvents,
     height = 190
 ): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
@@ -16,17 +16,15 @@ export function MainCharacterAnimation(
     const root = Spine({
         name: spineAssetName,
         animation: 'Idle',
-        events: onClick
-            ? {
-                  pointerup: onClick,
-                  pointerover: () => {
-                      hoveredCharacterUid.set(characterMeta.uid)
-                  },
-                  pointerout: () => {
-                      hoveredCharacterUid.set(null)
-                  },
-              }
-            : undefined,
+        events: {
+            pointerover() {
+                hoveredCharacterUid.set(characterMeta.uid)
+            },
+            pointerout() {
+                hoveredCharacterUid.set(null)
+            },
+            ...(events ?? {}),
+        },
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
