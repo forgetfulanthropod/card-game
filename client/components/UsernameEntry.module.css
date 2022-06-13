@@ -4,8 +4,7 @@
     color: white;
     font-family: sans-serif;
     text-align: center;
-    background: url('./mushroom-bg.jpg')
-        no-repeat center center fixed;
+    background: url('./mushroom-bg.jpg') no-repeat center center fixed;
     background-size: contain;
     /* background-size: max(100vw, 2 * 100vh); */
     width: 100%;
@@ -91,7 +90,6 @@
     outline: none;
     border: none;
     border-radius: 12px;
-
 
     font-family: 'Permanent Marker';
     position: absolute;

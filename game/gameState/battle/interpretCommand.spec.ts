@@ -4,6 +4,7 @@ import type { Card, CharacterUid, Command, Gamestate, TargetType } from 'shared'
 import { interpretCommand, play } from './cards'
 // @ts-ignore
 import exampleBattleScene_ from './exampleBattlescene.json'
+// eslint-disable-next-line import/no-internal-modules
 import { explainCommand } from './cards/interpretCommand'
 import { getBattleSceneIn } from '@/util'
 
