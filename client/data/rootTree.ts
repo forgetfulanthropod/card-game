@@ -1,4 +1,3 @@
-import { memoize } from 'lodash'
 import type { ROBaobab, ROCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
 import type {
@@ -58,13 +57,3 @@ interface ClientTree {
     serverCalls: unknown[]
     // modal: null | { title: string, body: string, onClose: Callback }
 }
-/** TODO: merge with localTree */
-export const getClientTree: () => SBaobab<ClientTree> = memoize(() => {
-    return new SBaobab<ClientTree>({
-        serverCalls: [],
-        // modal: null,
-    })
-})
-
-// @ts-ignore
-window.clientTree = getClientTree()

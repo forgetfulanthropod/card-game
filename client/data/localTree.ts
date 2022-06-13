@@ -1,6 +1,12 @@
 import { SBaobab } from 'sbaobab'
 import type { CharacterUid } from 'shared'
 
-export const localTree = new SBaobab({
-    selectedTargets: [] as CharacterUid[],
+interface LocalTree {
+    selectedTargets: CharacterUid[]
+    serverCalls: unknown[]
+}
+
+export const localTree = new SBaobab<LocalTree>({
+    selectedTargets: [],
+    serverCalls: [],
 })

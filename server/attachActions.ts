@@ -1,14 +1,14 @@
 import type { Request, Response } from 'express'
-import { actions } from 'game'
+import { actions as gameActions } from 'game'
 import { camelCase } from 'lodash'
 import { satisfies } from 'shared/code'
+import * as serverActions from './actions'
 
-import { makeNewUser as makeNewUser, maybeMakeUser } from './actions'
 import { getGamestate } from './db'
 import { emitNewGamestate } from './IO'
 import { doActionAndTakeSteps } from './sleepLoop'
 
-const allActions = { ...actions, maybeMakeUser, makeNewUser } as const
+const allActions = { ...gameActions, ...serverActions } as const
 type ActionName = keyof typeof allActions
 const noCommit = ['hello', 'maybeMakeUser'] as const
 const wholeRequests = ['maybeMakeUser', 'makeNewUser'] as const
