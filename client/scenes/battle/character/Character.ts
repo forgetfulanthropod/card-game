@@ -15,7 +15,7 @@ import { MoveInfo } from './MoveInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
-import {  getOrbTexture, getCharTexture } from '@/scenes'
+import { getOrbTexture, getCharTexture } from '@/scenes'
 import { onUpdate } from '@/util'
 import {
     Adjust,
@@ -62,7 +62,8 @@ export function Character(args: CharacterProps): PixiContainer {
                 y: 22,
             }),
             mainAnimation,
-            mainAnimation == null && FallBackCharacterSprite(characterMeta),
+            mainAnimation == null &&
+                FallBackCharacterSprite(characterMeta, args.onClick),
             Adjust(FloatingIntents(characterMeta.uid), {
                 y: -(mainAnimation?.height ?? 0),
             }),
@@ -96,11 +97,16 @@ export function Character(args: CharacterProps): PixiContainer {
     return root
 }
 
-function FallBackCharacterSprite(characterMeta: CharacterMeta) {
+function FallBackCharacterSprite(
+    characterMeta: CharacterMeta,
+    onClick: (_: CharacterUid) => void
+) {
     const charSrc = getCharTexture(characterMeta.name)
     return Sprite({
         src: charSrc,
+        anchor: [0, 1],
         y: -20,
+        events: { pointerup: () => onClick(characterMeta.uid) },
         x: ((characterMeta.isPc ? 1 : -2) * charSrc.width) / 4,
     })
 }
