@@ -2,7 +2,7 @@ import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
 import { range } from 'lodash'
-import { MainCharacterAnimation } from '@sharedElements'
+import { CharacterInfo, MainCharacterAnimation } from '@sharedElements'
 import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
@@ -89,8 +89,8 @@ export function SelectedCharacters(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
     const root = Container({
-        x: (BASE_WIDTH * 1037) / 1920,
-        y: (BASE_HEIGHT * 698) / 1080,
+        x: 0.5 * BASE_WIDTH,
+        y: 0.77 * BASE_HEIGHT,
         children: [],
         onDestroy: [
             onUpdate(selectedCharacters, characters => {
@@ -113,27 +113,20 @@ export function SelectedCharacters(): PixiContainer {
             charactersData
                 .filter(c => c != null)
                 .map((c, i) => {
-                    const animation = MainCharacterAnimation(
-                        c,
-                        {
-                            pointerup: () => toggleSelectedCharacter(c, i),
-                        },
-                        260
-                    )
-
-                    if (animation != null) {
-                        animation.x -= animation.width / 2
-                        animation.y += animation.height / 2
-
-                        animation.cursor = 'pointer'
-                    }
-
                     return Container({
                         x: i === 0 ? -200 : i === 2 ? 0 : 200,
                         y: i === 2 ? 43 : 0,
                         scale: i === 2 ? 1.1 : 1,
                         children: [
-                            animation ??
+                            CharacterInfo(c),
+                            MainCharacterAnimation({
+                                characterMeta: c,
+                                events: {
+                                    pointerup: () =>
+                                        toggleSelectedCharacter(c, i),
+                                },
+                                height: 260,
+                            }) ??
                                 Sprite({
                                     anchor: [0.5, 0.5],
                                     src: isTextureKey(c.name)

@@ -4,11 +4,18 @@ import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
 import { glowFilter, Spine } from '@/elementsUtil'
 
-export function MainCharacterAnimation(
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>,
-    events?: InteractionEvents,
-    height = 190
-): PixiSpine | null {
+export function MainCharacterAnimation({
+    characterMeta,
+    events,
+    height = 190,
+    centerX = false,
+}: {
+    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>
+    // characterMeta: CharacterMeta
+    events?: InteractionEvents
+    height?: number
+    centerX?: boolean
+}): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(characterMeta.name)
 
     if (!spineAssetName) return null
@@ -37,11 +44,17 @@ export function MainCharacterAnimation(
     const desiredScale = desiredHeight / root.height
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    root.x += ((characterMeta.isPc ? 1 : -2) * root.width) / 4
+    // console.log({ rootWidth: root.width })
+
+    if (centerX) root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
 
     root.y -= 20
 
     return root
+
+    // return Container({
+    //     children: [root, CharacterInfo(characterMeta)],
+    // })
 
     function updateGlow(hoveredCharacterUid: CharacterUid | null) {
         if (root == null) return

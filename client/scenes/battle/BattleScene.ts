@@ -4,7 +4,7 @@ import type { CharacterUid } from 'shared'
 import { Cards, CardAdder } from './cards'
 import { Characters } from './character'
 import { Energy } from './Energy'
-import { InfoBox } from './InfoBox'
+import { BattleRoomInfo } from './BattleRoomInfo'
 import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
@@ -24,7 +24,7 @@ export function BattleScene(): PixiContainer {
         name: 'BattleScene',
         children: [
             Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
-            InfoBox({
+            BattleRoomInfo({
                 info: [
                     `Room ${scene.get('numRoomsPassed') + 1}`,
                     scene.get('dungeonName'),
