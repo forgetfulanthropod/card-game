@@ -106,7 +106,12 @@ function executeCommand({
 
     const output = angu.evaluate(command.actions, ctx, locals)
     if (output.kind === 'err') {
-        logger.error(['error in command:', output.value])
+        logger.error([
+            'error in command:',
+            command.actions,
+            command.id,
+            output.value,
+        ])
         // throw Error(jss`error in command: ${output.value}`)
     }
 

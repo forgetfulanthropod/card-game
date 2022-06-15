@@ -22,9 +22,9 @@ function main() {
             console.log(`\n\ttesting ${name}`)
             try {
                 test()
-                console.log(`✅ ${name} passed`)
+                console.log(`\t✅ ${name} passed`)
             } catch (e) {
-                console.log(`❌ ${name} failed`)
+                console.log(`\t❌ ${name} failed`)
                 if (e instanceof Error) {
                     console.log('\t\t', e.message.split('\n').join('\n\t\t'))
                 }

@@ -5,7 +5,7 @@ import type { Renderer, Sprite as PixiSprite } from 'pixi.js'
 import { BaseRenderTexture, RenderTexture } from 'pixi.js'
 
 import type { SpriteArgs } from './mypixi'
-import { getRenderer, Graphics, getPixiApp, Sprite } from './mypixi'
+import { PixiGraphics, getRenderer, getPixiApp, Sprite } from './mypixi'
 
 export type GradientArgs = {
     x0: number
@@ -21,7 +21,7 @@ export type GradientSpriteArgs = Required<
 > &
     Omit<SpriteArgs, 'src'>
 
-export function GradientRectangleSprite(
+function GradientRectangleSprite(
     options: GradientArgs,
     spriteArgs: GradientSpriteArgs
 ): PixiSprite {
@@ -50,35 +50,24 @@ export function RoundedRectangleGradientSprite({
     gradientArgs: GradientArgs
     spriteArgs: GradientSpriteArgs
 }): PixiSprite {
-    return Sprite({
-        src: getRenderer().generateTexture(
-            Graphics({
-                draw(g) {
-                    g.beginTextureFill({
-                        texture: GradientRectangleSprite(
-                            gradientArgs,
-                            spriteArgs
-                        ).texture,
-                    })
-                    if (
-                        radius >=
-                        Math.max(spriteArgs.width, spriteArgs.height) / 2
-                    ) {
-                        g.drawCircle(radius, radius, radius)
-                    } else {
-                        g.drawRoundedRect(
-                            0,
-                            0,
-                            spriteArgs.width,
-                            spriteArgs.height,
-                            radius
-                        )
-                    }
+    const subSprite = GradientRectangleSprite(gradientArgs, spriteArgs)
+    const g = new PixiGraphics()
+    g.beginTextureFill({
+        texture: subSprite.texture,
+    })
+    if (radius >= Math.max(spriteArgs.width, spriteArgs.height) / 2) {
+        g.drawCircle(radius, radius, radius)
+    } else {
+        g.drawRoundedRect(0, 0, spriteArgs.width, spriteArgs.height, radius)
+    }
 
-                    g.endFill()
-                },
-            })
-        ),
+    g.endFill()
+    const texture = getRenderer().generateTexture(g)
+    g.destroy(true)
+    subSprite.destroy(true)
+    return Sprite({
+        src: texture,
         ...spriteArgs,
+        onDestroy: [() => texture.destroy(true)],
     })
 }

@@ -4,7 +4,7 @@ import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 
 import type { InteractionEvents } from './mypixi'
-import { bindEvents } from './mypixi'
+import { bindEvents, startChecking } from './mypixi'
 import type { AnimationsOf, SpineAsset } from '@/scenes'
 import { onUpdate } from '@/util'
 
@@ -49,6 +49,7 @@ export function Spine<Name extends SpineAsset>(props: {
         })
     }
 
+    startChecking(spine)
     return spine
 }
 

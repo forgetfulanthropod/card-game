@@ -185,9 +185,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'magicalStorm',
         targetNum: 0,
         targetType: 'self',
-        // round.enemyDamageBonus += 4
-        // if (blockBroken) health -= (damage + round.enemyDamageBonus)
-        actions: 'addEffect("smallDamageIncrease", 1)',
+        actions: 'effect("smallDamageIncrease", 1)',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -311,7 +309,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             },
         ],
         actions:
-            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)], momentary())',
+            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -331,8 +329,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions:
-            'chain(queue(1, addEnergy(2))), "+2 energy next turn", momentary())',
+        actions: 'chain(queue(1, addEnergy(2)), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },

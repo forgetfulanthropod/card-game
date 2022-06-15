@@ -1,10 +1,9 @@
 import { assertFinite } from 'shared/code'
 import type { Executors, Explainers } from './util'
-import { evalOne } from './util'
 import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['smite'] = dslArgs => {
-    return `${evalOne(dslArgs[0])}\nif target dies, \n ${evalOne(dslArgs[1])}`
+    return `Deal wisdom damage. If enemy is killed, block dexterity.`
 }
 
 export const execute: Executors['smite'] = ({

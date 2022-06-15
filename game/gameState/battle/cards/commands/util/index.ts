@@ -42,6 +42,11 @@ interface ArgsOf {
     queue: [numTurns: number, move: any]
 
     killIf: [condition: boolean]
+
+    draw: [numCards: number]
+    discard: [numCards: number]
+    orbOfHolyLight: []
+    doubleEnchantmentOrToken: []
 }
 
 export type Locals = CalculatedCharacterStats & {

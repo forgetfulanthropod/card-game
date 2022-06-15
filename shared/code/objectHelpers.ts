@@ -1,3 +1,5 @@
+import { shuffle } from 'lodash'
+
 export function vals<K extends string | number, V>(obj: Record<K, V>): V[] {
     return Object.values(obj)
 }
@@ -49,4 +51,11 @@ export function objFilter<K extends string | number, V>(
         if (f(k as string, v)) o[k] = v
     })
     return o
+}
+
+/** Returns a new shuffled object; does not shuffle in place */
+export function objShuffle<Obj extends Record<string, unknown>>(obj: Obj): Obj {
+    const res = {} as Obj
+    shuffle(Object.keys(obj) as (keyof Obj)[]).forEach(k => (res[k] = obj[k]))
+    return res
 }

@@ -68,7 +68,7 @@ export type NpcCommandId =
     | 'matchaMadness'
     | 'matchaMeld'
     | 'evisceratingSweep'
-    | 'passiveBlock'
+    | 'passiveBlockCmd'
     | 'ancientStrike'
     | 'hansBuffBlock'
     | 'hansMagicMissile'

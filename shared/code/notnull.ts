@@ -15,3 +15,7 @@ export function notnull(obj: Record<string, unknown>) {
         }
     }
 }
+
+export function throwNull(name: string): never {
+    throw Error(`'${name}' is null`)
+}

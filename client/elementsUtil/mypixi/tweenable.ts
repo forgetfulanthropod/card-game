@@ -1,6 +1,7 @@
 import { applyContainerArgs } from './_applyArgs'
 import type { ContainerArgs } from './_types'
 import { PixiContainer } from './aliases'
+import { startChecking } from './_util'
 
 export class TweenablePixiContainer extends PixiContainer {
     set tweenableScale(scale: number) {
@@ -15,6 +16,7 @@ export function TweenableContainer(
 ): TweenablePixiContainer {
     const c = new TweenablePixiContainer()
     applyContainerArgs(args, c)
+    startChecking(c)
     return c
 }
 
