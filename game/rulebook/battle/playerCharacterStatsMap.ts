@@ -134,7 +134,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         name: 'matchaGelatinCube',
         displayName: 'Matcha Gelatin Cube',
         isPc: false,
-        class: 'knight',
+        class: 'wizard',
 
         constitution: 78,
         strength: 7,

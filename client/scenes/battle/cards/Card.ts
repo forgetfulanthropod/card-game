@@ -27,8 +27,7 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/actions'
 import type { CardTypeAssetId } from '@/scenes'
 
-//maybe yellow/orange gradient for cleric, red for warrior, blue for wizard, green for bard, purple for rogue?
-const classToCardColorMap: Record<CardTypeAssetId, number[]> = {
+const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
     cardTypeDefense: [0xfef3d7, 0xe5f8e1, 0x5df6fd, 0x00b6fc, 0x0012de],
     cardTypeUtility: [0xfff4d8, 0xf3f5ce, 0x9eff87, 0x42f93a, 0x1be515],
@@ -212,7 +211,7 @@ function getMargins(cardFrameTexture: PixiTexture) {
 function getColorStopsFromCardType(cardType: CardType): ColorStop[] {
     const bgGradientColors =
         //@ts-expect-error
-        classToCardColorMap[`cardType${upperFirst(cardType)}`] as number[]
+        cardTypeToColorMap[`cardType${upperFirst(cardType)}`] as number[]
 
     return bgGradientColors.map(
         (color, i): ColorStop => ({

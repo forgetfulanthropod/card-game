@@ -24,11 +24,11 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         displayName: 'Skeleton Warrior',
         isPc: true,
         class: 'knight',
-        constitution: 10,
-        strength: 2,
-        wisdom: 5,
-        dexterity: 5,
 
+        constitution: 54,
+        strength: 11,
+        wisdom: 4,
+        dexterity: 4,
         uid: 'pc-1',
         tokenId: '4',
         nftName: 'skeletonWarrior-4',
@@ -60,6 +60,21 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         uid: 'pc-3',
         tokenId: '4',
         nftName: 'mushroomFarmer-4',
+    },
+    {
+        name: 'matchaGelatinCube',
+        displayName: 'Matcha Gelatin Cube',
+        isPc: true,
+        class: 'wizard',
+
+        constitution: 78,
+        strength: 7,
+        wisdom: 5,
+        dexterity: 5,
+
+        uid: 'pc-4',
+        tokenId: '4',
+        nftName: 'matchaGelatinCube-4',
     },
 ]
 
@@ -168,7 +183,8 @@ export function SelectedCharacters(): PixiContainer {
 
 function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
     const nextIndex =
-        (defaultOwnedCharacters.findIndex(oc => oc.name === c.name) + 1) % 3
+        (defaultOwnedCharacters.findIndex(oc => oc.name === c.name) + 1) %
+        defaultOwnedCharacters.length
     const nextChoice = defaultOwnedCharacters[nextIndex]
     console.log({ nextIndex, nextChoice })
     void callApi('PlaceSelectedCharacters', {
