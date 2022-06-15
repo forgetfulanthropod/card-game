@@ -42,6 +42,8 @@ export interface GameOnlyAction {
     RulebookAction: (_: RulebookArgs) => void
 
     ToggleStance: (_: { characterUid: CharacterUid }) => void
+
+    FinishCard: (_: { kind: RequiredActionName; cardUids: CardUid[] }) => void
 }
 export interface Action extends GameOnlyAction, ServerOnlyAction {}
 
@@ -80,3 +82,11 @@ export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
 type ServerResult<T> =
     | { status: 'success'; result: T }
     | { status: 'error'; message: string }
+
+type RequiredActionName = 'discard' | 'removeFromRoom' | 'discardFromDraw'
+
+export interface RequiredAction {
+    type: RequiredActionName
+    least: number
+    most: number
+}

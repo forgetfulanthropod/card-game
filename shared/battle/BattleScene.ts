@@ -9,6 +9,7 @@ import type {
     Pile,
     Piles,
     SceneHas,
+    RequiredAction,
 } from '@'
 
 export interface BattleScene extends SceneHas {
@@ -28,6 +29,7 @@ export interface BattleScene extends SceneHas {
     numRoomsPassed: number
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    requireAction: RequiredAction | null
     queue: CommandQueue
 }
 

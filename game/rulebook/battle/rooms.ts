@@ -7,7 +7,7 @@ import { enemies } from '@/rulebook'
 // - Room 3: Two Level 2 Skeletons, One Level 2 Matcha
 // - Room 4: Boss (maybe warhog)
 
-const config = { randomDungeon: false }
+const config = { randomDungeon: true }
 
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [

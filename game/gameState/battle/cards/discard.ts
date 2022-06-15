@@ -1,18 +1,18 @@
 import produce from 'immer'
-import type { Card, CardUid, BattleCursor } from 'shared'
+import type { CardUid, BattleCursor } from 'shared'
 
 export function discard(args: {
-    cardUid: CardUid
-    card: Card
+    cardUids: CardUid[]
     scene: BattleCursor
 }): void {
     args.scene.apply(
         'cards',
         produce(cards => {
-            const card = cards.hand[args.cardUid]
-            delete cards.hand[args.cardUid]
-            if (card) {
-                cards.discard[args.cardUid] = card
+            for (const uid of args.cardUids) {
+                const card = cards.hand[uid]
+                if (card == null) throw Error('card not in hand:' + uid)
+                delete cards.hand[uid]
+                cards.discard[uid] = card
             }
         })
     )

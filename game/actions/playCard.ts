@@ -16,7 +16,7 @@ export const playCard: GameActions['PlayCard'] = args => {
 
     if (isPlayable({ card, scene })) {
         play({ card, targetUids: args.targetUids, scene })
-        discard({ cardUid: args.cardUid, card, scene })
+        discard({ cardUids: [args.cardUid], scene })
     }
 
     clearDead(scene)
