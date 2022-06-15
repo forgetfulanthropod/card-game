@@ -7,6 +7,7 @@ import { callApi } from '@/actions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    Adjust,
     isTextureKey,
     PixiTexture,
     BASE_HEIGHT,
@@ -109,35 +110,45 @@ export function SelectedCharacters(): PixiContainer {
 
         void fillUnselectedSlots(charactersData)
 
+        const characterHeight = 260
         const characters =
             charactersData
                 .filter(c => c != null)
                 .map((c, i) => {
-                    return Container({
+                    const props = {
                         x: i === 0 ? -200 : i === 2 ? 0 : 200,
                         y: i === 2 ? 43 : 0,
                         scale: i === 2 ? 1.1 : 1,
-                        children: [
-                            CharacterInfo(c),
-                            MainCharacterAnimation({
-                                characterMeta: c,
-                                events: {
-                                    pointerup: () =>
-                                        toggleSelectedCharacter(c, i),
-                                },
-                                height: 260,
-                            }) ??
-                                Sprite({
-                                    anchor: [0.5, 0.5],
-                                    src: isTextureKey(c.name)
-                                        ? getTexture(c.name)
-                                        : PixiTexture.WHITE,
-                                    scale: 1,
-                                }),
-                        ],
-                    })
-                }) ?? []
-
+                    } as const
+                    return [
+                        Container({
+                            ...props,
+                            children: [
+                                MainCharacterAnimation({
+                                    characterMeta: c,
+                                    events: {
+                                        pointerup: () =>
+                                            toggleSelectedCharacter(c, i),
+                                    },
+                                    height: characterHeight,
+                                }) ??
+                                    Sprite({
+                                        anchor: [0.5, 0.5],
+                                        src: isTextureKey(c.name)
+                                            ? getTexture(c.name)
+                                            : PixiTexture.WHITE,
+                                        scale: 1,
+                                    }),
+                            ],
+                        }),
+                        Adjust(CharacterInfo(c), {
+                            ...props,
+                            y: -characterHeight * 1.5,
+                            zIndex: i + 3,
+                        }),
+                    ]
+                })
+                .flat() ?? []
         listenerStack.pop()?.()
 
         listenerStack.push(
@@ -151,6 +162,7 @@ export function SelectedCharacters(): PixiContainer {
         root.removeChildren()
         if (Array.isArray(characters) && characters.length > 0)
             root.addChild(...characters)
+        root.sortChildren()
     }
 }
 
