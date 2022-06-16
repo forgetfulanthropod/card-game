@@ -20,13 +20,13 @@ const interpretCommandSuite = {
     addBlock() {
         const scene = freshBattleScene()
         interpretCommand({
-            command: makeCmd(pc1, 'addBlock(dexterity)', 'self'),
+            command: makeCmd(pc1, 'addBlock(defense)', 'self'),
             scene,
             targetUids: [pc1],
         })
         equals(
             scene.get('allCharacters', pc1, 'block'),
-            exampleBattleScene_.scene.allCharacters[pc1].dexterity
+            exampleBattleScene_.scene.allCharacters[pc1].defense
         )
     },
     addEnergy() {

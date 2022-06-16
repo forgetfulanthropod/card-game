@@ -21,7 +21,7 @@ const blockBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'friends',
-    actions: 'addBlock(dexterity)',
+    actions: 'addBlock(defense)',
     type: 'defense',
 } as const
 /** Enforces correct self-id */
@@ -35,7 +35,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shield',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'addBlock(dexterity + 2)',
+        actions: 'addBlock(defense + 2)',
         type: 'defense',
         characterClass: 'knight',
     },
@@ -263,7 +263,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         // TODO: "You may only play this card if this character is in an avoidant stance."
         actions:
-            'chain(addBlock(dexterity), effect("strongblock", 1, "friends"))',
+            'chain(addBlock(defense), effect("strongblock", 1, "friends"))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -340,8 +340,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'helpingHand',
         targetNum: 1,
         targetType: 'friends',
-        actions:
-            'choice(addBlock(dexterity + 2), addWisdom(2), addStrength(2))',
+        actions: 'choice(addBlock(defense + 2), addWisdom(2), addStrength(2))',
         type: 'utility',
         characterClass: 'cleric',
     },

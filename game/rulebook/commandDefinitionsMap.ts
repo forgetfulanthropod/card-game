@@ -118,7 +118,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         id: 'block',
         targetNum: 1,
         targetType: 'self',
-        actions: 'addBlock(dexterity)',
+        actions: 'addBlock(defense)',
     },
 
     /**Slash (SL) */

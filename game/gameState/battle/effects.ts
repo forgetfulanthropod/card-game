@@ -13,7 +13,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         block: cm.block,
         blockMultiplier: 1,
         constitution: cm.constitution,
-        dexterity: cm.dexterity,
+        defense: cm.defense,
         wisdom: cm.wisdom,
         strength: cm.strength,
         isSkipped: false,

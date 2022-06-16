@@ -28,7 +28,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         constitution: 54,
         strength: 11,
         wisdom: 4,
-        dexterity: 4,
+        defense: 4,
         uid: 'pc-1',
         tokenId: '4',
         nftName: 'skeletonWarrior-4',
@@ -41,7 +41,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         constitution: 72,
         strength: 8,
         wisdom: 5,
-        dexterity: 5,
+        defense: 5,
 
         uid: 'pc-2',
         tokenId: '4',
@@ -55,7 +55,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         constitution: 112,
         strength: 8,
         wisdom: 9,
-        dexterity: 6,
+        defense: 6,
 
         uid: 'pc-3',
         tokenId: '4',
@@ -70,7 +70,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         constitution: 78,
         strength: 7,
         wisdom: 5,
-        dexterity: 5,
+        defense: 5,
 
         uid: 'pc-4',
         tokenId: '4',

@@ -3,7 +3,7 @@ import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['smite'] = dslArgs => {
-    return `Deal wisdom damage. If enemy is killed, block dexterity.`
+    return `Deal wisdom damage. If enemy is killed, block defense.`
 }
 
 export const execute: Executors['smite'] = ({
@@ -28,6 +28,6 @@ export const execute: Executors['smite'] = ({
     if (healthAfter <= 0) {
         scene
             .select('allCharacters', command.characterUid, 'block')
-            .apply(b => b + calculatedStats.dexterity)
+            .apply(b => b + calculatedStats.defense)
     }
 }

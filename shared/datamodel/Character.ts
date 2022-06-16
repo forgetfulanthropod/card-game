@@ -1,6 +1,13 @@
 import type { Brandify } from './misc'
 import type { CharacterClass, CharacterName } from '@'
 
+export type CharacterAbility = {
+    displayName: string
+    actions: string
+    type: 'passive' | 'oneTime'
+    description: string
+}
+
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     /** TODO: rename this to ID  */
@@ -15,7 +22,8 @@ export type CharacterStats = Readonly<{
     /** base magic */
     wisdom: number
     /** base block */
-    dexterity: number
+    defense: number
+    // abilities: CharacterAbility[]
 }> &
     Brandify
 
@@ -26,7 +34,7 @@ export interface CalculatedCharacterStats {
     constitution: number
     strength: number
     wisdom: number
-    dexterity: number
+    defense: number
     damageTakeMultiplier: number
     damageTakeAddend: number
     blockMultiplier: number

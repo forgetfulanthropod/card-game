@@ -7,7 +7,7 @@ import { hoveredCharacterUid } from '@/util'
 const stats = [
     { key: 'strength', color: 0xd44c47 },
     { key: 'wisdom', color: 0x9e6ec2 },
-    { key: 'dexterity', color: 0x337ea9 },
+    { key: 'defense', color: 0x337ea9 },
     { key: 'constitution', color: 0x1cc8af },
 ] as const
 
