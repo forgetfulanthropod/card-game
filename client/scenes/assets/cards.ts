@@ -1,32 +1,17 @@
-const cardBodySlam = 'cards/Body Slam.png'
-const cardBackPileSizeOverlay = 'cards/card back pile size overlay.png'
-const cardBack = 'cards/card back.png'
-const cardEnergy = 'cards/parts/energy.png'
-const cardJab = 'cards/Jab.png'
-const cardTypeAttack = 'cards/parts/Attack.png'
-const cardTypeDefense = 'cards/parts/Defense.png'
-const cardTypeEnchantment = 'cards/parts/Enchantment.png'
-const cardTypeUtility = 'cards/parts/Utility.png'
-const cardShieldOfLight = 'cards/Shield of Light.png'
-const cardShield = 'cards/Shield.png'
-const cardStrike = 'cards/Strike.png'
-const cardSweepTheLeg = 'cards/Sweep The Leg.png'
-const remainingEnergy = 'cards/energy flame.png'
-
 const cardArtAssets = {
-    cardBodySlam,
-    cardJab,
-    cardSweepTheLeg,
-    cardShield,
-    cardStrike,
-    cardShieldOfLight,
+    cardBodySlam: 'cards/Body Slam.png',
+    cardJab: 'cards/Jab.png',
+    cardSweepTheLeg: 'cards/Sweep The Leg.png',
+    cardShield: 'cards/Shield.png',
+    cardStrike: 'cards/Strike.png',
+    cardShieldOfLight: 'cards/Shield of Light.png',
 }
 
 const cardTypeAssets = {
-    cardTypeAttack,
-    cardTypeDefense,
-    cardTypeEnchantment,
-    cardTypeUtility,
+    cardTypeAttack: 'cards/parts/Attack.png',
+    cardTypeDefense: 'cards/parts/Defense.png',
+    cardTypeEnchantment: 'cards/parts/Enchantment.png',
+    cardTypeUtility: 'cards/parts/Utility.png',
 }
 
 export type CardArtAssetId = keyof typeof cardArtAssets
@@ -35,10 +20,10 @@ export type CardTypeAssetId = keyof typeof cardTypeAssets
 export type CardAssetId = keyof typeof cardAssets
 
 export const cardAssets = {
-    remainingEnergy,
-    cardEnergy,
-    cardBackPileSizeOverlay,
-    cardBack,
+    remainingEnergy: 'cards/energy flame.png',
+    cardEnergy: 'cards/parts/energy.png',
+    cardBackPileSizeOverlay: 'cards/card back pile size overlay.png',
+    cardBack: 'cards/card back.png',
     ...cardArtAssets,
     ...cardTypeAssets,
 } as const

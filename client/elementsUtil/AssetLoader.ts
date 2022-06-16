@@ -16,30 +16,19 @@ import {
 } from '@/scenes'
 import { check, fontAssets } from '@/assets'
 
-const endTurnButton = 'core-ui/end turn.png'
-const confirmButton = 'core-ui/confirm_.png'
-const gemButton = 'misc-png/BUTTON_GO.png'
-const chestBody = 'misc-png/CHEST_BODY.png'
-const chestLid = 'misc-png/CHEST_LID.png'
-const fishstick = 'misc-png/INVENTORY_FISHSTICK.png'
-const potion = 'misc-png/INVENTORY_POTION.png'
-const swordShield = 'misc-png/INVENTORY_SWORDSHIELD.png'
-const bread = 'misc-png/ITEM_BREAD.png'
-const door = 'misc-png/temp-door.png'
-
 Loader.registerPlugin(WebfontLoaderPlugin)
 
 const allAssets = {
-    fishstick,
-    potion,
-    swordShield,
-    bread,
+    fishstick: 'misc-png/INVENTORY_FISHSTICK.png',
+    potion: 'misc-png/INVENTORY_POTION.png',
+    swordShield: 'misc-png/INVENTORY_SWORDSHIELD.png',
+    bread: 'misc-png/ITEM_BREAD.png',
     check,
-    chestBody,
-    chestLid,
-    door,
-    endTurnButton,
-    confirmButton,
+    chestBody: 'misc-png/CHEST_BODY.png',
+    chestLid: 'misc-png/CHEST_LID.png',
+    door: 'misc-png/temp-door.png',
+    endTurnButton: 'core-ui/end turn.png',
+    confirmButton: 'core-ui/confirm_.png',
     ...intentAssets,
     ...fontAssets,
     ...orbAssets,
@@ -51,7 +40,7 @@ const allAssets = {
     ...spineAssets,
     ...cardAssets,
     ...healthBarAssets,
-    gemButton,
+    gemButton: 'misc-png/BUTTON_GO.png',
 }
 
 let resolveLoaderPromise = null as unknown as (_: unknown) => void

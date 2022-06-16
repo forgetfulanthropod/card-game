@@ -7,4 +7,3 @@ export const fontAssets = {
 export const goodEarthImg = 'root/good-earth.png'
 
 export const check = 'root/check.png'
-export const pointer = 'root/mouse.png'

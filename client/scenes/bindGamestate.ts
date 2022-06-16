@@ -4,11 +4,11 @@ import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import { BattleScene } from './battle'
 import { DungeonEntryScene } from './entry'
-import { pointer } from '@/assets'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { animation$, nextFrame, onUpdate } from '@/util'
 
+const pointerFullPath = 'assets/root/mouse.png'
 let lastScene: PixiContainer
 
 export function bindGamestate(app: PixiApplication): void {
@@ -19,7 +19,7 @@ export function bindGamestate(app: PixiApplication): void {
 
 function setBodyStyles() {
     document.body.style.cursor = 'pointer'
-    document.body.style.cursor = `url('${pointer}'), pointer`
+    document.body.style.cursor = `url('${pointerFullPath}'), pointer`
 }
 
 function bindScene(app: PixiApplication): Unbind {

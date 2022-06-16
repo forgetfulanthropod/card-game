@@ -23,3 +23,5 @@ tsconfig.tsbuildinfo
 db.json
 server/leveldb
 server/temp
+public/*.css
+public/*.map
