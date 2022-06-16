@@ -54,7 +54,7 @@ export type GameActions = {
 export type ServerActions = {
     [K in keyof BareServerActionArgs]: (
         args: BareServerActionArgs[K]
-    ) => Promise<void>
+    ) => Promise<void> | void
 }
 
 // export type GameActionArgs = {

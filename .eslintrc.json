@@ -114,6 +114,7 @@
         "**/ignore/",
         "**/dist/",
         "**/node_modules/",
+        "public/",
         "tests/",
         "client/public_"
     ],
