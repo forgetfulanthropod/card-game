@@ -186,7 +186,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
         (defaultOwnedCharacters.findIndex(oc => oc.name === c.name) + 1) %
         defaultOwnedCharacters.length
     const nextChoice = defaultOwnedCharacters[nextIndex]
-    console.log({ nextIndex, nextChoice })
+    // console.log({ nextIndex, nextChoice })
     void callApi('placeSelectedCharacters', {
         characters: [
             {

@@ -12,10 +12,9 @@ export function App(): JSXElement {
         localStorage.getItem('username') ?? ''
     )
     const [ready, setReady] = useState(false)
-    console.log({ username })
+    // console.log({ username })
 
     useEffect(() => {
-        timelog('inside app')
         if (username.length > 0) {
             emitUsername(username)
             setReady(true)

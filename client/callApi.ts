@@ -4,7 +4,7 @@ export async function callApi<K extends ActionName>(
     method: K,
     args: AllActionArgs[K]
 ): Promise<void> {
-    console.log('calling', method, args)
+    // console.log('calling', method, args)
     const username = localStorage.getItem('username')
     if (username == null)
         throw Error(

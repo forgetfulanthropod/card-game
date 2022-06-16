@@ -10,7 +10,6 @@ const config = {
 export async function startPixi(canvas: HTMLCanvasElement): Promise<void> {
     // const scale = window.innerWidth / BASE_WIDTH
     await assetsLoadedPromise()
-    timelog('assets loaded')
     if (config?.showOneThing != null) {
         Application({ canvas, children: [config?.showOneThing()] })
         return

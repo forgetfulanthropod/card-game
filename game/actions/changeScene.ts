@@ -8,7 +8,7 @@ import { getBattleSceneIn, getEntrySceneIn } from '@/util'
 export const changeScene: GameActions['changeScene'] = args => {
     const { game } = args
     //TODO: VALIDATE
-    logger.info('changing scene to ' + args.newSceneName)
+    // logger.info('changing scene to ' + args.newSceneName)
     if (args.newSceneName === 'battle') {
         const entrySceneData = getEntrySceneIn(args.game).get()
         const { selectedCharacters, selectedLevel } = entrySceneData

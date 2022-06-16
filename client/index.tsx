@@ -21,11 +21,9 @@ console.log('client build info:', JSON.stringify(clientBuildInfo))
 const preactRoot = document.getElementById('preact-root') as HTMLDivElement
 
 function main() {
-    timelog('waiting for socket')
     startLoadingAssets()
     prepareSocket()
     preactRoot.innerHTML = '' // remove the default warning
-    timelog('rendering app')
     render(<App />, preactRoot)
 }
 void main()

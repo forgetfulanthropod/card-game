@@ -67,8 +67,8 @@ function updateBoabab(fromServer: Gamestate): void {
     // not working on N level tree updates?
     // cards.hand key value pair removedand no differences..
     if (differences == null) {
-        console.warn('no differences')
-        console.log(oldState, fromServer)
+        console.warn('received state update with no differences')
+        // console.log(oldState, fromServer)
         return
     }
     for (const change of differences) {

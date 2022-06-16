@@ -21,8 +21,10 @@ export function beginTargetSelection(
 
     const destination = datum({ x: origin.val.x, y: origin.val.y })
 
+    // TODO: this should not fire when dead
     const updateDestination = (e: InteractionEvent) => {
-        const cardBounds = cardEl.children[0].getBounds()
+        const cardBounds = cardEl?.children?.[0]?.getBounds()
+        if (cardBounds == null) return
         const x0 = (cardBounds.left + cardBounds.right) / 2
         const y0 = cardBounds.top
 
@@ -33,7 +35,7 @@ export function beginTargetSelection(
     }
     app.stage.interactive = true
     app.stage.on('pointermove', updateDestination)
-    app.stage.on('pointerout', () => cleanup())
+    app.stage.on('pointerout', cleanup)
 
     window.addEventListener(
         'keydown',

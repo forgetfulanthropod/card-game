@@ -44,8 +44,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.post('/api', api)
 
-// eslint-disable-next-line no-console
-console.log('DIRNAME:', __dirname)
 app.use('/', express.static(__dirname + '/client', { extensions: ['.atlas'] }))
 
 if (process.env.USE_ROUTER !== 'yes') {

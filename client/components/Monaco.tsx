@@ -38,7 +38,7 @@ export function Monaco(props: {
                     await editor.getAction('editor.foldRecursively').run()
                     for (let i = 0; i < foldLevel; i++)
                         await editor.getAction('editor.unfold').run()
-                    console.log('i tried to fold it ok')
+                    // console.log('i tried to fold it ok')
                 }) as OnMount
             }
             height='88vh'

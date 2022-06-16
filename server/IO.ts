@@ -36,7 +36,7 @@ export function mountIo(
 ): void {
     io = new SocketServer(server, { path: prefix + '/socket' })
     io.on('connection', socket => {
-        logger.info(`socket connected: ${socket.id}`)
+        // logger.info(`socket connected: ${socket.id}`)
         socket.on(
             'username',
             ({
@@ -46,7 +46,7 @@ export function mountIo(
                 username: string
                 socketId: string
             }) => {
-                logger.info(['username associated:', { username, socketId }])
+                // logger.info(['username associated:', { username, socketId }])
                 usernameToSocketId[username] = socketId
                 void maybeMakeUser({ username })
             }

@@ -49,13 +49,13 @@ class Runner {
 
     start() {
         this.running = true
-        console.log('runner started')
+        // console.log('runner started')
         void this.step()
     }
 
     stop() {
         this.running = false
-        console.log('runner stopped')
+        // console.log('runner stopped')
     }
 
     async step() {
@@ -128,7 +128,7 @@ class Runner {
 }
 
 function addNewCharacter(availableChars: OwnedCharacterStats[]) {
-    console.log(`there are ${availableChars.length} options`)
+    // console.log(`there are ${availableChars.length} options`)
     if (availableChars.length === 0) {
         throw Error('no chars left')
     }
