@@ -264,7 +264,7 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         if (card.targetType === 'self')
-            void callApi('PlayCard', {
+            void callApi('playCard', {
                 cardUid: card.uid,
                 targetUids: [],
             })

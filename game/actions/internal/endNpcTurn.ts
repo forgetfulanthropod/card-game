@@ -1,4 +1,4 @@
-import type { Empty, InternalAction } from 'shared'
+import type { InternalActions } from 'shared'
 
 import {
     drawNewHand,
@@ -15,10 +15,7 @@ import { getBattleSceneIn } from '@/util'
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
 
-export const endNpcTurn: InternalAction['endNpcTurn'] = (
-    game: Gamecursor,
-    _args: Empty
-): void => {
+export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('ending NPC turn')
     scene.select('nextNpcCommands').set(getNpcMoves(scene))

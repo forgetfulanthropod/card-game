@@ -60,7 +60,7 @@ function makeCharacters() {
                     src: getTexture(c.name),
                     scale: 0.45,
                     onClick: () =>
-                        callApi('PlaceSelectedCharacters', { character: c, index: 0 }),
+                        callApi('placeSelectedCharacters', { character: c, index: 0 }),
                 }),
             ],
         })

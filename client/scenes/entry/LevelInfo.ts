@@ -69,7 +69,7 @@ export function LevelInfo(): PixiContainer {
     //     style: arrowStyle,
     //     alpha: 0,
     //     async onClick() {
-    //         await callApi('ChangeDungeon', { direction: -1 })
+    //         await callApi('changeDungeon', { direction: -1 })
     //     },
     // })
     // const rightButton = Text({
@@ -80,7 +80,7 @@ export function LevelInfo(): PixiContainer {
     //     style: arrowStyle,
     //     alpha: 0,
     //     async onClick() {
-    //         await callApi('ChangeDungeon', { direction: +1 })
+    //         await callApi('changeDungeon', { direction: +1 })
     //     },
     // })
 

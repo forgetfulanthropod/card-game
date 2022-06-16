@@ -141,7 +141,7 @@ function getBoundOrbContainer(
                     Container({
                         x: i * orbWidth * 1.5,
                         onClick: async () => {
-                            await callApi('ActivateOrb', {
+                            await callApi('activateOrb', {
                                 characterUid: characterCursor.get('uid'),
                                 orb,
                             })

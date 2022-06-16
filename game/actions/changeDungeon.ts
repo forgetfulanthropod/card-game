@@ -1,9 +1,9 @@
-import type { GameActions } from './types'
+import type { GameActions } from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { getEntrySceneIn } from '@/util'
 
-export const changeDungeon: GameActions['ChangeDungeon'] = args => {
+export const changeDungeon: GameActions['changeDungeon'] = args => {
     const levels = getRulebook().dungeonLevels
     const scene = getEntrySceneIn(args.game)
 

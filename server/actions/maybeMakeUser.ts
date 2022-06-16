@@ -1,15 +1,18 @@
-import type { Gamestate } from 'shared'
+import type { ServerActions } from 'shared'
 
-import type { Request } from 'express'
 import { makeNewUser } from './makeNewUser'
 import { getGamestate } from '@/db'
+import { emitNewGamestate } from '@/IO'
 
-export const maybeMakeUser = async (req: Request): Promise<Gamestate> => {
-    const username: string = req.body.username
-    if (typeof username !== 'string')
-        throw Error(`username '${username}' is not string`)
+export const maybeMakeUser: ServerActions['maybeMakeUser'] = async ({
+    username,
+}) => {
     const maybeGamestate = await getGamestate(username)
-    if (maybeGamestate != null) return maybeGamestate
+    if (maybeGamestate != null) {
+        logger.info('emitting existing gamestate')
+        emitNewGamestate(username, maybeGamestate)
+        return
+    }
     logger.info(`adding user ${username} with initial gamestate`)
-    return await makeNewUser(req)
+    await makeNewUser({ username })
 }

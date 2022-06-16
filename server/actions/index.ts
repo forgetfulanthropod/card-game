@@ -1,5 +1,5 @@
 // @index('./*', f => `export { ${f.name} } from '${f.path}'`)
-export { hello } from './hello'
+export { incrementTestCounter } from './incrementTestCounter'
 export { makeNewUser } from './makeNewUser'
 export { maybeMakeUser } from './maybeMakeUser'
 // @endindex

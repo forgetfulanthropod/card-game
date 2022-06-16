@@ -1,8 +1,8 @@
 import { produce } from 'immer'
-import type { GameActions } from './types'
+import type { GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
 import { discard } from '@/gameState'
-export const finishCard: GameActions['FinishCard'] = ({ cardUids, game }) => {
+export const finishCard: GameActions['finishCard'] = ({ cardUids, game }) => {
     const scene = getBattleSceneIn(game)
     const ra = scene.get('requireAction')
     if (ra == null) throw Error('no action is required')

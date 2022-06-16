@@ -119,7 +119,7 @@ function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {
             x: BASE_WIDTH * 0.9,
             y: BASE_HEIGHT * 0.78,
             onClick: () => {
-                void callApi('AddCardToDeck', { cardUid })
+                void callApi('addCardToDeck', { cardUid })
                 selectedCardUid.set(null)
             },
             children: [

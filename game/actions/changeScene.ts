@@ -1,11 +1,11 @@
-import type { GameActions } from './types'
+import type { GameActions } from 'shared'
 
 import { nextRoom } from './nextRoom'
 import { makeBattleState, setCards } from '@/gameState'
 import { getRulebook } from '@/rulebook'
 import { getBattleSceneIn, getEntrySceneIn } from '@/util'
 
-export const changeScene: GameActions['ChangeScene'] = args => {
+export const changeScene: GameActions['changeScene'] = args => {
     const { game } = args
     //TODO: VALIDATE
     logger.info('changing scene to', args.newSceneName)

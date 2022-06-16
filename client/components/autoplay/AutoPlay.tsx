@@ -82,7 +82,7 @@ class Runner {
         const scene = tree.scene as EntryScene
         if (scene.selectedCharacters.length === 0 && flip(probChangeLevel)) {
             toast('changing dungeon')
-            await callApi('ChangeDungeon', { direction: flip(0.5) ? -1 : 1 })
+            await callApi('changeDungeon', { direction: flip(0.5) ? -1 : 1 })
             return
         }
         const availableChars = getAvailableChars(scene, tree)
@@ -92,7 +92,7 @@ class Runner {
             return
         }
         toast('out of points. starting battle.')
-        await callApi('ChangeScene', { newSceneName: 'battle' })
+        await callApi('changeScene', { newSceneName: 'battle' })
     }
 
     battleStep(tree: Gamestate) {
@@ -104,7 +104,7 @@ class Runner {
         //     if (door == null) {
         //         throw Error('null door')
         //     }
-        //     await callApi('NextRoom', { door })
+        //     await callApi('nextRoom', { door })
         // }
         if (!scene.isPlayerTurn) {
             toast('not my turn - doing nothing')
@@ -136,7 +136,7 @@ function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     if (charChoice == null) {
         throw Error('null char')
     }
-    // await callApi('PlaceSelectedCharacters', {
+    // await callApi('placeSelectedCharacters', {
     //     character: charChoice,
     //     //TODO: HOW??
     //     index: 0,

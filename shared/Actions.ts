@@ -1,3 +1,7 @@
+/** All server and game (including internal) actions.
+ * They all return void when called.
+ */
+
 import type { SCursor } from 'sbaobab'
 
 import type { CharacterUid, Gamestate } from './datamodel'
@@ -9,79 +13,101 @@ import type {
     SceneType,
 } from './index'
 
-export interface ServerOnlyAction {
-    Hello: (_: Empty) => string
-    IncrementTestCounter: (_: Empty) => void
-    MakeNewUser: (_: { username: string }) => void
-    MaybeMakeUser: (_: { username: string }) => Gamestate
+interface BareServerActionArgs {
+    incrementTestCounter: Empty
+    makeNewUser: { username: string }
+    maybeMakeUser: { username: string }
 }
 
-/** A server action */
-export interface GameOnlyAction {
-    ActivateOrb: (_: { characterUid: CharacterUid; orb: Orb }) => void
-
-    PlaceSelectedCharacters: (_: {
+interface BareGameActionArgs {
+    activateOrb: { characterUid: CharacterUid; orb: Orb }
+    addCardToDeck: { cardUid: CardUid }
+    changeDungeon: { direction: -1 | 1 }
+    changeScene: { newSceneName: SceneType }
+    endTurn: Empty
+    exitDungeon: Empty
+    finishCard: { kind: RequiredActionName; cardUids: CardUid[] }
+    nextRoom: Empty
+    placeSelectedCharacters: {
         characters: {
             character: OwnedCharacterStats
             index: CharacterPlaceIndex
         }[]
-    }) => void
-    ChangeDungeon: (_: { direction: -1 | 1 }) => void
-
-    ChangeScene: (_: { newSceneName: SceneType }) => void
-
-    NextRoom: (_: Empty) => void
-
-    EndTurn: (_: Empty) => void
-    ExitDungeon: (_: Empty) => void
-
-    PlayCard: (_: { cardUid: string; targetUids: CharacterUid[] }) => void
-    AddCardToDeck: (_: { cardUid: CardUid }) => void
-    ResetRandomSeed: (_: Empty) => void
-
-    RulebookAction: (_: RulebookArgs) => void
-
-    ToggleStance: (_: { characterUid: CharacterUid }) => void
-
-    FinishCard: (_: { kind: RequiredActionName; cardUids: CardUid[] }) => void
+    }
+    playCard: { cardUid: string; targetUids: CharacterUid[] }
+    resetRandomSeed: Empty
+    rulebookAction: RulebookArgs
+    toggleStance: { characterUid: CharacterUid }
 }
-export interface Action extends GameOnlyAction, ServerOnlyAction {}
 
-export type Gamecursor = SCursor<Gamestate>
+// NOTE: below is not as complicated as it looks.
+// The pattern is making an interface, then unioning its properties.
+// This lets us get highly specific types without repeating ourselves or using generics.
+
+/** Map from game action name to function signature */
+export type GameActions = {
+    [K in keyof BareGameActionArgs]: (
+        args: BareGameActionArgs[K] & { game: Gamecursor }
+    ) => void
+}
+/** Map from server action name to function signature */
+export type ServerActions = {
+    [K in keyof BareServerActionArgs]: (
+        args: BareServerActionArgs[K]
+    ) => Promise<void>
+}
+
+// export type GameActionArgs = {
+//     [K in keyof BareGameActionArgs]: BareGameActionArgs[K] & { method: K }
+// }
+
+/** An argument to game's main takeAction() export */
+type ToGameActionCall = {
+    [K in keyof BareGameActionArgs]: BareGameActionArgs[K] & {
+        method: K
+        game: Gamecursor
+    }
+}
+export type GameActionCall = ToGameActionCall[keyof ToGameActionCall]
+
+export type AllActionArgs = BareServerActionArgs & BareGameActionArgs
+
+/** Name of any action */
+export type ActionName = keyof BareGameActionArgs | keyof BareServerActionArgs
+
 /** A no-input game action */
-export interface InternalAction {
-    doNpcTurn(game: Gamecursor, args: { index: number }): undefined | NextAction
-    endNpcTurn(game: Gamecursor, args: Empty): void
-}
-export type InternalActionName = keyof InternalAction
-/** Means there is nothing for the player to do right now. */
-export type NextAction<K extends InternalActionName = InternalActionName> = {
-    type: K
-    delay: number
-    args: Param1<InternalAction[K]>
+interface BareInternalActionArgs {
+    doNpcTurn: { index: number }
+    endNpcTurn: Empty
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type Param1<T extends (...args: any[]) => any> = Parameters<T>[1]
+/** Map from internal action name to function signature */
+export type InternalActions = {
+    [K in keyof BareInternalActionArgs]: (
+        args: BareInternalActionArgs[K] & { game: Gamecursor }
+    ) => void
+}
+
+type ToNextAction = {
+    [K in keyof BareInternalActionArgs]: BareInternalActionArgs[K] & {
+        method: K
+        delay: number
+    }
+}
+
+/** Next internal action, stored in Gamestate */
+export type NextAction = ToNextAction[keyof ToNextAction]
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface Empty {}
+interface Empty {}
 
-export type CharacterPlaceIndex = 0 | 1 | 2
-
-type RulebookArgs =
-    | { do: 'new'; rulebook: Rulebook }
-    | { do: 'delete'; name: string }
-    | { do: 'choose'; name: string }
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Func = (..._: any[]) => any
-
-export type CallReturn<F extends Func> = ServerResult<ReturnType<F>>
-
-type ServerResult<T> =
-    | { status: 'success'; result: T }
+export type CallReturn =
+    | { status: 'success' }
     | { status: 'error'; message: string }
+
+export type Gamecursor = SCursor<Gamestate>
+
+// ======= Little types for specific actions =======
 
 type RequiredActionName = 'discard' | 'removeFromRoom' | 'discardFromDraw'
 
@@ -90,3 +116,10 @@ export interface RequiredAction {
     least: number
     most: number
 }
+
+type RulebookArgs =
+    | { do: 'new'; rulebook: Rulebook }
+    | { do: 'delete'; name: string }
+    | { do: 'choose'; name: string }
+
+export type CharacterPlaceIndex = 0 | 1 | 2

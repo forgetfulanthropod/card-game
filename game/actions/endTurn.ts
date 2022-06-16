@@ -1,18 +1,17 @@
-import type { NextAction } from 'shared'
+import type { GameActions } from 'shared'
 
-import { endRound } from './endRound'
 import { getBattleSceneIn } from '@/util'
 import {
     applyTurnStartEffects,
     clearBlock,
     decrementEffects,
     popAndRunQueue,
+    endRound,
 } from '@/gameState'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 
-// GameActions['EndTurn']
-export const endTurn = (args: { game: Gamecursor }): NextAction => {
+export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
 
     decrementEffects(scene, 'pc')
@@ -21,9 +20,9 @@ export const endTurn = (args: { game: Gamecursor }): NextAction => {
     applyTurnStartEffects(scene, 'npc')
     popAndRunQueue(scene, 'npc')
 
-    return {
-        type: 'doNpcTurn',
-        args: { index: 0 },
+    args.game.set('nextAction', {
+        index: 0,
+        method: 'doNpcTurn',
         delay: TIME_AFTER_PLAYER_MOVE,
-    }
+    })
 }

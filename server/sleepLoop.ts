@@ -1,25 +1,23 @@
-import { clearHappened, getHappened, step } from 'game'
-import type { Gamecursor, NextAction } from 'shared'
+import { clearHappened, getHappened, step, doGameAction } from 'game'
+import type { GameActionCall, Gamecursor } from 'shared'
 import { sleep } from 'shared/code'
-import { getGameStateCursor, setGamestate } from './db'
+import { setGamestate } from './db'
 import { emitNetworkEvent, emitNewGamestate } from './IO'
 
+const _ = doGameAction
 type Func<T> = (u: T) => Promise<unknown> | unknown
-export async function doActionAndTakeSteps<T>(
-    username: string,
-    f: Func<T>,
-    args: T
+export async function doActionAndTakeSteps(
+    args: GameActionCall & { username: string }
 ) {
-    const game = await getGameStateCursor(username)
-    // @ts-expect-error
-    args.game = game
-    let maybeNextAction = f(args)
-    logger.info({ maybeNextAction })
-    while (isNextAction(maybeNextAction)) {
-        logger.info({ maybeNextAction })
-        await updateClient(username, game)
+    const { game, username } = args
+    doGameAction(args)
+    let maybeNextAction = game.get('nextAction')
+    while (maybeNextAction != null) {
+        await updateClient(args.username, game)
         await sleep(maybeNextAction.delay)
-        maybeNextAction = step(game, maybeNextAction)
+        game.set('nextAction', null)
+        step(game, maybeNextAction)
+        maybeNextAction = game.get('nextAction')
     }
     await updateClient(username, game)
 }
@@ -31,8 +29,4 @@ async function updateClient(username: string, game: Gamecursor) {
 
     emitNewGamestate(username, game.get())
     await setGamestate(username, game.get())
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isNextAction(x: any): x is NextAction {
-    return x?.delay != null
 }

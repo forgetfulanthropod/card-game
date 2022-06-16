@@ -49,7 +49,7 @@ function EndTurnButton(): PixiContainer {
         x: BASE_WIDTH * 0.9,
         y: BASE_HEIGHT * 0.78,
         onClick: async () => {
-            await callApi('EndTurn', {})
+            await callApi('endTurn', {})
         },
         children: [
             Sprite({

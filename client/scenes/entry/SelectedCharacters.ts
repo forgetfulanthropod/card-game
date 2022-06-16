@@ -187,7 +187,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
         defaultOwnedCharacters.length
     const nextChoice = defaultOwnedCharacters[nextIndex]
     console.log({ nextIndex, nextChoice })
-    void callApi('PlaceSelectedCharacters', {
+    void callApi('placeSelectedCharacters', {
         characters: [
             {
                 character: {
@@ -207,5 +207,5 @@ async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
             character: defaultOwnedCharacters[i],
             index: i as CharacterPlaceIndex,
         }))
-    await callApi('PlaceSelectedCharacters', { characters: additions })
+    await callApi('placeSelectedCharacters', { characters: additions })
 }

@@ -1,43 +1,16 @@
-import type { Action, CallReturn } from 'shared'
+import type { CallReturn, ActionName, AllActionArgs } from 'shared'
 
-import { jss } from 'shared/code'
-import { localTree } from '@/data'
-
-const config = {
-    shouldLog: false,
-    shouldSaveCalls: true,
-}
-
-export async function callApi<K extends keyof Action>(
+export async function callApi<K extends ActionName>(
     name: K,
-    args: Parameters<Action[K]>[0]
-): Promise<CallReturn<Action[K]> | null> {
-    type F = Action[K]
-    const randId = Math.random().toString().slice(2, 6)
-    if (config.shouldSaveCalls) {
-        localTree.select('serverCalls').apply(calls => [
-            ...calls,
-            {
-                name,
-                args: args,
-                time: new Date().toLocaleTimeString(),
-            },
-        ])
-    }
-    if (config.shouldLog) {
-        console.log(
-            jss`calling ${name}#${randId}(${args}) at ${new Date().toLocaleTimeString()}`
-        )
-    }
-    try {
-        const username = localStorage.getItem('username')
-        console.log(`callApi: username: ${username}`)
-        if (username == null)
-            throw Error("No username in localstorage. Can't call API.")
+    args: AllActionArgs[K]
+): Promise<CallReturn> {
+    const username = localStorage.getItem('username')
+    console.log(`callApi: username: ${username}`)
+    if (username == null)
+        throw Error("No username in localstorage. Can't call API.")
 
-        const fullArgs = { ...(args ?? {}), username, method: name }
-        const startTime = Date.now()
-        let json: CallReturn<F> | null = null
+    const fullArgs = { ...(args ?? {}), username, method: name }
+    try {
         const res = await fetch(`api`, {
             method: 'POST',
             headers: {
@@ -46,24 +19,14 @@ export async function callApi<K extends keyof Action>(
             },
             body: JSON.stringify(fullArgs),
         })
-
-        try {
-            json = await res.json()
-        } catch (e) {
-            console.log(`${name}#${randId} did not return json`)
-        }
-        if (config.shouldLog) {
-            console.log(
-                `function ${name}#${randId} took ${
-                    (Date.now() - startTime) / 1000
-                } seconds and  returned ${JSON.stringify(
-                    json
-                )} at ${new Date().toLocaleTimeString()}`
-            )
-        }
-        return json
+        const json = await res.json()
+        if ('status' in json) return json as CallReturn
+        const message = 'server returned invalid data'
+        console.warn(message)
+        return { status: 'error', message }
     } catch (e) {
-        console.error(`server error: ${e}`)
-        return { status: 'error', message: 'error connecting to server' }
+        const message = 'server is offline or did not return json'
+        console.warn(message)
+        return { status: 'error', message }
     }
 }

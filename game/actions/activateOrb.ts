@@ -1,7 +1,6 @@
 import { isEqual } from 'lodash'
-import type { CharacterMeta, Orb, BattleCursor } from 'shared'
+import type { CharacterMeta, Orb, BattleCursor, GameActions } from 'shared'
 
-import type { GameActions } from './types'
 import {
     maybeTransitionBattleState,
     getRandomLivingNpcUid,
@@ -12,7 +11,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
-export const activateOrb: GameActions['ActivateOrb'] = ({
+export const activateOrb: GameActions['activateOrb'] = ({
     game,
     orb,
     characterUid,

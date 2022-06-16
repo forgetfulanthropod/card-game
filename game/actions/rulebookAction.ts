@@ -1,11 +1,11 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs'
 import { pacificDate } from 'shared/code'
-import type { GameActions } from './types'
+import type { GameActions } from 'shared'
 
 import { resetRulebook, setRulebook } from '@/rulebook'
 import { prefix, stringifyRulebook, toPath } from '@/util'
 
-export const rulebookAction: GameActions['RulebookAction'] = args => {
+export const rulebookAction: GameActions['rulebookAction'] = args => {
     logger.info(`rulebookAction performing action ${args.do}`)
     if (!existsSync(prefix)) {
         mkdirSync(prefix)

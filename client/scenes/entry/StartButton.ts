@@ -16,7 +16,7 @@ export function StartButton(): PixiContainer {
         scale: (1920 * 0.25) / getTexture('gemButton').width,
         async onClick() {
             root.visible = false
-            await callApi('ChangeScene', { newSceneName: 'battle' })
+            await callApi('changeScene', { newSceneName: 'battle' })
         },
         events: {
             pointerover() {

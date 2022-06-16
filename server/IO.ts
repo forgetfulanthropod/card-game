@@ -47,6 +47,7 @@ export function mountIo(
             }) => {
                 logger.info(['username associated:', { username, socketId }])
                 usernameToSocketId[username] = socketId
+                socket.emit('usernameReceived')
             }
         )
     })

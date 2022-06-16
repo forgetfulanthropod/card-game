@@ -42,5 +42,6 @@ export function getInitialGameState(username: string): Gamestate {
             ? stringifyRulebook(getRulebook())
             : undefined,
         username,
+        nextAction: null,
     }
 }

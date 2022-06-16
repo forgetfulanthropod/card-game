@@ -1,8 +1,8 @@
-import type { GameActions } from './types'
+import type { GameActions } from 'shared'
 import { nextRoom } from './nextRoom'
 import { getBattleSceneIn } from '@/util'
 
-export const addCardToDeck: GameActions['AddCardToDeck'] = args => {
+export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     const scene = getBattleSceneIn(args.game)
 
     const card = scene.get('newCardOptions', args.cardUid)

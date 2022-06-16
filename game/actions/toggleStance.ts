@@ -1,9 +1,8 @@
-import type { StanceName } from 'shared'
-import type { GameActions } from './types'
+import type { StanceName, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
 
-export const toggleStance: GameActions['ToggleStance'] = args => {
+export const toggleStance: GameActions['toggleStance'] = args => {
     const { characterUid } = args
     const scene = getBattleSceneIn(args.game)
 

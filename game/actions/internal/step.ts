@@ -1,27 +1,15 @@
-import type { InternalAction, InternalActionName, NextAction } from 'shared'
+import type { InternalActions, NextAction } from 'shared'
 
 import { doNpcTurn } from './doNpcTurn'
 import { endNpcTurn } from './endNpcTurn'
 
-const internalActions: InternalAction = {
+const internalActions: InternalActions = {
     doNpcTurn,
-    endNpcTurn: endNpcTurn,
+    endNpcTurn,
 } as const
 
-// type ArgsOf = {
-//     [K in ActionName]: Param1<InternalAction[K]>
-// }
-
-export function step<K extends InternalActionName>(
-    game: Gamecursor,
-    action: NextAction<K>
-): ReturnType<InternalAction[K]> {
-    const func = internalActions[action.type]
-    const res = func(
-        game,
-        // @ts-expect-error
-        action.args
-    )
+export function step(game: Gamecursor, action: NextAction) {
+    const func = internalActions[action.method]
     // @ts-expect-error
-    return res
+    func({ game, ...action })
 }

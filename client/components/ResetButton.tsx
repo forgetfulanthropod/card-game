@@ -26,7 +26,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         }}
         onPointerUp={async () => {
             release = true
-            await callApi('MakeNewUser', { username: props.username })
+            await callApi('makeNewUser', { username: props.username })
         }}
     >
         ↺

@@ -50,7 +50,7 @@ export function beginTargetSelection(
 
     const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
         if (targets.length >= numTargets) {
-            await callApi('PlayCard', {
+            await callApi('playCard', {
                 cardUid: cardEl.name, //cardMeta.id,
                 targetUids: targets,
             })

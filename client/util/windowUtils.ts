@@ -13,7 +13,7 @@ async function runRecording(
     setSeed = true
 ): Promise<void> {
     if (setSeed) {
-        await callApi('ResetRandomSeed', {})
+        await callApi('resetRandomSeed', {})
     }
     for (const { name, args } of recording) {
         console.log(jss`running ${name}(${args})`)

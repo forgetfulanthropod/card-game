@@ -1,5 +1,4 @@
-import type { Card, CardUid, BattleCursor } from 'shared'
-import type { GameActions } from './types'
+import type { Card, CardUid, BattleCursor, GameActions } from 'shared'
 
 import {
     discard,
@@ -10,7 +9,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
-export const playCard: GameActions['PlayCard'] = args => {
+export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
     const card = findCard({ cardUid: args.cardUid, scene })
 

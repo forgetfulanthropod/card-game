@@ -73,11 +73,11 @@ export function RulebookEditor(props: { username: string }): JSXElement {
                 value={name}
                 options={rulebooks}
                 onChoice={async newName => {
-                    await callApi('RulebookAction', {
+                    await callApi('rulebookAction', {
                         do: 'choose',
                         name: newName,
                     })
-                    await callApi('MakeNewUser', { username })
+                    await callApi('makeNewUser', { username })
                 }}
             />
             {shown && <>
@@ -102,7 +102,7 @@ async function deleteRulebook(name: string): Promise<void> {
         toast.error('cannot delete default rulebook')
         return
     }
-    await callApi('RulebookAction', { do: 'delete', name })
+    await callApi('rulebookAction', { do: 'delete', name })
     toast('deleted')
 }
 
@@ -121,8 +121,8 @@ async function addNewRulebook(
         toast.error('already have rulebook with that name')
         return
     }
-    await callApi('RulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('MakeNewUser', { username })
+    await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
+    await callApi('makeNewUser', { username })
     toast('added')
 }
 
@@ -155,9 +155,9 @@ async function overwriteRulebook(
         toast.error('cannot overwrite default. save new instead.')
         return
     }
-    await callApi('RulebookAction', { do: 'delete', name })
-    await callApi('RulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('MakeNewUser', { username })
+    await callApi('rulebookAction', { do: 'delete', name })
+    await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
+    await callApi('makeNewUser', { username })
     toast('overwritten')
 }
 

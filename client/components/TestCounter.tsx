@@ -21,7 +21,7 @@ export function TestCounter(): JSXElement {
         onClick={async () => {
             start.current = Date.now()
             console.log('making request to incrementTestCounter')
-            await callApi('IncrementTestCounter', {})
+            await callApi('incrementTestCounter', {})
             console.log(
                 'request returned after',
                 (Date.now() - start.current) / 1000,

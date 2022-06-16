@@ -150,7 +150,7 @@ function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
             anchor: [1, 0],
             width: HEALTH_BAR_WIDTH / 4,
             height: (HEALTH_BAR_WIDTH / 4 / stanceSrc.width) * stanceSrc.height,
-            onClick: () => callApi('ToggleStance', { characterUid: uid }),
+            onClick: () => callApi('toggleStance', { characterUid: uid }),
         })
     })
 }

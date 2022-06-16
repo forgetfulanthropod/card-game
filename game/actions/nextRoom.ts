@@ -1,7 +1,5 @@
 import { objFilter } from 'shared/code'
-import type { BattleCursor } from 'shared'
-import type { GameActions } from './types'
-import { resetRound } from './internal'
+import type { BattleCursor, GameActions } from 'shared'
 import {
     makeRoomNpcs as makeNpcsForRoom,
     clearAllEffects,
@@ -12,7 +10,7 @@ import {
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
 
-export const nextRoom: GameActions['NextRoom'] = args => {
+export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
@@ -28,7 +26,7 @@ export const nextRoom: GameActions['NextRoom'] = args => {
     scene.set('turnCount', 1)
     putAllCardsInDrawPile(scene)
     scene.set('cardsPlayedThisRoom', [])
-    resetRound(args.game, {})
+    // resetRound({ game: args.game })
 }
 
 function getNextRoom(scene: BattleCursor) {

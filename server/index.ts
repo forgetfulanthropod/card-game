@@ -1,11 +1,10 @@
-// import './database'
 import type { Server } from 'http'
 import type { Application } from 'express'
 import express from 'express'
 import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
 
-import { api } from './attachActions'
+import { api } from './api'
 import { mountIo as fullMountIo } from './IO'
 
 /** Required for kaiju-router */
