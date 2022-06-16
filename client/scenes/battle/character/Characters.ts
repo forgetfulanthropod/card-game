@@ -1,4 +1,5 @@
 import { vals } from 'shared/code'
+import { uniq } from 'lodash'
 import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
 import { For, If } from '@/elementsUtil'
@@ -23,7 +24,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                         onClick: () => {
                             localTree
                                 .select('selectedTargets')
-                                .apply(arr => [...arr, uid])
+                                .apply(arr => uniq([...arr, uid]))
                         },
                         scale: 1,
                     })

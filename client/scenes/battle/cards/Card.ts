@@ -263,11 +263,14 @@ function getEvents(
     const pointerup: InteractionEventHandler = function ({
         currentTarget: cardEl,
     }) {
-        if (card.targetType === 'self')
+        if (card.targetType === 'self') {
+            console.log('Card.ts: playing card')
+
             void callApi('playCard', {
                 cardUid: card.uid,
                 targetUids: [],
             })
+        }
         //for mobile
         else
             pointerout({
