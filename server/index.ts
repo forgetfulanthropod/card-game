@@ -44,7 +44,10 @@ app.use(express.urlencoded({ extended: true }))
 
 app.post('/api', api)
 
-app.use('/', express.static('public', { extensions: ['.atlas'] }))
+app.use(
+    '/',
+    express.static(__dirname + '../../public', { extensions: ['.atlas'] })
+)
 
 if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {
