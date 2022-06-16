@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'preact/hooks'
 
 import styles from './UsernameEntry.module.css'
-import { goodEarthImg } from '@/assets'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
+
+const fullGoodEarthImg = 'assets/root/good-earth.png'
 
 export function UsernameEntry(props: {
     onEnter: (username: string) => void
@@ -121,7 +122,7 @@ function EnterButton(props: { onClick: Callback; show: boolean }) {
                 <image
                     onClick={() => props.onClick()}
                     class={styles.svgimage}
-                    href={goodEarthImg}
+                    href={fullGoodEarthImg}
                     width='100%'
                     preserveAspectRatio='xMinYMin slice'
                     height='100%'

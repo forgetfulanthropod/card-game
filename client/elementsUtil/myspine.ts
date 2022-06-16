@@ -5,7 +5,7 @@ import type { ROCursor } from 'sbaobab'
 
 import type { InteractionEvents } from './mypixi'
 import { bindEvents, startChecking } from './mypixi'
-import type { AnimationsOf, SpineAsset } from '@/scenes'
+import type { AnimationsOf, SpineAsset } from '@/assets'
 import { onUpdate } from '@/util'
 
 export { PixiSpine }

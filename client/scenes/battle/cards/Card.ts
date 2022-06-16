@@ -25,7 +25,7 @@ import type {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
-import type { CardTypeAssetId } from '@/scenes'
+import type { CardTypeAssetId } from '@/assets'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],

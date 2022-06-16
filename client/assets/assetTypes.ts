@@ -3,11 +3,11 @@ import type {
     cardArtAssets,
     cardTypeAssets,
     cardAssets,
-    invisibleEffects_,
     intentAssets,
     orbAssets,
     spineAssets,
-} from './allMaps'
+} from './assetMaps'
+import type { invisibleEffects_ } from './invisibleEffects'
 
 export type CardArtAssetId = keyof typeof cardArtAssets
 export type CardTypeAssetId = keyof typeof cardTypeAssets

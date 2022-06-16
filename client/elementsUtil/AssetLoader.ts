@@ -2,45 +2,13 @@ import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 import { uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
-import {
-    backgroundAssets,
-    characterAssets,
-    characterStatusAssets,
-    effectAssets,
-    orbAssets,
-    spineAssets,
-    cardAssets,
-    healthBarAssets,
-    intentAssets,
-    signAssets,
-} from '@/scenes'
-import { check, fontAssets } from '@/assets'
+import { assetMaps } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
-const allAssets = {
-    fishstick: 'misc-png/INVENTORY_FISHSTICK.png',
-    potion: 'misc-png/INVENTORY_POTION.png',
-    swordShield: 'misc-png/INVENTORY_SWORDSHIELD.png',
-    bread: 'misc-png/ITEM_BREAD.png',
-    check,
-    chestBody: 'misc-png/CHEST_BODY.png',
-    chestLid: 'misc-png/CHEST_LID.png',
-    door: 'misc-png/temp-door.png',
-    endTurnButton: 'core-ui/end turn.png',
-    confirmButton: 'core-ui/confirm_.png',
-    ...intentAssets,
-    ...fontAssets,
-    ...orbAssets,
-    ...characterAssets,
-    ...characterStatusAssets,
-    ...backgroundAssets,
-    ...signAssets,
-    ...effectAssets,
-    ...spineAssets,
-    ...cardAssets,
-    ...healthBarAssets,
-    gemButton: 'misc-png/BUTTON_GO.png',
+const allAssets: Record<string, string> = {}
+for (const map of Object.values(assetMaps)) {
+    Object.assign(allAssets, map)
 }
 
 let resolveLoaderPromise = null as unknown as (_: unknown) => void

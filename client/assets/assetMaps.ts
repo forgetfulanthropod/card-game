@@ -1,11 +1,30 @@
-import type { EffectId } from 'shared'
 import type { VisibleEffect } from './assetTypes'
 
-const caveFinal = 'backgrounds/cave-final.png'
+export const rootAssets = {
+    fishstick: 'misc-png/INVENTORY_FISHSTICK.png',
+    potion: 'misc-png/INVENTORY_POTION.png',
+    swordShield: 'misc-png/INVENTORY_SWORDSHIELD.png',
+    bread: 'misc-png/ITEM_BREAD.png',
+
+    chestBody: 'misc-png/CHEST_BODY.png',
+    chestLid: 'misc-png/CHEST_LID.png',
+    door: 'misc-png/temp-door.png',
+    endTurnButton: 'core-ui/end turn.png',
+    confirmButton: 'core-ui/confirm_.png',
+    gemButton: 'misc-png/BUTTON_GO.png',
+}
+
+export const fontAssets = {
+    bigFont: 'root/fonts/Aesthet Nova/Aesthet Nova W05 Black.ttf',
+    sansFont: 'root/fonts/Space Grotesk/SpaceGrotesk-VariableFont_wght.ttf',
+    monoFont: 'root/fonts/Space Mono/SpaceMono-Bold.ttf',
+} as const
+
 // import fort from '@battleAssets/backgrounds/fort-skeleton-temp.jpg'
 // import matcha from '@battleAssets/backgrounds/matcha-caves.jpg'
 // const ninth = 'backgrounds/ninth-trash-hole.png'
 
+const caveFinal = 'backgrounds/cave-final.png'
 export const backgroundAssets = {
     'Skelepit Dungeon': caveFinal,
     'Hooligan’s Bluff': caveFinal,
@@ -76,15 +95,6 @@ export const characterStatusAssets = {
     healthTexture: 'char status/HEALTH_TEXTURE.png',
     blockIcon: 'char status/block icon.png',
 }
-// const effectPiercing = 'effects/piercing.png'
-export const invisibleEffects_ = [
-    'strongblock',
-    'smallDamageIncrease',
-    'doubleDamage',
-    'passiveBlock',
-] as const
-export const invisibleEffects: readonly EffectId[] = invisibleEffects_
-
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
