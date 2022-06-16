@@ -27,6 +27,15 @@ const classColorMap: Record<CharacterClass, [number, number]> = {
 }
 
 export function CharacterInfo(cm: OwnedCharacterStats) {
+    const abilities = [
+        {
+            name: 'Sleepy Time Spores',
+        },
+        {
+            name: 'Slow but Purposeful ',
+        },
+    ]
+
     const contentWidth = BASE_WIDTH * 0.3
     return If(
         compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
@@ -91,6 +100,24 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                                         },
                                         y: 22,
                                         anchor: [0.5, 0],
+                                    }),
+                                ],
+                            })
+                        }),
+                        ...abilities.map((ability, i) => {
+                            return Container({
+                                y: 145,
+                                // x: ((i - 1.5) * contentWidth) / 4,
+                                children: [
+                                    Text({
+                                        text: ability.name,
+                                        style: {
+                                            fontFamily: 'sansFont',
+                                            fontSize: 20,
+                                            fill: 0xdddddd,
+                                        },
+                                        anchor: [i, 0],
+                                        x: -contentWidth * (0.5 - i),
                                     }),
                                 ],
                             })
