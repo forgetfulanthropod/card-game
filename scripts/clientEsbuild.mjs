@@ -6,8 +6,7 @@ import { makeBuildInfo } from './makeBuildInfo.mjs'
 import { fileURLToPath } from 'url'
 
 const password = 'hackin'
-const buildDir = 'builds/client'
-const publicDir = 'client/public_'
+const buildDir = 'public/'
 const entryPoint = 'client/index.tsx'
 const outFile = `${buildDir}/${password}.js`
 
@@ -29,9 +28,7 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
-    rmSync(buildDir, { recursive: true, force: true })
-    mkdirSync(buildDir, { recursive: true })
-    cpSync(publicDir, buildDir, { recursive: true })
+    rmSync(outFile, { recursive: true, force: true })
     esbuild({
         minify: false, //!isDevelopment,
         sourcemap: true, //isDevelopment,
@@ -48,14 +45,14 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
             '.tsx': 'tsx',
             '.svg': 'dataurl',
             '.css': 'css',
-            '.png': 'file',
-            '.webp': 'file',
-            '.jpg': 'file',
-            '.mp4': 'file',
-            '.webm': 'file',
-            '.ttf': 'file',
-            '.atlas': 'file',
-            '.json': 'file',
+            // '.png': 'file',
+            // '.webp': 'file',
+            // '.jpg': 'file',
+            // '.mp4': 'file',
+            // '.webm': 'file',
+            // '.ttf': 'file',
+            // '.atlas': 'file',
+            // '.json': 'file',
         },
         define: makeSubstitutions(),
         watch: shouldWatch && {

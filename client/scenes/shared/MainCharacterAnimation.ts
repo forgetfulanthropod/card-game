@@ -1,5 +1,5 @@
 import type { CharacterMeta, CharacterUid } from 'shared'
-import { getValidSpineAssetName } from '@/scenes'
+import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
 import { glowFilter, Spine } from '@/elementsUtil'
