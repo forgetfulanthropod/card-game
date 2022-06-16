@@ -1,4 +1,6 @@
-import type { OwnedCharacterStats, SceneHas } from './index'
+import type { SceneHas } from '@misc'
+import type { OwnedCharacterStats } from './battle'
+
 export interface EntryScene extends SceneHas {
     id: 'entry'
     selectedCharacters: OwnedCharacterStats[]

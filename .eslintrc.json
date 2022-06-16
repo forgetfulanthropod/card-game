@@ -177,6 +177,10 @@
             "files": ["shared/**/*"],
             "parserOptions": {
                 "project": "./shared/tsconfig.json"
+            },
+            "rules": {
+                // "import/no-relative-parent-imports": "off",
+                // "import/no-internal-modules": "off"
             }
         },
         {

@@ -1,16 +1,10 @@
-import type {
-    Card,
-    Characters,
-    CharacterUid,
-    Command,
-    CommandQueue,
-    StatChangeMap,
-    DungeonName,
-    Pile,
-    Piles,
-    SceneHas,
-    RequiredAction,
-} from '@'
+import type { RequiredAction } from '@actions'
+import type { SceneHas } from '@misc'
+import type { CharacterUid } from './Character'
+import type { Piles, Pile, Card, Command } from './Card'
+import type { StatChangeMap } from './CardHit'
+import type { Characters } from './Characters'
+import type { CommandQueue } from './CommandQueue'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -47,3 +41,10 @@ export interface NextCommand {
 }
 
 type BattleWinState = 'in battle' | 'won' | 'lost' | 'choosing cards'
+
+export type DungeonName =
+    | 'Skelepit Dungeon'
+    | 'Hooligan’s Bluff'
+    | 'The Matcha Caves'
+    | 'Fort Skeleton'
+    | 'The Ninth Trash Hole of Hell'

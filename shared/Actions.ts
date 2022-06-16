@@ -3,15 +3,16 @@
  */
 
 import type { SCursor } from 'sbaobab'
+import type { SceneId } from './misc'
 
-import type { CharacterUid, Gamestate } from './datamodel'
 import type {
     CardUid,
+    CharacterUid,
+    Gamestate,
     Orb,
     OwnedCharacterStats,
     Rulebook,
-    SceneId,
-} from './index'
+} from './tree'
 
 interface BareServerActionArgs {
     incrementTestCounter: Empty

@@ -1,5 +1,5 @@
-import type { Brandify } from './misc'
-import type { CharacterClass, CharacterId } from '@'
+import type { Brandify } from '@misc'
+import type { CharacterClass, CharacterId } from './Characters'
 
 export type CharacterAbility = {
     displayName: string

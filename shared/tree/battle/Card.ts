@@ -1,5 +1,10 @@
+import type { Brandify } from '@misc'
+import type { CharacterUid } from './Character'
 import type { CharacterClass } from './Characters'
-import type { Brandify, CardUid, CharacterUid, PileId } from '@'
+
+export type CardUid = string & Brandify
+
+export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
 
 export type DSLString = string & Brandify
 

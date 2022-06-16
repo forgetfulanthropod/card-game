@@ -1,7 +1,11 @@
-import type { CharacterStats } from './Character'
-import type { Brandify, DungeonLevel } from './misc'
-import type { DungeonRoomMap } from './DungeonRoom'
-import type { CharacterId, StanceId, StanceStats } from '@'
+import type { Brandify } from '@misc'
+import type {
+    CharacterId,
+    StanceId,
+    StanceStats,
+    CharacterStats,
+} from './battle'
+import type { DungeonLevel, DungeonRoomMap } from './Dungeon'
 
 export type Rulebook = Readonly<{
     version: string

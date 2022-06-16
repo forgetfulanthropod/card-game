@@ -1,4 +1,4 @@
-import type { CharacterUid } from '@'
+import type { CharacterUid } from './Character'
 
 export interface CardHit {
     cardName: string

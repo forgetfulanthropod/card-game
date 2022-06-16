@@ -1,12 +1,8 @@
+import type { CharacterStats, CharacterUid } from './Character'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
-import type {
-    CharacterId as CharacterId,
-    CharacterStats,
-    CharacterUid,
-    EnemyCharacterId,
-    StanceId,
-} from '@'
+
+export type StanceId = 'defensive' | 'neutral' | 'aggressive'
 
 export type Characters = Record<CharacterUid, CharacterMeta>
 export type EnemyCharacters = Record<CharacterUid, EnemyCharacterMeta>
@@ -34,3 +30,36 @@ export interface CharacterMeta extends CharacterStats {
     orbs: Orb[]
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
+
+export type CharacterId =
+    | 'bloatDemon'
+    | 'bogSpirit'
+    | 'bookle'
+    | 'bumbit'
+    | 'frogKnight'
+    | 'frogWizard'
+    | 'gnomeHooligan'
+    | 'goblinDragon'
+    | 'greenJester'
+    | 'jerry'
+    | 'lichLord'
+    | 'mushroomFarmer'
+    | 'notoriousBEAN'
+    | 'penguinKnight'
+    | 'skeletonWarrior'
+    | 'snacky'
+    | 'theHatefly'
+    | 'trioOfFools'
+    | 'warhog'
+    | 'wimpyGuard'
+    | EnemyCharacterId
+
+export type EnemyCharacterId =
+    | 'skeletonWarrior'
+    | 'matchaGelatinCube'
+    | 'mimic'
+    | 'orcWarrior'
+    | 'bosshogJurgen'
+    | 'toadmaw'
+    | 'cultist'
+    | 'halfdan'

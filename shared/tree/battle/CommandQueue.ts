@@ -1,5 +1,7 @@
 /** Commands which will be executed in future rounds */
-import type { CharacterUid, Command } from '@'
+
+import type { CharacterUid } from './Character'
+import type { Command } from './Card'
 
 export type QueuedCommand = {
     description?: string
