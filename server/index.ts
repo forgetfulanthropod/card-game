@@ -44,10 +44,16 @@ app.use(express.urlencoded({ extended: true }))
 
 app.post('/api', api)
 
+// express static server, ovverides maxAge for png files:
+
 app.use(
-    '/',
-    express.static(__dirname + '../../public', { extensions: ['.atlas'] })
+    '/assets',
+    express.static(__dirname + '../../public/assets', {
+        extensions: ['.atlas'],
+        maxAge: '1d',
+    })
 )
+app.use('/', express.static(__dirname + '../../public/'))
 
 if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {
