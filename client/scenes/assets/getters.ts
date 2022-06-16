@@ -1,9 +1,7 @@
 import { upperFirst } from 'lodash'
 import type { CharacterName, OrbType } from 'shared'
 import { Loader } from 'pixi.js'
-import type { OrbAssetId } from './orbs'
-import type { SpineAsset } from './spines'
-import type { VisibleEffect } from './effects'
+import type { OrbAssetId, SpineAsset, VisibleEffect } from './assetTypes'
 import { isTextureKey, PixiTexture, getTexture } from '@/elementsUtil'
 
 export function getEffectIconSrc<T extends VisibleEffect>(
