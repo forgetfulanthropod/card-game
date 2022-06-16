@@ -1,4 +1,4 @@
-import type { StanceName, GameActions } from 'shared'
+import type { StanceId, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
 
@@ -19,7 +19,7 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     const stanceCursor = characterCursor.select('stance')
 
-    const stances: StanceName[] = ['defensive', 'neutral', 'aggressive']
+    const stances: StanceId[] = ['defensive', 'neutral', 'aggressive']
     const stance = stanceCursor.get()
     const stanceIndex = stances.findIndex(v => stance === v)
 

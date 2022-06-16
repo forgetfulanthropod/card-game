@@ -1,0 +1,18 @@
+import type { Brandify } from '@misc'
+import type { DungeonName, EnemyCharacterId } from './battle'
+
+const Dungeon = null
+
+export type DungeonLevel = Readonly<DungeonLevelI> & Brandify
+interface DungeonLevelI {
+    name: DungeonName
+    num: number
+    modifier: number
+}
+
+export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
+
+export type DungeonRoom = ReadonlyArray<{
+    id: EnemyCharacterId
+    level: string | number
+}>

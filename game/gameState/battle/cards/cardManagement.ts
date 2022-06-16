@@ -33,6 +33,7 @@ export function getNullCards(): Piles {
 
 function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
+        // 'TEST_turnStartEffects',
         // 'magicRitual',
         // 'chainLightning',
         // 'spellBook',

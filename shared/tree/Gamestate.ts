@@ -1,6 +1,6 @@
-import type { OwnedCharacterStatsMap } from './Character'
-import type { Brandify, Scene } from './misc'
-import type { NextAction } from '@'
+import type { NextAction } from '@actions'
+import type { Brandify, Scene } from '@misc'
+import type { OwnedCharacterStatsMap } from './battle'
 
 export type Gamestate = Readonly<{
     scene: Scene

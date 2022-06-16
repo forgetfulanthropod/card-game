@@ -9,9 +9,12 @@ const db = new Level<Username, Gamestate>(__dirname + '/leveldb', {
 })
 const userPrefix = 'user-'
 
+const cache: Record<Username, Gamestate> = {}
+
 export async function getGamestate(
     username: string
 ): Promise<Gamestate | null> {
+    if (cache[username]) return cache[username]
     try {
         return await db.get(userPrefix + username)
     } catch (e) {
@@ -19,8 +22,9 @@ export async function getGamestate(
     }
 }
 
-export async function setGamestate(username: string, gamestate: Gamestate) {
-    await db.put(userPrefix + username, gamestate)
+export function setGamestate(username: string, gamestate: Gamestate) {
+    cache[username] = gamestate
+    void db.put(userPrefix + username, gamestate)
 }
 
 export async function getGameStateCursor(

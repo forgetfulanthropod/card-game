@@ -5,10 +5,8 @@ import type { ServerActions } from 'shared'
 import { setGamestate } from '@/db'
 import { emitNewGamestate } from '@/IO'
 
-export const makeNewUser: ServerActions['makeNewUser'] = async ({
-    username,
-}): Promise<void> => {
+export const makeNewUser: ServerActions['makeNewUser'] = ({ username }) => {
     const gs = getInitialGameState(username)
-    await setGamestate(username, gs)
+    setGamestate(username, gs)
     emitNewGamestate(username, gs)
 }

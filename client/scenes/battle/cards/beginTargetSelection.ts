@@ -3,6 +3,7 @@ import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
 import { TargetSelectGraphic } from '@sharedElements'
+import { debounce } from 'lodash'
 import { callApi } from '@/callApi'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
@@ -35,7 +36,7 @@ export function beginTargetSelection(
     }
     app.stage.interactive = true
     app.stage.on('pointermove', updateDestination)
-    app.stage.on('pointerout', cleanup)
+    app.stage.once('pointerout', cleanup)
 
     window.addEventListener(
         'keydown',
@@ -50,15 +51,19 @@ export function beginTargetSelection(
 
     const selectedTargetsCursor = localTree.select('selectedTargets')
 
-    const unsub = onUpdate(selectedTargetsCursor, async (targets: string[]) => {
-        if (targets.length >= numTargets) {
-            await callApi('playCard', {
-                cardUid: cardEl.name, //cardMeta.id,
-                targetUids: targets,
-            })
-            cleanup()
-        }
-    })
+    const unsub = onUpdate(
+        selectedTargetsCursor,
+        debounce((targets: string[]) => {
+            if (targets.length >= numTargets) {
+                console.log('beginTargetSelection: playing card')
+                void callApi('playCard', {
+                    cardUid: cardEl.name, //cardMeta.id,
+                    targetUids: targets,
+                })
+                cleanup()
+            }
+        }, 10)
+    )
 
     function cleanup() {
         unsub()

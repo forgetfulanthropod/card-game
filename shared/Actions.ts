@@ -3,15 +3,16 @@
  */
 
 import type { SCursor } from 'sbaobab'
+import type { SceneId } from './misc'
 
-import type { CharacterUid, Gamestate } from './datamodel'
 import type {
     CardUid,
+    CharacterUid,
+    Gamestate,
     Orb,
     OwnedCharacterStats,
     Rulebook,
-    SceneType,
-} from './index'
+} from './tree'
 
 interface BareServerActionArgs {
     incrementTestCounter: Empty
@@ -23,7 +24,7 @@ interface BareGameActionArgs {
     activateOrb: { characterUid: CharacterUid; orb: Orb }
     addCardToDeck: { cardUid: CardUid }
     changeDungeon: { direction: -1 | 1 }
-    changeScene: { newSceneName: SceneType }
+    changeScene: { newSceneName: SceneId }
     endTurn: Empty
     exitDungeon: Empty
     finishCard: { kind: RequiredActionName; cardUids: CardUid[] }
@@ -54,7 +55,7 @@ export type GameActions = {
 export type ServerActions = {
     [K in keyof BareServerActionArgs]: (
         args: BareServerActionArgs[K]
-    ) => Promise<void>
+    ) => Promise<void> | void
 }
 
 // export type GameActionArgs = {

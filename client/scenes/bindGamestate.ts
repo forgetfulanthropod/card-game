@@ -1,4 +1,4 @@
-import type { SceneType } from 'shared'
+import type { SceneId } from 'shared'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
@@ -23,8 +23,8 @@ function setBodyStyles() {
 }
 
 function bindScene(app: PixiApplication): Unbind {
-    return onUpdate(getScene().select('name'), setScene, true)
-    async function setScene(sceneType: SceneType): Promise<void> {
+    return onUpdate(getScene().select('id'), setScene, true)
+    async function setScene(sceneType: SceneId): Promise<void> {
         if (lastScene != null) {
             await nextFrame()
             if (sceneType === 'battle')

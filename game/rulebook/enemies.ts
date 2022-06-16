@@ -1,6 +1,6 @@
-import type { EnemyCharacterName, NpcCommandId } from 'shared'
+import type { EnemyCharacterId, NpcCommandId } from 'shared'
 type Level = string
-export const enemies: Record<EnemyCharacterName, Record<Level, EnemyDefinition>> = {
+export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', null, null, 'block', null] },
         1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', 'swordWack', 'jab', 'strike', 'jab'] },

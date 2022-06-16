@@ -26,7 +26,7 @@ function getNpcMove(
     attacker: EnemyCharacterMeta
 ): Command | null {
     // TODO: handle levels correctly instead of just using the first defined level
-    const enemy = enemies[attacker.name][attacker.level]
+    const enemy = enemies[attacker.id][attacker.level]
     const moves = enemy.moves
     const move = moves[(scene.get('turnCount') - 1) % moves.length]
     if (move == null) return move

@@ -4,10 +4,9 @@
  */
 
 // @index('./*', f => `export * from '${f.path}'`)
-export * from './Character'
-export * from './CommandQueue'
-export * from './DungeonRoom'
+export * from './battle'
+export * from './Dungeon'
+export * from './entryTypes'
 export * from './Gamestate'
-export * from './misc'
 export * from './Rulebook'
 // @endindex

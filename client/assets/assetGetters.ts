@@ -1,5 +1,5 @@
 import { upperFirst } from 'lodash'
-import type { CharacterName, OrbType } from 'shared'
+import type { CharacterId, OrbType } from 'shared'
 import { Loader } from 'pixi.js'
 import type { OrbAssetId, SpineAsset, VisibleEffect } from './assetTypes'
 import { isTextureKey, PixiTexture, getTexture } from '@/elementsUtil'
@@ -11,13 +11,13 @@ export function getEffectIconSrc<T extends VisibleEffect>(
     return getTexture(id)
 }
 
-export const getCharTexture = (charId: CharacterName) =>
+export const getCharTexture = (charId: CharacterId) =>
     isTextureKey(charId) ? getTexture(charId) : PixiTexture.WHITE
 
 export const getOrbTexture = (orbType: OrbType) =>
     getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)
 
-export function getValidSpineAssetName(name: CharacterName): SpineAsset | null {
+export function getValidSpineAssetName(name: CharacterId): SpineAsset | null {
     //@ts-expect-error TODO this goes away when all characters have spines...
     const assetName: SpineAsset = `${name}Spine`
 

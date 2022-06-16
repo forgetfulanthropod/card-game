@@ -1,3 +1,4 @@
+import { watchFile } from 'fs'
 import type { Server } from 'http'
 import { has } from 'lodash'
 import type { Gamestate, NetworkEvent } from 'shared'
@@ -35,6 +36,7 @@ export function mountIo(
     prefix: string
 ): void {
     io = new SocketServer(server, { path: prefix + '/socket' })
+    refreshOnChange(io)
     io.on('connection', socket => {
         // logger.info(`socket connected: ${socket.id}`)
         socket.on(
@@ -51,5 +53,10 @@ export function mountIo(
                 void maybeMakeUser({ username })
             }
         )
+    })
+}
+function refreshOnChange(io: SocketServer) {
+    watchFile(__dirname + '../../public/hackin.js', () => {
+        io.emit('refresh')
     })
 }

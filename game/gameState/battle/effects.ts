@@ -8,6 +8,59 @@ import { turnEndClearEffects } from 'shared'
 
 import produce from 'immer'
 
+const turnStartEffectIds = ['bleed', 'poison', 'passiveBlock'] as const
+type TurnStartEffectId = typeof turnStartEffectIds[number]
+type StaticEffectId = Exclude<EffectId, TurnStartEffectId>
+
+const staticEffectFuncs: Record<
+    StaticEffectId,
+    (stats: CalculatedCharacterStats, counter: number) => void
+> = {
+    smallDamageIncrease(stats) {
+        stats.damageTakeAddend += 4
+    },
+    // strengthify(stats, counter) {
+    //     stats.strength += counter
+    // },
+    debilitated(stats) {
+        stats.strength *= 0.5
+    },
+    fatigue(stats) {
+        stats.strength *= 0.25
+    },
+    stunned(stats) {
+        stats.isSkipped = true
+    },
+    strongblock(stats) {
+        stats.blockMultiplier *= 1.5
+    },
+    unguarded(stats) {
+        stats.damageTakeMultiplier *= 1.25
+    },
+    vulnerable(stats) {
+        stats.damageTakeMultiplier *= 1.5
+    },
+    doubleDamage(stats) {
+        stats.strength *= 2
+    },
+}
+
+const turnStartEffectFuncs: Record<
+    TurnStartEffectId,
+    (cm: CharacterMeta, counter: number) => void
+> = {
+    bleed(cm) {
+        cm.health -= Math.floor(cm.constitution * 0.05)
+    },
+    poison(cm, counter) {
+        cm.health -= counter
+    },
+    passiveBlock(cm, counter) {
+        cm.block += counter
+    },
+} as const
+
+/** pure function */
 export function calcPostEffectStats(cm: CharacterMeta) {
     const stats: CalculatedCharacterStats = {
         block: cm.block,
@@ -22,46 +75,12 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         health: cm.health,
     }
     cm.effects.forEach(effect => {
-        effectFuncs[effect.id](stats)
+        if (turnStartEffectIds.includes(effect.id as TurnStartEffectId)) return
+        staticEffectFuncs[effect.id as StaticEffectId](stats, effect.counter)
     })
     return stats
 }
 
-const effectFuncs: Record<EffectId, (stats: CalculatedCharacterStats) => void> =
-    {
-        /** see applyTurnStartEffects */
-        bleed(_stats) {},
-        smallDamageIncrease(stats) {
-            stats.damageTakeAddend += 4
-        },
-        debilitated(stats) {
-            stats.strength *= 0.5
-        },
-        fatigue(stats) {
-            stats.strength *= 0.25
-        },
-        /** see applyTurnStartEffects */
-        poison(_stats) {},
-        stunned(stats) {
-            stats.isSkipped = true
-        },
-        strongblock(stats) {
-            stats.blockMultiplier *= 1.5
-        },
-        unguarded(stats) {
-            stats.damageTakeMultiplier *= 1.25
-        },
-        vulnerable(stats) {
-            stats.damageTakeMultiplier *= 1.5
-        },
-        doubleDamage(stats) {
-            stats.strength *= 2
-        },
-        /** see applyTurnStartEffects */
-        passiveBlock(stats) {},
-    }
-
-/** bleed and poison happen at turn start */
 export function applyTurnStartEffects(
     scene: BattleCursor,
     starting: 'pc' | 'npc'
@@ -71,14 +90,12 @@ export function applyTurnStartEffects(
         produce(ac => {
             for (const cm of Object.values(ac)) {
                 if (cm.isPc !== isPcStart) continue
-                const getEffect = (id: EffectId) =>
-                    cm.effects.find(e => e.id === id)
-                const bleed = getEffect('bleed')
-                if (bleed) cm.health -= Math.floor(cm.constitution * 0.05)
-                const poison = cm.effects.find(e => e.id === 'poison')
-                if (poison) cm.health -= poison.counter
-                const passiveBlock = getEffect('passiveBlock')
-                if (passiveBlock) cm.block += passiveBlock.counter
+                cm.effects.forEach(eff =>
+                    turnStartEffectFuncs[eff.id as TurnStartEffectId]?.(
+                        cm,
+                        eff.counter
+                    )
+                )
             }
         })
     )

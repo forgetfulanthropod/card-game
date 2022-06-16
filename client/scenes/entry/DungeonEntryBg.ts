@@ -19,7 +19,7 @@ export function DungeonEntryBg() {
         bgLoopEnded,
     }) as PlayablePixiSprite
 
-    const sceneTypeCursor = getTree().select('scene', 'name')
+    const sceneTypeCursor = getTree().select('scene', 'id')
 
     sceneTypeCursor.once('update', () => {
         if (sceneTypeCursor.get() !== 'battle')

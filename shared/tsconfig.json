@@ -1,7 +1,8 @@
 // Shared
 {
     "compilerOptions": {
-        "paths": { "@": ["./index.ts"] }
+        // "paths": { "@": ["./index.ts"] }
+        "paths": { "@actions": ["./Actions.ts"], "@misc": ["./misc.ts"] }
     },
     "extends": "../tsconfig.base.json"
 }

@@ -38,14 +38,14 @@ export function getTree(): ROBaobab<Gamestate> {
 }
 
 export const getBattleScene = (): ROCursor<BattleScene> => {
-    const sceneName = getTree().select('scene').get('name')
+    const sceneName = getTree().select('scene').get('id')
     if (sceneName !== 'battle') {
         throw new Error(`tried to get battle scene when you're in ${sceneName}`)
     }
     return getTree().select('scene') as ROCursor<BattleScene>
 }
 export const getEntryScene = (): ROCursor<EntryScene> => {
-    const curType = getTree().select('scene').select('name').get()
+    const curType = getTree().select('scene').select('id').get()
     if (curType !== 'entry') {
         throw new Error(`tried to get entry scene when you're in ${curType}`)
     }

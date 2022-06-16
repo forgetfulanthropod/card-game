@@ -10,13 +10,13 @@ export function MainCharacterAnimation({
     height = 190,
     centerX = false,
 }: {
-    characterMeta: Pick<CharacterMeta, 'name' | 'isPc' | 'uid'>
+    characterMeta: Pick<CharacterMeta, 'id' | 'isPc' | 'uid'>
     // characterMeta: CharacterMeta
     events?: InteractionEvents
     height?: number
     centerX?: boolean
 }): PixiSpine | null {
-    const spineAssetName = getValidSpineAssetName(characterMeta.name)
+    const spineAssetName = getValidSpineAssetName(characterMeta.id)
 
     if (!spineAssetName) return null
 
@@ -40,7 +40,7 @@ export function MainCharacterAnimation({
     }
 
     //@ts-expect-error
-    const desiredHeight = (heightOverrides?.[characterMeta.name] ?? 1) * height // TODO: what is it tho
+    const desiredHeight = (heightOverrides?.[characterMeta.id] ?? 1) * height // TODO: what is it tho
     const desiredScale = desiredHeight / root.height
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 

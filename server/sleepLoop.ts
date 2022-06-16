@@ -13,20 +13,20 @@ export async function doActionAndTakeSteps(
     doGameAction(args)
     let maybeNextAction = game.get('nextAction')
     while (maybeNextAction != null) {
-        await updateClient(args.username, game)
+        updateClient(args.username, game)
         await sleep(maybeNextAction.delay)
         game.set('nextAction', null)
         step(game, maybeNextAction)
         maybeNextAction = game.get('nextAction')
     }
-    await updateClient(username, game)
+    updateClient(username, game)
 }
-async function updateClient(username: string, game: Gamecursor) {
+function updateClient(username: string, game: Gamecursor) {
     for (const event of getHappened(username)) {
         emitNetworkEvent({ username, event })
     }
     clearHappened(username)
 
     emitNewGamestate(username, game.get())
-    await setGamestate(username, game.get())
+    setGamestate(username, game.get())
 }
