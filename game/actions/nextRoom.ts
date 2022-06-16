@@ -6,6 +6,7 @@ import {
     getNpcMoves,
     putAllCardsInDrawPile,
     clearRoomCardModifiers,
+    drawNewHand,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
@@ -26,7 +27,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('turnCount', 1)
     putAllCardsInDrawPile(scene)
     scene.set('cardsPlayedThisRoom', [])
-    // resetRound({ game: args.game })
+    drawNewHand(scene)
 }
 
 function getNextRoom(scene: BattleCursor) {

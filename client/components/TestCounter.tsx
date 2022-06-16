@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks'
 
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 
 export function TestCounter(): JSXElement {
     const start = useRef(0)

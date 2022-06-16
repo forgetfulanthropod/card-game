@@ -3,7 +3,7 @@ import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
 import { TargetSelectGraphic } from '@sharedElements'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { getPixiApp } from '@/elementsUtil'

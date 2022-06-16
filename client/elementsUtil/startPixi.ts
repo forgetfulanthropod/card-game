@@ -1,5 +1,5 @@
 import type { PixiContainer } from '@/elementsUtil'
-import { Application, loadAssets } from '@/elementsUtil'
+import { assetsLoadedPromise, Application } from '@/elementsUtil'
 import { bindGamestate } from '@/scenes'
 
 const config = {
@@ -9,7 +9,8 @@ const config = {
 
 export async function startPixi(canvas: HTMLCanvasElement): Promise<void> {
     // const scale = window.innerWidth / BASE_WIDTH
-    await loadAssets()
+    await assetsLoadedPromise()
+    timelog('assets loaded')
     if (config?.showOneThing != null) {
         Application({ canvas, children: [config?.showOneThing()] })
         return

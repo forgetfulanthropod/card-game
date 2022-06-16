@@ -20,7 +20,6 @@ export async function getGamestate(
 }
 
 export async function setGamestate(username: string, gamestate: Gamestate) {
-    logger.info(`user ${username} is in scene ${gamestate.scene.name}`)
     await db.put(userPrefix + username, gamestate)
 }
 

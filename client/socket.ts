@@ -1,10 +1,12 @@
 import type { Diff } from 'deep-diff'
 import { diff as calcDiff } from 'deep-diff'
-import type { ROCursor, SBaobab } from 'sbaobab'
+import type { ROCursor } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import { getTree } from '@/data'
+import type { Gamestate } from 'shared'
+import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
+import { startPixi } from '@/elementsUtil'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -15,42 +17,11 @@ const log = (...args: unknown[]) => config.shouldLog && console.log(...args)
 
 const urlPrefix = window.location.href.split('/')[3]
 
-// MARK
-let socket: Socket = null as unknown as Socket
-// window.socket = socket
-function maybeMakeSocket(): void {
-    if (socket == null) {
-        socket = io({
-            path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
-        })
-        // window.socket = socket
-        socket.once('connect', () =>
-            console.log('connected but i threw away the confirmation')
-        )
-    }
-}
-export function resolveWhenSocketConfirmed(): Promise<void> {
-    maybeMakeSocket()
-    log('waiting for socket connection with server')
-    return new Promise(resolve => {
-        socket.once('connect', () => {
-            log('connection confirmed with server')
-            resolve()
-        })
-    })
-}
-
-export function getSocket(): Socket {
-    return socket
-}
-
-export function attachServerListener(): void {
-    log('attaching server listener')
-    maybeMakeSocket()
-    socket.on('update', ({ data, path }: { data: unknown; path: string[] }) => {
-        log('received server data', data)
-        // getTree().set(data)
-        updateBoabab(data, path)
+let socket = null as unknown as Socket
+export function prepareSocket(): void {
+    if (socket != null) throw Error('socket is already prepared')
+    socket = io({
+        path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
     })
     socket.on('connect', () => {
         const username = localStorage.getItem('username')
@@ -58,12 +29,39 @@ export function attachServerListener(): void {
             socket.emit('username', { username, socketId: socket.id })
         }
     })
-    // socket.on()
+
+    socket.on('update', ({ data }: { data: Gamestate }) => {
+        log('received server data', data)
+        // getTree().set(data)
+        updateBoabab(data)
+    })
 }
 
-function updateBoabab(fromServer: unknown, path: string[]): void {
-    // @ts-expect-error
-    const cursor = getTree().select(path) as ROCursor<unknown>
+export function emitUsername(username: string): void {
+    if (socket == null) throw Error('socket is null')
+    socket.emit('username', { username, socketId: socket.id })
+}
+
+type Unsub = Callback
+export function socketOn(
+    event: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    callback: (...args: any[]) => void
+): Unsub {
+    if (socket == null) throw Error('socket is null')
+    socket.on(event, callback)
+    return () => socket.off(event, callback)
+}
+
+function updateBoabab(fromServer: Gamestate): void {
+    if (!isTreeInitialized()) {
+        initializeBoababTree(fromServer)
+        void startPixi(
+            document.getElementById('pixi-root') as HTMLCanvasElement
+        )
+        return
+    }
+    const cursor = getTree().select()
     const oldState = cursor.get() as unknown
     const differences = calcDiff(oldState, fromServer)
     // not working on N level tree updates?
@@ -78,6 +76,7 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
             console.warn('entire thing changed:', JSON.stringify(change))
             continue
         }
+        // @ts-expect-error
         applyChange(change, cursor)
     }
     if (config.enableExpensiveUpdateValidation) {
@@ -102,7 +101,7 @@ function updateBoabab(fromServer: unknown, path: string[]): void {
     }
 }
 
-function applyChange<T>(change: Diff<T, T>, cursor: ROCursor<T> | SBaobab<T>) {
+function applyChange<T>(change: Diff<T, T>, cursor: ROCursor<T>) {
     // @ts-expect-error (I don't have this in the wrapper right now)
     const path = cursor.path
     log('applying tree change:', change, 'at:', path)

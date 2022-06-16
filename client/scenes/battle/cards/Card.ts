@@ -24,7 +24,7 @@ import type {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import type { CardTypeAssetId } from '@/scenes'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {

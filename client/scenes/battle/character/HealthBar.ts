@@ -4,7 +4,7 @@ import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
 import type { VisibleEffect as VisibleEffectId } from '@/scenes'
 import { getEffectIconSrc, invisibleEffects } from '@/scenes'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {

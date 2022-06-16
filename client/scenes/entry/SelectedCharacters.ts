@@ -3,7 +3,7 @@ import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
 import { range } from 'lodash'
 import { CharacterInfo, MainCharacterAnimation } from '@sharedElements'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {

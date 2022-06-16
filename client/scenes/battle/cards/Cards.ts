@@ -13,7 +13,7 @@ import {
     Sprite,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { toDatum } from '@/util'
 
 type CardsArgs = {

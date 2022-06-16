@@ -11,6 +11,7 @@ import potion from '@battleAssets/misc-png/INVENTORY_POTION.png'
 import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
 import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
 import door from '@battleAssets/misc-png/temp-door.png'
+import { uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
 import {
     backgroundAssets,
@@ -28,7 +29,7 @@ import { check, fontAssets } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
-const basicAssets = {
+const allAssets = {
     fishstick,
     potion,
     swordShield,
@@ -50,50 +51,27 @@ const basicAssets = {
     ...spineAssets,
     ...cardAssets,
     ...healthBarAssets,
-}
-const deluxeAssets = {
     gemButton,
 }
-const allAssets = { ...basicAssets, ...deluxeAssets }
+
+let resolveLoaderPromise = null as unknown as (_: unknown) => void
+const promise = new Promise(res => (resolveLoaderPromise = res))
+
+export function assetsLoadedPromise() {
+    return promise
+}
 
 export type AssetKey = keyof typeof allAssets
 // TODO: add back basic and deluxe
-export function loadAssets(): Promise<void> {
-    const loaded = new Set(
-        Object.keys(allAssets).filter(
-            name => Loader.shared.resources[name]?.data != null
-        )
-    )
+export function startLoadingAssets() {
+    const unique = uniqBy(Object.entries(allAssets), ([name, _]) => name)
 
-    for (const [name, url] of Object.entries(allAssets)) {
-        if (Loader.shared.resources[name]?.data == null) {
-            Loader.shared.add(name, url)
-        }
+    for (const [name, url] of unique) {
+        Loader.shared.add(name, url)
     }
 
     Loader.shared.load()
-
-    let basicDone = false
-    let deluxeDone = false
-    return new Promise(resolve => {
-        // @ts-ignore
-        Loader.shared.onLoad.add((_, { name }) => {
-            loaded.add(name)
-            if (Object.keys(basicAssets).every(k => loaded.has(k))) {
-                // TODO:
-                // dispatch({ a: 'setIsBasicLoaded', v: true })
-                basicDone = true
-            }
-            if (Object.keys(deluxeAssets).every(k => loaded.has(k))) {
-                // dispatch({ a: 'setIsDeluxeLoaded', v: true })
-                deluxeDone = true
-            }
-            if (basicDone && deluxeDone) {
-                resolve()
-            }
-        })
-    })
-    // return () => Loader.shared.onLoad.detach(cb)
+    Loader.shared.onComplete.once(() => resolveLoaderPromise(null))
 }
 
 export function getTexture(assetId: AssetKey): PixiTexture {

@@ -7,7 +7,7 @@ import { useCursor } from './util'
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
 import { getTree } from '@/data'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { styled } from '@/config'
 
 const ButtonGroup = styled.div`

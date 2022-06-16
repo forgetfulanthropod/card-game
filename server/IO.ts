@@ -2,6 +2,7 @@ import type { Server } from 'http'
 import { has } from 'lodash'
 import type { Gamestate, NetworkEvent } from 'shared'
 import { Server as SocketServer } from 'socket.io'
+import { maybeMakeUser } from './actions'
 
 const usernameToSocketId: Record<string, string> = {}
 
@@ -47,7 +48,7 @@ export function mountIo(
             }) => {
                 logger.info(['username associated:', { username, socketId }])
                 usernameToSocketId[username] = socketId
-                socket.emit('usernameReceived')
+                void maybeMakeUser({ username })
             }
         )
     })

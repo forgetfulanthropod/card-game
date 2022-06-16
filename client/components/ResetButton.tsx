@@ -1,4 +1,4 @@
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { styled } from '@/config'
 
 const Root = styled.button`

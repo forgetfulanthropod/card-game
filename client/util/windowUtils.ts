@@ -1,5 +1,5 @@
 import { jss } from 'shared/code'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 import { localTree } from '@/data'
 
 // @ts-expect-error

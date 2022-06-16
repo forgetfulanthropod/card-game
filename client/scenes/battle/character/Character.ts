@@ -26,8 +26,8 @@ import {
     Text,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
-import { getSocket } from '@/connection'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
+import { socketOn } from '@/socket'
 
 // import LevelUp from './LevelUp'
 
@@ -178,9 +178,7 @@ function bindDOT(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer
 ): Unbind {
-    const socket = getSocket()
-    socket.on('DOT$', handleDOT)
-    return () => socket.off('DOT$', handleDOT)
+    return socketOn('DOT$', handleDOT)
     function handleDOT(event: NetworkEvent<'damage$', NetworkDOTData>) {
         const { damageMap } = event.data
 
@@ -196,10 +194,7 @@ function bindMoves(
     aboveCharacterContainer: PixiContainer,
     mainAnimation: PixiSpine | null
 ): Unbind {
-    const socket = getSocket()
-    socket.on('damage$', showCharMove)
-
-    return () => socket.off('damage$', showCharMove)
+    return socketOn('damage$', showCharMove)
     function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
         const { attacker, cardName, damages } = event.data
         const defenderUids: CharacterUid[] = Object.keys(damages)

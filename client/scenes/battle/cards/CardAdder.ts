@@ -18,7 +18,7 @@ import {
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { toDatum } from '@/util'
-import { callApi } from '@/actions'
+import { callApi } from '@/callApi'
 
 export function CardAdder(): PixiContainer {
     // const w = 400

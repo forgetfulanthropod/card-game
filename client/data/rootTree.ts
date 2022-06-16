@@ -19,6 +19,10 @@ export function initializeBoababTree(gamestate: Gamestate): void {
     window.tree = state.gamestate
 }
 
+export function isTreeInitialized(): boolean {
+    return state.gamestate != null
+}
+
 /** Do not call at the module-level
  * The pattern above with triggercallbacks etc lets us
  *  write synchronous code everywhere in app, we just need to
