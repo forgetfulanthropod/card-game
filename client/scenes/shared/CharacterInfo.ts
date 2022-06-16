@@ -1,7 +1,14 @@
 import type { CharacterClass, OwnedCharacterStats } from 'shared'
 import { compose } from 'datums'
 import { InfoBox } from './InfoBox'
-import { If, Text, Container, BASE_WIDTH } from '@/elementsUtil'
+import {
+    If,
+    Text,
+    Container,
+    BASE_WIDTH,
+    Sprite,
+    getTexture,
+} from '@/elementsUtil'
 import { hoveredCharacterUid } from '@/util'
 
 const stats = [
@@ -37,19 +44,28 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                             anchor: [0, 1],
                             x: -contentWidth * 0.5,
                         }),
-                        Text({
-                            text: cm.class,
-                            style: {
-                                fontFamily: 'bigFont',
-                                fontSize: 40,
-                                fill: classColorMap[cm.class],
-                                // stroke: 0xdddddd,
-                                // strokeThickness: 3,
-                                // letterSpacing: 5,
-                            },
-                            anchor: [1, 1],
-                            x: contentWidth * 0.5,
-                        }),
+                        // Text({
+                        //     text: cm.class,
+                        //     style: {
+                        //         fontFamily: 'bigFont',
+                        //         fontSize: 40,
+                        //         fill: classColorMap[cm.class],
+                        //         // stroke: 0xdddddd,
+                        //         // strokeThickness: 3,
+                        //         // letterSpacing: 5,
+                        //     },
+                        //     anchor: [1, 1],
+                        //     x: contentWidth * 0.5,
+                        // }),
+                        // Sprite({
+                        //     src: `${cm.class}ClassIcon`,
+                        //     anchor: [1, 1],
+                        //     x: contentWidth * 0.5,
+                        //     scale:
+                        //         150 /
+                        //         (getTexture(`${cm.class}ClassIcon`)?.height ??
+                        //             1),
+                        // }),
                         ...stats.map((stat, i) => {
                             return Container({
                                 y: 50,
@@ -81,6 +97,14 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                         }),
                     ],
                 })
-            )
+            ).addChild(
+                Sprite({
+                    src: `${cm.class}ClassIcon`,
+                    anchor: [1, 1],
+                    x: contentWidth * 0.5,
+                    scale:
+                        150 / (getTexture(`${cm.class}ClassIcon`)?.height ?? 1),
+                })
+            ).parent
     )
 }

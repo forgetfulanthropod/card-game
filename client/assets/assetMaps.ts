@@ -136,6 +136,12 @@ export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
 }
 
+export const characterClassAssets = {
+    wizardClassIcon: 'character classes/wizard glow.png',
+    knightClassIcon: 'character classes/knight glow.png',
+    clericClassIcon: 'character classes/cleric glow.png',
+} as const
+
 export const spineAssets = {
     frogKnightSpine: 'spine/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
