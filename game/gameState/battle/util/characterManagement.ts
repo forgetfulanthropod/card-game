@@ -1,12 +1,12 @@
 import type {
     CharacterMeta,
-    CharacterName,
+    CharacterId,
     Characters,
     EnemyCharacterMeta,
-    EnemyCharacterName,
+    EnemyCharacterId,
     EnemyCharacters,
     OwnedCharacterStats,
-    StanceName,
+    StanceId,
 } from 'shared'
 import { keys, vals } from 'shared/code'
 import { enemies, getRulebook } from '@/rulebook'
@@ -22,7 +22,7 @@ export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return newPCMeta({ uid: c.uid, name: c.name, x, y })
+            return newPCMeta({ uid: c.uid, name: c.id, x, y })
         }),
     ]
     const o: Characters = {}
@@ -107,12 +107,12 @@ function newPCMeta(args: {
     x: number
     y: number
     uid: string
-    name: CharacterName
+    name: CharacterId
 }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    const stance: StanceName =
+    const stance: StanceId =
         args.x > X_AGGRESSIVE_THRESH
             ? 'aggressive'
             : args.x > X_NEUTRAL_THRESH
@@ -139,7 +139,7 @@ function newPCMeta(args: {
 export function newNPCMeta(args: {
     x: number
     y: number
-    name: EnemyCharacterName
+    name: EnemyCharacterId
     uid: string
     level: string | number
 }): EnemyCharacterMeta {
@@ -149,7 +149,7 @@ export function newNPCMeta(args: {
 
     return {
         ...enemyDefinition,
-        name,
+        id: name,
         displayName: '',
         health: getHealthFromBase(enemyDefinition.constitution),
         constitution: getHealthFromBase(enemyDefinition.constitution),

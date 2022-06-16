@@ -1,5 +1,6 @@
-import type { Card, CardUid, BattleCursor, GameActions } from 'shared'
+import type { Card, BattleCursor, GameActions } from 'shared'
 
+import { throwNull } from 'shared/code'
 import {
     discard,
     getEnergy,
@@ -11,8 +12,11 @@ import { getBattleSceneIn } from '@/util'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
-    const card = findCard({ cardUid: args.cardUid, scene })
+    const card =
+        scene.get('cards', 'hand', args.cardUid) ??
+        throwNull(`cardUid ${args.cardUid}`)
 
+    // logger.info(`playing card ${card.uid}`)
     if (isPlayable({ card, scene })) {
         play({ card, targetUids: args.targetUids, scene })
         discard({ cardUids: [args.cardUid], scene })
@@ -20,21 +24,6 @@ export const playCard: GameActions['playCard'] = args => {
 
     clearDead(scene)
     updateHand(scene)
-}
-
-function findCard({
-    cardUid,
-    scene,
-}: {
-    cardUid: CardUid
-    scene: BattleCursor
-}): Card {
-    const card = scene.select('cards').select('hand').select(cardUid).get()
-
-    if (card == null)
-        throw new Error(`card Uid ${cardUid} not found, something is wrong`)
-
-    return card
 }
 
 function isPlayable({

@@ -23,7 +23,7 @@ export function makeBattleState(args: {
 
     const bs: BattleScene = {
         username: args.game.get('username'),
-        name: 'battle',
+        id: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 1,
         state: 'in battle',

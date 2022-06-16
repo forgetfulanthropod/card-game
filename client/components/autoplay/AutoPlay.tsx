@@ -67,7 +67,7 @@ class Runner {
         }
         this.lastStep = Date.now()
         const tree = getTree().get()
-        const sceneName = tree.scene.name
+        const sceneName = tree.scene.id
         if (sceneName === 'entry') {
             await this.entryStep(tree)
         } else if (sceneName === 'battle') {
@@ -123,7 +123,7 @@ class Runner {
         if (enemy == null) {
             throw Error('null enemy')
         }
-        toast(`hitting enemy ${enemy.name} (${enemy.uid})`)
+        toast(`hitting enemy ${enemy.id} (${enemy.uid})`)
     }
 }
 

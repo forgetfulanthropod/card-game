@@ -1,5 +1,5 @@
 import type { Brandify } from './misc'
-import type { CharacterClass, CharacterName } from '@'
+import type { CharacterClass, CharacterId } from '@'
 
 export type CharacterAbility = {
     displayName: string
@@ -11,7 +11,7 @@ export type CharacterAbility = {
 export type CharacterUid = string & Brandify
 export type CharacterStats = Readonly<{
     /** TODO: rename this to ID  */
-    name: CharacterName
+    id: CharacterId
     displayName: string
     class: CharacterClass
     isPc: boolean

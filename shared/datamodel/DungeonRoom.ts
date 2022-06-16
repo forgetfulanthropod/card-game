@@ -1,8 +1,8 @@
-import type { DungeonName, EnemyCharacterName } from '@'
+import type { DungeonName, EnemyCharacterId } from '@'
 
 export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
 
 export type DungeonRoom = ReadonlyArray<{
-    name: EnemyCharacterName
+    id: EnemyCharacterId
     level: string | number
 }>

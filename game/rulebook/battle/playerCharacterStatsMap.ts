@@ -1,4 +1,4 @@
-import type { CharacterName, CharacterStats } from 'shared'
+import type { CharacterId, CharacterStats } from 'shared'
 
 const unknownEnemyFiller = {
     class: 'knight',
@@ -8,9 +8,9 @@ const unknownEnemyFiller = {
     defense: 5,
 } as const
 
-export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
+export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
     bloatDemon: {
-        name: 'bloatDemon',
+        id: 'bloatDemon',
         displayName: 'Bloat Demon',
         isPc: true,
         class: 'knight',
@@ -21,7 +21,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     bogSpirit: {
-        name: 'bogSpirit',
+        id: 'bogSpirit',
         displayName: 'Bog Spirit',
         isPc: true,
         class: 'knight',
@@ -32,7 +32,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     bookle: {
-        name: 'bookle',
+        id: 'bookle',
         displayName: 'Bookle',
         isPc: true,
         class: 'knight',
@@ -43,7 +43,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     bumbit: {
-        name: 'bumbit',
+        id: 'bumbit',
         displayName: 'Bumbit',
         isPc: true,
         class: 'knight',
@@ -54,7 +54,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     frogKnight: {
-        name: 'frogKnight',
+        id: 'frogKnight',
         displayName: 'Frog Knight',
         isPc: true,
         class: 'knight',
@@ -65,7 +65,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     frogWizard: {
-        name: 'frogWizard',
+        id: 'frogWizard',
         displayName: 'Frog Wizard',
         isPc: true,
         class: 'knight',
@@ -76,7 +76,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     gnomeHooligan: {
-        name: 'gnomeHooligan',
+        id: 'gnomeHooligan',
         displayName: 'Gnome Hooligan',
         isPc: true,
         class: 'knight',
@@ -87,7 +87,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     goblinDragon: {
-        name: 'goblinDragon',
+        id: 'goblinDragon',
         displayName: 'Goblin Dragon',
         isPc: true,
         class: 'knight',
@@ -98,7 +98,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     greenJester: {
-        name: 'greenJester',
+        id: 'greenJester',
         displayName: 'Green Jester',
         isPc: true,
         class: 'knight',
@@ -109,7 +109,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     jerry: {
-        name: 'jerry',
+        id: 'jerry',
         displayName: 'Jerry',
         isPc: true,
         class: 'knight',
@@ -120,7 +120,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     lichLord: {
-        name: 'lichLord',
+        id: 'lichLord',
         displayName: 'Lich Lord',
         isPc: true,
         class: 'knight',
@@ -131,7 +131,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     matchaGelatinCube: {
-        name: 'matchaGelatinCube',
+        id: 'matchaGelatinCube',
         displayName: 'Matcha Gelatin Cube',
         isPc: false,
         class: 'wizard',
@@ -142,7 +142,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     mimic: {
-        name: 'mimic',
+        id: 'mimic',
         displayName: 'Mimic',
         isPc: false,
         class: 'knight',
@@ -153,7 +153,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     mushroomFarmer: {
-        name: 'mushroomFarmer',
+        id: 'mushroomFarmer',
         displayName: 'Mushroom Farmer',
         isPc: true,
         class: 'cleric',
@@ -164,7 +164,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 6,
     },
     notoriousBEAN: {
-        name: 'notoriousBEAN',
+        id: 'notoriousBEAN',
         displayName: 'Notorious B.E.A.N',
         isPc: true,
         class: 'knight',
@@ -175,7 +175,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     orcWarrior: {
-        name: 'orcWarrior',
+        id: 'orcWarrior',
         displayName: 'Orc Warrior',
         isPc: false,
         class: 'knight',
@@ -186,7 +186,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     penguinKnight: {
-        name: 'penguinKnight',
+        id: 'penguinKnight',
         displayName: 'Penguin Knight',
         isPc: true,
         class: 'knight',
@@ -197,7 +197,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     skeletonWarrior: {
-        name: 'skeletonWarrior',
+        id: 'skeletonWarrior',
         displayName: 'Skeleton Warrior',
         isPc: false,
         class: 'knight',
@@ -208,7 +208,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 4,
     },
     snacky: {
-        name: 'snacky',
+        id: 'snacky',
         displayName: 'Snacky',
         isPc: true,
         class: 'knight',
@@ -219,7 +219,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     theHatefly: {
-        name: 'theHatefly',
+        id: 'theHatefly',
         displayName: 'The Hatefly',
         isPc: true,
         class: 'knight',
@@ -230,7 +230,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     trioOfFools: {
-        name: 'trioOfFools',
+        id: 'trioOfFools',
         displayName: 'Trio of Fools',
         isPc: true,
         class: 'knight',
@@ -241,7 +241,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     warhog: {
-        name: 'warhog',
+        id: 'warhog',
         displayName: 'Warhog',
         isPc: true,
         class: 'knight',
@@ -252,7 +252,7 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     wimpyGuard: {
-        name: 'wimpyGuard',
+        id: 'wimpyGuard',
         displayName: 'Wimpy Guard',
         isPc: true,
         class: 'knight',
@@ -263,25 +263,25 @@ export const playerCharacterStatsMap: Record<CharacterName, CharacterStats> = {
         defense: 5,
     },
     bosshogJurgen: {
-        name: 'bosshogJurgen',
+        id: 'bosshogJurgen',
         displayName: 'bosshogJurgen',
         isPc: false,
         ...unknownEnemyFiller,
     },
     toadmaw: {
-        name: 'toadmaw',
+        id: 'toadmaw',
         displayName: 'toadmaw',
         isPc: false,
         ...unknownEnemyFiller,
     },
     cultist: {
-        name: 'cultist',
+        id: 'cultist',
         displayName: 'cultist',
         isPc: false,
         ...unknownEnemyFiller,
     },
     halfdan: {
-        name: 'halfdan',
+        id: 'halfdan',
         displayName: 'halfdan',
         isPc: false,
         ...unknownEnemyFiller,

@@ -14,7 +14,7 @@ import type {
 
 export interface BattleScene extends SceneHas {
     username: string
-    name: 'battle'
+    id: 'battle'
     dungeonName: DungeonName
     state: BattleWinState
     playerStarts: boolean

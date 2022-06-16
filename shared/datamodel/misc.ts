@@ -8,11 +8,11 @@ export type Brandify = {
 }
 
 export type SceneHas = Readonly<{
-    name: SceneType
+    id: SceneId
 }> &
     Brandify
 
-export type SceneType = 'entry' | 'battle'
+export type SceneId = 'entry' | 'battle'
 export type Scene = BattleScene | EntryScene
 
 export type DungeonLevel = Readonly<DungeonLevelI> & Brandify

@@ -5,7 +5,7 @@ satisfies<GameActions>(actions)
 export function doGameAction(args: GameActionCall) {
     const { game, method } = args
     if (
-        game.get('scene', 'name') === 'battle' &&
+        game.get('scene', 'id') === 'battle' &&
         (game.select('scene') as BattleCursor).get('requireAction') != null &&
         method !== 'finishCard'
     ) {

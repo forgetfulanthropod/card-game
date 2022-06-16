@@ -10,7 +10,7 @@ import type {
     Orb,
     OwnedCharacterStats,
     Rulebook,
-    SceneType,
+    SceneId,
 } from './index'
 
 interface BareServerActionArgs {
@@ -23,7 +23,7 @@ interface BareGameActionArgs {
     activateOrb: { characterUid: CharacterUid; orb: Orb }
     addCardToDeck: { cardUid: CardUid }
     changeDungeon: { direction: -1 | 1 }
-    changeScene: { newSceneName: SceneType }
+    changeScene: { newSceneName: SceneId }
     endTurn: Empty
     exitDungeon: Empty
     finishCard: { kind: RequiredActionName; cardUids: CardUid[] }

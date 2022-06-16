@@ -20,7 +20,7 @@ import { brightBackLightIsShining, onUpdate } from '@/util'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {
-        name: 'skeletonWarrior',
+        id: 'skeletonWarrior',
         displayName: 'Skeleton Warrior',
         isPc: true,
         class: 'knight',
@@ -34,7 +34,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         nftName: 'skeletonWarrior-4',
     },
     {
-        name: 'frogKnight',
+        id: 'frogKnight',
         displayName: 'Frog Knight',
         isPc: true,
         class: 'knight',
@@ -48,7 +48,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         nftName: 'frogKnight-4',
     },
     {
-        name: 'mushroomFarmer',
+        id: 'mushroomFarmer',
         displayName: 'Mushroom Farmer',
         isPc: true,
         class: 'cleric',
@@ -62,7 +62,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         nftName: 'mushroomFarmer-4',
     },
     {
-        name: 'matchaGelatinCube',
+        id: 'matchaGelatinCube',
         displayName: 'Matcha Gelatin Cube',
         isPc: true,
         class: 'wizard',
@@ -149,8 +149,8 @@ export function SelectedCharacters(): PixiContainer {
                                 }) ??
                                     Sprite({
                                         anchor: [0.5, 0.5],
-                                        src: isTextureKey(c.name)
-                                            ? getTexture(c.name)
+                                        src: isTextureKey(c.id)
+                                            ? getTexture(c.id)
                                             : PixiTexture.WHITE,
                                         scale: 1,
                                     }),
@@ -183,7 +183,7 @@ export function SelectedCharacters(): PixiContainer {
 
 function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
     const nextIndex =
-        (defaultOwnedCharacters.findIndex(oc => oc.name === c.name) + 1) %
+        (defaultOwnedCharacters.findIndex(oc => oc.id === c.id) + 1) %
         defaultOwnedCharacters.length
     const nextChoice = defaultOwnedCharacters[nextIndex]
     // console.log({ nextIndex, nextChoice })

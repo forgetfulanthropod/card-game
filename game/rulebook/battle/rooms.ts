@@ -1,5 +1,5 @@
 import { sample, sampleSize } from 'lodash'
-import type { DungeonRoom, DungeonRoomMap, EnemyCharacterName } from 'shared'
+import type { DungeonRoom, DungeonRoomMap, EnemyCharacterId } from 'shared'
 import { throwNull } from 'shared/code'
 import { enemies } from '@/rulebook'
 // - Room 1:  Two level 1 Skeletons, One level 1 Matcha
@@ -12,19 +12,19 @@ const config = { randomDungeon: false }
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [
         [
-            { name: 'skeletonWarrior', level: 1 },
-            { name: 'skeletonWarrior', level: 1 },
-            { name: 'matchaGelatinCube', level: 1 },
+            { id: 'skeletonWarrior', level: 1 },
+            { id: 'skeletonWarrior', level: 1 },
+            { id: 'matchaGelatinCube', level: 1 },
         ],
         [
-            { name: 'matchaGelatinCube', level: 1 },
-            { name: 'skeletonWarrior', level: 2 },
-            { name: 'matchaGelatinCube', level: 1 },
+            { id: 'matchaGelatinCube', level: 1 },
+            { id: 'skeletonWarrior', level: 2 },
+            { id: 'matchaGelatinCube', level: 1 },
         ],
         [
-            { name: 'skeletonWarrior', level: 2 },
-            { name: 'matchaGelatinCube', level: 2 },
-            { name: 'skeletonWarrior', level: 2 },
+            { id: 'skeletonWarrior', level: 2 },
+            { id: 'matchaGelatinCube', level: 2 },
+            { id: 'skeletonWarrior', level: 2 },
         ],
     ],
     'Hooligan’s Bluff': [],
@@ -39,9 +39,9 @@ function randomDungeon(): DungeonRoom[] {
     return Array.from({ length: 3 }, randomRoom)
 }
 function randomRoom(): DungeonRoom {
-    const names = sampleSize(Object.keys(enemies), 3) as EnemyCharacterName[]
-    return names.map(name => ({
-        name,
-        level: sample(Object.keys(enemies[name])) ?? throwNull('enemy sample'),
+    const ids = sampleSize(Object.keys(enemies), 3) as EnemyCharacterId[]
+    return ids.map(id => ({
+        id,
+        level: sample(Object.keys(enemies[id])) ?? throwNull('enemy sample'),
     }))
 }

@@ -1,11 +1,11 @@
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
 import type {
-    CharacterName,
+    CharacterId as CharacterId,
     CharacterStats,
     CharacterUid,
-    EnemyCharacterName,
-    StanceName,
+    EnemyCharacterId,
+    StanceId,
 } from '@'
 
 export type Characters = Record<CharacterUid, CharacterMeta>
@@ -13,11 +13,11 @@ export type EnemyCharacters = Record<CharacterUid, EnemyCharacterMeta>
 
 /** TODO: simplify CharacterMeta, CharacterStats, OwnedCharacterStats,   */
 export type EnemyCharacterMeta = Omit<CharacterMeta, 'stance' | 'class'> & {
-    name: EnemyCharacterName
+    id: EnemyCharacterId
     level: string | number
 }
 export interface CharacterMeta extends CharacterStats {
-    name: CharacterName
+    id: CharacterId
     uid: CharacterUid
     isPc: boolean
     /** TODO: remove */
@@ -29,7 +29,7 @@ export interface CharacterMeta extends CharacterStats {
     y: number
     screenX: number
     screenY: number
-    stance: StanceName
+    stance: StanceId
     effects: Effect[]
     orbs: Orb[]
 }

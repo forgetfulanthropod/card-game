@@ -105,7 +105,7 @@ function FallBackCharacterSprite(
     characterMeta: CharacterMeta,
     onClick: (_: CharacterUid) => void
 ) {
-    const charSrc = getCharTexture(characterMeta.name)
+    const charSrc = getCharTexture(characterMeta.id)
     return Sprite({
         src: charSrc,
         anchor: [0, 1],

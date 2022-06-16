@@ -3,7 +3,7 @@ import { newNPCMeta, rearrangeNpcs } from './characterManagement'
 
 export function makeRoomNpcs(nextRoom: DungeonRoom) {
     let newNpcs = Object.fromEntries(
-        nextRoom.map(({ name, level }) => {
+        nextRoom.map(({ id: name, level }) => {
             const uid = srandom().toString().slice(6)
             return [
                 uid,

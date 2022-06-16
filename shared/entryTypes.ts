@@ -1,6 +1,6 @@
 import type { OwnedCharacterStats, SceneHas } from './index'
 export interface EntryScene extends SceneHas {
-    name: 'entry'
+    id: 'entry'
     selectedCharacters: OwnedCharacterStats[]
     selectedLevel: {
         name: string

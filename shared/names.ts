@@ -1,4 +1,4 @@
-export type CharacterName =
+export type CharacterId =
     | 'bloatDemon'
     | 'bogSpirit'
     | 'bookle'
@@ -19,9 +19,9 @@ export type CharacterName =
     | 'trioOfFools'
     | 'warhog'
     | 'wimpyGuard'
-    | EnemyCharacterName
+    | EnemyCharacterId
 
-export type EnemyCharacterName =
+export type EnemyCharacterId =
     | 'skeletonWarrior'
     | 'matchaGelatinCube'
     | 'mimic'
@@ -37,5 +37,5 @@ export type DungeonName =
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'
 
-export type StanceName = 'defensive' | 'neutral' | 'aggressive'
+export type StanceId = 'defensive' | 'neutral' | 'aggressive'
 export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
