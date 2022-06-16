@@ -187,7 +187,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'scatterBrained',
         targetNum: 0,
         targetType: 'self',
-        actions: 'chain(draw(3), discard(2))',
+        actions: 'chain(draw(3), require("discardHand", 2, 2))',
         type: 'utility',
         characterClass: 'wizard',
     },

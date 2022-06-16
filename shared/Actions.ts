@@ -110,7 +110,7 @@ export type Gamecursor = SCursor<Gamestate>
 
 // ======= Little types for specific actions =======
 
-type RequiredActionName = 'discard' | 'removeFromRoom' | 'discardFromDraw'
+export type RequiredActionName = 'discardHand' | 'removeRoom' | 'discardDraw'
 
 export interface RequiredAction {
     type: RequiredActionName

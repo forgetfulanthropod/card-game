@@ -9,11 +9,11 @@ export const finishCard: GameActions['finishCard'] = ({ cardUids, game }) => {
     if (cardUids.length < ra.least || cardUids.length > ra.most)
         throw Error('wrong number of cards')
     switch (ra.type) {
-        case 'discard': {
+        case 'discardHand': {
             discard({ cardUids, scene })
             break
         }
-        case 'removeFromRoom': {
+        case 'removeRoom': {
             scene.apply(
                 'cards',
                 produce(cards => {
@@ -27,7 +27,7 @@ export const finishCard: GameActions['finishCard'] = ({ cardUids, game }) => {
             )
             break
         }
-        case 'discardFromDraw': {
+        case 'discardDraw': {
             scene.apply(
                 'cards',
                 produce(cards => {

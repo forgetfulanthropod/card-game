@@ -8,6 +8,7 @@ import type {
     CardUid,
     EffectId,
     OrbType,
+    RequiredActionName,
 } from 'shared'
 
 type ExecuteArgs<T = VAngu[]> = {
@@ -47,6 +48,7 @@ interface ArgsOf {
     discard: [numCards: number]
     orbOfHolyLight: []
     doubleEnchantmentOrToken: []
+    require: [type: RequiredActionName, least: number, most: number]
 }
 
 export type Locals = CalculatedCharacterStats & {
@@ -61,10 +63,6 @@ export type Executors = {
 }
 export type Explainers = {
     [K in keyof ArgsOf]: (dslArgs: Anguify<ArgsOf[K]>) => string
-}
-
-export function evalOne(angu: VAngu) {
-    return angu.eval()
 }
 
 export function evalAll<T extends any[]>(angus: Anguify<T>): T {

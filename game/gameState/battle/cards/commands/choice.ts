@@ -1,5 +1,5 @@
 import type { Executors, Explainers } from './util'
-import { evalOne, evalAll } from './util'
+import { evalAll } from './util'
 
 export const explain: Explainers['choice'] = dslArgs => {
     const choices = evalAll(dslArgs)
@@ -11,5 +11,5 @@ export const execute: Executors['choice'] = ({
     targetUids,
     scene,
 }) => {
-    void evalOne(dslArgs[Math.floor(dslArgs.length * srandom())])
+    dslArgs[Math.floor(dslArgs.length * srandom())].eval()
 }
