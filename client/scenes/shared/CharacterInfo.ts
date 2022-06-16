@@ -18,7 +18,7 @@ const stats = [
     { key: 'constitution', color: 0x1cc8af },
 ] as const
 
-const classColorMap: Record<CharacterClass, [number, number]> = {
+const _classColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
     knight: [0xe4a72f, 0xff435a],
     wizard: [0x44a0ff, 0x1184fa],

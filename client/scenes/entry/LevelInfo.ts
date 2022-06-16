@@ -1,4 +1,3 @@
-import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     getTexture,
@@ -8,19 +7,19 @@ import {
     Container,
 } from '@/elementsUtil'
 
-const arrowStyle = {
-    fontFamily: 'bigFont',
-    fontSize: 80,
-    // fill: ['#fff', '#eee'], // gradient
-    fill: ['#aaa'],
-    stroke: '#999',
-    strokeThickness: 5,
-}
+// const arrowStyle = {
+//     fontFamily: 'bigFont',
+//     fontSize: 80,
+//     // fill: ['#fff', '#eee'], // gradient
+//     fill: ['#aaa'],
+//     stroke: '#999',
+//     strokeThickness: 5,
+// }
 
 export function LevelInfo(): PixiContainer {
-    const scene = getEntryScene()
+    // const scene = getEntryScene()
 
-    const level = scene.select('selectedLevel').get()
+    // const level = scene.select('selectedLevel').get()
 
     const root = Container({
         x: BASE_WIDTH * 0.15,

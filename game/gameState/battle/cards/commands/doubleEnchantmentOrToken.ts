@@ -1,6 +1,6 @@
 import type { Executors, Explainers } from './util'
 
-export const explain: Explainers['doubleEnchantmentOrToken'] = dslArgs => {
+export const explain: Explainers['doubleEnchantmentOrToken'] = _dslArgs => {
     return `doubleEnchantmentOrToken: Unimplemented!`
 }
 

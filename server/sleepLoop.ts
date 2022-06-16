@@ -4,8 +4,6 @@ import { sleep } from 'shared/code'
 import { setGamestate } from './db'
 import { emitNetworkEvent, emitNewGamestate } from './IO'
 
-const _ = doGameAction
-type Func<T> = (u: T) => Promise<unknown> | unknown
 export async function doActionAndTakeSteps(
     args: GameActionCall & { username: string }
 ) {

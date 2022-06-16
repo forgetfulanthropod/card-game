@@ -16,8 +16,6 @@ export function BattleScene(): PixiContainer {
 
     const scene = getBattleScene()
 
-    const dungeonName = scene.get('dungeonName')
-
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
     const container = Container({

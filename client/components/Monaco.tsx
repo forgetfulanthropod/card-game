@@ -32,7 +32,7 @@ export function Monaco(props: {
         {props.onClose && <button onClick={props.onClose}>close</button>}
         <Editor
             onMount={
-                (async (editor, _monaco) => {
+                (async editor => {
                     mref.current = editor
                     // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
                     await editor.getAction('editor.foldRecursively').run()

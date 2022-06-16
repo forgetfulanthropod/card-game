@@ -14,10 +14,8 @@ import { getBattleScene } from '@/data'
 const INTENT_ICON_WIDTH = 44
 
 export function FloatingIntents(cuid: CharacterUid): PixiContainer {
-    const nextNpcCommandsCursor = getBattleScene().select('nextNpcCommands')
-
     return For(
-        toDatum(getBattleScene(), ({ nextNpcCommands, allCharacters }) =>
+        toDatum(getBattleScene().select('nextNpcCommands'), nextNpcCommands =>
             nextNpcCommands == null
                 ? []
                 : nextNpcCommands

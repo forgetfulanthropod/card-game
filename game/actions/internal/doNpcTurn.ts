@@ -16,7 +16,7 @@ export const doNpcTurn: InternalActions['doNpcTurn'] = ({ game, index }) => {
     const processedCmds = scene.get('nextNpcCommands')
     const processedCmd = processedCmds[index]
 
-    const { targetUids, command, outcome: _outcome } = processedCmd
+    const { targetUids, command } = processedCmd
     if (validateCommand(scene.get(), command)) {
         interpretCommand({ command, targetUids, scene })
     }

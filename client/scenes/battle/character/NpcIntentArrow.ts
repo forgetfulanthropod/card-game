@@ -55,7 +55,7 @@ function IntentText(
     onDestroyed(
         text,
         commandDatum.onChange(
-            c => (text.text = getIntentText(commandDatum)),
+            _c => (text.text = getIntentText(commandDatum)),
             true
         )
     )

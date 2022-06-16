@@ -118,4 +118,6 @@ async function largeExample() {
         return new Promise(resolve => setTimeout(resolve, ms))
     }
 }
+void oneWayExample()
+void twoWayExample()
 void largeExample()

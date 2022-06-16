@@ -7,7 +7,6 @@ import { PixiApplication } from './aliases'
 
 export const ROOT_SCALE = isMobile ? 1 : 2
 
-const application = null
 let app: null | PixiApplication = null
 export function Application(args: {
     canvas: HTMLCanvasElement

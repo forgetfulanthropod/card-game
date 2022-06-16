@@ -6,10 +6,6 @@ export const explain: Explainers['choice'] = dslArgs => {
     return `${choices.map((c, i) => `${i > 0 ? '\nor ' : '   '}${c}`).join('')}`
 }
 
-export const execute: Executors['choice'] = ({
-    dslArgs,
-    targetUids,
-    scene,
-}) => {
+export const execute: Executors['choice'] = ({ dslArgs }) => {
     dslArgs[Math.floor(dslArgs.length * srandom())].eval()
 }

@@ -51,7 +51,6 @@ function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
     const cardPile = getBattleScene().get('newCardOptions')
     const lessImportantFilter = new AdjustmentFilter({ saturation: 0.5 })
 
-    const hoveredCardUid = datum(null)
     const cardWidth = 260
     const cardEls = vals(cardPile).map((card, i) => {
         const pointerover = () => {

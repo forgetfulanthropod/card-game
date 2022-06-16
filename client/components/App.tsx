@@ -5,7 +5,6 @@ import { useEffect, useState } from 'preact/hooks'
 import { GameManager } from './GameManager'
 import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
-const log = (...args: unknown[]) => true && console.log(...args)
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(

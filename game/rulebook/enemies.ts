@@ -68,7 +68,6 @@ export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> =
 } as const // prettier-ignore
 
 export type BaseHealth = number | `${number}-${number}` | `>${number}`
-type Selfkeys<T> = { [K in keyof T]: { id: K } }
 export type EnemyDefinition = {
     // displayName: string
     // level: number | string | null

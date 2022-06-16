@@ -5,14 +5,14 @@ import type { ROCursor } from 'sbaobab'
 
 import type { InteractionEvents } from './mypixi'
 import { bindEvents, startChecking } from './mypixi'
-import type { AnimationsOf, SpineAsset } from '@/assets'
+import type { AnimationId, SpineAsset } from '@/assets'
 import { onUpdate } from '@/util'
 
 export { PixiSpine }
 
 export function Spine<Name extends SpineAsset>(props: {
     name: Name
-    animation?: AnimationsOf<Name> | ROCursor<AnimationsOf<Name>>
+    animation?: AnimationId | ROCursor<AnimationId>
     x?: number
     y?: number
     size?: [number, number]

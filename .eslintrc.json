@@ -62,7 +62,10 @@
             "warn",
             { "prefer": "type-imports" }
         ],
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }
+        ],
         "unused-imports/no-unused-imports": "warn",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/require-await": "error",

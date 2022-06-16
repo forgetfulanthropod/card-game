@@ -133,10 +133,6 @@ export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
     }
 }
 
-function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
-    return cardDefinitionsMap[id].characterClass
-}
-
 function makeRandId() {
     return srandom().toString().slice(2)
 }

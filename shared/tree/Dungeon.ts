@@ -1,8 +1,6 @@
 import type { Brandify } from '@misc'
 import type { DungeonName, EnemyCharacterId } from './battle'
 
-const Dungeon = null
-
 export type DungeonLevel = Readonly<DungeonLevelI> & Brandify
 interface DungeonLevelI {
     name: DungeonName

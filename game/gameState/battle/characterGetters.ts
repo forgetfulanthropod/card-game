@@ -44,6 +44,7 @@ export function isAlive(scene: BattleScene, uid: CharacterUid): boolean {
     return scene.allCharacters[uid]?.health > 0
 }
 
+/*
 function getClosestAlive(
     allCharacters: CharacterMeta[],
     character: CharacterMeta,
@@ -60,6 +61,7 @@ function getClosestAlive(
 function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
     return Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
 }
+*/
 
 function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()

@@ -19,13 +19,6 @@ import {
 } from '@/elementsUtil'
 import { onUpdate, toDatum } from '@/util'
 
-type Rect = [
-    number, // x
-    number, // y
-    number, // width
-    number // height
-]
-
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
 // const rawHeight = 161
@@ -160,7 +153,7 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
         if (!isPc) return false
         return { stance, uid }
     })
-    return If(data, ({ stance, uid }) => {
+    return If(data, ({ stance }) => {
         if (stance === 'neutral') {
             return Container({ children: [] })
         }

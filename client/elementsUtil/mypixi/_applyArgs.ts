@@ -11,7 +11,6 @@ import type {
 import type { DisplayObjectArgs, ShownArgs, ContainerArgs } from './_types'
 import { bindIsHovered } from './_bindIsHovered'
 
-const applyArgs = null
 export function applyDisplayObjectArgs(
     el: PixiContainer | PixiSprite | PixiText | PixiGraphics,
     args: DisplayObjectArgs

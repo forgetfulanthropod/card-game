@@ -1,20 +1,9 @@
-import { useEffect, useRef } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 
 import { callApi } from '@/callApi'
 
 export function TestCounter(): JSXElement {
     const start = useRef(0)
-    useEffect(() => {
-        console.log('attaching test counter listener')
-        const onChange = (data: unknown) => {
-            console.log(
-                'counter data changed to',
-                data,
-                (Date.now() - start.current) / 1000,
-                'seconds after button press'
-            )
-        }
-    }, [])
 
     return <button
         style={{ pointerEvents: 'auto' }}

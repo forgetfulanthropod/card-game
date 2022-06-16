@@ -55,6 +55,6 @@ function clearDeadCommands(scene: BattleCursor) {
     }
 }
 
-function clearDeadCharacters(scene: BattleCursor) {
+function _clearDeadCharacters(_scene: BattleCursor) {
     throw new Error('Function not implemented.')
 }

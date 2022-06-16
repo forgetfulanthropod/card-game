@@ -23,7 +23,7 @@ export const execute: Executors['deal'] = ({
     command,
     targetUids,
 }) => {
-    const [damage, times] = evalAll(dslArgs)
+    const [damage, _times] = evalAll(dslArgs)
     const expectedNumTargets = command.targetNum
     if (expectedNumTargets !== targetUids.length) {
         logger.error(

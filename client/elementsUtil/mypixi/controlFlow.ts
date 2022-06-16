@@ -123,7 +123,7 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
         const newItems = hasKey
             ? items.filter(v => !oldKeys.includes(v.key))
             : items.filter(k => !oldKeys.includes(k))
-        const newChildren = newItems.map((it, i) => {
+        const newChildren = newItems.map(it => {
             const c = render(it) as KeyedDisplayObject
             c.key = typeof it === 'object' ? it.key : it
             return c

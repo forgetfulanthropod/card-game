@@ -2,7 +2,7 @@ import { assertFinite } from 'shared/code'
 import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
 
-export const explain: Explainers['smite'] = dslArgs => {
+export const explain: Explainers['smite'] = _dslArgs => {
     return `Deal wisdom damage. If enemy is killed, block defense.`
 }
 

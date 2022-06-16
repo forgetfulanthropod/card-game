@@ -145,7 +145,7 @@ const interpretCommandSuite = {
     // text() {},
 } as const
 
-const effectsSuite = {
+const _effectsSuite = {
     bleed() {},
     debilitated() {},
     fatigue() {},
