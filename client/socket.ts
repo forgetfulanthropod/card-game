@@ -30,6 +30,8 @@ export function prepareSocket(): void {
         }
     })
 
+    socket.on('refresh', () => window.location.reload())
+
     socket.on('update', ({ data }: { data: Gamestate }) => {
         log('received server data', data)
         // getTree().set(data)

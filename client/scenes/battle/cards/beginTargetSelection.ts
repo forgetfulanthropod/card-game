@@ -62,7 +62,7 @@ export function beginTargetSelection(
                 })
                 cleanup()
             }
-        }, 250)
+        }, 10)
     )
 
     function cleanup() {
