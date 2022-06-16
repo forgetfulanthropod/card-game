@@ -123,6 +123,7 @@ export type CardId =
     | 'orbOfHolyLight'
     | 'mantraOfPatience'
     | 'helpingHand'
+    | 'TEST_turnStartEffects'
 export type BasicTargetType =
     | 'friends'
     | 'enemies'
