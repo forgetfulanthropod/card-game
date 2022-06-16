@@ -17,18 +17,19 @@ export function InfoBox(contents: PixiContainer) {
                     x0: 0,
                     y0: 0,
                     x1: 0,
-                    y1: contents.height,
+                    y1: localBounds.height,
                     colorStops: [
                         { color: 0x111111, offset: 0 },
                         { color: 0x33_33_33, offset: 1 },
                     ],
                 },
                 spriteArgs: {
-                    width: contents.width * (1 + marginPortion * 2),
+                    width: localBounds.width * (1 + marginPortion * 2),
                     height:
-                        contents.height + contents.width * marginPortion * 2, // even margin all around
-                    x: localBounds.left - contents.width * marginPortion,
-                    y: localBounds.top - contents.width * marginPortion,
+                        localBounds.height +
+                        localBounds.width * marginPortion * 2, // even margin all around
+                    x: localBounds.left - localBounds.width * marginPortion,
+                    y: localBounds.top - localBounds.width * marginPortion,
                 },
             }),
             // Sprite({
