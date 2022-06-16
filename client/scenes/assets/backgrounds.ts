@@ -1,7 +1,7 @@
-import caveFinal from '@battleAssets/backgrounds/cave-final.png'
+const caveFinal = 'backgrounds/cave-final.png'
 // import fort from '@battleAssets/backgrounds/fort-skeleton-temp.jpg'
 // import matcha from '@battleAssets/backgrounds/matcha-caves.jpg'
-// import ninth from '@battleAssets/backgrounds/ninth-trash-hole.png'
+// const ninth = 'backgrounds/ninth-trash-hole.png'
 
 export const backgroundAssets = {
     'Skelepit Dungeon': caveFinal,

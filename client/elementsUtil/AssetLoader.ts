@@ -1,16 +1,5 @@
 import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
-
-import endTurnButton from '@battleAssets/core-ui/end turn.png'
-import confirmButton from '@battleAssets/core-ui/confirm_.png'
-import gemButton from '@battleAssets/misc-png/BUTTON_GO.png'
-import chestBody from '@battleAssets/misc-png/CHEST_BODY.png'
-import chestLid from '@battleAssets/misc-png/CHEST_LID.png'
-import fishstick from '@battleAssets/misc-png/INVENTORY_FISHSTICK.png'
-import potion from '@battleAssets/misc-png/INVENTORY_POTION.png'
-import swordShield from '@battleAssets/misc-png/INVENTORY_SWORDSHIELD.png'
-import bread from '@battleAssets/misc-png/ITEM_BREAD.png'
-import door from '@battleAssets/misc-png/temp-door.png'
 import { uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
 import {
@@ -26,6 +15,17 @@ import {
     signAssets,
 } from '@/scenes'
 import { check, fontAssets } from '@/assets'
+
+const endTurnButton = 'core-ui/end turn.png'
+const confirmButton = 'core-ui/confirm_.png'
+const gemButton = 'misc-png/BUTTON_GO.png'
+const chestBody = 'misc-png/CHEST_BODY.png'
+const chestLid = 'misc-png/CHEST_LID.png'
+const fishstick = 'misc-png/INVENTORY_FISHSTICK.png'
+const potion = 'misc-png/INVENTORY_POTION.png'
+const swordShield = 'misc-png/INVENTORY_SWORDSHIELD.png'
+const bread = 'misc-png/ITEM_BREAD.png'
+const door = 'misc-png/temp-door.png'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -67,7 +67,7 @@ export function startLoadingAssets() {
     const unique = uniqBy(Object.entries(allAssets), ([name, _]) => name)
 
     for (const [name, url] of unique) {
-        Loader.shared.add(name, url)
+        Loader.shared.add(name, 'assets/' + url)
     }
 
     Loader.shared.load()

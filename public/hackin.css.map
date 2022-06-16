@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../client/components/global.css"],
+  "sourcesContent": ["* {\n    margin: 0;\n    padding: 0;\n}\n\nbody {\n    margin: 0;\n    padding: 0;\n    overflow: hidden;\n    background: black;\n}\n\nimg {\n    -webkit-user-drag: none;\n}\n"],
+  "mappings": ";AAAA;AACI;AACA;AAAA;AAGJ;AACI;AACA;AACA;AACA;AAAA;AAGJ;AACI;AAAA;",
+  "names": []
+}

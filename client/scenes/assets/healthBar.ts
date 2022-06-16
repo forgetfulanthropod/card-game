@@ -1,11 +1,11 @@
-import healthBarAggressive from '@battleAssets/health bar/Aggressive Stance.png'
-import healthBarAvoidant from '@battleAssets/health bar/Avoidant stance.png'
-import healthBarDoT from '@battleAssets/health bar/DoT.png'
-import healthBarHealth from '@battleAssets/health bar/Health.png'
-import healthBarBacking from '@battleAssets/health bar/Healthbar Backing.png'
-import healthBarHighlight from '@battleAssets/health bar/Highlight.png'
-import healthBarDamage from '@battleAssets/health bar/Regular Damage.png'
-import healthBarShadow from '@battleAssets/health bar/Shadow.png'
+const healthBarAggressive = 'health bar/Aggressive Stance.png'
+const healthBarAvoidant = 'health bar/Avoidant stance.png'
+const healthBarDoT = 'health bar/DoT.png'
+const healthBarHealth = 'health bar/Health.png'
+const healthBarBacking = 'health bar/Healthbar Backing.png'
+const healthBarHighlight = 'health bar/Highlight.png'
+const healthBarDamage = 'health bar/Regular Damage.png'
+const healthBarShadow = 'health bar/Shadow.png'
 
 export const healthBarAssets = {
     healthBarAggressive,
