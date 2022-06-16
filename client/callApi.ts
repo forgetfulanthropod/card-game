@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast'
 import type { ActionName, AllActionArgs } from 'shared'
 
 export async function callApi<K extends ActionName>(
@@ -6,10 +7,12 @@ export async function callApi<K extends ActionName>(
 ): Promise<void> {
     // console.log('calling', method, args)
     const username = localStorage.getItem('username')
-    if (username == null)
-        throw Error(
+    if (username == null) {
+        toastWarn(
             `call to ${method}: No username in localstorage. Can't call API.`
         )
+        return
+    }
 
     const fullArgs = { ...(args ?? {}), username, method: method }
     try {
@@ -22,11 +25,21 @@ export async function callApi<K extends ActionName>(
             body: JSON.stringify(fullArgs),
         })
         const json = await res.json()
-        if ('status' in json) return
-        console.warn(`call to ${method}: server returned invalid data`)
+        if (json?.status == null) {
+            toastWarn(`${method} invalid return type`)
+            return
+        }
+        if (json?.status === 'error') {
+            toastWarn(`${method}: server error: ${json?.message}`)
+            return
+        }
+        toastWarn(`call to ${method}: server returned invalid data`)
     } catch (e) {
-        console.warn(
-            `call to ${method}: server is offline or did not return json`
-        )
+        toastWarn(`call to ${method}: server is offline or did not return json`)
     }
+}
+
+function toastWarn(x: string): void {
+    toast.error(x)
+    console.warn(x)
 }
