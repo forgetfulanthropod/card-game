@@ -57,12 +57,12 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     return If(data, block =>
         Container({
             // y: -50 *  SCALE_UNIVERSAL,
-            x: 250,
+            x: characterCursor.get('isPc') ? 255 : -80,
             children: [
                 Sprite({
                     src: getTexture('blockIcon'),
-                    width: 60 * SCALE_UNIVERSAL,
-                    height: 60 * SCALE_UNIVERSAL,
+                    width: 90 * SCALE_UNIVERSAL,
+                    height: 90 * SCALE_UNIVERSAL,
                     anchor: [0.5, 0.5],
                 }),
                 Text({
