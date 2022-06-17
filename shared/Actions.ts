@@ -27,7 +27,7 @@ interface BareGameActionArgs {
     changeScene: { newSceneName: SceneId }
     endTurn: Empty
     exitDungeon: Empty
-    finishCard: { kind: RequiredActionName; cardUids: CardUid[] }
+    finishCard: { cardUids: CardUid[] }
     nextRoom: Empty
     placeSelectedCharacters: {
         characters: {

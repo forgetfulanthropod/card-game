@@ -27,19 +27,15 @@ export function Cards(args: CardsArgs) {
         if (scene.state !== 'in battle') return false
         return scene.cards
     })
-    return If(
-        cardsDatum,
-        cards =>
-            Container({
-                children: [
-                    EndTurnButton(),
-                    DrawPile(cards['draw']),
-                    DiscardPile(cards['discard']),
-                    Hand(cards['hand'], args.hoveredCardUid),
-                ],
-            }),
-        undefined,
-        { onDestroy: [cardsDatum.destroy] }
+    return If(cardsDatum, cards =>
+        Container({
+            children: [
+                EndTurnButton(),
+                DrawPile(cards['draw']),
+                DiscardPile(cards['discard']),
+                Hand(cards['hand'], args.hoveredCardUid),
+            ],
+        })
     )
 }
 

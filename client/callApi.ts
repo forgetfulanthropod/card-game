@@ -1,5 +1,5 @@
-import toast from 'react-hot-toast'
 import type { ActionName, AllActionArgs } from 'shared'
+import { toastWarn } from './util'
 
 export async function callApi<K extends ActionName>(
     method: K,
@@ -33,13 +33,7 @@ export async function callApi<K extends ActionName>(
             toastWarn(`${method}: server error: ${json?.message}`)
             return
         }
-        toastWarn(`call to ${method}: server returned invalid data`)
     } catch (e) {
         toastWarn(`call to ${method}: server is offline or did not return json`)
     }
-}
-
-function toastWarn(x: string): void {
-    toast.error(x)
-    console.warn(x)
 }

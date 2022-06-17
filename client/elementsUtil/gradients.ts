@@ -1,11 +1,17 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { GradientFactory } from '@pixi-essentials/gradients'
-import { pick } from 'lodash'
 import type { Renderer, Sprite as PixiSprite } from 'pixi.js'
 import { BaseRenderTexture, RenderTexture } from 'pixi.js'
+import { assertFinite } from 'shared/code'
 
 import type { SpriteArgs } from './mypixi'
-import { PixiGraphics, getRenderer, getPixiApp, Sprite } from './mypixi'
+import {
+    PixiTexture,
+    PixiGraphics,
+    getRenderer,
+    getPixiApp,
+    Sprite,
+} from './mypixi'
 
 export type GradientArgs = {
     x0: number
@@ -26,17 +32,29 @@ function GradientRectangleSprite(
     spriteArgs: GradientSpriteArgs
 ): PixiSprite {
     const renderer = getPixiApp().renderer as Renderer
-    const texture = new RenderTexture(
-        new BaseRenderTexture(pick(spriteArgs, 'width', 'height'))
-    )
+    const { width, height } = spriteArgs
+    assertFinite({ width, height })
+    const texture = new RenderTexture(new BaseRenderTexture({ width, height }))
 
     let src
 
-    if (options.r0 != null && options.r1 != null)
-        //@ts-expect-error
-        src = GradientFactory.createRadialGradient(renderer, texture, options)
-    else src = GradientFactory.createLinearGradient(renderer, texture, options)
-
+    try {
+        if (options.r0 != null && options.r1 != null)
+            src = GradientFactory.createRadialGradient(
+                renderer,
+                texture,
+                //@ts-expect-error
+                options
+            )
+        else
+            src = GradientFactory.createLinearGradient(
+                renderer,
+                texture,
+                options
+            )
+    } catch (e) {
+        src = PixiTexture.WHITE
+    }
     return Sprite({ ...spriteArgs, src })
 }
 

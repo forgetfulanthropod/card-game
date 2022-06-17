@@ -1,6 +1,7 @@
 // import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { datum } from 'datums'
-import type { CharacterUid } from 'shared'
+import type { CharacterUid, PileId, RequiredAction } from 'shared'
+import { sampleSize } from 'lodash'
 import { Cards, CardAdder } from './cards'
 import { Characters } from './character'
 import { Energy } from './Energy'
@@ -9,7 +10,8 @@ import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { toDatum } from '@/util'
+import { onUpdate, toDatum } from '@/util'
+import { callApi } from '@/callApi'
 
 export function BattleScene(): PixiContainer {
     const hoveredCardUid = datum<CharacterUid | null>(null)
@@ -18,7 +20,7 @@ export function BattleScene(): PixiContainer {
 
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-    const container = Container({
+    return Container({
         name: 'BattleScene',
         children: [
             Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
@@ -40,7 +42,28 @@ export function BattleScene(): PixiContainer {
                 () => CardAdder()
             ),
         ],
+        onDestroy: [
+            onUpdate(
+                scene.select('requireAction'),
+                immediatelyTakeRequiredAction,
+                true
+            ),
+        ],
     })
+}
+function immediatelyTakeRequiredAction(req: RequiredAction | null) {
+    if (req == null) return
+    const { type, least } = req
+    const toPile = {
+        discardHand: 'hand',
+        discardDraw: 'draw',
+        removeRoom: 'draw',
+    } as const
+    const pileId: PileId = toPile[type]
 
-    return container
+    const cardUids = sampleSize(
+        Object.keys(getBattleScene().get('cards', pileId)),
+        least
+    )
+    void callApi('finishCard', { cardUids })
 }
