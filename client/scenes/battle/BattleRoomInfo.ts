@@ -4,7 +4,7 @@ import { BASE_WIDTH, Container, Text } from '@/elementsUtil'
 export function BattleRoomInfo(args: { info: string[] }): PixiContainer {
     return Container({
         name: BattleRoomInfo.name,
-        x: BASE_WIDTH * 0.98,
+        x: BASE_WIDTH * 0.95,
         y: BASE_WIDTH * 0.02,
         children: [
             Text({

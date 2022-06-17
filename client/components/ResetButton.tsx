@@ -4,12 +4,12 @@ import { styled } from '@/config'
 const Root = styled.button`
     position: absolute;
     right: 5px;
-    bottom: 10px;
+    top: 10px;
     pointer-events: auto;
     border: none;
     background: none;
     color: white;
-    font-size: 40px;
+    font-size: 2rem;
     cursor: pointer;
 `
 
