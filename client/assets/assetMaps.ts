@@ -52,7 +52,7 @@ export const cardAssets = {
     remainingEnergy: 'cards/energy flame.png',
     cardEnergy: 'cards/parts/energy.png',
     cardBackPileSizeOverlay: 'cards/card back pile size overlay.png',
-    cardBack: 'cards/card back.png',
+    cardBack: 'cards/card back.webp',
     ...cardArtAssets,
     ...cardTypeAssets,
 } as const

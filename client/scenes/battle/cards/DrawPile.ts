@@ -31,13 +31,13 @@ export function DrawPile(pile: Pile): PixiContainer {
             Text({
                 text: `${vals(pile).length}`,
                 anchor: [0.5, 0.5],
-                width: getCardBackPileSizeSrc().width * 0.5,
-                height: getCardBackPileSizeSrc().height * 0.5,
+                // width: getCardBackPileSizeSrc().width * 0.5,
+                // height: getCardBackPileSizeSrc().height * 0.5,
                 x: getCardBackSrc().width,
                 y: -getCardBackSrc().height,
                 style: {
                     fill: 0xffffff,
-                    fontSize: 150,
+                    fontSize: 48,
                     fontFamily: 'bigFont',
                 },
             }),
