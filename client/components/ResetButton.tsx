@@ -17,6 +17,7 @@ export function ResetButton(props: { username: string }): JSXElement {
     let release = false
     return <Root
         onPointerDown={() => {
+            release = false
             setTimeout(() => {
                 if (!release) {
                     localStorage.removeItem('username')
