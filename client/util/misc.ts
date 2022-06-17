@@ -1,7 +1,13 @@
+import { PixiTicker } from '@/elementsUtil'
+
 export function nextFrame() {
     return new Promise(resolve => {
         setTimeout(resolve, 0)
     })
+}
+
+export function nextTick() {
+    return new Promise(resolve => PixiTicker.shared.addOnce(resolve))
 }
 
 let lastLog = Date.now()
