@@ -55,10 +55,12 @@ export function RoundedRectangleGradientSprite({
     radius,
     gradientArgs,
     spriteArgs,
+    onLoaded = () => {},
 }: {
     radius: number
     gradientArgs: GradientArgs
     spriteArgs: GradientSpriteArgs
+    onLoaded?: Callback
 }): PixiContainer {
     const root = Container({})
     void GradientRectangleSprite(gradientArgs, spriteArgs).then(subSprite => {
@@ -88,6 +90,7 @@ export function RoundedRectangleGradientSprite({
                     ],
                 })
             )
+            onLoaded()
         })
     })
     return root

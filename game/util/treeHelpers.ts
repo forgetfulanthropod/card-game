@@ -14,12 +14,13 @@ export function toCursor<T>(tree: T): SCursor<T> {
     return new SBaobab(tree).select()
 }
 
-export function getEntrySceneIn(game: Gamecursor): SCursor<EntryScene> {
+export type EntryCursor = SCursor<EntryScene>
+export function getEntrySceneIn(game: Gamecursor): EntryCursor {
     const scene = game.select('scene')
     if (scene.get('id') !== 'entry') {
         throw Error('getEntryScene called when not in entry scene')
     }
-    return scene as SCursor<EntryScene>
+    return scene as EntryCursor
 }
 
 type Username = string

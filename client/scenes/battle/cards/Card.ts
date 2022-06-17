@@ -10,6 +10,7 @@ import { getCardTypeSrc } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
 import {
     Container,
+    getRenderer,
     PixiContainer,
     RoundedRectangleGradientSprite,
     Sprite,
@@ -22,6 +23,7 @@ import type {
     PixiText,
     PixiTexture,
     TweenablePixiContainer,
+    PixiSprite,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
@@ -34,18 +36,20 @@ const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeEnchantment: [0xfef3d7, 0xffee98, 0xfedc41, 0xf2b90d, 0xdf8e01],
 }
 
-export function Card({
+export function CardEl({
     rotation,
     width,
     card,
     hoveredCardUid,
     events,
+    onLoaded = () => {},
 }: {
     rotation?: number
     width: number
     card: Card
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
+    onLoaded?: Callback
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeSrc(card.type)
     const colorStops = getColorStopsFromCardType(card.type)
@@ -64,7 +68,11 @@ export function Card({
                 scale,
                 y: (cardFrameTexture.height / 2) * scale,
                 children: [
-                    getGradientBackground(cardFrameTexture, colorStops),
+                    getGradientBackground(
+                        cardFrameTexture,
+                        colorStops,
+                        onLoaded
+                    ),
                     getCardFrameSprite(cardFrameTexture),
                     getEnergyContainer(card, cardFrameTexture),
                     ...getTexts(card, cardFrameTexture, colorStops),
@@ -75,6 +83,37 @@ export function Card({
                 ],
             }),
         ],
+    })
+}
+
+export function CardSpritePromise({
+    rotation,
+    width,
+    card,
+    hoveredCardUid,
+    events,
+}: {
+    rotation?: number
+    width: number
+    card: Card
+    hoveredCardUid?: Datum<CharacterUid | null>
+    events?: InteractionEvents
+}): Promise<PixiSprite> {
+    return new Promise(resolve => {
+        const el = CardEl({
+            rotation,
+            width,
+            card,
+            hoveredCardUid,
+            events,
+            onLoaded() {
+                resolve(
+                    Sprite({
+                        src: getRenderer().generateTexture(el),
+                    })
+                )
+            },
+        })
     })
 }
 
@@ -94,7 +133,8 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
 
 function getGradientBackground(
     cardFrameTexture: PixiTexture,
-    colorStops: ColorStop[]
+    colorStops: ColorStop[],
+    onLoaded: Callback = () => {}
 ) {
     return RoundedRectangleGradientSprite({
         radius: cardFrameTexture.width / 15,
@@ -110,6 +150,7 @@ function getGradientBackground(
             height: cardFrameTexture.height,
             anchor: 0.5,
         },
+        onLoaded,
     })
 }
 

@@ -13,6 +13,7 @@ import type { Locals } from './commands'
 import { executors, explainers } from './commands'
 import { extractBlocks, extractDamages } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
+import type { EntryCursor } from '@/util'
 import { clearHappened, emit, getHappened } from '@/util'
 import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
 
@@ -23,17 +24,29 @@ export function interpretCommand(args: CommandDetail): void {
     executeCommand({ ...args, locals })
 }
 
-function localsFromCommand(args: CommandDetail): Locals {
+function localsFromCommand(
+    args:
+        | CommandDetail
+        | (Omit<CommandDetail, 'scene'> & { scene: BattleCursor | EntryCursor })
+): Locals {
     const { scene, command, targetUids } = args
-    const cardOwner = scene.get('allCharacters', command.characterUid)
+    const cardOwner =
+        (scene as BattleCursor).get('allCharacters', command.characterUid) ??
+        (scene as EntryCursor)
+            .get('selectedCharacters')
+            .find(c => c.uid === command.characterUid)
     const targetHealth =
         targetUids.length === 1
-            ? scene.get('allCharacters', targetUids[0])?.health
+            ? (scene as BattleCursor).get('allCharacters', targetUids[0])
+                  ?.health
             : undefined
     return { ...calcPostEffectStats(cardOwner), targetHealth }
 }
 
-export function explainCommand(command: Command, scene: BattleCursor): string {
+export function explainCommand(
+    command: Command,
+    scene: BattleCursor | EntryCursor
+): string {
     const res = explainActions(
         command.actions,
         localsFromCommand({ command, scene, targetUids: [] })

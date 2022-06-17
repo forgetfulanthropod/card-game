@@ -6,11 +6,14 @@ import type {
     CharacterUid,
     BattleCursor,
     CharacterClass,
+    Pile,
+    OwnedCharacterStats,
 } from 'shared'
 
 import { keys, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
+import type { EntryCursor } from '@/util'
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
@@ -99,7 +102,7 @@ function makeCards(scene: BattleCursor): Piles {
  */
 export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
     const idPool = keys(cardDefinitionsMap).filter(
-        cardId => cardDefinitionsMap[cardId].characterClass === characterClass
+        cardId => getCardClass(cardId) === characterClass
     )
 
     let cardId = get()
@@ -120,7 +123,35 @@ export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
     }
 }
 
-export function updateExplanation(card: Card, scene: BattleCursor): Card {
+/**
+ * random but not a basic starter...
+ */
+export function getFullDeckForCharacter(
+    character: OwnedCharacterStats,
+    scene: EntryCursor
+): Pile {
+    const idPool = keys(cardDefinitionsMap).filter(
+        cardId => getCardClass(cardId) === character.class
+    )
+
+    const pile: Pile = {}
+
+    idPool.forEach(cardId => {
+        const card = updateExplanation(
+            getCardInstance(cardId, character.uid),
+            scene
+        )
+
+        pile[card.uid] = card
+    })
+
+    return pile
+}
+
+export function updateExplanation(
+    card: Card,
+    scene: BattleCursor | EntryCursor
+): Card {
     return { ...card, explanation: explainCommand(card, scene) }
 }
 
@@ -135,4 +166,8 @@ export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
 
 function makeRandId() {
     return srandom().toString().slice(2)
+}
+
+function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
+    return cardDefinitionsMap[id].characterClass
 }

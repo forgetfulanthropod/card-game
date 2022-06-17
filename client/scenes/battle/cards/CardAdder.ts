@@ -4,7 +4,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { CardUid } from 'shared'
 import { AdjustmentFilter } from 'pixi-filters'
-import { Card } from './Card'
+import { CardEl } from './Card'
 import { getBattleScene } from '@/data'
 import {
     Adjust,
@@ -60,7 +60,7 @@ function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
             cardEl.filters = [...(cardEl.filters ?? []), glowFilter]
         }
         const cardEl = Adjust(
-            Card({
+            CardEl({
                 card,
                 width: cardWidth,
                 events: {

@@ -5,5 +5,6 @@ import { getRulebook } from '@/rulebook'
 export const initialEntryState: EntryScene = {
     id: 'entry',
     selectedCharacters: [],
+    fullSelectedCharacterDecks: {},
     selectedLevel: getRulebook().dungeonLevels[0],
 }

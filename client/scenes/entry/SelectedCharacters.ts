@@ -158,7 +158,7 @@ export function SelectedCharacters(): PixiContainer {
                         }),
                         Adjust(CharacterInfo(c), {
                             ...props,
-                            y: -characterHeight * 1.5,
+                            y: -characterHeight * 2.4,
                             zIndex: i + 3,
                         }),
                     ]

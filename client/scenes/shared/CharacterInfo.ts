@@ -1,6 +1,8 @@
-import type { CharacterClass, OwnedCharacterStats } from 'shared'
+import type { Card, CharacterClass, OwnedCharacterStats } from 'shared'
 import { compose } from 'datums'
+import { vals } from 'shared/code'
 import { InfoBox } from './InfoBox'
+import { CardsTiltedInLine } from './CadsTiltedInLine'
 import {
     If,
     Text,
@@ -8,8 +10,10 @@ import {
     BASE_WIDTH,
     Sprite,
     getTexture,
+    glowFilter,
 } from '@/elementsUtil'
 import { hoveredCharacterUid } from '@/util'
+import { getEntryScene } from '@/data'
 
 const stats = [
     { key: 'strength', color: 0xd44c47 },
@@ -39,9 +43,23 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
     const contentWidth = BASE_WIDTH * 0.3
     return If(
         compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
-        () =>
-            InfoBox(
+        () => {
+            const allCharCards = Container({
+                children: CardsTiltedInLine({
+                    cards: getAllPossibleCardsForCharacter(cm),
+                    cardWidth: 90,
+                    parentWidth: contentWidth,
+                }),
+            })
+
+            return InfoBox(
                 Container({
+                    events: {
+                        pointerover() {
+                            console.log('setting hoveredcharuid..')
+                            setTimeout(() => hoveredCharacterUid.set(cm.uid), 0)
+                        },
+                    },
                     children: [
                         Text({
                             text: cm.displayName,
@@ -105,25 +123,35 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                             })
                         }),
                         ...abilities.map((ability, i) => {
-                            return Container({
-                                y: 145,
-                                // x: ((i - 1.5) * contentWidth) / 4,
-                                children: [
-                                    Text({
-                                        text: ability.name,
-                                        style: {
-                                            fontFamily: 'sansFont',
-                                            fontSize: 20,
-                                            fill: 0xdddddd,
-                                        },
-                                        anchor: [i, 0],
-                                        x: -contentWidth * (0.5 - i),
-                                    }),
-                                ],
-                            })
+                            return InfoBox(
+                                Container({
+                                    children: [
+                                        Text({
+                                            text: ability.name,
+                                            style: {
+                                                fontFamily: 'sansFont',
+                                                fontSize: 20,
+                                                fill: 0xdddddd,
+                                            },
+                                            anchor: [i, 0],
+                                            x: -contentWidth * (0.5 - i),
+                                        }),
+                                    ],
+                                }),
+                                {
+                                    y: 150,
+                                }
+                            )
+                        }),
+                        InfoBox(allCharCards, {
+                            y: 185 + allCharCards.height / 2,
+                            x: -allCharCards.width / 2,
                         }),
                     ],
-                })
+                }),
+                {
+                    filters: [glowFilter],
+                }
             ).addChild(
                 Sprite({
                     src: `${cm.class}ClassIcon`,
@@ -133,5 +161,10 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                         150 / (getTexture(`${cm.class}ClassIcon`)?.height ?? 1),
                 })
             ).parent
+        }
     )
+}
+
+function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
+    return vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
 }

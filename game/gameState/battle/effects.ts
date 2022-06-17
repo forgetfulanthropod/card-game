@@ -74,7 +74,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         damageTakeAddend: 0,
         health: cm.health,
     }
-    cm.effects.forEach(effect => {
+    cm.effects?.forEach(effect => {
         if (turnStartEffectIds.includes(effect.id as TurnStartEffectId)) return
         staticEffectFuncs[effect.id as StaticEffectId](stats, effect.counter)
     })

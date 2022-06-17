@@ -3,7 +3,7 @@ import { Tweener } from 'pixi-tweener'
 import type { CardUid, CharacterUid, Pile } from 'shared'
 import { assertFinite, keys, vals } from 'shared/code'
 import type { Datum } from 'datums'
-import { Card } from './Card'
+import { CardEl } from './Card'
 import { hoveredCharacterUid } from '@/util'
 import {
     Adjust,
@@ -36,7 +36,7 @@ export function Hand(
     const children = vals(pile).map((card, index) => {
         const { x, y, rotation } = getXYRotationForNthCard(index + 1, total)
         return Adjust(
-            Card({
+            CardEl({
                 rotation,
                 width: CARD_WIDTH,
                 card,

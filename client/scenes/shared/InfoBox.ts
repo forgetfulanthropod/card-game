@@ -1,15 +1,16 @@
 import type { PixiContainer } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
+import type { DisplayObjectArgs } from '@/elementsUtil/mypixi/_types'
 
-export function InfoBox(contents: PixiContainer) {
+export function InfoBox(
+    contents: PixiContainer,
+    displayArgs: DisplayObjectArgs = {}
+) {
     const localBounds = contents.getLocalBounds()
 
     const marginPortion = 0.08
 
     return Container({
-        events: {
-            pointerover() {},
-        },
         children: [
             RoundedRectangleGradientSprite({
                 radius: 20,
@@ -42,5 +43,6 @@ export function InfoBox(contents: PixiContainer) {
             // }),
             contents,
         ],
+        ...displayArgs,
     })
 }

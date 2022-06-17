@@ -8,6 +8,7 @@
         "gsap": "^3.10.4",
         "mobile-device-detect": "^0.4.3",
         "pixi-filters": "^4.1.6",
+        "pixi-projection": "^0.4.4",
         "pixi-tweener": "^0.12.2",
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
