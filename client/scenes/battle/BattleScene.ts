@@ -25,7 +25,7 @@ export function BattleScene(): PixiContainer {
         children: [
             Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
             BattleRoomInfo({
-                info: [`Room ${scene.get('numRoomsPassed') + 1}`],
+                info: [`room ${scene.get('numRoomsPassed') + 1}`],
             }),
             intentArrowContainer,
             Characters(scene),
