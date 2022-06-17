@@ -20,12 +20,13 @@ export function BattleScene(): PixiContainer {
 
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
+    const num = scene.get('numRoomsPassed')
     return Container({
         name: 'BattleScene',
         children: [
             Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
             BattleRoomInfo({
-                info: [`room ${scene.get('numRoomsPassed') + 1}`],
+                info: [`${num} room${num === 1 ? '' : 's'} passed`],
             }),
             intentArrowContainer,
             Characters(scene),
