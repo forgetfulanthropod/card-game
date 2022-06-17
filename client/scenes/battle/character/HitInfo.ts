@@ -13,7 +13,7 @@ export function HitInfo(args: {
             fontSize: 60,
             fill: args.isPoison
                 ? ['rgb(143,253,49)', 'rgb(43,148,52)']
-                : ['#bf040e', '#98040c'], // gradient
+                : ['#D74222', '#d66249'], // gradient
             letterSpacing: -5,
             dropShadow: true,
             dropShadowColor: '#eeeeee',

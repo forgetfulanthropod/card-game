@@ -1,9 +1,9 @@
+import { Texture } from 'pixi.js'
 import type { Card } from 'shared'
 import type { PixiContainer } from '@/elementsUtil'
 import { Sprite, Container } from '@/elementsUtil'
 import 'pixi-projection'
 import { CardSpritePromise } from '../battle/cards/Card'
-import { Texture } from 'pixi.js'
 
 // import type { PixiContainer } from '@mypixi'
 // import { Container, Sprite } from '@mypixi'
@@ -61,7 +61,10 @@ export function CardsTiltedInLine({
                 wrappedCardEl.convertSubtreeTo2d()
 
                 //@ts-expect-error
-                wrappedCardEl.proj.setAxisX({ x: cardWidth * 5, y: 0 }, 1)
+                wrappedCardEl.proj.setAxisX(
+                    { x: cardWidth * 5, y: (cardWidth * 1.4) / 2 },
+                    1
+                )
             }
         )
 

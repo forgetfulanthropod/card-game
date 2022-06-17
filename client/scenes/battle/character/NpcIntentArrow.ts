@@ -123,7 +123,7 @@ function bottomLeftCornerOf(uid: CharacterUid) {
     return toDatum(
         getBattleScene().select('allCharacters').select(uid),
         cm => ({
-            x: cm.screenX,
+            x: cm.screenX - 30,
             y: cm.screenY,
         })
     )
@@ -165,19 +165,28 @@ function EnemyIntentArrow(
         textEl.y = (origin.val.y + destination.val.y) / 2
         textEl.rotation = rotation
 
-        const src = getTexture('enemyIntentArrow')
+        const src = getTexture('enemyIntentArrowTail')
+        const scale = (1920 * 0.5) / src.width
         root.addChild(
             Sprite({
                 src,
-                scale: (1920 * 0.5) / src.width,
+                scale,
                 width: distance,
                 anchor: [1, 0.5],
                 pivot: [1, 0.5],
                 rotation,
                 x: origin.val.x,
                 y: origin.val.y,
+            }),
+            Sprite({
+                src: 'enemyIntentArrowHead',
+                scale,
+                anchor: [0, 0.5],
+                pivot: [1, 0.5],
+                rotation,
+                x: destination.val.x,
+                y: destination.val.y,
             })
-            // text
         )
     }
 }

@@ -57,7 +57,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     return If(data, block =>
         Container({
             // y: -50 *  SCALE_UNIVERSAL,
-            x: 200,
+            x: 250,
             children: [
                 Sprite({
                     src: getTexture('blockIcon'),
@@ -70,10 +70,10 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                     anchor: [0.5, 0.5],
                     style: {
                         // fontFamily: ['bigFont', 'monospace'],
-                        fontFamily: ['monospace'],
-                        fontSize: 22,
-                        fill: '#eee',
-                        stroke: '#666',
+                        fontFamily: ['sansFont'],
+                        fontSize: 28,
+                        fill: 'white',
+                        stroke: 'black',
                         strokeThickness: 5,
                     },
                 }),

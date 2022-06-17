@@ -120,7 +120,8 @@ export const healthBarAssets = {
 }
 
 export const intentAssets = {
-    enemyIntentArrow: 'intents/arrow_3.png',
+    enemyIntentArrowHead: 'intents/arrow_4_head.png',
+    enemyIntentArrowTail: 'intents/arrow_4_tail.png',
     floatingIntentAmount: 'intents/floating intent amount.png',
     blockIntent: 'intents/npc/Shield intent.png',
 }

@@ -11,7 +11,6 @@ import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
-import { MoveInfo } from './MoveInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
@@ -70,7 +69,7 @@ export function Character(args: CharacterProps): PixiContainer {
 
     const hitContainer = Container({
         x: 0,
-        y: -mainContainer.height,
+        y: -260,
         children: [],
     })
 
@@ -204,13 +203,13 @@ function bindMoves(
                 mainAnimation.state.addAnimation(0, 'Idle', true)
             }
 
-            flashTo(
-                aboveCharacterContainer,
-                () => MoveInfo({ moveName: cardName, offset: -70 }),
-                {
-                    durationMs: SHOW_HIT_TIME,
-                }
-            )
+            // flashTo(
+            //     aboveCharacterContainer,
+            //     () => MoveInfo({ moveName: cardName, offset: -70 }),
+            //     {
+            //         durationMs: SHOW_HIT_TIME,
+            //     }
+            // )
 
             flashDamageTo(aboveCharacterContainer, damages[thisUid])
         }

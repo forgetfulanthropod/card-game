@@ -76,10 +76,10 @@ function DamageIntended(amount: number) {
             text: `${amount}`,
             anchor: 0.5,
             style: {
-                fill: 'black',
+                fill: 'white',
                 strokeThickness: 5,
-                stroke: 'white',
-                fontFamily: 'monoFont',
+                stroke: 'black',
+                fontFamily: 'sansFont',
             },
         }),
     ]
@@ -88,18 +88,18 @@ function DamageIntended(amount: number) {
 function BlockIntended(amount: number) {
     return [
         Sprite({
-            scale: (INTENT_ICON_WIDTH * 2) / getTexture('blockIntent').width,
+            scale: INTENT_ICON_WIDTH / getTexture('blockIntent').width,
             src: 'blockIntent',
-            anchor: 0.5,
+            anchor: [0.2, 0.2],
         }),
         Text({
             text: `${amount}`,
             anchor: 0.5,
             style: {
-                fill: 'black',
+                fill: 'white',
                 strokeThickness: 5,
-                stroke: 'white',
-                fontFamily: 'monoFont',
+                stroke: 0,
+                fontFamily: 'sansFont',
             },
         }),
     ]
