@@ -24,13 +24,13 @@ export const fontAssets = {
 // import matcha from '@battleAssets/backgrounds/matcha-caves.jpg'
 // const ninth = 'backgrounds/ninth-trash-hole.png'
 
-const caveFinal = 'backgrounds/cave-final.png'
+const caveFinal = 'backgrounds/Matcha_Caves.webp'
 export const backgroundAssets = {
     'Skelepit Dungeon': caveFinal,
-    'Hooligan’s Bluff': caveFinal,
-    'The Matcha Caves': caveFinal,
-    'Fort Skeleton': caveFinal,
-    'The Ninth Trash Hole of Hell': caveFinal,
+    // 'Hooligan’s Bluff': caveFinal,
+    // 'The Matcha Caves': caveFinal,
+    // 'Fort Skeleton': caveFinal,
+    // 'The Ninth Trash Hole of Hell': caveFinal,
 }
 export const cardArtAssets = {
     cardBodySlam: 'cards/Body Slam.png',

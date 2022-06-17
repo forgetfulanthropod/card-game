@@ -79,8 +79,8 @@ export function PngLayersBackground(args: {
         children: args.srcs.map(src =>
             Sprite({
                 src,
-                width: BASE_WIDTH,
-                height: BASE_HEIGHT,
+                // width: BASE_WIDTH,
+                // height: BASE_HEIGHT,
                 zIndex: -1,
             })
         ),
