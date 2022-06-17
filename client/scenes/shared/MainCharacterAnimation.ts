@@ -35,6 +35,8 @@ export function MainCharacterAnimation({
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
+    updateGlow(hoveredCharacterUid.val)
+
     const heightOverrides = {
         matchaGelatinCube: 15 / 19,
     }

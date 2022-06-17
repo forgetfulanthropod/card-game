@@ -1,7 +1,7 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { GradientFactory } from '@pixi-essentials/gradients'
 import type { Renderer, Sprite as PixiSprite } from 'pixi.js'
-import { BaseRenderTexture, RenderTexture } from 'pixi.js'
+import { Texture, BaseRenderTexture, RenderTexture } from 'pixi.js'
 import { assertFinite } from 'shared/code'
 
 import type { PixiContainer, SpriteArgs } from './mypixi'
@@ -62,7 +62,16 @@ export function RoundedRectangleGradientSprite({
     spriteArgs: GradientSpriteArgs
     onLoaded?: Callback
 }): PixiContainer {
-    const root = Container({})
+    const root = Container({
+        children: [
+            Sprite({
+                src: Texture.WHITE,
+                tint: 0,
+                alpha: 0.1,
+                ...spriteArgs,
+            }),
+        ],
+    })
     void GradientRectangleSprite(gradientArgs, spriteArgs).then(subSprite => {
         const g = new PixiGraphics()
         g.beginTextureFill({
@@ -79,6 +88,7 @@ export function RoundedRectangleGradientSprite({
         void nextTick().then(() => {
             g.destroy(true)
             subSprite.destroy(true)
+            root.removeChildren()
             root.addChild(
                 Sprite({
                     src: texture,

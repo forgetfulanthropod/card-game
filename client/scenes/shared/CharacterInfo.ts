@@ -1,4 +1,9 @@
-import type { Card, CharacterClass, OwnedCharacterStats } from 'shared'
+import type {
+    Card,
+    CharacterClass,
+    CharacterUid,
+    OwnedCharacterStats,
+} from 'shared'
 import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { InfoBox } from './InfoBox'
@@ -11,8 +16,9 @@ import {
     Sprite,
     getTexture,
     glowFilter,
+    Adjust,
 } from '@/elementsUtil'
-import { hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene } from '@/data'
 
 const stats = [
@@ -30,6 +36,40 @@ const _classColorMap: Record<CharacterClass, [number, number]> = {
     rogue: [0xaa44ff, 0x370561],
 }
 
+export function RootCharacterInfo() {
+    const root = Container({
+        onDestroy: [
+            hoveredCharacterUid.onChange(update),
+            onUpdate(getEntryScene().select('selectedCharacters'), sc => {
+                update(hoveredCharacterUid.val)
+            }),
+        ],
+    })
+
+    return root
+
+    function update(uid: CharacterUid | null) {
+        root.removeChildren()
+
+        if (uid == null) return
+
+        const cm = getEntryScene()
+            .get('selectedCharacters')
+            .find(c => c.uid === uid)
+
+        if (cm == null) return
+
+        const characterInfo = CharacterInfo(cm)
+
+        root.addChild(
+            Adjust(characterInfo, {
+                x: characterInfo.width * 0.5 + BASE_WIDTH * 0.67,
+                y: characterInfo.height * 0.3,
+            })
+        )
+    }
+}
+
 export function CharacterInfo(cm: OwnedCharacterStats) {
     const abilities = [
         {
@@ -40,7 +80,7 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
         },
     ]
 
-    const contentWidth = BASE_WIDTH * 0.3
+    const contentWidth = BASE_WIDTH * 0.23
     return If(
         compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
         () => {
@@ -54,12 +94,6 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
 
             return InfoBox(
                 Container({
-                    events: {
-                        pointerover() {
-                            console.log('setting hoveredcharuid..')
-                            setTimeout(() => hoveredCharacterUid.set(cm.uid), 0)
-                        },
-                    },
                     children: [
                         Text({
                             text: cm.displayName,

@@ -33,8 +33,6 @@ export function CardsTiltedInLine({
         spaceBetween = (parentWidth - cardWidth) / (cards.length - 1)
     }
 
-    console.log({ cards })
-
     return cards.map((cardMeta, index) => {
         const wrappedCardEl = Container({
             x: index * spaceBetween,

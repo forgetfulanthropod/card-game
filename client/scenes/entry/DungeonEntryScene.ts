@@ -1,3 +1,4 @@
+import { RootCharacterInfo } from '../shared/CharacterInfo'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
@@ -22,6 +23,7 @@ export function DungeonEntryScene(): PixiContainer {
             SelectedCharacters(),
             startButton,
             LevelInfo(),
+            RootCharacterInfo(),
             // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
         ],
         onDestroy: [

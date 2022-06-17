@@ -2,12 +2,11 @@ import { OldFilmFilter } from 'pixi-filters'
 import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
 
 import { range } from 'lodash'
-import { CharacterInfo, MainCharacterAnimation } from '@sharedElements'
+import { MainCharacterAnimation } from '@sharedElements'
 import { callApi } from '@/callApi'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
-    Adjust,
     isTextureKey,
     PixiTexture,
     BASE_HEIGHT,
@@ -16,7 +15,7 @@ import {
     getTexture,
     Sprite,
 } from '@/elementsUtil'
-import { brightBackLightIsShining, onUpdate } from '@/util'
+import { brightBackLightIsShining, hoveredCharacterUid, onUpdate } from '@/util'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {
@@ -142,8 +141,16 @@ export function SelectedCharacters(): PixiContainer {
                                 MainCharacterAnimation({
                                     characterMeta: c,
                                     events: {
-                                        pointerup: () =>
-                                            toggleSelectedCharacter(c, i),
+                                        pointerout() {},
+                                        pointerdown() {
+                                            if (
+                                                hoveredCharacterUid.val ===
+                                                c.uid
+                                            )
+                                                toggleSelectedCharacter(c, i)
+
+                                            hoveredCharacterUid.set(c.uid)
+                                        },
                                     },
                                     height: characterHeight,
                                 }) ??
@@ -155,11 +162,6 @@ export function SelectedCharacters(): PixiContainer {
                                         scale: 1,
                                     }),
                             ],
-                        }),
-                        Adjust(CharacterInfo(c), {
-                            ...props,
-                            y: -characterHeight * 2.4,
-                            zIndex: i + 3,
                         }),
                     ]
                 })
