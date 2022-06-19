@@ -3,7 +3,6 @@ import { compose } from 'datums'
 import { sortBy, uniq } from 'lodash'
 import type { DisplayObject, IDestroyOptions } from 'pixi.js'
 import { Ticker } from 'pixi.js'
-import { keys as getKeys } from 'shared/code'
 import type { PixiContainer } from './aliases'
 import { applyDisplayObjectArgs } from './_applyArgs'
 import type { ContainerArgs, DisplayObjectArgs } from './_types'
@@ -78,12 +77,15 @@ interface KeyedContainer extends PixiContainer {
 
 /**
  * @args
- *   @getDisplayArgsForIndex is a callback which assigns properties to the root DisplayObject when the index changes
+ *   @getDisplayArgsForIndex
+ *      Given index of child, return desired displayArgs (e.g. x, y, rotation) for child.
+ *      When an item's position changes, this will be called with the new index, and the result will be assigned to the child.
+ *      Example: i => ({ x: i * 10, y: i * 20 })
  */
 export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T> & { destroy?: Callback },
     render: (item: T[number]) => DisplayObject,
-    getDisplayArgsForIndex?: (index: number) => Partial<DisplayObject>,
+    getDisplayArgsForIndex?: (index: number) => DisplayObjectArgs,
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
@@ -135,13 +137,12 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
         )
         if (sortedChildren.length > 0) root.addChild(...sortedChildren)
         if (getDisplayArgsForIndex != null) {
-            for (let i = 0; i < root.children.length; i++) {
-                const c = root.children[i]
+            root.children.forEach((c, i) => {
                 const args = getDisplayArgsForIndex(i)
-
                 //@ts-expect-error
-                getKeys(args).forEach(key => (c[key] = args[key]))
-            }
+                applyDisplayObjectArgs(c, args)
+                // Object.keys(args).forEach(key => (c[key] = args[key]))
+            })
         }
     }
 }
