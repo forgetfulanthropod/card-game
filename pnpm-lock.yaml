@@ -76,6 +76,7 @@ importers:
       mobile-device-detect: ^0.4.3
       monaco-editor: ^0.33.0
       pixi-filters: ^4.1.6
+      pixi-projection: ^0.4.4
       pixi-tweener: ^0.12.2
       pixi-viewport: ^4.34.4
       pixi-webfont-loader: ^1.0.2
@@ -93,6 +94,7 @@ importers:
       gsap: 3.10.4
       mobile-device-detect: 0.4.3
       pixi-filters: 4.1.6
+      pixi-projection: 0.4.4
       pixi-tweener: 0.12.2
       pixi-viewport: 4.34.4
       pixi-webfont-loader: 1.0.2
@@ -3914,6 +3916,24 @@ packages:
       - '@pixi/math'
       - '@pixi/settings'
       - '@pixi/utils'
+    dev: false
+
+  /pixi-projection/0.4.4:
+    resolution: {integrity: sha512-oZMlfx7CFjxw4F0jkZXdOtJ5rbnHCQ+EdM6f6++CbzQvYnhB9ULKSobP2ZgrQ4oXag1KRJYwwSMSlz77lU/4wA==}
+    engines: {node: '>=14', npm: '>=7'}
+    peerDependencies:
+      '@pixi-spine/base': ^3.0.4
+      '@pixi/constants': ^6.0.4
+      '@pixi/core': ^6.0.4
+      '@pixi/display': ^6.0.4
+      '@pixi/graphics': ^6.0.4
+      '@pixi/math': ^6.0.4
+      '@pixi/mesh': ^6.0.4
+      '@pixi/mesh-extras': ^6.0.4
+      '@pixi/sprite': ^6.0.4
+      '@pixi/sprite-tiling': ^6.0.4
+      '@pixi/text': ^6.0.4
+      '@pixi/utils': ^6.0.4
     dev: false
 
   /pixi-tweener/0.12.2:
