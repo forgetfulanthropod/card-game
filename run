@@ -113,6 +113,15 @@ function dep-graph() {
     open $name
 }
 
+function dep-graph-package() {
+    package=$1
+    cd $package
+    rm -f dep-graph.svg
+    depcruise . --output-type=dot --ts-config tsconfig.json --exclude 'node_modules|@|shared' |
+        dot -T svg >dep-graph.svg
+    open dep-graph.svg
+}
+
 function npm-clean() {
     rm -rf pnpm-lock.yaml node_modules **/node_modules
 }
