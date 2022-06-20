@@ -1,18 +1,11 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { GradientFactory } from '@pixi-essentials/gradients'
 import type { Renderer, Sprite as PixiSprite } from 'pixi.js'
-import { Texture, BaseRenderTexture, RenderTexture } from 'pixi.js'
+import { BaseRenderTexture, RenderTexture } from 'pixi.js'
 import { assertFinite } from 'shared/code'
-
-import type { PixiContainer, SpriteArgs } from './mypixi'
-import {
-    Container,
-    PixiGraphics,
-    getRenderer,
-    getPixiApp,
-    Sprite,
-} from './mypixi'
-import { nextTick } from '@/util'
+import { deepEqual } from 'fast-equals'
+import type { SpriteArgs } from './mypixi'
+import { PixiGraphics, getRenderer, getPixiApp, Sprite } from './mypixi'
 
 export type GradientArgs = {
     x0: number
@@ -28,15 +21,14 @@ export type GradientSpriteArgs = Required<
 > &
     Omit<SpriteArgs, 'src'>
 
-async function GradientRectangleSprite(
+function GradientRectangleSprite(
     options: GradientArgs,
     spriteArgs: GradientSpriteArgs
-): Promise<PixiSprite> {
+): PixiSprite {
     const renderer = getPixiApp().renderer as Renderer
     const { width, height } = spriteArgs
     assertFinite({ width, height })
     const texture = new RenderTexture(new BaseRenderTexture({ width, height }))
-    await nextTick()
 
     const src =
         options.r0 != null && options.r1 != null
@@ -50,58 +42,47 @@ async function GradientRectangleSprite(
     return Sprite({ ...spriteArgs, src })
 }
 
-// a gradient inside of a rounded corner rectangle
-export function RoundedRectangleGradientSprite({
-    radius,
-    gradientArgs,
-    spriteArgs,
-    onLoaded = () => {},
-}: {
+const rrgsMemo: [RRGSProps, RenderTexture][] = []
+
+type RRGSProps = {
     radius: number
     gradientArgs: GradientArgs
     spriteArgs: GradientSpriteArgs
-    onLoaded?: Callback
-}): PixiContainer {
-    const root = Container({
-        children: [
-            Sprite({
-                src: Texture.WHITE,
-                tint: 0,
-                alpha: 0.1,
-                ...spriteArgs,
-            }),
-        ],
-    })
-    void GradientRectangleSprite(gradientArgs, spriteArgs).then(subSprite => {
-        const g = new PixiGraphics()
-        g.beginTextureFill({
-            texture: subSprite.texture,
-        })
-        if (radius >= Math.max(spriteArgs.width, spriteArgs.height) / 2) {
-            g.drawCircle(radius, radius, radius)
-        } else {
-            g.drawRoundedRect(0, 0, spriteArgs.width, spriteArgs.height, radius)
-        }
+}
 
-        g.endFill()
-        const texture = getRenderer().generateTexture(g)
-        void nextTick().then(() => {
-            g.destroy(true)
-            subSprite.destroy(true)
-            root.removeChildren()
-            root.addChild(
-                Sprite({
-                    src: texture,
-                    ...spriteArgs,
-                    onDestroy: [
-                        () => {
-                            texture.destroy(true)
-                        },
-                    ],
-                })
-            )
-            onLoaded()
+// a gradient inside of a rounded corner rectangle
+export function RoundedRectangleGradientSprite(props: RRGSProps): PixiSprite {
+    const cached = rrgsMemo.find(([args, _texture]) =>
+        deepEqual(args, props)
+    )?.[1]
+    if (cached)
+        return Sprite({
+            src: cached,
+            ...props.spriteArgs,
         })
+
+    const { radius, gradientArgs, spriteArgs } = props
+
+    const subSprite = GradientRectangleSprite(gradientArgs, spriteArgs)
+    const g = new PixiGraphics()
+    g.beginTextureFill({
+        texture: subSprite.texture,
     })
-    return root
+    if (radius >= Math.max(spriteArgs.width, spriteArgs.height) / 2) {
+        g.drawCircle(radius, radius, radius)
+    } else {
+        g.drawRoundedRect(0, 0, spriteArgs.width, spriteArgs.height, radius)
+    }
+
+    g.endFill()
+    const texture = getRenderer().generateTexture(g)
+    rrgsMemo.push([props, texture])
+    console.log(`there are now ${rrgsMemo.length} rrgs in the memo`)
+    g.destroy(true)
+    subSprite.destroy(true)
+    return Sprite({
+        src: texture,
+        ...spriteArgs,
+        // onDestroy: [() => texture.destroy(true)],
+    })
 }
