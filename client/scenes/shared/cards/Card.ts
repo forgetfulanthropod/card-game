@@ -99,7 +99,7 @@ export function CardSprite({
         events,
     })
     const src = getRenderer().generateTexture(el)
-    // el.destroy(true)
+    // nextTick().then(() => el.destroy(true))
     return Sprite({ src, onDestroy: [() => el.destroy(true)] })
 }
 

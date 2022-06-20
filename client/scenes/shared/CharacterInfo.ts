@@ -199,7 +199,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
         }),
         Adjust(allCharCards, {
-            y: 140 + allCharCards.height / 2,
+            y: 190,
             x: -allCharCards.width / 2,
         })
     ).parent
