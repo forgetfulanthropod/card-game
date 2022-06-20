@@ -1,10 +1,9 @@
 // @sharedElements
 
-// @index('./*.ts', f => `export * from '${f.path}'`)
-export * from './CardsTiltedInLine'
+// @index('./*', f => `export * from '${f.path}'`)
+export * from './cards'
 export * from './CharacterInfo'
 export * from './InfoBox'
 export * from './MainCharacterAnimation'
 export * from './PlainButton'
-export * from './TargetSelectGraphic'
 // @endindex

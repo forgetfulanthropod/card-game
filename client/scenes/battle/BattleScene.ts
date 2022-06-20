@@ -2,7 +2,7 @@
 import { datum } from 'datums'
 import type { CharacterUid, PileId, RequiredAction } from 'shared'
 import { sampleSize } from 'lodash'
-import { Cards, CardAdder } from './cards'
+import { Cards, CardAdder } from '@sharedElements'
 import { Characters } from './character'
 import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'

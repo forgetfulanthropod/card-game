@@ -7,7 +7,7 @@ import type {
 import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { InfoBox } from './InfoBox'
-import { CardsTiltedInLine } from './CardsTiltedInLine'
+import { CardsTiltedInLine } from './cards'
 import {
     Text,
     Container,
