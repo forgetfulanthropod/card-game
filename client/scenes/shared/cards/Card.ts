@@ -8,6 +8,14 @@ import { upperFirst } from 'lodash'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeSrc } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
+import type {
+    InteractionEventHandler,
+    InteractionEvents,
+    PixiText,
+    PixiTexture,
+    PixiSprite,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
 import {
     Container,
     getRenderer,
@@ -16,14 +24,6 @@ import {
     Sprite,
     Text,
     TweenableContainer,
-} from '@/elementsUtil'
-import type {
-    InteractionEventHandler,
-    InteractionEvents,
-    PixiText,
-    PixiTexture,
-    TweenablePixiContainer,
-    PixiSprite,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
@@ -49,6 +49,8 @@ export function CardEl({
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
 }): TweenablePixiContainer {
+    if (card.type == null) return TweenableContainer({}, TweenableContainer({}))
+
     const cardFrameTexture = getCardTypeSrc(card.type)
     const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
