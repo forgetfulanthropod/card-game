@@ -23,7 +23,7 @@ export function If<T = unknown>(
     displayArgs?: DisplayObjectArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
-    const root = Container({ children: [] })
+    const root = Container({})
     onDestroyed(
         root,
         condition.onChange(handleChange, true),
@@ -50,7 +50,7 @@ export function IfHideShow<T = unknown>(
     elseEl?: DisplayObject,
     displayArgs?: DisplayObjectArgs
 ): PixiContainer {
-    const root = Container({ children: [ifEl, elseEl ?? null] })
+    const root = Container({}, ifEl, elseEl ?? null)
     onDestroyed(
         root,
         condition.onChange(handleChange, true),
@@ -109,7 +109,7 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
-    const root = Container({ children: [] }) as KeyedContainer
+    const root = Container({}) as KeyedContainer
     onDestroyed(
         root,
         () => items?.destroy?.(),

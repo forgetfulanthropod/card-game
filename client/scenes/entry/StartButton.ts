@@ -30,24 +30,13 @@ export function StartButton(): PixiContainer {
 
     bg.cursor = 'pointer'
 
-    const root = Container({
-        x: BASE_WIDTH * 0.87,
-        y: BASE_HEIGHT * 0.85,
-        children: [
-            bg,
-            // Text({
-            //     text: 'GO!',
-            //     anchor: 0.5,
-            //     style: {
-            //         fontFamily: 'bigFont',
-            //         fontSize: 100,
-            //         fill: ['#fff', '#eee'],
-            //         stroke: '#999',
-            //         strokeThickness: 5,
-            //     },
-            // }),
-        ],
-    })
+    const root = Container(
+        {
+            x: BASE_WIDTH * 0.87,
+            y: BASE_HEIGHT * 0.85,
+        },
+        bg
+    )
 
     return root
 }

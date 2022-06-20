@@ -8,7 +8,7 @@ import type {
     PixiSprite,
     PixiText,
 } from './aliases'
-import type { DisplayObjectArgs, ShownArgs, ContainerArgs } from './_types'
+import type { DisplayObjectArgs, ShownArgs } from './_types'
 import { bindIsHovered } from './_bindIsHovered'
 
 export function applyDisplayObjectArgs(
@@ -138,16 +138,5 @@ export function applyShownArgs(x: PixiSprite | PixiText, args: ShownArgs) {
         } else {
             x.anchor.set(args.anchor)
         }
-    }
-}
-export function applyContainerArgs(args: ContainerArgs, c: PixiContainer) {
-    for (const ch of args.children || []) {
-        if (ch != null && ch !== false) {
-            c.addChild(ch)
-        }
-    }
-    applyDisplayObjectArgs(c, args)
-    if (args.cache === true) {
-        c.cacheAsBitmap = true
     }
 }

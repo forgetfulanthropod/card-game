@@ -25,7 +25,6 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
     )
 
     const root = Container({
-        children: [],
         onDestroy: [nextCmd.destroy],
     })
 
@@ -144,9 +143,7 @@ function EnemyIntentArrow(
     destination: RODatum<Point>,
     textEl: PixiText
 ) {
-    const root = Container({
-        children: [],
-    })
+    const root = Container({})
     return onDestroyed(
         root,
         destination.onChange(update),
