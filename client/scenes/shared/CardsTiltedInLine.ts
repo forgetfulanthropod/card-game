@@ -25,7 +25,7 @@ export function CardsTiltedInLine({
     cardWidth?: number
     parentWidth?: number
 }): PixiContainer[] {
-    let spaceBetween = cardWidth / 2
+    let spaceBetween = cardWidth * 0.8
 
     const wouldBeTotalWidth = cardWidth + (cards.length - 1) * spaceBetween
 
@@ -35,7 +35,7 @@ export function CardsTiltedInLine({
 
     return cards.map((cardMeta, index) => {
         const wrappedCardEl = Container({
-            x: index * spaceBetween,
+            x: (cards.length - index) * spaceBetween - cardWidth * 0.5,
             // highlight: it.selected && 'yellow'
             children: [
                 Sprite({
@@ -50,6 +50,7 @@ export function CardsTiltedInLine({
 
         void CardSpritePromise({ card: cardMeta, width: cardWidth }).then(
             sprite => {
+                sprite.scale.x = -1
                 wrappedCardEl.removeChildren()
                 wrappedCardEl.addChild(sprite)
                 //@ts-expect-error
@@ -60,7 +61,7 @@ export function CardsTiltedInLine({
 
                 //@ts-expect-error
                 wrappedCardEl.proj.setAxisX(
-                    { x: cardWidth * 5, y: (cardWidth * 1.4) / 2 },
+                    { x: -cardWidth * 6, y: (cardWidth * 1.4) / 2 },
                     1
                 )
             }

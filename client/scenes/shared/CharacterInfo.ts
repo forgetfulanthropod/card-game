@@ -7,7 +7,7 @@ import type {
 import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { InfoBox } from './InfoBox'
-import { CardsTiltedInLine } from './CadsTiltedInLine'
+import { CardsTiltedInLine } from './CardsTiltedInLine'
 import {
     If,
     Text,
@@ -87,8 +87,7 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
             const allCharCards = Container({
                 children: CardsTiltedInLine({
                     cards: getAllPossibleCardsForCharacter(cm),
-                    cardWidth: 90,
-                    parentWidth: contentWidth,
+                    parentWidth: contentWidth * 0.8,
                 }),
             })
 
@@ -178,7 +177,7 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                             )
                         }),
                         InfoBox(allCharCards, {
-                            y: 185 + allCharCards.height / 2,
+                            y: 190 + allCharCards.height / 2,
                             x: -allCharCards.width / 2,
                         }),
                     ],
