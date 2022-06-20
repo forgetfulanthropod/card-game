@@ -20,8 +20,8 @@ export function BattleScene(): PixiContainer {
 
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-    const num = scene.get('numRoomsPassed')
-    return Container(
+
+    const root = Container(
         {
             name: 'BattleScene',
             onDestroy: [
@@ -33,9 +33,6 @@ export function BattleScene(): PixiContainer {
             ],
         },
         Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
-        BattleRoomInfo({
-            info: [`${num} room${num === 1 ? '' : 's'} cleared`],
-        }),
         intentArrowContainer,
         Characters(scene),
         Cards({ scene, hoveredCardUid }),
@@ -45,6 +42,24 @@ export function BattleScene(): PixiContainer {
             () => CardAdder()
         )
     )
+
+    let battleRoomInfo: null | PixiContainer
+    root.on(
+        'destroyed',
+        onUpdate(
+            scene.select('numRoomsPassed'),
+            num => {
+                if (battleRoomInfo) root.removeChild(battleRoomInfo)
+                battleRoomInfo = BattleRoomInfo({
+                    info: [`${num} room${num === 1 ? '' : 's'} cleared`],
+                })
+                root.addChild(battleRoomInfo)
+            },
+            true
+        )
+    )
+
+    return root
 }
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {
     if (req == null) return

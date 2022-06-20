@@ -69,7 +69,7 @@ export function Character(args: CharacterProps): PixiContainer {
 
     const hitContainer = Container({
         x: 0,
-        y: -260,
+        y: -220,
     })
 
     const unbindMoves = bindMoves(characterMeta, hitContainer, mainAnimation)
