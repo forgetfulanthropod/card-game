@@ -82,7 +82,6 @@ export type PixiChildren = (
     | DisplayObject
     | null
     | false
-    | undefined
 )[]
 
 export type InteractionEventHandler = (e: InteractionEvent) => void

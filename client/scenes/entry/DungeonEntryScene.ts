@@ -1,4 +1,4 @@
-import { RootCharacterInfo } from '../shared/CharacterInfo'
+import { RootCharacterInfo } from '@sharedElements'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'

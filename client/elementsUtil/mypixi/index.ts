@@ -9,6 +9,10 @@ export * from './pixiInspector'
 export * from './tweenable'
 // @endindex
 
-export type { InteractionEventHandler, SpriteArgs } from './_types'
+export type {
+    InteractionEventHandler,
+    SpriteArgs,
+    ContainerArgs,
+} from './_types'
 
 export { startChecking } from './_util'

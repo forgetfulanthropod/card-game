@@ -19,7 +19,7 @@ type Falsy = false | null | 0 | '' | undefined
 export function If<T = unknown>(
     condition: RODatum<T> & { destroy?: Callback },
     ifRender: (x: Exclude<T, Falsy>) => DisplayObject,
-    elseRender?: (x: T & Falsy) => DisplayObject,
+    elseRender?: () => DisplayObject,
     displayArgs?: DisplayObjectArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
@@ -41,6 +41,26 @@ export function If<T = unknown>(
             // @ts-expect-error
             root.addChild(elseRender(val))
         }
+    }
+}
+
+export function IfHideShow<T = unknown>(
+    condition: RODatum<T> & { destroy?: Callback },
+    ifEl: DisplayObject,
+    elseEl?: DisplayObject,
+    displayArgs?: DisplayObjectArgs
+): PixiContainer {
+    const root = Container({ children: [ifEl, elseEl ?? null] })
+    onDestroyed(
+        root,
+        condition.onChange(handleChange, true),
+        () => condition?.destroy?.(),
+    ) // prettier-ignore
+    if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
+    return root
+    function handleChange(val: T) {
+        ifEl.visible = !!val
+        if (elseEl) elseEl.visible = !val
     }
 }
 

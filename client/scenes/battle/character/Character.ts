@@ -188,7 +188,7 @@ function bindMoves(
 ): Unbind {
     return socketOn('damage$', showCharMove)
     function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
-        const { attacker, cardName, damages } = event.data
+        const { attacker, cardName: _cardName, damages } = event.data
         const defenderUids: CharacterUid[] = Object.keys(damages)
 
         const thisUid = characterMeta.uid

@@ -1,10 +1,9 @@
-import type { PixiContainer } from '@/elementsUtil'
+import type { PixiContainer, ContainerArgs } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
-import type { DisplayObjectArgs } from '@/elementsUtil/mypixi/_types'
 
 export function InfoBox(
     contents: PixiContainer,
-    displayArgs: DisplayObjectArgs = {}
+    displayArgs: ContainerArgs = {}
 ) {
     const localBounds = contents.getLocalBounds()
 
