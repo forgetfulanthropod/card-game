@@ -66,9 +66,14 @@ export function explainActions(actions: string, locals?: object): string {
                 // @ts-expect-error
                 func(args)
     )
-    const ctx = generateAnguContext(wrappedExplainers)
+    try {
+        const ctx = generateAnguContext(wrappedExplainers)
 
-    return angu.evaluate(actions, ctx, locals).value
+        return angu.evaluate(actions, ctx, locals).value
+    } catch (e) {
+        logger.warn(['[explainActions] angu error:', e])
+        return 'error!'
+    }
 }
 
 interface CommandDetail {
@@ -115,17 +120,21 @@ function executeCommand({
                     cardUid,
                 })
     )
-    const ctx = generateAnguContext(wrappedExecutors)
 
-    const output = angu.evaluate(command.actions, ctx, locals)
-    if (output.kind === 'err') {
-        logger.error([
-            'error in command:',
-            command.actions,
-            command.id,
-            output.value,
-        ])
-        // throw Error(jss`error in command: ${output.value}`)
+    try {
+        const ctx = generateAnguContext(wrappedExecutors)
+        const output = angu.evaluate(command.actions, ctx, locals)
+        if (output.kind === 'err') {
+            logger.error([
+                'error in command:',
+                command.actions,
+                command.id,
+                output.value,
+            ])
+            // throw Error(jss`error in command: ${output.value}`)
+        }
+    } catch (e) {
+        logger.error(['[executeCommand] angu error:', e])
     }
 
     maybeTransitionBattleState(scene)
