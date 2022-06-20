@@ -90,9 +90,10 @@ function IntentArrows(
             { name: 'intentArrows' }
         ),
         orig.destroy,
-        // overrides everything
         highlightIntentFrom.onChange(_uid => {
-            hasIntentArrow.set(_uid === uid)
+            hasIntentArrow.set(
+                commandHasIntentArrow(nextCmd.val) && _uid === uid
+            )
         }),
         nextCmd.onChange(cmd => {
             if (!commandHasIntentArrow(cmd)) hasIntentArrow.set(false)

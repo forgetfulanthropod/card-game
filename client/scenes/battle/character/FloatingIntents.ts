@@ -55,10 +55,8 @@ function FloatingIntent(
     return root
 
     function interact() {
-        // highlight attacker & show arrow
         highlightIntentFrom.set(nextCmd.command.characterUid)
         root.filters = [glowFilter]
-        // describe intent in a black box?
     }
 
     function stopInteracting() {
