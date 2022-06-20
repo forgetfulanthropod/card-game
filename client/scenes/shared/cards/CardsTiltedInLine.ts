@@ -35,8 +35,10 @@ export function CardsTiltedInLine({
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
-        const c = Container({ x: index * spaceBetween }, sprite)
+        const c = Container({ x: index * spaceBetween + cardWidth / 2 }, sprite)
+
         c.addChild(sprite)
+
         //@ts-expect-error
         c.convertTo2d()
 
@@ -44,13 +46,7 @@ export function CardsTiltedInLine({
         c.convertSubtreeTo2d()
 
         //@ts-expect-error
-        c.proj.setAxisX(
-            {
-                x: cardWidth * 5,
-                y: (cardWidth * 1.4) / 2,
-            },
-            1
-        )
+        c.proj.setAxisX({ x: -cardWidth * 6, y: (cardWidth * 1.4) / 2 }, 1)
         return c
     })
     const root = Container({}, ...cardEls)
