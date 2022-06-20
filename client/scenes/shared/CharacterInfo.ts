@@ -42,7 +42,7 @@ export function RootCharacterInfo() {
     const root = Container({
         onDestroy: [
             hoveredCharacterUid.onChange(update),
-            onUpdate(getEntryScene().select('selectedCharacters'), sc => {
+            onUpdate(getEntryScene().select('selectedCharacters'), _sc => {
                 update(hoveredCharacterUid.val)
             }),
         ],
