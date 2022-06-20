@@ -25,8 +25,11 @@ export function PlainButton(args: {
         x: text.x - text.width * 0.1,
         y: text.y - text.height * 0.1,
     })
-    return Container({
-        name: 'PlainButton',
-        children: [bg, text],
-    })
+    return Container(
+        {
+            name: 'PlainButton',
+        },
+        bg,
+        text
+    )
 }

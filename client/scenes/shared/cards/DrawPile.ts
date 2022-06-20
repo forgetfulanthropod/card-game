@@ -12,37 +12,37 @@ import {
 } from '@/elementsUtil'
 
 export function DrawPile(pile: Pile): PixiContainer {
-    return Container({
-        x: BASE_WIDTH * 0.03,
-        y: BASE_HEIGHT * 0.98,
-        scale: 0.7,
-        angle: -20,
-        children: [
-            Sprite({
-                src: getCardBackSrc(),
-                anchor: [0, 1],
-            }),
-            Sprite({
-                src: getCardBackPileSizeSrc(),
-                x: getCardBackSrc().width,
-                y: -getCardBackSrc().height,
-                anchor: [0.5, 0.5],
-            }),
-            Text({
-                text: `${vals(pile).length}`,
-                anchor: [0.5, 0.5],
-                // width: getCardBackPileSizeSrc().width * 0.5,
-                // height: getCardBackPileSizeSrc().height * 0.5,
-                x: getCardBackSrc().width,
-                y: -getCardBackSrc().height,
-                style: {
-                    fill: 0xffffff,
-                    fontSize: 48,
-                    fontFamily: 'bigFont',
-                },
-            }),
-        ],
-    })
+    return Container(
+        {
+            x: BASE_WIDTH * 0.03,
+            y: BASE_HEIGHT * 0.98,
+            scale: 0.7,
+            angle: -20,
+        },
+        Sprite({
+            src: getCardBackSrc(),
+            anchor: [0, 1],
+        }),
+        Sprite({
+            src: getCardBackPileSizeSrc(),
+            x: getCardBackSrc().width,
+            y: -getCardBackSrc().height,
+            anchor: [0.5, 0.5],
+        }),
+        Text({
+            text: `${vals(pile).length}`,
+            anchor: [0.5, 0.5],
+            // width: getCardBackPileSizeSrc().width * 0.5,
+            // height: getCardBackPileSizeSrc().height * 0.5,
+            x: getCardBackSrc().width,
+            y: -getCardBackSrc().height,
+            style: {
+                fill: 0xffffff,
+                fontSize: 48,
+                fontFamily: 'bigFont',
+            },
+        })
+    )
 }
 
 function getCardBackPileSizeSrc() {

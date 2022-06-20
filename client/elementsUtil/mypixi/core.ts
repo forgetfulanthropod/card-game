@@ -6,16 +6,13 @@ import {
     PixiText,
     PixiTexture,
 } from './aliases'
-import {
-    applyShownArgs,
-    applyContainerArgs,
-    applyDisplayObjectArgs,
-} from './_applyArgs'
+import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import type {
     ContainerArgs,
     TextArgs,
     GraphicsArgs,
     SpriteArgs,
+    ContainerChildren,
 } from './_types'
 import { startChecking } from './_util'
 import { onUpdate } from '@/util'
@@ -36,9 +33,14 @@ export function Sprite(args: SpriteArgs): PixiSprite {
     startChecking(s)
     return s
 }
-export function Container(args: ContainerArgs): PixiContainer {
+export function Container(
+    args: ContainerArgs,
+    ...children: ContainerChildren
+): PixiContainer {
     const c = new PixiContainer()
-    applyContainerArgs(args, c)
+    children.forEach(ch => ch && c.addChild(ch))
+    applyDisplayObjectArgs(c, args)
+    if (args.cache === true) c.cacheAsBitmap = true
     startChecking(c)
     return c
 }

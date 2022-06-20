@@ -51,44 +51,44 @@ export function Character(args: CharacterProps): PixiContainer {
         centerX: true,
     })
 
-    const mainContainer = Container({
-        isHoveredDatum: isHovered,
-        children: [
-            Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
-                y: 22,
-            }),
-            mainAnimation,
-            mainAnimation == null &&
-                FallBackCharacterSprite(characterMeta, args.onClick),
-            Adjust(FloatingIntents(characterMeta.uid), {
-                y: -(mainAnimation?.height ?? 0),
-            }),
-            Adjust(HealthBar(characterMeta.uid), { y: 11 }),
-        ],
-    })
+    const mainContainer = Container(
+        {
+            isHoveredDatum: isHovered,
+        },
+        Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
+            y: 22,
+        }),
+        mainAnimation,
+        mainAnimation == null &&
+            FallBackCharacterSprite(characterMeta, args.onClick),
+        Adjust(FloatingIntents(characterMeta.uid), {
+            y: -(mainAnimation?.height ?? 0),
+        }),
+        Adjust(HealthBar(characterMeta.uid), { y: 11 })
+    )
 
     const hitContainer = Container({
         x: 0,
         y: -260,
-        children: [],
     })
 
     const unbindMoves = bindMoves(characterMeta, hitContainer, mainAnimation)
     const unbindDot = bindDOT(characterMeta, hitContainer)
 
-    const root = Container({
-        name: 'Character Wrap',
-        x: screenX,
-        y: screenY,
-        // scale: (characterMeta.y / 100) * 0.3 + 0.9,
-        scale: 0.3 * 0.3 + 0.9,
-        children: [
-            mainContainer,
-            getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
-            hitContainer,
-        ],
-        onDestroy: [unbindMoves, unbindDot],
-    })
+    const root = Container(
+        {
+            name: 'Character Wrap',
+            x: screenX,
+            y: screenY,
+            // scale: (characterMeta.y / 100) * 0.3 + 0.9,
+            scale: 0.3 * 0.3 + 0.9,
+            onDestroy: [unbindMoves, unbindDot],
+        },
+
+        mainContainer,
+        getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
+        hitContainer
+    )
 
     return root
 }
@@ -115,7 +115,6 @@ function getBoundOrbContainer(
         x: 0,
         y: -offset,
         name: 'OrbContainer',
-        children: [],
     })
     const orbWidth = 45
 
@@ -130,33 +129,33 @@ function getBoundOrbContainer(
             orbContainer.removeChildren()
             orbs.forEach((orb, i) => {
                 orbContainer.addChild(
-                    Container({
-                        x: i * orbWidth * 1.5,
-                        onClick: async () => {
-                            await callApi('activateOrb', {
-                                characterUid: characterCursor.get('uid'),
-                                orb,
-                            })
+                    Container(
+                        {
+                            x: i * orbWidth * 1.5,
+                            onClick: async () => {
+                                await callApi('activateOrb', {
+                                    characterUid: characterCursor.get('uid'),
+                                    orb,
+                                })
+                            },
                         },
-                        children: [
-                            Sprite({
-                                src: getOrbTexture(orb.type),
-                                width: orbWidth * SCALE_UNIVERSAL,
-                                height: orbWidth * SCALE_UNIVERSAL,
-                            }),
-                            Text({
-                                text: `${orb.remainingCount}`,
-                                style: {
-                                    fontFamily: 'bigFont',
-                                    fontSize: 14 * SCALE_UNIVERSAL,
-                                    fill: ['#fff', '#eee'], // gradient
-                                    // letterSpacing: -5,
-                                    stroke: '#333',
-                                    strokeThickness: 5,
-                                },
-                            }),
-                        ],
-                    })
+                        Sprite({
+                            src: getOrbTexture(orb.type),
+                            width: orbWidth * SCALE_UNIVERSAL,
+                            height: orbWidth * SCALE_UNIVERSAL,
+                        }),
+                        Text({
+                            text: `${orb.remainingCount}`,
+                            style: {
+                                fontFamily: 'bigFont',
+                                fontSize: 14 * SCALE_UNIVERSAL,
+                                fill: ['#fff', '#eee'], // gradient
+                                // letterSpacing: -5,
+                                stroke: '#333',
+                                strokeThickness: 5,
+                            },
+                        })
+                    )
                 )
             })
         },

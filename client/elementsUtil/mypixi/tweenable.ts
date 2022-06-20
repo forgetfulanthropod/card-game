@@ -1,7 +1,7 @@
-import { applyContainerArgs } from './_applyArgs'
-import type { ContainerArgs } from './_types'
+import type { ContainerArgs, ContainerChildren } from './_types'
 import { PixiContainer } from './aliases'
 import { startChecking } from './_util'
+import { applyDisplayObjectArgs } from './_applyArgs'
 
 export class TweenablePixiContainer extends PixiContainer {
     set tweenableScale(scale: number) {
@@ -12,10 +12,12 @@ export class TweenablePixiContainer extends PixiContainer {
     }
 }
 export function TweenableContainer(
-    args: ContainerArgs
+    args: ContainerArgs,
+    ...children: ContainerChildren
 ): TweenablePixiContainer {
     const c = new TweenablePixiContainer()
-    applyContainerArgs(args, c)
+    children.forEach(ch => ch && c.addChild(ch))
+    applyDisplayObjectArgs(c, args)
     startChecking(c)
     return c
 }

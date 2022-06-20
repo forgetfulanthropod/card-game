@@ -21,33 +21,30 @@ export function BattleScene(): PixiContainer {
     /** NOTE: name is used for lookup */
     const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
     const num = scene.get('numRoomsPassed')
-    return Container({
-        name: 'BattleScene',
-        children: [
-            Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
-            BattleRoomInfo({
-                info: [`${num} room${num === 1 ? '' : 's'} cleared`],
-            }),
-            intentArrowContainer,
-            Characters(scene),
-            Cards({ scene, hoveredCardUid }),
-            Energy({ scene }),
-            If(
-                toDatum(
-                    scene.select('state'),
-                    state => state === 'choosing cards'
+    return Container(
+        {
+            name: 'BattleScene',
+            onDestroy: [
+                onUpdate(
+                    scene.select('requireAction'),
+                    immediatelyTakeRequiredAction,
+                    true
                 ),
-                () => CardAdder()
-            ),
-        ],
-        onDestroy: [
-            onUpdate(
-                scene.select('requireAction'),
-                immediatelyTakeRequiredAction,
-                true
-            ),
-        ],
-    })
+            ],
+        },
+        Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
+        BattleRoomInfo({
+            info: [`${num} room${num === 1 ? '' : 's'} cleared`],
+        }),
+        intentArrowContainer,
+        Characters(scene),
+        Cards({ scene, hoveredCardUid }),
+        Energy({ scene }),
+        If(
+            toDatum(scene.select('state'), state => state === 'choosing cards'),
+            () => CardAdder()
+        )
+    )
 }
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {
     if (req == null) return

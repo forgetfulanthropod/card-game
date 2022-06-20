@@ -35,7 +35,7 @@ export function CardsTiltedInLine({
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
-        const c = Container({ x: index * spaceBetween, children: [sprite] })
+        const c = Container({ x: index * spaceBetween }, sprite)
         c.addChild(sprite)
         //@ts-expect-error
         c.convertTo2d()
@@ -53,7 +53,7 @@ export function CardsTiltedInLine({
         )
         return c
     })
-    const root = Container({ children: cardEls })
+    const root = Container({}, ...cardEls)
     root.cacheAsBitmap = true
     return root
 }

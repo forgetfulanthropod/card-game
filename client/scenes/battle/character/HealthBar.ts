@@ -34,17 +34,17 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
             root.destroy({ children: true })
         }
     })
-    const root = Container({
-        name: 'HealthBar',
-        scale: 0.7,
-        children: [
-            HealthIndicator(characterCursor),
-            StanceIndicator(characterCursor),
-            EffectIndicators(characterCursor),
-            BlockIndicator(characterCursor),
-        ],
-        onDestroy: [unsub],
-    })
+    const root = Container(
+        {
+            name: 'HealthBar',
+            scale: 0.7,
+            onDestroy: [unsub],
+        },
+        HealthIndicator(characterCursor),
+        StanceIndicator(characterCursor),
+        EffectIndicators(characterCursor),
+        BlockIndicator(characterCursor)
+    )
     return root
 }
 
@@ -55,30 +55,30 @@ function getCharacterCursor(characterUid: string) {
 function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     const data = toDatum(characterCursor.select('block'), b => b)
     return If(data, block =>
-        Container({
-            // y: -50 *  SCALE_UNIVERSAL,
-            x: characterCursor.get('isPc') ? 255 : -80,
-            children: [
-                Sprite({
-                    src: getTexture('blockIcon'),
-                    width: 90 * SCALE_UNIVERSAL,
-                    height: 90 * SCALE_UNIVERSAL,
-                    anchor: [0.5, 0.5],
-                }),
-                Text({
-                    text: `${block}`,
-                    anchor: [0.5, 0.5],
-                    style: {
-                        // fontFamily: ['bigFont', 'monospace'],
-                        fontFamily: ['sansFont'],
-                        fontSize: 28,
-                        fill: 'white',
-                        stroke: 'black',
-                        strokeThickness: 5,
-                    },
-                }),
-            ],
-        })
+        Container(
+            {
+                // y: -50 *  SCALE_UNIVERSAL,
+                x: characterCursor.get('isPc') ? 255 : -80,
+            },
+            Sprite({
+                src: getTexture('blockIcon'),
+                width: 90 * SCALE_UNIVERSAL,
+                height: 90 * SCALE_UNIVERSAL,
+                anchor: [0.5, 0.5],
+            }),
+            Text({
+                text: `${block}`,
+                anchor: [0.5, 0.5],
+                style: {
+                    // fontFamily: ['bigFont', 'monospace'],
+                    fontFamily: ['sansFont'],
+                    fontSize: 28,
+                    fill: 'white',
+                    stroke: 'black',
+                    strokeThickness: 5,
+                },
+            })
+        )
     )
 }
 
@@ -101,27 +101,26 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
 }
 
 function SingleEffect(effect: Effect & { id: VisibleEffectId }): PixiContainer {
-    return Container({
-        children: [
-            Sprite({
-                src: getEffectIconSrc(effect.id),
-                width: 80 * SCALE_UNIVERSAL,
-                height: 80 * SCALE_UNIVERSAL,
-                anchor: [0.5, 0.4],
-            }),
-            Text({
-                text: `${effect.counter}`,
-                anchor: [0.6, 1],
-                style: {
-                    fontFamily: ['bigFont', 'monospace'],
-                    fontSize: 30 * SCALE_UNIVERSAL,
-                    fill: 'white',
-                    stroke: 'black',
-                    strokeThickness: 5,
-                },
-            }),
-        ],
-    })
+    return Container(
+        {},
+        Sprite({
+            src: getEffectIconSrc(effect.id),
+            width: 80 * SCALE_UNIVERSAL,
+            height: 80 * SCALE_UNIVERSAL,
+            anchor: [0.5, 0.4],
+        }),
+        Text({
+            text: `${effect.counter}`,
+            anchor: [0.6, 1],
+            style: {
+                fontFamily: ['bigFont', 'monospace'],
+                fontSize: 30 * SCALE_UNIVERSAL,
+                fill: 'white',
+                stroke: 'black',
+                strokeThickness: 5,
+            },
+        })
+    )
 }
 
 function StanceIndicator(characterCursor: ROCursor<CharacterMeta>) {
@@ -155,7 +154,7 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
     })
     return If(data, ({ stance }) => {
         if (stance === 'neutral') {
-            return Container({ children: [] })
+            return Container({})
         }
 
         return Sprite({
@@ -171,44 +170,45 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
 const spriteAnchor: [number, number] = [0, 0.5]
 
 function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
-    return Container({
-        x: -HEALTH_BAR_WIDTH * 0.2,
-        children: [
-            Sprite({
-                src: 'healthBarBacking',
-                anchor: spriteAnchor,
-            }),
-            BaseHealth(characterCursor),
-            Sprite({
-                src: 'healthBarHighlight',
-                anchor: spriteAnchor,
-            }),
-            Sprite({
-                src: 'healthBarShadow',
-                anchor: spriteAnchor,
-            }),
-            StanceBarIndicator(characterCursor),
+    return Container(
+        {
+            x: -HEALTH_BAR_WIDTH * 0.2,
+        },
 
-            // todo: projected damage and DoT
-            // ProjectedDamage(characterCursor),
-            // ProjectedDoT(characterCursor),
+        Sprite({
+            src: 'healthBarBacking',
+            anchor: spriteAnchor,
+        }),
+        BaseHealth(characterCursor),
+        Sprite({
+            src: 'healthBarHighlight',
+            anchor: spriteAnchor,
+        }),
+        Sprite({
+            src: 'healthBarShadow',
+            anchor: spriteAnchor,
+        }),
+        StanceBarIndicator(characterCursor),
 
-            Text({
-                text: characterCursor.select('health'),
-                zIndex: 1,
-                anchor: [0.5, 0.6],
-                x: HEALTH_BAR_WIDTH / 2,
-                style: {
-                    fontFamily: 'bigFont',
-                    fontSize: 20,
-                    fill: 'white',
-                    stroke: '#111',
-                    strokeThickness: 4,
-                    // letterSpacing: -3,
-                },
-            }),
-        ],
-    })
+        // todo: projected damage and DoT
+        // ProjectedDamage(characterCursor),
+        // ProjectedDoT(characterCursor),
+
+        Text({
+            text: characterCursor.select('health'),
+            zIndex: 1,
+            anchor: [0.5, 0.6],
+            x: HEALTH_BAR_WIDTH / 2,
+            style: {
+                fontFamily: 'bigFont',
+                fontSize: 20,
+                fill: 'white',
+                stroke: '#111',
+                strokeThickness: 4,
+                // letterSpacing: -3,
+            },
+        })
+    )
 }
 
 function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {

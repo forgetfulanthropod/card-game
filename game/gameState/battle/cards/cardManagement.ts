@@ -36,6 +36,7 @@ export function getNullCards(): Piles {
 
 function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
+        // 'bodySlam',
         // 'TEST_turnStartEffects',
         // 'magicRitual',
         // 'chainLightning',
@@ -53,21 +54,7 @@ function makeCards(scene: BattleCursor): Piles {
         // 'tetsudoFormation',
         // final cards below?
         // 'arcanePower',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
-        'scatterBrained',
+        // 'scatterBrained',
         // 'magicalStorm',
         // 'guidingBolt',
         // 'smite',

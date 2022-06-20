@@ -19,7 +19,7 @@ import {
     IfHideShow,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
-import { getEntryScene } from '@/data'
+import { getEntryScene, getTree } from '@/data'
 
 type Ability = { name: string }
 
@@ -54,6 +54,7 @@ export function RootCharacterInfo() {
         root.removeChildren()
 
         if (uid == null) return
+        if (getTree().get('scene', 'id') !== 'entry') return
 
         const cm = getEntryScene()
             .get('selectedCharacters')
@@ -101,96 +102,96 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     })
 
     return InfoBox(
-        Container({
-            children: [
-                Text({
-                    text: props.cm.displayName,
-                    style: {
-                        fontFamily: 'bigFont',
-                        fontSize: 40,
-                        fill: 0xdddddd,
-                    },
-                    anchor: [0, 1],
-                    x: -contentWidth * 0.5,
-                }),
-                // Text({
-                //     text: cm.class,
-                //     style: {
-                //         fontFamily: 'bigFont',
-                //         fontSize: 40,
-                //         fill: classColorMap[cm.class],
-                //         // stroke: 0xdddddd,
-                //         // strokeThickness: 3,
-                //         // letterSpacing: 5,
-                //     },
-                //     anchor: [1, 1],
-                //     contentWidth * 0.5,
-                // }),
-                // Sprite({
-                //     src: `${cm.class}ClassIcon`,
-                //     anchor: [1, 1],
-                //     contentWidth * 0.5,
-                //     scale:
-                //         150 /
-                //         (getTexture(`${cm.class}ClassIcon`)?.height ??
-                //             1),
-                // }),
-                ...stats.map((stat, i) => {
-                    return Container({
+        Container(
+            {},
+
+            Text({
+                text: props.cm.displayName,
+                style: {
+                    fontFamily: 'bigFont',
+                    fontSize: 40,
+                    fill: 0xdddddd,
+                },
+                anchor: [0, 1],
+                x: -contentWidth * 0.5,
+            }),
+            // Text({
+            //     text: cm.class,
+            //     style: {
+            //         fontFamily: 'bigFont',
+            //         fontSize: 40,
+            //         fill: classColorMap[cm.class],
+            //         // stroke: 0xdddddd,
+            //         // strokeThickness: 3,
+            //         // letterSpacing: 5,
+            //     },
+            //     anchor: [1, 1],
+            //     contentWidth * 0.5,
+            // }),
+            // Sprite({
+            //     src: `${cm.class}ClassIcon`,
+            //     anchor: [1, 1],
+            //     contentWidth * 0.5,
+            //     scale:
+            //         150 /
+            //         (getTexture(`${cm.class}ClassIcon`)?.height ??
+            //             1),
+            // }),
+            ...stats.map((stat, i) => {
+                return Container(
+                    {
                         y: 50,
                         x: ((i - 1.5) * contentWidth) / 4,
-                        children: [
-                            Text({
-                                text: `${stat.key}`,
-                                style: {
-                                    fontFamily: 'sansFont',
-                                    fontSize: 20,
-                                    fill: stat.color,
-                                    align: 'center',
-                                },
-                                anchor: [0.5, 0],
-                            }),
-                            Text({
-                                text: `${props.cm[stat.key]}`,
-                                style: {
-                                    fontFamily: 'bigFont',
-                                    fontSize: 32,
-                                    fill: stat.color,
-                                    align: 'center',
-                                },
-                                y: 22,
-                                anchor: [0.5, 0],
-                            }),
-                        ],
+                    },
+
+                    Text({
+                        text: `${stat.key}`,
+                        style: {
+                            fontFamily: 'sansFont',
+                            fontSize: 20,
+                            fill: stat.color,
+                            align: 'center',
+                        },
+                        anchor: [0.5, 0],
+                    }),
+                    Text({
+                        text: `${props.cm[stat.key]}`,
+                        style: {
+                            fontFamily: 'bigFont',
+                            fontSize: 32,
+                            fill: stat.color,
+                            align: 'center',
+                        },
+                        y: 22,
+                        anchor: [0.5, 0],
                     })
-                }),
-                ...props.abilities.map((ability, i) => {
-                    return InfoBox(
-                        Container({
-                            children: [
-                                Text({
-                                    text: ability.name,
-                                    style: {
-                                        fontFamily: 'sansFont',
-                                        fontSize: 20,
-                                        fill: 0xdddddd,
-                                    },
-                                    anchor: [i, 0],
-                                    x: -contentWidth * (0.5 - i),
-                                }),
-                            ],
-                        }),
-                        {
-                            y: 150,
-                        }
-                    )
-                }),
-                InfoBox(allCharCards, {
-                    y: 185 + allCharCards.height / 2,
-                    x: -allCharCards.width / 2,
-                }),
-            ],
-        }),
+                )
+            }),
+            ...props.abilities.map((ability, i) => {
+                return InfoBox(
+                    Container(
+                        {},
+                        Text({
+                            text: ability.name,
+                            style: {
+                                fontFamily: 'sansFont',
+                                fontSize: 20,
+                                fill: 0xdddddd,
+                            },
+                            anchor: [i, 0],
+                            x: -contentWidth * (0.5 - i),
+                        })
+                    ),
+                    {
+                        y: 150,
+                    }
+                )
+            }),
+            InfoBox(allCharCards, {
+                y: 185 + allCharCards.height / 2,
+                x: -allCharCards.width / 2,
+            })
+        ),
         {
             filters: [glowFilter],
         }

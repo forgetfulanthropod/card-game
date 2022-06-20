@@ -36,14 +36,12 @@ export function CardAdder(): PixiContainer {
 function NewCardOptions(): PixiContainer {
     const selectedCardUid = datum<CardUid | null>(null)
 
-    return Container({
-        name: 'CardOptions',
-        children: [
-            Backdrop(),
-            ...Options(selectedCardUid),
-            ConfirmButton(selectedCardUid),
-        ],
-    })
+    return Container(
+        { name: 'CardOptions' },
+        Backdrop(),
+        ...Options(selectedCardUid),
+        ConfirmButton(selectedCardUid)
+    )
 }
 
 const NUM_CARD_OPTIONS = 5
@@ -114,31 +112,30 @@ function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {
     const texture = getTexture('confirmButton')
 
     return If(selectedCardUid, cardUid =>
-        Container({
-            x: BASE_WIDTH * 0.9,
-            y: BASE_HEIGHT * 0.78,
-            onClick: () => {
-                void callApi('addCardToDeck', { cardUid })
-                selectedCardUid.set(null)
+        Container(
+            {
+                x: BASE_WIDTH * 0.9,
+                y: BASE_HEIGHT * 0.78,
+                onClick: () => {
+                    void callApi('addCardToDeck', { cardUid })
+                    selectedCardUid.set(null)
+                },
             },
-            children: [
-                Sprite({
-                    src: texture,
-                    anchor: [0.5, 0.5],
-                    width: BASE_WIDTH * 0.15,
-                    height:
-                        (BASE_WIDTH * 0.15 * texture.height) / texture.width,
-                }),
-                // Text({
-                //     text: 'Confirm',
-                //     anchor: [0.5, 0.5],
-                //     style: {
-                //         fill: 0xffffff,
-                //         fontSize: 44,
-                //         fontFamily: 'bigFont',
-                //     },
-                // }),
-            ],
-        })
+            Sprite({
+                src: texture,
+                anchor: [0.5, 0.5],
+                width: BASE_WIDTH * 0.15,
+                height: (BASE_WIDTH * 0.15 * texture.height) / texture.width,
+            })
+            // Text({
+            //     text: 'Confirm',
+            //     anchor: [0.5, 0.5],
+            //     style: {
+            //         fill: 0xffffff,
+            //         fontSize: 44,
+            //         fontFamily: 'bigFont',
+            //     },
+            // }),
+        )
     )
 }
