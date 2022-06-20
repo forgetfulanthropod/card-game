@@ -34,8 +34,12 @@ export function CardsTiltedInLine({
 
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
+        sprite.scale.x = -1
 
-        const c = Container({ x: index * spaceBetween + cardWidth / 2 }, sprite)
+        const c = Container(
+            { x: (cards.length - 1 - index) * spaceBetween },
+            sprite
+        )
 
         c.addChild(sprite)
 

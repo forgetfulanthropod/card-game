@@ -185,10 +185,6 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         y: 150,
                     }
                 )
-            }),
-            InfoBox(allCharCards, {
-                y: 185 + allCharCards.height / 2,
-                x: -allCharCards.width / 2,
             })
         ),
         {
@@ -201,6 +197,10 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x: contentWidth * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
+        }),
+        Adjust(allCharCards, {
+            y: 140 + allCharCards.height / 2,
+            x: -allCharCards.width / 2,
         })
     ).parent
 }

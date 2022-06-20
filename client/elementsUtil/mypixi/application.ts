@@ -6,7 +6,7 @@ import type { PixiContainer, PixiSprite } from './aliases'
 import { PixiApplication } from './aliases'
 
 // export const ROOT_SCALE = isMobile ? 1 : 2
-export const ROOT_SCALE = isMobile ? 1 : 1
+export const ROOT_SCALE = isMobile ? 1 : 2
 
 let app: null | PixiApplication = null
 export function Application(args: {
