@@ -104,7 +104,7 @@ export function PortalizeExample(): PixiContainer {
         return sprite
     })
     startToggling(shown)
-    return Container({ children: [hideShow, cont] })
+    return Container({}, hideShow, cont)
 }
 
 export function AdjustExample(): PixiContainer {
@@ -115,16 +115,15 @@ export function AdjustExample(): PixiContainer {
         onClick: () => console.log('clicked'),
         anchor: 0.5,
     })
-    const testContainer = Container({ children: [] })
+    const testContainer = Container({})
     // no anchor!
     // @ts-expect-error
     Adjust(testContainer, { anchor: 0.5 })
-    return Container({
-        children: [
-            Adjust(adjustedOnce, {
-                x: adjustedOnce.x + 100,
-                y: 50,
-            }),
-        ],
-    })
+    return Container(
+        {},
+        Adjust(adjustedOnce, {
+            x: adjustedOnce.x + 100,
+            y: 50,
+        })
+    )
 }

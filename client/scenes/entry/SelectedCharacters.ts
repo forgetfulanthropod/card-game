@@ -106,7 +106,6 @@ export function SelectedCharacters(): PixiContainer {
     const root = Container({
         x: 0.5 * BASE_WIDTH,
         y: 0.77 * BASE_HEIGHT,
-        children: [],
         onDestroy: [
             onUpdate(selectedCharacters, characters => {
                 if (characters != null) setSelectedCharacters()
@@ -135,34 +134,32 @@ export function SelectedCharacters(): PixiContainer {
                         scale: i === 2 ? 1.1 : 1,
                     } as const
                     return [
-                        Container({
-                            ...props,
-                            children: [
-                                MainCharacterAnimation({
-                                    characterMeta: c,
-                                    events: {
-                                        pointerout() {},
-                                        pointerdown() {
-                                            if (
-                                                hoveredCharacterUid.val ===
-                                                c.uid
-                                            )
-                                                toggleSelectedCharacter(c, i)
+                        Container(
+                            {
+                                ...props,
+                            },
 
-                                            hoveredCharacterUid.set(c.uid)
-                                        },
+                            MainCharacterAnimation({
+                                characterMeta: c,
+                                events: {
+                                    pointerout() {},
+                                    pointerdown() {
+                                        if (hoveredCharacterUid.val === c.uid)
+                                            toggleSelectedCharacter(c, i)
+
+                                        hoveredCharacterUid.set(c.uid)
                                     },
-                                    height: characterHeight,
-                                }) ??
-                                    Sprite({
-                                        anchor: [0.5, 0.5],
-                                        src: isTextureKey(c.id)
-                                            ? getTexture(c.id)
-                                            : PixiTexture.WHITE,
-                                        scale: 1,
-                                    }),
-                            ],
-                        }),
+                                },
+                                height: characterHeight,
+                            }) ??
+                                Sprite({
+                                    anchor: [0.5, 0.5],
+                                    src: isTextureKey(c.id)
+                                        ? getTexture(c.id)
+                                        : PixiTexture.WHITE,
+                                    scale: 1,
+                                })
+                        ),
                     ]
                 })
                 .flat() ?? []

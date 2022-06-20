@@ -21,20 +21,20 @@ export function LevelInfo(): PixiContainer {
 
     // const level = scene.select('selectedLevel').get()
 
-    const root = Container({
-        x: BASE_WIDTH * 0.15,
-        y: BASE_HEIGHT * 0.85,
-        // children: [leftButton, levelNumText, rightButton, levelNameText],
-        children: [
-            Sprite({
-                src: 'skelepitDungeonSign',
-                anchor: 0.5,
-                scale:
-                    (BASE_WIDTH * 0.3) /
-                    (getTexture('skelepitDungeonSign')?.width ?? 1000),
-            }),
-        ],
-    })
+    const root = Container(
+        {
+            x: BASE_WIDTH * 0.15,
+            y: BASE_HEIGHT * 0.85,
+            // children: [leftButton, levelNumText, rightButton, levelNameText],
+        },
+        Sprite({
+            src: 'skelepitDungeonSign',
+            anchor: 0.5,
+            scale:
+                (BASE_WIDTH * 0.3) /
+                (getTexture('skelepitDungeonSign')?.width ?? 1000),
+        })
+    )
 
     return root
 

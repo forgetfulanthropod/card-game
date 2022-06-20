@@ -47,11 +47,9 @@ export interface ShownArgs extends DisplayObjectArgs {
     tint?: number
     anchor?: number | Pair
 }
-type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
+// type OnContainerTick = (self: PixiContainer, delta: number) => void | 'remove'
 export interface ContainerArgs extends DisplayObjectArgs {
-    children?: PixiChildren
-    onTick?: OnContainerTick
-    name?: string
+    // onTick?: OnContainerTick
     cache?: boolean
 }
 export interface TextArgs extends ShownArgs {
@@ -76,14 +74,14 @@ export type OnPixiTick = (
 export interface SpriteArgs extends ShownArgs {
     src: AssetKey | PixiTexture
 }
-export type PixiChildren = (
+export type ContainerChild =
     | PixiSprite
     | PixiContainer
     | DisplayObject
     | null
     | false
-    | undefined
-)[]
+
+export type ContainerChildren = ContainerChild[]
 
 export type InteractionEventHandler = (e: InteractionEvent) => void
 export type Pair = [x: number, y: number]

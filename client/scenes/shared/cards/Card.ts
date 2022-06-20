@@ -42,51 +42,41 @@ export function CardEl({
     card,
     hoveredCardUid,
     events,
-    onLoaded = () => {},
 }: {
     rotation?: number
     width: number
     card: Card
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
-    onLoaded?: Callback
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeSrc(card.type)
     const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
 
-    return TweenableContainer({
-        name: card.uid,
-        // cache: true, // doesn't update...
-
-        children: [
-            TweenableContainer({
+    return TweenableContainer(
+        {
+            name: card.uid,
+            // cache: true, // doesn't update...
+        },
+        TweenableContainer(
+            {
                 events:
                     events ??
                     (hoveredCardUid ? getEvents(card, hoveredCardUid) : {}),
                 rotation,
                 scale,
                 y: (cardFrameTexture.height / 2) * scale,
-                children: [
-                    getGradientBackground(
-                        cardFrameTexture,
-                        colorStops,
-                        onLoaded
-                    ),
-                    getCardFrameSprite(cardFrameTexture),
-                    getEnergyContainer(card, cardFrameTexture),
-                    ...getTexts(card, cardFrameTexture, colorStops),
-                    PointerAreaExtender(
-                        cardFrameTexture.width,
-                        cardFrameTexture.height
-                    ),
-                ],
-            }),
-        ],
-    })
+            },
+            getGradientBackground(cardFrameTexture, colorStops),
+            getCardFrameSprite(cardFrameTexture),
+            getEnergyContainer(card, cardFrameTexture),
+            ...getTexts(card, cardFrameTexture, colorStops),
+            PointerAreaExtender(cardFrameTexture.width, cardFrameTexture.height)
+        )
+    )
 }
 
-export function CardSpritePromise({
+export function CardSprite({
     rotation,
     width,
     card,
@@ -98,43 +88,35 @@ export function CardSpritePromise({
     card: Card
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
-}): Promise<PixiSprite> {
-    return new Promise(resolve => {
-        const el = CardEl({
-            rotation,
-            width,
-            card,
-            hoveredCardUid,
-            events,
-            onLoaded() {
-                resolve(
-                    Sprite({
-                        src: getRenderer().generateTexture(el),
-                    })
-                )
-            },
-        })
+}): PixiSprite {
+    const el = CardEl({
+        rotation,
+        width,
+        card,
+        hoveredCardUid,
+        events,
     })
+    const src = getRenderer().generateTexture(el)
+    // el.destroy(true)
+    return Sprite({ src, onDestroy: [() => el.destroy(true)] })
 }
 
 function PointerAreaExtender(width: number, height: number): PixiContainer {
-    return Container({
-        children: [
-            Sprite({
-                src: Texture.WHITE,
-                width,
-                height,
-                alpha: 0,
-                anchor: [0.5, 0],
-            }),
-        ],
-    })
+    return Container(
+        {},
+        Sprite({
+            src: Texture.WHITE,
+            width,
+            height,
+            alpha: 0,
+            anchor: [0.5, 0],
+        })
+    )
 }
 
 function getGradientBackground(
     cardFrameTexture: PixiTexture,
-    colorStops: ColorStop[],
-    onLoaded: Callback = () => {}
+    colorStops: ColorStop[]
 ) {
     return RoundedRectangleGradientSprite({
         radius: cardFrameTexture.width / 15,
@@ -150,7 +132,6 @@ function getGradientBackground(
             height: cardFrameTexture.height,
             anchor: 0.5,
         },
-        onLoaded,
     })
 }
 
@@ -166,29 +147,29 @@ function getEnergyContainer(
     cardFrameTexture: PixiTexture
 ): PixiContainer {
     const wh = cardFrameTexture.width * 0.15
-    return Container({
-        x: cardFrameTexture.width * 0.4,
-        y: -cardFrameTexture.height * 0.42,
-        children: [
-            Sprite({
-                src: 'cardEnergy',
-                width: wh,
-                height: wh,
-                anchor: 0.5,
-            }),
-            Text({
-                text: `${card.energy}`,
-                style: {
-                    fill: '#eee',
-                    stroke: 'black',
-                    strokeThickness: 8,
-                    fontSize: wh * 0.9,
-                    fontFamily: 'bigFont',
-                },
-                anchor: [0.5, 0.5],
-            }),
-        ],
-    })
+    return Container(
+        {
+            x: cardFrameTexture.width * 0.4,
+            y: -cardFrameTexture.height * 0.42,
+        },
+        Sprite({
+            src: 'cardEnergy',
+            width: wh,
+            height: wh,
+            anchor: 0.5,
+        }),
+        Text({
+            text: `${card.energy}`,
+            style: {
+                fill: '#eee',
+                stroke: 'black',
+                strokeThickness: 8,
+                fontSize: wh * 0.9,
+                fontFamily: 'bigFont',
+            },
+            anchor: [0.5, 0.5],
+        })
+    )
 }
 
 function getTexts(

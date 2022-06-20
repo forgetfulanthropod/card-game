@@ -7,9 +7,12 @@ import type {
 import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { InfoBox } from './InfoBox'
+<<<<<<< HEAD
 import { CardsTiltedInLine } from './CardsTiltedInLine'
+=======
+import { CardsTiltedInLine } from './cards'
+>>>>>>> 8f613d343e05acca5588fda64410c3736d2fea33
 import {
-    If,
     Text,
     Container,
     BASE_WIDTH,
@@ -17,9 +20,12 @@ import {
     getTexture,
     glowFilter,
     Adjust,
+    IfHideShow,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
-import { getEntryScene } from '@/data'
+import { getEntryScene, getTree } from '@/data'
+
+type Ability = { name: string }
 
 const stats = [
     { key: 'strength', color: 0xd44c47 },
@@ -40,7 +46,7 @@ export function RootCharacterInfo() {
     const root = Container({
         onDestroy: [
             hoveredCharacterUid.onChange(update),
-            onUpdate(getEntryScene().select('selectedCharacters'), sc => {
+            onUpdate(getEntryScene().select('selectedCharacters'), _sc => {
                 update(hoveredCharacterUid.val)
             }),
         ],
@@ -52,6 +58,7 @@ export function RootCharacterInfo() {
         root.removeChildren()
 
         if (uid == null) return
+        if (getTree().get('scene', 'id') !== 'entry') return
 
         const cm = getEntryScene()
             .get('selectedCharacters')
@@ -71,7 +78,7 @@ export function RootCharacterInfo() {
 }
 
 export function CharacterInfo(cm: OwnedCharacterStats) {
-    const abilities = [
+    const abilities: Ability[] = [
         {
             name: 'Sleepy Time Spores',
         },
@@ -80,9 +87,9 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
         },
     ]
 
-    const contentWidth = BASE_WIDTH * 0.23
-    return If(
+    return IfHideShow(
         compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
+<<<<<<< HEAD
         () => {
             const allCharCards = Container({
                 children: CardsTiltedInLine({
@@ -90,17 +97,102 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                     parentWidth: contentWidth * 0.8,
                 }),
             })
+=======
+        FullInfoBox({ cm, abilities })
+    )
+}
 
-            return InfoBox(
-                Container({
-                    children: [
+function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
+    return vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
+}
+
+function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
+    const contentWidth = BASE_WIDTH * 0.23
+    const allCharCards = CardsTiltedInLine({
+        cards: getAllPossibleCardsForCharacter(props.cm),
+        cardWidth: 90,
+        parentWidth: contentWidth,
+    })
+>>>>>>> 8f613d343e05acca5588fda64410c3736d2fea33
+
+    return InfoBox(
+        Container(
+            {},
+
+            Text({
+                text: props.cm.displayName,
+                style: {
+                    fontFamily: 'bigFont',
+                    fontSize: 40,
+                    fill: 0xdddddd,
+                },
+                anchor: [0, 1],
+                x: -contentWidth * 0.5,
+            }),
+            // Text({
+            //     text: cm.class,
+            //     style: {
+            //         fontFamily: 'bigFont',
+            //         fontSize: 40,
+            //         fill: classColorMap[cm.class],
+            //         // stroke: 0xdddddd,
+            //         // strokeThickness: 3,
+            //         // letterSpacing: 5,
+            //     },
+            //     anchor: [1, 1],
+            //     contentWidth * 0.5,
+            // }),
+            // Sprite({
+            //     src: `${cm.class}ClassIcon`,
+            //     anchor: [1, 1],
+            //     contentWidth * 0.5,
+            //     scale:
+            //         150 /
+            //         (getTexture(`${cm.class}ClassIcon`)?.height ??
+            //             1),
+            // }),
+            ...stats.map((stat, i) => {
+                return Container(
+                    {
+                        y: 50,
+                        x: ((i - 1.5) * contentWidth) / 4,
+                    },
+
+                    Text({
+                        text: `${stat.key}`,
+                        style: {
+                            fontFamily: 'sansFont',
+                            fontSize: 20,
+                            fill: stat.color,
+                            align: 'center',
+                        },
+                        anchor: [0.5, 0],
+                    }),
+                    Text({
+                        text: `${props.cm[stat.key]}`,
+                        style: {
+                            fontFamily: 'bigFont',
+                            fontSize: 32,
+                            fill: stat.color,
+                            align: 'center',
+                        },
+                        y: 22,
+                        anchor: [0.5, 0],
+                    })
+                )
+            }),
+            ...props.abilities.map((ability, i) => {
+                return InfoBox(
+                    Container(
+                        {},
                         Text({
-                            text: cm.displayName,
+                            text: ability.name,
                             style: {
-                                fontFamily: 'bigFont',
-                                fontSize: 40,
+                                fontFamily: 'sansFont',
+                                fontSize: 20,
                                 fill: 0xdddddd,
                             },
+<<<<<<< HEAD
                             anchor: [0, 1],
                             x: -contentWidth * 0.5,
                         }),
@@ -194,10 +286,32 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
                         150 / (getTexture(`${cm.class}ClassIcon`)?.height ?? 1),
                 })
             ).parent
+=======
+                            anchor: [i, 0],
+                            x: -contentWidth * (0.5 - i),
+                        })
+                    ),
+                    {
+                        y: 150,
+                    }
+                )
+            }),
+            InfoBox(allCharCards, {
+                y: 185 + allCharCards.height / 2,
+                x: -allCharCards.width / 2,
+            })
+        ),
+        {
+            filters: [glowFilter],
+>>>>>>> 8f613d343e05acca5588fda64410c3736d2fea33
         }
-    )
-}
-
-function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
-    return vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
+    ).addChild(
+        Sprite({
+            src: `${props.cm.class}ClassIcon`,
+            anchor: [1, 1],
+            x: contentWidth * 0.5,
+            scale:
+                150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
+        })
+    ).parent
 }

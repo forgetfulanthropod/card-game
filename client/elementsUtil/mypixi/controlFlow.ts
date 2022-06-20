@@ -3,7 +3,6 @@ import { compose } from 'datums'
 import { sortBy, uniq } from 'lodash'
 import type { DisplayObject, IDestroyOptions } from 'pixi.js'
 import { Ticker } from 'pixi.js'
-import { keys as getKeys } from 'shared/code'
 import type { PixiContainer } from './aliases'
 import { applyDisplayObjectArgs } from './_applyArgs'
 import type { ContainerArgs, DisplayObjectArgs } from './_types'
@@ -20,11 +19,11 @@ type Falsy = false | null | 0 | '' | undefined
 export function If<T = unknown>(
     condition: RODatum<T> & { destroy?: Callback },
     ifRender: (x: Exclude<T, Falsy>) => DisplayObject,
-    elseRender?: (x: T & Falsy) => DisplayObject,
+    elseRender?: () => DisplayObject,
     displayArgs?: DisplayObjectArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
-    const root = Container({ children: [] })
+    const root = Container({})
     onDestroyed(
         root,
         condition.onChange(handleChange, true),
@@ -42,6 +41,26 @@ export function If<T = unknown>(
             // @ts-expect-error
             root.addChild(elseRender(val))
         }
+    }
+}
+
+export function IfHideShow<T = unknown>(
+    condition: RODatum<T> & { destroy?: Callback },
+    ifEl: DisplayObject,
+    elseEl?: DisplayObject,
+    displayArgs?: DisplayObjectArgs
+): PixiContainer {
+    const root = Container({}, ifEl, elseEl ?? null)
+    onDestroyed(
+        root,
+        condition.onChange(handleChange, true),
+        () => condition?.destroy?.(),
+    ) // prettier-ignore
+    if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
+    return root
+    function handleChange(val: T) {
+        ifEl.visible = !!val
+        if (elseEl) elseEl.visible = !val
     }
 }
 
@@ -78,16 +97,19 @@ interface KeyedContainer extends PixiContainer {
 
 /**
  * @args
- *   @getDisplayArgsForIndex is a callback which assigns properties to the root DisplayObject when the index changes
+ *   @getDisplayArgsForIndex
+ *      Given index of child, return desired displayArgs (e.g. x, y, rotation) for child.
+ *      When an item's position changes, this will be called with the new index, and the result will be assigned to the child.
+ *      Example: i => ({ x: i * 10, y: i * 20 })
  */
 export function For<T extends { key: string | number }[] | (string | number)[]>(
     items: RODatum<T> & { destroy?: Callback },
     render: (item: T[number]) => DisplayObject,
-    getDisplayArgsForIndex?: (index: number) => Partial<DisplayObject>,
+    getDisplayArgsForIndex?: (index: number) => DisplayObjectArgs,
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
-    const root = Container({ children: [] }) as KeyedContainer
+    const root = Container({}) as KeyedContainer
     onDestroyed(
         root,
         () => items?.destroy?.(),
@@ -135,13 +157,12 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
         )
         if (sortedChildren.length > 0) root.addChild(...sortedChildren)
         if (getDisplayArgsForIndex != null) {
-            for (let i = 0; i < root.children.length; i++) {
-                const c = root.children[i]
+            root.children.forEach((c, i) => {
                 const args = getDisplayArgsForIndex(i)
-
                 //@ts-expect-error
-                getKeys(args).forEach(key => (c[key] = args[key]))
-            }
+                applyDisplayObjectArgs(c, args)
+                // Object.keys(args).forEach(key => (c[key] = args[key]))
+            })
         }
     }
 }

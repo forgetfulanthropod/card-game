@@ -40,15 +40,17 @@ function FloatingIntent(
               )
             : DamageIntended(nextCmd.outcome.damages[cuid])
 
-    const root = Container({
-        events: {
-            pointerover: interact,
-            pointerdown: interact,
-            pointerup: stopInteracting,
-            pointerout: stopInteracting,
+    const root = Container(
+        {
+            events: {
+                pointerover: interact,
+                pointerdown: interact,
+                pointerup: stopInteracting,
+                pointerout: stopInteracting,
+            },
         },
-        children,
-    })
+        ...children
+    )
 
     return root
 

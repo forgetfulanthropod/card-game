@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e # fail on error
+set -euo pipefail # strict mode
 
 # Add npm binaries to path
 export PATH=./node_modules/.bin:$PATH
@@ -14,6 +14,7 @@ function install-all() {
 }
 
 function CI() {
+    set +e
     source ~/.bashrc
     pnpm i -P
     client:build
@@ -93,10 +94,32 @@ function arkit() {
     npx arkit
 }
 
+# generate the full dependency graph
+function dep-graph-full() {
+    rm -f dep-graph.svg
+    depcruise --output-type=dot --ts-config=tsconfig.json . --exclude node_modules |
+        dot -T svg >dep-graph.svg
+    open dep-graph.svg
+}
+
+# generate the dependency graph in a given subdirectory
 function dep-graph() {
-    rm -f deps.svg
-    depcruise --output-type=dot --ts-config=tsconfig.json **/*.ts --exclude node_modules | dot -T svg >deps.svg
-    open deps.svg
+    subdir=$1
+    dashed=${subdir//\//-}
+    name="dep-graph-$dashed.svg"
+    rm -f $name
+    depcruise $subdir --output-type=dot --include-only="^$subdir" --exclude=node_modules |
+        dot -T svg >$name
+    open $name
+}
+
+function dep-graph-package() {
+    package=$1
+    cd $package
+    rm -f dep-graph.svg
+    depcruise . --output-type=dot --ts-config tsconfig.json --exclude 'node_modules|@|shared' |
+        dot -T svg >dep-graph.svg
+    open dep-graph.svg
 }
 
 function npm-clean() {

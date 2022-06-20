@@ -38,21 +38,22 @@ function EnergyEl(value: ROCursor<number>): PixiContainer {
         },
         anchor: [0.5, 0],
     })
-    return Container({
-        name: 'Energy',
-        x: BASE_WIDTH * 0.06,
-        y: BASE_HEIGHT * 0.75,
-        children: [
-            Sprite({
-                src: getEnergySrc(),
-                anchor: [0.5, 0.5],
-                width: (energyWidth * BASE_WIDTH) / 1920,
-                height: (energyWidth * BASE_WIDTH) / 1920,
-            }),
-            text,
-        ],
-        onDestroy: [onUpdate(value, v => (text.text = `${v} / 3`), true)],
-    })
+    return Container(
+        {
+            name: 'Energy',
+            x: BASE_WIDTH * 0.06,
+            y: BASE_HEIGHT * 0.75,
+            onDestroy: [onUpdate(value, v => (text.text = `${v} / 3`), true)],
+        },
+
+        Sprite({
+            src: getEnergySrc(),
+            anchor: [0.5, 0.5],
+            width: (energyWidth * BASE_WIDTH) / 1920,
+            height: (energyWidth * BASE_WIDTH) / 1920,
+        }),
+        text
+    )
 }
 
 export const getEnergySrc = () => getTexture('remainingEnergy')

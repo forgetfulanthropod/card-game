@@ -34,19 +34,17 @@ export function CardsTiltedInLine({
     }
 
     return cards.map((cardMeta, index) => {
-        const wrappedCardEl = Container({
-            x: (cards.length - index) * spaceBetween - cardWidth * 0.5,
+        const wrappedCardEl = Container(
+            { x: (cards.length - index) * spaceBetween - cardWidth * 0.5 },
             // highlight: it.selected && 'yellow'
-            children: [
-                Sprite({
-                    src: Texture.WHITE,
-                    width: cardWidth,
-                    height: cardWidth * 1.4,
-                    tint: 0,
-                    alpha: 0.1,
-                }),
-            ],
-        })
+            Sprite({
+                src: Texture.WHITE,
+                width: cardWidth,
+                height: cardWidth * 1.4,
+                tint: 0,
+                alpha: 0.1,
+            })
+        )
 
         void CardSpritePromise({ card: cardMeta, width: cardWidth }).then(
             sprite => {

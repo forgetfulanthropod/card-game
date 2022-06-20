@@ -11,6 +11,7 @@
         "esbuild-css-modules-plugin": "^2.2.16",
         "esbuild-plugin-alias": "^0.2.1",
         "express": "^4.18.1",
+        "fast-equals": "^4.0.1",
         "immer": "^9.0.14",
         "lodash": "^4.17.21",
         "sbaobab": "npm:@qpwo/baobab-not-deep@2.6.9",
@@ -35,5 +36,36 @@
         "prettier-no-jsx-parens": "^2.6.2",
         "typescript": "4.7.2",
         "vscode-generate-index-standalone": "^1.6.0"
+    },
+    "pnpm": {
+        "peerDependencyRules": {
+            "ignoreMissing": [
+                "csstype",
+                "react-dom",
+                "react-is",
+                "react",
+                "resource-loader",
+                "@pixi-spine/base",
+                "@pixi/app",
+                "@pixi/constants",
+                "@pixi/core",
+                "@pixi/display",
+                "@pixi/filter-alpha",
+                "@pixi/filter-blur",
+                "@pixi/graphics",
+                "@pixi/interaction",
+                "@pixi/loaders",
+                "@pixi/math",
+                "@pixi/mesh-extras",
+                "@pixi/mesh",
+                "@pixi/runner",
+                "@pixi/settings",
+                "@pixi/sprite-tiling",
+                "@pixi/sprite",
+                "@pixi/text",
+                "@pixi/ticker",
+                "@pixi/utils"
+            ]
+        }
     }
 }

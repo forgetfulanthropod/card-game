@@ -1,6 +1,5 @@
 import type { DisplayObject } from 'pixi.js'
 
-import { keys } from 'shared/code'
 import type { InteractionEventHandler } from './_types'
 
 export interface InteractionEvents {
@@ -16,14 +15,9 @@ export function bindEvents(
     el: DisplayObject
 ) {
     if (events == null || Object.keys(events).length === 0) return
-
-    // console.log('binding', events)
-
     el.interactive = true
     el.cursor = 'pointer'
-    //@ts-expect-error
-    keys(events).map(eventId => {
-        //@ts-expect-error
-        el.on(eventId, events[eventId])
-    })
+    Object.entries(events).forEach(([eventName, handler]) =>
+        el.on(eventName, handler)
+    )
 }

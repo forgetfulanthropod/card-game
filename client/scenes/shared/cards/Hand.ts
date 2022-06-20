@@ -46,12 +46,14 @@ export function Hand(
         )
     })
 
-    const root = Container({
-        name: 'Player Hand Container',
-        x: BASE_WIDTH * 0.5,
-        y: BASE_HEIGHT * 1,
-        children,
-    }) as PixiContainerWithTweenableChildren
+    const root = Container(
+        {
+            name: 'Player Hand Container',
+            x: BASE_WIDTH * 0.5,
+            y: BASE_HEIGHT * 1,
+        },
+        ...children
+    ) as PixiContainerWithTweenableChildren
 
     bindHandAnimations(root, hoveredCardUid)
 

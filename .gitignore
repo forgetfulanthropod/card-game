@@ -25,3 +25,4 @@ server/leveldb
 server/temp
 public/*.css
 public/*.map
+dep-graph*.svg

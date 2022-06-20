@@ -44,8 +44,9 @@ export function DungeonEntryBg() {
         })
     })
 
-    const root = Container({
-        children: [Background({ scale: 1, src: bgFullSrc, bgLoopEnded })],
-    })
+    const root = Container(
+        {},
+        Background({ scale: 1, src: bgFullSrc, bgLoopEnded })
+    )
     return root
 }

@@ -74,17 +74,19 @@ export function PngLayersBackground(args: {
     scale: number
     srcs: AssetKey[] | PixiTexture[]
 }): PixiContainer {
-    return Container({
-        name: args.name,
-        children: args.srcs.map(src =>
+    return Container(
+        {
+            name: args.name,
+        },
+        ...args.srcs.map(src =>
             Sprite({
                 src,
                 // width: BASE_WIDTH,
                 // height: BASE_HEIGHT,
                 zIndex: -1,
             })
-        ),
-    })
+        )
+    )
 }
 type TypeArgPairs =
     | [PixiGraphics, DisplayObjectArgs]

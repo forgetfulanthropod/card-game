@@ -1,4 +1,4 @@
-import { RootCharacterInfo } from '../shared/CharacterInfo'
+import { RootCharacterInfo } from '@sharedElements'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { LevelInfo } from './LevelInfo'
 import { SelectedCharacters } from './SelectedCharacters'
@@ -16,25 +16,25 @@ export function DungeonEntryScene(): PixiContainer {
 
     const startButton = StartButton()
 
-    return Container({
-        name: DungeonEntryScene.name,
-        children: [
-            DungeonEntryBg(),
-            SelectedCharacters(),
-            startButton,
-            LevelInfo(),
-            RootCharacterInfo(),
-            // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
-        ],
-        onDestroy: [
-            onUpdate(
-                selectedCharactersCursor,
-                selected => {
-                    startButton.visible =
-                        selected?.length === NUM_CHARACTERS_REQUIRED
-                },
-                true
-            ),
-        ],
-    })
+    return Container(
+        {
+            name: DungeonEntryScene.name,
+            onDestroy: [
+                onUpdate(
+                    selectedCharactersCursor,
+                    selected => {
+                        startButton.visible =
+                            selected?.length === NUM_CHARACTERS_REQUIRED
+                    },
+                    true
+                ),
+            ],
+        },
+        DungeonEntryBg(),
+        SelectedCharacters(),
+        startButton,
+        LevelInfo(),
+        RootCharacterInfo()
+        // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
+    )
 }
