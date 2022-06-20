@@ -1,10 +1,8 @@
 import 'pixi-projection'
 import type { Card } from 'shared'
-import { Texture } from 'pixi.js'
 import { CardSprite } from './Card'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, Sprite } from '@/elementsUtil'
-import { nextTick } from '@/util'
+import { Container } from '@/elementsUtil'
 
 // import type { PixiContainer } from '@mypixi'
 // import { Container, Sprite } from '@mypixi'
@@ -25,7 +23,7 @@ export function CardsTiltedInLine({
     cards: Card[]
     cardWidth?: number
     parentWidth?: number
-}): PixiContainer[] {
+}): PixiContainer {
     let spaceBetween = cardWidth / 2
 
     const wouldBeTotalWidth = cardWidth + (cards.length - 1) * spaceBetween
@@ -34,49 +32,28 @@ export function CardsTiltedInLine({
         spaceBetween = (parentWidth - cardWidth) / (cards.length - 1)
     }
 
-    return cards.map((cardMeta, index) => {
-        const wrappedCardEl = Container({
-            x: index * spaceBetween,
-            // highlight: it.selected && 'yellow'
-            children: [
-                Sprite({
-                    src: Texture.WHITE,
-                    width: cardWidth,
-                    height: cardWidth * 1.4,
-                    tint: 0,
-                    alpha: 0.1,
-                }),
-            ],
-        })
-
+    const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
-        void nextTick().then(
-            () =>
-                void nextTick().then(
-                    () =>
-                        void nextTick().then(
-                            () =>
-                                void nextTick().then(() => {
-                                    wrappedCardEl.removeChildren()
-                                    wrappedCardEl.addChild(sprite)
-                                    //@ts-expect-error
-                                    wrappedCardEl.convertTo2d()
 
-                                    //@ts-expect-error
-                                    wrappedCardEl.convertSubtreeTo2d()
+        const c = Container({ x: index * spaceBetween, children: [sprite] })
+        c.addChild(sprite)
+        //@ts-expect-error
+        c.convertTo2d()
 
-                                    //@ts-expect-error
-                                    wrappedCardEl.proj.setAxisX(
-                                        {
-                                            x: cardWidth * 5,
-                                            y: (cardWidth * 1.4) / 2,
-                                        },
-                                        1
-                                    )
-                                })
-                        )
-                )
+        //@ts-expect-error
+        c.convertSubtreeTo2d()
+
+        //@ts-expect-error
+        c.proj.setAxisX(
+            {
+                x: cardWidth * 5,
+                y: (cardWidth * 1.4) / 2,
+            },
+            1
         )
-        return wrappedCardEl
+        return c
     })
+    const root = Container({ children: cardEls })
+    root.cacheAsBitmap = true
+    return root
 }

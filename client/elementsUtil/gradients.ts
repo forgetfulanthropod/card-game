@@ -77,7 +77,7 @@ export function RoundedRectangleGradientSprite(props: RRGSProps): PixiSprite {
     g.endFill()
     const texture = getRenderer().generateTexture(g)
     rrgsMemo.push([props, texture])
-    console.log(`there are now ${rrgsMemo.length} rrgs in the memo`)
+    // console.log(`there are now ${rrgsMemo.length} rrgs in the memo`)
     g.destroy(true)
     subSprite.destroy(true)
     return Sprite({

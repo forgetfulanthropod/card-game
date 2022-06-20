@@ -94,12 +94,10 @@ function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
 
 function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
-    const allCharCards = Container({
-        children: CardsTiltedInLine({
-            cards: getAllPossibleCardsForCharacter(props.cm),
-            cardWidth: 90,
-            parentWidth: contentWidth,
-        }),
+    const allCharCards = CardsTiltedInLine({
+        cards: getAllPossibleCardsForCharacter(props.cm),
+        cardWidth: 90,
+        parentWidth: contentWidth,
     })
 
     return InfoBox(
