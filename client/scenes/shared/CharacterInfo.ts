@@ -164,25 +164,17 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                 )
             }),
             ...props.abilities.map((ability, i) => {
-                return InfoBox(
-                    Container(
-                        {},
-                        Text({
-                            text: ability.name,
-                            style: {
-                                fontFamily: 'sansFont',
-                                fontSize: 20,
-                                fill: 0xdddddd,
-                            },
-                            anchor: [i, 0],
-                            x: -contentWidth * (0.5 - i),
-                        })
-                    ),
-                    {
-                        y: 150,
-                        padding: 20,
-                    }
-                )
+                return Text({
+                    text: ability.name,
+                    style: {
+                        fontFamily: 'sansFont',
+                        fontSize: 20,
+                        fill: 0xdddddd,
+                    },
+                    anchor: [i, 0],
+                    x: -contentWidth * (0.5 - i),
+                    y: 150,
+                })
             })
         ),
         {
