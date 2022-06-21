@@ -1,6 +1,5 @@
 import type { EffectId } from 'shared'
 
-// const effectPiercing = 'effects/piercing.png'
 export const invisibleEffects_ = [
     'strongblock',
     'smallDamageIncrease',
