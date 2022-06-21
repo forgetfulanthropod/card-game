@@ -19,7 +19,6 @@ import {
     getTexture,
     Adjust,
     IfHideShow,
-    glowFilter,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene, getTree } from '@/data'
@@ -96,7 +95,11 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         parentWidth: contentWidth * 0.8,
     })
 
-    const outlineFilter = new OutlineFilter(5, classColorMap[props.cm.class][1])
+    const classOutlineFilter = new OutlineFilter(
+        5,
+        classColorMap[props.cm.class][1]
+    )
+    const whiteOutlineFilter = new OutlineFilter(4, 0xffffff)
     const mainPadding = 40
 
     return InfoBox(
@@ -167,8 +170,11 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             })
         ),
         {
-            filters: [outlineFilter],
-            onDestroy: [() => outlineFilter.destroy()],
+            filters: [classOutlineFilter],
+            onDestroy: [
+                () => classOutlineFilter.destroy(),
+                () => whiteOutlineFilter.destroy(),
+            ],
             padding: mainPadding,
         }
     ).addChild(
@@ -178,7 +184,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x: contentWidth * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
-            filters: [outlineFilter],
+            filters: [classOutlineFilter],
         }),
         ...props.abilities.map((ability, i) => {
             return InfoBox(
@@ -202,7 +208,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                 ),
                 {
                     padding: 20,
-                    filters: [outlineFilter],
+                    filters: [whiteOutlineFilter],
                     events: {
                         pointerdown() {
                             //
@@ -232,7 +238,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x:
                 -allCharCards.width / 2 +
                 (contentWidth + mainPadding * 2 - allCharCards.width) * 0.5,
-            filters: [glowFilter],
+            filters: [classOutlineFilter],
         })
     ).parent
 }

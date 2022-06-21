@@ -1,5 +1,4 @@
 import type { CharacterMeta, CharacterUid } from 'shared'
-import { keys } from 'shared/code'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
@@ -37,15 +36,16 @@ export function MainCharacterAnimation({
         events: {
             ...basicEvents,
             // pointerup: pointerout,
-            //@ts-expect-error
-            ...keys(events).reduce((processedEvents, eventKey) => {
-                processedEvents[eventKey] = e => {
-                    events?.[eventKey]?.(e)
-                    basicEvents[eventKey]()
-                }
+            ...events, // choosing not to extend base events on override..
+            // //@ts-expect-error
+            // ...keys(events).reduce((processedEvents, eventKey) => {
+            //     processedEvents[eventKey] = e => {
+            //         events?.[eventKey]?.(e)
+            //         basicEvents[eventKey]()
+            //     }
 
-                return processedEvents
-            }, {} as InteractionEvents),
+            //     return processedEvents
+            // }, {} as InteractionEvents),
         },
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })

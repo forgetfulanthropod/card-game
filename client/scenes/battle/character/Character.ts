@@ -15,7 +15,7 @@ import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { getOrbTexture, getCharTexture } from '@/assets'
-import { onUpdate, toDatum } from '@/util'
+import { hoveredCharacterUid, onUpdate, toDatum } from '@/util'
 import {
     Adjust,
     Container,
@@ -47,8 +47,11 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainAnimation = MainCharacterAnimation({
         characterMeta,
         events: {
-            // pointerup: () => args.onClick(characterMeta.uid),
-            // pointerdown: () => args.onClick(characterMeta.uid),
+            pointerup: () => args.onClick(characterMeta.uid),
+            pointerdown: () => {
+                hoveredCharacterUid.set(characterMeta.uid)
+                args.onClick(characterMeta.uid)
+            },
         },
         centerX: true,
     })
