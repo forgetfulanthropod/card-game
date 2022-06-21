@@ -15,11 +15,12 @@ import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { getOrbTexture, getCharTexture } from '@/assets'
-import { onUpdate } from '@/util'
+import { onUpdate, toDatum } from '@/util'
 import {
     Adjust,
     Container,
     flashTo,
+    If,
     SCALE_UNIVERSAL,
     Sprite,
     Text,
@@ -27,6 +28,7 @@ import {
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { socketOn } from '@/socket'
+import { getBattleScene } from '@/data'
 
 const SHOW_HIT_TIME = 1000
 
@@ -61,9 +63,13 @@ export function Character(args: CharacterProps): PixiContainer {
         mainAnimation,
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, args.onClick),
-        Adjust(FloatingIntents(characterMeta.uid), {
-            y: -(mainAnimation?.height ?? 0),
-        }),
+        If(
+            toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+            () =>
+                Adjust(FloatingIntents(characterMeta.uid), {
+                    y: -(mainAnimation?.height ?? 0),
+                })
+        ),
         Adjust(HealthBar(characterMeta.uid), { y: 11 })
     )
 
