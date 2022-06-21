@@ -204,10 +204,10 @@ function getTexts(
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: 36 * cardFrameScale,
+                fontSize: 14 / cardFrameScale,
                 fontFamily: 'monoFont',
                 fill: 'black',
-                lineHeight: 36 * cardFrameScale,
+                lineHeight: 14 / cardFrameScale,
             },
         }),
         Text({

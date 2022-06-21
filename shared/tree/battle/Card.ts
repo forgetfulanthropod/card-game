@@ -121,7 +121,7 @@ export type CardId =
     | 'guidingBolt'
     | 'smite'
     | 'bless'
-    // | 'prayerOfGoodFortune'
+    | 'prayerOfGoodFortune'
     | 'orbOfHolyLight'
     | 'mantraOfPatience'
     | 'helpingHand'

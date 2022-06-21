@@ -19,7 +19,8 @@ export const playCard: GameActions['playCard'] = args => {
     // logger.info(`playing card ${card.uid}`)
     if (isPlayable({ card, scene })) {
         play({ card, targetUids: args.targetUids, scene })
-        discard({ cardUids: [args.cardUid], scene })
+        if (scene.get('cards', 'hand', card.uid) != null)
+            discard({ cardUids: [args.cardUid], scene })
     }
 
     clearDead(scene)

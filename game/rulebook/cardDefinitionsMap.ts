@@ -308,23 +308,23 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'defense',
         characterClass: 'cleric',
     },
-    // prayerOfGoodFortune: {
-    //     name: 'Prayer of Good Fortune',
-    //     energy: 0,
-    //     id: 'prayerOfGoodFortune',
-    //     targetNum: 1,
-    //     targetType: [
-    //         { type: 'friends' },
-    //         {
-    //             type: 'enemies',
-    //             constraint: { key: 'health', comparator: '<=', value: 3 },
-    //         },
-    //     ],
-    //     actions:
-    //         'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
-    //     type: 'utility',
-    //     characterClass: 'cleric',
-    // },
+    prayerOfGoodFortune: {
+        name: 'Prayer of Good Fortune',
+        energy: 0,
+        id: 'prayerOfGoodFortune',
+        targetNum: 1,
+        targetType: [
+            { type: 'friends' },
+            {
+                type: 'enemies',
+                constraint: { key: 'health', comparator: '<=', value: 3 },
+            },
+        ],
+        actions:
+            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
+        type: 'utility',
+        characterClass: 'cleric',
+    },
     orbOfHolyLight: {
         name: 'Orb of Holy Light',
         energy: 2,
