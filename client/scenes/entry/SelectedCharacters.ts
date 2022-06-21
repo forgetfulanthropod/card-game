@@ -96,10 +96,10 @@ export const characterIdToAbilitiesMap: Partial<
     ],
     skeletonWarrior: [
         {
-            name: 'Cheap Shot',
+            name: 'Bone Smack',
         },
         {
-            name: 'Tough Skin',
+            name: 'Always Wary',
         },
     ],
     frogKnight: [

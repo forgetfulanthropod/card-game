@@ -21,20 +21,20 @@ export function CardsTiltedInLine({
         spaceBetween = (parentWidth - cardWidth) / (cards.length - 1)
     }
 
-    const bgMarginPortion = 0.08
+    const bgPaddingPortion = 0.08
 
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
-        sprite.scale.x = -1
 
         const tiltFactor = 0.7
+        sprite.scale.x = -0.8
 
         const c = Container(
             {
                 x:
                     (cards.length - 1 - index) * spaceBetween +
                     (cardWidth / 2) * tiltFactor,
-                y: parentWidth * bgMarginPortion,
+                y: parentWidth * bgPaddingPortion,
             },
             sprite
         )
@@ -48,12 +48,13 @@ export function CardsTiltedInLine({
         c.convertSubtreeTo2d()
 
         //@ts-expect-error
-        c.proj.setAxisX({ x: -cardWidth * 6, y: (cardWidth * 1.4) / 2 }, 1)
+        c.proj.setAxisX({ x: -cardWidth * 3, y: (cardWidth * 1.4) / 2 }, 1)
+
         return c
     })
 
-    const bgWidth = parentWidth * (1 + bgMarginPortion * 2)
-    const bgHeight = cardWidth * 1.4 + parentWidth * bgMarginPortion * 2
+    const bgWidth = parentWidth * (1 + bgPaddingPortion * 2)
+    const bgHeight = cardWidth * 1.4 + parentWidth * bgPaddingPortion * 2
 
     const root = Container(
         {},

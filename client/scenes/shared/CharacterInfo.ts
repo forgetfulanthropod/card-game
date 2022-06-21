@@ -96,6 +96,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     })
 
     const outlineFilter = new OutlineFilter(6, classColorMap[props.cm.class][1])
+    const mainPadding = 40
 
     return InfoBox(
         Container(
@@ -164,22 +165,31 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                 )
             }),
             ...props.abilities.map((ability, i) => {
-                return Text({
-                    text: ability.name,
-                    style: {
-                        fontFamily: 'sansFont',
-                        fontSize: 20,
-                        fill: 0xdddddd,
-                    },
-                    anchor: [i, 0],
-                    x: -contentWidth * (0.5 - i),
-                    y: 150,
-                })
+                return InfoBox(
+                    Container(
+                        {},
+                        Text({
+                            text: ability.name,
+                            style: {
+                                fontFamily: 'sansFont',
+                                fontSize: 20,
+                                fill: 0xdddddd,
+                            },
+                            anchor: [i, 0],
+                            x: -contentWidth * (0.5 - i),
+                            y: 150,
+                        })
+                    ),
+                    {
+                        padding: 20,
+                    }
+                )
             })
         ),
         {
             filters: [outlineFilter],
             onDestroy: [() => outlineFilter.destroy()],
+            padding: mainPadding,
         }
     ).addChild(
         Sprite({
@@ -191,7 +201,9 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         }),
         Adjust(allCharCards, {
             y: 190,
-            x: -allCharCards.width / 2,
+            x:
+                -allCharCards.width / 2 +
+                (contentWidth + mainPadding * 2 - allCharCards.width) * 0.675,
         })
     ).parent
 }
