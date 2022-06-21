@@ -1,4 +1,5 @@
 import type { CharacterMeta, CharacterUid } from 'shared'
+import { keys } from 'shared/code'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
@@ -6,7 +7,7 @@ import { glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation({
     characterMeta,
-    events,
+    events = {},
     height = 190,
     centerX = false,
 }: {
@@ -20,17 +21,31 @@ export function MainCharacterAnimation({
 
     if (!spineAssetName) return null
 
+    const pointerover = () => hoveredCharacterUid.set(characterMeta.uid)
+    const pointerout = () => hoveredCharacterUid.set(null)
+    const basicEvents = {
+        pointerover,
+        pointerdown: pointerover,
+        pointerout,
+        pointerup() {},
+        pointermove() {},
+    }
+
     const root = Spine({
         name: spineAssetName,
         animation: 'Idle',
         events: {
-            pointerover() {
-                hoveredCharacterUid.set(characterMeta.uid)
-            },
-            pointerout() {
-                hoveredCharacterUid.set(null)
-            },
-            ...(events ?? {}),
+            ...basicEvents,
+            // pointerup: pointerout,
+            //@ts-expect-error
+            ...keys(events).reduce((processedEvents, eventKey) => {
+                processedEvents[eventKey] = e => {
+                    events?.[eventKey]?.(e)
+                    basicEvents[eventKey]()
+                }
+
+                return processedEvents
+            }, {} as InteractionEvents),
         },
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })

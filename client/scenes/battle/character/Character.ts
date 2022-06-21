@@ -47,8 +47,8 @@ export function Character(args: CharacterProps): PixiContainer {
     const mainAnimation = MainCharacterAnimation({
         characterMeta,
         events: {
-            pointerup: () => args.onClick(characterMeta.uid),
-            pointerdown: () => args.onClick(characterMeta.uid),
+            // pointerup: () => args.onClick(characterMeta.uid),
+            // pointerdown: () => args.onClick(characterMeta.uid),
         },
         centerX: true,
     })
