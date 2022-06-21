@@ -125,10 +125,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'basicAttackWizard',
         characterClass: 'wizard',
     },
-    basicAttackCleric: {
+    basicAttackBard: {
         ...basicMagicAttackBase,
-        id: 'basicAttackCleric',
-        characterClass: 'cleric',
+        id: 'basicAttackBard',
+        characterClass: 'bard',
     },
     magicRitual: {
         name: 'Magic Ritual',
