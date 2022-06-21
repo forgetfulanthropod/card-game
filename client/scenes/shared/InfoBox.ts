@@ -1,9 +1,14 @@
+import type { ColorStop } from '@pixi-essentials/gradients'
+import { omit } from 'lodash'
 import type { PixiContainer, ContainerArgs } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
 
 export function InfoBox(
     contents: PixiContainer,
-    displayArgs: ContainerArgs & { padding?: number } = {}
+    displayArgs: ContainerArgs & {
+        padding?: number
+        colorStops?: ColorStop[]
+    } = {}
 ) {
     const localBounds = contents.getLocalBounds()
 
@@ -12,7 +17,10 @@ export function InfoBox(
     const padding = displayArgs.padding ?? paddingPortion * localBounds.width
 
     return Container(
-        { ...displayArgs },
+        {
+            x: padding,
+            ...omit(displayArgs, 'filters', 'colorStops', 'padding'),
+        },
         RoundedRectangleGradientSprite({
             radius: 20,
             gradientArgs: {
@@ -20,7 +28,7 @@ export function InfoBox(
                 y0: 0,
                 x1: 0,
                 y1: localBounds.height,
-                colorStops: [
+                colorStops: displayArgs.colorStops ?? [
                     { color: 0x111111, offset: 0 },
                     { color: 0x33_33_33, offset: 1 },
                 ],
@@ -30,6 +38,7 @@ export function InfoBox(
                 height: localBounds.height + +padding * 2, // even padding all around
                 x: localBounds.left - padding,
                 y: localBounds.top - padding,
+                filters: displayArgs.filters,
             },
         }),
         // Sprite({

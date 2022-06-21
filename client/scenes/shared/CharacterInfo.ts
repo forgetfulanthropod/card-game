@@ -163,27 +163,6 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         anchor: [0.5, 0],
                     })
                 )
-            }),
-            ...props.abilities.map((ability, i) => {
-                return InfoBox(
-                    Container(
-                        {},
-                        Text({
-                            text: ability.name,
-                            style: {
-                                fontFamily: 'sansFont',
-                                fontSize: 20,
-                                fill: 0xdddddd,
-                            },
-                            anchor: [i, 0],
-                            x: -contentWidth * (0.5 - i),
-                            y: 150,
-                        })
-                    ),
-                    {
-                        padding: 20,
-                    }
-                )
             })
         ),
         {
@@ -199,11 +178,53 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
         }),
+        ...props.abilities.map((ability, i) => {
+            return InfoBox(
+                Container(
+                    {},
+                    Text({
+                        text: ability.name,
+                        style: {
+                            fontFamily: 'sansFont',
+                            fontSize: 20,
+                            fill: 0xdddddd,
+                        },
+                        anchor: [i, 0],
+                        x:
+                            -contentWidth * (0.5 - i) -
+                            20 * i -
+                            mainPadding +
+                            mainPadding * 1.675 * i,
+                        y: 150,
+                    })
+                ),
+                {
+                    padding: 20,
+                    filters: [outlineFilter],
+                    events: {
+                        pointerdown() {
+                            //
+                        },
+                        pointerover() {
+                            //
+                        },
+                    },
+                    colorStops: [
+                        { color: 'black', offset: 0 },
+                        { color: 0x111111, offset: 0.4 },
+                        { color: 0x222222, offset: 0.6 },
+                        { color: 0x333333, offset: 0.8 },
+                        { color: 0x333333, offset: 1 },
+                    ],
+                }
+            )
+        }),
         Adjust(allCharCards, {
-            y: 190,
+            y: 210,
             x:
                 -allCharCards.width / 2 +
-                (contentWidth + mainPadding * 2 - allCharCards.width) * 0.675,
+                (contentWidth + mainPadding * 2 - allCharCards.width) * 0.5,
+            filters: [outlineFilter],
         })
     ).parent
 }

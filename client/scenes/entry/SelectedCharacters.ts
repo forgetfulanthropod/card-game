@@ -99,7 +99,7 @@ export const characterIdToAbilitiesMap: Partial<
             name: 'Bone Smack',
         },
         {
-            name: 'Always Wary',
+            name: 'Bone Chilling Premonition',
         },
     ],
     frogKnight: [
