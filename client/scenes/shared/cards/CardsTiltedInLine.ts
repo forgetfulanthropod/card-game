@@ -66,6 +66,7 @@ export function CardsTiltedInLine({
                 y1: bgHeight,
                 colorStops: [
                     { color: 0x333333, offset: 0 },
+                    { color: 0x333333, offset: 0.3 },
                     { color: 0x666666, offset: 1 },
                 ],
             },

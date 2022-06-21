@@ -3,11 +3,13 @@ import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
 
 export function InfoBox(
     contents: PixiContainer,
-    displayArgs: ContainerArgs = {}
+    displayArgs: ContainerArgs & { padding?: number } = {}
 ) {
     const localBounds = contents.getLocalBounds()
 
-    const marginPortion = 0.08
+    const paddingPortion = 0.08
+
+    const padding = displayArgs.padding ?? paddingPortion * localBounds.width
 
     return Container(
         { ...displayArgs },
@@ -24,11 +26,10 @@ export function InfoBox(
                 ],
             },
             spriteArgs: {
-                width: localBounds.width * (1 + marginPortion * 2),
-                height:
-                    localBounds.height + localBounds.width * marginPortion * 2, // even margin all around
-                x: localBounds.left - localBounds.width * marginPortion,
-                y: localBounds.top - localBounds.width * marginPortion,
+                width: localBounds.width + padding * 2,
+                height: localBounds.height + +padding * 2, // even padding all around
+                x: localBounds.left - padding,
+                y: localBounds.top - padding,
             },
         }),
         // Sprite({

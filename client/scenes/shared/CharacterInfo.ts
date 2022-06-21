@@ -6,6 +6,9 @@ import type {
 } from 'shared'
 import { compose } from 'datums'
 import { vals } from 'shared/code'
+import { OutlineFilter } from 'pixi-filters'
+import type { Ability } from '../entry/SelectedCharacters'
+import { characterIdToAbilitiesMap } from '../entry/SelectedCharacters'
 import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
 import {
@@ -14,14 +17,11 @@ import {
     BASE_WIDTH,
     Sprite,
     getTexture,
-    glowFilter,
     Adjust,
     IfHideShow,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene, getTree } from '@/data'
-
-type Ability = { name: string }
 
 const stats = [
     { key: 'strength', color: 0xd44c47 },
@@ -30,10 +30,10 @@ const stats = [
     { key: 'constitution', color: 0x1cc8af },
 ] as const
 
-const _classColorMap: Record<CharacterClass, [number, number]> = {
+const classColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
     knight: [0xe4a72f, 0xff435a],
-    wizard: [0x44a0ff, 0x1184fa],
+    wizard: [0x44a0ff, 0x9f6ec2],
     bard: [0x44ff82, 0x016622],
     rogue: [0xaa44ff, 0x370561],
 }
@@ -74,14 +74,9 @@ export function RootCharacterInfo() {
 }
 
 export function CharacterInfo(cm: OwnedCharacterStats) {
-    const abilities: Ability[] = [
-        {
-            name: 'Sleepy Time Spores',
-        },
-        {
-            name: 'Slow but Purposeful ',
-        },
-    ]
+    const abilities = characterIdToAbilitiesMap[cm.id]
+
+    if (abilities == null) throw new Error('PCs need abilities!')
 
     return IfHideShow(
         compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
@@ -99,6 +94,8 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         cards: getAllPossibleCardsForCharacter(props.cm),
         parentWidth: contentWidth * 0.8,
     })
+
+    const outlineFilter = new OutlineFilter(6, classColorMap[props.cm.class][1])
 
     return InfoBox(
         Container(
@@ -183,17 +180,19 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                     ),
                     {
                         y: 150,
+                        padding: 20,
                     }
                 )
             })
         ),
         {
-            filters: [glowFilter],
+            filters: [outlineFilter],
+            onDestroy: [() => outlineFilter.destroy()],
         }
     ).addChild(
         Sprite({
             src: `${props.cm.class}ClassIcon`,
-            anchor: [1, 1],
+            anchor: [0.5, 0.8],
             x: contentWidth * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),

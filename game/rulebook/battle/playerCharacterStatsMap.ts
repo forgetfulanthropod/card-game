@@ -137,8 +137,8 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         class: 'wizard',
 
         constitution: 78,
-        strength: 7,
-        wisdom: 5,
+        strength: 5,
+        wisdom: 7,
         defense: 5,
     },
     mimic: {

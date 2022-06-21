@@ -1,5 +1,9 @@
 import { OldFilmFilter } from 'pixi-filters'
-import type { CharacterPlaceIndex, OwnedCharacterStats } from 'shared'
+import type {
+    CharacterId,
+    CharacterPlaceIndex,
+    OwnedCharacterStats,
+} from 'shared'
 
 import { range } from 'lodash'
 import { MainCharacterAnimation } from '@sharedElements'
@@ -67,8 +71,8 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'wizard',
 
         constitution: 78,
-        strength: 7,
-        wisdom: 5,
+        strength: 5,
+        wisdom: 7,
         defense: 5,
 
         uid: 'pc-4',
@@ -76,6 +80,45 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         nftName: 'matchaGelatinCube-4',
     },
 ]
+
+export type Ability = { name: string }
+
+export const characterIdToAbilitiesMap: Partial<
+    Record<CharacterId, Ability[]>
+> = {
+    mushroomFarmer: [
+        {
+            name: 'Sleepy Time Spores',
+        },
+        {
+            name: 'Slow but Purposeful',
+        },
+    ],
+    skeletonWarrior: [
+        {
+            name: 'Cheap Shot',
+        },
+        {
+            name: 'Tough Skin',
+        },
+    ],
+    frogKnight: [
+        {
+            name: 'Small but Stoic',
+        },
+        {
+            name: 'Amphibious Vigor',
+        },
+    ],
+    matchaGelatinCube: [
+        {
+            name: 'Friend and Snack',
+        },
+        {
+            name: 'Impenetrable Gelatin',
+        },
+    ],
+}
 
 // const preselectFilter = new AdjustmentFilter({
 //     contrast: 0,
