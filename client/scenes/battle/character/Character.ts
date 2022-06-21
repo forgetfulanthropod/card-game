@@ -86,7 +86,7 @@ export function Character(args: CharacterProps): PixiContainer {
         },
 
         mainContainer,
-        getBoundOrbContainer(args.cursor, mainContainer.height * 0.8),
+        getBoundOrbContainer(args.cursor, mainContainer.height * 0.92),
         hitContainer
     )
 
