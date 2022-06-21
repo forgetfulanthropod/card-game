@@ -63,6 +63,8 @@ function makeCards(scene: BattleCursor): Piles {
         // 'orbOfHolyLight', // todo
         // 'mantraOfPatience',
         // 'helpingHand',
+        // 'orbOfProtection',
+        // 'orbOfLightning',
     ]
 
     const allCharacters = vals(scene.get('allCharacters'))
@@ -102,6 +104,10 @@ function makeCards(scene: BattleCursor): Piles {
  * random but not a basic starter...
  */
 export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
+    if (characterClass === 'wizard') {
+        return srandom() > 0.5 ? 'orbOfLightning' : 'orbOfProtection'
+    }
+
     const idPool = keys(cardDefinitionsMap).filter(
         cardId => getCardClass(cardId) === characterClass
     )
