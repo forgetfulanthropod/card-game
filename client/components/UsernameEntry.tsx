@@ -3,7 +3,7 @@ import { useState, useEffect } from 'preact/hooks'
 import styles from './UsernameEntry.module.css'
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 
-const fullGoodEarthImg = 'assets/root/good-earth.png'
+const fullGoodEarthImg = 'assets/root/good-earth.webp'
 
 export function UsernameEntry(props: {
     onEnter: (username: string) => void

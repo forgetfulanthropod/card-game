@@ -50,6 +50,16 @@ function biggest-dirs() {
     fd -t d | while read -r line; do echo $(ls "$line" | wc -l) $line; done | sort -n
 }
 
+function mp4-to-webm() {
+    path=$1
+    ffmpeg -i $1.mp4 -c:v libvpx-vp9 -crf 30 -b:v 0 -b:a 128k -c:a libopus $1.webm
+}
+
+function png-to-webp() {
+    path=$1
+    mogrify -format webp $1.png
+}
+
 function generate-indices() {
     # vscode-generate-index-standalone '!node_modules/' server client game shared '!node_modules/'
     # vscode-generate-index-standalone './shared/**/*.ts' '!**/node_modules' './client/**/*.ts' '!**/node_modules' './game/**/*.ts' '!**/node_modules' './server/**/*.ts' '!**/node_modules'
