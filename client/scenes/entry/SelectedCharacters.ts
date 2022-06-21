@@ -64,21 +64,21 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         tokenId: '4',
         nftName: 'mushroomFarmer-4',
     },
-    // {
-    //     id: 'matchaGelatinCube',
-    //     displayName: 'Matcha Gelatin Cube',
-    //     isPc: true,
-    //     class: 'wizard',
+    {
+        id: 'matchaGelatinCube',
+        displayName: 'Matcha Gelatin Cube',
+        isPc: true,
+        class: 'wizard',
 
-    //     constitution: 78,
-    //     strength: 5,
-    //     wisdom: 7,
-    //     defense: 5,
+        constitution: 78,
+        strength: 5,
+        wisdom: 7,
+        defense: 5,
 
-    //     uid: 'pc-4',
-    //     tokenId: '4',
-    //     nftName: 'matchaGelatinCube-4',
-    // },
+        uid: 'pc-4',
+        tokenId: '4',
+        nftName: 'matchaGelatinCube-4',
+    },
 ]
 
 export type Ability = { name: string }
@@ -96,10 +96,10 @@ export const characterIdToAbilitiesMap: Partial<
     ],
     skeletonWarrior: [
         {
-            name: 'Bone Smack',
+            name: 'Xylophone Bones',
         },
         {
-            name: 'Bone Chilling Premonition',
+            name: 'Chilling Premonition',
         },
     ],
     frogKnight: [

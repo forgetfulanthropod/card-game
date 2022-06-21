@@ -19,6 +19,7 @@ import {
     getTexture,
     Adjust,
     IfHideShow,
+    glowFilter,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene, getTree } from '@/data'
@@ -95,7 +96,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         parentWidth: contentWidth * 0.8,
     })
 
-    const outlineFilter = new OutlineFilter(6, classColorMap[props.cm.class][1])
+    const outlineFilter = new OutlineFilter(5, classColorMap[props.cm.class][1])
     const mainPadding = 40
 
     return InfoBox(
@@ -177,6 +178,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x: contentWidth * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
+            filters: [outlineFilter],
         }),
         ...props.abilities.map((ability, i) => {
             return InfoBox(
@@ -208,6 +210,12 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         pointerover() {
                             //
                         },
+                        pointerup() {
+                            //
+                        },
+                        pointerout() {
+                            //
+                        },
                     },
                     colorStops: [
                         { color: 'black', offset: 0 },
@@ -220,11 +228,11 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             )
         }),
         Adjust(allCharCards, {
-            y: 210,
+            y: 220,
             x:
                 -allCharCards.width / 2 +
                 (contentWidth + mainPadding * 2 - allCharCards.width) * 0.5,
-            filters: [outlineFilter],
+            filters: [glowFilter],
         })
     ).parent
 }

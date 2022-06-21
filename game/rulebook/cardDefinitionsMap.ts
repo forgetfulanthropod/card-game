@@ -120,14 +120,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'enchantment',
         characterClass: 'wizard',
     },
-    basicMagicAttackWizard: {
+    basicAttackWizard: {
         ...basicMagicAttackBase,
-        id: 'basicMagicAttackWizard',
+        id: 'basicAttackWizard',
         characterClass: 'wizard',
     },
-    basicMagicAttackCleric: {
+    basicAttackCleric: {
         ...basicMagicAttackBase,
-        id: 'basicMagicAttackCleric',
+        id: 'basicAttackCleric',
         characterClass: 'cleric',
     },
     magicRitual: {
