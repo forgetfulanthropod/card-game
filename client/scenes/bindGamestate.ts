@@ -8,7 +8,7 @@ import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { animation$, nextFrame, onUpdate } from '@/util'
 
-const pointerFullPath = 'assets/root/mouse.png'
+const pointerFullPath = 'assets/root/mouse.webp'
 let lastScene: PixiContainer
 
 export function bindGamestate(app: PixiApplication): void {
