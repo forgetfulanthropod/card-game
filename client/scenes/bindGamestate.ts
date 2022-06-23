@@ -6,7 +6,7 @@ import { BattleScene } from './battle'
 import { DungeonEntryScene } from './entry'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
-import { animation$, nextFrame, onUpdate } from '@/util'
+import { nextFrame, onUpdate } from '@/util'
 
 const pointerFullPath = 'assets/root/mouse.webp'
 let lastScene: PixiContainer
@@ -27,8 +27,8 @@ function bindScene(app: PixiApplication): Unbind {
     async function setScene(sceneType: SceneId): Promise<void> {
         if (lastScene != null) {
             await nextFrame()
-            if (sceneType === 'battle')
-                await animation$.readAssert('scene exit done')
+            // if (sceneType === 'battle')
+            //     await animation$.readAssert('scene exit done')
 
             await transitionScene(lastScene, 'out')
 
