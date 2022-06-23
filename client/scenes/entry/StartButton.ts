@@ -32,8 +32,8 @@ export function StartButton(): PixiContainer {
 
     const root = Container(
         {
-            x: BASE_WIDTH * 0.87,
-            y: BASE_HEIGHT * 0.89,
+            x: BASE_WIDTH * 0.85,
+            y: BASE_HEIGHT * 0.88,
         },
         bg
     )
