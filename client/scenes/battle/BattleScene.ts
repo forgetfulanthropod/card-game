@@ -1,4 +1,3 @@
-// import CaveVideo from '@battleAssets/backgrounds/matcha-cave.webm'
 import { datum } from 'datums'
 import type { CharacterUid, PileId, RequiredAction } from 'shared'
 import { sampleSize } from 'lodash'

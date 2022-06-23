@@ -9,6 +9,7 @@ console.log('build environment:', envObj)
 
 // const parentDir = process.env.PWD.split('/').at(-1)
 // if (parentDir !== 'server') throw Error("must be run from directory 'server'")
+// const isProduction = process.env.production === 'yes'
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) buildServer()
 
