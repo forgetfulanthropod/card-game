@@ -31,7 +31,7 @@ export function LevelInfo(): PixiContainer {
             src: 'skelepitDungeonSign',
             anchor: 0.5,
             scale:
-                (BASE_WIDTH * 0.3) /
+                (BASE_WIDTH * 0.25) /
                 (getTexture('skelepitDungeonSign')?.width ?? 1000),
         })
     )

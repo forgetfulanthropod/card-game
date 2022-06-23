@@ -25,13 +25,18 @@ export const fontAssets = {
 // const ninth = 'backgrounds/ninth-trash-hole.webp'
 
 const caveFinal = 'backgrounds/Matcha_Caves.webp'
-export const backgroundAssets = {
+export const dungeonBackgroundAssets = {
     'Skelepit Dungeon': caveFinal,
     // 'Hooligan’s Bluff': caveFinal,
     // 'The Matcha Caves': caveFinal,
     // 'Fort Skeleton': caveFinal,
     // 'The Ninth Trash Hole of Hell': caveFinal,
 }
+
+export const entrySceneBackgrounds = {
+    skelepitEntrySceneBackground: 'backgrounds/temple_background_2.webp',
+}
+
 export const cardArtAssets = {
     cardBodySlam: 'cards/Body Slam.webp',
     cardJab: 'cards/Jab.webp',
@@ -57,35 +62,35 @@ export const cardAssets = {
     ...cardTypeAssets,
 } as const
 
-export const characterAssets = {
-    bloatDemon: 'gen0_cards/bloat_demon-200.webp',
-    bogSpirit: 'gen0_cards/BogSpirit-200.webp',
-    bookle: 'gen0_cards/bookle-200.webp',
-    bumbit: 'gen0_cards/Bumbit-200.webp',
-    frogKnight: 'chars/Frog_Knight_sprite-200.webp',
-    frogWizard: 'chars/FrogWizard-cropped-200.webp',
-    gnomeHooligan: 'gen0_cards/Gnome_hooligan-200.webp',
-    goblinDragon: 'gen0_cards/Dragon_2-200.webp',
-    greenJester: 'gen0_cards/green_jester-200.webp',
-    jerry: 'gen0_cards/Jerry-200.webp',
-    lichLord: 'gen0_cards/LichLord-200.webp',
-    matchaGelatinCube: 'gen0_cards/matcha_gelatin_cube-200.webp',
-    mimic: 'gen0_cards/mimic-200.webp',
-    mushroomFarmer: 'gen0_cards/Mushroom_Farmer2-200.webp',
-    notoriousBEAN: 'chars/NotoriousBEAN200.webp',
-    orcWarrior: 'chars/orcWarrior-200.webp',
-    penguinKnight: 'gen0_cards/PenguinKnight-200.webp',
-    skeletonWarrior: 'chars/Skeleton_Warrior_sprite-200.webp',
-    snacky: 'gen0_cards/Snacky-200.webp',
-    theHatefly: 'gen0_cards/TheHatefly-200.webp',
-    trioOfFools: 'gen0_cards/TrioOfFools-200.webp',
-    warhog: 'chars/warhog-200.webp',
-    wimpyGuard: 'gen0_cards/WimpyGuard-200.webp',
-    halfdan: 'chars/halfdan.webp',
-    cultist: 'chars/cultist.webp',
-    toadmaw: 'chars/toadmaw.webp',
-    bosshogJurgen: 'chars/bosshogJurgen.webp',
-}
+// export const characterAssets = {
+//     bloatDemon: 'gen0_cards/bloat_demon-200.webp',
+//     bogSpirit: 'gen0_cards/BogSpirit-200.webp',
+//     bookle: 'gen0_cards/bookle-200.webp',
+//     bumbit: 'gen0_cards/Bumbit-200.webp',
+//     frogKnight: 'chars/Frog_Knight_sprite-200.webp',
+//     frogWizard: 'chars/FrogWizard-cropped-200.webp',
+//     gnomeHooligan: 'gen0_cards/Gnome_hooligan-200.webp',
+//     goblinDragon: 'gen0_cards/Dragon_2-200.webp',
+//     greenJester: 'gen0_cards/green_jester-200.webp',
+//     jerry: 'gen0_cards/Jerry-200.webp',
+//     lichLord: 'gen0_cards/LichLord-200.webp',
+//     matchaGelatinCube: 'gen0_cards/matcha_gelatin_cube-200.webp',
+//     mimic: 'gen0_cards/mimic-200.webp',
+//     mushroomFarmer: 'gen0_cards/Mushroom_Farmer2-200.webp',
+//     notoriousBEAN: 'chars/NotoriousBEAN200.webp',
+//     orcWarrior: 'chars/orcWarrior-200.webp',
+//     penguinKnight: 'gen0_cards/PenguinKnight-200.webp',
+//     skeletonWarrior: 'chars/Skeleton_Warrior_sprite-200.webp',
+//     snacky: 'gen0_cards/Snacky-200.webp',
+//     theHatefly: 'gen0_cards/TheHatefly-200.webp',
+//     trioOfFools: 'gen0_cards/TrioOfFools-200.webp',
+//     warhog: 'chars/warhog-200.webp',
+//     wimpyGuard: 'gen0_cards/WimpyGuard-200.webp',
+//     halfdan: 'chars/halfdan.webp',
+//     cultist: 'chars/cultist.webp',
+//     toadmaw: 'chars/toadmaw.webp',
+//     bosshogJurgen: 'chars/bosshogJurgen.webp',
+// }
 
 export const characterStatusAssets = {
     stanceNeutral: 'char status/neutral stance.webp',

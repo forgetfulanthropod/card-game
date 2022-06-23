@@ -148,7 +148,7 @@ export function SelectedCharacters(): PixiContainer {
 
     const root = Container({
         x: 0.5 * BASE_WIDTH,
-        y: 0.77 * BASE_HEIGHT,
+        y: 0.82 * BASE_HEIGHT,
         onDestroy: [
             onUpdate(selectedCharacters, characters => {
                 if (characters != null) setSelectedCharacters()
