@@ -17,8 +17,8 @@ function CI() {
     set +e
     source ~/.bashrc
     pnpm i -P
-    client:build
-    server:build
+    production=yes client:build
+    production=yes server:build
 }
 
 function lint() {

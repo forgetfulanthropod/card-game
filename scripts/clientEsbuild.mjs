@@ -1,9 +1,9 @@
 import { build as esbuild } from 'esbuild'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
-import { cpSync, mkdirSync, rmSync } from 'fs'
-import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
+import { makeBuildInfo } from './makeBuildInfo.mjs'
 
 const password = 'hackin'
 const buildDir = 'public/'
@@ -12,6 +12,8 @@ const outFile = `${buildDir}/${password}.js`
 
 const args = process.argv.slice(2)
 const shouldWatchArgv = args[0] === 'watch'
+
+const isProduction = process.env.production === 'yes'
 
 console.log('process.env.PWD:', process.env.PWD)
 
@@ -29,10 +31,11 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
     rmSync(outFile, { recursive: true, force: true })
+    rmSync(outFile + '.map', { recursive: true, force: true })
     esbuild({
-        minify: false, //!isDevelopment,
-        sourcemap: true, //isDevelopment,
-        keepNames: true,
+        minify: isProduction, //!isDevelopment,
+        sourcemap: !isProduction, //isDevelopment,
+        keepNames: !isProduction,
         entryPoints: [entryPoint],
         inject: ['client/config/preact-shim.js'],
         jsxFactory: 'h',
