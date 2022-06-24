@@ -5,7 +5,7 @@ import { GoButton } from './GoButton'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
-import { hoveredCharacterUid, onUpdate } from '@/util'
+import { onUpdate } from '@/util'
 
 const NUM_CHARACTERS_REQUIRED = 3
 
@@ -18,11 +18,6 @@ export function DungeonEntryScene(): PixiContainer {
     return Container(
         {
             name: DungeonEntryScene.name,
-            events: {
-                pointerdown() {
-                    hoveredCharacterUid.set(null)
-                },
-            },
             defaultCursor: true,
             onDestroy: [
                 onUpdate(
