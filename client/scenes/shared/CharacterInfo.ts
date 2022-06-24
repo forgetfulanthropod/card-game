@@ -99,7 +99,11 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         5,
         classColorMap[props.cm.class][1]
     )
-    const whiteOutlineFilter = new OutlineFilter(4, 0xffffff)
+    const classOutlineFilter2 = new OutlineFilter(
+        3,
+        classColorMap[props.cm.class][1]
+    )
+    const whiteOutlineFilter = new OutlineFilter(5, 0xbbbbbb)
     const mainPadding = 40
 
     return InfoBox(
@@ -201,13 +205,13 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         x:
                             -contentWidth * (0.5 - i) -
                             20 * i -
-                            mainPadding +
-                            mainPadding * 1.675 * i,
+                            mainPadding * 0.5 +
+                            mainPadding * i * 0.7,
                         y: 150,
                     })
                 ),
                 {
-                    padding: 20,
+                    padding: 18,
                     filters: [whiteOutlineFilter],
                     events: {
                         pointerdown() {
@@ -230,6 +234,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         { color: 0x333333, offset: 0.8 },
                         { color: 0x333333, offset: 1 },
                     ],
+                    borderRadius: 90,
                 }
             )
         }),
@@ -238,7 +243,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x:
                 -allCharCards.width / 2 +
                 (contentWidth + mainPadding * 2 - allCharCards.width) * 0.5,
-            filters: [classOutlineFilter],
+            filters: [classOutlineFilter2],
         })
     ).parent
 }

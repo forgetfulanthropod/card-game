@@ -8,6 +8,7 @@ export function InfoBox(
     displayArgs: ContainerArgs & {
         padding?: number
         colorStops?: ColorStop[]
+        borderRadius?: number
     } = {}
 ) {
     const localBounds = contents.getLocalBounds()
@@ -22,7 +23,7 @@ export function InfoBox(
             ...omit(displayArgs, 'filters', 'colorStops', 'padding'),
         },
         RoundedRectangleGradientSprite({
-            radius: 20,
+            radius: displayArgs.borderRadius ?? 20,
             gradientArgs: {
                 x0: 0,
                 y0: 0,

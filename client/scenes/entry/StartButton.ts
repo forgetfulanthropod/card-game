@@ -13,7 +13,7 @@ export function StartButton(): PixiContainer {
     const bg = Sprite({
         src: getTexture('gemButton'),
         anchor: 0.5,
-        scale: (1920 * 0.2) / getTexture('gemButton').width,
+        scale: (1920 * 0.1) / getTexture('gemButton').width,
         async onClick() {
             root.visible = false
             await callApi('changeScene', { newSceneName: 'battle' })
