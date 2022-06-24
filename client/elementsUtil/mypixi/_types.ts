@@ -33,6 +33,7 @@ export interface DisplayObjectArgs {
     // deprecated
     onMouseout?: InteractionEventHandler
     events?: InteractionEvents
+    defaultCursor?: boolean
     name?: string
     zIndex?: number
     visible?: boolean

@@ -23,6 +23,10 @@ export function applyDisplayObjectArgs(
         el.on('pointerdown', args.onClick)
     }
 
+    if (args.defaultCursor === true) {
+        el.cursor = 'default'
+    }
+
     if (args.onMouseover != null) {
         el.interactive = true
         el.on('pointerover', args.onMouseover)

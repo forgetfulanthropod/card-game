@@ -9,11 +9,11 @@ import {
     Sprite,
 } from '@/elementsUtil'
 
-export function StartButton(): PixiContainer {
+export function GoButton(): PixiContainer {
     const bg = Sprite({
-        src: getTexture('gemButton'),
+        src: getTexture('goButton'),
         anchor: 0.5,
-        scale: (1920 * 0.1) / getTexture('gemButton').width,
+        scale: (1920 * 0.18) / getTexture('goButton').width,
         async onClick() {
             root.visible = false
             await callApi('changeScene', { newSceneName: 'battle' })

@@ -12,7 +12,7 @@ export const rootAssets = {
     endTurnButton: 'core-ui/end turn.webp',
     confirmButton: 'core-ui/confirm_.webp',
     abilityButton: 'core-ui/ability pill.svg',
-    gemButton: 'misc-png/BUTTON_GO.webp',
+    goButton: 'core-ui/go.webp',
 }
 
 export const fontAssets = {
