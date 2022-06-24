@@ -7,6 +7,7 @@ import type {
 import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
+import { Texture } from 'pixi.js'
 import type { Ability } from '../entry/SelectedCharacters'
 import { characterIdToAbilitiesMap } from '../entry/SelectedCharacters'
 import { AbilityButtons } from './AbilityButtons'
@@ -110,7 +111,12 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     return InfoBox(
         Container(
             {},
-
+            Sprite({
+                src: Texture.WHITE,
+                width: contentWidth,
+                alpha: 0,
+                anchor: 0.5,
+            }),
             Text({
                 text: props.cm.displayName,
                 style: {
