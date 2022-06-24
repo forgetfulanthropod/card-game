@@ -243,7 +243,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
 }
 
 async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
-    const additions = range(3)
+    const additions = range(1)
         .filter(i => charactersData[i] == null)
         .map(i => ({
             character: defaultOwnedCharacters[i],

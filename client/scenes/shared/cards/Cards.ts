@@ -23,7 +23,6 @@ type CardsArgs = {
 
 export function Cards(args: CardsArgs) {
     const cardsDatum = toDatum(args.scene, scene => {
-        if (!scene.isPlayerTurn) return false
         if (scene.state !== 'in battle') return false
         return scene.cards
     })

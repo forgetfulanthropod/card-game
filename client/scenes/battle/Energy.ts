@@ -14,7 +14,7 @@ import { onUpdate, toDatum } from '@/util'
 
 export function Energy({ scene }: { scene: ROBattleScene }): PixiContainer {
     const showEnergy = toDatum(scene, scene => {
-        return scene.isPlayerTurn && scene.state === 'in battle'
+        return scene.state === 'in battle'
     })
     return If(showEnergy, () => EnergyEl(scene.select('energy')), undefined, {
         onDestroy: [showEnergy.destroy],
