@@ -9,6 +9,7 @@ import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import type { Ability } from '../entry/SelectedCharacters'
 import { characterIdToAbilitiesMap } from '../entry/SelectedCharacters'
+import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
 import {
@@ -24,10 +25,10 @@ import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene, getTree } from '@/data'
 
 const stats = [
-    { key: 'strength', color: 0xd44c47 },
-    { key: 'wisdom', color: 0x9e6ec2 },
-    { key: 'defense', color: 0x337ea9 },
-    { key: 'constitution', color: 0x1cc8af },
+    { key: 'strength', displayName: 'strength', color: 0xd44c47 },
+    { key: 'wisdom', displayName: 'wisdom', color: 0x9e6ec2 },
+    { key: 'defense', displayName: 'defense', color: 0x337ea9 },
+    { key: 'constitution', displayName: 'const.', color: 0x1cc8af },
 ] as const
 
 const classColorMap: Record<CharacterClass, [number, number]> = {
@@ -150,7 +151,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                     },
 
                     Text({
-                        text: `${stat.key}`,
+                        text: `${stat.displayName}`,
                         style: {
                             fontFamily: 'sansFont',
                             fontSize: 20,
@@ -190,54 +191,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
             filters: [classOutlineFilter],
         }),
-        ...props.abilities.map((ability, i) => {
-            return InfoBox(
-                Container(
-                    {},
-                    Text({
-                        text: ability.name,
-                        style: {
-                            fontFamily: 'sansFont',
-                            fontSize: 20,
-                            fill: 0xdddddd,
-                        },
-                        anchor: [i, 0],
-                        x:
-                            -contentWidth * (0.5 - i) -
-                            20 * i -
-                            mainPadding * 0.5 +
-                            mainPadding * i * 0.7,
-                        y: 150,
-                    })
-                ),
-                {
-                    padding: 18,
-                    filters: [whiteOutlineFilter],
-                    events: {
-                        pointerdown() {
-                            //
-                        },
-                        pointerover() {
-                            //
-                        },
-                        pointerup() {
-                            //
-                        },
-                        pointerout() {
-                            //
-                        },
-                    },
-                    colorStops: [
-                        { color: 'black', offset: 0 },
-                        { color: 0x111111, offset: 0.4 },
-                        { color: 0x222222, offset: 0.6 },
-                        { color: 0x333333, offset: 0.8 },
-                        { color: 0x333333, offset: 1 },
-                    ],
-                    borderRadius: 90,
-                }
-            )
-        }),
+        ...AbilityButtons(props.abilities),
         Adjust(allCharCards, {
             y: 220,
             x:

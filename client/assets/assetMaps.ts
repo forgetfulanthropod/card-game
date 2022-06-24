@@ -11,6 +11,7 @@ export const rootAssets = {
     door: 'misc-png/temp-door.webp',
     endTurnButton: 'core-ui/end turn.webp',
     confirmButton: 'core-ui/confirm_.webp',
+    abilityButton: 'core-ui/ability pill.svg',
     gemButton: 'misc-png/BUTTON_GO.webp',
 }
 
