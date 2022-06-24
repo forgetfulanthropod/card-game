@@ -63,7 +63,7 @@ export function Character(args: CharacterProps): PixiContainer {
         Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
             y: 22,
         }),
-        mainAnimation,
+        ...(mainAnimation ? [Adjust(mainAnimation, { y: -20 })] : []),
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, args.onClick),
         If(

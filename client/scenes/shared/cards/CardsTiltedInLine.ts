@@ -26,7 +26,7 @@ export function CardsTiltedInLine({
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
-        const tiltFactor = 0.7
+        const tiltFactor = 0.65
         sprite.scale.x = -0.8
 
         const c = Container(

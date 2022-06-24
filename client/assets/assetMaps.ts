@@ -35,7 +35,7 @@ export const dungeonBackgroundAssets = {
 }
 
 export const entrySceneBackgrounds = {
-    skelepitEntrySceneBackground: 'backgrounds/temple_background_2.webp',
+    skelepitEntrySceneBackground: 'backgrounds/temple_background_3.webp',
 }
 
 export const cardArtAssets = {

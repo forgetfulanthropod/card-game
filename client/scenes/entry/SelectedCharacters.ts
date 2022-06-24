@@ -148,7 +148,7 @@ export function SelectedCharacters(): PixiContainer {
 
     const root = Container({
         x: 0.5 * BASE_WIDTH,
-        y: 0.82 * BASE_HEIGHT,
+        y: 0.807 * BASE_HEIGHT,
         onDestroy: [
             onUpdate(selectedCharacters, characters => {
                 if (characters != null) setSelectedCharacters()
@@ -172,7 +172,7 @@ export function SelectedCharacters(): PixiContainer {
                 .filter(c => c != null)
                 .map((c, i) => {
                     const props = {
-                        x: i === 0 ? -200 : i === 2 ? 0 : 200,
+                        x: i === 0 ? -180 : i === 2 ? 0 : 180,
                         y: i === 2 ? 43 : 0,
                         scale: i === 2 ? 1.1 : 1,
                     } as const

@@ -65,8 +65,6 @@ export function MainCharacterAnimation({
 
     if (centerX) root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
 
-    root.y -= 20
-
     return root
 
     // return Container({
