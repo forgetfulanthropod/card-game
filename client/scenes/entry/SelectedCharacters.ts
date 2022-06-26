@@ -216,6 +216,12 @@ export function SelectedCharacters(): PixiContainer {
             })
         )
 
+        // range(3 - characters.length).map((i) => {
+        //     root.addChild(Sprite({
+        //         src: ''
+        //     }))
+        // })
+
         root.removeChildren()
         if (Array.isArray(characters) && characters.length > 0)
             root.addChild(...characters)
@@ -243,7 +249,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
 }
 
 async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
-    const additions = range(1)
+    const additions = range(3)
         .filter(i => charactersData[i] == null)
         .map(i => ({
             character: defaultOwnedCharacters[i],
