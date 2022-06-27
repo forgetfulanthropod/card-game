@@ -1,4 +1,4 @@
-import type { Ability } from '../entry/SelectedCharacters'
+import type { Ability } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
 
