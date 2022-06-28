@@ -19,6 +19,7 @@ export const placeSelectedCharacters: GameActions['placeSelectedCharacters'] =
         const fullSelectedCharacterDecks: Record<CharacterUid, Pile> = {}
 
         scene.get('selectedCharacters').forEach(c => {
+            if (c == null) return
             fullSelectedCharacterDecks[c.uid] = getFullDeckForCharacter(
                 c,
                 scene

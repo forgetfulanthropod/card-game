@@ -80,7 +80,10 @@ class Runner {
 
     async entryStep(tree: Gamestate) {
         const scene = tree.scene as EntryScene
-        if (scene.selectedCharacters.length === 0 && flip(probChangeLevel)) {
+        if (
+            scene.selectedCharacters.filter(c => c != null).length === 0 &&
+            flip(probChangeLevel)
+        ) {
             toast('changing dungeon')
             await callApi('changeDungeon', { direction: flip(0.5) ? -1 : 1 })
             return

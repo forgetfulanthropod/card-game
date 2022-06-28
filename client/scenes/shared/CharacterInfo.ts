@@ -60,7 +60,7 @@ export function RootCharacterInfo() {
 
         const cm = getEntryScene()
             .get('selectedCharacters')
-            .find(c => c.uid === uid)
+            .find(c => c?.uid === uid)
 
         if (cm == null) return
 

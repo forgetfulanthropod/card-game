@@ -1,4 +1,4 @@
-import type { GameActions } from 'shared'
+import type { GameActions, OwnedCharacterStats } from 'shared'
 
 import { nextRoom } from './nextRoom'
 import { makeBattleState, setCards } from '@/gameState'
@@ -16,7 +16,9 @@ export const changeScene: GameActions['changeScene'] = args => {
         game.set(
             'scene',
             makeBattleState({
-                chosen: selectedCharacters,
+                chosen: selectedCharacters
+                    .filter(c => c != null)
+                    .map(c => c as OwnedCharacterStats),
                 dungeonName,
                 game: args.game,
             })

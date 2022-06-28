@@ -15,6 +15,6 @@ export const changeDungeon: GameActions['changeDungeon'] = args => {
         l = 1
     }
 
-    scene.select('selectedCharacters').set([])
+    scene.select('selectedCharacters').set([null, null, null])
     scene.select('selectedLevel').set(levels[l - 1])
 }

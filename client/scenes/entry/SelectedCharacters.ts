@@ -3,6 +3,7 @@ import type {
     CharacterId,
     CharacterPlaceIndex,
     OwnedCharacterStats,
+    SelectedCharacters,
 } from 'shared'
 
 import { range } from 'lodash'
@@ -162,15 +163,16 @@ export function SelectedCharacters(): PixiContainer {
     return root
 
     function setSelectedCharacters() {
-        const charactersData = [...selectedCharacters.get()]
+        const charactersData = selectedCharacters.get()
 
         void fillUnselectedSlots(charactersData)
 
         const characterHeight = 260
         const characters =
             charactersData
-                .filter(c => c != null)
                 .map((c, i) => {
+                    if (c == null) return Container({})
+
                     const props = {
                         x: i === 0 ? -180 : i === 2 ? 0 : 180,
                         y: i === 2 ? 43 : 0,
@@ -248,7 +250,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
     })
 }
 
-async function fillUnselectedSlots(charactersData: OwnedCharacterStats[]) {
+async function fillUnselectedSlots(charactersData: SelectedCharacters) {
     const additions = range(3)
         .filter(i => charactersData[i] == null)
         .map(i => ({
