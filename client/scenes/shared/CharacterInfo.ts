@@ -8,8 +8,6 @@ import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
-import type { Ability } from '../entry/SelectedCharacters'
-import { characterIdToAbilitiesMap } from '../entry/SelectedCharacters'
 import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
@@ -23,7 +21,8 @@ import {
     IfHideShow,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
-import { getEntryScene, getTree } from '@/data'
+import type { Ability } from '@/data'
+import { getEntryScene, getTree, characterIdToAbilitiesMap } from '@/data'
 
 const stats = [
     { key: 'strength', displayName: 'strength', color: 0xd44c47 },
