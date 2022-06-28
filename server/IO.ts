@@ -56,7 +56,7 @@ export function mountIo(
     })
 }
 function refreshOnChange(io: SocketServer) {
-    watchFile(__dirname + '../../public/hackin.js', () => {
+    watchFile(__dirname + '../../public/dailyship.js', () => {
         io.emit('refresh')
     })
 }
