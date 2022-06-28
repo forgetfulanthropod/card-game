@@ -78,38 +78,43 @@
         </div>
     </div>
     <script>
-        const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+        (async () => {
+            const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
 
-        try {
-            const head = document.getElementsByTagName("head")[0]
+            try {
+                const head = document.getElementsByTagName("head")[0]
 
-            const href = window.location.href
-            const hrefSlash = href.endsWith('/') ? href : href + '/'
+                const href = window.location.href
+                const hrefSlash = href.endsWith('/') ? href : href + '/'
 
-            var script = document.createElement('script')
-            script.src = hrefSlash + pwd + '.js'
-            script.type = "text/javascript"
+                var script = document.createElement('script')
+                script.src = hrefSlash + pwd + '.js'
+                script.type = "text/javascript"
 
-            head.appendChild(script)
+                const fileExists = await fetch( script.src).then(response => response.status === 200)
+                if (! fileExists) throw new Error('bad password')
 
-            var link = document.createElement("link")
-            link.href = hrefSlash + pwd + '.css'
-            link.type = "text/css"
-            link.rel = "stylesheet"
-            link.media = "screen,print"
-            head.appendChild(link)
+                head.appendChild(script)
 
-            setTimeout(() => {
-                if (window.loadedJs) {
-                    localStorage.setItem('pwd', pwd)
-                } else {
-                    localStorage.removeItem('pwd')
-                }
-            }, 10000)
-        } catch (e) {
-            console.error(e)
-            localStorage.removeItem('pwd')
-        }
+                var link = document.createElement("link")
+                link.href = hrefSlash + pwd + '.css'
+                link.type = "text/css"
+                link.rel = "stylesheet"
+                link.media = "screen,print"
+                head.appendChild(link)
+
+                setTimeout(() => {
+                    if (window.loadedJs) {
+                        localStorage.setItem('pwd', pwd)
+                    } else {
+                        localStorage.removeItem('pwd')
+                    }
+                }, 10_000)
+            } catch (e) {
+                console.error(e)
+                localStorage.removeItem('pwd')
+            }
+        })()
     </script>
 
     <!-- <script src="out.js"></script> -->
