@@ -1,4 +1,3 @@
-import { OldFilmFilter } from 'pixi-filters'
 import type {
     CharacterPlaceIndex,
     OwnedCharacterStats,
@@ -7,9 +6,11 @@ import type {
 
 import { range } from 'lodash'
 import { MainCharacterAnimation } from '@sharedElements'
+import { Tweener, Easing } from 'pixi-tweener'
+import { keys } from 'shared/code'
 import { callApi } from '@/callApi'
 import { getEntryScene } from '@/data'
-import type { PixiContainer } from '@/elementsUtil'
+import type { DisplayObject, PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     isTextureKey,
     PixiTexture,
@@ -19,7 +20,7 @@ import {
     getTexture,
     Sprite,
 } from '@/elementsUtil'
-import { brightBackLightIsShining, hoveredCharacterUid, onUpdate } from '@/util'
+import { hoveredCharacterUid, onUpdate } from '@/util'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {
@@ -137,24 +138,22 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 //     // blue: 1,
 // })
 
-const darkenFilter = new OldFilmFilter({
-    sepia: 0,
-    noise: 0,
-    noiseSize: 1,
-    scratch: 0.5,
-    scratchDensity: 0.3,
-    scratchWidth: 1,
-    vignetting: 0.8,
-    vignettingAlpha: 0.669,
-    vignettingBlur: 0.3,
-})
+// const darkenFilter = new OldFilmFilter({
+//     sepia: 0,
+//     noise: 0,
+//     noiseSize: 1,
+//     scratch: 0.5,
+//     scratchDensity: 0.3,
+//     scratchWidth: 1,
+//     vignetting: 0.8,
+//     vignettingAlpha: 0.669,
+//     vignettingBlur: 0.3,
+// })
 
 export function SelectedCharactersEl(): PixiContainer {
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
     const root = Container({
-        x: 0.5 * BASE_WIDTH,
-        y: 0.807 * BASE_HEIGHT,
         onDestroy: [
             onUpdate(selectedCharacters, characters => {
                 if (characters != null) setSelectedCharacters()
@@ -176,11 +175,9 @@ export function SelectedCharactersEl(): PixiContainer {
         const characters =
             charactersData
                 .map((c, i) => {
-                    if (c == null) return Container({})
-
+                    if (c == null) return null
                     const props = {
-                        x: i === 0 ? -180 : i === 2 ? 0 : 180,
-                        y: i === 2 ? 43 : 0,
+                        ...getXYAtIndex(i),
                         scale: i === 2 ? 1.1 : 1,
                     } as const
                     return [
@@ -203,7 +200,7 @@ export function SelectedCharactersEl(): PixiContainer {
                                 height: characterHeight,
                             }) ??
                                 Sprite({
-                                    anchor: [0.5, 0.5],
+                                    anchor: 0.5,
                                     src: isTextureKey(c.id)
                                         ? getTexture(c.id)
                                         : PixiTexture.WHITE,
@@ -215,13 +212,7 @@ export function SelectedCharactersEl(): PixiContainer {
                 .flat() ?? []
         listenerStack.pop()?.()
 
-        listenerStack.push(
-            brightBackLightIsShining.onChange((is, _, unsub) => {
-                if (is) unsub()
-
-                characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
-            })
-        )
+        root.removeChildren()
 
         // range(3 - characters.length).map((i) => {
         //     root.addChild(Sprite({
@@ -229,10 +220,87 @@ export function SelectedCharactersEl(): PixiContainer {
         //     }))
         // })
 
-        root.removeChildren()
-        if (Array.isArray(characters) && characters.length > 0)
-            root.addChild(...characters)
+        const pedestalRays = characters
+            .map((c, index) => {
+                if (c != null) return null
+
+                return Container(
+                    {},
+                    Sprite({
+                        name: `pedestalRay${index}`,
+                        src: `pedestalRay${index}`,
+                        scale:
+                            BASE_WIDTH /
+                            getTexture(`pedestalRay${index}`).width,
+                    }),
+                    Container(
+                        {},
+                        LoopingAnimation(
+                            Sprite({
+                                name: `select${index}`,
+                                src: 'selectCharacterArrow',
+                                anchor: [0.5, 1.8],
+                                ...getXYAtIndex(index),
+                            }),
+                            {
+                                ...getXYAtIndex(index),
+                                y: getXYAtIndex(index).y - 33,
+                            }
+                            // [
+                            //     {
+                            //         duration: 2,
+                            //         ease: Easing.easeInExpo,
+                            //     },
+                            // ]
+                            // {
+                            //     from: {
+                            //         ...getXYAtIndex(index),
+                            //     },
+                            //     to: {
+                            //         ...getXYAtIndex(index),
+                            //         y: getXYAtIndex(index) - 33,
+                            //     },
+                            // }
+                        ),
+                        Sprite({
+                            name: `click region`,
+                            src: PixiTexture.WHITE,
+                            width: 200,
+                            height: 300,
+                            alpha: 0,
+                            events: {
+                                pointerup() {
+                                    alert('open character select menu')
+                                },
+                            },
+                            anchor: [0.5, 0.8],
+                            ...getXYAtIndex(index),
+                        })
+                    )
+                )
+            })
+            .filter(c => c != null) as PixiSprite[]
+
+        root.addChild(...pedestalRays)
+        root.addChild(...(characters.filter(c => c != null) as PixiContainer[]))
         root.sortChildren()
+
+        // listenerStack.push(
+        //     brightBackLightIsShining.onChange((is, _, unsub) => {
+        //         if (is) unsub()
+
+        //         characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
+        //     })
+        // )
+    }
+}
+
+function getXYAtIndex(i: number) {
+    const x = 0.507 * BASE_WIDTH
+    const y = 0.807 * BASE_HEIGHT
+    return {
+        x: x + (i === 0 ? -180 : i === 2 ? 0 : 180),
+        y: y + (i === 2 ? 43 : 0),
     }
 }
 
@@ -241,7 +309,7 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
         (defaultOwnedCharacters.findIndex(oc => oc.id === c.id) + 1) %
         defaultOwnedCharacters.length
     const nextChoice = defaultOwnedCharacters[nextIndex]
-    // console.log({ nextIndex, nextChoice })
+
     void callApi('placeSelectedCharacters', {
         characters: [
             {
@@ -256,11 +324,50 @@ function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
 }
 
 async function fillUnselectedSlots(charactersData: SelectedCharacters) {
-    const additions = range(3)
+    if (charactersData[2]) return
+
+    const additions = range(1)
         .filter(i => charactersData[i] == null)
         .map(i => ({
             character: defaultOwnedCharacters[i],
-            index: i as CharacterPlaceIndex,
+            index: 1 as CharacterPlaceIndex,
         }))
     await callApi('placeSelectedCharacters', { characters: additions })
+}
+
+interface TweenProps {
+    [key: string]: number
+}
+function LoopingAnimation(el: DisplayObject, params: TweenProps) {
+    const originalProps = {}
+    keys(params).forEach(pKey => {
+        //@ts-expect-error
+        originalProps[pKey] = el[pKey]
+    })
+    ;(function play() {
+        void Tweener.add(
+            {
+                //@ts-expect-error
+                target: el,
+                ease: Easing.easeInOutSine,
+                duration: 1,
+            },
+            {
+                ...params,
+            }
+        ).then(() => {
+            void Tweener.add(
+                {
+                    target: el,
+                    ease: Easing.easeInOutSine,
+                    duration: 1,
+                },
+                {
+                    ...originalProps,
+                }
+            ).then(play)
+        })
+    })()
+
+    return el
 }

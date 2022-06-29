@@ -170,3 +170,10 @@ export const spineAssets = {
     // matchaGelatinCubeSpineWebp:
     //     'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.webp',
 } as const
+
+export const matchaEntryAssets = {
+    pedestalRay0: 'scenes/entry matcha/Pedestal_ray_Left.png',
+    pedestalRay1: 'scenes/entry matcha/Pedestal_ray_Right.png',
+    pedestalRay2: 'scenes/entry matcha/Pedestal_ray.png',
+    selectCharacterArrow: 'scenes/entry matcha/select_arrow.webp',
+}
