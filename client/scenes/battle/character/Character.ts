@@ -1,3 +1,4 @@
+import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { ROCursor } from 'sbaobab'
 import type {
@@ -6,9 +7,11 @@ import type {
     CharacterUid,
     NetworkDOTData,
     NetworkEvent,
+    StatChangeMap,
 } from 'shared'
 import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
+import type { TrackEntry } from '@pixi-spine/all-4.0'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
@@ -37,20 +40,21 @@ interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
     cursor: ROCursor<CharacterMeta>
+    triggerStatChanges: Datum<StatChangeMap>
 }
 
-export function Character(args: CharacterProps): PixiContainer {
+export function Character(props: CharacterProps): PixiContainer {
     const isHovered = datum(false)
-    const characterMeta = args.cursor.get()
+    const characterMeta = props.cursor.get()
     const { screenX, screenY } = characterMeta
 
     const mainAnimation = MainCharacterAnimation({
         characterMeta,
         events: {
-            pointerup: () => args.onClick(characterMeta.uid),
+            pointerup: () => props.onClick(characterMeta.uid),
             pointerdown: () => {
                 hoveredCharacterUid.set(characterMeta.uid)
-                args.onClick(characterMeta.uid)
+                props.onClick(characterMeta.uid)
             },
         },
         centerX: true,
@@ -65,7 +69,7 @@ export function Character(args: CharacterProps): PixiContainer {
         }),
         ...(mainAnimation ? [Adjust(mainAnimation, { y: -20 })] : []),
         mainAnimation == null &&
-            FallBackCharacterSprite(characterMeta, args.onClick),
+            FallBackCharacterSprite(characterMeta, props.onClick),
         If(
             toDatum(getBattleScene().select('isPlayerTurn'), is => is),
             () =>
@@ -81,7 +85,12 @@ export function Character(args: CharacterProps): PixiContainer {
         y: -220,
     })
 
-    const unbindMoves = bindMoves(characterMeta, hitContainer, mainAnimation)
+    const unbindMoves = bindMoves(
+        characterMeta,
+        hitContainer,
+        mainAnimation,
+        props.triggerStatChanges
+    )
     const unbindDot = bindDOT(characterMeta, hitContainer)
 
     const root = Container(
@@ -95,7 +104,7 @@ export function Character(args: CharacterProps): PixiContainer {
         },
 
         mainContainer,
-        getBoundOrbContainer(args.cursor, mainContainer.height * 0.92),
+        getBoundOrbContainer(props.cursor, mainContainer.height * 0.92),
         hitContainer
     )
 
@@ -192,12 +201,47 @@ function bindDOT(
 function bindMoves(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer,
-    mainAnimation: PixiSpine | null
+    mainAnimation: PixiSpine | null,
+    triggerStatChanges: Datum<StatChangeMap>
 ): Unbind {
-    return socketOn('damage$', showCharMove)
+    const unbindStatChangesListener = triggerStatChanges.onChange(changes => {
+        keys(changes).forEach(uid => {
+            if (uid === characterMeta.uid) {
+                if (mainAnimation) {
+                    mainAnimation.state.setAnimation(0, 'Damage', false)
+                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                }
+                flashDamageTo(aboveCharacterContainer, changes[uid])
+            }
+        })
+    })
+    const unbindDmage$Listener = socketOn('damage$', showCharMove)
+
+    const attackListener = {
+        event: listenForAttack,
+    }
+    let damages: StatChangeMap = {}
+
+    mainAnimation?.state.addListener(attackListener)
+
+    return () => {
+        unbindStatChangesListener()
+        unbindDmage$Listener()
+        mainAnimation?.state.removeListener(attackListener)
+    }
+
+    function listenForAttack(
+        _entry: TrackEntry,
+        event: { data: { name: string } }
+    ) {
+        if (event.data.name === 'Attack') {
+            console.log('triggering stat changes')
+            triggerStatChanges.set(damages)
+        }
+    }
+
     function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
-        const { attacker, cardName: _cardName, damages } = event.data
-        const defenderUids: CharacterUid[] = Object.keys(damages)
+        const { attacker, cardName: _cardName, damages: _damages } = event.data
 
         const thisUid = characterMeta.uid
         if (attacker === thisUid) {
@@ -205,21 +249,7 @@ function bindMoves(
 
             mainAnimation.state.setAnimation(0, 'Attack', false)
             mainAnimation.state.addAnimation(0, 'Idle', true)
-        } else if (defenderUids.includes(thisUid)) {
-            if (mainAnimation) {
-                mainAnimation.state.setAnimation(0, 'Damage', false)
-                mainAnimation.state.addAnimation(0, 'Idle', true)
-            }
-
-            // flashTo(
-            //     aboveCharacterContainer,
-            //     () => MoveInfo({ moveName: cardName, offset: -70 }),
-            //     {
-            //         durationMs: SHOW_HIT_TIME,
-            //     }
-            // )
-
-            flashDamageTo(aboveCharacterContainer, damages[thisUid])
+            damages = _damages
         }
     }
 }

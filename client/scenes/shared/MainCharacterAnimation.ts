@@ -9,10 +9,13 @@ export function MainCharacterAnimation({
     events = {},
     height = 190,
     centerX = false,
+    onSpineEvent,
 }: {
     characterMeta: Pick<CharacterMeta, 'id' | 'isPc' | 'uid'>
     // characterMeta: CharacterMeta
     events?: InteractionEvents
+
+    onSpineEvent?: (e: string) => void
     height?: number
     centerX?: boolean
 }): PixiSpine | null {
@@ -47,6 +50,7 @@ export function MainCharacterAnimation({
             //     return processedEvents
             // }, {} as InteractionEvents),
         },
+        onSpineEvent,
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
@@ -64,15 +68,9 @@ export function MainCharacterAnimation({
     )
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    // console.log({ rootWidth: root.width })
-
     if (centerX) root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
 
     return root
-
-    // return Container({
-    //     children: [root, CharacterInfo(characterMeta)],
-    // })
 
     function updateGlow(hoveredCharacterUid: CharacterUid | null) {
         if (root == null) return

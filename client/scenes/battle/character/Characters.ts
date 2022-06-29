@@ -1,5 +1,7 @@
 import { vals } from 'shared/code'
 import { uniq } from 'lodash'
+import type { StatChangeMap } from 'shared'
+import { datum } from 'datums'
 import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
 import { For, If } from '@/elementsUtil'
@@ -10,9 +12,11 @@ export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
     const aliveUids = toDatum(allCharsC, chars =>
         vals(chars)
-            .filter(({ health }) => health > 0)
+            // .filter(({ health }) => health > 0)
             .map(({ uid }) => uid)
     )
+    const triggerStatChanges = datum({} as StatChangeMap)
+
     return For(
         aliveUids,
         uid =>
@@ -27,6 +31,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                                 .apply(arr => uniq([...arr, uid]))
                         },
                         scale: 1,
+                        triggerStatChanges,
                     })
             ),
         undefined,

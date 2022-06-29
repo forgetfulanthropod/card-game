@@ -17,6 +17,7 @@ export function Spine<Name extends SpineAsset>(props: {
     y?: number
     size?: [number, number]
     events?: InteractionEvents
+    onSpineEvent?: (e: string) => void
     onDestroy?: Callback[]
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
@@ -34,6 +35,12 @@ export function Spine<Name extends SpineAsset>(props: {
             spine.state.setAnimation(0, animation, true)
         })
     }
+
+    spine.state.addListener({
+        event(entry, event) {
+            props.onSpineEvent?.(event.data.name)
+        },
+    })
 
     spine.cursor = spine.interactive ? 'pointer' : 'default'
 
