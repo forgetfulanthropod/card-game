@@ -19,6 +19,7 @@ import {
     Container,
     getTexture,
     Sprite,
+    Text,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 
@@ -169,7 +170,7 @@ export function SelectedCharactersEl(): PixiContainer {
     function setSelectedCharacters() {
         const charactersData = selectedCharacters.get()
 
-        void fillUnselectedSlots(charactersData)
+        // void fillUnselectedSlots(charactersData)
 
         const characterHeight = 260
         const characters =
@@ -239,7 +240,7 @@ export function SelectedCharactersEl(): PixiContainer {
                             Sprite({
                                 name: `select${index}`,
                                 src: 'selectCharacterArrow',
-                                anchor: [0.5, 1.8],
+                                anchor: [0.5, 1.4],
                                 ...getXYAtIndex(index),
                             }),
                             {
@@ -281,8 +282,27 @@ export function SelectedCharactersEl(): PixiContainer {
             })
             .filter(c => c != null) as PixiSprite[]
 
-        root.addChild(...pedestalRays)
-        root.addChild(...(characters.filter(c => c != null) as PixiContainer[]))
+        if (pedestalRays.length)
+            root.addChild(
+                ...pedestalRays,
+                Text({
+                    text: 'SELECT A CHARACTER',
+                    x: BASE_WIDTH * 0.506,
+                    y: BASE_HEIGHT * 0.565,
+                    anchor: 0.5,
+                    style: {
+                        fontFamily: 'bigFont',
+                        fontSize: 50,
+                        fill: 0xdddddd,
+                        strokeThickness: 22,
+                        stroke: 0x222_222,
+                    },
+                })
+            )
+        const validCharacters = characters.filter(
+            c => c != null
+        ) as PixiContainer[]
+        if (validCharacters.length) root.addChild(...validCharacters)
         root.sortChildren()
 
         // listenerStack.push(
