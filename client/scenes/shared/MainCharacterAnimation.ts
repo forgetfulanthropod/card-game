@@ -58,7 +58,10 @@ export function MainCharacterAnimation({
 
     //@ts-expect-error
     const desiredHeight = (heightOverrides?.[characterMeta.id] ?? 1) * height // TODO: what is it tho
-    const desiredScale = desiredHeight / root.height
+    const desiredScale = Math.min(
+        desiredHeight / root.height,
+        (desiredHeight * 1.2) / root.width
+    )
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
     // console.log({ rootWidth: root.width })

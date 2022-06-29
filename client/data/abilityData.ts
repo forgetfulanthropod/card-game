@@ -37,4 +37,28 @@ export const characterIdToAbilitiesMap: Partial<
             name: 'Impenetrable Gelatin',
         },
     ],
+    warhog: [
+        {
+            name: 'Irresistable Target',
+        },
+        {
+            name: 'Growth Spurt',
+        },
+    ],
+    gnomeHooligan: [
+        {
+            name: 'Born Lucky',
+        },
+        {
+            name: 'Manic Hoarder',
+        },
+    ],
+    jerry: [
+        {
+            name: 'Thousand Year Stare',
+        },
+        {
+            name: 'Water Slide',
+        },
+    ],
 }

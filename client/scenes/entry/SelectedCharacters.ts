@@ -79,6 +79,51 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         tokenId: '4',
         nftName: 'matchaGelatinCube-4',
     },
+    {
+        id: 'warhog',
+        displayName: 'Warhog',
+        isPc: true,
+        class: 'cleric',
+
+        constitution: 84,
+        strength: 6,
+        wisdom: 4,
+        defense: 8,
+
+        uid: 'pc-4',
+        tokenId: '4',
+        nftName: 'warhog-4',
+    },
+    {
+        id: 'gnomeHooligan',
+        displayName: 'Gnome Hooligan',
+        isPc: true,
+        class: 'rogue',
+
+        constitution: 40,
+        strength: 12,
+        wisdom: 12,
+        defense: 3,
+
+        uid: 'pc-4',
+        tokenId: '4',
+        nftName: 'matchaGelatinCube-4',
+    },
+    {
+        id: 'jerry',
+        displayName: 'Jerry',
+        isPc: true,
+        class: 'bard',
+
+        constitution: 86,
+        strength: 5,
+        wisdom: 20,
+        defense: 9,
+
+        uid: 'pc-4',
+        tokenId: '4',
+        nftName: 'matchaGelatinCube-4',
+    },
 ]
 
 // const preselectFilter = new AdjustmentFilter({

@@ -147,21 +147,26 @@ export const characterClassAssets = {
     wizardClassIcon: 'character classes/wizard glow.webp',
     knightClassIcon: 'character classes/knight glow.webp',
     clericClassIcon: 'character classes/cleric glow.webp',
+    rogueClassIcon: 'character classes/rogue glow.webp',
+    bardClassIcon: 'character classes/bard glow.webp',
 } as const
 
 export const spineAssets = {
     frogKnightSpine: 'spine/frogKnight/FrogKnight.json',
-    frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     mushroomFarmerSpine:
         'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
-    mushroomFarmerSpineWebp:
-        'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
     skeletonWarriorSpine:
         'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
-    skeletonWarriorSpineWebp:
-        'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.webp',
     matchaGelatinCubeSpine:
         'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
-    matchaGelatinCubeSpineWebp:
-        'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.webp',
+    gnomeHooliganSpine: 'spine/gnomeHooligan/Gnome_Hooligan.json',
+    jerrySpine: 'spine/jerry/Jerry_MJ_Rig_Prep_v4.json',
+    warhogSpine: 'spine/warhog/Warhog.json',
+    // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
+    // mushroomFarmerSpineWebp:
+    //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
+    // skeletonWarriorSpineWebp:
+    //     'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.webp',
+    // matchaGelatinCubeSpineWebp:
+    //     'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.webp',
 } as const
