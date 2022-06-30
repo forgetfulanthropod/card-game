@@ -180,7 +180,6 @@ export const matchaEntryAssets = {
 
 export const characterProfileAssets = {
     frogKnightProfile: 'character profiles/frogKnight.webp',
-    penguinKnightProfile: 'character profiles/penguinKnight.webp',
     skeletonWarriorProfile: 'character profiles/skeletonWarrior.webp',
     mushroomFarmerProfile: 'character profiles/mushroomFarmer.webp',
     matchaGelatinCubeProfile: 'character profiles/matchaGelatinCube.webp',

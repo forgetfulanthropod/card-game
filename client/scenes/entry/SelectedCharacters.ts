@@ -71,6 +71,7 @@ export function SelectedCharactersEl(): PixiContainer {
                     return [
                         Container(
                             {
+                                zIndex: i,
                                 ...props,
                             },
 
@@ -112,7 +113,9 @@ export function SelectedCharactersEl(): PixiContainer {
                 if (c != null) return null
 
                 return Container(
-                    {},
+                    {
+                        zIndex: index,
+                    },
                     Sprite({
                         name: `pedestalRay${index}`,
                         src: `pedestalRay${index}`,
@@ -168,9 +171,9 @@ export function SelectedCharactersEl(): PixiContainer {
             })
             .filter(c => c != null) as PixiSprite[]
 
-        if (pedestalRays.length)
+        if (pedestalRays.length) root.addChild(...pedestalRays)
+        if (pedestalRays.length === 3)
             root.addChild(
-                ...pedestalRays,
                 Text({
                     text: 'SELECT A CHARACTER',
                     x: BASE_WIDTH * 0.506,
@@ -213,6 +216,7 @@ function getXYAtIndex(i: number) {
 interface TweenProps {
     [key: string]: number
 }
+
 function LoopingAnimation(el: DisplayObject, params: TweenProps) {
     const originalProps = {}
     keys(params).forEach(pKey => {

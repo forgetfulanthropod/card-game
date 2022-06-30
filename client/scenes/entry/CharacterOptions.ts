@@ -1,28 +1,21 @@
 import type {
+    CharacterId,
     CharacterPlaceIndex,
     OwnedCharacterStats,
     SelectedCharacters,
 } from 'shared'
 import { range } from 'lodash'
 import { datum } from 'datums'
-import { RoundedBordered, Container, getTexture, Sprite } from '@/elementsUtil'
+import {
+    RoundedBordered,
+    Container,
+    getTexture,
+    Sprite,
+    glowFilter,
+} from '@/elementsUtil'
 import { callApi } from '@/callApi'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
-    {
-        id: 'skeletonWarrior',
-        displayName: 'Skeleton Warrior',
-        isPc: true,
-        class: 'knight',
-
-        constitution: 54,
-        strength: 11,
-        wisdom: 4,
-        defense: 4,
-        uid: 'pc-1',
-        tokenId: '4',
-        nftName: 'skeletonWarrior-4',
-    },
     {
         id: 'frogKnight',
         displayName: 'Frog Knight',
@@ -50,6 +43,20 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         uid: 'pc-3',
         tokenId: '4',
         nftName: 'mushroomFarmer-4',
+    },
+    {
+        id: 'skeletonWarrior',
+        displayName: 'Skeleton Warrior',
+        isPc: true,
+        class: 'knight',
+
+        constitution: 54,
+        strength: 11,
+        wisdom: 4,
+        defense: 4,
+        uid: 'pc-1',
+        tokenId: '4',
+        nftName: 'skeletonWarrior-4',
     },
     {
         id: 'matchaGelatinCube',
@@ -113,37 +120,55 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
     },
 ]
 
-export function CharacterOptions() {
-    return Container(
-        {},
-        ...defaultOwnedCharacters.map((c, index) => {
-            const width = 180
-            const margin = width * 0.2
-            const src = getTexture(`${c.id}Profile`)
+export const selectedCharacterId = datum<null | CharacterId>('frogKnight')
 
-            return Container(
-                {
-                    x: 50 + (index % 2) * (width + margin),
-                    y: 50 + Math.floor(index / 2) * (width + margin),
-                    events: {
-                        pointerup() {
-                            chooseOwnedCharacterAt(index)
-                        },
+export function CharacterOptions() {
+    const options = defaultOwnedCharacters.map((c, index) => {
+        const width = 180
+        const margin = width * 0.2
+        const src = getTexture(`${c.id}Profile`)
+        // const src = getTexture(`frogKnightProfile`)
+
+        return Container(
+            {
+                x: 50 + (index % 2) * (width + margin),
+                y: 50 + Math.floor(index / 2) * (width + margin),
+                events: {
+                    pointerup() {
+                        chooseOwnedCharacterAt(index)
                     },
                 },
-                RoundedBordered(
-                    Sprite({
-                        src,
-                        scale: width / src.width,
-                    }),
-                    {
-                        radius: 20,
-                        borderThickness: 12,
-                        borderColor: 0,
-                    }
-                )
+            },
+            RoundedBordered(
+                Sprite({
+                    src,
+                    scale: width / src.width,
+                }),
+                {
+                    radius: 20,
+                    borderThickness: 6,
+                    borderColor: 0,
+                }
             )
-        })
+        )
+    })
+
+    return Container(
+        {
+            onDestroy: [
+                selectedCharacterId.onChange(id => {
+                    options.forEach(o => (o.filters = []))
+                    if (id == null) return
+                    else {
+                        const i = defaultOwnedCharacters.findIndex(
+                            c => c.id === id
+                        )
+                        options[i].filters = [glowFilter]
+                    }
+                }, true),
+            ],
+        },
+        ...options
     )
 }
 
@@ -163,7 +188,7 @@ function chooseOwnedCharacterAt(ownedCharacterIndex: number) {
     })
 }
 
-async function fillUnselectedSlots(charactersData: SelectedCharacters) {
+async function _fillUnselectedSlots(charactersData: SelectedCharacters) {
     if (charactersData[2]) return
 
     const additions = range(1)
