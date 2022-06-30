@@ -2,6 +2,7 @@ import { RootCharacterInfo } from '@sharedElements'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { SelectedCharactersEl } from './SelectedCharacters'
 import { GoButton } from './GoButton'
+import { CharacterOptions } from './CharacterOptions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
@@ -34,7 +35,7 @@ export function DungeonEntryScene(): PixiContainer {
         DungeonEntryBg(),
         SelectedCharactersEl(),
         startButton,
-        // LevelInfo(),
+        CharacterOptions(),
         RootCharacterInfo()
         // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
     )

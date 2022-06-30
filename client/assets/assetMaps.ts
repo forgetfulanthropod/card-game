@@ -177,3 +177,7 @@ export const matchaEntryAssets = {
     pedestalRay2: 'scenes/entry matcha/Pedestal_ray.png',
     selectCharacterArrow: 'scenes/entry matcha/select_arrow.webp',
 }
+
+export const characterProfileAssets = {
+    frogKnightProfile: 'character extras/profiles/frogKnight.webp',
+}

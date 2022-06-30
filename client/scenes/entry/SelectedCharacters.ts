@@ -1,14 +1,6 @@
-import type {
-    CharacterPlaceIndex,
-    OwnedCharacterStats,
-    SelectedCharacters,
-} from 'shared'
-
-import { range } from 'lodash'
 import { MainCharacterAnimation } from '@sharedElements'
 import { Tweener, Easing } from 'pixi-tweener'
 import { keys } from 'shared/code'
-import { callApi } from '@/callApi'
 import { getEntryScene } from '@/data'
 import type { DisplayObject, PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
@@ -21,112 +13,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { hoveredCharacterUid, onUpdate } from '@/util'
-
-const defaultOwnedCharacters: OwnedCharacterStats[] = [
-    {
-        id: 'skeletonWarrior',
-        displayName: 'Skeleton Warrior',
-        isPc: true,
-        class: 'knight',
-
-        constitution: 54,
-        strength: 11,
-        wisdom: 4,
-        defense: 4,
-        uid: 'pc-1',
-        tokenId: '4',
-        nftName: 'skeletonWarrior-4',
-    },
-    {
-        id: 'frogKnight',
-        displayName: 'Frog Knight',
-        isPc: true,
-        class: 'knight',
-        constitution: 72,
-        strength: 8,
-        wisdom: 5,
-        defense: 5,
-
-        uid: 'pc-2',
-        tokenId: '4',
-        nftName: 'frogKnight-4',
-    },
-    {
-        id: 'mushroomFarmer',
-        displayName: 'Mushroom Farmer',
-        isPc: true,
-        class: 'cleric',
-        constitution: 112,
-        strength: 8,
-        wisdom: 9,
-        defense: 6,
-
-        uid: 'pc-3',
-        tokenId: '4',
-        nftName: 'mushroomFarmer-4',
-    },
-    {
-        id: 'matchaGelatinCube',
-        displayName: 'Matcha Gelatin Cube',
-        isPc: true,
-        class: 'wizard',
-
-        constitution: 78,
-        strength: 5,
-        wisdom: 7,
-        defense: 5,
-
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
-    },
-    {
-        id: 'warhog',
-        displayName: 'Warhog',
-        isPc: true,
-        class: 'cleric',
-
-        constitution: 84,
-        strength: 6,
-        wisdom: 4,
-        defense: 8,
-
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'warhog-4',
-    },
-    {
-        id: 'gnomeHooligan',
-        displayName: 'Gnome Hooligan',
-        isPc: true,
-        class: 'rogue',
-
-        constitution: 40,
-        strength: 12,
-        wisdom: 12,
-        defense: 3,
-
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
-    },
-    {
-        id: 'jerry',
-        displayName: 'Jerry',
-        isPc: true,
-        class: 'bard',
-
-        constitution: 86,
-        strength: 5,
-        wisdom: 20,
-        defense: 9,
-
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
-    },
-]
+import { onUpdate } from '@/util'
 
 // const preselectFilter = new AdjustmentFilter({
 //     contrast: 0,
@@ -192,10 +79,9 @@ export function SelectedCharactersEl(): PixiContainer {
                                 events: {
                                     pointerout() {},
                                     pointerdown() {
-                                        if (hoveredCharacterUid.val === c.uid)
-                                            toggleSelectedCharacter(c, i)
-
-                                        hoveredCharacterUid.set(c.uid)
+                                        // if (hoveredCharacterUid.val === c.uid)
+                                        //     toggleSelectedCharacter(c, i)
+                                        // hoveredCharacterUid.set(c.uid)
                                     },
                                 },
                                 height: characterHeight,
@@ -322,37 +208,6 @@ function getXYAtIndex(i: number) {
         x: x + (i === 0 ? -180 : i === 2 ? 0 : 180),
         y: y + (i === 2 ? 43 : 0),
     }
-}
-
-function toggleSelectedCharacter(c: OwnedCharacterStats, i: number) {
-    const nextIndex =
-        (defaultOwnedCharacters.findIndex(oc => oc.id === c.id) + 1) %
-        defaultOwnedCharacters.length
-    const nextChoice = defaultOwnedCharacters[nextIndex]
-
-    void callApi('placeSelectedCharacters', {
-        characters: [
-            {
-                character: {
-                    ...nextChoice,
-                    uid: `pc-${i + 1}`,
-                },
-                index: i as CharacterPlaceIndex,
-            },
-        ],
-    })
-}
-
-async function fillUnselectedSlots(charactersData: SelectedCharacters) {
-    if (charactersData[2]) return
-
-    const additions = range(1)
-        .filter(i => charactersData[i] == null)
-        .map(i => ({
-            character: defaultOwnedCharacters[i],
-            index: 1 as CharacterPlaceIndex,
-        }))
-    await callApi('placeSelectedCharacters', { characters: additions })
 }
 
 interface TweenProps {

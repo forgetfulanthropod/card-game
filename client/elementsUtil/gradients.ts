@@ -50,6 +50,39 @@ type RRGSProps = {
     spriteArgs: GradientSpriteArgs
 }
 
+export function RoundedBordered(
+    el: PixiSprite,
+    props: {
+        radius: 20
+        borderThickness: 12
+        borderColor: 0x333333
+    }
+): PixiGraphics {
+    const g = new PixiGraphics()
+    const scale = el.scale.x
+    g.scale.set(scale)
+    g.beginTextureFill({
+        texture: el.texture,
+    })
+    g.lineStyle({
+        width: (props.borderThickness * 1) / scale,
+        alignment: 1,
+        color: props.borderColor,
+    })
+
+    const radius = (props.radius * 1) / scale
+
+    if (radius >= Math.max(el.width, el.height) / 2) {
+        g.drawCircle(radius, radius, radius)
+    } else {
+        g.drawRoundedRect(0, 0, el.texture.width, el.texture.height, radius)
+    }
+
+    g.endFill()
+
+    return g
+}
+
 // a gradient inside of a rounded corner rectangle
 export function RoundedRectangleGradientSprite(props: RRGSProps): PixiSprite {
     const cached = rrgsMemo.find(([args, _texture]) =>
