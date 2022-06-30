@@ -53,9 +53,9 @@ type RRGSProps = {
 export function RoundedBordered(
     el: PixiSprite,
     props: {
-        radius: 20
-        borderThickness: 12
-        borderColor: 0x333333
+        radius: number
+        borderThickness: number
+        borderColor: number
     }
 ): PixiGraphics {
     const g = new PixiGraphics()

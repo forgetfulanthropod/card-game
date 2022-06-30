@@ -179,5 +179,13 @@ export const matchaEntryAssets = {
 }
 
 export const characterProfileAssets = {
-    frogKnightProfile: 'character extras/profiles/frogKnight.webp',
+    frogKnightProfile: 'character profiles/frogKnight.webp',
+    penguinKnightProfile: 'character profiles/penguinKnight.webp',
+    skeletonWarriorProfile: 'character profiles/skeletonWarrior.webp',
+    mushroomFarmerProfile: 'character profiles/mushroomFarmer.webp',
+    matchaGelatinCubeProfile: 'character profiles/matchaGelatinCube.webp',
+    gnomeHooliganProfile: 'character profiles/gnomeHooligan.webp',
+    warhogProfile: 'character profiles/warhog.webp',
+    bookleProfile: 'character profiles/bookle.webp',
+    jerryProfile: 'character profiles/jerry.webp',
 }

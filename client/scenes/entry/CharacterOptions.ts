@@ -117,9 +117,9 @@ export function CharacterOptions() {
     return Container(
         {},
         ...defaultOwnedCharacters.map((c, index) => {
-            const width = 200
+            const width = 180
             const margin = width * 0.2
-            const src = getTexture(`frogKnightProfile`)
+            const src = getTexture(`${c.id}Profile`)
 
             return Container(
                 {
@@ -139,7 +139,7 @@ export function CharacterOptions() {
                     {
                         radius: 20,
                         borderThickness: 12,
-                        borderColor: 0x333333,
+                        borderColor: 0,
                     }
                 )
             )
