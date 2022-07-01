@@ -28,6 +28,8 @@ export function DungeonEntryScene(): PixiContainer {
                 onUpdate(
                     selectedCharactersCursor,
                     selected => {
+                        if (selected == null) return
+
                         startButton.visible =
                             selected.filter(s => s).length ===
                             NUM_CHARACTERS_REQUIRED

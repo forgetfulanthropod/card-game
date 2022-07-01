@@ -172,7 +172,6 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
                         ...getXYAtIndex(index),
                     }),
                     {
-                        ...getXYAtIndex(index),
                         y: getXYAtIndex(index).y - 33,
                     }
                 ),
