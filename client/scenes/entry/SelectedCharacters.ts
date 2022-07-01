@@ -1,8 +1,8 @@
 import { MainCharacterAnimation } from '@sharedElements'
 import { Tweener, Easing } from 'pixi-tweener'
 import { keys } from 'shared/code'
-import type { CharacterPlaceIndex } from 'shared'
-import { compose } from 'datums'
+import type { CharacterPlaceIndex, SelectedCharacters } from 'shared'
+
 import {
     selectedCharacterId,
     selectedCharacterPlaceIndex,
@@ -11,7 +11,6 @@ import { getEntryScene } from '@/data'
 import type { DisplayObject, PixiContainer } from '@/elementsUtil'
 import {
     glowFilter,
-    If,
     isTextureKey,
     PixiTexture,
     BASE_HEIGHT,
@@ -21,7 +20,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { onUpdate } from '@/util'
+import { hoveredCharacterUid, onUpdate } from '@/util'
 
 // const preselectFilter = new AdjustmentFilter({
 //     contrast: 0,
@@ -67,166 +66,149 @@ export function SelectedCharactersEl(): PixiContainer {
 
         // void fillUnselectedSlots(charactersData)
 
-        const characterHeight = 260
-        const characters =
-            charactersData
-                .map((c, i) => {
-                    if (c == null) return null
-                    const props = {
-                        ...getXYAtIndex(i),
-                        scale: i === 2 ? 1.1 : 1,
-                    } as const
-                    return [
-                        Container(
-                            {
-                                zIndex: i,
-                                ...props,
-                            },
-
-                            MainCharacterAnimation({
-                                characterMeta: c,
-                                events: {
-                                    pointerout() {
-                                        // only un-hover on bg click...
-                                    },
-                                    pointerup() {
-                                        selectedCharacterPlaceIndex.set(
-                                            i as CharacterPlaceIndex
-                                        )
-                                        selectedCharacterId.set(c.id)
-                                    },
-                                },
-                                height: characterHeight,
-                            }) ??
-                                Sprite({
-                                    anchor: 0.5,
-                                    src: isTextureKey(c.id)
-                                        ? getTexture(c.id)
-                                        : PixiTexture.WHITE,
-                                    scale: 1,
-                                })
-                        ),
-                    ]
-                })
-                .flat() ?? []
+        const characters = Characters(charactersData)
         listenerStack.pop()?.()
 
         root.removeChildren()
 
-        // range(3 - characters.length).map((i) => {
-        //     root.addChild(Sprite({
-        //         src: ''
-        //     }))
-        // })
-
-        const pedestalRays = characters
-            .map((c, index): PixiContainer | null => {
-                if (c != null) return null
-
-                return If(
-                    compose(
-                        selectedIndex => selectedIndex ?? true,
-                        selectedCharacterPlaceIndex
-                    ),
-                    ([selectedIndex]) =>
-                        Container(
-                            {
-                                zIndex: index,
-                            },
-                            Sprite({
-                                name: `pedestalRay${index}`,
-                                src: `pedestalRay${index}`,
-                                scale:
-                                    BASE_WIDTH /
-                                    getTexture(`pedestalRay${index}`).width,
-                            }),
-                            Container(
-                                {},
-                                LoopingAnimation(
-                                    Sprite({
-                                        name: `select${index}`,
-                                        src: 'selectCharacterArrow',
-                                        anchor: [0.5, 1.4],
-                                        ...getXYAtIndex(index),
-                                        filters:
-                                            selectedIndex === index
-                                                ? [glowFilter]
-                                                : [],
-                                    }),
-                                    {
-                                        ...getXYAtIndex(index),
-                                        y: getXYAtIndex(index).y - 33,
-                                    }
-                                    // [
-                                    //     {
-                                    //         duration: 2,
-                                    //         ease: Easing.easeInExpo,
-                                    //     },
-                                    // ]
-                                    // {
-                                    //     from: {
-                                    //         ...getXYAtIndex(index),
-                                    //     },
-                                    //     to: {
-                                    //         ...getXYAtIndex(index),
-                                    //         y: getXYAtIndex(index) - 33,
-                                    //     },
-                                    // }
-                                ),
-                                Sprite({
-                                    name: `click region`,
-                                    src: PixiTexture.WHITE,
-                                    width: 190 + (index === 2 ? 50 : 0),
-                                    height: 360 + (index === 2 ? 50 : 0),
-                                    alpha: 0,
-                                    events: {
-                                        pointerup() {
-                                            selectedCharacterPlaceIndex.set(
-                                                index as CharacterPlaceIndex
-                                            )
-                                            selectedCharacterId.set(null)
-                                        },
-                                    },
-                                    anchor: [0.5, 0.92],
-                                    ...getXYAtIndex(index),
-                                })
-                            )
-                        )
-                )
-            })
-            .filter(c => c != null) as PixiContainer[]
+        const pedestalRays = PedestalRays(characters)
 
         if (pedestalRays.length) root.addChild(...pedestalRays)
-        if (pedestalRays.length === 3)
-            root.addChild(
-                Text({
-                    text: 'SELECT A CHARACTER',
-                    x: BASE_WIDTH * 0.506,
-                    y: BASE_HEIGHT * 0.565,
-                    anchor: 0.5,
-                    style: {
-                        fontFamily: 'bigFont',
-                        fontSize: 50,
-                        fill: 0xdddddd,
-                        strokeThickness: 22,
-                        stroke: 0x222_222,
-                    },
-                })
-            )
+        if (pedestalRays.length === 3) root.addChild(SelectedCharacterText())
         const validCharacters = characters.filter(
             c => c != null
         ) as PixiContainer[]
         if (validCharacters.length) root.addChild(...validCharacters)
         root.sortChildren()
-
-        // listenerStack.push(
-        //     brightBackLightIsShining.onChange((is, _, unsub) => {
-        //         if (is) unsub()
-
-        //         characters.forEach(c => (c.filters = is ? [darkenFilter] : []))
-        //     })
-        // )
     }
+}
+
+function SelectedCharacterText() {
+    return Text({
+        text: 'SELECT A CHARACTER',
+        x: BASE_WIDTH * 0.506,
+        y: BASE_HEIGHT * 0.565,
+        anchor: 0.5,
+        style: {
+            fontFamily: 'bigFont',
+            fontSize: 50,
+            fill: 0xdddddd,
+            strokeThickness: 22,
+            stroke: 2236962,
+        },
+    })
+}
+
+function Characters(charactersData: SelectedCharacters) {
+    return (
+        charactersData
+            .map((c, i) => {
+                const characterHeight = 260
+
+                if (c == null) return null
+
+                const props = {
+                    ...getXYAtIndex(i),
+                    scale: i === 2 ? 1.1 : 1,
+                } as const
+                return [
+                    Container(
+                        {
+                            zIndex: i,
+                            ...props,
+                        },
+
+                        MainCharacterAnimation({
+                            characterMeta: c,
+                            events: {
+                                pointerout() {
+                                    // only un-hover on bg click...
+                                },
+                                pointerup() {
+                                    selectedCharacterPlaceIndex.set(
+                                        i as CharacterPlaceIndex
+                                    )
+                                    selectedCharacterId.set(c.id)
+                                },
+                            },
+                            height: characterHeight,
+                        }) ??
+                            Sprite({
+                                anchor: 0.5,
+                                src: isTextureKey(c.id)
+                                    ? getTexture(c.id)
+                                    : PixiTexture.WHITE,
+                                scale: 1,
+                            })
+                    ),
+                ]
+            })
+            .flat() ?? []
+    )
+}
+
+function PedestalRays(characters: (PixiContainer | null)[]) {
+    const rays = characters.map((c, index): PixiContainer | null => {
+        if (c != null) return null
+
+        selectedCharacterPlaceIndex.onChange(() => {})
+
+        return Container(
+            {
+                zIndex: index,
+            },
+            Sprite({
+                name: `pedestalRay${index}`,
+                src: `pedestalRay${index}`,
+                scale: BASE_WIDTH / getTexture(`pedestalRay${index}`).width,
+            }),
+            Container(
+                {},
+                LoopingAnimation(
+                    Sprite({
+                        name: `select${index}`,
+                        src: 'selectCharacterArrow',
+                        anchor: [0.5, 1.4],
+                        ...getXYAtIndex(index),
+                    }),
+                    {
+                        ...getXYAtIndex(index),
+                        y: getXYAtIndex(index).y - 33,
+                    }
+                ),
+                Sprite({
+                    name: `click region`,
+                    src: PixiTexture.WHITE,
+                    width: 190 + (index === 2 ? 50 : 0),
+                    height: 360 + (index === 2 ? 50 : 0),
+                    alpha: 0,
+                    events: {
+                        pointerup() {
+                            selectedCharacterPlaceIndex.set(
+                                index as CharacterPlaceIndex
+                            )
+                            selectedCharacterId.set(null)
+                            hoveredCharacterUid.set(null)
+                        },
+                    },
+                    anchor: [0.5, 0.92],
+                    ...getXYAtIndex(index),
+                })
+            )
+        )
+    })
+
+    selectedCharacterPlaceIndex.onChange(placeIndex => {
+        console.log({ placeIndex })
+        rays.forEach((ray, rayIndex) => {
+            if (ray == null) return
+
+            ray.children[1].filters =
+                placeIndex === rayIndex ? [glowFilter] : []
+        })
+    })
+
+    return rays.filter(c => c != null) as PixiContainer[]
 }
 
 function getXYAtIndex(i: number) {
