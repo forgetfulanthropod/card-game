@@ -96,14 +96,8 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         parentWidth: contentWidth * 0.8,
     })
 
-    const classOutlineFilter = new OutlineFilter(
-        5,
-        classColorMap[props.cm.class][1]
-    )
-    const classOutlineFilter2 = new OutlineFilter(
-        3,
-        classColorMap[props.cm.class][1]
-    )
+    const classOutlineFilter = new OutlineFilter(5, 0)
+    const classOutlineFilter2 = new OutlineFilter(3, 0)
     const whiteOutlineFilter = new OutlineFilter(5, 0xbbbbbb)
     const mainPadding = 40
 
@@ -194,7 +188,6 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             x: contentWidth * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
-            filters: [classOutlineFilter],
         }),
         ...AbilityButtons(props.abilities),
         Adjust(allCharCards, {

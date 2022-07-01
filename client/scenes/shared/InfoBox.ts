@@ -30,8 +30,7 @@ export function InfoBox(
                 x1: 0,
                 y1: localBounds.height,
                 colorStops: displayArgs.colorStops ?? [
-                    { color: 0x111111, offset: 0 },
-                    { color: 0x33_33_33, offset: 1 },
+                    { color: 0x272753, offset: 0 },
                 ],
             },
             spriteArgs: {
