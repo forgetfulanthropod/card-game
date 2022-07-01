@@ -18,8 +18,7 @@ export function bindGamestate(app: PixiApplication): void {
 }
 
 function setBodyStyles() {
-    document.body.style.cursor = 'pointer'
-    document.body.style.cursor = `url('${pointerFullPath}'), pointer`
+    document.body.style.cursor = `url('${pointerFullPath}'), default`
 }
 
 function bindScene(app: PixiApplication): Unbind {

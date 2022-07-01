@@ -28,7 +28,7 @@ export function GoButton(): PixiContainer {
         },
     })
 
-    bg.cursor = 'pointer'
+    bg.cursor = `url('assets/root/hand.webp'), pointer`
 
     const root = Container(
         {

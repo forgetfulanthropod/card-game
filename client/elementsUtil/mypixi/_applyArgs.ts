@@ -19,7 +19,7 @@ export function applyDisplayObjectArgs(
 
     if (args.onClick != null) {
         el.interactive = true
-        el.cursor = 'pointer'
+        el.cursor = `url('assets/root/hand.webp'), pointer`
         el.on('pointerdown', args.onClick)
     }
 

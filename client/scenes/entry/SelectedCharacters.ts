@@ -1,9 +1,17 @@
 import { MainCharacterAnimation } from '@sharedElements'
 import { Tweener, Easing } from 'pixi-tweener'
 import { keys } from 'shared/code'
-import { getEntryScene } from '@/data'
-import type { DisplayObject, PixiContainer, PixiSprite } from '@/elementsUtil'
+import type { CharacterPlaceIndex } from 'shared'
+import { compose } from 'datums'
 import {
+    selectedCharacterId,
+    selectedCharacterPlaceIndex,
+} from './CharacterOptions'
+import { getEntryScene } from '@/data'
+import type { DisplayObject, PixiContainer } from '@/elementsUtil'
+import {
+    glowFilter,
+    If,
     isTextureKey,
     PixiTexture,
     BASE_HEIGHT,
@@ -78,11 +86,14 @@ export function SelectedCharactersEl(): PixiContainer {
                             MainCharacterAnimation({
                                 characterMeta: c,
                                 events: {
-                                    pointerout() {},
-                                    pointerdown() {
-                                        // if (hoveredCharacterUid.val === c.uid)
-                                        //     toggleSelectedCharacter(c, i)
-                                        // hoveredCharacterUid.set(c.uid)
+                                    pointerout() {
+                                        // only un-hover on bg click...
+                                    },
+                                    pointerup() {
+                                        selectedCharacterPlaceIndex.set(
+                                            i as CharacterPlaceIndex
+                                        )
+                                        selectedCharacterId.set(c.id)
                                     },
                                 },
                                 height: characterHeight,
@@ -109,67 +120,81 @@ export function SelectedCharactersEl(): PixiContainer {
         // })
 
         const pedestalRays = characters
-            .map((c, index) => {
+            .map((c, index): PixiContainer | null => {
                 if (c != null) return null
 
-                return Container(
-                    {
-                        zIndex: index,
-                    },
-                    Sprite({
-                        name: `pedestalRay${index}`,
-                        src: `pedestalRay${index}`,
-                        scale:
-                            BASE_WIDTH /
-                            getTexture(`pedestalRay${index}`).width,
-                    }),
-                    Container(
-                        {},
-                        LoopingAnimation(
-                            Sprite({
-                                name: `select${index}`,
-                                src: 'selectCharacterArrow',
-                                anchor: [0.5, 1.4],
-                                ...getXYAtIndex(index),
-                            }),
+                return If(
+                    compose(
+                        selectedIndex => selectedIndex ?? true,
+                        selectedCharacterPlaceIndex
+                    ),
+                    ([selectedIndex]) =>
+                        Container(
                             {
-                                ...getXYAtIndex(index),
-                                y: getXYAtIndex(index).y - 33,
-                            }
-                            // [
-                            //     {
-                            //         duration: 2,
-                            //         ease: Easing.easeInExpo,
-                            //     },
-                            // ]
-                            // {
-                            //     from: {
-                            //         ...getXYAtIndex(index),
-                            //     },
-                            //     to: {
-                            //         ...getXYAtIndex(index),
-                            //         y: getXYAtIndex(index) - 33,
-                            //     },
-                            // }
-                        ),
-                        Sprite({
-                            name: `click region`,
-                            src: PixiTexture.WHITE,
-                            width: 200,
-                            height: 300,
-                            alpha: 0,
-                            events: {
-                                pointerup() {
-                                    alert('open character select menu')
-                                },
+                                zIndex: index,
                             },
-                            anchor: [0.5, 0.8],
-                            ...getXYAtIndex(index),
-                        })
-                    )
+                            Sprite({
+                                name: `pedestalRay${index}`,
+                                src: `pedestalRay${index}`,
+                                scale:
+                                    BASE_WIDTH /
+                                    getTexture(`pedestalRay${index}`).width,
+                            }),
+                            Container(
+                                {},
+                                LoopingAnimation(
+                                    Sprite({
+                                        name: `select${index}`,
+                                        src: 'selectCharacterArrow',
+                                        anchor: [0.5, 1.4],
+                                        ...getXYAtIndex(index),
+                                        filters:
+                                            selectedIndex === index
+                                                ? [glowFilter]
+                                                : [],
+                                    }),
+                                    {
+                                        ...getXYAtIndex(index),
+                                        y: getXYAtIndex(index).y - 33,
+                                    }
+                                    // [
+                                    //     {
+                                    //         duration: 2,
+                                    //         ease: Easing.easeInExpo,
+                                    //     },
+                                    // ]
+                                    // {
+                                    //     from: {
+                                    //         ...getXYAtIndex(index),
+                                    //     },
+                                    //     to: {
+                                    //         ...getXYAtIndex(index),
+                                    //         y: getXYAtIndex(index) - 33,
+                                    //     },
+                                    // }
+                                ),
+                                Sprite({
+                                    name: `click region`,
+                                    src: PixiTexture.WHITE,
+                                    width: 190 + (index === 2 ? 50 : 0),
+                                    height: 360 + (index === 2 ? 50 : 0),
+                                    alpha: 0,
+                                    events: {
+                                        pointerup() {
+                                            selectedCharacterPlaceIndex.set(
+                                                index as CharacterPlaceIndex
+                                            )
+                                            selectedCharacterId.set(null)
+                                        },
+                                    },
+                                    anchor: [0.5, 0.92],
+                                    ...getXYAtIndex(index),
+                                })
+                            )
+                        )
                 )
             })
-            .filter(c => c != null) as PixiSprite[]
+            .filter(c => c != null) as PixiContainer[]
 
         if (pedestalRays.length) root.addChild(...pedestalRays)
         if (pedestalRays.length === 3)
@@ -208,7 +233,7 @@ function getXYAtIndex(i: number) {
     const x = 0.507 * BASE_WIDTH
     const y = 0.807 * BASE_HEIGHT
     return {
-        x: x + (i === 0 ? -180 : i === 2 ? 0 : 180),
+        x: x + (i === 0 ? -190 : i === 2 ? 0 : 170),
         y: y + (i === 2 ? 43 : 0),
     }
 }
@@ -223,7 +248,13 @@ function LoopingAnimation(el: DisplayObject, params: TweenProps) {
         //@ts-expect-error
         originalProps[pKey] = el[pKey]
     })
+
+    el.on('destroyed', () => {
+        Tweener.killTweensOf(el)
+    })
     ;(function play() {
+        if (el == null) return
+
         void Tweener.add(
             {
                 //@ts-expect-error

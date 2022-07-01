@@ -16,7 +16,7 @@ export function bindEvents(
 ) {
     if (events == null || Object.keys(events).length === 0) return
     el.interactive = true
-    el.cursor = 'pointer'
+    el.cursor = `url('assets/root/hand.webp'), pointer`
     Object.entries(events).forEach(([eventName, handler]) =>
         el.on(eventName, handler)
     )

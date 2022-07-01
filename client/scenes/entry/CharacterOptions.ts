@@ -14,6 +14,7 @@ import {
     glowFilter,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
+import { hoveredCharacterUid } from '@/util'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {
@@ -120,7 +121,10 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
     },
 ]
 
-export const selectedCharacterId = datum<null | CharacterId>('frogKnight')
+export const selectedCharacterId = datum<null | CharacterId>(null)
+export const selectedCharacterPlaceIndex = datum<null | CharacterPlaceIndex>(
+    null
+)
 
 export function CharacterOptions() {
     const options = defaultOwnedCharacters.map((c, index) => {
@@ -135,7 +139,16 @@ export function CharacterOptions() {
                 y: 50 + Math.floor(index / 2) * (width + margin),
                 events: {
                     pointerup() {
-                        chooseOwnedCharacterAt(index)
+                        if (selectedCharacterPlaceIndex.val == null)
+                            throw new Error(
+                                'trying to choose but no place index...'
+                            )
+
+                        selectedCharacterId.set(c.id)
+                        chooseOwnedCharacterAt(
+                            index,
+                            selectedCharacterPlaceIndex.val
+                        )
                     },
                 },
             },
@@ -159,12 +172,9 @@ export function CharacterOptions() {
                 selectedCharacterId.onChange(id => {
                     options.forEach(o => (o.filters = []))
                     if (id == null) return
-                    else {
-                        const i = defaultOwnedCharacters.findIndex(
-                            c => c.id === id
-                        )
-                        options[i].filters = [glowFilter]
-                    }
+
+                    const i = defaultOwnedCharacters.findIndex(c => c.id === id)
+                    options[i].filters = [glowFilter]
                 }, true),
             ],
         },
@@ -172,17 +182,22 @@ export function CharacterOptions() {
     )
 }
 
-const currentCharacterPlaceIndex = datum<CharacterPlaceIndex>(0)
+function chooseOwnedCharacterAt(
+    ownedCharacterIndex: number,
+    selectedCharacterPlaceIndex: CharacterPlaceIndex
+) {
+    const uid = `pc-${ownedCharacterIndex}-${(Math.random() * 10000) | 0}`
 
-function chooseOwnedCharacterAt(ownedCharacterIndex: number) {
+    hoveredCharacterUid.set(uid)
+
     void callApi('placeSelectedCharacters', {
         characters: [
             {
                 character: {
                     ...defaultOwnedCharacters[ownedCharacterIndex],
-                    uid: `pc-${ownedCharacterIndex}`,
+                    uid,
                 },
-                index: currentCharacterPlaceIndex.val,
+                index: selectedCharacterPlaceIndex,
             },
         ],
     })

@@ -1,11 +1,15 @@
 import { RootCharacterInfo } from '@sharedElements'
+import { compose } from 'datums'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { SelectedCharactersEl } from './SelectedCharacters'
 import { GoButton } from './GoButton'
-import { CharacterOptions } from './CharacterOptions'
+import {
+    CharacterOptions,
+    selectedCharacterPlaceIndex,
+} from './CharacterOptions'
 import { getEntryScene } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container } from '@/elementsUtil'
+import { If, Container } from '@/elementsUtil'
 import { onUpdate } from '@/util'
 
 const NUM_CHARACTERS_REQUIRED = 3
@@ -35,7 +39,10 @@ export function DungeonEntryScene(): PixiContainer {
         DungeonEntryBg(),
         SelectedCharactersEl(),
         startButton,
-        CharacterOptions(),
+        If(
+            compose(([i]) => i != null, selectedCharacterPlaceIndex),
+            () => CharacterOptions()
+        ),
         RootCharacterInfo()
         // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
     )
