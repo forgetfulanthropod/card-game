@@ -68,7 +68,7 @@ export function RootCharacterInfo() {
         root.addChild(
             Adjust(characterInfo, {
                 x: characterInfo.width * 0.5 + BASE_WIDTH * 0.67,
-                y: characterInfo.height * 0.3,
+                y: 78 + characterInfo.width * 0.1,
             })
         )
     }

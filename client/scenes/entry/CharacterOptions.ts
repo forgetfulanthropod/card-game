@@ -128,15 +128,20 @@ export const selectedCharacterPlaceIndex = datum<null | CharacterPlaceIndex>(
 
 export function CharacterOptions() {
     const options = defaultOwnedCharacters.map((c, index) => {
-        const width = 180
+        const width = 115
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile`)
         // const src = getTexture(`frogKnightProfile`)
 
         return Container(
             {
-                x: 50 + (index % 2) * (width + margin),
-                y: 50 + Math.floor(index / 2) * (width + margin),
+                x: 78 + (index % 2) * (width + margin),
+                y: 54 + Math.floor(index / 2) * (width + margin),
+                // x:
+                //     BASE_WIDTH * 0.508 +
+                //     (-defaultOwnedCharacters.length / 2 + index) *
+                //         (width + margin),
+                // y: BASE_HEIGHT * 0.88,
                 events: {
                     pointerup() {
                         if (selectedCharacterPlaceIndex.val == null)

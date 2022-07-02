@@ -72,7 +72,7 @@ export function RoundedBordered(
 
     const radius = (props.radius * 1) / scale
 
-    if (radius >= Math.max(el.width, el.height) / 2) {
+    if (radius >= Math.max(el.texture.width, el.texture.height) / 2) {
         g.drawCircle(radius, radius, radius)
     } else {
         g.drawRoundedRect(0, 0, el.texture.width, el.texture.height, radius)
