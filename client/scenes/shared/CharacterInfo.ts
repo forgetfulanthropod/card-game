@@ -192,9 +192,7 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
         ...AbilityButtons(props.abilities),
         Adjust(allCharCards, {
             y: 220,
-            x:
-                -allCharCards.width / 2 +
-                (contentWidth + mainPadding * 2 - allCharCards.width) * 0.5,
+            x: -allCharCards.width + contentWidth / 2 + mainPadding,
             filters: [classOutlineFilter2],
         })
     ).parent

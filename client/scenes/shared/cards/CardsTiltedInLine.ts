@@ -13,27 +13,29 @@ export function CardsTiltedInLine({
     cardWidth?: number
     parentWidth?: number
 }): PixiContainer {
-    let spaceBetween = cardWidth / 2
+    const bgPaddingPortion = 0.08
+    const tiltFactor = 0.7
 
-    const wouldBeTotalWidth = cardWidth + (cards.length - 1) * spaceBetween
+    const tiltedWidth = tiltFactor * 1.1 * cardWidth
 
+    let spaceBetween = cardWidth * tiltFactor
+    const wouldBeTotalWidth = tiltedWidth + (cards.length - 1) * spaceBetween
     if (wouldBeTotalWidth > parentWidth) {
-        spaceBetween = (parentWidth - cardWidth) / (cards.length - 1)
+        spaceBetween = (parentWidth - tiltedWidth) / (cards.length - 1)
     }
 
-    const bgPaddingPortion = 0.08
+    const allCardsWidth = spaceBetween * (cards.length - 1) + tiltedWidth
+    const leftMargin =
+        (parentWidth - allCardsWidth) / 2 + bgPaddingPortion * parentWidth
 
     const cardEls = cards.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
-        const tiltFactor = 0.65
-        sprite.scale.x = -0.8
+        sprite.scale.x = -tiltFactor
 
         const c = Container(
             {
-                x:
-                    (cards.length - 1 - index) * spaceBetween +
-                    (cardWidth / 2) * tiltFactor,
+                x: (cards.length - 1 - index) * spaceBetween + leftMargin,
                 y: parentWidth * bgPaddingPortion,
             },
             sprite
