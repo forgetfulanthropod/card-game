@@ -243,7 +243,7 @@ function bindMoves(
             _entry: TrackEntry,
             event: { data: { name: string } }
         ) {
-            if (event.data.name === 'Attack') {
+            if (event.data.name === 'Attack' && !characterMeta.isPc) {
                 triggerStatChanges.set(damages)
             }
         },
