@@ -1,4 +1,5 @@
 import { Graphics, MovieClip, load } from '@pixi/animate'
+//@ts-expect-error
 import data from '../animations/KC_FX_BasicAttack002_v01.js'
 
 export function loadAnimation(): Promise<void> {
