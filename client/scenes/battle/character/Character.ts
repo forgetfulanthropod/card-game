@@ -27,8 +27,10 @@ import {
     SCALE_UNIVERSAL,
     Sprite,
     Text,
+    Animation,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
+
 import { callApi } from '@/callApi'
 import { socketOn } from '@/socket'
 import { getBattleScene } from '@/data'
@@ -217,11 +219,9 @@ function bindMoves(
                         ) {
                             if (event.data.name !== 'Taking Damage') return
 
-                            // const effectAnimation = Animation()
-                            // if (effectAnimation)
-                            //     mainAnimation.parent.addChild(
-                            //         effectAnimation
-                            //     )
+                            const effectAnimation = Animation()
+                            if (effectAnimation)
+                                mainAnimation.parent.addChild(effectAnimation)
 
                             mainAnimation.state.removeListener(
                                 takingDamageListener
