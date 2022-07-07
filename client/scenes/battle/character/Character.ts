@@ -244,7 +244,6 @@ function bindMoves(
             event: { data: { name: string } }
         ) {
             if (event.data.name === 'Attack') {
-                console.log('triggering stat changes')
                 triggerStatChanges.set(damages)
             }
         },
