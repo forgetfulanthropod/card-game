@@ -21,7 +21,8 @@ export function Animation(): MovieClip | null {
 function getNewClip() {
     const newClip = new data.lib.KC_FX_BasicAttack002_v02()
 
-    newClip.y -= 300
+    newClip.y -= 640
+    newClip.scale.set(2.5)
     newClip.loop = false
     newClip.autoReset = false
 
