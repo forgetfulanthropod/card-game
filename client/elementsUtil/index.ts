@@ -2,6 +2,7 @@
 export * from './AssetLoader'
 export * from './filters'
 export * from './gradients'
+export * from './myanimate'
 export * from './mypixi'
 export * from './mypixiExamples'
 export * from './myspine'

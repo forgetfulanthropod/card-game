@@ -209,6 +209,27 @@ function bindMoves(
             if (uid === characterMeta.uid) {
                 if (mainAnimation) {
                     mainAnimation.state.setAnimation(0, 'Damage', false)
+
+                    const takingDamageListener = {
+                        event: function reactToDamage(
+                            _entry: TrackEntry,
+                            event: { data: { name: string } }
+                        ) {
+                            if (event.data.name !== 'Taking Damage') return
+
+                            // const effectAnimation = Animation()
+                            // if (effectAnimation)
+                            //     mainAnimation.parent.addChild(
+                            //         effectAnimation
+                            //     )
+
+                            mainAnimation.state.removeListener(
+                                takingDamageListener
+                            )
+                        },
+                    }
+                    mainAnimation.state.addListener(takingDamageListener)
+
                     mainAnimation.state.addAnimation(0, 'Idle', true)
                 }
                 flashDamageTo(aboveCharacterContainer, changes[uid])
@@ -218,7 +239,15 @@ function bindMoves(
     const unbindDmage$Listener = socketOn('damage$', showCharMove)
 
     const attackListener = {
-        event: listenForAttack,
+        event: function reactToAttack(
+            _entry: TrackEntry,
+            event: { data: { name: string } }
+        ) {
+            if (event.data.name === 'Attack') {
+                console.log('triggering stat changes')
+                triggerStatChanges.set(damages)
+            }
+        },
     }
     let damages: StatChangeMap = {}
 
@@ -228,16 +257,6 @@ function bindMoves(
         unbindStatChangesListener()
         unbindDmage$Listener()
         mainAnimation?.state.removeListener(attackListener)
-    }
-
-    function listenForAttack(
-        _entry: TrackEntry,
-        event: { data: { name: string } }
-    ) {
-        if (event.data.name === 'Attack') {
-            console.log('triggering stat changes')
-            triggerStatChanges.set(damages)
-        }
     }
 
     function showCharMove(event: NetworkEvent<'damage$', CardHit>) {

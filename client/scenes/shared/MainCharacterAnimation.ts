@@ -1,4 +1,4 @@
-import type { CharacterMeta, CharacterUid } from 'shared'
+import type { CharacterId, CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
@@ -56,19 +56,30 @@ export function MainCharacterAnimation({
 
     updateGlow(hoveredCharacterUid.val)
 
-    const heightOverrides = {
-        matchaGelatinCube: 15 / 19,
+    const heightOverrides: Partial<Record<CharacterId, number>> = {
+        matchaGelatinCube: 0.88,
+        frogKnight: 1.4,
+        warhog: 0.85,
+        jerry: 1.1,
+        gnomeHooligan: 1.1,
+        skeletonWarrior: 0.75,
     }
 
-    //@ts-expect-error
-    const desiredHeight = (heightOverrides?.[characterMeta.id] ?? 1) * height // TODO: what is it tho
-    const desiredScale = Math.min(
-        desiredHeight / root.height,
-        (desiredHeight * 1.2) / root.width
-    )
+    // //@ts-expect-error
+    // const desiredHeight = (heightOverrides?.[characterMeta.id] ?? 1) * height // TODO: what is it tho
+    // const desiredScale = Math.min(
+    //     desiredHeight / root.height,
+    //     (desiredHeight * 1.2) / root.width
+    // )
+    const desiredScale = 0.0826 * (heightOverrides?.[characterMeta.id] ?? 1) // 260/matcha height
+    // console.log({ name: characterMeta.id, desiredScale })
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 
-    if (centerX) root.x += ((characterMeta.isPc ? 1 : -1) * root.width) / 4
+    if (!characterMeta.isPc) {
+        root.x -= root.width * 0.36
+    }
+
+    // if (centerX) root.x -= ((characterMeta.isPc ? 1 : -1) * root.width) / 2
 
     return root
 

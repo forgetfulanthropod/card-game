@@ -3,7 +3,8 @@
     "dependencies": {
         "@monaco-editor/react": "^4.4.5",
         "@pixi-essentials/gradients": "^0.0.5",
-        "@pixi-spine/all-4.0": "^3.0.13",
+        "@pixi-spine/all-4.0": "^3.0.16",
+        "@pixi/animate": "^2.0.2",
         "ahooks": "^3.3.12",
         "gsap": "^3.10.4",
         "mobile-device-detect": "^0.4.3",

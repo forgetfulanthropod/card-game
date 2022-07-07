@@ -2,6 +2,7 @@ import { Loader } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 import { uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
+import { loadAnimation } from './myanimate'
 import { assetMaps } from '@/assets'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
@@ -29,6 +30,8 @@ export function startLoadingAssets() {
 
     Loader.shared.load()
     Loader.shared.onComplete.once(() => resolveLoaderPromise(null))
+
+    void loadAnimation()
 }
 
 export function getTexture(assetId: AssetKey): PixiTexture {

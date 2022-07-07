@@ -49,11 +49,16 @@ app.post('/api', api)
 app.use(
     '/assets',
     express.static(__dirname + '../../public/assets', {
-        extensions: ['.atlas'],
+        extensions: ['.atlas', '.txt'],
         maxAge: '1d',
     })
 )
-app.use('/', express.static(__dirname + '../../public/'))
+app.use(
+    '/',
+    express.static(__dirname + '../../public/', {
+        extensions: ['.atlas', '.txt'],
+    })
+)
 
 if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {
