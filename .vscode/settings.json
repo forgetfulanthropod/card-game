@@ -30,7 +30,6 @@
         "builds": true,
         "ignore": true,
         ".eslintrc.json": true,
-        ".gitignore": true,
         ".prettierignore": true,
         ".prettierrc.json": true,
         "arkit.json": true,
