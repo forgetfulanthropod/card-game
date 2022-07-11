@@ -64,7 +64,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                 src: getTexture('blockIcon'),
                 width: 90 * SCALE_UNIVERSAL,
                 height: 90 * SCALE_UNIVERSAL,
-                anchor: [0.5, 0.5],
+                anchor: [0.5, 0.45],
             }),
             Text({
                 text: `${block}`,
