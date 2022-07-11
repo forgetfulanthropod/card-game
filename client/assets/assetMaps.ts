@@ -157,8 +157,12 @@ export const spineAssets = {
         'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
     skeletonWarriorSpine:
         'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
+    skeletonWarriorNPCSpine:
+        'spine/skeletonWarriorNPC/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
     matchaGelatinCubeSpine:
         'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
+    matchaGelatinCubeNPCSpine:
+        'spine/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
     gnomeHooliganSpine: 'spine/gnomeHooligan/Gnome_Hooligan.json',
     jerrySpine: 'spine/jerry/Jerry_MJ_Rig_Prep_v4.json',
     warhogSpine: 'spine/warhog/Warhog.json',
@@ -179,12 +183,13 @@ export const matchaEntryAssets = {
 }
 
 export const characterProfileAssets = {
-    frogKnightProfile: 'character profiles/frogKnight.webp',
-    skeletonWarriorProfile: 'character profiles/skeletonWarrior.webp',
-    mushroomFarmerProfile: 'character profiles/mushroomFarmer.webp',
-    matchaGelatinCubeProfile: 'character profiles/matchaGelatinCube.webp',
-    gnomeHooliganProfile: 'character profiles/gnomeHooligan.webp',
-    warhogProfile: 'character profiles/warhog.webp',
     bookleProfile: 'character profiles/bookle.webp',
+    frogKnightProfile: 'character profiles/frogKnight.webp',
+    gnomeHooliganProfile: 'character profiles/gnomeHooligan.webp',
     jerryProfile: 'character profiles/jerry.webp',
+    matchaGelatinCubeProfile: 'character profiles/matchaGelatinCube.webp',
+    mushroomFarmerProfile: 'character profiles/mushroomFarmer.webp',
+    penguinKnightProfile: 'character profiles/penguinKnight.webp',
+    skeletonWarriorProfile: 'character profiles/skeletonWarrior.webp',
+    warhogProfile: 'character profiles/warhog.webp',
 }

@@ -17,9 +17,18 @@ export const getCharTexture = (charId: CharacterId) =>
 export const getOrbTexture = (orbType: OrbType) =>
     getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)
 
-export function getValidSpineAssetName(name: CharacterId): SpineAsset | null {
+export function getValidSpineAssetName(
+    name: CharacterId,
+    isPc?: boolean
+): SpineAsset | null {
+    const haveEvilVersions: Partial<Record<CharacterId, boolean>> = {
+        skeletonWarrior: true,
+        matchaGelatinCube: true,
+    }
+
     //@ts-expect-error TODO this goes away when all characters have spines...
-    const assetName: SpineAsset = `${name}Spine`
+    const assetName: SpineAsset =
+        !isPc && haveEvilVersions[name] ? `${name}NPCSpine` : `${name}Spine`
 
     if (Loader.shared.resources[assetName]) return assetName
 

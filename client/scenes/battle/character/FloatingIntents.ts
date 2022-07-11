@@ -11,7 +11,7 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 
-const INTENT_ICON_WIDTH = 44
+const INTENT_ICON_WIDTH = 66
 
 export function FloatingIntents(cuid: CharacterUid): PixiContainer {
     return For(
@@ -70,7 +70,7 @@ function DamageIntended(amount: number) {
         Sprite({
             scale: INTENT_ICON_WIDTH / getTexture('floatingIntentAmount').width,
             src: 'floatingIntentAmount',
-            anchor: 0.5,
+            anchor: [0.4, 0.4],
         }),
         Text({
             text: `${amount}`,

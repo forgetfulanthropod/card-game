@@ -13,12 +13,12 @@ export const characterIdToAbilitiesMap: Partial<
             name: 'Slow but Purposeful',
         },
     ],
-    skeletonWarrior: [
+    penguinKnight: [
         {
-            name: 'Xylophone Bones',
+            name: 'Better Together',
         },
         {
-            name: 'Chilling Premonition',
+            name: 'Feathered Fortress',
         },
     ],
     frogKnight: [
@@ -27,6 +27,14 @@ export const characterIdToAbilitiesMap: Partial<
         },
         {
             name: 'Amphibious Vigor',
+        },
+    ],
+    skeletonWarrior: [
+        {
+            name: 'Xylophone Bones',
+        },
+        {
+            name: 'Chilling Premonition',
         },
     ],
     matchaGelatinCube: [

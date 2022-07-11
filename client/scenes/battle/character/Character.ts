@@ -77,6 +77,7 @@ export function Character(props: CharacterProps): PixiContainer {
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
                     y: -(mainAnimation?.height ?? 0),
+                    x: -30,
                 })
         ),
         Adjust(HealthBar(characterMeta.uid), { y: 11 })

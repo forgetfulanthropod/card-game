@@ -19,7 +19,10 @@ export function MainCharacterAnimation({
     height?: number
     centerX?: boolean
 }): PixiSpine | null {
-    const spineAssetName = getValidSpineAssetName(characterMeta.id)
+    const spineAssetName = getValidSpineAssetName(
+        characterMeta.id,
+        characterMeta.isPc
+    )
 
     if (!spineAssetName) return null
 
@@ -57,7 +60,7 @@ export function MainCharacterAnimation({
     updateGlow(hoveredCharacterUid.val)
 
     const heightOverrides: Partial<Record<CharacterId, number>> = {
-        matchaGelatinCube: 0.88,
+        matchaGelatinCube: 0.78,
         frogKnight: 1.4,
         warhog: 0.85,
         jerry: 1.1,

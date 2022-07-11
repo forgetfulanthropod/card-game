@@ -27,9 +27,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 5,
         defense: 5,
 
-        uid: 'pc-2',
-        tokenId: '4',
-        nftName: 'frogKnight-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'mushroomFarmer',
@@ -41,9 +41,24 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 9,
         defense: 6,
 
-        uid: 'pc-3',
-        tokenId: '4',
-        nftName: 'mushroomFarmer-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
+    },
+    {
+        id: 'penguinKnight',
+        displayName: 'Penguin Knight',
+        isPc: true,
+        class: 'knight',
+
+        constitution: 66,
+        strength: 9,
+        wisdom: 5,
+        defense: 5,
+
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'skeletonWarrior',
@@ -55,9 +70,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         strength: 11,
         wisdom: 4,
         defense: 4,
-        uid: 'pc-1',
-        tokenId: '4',
-        nftName: 'skeletonWarrior-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'matchaGelatinCube',
@@ -70,9 +85,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 7,
         defense: 5,
 
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'warhog',
@@ -85,9 +100,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 4,
         defense: 8,
 
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'warhog-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'gnomeHooligan',
@@ -100,9 +115,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 12,
         defense: 3,
 
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
     {
         id: 'jerry',
@@ -115,9 +130,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         wisdom: 20,
         defense: 9,
 
-        uid: 'pc-4',
-        tokenId: '4',
-        nftName: 'matchaGelatinCube-4',
+        uid: '',
+        tokenId: '',
+        nftName: '',
     },
 ]
 
