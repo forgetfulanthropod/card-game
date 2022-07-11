@@ -76,7 +76,7 @@ export function Character(props: CharacterProps): PixiContainer {
             toDatum(getBattleScene().select('isPlayerTurn'), is => is),
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
-                    y: -(mainAnimation?.height ?? 0),
+                    y: -(mainAnimation?.height ?? 0) * 1.2,
                     x: -30,
                 })
         ),

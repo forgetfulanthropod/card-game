@@ -62,9 +62,10 @@ export function MainCharacterAnimation({
     const heightOverrides: Partial<Record<CharacterId, number>> = {
         matchaGelatinCube: 0.78,
         frogKnight: 1.4,
-        warhog: 0.85,
-        jerry: 1.1,
-        gnomeHooligan: 1.1,
+        warhog: 0.8,
+        jerry: 1.2,
+        gnomeHooligan: 1.2,
+        penguinKnight: 1.2,
         skeletonWarrior: 0.75,
     }
 

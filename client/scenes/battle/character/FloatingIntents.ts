@@ -23,7 +23,7 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
                       .map(cmd => ({ key: cmd.command.characterUid, ...cmd }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
-        index => ({ x: index * INTENT_ICON_WIDTH })
+        index => ({ x: (index * INTENT_ICON_WIDTH) / 2 })
     )
 }
 

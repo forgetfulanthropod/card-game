@@ -155,6 +155,7 @@ export const spineAssets = {
     frogKnightSpine: 'spine/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
         'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
+    penguinKnightSpine: 'spine/penguinKnight/imported.json',
     skeletonWarriorSpine:
         'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
     skeletonWarriorNPCSpine:
