@@ -88,11 +88,13 @@ function DamageIntended(amount: number) {
 function BlockIntended(amount: number) {
     return [
         Sprite({
+            x: 90,
             scale: INTENT_ICON_WIDTH / getTexture('blockIntent').width,
             src: 'blockIntent',
             anchor: [0.2, 0.2],
         }),
         Text({
+            x: 90,
             text: `${amount}`,
             anchor: 0.5,
             style: {
