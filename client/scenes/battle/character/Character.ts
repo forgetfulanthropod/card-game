@@ -213,27 +213,25 @@ function bindMoves(
                 if (mainAnimation) {
                     mainAnimation.state.setAnimation(0, 'Damage', false)
 
-                    if (!characterMeta.isPc) {
-                        const takingDamageListener = {
-                            event: function reactToDamage(
-                                _entry: TrackEntry,
-                                event: { data: { name: string } }
-                            ) {
-                                if (event.data.name !== 'Taking Damage') return
+                    const takingDamageListener = {
+                        event: function reactToDamage(
+                            _entry: TrackEntry,
+                            event: { data: { name: string } }
+                        ) {
+                            if (event.data.name !== 'Taking Damage') return
 
-                                const effectAnimation = EffectOverlayAnimation()
-                                if (effectAnimation)
-                                    mainAnimation.parent.addChild(
-                                        effectAnimation
-                                    )
+                            const effectAnimation = EffectOverlayAnimation(
+                                characterMeta.isPc
+                            )
+                            if (effectAnimation)
+                                mainAnimation.parent.addChild(effectAnimation)
 
-                                mainAnimation.state.removeListener(
-                                    takingDamageListener
-                                )
-                            },
-                        }
-                        mainAnimation.state.addListener(takingDamageListener)
+                            mainAnimation.state.removeListener(
+                                takingDamageListener
+                            )
+                        },
                     }
+                    mainAnimation.state.addListener(takingDamageListener)
 
                     mainAnimation.state.addAnimation(0, 'Idle', true)
                 }
