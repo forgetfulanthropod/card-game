@@ -27,7 +27,7 @@ import {
     SCALE_UNIVERSAL,
     Sprite,
     Text,
-    Animation,
+    EffectOverlayAnimation,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
@@ -221,7 +221,7 @@ function bindMoves(
                             ) {
                                 if (event.data.name !== 'Taking Damage') return
 
-                                const effectAnimation = Animation()
+                                const effectAnimation = EffectOverlayAnimation()
                                 if (effectAnimation)
                                     mainAnimation.parent.addChild(
                                         effectAnimation

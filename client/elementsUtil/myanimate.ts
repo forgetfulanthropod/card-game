@@ -1,25 +1,30 @@
+/* eslint-disable import/no-relative-parent-imports */
 import { Graphics, MovieClip, load } from '@pixi/animate'
-//@ts-expect-error
-import data from '../animations/KC_FX_BasicAttack002_v02.js'
+import { keys } from 'lodash'
 
-export function loadAnimation(): Promise<void> {
-    data.setup({ MovieClip, Graphics })
+import { allAnimations } from '../animations'
 
-    return new Promise(resolve =>
-        load(data, () => {
-            // clip = getNewClip()
-            resolve()
-        })
+const allAnimationKeys = keys(allAnimations)
+
+export function loadAllAnimateFiles(): void {
+    allAnimationKeys.forEach(k =>
+        //@ts-expect-error
+        allAnimations[k].setup({ MovieClip, Graphics })
     )
+
+    allAnimationKeys.map(k => {
+        load(allAnimations[k], () => {})
+    })
 }
 
-// let clip: MovieClip | null = null
-export function Animation(): MovieClip | null {
-    return getNewClip()
-}
+export function EffectOverlayAnimation() {
+    const data = nextAnimateFile()
 
-function getNewClip() {
-    const newClip = new data.lib.KC_FX_BasicAttack002_v02()
+    const firstLibKey = keys(data.lib)[0]
+    const EffectMovieClip = data?.lib?.[firstLibKey]
+    console.log({ data, firstLibKey })
+
+    const newClip = new EffectMovieClip()
 
     newClip.y -= 640
     newClip.scale.set(2.5)
@@ -30,25 +35,10 @@ function getNewClip() {
 
     return newClip
 }
-// const animation = new Animator()
 
-// data.setup({ MovieClip, Graphics })
-
-// const root = Container({})
-
-// load(data, _asset => {
-//     // root.addChild(new (asset?.stage)())
-//     // new data.lib.KC_FX_BasicAttack002_v02()
-
-//     // console.log({
-//     //     data,
-//     //     asset,
-//     //     constructrr: data.lib.KC_FX_BasicAttack002_v02,
-//     // })
-//     const animation = new data.lib.KC_FX_BasicAttack002_v02()
-
-//     root.addChild(animation)
-// })
-
-// return (animation = root)
-// return Container({})
+let nextAnimationIndex = 0
+function nextAnimateFile() {
+    return allAnimations[
+        allAnimationKeys[nextAnimationIndex++ % allAnimationKeys.length]
+    ]
+}
