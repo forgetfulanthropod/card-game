@@ -85,7 +85,7 @@ export function SelectedCharactersEl(): PixiContainer {
 
 function SelectedCharacterText() {
     return Text({
-        text: 'SELECT A CHARACTER',
+        text: 'SELECT   A    KAIJU',
         x: BASE_WIDTH * 0.506,
         y: BASE_HEIGHT * 0.565,
         anchor: 0.5,
@@ -151,8 +151,6 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
     const rays = characters.map((c, index): PixiContainer | null => {
         if (c != null) return null
 
-        selectedCharacterPlaceIndex.onChange(() => {})
-
         return Container(
             {
                 zIndex: index,
@@ -197,13 +195,12 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
         )
     })
 
-    selectedCharacterPlaceIndex.onChange(placeIndex => {
-        console.log({ placeIndex })
+    selectedCharacterPlaceIndex.onChange(() => {
         rays.forEach((ray, rayIndex) => {
             if (ray == null) return
 
             ray.children[1].filters =
-                placeIndex === rayIndex ? [glowFilter] : []
+                selectedCharacterPlaceIndex.val === rayIndex ? [glowFilter] : []
         })
     })
 
@@ -211,11 +208,11 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
 }
 
 function getXYAtIndex(i: number) {
-    const x = 0.507 * BASE_WIDTH
-    const y = 0.807 * BASE_HEIGHT
+    const x = 0.5 * BASE_WIDTH
+    const y = 0.818 * BASE_HEIGHT
     return {
-        x: x + (i === 0 ? -190 : i === 2 ? 0 : 170),
-        y: y + (i === 2 ? 43 : 0),
+        x: x + (i === 0 ? -240 : i === 2 ? 0 : 240),
+        y: y + (i === 2 ? 33 : 0),
     }
 }
 

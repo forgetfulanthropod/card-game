@@ -2,7 +2,12 @@ import type { Datum } from 'datums'
 import type { CharacterMeta, StatChangesMap } from 'shared'
 import type { MovieClip } from '@pixi/animate'
 import type { PixiContainer } from '@/elementsUtil'
-import { BleedOverlayAnimation, Container, If } from '@/elementsUtil'
+import {
+    GainHealthOverlayAnimation,
+    BleedOverlayAnimation,
+    Container,
+    If,
+} from '@/elementsUtil'
 
 const TIME_BETWEEN_OVERLAY_ANIMATIONS = 200
 
@@ -51,7 +56,7 @@ export function getAnimationsFrom(
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
     }
     if (changes.block) {
-        animations.push(BleedOverlayAnimation(characterMeta.isPc))
+        animations.push(GainHealthOverlayAnimation(characterMeta.isPc))
     }
 
     return animations

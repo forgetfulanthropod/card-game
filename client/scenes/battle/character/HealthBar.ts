@@ -1,7 +1,14 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid, Effect } from 'shared'
+import type {
+    CharacterMeta,
+    CharacterUid,
+    Effect,
+    StatChangesMap,
+} from 'shared'
 
+import type { Datum } from 'datums'
+import { compose } from 'datums'
 import type { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { callApi } from '@/callApi'
@@ -25,7 +32,10 @@ export const HEALTH_BAR_WIDTH = 300
 // const widthToHeight = rawHeight / rawWidth
 // const displayHeight = HEALTH_BAR_WIDTH * widthToHeight
 
-export function HealthBar(characterUid: CharacterUid): PixiContainer {
+export function HealthBar(
+    characterUid: CharacterUid,
+    statChangesDatum: Datum<StatChangesMap>
+): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
     // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
     const unsub = onUpdate(characterCursor, char => {
@@ -40,7 +50,7 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
             scale: 0.7,
             onDestroy: [unsub],
         },
-        HealthIndicator(characterCursor),
+        HealthIndicator(characterCursor, statChangesDatum),
         StanceIndicator(characterCursor),
         EffectIndicators(characterCursor),
         BlockIndicator(characterCursor)
@@ -169,7 +179,12 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
 const spriteAnchor: [number, number] = [0, 0.5]
 
-function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
+function HealthIndicator(
+    characterCursor: ROCursor<CharacterMeta>,
+    statChangesDatum: Datum<StatChangesMap>
+) {
+    let firstRender = true
+    let lastHealth = 0
     return Container(
         {
             x: -HEALTH_BAR_WIDTH * 0.2,
@@ -179,7 +194,7 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             src: 'healthBarBacking',
             anchor: spriteAnchor,
         }),
-        BaseHealth(characterCursor),
+        BaseHealth(characterCursor, statChangesDatum),
         Sprite({
             src: 'healthBarHighlight',
             anchor: spriteAnchor,
@@ -195,7 +210,19 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
         // ProjectedDoT(characterCursor),
 
         Text({
-            text: characterCursor.select('health'),
+            text: compose(
+                ([statChanges, health]) => {
+                    if (firstRender) return health
+
+                    firstRender = false
+
+                    if (statChanges[characterCursor.get('uid')]?.health)
+                        return (lastHealth = health)
+                    else return lastHealth
+                },
+                statChangesDatum,
+                toDatum(characterCursor.select('health'), h => h)
+            ),
             zIndex: 1,
             anchor: [0.5, 0.6],
             x: HEALTH_BAR_WIDTH / 2,
@@ -211,7 +238,10 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
+function BaseHealth(
+    characterCursor: ROCursor<CharacterMeta>,
+    statChangesDatum: Datum<StatChangesMap>
+) {
     const originalTexture = getTexture('healthBarHealth')
     const texture = new Texture(originalTexture.baseTexture)
     const el = Sprite({
@@ -223,15 +253,27 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
 
     let lastHealth: number
 
-    return onDestroyed(el, onUpdate(characterCursor, update, true))
+    updateNoWait(characterCursor.get())
 
-    function update(cm: CharacterMeta) {
+    return onDestroyed(el, onUpdate(characterCursor, update, false))
+
+    function updateNoWait(cm: CharacterMeta) {
         if (cm == null) return
         const portion = cm.health / cm.constitution
 
         if (cm.health !== lastHealth) updateFrame(texture, 0, portion)
 
         lastHealth = characterCursor.get('health')
+    }
+
+    async function update(cm: CharacterMeta) {
+        await new Promise<void>(resolve => {
+            statChangesDatum.onChange(sc => {
+                if (sc[cm.uid]?.health) resolve()
+            })
+        })
+
+        updateNoWait(cm)
     }
 }
 

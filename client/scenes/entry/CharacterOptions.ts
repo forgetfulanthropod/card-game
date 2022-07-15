@@ -137,9 +137,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 ]
 
 export const selectedCharacterId = datum<null | CharacterId>(null)
-export const selectedCharacterPlaceIndex = datum<null | CharacterPlaceIndex>(
-    null
-)
+export const selectedCharacterPlaceIndex = datum<CharacterPlaceIndex>(2)
 
 export function CharacterOptions() {
     const options = defaultOwnedCharacters.map((c, index) => {
@@ -152,22 +150,16 @@ export function CharacterOptions() {
             {
                 x: 78 + (index % 2) * (width + margin),
                 y: 54 + Math.floor(index / 2) * (width + margin),
-                // x:
-                //     BASE_WIDTH * 0.508 +
-                //     (-defaultOwnedCharacters.length / 2 + index) *
-                //         (width + margin),
-                // y: BASE_HEIGHT * 0.88,
                 events: {
                     pointerup() {
-                        if (selectedCharacterPlaceIndex.val == null)
-                            throw new Error(
-                                'trying to choose but no place index...'
-                            )
-
                         selectedCharacterId.set(c.id)
                         chooseOwnedCharacterAt(
                             index,
                             selectedCharacterPlaceIndex.val
+                        )
+                        selectedCharacterPlaceIndex.set(
+                            ((selectedCharacterPlaceIndex.val + 1) %
+                                3) as CharacterPlaceIndex
                         )
                     },
                 },
@@ -191,11 +183,14 @@ export function CharacterOptions() {
             onDestroy: [
                 selectedCharacterId.onChange(id => {
                     options.forEach(o => (o.filters = []))
-                    if (id == null) return
+                    if (id == null || hoveredCharacterUid.val == null) return
 
                     const i = defaultOwnedCharacters.findIndex(c => c.id === id)
                     options[i].filters = [glowFilter]
                 }, true),
+                hoveredCharacterUid.onChange(() =>
+                    selectedCharacterId.set(null)
+                ),
             ],
         },
         ...options

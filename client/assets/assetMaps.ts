@@ -35,7 +35,7 @@ export const dungeonBackgroundAssets = {
 }
 
 export const entrySceneBackgrounds = {
-    skelepitEntrySceneBackground: 'backgrounds/temple_background_3.webp',
+    skelepitEntrySceneBackground: 'backgrounds/temple_background_4.webp',
 }
 
 export const cardArtAssets = {
@@ -177,9 +177,9 @@ export const spineAssets = {
 } as const
 
 export const matchaEntryAssets = {
-    pedestalRay0: 'scenes/entry matcha/Pedestal_ray_Left.png',
-    pedestalRay1: 'scenes/entry matcha/Pedestal_ray_Right.png',
-    pedestalRay2: 'scenes/entry matcha/Pedestal_ray.png',
+    pedestalRay0: 'scenes/entry matcha/Pedestal_ray_Left.webp',
+    pedestalRay1: 'scenes/entry matcha/Pedestal_ray_Right.webp',
+    pedestalRay2: 'scenes/entry matcha/Pedestal_ray.webp',
     selectCharacterArrow: 'scenes/entry matcha/select_arrow.webp',
 }
 

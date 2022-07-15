@@ -33,6 +33,14 @@ export function BleedOverlayAnimation(isPc: boolean) {
     return a
 }
 
+export function GainHealthOverlayAnimation(isPc: boolean) {
+    const a = Animation(getOneOf(['Gain'], isPc), isPc)
+
+    a.y += 300
+
+    return a
+}
+
 export function BlockOverlayAnimation(isPc: boolean) {
     return Animation(getOneOf(['Block'], isPc), isPc)
 }

@@ -83,7 +83,7 @@ export function Character(props: CharacterProps): PixiContainer {
                     x: -30,
                 })
         ),
-        Adjust(HealthBar(characterMeta.uid), { y: 11 })
+        Adjust(HealthBar(characterMeta.uid, props.statChangesDatum), { y: 11 })
     )
 
     const hitContainer = Container({
@@ -303,6 +303,7 @@ function bindStatChanges(
 
         dataChanges?.forEach(c => {
             const key = c.path?.[0]
+            if (key === 'health') return
             if (c.kind === 'E') {
                 //@ts-ignore
                 statChanges[key] = c.rhs - c.lhs
@@ -313,6 +314,7 @@ function bindStatChanges(
         })
         // console.log({ dataChanges, metaChanges: statChanges })
 
+        //@ts-ignore
         if (keys(statChanges).length)
             statChangesDatum.set({ [currentData.uid]: statChanges })
     }
