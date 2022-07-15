@@ -73,7 +73,7 @@ function DamageIntended(amount: number) {
             anchor: [0.4, 0.4],
         }),
         Text({
-            text: `${amount}`,
+            text: `${amount ?? '?'}`,
             anchor: 0.5,
             style: {
                 fill: 'white',

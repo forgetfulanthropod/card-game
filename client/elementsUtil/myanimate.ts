@@ -1,4 +1,5 @@
 /* eslint-disable import/no-relative-parent-imports */
+import type { AnimateAsset } from '@pixi/animate'
 import { Graphics, MovieClip, load } from '@pixi/animate'
 import { keys, random } from 'lodash'
 
@@ -17,18 +18,35 @@ export function loadAllAnimateFiles(): void {
     })
 }
 
-export function EffectOverlayAnimation(isPc: boolean) {
-    const data = nextAnimateFile(isPc)
+export function AttackOverlayAnimation(isPc: boolean) {
+    return Animation(
+        getOneOf(['BasicAttack001', 'BasicAttack002', 'BasicAttack005'], isPc),
+        isPc
+    )
+}
 
+export function BleedOverlayAnimation(isPc: boolean) {
+    const a = Animation(getOneOf(['Bleed'], isPc), isPc)
+
+    a.y += 200
+
+    return a
+}
+
+export function BlockOverlayAnimation(isPc: boolean) {
+    return Animation(getOneOf(['Block'], isPc), isPc)
+}
+
+function Animation(data: AnimateAsset, isPc: boolean) {
     const firstLibKey = keys(data.lib)[0]
     const EffectMovieClip = data?.lib?.[firstLibKey]
-    console.log({ data, firstLibKey })
+    // console.log({ data, firstLibKey })
 
     const newClip = new EffectMovieClip() as MovieClip
 
-    newClip.y -= 640
-    newClip.x = isPc ? -300 : 0
     newClip.scale.set(2.5)
+    newClip.y -= data?.height * 2.5
+    newClip.x = isPc ? -300 : 0
     newClip.loop = false
     newClip.autoReset = false
 
@@ -37,13 +55,13 @@ export function EffectOverlayAnimation(isPc: boolean) {
     return newClip
 }
 
-function nextAnimateFile(isPc: boolean) {
+function getOneOf(possibilities: string[], isPc: boolean) {
     const animKeys = allAnimationKeys.filter(key => {
         const isProperSide = isPc
-            ? key.includes('_Player')
-            : key.includes('_Enemy')
-        const basics = ['BasicAttack001', 'BasicAttack002', 'BasicAttack005']
-        return isProperSide && basics.find(b => key.includes(b))
+            ? !key.includes('_Enemy')
+            : !key.includes('_Player')
+
+        return isProperSide && possibilities.find(b => key.includes(b))
     })
 
     return allAnimations[animKeys[random(false) % animKeys.length]]

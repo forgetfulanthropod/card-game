@@ -1,6 +1,6 @@
 import { vals } from 'shared/code'
 import { uniq } from 'lodash'
-import type { StatChangeMap } from 'shared'
+import type { StatChangesMap } from 'shared'
 import { datum } from 'datums'
 import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
@@ -15,7 +15,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             // .filter(({ health }) => health > 0)
             .map(({ uid }) => uid)
     )
-    const triggerStatChanges = datum({} as StatChangeMap)
+    const statChangesDatum = datum({} as StatChangesMap)
 
     return For(
         aliveUids,
@@ -31,7 +31,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                                 .apply(arr => uniq([...arr, uid]))
                         },
                         scale: 1,
-                        triggerStatChanges,
+                        statChangesDatum,
                     })
             ),
         undefined,

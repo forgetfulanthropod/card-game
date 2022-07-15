@@ -1,6 +1,6 @@
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import type { ROCursor } from 'sbaobab'
+import type { Listener, ROCursor } from 'sbaobab'
 import type {
     CardHit,
     CharacterMeta,
@@ -8,15 +8,18 @@ import type {
     NetworkDOTData,
     NetworkEvent,
     StatChangeMap,
+    StatChangesMap,
 } from 'shared'
 import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
 import type { TrackEntry } from '@pixi-spine/all-4.0'
+import { diff } from 'deep-diff'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
+import { StatusEffectOverlayManager } from './StatusEffectOverlayManager'
 import { getOrbTexture, getCharTexture } from '@/assets'
 import { hoveredCharacterUid, onUpdate, toDatum } from '@/util'
 import {
@@ -27,7 +30,7 @@ import {
     SCALE_UNIVERSAL,
     Sprite,
     Text,
-    EffectOverlayAnimation,
+    AttackOverlayAnimation,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
@@ -42,7 +45,7 @@ interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
     cursor: ROCursor<CharacterMeta>
-    triggerStatChanges: Datum<StatChangeMap>
+    statChangesDatum: Datum<StatChangesMap>
 }
 
 export function Character(props: CharacterProps): PixiContainer {
@@ -88,30 +91,33 @@ export function Character(props: CharacterProps): PixiContainer {
         y: -220,
     })
 
-    const unbindMoves = bindMoves(
-        characterMeta,
-        hitContainer,
-        mainAnimation,
-        props.triggerStatChanges
-    )
-    const unbindDot = bindDOT(characterMeta, hitContainer)
-
-    const root = Container(
+    return Container(
         {
             name: 'Character Wrap',
             x: screenX,
             y: screenY,
-            // scale: (characterMeta.y / 100) * 0.3 + 0.9,
-            scale: 0.3 * 0.3 + 0.9,
-            onDestroy: [unbindMoves, unbindDot],
+            // scale: (characterMeta.y / 100) * 0.3 + 0.9, //depth calc
+            onDestroy: [
+                bindMoves(
+                    characterMeta,
+                    hitContainer,
+                    mainAnimation,
+                    props.statChangesDatum
+                ),
+                bindDOT(characterMeta, hitContainer),
+                bindStatChanges(props.cursor, props.statChangesDatum),
+            ],
         },
 
         mainContainer,
-        getBoundOrbContainer(props.cursor, mainContainer.height * 0.92),
+        OrbManager(props.cursor, mainContainer.height * 0.92),
+        StatusEffectOverlayManager(
+            props.statChangesDatum,
+            characterMeta,
+            -mainContainer.height * 0.5
+        ),
         hitContainer
     )
-
-    return root
 }
 
 function FallBackCharacterSprite(
@@ -128,7 +134,7 @@ function FallBackCharacterSprite(
     })
 }
 
-function getBoundOrbContainer(
+function OrbManager(
     characterCursor: CharacterCursor,
     offset: number
 ): PixiContainer {
@@ -205,11 +211,11 @@ function bindMoves(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer,
     mainAnimation: PixiSpine | null,
-    triggerStatChanges: Datum<StatChangeMap>
+    statChangesDatum: Datum<StatChangesMap>
 ): Unbind {
-    const unbindStatChangesListener = triggerStatChanges.onChange(changes => {
+    const unbindStatChangesListener = statChangesDatum.onChange(changes => {
         keys(changes).forEach(uid => {
-            if (uid === characterMeta.uid) {
+            if (uid === characterMeta.uid && changes[uid].health) {
                 if (mainAnimation) {
                     mainAnimation.state.setAnimation(0, 'Damage', false)
 
@@ -220,7 +226,7 @@ function bindMoves(
                         ) {
                             if (event.data.name !== 'Taking Damage') return
 
-                            const effectAnimation = EffectOverlayAnimation(
+                            const effectAnimation = AttackOverlayAnimation(
                                 characterMeta.isPc
                             )
                             if (effectAnimation)
@@ -235,11 +241,15 @@ function bindMoves(
 
                     mainAnimation.state.addAnimation(0, 'Idle', true)
                 }
-                flashDamageTo(aboveCharacterContainer, changes[uid])
+                if (changes[uid].health)
+                    flashDamageTo(
+                        aboveCharacterContainer,
+                        changes[uid].health ?? 0
+                    )
             }
         })
     })
-    const unbindDmage$Listener = socketOn('damage$', showCharMove)
+    const unbindDamage$Listener = socketOn('damage$', showCharMove)
 
     const attackListener = {
         event: function reactToAttack(
@@ -247,7 +257,13 @@ function bindMoves(
             event: { data: { name: string } }
         ) {
             if (event.data.name === 'Attack') {
-                triggerStatChanges.set(damages)
+                const statChanges: StatChangesMap = {}
+
+                keys(damages).forEach(uid => {
+                    statChanges[uid] = { health: damages[uid] }
+                })
+
+                if (keys(statChanges).length) statChangesDatum.set(statChanges)
             }
         },
     }
@@ -257,7 +273,7 @@ function bindMoves(
 
     return () => {
         unbindStatChangesListener()
-        unbindDmage$Listener()
+        unbindDamage$Listener()
         mainAnimation?.state.removeListener(attackListener)
     }
 
@@ -273,6 +289,36 @@ function bindMoves(
             damages = _damages
         }
     }
+}
+
+function bindStatChanges(
+    characterCursor: CharacterCursor,
+    statChangesDatum: Datum<StatChangesMap>
+) {
+    const update: Listener<CharacterMeta> = ({
+        data: { currentData, previousData },
+    }) => {
+        const dataChanges = diff(previousData, currentData)
+        const statChanges: Partial<CharacterMeta> = {}
+
+        dataChanges?.forEach(c => {
+            const key = c.path?.[0]
+            if (c.kind === 'E') {
+                //@ts-ignore
+                statChanges[key] = c.rhs - c.lhs
+            } else if (c.kind === 'A') {
+                //@ts-ignore
+                statChanges[key] = [...(statChanges[key] ?? []), c.item.rhs]
+            }
+        })
+        // console.log({ dataChanges, metaChanges: statChanges })
+
+        if (keys(statChanges).length)
+            statChangesDatum.set({ [currentData.uid]: statChanges })
+    }
+
+    characterCursor.on('update', update)
+    return () => characterCursor.off('update', update)
 }
 
 function flashPoisonTo(
@@ -296,116 +342,3 @@ function flashDamageTo(
         durationMs: SHOW_HIT_TIME,
     })
 }
-
-// function makeSprites(
-//     args: CharacterProps,
-//     characterMeta: CharacterMeta,
-//     onHeight: (height: number) => void
-// ) {
-//     const blurFilter = new filters.BlurFilter()
-//     blurFilter.blur = 20
-//     const grayFilter = new filters.ColorMatrixFilter()
-//     grayFilter.saturate(-0.7, false)
-//     const redFilter = new filters.ColorMatrixFilter()
-//     redFilter.hue(180, false)
-
-//     const assetIdCursor = args.cursor.select('name')
-
-//     const unsub = onUpdate(assetIdCursor, assetId => {
-//         // tl('asset update')
-//         // @ts-expect-error TODO
-//         if (!hasTexture(assetId)) {
-//             unsub()
-//             return
-//         }
-//         const texture = getCharTexture(assetId)
-//         const height = texture.height
-//         const update = (s: PixiSprite) => {
-//             s.texture = texture
-//             s.height = height
-//         }
-//         update(mainSprite)
-//         onHeight(height)
-//     })
-
-//     if (assetIdCursor.get() == null) {
-//         // TODO: has to do with renewChildren()
-//         // should never occur...
-//         console.error(
-//             'null character assetId. probably character was removed or uid was changed.'
-//         )
-//         unsub()
-//         return null
-//     }
-
-//     const charSpriteProps = {
-//         src: getCharTexture(assetIdCursor.get()),
-//         anchor: [0, 1] as [number, number],
-//         height: getCharTexture(assetIdCursor.get()).height,
-//     }
-
-//     const mainSprite = Sprite({
-//         ...charSpriteProps,
-//         name: 'mainCharacterSprite',
-//         events: {
-//             pointerup: () => {
-//                 args.onClick(characterMeta.uid)
-//             },
-//             pointerover: () => {
-//                 mainSprite.filters = [glowFilter]
-//             },
-//             pointerout: () => {
-//                 mainSprite.filters = null
-//             },
-//         },
-//         onDestroy: [unsub],
-//         zIndex: 1,
-//     })
-
-//     return {
-//         mainSprite,
-//         initialHeight: charSpriteProps.height,
-//     }
-// }
-
-// const FLY_TIME = 800
-// const FLY_TO_TIME = FLY_TIME * 0.6
-// const FLY_BACK_TIME = FLY_TIME - FLY_TO_TIME
-
-// function makeFlyToOnTick(start: Point, flyTo: Point, ease = true) {
-//     let totalElapsed = 0
-//     let flewTo: { x: number; y: number } | null = null
-//     const easingFactor = 0.1
-
-//     return (container: PixiContainer, elapsed: number): void | 'remove' => {
-//         // const deltaTimeMs = elapsed * 1000 / 60
-//         totalElapsed += elapsed * 16.66
-//         if (totalElapsed < FLY_TO_TIME) {
-//             if (ease) {
-//                 container.x += (flyTo.x - container.x) * easingFactor
-//                 container.y += (flyTo.y - container.y) * easingFactor
-//             } else {
-//                 container.x =
-//                     start.x + ((flyTo.x - start.x) * totalElapsed) / FLY_TO_TIME
-//                 container.y =
-//                     start.y + ((flyTo.y - start.y) * totalElapsed) / FLY_TO_TIME
-//             }
-//         } else if (totalElapsed < FLY_TIME) {
-//             if (flewTo == null) flewTo = { x: container.x, y: container.y }
-
-//             container.x =
-//                 flewTo.x +
-//                 ((start.x - flewTo.x) * (totalElapsed - FLY_TO_TIME)) /
-//                     FLY_BACK_TIME
-//             container.y =
-//                 flewTo.y +
-//                 ((start.y - flewTo.y) * (totalElapsed - FLY_TO_TIME)) /
-//                     FLY_BACK_TIME
-//         } else {
-//             container.x = start.x
-//             container.y = start.y
-//             return 'remove'
-//         }
-//         return undefined
-//     }
-// }
