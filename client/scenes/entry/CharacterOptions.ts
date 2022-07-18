@@ -78,7 +78,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         id: 'matchaGelatinCube',
         displayName: 'Matcha Gelatin Cube',
         isPc: true,
-        class: 'wizard',
+        class: 'cleric',
 
         constitution: 78,
         strength: 5,
@@ -123,7 +123,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         id: 'jerry',
         displayName: 'Jerry',
         isPc: true,
-        class: 'bard',
+        class: 'wizard',
 
         constitution: 86,
         strength: 5,
