@@ -15,6 +15,7 @@ import {
 import type { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { toDatum } from '@/util'
+import { getBattleScene } from '@/data'
 
 type CardsArgs = {
     scene: ROCursor<BattleScene>
@@ -39,28 +40,32 @@ export function Cards(args: CardsArgs) {
 
 function EndTurnButton(): PixiContainer {
     const buttonTexture = getTexture('endTurnButton')
-    return Container(
-        {
-            x: BASE_WIDTH * 0.9,
-            y: BASE_HEIGHT * 0.78,
-            onClick: async () => {
-                await callApi('endTurn', {})
-            },
-        },
+    return If(
+        toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+        () =>
+            Container(
+                {
+                    x: BASE_WIDTH * 0.9,
+                    y: BASE_HEIGHT * 0.78,
+                    onClick: async () => {
+                        await callApi('endTurn', {})
+                    },
+                },
 
-        Sprite({
-            src: buttonTexture,
-            anchor: [0.5, 0.5],
-            scale: (BASE_WIDTH * 0.15) / buttonTexture.width,
-        })
-        // Text({
-        //     text: 'End Turn',
-        //     anchor: [0.5, 0.5],
-        //     style: {
-        //         fill: 0xffffff,
-        //         fontSize: 44,
-        //         fontFamily: 'bigFont',
-        //     },
-        // }),
+                Sprite({
+                    src: buttonTexture,
+                    anchor: [0.5, 0.5],
+                    scale: (BASE_WIDTH * 0.15) / buttonTexture.width,
+                })
+                // Text({
+                //     text: 'End Turn',
+                //     anchor: [0.5, 0.5],
+                //     style: {
+                //         fill: 0xffffff,
+                //         fontSize: 44,
+                //         fontFamily: 'bigFont',
+                //     },
+                // }),
+            )
     )
 }
