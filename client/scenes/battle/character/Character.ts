@@ -77,7 +77,14 @@ export function Character(props: CharacterProps): PixiContainer {
         Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
             y: 22,
         }),
-        ...(mainAnimation ? [Adjust(mainAnimation, { y: -20 })] : []),
+        ...(mainAnimation
+            ? [
+                  Adjust(mainAnimation, {
+                      y: -20,
+                      x: characterMeta.isPc ? 40 : mainAnimation.x,
+                  }),
+              ]
+            : []),
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, props.onClick),
         If(
