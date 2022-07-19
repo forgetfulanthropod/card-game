@@ -19,26 +19,19 @@ export function loadAllAnimateFiles(): void {
 }
 
 export function AttackOverlayAnimation(isPc: boolean) {
-    return Animation(
-        getOneOf(['BasicAttack001', 'BasicAttack002', 'BasicAttack005'], isPc),
-        isPc
-    )
+    return Animation(getOneOf(['BasicAttack001'], isPc), isPc)
 }
 
 export function BleedOverlayAnimation(isPc: boolean) {
-    const a = Animation(getOneOf(['Bleed'], isPc), isPc)
+    return Animation(getOneOf(['Bleed'], isPc), isPc)
+}
 
-    a.y += 200
-
-    return a
+export function PoisonOverlayAnimation(isPc: boolean) {
+    return Animation(getOneOf(['Poison'], isPc), isPc)
 }
 
 export function GainHealthOverlayAnimation(isPc: boolean) {
-    const a = Animation(getOneOf(['Gain'], isPc), isPc)
-
-    a.y += 300
-
-    return a
+    return Animation(getOneOf(['Gain'], isPc), isPc)
 }
 
 export function BlockOverlayAnimation(isPc: boolean) {
@@ -53,7 +46,7 @@ function Animation(data: AnimateAsset, isPc: boolean) {
     const newClip = new EffectMovieClip() as MovieClip
 
     newClip.scale.set(2.5)
-    newClip.y -= data?.height * 2.5
+    newClip.y -= (data?.height * 2.5) / 2
     newClip.x = isPc ? -300 : 0
     newClip.loop = false
     newClip.autoReset = false

@@ -15,12 +15,24 @@ import { extractBlocks, extractDamages } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
 import type { EntryCursor } from '@/util'
 import { clearHappened, emit, getHappened } from '@/util'
-import { calcPostEffectStats, maybeTransitionBattleState } from '@/gameState'
+import {
+    calcPostEffectStats,
+    emitMove,
+    maybeTransitionBattleState,
+} from '@/gameState'
 
 export function interpretCommand(args: CommandDetail): void {
     const locals = localsFromCommand(args)
     if (locals.isSkipped) return
     // const explanation = explainActions(command.actions, locals)
+    emitMove({
+        moveName: args.command.name,
+        characterUid: args.command.characterUid,
+        targetType: args.command.targetType,
+        targetUids: args.targetUids,
+        scene: args.scene,
+    })
+
     executeCommand({ ...args, locals })
 }
 

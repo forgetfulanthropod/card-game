@@ -1,9 +1,6 @@
-import type { CardHit } from 'shared'
-import { mapToObj } from 'shared/code'
 import { s, evalAll } from './util'
 
 import type { Executors, Explainers } from './util'
-import { emit } from '@/util'
 import { applyDamage, calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['deal'] = dslArgs => {
@@ -32,16 +29,16 @@ export const execute: Executors['deal'] = ({
         return
     }
 
-    const damages = mapToObj(targetUids, () => damage)
-    const cardHit: CardHit = {
-        attacker: command.characterUid,
-        cardName: command.name,
-        damages,
-    }
-    emit({
-        username: scene.get('username'),
-        event: { type: 'damage$', data: cardHit },
-    })
+    // const damages = mapToObj(targetUids, () => damage)
+    // const cardHit: CardHit = {
+    //     attacker: command.characterUid,
+    //     cardName: command.name,
+    //     damages,
+    // }
+    // emit({
+    //     username: scene.get('username'),
+    //     event: { type: 'move$', data: cardHit },
+    // })
 
     targetUids.forEach(targetUid =>
         applyDamage({

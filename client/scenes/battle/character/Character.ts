@@ -7,8 +7,8 @@ import type {
     CharacterUid,
     NetworkDOTData,
     NetworkEvent,
-    StatChangeMap,
     StatChangesMap,
+    TargetType,
 } from 'shared'
 import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
@@ -19,9 +19,16 @@ import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
-import { StatusEffectOverlayManager } from './StatusEffectOverlayManager'
+import { EffectOverlayManager } from './EffectOverlayManager'
 import { getOrbTexture, getCharTexture } from '@/assets'
-import { hoveredCharacterUid, onUpdate, toDatum } from '@/util'
+import {
+    hoveredCharacterUid,
+    onUpdate,
+    playDamageAnimation,
+    statChangesDatum,
+    targetUidsWaitingForImpact,
+    toDatum,
+} from '@/util'
 import {
     Adjust,
     Container,
@@ -30,7 +37,6 @@ import {
     SCALE_UNIVERSAL,
     Sprite,
     Text,
-    AttackOverlayAnimation,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
@@ -45,7 +51,6 @@ interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
     cursor: ROCursor<CharacterMeta>
-    statChangesDatum: Datum<StatChangesMap>
 }
 
 export function Character(props: CharacterProps): PixiContainer {
@@ -83,7 +88,7 @@ export function Character(props: CharacterProps): PixiContainer {
                     x: -30,
                 })
         ),
-        Adjust(HealthBar(characterMeta.uid, props.statChangesDatum), { y: 11 })
+        Adjust(HealthBar(characterMeta.uid), { y: 11 })
     )
 
     const hitContainer = Container({
@@ -98,24 +103,15 @@ export function Character(props: CharacterProps): PixiContainer {
             y: screenY,
             // scale: (characterMeta.y / 100) * 0.3 + 0.9, //depth calc
             onDestroy: [
-                bindMoves(
-                    characterMeta,
-                    hitContainer,
-                    mainAnimation,
-                    props.statChangesDatum
-                ),
+                bindMoves(characterMeta, hitContainer, mainAnimation),
                 bindDOT(characterMeta, hitContainer),
-                bindStatChanges(props.cursor, props.statChangesDatum),
+                bindStatChanges(props.cursor),
             ],
         },
 
         mainContainer,
         OrbManager(props.cursor, mainContainer.height * 0.92),
-        StatusEffectOverlayManager(
-            props.statChangesDatum,
-            characterMeta,
-            -mainContainer.height * 0.5
-        ),
+        EffectOverlayManager(characterMeta, -mainContainer.height * 0.5),
         hitContainer
     )
 }
@@ -197,7 +193,7 @@ function bindDOT(
     aboveCharacterContainer: PixiContainer
 ): Unbind {
     return socketOn('DOT$', handleDOT)
-    function handleDOT(event: NetworkEvent<'damage$', NetworkDOTData>) {
+    function handleDOT(event: NetworkEvent<'move$', NetworkDOTData>) {
         const { damageMap } = event.data
 
         keys(damageMap).forEach(characterUid => {
@@ -210,36 +206,20 @@ function bindDOT(
 function bindMoves(
     characterMeta: CharacterMeta,
     aboveCharacterContainer: PixiContainer,
-    mainAnimation: PixiSpine | null,
-    statChangesDatum: Datum<StatChangesMap>
+    mainAnimation: PixiSpine | null
 ): Unbind {
-    const unbindStatChangesListener = statChangesDatum.onChange(changes => {
+    const unbindDamageAnimationListener = playDamageAnimation.onChange(play => {
+        if (!play) return
+
+        const changes = statChangesDatum.val
+
         keys(changes).forEach(uid => {
-            if (uid === characterMeta.uid && changes[uid].health) {
+            if (
+                uid === characterMeta.uid &&
+                targetUidsWaitingForImpact.val.includes(characterMeta.uid)
+            ) {
                 if (mainAnimation) {
-                    mainAnimation.state.setAnimation(0, 'Damage', false)
-
-                    const takingDamageListener = {
-                        event: function reactToDamage(
-                            _entry: TrackEntry,
-                            event: { data: { name: string } }
-                        ) {
-                            if (event.data.name !== 'Taking Damage') return
-
-                            const effectAnimation = AttackOverlayAnimation(
-                                characterMeta.isPc
-                            )
-                            if (effectAnimation)
-                                mainAnimation.parent.addChild(effectAnimation)
-
-                            mainAnimation.state.removeListener(
-                                takingDamageListener
-                            )
-                        },
-                    }
-                    mainAnimation.state.addListener(takingDamageListener)
-
-                    mainAnimation.state.addAnimation(0, 'Idle', true)
+                    triggerDamageAnimation(mainAnimation)
                 }
                 if (changes[uid].health)
                     flashDamageTo(
@@ -249,62 +229,120 @@ function bindMoves(
             }
         })
     })
-    const unbindDamage$Listener = socketOn('damage$', showCharMove)
+    const unbindmove$Listener = socketOn('move$', showCharMove)
+    // let targetUidsWaitingForImpact: CharacterUid[] = []
 
-    const attackListener = {
+    const attackSpineEventListener = {
         event: function reactToAttack(
             _entry: TrackEntry,
             event: { data: { name: string } }
         ) {
             if (event.data.name === 'Attack') {
-                const statChanges: StatChangesMap = {}
-
-                keys(damages).forEach(uid => {
-                    statChanges[uid] = { health: damages[uid] }
-                })
-
-                if (keys(statChanges).length) statChangesDatum.set(statChanges)
+                playDamageAnimation.set(true)
+                setTimeout(() => playDamageAnimation.set(false), 0)
             }
         },
     }
-    let damages: StatChangeMap = {}
 
-    mainAnimation?.state.addListener(attackListener)
+    mainAnimation?.state.addListener(attackSpineEventListener)
 
     return () => {
-        unbindStatChangesListener()
-        unbindDamage$Listener()
-        mainAnimation?.state.removeListener(attackListener)
+        unbindDamageAnimationListener()
+        unbindmove$Listener()
+        mainAnimation?.state.removeListener(attackSpineEventListener)
     }
 
-    function showCharMove(event: NetworkEvent<'damage$', CardHit>) {
-        const { attacker, cardName: _cardName, damages: _damages } = event.data
+    function showCharMove(event: NetworkEvent<'move$', CardHit>) {
+        const attackingTargetTypes: TargetType[] = ['enemies', 'allEnemies']
+        const isAttack = attackingTargetTypes.includes(event.data.targetType)
 
-        const thisUid = characterMeta.uid
-        if (attacker === thisUid) {
+        if (isAttack && event.data.characterUid === characterMeta.uid) {
             if (mainAnimation == null) return
+
+            targetUidsWaitingForImpact.set(event.data.targetUids)
+
+            const statChanges = { ...statChangesDatum.val }
+            targetUidsWaitingForImpact.val.forEach(
+                uid =>
+                    (statChanges[uid] = {
+                        wait: true,
+                        ...(statChanges[uid] ?? {}),
+                    })
+            )
+
+            statChangesDatum.set(statChanges)
+
+            // lockStatUpdates()
 
             mainAnimation.state.setAnimation(0, 'Attack', false)
             mainAnimation.state.addAnimation(0, 'Idle', true)
-            damages = _damages
         }
     }
 }
 
-function bindStatChanges(
-    characterCursor: CharacterCursor,
-    statChangesDatum: Datum<StatChangesMap>
-) {
+function triggerDamageAnimation(mainAnimation: PixiSpine) {
+    mainAnimation.state.setAnimation(0, 'Damage', false)
+
+    const takingDamageListener = {
+        event: function reactToDamage(
+            _entry: TrackEntry,
+            event: { data: { name: string } }
+        ) {
+            if (event.data.name !== 'Taking Damage') return
+
+            unlockWaitingStatChanges(statChangesDatum)
+
+            // const effectAnimation = AttackOverlayAnimation(characterMeta.isPc)
+            // if (effectAnimation) mainAnimation.parent.addChild(effectAnimation)
+
+            mainAnimation.state.removeListener(takingDamageListener)
+        },
+    }
+    mainAnimation.state.addListener(takingDamageListener)
+
+    mainAnimation.state.addAnimation(0, 'Idle', true)
+}
+
+function unlockWaitingStatChanges(statChangesDatum: Datum<StatChangesMap>) {
+    let statChanges = { ...statChangesDatum.val }
+
+    targetUidsWaitingForImpact.val.forEach(
+        uid =>
+            (statChanges[uid] = {
+                ...statChanges[uid],
+                wait: false,
+            })
+    )
+    statChangesDatum.set(statChanges)
+
+    // const targetUidsToClear = [...targetUidsWaitingForImpact.val]
+    setTimeout(() => {
+        statChanges = { ...statChangesDatum.val }
+        targetUidsWaitingForImpact.val.forEach(uid => (statChanges[uid] = {}))
+        targetUidsWaitingForImpact.set([])
+        statChangesDatum.set(statChanges)
+    }, 0)
+}
+
+function bindStatChanges(characterCursor: CharacterCursor) {
     const update: Listener<CharacterMeta> = ({
         data: { currentData, previousData },
     }) => {
+        if (currentData == null) {
+            console.log('null character meta')
+            return
+        }
+
         const dataChanges = diff(previousData, currentData)
-        const statChanges: Partial<CharacterMeta> = {}
+        const statChanges: Partial<CharacterMeta & { wait: boolean }> =
+            statChangesDatum.val[currentData.uid] ?? {}
 
         dataChanges?.forEach(c => {
             const key = c.path?.[0]
-            if (key === 'health') return
-            if (c.kind === 'E') {
+
+            if (c.path?.[0] === 'effects') {
+                statChanges.effects = currentData.effects
+            } else if (c.kind === 'E') {
                 //@ts-ignore
                 statChanges[key] = c.rhs - c.lhs
             } else if (c.kind === 'A') {
@@ -313,10 +351,32 @@ function bindStatChanges(
             }
         })
         // console.log({ dataChanges, metaChanges: statChanges })
+        // console.log({
+        //     statChanges,
+        //     statChangesGlobal: statChangesDatum.val,
+        //     didStatsChange:
+        //         JSON.stringify(statChangesDatum.val) ===
+        //         JSON.stringify({
+        //             ...statChangesDatum.val,
+        //             [currentData.uid]: statChanges,
+        //         }),
+        // })
 
         //@ts-ignore
         if (keys(statChanges).length)
-            statChangesDatum.set({ [currentData.uid]: statChanges })
+            statChangesDatum.set({
+                ...statChangesDatum.val,
+                [currentData.uid]: statChanges,
+            })
+        if (statChanges.wait === undefined)
+            setTimeout(
+                () =>
+                    statChangesDatum.set({
+                        ...statChangesDatum.val,
+                        [currentData.uid]: {},
+                    }),
+                1000
+            )
     }
 
     characterCursor.on('update', update)

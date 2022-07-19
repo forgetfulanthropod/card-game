@@ -36,7 +36,7 @@ export function getInitialGameState(username: string): Gamestate {
     return {
         scene: initialEntryState,
         ownedCharacters: initialOwnedCharacters(),
-        events: { world$: [], damage$: [], DOT$: [] },
+        events: { world$: [], move$: [], DOT$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook
             ? stringifyRulebook(getRulebook())

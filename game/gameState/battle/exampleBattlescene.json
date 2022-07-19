@@ -171,7 +171,7 @@
     },
     "events": {
         "world$": [],
-        "damage$": [],
+        "move$": [],
         "DOT$": []
     },
     "username": "\"bob\""

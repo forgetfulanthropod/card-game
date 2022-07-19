@@ -7,7 +7,6 @@ import {
     updateHand,
     applyDamage,
     calcPostEffectStats,
-    emitDamage,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -87,11 +86,11 @@ function activateLightning(character: CharacterMeta, scene: BattleCursor) {
     const targetUid = getRandomLivingNpcUid(scene)
     const multiplier = calcPostEffectStats(character).damageTakeMultiplier
     applyDamage({ damage, targetUid, scene, multiplier })
-    emitDamage({
-        moveName: 'Lightning!',
-        attackerUid: character.uid,
-        damage,
-        targetUids: [targetUid],
-        scene,
-    })
+    // emitMove({
+    //     moveName: 'Lightning!',
+    //     attackerUid: character.uid,
+    //     // damage,
+    //     targetUids: [targetUid],
+    //     scene,
+    // })
 }

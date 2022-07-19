@@ -6,7 +6,7 @@ export function HitInfo(args: {
     isPoison?: boolean
 }): PixiText {
     return Text({
-        text: `-${args.damage}`,
+        text: `${args.damage}`,
         anchor: [0, 1],
         style: {
             fontFamily: ['bigFont', 'monospace'],

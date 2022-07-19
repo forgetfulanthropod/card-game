@@ -1,13 +1,7 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type {
-    CharacterMeta,
-    CharacterUid,
-    Effect,
-    StatChangesMap,
-} from 'shared'
+import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
-import type { Datum } from 'datums'
 import { compose } from 'datums'
 import type { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
@@ -24,7 +18,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { onUpdate, toDatum } from '@/util'
+import { onUpdate, statChangesDatum, toDatum } from '@/util'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -32,10 +26,7 @@ export const HEALTH_BAR_WIDTH = 300
 // const widthToHeight = rawHeight / rawWidth
 // const displayHeight = HEALTH_BAR_WIDTH * widthToHeight
 
-export function HealthBar(
-    characterUid: CharacterUid,
-    statChangesDatum: Datum<StatChangesMap>
-): PixiContainer {
+export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
     // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
     const unsub = onUpdate(characterCursor, char => {
@@ -50,7 +41,7 @@ export function HealthBar(
             scale: 0.7,
             onDestroy: [unsub],
         },
-        HealthIndicator(characterCursor, statChangesDatum),
+        HealthIndicator(characterCursor),
         StanceIndicator(characterCursor),
         EffectIndicators(characterCursor),
         BlockIndicator(characterCursor)
@@ -63,7 +54,15 @@ function getCharacterCursor(characterUid: string) {
 }
 
 function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
-    const data = toDatum(characterCursor.select('block'), b => b)
+    const data = compose(
+        ([statChanges, block], lastOut) => {
+            if (statChanges[characterCursor.get('uid')]?.wait) return lastOut
+
+            return block
+        },
+        statChangesDatum,
+        toDatum(characterCursor.select('block'), b => b)
+    )
     return If(data, block =>
         Container(
             {
@@ -94,17 +93,27 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
 function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
-    const data = toDatum(effectsCursor, effects =>
-        effects
-            .filter(e => !invisibleEffects.includes(e.id))
-            .map(e => ({
-                ...e,
-                key: e.id + e.counter,
-                id: e.id as VisibleEffectId,
-            }))
+    const data = compose(
+        ([statChanges, effects], lastOut) => {
+            if (statChanges[characterCursor.get('uid')]?.wait) return lastOut
+
+            return effects
+        },
+        statChangesDatum,
+        toDatum(effectsCursor, effects =>
+            effects
+                .filter(e => !invisibleEffects.includes(e.id))
+                .map(e => ({
+                    ...e,
+                    key: e.id + e.counter,
+                    id: e.id as VisibleEffectId,
+                }))
+        )
     )
     return For(
+        //@ts-expect-error
         data,
+        //@ts-expect-error
         effect => SingleEffect(effect),
         idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
     )
@@ -179,10 +188,7 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
 const spriteAnchor: [number, number] = [0, 0.5]
 
-function HealthIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    statChangesDatum: Datum<StatChangesMap>
-) {
+function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
     let firstRender = true
     let lastHealth = 0
     return Container(
@@ -194,7 +200,7 @@ function HealthIndicator(
             src: 'healthBarBacking',
             anchor: spriteAnchor,
         }),
-        BaseHealth(characterCursor, statChangesDatum),
+        BaseHealth(characterCursor),
         Sprite({
             src: 'healthBarHighlight',
             anchor: spriteAnchor,
@@ -212,13 +218,24 @@ function HealthIndicator(
         Text({
             text: compose(
                 ([statChanges, health]) => {
-                    if (firstRender) return health
+                    if (firstRender) {
+                        firstRender = false
+                        lastHealth = health
+                        return health
+                    }
 
-                    firstRender = false
+                    const statChangesForCharacter =
+                        statChanges[characterCursor.get('uid')]
 
-                    if (statChanges[characterCursor.get('uid')]?.health)
+                    if (statChangesForCharacter == null) return lastHealth
+
+                    if (
+                        !statChangesForCharacter.wait &&
+                        statChangesForCharacter?.health
+                    )
                         return (lastHealth = health)
-                    else return lastHealth
+
+                    return lastHealth
                 },
                 statChangesDatum,
                 toDatum(characterCursor.select('health'), h => h)
@@ -238,10 +255,7 @@ function HealthIndicator(
     )
 }
 
-function BaseHealth(
-    characterCursor: ROCursor<CharacterMeta>,
-    statChangesDatum: Datum<StatChangesMap>
-) {
+function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
     const originalTexture = getTexture('healthBarHealth')
     const texture = new Texture(originalTexture.baseTexture)
     const el = Sprite({
@@ -267,9 +281,14 @@ function BaseHealth(
     }
 
     async function update(cm: CharacterMeta) {
+        if (cm == null) return
+
         await new Promise<void>(resolve => {
-            statChangesDatum.onChange(sc => {
-                if (sc[cm.uid]?.health) resolve()
+            statChangesDatum.onChange((sc, _, unsub) => {
+                if (sc[cm.uid]?.health) {
+                    unsub()
+                    resolve()
+                }
             })
         })
 

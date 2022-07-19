@@ -37,7 +37,9 @@ export function getNullCards(): Piles {
 function makeCards(scene: BattleCursor): Piles {
     const cardIds: CardId[] = [
         // 'bodySlam',
-        // 'TEST_turnStartEffects',
+        'TEST_turnStartEffects',
+        'TEST_turnStartEffects',
+        'TEST_turnStartEffects',
         // 'magicRitual',
         // 'chainLightning',
         // 'spellBook',

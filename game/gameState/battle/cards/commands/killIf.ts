@@ -1,6 +1,5 @@
 import type { Executors, Explainers } from './util'
 import { evalAll } from './util'
-import { emitDamage } from '@/gameState'
 
 export const explain: Explainers['killIf'] = dslArgs => {
     const condition = dslArgs[0].toString()
@@ -25,13 +24,13 @@ export const execute: Executors['killIf'] = ({
     }
 
     if (condition) {
-        emitDamage({
-            moveName: 'Kill',
-            attackerUid: command.characterUid,
-            damage: healthBefore,
-            targetUids: [targetUid],
-            scene,
-        })
+        // emitMove({
+        //     moveName: 'Kill',
+        //     attackerUid: command.characterUid,
+        //     // damage: healthBefore,
+        //     targetUids: [targetUid],
+        //     scene,
+        // })
 
         scene.set(['allCharacters', targetUid, 'health'], 0)
     }

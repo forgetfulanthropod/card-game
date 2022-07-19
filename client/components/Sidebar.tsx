@@ -13,7 +13,7 @@ import { getTree, localTree } from '@/data'
 export function Sidebar(): JSXElement {
     return <div style={{ pointerEvents: 'auto' }}>
         <OneSidebar
-            cursor={getTree().select('events').select('damage$')}
+            cursor={getTree().select('events').select('move$')}
             title='Event History'
             top='0'
         />
