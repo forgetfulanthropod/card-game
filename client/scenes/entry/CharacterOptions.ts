@@ -157,10 +157,15 @@ export function CharacterOptions() {
                             selectedCharacterPlaceIndex.val
                         )
 
-                        selectedCharacterPlaceIndex.set(
-                            ((selectedCharacterPlaceIndex.val + 1) %
-                                3) as CharacterPlaceIndex
+                        if (
+                            getEntryScene()
+                                .get('selectedCharacters')
+                                .filter(c => c != null).length < 3
                         )
+                            selectedCharacterPlaceIndex.set(
+                                ((selectedCharacterPlaceIndex.val + 1) %
+                                    3) as CharacterPlaceIndex
+                            )
                     },
                 },
             },
@@ -191,7 +196,11 @@ export function CharacterOptions() {
                 hoveredCharacterUid.onChange(uid => {
                     const hoveredCharacterMeta = getEntryScene()
                         .get('selectedCharacters')
-                        .find(c => c?.uid === uid)
+                        .find((c, i) => {
+                            const isMatch = c?.uid === uid
+                            if (isMatch) selectedCharacterPlaceIndex.set(i)
+                            return isMatch
+                        })
 
                     selectedCharacterId.set(hoveredCharacterMeta?.id ?? null)
                 }),
