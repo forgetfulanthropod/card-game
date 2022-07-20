@@ -198,7 +198,10 @@ export function CharacterOptions() {
                         .get('selectedCharacters')
                         .find((c, i) => {
                             const isMatch = c?.uid === uid
-                            if (isMatch) selectedCharacterPlaceIndex.set(i)
+                            if (isMatch)
+                                selectedCharacterPlaceIndex.set(
+                                    i as CharacterPlaceIndex
+                                )
                             return isMatch
                         })
 
