@@ -208,6 +208,8 @@ export function CharacterOptions() {
                     selectedCharacterId.set(hoveredCharacterMeta?.id ?? null)
                 }),
                 onUpdate(getEntryScene().select('selectedCharacters'), sc => {
+                    if (sc == null) return
+
                     const hoveredCharacterMeta =
                         sc[selectedCharacterPlaceIndex.val]
 
