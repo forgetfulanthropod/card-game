@@ -1,5 +1,4 @@
-import { vals } from 'shared/code'
-import { uniq } from 'lodash'
+import { keys, uniq } from 'lodash'
 import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
 import { For, If } from '@/elementsUtil'
@@ -8,14 +7,9 @@ import { toDatum } from '@/util'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
-    const aliveUids = toDatum(allCharsC, chars =>
-        vals(chars)
-            // .filter(({ health }) => health > 0)
-            .map(({ uid }) => uid)
-    )
 
     return For(
-        aliveUids,
+        toDatum(allCharsC, c => keys(c)),
         uid =>
             If(
                 toDatum(scene.select('allCharacters', uid), c => c.health > 0),
