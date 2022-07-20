@@ -14,7 +14,8 @@ import {
     glowFilter,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
-import { hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid, onUpdate } from '@/util'
+import { getEntryScene } from '@/data'
 
 const defaultOwnedCharacters: OwnedCharacterStats[] = [
     {
@@ -144,7 +145,6 @@ export function CharacterOptions() {
         const width = 115
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile`)
-        // const src = getTexture(`frogKnightProfile`)
 
         return Container(
             {
@@ -152,11 +152,11 @@ export function CharacterOptions() {
                 y: 54 + Math.floor(index / 2) * (width + margin),
                 events: {
                     pointerup() {
-                        selectedCharacterId.set(c.id)
                         chooseOwnedCharacterAt(
                             index,
                             selectedCharacterPlaceIndex.val
                         )
+
                         selectedCharacterPlaceIndex.set(
                             ((selectedCharacterPlaceIndex.val + 1) %
                                 3) as CharacterPlaceIndex
@@ -188,9 +188,21 @@ export function CharacterOptions() {
                     const i = defaultOwnedCharacters.findIndex(c => c.id === id)
                     options[i].filters = [glowFilter]
                 }, true),
-                hoveredCharacterUid.onChange(() =>
-                    selectedCharacterId.set(null)
-                ),
+                hoveredCharacterUid.onChange(uid => {
+                    const hoveredCharacterMeta = getEntryScene()
+                        .get('selectedCharacters')
+                        .find(c => c?.uid === uid)
+
+                    selectedCharacterId.set(hoveredCharacterMeta?.id ?? null)
+                }),
+                onUpdate(getEntryScene().select('selectedCharacters'), sc => {
+                    const hoveredCharacterMeta =
+                        sc[selectedCharacterPlaceIndex.val]
+
+                    hoveredCharacterUid.set(hoveredCharacterMeta?.uid ?? null)
+
+                    selectedCharacterId.set(hoveredCharacterMeta?.id ?? null)
+                }),
             ],
         },
         ...options
@@ -202,8 +214,6 @@ function chooseOwnedCharacterAt(
     selectedCharacterPlaceIndex: CharacterPlaceIndex
 ) {
     const uid = `pc-${ownedCharacterIndex}-${(Math.random() * 10000) | 0}`
-
-    hoveredCharacterUid.set(uid)
 
     void callApi('placeSelectedCharacters', {
         characters: [
