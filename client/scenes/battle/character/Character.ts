@@ -279,8 +279,6 @@ function bindMoves(
 
             statChangesDatum.set(statChanges)
 
-            // lockStatUpdates()
-
             mainAnimation.state.setAnimation(0, 'Attack', false)
             mainAnimation.state.addAnimation(0, 'Idle', true)
         }

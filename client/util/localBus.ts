@@ -8,5 +8,6 @@ export const highlightIntentFrom = datum<CharacterUid | null>(null)
 export const targetUidsWaitingForImpact = datum<CharacterUid[]>([])
 export const playDamageAnimation = datum<boolean>(false)
 export const statChangesDatum = datum({} as StatChangesMap)
+export const waitForDeathAnimationDatum = datum<boolean | null>(null)
 
 export const animation$ = new Channel<'scene exit done'>('animation')

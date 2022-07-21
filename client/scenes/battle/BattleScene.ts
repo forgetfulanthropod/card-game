@@ -1,4 +1,4 @@
-import { datum } from 'datums'
+import { datum, compose } from 'datums'
 import type { CharacterUid, PileId, RequiredAction } from 'shared'
 import { sampleSize } from 'lodash'
 import { Cards, CardAdder } from '@sharedElements'
@@ -9,7 +9,7 @@ import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { onUpdate, toDatum } from '@/util'
+import { onUpdate, toDatum, waitForDeathAnimationDatum } from '@/util'
 import { callApi } from '@/callApi'
 
 export function BattleScene(): PixiContainer {
@@ -37,7 +37,16 @@ export function BattleScene(): PixiContainer {
         Cards({ scene, hoveredCardUid }),
         Energy({ scene }),
         If(
-            toDatum(scene.select('state'), state => state === 'choosing cards'),
+            compose(
+                ([waitForDeathAnimation, shouldBeChoosing]) => {
+                    return !waitForDeathAnimation && shouldBeChoosing
+                },
+                waitForDeathAnimationDatum,
+                toDatum(
+                    scene.select('state'),
+                    state => state === 'choosing cards'
+                )
+            ),
             () => CardAdder()
         )
     )

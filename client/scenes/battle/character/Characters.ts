@@ -1,5 +1,5 @@
 import { uniq } from 'lodash'
-import { compose, datum } from 'datums'
+import { compose } from 'datums'
 import type { Characters, CharacterUid } from 'shared'
 import { keys, sleep } from 'shared/code'
 import type { DisplayObject } from 'pixi.js'
@@ -9,51 +9,40 @@ import { Character } from './Character'
 import type { PixiContainer } from '@/elementsUtil'
 import { For } from '@/elementsUtil'
 import { localTree } from '@/data'
-import { statChangesDatum, toDatum } from '@/util'
+import { waitForDeathAnimationDatum, statChangesDatum, toDatum } from '@/util'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
-    const justDiedDatum = datum<CharacterUid[]>([])
 
     const root = For(
         //@ts-expect-error
         compose(
-            // ([allCharacters, justDied]) => {
-            //     return []
-            // },
-            ([allCharacters, justDied], lastOut) => {
-                const living = keys(allCharacters).filter(
+            ([allCharacters, waitForDeathAnimation], lastOut) => {
+                const living: CharacterUid[] = keys(allCharacters).filter(
                     cK => allCharacters[cK].health > 0
                 )
 
-                if (!Array.isArray(lastOut)) {
-                    return living
-                }
+                if (!Array.isArray(lastOut)) return living
 
-                if (living.length < lastOut.length) {
-                    const removedIndices = lastOut
-                        .map((_, i) => i)
-                        .filter(i => !living.includes(lastOut[i]))
+                if (waitForDeathAnimation === true) return lastOut
 
-                    console.log('animating out', {
-                        living,
-                        lastOut,
-                        removedIndices,
-                        children: root.children,
-                    })
+                if (
+                    living.length < lastOut.length &&
+                    waitForDeathAnimation === null
+                ) {
+                    manageNewDeaths(lastOut, living)
 
-                    animateOut(
-                        root.children,
-                        removedIndices,
-                        removedIndices.map(i => lastOut[i])
-                    )
                     return lastOut
                 }
+
+                // if (living.length < lastOut.length &&
+
+                setTimeout(() => waitForDeathAnimationDatum.set(null), 0)
 
                 return living
             },
             toDatum<Characters>(allCharsC, c => c),
-            justDiedDatum
+            waitForDeathAnimationDatum
         ),
         (uid: CharacterUid) =>
             Character({
@@ -65,44 +54,56 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 },
                 scale: 1,
             })
-        // uid =>
-        //     If(
-        //         toDatum(scene.select('allCharacters', uid), c => c.health > 0),
-        //         () =>
-        //     ),
-        // undefined,
-        // { name: 'CharactersContainer' }
     )
 
     return root
+
+    function manageNewDeaths(lastOut: CharacterUid[], living: CharacterUid[]) {
+        waitForDeathAnimationDatum.set(true)
+
+        const removedIndices = lastOut
+            .map((_, i) => i)
+            .filter(i => !living.includes(lastOut[i]))
+
+        console.log('playing death animation')
+
+        const newJustDied = removedIndices.map(i => lastOut[i])
+
+        void animateOut(root.children, removedIndices, newJustDied).then(() =>
+            waitForDeathAnimationDatum.set(false)
+        )
+    }
 }
 
-function animateOut(
+async function animateOut(
     els: DisplayObject[],
     indices: number[],
     uids: CharacterUid[]
 ) {
-    indices.forEach((elIndex, i) => {
-        animateOutOne(els[elIndex], uids[i])
-    })
+    return await Promise.all(
+        indices.map((elIndex, i) => animateOutOne(els[elIndex], uids[i]))
+    )
 }
 
-function animateOutOne(el: DisplayObject, uid: CharacterUid) {
-    statChangesDatum.onChange((statChanges, _, unsub) => {
-        console.log({ statChanges })
-        if (!statChanges[uid]?.health) return
+async function animateOutOne(el: DisplayObject, uid: CharacterUid) {
+    return new Promise<void>(resolve => {
+        statChangesDatum.onChange(async (statChanges, _, unsub) => {
+            console.log({ statChanges })
+            if (!statChanges[uid]?.health) return
 
-        animateDeath(el)
+            await animateDeath(el)
 
-        unsub()
+            resolve()
+
+            unsub()
+        })
     })
 }
 
 let colorOverlayFilter: ColorOverlayFilter | null = null
 
-function animateDeath(el: DisplayObject) {
-    // el.filters = getAnimatedDeathFilters()
-    void Tweener.add(
+async function animateDeath(el: DisplayObject) {
+    await Tweener.add(
         {
             target: el,
             duration: 0.3,
