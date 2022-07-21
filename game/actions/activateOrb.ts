@@ -7,6 +7,7 @@ import {
     updateHand,
     applyDamage,
     calcPostEffectStats,
+    emitMove,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -79,6 +80,14 @@ function activateProtection(character: CharacterMeta, scene: BattleCursor) {
         ['allCharacters', character.uid, 'block'],
         b => b + block * multiplier
     )
+
+    emitMove({
+        moveName: 'Protection!',
+        targetType: 'self',
+        characterUid: character.uid,
+        targetUids: [character.uid],
+        scene,
+    })
 }
 
 function activateLightning(character: CharacterMeta, scene: BattleCursor) {
@@ -86,11 +95,12 @@ function activateLightning(character: CharacterMeta, scene: BattleCursor) {
     const targetUid = getRandomLivingNpcUid(scene)
     const multiplier = calcPostEffectStats(character).damageTakeMultiplier
     applyDamage({ damage, targetUid, scene, multiplier })
-    // emitMove({
-    //     moveName: 'Lightning!',
-    //     attackerUid: character.uid,
-    //     // damage,
-    //     targetUids: [targetUid],
-    //     scene,
-    // })
+
+    emitMove({
+        moveName: 'Lightning!',
+        targetType: 'enemies',
+        characterUid: character.uid,
+        targetUids: [targetUid],
+        scene,
+    })
 }
