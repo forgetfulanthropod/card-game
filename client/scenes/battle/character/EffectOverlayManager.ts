@@ -17,7 +17,7 @@ export function EffectOverlayManager(
 ): PixiContainer {
     const root = Container({
         y: offset,
-        x: characterMeta.isPc ? 0 : 200,
+        x: characterMeta.isPc ? 0 : -150,
         onDestroy: [
             statChangesDatum.onChange(statChanges => {
                 const animations: MovieClip[] = getAnimationsFrom(

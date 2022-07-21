@@ -3,7 +3,7 @@ type Level = string
 export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', null, null, 'block', null] },
-        1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', 'swordWack', 'jab', 'strike', 'jab'] },
+        1: { level: '1', wisdom: 0, constitution: 1, strength: 4, defense: 7, moves: ['swordWack', 'swordWack', 'jab', 'strike', 'jab'] },
         2: { level: '2', wisdom: 0, constitution: 27, strength: 6, defense: 9, moves: ['swordWack', 'rustyPokeLow', 'swordWack', 'block', 'swordWack'] },
         3: { level: '3', wisdom: 0, constitution: 36, strength: 8, defense: 12, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', 'swordWack'] },
         4: { level: '4', wisdom: 0, constitution: 50, strength: 11, defense: 16, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', 'swordWack'] },
@@ -15,7 +15,7 @@ export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> =
         10: { level: '10', wisdom: 0, constitution: 150, strength: 29, defense: 34, moves: ['swordWack', 'rustyPokeHigh', 'slash', 'block', 'startlingSpook(3,3)'] },
     },
     matchaGelatinCube: {
-        1: { level: '1', wisdom: 0, constitution: 24, strength: 3, defense: 10, moves: ['basicAttack', 'block', 'basicAttack', 'block', 'basicAttack'] },
+        1: { level: '1', wisdom: 0, constitution: 1, strength: 3, defense: 10, moves: ['basicAttack', 'block', 'basicAttack', 'block', 'basicAttack'] },
         2: { level: '2', wisdom: 0, constitution: 36, strength: 4, defense: 14, moves: ['basicAttack', 'surpriseAllergy(1,1)', 'block', 'basicAttack', 'block'] },
         3: { level: '3', wisdom: 0, constitution: 55, strength: 6, defense: 17, moves: ['basicAttack', 'surpriseAllergy(1,1)', 'itchyOoze(1)', 'block', null] },
         4: { level: '4', wisdom: 0, constitution: 72, strength: 8, defense: 22, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'itchyOoze(2)', 'block', null] },

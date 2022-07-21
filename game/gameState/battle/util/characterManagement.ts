@@ -17,7 +17,7 @@ const BASE_HEIGHT = 1080
 const X_AGGRESSIVE_THRESH = 11
 const X_NEUTRAL_THRESH = 9
 
-const CENTERING_X_OFFSET = 6 // out of 100
+const CENTERING_X_OFFSET = 5 // out of 100
 
 export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     const playerCharacterPositions = makeLeftPositions()
