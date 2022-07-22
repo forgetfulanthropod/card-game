@@ -30,13 +30,15 @@ export function BleedOverlayAnimation(isPc: boolean) {
 }
 
 export function GainBlockOverlayAnimation(_isPc: boolean) {
-    const animation = new AnimatedSprite(
-        sequenceMap.block.map(assetKey => getTexture(assetKey))
-    )
+    return SequenceAnimation('block')
+}
 
-    setTimeout(() => animation.play(), 0)
+export function LoseBlockOverlayAnimation(_isPc: boolean) {
+    return SequenceAnimation('loseBlock')
+}
 
-    return animation
+export function BreakBlockOverlayAnimation(_isPc: boolean) {
+    return SequenceAnimation('breakBlock')
 }
 
 export function PoisonOverlayAnimation(isPc: boolean) {
@@ -79,4 +81,17 @@ function getOneOf(possibilities: string[], isPc: boolean) {
     })
 
     return allAnimations[animKeys[random(false) % animKeys.length]]
+}
+
+function SequenceAnimation(sequenceKey: keyof typeof sequenceMap) {
+    const animation = new AnimatedSprite(
+        sequenceMap[sequenceKey]?.map(assetKey => getTexture(assetKey))
+    )
+
+    setTimeout(() => {
+        animation.animationSpeed = 0.5
+        animation.play()
+    }, 0)
+
+    return animation
 }

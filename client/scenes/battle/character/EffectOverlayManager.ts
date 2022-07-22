@@ -4,6 +4,8 @@ import { keys } from 'shared/code'
 import type { AnimatedSprite } from 'pixi.js'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    BreakBlockOverlayAnimation,
+    LoseBlockOverlayAnimation,
     GainBlockOverlayAnimation,
     BleedOverlayAnimation,
     AttackOverlayAnimation,
@@ -31,10 +33,8 @@ export function EffectOverlayManager(
                 )
                     return
 
-                const animations: MovieClip[] = getAnimationsFrom(
-                    statChanges,
-                    characterMeta
-                )
+                const animations: (MovieClip | AnimatedSprite)[] =
+                    getAnimationsFrom(statChanges, characterMeta)
 
                 if (animations.length) {
                     animations.forEach((anim, i) => {
@@ -75,6 +75,11 @@ export function getAnimationsFrom(
     // }
     if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
+    }
+    if ((changes.block ?? 0) < 0) {
+        if (characterMeta.health <= 0)
+            animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
+        else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))
     }
 
     return animations
