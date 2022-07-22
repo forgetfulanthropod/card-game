@@ -29,28 +29,20 @@ export function BleedOverlayAnimation(isPc: boolean) {
     return Animation(getOneOf(['Bleed'], isPc), isPc)
 }
 
-export function GainBlockOverlayAnimation(_isPc: boolean) {
-    return SequenceAnimation('block')
+export function GainBlockOverlayAnimation(isPc: boolean) {
+    return SequenceAnimation('block', isPc)
 }
 
-export function LoseBlockOverlayAnimation(_isPc: boolean) {
-    return SequenceAnimation('loseBlock')
+export function LoseBlockOverlayAnimation(isPc: boolean) {
+    return SequenceAnimation('loseBlock', isPc)
 }
 
-export function BreakBlockOverlayAnimation(_isPc: boolean) {
-    return SequenceAnimation('breakBlock')
+export function BreakBlockOverlayAnimation(isPc: boolean) {
+    return SequenceAnimation('breakBlock', isPc)
 }
 
 export function PoisonOverlayAnimation(isPc: boolean) {
-    return Animation(getOneOf(['Poison'], isPc), isPc)
-}
-
-export function GainHealthOverlayAnimation(isPc: boolean) {
-    return Animation(getOneOf(['Gain'], isPc), isPc)
-}
-
-export function BlockOverlayAnimation(isPc: boolean) {
-    return Animation(getOneOf(['Block'], isPc), isPc)
+    return SequenceAnimation('poison', isPc)
 }
 
 function Animation(data: AnimateAsset, isPc: boolean) {
@@ -83,12 +75,17 @@ function getOneOf(possibilities: string[], isPc: boolean) {
     return allAnimations[animKeys[random(false) % animKeys.length]]
 }
 
-function SequenceAnimation(sequenceKey: keyof typeof sequenceMap) {
+function SequenceAnimation(
+    sequenceKey: keyof typeof sequenceMap,
+    isPc: boolean
+) {
     const animation = new AnimatedSprite(
         sequenceMap[sequenceKey]?.map(assetKey => getTexture(assetKey))
     )
 
     setTimeout(() => {
+        animation.scale.set(1.7)
+        animation.anchor.set(isPc ? 0.5 : 0, 0.5)
         animation.animationSpeed = 0.5
         animation.play()
     }, 0)

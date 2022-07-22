@@ -4,6 +4,7 @@ import { keys } from 'shared/code'
 import type { AnimatedSprite } from 'pixi.js'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    PoisonOverlayAnimation,
     BreakBlockOverlayAnimation,
     LoseBlockOverlayAnimation,
     GainBlockOverlayAnimation,
@@ -70,9 +71,8 @@ export function getAnimationsFrom(
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'bleed'))
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
-    // if (changes.effects?.find(e => e.id === 'poison')) {
-    //     animations.push(PoisonOverlayAnimation(characterMeta.isPc))
-    // }
+    if (changes.effects?.find(e => e.id === 'poison'))
+        animations.push(PoisonOverlayAnimation(characterMeta.isPc))
     if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
     }
