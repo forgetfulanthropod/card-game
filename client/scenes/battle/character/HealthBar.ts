@@ -287,7 +287,7 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
 
         await new Promise<void>(resolve => {
             statChangesDatum.onChange((sc, _, unsub) => {
-                if (sc[cm.uid]?.health) {
+                if (!sc[cm.uid]?.wait && sc[cm.uid]?.health) {
                     unsub()
                     resolve()
                 }
