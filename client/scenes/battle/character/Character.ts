@@ -354,7 +354,7 @@ function bindStatChanges(characterCursor: CharacterCursor) {
 
         const dataChanges = diff(previousData, currentData)
         const statChanges: Partial<CharacterMeta & { wait: boolean }> =
-            { wait: statChangesDatum.val[currentData.uid].wait } ?? {}
+            { wait: statChangesDatum.val[currentData.uid]?.wait } ?? {}
 
         dataChanges?.forEach(c => {
             const key = c.path?.[0]

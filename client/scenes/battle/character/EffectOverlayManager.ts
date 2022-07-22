@@ -1,5 +1,6 @@
 import type { CharacterMeta, StatChangesMap } from 'shared'
 import type { MovieClip } from '@pixi/animate'
+import { keys } from 'shared/code'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     GainHealthOverlayAnimation,
@@ -20,7 +21,14 @@ export function EffectOverlayManager(
         x: characterMeta.isPc ? 80 : -150,
         onDestroy: [
             statChangesDatum.onChange(statChanges => {
-                if (statChanges[characterMeta.uid]?.wait) return
+                const myStatChanges = statChanges[characterMeta.uid]
+                if (
+                    myStatChanges == null ||
+                    myStatChanges?.wait ||
+                    //@ts-expect-error
+                    keys(myStatChanges).length === 0
+                )
+                    return
 
                 const animations: MovieClip[] = getAnimationsFrom(
                     statChanges,
@@ -35,6 +43,11 @@ export function EffectOverlayManager(
                         }, i * TIME_BETWEEN_OVERLAY_ANIMATIONS)
                     })
                 }
+
+                statChangesDatum.set({
+                    ...statChangesDatum,
+                    [characterMeta.uid]: {},
+                })
             }),
         ],
     })
