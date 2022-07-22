@@ -39,7 +39,7 @@ interface ArgsOf {
     orb: [type: OrbType, count: number]
     text: [str: string]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
-    smite: [mainMove: any, conditionalMove: any]
+    smite: [damage: number, block: number]
     queue: [numTurns: number, move: any]
 
     killIf: [condition: boolean]

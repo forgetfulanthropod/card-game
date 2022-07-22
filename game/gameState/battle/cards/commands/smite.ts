@@ -3,7 +3,10 @@ import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['smite'] = _dslArgs => {
-    return `Deal wisdom damage. If enemy is killed, block defense.`
+    // const [damage, block] = evalAll(dslArgs)
+
+    // return `Deal ${damage} damage. If enemy is killed, block ${block}.`
+    return 'Deal ${wisdom} damage. If enemy is killed, block ${defense}.'
 }
 
 export const execute: Executors['smite'] = ({

@@ -294,7 +294,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'smite()',
+        actions: 'smite(wisdom, defense)',
         type: 'attack',
         characterClass: 'cleric',
     },
