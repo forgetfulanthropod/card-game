@@ -164,6 +164,7 @@ let colorOverlayFilter: ColorOverlayFilter | null = null
 
 async function animateDeath(el: DisplayObject) {
     console.log('got to animateDeath even...')
+    await sleep(200)
     await Tweener.add(
         {
             target: el,
