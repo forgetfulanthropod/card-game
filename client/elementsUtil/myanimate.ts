@@ -2,11 +2,10 @@
 import type { AnimateAsset } from '@pixi/animate'
 import { Graphics, MovieClip, load } from '@pixi/animate'
 import { keys, random } from 'lodash'
-import { AnimatedSprite } from 'pixi.js'
 
 import { allAnimations } from '../animations'
-import { getTexture } from './AssetLoader'
-import { sequenceMap } from '@/assets/sequenceMap'
+// import { getTexture } from './AssetLoader'
+import { SequenceAnimation } from './SequenceAnimation'
 
 const allAnimationKeys = keys(allAnimations)
 
@@ -73,22 +72,4 @@ function getOneOf(possibilities: string[], isPc: boolean) {
     })
 
     return allAnimations[animKeys[random(false) % animKeys.length]]
-}
-
-function SequenceAnimation(
-    sequenceKey: keyof typeof sequenceMap,
-    isPc: boolean
-) {
-    const animation = new AnimatedSprite(
-        sequenceMap[sequenceKey]?.map(assetKey => getTexture(assetKey))
-    )
-
-    setTimeout(() => {
-        animation.scale.set(1.7)
-        animation.anchor.set(isPc ? 0.5 : 0, 0.5)
-        animation.animationSpeed = 0.5
-        animation.play()
-    }, 0)
-
-    return animation
 }
