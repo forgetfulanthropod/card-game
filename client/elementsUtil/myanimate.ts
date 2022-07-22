@@ -2,8 +2,11 @@
 import type { AnimateAsset } from '@pixi/animate'
 import { Graphics, MovieClip, load } from '@pixi/animate'
 import { keys, random } from 'lodash'
+import { AnimatedSprite } from 'pixi.js'
 
 import { allAnimations } from '../animations'
+import { getTexture } from './AssetLoader'
+import { sequenceMap } from '@/assets/sequenceMap'
 
 const allAnimationKeys = keys(allAnimations)
 
@@ -24,6 +27,16 @@ export function AttackOverlayAnimation(isPc: boolean) {
 
 export function BleedOverlayAnimation(isPc: boolean) {
     return Animation(getOneOf(['Bleed'], isPc), isPc)
+}
+
+export function GainBlockOverlayAnimation(_isPc: boolean) {
+    const animation = new AnimatedSprite(
+        sequenceMap.block.map(assetKey => getTexture(assetKey))
+    )
+
+    setTimeout(() => animation.play(), 0)
+
+    return animation
 }
 
 export function PoisonOverlayAnimation(isPc: boolean) {

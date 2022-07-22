@@ -1,9 +1,10 @@
 import type { CharacterMeta, StatChangesMap } from 'shared'
 import type { MovieClip } from '@pixi/animate'
 import { keys } from 'shared/code'
+import type { AnimatedSprite } from 'pixi.js'
 import type { PixiContainer } from '@/elementsUtil'
 import {
-    GainHealthOverlayAnimation,
+    GainBlockOverlayAnimation,
     BleedOverlayAnimation,
     AttackOverlayAnimation,
     Container,
@@ -59,7 +60,7 @@ export function getAnimationsFrom(
     statChanges: StatChangesMap,
     characterMeta: CharacterMeta
 ) {
-    const animations: MovieClip[] = []
+    const animations: (MovieClip | AnimatedSprite)[] = []
 
     const changes = statChanges[characterMeta.uid]
 
@@ -73,7 +74,7 @@ export function getAnimationsFrom(
     //     animations.push(PoisonOverlayAnimation(characterMeta.isPc))
     // }
     if ((changes.block ?? 0) > 0) {
-        animations.push(GainHealthOverlayAnimation(characterMeta.isPc))
+        animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
     }
 
     return animations
