@@ -23,7 +23,7 @@ import { getBattleScene } from '@/data'
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_WIDTH_IN_HAND = 220
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
-const CARD_WIDTH_FULL = 350
+const CARD_WIDTH_FULL = 300
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 const CARD_WIDTH = 220
 
@@ -140,7 +140,7 @@ function getFocus(
         animateTo(cardEl, {
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.7,
+            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.5,
             scale:
                 (CARD_WIDTH_FULL / CARD_WIDTH_IN_HAND) *
                 initialDisplayVal.scale,
