@@ -23,6 +23,7 @@ import { EffectOverlayManager } from './EffectOverlayManager'
 import { getOrbTexture, getCharTexture } from '@/assets'
 import {
     hoveredCharacterUid,
+    nextTick,
     onUpdate,
     playDamageAnimation,
     statChangesDatum,
@@ -266,14 +267,17 @@ function bindMoves(
         if (isAttack && event.data.characterUid === characterMeta.uid) {
             if (mainAnimation == null) return
 
-            targetUidsWaitingForImpact.set(event.data.targetUids)
+            targetUidsWaitingForImpact.set([
+                ...targetUidsWaitingForImpact.val,
+                ...event.data.targetUids,
+            ])
 
             const statChanges = { ...statChangesDatum.val }
             targetUidsWaitingForImpact.val.forEach(
                 uid =>
                     (statChanges[uid] = {
-                        wait: true,
                         ...(statChanges[uid] ?? {}),
+                        wait: true,
                     })
             )
 
@@ -321,18 +325,28 @@ function unlockWaitingStatChanges(statChangesDatum: Datum<StatChangesMap>) {
     statChangesDatum.set(statChanges)
 
     // const targetUidsToClear = [...targetUidsWaitingForImpact.val]
-    setTimeout(() => {
+    setTimeout(function clearProcessedChanges() {
+        if (
+            targetUidsWaitingForImpact.val.find(uid => statChanges[uid]?.wait)
+        ) {
+            setTimeout(clearProcessedChanges, 100)
+
+            return
+        }
+
         statChanges = { ...statChangesDatum.val }
         targetUidsWaitingForImpact.val.forEach(uid => (statChanges[uid] = {}))
         targetUidsWaitingForImpact.set([])
         statChangesDatum.set(statChanges)
-    }, 0)
+    }, 100)
 }
 
 function bindStatChanges(characterCursor: CharacterCursor) {
-    const update: Listener<CharacterMeta> = ({
+    const update: Listener<CharacterMeta> = async ({
         data: { currentData, previousData },
     }) => {
+        await nextTick()
+
         if (currentData == null) {
             console.log('null character meta')
             return
@@ -340,7 +354,7 @@ function bindStatChanges(characterCursor: CharacterCursor) {
 
         const dataChanges = diff(previousData, currentData)
         const statChanges: Partial<CharacterMeta & { wait: boolean }> =
-            statChangesDatum.val[currentData.uid] ?? {}
+            { wait: statChangesDatum.val[currentData.uid].wait } ?? {}
 
         dataChanges?.forEach(c => {
             const key = c.path?.[0]
@@ -373,15 +387,15 @@ function bindStatChanges(characterCursor: CharacterCursor) {
                 ...statChangesDatum.val,
                 [currentData.uid]: statChanges,
             })
-        if (statChanges.wait === undefined)
-            setTimeout(
-                () =>
-                    statChangesDatum.set({
-                        ...statChangesDatum.val,
-                        [currentData.uid]: {},
-                    }),
-                1000
-            )
+        // if (statChanges.wait !== true)
+        //     setTimeout(
+        //         () =>
+        //             statChangesDatum.set({
+        //                 ...statChangesDatum.val,
+        //                 [currentData.uid]: {},
+        //             }),
+        //         0
+        //     )
     }
 
     characterCursor.on('update', update)

@@ -72,15 +72,15 @@ function makeCards(scene: BattleCursor): Piles {
     const allCharacters = vals(scene.get('allCharacters'))
     allCharacters.forEach(c => {
         const ccuf = upperFirst(c.class)
-        cardIds.push(
-            //@ts-expect-error
-            `basicAttack${ccuf}`,
-            // `basicAttack${ccuf}`,
-            `block${ccuf}`
-            // `block${ccuf}`,
-            // 'helpingHand',
-            // 'smite'
-        )
+        // cardIds.push(
+        //     //@ts-expect-error
+        //     `basicAttack${ccuf}`,
+        //     // `basicAttack${ccuf}`,
+        //     `block${ccuf}`
+        //     // `block${ccuf}`,
+        //     // 'helpingHand',
+        //     // 'smite'
+        // )
         cardIds.push(getRandomCardIdOfClass(c.class))
     })
 

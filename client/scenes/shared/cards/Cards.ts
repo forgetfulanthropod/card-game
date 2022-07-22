@@ -41,7 +41,8 @@ export function Cards(args: CardsArgs) {
 function EndTurnButton(): PixiContainer {
     const buttonTexture = getTexture('endTurnButton')
     return If(
-        toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+        // toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+        toDatum(getBattleScene().select('isPlayerTurn'), is => true), // TEMP!! IMPROPER isPlayerTurn state BUG!!!!
         () =>
             Container(
                 {

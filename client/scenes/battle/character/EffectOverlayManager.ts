@@ -20,6 +20,8 @@ export function EffectOverlayManager(
         x: characterMeta.isPc ? 80 : -150,
         onDestroy: [
             statChangesDatum.onChange(statChanges => {
+                if (statChanges[characterMeta.uid]?.wait) return
+
                 const animations: MovieClip[] = getAnimationsFrom(
                     statChanges,
                     characterMeta

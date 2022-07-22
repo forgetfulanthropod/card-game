@@ -110,6 +110,7 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
                 }))
         )
     )
+
     return For(
         //@ts-expect-error
         data,
@@ -218,6 +219,7 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
         Text({
             text: compose(
                 ([statChanges, health]) => {
+                    // console.log({ statChanges, health })
                     if (firstRender) {
                         firstRender = false
                         lastHealth = health
