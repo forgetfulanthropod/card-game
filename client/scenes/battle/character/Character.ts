@@ -100,8 +100,8 @@ export function Character(props: CharacterProps): PixiContainer {
     )
 
     const hitContainer = Container({
-        x: 0,
-        y: -220,
+        x: characterMeta.isPc ? 30 : 50,
+        y: -50,
     })
 
     return Container(
@@ -419,7 +419,8 @@ function flashDamageTo(
     aboveCharacterContainer: PixiContainer,
     damage: number
 ): void {
-    flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
-        durationMs: SHOW_HIT_TIME,
-    })
+    // flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
+    //     durationMs: SHOW_HIT_TIME,
+    // })
+    aboveCharacterContainer.addChild(HitInfo({ damage }))
 }

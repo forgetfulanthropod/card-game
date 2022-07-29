@@ -152,21 +152,22 @@ export const characterClassAssets = {
 } as const
 
 export const spineAssets = {
-    frogKnightSpine: 'spine/frogKnight/FrogKnight.json',
+    frogKnightSpine: 'spines/characters/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
-        'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
-    penguinKnightSpine: 'spine/penguinKnight/imported.json',
+        'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
+    penguinKnightSpine: 'spines/characters/penguinKnight/imported.json',
     skeletonWarriorSpine:
-        'spine/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
+        'spines/characters/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
     skeletonWarriorNPCSpine:
-        'spine/skeletonWarriorNPC/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
+        'spines/characters/skeletonWarriorNPC/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
     matchaGelatinCubeSpine:
-        'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
+        'spines/characters/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
     matchaGelatinCubeNPCSpine:
-        'spine/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
-    gnomeHooliganSpine: 'spine/gnomeHooligan/Gnome_Hooligan.json',
-    jerrySpine: 'spine/jerry/Jerry_MJ_Rig_Prep_v4.json',
-    warhogSpine: 'spine/warhog/Warhog.json',
+        'spines/characters/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
+    gnomeHooliganSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
+    jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
+    warhogSpine: 'spines/characters/warhog/Warhog.json',
+    damageSpine: 'spines/damage/Text.json',
     // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     // mushroomFarmerSpineWebp:
     //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
