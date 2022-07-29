@@ -48,7 +48,8 @@ export function HitInfo(args: {
 
     lastRandomIndex = (lastRandomIndex % 3) + 1
 
-    root.state.setAnimation(0, randomAnimation, true)
+    const loop = false
+    root.state.setAnimation(0, randomAnimation, loop)
 
     return root
 

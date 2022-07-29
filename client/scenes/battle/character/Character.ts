@@ -419,8 +419,7 @@ function flashDamageTo(
     aboveCharacterContainer: PixiContainer,
     damage: number
 ): void {
-    // flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
-    //     durationMs: SHOW_HIT_TIME,
-    // })
-    aboveCharacterContainer.addChild(HitInfo({ damage }))
+    flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
+        durationMs: SHOW_HIT_TIME,
+    })
 }
