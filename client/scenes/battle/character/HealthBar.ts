@@ -271,7 +271,13 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
 
     updateNoWait(characterCursor.get())
 
-    return onDestroyed(el, onUpdate(characterCursor, update, false))
+    onDestroyed(el, onUpdate(characterCursor, update, false))
+    onDestroyed(
+        el,
+        statChangesDatum.onChange(() => update(characterCursor.get()))
+    )
+
+    return el
 
     function updateNoWait(cm: CharacterMeta) {
         if (cm == null) return
@@ -282,19 +288,12 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
         lastHealth = characterCursor.get('health')
     }
 
-    async function update(cm: CharacterMeta) {
+    function update(cm: CharacterMeta) {
         if (cm == null) return
 
-        await new Promise<void>(resolve => {
-            statChangesDatum.onChange((sc, _, unsub) => {
-                if (!sc[cm.uid]?.wait && sc[cm.uid]?.health) {
-                    unsub()
-                    resolve()
-                }
-            })
-        })
+        const sc = statChangesDatum.val
 
-        updateNoWait(cm)
+        if (!sc[cm.uid]?.wait && sc[cm.uid]?.health) updateNoWait(cm)
     }
 }
 
