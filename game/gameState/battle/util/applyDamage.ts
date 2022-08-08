@@ -13,11 +13,11 @@ export function applyDamage(args: {
         let health = c.health
         let block = c.block
 
-        unblockedDamage = damage - block
+        unblockedDamage = Math.ceil(damage * multiplier - block)
 
         if (unblockedDamage > 0) {
             block = 0
-            health -= unblockedDamage * multiplier
+            health -= unblockedDamage
         } else {
             block -= damage
         }
