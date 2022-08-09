@@ -57,6 +57,10 @@ export function MainCharacterAnimation({
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
+    setTimeout(() => {
+        root.state.setAnimation(0, 'Idle', true).mixDuration = 0.2
+    }, Math.random() * 2000)
+
     updateGlow(hoveredCharacterUid.val)
 
     const heightOverrides: Partial<Record<CharacterId, number>> = {

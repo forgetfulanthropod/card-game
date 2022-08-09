@@ -1,6 +1,8 @@
 import { Texture } from 'pixi.js'
 import type { CharacterMeta, DungeonRoom } from 'shared'
 import { keys, vals } from 'shared/code'
+
+import { AdjustmentFilter } from 'pixi-filters'
 import { MainCharacterAnimation } from '../shared'
 import type { PixiContainer } from '@/elementsUtil'
 import {
@@ -102,19 +104,24 @@ type MapNode = {
 }
 
 function TileForNode(node: MapNode, depth: number, yOffset: number) {
-    const texture = getTexture(`mapTile${depth}`)
+    const texture = getTexture(`mapTile${Math.floor(Math.random() * 7) + 1}`)
     const displayWidth = (BASE_WIDTH / 6) * 2
 
     const root = Container(
         {
             x: depth * displayWidth * 0.41,
             y: BASE_HEIGHT * 0.55 + displayWidth * 0.18 * yOffset,
+            filters:
+                depth > getBattleScene().get('numRoomsPassed') + 2 ||
+                node == null
+                    ? [new AdjustmentFilter({ brightness: 0.6 })]
+                    : [],
         },
         Sprite({
             src: texture,
             scale: displayWidth / texture.width,
             anchor: 0.5,
-            alpha: node == null ? 0.4 : 1,
+            // alpha: node == null ? 0.4 : 1,
         }),
         node ? TileCharacters(node) : Container({})
     )
