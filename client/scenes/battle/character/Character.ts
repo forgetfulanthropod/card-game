@@ -75,9 +75,6 @@ export function Character(props: CharacterProps): PixiContainer {
         {
             isHoveredDatum: isHovered,
         },
-        Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
-            y: 22,
-        }),
         ...(mainAnimation
             ? [
                   Adjust(mainAnimation, {
@@ -97,6 +94,16 @@ export function Character(props: CharacterProps): PixiContainer {
                 })
         ),
         Adjust(HealthBar(characterMeta.uid), { y: 11 })
+    )
+
+    setTimeout(
+        () =>
+            mainContainer.addChild(
+                Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
+                    y: 22,
+                })
+            ),
+        1000 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
     )
 
     const hitContainer = Container({

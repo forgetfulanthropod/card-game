@@ -29,6 +29,7 @@ interface BareGameActionArgs {
     exitDungeon: Empty
     finishCard: { cardUids: CardUid[] }
     nextRoom: Empty
+    confirmNextRoom: Empty
     placeSelectedCharacters: {
         characters: {
             character: OwnedCharacterStats

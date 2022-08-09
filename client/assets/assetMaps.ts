@@ -442,3 +442,19 @@ export const sequences = {
         'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0034.svg',
     // @endindex
 }
+
+export const mapAssets = {
+    mapBg: 'hex map/dungeon test bg for export.mp4',
+    mapFire: 'hex map/fire test.mov',
+}
+
+export const mapTileAssets = {
+    mapTile1: 'hex map/Tile 1.png',
+    mapTile2: 'hex map/Tile 2.png',
+    mapTile3: 'hex map/Tile 3.png',
+    mapTile4: 'hex map/Tile 4.png',
+    mapTile5: 'hex map/Tile 5.png',
+    mapTile6: 'hex map/Tile 6.png',
+    mapTile7: 'hex map/Tile 7.png',
+    mapTile8: 'hex map/Tile 8.png',
+}

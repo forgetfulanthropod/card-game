@@ -40,6 +40,8 @@ export function makeBattleState(args: {
         cardsPlayedThisRoom: [],
         queue: [],
         requireAction: null,
+        isInMap: true,
+        isInRestSite: false,
     }
     return bs
 }

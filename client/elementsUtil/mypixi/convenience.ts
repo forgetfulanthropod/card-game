@@ -132,7 +132,7 @@ export function getElByPath(args: {
                 `path ${pathHere} is not a Container on root ${root?.name}`
             )
         }
-        el = el.getChildByName(name) as PixiContainer
+        el = el.getChildByName(name, true) as PixiContainer
     })
     if (strict && !(el instanceof DisplayObject))
         throw Error(

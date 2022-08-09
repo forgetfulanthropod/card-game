@@ -25,6 +25,8 @@ export interface BattleScene extends SceneHas {
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
     requireAction: RequiredAction | null
     queue: CommandQueue
+    isInMap: boolean
+    isInRestSite: boolean
 }
 
 /** May later have e.g. DOT effects */

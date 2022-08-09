@@ -6,6 +6,7 @@ import { keys } from 'shared/code'
 import { Characters } from './character'
 import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'
+import { HexMapOverlay } from './HexMapOverlay'
 import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
@@ -32,26 +33,37 @@ export function BattleScene(): PixiContainer {
                 ),
             ],
         },
-        Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
-        intentArrowContainer,
-        Characters(scene),
-        Cards({ scene, hoveredCardUid }),
-        Energy({ scene }),
         If(
-            compose(
-                ([waitForDeathAnimation, shouldBeChoosing]) => {
-                    console.log({ waitForDeathAnimation, shouldBeChoosing })
-                    return (
-                        !keys(waitForDeathAnimation).length && shouldBeChoosing
+            toDatum(scene.select('isInMap'), is => !is),
+            () =>
+                Container(
+                    {},
+                    Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
+                    intentArrowContainer,
+                    Characters(scene),
+                    Cards({ scene, hoveredCardUid }),
+                    Energy({ scene }),
+                    If(
+                        compose(
+                            ([waitForDeathAnimation, shouldBeChoosing]) => {
+                                return (
+                                    !keys(waitForDeathAnimation).length &&
+                                    shouldBeChoosing
+                                )
+                            },
+                            waitForDeathAnimationsDatum,
+                            toDatum(
+                                scene.select('state'),
+                                state => state === 'choosing cards'
+                            )
+                        ),
+                        () => CardAdder()
                     )
-                },
-                waitForDeathAnimationsDatum,
-                toDatum(
-                    scene.select('state'),
-                    state => state === 'choosing cards'
                 )
-            ),
-            () => CardAdder()
+        ),
+        If(
+            toDatum(scene.select('isInMap'), is => is),
+            () => HexMapOverlay()
         )
     )
 

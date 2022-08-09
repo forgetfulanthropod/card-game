@@ -28,6 +28,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     putAllCardsInDrawPile(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)
+    scene.set('isInMap', true)
 }
 
 function getNextRoom(scene: BattleCursor) {
