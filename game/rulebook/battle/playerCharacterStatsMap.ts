@@ -81,10 +81,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: true,
         class: 'knight',
 
-        constitution: 43,
-        strength: 14,
-        wisdom: 5,
-        defense: 5,
+        constitution: 40,
+        strength: 12,
+        wisdom: 12,
+        defense: 3,
     },
     goblinDragon: {
         id: 'goblinDragon',

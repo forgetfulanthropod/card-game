@@ -5,7 +5,7 @@ import { applyDamage, calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['deal'] = dslArgs => {
     const [damage, times] = evalAll(dslArgs)
-    let explication = 'deals ' + damage + ' damage'
+    let explication = 'deals ' + Math.ceil(damage) + ' damage'
 
     if (times != null) {
         explication += ` ${times} time${s(times)}`

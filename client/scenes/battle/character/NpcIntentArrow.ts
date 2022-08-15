@@ -33,7 +33,10 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
         content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
         to: () =>
-            getElByPath({ path: ['BattleScene', 'IntentArrowsContainer'] }),
+            getElByPath({
+                path: ['BattleScene', 'IntentArrowsContainer'],
+                strict: false,
+            }),
     })
 
     return root

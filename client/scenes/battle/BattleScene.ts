@@ -33,13 +33,13 @@ export function BattleScene(): PixiContainer {
                 ),
             ],
         },
+        Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
+        intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
             () =>
                 Container(
                     {},
-                    Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
-                    intentArrowContainer,
                     Characters(scene),
                     Cards({ scene, hoveredCardUid }),
                     Energy({ scene }),

@@ -26,6 +26,7 @@ export function s(n: number) {
 
 interface ArgsOf {
     addBlock: [block: number]
+    addBlockToSelf: [block: number]
     addWisdom: [block: number]
     addStrength: [block: number]
     addEnergy: [energy: number]
@@ -33,6 +34,7 @@ interface ArgsOf {
     choice: any[]
     chain: any[]
     deal: [damage: number, times?: number]
+    dwindle: []
     effect: [id: EffectId, increase: number, targetType?: 'friends' | 'enemies']
     ifFirstPlay: any[]
     momentary: []
@@ -47,6 +49,7 @@ interface ArgsOf {
     draw: [numCards: number]
     discard: [numCards: number]
     orbOfHolyLight: []
+    psychicWarfare: [damage: number, sameTargetAddend: number]
     doubleEnchantmentOrToken: []
     require: [type: RequiredActionName, least: number, most: number]
 }

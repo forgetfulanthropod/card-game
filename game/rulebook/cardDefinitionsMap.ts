@@ -1,7 +1,7 @@
 import type { CardDefinition, CardId } from 'shared'
 
 const basicMagicAttackBase = {
-    name: 'Magic Strike',
+    name: 'Magic Attack',
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
@@ -9,7 +9,7 @@ const basicMagicAttackBase = {
     type: 'attack',
 } as const
 const basicAttackBase = {
-    name: 'Strike',
+    name: 'Attack',
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
@@ -56,7 +56,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shieldOfLight',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'addBlock(wisdom + 3)',
+        actions: 'addBlock(wisdom * 1.5)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -91,12 +91,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'bard',
     },
     strike: {
-        name: 'Strike',
+        name: 'Attack',
         energy: 1,
         id: 'strike',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'deal(strength + 2)',
+        actions: 'deal(strength)',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -246,6 +246,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'knight',
     },
+    parry: {
+        name: 'Parry',
+        energy: 1,
+        id: 'parry',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'chain(deal(0.75 * strength),blockSelf(3))',
+        type: 'attack',
+        characterClass: 'knight',
+    },
     dutifulStab: {
         name: 'Dutiful Stab',
         energy: 1,
@@ -288,6 +298,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'cleric',
     },
+    gnomeBomb: {
+        name: 'Gnome Bomb',
+        energy: 0,
+        id: 'gnomeBomb',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'chain(deal((strength * .5) + (wisdom * .5)), dwindle())',
+        type: 'attack',
+        characterClass: 'cleric',
+    },
     smite: {
         name: 'Smite',
         energy: 1,
@@ -322,6 +342,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         ],
         actions:
             'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    psychicWarfare: {
+        name: 'Psychic Warfare',
+        energy: 0,
+        id: 'psychicWarfare',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'psychicWarfare(wisdom * .75, wisdom * .25)',
         type: 'utility',
         characterClass: 'cleric',
     },

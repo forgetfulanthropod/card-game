@@ -8,6 +8,7 @@ import type {
     CharacterClass,
     Pile,
     OwnedCharacterStats,
+    CharacterId,
 } from 'shared'
 
 import { keys, vals } from 'shared/code'
@@ -70,19 +71,19 @@ function makeCards(scene: BattleCursor): Piles {
     ]
 
     const allCharacters = vals(scene.get('allCharacters'))
-    allCharacters.forEach(c => {
-        const ccuf = upperFirst(c.class)
+    allCharacters.forEach(cm => {
+        const ccuf = upperFirst(cm.class)
         cardIds.push(
             //@ts-expect-error
             `basicAttack${ccuf}`,
             // `basicAttack${ccuf}`,
-            `block${ccuf}`,
+            `block${ccuf}`
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
-            'TEST_turnStartEffects'
+            // 'TEST_turnStartEffects'
         )
-        cardIds.push(getRandomCardIdOfClass(c.class))
+        cardIds.push(getFirstCardIdForCharacterId(cm.id))
     })
 
     return {
@@ -103,6 +104,24 @@ function makeCards(scene: BattleCursor): Piles {
         removedRun: {},
     }
 }
+
+function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
+    // TODO: no partial when all characters covered..
+    const characterIdToCardIdMap: Partial<Record<CharacterId, CardId>> = {
+        frogKnight: 'charge',
+        mushroomFarmer: 'helpingHand',
+        penguinKnight: 'parry',
+        skeletonWarrior: 'swordSlash',
+        matchaGelatinCube: 'shieldOfLight',
+        warhog: 'bodySlam',
+        gnomeHooligan: 'gnomeBomb',
+        jerry: 'psychicWarfare',
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    return characterIdToCardIdMap[characterId]!
+}
+
 /**
  * random but not a basic starter...
  */
@@ -112,25 +131,14 @@ export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
     }
 
     const idPool = keys(cardDefinitionsMap).filter(
-        cardId => getCardClass(cardId) === characterClass
+        cardId =>
+            getCardClass(cardId) === characterClass &&
+            !~cardId.indexOf('basicAttack') &&
+            !~cardId.indexOf('strike') &&
+            !~cardId.indexOf('block')
     )
 
-    let cardId = get()
-
-    while (
-        //can't be these..
-        ~cardId.indexOf('basicAttack') ||
-        ~cardId.indexOf('strike') ||
-        ~cardId.indexOf('block')
-    ) {
-        cardId = get()
-    }
-
-    return cardId
-
-    function get() {
-        return idPool[Math.floor(srandom() * idPool.length)]
-    }
+    return idPool[Math.floor(srandom() * idPool.length)]
 }
 
 /**
