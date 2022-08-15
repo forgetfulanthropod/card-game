@@ -126,10 +126,6 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
  * random but not a basic starter...
  */
 export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
-    if (characterClass === 'wizard') {
-        return srandom() > 0.5 ? 'orbOfLightning' : 'orbOfProtection'
-    }
-
     const idPool = keys(cardDefinitionsMap).filter(
         cardId =>
             getCardClass(cardId) === characterClass &&

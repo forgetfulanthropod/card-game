@@ -3,6 +3,7 @@ import type { Executors, Explainers } from './util'
 import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
 import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from './addBlockToSelf'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
+import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
 import {explain as explainAddStrength, execute as executeAddStrength} from './addStrength'
 import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWisdom'
 import {explain as explainChain, execute as executeChain} from './chain'
@@ -32,6 +33,7 @@ export const explainers: Explainers = {
     addBlock: explainAddBlock,
     addBlockToSelf: explainAddBlockToSelf,
     addEnergy: explainAddEnergy,
+    addEnergyPerRound: explainAddEnergyPerRound,
     addStrength: explainAddStrength,
     addWisdom: explainAddWisdom,
     chain: explainChain,
@@ -61,6 +63,7 @@ export const executors: Executors = {
     addBlock: executeAddBlock,
     addBlockToSelf: executeAddBlockToSelf,
     addEnergy: executeAddEnergy,
+    addEnergyPerRound: executeAddEnergyPerRound,
     addStrength: executeAddStrength,
     addWisdom: executeAddWisdom,
     chain: executeChain,

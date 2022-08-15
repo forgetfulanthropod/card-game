@@ -30,6 +30,7 @@ interface ArgsOf {
     addWisdom: [block: number]
     addStrength: [block: number]
     addEnergy: [energy: number]
+    addEnergyPerRound: [energy: number]
 
     choice: any[]
     chain: any[]
