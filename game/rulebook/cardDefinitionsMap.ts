@@ -156,7 +156,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'spellBook',
         targetNum: 1,
         targetType: 'self',
-        actions: 'addEnergyPerRound(1)',
+        actions: 'chain(addEnergyPerRound(1), momentary())',
         type: 'enchantment',
         characterClass: 'wizard',
     },

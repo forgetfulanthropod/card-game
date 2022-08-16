@@ -4,7 +4,7 @@ import { enqueueAction } from '@/gameState'
 export const explain: Explainers['addEnergyPerRound'] = dslArgs => {
     const energy = dslArgs[0].eval()
 
-    return `adds ${energy} at the start of each turn`
+    return `adds ${energy} energy at the start of each turn`
 }
 
 export const execute: Executors['addEnergyPerRound'] = ({
