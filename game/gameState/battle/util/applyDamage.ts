@@ -12,14 +12,15 @@ export function applyDamage(args: {
     scene.select('allCharacters').apply(targetUid, c => {
         let health = c.health
         let block = c.block
+        const calcedDamage = Math.ceil(damage * multiplier)
 
-        unblockedDamage = Math.ceil(damage * multiplier - block)
+        unblockedDamage = calcedDamage - block
 
         if (unblockedDamage > 0) {
             block = 0
             health -= unblockedDamage
         } else {
-            block -= damage
+            block -= calcedDamage
         }
 
         return { ...c, health, block }

@@ -104,14 +104,15 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
-    effectVulnerable: 'effects/vulnerable_v2.webp',
     effectBleed: 'effects/bleed.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigue: 'effects/fatigue.webp',
     // effectPiercing,
+    effectMagicalStorm: 'effects/magicalStorm.webp',
     effectPoison: 'effects/poison_skull.webp',
     effectStunned: 'effects/stunned.webp',
     effectUnguarded: 'effects/unguarded_v2.webp',
+    effectVulnerable: 'effects/vulnerable_v2.webp',
 }
 
 export const healthBarAssets = {
@@ -133,8 +134,7 @@ export const intentAssets = {
 }
 
 export const orbAssets = {
-    orbOfEnergy: 'char status/orbs/lightning.webp',
-    orbOfFrost: 'char status/orbs/lightning.webp',
+    orbOfFrost: 'char status/orbs/frost.webp',
     orbOfLightning: 'char status/orbs/lightning.webp',
     orbOfProtection: 'char status/orbs/protection.webp',
 }

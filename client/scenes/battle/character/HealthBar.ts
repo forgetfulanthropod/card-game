@@ -121,8 +121,11 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
 }
 
 function SingleEffect(effect: Effect & { id: VisibleEffectId }): PixiContainer {
+    console.log('rendering effect', { effect })
     return Container(
-        {},
+        {
+            name: `Effect-${effect.id}`,
+        },
         Sprite({
             src: getEffectIconSrc(effect.id),
             width: 80 * SCALE_UNIVERSAL,

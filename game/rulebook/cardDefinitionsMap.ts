@@ -197,7 +197,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'magicalStorm',
         targetNum: 0,
         targetType: 'self',
-        actions: 'effect("smallDamageIncrease", 1)',
+        actions: 'effect("magicalStorm", 3)',
         type: 'utility',
         characterClass: 'wizard',
     },

@@ -1,3 +1,4 @@
+import { startCase } from 'lodash'
 import { setAt } from 'shared/code'
 
 import type { Executors, Explainers } from './util'
@@ -5,7 +6,7 @@ import { evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase] = evalAll(dslArgs)
-    return `+${increase} ${id}`
+    return `+${increase} ${startCase(id)}`
 }
 
 export const execute: Executors['effect'] = ({
@@ -24,6 +25,8 @@ export const execute: Executors['effect'] = ({
             .filter(x => x.isPc === shouldBePc)
             .map(x => x.uid)
     }
+
+    logger.info(`adding effect ${id}`)
 
     const ac = scene.select('allCharacters')
     for (const uid of targetUids) {

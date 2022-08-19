@@ -25,6 +25,7 @@ export const effectIds = [
     'vulnerable',
     'strongblock',
     'smallDamageIncrease',
+    'magicalStorm',
     'doubleDamage',
     'passiveBlock',
 ] as const

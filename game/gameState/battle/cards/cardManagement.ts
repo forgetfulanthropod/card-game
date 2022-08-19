@@ -77,11 +77,12 @@ function makeCards(scene: BattleCursor): Piles {
             //@ts-expect-error
             `basicAttack${ccuf}`,
             // `basicAttack${ccuf}`,
-            `block${ccuf}`
+            `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
             // 'TEST_turnStartEffects'
+            'magicalStorm'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
     })
