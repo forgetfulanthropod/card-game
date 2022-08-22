@@ -54,7 +54,7 @@ function makeCards(scene: BattleCursor): Piles {
         // 'swordSlash',
         // 'dutifulStab',
         // 'charge',
-        // 'tetsudoFormation',
+        // 'testudoFormation',
         // final cards below?
         // 'arcanePower',
         // 'scatterBrained',

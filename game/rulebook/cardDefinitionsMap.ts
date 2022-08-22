@@ -276,10 +276,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'knight',
     },
-    tetsudoFormation: {
-        name: 'Tetsudo Formation',
+    testudoFormation: {
+        name: 'testudo Formation',
         energy: 1,
-        id: 'tetsudoFormation',
+        id: 'testudoFormation',
         targetNum: 1,
         targetType: 'friends',
         // TODO: "You may only play this card if this character is in an avoidant stance."

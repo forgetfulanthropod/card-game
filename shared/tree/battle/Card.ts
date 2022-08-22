@@ -128,7 +128,7 @@ export type CardId =
     | 'sweepTheLeg'
     | 'swordSlash'
     | 'TEST_turnStartEffects'
-    | 'tetsudoFormation'
+    | 'testudoFormation'
 export type BasicTargetType =
     | 'friends'
     | 'enemies'
