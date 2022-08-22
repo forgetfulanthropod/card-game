@@ -13,7 +13,9 @@ export function toDatum<T, S = T>(
         cursor,
         x => {
             if (x === undefined) {
-                d.destroy()
+                // undefined in rare cases
+                if (d.destroy == null) setTimeout(() => d?.destroy?.(), 0)
+                else d.destroy()
                 return
             }
             d.set(compute(x))
