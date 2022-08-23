@@ -292,7 +292,8 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
         const cm = characterCursor.get()
         const sc = statChangesDatum.val
 
-        if (!sc[cm.uid]?.wait && sc[cm.uid]?.health) updateNoWait(cm)
+        if (cm?.uid && !sc?.[cm.uid]?.wait && sc[cm.uid]?.health)
+            updateNoWait(cm)
     }
 }
 
