@@ -9,6 +9,9 @@ export function setRoundEnergy(scene: BattleCursor): void {
         BASE_ENERGY -
         1 +
         Math.max(1, Math.ceil(scene.get('turnCount') / TURNS_PER_INCREASE))
-    const roundEnergy = Math.min(incrementalEnergy, MAX_ROUND_ENERGY)
+    const roundEnergy = Math.min(
+        incrementalEnergy + BASE_ENERGY,
+        MAX_ROUND_ENERGY
+    )
     scene.set('energy', roundEnergy)
 }
