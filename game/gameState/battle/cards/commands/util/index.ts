@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Value as VAngu } from 'angu'
+
 import type {
     Command,
     CharacterUid,
@@ -11,6 +12,8 @@ import type {
     RequiredActionName,
     BasicTargetType,
 } from 'shared'
+
+export type { Value as VAngu } from 'angu'
 
 type ExecuteArgs<T = VAngu[]> = {
     dslArgs: T

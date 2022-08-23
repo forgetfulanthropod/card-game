@@ -1,5 +1,11 @@
 import { isEqual } from 'lodash'
-import type { CharacterMeta, Orb, BattleCursor, GameActions } from 'shared'
+import type {
+    CharacterMeta,
+    Orb,
+    BattleCursor,
+    GameActions,
+    OrbType,
+} from 'shared'
 
 import {
     maybeTransitionBattleState,
@@ -10,6 +16,55 @@ import {
     emitMove,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
+import { applyEffect } from '@/gameState/battle/cards/commands/effect'
+
+const orbActivators: Record<
+    OrbType,
+    (character: CharacterMeta, scene: BattleCursor) => void
+> = {
+    protection(character: CharacterMeta, scene: BattleCursor) {
+        const block = Math.ceil(character.wisdom * 0.5)
+        const multiplier = calcPostEffectStats(character).blockMultiplier
+        scene.apply(
+            ['allCharacters', character.uid, 'block'],
+            b => b + block * multiplier
+        )
+
+        emitMove({
+            moveName: 'Protection!',
+            targetType: 'self',
+            characterUid: character.uid,
+            targetUids: [character.uid],
+            scene,
+        })
+    },
+    lightning(character: CharacterMeta, scene: BattleCursor) {
+        const damage = Math.ceil(character.wisdom * 0.5)
+        const targetUid = getRandomLivingNpcUid(scene)
+        const multiplier = calcPostEffectStats(character).damageTakeMultiplier
+        applyDamage({ damage, targetUid, scene, multiplier })
+
+        emitMove({
+            moveName: 'Lightning!',
+            targetType: 'enemies',
+            characterUid: character.uid,
+            targetUids: [targetUid],
+            scene,
+        })
+    },
+    frost(character: CharacterMeta, scene: BattleCursor) {
+        applyEffect(scene, [character.uid], 'strongblock', 2)
+        updateHand(scene)
+
+        emitMove({
+            moveName: '+2 strongblock!',
+            targetType: 'self',
+            characterUid: character.uid,
+            targetUids: [character.uid],
+            scene,
+        })
+    },
+}
 
 export const activateOrb: GameActions['activateOrb'] = ({
     game,
@@ -36,11 +91,7 @@ function validate(character: CharacterMeta, orb: Orb) {
 }
 
 function activate(orb: Orb, character: CharacterMeta, scene: BattleCursor) {
-    if (orb.type === 'lightning') {
-        activateLightning(character, scene)
-    } else if (orb.type === 'protection') {
-        activateProtection(character, scene)
-    }
+    orbActivators[orb.type](character, scene)
 
     decrementCounter(character, orb, scene)
 }
@@ -70,37 +121,5 @@ function decrementCounter(
             ...updatedOrb,
             ...orbs.slice(orbIndex + 1),
         ]
-    })
-}
-
-function activateProtection(character: CharacterMeta, scene: BattleCursor) {
-    const block = Math.ceil(character.wisdom * 0.5)
-    const multiplier = calcPostEffectStats(character).blockMultiplier
-    scene.apply(
-        ['allCharacters', character.uid, 'block'],
-        b => b + block * multiplier
-    )
-
-    emitMove({
-        moveName: 'Protection!',
-        targetType: 'self',
-        characterUid: character.uid,
-        targetUids: [character.uid],
-        scene,
-    })
-}
-
-function activateLightning(character: CharacterMeta, scene: BattleCursor) {
-    const damage = Math.ceil(character.wisdom * 0.5)
-    const targetUid = getRandomLivingNpcUid(scene)
-    const multiplier = calcPostEffectStats(character).damageTakeMultiplier
-    applyDamage({ damage, targetUid, scene, multiplier })
-
-    emitMove({
-        moveName: 'Lightning!',
-        targetType: 'enemies',
-        characterUid: character.uid,
-        targetUids: [targetUid],
-        scene,
     })
 }

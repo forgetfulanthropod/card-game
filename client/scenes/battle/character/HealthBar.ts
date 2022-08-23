@@ -115,13 +115,14 @@ function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
         //@ts-expect-error
         data,
         //@ts-expect-error
-        effect => SingleEffect(effect),
+        effect => InteractiveEffectCounter(effect),
         idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
     )
 }
 
-function SingleEffect(effect: Effect & { id: VisibleEffectId }): PixiContainer {
-    console.log('rendering effect', { effect })
+function InteractiveEffectCounter(
+    effect: Effect & { id: VisibleEffectId }
+): PixiContainer {
     return Container(
         {
             name: `Effect-${effect.id}`,

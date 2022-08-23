@@ -1,8 +1,14 @@
 import { startCase } from 'lodash'
-import type { BasicTargetType } from 'shared'
+import type {
+    BasicTargetType,
+    BattleCursor,
+    CharacterUid,
+    Command,
+    EffectId,
+} from 'shared'
 import { setAt } from 'shared/code'
 
-import type { Executors, Explainers } from './util'
+import type { Executors, Explainers, VAngu } from './util'
 import { evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
@@ -17,6 +23,38 @@ export const execute: Executors['effect'] = ({
     command,
 }) => {
     const [id, increase] = evalAll(dslArgs)
+    const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
+
+    // logger.info(`adding effect ${id}`)
+
+    applyEffect(scene, targetUids, id, increase)
+}
+
+export function applyEffect(
+    scene: BattleCursor,
+    targetUids: CharacterUid[],
+    id: EffectId,
+    increase: number
+) {
+    const ac = scene.select('allCharacters')
+    for (const uid of targetUids) {
+        ac.select(uid, 'effects').apply(effects => {
+            const i = effects.findIndex(e => e.id === id)
+            if (i === -1) return [...effects, { id, counter: increase }]
+            return setAt(effects, i, {
+                ...effects[i],
+                counter: effects[i].counter + increase,
+            })
+        })
+    }
+}
+
+function getTargetUids(
+    dslArgs: VAngu[],
+    givenUids: CharacterUid[],
+    command: Command,
+    scene: BattleCursor
+) {
     let targetType = evalAll(dslArgs)[2]
     let targetUids
 
@@ -39,18 +77,5 @@ export const execute: Executors['effect'] = ({
     } else {
         targetUids = givenUids
     }
-
-    logger.info(`adding effect ${id}`)
-
-    const ac = scene.select('allCharacters')
-    for (const uid of targetUids) {
-        ac.select(uid, 'effects').apply(effects => {
-            const i = effects.findIndex(e => e.id === id)
-            if (i === -1) return [...effects, { id, counter: increase }]
-            return setAt(effects, i, {
-                ...effects[i],
-                counter: effects[i].counter + increase,
-            })
-        })
-    }
+    return targetUids
 }

@@ -14,8 +14,7 @@ export const execute: Executors['addBlock'] = ({
 }) => {
     const [block] = evalAll(dslArgs)
 
-    scene.apply(
-        ['allCharacters', targetUids[0], 'block'],
-        b => b + block * calculatedStats.blockMultiplier
+    scene.apply(['allCharacters', targetUids[0], 'block'], b =>
+        Math.ceil(b + block * calculatedStats.blockMultiplier)
     )
 }

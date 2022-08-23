@@ -108,6 +108,7 @@ export const effectAssets: {
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigue: 'effects/fatigue.webp',
     // effectPiercing,
+    effectStrongblock: 'intents/npc/Shield intent.webp',
     effectMagicalStorm: 'effects/magicalStorm.webp',
     effectPoison: 'effects/poison_skull.webp',
     effectStunned: 'effects/stunned.webp',

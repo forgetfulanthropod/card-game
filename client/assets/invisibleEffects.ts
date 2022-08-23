@@ -1,7 +1,6 @@
 import type { EffectId } from 'shared'
 
 export const invisibleEffects_ = [
-    'strongblock',
     'smallDamageIncrease',
     'doubleDamage',
     'passiveBlock',
