@@ -14,47 +14,50 @@ import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
 
+    const uidsDatum = compose(
+        ([allCharacters, waitForDeathAnimations], lastOut) => {
+            const living: CharacterUid[] = keys(allCharacters).filter(
+                cK => allCharacters[cK].health > 0
+            )
+
+            if (!Array.isArray(lastOut)) return living
+
+            const currentlyDyingUids = keys(waitForDeathAnimations).filter(
+                uid => waitForDeathAnimations[uid]
+            )
+            const areAllDeathAnimationsPlaying =
+                currentlyDyingUids.length > 0 &&
+                currentlyDyingUids.length === lastOut.length - living.length
+
+            if (areAllDeathAnimationsPlaying) return lastOut
+
+            if (
+                lastOut.length - living.length >
+                    keys(waitForDeathAnimations).length &&
+                root.children.length
+            ) {
+                manageNewDeaths(lastOut, living)
+
+                return lastOut
+            }
+
+            const deadUids: CharacterUid[] = keys(
+                waitForDeathAnimations
+            ).filter(uid => waitForDeathAnimations[uid] === false)
+
+            if (deadUids.length) {
+                return clearDeadFromLastOut(deadUids, lastOut)
+            }
+
+            return living
+        },
+        toDatum<Characters>(allCharsC, c => c),
+        waitForDeathAnimationsDatum
+    )
+
     const root = For(
         //@ts-expect-error
-        compose(
-            ([allCharacters, waitForDeathAnimations], lastOut) => {
-                const living: CharacterUid[] = keys(allCharacters).filter(
-                    cK => allCharacters[cK].health > 0
-                )
-
-                if (!Array.isArray(lastOut)) return living
-
-                const currentlyDyingUids = keys(waitForDeathAnimations).filter(
-                    uid => waitForDeathAnimations[uid]
-                )
-                const areAllDeathAnimationsPlaying =
-                    currentlyDyingUids.length > 0 &&
-                    currentlyDyingUids.length === lastOut.length - living.length
-
-                if (areAllDeathAnimationsPlaying) return lastOut
-
-                if (
-                    lastOut.length - living.length >
-                    keys(waitForDeathAnimations).length
-                ) {
-                    manageNewDeaths(lastOut, living)
-
-                    return lastOut
-                }
-
-                const deadUids: CharacterUid[] = keys(
-                    waitForDeathAnimations
-                ).filter(uid => waitForDeathAnimations[uid] === false)
-
-                if (deadUids.length) {
-                    return clearDeadFromLastOut(deadUids, lastOut)
-                }
-
-                return living
-            },
-            toDatum<Characters>(allCharsC, c => c),
-            waitForDeathAnimationsDatum
-        ),
+        uidsDatum,
         (uid: CharacterUid) =>
             Character({
                 cursor: allCharsC.select(uid),
@@ -134,6 +137,10 @@ async function animateOut(
     indices: number[],
     uids: CharacterUid[]
 ) {
+    indices.map((elIndex, i) =>
+        console.log({ elIndex, els, el: els[elIndex], i, uid: uids[i] })
+    )
+
     return await Promise.all(
         indices.map((elIndex, i) => animateOutOne(els[elIndex], uids[i]))
     )
