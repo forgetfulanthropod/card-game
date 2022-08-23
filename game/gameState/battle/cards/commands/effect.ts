@@ -1,4 +1,5 @@
 import { startCase } from 'lodash'
+import type { BasicTargetType } from 'shared'
 import { setAt } from 'shared/code'
 
 import type { Executors, Explainers } from './util'
@@ -15,15 +16,28 @@ export const execute: Executors['effect'] = ({
     scene,
     command,
 }) => {
-    const [id, increase, targetType] = evalAll(dslArgs)
-    let targetUids = givenUids
-    if (targetType) {
+    const [id, increase] = evalAll(dslArgs)
+    let targetType = evalAll(dslArgs)[2]
+    let targetUids
+
+    if (targetType == null) {
+        targetUids = givenUids
+        if (givenUids.length === 0 && typeof command.targetType === 'string')
+            targetType = command.targetType as BasicTargetType
+    }
+    if (targetType == null) {
+        targetUids = givenUids
+    } else if (['friends', 'enemies'].includes(targetType)) {
         const ac = scene.get('allCharacters')
         const isPcSource = ac[command.characterUid].isPc
         const shouldBePc = isPcSource === (targetType === 'friends') // NOR
         targetUids = Object.values(ac)
             .filter(x => x.isPc === shouldBePc)
             .map(x => x.uid)
+    } else if (['self'].includes(targetType)) {
+        targetUids = [command.characterUid]
+    } else {
+        targetUids = givenUids
     }
 
     logger.info(`adding effect ${id}`)

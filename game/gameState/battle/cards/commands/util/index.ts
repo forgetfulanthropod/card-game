@@ -9,6 +9,7 @@ import type {
     EffectId,
     OrbType,
     RequiredActionName,
+    BasicTargetType,
 } from 'shared'
 
 type ExecuteArgs<T = VAngu[]> = {
@@ -36,7 +37,7 @@ interface ArgsOf {
     chain: any[]
     deal: [damage: number, times?: number]
     dwindle: []
-    effect: [id: EffectId, increase: number, targetType?: 'friends' | 'enemies']
+    effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     ifFirstPlay: any[]
     momentary: []
     orb: [type: OrbType, count: number]
