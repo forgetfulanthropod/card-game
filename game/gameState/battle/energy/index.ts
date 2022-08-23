@@ -1,2 +1,2 @@
 export * from './getEnergy'
-export * from './getRoundEnergy'
+export * from './setRoundEnergy'
