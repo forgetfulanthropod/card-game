@@ -1,5 +1,7 @@
+import type { BattleCursor, CharacterUid } from 'shared'
 import type { Executors, Explainers } from './util'
 import { evalAll } from './util'
+import { calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
     const [block] = evalAll(dslArgs)
@@ -10,11 +12,14 @@ export const execute: Executors['addBlock'] = ({
     dslArgs,
     targetUids,
     scene,
-    calculatedStats,
 }) => {
     const [block] = evalAll(dslArgs)
 
     scene.apply(['allCharacters', targetUids[0], 'block'], b =>
-        Math.ceil(b + block * calculatedStats.blockMultiplier)
+        Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))
     )
+}
+
+function getBlockMultiplier(uid: CharacterUid, scene: BattleCursor): number {
+    return calcPostEffectStats(scene.get('allCharacters', uid)).blockMultiplier
 }
