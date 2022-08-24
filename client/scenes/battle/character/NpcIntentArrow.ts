@@ -178,6 +178,7 @@ function EnemyIntentArrow(
                 rotation,
                 x: origin.val.x,
                 y: origin.val.y,
+                alpha: 0.6,
             }),
             Sprite({
                 src: 'enemyIntentArrowHead',
