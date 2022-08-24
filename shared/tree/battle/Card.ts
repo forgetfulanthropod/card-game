@@ -109,7 +109,7 @@ export type CardId =
     | 'gnomeBomb'
     | 'helpingHand'
     | 'jab'
-    | 'magicalStorm'
+    | 'trance'
     | 'magicRitual'
     | 'mantraOfPatience'
     | 'orbOfFrost'

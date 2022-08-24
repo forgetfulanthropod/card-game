@@ -19,8 +19,8 @@ const staticEffectFuncs: Record<
     smallDamageIncrease(stats) {
         stats.damageTakeAddend += 4
     },
-    magicalStorm(stats) {
-        stats.wisdom += Math.ceil(stats.wisdom * 0.25)
+    trance(stats, counter) {
+        stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
     },
     // strengthify(stats, counter) {
     //     stats.strength += counter

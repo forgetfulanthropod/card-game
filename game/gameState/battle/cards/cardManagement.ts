@@ -75,16 +75,19 @@ function makeCards(scene: BattleCursor): Piles {
         const ccuf = upperFirst(cm.class)
         cardIds.push(
             //@ts-expect-error
-            `basicAttack${ccuf}`,
             // `basicAttack${ccuf}`,
-            `block${ccuf}`,
+            `basicAttack${ccuf}`,
+            `block${ccuf}`
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
             // 'TEST_turnStartEffects'
-            'magicalStorm'
+            // 'magicalStorm',
+            // 'parry',
+            // 'smite'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
+        if (cm.class === 'wizard') cardIds.push('trance')
     })
 
     return {

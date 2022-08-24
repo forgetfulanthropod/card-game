@@ -1,12 +1,12 @@
 import { assertFinite } from 'shared/code'
 import type { Executors, Explainers } from './util'
+import { evalAll } from './util'
 import { applyDamage } from '@/gameState'
 
-export const explain: Explainers['smite'] = _dslArgs => {
-    // const [damage, block] = evalAll(dslArgs)
+export const explain: Explainers['smite'] = dslArgs => {
+    const [damage, block] = evalAll(dslArgs)
 
-    // return `Deal ${damage} damage. If enemy is killed, block ${block}.`
-    return 'Deal ${wisdom} damage. If enemy is killed, block ${defense}.'
+    return `Deal ${damage} damage. If enemy is killed, block ${block}.`
 }
 
 export const execute: Executors['smite'] = ({
