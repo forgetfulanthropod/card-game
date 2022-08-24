@@ -11,7 +11,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
 
     if (winner === 'PC') {
         if (scene.get('numRoomsPassed') < NUM_ROOMS_BEFORE_GAME_OVER) {
-            scene.set('state', 'choosing cards')
+            scene.set('state', 'collecting loot')
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
         } else scene.set('state', 'won')
         // incrementXP(scene)

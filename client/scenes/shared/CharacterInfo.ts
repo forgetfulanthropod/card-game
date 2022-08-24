@@ -8,8 +8,8 @@ import { compose } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
+import { InfoBox } from '@sharedElements'
 import { AbilityButtons } from './AbilityButtons'
-import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
 import {
     Text,

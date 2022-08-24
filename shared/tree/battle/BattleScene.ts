@@ -42,7 +42,12 @@ export interface NextCommand {
     targetUids: CharacterUid[]
 }
 
-type BattleWinState = 'in battle' | 'won' | 'lost' | 'choosing cards'
+type BattleWinState =
+    | 'in battle'
+    | 'won'
+    | 'lost'
+    | 'collecting loot'
+    | 'choosing cards'
 
 export type DungeonName =
     | 'Skelepit Dungeon'
