@@ -288,7 +288,7 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         if (card.targetType === 'self') {
-            console.log('Card.ts: playing card')
+            // console.log('Card.ts: playing card')
 
             void callApi('playCard', {
                 cardUid: card.uid,

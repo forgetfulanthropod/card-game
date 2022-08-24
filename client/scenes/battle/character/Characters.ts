@@ -86,7 +86,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             0
         )
 
-        console.log('clearing the dead')
+        // console.log('clearing the dead')
 
         return lastOut.filter(uid => !deadUids.includes(uid))
     }
@@ -111,13 +111,13 @@ export function Characters(scene: ROBattleScene): PixiContainer {
 
         waitForDeathAnimationsDatum.set(waiting)
 
-        console.log('animating out ', removedCharacterUids)
+        // console.log('animating out ', removedCharacterUids)
         void animateOut(
             root.children,
             removedIndices,
             removedCharacterUids
         ).then(() => {
-            console.log('animated out ', removedCharacterUids)
+            // console.log('animated out ', removedCharacterUids)
 
             const waiting: Record<CharacterUid, boolean> = {
                 ...waitForDeathAnimationsDatum.val,
@@ -125,7 +125,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
 
             removedCharacterUids.forEach(uid => (waiting[uid] = false))
 
-            console.log('updating to ', waiting)
+            // console.log('updating to ', waiting)
 
             waitForDeathAnimationsDatum.set(waiting)
         })
@@ -137,9 +137,9 @@ async function animateOut(
     indices: number[],
     uids: CharacterUid[]
 ) {
-    indices.map((elIndex, i) =>
-        console.log({ elIndex, els, el: els[elIndex], i, uid: uids[i] })
-    )
+    // indices.map((elIndex, i) =>
+    //     console.log({ elIndex, els, el: els[elIndex], i, uid: uids[i] })
+    // )
 
     return await Promise.all(
         indices.map((elIndex, i) => animateOutOne(els[elIndex], uids[i]))
@@ -147,18 +147,18 @@ async function animateOut(
 }
 
 async function animateOutOne(el: DisplayObject, uid: CharacterUid) {
-    console.log('animateOutOneHere', { el, uid })
+    // console.log('animateOutOneHere', { el, uid })
     return new Promise<void>(resolve => {
         statChangesDatum.onChange(async (statChanges, _, unsub) => {
-            console.log(
-                { myStatChanges: JSON.stringify(statChanges[uid]), uid },
-                'not ready to trigger death animation??',
-                !statChanges[uid]?.health || statChanges[uid]?.wait,
-                '!statChanges[uid]?.health || statChanges[uid]?.wait'
-            )
+            // console.log(
+            //     { myStatChanges: JSON.stringify(statChanges[uid]), uid },
+            //     'not ready to trigger death animation??',
+            //     !statChanges[uid]?.health || statChanges[uid]?.wait,
+            //     '!statChanges[uid]?.health || statChanges[uid]?.wait'
+            // )
             if (!statChanges[uid]?.health || statChanges[uid]?.wait) return
 
-            console.log('the changes are causing an animation for ', uid)
+            // console.log('the changes are causing an animation for ', uid)
             await animateDeath(el)
 
             unsub()
@@ -170,7 +170,7 @@ async function animateOutOne(el: DisplayObject, uid: CharacterUid) {
 let colorOverlayFilter: ColorOverlayFilter | null = null
 
 async function animateDeath(el: DisplayObject) {
-    console.log('got to animateDeath even...')
+    // console.log('got to animateDeath even...')
     await sleep(200)
     await Tweener.add(
         {

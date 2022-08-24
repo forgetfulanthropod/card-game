@@ -355,7 +355,7 @@ function bindStatChanges(characterCursor: CharacterCursor) {
         await nextTick()
 
         if (currentData == null) {
-            console.log('null character meta')
+            // console.log('null character meta')
             return
         }
 
