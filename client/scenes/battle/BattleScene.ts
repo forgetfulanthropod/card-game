@@ -1,7 +1,7 @@
 import { datum, compose } from 'datums'
 import type { CharacterUid, PileId, RequiredAction } from 'shared'
 import { sampleSize } from 'lodash'
-import { Cards, CardAdder } from '@sharedElements'
+import { Cards, CardAdder, BattleSceneCharacterInfo } from '@sharedElements'
 import { keys } from 'shared/code'
 import { Characters } from './character'
 import { Energy } from './Energy'
@@ -43,6 +43,7 @@ export function BattleScene(): PixiContainer {
                     Characters(scene),
                     Cards({ scene, hoveredCardUid }),
                     Energy({ scene }),
+                    BattleSceneCharacterInfo(),
                     If(
                         compose(
                             ([waitForDeathAnimation, shouldBeChoosing]) => {

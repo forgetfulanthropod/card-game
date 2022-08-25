@@ -1,7 +1,7 @@
 import type {
     Card,
     CharacterClass,
-    CharacterUid,
+    CharacterMeta,
     OwnedCharacterStats,
 } from 'shared'
 import { compose } from 'datums'
@@ -11,7 +11,9 @@ import { Texture } from 'pixi.js'
 import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
+import type { PixiContainer } from '@/elementsUtil'
 import {
+    If,
     Text,
     Container,
     BASE_WIDTH,
@@ -20,9 +22,14 @@ import {
     Adjust,
     IfHideShow,
 } from '@/elementsUtil'
-import { hoveredCharacterUid, onUpdate } from '@/util'
+import { hoveredCharacterUid, toDatum } from '@/util'
 import type { Ability } from '@/data'
-import { getEntryScene, getTree, characterIdToAbilitiesMap } from '@/data'
+import {
+    getTree,
+    getBattleScene,
+    getEntryScene,
+    characterIdToAbilitiesMap,
+} from '@/data'
 
 const stats = [
     { key: 'strength', displayName: 'strength', color: 0xd44c47 },
@@ -31,7 +38,7 @@ const stats = [
     { key: 'constitution', displayName: 'const.', color: 0x1cc8af },
 ] as const
 
-const classColorMap: Record<CharacterClass, [number, number]> = {
+const _classColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
     knight: [0xe4a72f, 0xff435a],
     wizard: [0x44a0ff, 0x9f6ec2],
@@ -39,39 +46,48 @@ const classColorMap: Record<CharacterClass, [number, number]> = {
     rogue: [0xaa44ff, 0x370561],
 }
 
-export function RootCharacterInfo() {
-    const root = Container({
-        onDestroy: [
-            hoveredCharacterUid.onChange(update),
-            onUpdate(getEntryScene().select('selectedCharacters'), _sc => {
-                update(hoveredCharacterUid.val)
-            }),
-        ],
+export function EntrySceneCharacterInfo() {
+    return If(
+        compose(
+            ([hoveredCharacterUid, selectedCharacters]) => {
+                return selectedCharacters.find(
+                    c => hoveredCharacterUid === c?.uid
+                )
+            },
+            hoveredCharacterUid,
+            toDatum(getEntryScene().select('selectedCharacters'), sc => sc)
+        ),
+        cm => RootCharacterInfo(cm)
+    )
+}
+
+export function BattleSceneCharacterInfo() {
+    return If(
+        compose(
+            ([hoveredCharacterUid, allCharacters]) => {
+                if (hoveredCharacterUid == null) return undefined
+                const character = allCharacters[hoveredCharacterUid]
+
+                return character.isPc ? character : null
+            },
+            hoveredCharacterUid,
+            toDatum(getBattleScene().select('allCharacters'), ac => ac)
+        ),
+        cm => RootCharacterInfo(cm, 0, 78)
+    )
+}
+
+function RootCharacterInfo(
+    cm: OwnedCharacterStats | CharacterMeta,
+    x = BASE_WIDTH * 0.67,
+    y = 78
+): PixiContainer {
+    const characterInfo = CharacterInfo(cm as OwnedCharacterStats)
+
+    return Adjust(characterInfo, {
+        x: characterInfo.width * 0.5 + x,
+        y: y + characterInfo.width * 0.1,
     })
-
-    return root
-
-    function update(uid: CharacterUid | null) {
-        root.removeChildren()
-
-        if (uid == null) return
-        if (getTree().get('scene', 'id') !== 'entry') return
-
-        const cm = getEntryScene()
-            .get('selectedCharacters')
-            .find(c => c?.uid === uid)
-
-        if (cm == null) return
-
-        const characterInfo = CharacterInfo(cm)
-
-        root.addChild(
-            Adjust(characterInfo, {
-                x: characterInfo.width * 0.5 + BASE_WIDTH * 0.67,
-                y: 78 + characterInfo.width * 0.1,
-            })
-        )
-    }
 }
 
 export function CharacterInfo(cm: OwnedCharacterStats) {
@@ -91,10 +107,13 @@ function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
 
 function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
-    const allCharCards = CardsTiltedInLine({
-        cards: getAllPossibleCardsForCharacter(props.cm),
-        parentWidth: contentWidth * 0.8,
-    })
+    const allCharCards =
+        getTree().get('scene', 'id') === 'entry'
+            ? CardsTiltedInLine({
+                  cards: getAllPossibleCardsForCharacter(props.cm),
+                  parentWidth: contentWidth * 0.8,
+              })
+            : Container({})
 
     const classOutlineFilter = new OutlineFilter(5, 0)
     const classOutlineFilter2 = new OutlineFilter(3, 0)
