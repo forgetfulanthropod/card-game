@@ -4,10 +4,11 @@ import type {
     CharacterMeta,
     OwnedCharacterStats,
 } from 'shared'
-import { compose } from 'datums'
+import { compose, datum } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
+import { Tweener } from 'pixi-tweener'
 import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
@@ -62,18 +63,68 @@ export function EntrySceneCharacterInfo() {
 }
 
 export function BattleSceneCharacterInfo() {
+    const isDoneAnimatingOutDatum = datum<boolean>(true)
+
     return If(
         compose(
-            ([hoveredCharacterUid, allCharacters]) => {
+            (
+                [hoveredCharacterUid, allCharacters, isDoneAnimatingOut],
+                lastOut
+            ) => {
                 if (hoveredCharacterUid == null) return undefined
                 const character = allCharacters[hoveredCharacterUid]
+                const playerCharacter = character.isPc ? character : null
 
-                return character.isPc ? character : null
+                if (!isDoneAnimatingOut && playerCharacter == null)
+                    return lastOut as CharacterMeta | null
+
+                return playerCharacter
             },
             hoveredCharacterUid,
-            toDatum(getBattleScene().select('allCharacters'), ac => ac)
+            toDatum(getBattleScene().select('allCharacters'), ac => ac),
+            isDoneAnimatingOutDatum
         ),
-        cm => RootCharacterInfo(cm, 0, 78)
+        //@ts-ignore
+        (cm: CharacterMeta) => {
+            const root = RootCharacterInfo(cm, 0, 78)
+
+            root.alpha = 0
+
+            isDoneAnimatingOutDatum.set(false)
+
+            Tweener.killTweensOf(root)
+
+            void Tweener.add(
+                {
+                    target: root,
+                    duration: 1,
+                },
+                {
+                    alpha: 1,
+                }
+            )
+
+            hoveredCharacterUid.onChange(uid => {
+                if (uid == null)
+                    void Tweener.add(
+                        {
+                            target: root,
+                            duration: 1,
+                        },
+                        {
+                            alpha: 0,
+                        }
+                    ).then(() => {
+                        isDoneAnimatingOutDatum.set(true)
+                    })
+            })
+
+            root.addListener('destroyed', () => {
+                Tweener.killTweensOf(root)
+            })
+
+            return root
+        }
     )
 }
 
