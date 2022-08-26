@@ -4,7 +4,7 @@ import { Loader } from 'pixi.js'
 import type { CardAssetId, CardTypeAssetId } from '@/assets'
 import type { PixiTexture } from '@/elementsUtil'
 
-export function getCardTypeSrc(cardType: CardType): PixiTexture {
+export function getCardTypeTexture(cardType: CardType): PixiTexture {
     const assetId = `cardType${startCase(cardType)}` as CardTypeAssetId
 
     //eslint-disable-next-line

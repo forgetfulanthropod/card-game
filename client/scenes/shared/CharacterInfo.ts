@@ -11,9 +11,9 @@ import { Texture } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
 import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
-import { CardsTiltedInLine } from './cards'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    IfHideShow,
     If,
     Text,
     Container,
@@ -21,12 +21,10 @@ import {
     Sprite,
     getTexture,
     Adjust,
-    IfHideShow,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, toDatum } from '@/util'
 import type { Ability } from '@/data'
 import {
-    getTree,
     getBattleScene,
     getEntryScene,
     characterIdToAbilitiesMap,
@@ -71,8 +69,12 @@ export function BattleSceneCharacterInfo() {
                 [hoveredCharacterUid, allCharacters, isDoneAnimatingOut],
                 lastOut
             ) => {
-                if (hoveredCharacterUid == null) return undefined
+                if (hoveredCharacterUid == null) return null
+
                 const character = allCharacters[hoveredCharacterUid]
+
+                if (character == null) return null
+
                 const playerCharacter = character.isPc ? character : null
 
                 if (!isDoneAnimatingOut && playerCharacter == null)
@@ -146,8 +148,9 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
 
     if (abilities == null) throw new Error('PCs need abilities!')
 
+    // TODO: figure out why IfHideShow is breaking in entry scene after adding this to battle scene..
     return IfHideShow(
-        compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
+        compose(([uid]) => uid === cm?.uid, hoveredCharacterUid),
         FullInfoBox({ cm, abilities })
     )
 }
@@ -158,13 +161,15 @@ function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
 
 function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
-    const allCharCards =
-        getTree().get('scene', 'id') === 'entry'
-            ? CardsTiltedInLine({
-                  cards: getAllPossibleCardsForCharacter(props.cm),
-                  parentWidth: contentWidth * 0.8,
-              })
-            : Container({})
+    // const allCharCards =
+    //     getTree().get('scene', 'id') === 'entry'
+    //         ? CardsTiltedInLine({
+    //               cards: getAllPossibleCardsForCharacter(props.cm),
+    //               parentWidth: contentWidth * 0.8,
+    //           })
+    //         : Container({})
+
+    const allCharCards = Container({})
 
     const classOutlineFilter = new OutlineFilter(5, 0)
     const classOutlineFilter2 = new OutlineFilter(3, 0)
