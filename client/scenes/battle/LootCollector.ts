@@ -3,10 +3,11 @@ import { Texture } from 'pixi.js'
 import { InfoBox } from '@sharedElements'
 import { PixiContainer, Text } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
+import { callApi } from '@/callApi'
 
 export function LootCollector(): PixiContainer {
-    function dismissLootCollector() {
-        console.log('testing')
+    function handleButtonPress() {
+        callApi('collectLoot', {})
     }
 
     return Container(
@@ -26,19 +27,20 @@ export function LootCollector(): PixiContainer {
                 Sprite({
                     src: Texture.WHITE,
                     width: BASE_WIDTH * 0.6,
-                    height: 100,
+                    height: 150,
                     alpha: 1,
                     anchor: [0.5,0.5],
                     x: BASE_WIDTH,
                     y: BASE_HEIGHT + 500,
-                    onClick: dismissLootCollector,
-                }).addChild(Text({
+                    onClick: handleButtonPress,
+                }),
+                Text({
                     text: 'collect loot',
                     anchor: [0.5,0.5],
                     x: BASE_WIDTH,
                     y: BASE_HEIGHT + 500,
-                    style: { fontSize: 100, fill: 'white' },
-                }))
+                    style: { fontSize: 100, fill: 'black', padding: 4 },
+                })
             ),
             {
                 borderRadius: 12,
