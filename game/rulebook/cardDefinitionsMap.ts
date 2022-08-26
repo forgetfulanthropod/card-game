@@ -363,7 +363,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: 'psychicWarfare(wisdom * .75, wisdom * .25)',
         type: 'utility',
-        characterClass: 'cleric',
+        characterClass: 'wizard',
     },
     orbOfHolyLight: {
         name: 'Orb of Holy Light',
