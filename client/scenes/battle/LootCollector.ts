@@ -1,6 +1,6 @@
 import { Texture } from 'pixi.js'
 
-import { InfoBox } from '@sharedElements'
+import { InfoBox, ModalBackdrop } from '@sharedElements'
 import { PixiContainer, Text } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
@@ -12,6 +12,7 @@ export function LootCollector(): PixiContainer {
 
     return Container(
         { x: 0, y: 0, scale: 0.5 },
+        ModalBackdrop(),
         InfoBox(
             Container(
                 {},
