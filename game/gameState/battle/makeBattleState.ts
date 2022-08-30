@@ -1,6 +1,7 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
+import { getInitialLoot } from './loot/getInitialLoot'
 import { makeCharacters } from './util'
 
 export function makeBattleState(args: {
@@ -42,6 +43,7 @@ export function makeBattleState(args: {
         requireAction: null,
         isInMap: true,
         isInRestSite: false,
+        lootEarned: getInitialLoot(),
     }
     return bs
 }
