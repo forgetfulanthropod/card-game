@@ -13,7 +13,7 @@ export function HitInfo(args: {
     })
     root.scale.set(0.6)
 
-    range(1, 10).forEach(n => {
+    range(0, 10).forEach(n => {
         root.hackTextureAttachment(
             `Museo Sans Rounded ${n}`,
             `Museo Sans Rounded ${n}`,
@@ -36,12 +36,17 @@ export function HitInfo(args: {
     text.destroy(true)
 
     const relevantSlotIndex = 0
-    root.hackTextureAttachment(
-        `Museo Sans Rounded ${relevantSlotIndex}`,
-        `Museo Sans Rounded ${relevantSlotIndex}`,
-        textTexture,
-        // Texture.WHITE,
-        new Rectangle(-100, -100, 100, 100)
+
+    setTimeout(
+        () =>
+            root.hackTextureAttachment(
+                `Museo Sans Rounded ${relevantSlotIndex}`,
+                `Museo Sans Rounded ${relevantSlotIndex}`,
+                textTexture,
+                // Texture.WHITE,
+                new Rectangle(-100, -100, 100, 100)
+            ),
+        0
     )
 
     const randomAnimation = `Animations/Regular Position ${lastRandomIndex}`

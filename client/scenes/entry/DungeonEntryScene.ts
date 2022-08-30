@@ -1,4 +1,4 @@
-import { RootCharacterInfo } from '@sharedElements'
+import { EntrySceneCharacterInfo } from '@sharedElements'
 import { DungeonEntryBg } from './DungeonEntryBg'
 import { SelectedCharactersEl } from './SelectedCharacters'
 import { GoButton } from './GoButton'
@@ -38,7 +38,7 @@ export function DungeonEntryScene(): PixiContainer {
         SelectedCharactersEl(),
         startButton,
         CharacterOptions(),
-        RootCharacterInfo()
+        EntrySceneCharacterInfo()
         // DeckView()
         // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
     )

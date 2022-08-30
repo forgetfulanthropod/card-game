@@ -1,28 +1,33 @@
 import type {
     Card,
     CharacterClass,
-    CharacterUid,
+    CharacterMeta,
     OwnedCharacterStats,
 } from 'shared'
-import { compose } from 'datums'
+import { compose, datum } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
-import { InfoBox } from '@sharedElements'
 import { AbilityButtons } from './AbilityButtons'
+import { InfoBox } from './InfoBox'
 import { CardsTiltedInLine } from './cards'
 import {
+    IfHideShow,
+    If,
     Text,
     Container,
     BASE_WIDTH,
     Sprite,
     getTexture,
     Adjust,
-    IfHideShow,
 } from '@/elementsUtil'
-import { hoveredCharacterUid, onUpdate } from '@/util'
+import { hoveredCharacterUid, toDatum } from '@/util'
 import type { Ability } from '@/data'
-import { getEntryScene, getTree, characterIdToAbilitiesMap } from '@/data'
+import {
+    getBattleScene,
+    getEntryScene,
+    characterIdToAbilitiesMap,
+} from '@/data'
 
 const stats = [
     { key: 'strength', displayName: 'strength', color: 0xd44c47 },
@@ -31,7 +36,7 @@ const stats = [
     { key: 'constitution', displayName: 'const.', color: 0x1cc8af },
 ] as const
 
-const classColorMap: Record<CharacterClass, [number, number]> = {
+const _classColorMap: Record<CharacterClass, [number, number]> = {
     cleric: [0xbce42d, 0xffab44],
     knight: [0xe4a72f, 0xff435a],
     wizard: [0x44a0ff, 0x9f6ec2],
@@ -51,27 +56,57 @@ export function RootCharacterInfo() {
 
     return root
 
-    function update(uid: CharacterUid | null) {
-        root.removeChildren()
+            root.alpha = 0
 
-        if (uid == null) return
-        if (getTree().get('scene', 'id') !== 'entry') return
+            isDoneAnimatingOutDatum.set(false)
 
-        const cm = getEntryScene()
-            .get('selectedCharacters')
-            .find(c => c?.uid === uid)
+            Tweener.killTweensOf(root)
 
-        if (cm == null) return
+            void Tweener.add(
+                {
+                    target: root,
+                    duration: 1,
+                },
+                {
+                    alpha: 1,
+                }
+            )
 
-        const characterInfo = CharacterInfo(cm)
-
-        root.addChild(
-            Adjust(characterInfo, {
-                x: characterInfo.width * 0.5 + BASE_WIDTH * 0.67,
-                y: 78 + characterInfo.width * 0.1,
+            hoveredCharacterUid.onChange(uid => {
+                if (uid == null)
+                    void Tweener.add(
+                        {
+                            target: root,
+                            duration: 1,
+                        },
+                        {
+                            alpha: 0,
+                        }
+                    ).then(() => {
+                        isDoneAnimatingOutDatum.set(true)
+                    })
             })
-        )
-    }
+
+            root.addListener('destroyed', () => {
+                Tweener.killTweensOf(root)
+            })
+
+            return root
+        }
+    )
+}
+
+function RootCharacterInfo(
+    cm: OwnedCharacterStats | CharacterMeta,
+    x = BASE_WIDTH * 0.67,
+    y = 78
+): PixiContainer {
+    const characterInfo = CharacterInfo(cm as OwnedCharacterStats)
+
+    return Adjust(characterInfo, {
+        x: characterInfo.width * 0.5 + x,
+        y: y + characterInfo.width * 0.1,
+    })
 }
 
 export function CharacterInfo(cm: OwnedCharacterStats) {
@@ -79,8 +114,9 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
 
     if (abilities == null) throw new Error('PCs need abilities!')
 
+    // TODO: figure out why IfHideShow is breaking in entry scene after adding this to battle scene..
     return IfHideShow(
-        compose(([uid]) => uid === cm.uid, hoveredCharacterUid),
+        compose(([uid]) => uid === cm?.uid, hoveredCharacterUid),
         FullInfoBox({ cm, abilities })
     )
 }
@@ -91,10 +127,15 @@ function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
 
 function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
-    const allCharCards = CardsTiltedInLine({
-        cards: getAllPossibleCardsForCharacter(props.cm),
-        parentWidth: contentWidth * 0.8,
-    })
+    // const allCharCards =
+    //     getTree().get('scene', 'id') === 'entry'
+    //         ? CardsTiltedInLine({
+    //               cards: getAllPossibleCardsForCharacter(props.cm),
+    //               parentWidth: contentWidth * 0.8,
+    //           })
+    //         : Container({})
+
+    const allCharCards = Container({})
 
     const classOutlineFilter = new OutlineFilter(5, 0)
     const classOutlineFilter2 = new OutlineFilter(3, 0)

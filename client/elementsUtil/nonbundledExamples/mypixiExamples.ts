@@ -1,10 +1,11 @@
+/* eslint-disable import/no-relative-parent-imports */
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { delayChain } from 'shared/code'
-import { getTexture } from './AssetLoader'
+import { getTexture } from '../AssetLoader'
 
-import type { PixiContainer } from './mypixi'
-import { Adjust, Container, Sprite, Text, For, If, portalize } from './mypixi'
+import type { PixiContainer } from '../mypixi'
+import { Adjust, Container, Sprite, Text, For, If, portalize } from '../mypixi'
 
 export function ForExample(): PixiContainer {
     const strings = datum(['a', 'b', 'c', 'd'])

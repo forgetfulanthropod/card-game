@@ -6,7 +6,7 @@ import type { Card, CardType, CardUid, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { beginTargetSelection } from './beginTargetSelection'
-import { getCardTypeSrc } from './getCardTypeSrc'
+import { getCardTypeTexture } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
 import type {
     InteractionEventHandler,
@@ -49,9 +49,12 @@ export function CardEl({
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
 }): TweenablePixiContainer {
+    const cardFrameTexture = getCardTypeTexture(card.type)
+
     if (card.type == null) return TweenableContainer({}, TweenableContainer({}))
 
-    const cardFrameTexture = getCardTypeSrc(card.type)
+    console.log({ cardType: card.type, cardFrameTexture })
+
     const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
 

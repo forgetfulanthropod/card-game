@@ -31,10 +31,7 @@ export const effectIds = [
 ] as const
 
 /** Effects which are cleared on turn end */
-export const turnEndClearEffects: EffectId[] = [
-    'strongblock',
-    'smallDamageIncrease',
-]
+export const turnEndClearEffects: EffectId[] = ['smallDamageIncrease']
 
 export type EffectId = typeof effectIds[number]
 

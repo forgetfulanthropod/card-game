@@ -14,7 +14,7 @@ import {
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/callApi'
-import { toDatum } from '@/util'
+import { hoveredCharacterUid, toDatum } from '@/util'
 import { getBattleScene } from '@/data'
 
 type CardsArgs = {
@@ -41,14 +41,15 @@ export function Cards(args: CardsArgs) {
 function EndTurnButton(): PixiContainer {
     const buttonTexture = getTexture('endTurnButton')
     return If(
-        // toDatum(getBattleScene().select('isPlayerTurn'), is => is),
-        toDatum(getBattleScene().select('isPlayerTurn'), is => true), // TEMP!! IMPROPER isPlayerTurn state BUG!!!!
+        toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+        // toDatum(getBattleScene().select('isPlayerTurn'), () => true), // TEMP!! IMPROPER isPlayerTurn state BUG!!!!
         () =>
             Container(
                 {
                     x: BASE_WIDTH * 0.9,
                     y: BASE_HEIGHT * 0.78,
                     onClick: async () => {
+                        hoveredCharacterUid.set(null)
                         await callApi('endTurn', {})
                     },
                 },

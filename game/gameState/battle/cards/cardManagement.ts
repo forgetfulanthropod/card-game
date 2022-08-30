@@ -87,7 +87,8 @@ function makeCards(scene: BattleCursor): Piles {
             // 'smite'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        if (cm.class === 'wizard') cardIds.push('trance')
+        if (cm.class === 'wizard') cardIds.push('trance', 'orbOfFrost')
+        if (cm.class === 'cleric') cardIds.push('smite')
     })
 
     return {
