@@ -15,8 +15,8 @@ export function calculateLoot(
 ): LootEarned {
     const placeholderEquipment = ['Helmet', 'Sword', 'Cool Thing']
     // TODO: Use scene and source to determine actual loot values
-    const gems = Math.random() * 100
-    const tokenTBD = Math.random() * 100
+    const gems = parseInt((Math.random() * 100).toFixed(0))
+    const tokenTBD = parseInt((Math.random() * 100).toFixed(0))
     const placeholder =
         placeholderEquipment[
             Math.floor(Math.random() * placeholderEquipment.length - 1)
