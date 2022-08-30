@@ -14,15 +14,15 @@ export function calculateLoot(
     source: 'room' | 'dungeon'
 ): LootEarned {
     const placeholderEquipment = ['Helmet', 'Sword', 'Cool Thing']
-
     // TODO: Use scene and source to determine actual loot values
     const gems = Math.random() * 100
     const tokenTBD = Math.random() * 100
-    const placeholder = Math.floor(
-        Math.random() * placeholderEquipment.length - 1
-    )
+    const placeholder =
+        placeholderEquipment[
+            Math.floor(Math.random() * placeholderEquipment.length - 1)
+        ]
 
-    const items: { [key in LootFromGame]: number } = {
+    const items: LootFromGame = {
         gems,
         tokenTBD,
         placeholder,
