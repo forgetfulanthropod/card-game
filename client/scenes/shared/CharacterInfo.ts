@@ -8,9 +8,10 @@ import { compose, datum } from 'datums'
 import { vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
+import { Tweener } from 'pixi-tweener'
 import { AbilityButtons } from './AbilityButtons'
 import { InfoBox } from './InfoBox'
-import { CardsTiltedInLine } from './cards'
+import type { PixiContainer } from '@/elementsUtil'
 import {
     IfHideShow,
     If,
@@ -44,17 +45,50 @@ const _classColorMap: Record<CharacterClass, [number, number]> = {
     rogue: [0xaa44ff, 0x370561],
 }
 
-export function RootCharacterInfo() {
-    const root = Container({
-        onDestroy: [
-            hoveredCharacterUid.onChange(update),
-            onUpdate(getEntryScene().select('selectedCharacters'), _sc => {
-                update(hoveredCharacterUid.val)
-            }),
-        ],
-    })
+export function EntrySceneCharacterInfo() {
+    return If(
+        compose(
+            ([hoveredCharacterUid, selectedCharacters]) => {
+                return selectedCharacters.find(
+                    c => hoveredCharacterUid === c?.uid
+                )
+            },
+            hoveredCharacterUid,
+            toDatum(getEntryScene().select('selectedCharacters'), sc => sc)
+        ),
+        cm => RootCharacterInfo(cm)
+    )
+}
 
-    return root
+export function BattleSceneCharacterInfo() {
+    const isDoneAnimatingOutDatum = datum<boolean>(true)
+
+    return If(
+        compose(
+            (
+                [hoveredCharacterUid, allCharacters, isDoneAnimatingOut],
+                lastOut
+            ) => {
+                if (hoveredCharacterUid == null) return null
+
+                const character = allCharacters[hoveredCharacterUid]
+
+                if (character == null) return null
+
+                const playerCharacter = character.isPc ? character : null
+
+                if (!isDoneAnimatingOut && playerCharacter == null)
+                    return lastOut as CharacterMeta | null
+
+                return playerCharacter
+            },
+            hoveredCharacterUid,
+            toDatum(getBattleScene().select('allCharacters'), ac => ac),
+            isDoneAnimatingOutDatum
+        ),
+        //@ts-ignore
+        (cm: CharacterMeta) => {
+            const root = RootCharacterInfo(cm, 0, 78)
 
             root.alpha = 0
 
