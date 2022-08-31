@@ -5,6 +5,7 @@
         "@pixi-essentials/gradients": "^0.0.5",
         "@pixi-spine/all-4.0": "^3.0.16",
         "@pixi/animate": "^2.0.2",
+        "@pixi/text-html": "^2.1.1",
         "ahooks": "^3.3.12",
         "gsap": "^3.10.4",
         "mobile-device-detect": "^0.4.3",

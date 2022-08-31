@@ -2,6 +2,7 @@ import type { ROCursor } from 'sbaobab'
 import {
     PixiContainer,
     PixiGraphics,
+    PixiHTMLText,
     PixiSprite,
     PixiText,
     PixiTexture,
@@ -46,30 +47,33 @@ export function Container(
 }
 export function Text(args: TextArgs): PixiText {
     const text = args.text
+
+    const TextInstantiator = args.isHtml ? PixiHTMLText : PixiText
     if (typeof text === 'object') {
         if ('get' in text) {
-            const textEl = new PixiText(String(text.get()), args.style)
+            const textEl = new TextInstantiator(String(text.get()), args.style)
             applyShownArgs(textEl, args)
             const unsub = onUpdate(
                 text as ROCursor<string>,
                 val => (textEl.text = String(val))
             )
             textEl.on('destroyed', unsub)
-            return textEl
+            return textEl as PixiText
         }
         if ('val' in text) {
-            const textEl = new PixiText(String(text.val), args.style)
+            const textEl = new TextInstantiator(String(text.val), args.style)
             applyShownArgs(textEl, args)
             const unsub = text.onChange(val => (textEl.text = String(val)))
             textEl.on('destroyed', unsub)
-            return textEl
+            return textEl as PixiText
         }
     }
-    const textEl = new PixiText(String(text), args.style)
+    const textEl = new TextInstantiator(String(text), args.style)
     applyShownArgs(textEl, args)
     startChecking(textEl)
-    return textEl
+    return textEl as PixiText
 }
+
 export function Graphics(args: GraphicsArgs): PixiGraphics {
     const g = new PixiGraphics()
     args.draw(g)

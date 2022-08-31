@@ -1,9 +1,10 @@
 import { assertFinite } from 'shared/code'
 import type { Executors, Explainers } from './util'
+import { evalAllAsHtml } from './util'
 
 export const explain: Explainers['ifDamageDealt'] = dslArgs => {
     // const mainMove = dslArgs[0].eval()
-    const conditionalMove = dslArgs[1].toString()
+    const [_, conditionalMove] = evalAllAsHtml(dslArgs)
     return `if damage is dealt, then ${conditionalMove}`
 }
 

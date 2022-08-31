@@ -1,10 +1,10 @@
 import type { BattleCursor, CharacterUid } from 'shared'
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAll, evalAllAsHtml } from './util'
 import { calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
-    const [block] = evalAll(dslArgs)
+    const [block] = evalAllAsHtml(dslArgs)
     return `+${block} block`
 }
 

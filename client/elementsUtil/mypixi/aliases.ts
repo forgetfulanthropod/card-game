@@ -10,3 +10,5 @@ export {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
+
+export { HTMLText as PixiHTMLText } from '@pixi/text-html'

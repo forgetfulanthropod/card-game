@@ -1,11 +1,11 @@
-import { s, evalAll } from './util'
+import { s, evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
 import { applyDamage, calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['deal'] = dslArgs => {
-    const [damage, times] = evalAll(dslArgs)
-    let explication = 'deals ' + Math.ceil(damage) + ' damage'
+    const [damage, times] = evalAllAsHtml(dslArgs)
+    let explication = 'deals ' + damage + ' damage'
 
     if (times != null) {
         explication += ` ${times} time${s(times)}`

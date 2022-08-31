@@ -155,7 +155,7 @@ function executeCommand({
 function generateAnguContext(actionsMap: object): angu.Context {
     return {
         scope: {
-            '=': function (a: VAngu, b: VAngu) {
+            '='(a: VAngu, b: VAngu) {
                 const resB = b.eval()
                 if (a.kind() === 'variable') {
                     this.context.scope[a.name()] = resB
@@ -169,6 +169,12 @@ function generateAnguContext(actionsMap: object): angu.Context {
             ...standardOperators,
             ...actionsMap,
         },
-        precedence: [['-', '+'], ['='], ['chain', 'deal', 'debilitate'], [';']],
+        precedence: [
+            ['/', '*'],
+            ['-', '+'],
+            ['pow', 'log10'],
+            { ops: ['='], associativity: 'right' },
+            [';'],
+        ],
     }
 }

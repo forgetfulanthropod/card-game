@@ -252,7 +252,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'swordSlash',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'chain(deal(0.5 * strength), "to two targets")',
+        actions: 'deal(0.5 * strength, 2)',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -314,7 +314,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'gnomeBomb',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal((strength * .5) + (wisdom * .5)), dwindle())',
+        actions:
+            'strengthywisdomy = strength * .5 + wisdom * .5; chain(deal(strengthywisdomy), dwindle())',
         type: 'attack',
         characterClass: 'cleric',
     },

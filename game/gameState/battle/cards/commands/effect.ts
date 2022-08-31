@@ -9,10 +9,10 @@ import type {
 import { setAt } from 'shared/code'
 
 import type { Executors, Explainers, VAngu } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
-    const [id, increase] = evalAll(dslArgs)
+    const [id, increase] = evalAllAsHtml(dslArgs)
     return `+${increase} ${startCase(id)}`
 }
 

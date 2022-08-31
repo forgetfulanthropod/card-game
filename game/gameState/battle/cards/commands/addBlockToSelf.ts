@@ -1,8 +1,8 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['addBlockToSelf'] = dslArgs => {
-    const [block] = evalAll(dslArgs)
+    const [block] = evalAllAsHtml(dslArgs)
     return `+${block} block self`
 }
 

@@ -1,8 +1,8 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['addEnergy'] = dslArgs => {
-    const [amount] = evalAll(dslArgs)
+    const [amount] = evalAllAsHtml(dslArgs)
     return `+${amount} energy`
 }
 

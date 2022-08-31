@@ -1,10 +1,10 @@
 import type { CharacterUid, OrbType, BattleCursor } from 'shared'
 
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['orb'] = args => {
-    const [orbType, count] = evalAll(args)
+    const [orbType, count] = evalAllAsHtml(args)
 
     return `creates ${count} ${orbType} orbs`
 }

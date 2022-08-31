@@ -1,8 +1,8 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['require'] = dslArgs => {
-    const [type, least, most] = evalAll(dslArgs)
+    const [type, least, most] = evalAllAsHtml(dslArgs)
     const numStr = least === most ? `${least}` : `${least}-${most}`
     const s = least < 1 || most > 1 ? 's' : ''
     switch (type) {

@@ -35,4 +35,6 @@ export const standardOperators = {
         a.eval()
         return b.eval()
     },
+    log10: (a: VAngu) => Math.log(a.eval()) / Math.log(10),
+    pow: (a: VAngu, b: VAngu) => Math.pow(a.eval(), b.eval()),
 } as const

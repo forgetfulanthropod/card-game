@@ -73,6 +73,7 @@ importers:
       '@pixi-essentials/gradients': ^0.0.5
       '@pixi-spine/all-4.0': ^3.0.16
       '@pixi/animate': ^2.0.2
+      '@pixi/text-html': ^2.1.1
       '@types/marked': ^4.0.3
       ahooks: ^3.3.12
       gsap: ^3.10.4
@@ -94,6 +95,7 @@ importers:
       '@pixi-essentials/gradients': 0.0.5
       '@pixi-spine/all-4.0': 3.0.16
       '@pixi/animate': 2.0.2
+      '@pixi/text-html': 2.1.1
       ahooks: 3.5.2
       gsap: 3.10.4
       mobile-device-detect: 0.4.3
@@ -118,10 +120,12 @@ importers:
       angu: ^0.12.0
       seedrandom: ^3.0.5
       shared: workspace:shared@*
+      simple-color-converter: ^2.1.13
     dependencies:
       angu: 0.12.0
       seedrandom: 3.0.5
       shared: link:../shared
+      simple-color-converter: 2.1.13
     devDependencies:
       '@types/seedrandom': 3.0.2
 
@@ -131,12 +135,14 @@ importers:
       game: workspace:game@*
       level: ^8.0.0
       shared: workspace:shared@*
+      simple-color-converter: ^2.1.13
       socket.io: ^4.5.1
     dependencies:
       classic-level: 1.2.0
       game: link:../game
       level: 8.0.0
       shared: link:../shared
+      simple-color-converter: 2.1.13
       socket.io: 4.5.1
 
   shared:
@@ -1249,6 +1255,17 @@ packages:
       '@pixi/utils': 6.4.2_95a5776e5aeb2f16e5ab84419ab62055
     dev: false
 
+  /@pixi/text-html/2.1.1:
+    resolution: {integrity: sha512-OWbkqG8ExXJ0AjvpzohBkM381XfZH2VUYdkKIF2HQ0TTKjTnO0NgpWvWdDe5MfO67COptEGjH1Z8Y+93w3IUfw==}
+    peerDependencies:
+      '@pixi/core': ^6.0.0
+      '@pixi/math': ^6.0.0
+      '@pixi/settings': ^6.0.0
+      '@pixi/sprite': ^6.0.0
+      '@pixi/text': ^6.0.0
+      '@pixi/utils': ^6.0.0
+    dev: false
+
   /@pixi/text/6.4.2_a41bbbe94c45d5c811543202e6b8e72a:
     resolution: {integrity: sha512-jX2LBjgEwKqm5lTUKh3gusSKsSPQpibdcxYMQKxMDNVqvNyGG9UqEO/FogMnGg6c5EHBKyMas26c8oXrf1oagg==}
     peerDependencies:
@@ -1929,6 +1946,11 @@ packages:
     dependencies:
       color-convert: 1.9.3
       color-string: 1.9.1
+    dev: false
+
+  /color_library/0.0.2:
+    resolution: {integrity: sha512-qdsir2B3bfOYLvdAiKaMHadulQBPp+1liP+1HK5KbB1mtlklA68xdIoudSWbPYVuWkd+4FOPPONDANnBw9pPbA==}
+    engines: {node: '>= 0.6'}
     dev: false
 
   /colorspace/1.1.4:
@@ -4368,6 +4390,13 @@ packages:
   /signal-exit/3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
     dev: true
+
+  /simple-color-converter/2.1.13:
+    resolution: {integrity: sha512-li2tcrdBH+0eFwSkELUNH8a7YUpuDT3m+PlF2gSMH2vEVfgzkp1aea+HWNWohgJ1no0m2Sxmt4AWnX3kqk9AZw==}
+    engines: {node: '>= 0.8'}
+    dependencies:
+      color_library: 0.0.2
+    dev: false
 
   /simple-swizzle/0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}

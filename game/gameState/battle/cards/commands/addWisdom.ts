@@ -1,8 +1,8 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['addWisdom'] = dslArgs => {
-    const [wisdom] = evalAll(dslArgs)
+    const [wisdom] = evalAllAsHtml(dslArgs)
     return `+${wisdom} wisdom`
 }
 

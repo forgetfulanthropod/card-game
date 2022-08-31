@@ -1,12 +1,12 @@
 import type { BattleCursor, CardUid } from 'shared'
-import { evalAll } from './util'
+import { evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
 import { applyDamage, calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['psychicWarfare'] = dslArgs => {
-    const [damage, sameTargetAddend] = evalAll(dslArgs)
-    return `deal ${Math.ceil(damage)} damage\n +${Math.ceil(
+    const [damage, sameTargetAddend] = evalAllAsHtml(dslArgs)
+    return `deal ${Math.ceil(damage)} damage<br/> +${Math.ceil(
         Math.ceil(sameTargetAddend)
     )} damage each time used`
 }

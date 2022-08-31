@@ -2,10 +2,10 @@ import produce from 'immer'
 import { range, size } from 'lodash'
 import { objShuffle } from 'shared/code'
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['draw'] = dslArgs => {
-    const [numCards] = evalAll(dslArgs)
+    const [numCards] = evalAllAsHtml(dslArgs)
     return `draw ${numCards} cards`
 }
 

@@ -1,9 +1,11 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml } from './util'
 
 export const explain: Explainers['choice'] = dslArgs => {
-    const choices = evalAll(dslArgs)
-    return `${choices.map((c, i) => `${i > 0 ? '\nor ' : '   '}${c}`).join('')}`
+    const choices = evalAllAsHtml(dslArgs)
+    return `${choices
+        .map((c, i) => `${i > 0 ? '<br/>or ' : '   '}${c}`)
+        .join('')}`
 }
 
 export const execute: Executors['choice'] = ({ dslArgs }) => {

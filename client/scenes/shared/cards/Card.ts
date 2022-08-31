@@ -186,6 +186,8 @@ function getTexts(
 
     const cardFrameScale = cardFrameTexture.width / 791
 
+    console.log({ explanation: card.explanation })
+
     return [
         Text({
             text: card.name,
@@ -201,7 +203,8 @@ function getTexts(
             },
         }),
         Text({
-            text: card.explanation,
+            text: `<div style="font-family: sans-serif; padding: 4px;">${card.explanation}</div>`,
+            isHtml: true,
             x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.width * 0.2,
             style: {

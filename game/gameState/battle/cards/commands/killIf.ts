@@ -1,8 +1,8 @@
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['killIf'] = dslArgs => {
-    const condition = dslArgs[0].toString()
+    const [condition] = evalAllAsHtml(dslArgs)
     // TODO: proper explainer
     return `Kill enemy if ${condition}`
 }

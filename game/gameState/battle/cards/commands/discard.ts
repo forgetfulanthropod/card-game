@@ -1,10 +1,10 @@
 import produce from 'immer'
 import { shuffle } from 'lodash'
 import type { Executors, Explainers } from './util'
-import { evalAll } from './util'
+import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['discard'] = dslArgs => {
-    const [numCards] = evalAll(dslArgs)
+    const [numCards] = evalAllAsHtml(dslArgs)
     return `discard ${numCards} cards`
 }
 

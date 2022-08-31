@@ -1,7 +1,7 @@
 import type { Executors, Explainers } from './util'
 
 export const explain: Explainers['dwindle'] = () => {
-    return 'dwindle'
+    return 'dwindle.'
 }
 
 export const execute: Executors['dwindle'] = ({ scene, cardUid }) => {
