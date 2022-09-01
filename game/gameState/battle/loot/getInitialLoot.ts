@@ -8,7 +8,15 @@ import { vals } from 'shared/code'
  */
 export function getInitialLoot(): LootEarned {
     return {
-        items: { gems: 0, tokenTBD: 0, placeholder: '' },
+        items: {
+            gems: 0,
+            tokenTBD: 0,
+            placeholder: '',
+            fishStick: 0,
+            swordShield: 0,
+            potion: 0,
+            bread: 0,
+        },
         claimed: false,
     }
 }
