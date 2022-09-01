@@ -19,7 +19,7 @@ export function calculateLoot(
     const tokenTBD = parseInt((Math.random() * 100).toFixed(0))
     const placeholder =
         placeholderEquipment[
-            Math.floor(Math.random() * placeholderEquipment.length - 1)
+            Math.ceil(Math.random() * (placeholderEquipment.length - 1))
         ]
 
     const items: LootFromGame = {
