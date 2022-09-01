@@ -3,6 +3,7 @@ export { step } from './internal'
 // @index('./*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
 export { activateOrb } from './activateOrb'
 export { addCardToDeck } from './addCardToDeck'
+export { collectLoot } from './collectLoot'
 export { changeDungeon } from './changeDungeon'
 export { changeScene } from './changeScene'
 export { confirmNextRoom } from './confirmNextRoom'

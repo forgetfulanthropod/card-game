@@ -23,6 +23,7 @@ interface BareServerActionArgs {
 interface BareGameActionArgs {
     activateOrb: { characterUid: CharacterUid; orb: Orb }
     addCardToDeck: { cardUid: CardUid }
+    collectLoot: Empty
     changeDungeon: { direction: -1 | 1 }
     changeScene: { newSceneName: SceneId }
     endTurn: Empty

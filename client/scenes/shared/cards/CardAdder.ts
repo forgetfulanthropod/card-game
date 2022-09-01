@@ -3,6 +3,7 @@ import { vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { CardUid } from 'shared'
+import { ModalBackdrop } from '@sharedElements'
 import { AdjustmentFilter } from 'pixi-filters'
 import { CardEl } from './Card'
 import { getBattleScene } from '@/data'
@@ -38,7 +39,7 @@ function NewCardOptions(): PixiContainer {
 
     return Container(
         { name: 'CardOptions' },
-        Backdrop(),
+        ModalBackdrop(),
         ...Options(selectedCardUid),
         ConfirmButton(selectedCardUid)
     )
@@ -95,17 +96,6 @@ function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
     })
 
     return cardEls
-}
-
-function Backdrop(): PixiSprite {
-    return Sprite({
-        src: Texture.WHITE,
-        tint: 0,
-        alpha: 0.5,
-        width: BASE_WIDTH * 2,
-        height: BASE_HEIGHT * 2,
-        events: {},
-    })
 }
 
 function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {

@@ -7,6 +7,7 @@ import { Characters } from './character'
 import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'
 import { HexMapOverlay } from './HexMapOverlay'
+import { LootCollector } from './LootCollector'
 import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
@@ -46,19 +47,19 @@ export function BattleScene(): PixiContainer {
                     BattleSceneCharacterInfo(),
                     If(
                         compose(
-                            ([waitForDeathAnimation, shouldBeChoosing]) => {
-                                return (
-                                    !keys(waitForDeathAnimation).length &&
-                                    shouldBeChoosing
-                                )
-                            },
+                            ([waitForDeathAnimations, sceneState]) =>
+                                !keys(waitForDeathAnimations).length &&
+                                ['choosing cards', 'collecting loot'].includes(
+                                    sceneState
+                                ) &&
+                                sceneState,
                             waitForDeathAnimationsDatum,
-                            toDatum(
-                                scene.select('state'),
-                                state => state === 'choosing cards'
-                            )
+                            toDatum(scene.select('state'), state => state)
                         ),
-                        () => CardAdder()
+                        sceneState =>
+                            sceneState === 'collecting loot'
+                                ? LootCollector()
+                                : CardAdder()
                     )
                 )
         ),

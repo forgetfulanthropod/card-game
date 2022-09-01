@@ -5,6 +5,7 @@ import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { Characters } from './Characters'
 import type { CommandQueue } from './CommandQueue'
+import type { LootEarned } from '../Loot'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -27,6 +28,7 @@ export interface BattleScene extends SceneHas {
     queue: CommandQueue
     isInMap: boolean
     isInRestSite: boolean
+    lootEarned: LootEarned
 }
 
 /** May later have e.g. DOT effects */
@@ -42,7 +44,12 @@ export interface NextCommand {
     targetUids: CharacterUid[]
 }
 
-type BattleWinState = 'in battle' | 'won' | 'lost' | 'choosing cards'
+type BattleWinState =
+    | 'in battle'
+    | 'won'
+    | 'lost'
+    | 'collecting loot'
+    | 'choosing cards'
 
 export type DungeonName =
     | 'Skelepit Dungeon'
