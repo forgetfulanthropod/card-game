@@ -262,7 +262,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'parry',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(0.75 * strength),blockSelf(3))',
+        actions:
+            'strengthy = 0.75 * strength; chain(deal(strengthy),addBlockToSelf(3))',
         type: 'attack',
         characterClass: 'knight',
     },
