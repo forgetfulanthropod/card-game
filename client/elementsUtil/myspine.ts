@@ -1,5 +1,5 @@
-import type { SkeletonData } from '@pixi-spine/all-4.0'
-import { Spine as PixiSpine } from '@pixi-spine/all-4.0'
+import type { SkeletonData } from '@pixi-spine/all-4.1'
+import { Spine as PixiSpine } from '@pixi-spine/all-4.1'
 import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 

@@ -206,7 +206,7 @@ function getTileGraphMap() {
             { id: 'matchaGelatinCube', level: 2 },
             { id: 'skeletonWarrior', level: 2 },
         ],
-        [],
+        [{ id: 'mimic', level: 3 }],
     ]
 
     const graph: Record<string, MapNode> = {}

@@ -186,8 +186,6 @@ function getTexts(
 
     const cardFrameScale = cardFrameTexture.width / 791
 
-    console.log({ explanation: card.explanation })
-
     return [
         Text({
             text: card.name,

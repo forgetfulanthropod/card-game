@@ -24,6 +24,8 @@ export function MainCharacterAnimation({
         characterMeta.isPc
     )
 
+    console.log({ spineAssetName })
+
     if (!spineAssetName) return null
 
     const pointerover = () => hoveredCharacterUid.set(characterMeta.uid)

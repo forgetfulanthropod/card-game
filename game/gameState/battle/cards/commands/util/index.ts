@@ -94,7 +94,6 @@ export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): T {
     return angus.map(angu => {
         let color = ''
         Object.keys(statsToColorsMap).map(stat => {
-            logger.info(`stat, angu.name() ${stat + ' ' + angu.name()}`)
             const statColor = statsToColorsMap[
                 stat as keyof CharacterStats
             ] as string

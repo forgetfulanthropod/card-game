@@ -26,6 +26,8 @@ export const dungeonRooms: DungeonRoomMap = {
             { id: 'matchaGelatinCube', level: 2 },
             { id: 'skeletonWarrior', level: 2 },
         ],
+        [{ id: 'mimic', level: 3 }],
+        // [{ id: 'bosshogJurgen', level: 4 }],
     ],
     'Hooligan’s Bluff': [],
     'Fort Skeleton': [],

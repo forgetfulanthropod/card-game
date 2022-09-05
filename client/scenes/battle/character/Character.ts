@@ -12,7 +12,7 @@ import type {
 } from 'shared'
 import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
-import type { TrackEntry } from '@pixi-spine/all-4.0'
+import type { TrackEntry } from '@pixi-spine/all-4.1'
 import { diff } from 'deep-diff'
 import { HealthBar } from './HealthBar'
 import { HitInfo } from './HitInfo'
