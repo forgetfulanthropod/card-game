@@ -5,7 +5,7 @@ import type {
     OwnedCharacterStats,
 } from 'shared'
 import { compose, datum } from 'datums'
-import { vals } from 'shared/code'
+import { sleep, vals } from 'shared/code'
 import { OutlineFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
 import { Tweener } from 'pixi-tweener'
@@ -96,14 +96,16 @@ export function BattleSceneCharacterInfo() {
 
             Tweener.killTweensOf(root)
 
-            void Tweener.add(
-                {
-                    target: root,
-                    duration: 1,
-                },
-                {
-                    alpha: 1,
-                }
+            void sleep(1000).then(() =>
+                Tweener.add(
+                    {
+                        target: root,
+                        duration: 0.3,
+                    },
+                    {
+                        alpha: 1,
+                    }
+                )
             )
 
             hoveredCharacterUid.onChange(uid => {
