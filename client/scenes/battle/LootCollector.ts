@@ -13,7 +13,7 @@ export function LootCollector(): PixiContainer {
         callApi('collectLoot', {})
     }
 
-    function renderLootItems() {
+    function renderLoot() {
         const items = scene.get('lootEarned').items
         let container = Container({})
 
@@ -70,7 +70,6 @@ export function LootCollector(): PixiContainer {
                     })
                 )
             )
-
             // increase width to space out items
             width += 450
         }
@@ -78,39 +77,56 @@ export function LootCollector(): PixiContainer {
         return container
     }
 
+    const infoBoxBackground = Sprite({
+        src: Texture.WHITE,
+        width: BASE_WIDTH,
+        height: BASE_HEIGHT * 0.9,
+        alpha: 0.6,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH,
+        y: BASE_HEIGHT,
+    })
+
+    const lootIconsAndValues = renderLoot()
+
+    const collectLootButton = Container(
+        {},
+        Sprite({
+            src: Texture.WHITE,
+            width: BASE_WIDTH,
+            height: 250,
+            alpha: 1,
+            anchor: [0.5, 0.5],
+            x: BASE_WIDTH,
+            y: BASE_HEIGHT + 500,
+            onClick: handleButtonPress,
+        }),
+        Text({
+            text: 'collect loot',
+            anchor: [0.5, 0.5],
+            x: BASE_WIDTH,
+            y: BASE_HEIGHT + 500,
+            style: { fontSize: 100, fill: 'black', padding: 4 },
+        })
+    )
+
+    const roomClearedSign = Sprite({
+        src: getTexture('roomClearedSign'),
+        alpha: 1,
+        x: 0,
+        y: -600,
+    })
+
     return Container(
         { x: 0, y: 0, scale: 0.5 },
         ModalBackdrop(),
+        roomClearedSign,
         InfoBox(
             Container(
                 {},
-                Sprite({
-                    src: Texture.WHITE,
-                    width: BASE_WIDTH,
-                    height: BASE_HEIGHT * 0.9,
-                    alpha: 0.6,
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT,
-                }),
-                renderLootItems(),
-                Sprite({
-                    src: Texture.WHITE,
-                    width: BASE_WIDTH,
-                    height: 250,
-                    alpha: 1,
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT + 500,
-                    onClick: handleButtonPress,
-                }),
-                Text({
-                    text: 'collect loot',
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT + 500,
-                    style: { fontSize: 100, fill: 'black', padding: 4 },
-                })
+                infoBoxBackground,
+                lootIconsAndValues,
+                collectLootButton
             ),
             {
                 borderRadius: 12,
