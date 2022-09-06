@@ -1,6 +1,5 @@
 export type LootEarned = {
     items: LootFromGame
-} & {
     claimed: boolean
 }
 
