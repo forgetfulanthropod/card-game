@@ -147,8 +147,8 @@ function TileCharacters(node: MapNode): PixiContainer {
 
     const root = Container(
         {
-            scale: 0.6,
-            y: -50,
+            scale: 0.55,
+            y: -90,
             x: characters?.[0]?.isPc ? -60 : 0,
             events: {
                 pointerover() {
@@ -178,8 +178,12 @@ function TileCharacters(node: MapNode): PixiContainer {
             if (numRoomsPassed + 1 !== node.depth) anim.cursor = 'default'
 
             return Adjust(anim, {
-                x: i === 2 ? 50 : i * 120,
-                y: i === 2 ? 110 : 0,
+                x: characterMeta.isPc
+                    ? 120 * (2 - i)
+                    : i === 2
+                    ? -50
+                    : 180 * i - 50,
+                y: characters.length === 1 ? 110 : 110 * i,
             })
         })
     )
