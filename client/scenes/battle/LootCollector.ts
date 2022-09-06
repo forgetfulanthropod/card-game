@@ -1,30 +1,54 @@
 import { Texture } from 'pixi.js'
 
 import { InfoBox, ModalBackdrop } from '@sharedElements'
-import { getTexture, PixiContainer, Text } from '@/elementsUtil'
+import {
+    getTexture,
+    PixiContainer,
+    Text,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
+import { animateTo } from '../shared/cards/Hand'
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
 
+    setTimeout(() => {
+        animateTo(roomClearedSign, {
+            rotation: 0,
+            scale: 1,
+            x: 0,
+            y: -600,
+        }),
+        animateTo(lootIconsAndValues, {
+            rotation: 0,
+            scale: 1,
+            x: BASE_WIDTH / 2 - 300,
+            y:0
+        })
+    }, 2000)
+
+    // need to store in state which things have been clicked
     function handleButtonPress() {
         callApi('collectLoot', {})
     }
 
     function renderLoot() {
-        const items = scene.get('lootEarned').items
-        let container = Container({})
+        const items = { 'cardBack': 1, ...scene.get('lootEarned').items}
+        let container = Container({
+            x: 3000
+        })
 
         // TODO change below to a better way of calculating where it goes
-        let height = 900
+        let height = 950
         let width = 1600
 
         for (let [item, value] of Object.entries(items)) {
             // temp filter out other things in loot
             if (
-                !['fishStick', 'swordShield', 'potion', 'bread'].includes(item)
+                !['fishStick', 'swordShield', 'potion', 'bread', 'cardBack'].includes(item)
             ) {
                 continue
             }
@@ -35,14 +59,15 @@ export function LootCollector(): PixiContainer {
                 Container(
                     {
                         x: 0 - 350,
+                        onClick: handleButtonPress
                     },
                     // Dark backdrop
                     Sprite({
                         src: Texture.WHITE,
                         scale: 1,
                         tint: 0,
-                        height: 250,
-                        width: 300,
+                        height: 650,
+                        width: 600,
                         alpha: 0.5,
                         anchor: [0.5, 0.1],
                         x: width,
@@ -51,87 +76,48 @@ export function LootCollector(): PixiContainer {
                     // Actual item
                     Sprite({
                         src,
-                        scale: 1,
+                        scale: 2,
                         anchor: [0.5, 0],
                         x: width,
-                        y: height,
+                        y: height + 100,
                     }),
                     Text({
-                        text: `${value}`,
+                        text: item === 'cardBack' ? 'draft a card' : `collect ${item}`,
                         anchor: [0.5, 0],
                         x: width,
-                        y: height + 250,
+                        y: height - 50,
                         style: {
                             fontSize: 80,
                             fill: 'white',
                             padding: 4,
                             align: 'left',
+                            fontWeight: 'bold'
                         },
                     })
                 )
             )
             // increase width to space out items
-            width += 450
+            width += 900
         }
 
         return container
     }
 
-    const infoBoxBackground = Sprite({
-        src: Texture.WHITE,
-        width: BASE_WIDTH,
-        height: BASE_HEIGHT * 0.9,
-        alpha: 0.6,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH,
-        y: BASE_HEIGHT,
-    })
+    const lootIconsAndValues = renderLoot() as TweenablePixiContainer
 
-    const lootIconsAndValues = renderLoot()
-
-    const collectLootButton = Container(
+    const roomClearedSign = Container(
         {},
         Sprite({
-            src: Texture.WHITE,
-            width: BASE_WIDTH,
-            height: 250,
+            src: getTexture('roomClearedSign'),
             alpha: 1,
-            anchor: [0.5, 0.5],
-            x: BASE_WIDTH,
-            y: BASE_HEIGHT + 500,
-            onClick: handleButtonPress,
-        }),
-        Text({
-            text: 'collect loot',
-            anchor: [0.5, 0.5],
-            x: BASE_WIDTH,
-            y: BASE_HEIGHT + 500,
-            style: { fontSize: 100, fill: 'black', padding: 4 },
+            x: 0,
+            y: 0,
         })
-    )
-
-    const roomClearedSign = Sprite({
-        src: getTexture('roomClearedSign'),
-        alpha: 1,
-        x: 0,
-        y: -600,
-    })
+    ) as TweenablePixiContainer
 
     return Container(
         { x: 0, y: 0, scale: 0.5 },
         ModalBackdrop(),
-        roomClearedSign,
-        InfoBox(
-            Container(
-                {},
-                infoBoxBackground,
-                lootIconsAndValues,
-                collectLootButton
-            ),
-            {
-                borderRadius: 12,
-                padding: 22,
-            }
-        )
+        Container({}, lootIconsAndValues, roomClearedSign)
     )
 }
