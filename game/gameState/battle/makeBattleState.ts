@@ -3,6 +3,7 @@ import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 import { getNullCards } from './cards'
 import { getInitialLoot } from './loot/getInitialLoot'
 import { makeCharacters } from './util'
+import { getRulebook } from '@/rulebook'
 
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
@@ -37,6 +38,7 @@ export function makeBattleState(args: {
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         numRoomsPassed: -1,
+        rooms: getRulebook().dungeonRooms,
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         queue: [],

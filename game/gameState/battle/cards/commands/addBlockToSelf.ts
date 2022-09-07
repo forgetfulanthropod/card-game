@@ -3,7 +3,7 @@ import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['addBlockToSelf'] = dslArgs => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `+${block} block`
+    return `+${block} block to self`
 }
 
 export const execute: Executors['addBlockToSelf'] = ({

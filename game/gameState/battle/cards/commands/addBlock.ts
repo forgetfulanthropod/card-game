@@ -5,7 +5,7 @@ import { calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `+${block} block to target`
+    return `+${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({

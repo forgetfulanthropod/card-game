@@ -263,7 +263,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = 0.75 * strength; chain(deal(strengthy),addBlockToSelf(3))',
+            'strengthy = 0.75 * strength; defensey = defense * .5; chain(deal(strengthy),addBlockToSelf(defensey))',
         type: 'attack',
         characterClass: 'knight',
     },
