@@ -38,7 +38,7 @@ export function makeBattleState(args: {
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         numRoomsPassed: -1,
-        rooms: getRulebook().dungeonRooms,
+        rooms: getRulebook().dungeonRooms['Skelepit Dungeon'],
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         queue: [],

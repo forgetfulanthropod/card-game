@@ -451,6 +451,7 @@ export const sequences = {
 export const mapAssets = {
     mapBg: 'hex map/dungeon test bg for export.mp4',
     mapFire: 'hex map/fire test.mov',
+    mapRestSite: 'hex map/rest site2.webp',
 }
 
 export const mapTileAssets = {
