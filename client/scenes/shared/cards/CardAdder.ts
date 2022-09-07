@@ -2,7 +2,7 @@ import { Texture } from 'pixi.js'
 import { vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import type { CardUid } from 'shared'
+import { CardUid, NUM_CARD_OPTIONS } from 'shared'
 import { ModalBackdrop } from '@sharedElements'
 import { AdjustmentFilter } from 'pixi-filters'
 import { CardEl } from './Card'
@@ -16,10 +16,13 @@ import {
     glowFilter,
     If,
     Sprite,
+    Text,
+    TweenablePixiContainer,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { callApi } from '@/callApi'
+import { animateTo } from './Hand'
 
 export function CardAdder(): PixiContainer {
     // const w = 400
@@ -36,17 +39,48 @@ export function CardAdder(): PixiContainer {
 
 function NewCardOptions(): PixiContainer {
     const selectedCardUid = datum<CardUid | null>(null)
+    const CardOptions = Options(selectedCardUid)
+    CardOptions.forEach(card => {
+        const { x, y, rotation, scale } = card
+
+        setTimeout(() => {
+            animateTo(card, {
+                scale: 0.6,
+                rotation,
+                x,
+                y: y - BASE_HEIGHT / 2,
+            })
+        }, 10)
+    })
 
     return Container(
         { name: 'CardOptions' },
         ModalBackdrop(),
-        ...Options(selectedCardUid),
+        ScreenHeading(),
+        ...CardOptions,
         ConfirmButton(selectedCardUid)
     )
 }
 
-const NUM_CARD_OPTIONS = 5
-function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
+function ScreenHeading() {
+    return Text({
+        text: 'Draft a card:',
+        anchor: [0.5, 0],
+        x: BASE_WIDTH / 2,
+        y: 100,
+        style: {
+            fontSize: 80,
+            fill: 'white',
+            padding: 4,
+            align: 'left',
+            fontWeight: 'bold',
+        },
+    })
+}
+
+function Options(
+    selectedCardUid: Datum<CardUid | null>
+): TweenablePixiContainer[] {
     const cardPile = getBattleScene().get('newCardOptions')
     const lessImportantFilter = new AdjustmentFilter({ saturation: 0.5 })
 
@@ -85,7 +119,7 @@ function Options(selectedCardUid: Datum<CardUid | null>): PixiContainer[] {
                 },
             }),
             {
-                y: BASE_HEIGHT / 2 - cardWidth,
+                y: BASE_HEIGHT - cardWidth,
                 x:
                     BASE_WIDTH / 2 +
                     (-(NUM_CARD_OPTIONS - 1) / 2 + i) * cardWidth * 1.2,

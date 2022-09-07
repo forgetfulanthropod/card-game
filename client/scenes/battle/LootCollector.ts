@@ -78,7 +78,7 @@ export function LootCollector(): PixiContainer {
                 Container(
                     {
                         x: 0 - 350,
-                        onClick: handleButtonPress,
+                        onClick: idx === 0 ? handleButtonPress : void 0,
                     },
                     // Dark backdrop
                     Sprite({
@@ -98,7 +98,7 @@ export function LootCollector(): PixiContainer {
                         scale: 2 * scale,
                         anchor: [0.5, 0],
                         x: width,
-                        y: height + (100 * scale * 1.5),
+                        y: height + 100 * scale * 1.5,
                     }),
                     Text({
                         text:
@@ -115,12 +115,14 @@ export function LootCollector(): PixiContainer {
                             align: 'left',
                             fontWeight: 'bold',
                         },
-                    }),
+                    })
                 )
             )
 
             if (idx !== 0) {
-                const containerChild = container.getChildAt(idx) as PixiContainer
+                const containerChild = container.getChildAt(
+                    idx
+                ) as PixiContainer
                 containerChild.addChild(
                     Sprite({
                         src: Texture.WHITE,
@@ -132,7 +134,7 @@ export function LootCollector(): PixiContainer {
                         anchor: [0.5, 0.1],
                         x: width,
                         y: height,
-                    }),
+                    })
                 )
             }
             // increase width to space out items
