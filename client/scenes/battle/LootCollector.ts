@@ -46,7 +46,7 @@ export function LootCollector(): PixiContainer {
     }
 
     function renderLoot() {
-        const lootItems = { cardBack: 1, ...scene.get('lootEarned').items }
+        const lootItems = scene.get('lootEarned')
         let container = Container({
             x: 3000,
         })
@@ -57,6 +57,10 @@ export function LootCollector(): PixiContainer {
         let idx = 0
 
         for (let [item, value] of Object.entries(lootItems)) {
+            if (item === 'draftCard') {
+                item = 'cardBack'
+            }
+
             // temp filter out other things in loot
             if (
                 ![
@@ -69,9 +73,7 @@ export function LootCollector(): PixiContainer {
             ) {
                 continue
             }
-
             const scale = idx === 0 ? 1.5 : 1
-
             const src = getTexture(item)
 
             container.addChild(

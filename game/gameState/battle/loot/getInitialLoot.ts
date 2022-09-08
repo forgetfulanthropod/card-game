@@ -1,4 +1,4 @@
-import type { BattleCursor, LootEarned } from 'shared'
+import type { BattleCursor, LootEarned, LootFromGame } from 'shared'
 
 import { vals } from 'shared/code'
 
@@ -6,17 +6,14 @@ import { vals } from 'shared/code'
  * Initialize loot at zero.
  * Loot is updated by calculateLoot when battle or dungeon run is over.
  */
-export function getInitialLoot(): LootEarned {
+export function getInitialLoot(): LootFromGame {
     return {
-        items: {
+            draftCard: 0,
             gems: 0,
             tokenTBD: 0,
-            placeholder: '',
             fishStick: 0,
             swordShield: 0,
             potion: 0,
             bread: 0,
-        },
-        claimed: false,
     }
 }

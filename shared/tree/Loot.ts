@@ -4,9 +4,9 @@ export type LootEarned = {
 }
 
 export type LootFromGame = {
+    draftCard: number
     gems: number
     tokenTBD: number
-    placeholder: string
     fishStick: number
     potion: number
     swordShield: number

@@ -5,7 +5,7 @@ import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { Characters } from './Characters'
 import type { CommandQueue } from './CommandQueue'
-import type { LootEarned } from '../Loot'
+import type { LootFromGame } from '../Loot'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -28,7 +28,7 @@ export interface BattleScene extends SceneHas {
     queue: CommandQueue
     isInMap: boolean
     isInRestSite: boolean
-    lootEarned: LootEarned
+    lootEarned: LootFromGame
 }
 
 /** May later have e.g. DOT effects */
