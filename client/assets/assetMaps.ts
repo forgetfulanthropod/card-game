@@ -173,6 +173,8 @@ export const spineAssets = {
     // bosshogJurgenNPCSpine: 'spines/characters/bosshogJurgen/Warhog.json',
 
     damageTextSpine: 'spines/damage/Text.json',
+
+    restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
     // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     // mushroomFarmerSpineWebp:
     //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
