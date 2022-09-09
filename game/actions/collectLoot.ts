@@ -27,11 +27,14 @@ function getRemainingLoot(scene: BattleCursor): Array<keyof LootFromGame> {
     const loot = scene.get('lootEarned')
     return Object.keys(loot).filter(key => {
         let lootItem = key as keyof LootFromGame
-        return loot[lootItem] > 0
+        return loot[lootItem] !== 0
     }) as Array<keyof LootFromGame>
 }
 
-function collectCurrentLootItem(remainingLoot: Array<keyof LootFromGame>, scene: BattleCursor): void {
+function collectCurrentLootItem(
+    remainingLoot: Array<keyof LootFromGame>,
+    scene: BattleCursor
+): void {
     const currentLootItem = last(remainingLoot) as keyof LootFromGame
     scene.set('lootEarned', {
         ...scene.get('lootEarned'),
