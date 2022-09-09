@@ -31,6 +31,7 @@ interface BareGameActionArgs {
     finishCard: { cardUids: CardUid[] }
     nextRoom: Empty
     confirmNextRoom: Empty
+    choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {
             character: OwnedCharacterStats

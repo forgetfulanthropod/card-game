@@ -8,9 +8,9 @@ import {
     Spine,
 } from '@/elementsUtil'
 import type { AnimationId } from '@/assets'
+import { callApi } from '@/callApi'
 
 export function RestSiteOverlay(): PixiContainer {
-    console.log('RestSiteOverlay')
     const animations: AnimationId[] = ['Position 3', 'Position 2', 'Position 1']
     const boundingBoxes = calcBoundingBoxes()
     const spine = Spine({
@@ -53,6 +53,9 @@ export function RestSiteOverlay(): PixiContainer {
                 },
                 pointerdown() {
                     // choosePlushyAction(){}
+                    void callApi('choosePlushy', {
+                        index: i,
+                    })
                 },
                 // pointerover() {
                 //     s.alpha = 0.1
@@ -69,9 +72,6 @@ export function RestSiteOverlay(): PixiContainer {
 
 function calcBoundingBoxes(): Rect[] {
     const lefts = [0.079, 0.374, 0.662]
-    for (const l of lefts) {
-        console.log(l / 1500)
-    }
     const top = 0.36
     const w = 0.271
     const h = 0.481
