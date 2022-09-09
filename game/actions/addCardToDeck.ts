@@ -19,9 +19,6 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
         }
     })
 
-    scene.set('lootEarned', {
-        ...scene.get('lootEarned'),
-        draftCard: 0,
-    })
+    scene.set('lootEarned', scene.get('lootEarned').slice(1))
     scene.set('state', 'collecting loot')
 }

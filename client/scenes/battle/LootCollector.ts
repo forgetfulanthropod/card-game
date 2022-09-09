@@ -56,25 +56,12 @@ export function LootCollector(): PixiContainer {
         let width = 1600
         let idx = 0
 
-        for (let [item, value] of Object.entries(lootItems)) {
-            if (item === 'draftCard') {
-                item = 'cardBack'
-            }
+        for (let lootItem of lootItems) {
+            let item = lootItem.name as string
+            let itemSrc = item === 'draftCard' ? 'cardBack' : item
 
-            // temp filter out other things in loot
-            if (
-                ![
-                    'fishStick',
-                    'swordShield',
-                    'potion',
-                    'bread',
-                    'cardBack',
-                ].includes(item)
-            ) {
-                continue
-            }
             const scale = idx === 0 ? 1.5 : 1
-            const src = getTexture(item)
+            const src = getTexture(itemSrc)
 
             container.addChild(
                 Container(
@@ -104,7 +91,7 @@ export function LootCollector(): PixiContainer {
                     }),
                     Text({
                         text:
-                            item === 'cardBack'
+                            item === 'draftCard'
                                 ? 'draft a card'
                                 : `collect ${item}`,
                         anchor: [0.5, 0],

@@ -1,4 +1,4 @@
-import type { BattleCursor, GameActions, LootFromGame } from 'shared'
+import type { BattleCursor, ClaimableLoot, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
 import { getInitialLoot } from '@/gameState'
@@ -7,12 +7,12 @@ import { nextRoom } from './nextRoom'
 
 export const collectLoot: GameActions['collectLoot'] = args => {
     const scene = getBattleSceneIn(args.game)
-    const remainingLoot = getRemainingLoot(scene)
+    const remainingLoot = scene.get('lootEarned')
 
-    if (remainingLoot.includes('draftCard')) {
-        scene.set('state', 'choosing cards')
-    } else if (isEmpty(remainingLoot)) {
+    if (isEmpty(remainingLoot)) {
         nextRoom(args)
+    } else if (remainingLoot[0].name === 'draftCard') {
+        scene.set('state', 'choosing cards')
     } else {
         collectCurrentLootItem(remainingLoot, scene)
     }
@@ -23,21 +23,12 @@ function transferLootToInventory(scene: BattleCursor) {
     return
 }
 
-function getRemainingLoot(scene: BattleCursor): Array<keyof LootFromGame> {
-    const loot = scene.get('lootEarned')
-    return Object.keys(loot).filter(key => {
-        let lootItem = key as keyof LootFromGame
-        return loot[lootItem] !== 0
-    }) as Array<keyof LootFromGame>
-}
 
 function collectCurrentLootItem(
-    remainingLoot: Array<keyof LootFromGame>,
+    remainingLoot: ClaimableLoot,
     scene: BattleCursor
 ): void {
-    const currentLootItem = last(remainingLoot) as keyof LootFromGame
-    scene.set('lootEarned', {
-        ...scene.get('lootEarned'),
-        [currentLootItem]: 0,
-    })
+    if (isEmpty(remainingLoot)) return
+    transferLootToInventory(scene);
+    scene.set('lootEarned', scene.get('lootEarned').slice(1))
 }
