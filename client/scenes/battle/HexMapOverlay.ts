@@ -145,6 +145,11 @@ function RestSiteContents() {
         scale: 255 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
+        events: {
+            pointerdown() {
+                void callApi('confirmNextRoom', {})
+            },
+        },
     })
 }
 

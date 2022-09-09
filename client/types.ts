@@ -12,6 +12,8 @@ declare global {
     type Children = ComponentChildren
     type Callback = () => void
     type Setter<T> = StateUpdater<T | undefined>
+    type Empty = Record<string, never>
+    type Rect = [left: number, top: number, width: number, height: number]
 
     type Size = {
         width: number
