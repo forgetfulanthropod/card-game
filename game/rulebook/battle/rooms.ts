@@ -11,6 +11,7 @@ const config = { randomDungeon: false }
 
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [
+        [{ id: 'REST_SITE', level: 2 }],
         [
             { id: 'skeletonWarrior', level: 1 },
             { id: 'skeletonWarrior', level: 1 },
