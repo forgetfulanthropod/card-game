@@ -133,8 +133,12 @@ function TileForNode(node: MapNode, depth: number, yOffset: number) {
 
 function TileContents(node: MapNode | null): PixiContainer {
     if (node == null) return Container({})
+    const scene = getBattleScene()
+    const passed = scene.get('numRoomsPassed')
 
-    if (node.enemies[0]?.id === 'REST_SITE') return RestSiteContents()
+    // TODO: node should be null after it's passed
+    if (node.enemies[0]?.id === 'REST_SITE' && passed < node.depth)
+        return RestSiteContents()
 
     return TileCharacters(node)
 }
