@@ -34,7 +34,7 @@ export function If<T = unknown>(
     function handleChange(val: T) {
         ;[...root.children].forEach(c => c.destroy(destroyOptions))
         root.removeChildren()
-        if (val) {
+        if (val != null) {
             // @ts-expect-error
             root.addChild(ifRender(val))
         } else if (elseRender != null) {

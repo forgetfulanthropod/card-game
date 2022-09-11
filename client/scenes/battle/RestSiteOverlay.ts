@@ -1,6 +1,10 @@
 import { Texture } from 'pixi.js'
+import { datum } from 'datums'
+import { InfoBox } from '../shared'
 import type { PixiContainer } from '@/elementsUtil'
 import {
+    If,
+    Text,
     BASE_WIDTH,
     BASE_HEIGHT,
     Sprite,
@@ -9,6 +13,12 @@ import {
 } from '@/elementsUtil'
 import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
+
+const plushyChoiceDescriptions = [
+    'Bring back a dead character with 25% of their maximum health',
+    'Heal an alive character for 50%',
+    'Bring back all of a characters exhausted cards and activated abilities',
+]
 
 export function RestSiteOverlay(): PixiContainer {
     const animations: AnimationId[] = ['Position 3', 'Position 2', 'Position 1']
@@ -34,6 +44,9 @@ export function RestSiteOverlay(): PixiContainer {
         // onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
     spine.scale.set(1.01) // mysterious missing row of pixels on the bottom
+
+    const hoveredBoxIndex = datum<number | null>(null)
+
     const boxes = boundingBoxes.map(([x, y, w, h], i) => {
         const s = Sprite({
             src: Texture.WHITE,
@@ -50,6 +63,8 @@ export function RestSiteOverlay(): PixiContainer {
                         false
                     )
                     anim.mixDuration = 0.2
+
+                    hoveredBoxIndex.set(i)
                 },
                 pointerdown() {
                     // choosePlushyAction(){}
@@ -57,17 +72,57 @@ export function RestSiteOverlay(): PixiContainer {
                         index: i,
                     })
                 },
-                // pointerover() {
-                //     s.alpha = 0.1
-                // },
                 pointerout() {
-                    s.alpha = 0.0
+                    hoveredBoxIndex.set(null)
                 },
             },
         })
         return s
     })
-    return Container({}, spine, ...boxes)
+    return Container(
+        {},
+        spine,
+        ...boxes,
+        If(hoveredBoxIndex, index => {
+            console.log({
+                x: boundingBoxes[index][0],
+                y: boundingBoxes[index][1] + boundingBoxes[index][3],
+            })
+            return InfoBox(
+                // RoundedBordered(
+                //     Sprite({
+                //         src: Text({
+                //             text: plushyChoiceDescriptions[index],
+                //             style: {
+                //                 fill: 'white',
+                //                 wordWrapWidth: BASE_WIDTH * 0.2,
+                //                 wordWrap: true,
+                //             },
+                //         }).texture,
+                //     }),
+                //     { radius: 10, borderColor: 0xffffff, borderThickness: 2 }
+                // ),
+                Container(
+                    {},
+                    Text({
+                        text: plushyChoiceDescriptions[index],
+                        style: {
+                            fill: 'white',
+                            wordWrapWidth: BASE_WIDTH * 0.2,
+                            wordWrap: true,
+                        },
+                    })
+                ),
+                {
+                    x: boundingBoxes[index][0] * BASE_WIDTH,
+                    y:
+                        (boundingBoxes[index][1] + boundingBoxes[index][3]) *
+                        BASE_HEIGHT,
+                    padding: 25,
+                }
+            )
+        })
+    )
 }
 
 function calcBoundingBoxes(): Rect[] {
