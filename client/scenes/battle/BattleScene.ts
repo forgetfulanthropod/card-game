@@ -8,6 +8,7 @@ import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'
 import { HexMapOverlay } from './HexMapOverlay'
 import { LootCollector } from './LootCollector'
+import { RestSiteOverlay } from './RestSiteOverlay'
 import { Background } from '@/scenes'
 import { Container, If } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
@@ -66,6 +67,10 @@ export function BattleScene(): PixiContainer {
         If(
             toDatum(scene.select('isInMap'), is => is),
             () => HexMapOverlay()
+        ),
+        If(
+            toDatum(scene.select('isInRestSite'), is => is),
+            () => RestSiteOverlay()
         )
     )
 

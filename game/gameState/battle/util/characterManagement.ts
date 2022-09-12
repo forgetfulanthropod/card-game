@@ -41,7 +41,12 @@ export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
 
     const npcKeys = keys(npcs)
     vals(npcs).forEach((npc, i) => {
-        const [x, y] = positions[i]
+        const [x, y] =
+            keys(npcs).length === 1
+                ? positions[1]
+                : keys(npcs).length === 2
+                ? positionBetween(positions[i], positions[i + 1])
+                : positions[i]
 
         rearrangedNpcs[npcKeys[i]] = {
             ...npc,
@@ -159,4 +164,11 @@ export function newNPCMeta(args: {
 
 function getHealthFromBase(base: BaseHealth): number {
     return parseInt(`${base}`)
+}
+
+function positionBetween(
+    arg0: [number, number],
+    arg1: [number, number]
+): [number, number] {
+    return [(arg0[0] + arg1[0]) / 2, (arg0[1] + arg1[1]) / 2]
 }

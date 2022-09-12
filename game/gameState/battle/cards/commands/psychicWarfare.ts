@@ -6,9 +6,7 @@ import { applyDamage, calcPostEffectStats } from '@/gameState'
 
 export const explain: Explainers['psychicWarfare'] = dslArgs => {
     const [damage, sameTargetAddend] = evalAllAsHtml(dslArgs)
-    return `deal ${Math.ceil(damage)} damage<br/> +${Math.ceil(
-        Math.ceil(sameTargetAddend)
-    )} damage each time used`
+    return `deal ${damage} damage<br/> +${sameTargetAddend} damage each time used`
 }
 
 export const execute: Executors['psychicWarfare'] = ({

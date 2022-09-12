@@ -9,7 +9,7 @@ export function HitInfo(args: {
     isPoison?: boolean
 }): PixiSpine {
     const root = Spine({
-        name: 'damageSpine',
+        name: 'damageTextSpine',
     })
     root.scale.set(0.6)
 

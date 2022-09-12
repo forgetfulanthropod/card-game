@@ -1,16 +1,18 @@
-import type { DungeonRoom } from 'shared'
+import type { DungeonRoom, EnemyCharacterId } from 'shared'
 import { newNPCMeta, rearrangeNpcs } from './characterManagement'
 
 export function makeRoomNpcs(nextRoom: DungeonRoom) {
+    if (nextRoom[0].id === 'REST_SITE') return {}
+
     let newNpcs = Object.fromEntries(
         nextRoom.map(({ id: name, level }) => {
             const uid = srandom().toString().slice(6)
             return [
                 uid,
                 newNPCMeta({
-                    name,
+                    name: name as EnemyCharacterId,
                     level,
-                    uid: uid,
+                    uid,
                     x: 0,
                     y: 0,
                 }),

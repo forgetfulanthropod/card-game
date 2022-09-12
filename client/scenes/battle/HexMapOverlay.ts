@@ -107,6 +107,8 @@ function TileForNode(node: MapNode, depth: number, yOffset: number) {
     const texture = getTexture(`mapTile${Math.floor(Math.random() * 7) + 1}`)
     const displayWidth = (BASE_WIDTH / 6) * 2
 
+    if (node == null) return Container({})
+
     const root = Container(
         {
             x: depth * displayWidth * 0.41,
@@ -114,19 +116,45 @@ function TileForNode(node: MapNode, depth: number, yOffset: number) {
             filters:
                 depth > getBattleScene().get('numRoomsPassed') + 2 ||
                 node == null
-                    ? [new AdjustmentFilter({ brightness: 0.6 })]
+                    ? [new AdjustmentFilter({ brightness: 0.5 })]
                     : [],
         },
         Sprite({
             src: texture,
             scale: displayWidth / texture.width,
-            anchor: 0.5,
+            anchor: [0.5, 0.42],
             // alpha: node == null ? 0.4 : 1,
         }),
-        node ? TileCharacters(node) : Container({})
+        TileContents(node)
     )
 
     return root
+}
+
+function TileContents(node: MapNode | null): PixiContainer {
+    if (node == null) return Container({})
+    const scene = getBattleScene()
+    const passed = scene.get('numRoomsPassed')
+
+    // TODO: node should be null after it's passed
+    if (node.enemies[0]?.id === 'REST_SITE' && passed < node.depth)
+        return RestSiteContents()
+
+    return TileCharacters(node)
+}
+
+function RestSiteContents() {
+    const src = getTexture('mapRestSite')
+    return Sprite({
+        scale: 255 / src.width,
+        src: 'mapRestSite',
+        anchor: 0.5,
+        events: {
+            pointerdown() {
+                void callApi('confirmNextRoom', {})
+            },
+        },
+    })
 }
 
 function TileCharacters(node: MapNode): PixiContainer {
@@ -147,8 +175,8 @@ function TileCharacters(node: MapNode): PixiContainer {
 
     const root = Container(
         {
-            scale: 0.6,
-            y: -50,
+            scale: 0.55,
+            y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
             events: {
                 pointerover() {
@@ -178,8 +206,12 @@ function TileCharacters(node: MapNode): PixiContainer {
             if (numRoomsPassed + 1 !== node.depth) anim.cursor = 'default'
 
             return Adjust(anim, {
-                x: i === 2 ? 50 : i * 120,
-                y: i === 2 ? 110 : 0,
+                x: characterMeta.isPc
+                    ? 120 * (2 - i)
+                    : i === 2
+                    ? -50
+                    : 180 * i - 50,
+                y: characters.length === 1 ? 110 : 110 * i,
             })
         })
     )
@@ -187,36 +219,26 @@ function TileCharacters(node: MapNode): PixiContainer {
     return root
 }
 
-function getTileGraphMap() {
+function getTileGraphMap(): Record<NodeUid, MapNode> {
     // TODO: copied from game/rooms.ts
-    const rooms: DungeonRoom[] = [
-        [],
-        [
-            { id: 'skeletonWarrior', level: 1 },
-            { id: 'skeletonWarrior', level: 1 },
-            { id: 'matchaGelatinCube', level: 1 },
-        ],
-        [
-            { id: 'matchaGelatinCube', level: 1 },
-            { id: 'skeletonWarrior', level: 2 },
-            { id: 'matchaGelatinCube', level: 1 },
-        ],
-        [
-            { id: 'skeletonWarrior', level: 2 },
-            { id: 'matchaGelatinCube', level: 2 },
-            { id: 'skeletonWarrior', level: 2 },
-        ],
-        [],
-    ]
+    const rooms = getBattleScene().get('rooms')
 
-    const graph: Record<string, MapNode> = {}
+    console.log({ rooms })
+
+    const graph: Record<NodeUid, MapNode> = {
+        'room 0': {
+            depth: 0,
+            enemies: [],
+            edges: ['', getNodeId(0)],
+        },
+    }
 
     rooms.forEach((room, i) => {
         const edges: [string, string] = ['', getNodeId(i + 1)]
         if ((i + 1) % 2) edges.reverse()
 
         graph[getNodeId(i)] = {
-            depth: i,
+            depth: i + 1,
             enemies: rooms[i],
             edges,
         }
@@ -225,6 +247,8 @@ function getTileGraphMap() {
     return graph
 }
 
-function getNodeId(i: number) {
+type NodeUid = string
+
+function getNodeId(i: number): NodeUid {
     return `${i}-${i % 2 ? 'a' : 'b'}`
 }

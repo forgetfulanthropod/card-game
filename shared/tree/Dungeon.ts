@@ -11,6 +11,6 @@ interface DungeonLevelI {
 export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
 
 export type DungeonRoom = ReadonlyArray<{
-    id: EnemyCharacterId
+    id: EnemyCharacterId | 'REST_SITE'
     level: string | number
 }>

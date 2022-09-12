@@ -24,6 +24,7 @@ export function getValidSpineAssetName(
     const haveEvilVersions: Partial<Record<CharacterId, boolean>> = {
         skeletonWarrior: true,
         matchaGelatinCube: true,
+        mimic: true,
     }
 
     //@ts-expect-error TODO this goes away when all characters have spines...

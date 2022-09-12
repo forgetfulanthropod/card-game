@@ -170,7 +170,12 @@ export const spineAssets = {
     gnomeHooliganSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
     jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
     warhogSpine: 'spines/characters/warhog/Warhog.json',
-    damageSpine: 'spines/damage/Text.json',
+    mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
+    // bosshogJurgenNPCSpine: 'spines/characters/bosshogJurgen/Warhog.json',
+
+    damageTextSpine: 'spines/damage/Text.json',
+
+    restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
     // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     // mushroomFarmerSpineWebp:
     //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
@@ -449,6 +454,7 @@ export const sequences = {
 export const mapAssets = {
     mapBg: 'hex map/dungeon test bg for export.mp4',
     mapFire: 'hex map/fire test.mov',
+    mapRestSite: 'hex map/rest site2.webp',
 }
 
 export const mapTileAssets = {

@@ -71,7 +71,7 @@ importers:
     specifiers:
       '@monaco-editor/react': ^4.4.5
       '@pixi-essentials/gradients': ^0.0.5
-      '@pixi-spine/all-4.0': ^3.0.16
+      '@pixi-spine/all-4.1': ^3.1.0
       '@pixi/animate': ^2.0.2
       '@pixi/text-html': ^2.1.1
       '@types/marked': ^4.0.3
@@ -93,7 +93,7 @@ importers:
     dependencies:
       '@monaco-editor/react': 4.4.5_monaco-editor@0.33.0
       '@pixi-essentials/gradients': 0.0.5
-      '@pixi-spine/all-4.0': 3.0.16
+      '@pixi-spine/all-4.1': 3.1.0
       '@pixi/animate': 2.0.2
       '@pixi/text-html': 2.1.1
       ahooks: 3.5.2
@@ -135,14 +135,12 @@ importers:
       game: workspace:game@*
       level: ^8.0.0
       shared: workspace:shared@*
-      simple-color-converter: ^2.1.13
       socket.io: ^4.5.1
     dependencies:
       classic-level: 1.2.0
       game: link:../game
       level: 8.0.0
       shared: link:../shared
-      simple-color-converter: 2.1.13
       socket.io: 4.5.1
 
   shared:
@@ -493,13 +491,13 @@ packages:
       '@pixi/sprite': ^6.0.0
     dev: false
 
-  /@pixi-spine/all-4.0/3.0.16:
-    resolution: {integrity: sha512-QUVcEC9hZ/xaFXbGoX23/a6gKiBv8eQZtZbVJYR1hYqONo3qksYEj4APzcI+q3/b3b87ctINK3KCHOm/8eFMNA==}
+  /@pixi-spine/all-4.1/3.1.0:
+    resolution: {integrity: sha512-BLz1eZlaFFeUsNI1Du0I58uxY2PevmkMvFeyHbs4VlZDGwZqt4UlXndujSH+ods3oTiBpr9jTGqgAx0daRFfQQ==}
     dependencies:
-      '@pixi-spine/base': 3.0.16
-      '@pixi-spine/loader-4.0': 3.0.16
-      '@pixi-spine/loader-base': 3.0.16
-      '@pixi-spine/runtime-4.0': 3.0.16
+      '@pixi-spine/base': 3.1.0
+      '@pixi-spine/loader-4.1': 3.1.0
+      '@pixi-spine/loader-base': 3.1.0
+      '@pixi-spine/runtime-4.1': 3.1.0
     transitivePeerDependencies:
       - '@pixi/app'
       - '@pixi/constants'
@@ -517,8 +515,8 @@ packages:
       - resource-loader
     dev: false
 
-  /@pixi-spine/base/3.0.16:
-    resolution: {integrity: sha512-68ExffQYduZKgM2IjMg77/TadG8pjXQ9EiKDG1cnExqPmjV1EY77EGot19lK+Xwa7aoz5fCZnYJ+p8wHaSvAjQ==}
+  /@pixi-spine/base/3.1.0:
+    resolution: {integrity: sha512-4QRXfokT4LE78r446VXwIjgAEKvXJgpwiVcGzArOQ+m8JeJkfFr2vR6ifP6uvNPZIOZ+1E3DF3DVNxIULw71Qw==}
     peerDependencies:
       '@pixi/constants': ^6.1.0
       '@pixi/core': ^6.1.0
@@ -533,8 +531,8 @@ packages:
       '@pixi/utils': ^6.1.0
     dev: false
 
-  /@pixi-spine/loader-4.0/3.0.16:
-    resolution: {integrity: sha512-Abr8L4KHI5/oxyPxDzzm7bUg73FyiZs3fuqW0WYjWMMjtwjuL+TFwEI+QQdNQrxNZ0KCTn2/iwBpOEobsOVg4w==}
+  /@pixi-spine/loader-4.1/3.1.0:
+    resolution: {integrity: sha512-h1hCvu5ZeKAbqxSyVX695D+zdoFBJ9k515PnNcEapHsfAUNvyf2wZZ4fgyJoHw9UVp12IZchXgESPkVGqnethw==}
     peerDependencies:
       '@pixi/app': ^6.1.0
       '@pixi/core': ^6.1.0
@@ -542,9 +540,9 @@ packages:
       '@pixi/loaders': ^6.1.0
       resource-loader: ~3.0.1
     dependencies:
-      '@pixi-spine/base': 3.0.16
-      '@pixi-spine/loader-base': 3.0.16
-      '@pixi-spine/runtime-4.0': 3.0.16
+      '@pixi-spine/base': 3.1.0
+      '@pixi-spine/loader-base': 3.1.0
+      '@pixi-spine/runtime-4.1': 3.1.0
     transitivePeerDependencies:
       - '@pixi/constants'
       - '@pixi/graphics'
@@ -557,8 +555,8 @@ packages:
       - '@pixi/utils'
     dev: false
 
-  /@pixi-spine/loader-base/3.0.16:
-    resolution: {integrity: sha512-msKbFxq43pFd9z7QMSp/lGRCQFHdWA0O6bWJU7KZOa0i/DCemXKFs4O/7o9ZhoshfAadnbkmDigzaZdN+bXp5Q==}
+  /@pixi-spine/loader-base/3.1.0:
+    resolution: {integrity: sha512-wSDMRefZedBhRVzRg+N1DqGoJjedaSMW5gh3lHKPPY0Qeb72aa9J3U0aTv82+tTXYN27DyuVjwpm0Qp3r502bA==}
     peerDependencies:
       '@pixi/app': ^6.1.0
       '@pixi/constants': ^6.1.0
@@ -567,7 +565,7 @@ packages:
       '@pixi/loaders': ^6.1.0
       resource-loader: ~3.0.1
     dependencies:
-      '@pixi-spine/base': 3.0.16
+      '@pixi-spine/base': 3.1.0
     transitivePeerDependencies:
       - '@pixi/graphics'
       - '@pixi/math'
@@ -579,13 +577,13 @@ packages:
       - '@pixi/utils'
     dev: false
 
-  /@pixi-spine/runtime-4.0/3.0.16:
-    resolution: {integrity: sha512-bcatHHNvPOcwa/YzdaWw4FLagRDnkP/tlW1d+ukwE4CEMVE26SNzNtO+xzRDuFqCC8pipPEZZ1TKpZb5j9u9zw==}
+  /@pixi-spine/runtime-4.1/3.1.0:
+    resolution: {integrity: sha512-KKHQAVRu9CaNrLNPjXwAVggVehBy2ChCE3QL5EwT5oVOt8uYhZ3f1UhMFDieqtz+QcqO8jUppfcsvgtFbTnHBQ==}
     peerDependencies:
       '@pixi/constants': ^6.1.0
       '@pixi/math': ^6.1.0
     dependencies:
-      '@pixi-spine/base': 3.0.16
+      '@pixi-spine/base': 3.1.0
     transitivePeerDependencies:
       - '@pixi/core'
       - '@pixi/display'

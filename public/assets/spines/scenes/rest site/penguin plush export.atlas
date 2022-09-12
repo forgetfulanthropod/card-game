@@ -1,0 +1,24 @@
+penguin plush export.png
+size:1635,547
+filter:Linear,Linear
+pma:true
+scale:0.5
+Body
+bounds:967,292,446,252
+offsets:0,0,762,252
+Eye L
+bounds:1374,16,56,54
+offsets:0,0,57,54
+Eye R
+bounds:1433,15,56,55
+Flipper pointer
+bounds:1226,27,145,262
+Frog
+bounds:1416,285,259,216
+rotate:90
+Layer 73
+bounds:3,3,961,541
+Mushroom
+bounds:967,45,256,244
+Penguin
+bounds:1374,73,237,209

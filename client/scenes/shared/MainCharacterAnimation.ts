@@ -2,7 +2,7 @@ import type { CharacterId, CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
 import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
-import { glowFilter, Spine } from '@/elementsUtil'
+import { onDestroyed, glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation({
     characterMeta,
@@ -23,6 +23,9 @@ export function MainCharacterAnimation({
         characterMeta.id,
         characterMeta.isPc
     )
+
+    // debug
+    // console.log({ spineAssetName })
 
     if (!spineAssetName) return null
 
@@ -57,9 +60,11 @@ export function MainCharacterAnimation({
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
     })
 
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
         root.state.setAnimation(0, 'Idle', true).mixDuration = 0.2
     }, Math.random() * 2000)
+
+    onDestroyed(root, () => clearTimeout(timeoutId))
 
     updateGlow(hoveredCharacterUid.val)
 

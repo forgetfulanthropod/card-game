@@ -64,7 +64,10 @@
                 "@pixi/sprite",
                 "@pixi/text",
                 "@pixi/ticker",
-                "@pixi/utils"
+                "@pixi/utils",
+                "@pixi/filter-color-matrix",
+                "@pixi/prepare",
+                "@pixi/spritesheet"
             ]
         }
     }
