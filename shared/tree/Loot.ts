@@ -13,5 +13,6 @@ export type LootItem = {
 }
 
 export type ClaimableLoot = Array<LootItem>
+export type ClaimedLoot = Array<LootItem>
 
 type LootBox = LootFromGame & 'potentially more stuff'

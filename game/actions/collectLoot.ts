@@ -8,29 +8,29 @@ import { nextRoom } from './nextRoom'
 export const collectLoot: GameActions['collectLoot'] = args => {
     const scene = getBattleSceneIn(args.game)
     const remainingLoot = scene.get('lootEarned')
-    const newRemainingLoot = collectCurrentLootItem(remainingLoot, scene)
+    if (remainingLoot[0].name === 'draftCard') {
+        scene.set('lootScreenHasOpened', true)
+        scene.set('state', 'choosing cards')
+        return
+    }
 
+    const newRemainingLoot = collectCurrentLootItem(scene)
     if (isEmpty(newRemainingLoot)) {
         nextRoom(args)
-    } else if (remainingLoot[0].name === 'draftCard') {
-        scene.set('state', 'choosing cards')
-    } else {
-        collectCurrentLootItem(remainingLoot, scene)
     }
-}
 
-function transferLootToInventory(scene: BattleCursor) {
-    // TODO implement loot inventory
-    // transfer()
     return
 }
 
-function collectCurrentLootItem(
-    remainingLoot: ClaimableLoot,
-    scene: BattleCursor
-): ClaimableLoot {
-    transferLootToInventory(scene)
-    const newRemainingLoot = remainingLoot.slice(1) as ClaimableLoot;
+function collectCurrentLootItem(scene: BattleCursor): ClaimableLoot {
+    const currentLootItem = scene.get('lootEarned').at(0)
+    if (currentLootItem) {
+        scene.set('lootClaimed', [...scene.get('lootClaimed'), currentLootItem])
+    } else {
+        return []
+    }
+
+    const newRemainingLoot = scene.get('lootEarned').slice(1)
     scene.set('lootEarned', newRemainingLoot)
     return newRemainingLoot
 }

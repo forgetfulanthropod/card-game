@@ -15,36 +15,32 @@ import { animateTo } from '../shared/cards/Hand'
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
+    const lootScreenHasOpened = scene.get('lootScreenHasOpened')
 
-    setTimeout(() => {
-        animateTo(roomClearedSign, {
-            rotation: 0,
-            scale: 2,
-            x: 0,
-            y: 0,
-        })
-    }, 1000)
+    let roomClearedFinalPosition = {
+        rotation: 0,
+        scale: 1,
+        x: 0,
+        y: -600,
+    }
+    let lootItemsFinalPosition = {
+        rotation: 0,
+        scale: 1,
+        x: BASE_WIDTH / 2 - 300,
+        y: 0,
+    }
 
-    setTimeout(() => {
-        animateTo(roomClearedSign, {
-            rotation: 0,
-            // scale animation is not working
-            scale: 1,
-            x: 0,
-            y: -600,
-        }),
-            animateTo(lootIconsAndValues, {
-                rotation: 0,
-                scale: 1,
-                x: BASE_WIDTH / 2 - 300,
-                y: 0,
-            })
-    }, 2000)
+    if (lootScreenHasOpened === false) {
+        setTimeout(() => {
+            animateTo(roomClearedSign, roomClearedFinalPosition)
+            animateTo(lootIconsAndValues, lootItemsFinalPosition)
+        }, 2000)
+    }
 
     function renderLoot() {
         const lootItems = scene.get('lootEarned')
         let container = Container({
-            x: 3000,
+            x: lootScreenHasOpened ? lootItemsFinalPosition.x : 3000,
         })
 
         // TODO change below to a better way of calculating where it goes
@@ -52,7 +48,7 @@ export function LootCollector(): PixiContainer {
         let width = 1600
         let idx = 0
 
-        let x = -200;
+        let x = -200
 
         // need to store in state which things have been clicked
         function handleButtonPress(elementToUpdate?: PixiText) {
@@ -65,7 +61,7 @@ export function LootCollector(): PixiContainer {
                 rotation: 0,
             })
 
-            x = x - 800
+            x = x - 900
         }
 
         for (let lootItem of lootItems) {
@@ -83,7 +79,7 @@ export function LootCollector(): PixiContainer {
                             // TODO: only allow current active loot to be clicked
                             // idx === 0 ?
                             () => handleButtonPress()
-                                // : void 0,
+                        // : void 0,
                     },
                     // Dark backdrop
                     Sprite({
@@ -120,7 +116,7 @@ export function LootCollector(): PixiContainer {
                             align: 'left',
                             fontWeight: 'bold',
                         },
-                    }),
+                    })
                 )
             )
 
@@ -157,8 +153,8 @@ export function LootCollector(): PixiContainer {
         Sprite({
             src: getTexture('roomClearedSign'),
             alpha: 1,
-            x: 0,
-            y: 0,
+            x: lootScreenHasOpened ? roomClearedFinalPosition.x : 0,
+            y: lootScreenHasOpened ? roomClearedFinalPosition.y : 0,
         })
     ) as TweenablePixiContainer
 
