@@ -6,6 +6,7 @@ import {
     PixiContainer,
     Text,
     TweenablePixiContainer,
+    PixiText,
 } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
@@ -40,11 +41,6 @@ export function LootCollector(): PixiContainer {
             })
     }, 2000)
 
-    // need to store in state which things have been clicked
-    function handleButtonPress() {
-        callApi('collectLoot', {})
-    }
-
     function renderLoot() {
         const lootItems = scene.get('lootEarned')
         let container = Container({
@@ -55,6 +51,22 @@ export function LootCollector(): PixiContainer {
         let height = 950
         let width = 1600
         let idx = 0
+
+        let x = -200;
+
+        // need to store in state which things have been clicked
+        function handleButtonPress(elementToUpdate?: PixiText) {
+            callApi('collectLoot', {})
+            lootIconsAndValues.removeChildAt(0)
+            animateTo(lootIconsAndValues, {
+                x: x,
+                y: 0,
+                scale: 0.2,
+                rotation: 0,
+            })
+
+            x = x - 800
+        }
 
         for (let lootItem of lootItems) {
             let item = lootItem.name as string
@@ -67,7 +79,11 @@ export function LootCollector(): PixiContainer {
                 Container(
                     {
                         x: 0 - 350,
-                        onClick: idx === 0 ? handleButtonPress : void 0,
+                        onClick:
+                            // TODO: only allow current active loot to be clicked
+                            // idx === 0 ?
+                            () => handleButtonPress()
+                                // : void 0,
                     },
                     // Dark backdrop
                     Sprite({
@@ -92,8 +108,8 @@ export function LootCollector(): PixiContainer {
                     Text({
                         text:
                             item === 'draftCard'
-                                ? 'draft a card'
-                                : `collect ${item}`,
+                                ? 'Draft a Card'
+                                : `Collect ${item}`,
                         anchor: [0.5, 0],
                         x: width,
                         y: height - 50,
@@ -104,7 +120,7 @@ export function LootCollector(): PixiContainer {
                             align: 'left',
                             fontWeight: 'bold',
                         },
-                    })
+                    }),
                 )
             )
 
