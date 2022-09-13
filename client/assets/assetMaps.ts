@@ -1,7 +1,7 @@
 import type { VisibleEffect } from './assetTypes'
 
 export const rootAssets = {
-    fishstick: 'misc-png/INVENTORY_FISHSTICK.webp',
+    fishStick: 'misc-png/INVENTORY_FISHSTICK.webp',
     potion: 'misc-png/INVENTORY_POTION.webp',
     swordShield: 'misc-png/INVENTORY_SWORDSHIELD.webp',
     bread: 'misc-png/ITEM_BREAD.webp',
@@ -143,6 +143,7 @@ export const orbAssets = {
 
 export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
+    roomClearedSign: 'signs/roomCleared.png'
 }
 
 export const characterClassAssets = {

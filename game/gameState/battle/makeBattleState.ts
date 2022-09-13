@@ -46,6 +46,8 @@ export function makeBattleState(args: {
         isInMap: true,
         isInRestSite: false,
         lootEarned: getInitialLoot(),
+        lootClaimed: [],
+        lootScreenHasOpened: false
     }
     return bs
 }

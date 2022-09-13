@@ -1,83 +1,204 @@
 import { Texture } from 'pixi.js'
 
-import { InfoBox, ModalBackdrop } from '@sharedElements'
-import { PixiContainer, Text } from '@/elementsUtil'
+import { ModalBackdrop } from '@sharedElements'
+import {
+    getTexture,
+    PixiContainer,
+    Text,
+    TweenableContainer,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
+import { animateTo } from '../shared/cards/Hand'
+
+const ROOM_CLEARED_FINAL_POS = {
+    rotation: 0,
+    scale: 1,
+    x: 0,
+    y: -600,
+}
+
+const LOOT_ITEMS_FINAL_POS = {
+    rotation: 0,
+    scale: 1,
+    x: BASE_WIDTH,
+    y: -100,
+}
+
+const LOOT_ITEMS_START_POS = {
+    x: 5000,
+}
+
+const ITEM_BOX_HEIGHT = 650
+const ITEM_BOX_WIDTH = 600
+
+const getScale = ({ idx }: { idx: number }) => (idx === 0 ? 1.5 : 1)
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
+    const lootScreenHasOpened = scene.get('lootScreenHasOpened')
+
+    if (lootScreenHasOpened === false) {
+        setTimeout(() => {
+            animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
+            animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
+        }, 2000)
+    }
+
+    const [currentLootItem, ...remainingLootItems] = renderLoot()
+
+    const lootItemsContainer = TweenableContainer(
+        {
+            x: lootScreenHasOpened
+                ? LOOT_ITEMS_FINAL_POS.x
+                : LOOT_ITEMS_START_POS.x,
+        },
+        currentLootItem,
+        ...remainingLootItems
+    )
+
+    function renderLoot() {
+        const lootItems = scene.get('lootEarned')
+
+        let lootItemsContainerX = 0
+        let lootItemsContainerY = BASE_HEIGHT + 200
+
+        return lootItems.map((item, idx) => {
+            let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
+
+            const scale = getScale({ idx })
+
+            const lootItemContainerArgs = {
+                name: `LootItemContainer_${item.name}`,
+                x: lootItemsContainerX,
+                y: lootItemsContainerY,
+                onClick: idx === 0 ? () => handleButtonPress() : void 0,
+            }
+
+            lootItemsContainerX += 900
+
+            const BlackRectBackground = Sprite({
+                src: Texture.WHITE,
+                scale: 1,
+                tint: 0,
+                height: ITEM_BOX_HEIGHT * scale,
+                width: ITEM_BOX_WIDTH * scale,
+                alpha: 0.5,
+                anchor: [0.5, 0.5],
+                x: 0,
+                y: 0,
+                name: 'BlackRectBackground',
+            })
+
+            const LootItemSprite = Sprite({
+                src: getTexture(itemSrc),
+                scale: 2 * scale,
+                anchor: [0.5, 0.5],
+                x: 0,
+                y: 50 * scale * 1.5,
+                name: 'LootItemSprite',
+            })
+
+            const LootItemText = Text({
+                text:
+                    item.name === 'draftCard'
+                        ? 'Draft a Card'
+                        : `Collect \n${item.name}`,
+                anchor: [0.5, 0],
+                x: 0,
+                y: -(ITEM_BOX_HEIGHT / 2) * scale + (50 + scale),
+                style: {
+                    fontSize: 80 * scale,
+                    fill: 'white',
+                    padding: 4,
+                    align: 'center',
+                    fontWeight: 'bold',
+                },
+                name: 'LootItemText',
+            })
+
+            const InactiveLootItemOverlay = Sprite({
+                src: Texture.WHITE,
+                scale: 1,
+                tint: 0,
+                height: ITEM_BOX_HEIGHT,
+                width: ITEM_BOX_WIDTH,
+                alpha: 0.5,
+                anchor: [0.5, 0.5],
+                x: 0,
+                y: 0,
+                name: 'InactiveLootItemOverlay',
+            })
+
+            const lootItemContainerChildren = [
+                BlackRectBackground,
+                LootItemSprite,
+                LootItemText,
+                idx !== 0 && InactiveLootItemOverlay,
+            ]
+
+            return Container(
+                lootItemContainerArgs,
+                ...lootItemContainerChildren
+            )
+        })
+    }
+
+    const roomClearedSign = TweenableContainer(
+        {},
+        Sprite({
+            src: getTexture('roomClearedSign'),
+            alpha: 1,
+            x: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.x : 0,
+            y: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.y : 0,
+        })
+    )
 
     function handleButtonPress() {
         callApi('collectLoot', {})
+        shiftCurrentItem(lootItemsContainer)
     }
 
-    function renderLootItems() {
-        const items = scene.get('lootEarned').items
-        let container = Container({})
-        // TODO change below to actual way of calculating where it goes
-        let height = 700
+    function shiftCurrentItem(el: TweenablePixiContainer) {
+        el.removeChildAt(0) // removes the current loot item (eg. the now-previous loot item)
+        currLootItemsX = currLootItemsX - 900
+        animateTo(el, {
+            x: currLootItemsX,
+            y: 0,
+            scale: 0.2,
+            rotation: 0,
+        })
 
-        for (let [item, value] of Object.entries(items)) {
-            container.addChild(
-                Text({
-                    text: `${item}: ${value}`,
-                    anchor: [0.5, 0],
-                    x: BASE_WIDTH,
-                    y: height,
-                    style: {
-                        fontSize: 100,
-                        fill: 'white',
-                        padding: 4,
-                        align: 'left',
-                    },
-                })
-            )
-            height += 100
-        }
-
-        return container
+        const newCurrentItem = el.getChildAt(0) as TweenablePixiContainer
+        transformIntoCurrentItem(newCurrentItem)
+        applyOnClick(newCurrentItem, () => handleButtonPress())
     }
 
-    return Container(
-        { x: 0, y: 0, scale: 0.5 },
+    function transformIntoCurrentItem(el: TweenablePixiContainer) {
+        const newScale = getScale({ idx: 0 })
+        el.height = ITEM_BOX_HEIGHT * newScale
+        el.width = ITEM_BOX_WIDTH * newScale
+        el.getChildByName('InactiveLootItemOverlay').destroy()
+    }
+
+    function applyOnClick(
+        el: PixiContainer | TweenablePixiContainer,
+        onClick: () => void
+    ) {
+        el.interactive = true
+        el.cursor = `url('assets/root/hand.webp'), pointer`
+        el.on('pointerdown', onClick)
+    }
+
+    let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
+
+    const LootCollectorContainer = Container(
+        { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
         ModalBackdrop(),
-        InfoBox(
-            Container(
-                {},
-                renderLootItems(),
-                Sprite({
-                    src: Texture.WHITE,
-                    width: BASE_WIDTH * 0.6,
-                    height: BASE_HEIGHT * 0.7,
-                    alpha: 0.6,
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT,
-                }),
-                Sprite({
-                    src: Texture.WHITE,
-                    width: BASE_WIDTH * 0.6,
-                    height: 150,
-                    alpha: 1,
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT + 500,
-                    onClick: handleButtonPress,
-                }),
-                Text({
-                    text: 'collect loot',
-                    anchor: [0.5, 0.5],
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT + 500,
-                    style: { fontSize: 100, fill: 'black', padding: 4 },
-                })
-            ),
-            {
-                borderRadius: 12,
-                padding: 22,
-            }
-        )
+        Container({}, lootItemsContainer, roomClearedSign)
     )
+
+    return LootCollectorContainer
 }
