@@ -62,24 +62,22 @@ export function LootCollector(): PixiContainer {
     function renderLoot() {
         const lootItems = scene.get('lootEarned')
 
-        let lootItemsContainerX = 0
+        let lootItemsContainerX = -900
         let lootItemsContainerY = BASE_HEIGHT + 200
 
         return lootItems.map((item, idx) => {
             let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
-
             const scale = getScale({ idx })
-
             const lootItemContainerArgs = {
                 name: `LootItemContainer_${item.name}`,
-                x: lootItemsContainerX,
+                x: (lootItemsContainerX += 900),
                 y: lootItemsContainerY,
-                onClick: idx === 0 ? () => handleButtonPress() : void 0,
+                onClick: idx === 0 ? () => handleButtonPress() : () => {},
+                idx,
             }
 
-            lootItemsContainerX += 900
-
-            if (item.name === 'treasureChest') return TreasureChest(lootItemContainerArgs.x, idx === 0 ? 1.25 : 0)
+            if (item.name === 'treasureChest')
+                return TreasureChest(lootItemContainerArgs)
 
             const BlackRectBackground = Sprite({
                 src: Texture.WHITE,
@@ -140,7 +138,8 @@ export function LootCollector(): PixiContainer {
                 LootItemText,
             ]
 
-            if (idx !== 0) lootItemContainerChildren.push(InactiveLootItemOverlay)
+            if (idx !== 0)
+                lootItemContainerChildren.push(InactiveLootItemOverlay)
 
             return Container(
                 lootItemContainerArgs,
@@ -182,7 +181,7 @@ export function LootCollector(): PixiContainer {
     function transformIntoCurrentItem(el: TweenablePixiContainer) {
         if (el.name === 'TreasureChestContainer') {
             setTimeout(() => {
-                el.scale = {x: 1.25, y: 1.25}
+                el.scale = { x: 1.25, y: 1.25 }
             }, 500)
             return
         }
@@ -208,13 +207,14 @@ export function LootCollector(): PixiContainer {
         { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
         ModalBackdrop(),
         lootItemsContainer,
-        roomClearedSign,
+        roomClearedSign
     )
 
     return LootCollectorContainer
 }
 
-function TreasureChest(x: number, scale: number) {
+function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
+    const { x, onClick, idx } = args
     const chestBodySrc = getTexture('chestBody')
     const chestLidSrc = getTexture('chestLid')
 
@@ -234,15 +234,41 @@ function TreasureChest(x: number, scale: number) {
         name: 'ChestLidSprite',
     })
 
+    const ChestProgressText = Text({
+        text: 'Chest Progress:',
+        anchor: [0.5, 0.5],
+        x: 0,
+        y: 425,
+        style: {
+            fontSize: 40,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'bold',
+        },
+        name: 'LootItemText',
+    })
+
+    const ChestProgressSprite = Sprite({
+        src: 'healthBarBacking',
+        anchor: [0.5, 0.5],
+        y: 550,
+        scale: 6,
+        width: BASE_WIDTH - 400,
+    })
+
     const TreasureChestContainer = Container(
         {
             x,
             y: BASE_HEIGHT,
-            scale,
-            name: 'TreasureChestContainer'
+            scale: idx === 0 ? 1 : 0,
+            name: 'TreasureChestContainer',
+            onClick,
         },
         ChestBodySprite,
-        ChestLidSprite
+        ChestLidSprite,
+        ChestProgressText,
+        ChestProgressSprite
     )
 
     return TreasureChestContainer
