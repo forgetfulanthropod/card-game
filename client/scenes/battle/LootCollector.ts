@@ -79,6 +79,8 @@ export function LootCollector(): PixiContainer {
 
             lootItemsContainerX += 900
 
+            if (item.name === 'treasureChest') return TreasureChest(lootItemContainerArgs.x, idx === 0 ? 1.25 : 0)
+
             const BlackRectBackground = Sprite({
                 src: Texture.WHITE,
                 scale: 1,
@@ -136,8 +138,9 @@ export function LootCollector(): PixiContainer {
                 BlackRectBackground,
                 LootItemSprite,
                 LootItemText,
-                idx !== 0 && InactiveLootItemOverlay,
             ]
+
+            if (idx !== 0) lootItemContainerChildren.push(InactiveLootItemOverlay)
 
             return Container(
                 lootItemContainerArgs,
@@ -167,7 +170,7 @@ export function LootCollector(): PixiContainer {
         animateTo(el, {
             x: currLootItemsX,
             y: 0,
-            scale: 0.2,
+            scale: 1,
             rotation: 0,
         })
 
@@ -177,6 +180,13 @@ export function LootCollector(): PixiContainer {
     }
 
     function transformIntoCurrentItem(el: TweenablePixiContainer) {
+        if (el.name === 'TreasureChestContainer') {
+            setTimeout(() => {
+                el.scale = {x: 1.25, y: 1.25}
+            }, 500)
+            return
+        }
+
         const newScale = getScale({ idx: 0 })
         el.height = ITEM_BOX_HEIGHT * newScale
         el.width = ITEM_BOX_WIDTH * newScale
@@ -197,8 +207,43 @@ export function LootCollector(): PixiContainer {
     const LootCollectorContainer = Container(
         { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
         ModalBackdrop(),
-        Container({}, lootItemsContainer, roomClearedSign)
+        lootItemsContainer,
+        roomClearedSign,
     )
 
     return LootCollectorContainer
+}
+
+function TreasureChest(x: number, scale: number) {
+    const chestBodySrc = getTexture('chestBody')
+    const chestLidSrc = getTexture('chestLid')
+
+    const ChestBodySprite = Sprite({
+        src: chestBodySrc,
+        anchor: [0.5, 0.5],
+        x: 0,
+        y: 0,
+        name: 'ChestBodySprite',
+    })
+
+    const ChestLidSprite = Sprite({
+        src: chestLidSrc,
+        anchor: [0.5, 0.5],
+        x: 0,
+        y: -100,
+        name: 'ChestLidSprite',
+    })
+
+    const TreasureChestContainer = Container(
+        {
+            x,
+            y: BASE_HEIGHT,
+            scale,
+            name: 'TreasureChestContainer'
+        },
+        ChestBodySprite,
+        ChestLidSprite
+    )
+
+    return TreasureChestContainer
 }

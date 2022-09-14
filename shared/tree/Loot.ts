@@ -6,6 +6,7 @@ export type LootFromGame =
     | 'potion'
     | 'swordShield'
     | 'bread'
+    | 'treasureChest'
 
 export type LootItem = {
     name: LootFromGame
