@@ -1,4 +1,4 @@
-import { Texture } from 'pixi.js'
+import { Rectangle, Texture } from 'pixi.js'
 
 import { ModalBackdrop } from '@sharedElements'
 import {
@@ -164,7 +164,8 @@ export function LootCollector(): PixiContainer {
     }
 
     function shiftCurrentItem(el: TweenablePixiContainer) {
-        el.removeChildAt(0) // removes the current loot item (eg. the now-previous loot item)
+        const itemToRemove = el.getChildAt(0)
+        itemToRemove.destroy()
         currLootItemsX = currLootItemsX - 900
         animateTo(el, {
             x: currLootItemsX,
@@ -217,8 +218,13 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const { x, onClick, idx } = args
     const chestBodySrc = getTexture('chestBody')
     const chestLidSrc = getTexture('chestLid')
+    const progressBarBackingSrc = getTexture('healthBarBacking')
+    const progressBarFillSrc = getTexture('healthBarHealth')
+    setTimeout(() => {
+        updateProgressBarFill()
+    }, 750)
 
-    const ChestBodySprite = Sprite({
+    const ChestBody = Sprite({
         src: chestBodySrc,
         anchor: [0.5, 0.5],
         x: 0,
@@ -226,7 +232,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         name: 'ChestBodySprite',
     })
 
-    const ChestLidSprite = Sprite({
+    const ChestLid = Sprite({
         src: chestLidSrc,
         anchor: [0.5, 0.5],
         x: 0,
@@ -249,26 +255,53 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         name: 'LootItemText',
     })
 
-    const ChestProgressSprite = Sprite({
-        src: 'healthBarBacking',
+    const ChestProgressBarBacking = Sprite({
+        src: progressBarBackingSrc,
         anchor: [0.5, 0.5],
         y: 550,
         scale: 6,
         width: BASE_WIDTH - 400,
     })
 
+    const ChestProgressBarFill = Sprite({
+        src: progressBarFillSrc,
+        anchor: [1, 0.5],
+        y: 550,
+        scale: 6,
+        width: BASE_WIDTH - 400,
+        visible: false
+    })
+
+    const updateProgressBarFill = () => {
+        const textureRef = getTexture('healthBarBacking')
+        const startingWidth = textureRef.width
+        const startingHeight = textureRef.height
+
+        progressBarFillSrc.frame = new Rectangle(
+            0,
+            0,
+            startingWidth * 0.5,
+            startingHeight - 1
+        )
+
+        ChestProgressBarFill.visible = true
+
+        progressBarFillSrc.updateUvs()
+    }
+
     const TreasureChestContainer = Container(
         {
             x,
             y: BASE_HEIGHT,
-            scale: idx === 0 ? 1 : 0,
+            scale: idx === 0 ? 1.25 : 0,
             name: 'TreasureChestContainer',
             onClick,
         },
-        ChestBodySprite,
-        ChestLidSprite,
+        ChestBody,
+        ChestLid,
         ChestProgressText,
-        ChestProgressSprite
+        ChestProgressBarBacking,
+        ChestProgressBarFill
     )
 
     return TreasureChestContainer
