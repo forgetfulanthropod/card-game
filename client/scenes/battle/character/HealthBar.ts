@@ -69,24 +69,28 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                 // y: -50 *  SCALE_UNIVERSAL,
                 x: characterCursor.get('isPc') ? 255 : -80,
             },
-            Sprite({
-                src: getTexture('blockIcon'),
-                width: 90 * SCALE_UNIVERSAL,
-                height: 90 * SCALE_UNIVERSAL,
-                anchor: [0.5, 0.45],
-            }),
-            Text({
-                text: `${block}`,
-                anchor: [0.5, 0.5],
-                style: {
-                    // fontFamily: ['bigFont', 'monospace'],
-                    fontFamily: ['sansFont'],
-                    fontSize: 28,
-                    fill: 'white',
-                    stroke: 'black',
-                    strokeThickness: 5,
-                },
-            })
+            ...(block === 0
+                ? []
+                : [
+                      Sprite({
+                          src: getTexture('blockIcon'),
+                          width: 90 * SCALE_UNIVERSAL,
+                          height: 90 * SCALE_UNIVERSAL,
+                          anchor: [0.5, 0.45],
+                      }),
+                      Text({
+                          text: `${block}`,
+                          anchor: [0.5, 0.5],
+                          style: {
+                              // fontFamily: ['bigFont', 'monospace'],
+                              fontFamily: ['sansFont'],
+                              fontSize: 28,
+                              fill: 'white',
+                              stroke: 'black',
+                              strokeThickness: 5,
+                          },
+                      }),
+                  ])
         )
     )
 }
