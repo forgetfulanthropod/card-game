@@ -53,7 +53,7 @@ export function CardEl({
 
     if (card.type == null) return TweenableContainer({}, TweenableContainer({}))
 
-    console.log({ cardType: card.type, cardFrameTexture })
+    // console.log({ cardType: card.type, cardFrameTexture })
 
     const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
