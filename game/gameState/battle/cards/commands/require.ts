@@ -7,7 +7,7 @@ export const explain: Explainers['require'] = dslArgs => {
     const s = least < 1 || most > 1 ? 's' : ''
     switch (type) {
         case 'discardHand':
-            return `discard ${numStr} card${s} from your hand`
+            return `discard ${numStr} card${s}`
         case 'discardDraw':
             return `discard ${numStr} card${s} from your draw pile`
         case 'removeRoom':
