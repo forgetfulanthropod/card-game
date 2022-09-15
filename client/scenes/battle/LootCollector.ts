@@ -220,9 +220,15 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const chestLidSrc = getTexture('chestLid')
     const progressBarBackingSrc = getTexture('healthBarBacking')
     const progressBarFillSrc = getTexture('healthBarHealth')
+    const { progressPct, upgraded } = getBattleScene().get('treasureChest')
+
     setTimeout(() => {
         updateProgressBarFill()
     }, 750)
+
+    if (upgraded) {
+        // do TreasureChest upgrade animation
+    }
 
     const ChestBody = Sprite({
         src: chestBodySrc,
@@ -257,7 +263,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
 
     const ChestProgressBarBacking = Sprite({
         src: progressBarBackingSrc,
-        anchor: [0.5, 0.5],
+        anchor: [0, 0.5],
         y: 550,
         scale: 6,
         width: BASE_WIDTH - 400,
@@ -269,22 +275,32 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         y: 550,
         scale: 6,
         width: BASE_WIDTH - 400,
-        visible: false
+        visible: false,
     })
+
+    const ChestProgressBarContainer = Container(
+        {
+            pivot: [BASE_WIDTH *  (1 - progressPct) + 250, 0]
+        },
+        ChestProgressBarBacking,
+        ChestProgressBarFill
+    )
 
     const updateProgressBarFill = () => {
         const textureRef = getTexture('healthBarBacking')
-        const startingWidth = textureRef.width
-        const startingHeight = textureRef.height
+        const totalWidth = textureRef.width
+        const totalHeight = textureRef.height
+        const currentAnchor = ChestProgressBarFill.anchor
 
         progressBarFillSrc.frame = new Rectangle(
             0,
             0,
-            startingWidth * 0.5,
-            startingHeight - 1
+            totalWidth * progressPct,
+            totalHeight
         )
 
         ChestProgressBarFill.visible = true
+        ChestProgressBarFill.anchor.set(0, 0.5)
 
         progressBarFillSrc.updateUvs()
     }
@@ -300,8 +316,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         ChestBody,
         ChestLid,
         ChestProgressText,
-        ChestProgressBarBacking,
-        ChestProgressBarFill
+        ChestProgressBarContainer
     )
 
     return TreasureChestContainer

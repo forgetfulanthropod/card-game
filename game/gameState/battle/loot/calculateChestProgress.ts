@@ -22,5 +22,6 @@ export function calculateChestProgress(scene: BattleCursor): TreasureChest {
         level: newLevel as TreasureChestLevel,
         progressPct: newProgressPct,
         state: 'calculated',
+        upgraded: true
     }
 }

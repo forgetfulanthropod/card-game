@@ -22,6 +22,7 @@ export type TreasureChest = {
     level: TreasureChestLevel
     progressPct: number
     state: 'pending' | 'calculated'
+    upgraded: boolean
 }
 
 export type TreasureChestLevel = 1 | 2 | 3 | 4 | 5
