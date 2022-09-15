@@ -15,6 +15,12 @@ type DestroyOptions = IDestroyOptions | boolean | undefined
 type Falsy = false | null | 0 | '' | undefined
 /** NOTE: condition datum is automatically destroyed if it has .destroy.
  *  Wrap condition with noDestroy() if you don't want this.
+ *
+ * @param condition: a datum. if the value of condition is truthy, then it is passed to ifRender.
+ * @param ifRender: a callback returning a DisplayObject. Called when `condition` is truthy. Takes the current value of `condition`.
+ * @param elseRender: a callback returning a DisplayObject. Called when `condition` is falsy. Receives no arguments.
+ * @param displayArgs: arguments to _the container containing the DisplayObject returned by ifRender or elseRender_.
+ * @param destroyOptions: destroy options for _the children_, not the root.
  */
 export function If<T = unknown>(
     condition: RODatum<T> & { destroy?: Callback },
