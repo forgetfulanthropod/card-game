@@ -1,4 +1,4 @@
-import type { BattleScene, CharacterMeta, Pile } from 'shared'
+import { BattleScene, CharacterMeta, NUM_CARD_OPTIONS, Pile } from 'shared'
 import { getAllPcs } from './characterGetters'
 import {
     getCardInstance,
@@ -7,7 +7,6 @@ import {
 } from './cards'
 import { toCursor } from '@/util'
 
-export const NUM_CARD_OPTIONS = 5
 export const NUM_KAIJUS_IN_PARTY = 3
 
 export function getNewCardOptions(scene: BattleScene): Pile {

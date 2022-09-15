@@ -60,7 +60,7 @@ export function BattleScene(): PixiContainer {
                         sceneState =>
                             sceneState === 'collecting loot'
                                 ? LootCollector()
-                                : CardAdder()
+                                : Container({}, LootCollector(), CardAdder())
                     )
                 )
         ),

@@ -1,7 +1,4 @@
-import type { BattleCursor } from 'shared'
-import type { LootEarned, LootFromGame } from 'shared'
-
-import { vals } from 'shared/code'
+import type { BattleCursor, ClaimableLoot } from 'shared'
 
 /**
  *
@@ -12,24 +9,27 @@ import { vals } from 'shared/code'
 export function calculateLoot(
     scene: BattleCursor,
     source: 'room' | 'dungeon'
-): LootEarned {
+): ClaimableLoot {
     const placeholderEquipment = ['Helmet', 'Sword', 'Cool Thing']
     // TODO: Use scene and source to determine actual loot values
-    const gems = parseInt((Math.random() * 100).toFixed(0))
-    const tokenTBD = parseInt((Math.random() * 100).toFixed(0))
+    const getRandomAmount = () => parseInt((Math.random() * 100).toFixed(0))
+    const gems = 0
+    const tokenTBD = 0
+    const fishStick = getRandomAmount()
+    const potion = getRandomAmount()
+    const swordShield = getRandomAmount()
+    const bread = getRandomAmount()
+
     const placeholder =
         placeholderEquipment[
             Math.ceil(Math.random() * (placeholderEquipment.length - 1))
         ]
 
-    const items: LootFromGame = {
-        gems,
-        tokenTBD,
-        placeholder,
-    }
-
-    return {
-        items,
-        claimed: false,
-    }
+    return [
+        { name: 'draftCard', quantity: 1 },
+        { name: 'fishStick', quantity: fishStick },
+        { name: 'potion', quantity: potion },
+        { name: 'bread', quantity: bread },
+        { name: 'swordShield', quantity: swordShield },
+    ]
 }

@@ -212,7 +212,7 @@ function updateGlowFilters(
     })
 }
 
-function animateTo(
+export function animateTo(
     cardEl: TweenablePixiContainer,
     displayVal: InitialDisplayVal
 ) {

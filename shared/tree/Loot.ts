@@ -1,13 +1,18 @@
-export type LootEarned = {
-    items: LootFromGame
-} & {
-    claimed: boolean
+export type LootFromGame =
+    | 'draftCard'
+    | 'gems'
+    | 'tokenTBD'
+    | 'fishStick'
+    | 'potion'
+    | 'swordShield'
+    | 'bread'
+
+export type LootItem = {
+    name: LootFromGame
+    quantity: number
 }
 
-export type LootFromGame = {
-    gems: number
-    tokenTBD: number
-    placeholder: string
-}
+export type ClaimableLoot = Array<LootItem>
+export type ClaimedLoot = Array<LootItem>
 
 type LootBox = LootFromGame & 'potentially more stuff'
