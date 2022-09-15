@@ -17,7 +17,7 @@ import { callApi } from '@/callApi'
 const plushyChoiceDescriptions = [
     'revive a character with 25% of constitution',
     'Heal a character for 50% of constitution',
-    "Bring back a character's exhausted abilities",
+    "bring back a character's exhausted abilities",
 ]
 
 export function RestSiteOverlay(): PixiContainer {
