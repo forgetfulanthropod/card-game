@@ -1,7 +1,7 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
-import { getInitialLoot } from './loot/getInitialLoot'
+import { getInitialLoot, getInitialTreasureChest } from './loot/'
 import { makeCharacters } from './util'
 import { getRulebook } from '@/rulebook'
 
@@ -47,7 +47,8 @@ export function makeBattleState(args: {
         isInRestSite: false,
         lootEarned: getInitialLoot(),
         lootClaimed: [],
-        lootScreenHasOpened: false
+        lootScreenHasOpened: false,
+        treasureChest: getInitialTreasureChest(),
     }
     return bs
 }
