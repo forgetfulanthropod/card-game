@@ -62,6 +62,7 @@ export const cardAssets = {
     remainingEnergy: 'cards/energy flame.webp',
     cardBase: 'cards/Card PNG Breakdown/Card Base.png',
     cardEnergy: 'cards/Card PNG Breakdown/ManaCostGem.png',
+    cardEnergy0: 'cards/Card PNG Breakdown/Mana Cost Numbers/0.png',
     cardEnergy1: 'cards/Card PNG Breakdown/Mana Cost Numbers/1.png',
     cardEnergy2: 'cards/Card PNG Breakdown/Mana Cost Numbers/2.png',
     cardEnergy3: 'cards/Card PNG Breakdown/Mana Cost Numbers/3.png',

@@ -1,11 +1,12 @@
-import { Texture } from 'pixi.js'
 import { vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import { CardUid, NUM_CARD_OPTIONS } from 'shared'
+import type { CardUid } from 'shared'
+import { NUM_CARD_OPTIONS } from 'shared'
 import { ModalBackdrop } from '@sharedElements'
 import { AdjustmentFilter } from 'pixi-filters'
 import { CardEl } from './Card'
+import { animateTo } from './Hand'
 import { getBattleScene } from '@/data'
 import {
     Adjust,
@@ -17,12 +18,12 @@ import {
     If,
     Sprite,
     Text,
-    TweenablePixiContainer,
 } from '@/elementsUtil'
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { callApi } from '@/callApi'
-import { animateTo } from './Hand'
+
+const CARD_WIDTH = 260
 
 export function CardAdder(): PixiContainer {
     // const w = 400
@@ -43,9 +44,11 @@ function NewCardOptions(): PixiContainer {
     CardOptions.forEach(card => {
         const { x, y, rotation, scale } = card
 
+        console.log({ scale, card })
+
         setTimeout(() => {
             animateTo(card, {
-                scale: 0.6,
+                scale: 0.1,
                 rotation,
                 x,
                 y: y - BASE_HEIGHT / 2,
@@ -84,7 +87,6 @@ function Options(
     const cardPile = getBattleScene().get('newCardOptions')
     const lessImportantFilter = new AdjustmentFilter({ saturation: 0.5 })
 
-    const cardWidth = 260
     const cardEls = vals(cardPile).map((card, i) => {
         const pointerover = () => {
             if (selectedCardUid.val == null)
@@ -95,7 +97,7 @@ function Options(
         const cardEl = Adjust(
             CardEl({
                 card,
-                width: cardWidth,
+                width: CARD_WIDTH,
                 events: {
                     pointerup() {
                         cardEls.forEach(el => {
@@ -119,10 +121,10 @@ function Options(
                 },
             }),
             {
-                y: BASE_HEIGHT - cardWidth,
+                y: BASE_HEIGHT - CARD_WIDTH,
                 x:
                     BASE_WIDTH / 2 +
-                    (-(NUM_CARD_OPTIONS - 1) / 2 + i) * cardWidth * 1.2,
+                    (-(NUM_CARD_OPTIONS - 1) / 2 + i) * CARD_WIDTH * 1.2,
             }
         )
 
