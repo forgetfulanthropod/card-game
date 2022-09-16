@@ -23,9 +23,9 @@ import { getBattleScene } from '@/data'
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_WIDTH_IN_HAND = 220
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
-const CARD_WIDTH_FULL = 300
+const CARD_WIDTH_FULL = 320
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
-const CARD_WIDTH = 220
+const CARD_WIDTH = 270
 
 export function Hand(
     pile: Pile,
@@ -254,7 +254,7 @@ function getXYRotationForNthCard(
     const RIGHT_TO_LEFT = 1
     const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
     const MAX_HAND_SIZE = 12
-    const MAX_CARD_ROTATION = Math.PI * 0.1
+    // const MAX_CARD_ROTATION = Math.PI * 0.1
     const Y_MAX_OFFSET = BASE_HEIGHT * 0.22
     const Y_MIN_OFFSET = BASE_HEIGHT * 0.2
 
@@ -269,14 +269,15 @@ function getXYRotationForNthCard(
     const xPlacementPortion =
         RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
 
-    const endCardRotation =
-        ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
+    // const endCardRotation =
+    //     ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
 
     return assertFinite({
         x: handWidth * 0.5 * xPlacementPortion,
         y:
             -Y_MIN_OFFSET -
             (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
-        rotation: xPlacementPortion * endCardRotation,
+        // rotation: xPlacementPortion * endCardRotation,
+        rotation: 0,
     })
 }

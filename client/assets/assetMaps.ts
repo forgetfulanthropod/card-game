@@ -39,24 +39,34 @@ export const entrySceneBackgrounds = {
 }
 
 export const cardArtAssets = {
-    cardBodySlam: 'cards/Body Slam.webp',
-    cardJab: 'cards/Jab.webp',
-    cardSweepTheLeg: 'cards/Sweep The Leg.webp',
-    cardShield: 'cards/Shield.webp',
-    cardStrike: 'cards/Strike.webp',
-    cardShieldOfLight: 'cards/Shield of Light.webp',
+    cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardBodySlam: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardTestudoFormation:
+        'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
+    // cardSweepTheLeg: 'cards/Sweep The Leg.webp',
+    // cardShield: 'cards/Shield.webp',
+    // cardShieldOfLight: 'cards/Shield of Light.webp',
 }
 
 export const cardTypeAssets = {
-    cardTypeAttack: 'cards/parts/Attack.webp',
-    cardTypeDefense: 'cards/parts/Defense.webp',
-    cardTypeEnchantment: 'cards/parts/Enchantment.webp',
-    cardTypeUtility: 'cards/parts/Utility.webp',
+    cardTypeAttack: 'cards/Card PNG Breakdown/Card Type Decorations/Attack.png',
+    cardTypeDefense:
+        'cards/Card PNG Breakdown/Card Type Decorations/Defense.png',
+    cardTypeEnchantment:
+        'cards/Card PNG Breakdown/Card Type Decorations/Enchant.png',
+    cardTypeUtility:
+        'cards/Card PNG Breakdown/Card Type Decorations/Utility.png',
 }
 
 export const cardAssets = {
     remainingEnergy: 'cards/energy flame.webp',
-    cardEnergy: 'cards/parts/energy.webp',
+    cardBase: 'cards/Card PNG Breakdown/Card Base.png',
+    cardEnergy: 'cards/Card PNG Breakdown/ManaCostGem.png',
+    cardEnergy1: 'cards/Card PNG Breakdown/Mana Cost Numbers/1.png',
+    cardEnergy2: 'cards/Card PNG Breakdown/Mana Cost Numbers/2.png',
+    cardEnergy3: 'cards/Card PNG Breakdown/Mana Cost Numbers/3.png',
+    cardEnergy4: 'cards/Card PNG Breakdown/Mana Cost Numbers/4.png',
+    cardEnergy5: 'cards/Card PNG Breakdown/Mana Cost Numbers/5.png',
     cardBackPileSizeOverlay: 'cards/card back pile size overlay.webp',
     cardBack: 'cards/card back.webp',
     ...cardArtAssets,
@@ -143,7 +153,7 @@ export const orbAssets = {
 
 export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
-    roomClearedSign: 'signs/roomCleared.png'
+    roomClearedSign: 'signs/roomCleared.png',
 }
 
 export const characterClassAssets = {

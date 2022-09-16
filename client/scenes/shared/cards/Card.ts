@@ -20,7 +20,6 @@ import {
     Container,
     getRenderer,
     PixiContainer,
-    RoundedRectangleGradientSprite,
     Sprite,
     Text,
     TweenableContainer,
@@ -72,9 +71,16 @@ export function CardEl({
                 scale,
                 y: (cardFrameTexture.height / 2) * scale,
             },
-            getGradientBackground(cardFrameTexture, colorStops),
-            getCardFrameSprite(cardFrameTexture),
-            getEnergyContainer(card, cardFrameTexture),
+            // getGradientBackground(cardFrameTexture, colorStops),
+            Sprite({
+                src: 'cardBase',
+                anchor: 0.5,
+            }),
+            Sprite({
+                src: cardFrameTexture,
+                anchor: 0.5,
+            }),
+            getEnergyContainer(card),
             ...getTexts(card, cardFrameTexture, colorStops),
             PointerAreaExtender(cardFrameTexture.width, cardFrameTexture.height)
         )
@@ -119,60 +125,44 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
     )
 }
 
-function getGradientBackground(
-    cardFrameTexture: PixiTexture,
-    colorStops: ColorStop[]
-) {
-    return RoundedRectangleGradientSprite({
-        radius: cardFrameTexture.width / 15,
-        gradientArgs: {
-            x0: 0,
-            y0: 0,
-            x1: 0,
-            y1: cardFrameTexture.height,
-            colorStops,
-        },
-        spriteArgs: {
-            width: cardFrameTexture.width,
-            height: cardFrameTexture.height,
-            anchor: 0.5,
-        },
-    })
-}
+// function getGradientBackground(
+//     cardFrameTexture: PixiTexture,
+//     colorStops: ColorStop[]
+// ) {
+//     return RoundedRectangleGradientSprite({
+//         radius: cardFrameTexture.width / 15,
+//         gradientArgs: {
+//             x0: 0,
+//             y0: 0,
+//             x1: 0,
+//             y1: cardFrameTexture.height,
+//             colorStops,
+//         },
+//         spriteArgs: {
+//             width: cardFrameTexture.width,
+//             height: cardFrameTexture.height,
+//             anchor: 0.5,
+//         },
+//     })
+// }
 
-function getCardFrameSprite(cardFrameTexture: PixiTexture) {
-    return Sprite({
-        src: cardFrameTexture,
-        anchor: 0.5,
-    })
-}
+// function getCardFrameSprite(cardFrameTexture: PixiTexture) {
+//     return Sprite({
+//         src: cardFrameTexture,
+//         anchor: 0.5,
+//     })
+// }
 
-function getEnergyContainer(
-    card: Card,
-    cardFrameTexture: PixiTexture
-): PixiContainer {
-    const wh = cardFrameTexture.width * 0.15
+function getEnergyContainer(card: Card): PixiContainer {
     return Container(
-        {
-            x: cardFrameTexture.width * 0.4,
-            y: -cardFrameTexture.height * 0.42,
-        },
+        {},
         Sprite({
             src: 'cardEnergy',
-            width: wh,
-            height: wh,
             anchor: 0.5,
         }),
-        Text({
-            text: `${card.energy}`,
-            style: {
-                fill: '#eee',
-                stroke: 'black',
-                strokeThickness: 8,
-                fontSize: wh * 0.9,
-                fontFamily: 'bigFont',
-            },
-            anchor: [0.5, 0.5],
+        Sprite({
+            src: `cardEnergy${card.energy}`,
+            anchor: 0.5,
         })
     )
 }
@@ -204,23 +194,23 @@ function getTexts(
             text: `<div style="font-family: sans-serif; padding: 4px;">${card.explanation}</div>`,
             isHtml: true,
             x: -cardFrameTexture.width / 2 + marginH,
-            y: cardFrameTexture.width * 0.2,
+            y: cardFrameTexture.height * 0.2,
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: 14 / cardFrameScale,
+                fontSize: 40 * cardFrameScale,
                 fontFamily: 'monoFont',
                 fill: 'black',
-                lineHeight: 14 / cardFrameScale,
+                lineHeight: 40 * cardFrameScale,
             },
         }),
         Text({
             text: card.characterClass,
-            y: cardFrameTexture.height * 0.45,
+            y: cardFrameTexture.height * 0.4,
             anchor: 0.5,
             style: {
-                fontSize: 90 * cardFrameScale,
-                fontFamily: 'bigFont',
+                fontSize: 40 * cardFrameScale,
+                fontFamily: 'sansFont',
                 fill: colorStops[0].color,
                 stroke: 'black',
                 strokeThickness: 8,
@@ -231,8 +221,8 @@ function getTexts(
 }
 
 function getMargins(cardFrameTexture: PixiTexture) {
-    const marginH = cardFrameTexture.width / 11
-    const marginV = marginH
+    const marginH = cardFrameTexture.width * 0.2
+    const marginV = cardFrameTexture.width * 0.12
     return { marginH, marginV }
 }
 
@@ -287,6 +277,7 @@ function getEvents(
                     card
                 )
         }
+        //TODO: else flash not enough energy message
     }
     const pointerup: InteractionEventHandler = function ({
         currentTarget: cardEl,
