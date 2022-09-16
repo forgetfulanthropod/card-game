@@ -1,4 +1,4 @@
-name: deploy on linode
+name: deploy on digitalocean
 on: [push, delete, workflow_dispatch]
 jobs:
     build:
