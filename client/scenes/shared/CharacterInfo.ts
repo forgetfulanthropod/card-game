@@ -31,10 +31,10 @@ import {
 } from '@/data'
 
 const stats = [
-    { key: 'strength', displayName: 'strength', color: 0xd44c47 },
-    { key: 'wisdom', displayName: 'wisdom', color: 0x9e6ec2 },
-    { key: 'defense', displayName: 'defense', color: 0x337ea9 },
-    { key: 'constitution', displayName: 'const.', color: 0x1cc8af },
+    { key: 'strength', displayName: 'Strength', color: 0xd44c47 },
+    { key: 'wisdom', displayName: 'Magic', color: 0x9e6ec2 },
+    { key: 'defense', displayName: 'Defense', color: 0x337ea9 },
+    { key: 'constitution', displayName: 'Health', color: 0x1cc8af },
 ] as const
 
 const _classColorMap: Record<CharacterClass, [number, number]> = {
