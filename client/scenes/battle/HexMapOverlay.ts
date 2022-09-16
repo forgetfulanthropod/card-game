@@ -4,7 +4,7 @@ import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { MainCharacterAnimation } from '../shared'
-import type { PixiContainer } from '@/elementsUtil'
+import type { PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     glowFilter,
     Adjust,
@@ -104,8 +104,8 @@ type MapNode = {
 }
 
 function TileForNode(node: MapNode, depth: number, yOffset: number) {
-    const texture = getTexture(`mapTile${Math.floor(Math.random() * 7) + 1}`)
-    const displayWidth = (BASE_WIDTH / 6) * 2
+    const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}`)
+    const displayWidth = (BASE_WIDTH / 7) * 2
 
     if (node == null) return Container({})
 
@@ -138,14 +138,17 @@ function TileContents(node: MapNode | null): PixiContainer {
 
     // TODO: node should be null after it's passed
     if (node.enemies[0]?.id === 'REST_SITE' && passed < node.depth)
-        return RestSiteContents()
+        return RestSiteContents(node)
 
     return TileCharacters(node)
 }
 
-function RestSiteContents() {
+function RestSiteContents(node: MapNode): PixiSprite {
     const src = getTexture('mapRestSite')
-    return Sprite({
+
+    const numRoomsPassed = getBattleScene().get('numRoomsPassed')
+
+    const root = Sprite({
         scale: 255 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
@@ -153,8 +156,17 @@ function RestSiteContents() {
             pointerdown() {
                 void callApi('confirmNextRoom', {})
             },
+            pointerover() {
+                if (numRoomsPassed + 1 === node.depth)
+                    root.filters = [glowFilter]
+            },
+            pointerout() {
+                root.filters = []
+            },
         },
     })
+
+    return root
 }
 
 function TileCharacters(node: MapNode): PixiContainer {

@@ -15,8 +15,8 @@ import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
 
 const plushyChoiceDescriptions = [
-    'revive a character with 25% of constitution',
-    'Heal a character for 50% of constitution',
+    'revive a character with 25% Health',
+    'heal a character for 50% of its Health',
     "bring back a character's exhausted abilities",
 ]
 
@@ -84,10 +84,10 @@ export function RestSiteOverlay(): PixiContainer {
         spine,
         ...boxes,
         If(hoveredBoxIndex, index => {
-            console.log({
-                x: boundingBoxes[index][0],
-                y: boundingBoxes[index][1] + boundingBoxes[index][3],
-            })
+            // console.log({
+            //     x: boundingBoxes[index][0],
+            //     y: boundingBoxes[index][1] + boundingBoxes[index][3],
+            // })
             return InfoBox(
                 // RoundedBordered(
                 //     Sprite({
@@ -111,10 +111,14 @@ export function RestSiteOverlay(): PixiContainer {
                             wordWrapWidth: BASE_WIDTH * 0.2,
                             wordWrap: true,
                         },
+                        anchor: [0.5, 0],
                     })
                 ),
                 {
-                    x: boundingBoxes[index][0] * BASE_WIDTH,
+                    x:
+                        (boundingBoxes[index][0] +
+                            boundingBoxes[index][2] / 2) *
+                        BASE_WIDTH,
                     y:
                         (boundingBoxes[index][1] + boundingBoxes[index][3]) *
                         BASE_HEIGHT,
