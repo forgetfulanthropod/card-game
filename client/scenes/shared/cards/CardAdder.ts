@@ -42,9 +42,7 @@ function NewCardOptions(): PixiContainer {
     const selectedCardUid = datum<CardUid | null>(null)
     const CardOptions = Options(selectedCardUid)
     CardOptions.forEach(card => {
-        const { x, y, rotation, scale } = card
-
-        console.log({ scale, card })
+        const { x, y, rotation } = card
 
         setTimeout(() => {
             animateTo(card, {
