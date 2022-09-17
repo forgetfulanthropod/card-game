@@ -48,7 +48,7 @@ function NewCardOptions(): PixiContainer {
 
         setTimeout(() => {
             animateTo(card, {
-                scale: 0.1,
+                scale: CARD_WIDTH / getTexture('cardBase').width,
                 rotation,
                 x,
                 y: y - BASE_HEIGHT / 2,
