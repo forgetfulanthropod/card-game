@@ -23,7 +23,7 @@ import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { callApi } from '@/callApi'
 
-const CARD_WIDTH = 260
+const CARD_WIDTH = 290
 
 export function CardAdder(): PixiContainer {
     // const w = 400

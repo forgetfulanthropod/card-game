@@ -186,7 +186,7 @@ function getTexts(
                 fontFamily: 'bigFont',
                 fill: 'white',
                 stroke: 'black',
-                strokeThickness: 6,
+                strokeThickness: 6 * cardFrameScale,
                 lineHeight: 0,
             },
         }),
@@ -194,7 +194,7 @@ function getTexts(
             text: `<div style="font-family: sans-serif; padding: 4px;">${card.explanation}</div>`,
             isHtml: true,
             x: -cardFrameTexture.width / 2 + marginH,
-            y: cardFrameTexture.height * 0.2,
+            y: cardFrameTexture.height * 0.15,
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,

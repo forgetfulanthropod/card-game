@@ -71,12 +71,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'knight',
     },
     bodySlam: {
-        name: 'Body Slam',
+        name: 'Shield Bash',
         energy: 1,
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(block), text("(equal to Kauju\'s block)"))', // , dwindle()
+        actions: 'chain(deal(block), "<br/>(equal to block)")', // , dwindle()
         type: 'attack',
         characterClass: 'knight',
     },
@@ -288,7 +288,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'knight',
     },
     testudoFormation: {
-        name: 'testudo Formation',
+        name: 'Testudo Formation',
         energy: 1,
         id: 'testudoFormation',
         targetNum: 1,
