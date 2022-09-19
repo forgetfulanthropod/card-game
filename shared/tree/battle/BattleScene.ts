@@ -6,7 +6,7 @@ import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { Characters } from './Characters'
 import type { CommandQueue } from './CommandQueue'
-import type { ClaimableLoot, ClaimedLoot } from '../Loot'
+import type { ClaimableLoot, ClaimedLoot, TreasureChest } from '../Loot'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -33,6 +33,7 @@ export interface BattleScene extends SceneHas {
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
     lootScreenHasOpened: boolean
+    treasureChest: TreasureChest
 }
 
 /** May later have e.g. DOT effects */

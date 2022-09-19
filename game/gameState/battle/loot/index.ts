@@ -1,2 +1,4 @@
 export * from './calculateLoot'
 export * from './getInitialLoot'
+export * from './getInitialTreasureChest'
+export * from './calculateChestProgress'

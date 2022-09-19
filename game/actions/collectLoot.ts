@@ -17,6 +17,7 @@ export const collectLoot: GameActions['collectLoot'] = args => {
     const newRemainingLoot = collectCurrentLootItem(scene)
     if (isEmpty(newRemainingLoot)) {
         nextRoom(args)
+        scene.set('lootScreenHasOpened', false)
     }
 
     return
