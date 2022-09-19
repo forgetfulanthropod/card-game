@@ -43,7 +43,7 @@ export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
     vals(npcs).forEach((npc, i) => {
         const [x, y] =
             keys(npcs).length === 1
-                ? positions[1]
+                ? positions[0]
                 : keys(npcs).length === 2
                 ? positionBetween(positions[i], positions[i + 1])
                 : positions[i]
