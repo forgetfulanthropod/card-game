@@ -31,6 +31,6 @@ export function calculateLoot(
         { name: 'potion', quantity: potion },
         { name: 'bread', quantity: bread },
         { name: 'swordShield', quantity: swordShield },
-        { name: 'treasureChest', quantity: swordShield },
+        { name: 'treasureChest', quantity: 1 },
     ]
 }
