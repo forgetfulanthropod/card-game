@@ -10,7 +10,7 @@ export const rootAssets = {
     chestLid: 'misc-png/CHEST_LID.webp',
     door: 'misc-png/temp-door.webp',
     endTurnButton: 'core-ui/end turn.webp',
-    confirmButton: 'core-ui/confirm_.webp',
+    confirmButton: 'core-ui/confirm.webp',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
 }
@@ -40,7 +40,11 @@ export const entrySceneBackgrounds = {
 
 export const cardArtAssets = {
     cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
-    cardBodySlam: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardDivineIntervention:
+        'public/assets/cards/Card PNG Breakdown/Card Art/divine intervention.png',
+    cardGuidingBolt:
+        'public/assets/cards/Card PNG Breakdown/Card Art/Guiding Bolt.png',
+    cardSpellbook: 'cards/Card PNG Breakdown/Card Art/Spellbook.png',
     cardTestudoFormation:
         'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
     // cardSweepTheLeg: 'cards/Sweep The Leg.webp',
@@ -60,7 +64,7 @@ export const cardTypeAssets = {
 
 export const cardAssets = {
     remainingEnergy: 'cards/energy flame.webp',
-    cardBase: 'cards/Card PNG Breakdown/Card Base.png',
+    cardBase: 'cards/Card PNG Breakdown/Card Base.webp',
     cardEnergy: 'cards/Card PNG Breakdown/ManaCostGem.png',
     cardEnergy0: 'cards/Card PNG Breakdown/Mana Cost Numbers/0.png',
     cardEnergy1: 'cards/Card PNG Breakdown/Mana Cost Numbers/1.png',

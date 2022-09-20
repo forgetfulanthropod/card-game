@@ -17,6 +17,7 @@ import type {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import {
+    getTexture,
     Container,
     getRenderer,
     PixiContainer,
@@ -57,6 +58,21 @@ export function CardEl({
     const colorStops = getColorStopsFromCardType(card.type)
     const scale = width / cardFrameTexture.width
 
+    let cardArtTexture
+    let cardArtTextureOrBlank
+    try {
+        const cardId = ['blockKnight', 'blockWizard', 'blockCleric'].includes(
+            card.id
+        )
+            ? 'block'
+            : card.id
+        cardArtTextureOrBlank = cardArtTexture = getTexture(
+            `card${upperFirst(cardId)}`
+        )
+    } catch {
+        cardArtTextureOrBlank = Texture.WHITE
+    }
+
     return TweenableContainer(
         {
             name: card.uid,
@@ -72,6 +88,13 @@ export function CardEl({
                 y: (cardFrameTexture.height / 2) * scale,
             },
             // getGradientBackground(cardFrameTexture, colorStops),
+            Sprite({
+                src: cardArtTextureOrBlank,
+                tint: cardArtTexture ? undefined : 0,
+                width: getTexture('cardBlock').width,
+                height: getTexture('cardBlock').height,
+                anchor: [0.5, 0.85],
+            }),
             Sprite({
                 src: 'cardBase',
                 anchor: 0.5,
@@ -214,7 +237,7 @@ function getTexts(
                 fill: colorStops[0].color,
                 stroke: 'black',
                 strokeThickness: 8,
-                letterSpacing: 6,
+                letterSpacing: 3 * cardFrameScale,
             },
         }),
     ]

@@ -140,7 +140,7 @@ function getFocus(
         animateTo(cardEl, {
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.5,
+            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.6,
             scale:
                 (CARD_WIDTH_FULL / CARD_WIDTH_IN_HAND) *
                 initialDisplayVal.scale,
@@ -262,7 +262,7 @@ function getXYRotationForNthCard(
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 
     const handWidth = Math.min(
-        (numCardsInHand - 1) * CARD_WIDTH,
+        (numCardsInHand - 1) * CARD_WIDTH * 0.9,
         MAX_HAND_WIDTH
     )
 
