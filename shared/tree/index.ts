@@ -9,5 +9,5 @@ export * from './Dungeon'
 export * from './entryTypes'
 export * from './Gamestate'
 export * from './Rulebook'
-export * from './Loot'
+export * from './battle/Loot'
 // @endindex

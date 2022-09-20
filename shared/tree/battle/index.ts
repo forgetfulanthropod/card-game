@@ -8,4 +8,6 @@ export * from './CommandQueue'
 export * from './Effect'
 export * from './Orb'
 export * from './Stance'
+export * from './RunScore'
+export * from './Loot'
 // @endindex
