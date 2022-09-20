@@ -231,6 +231,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'basicAttackCleric',
         characterClass: 'cleric',
     },
+    basicAttackRogue: {
+        ...basicAttackBase,
+        id: 'basicAttackRogue',
+        characterClass: 'rogue',
+    },
     blockKnight: {
         ...blockBase,
         id: 'blockKnight',
@@ -240,6 +245,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         ...blockBase,
         id: 'blockCleric',
         characterClass: 'cleric',
+    },
+    blockRogue: {
+        ...blockBase,
+        id: 'blockRogue',
+        characterClass: 'rogue',
     },
     blockWizard: {
         ...blockBase,
@@ -266,6 +276,26 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             'strengthy = 0.75 * strength; defensey = defense * .5; chain(deal(strengthy),addBlockToSelf(defensey))',
         type: 'attack',
         characterClass: 'knight',
+    },
+    berserk: {
+        name: 'Berserk',
+        energy: 1,
+        id: 'berserk',
+        targetNum: 1,
+        targetType: 'self',
+        actions: 'effect("berserk",3)',
+        type: 'enchantment',
+        characterClass: 'rogue',
+    },
+    patientAmbush: {
+        name: 'Patient Ambush',
+        energy: 1,
+        id: 'patientAmbush',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'strengthy = strength * 2; queue(deal(strengthy), 1)',
+        type: 'attack',
+        characterClass: 'rogue',
     },
     dutifulStab: {
         name: 'Dutiful Stab',

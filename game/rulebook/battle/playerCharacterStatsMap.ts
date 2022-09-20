@@ -79,7 +79,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         id: 'gnomeHooligan',
         displayName: 'Gnome Hooligan',
         isPc: true,
-        class: 'knight',
+        class: 'rogue',
 
         constitution: 40,
         strength: 12,

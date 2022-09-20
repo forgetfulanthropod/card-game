@@ -22,9 +22,9 @@ const staticEffectFuncs: Record<
     trance(stats, counter) {
         stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
     },
-    // strengthify(stats, counter) {
-    //     stats.strength += counter
-    // },
+    berserk(stats) {
+        stats.strength += Math.ceil(stats.strength * 0.5)
+    },
     debilitated(stats) {
         stats.strength *= 0.5
     },

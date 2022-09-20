@@ -16,6 +16,7 @@ addCounter(targetUid, counterId)
 
 /** Effects are applied in the order of this array */
 export const effectIds = [
+    'berserk',
     'bleed',
     'debilitated',
     'fatigue',

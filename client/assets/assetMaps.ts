@@ -119,6 +119,7 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
+    effectBerserk: 'effects/berserk_temp.png',
     effectBleed: 'effects/bleed.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigue: 'effects/fatigue.webp',
