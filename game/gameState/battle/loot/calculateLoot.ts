@@ -26,11 +26,11 @@ export function calculateLoot(
         ]
 
     return [
-        { name: 'draftCard', quantity: 1 },
-        { name: 'fishStick', quantity: fishStick },
-        { name: 'potion', quantity: potion },
-        { name: 'bread', quantity: bread },
-        { name: 'swordShield', quantity: swordShield },
-        { name: 'treasureChest', quantity: 1 },
+        { name: 'draftCard', count: 1 },
+        { name: 'fishStick', count: fishStick },
+        { name: 'potion', count: potion },
+        { name: 'bread', count: bread },
+        { name: 'swordShield', count: swordShield },
+        { name: 'treasureChest', count: 1 },
     ]
 }

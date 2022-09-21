@@ -1,7 +1,7 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
-import { getInitialLoot, getInitialTreasureChest, getInitialRunScore } from './loot/'
+import { getInitialLoot, getInitialTreasureChest, getInitialRunScore } from '.'
 import { makeCharacters } from './util'
 import { getRulebook } from '@/rulebook'
 

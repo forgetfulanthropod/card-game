@@ -1,19 +1,19 @@
 export type RunScore = {
     totalScore: number
     currModifier: number
-    attributes: RunScoreAttribute[]
+    attributes: Record<RunScoreAttributeName, number>
 }
 
 export type RunScoreAttribute = {
     keyword: RunScoreAttributeName
-    quantity: number
+    count: number
 }
 
 export type RunScoreAttributeName = 'grind' | 'grunts' | 'boss'
 
 type RunScoreAttributeMeta = {
     description: string
-    pointValue: number // eg. the number of points that 1 single "quantity" in RunScoreAttribute is worth
+    pointValue: number // eg. the number of points that 1 single "count" in RunScoreAttribute is worth
 }
 export const RUN_SCORE_ATTR_META: Record<
     RunScoreAttributeName,
@@ -31,4 +31,18 @@ export const RUN_SCORE_ATTR_META: Record<
         description: 'exit boss battle with full party health',
         pointValue: 30,
     },
+}
+
+export type RunScoreEvent =
+    | 'ENEMY_KILLED'
+    | 'EXIT_ROOM_FULL_HEALTH'
+    | 'EXIT_BOSS_FULL_HEALTH'
+
+export const RunScoreEventMapping: Record<
+    RunScoreEvent,
+    RunScoreAttributeName
+> = {
+    ENEMY_KILLED: 'grind',
+    EXIT_ROOM_FULL_HEALTH: 'grunts',
+    EXIT_BOSS_FULL_HEALTH: 'boss',
 }
