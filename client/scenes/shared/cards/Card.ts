@@ -267,16 +267,15 @@ function getEvents(
     card: Card,
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
-    const pointerover: InteractionEventHandler = _ => {
+    const pointerover: InteractionEventHandler = () => {
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
     }
-    const pointerout: InteractionEventHandler = function ({
-        currentTarget: cardEl,
-    }) {
+    const pointerout: InteractionEventHandler = () => {
         setTimeout(() => {
-            if (hoveredCardUid.val === cardEl.parent.name) {
+            if (hoveredCardUid.val === card.uid) {
                 hoveredCardUid.set(null)
+                hoveredCharacterUid.set(null)
             }
         }, 0)
     }

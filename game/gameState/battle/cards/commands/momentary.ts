@@ -3,7 +3,7 @@ import produce from 'immer'
 import type { Executors, Explainers } from './util'
 
 export const explain: Explainers['momentary'] = _dslArgs => {
-    return `removed until end of room`
+    return `<b>Momentary</b>`
 }
 
 export const execute: Executors['momentary'] = ({ scene, cardUid }) => {

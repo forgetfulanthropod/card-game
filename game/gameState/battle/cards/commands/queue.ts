@@ -5,7 +5,7 @@ import { enqueueAction } from '@/gameState'
 export const explain: Explainers['queue'] = dslArgs => {
     const [turnsAway, nextAction] = evalAllAsHtml(dslArgs)
 
-    return `in ${turnsAway} turn${s(turnsAway)}: ${nextAction}`
+    return `in ${turnsAway} turn${s(turnsAway)}:<br/>${nextAction}`
 }
 
 export const execute: Executors['queue'] = ({
