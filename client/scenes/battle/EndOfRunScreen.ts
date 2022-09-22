@@ -44,7 +44,22 @@ export function EndOfRunScreen(): PixiContainer {
             .get('grind')}`,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2,
+        y: BASE_HEIGHT / 2 - 100,
+        style: {
+            fontSize: 35,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+        },
+        name: 'EnemiesKilled',
+    })
+
+    const Placeholder = Text({
+        text: `Placeholder: 0`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 - 50,
         style: {
             fontSize: 35,
             fill: 'white',
@@ -59,7 +74,7 @@ export function EndOfRunScreen(): PixiContainer {
         text: `Total Score: ${scene.select('runScore').get('totalScore')}`,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 + 400,
+        y: BASE_HEIGHT / 2 + 25,
         style: {
             fontSize: 50,
             fill: 'white',
@@ -70,17 +85,33 @@ export function EndOfRunScreen(): PixiContainer {
         name: 'TotalScore',
     })
 
-    function handleButtonPress() {
-        // restart game (eg. retry)
-    }
+    const Retry = Text({
+        text: `Retry?`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 + 175,
+        style: {
+            fontSize: 40,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'bold',
+        },
+        name: 'Retry',
+    })
 
-    function applyOnClick(
-        el: PixiContainer | TweenablePixiContainer,
-        onClick: () => void
-    ) {
-        el.interactive = true
-        el.cursor = `url('assets/root/hand.webp'), pointer`
-        el.on('pointerdown', onClick)
+    const retryButton = Sprite({
+        src: getTexture('goButton'),
+        anchor: 0,
+        y: BASE_HEIGHT / 2 + 200,
+        x: BASE_WIDTH / 2 - 200,
+        scale: (1920 * 0.18) / getTexture('goButton').width,
+        onClick: handleButtonPress
+    })
+
+    function handleButtonPress() {
+        localStorage.removeItem('username')
+        window.location.reload()
     }
 
     const EndOfRunContainer = Container(
@@ -88,7 +119,10 @@ export function EndOfRunScreen(): PixiContainer {
         ModalBackdrop(),
         VictorySign,
         EnemiesKilled,
-        TotalScore
+        Placeholder,
+        TotalScore,
+        Retry,
+        retryButton
     )
 
     return EndOfRunContainer
