@@ -159,6 +159,7 @@ export const orbAssets = {
 export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
     roomClearedSign: 'signs/roomCleared.png',
+    victory: 'signs/victory.png'
 }
 
 export const characterClassAssets = {

@@ -15,6 +15,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
+import { EndOfRunScreen } from './EndOfRunScreen'
 
 export function BattleScene(): PixiContainer {
     const hoveredCardUid = datum<CharacterUid | null>(null)
@@ -50,9 +51,11 @@ export function BattleScene(): PixiContainer {
                         compose(
                             ([waitForDeathAnimations, sceneState]) =>
                                 !keys(waitForDeathAnimations).length &&
-                                ['choosing cards', 'collecting loot'].includes(
-                                    sceneState
-                                ) &&
+                                [
+                                    'choosing cards',
+                                    'collecting loot',
+                                    'won',
+                                ].includes(sceneState) &&
                                 sceneState,
                             waitForDeathAnimationsDatum,
                             toDatum(scene.select('state'), state => state)
@@ -60,7 +63,9 @@ export function BattleScene(): PixiContainer {
                         sceneState =>
                             sceneState === 'collecting loot'
                                 ? LootCollector()
-                                : Container({}, LootCollector(), CardAdder())
+                                : sceneState === 'choosing cards'
+                                ? Container({}, LootCollector(), CardAdder())
+                                : EndOfRunScreen()
                     )
                 )
         ),

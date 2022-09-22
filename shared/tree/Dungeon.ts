@@ -14,3 +14,5 @@ export type DungeonRoom = ReadonlyArray<{
     id: EnemyCharacterId | 'REST_SITE'
     level: string | number
 }>
+
+export const NUM_ROOMS_BEFORE_GAME_OVER = 5

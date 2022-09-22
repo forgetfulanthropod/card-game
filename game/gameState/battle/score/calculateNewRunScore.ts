@@ -6,8 +6,7 @@ import {
 } from 'shared'
 import { keys } from 'shared/code'
 
-// Only calculate new run score at time of player death or end of room
-export function calculateNewRunScore(scene: BattleCursor): RunScore {
+export function calculateNewRunScore(scene: BattleCursor): number {
     const { attributes, currModifier } = scene.get('runScore')
     let newTotalScore = 0
 
@@ -16,9 +15,5 @@ export function calculateNewRunScore(scene: BattleCursor): RunScore {
         newTotalScore += attributes[attributeName] * pointValue
     })
 
-    return {
-        totalScore: newTotalScore * currModifier,
-        currModifier: currModifier,
-        attributes: attributes,
-    }
+    return newTotalScore * currModifier
 }
