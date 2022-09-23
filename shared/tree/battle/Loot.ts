@@ -10,7 +10,7 @@ export type LootFromGame =
 
 export type LootItem = {
     name: LootFromGame
-    quantity: number
+    count: number
 }
 
 export type ClaimableLoot = Array<LootItem>

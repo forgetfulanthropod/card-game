@@ -12,6 +12,7 @@ import type {
     Orb,
     OwnedCharacterStats,
     Rulebook,
+    RunScoreEvent,
 } from './tree'
 
 interface BareServerActionArgs {
@@ -30,6 +31,7 @@ interface BareGameActionArgs {
     exitDungeon: Empty
     finishCard: { cardUids: CardUid[] }
     nextRoom: Empty
+    notifyRunScore: { event: RunScoreEvent; count: number }
     confirmNextRoom: Empty
     choosePlushy: { index: number }
     placeSelectedCharacters: {

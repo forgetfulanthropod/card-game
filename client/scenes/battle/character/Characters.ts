@@ -10,6 +10,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { For } from '@/elementsUtil'
 import { localTree } from '@/data'
 import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
+import { callApi } from '@/callApi'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
@@ -109,6 +110,11 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             waiting[i] = true
         })
 
+        const removedEnemyCharacters = Object.values(allCharsC.get()).filter(
+            char =>
+                char.isPc === false && removedCharacterUids.includes(char.uid)
+        )
+
         waitForDeathAnimationsDatum.set(waiting)
 
         // console.log('animating out ', removedCharacterUids)
@@ -128,6 +134,10 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             // console.log('updating to ', waiting)
 
             waitForDeathAnimationsDatum.set(waiting)
+            callApi('notifyRunScore', {
+                event: 'ENEMY_KILLED',
+                count: removedEnemyCharacters.length,
+            })
         })
     }
 }
