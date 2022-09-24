@@ -14,6 +14,8 @@ import type {
     RequiredActionName,
     BasicTargetType,
     CharacterStats,
+    StanceId,
+    CharacterMeta,
 } from 'shared'
 import { vals } from 'shared/code'
 
@@ -50,6 +52,7 @@ interface ArgsOf {
     orb: [type: OrbType, count: number]
     text: [str: string]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
+    ifStance: [stanceId: StanceId, conditionalMove: any]
     smite: [damage: number, block: number]
     queue: [numTurns: number, move: any]
 
@@ -61,6 +64,8 @@ interface ArgsOf {
     psychicWarfare: [damage: number, sameTargetAddend: number]
     doubleEnchantmentOrToken: []
     require: [type: RequiredActionName, least: number, most: number]
+
+    mimicAttack: []
 }
 
 export type Locals = CalculatedCharacterStats & {
@@ -73,8 +78,17 @@ export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }
 export type Executors = {
     [K in keyof ArgsOf]: (args: ExecuteArgs<Anguify<ArgsOf[K]>>) => void
 }
+
+export type ExplainerContext = {
+    command: Command
+    characterMeta: CharacterMeta
+}
+
 export type Explainers = {
-    [K in keyof ArgsOf]: (dslArgs: Anguify<ArgsOf[K]>) => string
+    [K in keyof ArgsOf]: (
+        dslArgs: Anguify<ArgsOf[K]>,
+        context: ExplainerContext
+    ) => string
 }
 
 export function evalAll<T extends any[]>(angus: Anguify<T>): T {
@@ -82,7 +96,7 @@ export function evalAll<T extends any[]>(angus: Anguify<T>): T {
     return angus.map(angu => angu.eval())
 }
 
-export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): T {
+export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
     const statsToColorsMap: Partial<Record<keyof CharacterStats, string>> = {
         strength: '#d44c47',
         wisdom: '#9e6ec2',
@@ -90,7 +104,6 @@ export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): T {
         constitution: '#1cc8af',
     }
 
-    // @ts-expect-error
     return angus.map(angu => {
         let color = ''
         Object.keys(statsToColorsMap).map(stat => {

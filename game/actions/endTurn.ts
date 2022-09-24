@@ -25,4 +25,6 @@ export const endTurn: GameActions['endTurn'] = args => {
         method: 'doNpcTurn',
         delay: TIME_AFTER_PLAYER_MOVE,
     })
+
+    scene.set('damagesDealtThisTurn', [])
 }

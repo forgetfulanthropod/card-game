@@ -11,6 +11,7 @@ import { vals } from 'shared/code'
 import { SCursor } from 'sbaobab'
 import { range } from 'lodash'
 import { getRulebook } from '@/rulebook'
+import type { EntryCursor } from '@/util'
 import { weightedRandom } from '@/util'
 
 export function getAllPcs(scene: BattleCursor | BattleScene): CharacterMeta[] {
@@ -42,6 +43,18 @@ export function getLivingPcs(scene: BattleScene): CharacterMeta[] {
 
 export function isAlive(scene: BattleScene, uid: CharacterUid): boolean {
     return scene.allCharacters[uid]?.health > 0
+}
+
+export function getCharacterMeta(
+    scene: BattleCursor | EntryCursor,
+    uid: CharacterUid
+): CharacterMeta {
+    return (
+        (scene as BattleCursor).get('allCharacters', uid) ||
+        (scene as EntryCursor)
+            .get('selectedCharacters')
+            ?.find(c => c?.uid === uid)
+    )
 }
 
 /*

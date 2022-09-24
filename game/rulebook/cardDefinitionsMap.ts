@@ -293,7 +293,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'patientAmbush',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'strengthy = strength * 2; queue(2, deal(strengthy))',
+        actions:
+            'queue(2, strengthy = strength * 2; ifStance("avoidant", deal(strengthy)))',
         type: 'attack',
         characterClass: 'rogue',
     },

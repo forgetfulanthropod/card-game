@@ -1,12 +1,12 @@
 import type { RequiredAction } from '@actions'
 import type { SceneHas } from '@misc'
 import type { DungeonRoom } from '../Dungeon'
+import type { ClaimableLoot, ClaimedLoot, TreasureChest } from '../Loot'
 import type { CharacterUid } from './Character'
 import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { Characters } from './Characters'
 import type { CommandQueue } from './CommandQueue'
-import type { ClaimableLoot, ClaimedLoot, TreasureChest } from '../Loot'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -26,6 +26,7 @@ export interface BattleScene extends SceneHas {
     rooms: DungeonRoom[]
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    damagesDealtThisTurn: { amount: number; targetUid: CharacterUid }[]
     requireAction: RequiredAction | null
     queue: CommandQueue
     isInMap: boolean

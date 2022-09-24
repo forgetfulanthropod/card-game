@@ -61,6 +61,8 @@ export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
 }
 
 export function getEnemyPositions(n: number) {
+    if (n === 1) return makePositions({ n: 2 }).slice(1)
+
     return makePositions({
         n,
     })
@@ -113,7 +115,7 @@ function newPCMeta(args: {
             ? 'aggressive'
             : args.x > X_NEUTRAL_THRESH
             ? 'neutral'
-            : 'defensive'
+            : 'avoidant'
     const stats = statsMap[args.name]
     return {
         ...stats,

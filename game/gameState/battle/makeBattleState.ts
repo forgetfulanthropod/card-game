@@ -1,7 +1,7 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
-import { getInitialLoot, getInitialTreasureChest } from './loot/'
+import { getInitialLoot, getInitialTreasureChest } from './loot'
 import { makeCharacters } from './util'
 import { getRulebook } from '@/rulebook'
 
@@ -41,6 +41,7 @@ export function makeBattleState(args: {
         rooms: getRulebook().dungeonRooms['Skelepit Dungeon'],
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
+        damagesDealtThisTurn: [],
         queue: [],
         requireAction: null,
         isInMap: true,

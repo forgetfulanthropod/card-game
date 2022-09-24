@@ -1,7 +1,7 @@
 import type { StanceId, StanceStats } from 'shared'
 export const stanceTypeMetaMap: Record<StanceId, StanceStats> = {
-    defensive: {
-        id: 'defensive',
+    avoidant: {
+        id: 'avoidant',
         attackMultiplier: 0.75,
         defenseMultiplier: 0.75,
         targetLikelihood: 0,

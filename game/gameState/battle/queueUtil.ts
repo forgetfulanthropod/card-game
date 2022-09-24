@@ -57,6 +57,7 @@ export function popAndRunQueue(
             const turnsAway = qc.turnsAway - 1
             if (turnsAway <= 0) {
                 const { command, targetUids } = qc
+                logger.info(`interpreting "${JSON.stringify(command)}"`)
                 interpretCommand({ command, scene, targetUids })
                 if (turnsAway < 0) nextQ.push({ ...qc, turnsAway })
             } else {

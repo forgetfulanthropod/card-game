@@ -41,8 +41,8 @@ const orbActivators: Record<
     lightning(character: CharacterMeta, scene: BattleCursor) {
         const damage = Math.ceil(character.wisdom * 0.5)
         const targetUid = getRandomLivingNpcUid(scene)
-        const multiplier = calcPostEffectStats(character).damageTakeMultiplier
-        applyDamage({ damage, targetUid, scene, multiplier })
+
+        applyDamage({ damage, targetUid, attackerUid: character.uid, scene })
 
         emitMove({
             moveName: 'Lightning!',

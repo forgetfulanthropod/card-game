@@ -1,7 +1,7 @@
 import type { StanceId, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
-import { getNpcMoves } from '@/gameState'
+import { getNpcMoves, updateHand } from '@/gameState'
 
 export const toggleStance: GameActions['toggleStance'] = args => {
     const { characterUid } = args
@@ -20,7 +20,7 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     const stanceCursor = characterCursor.select('stance')
 
-    const stances: StanceId[] = ['defensive', 'neutral', 'aggressive']
+    const stances: StanceId[] = ['avoidant', 'neutral', 'aggressive']
     const stance = stanceCursor.get()
     const stanceIndex = stances.findIndex(v => stance === v)
 
@@ -30,5 +30,5 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     scene.select('nextNpcCommands').set(getNpcMoves(scene))
 
-    // characterCursor.apply(ch => getModified(ch))
+    updateHand(scene)
 }

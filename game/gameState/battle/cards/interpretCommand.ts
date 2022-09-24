@@ -13,11 +13,13 @@ import type { Locals } from './commands'
 import { executors, explainers } from './commands'
 import { extractBlocks, extractDamages } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
+import type { ExplainerContext } from './commands/util'
 import type { EntryCursor } from '@/util'
 import { clearHappened, emit, getHappened } from '@/util'
 import {
     calcPostEffectStats,
     emitMove,
+    getCharacterMeta,
     maybeTransitionBattleState,
 } from '@/gameState'
 
@@ -59,9 +61,15 @@ export function explainCommand(
     command: Command,
     scene: BattleCursor | EntryCursor
 ): string {
+    const context: ExplainerContext = {
+        command,
+        characterMeta: getCharacterMeta(scene, command.characterUid),
+    }
+
     const res = explainActions(
         command.actions,
-        localsFromCommand({ command, scene, targetUids: [] })
+        localsFromCommand({ command, scene, targetUids: [] }),
+        context
     )
     if (typeof res !== 'string') {
         logger.error(['non-string result:', res])
@@ -70,13 +78,17 @@ export function explainCommand(
     return res
 }
 
-export function explainActions(actions: string, locals?: object): string {
+export function explainActions(
+    actions: string,
+    locals: object,
+    context: ExplainerContext
+): string {
     const wrappedExplainers = entryMap(
         explainers,
         (_, func) =>
             (...args: VAngu[]) =>
                 // @ts-expect-error
-                func(args)
+                func(args, context)
     )
     try {
         const ctx = generateAnguContext(wrappedExplainers)

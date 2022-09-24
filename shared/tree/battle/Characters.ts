@@ -2,7 +2,7 @@ import type { CharacterStats, CharacterUid } from './Character'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
 
-export type StanceId = 'defensive' | 'neutral' | 'aggressive'
+export type StanceId = 'avoidant' | 'neutral' | 'aggressive'
 
 export type Characters = Record<CharacterUid, CharacterMeta>
 export type EnemyCharacters = Record<CharacterUid, EnemyCharacterMeta>

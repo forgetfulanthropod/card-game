@@ -16,7 +16,9 @@ import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
+import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
+import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
@@ -46,7 +48,9 @@ export const explainers: Explainers = {
     effect: explainEffect,
     ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
+    ifStance: explainIfStance,
     killIf: explainKillIf,
+    mimicAttack: explainMimicAttack,
     momentary: explainMomentary,
     orb: explainOrb,
     orbOfHolyLight: explainOrbOfHolyLight,
@@ -76,7 +80,9 @@ export const executors: Executors = {
     effect: executeEffect,
     ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
+    ifStance: executeIfStance,
     killIf: executeKillIf,
+    mimicAttack: executeMimicAttack,
     momentary: executeMomentary,
     orb: executeOrb,
     orbOfHolyLight: executeOrbOfHolyLight,

@@ -24,9 +24,28 @@ export const itchyOoze = (x: number): CommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
+/** copy last damage dealt */
+export const mimicAttack = (): CommandDefinition => ({
+    actions: `mimicAttack()`,
+    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+    id: `mimicAttack`,
+    name: `Mimic Attack`,
+    targetNum: 1,
+    targetType: 'enemies',
+})
+/** deal strength */
+export const chomp = (): CommandDefinition => ({
+    actions: `deal(strength)`,
+    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+    id: `chomp`,
+    name: `Chomp`,
+    targetNum: 1,
+    targetType: 'enemies',
+})
 /**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
 export const infectiousBite = (x: number): CommandDefinition => ({
-    actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+    actions: `deal(strength)`,
+    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
     id: `infectiousBite(${x})`,
     name: `Infectious Bite ${x}`,
     targetNum: 1,

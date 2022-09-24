@@ -1,14 +1,27 @@
-import { s, evalAll, evalAllAsHtml } from './util'
+import { getDamage } from '../../util/applyDamage'
+import { evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
-import { applyDamage, calcPostEffectStats } from '@/gameState'
+import { applyDamage } from '@/gameState'
 
-export const explain: Explainers['deal'] = dslArgs => {
-    const [damage, times] = evalAllAsHtml(dslArgs)
-    let explication = 'deals ' + damage + ' damage'
+export const explain: Explainers['deal'] = (dslArgs, context) => {
+    const [damageHtml, times] = evalAllAsHtml(dslArgs)
+    const [damage] = evalAll(dslArgs)
+    // logger.info(
+    //     JSON.stringify({
+    //         damage: damageHtml,
+    //         attacker: context.characterMeta,
+    //         target: null,
+    //     })
+    // )
+    let explication = `deals ${damageHtml.split('>')[0]}>${getDamage({
+        damage: damage,
+        attacker: context.characterMeta,
+        target: null,
+    })}</${damageHtml.split('</')[1]} damage`
 
     if (times != null) {
-        explication += ` ${times} time${s(times)}`
+        explication += ` ${times} times`
     }
 
     return explication
@@ -40,14 +53,14 @@ export const execute: Executors['deal'] = ({
     //     event: { type: 'move$', data: cardHit },
     // })
 
+    logger.info(`dealing to targetUids: ${targetUids}.. damage: ${damage}`)
+
     targetUids.forEach(targetUid =>
         applyDamage({
             damage,
             targetUid,
+            attackerUid: command.characterUid,
             scene,
-            multiplier: calcPostEffectStats(
-                scene.get('allCharacters', targetUid)
-            ).damageTakeMultiplier,
         })
     )
 }

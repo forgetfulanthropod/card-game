@@ -3,10 +3,12 @@ import type {
     CalculatedCharacterStats,
     CharacterMeta,
     EffectId,
+    StanceId,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
 
 import produce from 'immer'
+import { getRulebook } from '@/rulebook'
 
 const turnStartEffectIds = ['bleed', 'poison', 'passiveBlock'] as const
 type TurnStartEffectId = typeof turnStartEffectIds[number]
@@ -38,10 +40,10 @@ const staticEffectFuncs: Record<
         stats.blockMultiplier *= 1.5
     },
     unguarded(stats) {
-        stats.damageTakeMultiplier *= 1.25
+        stats.damageTakeMultiplicand *= 1.25
     },
     vulnerable(stats) {
-        stats.damageTakeMultiplier *= 1.5
+        stats.damageTakeMultiplicand *= 1.5
     },
     doubleDamage(stats) {
         stats.strength *= 2
@@ -73,15 +75,29 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         wisdom: cm.wisdom,
         strength: cm.strength,
         isSkipped: false,
-        damageTakeMultiplier: 1,
+        damageDealMultiplicand: getDamageDealMulitplicandForStance(cm.stance),
+        damageDealAddend: 0,
+        damageTakeMultiplicand: getDamageTakeMulitplicandForStance(cm.stance),
         damageTakeAddend: 0,
         health: cm.health,
     }
+
     cm.effects?.forEach(effect => {
         if (turnStartEffectIds.includes(effect.id as TurnStartEffectId)) return
         staticEffectFuncs[effect.id as StaticEffectId](stats, effect.counter)
     })
+
     return stats
+}
+
+function getDamageDealMulitplicandForStance(stance: StanceId) {
+    const stanceMeta = getRulebook().stanceTypeMetaMap[stance]
+    return stanceMeta ? stanceMeta.attackMultiplier : 1
+}
+
+function getDamageTakeMulitplicandForStance(stance: StanceId) {
+    const stanceMeta = getRulebook().stanceTypeMetaMap[stance]
+    return stanceMeta ? stanceMeta.defenseMultiplier : 1
 }
 
 export function applyTurnStartEffects(

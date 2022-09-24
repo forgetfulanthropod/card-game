@@ -35,7 +35,9 @@ export interface CalculatedCharacterStats {
     strength: number
     wisdom: number
     defense: number
-    damageTakeMultiplier: number
+    damageDealMultiplicand: number
+    damageDealAddend: number
+    damageTakeMultiplicand: number
     damageTakeAddend: number
     blockMultiplier: number
     health: number

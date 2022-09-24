@@ -2,7 +2,7 @@ import type { BattleCursor, CardUid } from 'shared'
 import { evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
-import { applyDamage, calcPostEffectStats } from '@/gameState'
+import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['psychicWarfare'] = dslArgs => {
     const [damage, sameTargetAddend] = evalAllAsHtml(dslArgs)
@@ -14,6 +14,7 @@ export const execute: Executors['psychicWarfare'] = ({
     scene,
     targetUids,
     cardUid,
+    command,
 }) => {
     const [damage, sameTargetAddend] = evalAll(dslArgs)
     if (cardUid == null) throw new Error('psychic warfare on non-card?')
@@ -23,10 +24,8 @@ export const execute: Executors['psychicWarfare'] = ({
             damage:
                 damage + getAdditionalDamage(sameTargetAddend, cardUid, scene),
             targetUid,
+            attackerUid: command.characterUid,
             scene,
-            multiplier: calcPostEffectStats(
-                scene.get('allCharacters', targetUid)
-            ).damageTakeMultiplier,
         })
     )
 }
