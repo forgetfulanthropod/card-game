@@ -1,0 +1,129 @@
+import { ModalBackdrop } from '@sharedElements'
+import {
+    getTexture,
+    PixiContainer,
+    Text,
+    TweenableContainer,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
+import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
+import { getBattleScene } from '@/data'
+import { animateTo } from '../shared/cards/Hand'
+
+const VICTORY_SIGN_FINAL_POS = {
+    rotation: 0,
+    scale: 1,
+    x: 0,
+    y: -300,
+}
+
+// TODO end of run when user dies (eg. NPC wins)
+export function EndOfRunScreen(): PixiContainer {
+    const scene = getBattleScene()
+
+    // setTimeout(() => {
+    //     animateTo(VictorySign, VICTORY_SIGN_FINAL_POS)
+    // }, 2000)
+
+    const VictorySign = TweenableContainer(
+        {},
+        Sprite({
+            src: getTexture('victory'),
+            alpha: 1,
+            scale: 0.4,
+            x: BASE_WIDTH / 2,
+            y: BASE_HEIGHT / 2 - 300,
+            anchor: [0.5, 0.5],
+        })
+    )
+
+    const EnemiesKilled = Text({
+        text: `Enemies Killed: ${scene
+            .select('runScore')
+            .select('attributes')
+            .get('grind')}`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 - 100,
+        style: {
+            fontSize: 35,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+        },
+        name: 'EnemiesKilled',
+    })
+
+    const Placeholder = Text({
+        text: `Placeholder: 0`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 - 50,
+        style: {
+            fontSize: 35,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+        },
+        name: 'EnemiesKilled',
+    })
+
+    const TotalScore = Text({
+        text: `Total Score: ${scene.select('runScore').get('totalScore')}`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 + 25,
+        style: {
+            fontSize: 50,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'bold',
+        },
+        name: 'TotalScore',
+    })
+
+    const Retry = Text({
+        text: `Retry?`,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2,
+        y: BASE_HEIGHT / 2 + 175,
+        style: {
+            fontSize: 40,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'bold',
+        },
+        name: 'Retry',
+    })
+
+    const retryButton = Sprite({
+        src: getTexture('goButton'),
+        anchor: 0,
+        y: BASE_HEIGHT / 2 + 200,
+        x: BASE_WIDTH / 2 - 200,
+        scale: (1920 * 0.18) / getTexture('goButton').width,
+        onClick: handleButtonPress
+    })
+
+    function handleButtonPress() {
+        localStorage.removeItem('username')
+        window.location.reload()
+    }
+
+    const EndOfRunContainer = Container(
+        { x: 0, y: 0, scale: 1, name: 'EndOfRunContainer' },
+        ModalBackdrop(),
+        VictorySign,
+        EnemiesKilled,
+        Placeholder,
+        TotalScore,
+        Retry,
+        retryButton
+    )
+
+    return EndOfRunContainer
+}

@@ -1,24 +1,30 @@
-import type { BattleCursor } from 'shared'
+import { BattleCursor, NUM_ROOMS_BEFORE_GAME_OVER } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
 import { getNewCardOptions } from './getNewCardOptions'
 import { calculateLoot, calculateChestProgress } from './loot'
-
-const NUM_ROOMS_BEFORE_GAME_OVER = 5
+import { calculateNewRunScore } from './score'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
-        if (scene.get('numRoomsPassed') < NUM_ROOMS_BEFORE_GAME_OVER) {
+        // Add + 1 to check since the increment occur until later (eg. in nextRoom)
+        const gameIsOver =
+            scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
+
+        if (gameIsOver) {
+            scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+            scene.set('state', 'won')
+        } else {
+            scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('treasureChest', calculateChestProgress(scene))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-            scene.set('state', 'collecting loot')
-        } else scene.set('state', 'won')
-        // incrementXP(scene)
-        // putUpDoors(scene)
+            scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+        }
+
         return true
     } else if (winner === 'NPC') {
         scene.set('state', 'lost')
