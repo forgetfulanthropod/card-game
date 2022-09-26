@@ -22,5 +22,5 @@ export function getNpcMoves(scene: BattleCursor): NextCommand[] {
 }
 
 export function setNpcMoves(scene: BattleCursor) {
-    setNpcMoves(scene)
+    scene.select('nextNpcCommands').set(getNpcMoves(scene))
 }
