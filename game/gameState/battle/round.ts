@@ -2,13 +2,9 @@ import type {
     CharacterMeta,
     BattleCursor,
     Command,
-    NextCommand,
     EnemyCharacterMeta,
 } from 'shared'
 
-import { nonNulls } from 'shared/code'
-import { simulateCommand } from './cards'
-import { getLivingNpcs, getCommandTargets } from './characterGetters'
 import { enemies } from '@/rulebook'
 
 // TODO: move command definitions into rulebook object
@@ -21,7 +17,7 @@ export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
     return null
 }
 
-function getNpcMove(
+export function getNpcMove(
     scene: BattleCursor,
     attacker: EnemyCharacterMeta
 ): Command | null {
@@ -35,21 +31,4 @@ function getNpcMove(
         ...commandDefinitionsMap[move],
         characterUid: attacker.uid,
     }
-}
-
-export function getNpcMoves(scene: BattleCursor): NextCommand[] {
-    const movable = getLivingNpcs(scene.get())
-
-    const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
-
-    return cmds.map(command => {
-        const targetUids = getCommandTargets(scene.get(), command)
-        const outcome = simulateCommand({ command, scene, targetUids })
-
-        return {
-            command,
-            targetUids,
-            outcome,
-        }
-    })
 }

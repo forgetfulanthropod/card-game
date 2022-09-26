@@ -1,0 +1,26 @@
+import type { BattleCursor, NextCommand } from 'shared'
+import { nonNulls } from 'shared/code'
+import { simulateCommand } from './cards'
+import { getLivingNpcs, getCommandTargets } from './characterGetters'
+import { getNpcMove } from './round'
+
+export function getNpcMoves(scene: BattleCursor): NextCommand[] {
+    const movable = getLivingNpcs(scene.get())
+
+    const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
+
+    return cmds.map(command => {
+        const targetUids = getCommandTargets(scene.get(), command)
+        const outcome = simulateCommand({ command, scene, targetUids })
+
+        return {
+            command,
+            targetUids,
+            outcome,
+        }
+    })
+}
+
+export function setNpcMoves(scene: BattleCursor) {
+    setNpcMoves(scene)
+}

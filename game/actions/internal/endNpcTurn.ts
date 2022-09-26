@@ -5,10 +5,10 @@ import {
     clearBlock,
     clearHasMoved,
     setRoundEnergy,
-    getNpcMoves,
     decrementEffects,
     applyTurnStartEffects,
     popAndRunQueue,
+    setNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -18,7 +18,7 @@ const DEBUG = false
 export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('ending NPC turn')
-    scene.select('nextNpcCommands').set(getNpcMoves(scene))
+    setNpcMoves(scene)
 
     setRoundEnergy(scene)
     clearHasMoved(scene)

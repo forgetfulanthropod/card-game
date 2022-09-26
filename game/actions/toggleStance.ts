@@ -1,7 +1,7 @@
 import type { StanceId, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
-import { getNpcMoves, updateHand } from '@/gameState'
+import { setNpcMoves, updateHand } from '@/gameState'
 
 export const toggleStance: GameActions['toggleStance'] = args => {
     const { characterUid } = args
@@ -28,7 +28,7 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     stanceCursor.set(stances[nextIndex])
 
-    scene.select('nextNpcCommands').set(getNpcMoves(scene))
+    setNpcMoves(scene)
 
     updateHand(scene)
 }
