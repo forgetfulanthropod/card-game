@@ -72,16 +72,16 @@
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/no-extra-semi": "off",
         "@typescript-eslint/no-base-to-string": "error",
-        "import/no-internal-modules": [
-            "error",
-            {
-                "allow": ["shared/code"]
-            }
-        ],
+        // "import/no-internal-modules": [
+        //     "error",
+        //     {
+        //         "allow": ["shared/code"]
+        //     }
+        // ],
         "import/no-self-import": "error",
         "import/no-cycle": "error",
         "import/no-useless-path-segments": "error",
-        "import/no-relative-parent-imports": "error",
+        // "import/no-relative-parent-imports": "error",
         "import/no-mutable-exports": "error",
         "import/no-duplicates": "warn",
         "import/order": "warn",
@@ -148,18 +148,18 @@
                 ],
                 "react-hooks/rules-of-hooks": "error",
                 "react-hooks/exhaustive-deps": "warn",
-                "react/react-in-jsx-scope": "off",
-                "import/no-internal-modules": [
-                    "error",
-                    {
-                        "allow": [
-                            "preact/*",
-                            "lodash/*",
-                            "gsap/PixiPlugin",
-                            "shared/code"
-                        ]
-                    }
-                ]
+                "react/react-in-jsx-scope": "off"
+                // "import/no-internal-modules": [
+                //     "error",
+                //     {
+                //         "allow": [
+                //             "preact/*",
+                //             "lodash/*",
+                //             "gsap/PixiPlugin",
+                //             "shared/code"
+                //         ]
+                //     }
+                // ]
             },
             "settings": {
                 "react": {
