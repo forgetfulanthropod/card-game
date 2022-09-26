@@ -16,6 +16,7 @@ import type {
     CharacterStats,
     StanceId,
     CharacterMeta,
+    Card,
 } from 'shared'
 import { vals } from 'shared/code'
 
@@ -80,8 +81,9 @@ export type Executors = {
 }
 
 export type ExplainerContext = {
-    command: Command
+    command: Command | Card
     characterMeta: CharacterMeta
+    scene?: BattleCursor
 }
 
 export type Explainers = {
@@ -121,7 +123,7 @@ export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
 
         return color
             ? `<span style="color: ${color}; font-weight: bold;">${val}</span>`
-            : val
+            : `${val}`
     })
 }
 

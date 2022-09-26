@@ -15,11 +15,20 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
     //         target: null,
     //     })
     // )
-    let explication = `deals ${damageHtml.split('>')[0]}>${getDamage({
+    logger.info(`damageHtml: ${damageHtml}`)
+
+    const damageHtmlArr =
+        damageHtml.split('>').length > 1
+            ? [damageHtml.split('>')[0] + '>', '</' + damageHtml.split('</')[1]]
+            : ['', '']
+
+    logger.info(`damageHtmlArr: ${damageHtmlArr}`)
+
+    let explication = `deals ${damageHtmlArr[0]}${getDamage({
         damage: damage,
         attacker: context.characterMeta,
         target: null,
-    })}</${damageHtml.split('</')[1]} damage`
+    })}${damageHtmlArr[1]} damage`
 
     if (times != null) {
         explication += ` ${times} times`
@@ -43,17 +52,6 @@ export const execute: Executors['deal'] = ({
         return
     }
 
-    // const damages = mapToObj(targetUids, () => damage)
-    // const cardHit: CardHit = {
-    //     attacker: command.characterUid,
-    //     cardName: command.name,
-    //     damages,
-    // }
-    // emit({
-    //     username: scene.get('username'),
-    //     event: { type: 'move$', data: cardHit },
-    // })
-
     logger.info(`dealing to targetUids: ${targetUids}.. damage: ${damage}`)
 
     targetUids.forEach(targetUid =>
@@ -65,10 +63,6 @@ export const execute: Executors['deal'] = ({
         })
     )
 
-    logger.info(
-        'damageChangesEnemyIntent(scene) ' +
-            (damageChangesEnemyIntent(scene) ? 'yeap' : 'nooo')
-    )
     if (damageChangesEnemyIntent(scene)) {
         setNpcMoves(scene)
     }

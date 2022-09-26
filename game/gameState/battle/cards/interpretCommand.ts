@@ -26,7 +26,7 @@ import {
 export function interpretCommand(args: CommandDetail): void {
     const locals = localsFromCommand(args)
     if (locals.isSkipped) return
-    // const explanation = explainActions(command.actions, locals)
+
     emitMove({
         moveName: args.command.name,
         characterUid: args.command.characterUid,
@@ -58,7 +58,7 @@ function localsFromCommand(
 }
 
 export function explainCommand(
-    command: Command,
+    command: Command | Card,
     scene: BattleCursor | EntryCursor
 ): string {
     const context: ExplainerContext = {

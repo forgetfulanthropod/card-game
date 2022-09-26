@@ -76,7 +76,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'bodySlam',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(block), "<br/>(equal to block)")', // , dwindle()
+        actions: 'chain(deal(block), "(equal to block)")', // , dwindle()
         type: 'attack',
         characterClass: 'knight',
     },
