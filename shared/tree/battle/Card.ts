@@ -119,7 +119,7 @@ export type CardId =
     | 'orbOfProtection'
     | 'parry'
     | 'patientAmbush'
-    | 'prayerOfGoodFortune'
+    // | 'prayerOfGoodFortune'
     | 'psychicWarfare'
     | 'scatterBrained'
     | 'shield'

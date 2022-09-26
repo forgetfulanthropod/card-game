@@ -6,7 +6,6 @@ export const explain: Explainers['mimicAttack'] = () => {
 }
 
 export const execute: Executors['mimicAttack'] = ({
-    dslArgs,
     scene,
     command,
     targetUids,

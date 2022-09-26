@@ -3,7 +3,7 @@ import { getDamage } from '../../util/applyDamage'
 import { evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
-import { applyDamage, setNpcMoves } from '@/gameState'
+import { applyDamage, updateNpcMoves } from '@/gameState'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
     const [damageHtml, times] = evalAllAsHtml(dslArgs)
@@ -15,14 +15,14 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
     //         target: null,
     //     })
     // )
-    logger.info(`damageHtml: ${damageHtml}`)
+    // logger.info(`damageHtml: ${damageHtml}`)
 
     const damageHtmlArr =
         damageHtml.split('>').length > 1
             ? [damageHtml.split('>')[0] + '>', '</' + damageHtml.split('</')[1]]
             : ['', '']
 
-    logger.info(`damageHtmlArr: ${damageHtmlArr}`)
+    // logger.info(`damageHtmlArr: ${damageHtmlArr}`)
 
     let explication = `deals ${damageHtmlArr[0]}${getDamage({
         damage: damage,
@@ -64,7 +64,8 @@ export const execute: Executors['deal'] = ({
     )
 
     if (damageChangesEnemyIntent(scene)) {
-        setNpcMoves(scene)
+        logger.info('updating the NPC moves due to enemy damage')
+        updateNpcMoves(scene)
     }
 }
 
