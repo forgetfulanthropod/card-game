@@ -1,5 +1,6 @@
 import type { CharacterUid, BattleCursor, CharacterMeta } from 'shared'
 import { calcPostEffectStats } from '../effects'
+import { removeDeadCharacterCards } from './removeDeadCharacterCards'
 
 export function applyDamage(args: {
     damage: number
@@ -31,6 +32,9 @@ export function applyDamage(args: {
 
         return { ...c, health, block }
     })
+
+    if (scene.select('allCharacters').get(targetUid).health <= 0)
+        removeDeadCharacterCards(scene)
 
     scene.apply('damagesDealtThisTurn', damages => [
         ...damages,
