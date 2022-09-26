@@ -14,10 +14,10 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
 
-    decrementEffects(scene, 'pc')
     endRound(scene)
     clearBlock(scene, 'npc')
     applyTurnStartEffects(scene, 'npc')
+    decrementEffects(scene, 'pc')
     popAndRunQueue(scene, 'npc')
 
     args.game.set('nextAction', {
