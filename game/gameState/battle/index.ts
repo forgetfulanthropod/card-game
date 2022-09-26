@@ -6,7 +6,7 @@ export * from './characterGetters'
 export { getEnergy, setRoundEnergy } from './energy'
 export { maybeTransitionBattleState } from './transition'
 export { makeBattleState } from './makeBattleState'
-export { getNpcMoves, setNpcMoves } from './npcMoves'
+export { getNpcMoves, updateNpcMoves as setNpcMoves } from './npcMoves'
 export { endRound } from './endRound'
 export {
     calculateLoot,

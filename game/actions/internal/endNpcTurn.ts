@@ -29,4 +29,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     applyTurnStartEffects(scene, 'pc')
     drawNewHand(scene)
     popAndRunQueue(scene, 'pc')
+
+    scene.set('damagesDealtThisTurn', [])
 }

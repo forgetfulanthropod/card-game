@@ -66,9 +66,8 @@ export const execute: Executors['deal'] = ({
     )
 
     logger.info(
-        'damageChangesEnemyIntent(scene)' + damageChangesEnemyIntent(scene)
-            ? 'yeap'
-            : 'nooo'
+        'damageChangesEnemyIntent(scene) ' +
+            (damageChangesEnemyIntent(scene) ? 'yeap' : 'nooo')
     )
     if (damageChangesEnemyIntent(scene)) {
         setNpcMoves(scene)

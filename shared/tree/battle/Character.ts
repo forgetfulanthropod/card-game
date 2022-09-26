@@ -1,5 +1,5 @@
 import type { Brandify } from '@misc'
-import type { CharacterClass, CharacterId } from './Characters'
+import type { CharacterClass, CharacterId, StanceId } from './Characters'
 
 export type CharacterAbility = {
     displayName: string
@@ -41,6 +41,7 @@ export interface CalculatedCharacterStats {
     damageTakeAddend: number
     blockMultiplier: number
     health: number
+    stance: StanceId
 }
 
 export type OwnedCharacterStats = CharacterStats &

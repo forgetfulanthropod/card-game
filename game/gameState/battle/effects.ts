@@ -80,6 +80,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
         damageTakeMultiplicand: getDamageTakeMulitplicandForStance(cm.stance),
         damageTakeAddend: 0,
         health: cm.health,
+        stance: cm.stance,
     }
 
     cm.effects?.forEach(effect => {
