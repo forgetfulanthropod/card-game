@@ -18,7 +18,6 @@ import type {
     CharacterMeta,
     Card,
 } from 'shared'
-import { vals } from 'shared/code'
 
 export type { Value as VAngu } from 'angu'
 
@@ -147,11 +146,11 @@ function blend(color1Hex: string, color2Hex: string) {
         to: 'hex6',
     })
 
-    logger.info(
-        `blending ${vals(color1).join(', ')} + ${vals(color2).join(', ')} -> ${
-            blendColor.color
-        }`
-    )
+    // logger.info(
+    //     `blending ${vals(color1).join(', ')} + ${vals(color2).join(', ')} -> ${
+    //         blendColor.color
+    //     }`
+    // )
 
     return `#${blendColor.color}`
 }

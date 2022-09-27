@@ -14,6 +14,9 @@ export const doNpcTurn: InternalActions['doNpcTurn'] = ({ game, index }) => {
     const isBattleOver = maybeTransitionBattleState(scene)
     if (isBattleOver) return
     const processedCmds = scene.get('nextNpcCommands')
+
+    logger.info(JSON.stringify({ processedCmds }))
+
     const processedCmd = processedCmds[index]
 
     const { targetUids, command } = processedCmd

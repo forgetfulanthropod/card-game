@@ -54,13 +54,15 @@ export function beginTargetSelection(
     const unsub = onUpdate(
         selectedTargetsCursor,
         debounce((targets: string[]) => {
-            if (targets.length >= numTargets) {
+            if (targets.length === numTargets) {
                 // console.log('beginTargetSelection: playing card')
                 void callApi('playCard', {
                     cardUid: cardEl.name, //cardMeta.id,
                     targetUids: targets,
                 })
                 cleanup()
+            } else {
+                console.error()
             }
         }, 10)
     )

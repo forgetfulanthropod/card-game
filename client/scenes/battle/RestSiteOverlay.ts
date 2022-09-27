@@ -1,10 +1,9 @@
 import { Texture } from 'pixi.js'
 import { datum } from 'datums'
-import { InfoBox } from '../shared'
+import { ExplanationBox } from './ExplanationBox'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     If,
-    Text,
     BASE_WIDTH,
     BASE_HEIGHT,
     Sprite,
@@ -14,7 +13,7 @@ import {
 import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
 
-const plushyChoiceDescriptions = [
+export const plushyChoiceDescriptions = [
     'revive a character with 25% Health',
     'heal a character for 50% of its Health',
     "bring back a character's exhausted abilities",
@@ -88,33 +87,9 @@ export function RestSiteOverlay(): PixiContainer {
             //     x: boundingBoxes[index][0],
             //     y: boundingBoxes[index][1] + boundingBoxes[index][3],
             // })
-            return InfoBox(
-                // RoundedBordered(
-                //     Sprite({
-                //         src: Text({
-                //             text: plushyChoiceDescriptions[index],
-                //             style: {
-                //                 fill: 'white',
-                //                 wordWrapWidth: BASE_WIDTH * 0.2,
-                //                 wordWrap: true,
-                //             },
-                //         }).texture,
-                //     }),
-                //     { radius: 10, borderColor: 0xffffff, borderThickness: 2 }
-                // ),
-                Container(
-                    {},
-                    Text({
-                        text: plushyChoiceDescriptions[index],
-                        style: {
-                            fill: 'white',
-                            wordWrapWidth: BASE_WIDTH * 0.2,
-                            wordWrap: true,
-                        },
-                        anchor: [0.5, 0],
-                    })
-                ),
-                {
+            return ExplanationBox({
+                text: plushyChoiceDescriptions[index],
+                displayObjectArgs: {
                     x:
                         (boundingBoxes[index][0] +
                             boundingBoxes[index][2] / 2) *
@@ -122,9 +97,8 @@ export function RestSiteOverlay(): PixiContainer {
                     y:
                         (boundingBoxes[index][1] + boundingBoxes[index][3]) *
                         BASE_HEIGHT,
-                    padding: 25,
-                }
-            )
+                },
+            })
         })
     )
 }

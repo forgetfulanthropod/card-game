@@ -7,8 +7,8 @@ import { onDestroyed, glowFilter, Spine } from '@/elementsUtil'
 export function MainCharacterAnimation({
     characterMeta,
     events = {},
-    height = 190,
-    centerX = false,
+    _height = 190,
+    _centerX = false,
     onSpineEvent,
 }: {
     characterMeta: Pick<CharacterMeta, 'id' | 'isPc' | 'uid'>
@@ -16,8 +16,8 @@ export function MainCharacterAnimation({
     events?: InteractionEvents
 
     onSpineEvent?: (e: string) => void
-    height?: number
-    centerX?: boolean
+    _height?: number
+    _centerX?: boolean
 }): PixiSpine | null {
     const spineAssetName = getValidSpineAssetName(
         characterMeta.id,

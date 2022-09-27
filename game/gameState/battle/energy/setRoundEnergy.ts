@@ -1,16 +1,22 @@
 import type { BattleCursor } from 'shared'
 
-const BASE_ENERGY = 3
-const TURNS_PER_INCREASE = 3
-const MAX_ROUND_ENERGY = 5
-
+/**
+ * when turn count is 1, that's your first turn, 3 energy
+ * on your 4th turn, you get 4 energy
+ * on your 6th+ turn, you get 5 energy
+ */
 export function setRoundEnergy(scene: BattleCursor): void {
-    const incrementalEnergy = Math.ceil(
-        scene.get('turnCount') / TURNS_PER_INCREASE
-    )
-    const roundEnergy = Math.min(
-        incrementalEnergy + BASE_ENERGY,
-        MAX_ROUND_ENERGY
-    )
-    scene.set('energy', roundEnergy)
+    const turnCount = scene.get('turnCount')
+
+    let energy = 3
+
+    if (turnCount > 3) {
+        energy += 1
+    }
+
+    if (turnCount > 6) {
+        energy += 1
+    }
+
+    scene.set('energy', energy)
 }

@@ -147,8 +147,11 @@ export const healthBarAssets = {
 export const intentAssets = {
     enemyIntentArrowHead: 'intents/arrow_4_head.webp',
     enemyIntentArrowTail: 'intents/arrow_4_tail.webp',
-    floatingIntentAmount: 'intents/floating intent amount.webp',
-    blockIntent: 'intents/npc/Shield intent.webp',
+    intentAttack: 'intents/floating intent amount.webp',
+    intentMimic: 'intents/Mimic.webp',
+    intentInfectiousBite: 'intents/Infectious Bite.webp',
+    intentGrudge: 'intents/Grudge.webp',
+    intentBlock: 'intents/npc/Shield intent.webp',
 }
 
 export const orbAssets = {
@@ -160,7 +163,7 @@ export const orbAssets = {
 export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
     roomClearedSign: 'signs/roomCleared.png',
-    victory: 'signs/victory.png'
+    victory: 'signs/victory.png',
 }
 
 export const characterClassAssets = {
@@ -185,6 +188,10 @@ export const spineAssets = {
     matchaGelatinCubeNPCSpine:
         'spines/characters/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
     gnomeHooliganSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
+    gnomeHooliganNPCSpine:
+        'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
+    orcWarriorSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
+    orcWarriorNPCSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
     warhogSpine: 'spines/characters/warhog/Warhog.json',
     mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',

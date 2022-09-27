@@ -1,6 +1,12 @@
-import type { CharacterUid, BattleCursor, CharacterMeta } from 'shared'
+import type {
+    CharacterUid,
+    BattleCursor,
+    CharacterMeta,
+    CommandId,
+} from 'shared'
 import { calcPostEffectStats } from '../effects'
 import { removeDeadCharacterCards } from './removeDeadCharacterCards'
+import { updateNpcMoves } from '@/gameState'
 
 export function applyDamage(args: {
     damage: number
@@ -15,6 +21,21 @@ export function applyDamage(args: {
         damage,
     })
 
+    const unblockedDamage = applyCalcedDamage(scene, targetUid, calcedDamage)
+
+    manageSideEffectsOfNewDamage(scene, targetUid, calcedDamage)
+
+    if (unblockedDamage === Number.NEGATIVE_INFINITY)
+        throw new Error("unblocked damage wasn't calculated")
+
+    return unblockedDamage
+}
+
+function applyCalcedDamage(
+    scene: BattleCursor,
+    targetUid: CharacterUid,
+    calcedDamage: number
+) {
     let unblockedDamage = Number.NEGATIVE_INFINITY
 
     scene.select('allCharacters').apply(targetUid, c => {
@@ -33,18 +54,29 @@ export function applyDamage(args: {
         return { ...c, health, block }
     })
 
-    if (scene.select('allCharacters').get(targetUid).health <= 0)
-        removeDeadCharacterCards(scene)
+    return unblockedDamage
+}
+
+function manageSideEffectsOfNewDamage(
+    scene: BattleCursor,
+    targetUid: CharacterUid,
+    calcedDamage: number
+) {
+    if (didTargetDie(scene, targetUid)) removeDeadCharacterCards(scene)
 
     scene.apply('damagesDealtThisTurn', damages => [
         ...damages,
         { amount: calcedDamage, targetUid },
     ])
 
-    if (unblockedDamage === Number.NEGATIVE_INFINITY)
-        throw new Error("unblocked damage wasn't calculated")
+    if (damageChangesEnemyIntent(scene)) {
+        logger.info('updating the NPC moves due to enemy damage')
+        updateNpcMoves(scene)
+    }
+}
 
-    return unblockedDamage
+function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {
+    return scene.select('allCharacters').get(targetUid).health <= 0
 }
 
 export function getDamage({
@@ -61,4 +93,12 @@ export function getDamage({
         (target ? calcPostEffectStats(target).damageTakeMultiplicand : 1)
     const calcedDamage = Math.ceil(damage * multiplicand)
     return calcedDamage
+}
+
+function damageChangesEnemyIntent(scene: BattleCursor): boolean {
+    const specialCommanIds: CommandId[] = ['mimicAttack']
+
+    return !!~scene.get('nextNpcCommands').findIndex(command => {
+        return specialCommanIds.includes(command.command.id)
+    })
 }

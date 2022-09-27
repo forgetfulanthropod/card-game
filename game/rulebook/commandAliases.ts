@@ -34,14 +34,14 @@ export const mimicAttack = (): CommandDefinition => ({
     targetType: 'enemies',
 })
 /** deal strength */
-export const chomp = (): CommandDefinition => ({
-    actions: `deal(strength)`,
-    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
-    id: `chomp`,
-    name: `Chomp`,
-    targetNum: 1,
-    targetType: 'enemies',
-})
+// export const chomp = (): CommandDefinition => ({
+//     actions: `deal(strength)`,
+//     // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+//     id: `chomp`,
+//     name: `Chomp`,
+//     targetNum: 1,
+//     targetType: 'enemies',
+// })
 /**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
 export const infectiousBite = (x: number): CommandDefinition => ({
     actions: `deal(strength)`,

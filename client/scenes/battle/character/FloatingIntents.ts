@@ -1,6 +1,8 @@
-import type { CharacterUid, NextCommand } from 'shared'
+import type { CharacterUid, CommandId, NextCommand } from 'shared'
+import type { KeyTerm } from '../ExplanationBox'
+import { TermExplanationBox } from '../ExplanationBox'
 import { highlightIntentFrom, toDatum } from '@/util'
-import type { DisplayObject, PixiContainer } from '@/elementsUtil'
+import type { AssetKey, DisplayObject, PixiContainer } from '@/elementsUtil'
 import {
     glowFilter,
     Container,
@@ -38,7 +40,7 @@ function FloatingIntent(
             ? BlockIntended(
                   nextCmd.outcome.blocks[nextCmd.command.characterUid]
               )
-            : DamageIntended(nextCmd.outcome.damages[cuid])
+            : DamageIntended(nextCmd, cuid)
 
     const root = Container(
         {
@@ -65,23 +67,60 @@ function FloatingIntent(
     }
 }
 
-function DamageIntended(amount: number) {
+function DamageIntended(
+    command: NextCommand,
+    cuid: CharacterUid
+): DisplayObject[] {
+    const commandIdToMetaMap: Record<
+        CommandId & KeyTerm,
+        { id: CommandId; src: AssetKey }
+    > = {
+        mimicAttack: {
+            id: 'mimicAttack',
+            src: 'intentMimic',
+        },
+        infectiousBite: {
+            id: 'infectiousBite',
+            src: 'intentInfectiousBite',
+        },
+        grudge: {
+            id: 'grudge',
+            src: 'intentGrudge',
+        },
+    }
+
+    //@ts-ignore
+    const commandMeta = commandIdToMetaMap?.[command.command.id]
+
+    const intentIconTexture = getTexture(commandMeta?.src ?? 'intentAttack')
+    const amount = command.outcome.damages[cuid]
+
+    const infoBox =
+        commandMeta == null
+            ? null
+            : TermExplanationBox({
+                  term: commandMeta.id,
+                  displayObjectArgs: { x: 10, y: 10 },
+              })
+
     return [
         Sprite({
-            scale: INTENT_ICON_WIDTH / getTexture('floatingIntentAmount').width,
-            src: 'floatingIntentAmount',
+            scale: INTENT_ICON_WIDTH / intentIconTexture.width,
+            src: intentIconTexture,
             anchor: [0.4, 0.4],
         }),
         Text({
-            text: `${amount ?? '?'}`,
+            text: `${amount != null ? amount : '?'}`,
             anchor: 0.5,
             style: {
                 fill: 'white',
                 strokeThickness: 5,
                 stroke: 'black',
                 fontFamily: 'sansFont',
+                fontSize: 18,
             },
         }),
+        ...(infoBox ? [infoBox] : []),
     ]
 }
 
@@ -89,8 +128,8 @@ function BlockIntended(amount: number) {
     return [
         Sprite({
             x: 90,
-            scale: INTENT_ICON_WIDTH / getTexture('blockIntent').width,
-            src: 'blockIntent',
+            scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
+            src: 'intentBlock',
             anchor: [0.2, 0.2],
         }),
         Text({

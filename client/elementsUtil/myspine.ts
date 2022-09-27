@@ -3,9 +3,11 @@ import { Spine as PixiSpine } from '@pixi-spine/all-4.1'
 import { Loader } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
 
+import type { CharacterId } from 'shared'
 import type { InteractionEvents } from './mypixi'
 import { bindEvents, startChecking } from './mypixi'
 import type { AnimationId, SpineAsset } from '@/assets'
+import { haveEvilSkins } from '@/assets'
 import { onUpdate } from '@/util'
 
 export { PixiSpine }
@@ -21,6 +23,15 @@ export function Spine<Name extends SpineAsset>(props: {
     onDestroy?: Callback[]
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
+
+    if (haveEvilSkins[props.name.replace('Spine', '') as CharacterId]) {
+        const skinNames = spine.skeleton.data.skins.map(skin => skin.name)
+
+        if (!skinNames?.[1]) console.error('missing the second (evil) skin...')
+
+        spine.skeleton.setSkinByName(skinNames[1])
+    }
+
     if (props.x != null) spine.x = props.x
     if (props.y != null) spine.y = props.y
     if (props.size != null) [spine.width, spine.height] = props.size

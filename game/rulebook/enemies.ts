@@ -30,6 +30,18 @@ export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> =
         medium: { level: 'medium', wisdom: 0, constitution: '99-30', strength: 10, defense: 10, moves: ['matchaMash', null, null, null, null] },
         small: { level: 'small', wisdom: 0, constitution: '>29', strength: 10, defense: 5, moves: ['matchaMash', null, null, null, null] },
     },
+    gnomeHooligan: {
+        1: { level: '1', wisdom: 0, constitution: 15, strength: 3, defense: 6, moves: ['meatyCharge(1)', null, null, 'block', null] },
+        2: { level: '2', wisdom: 0, constitution: 33, strength: 4, defense: 8, moves: ['meatyCharge(1)', null, null, 'block', null] },
+        3: { level: '3', wisdom: 0, constitution: 50, strength: 6, defense: 10, moves: ['meatyCharge(1)', 'slash', null, 'block', null] },
+        4: { level: '4', wisdom: 0, constitution: 75, strength: 9, defense: 12, moves: ['meatyCharge(1)', 'slash', 'bellowAndSing(1,1)', 'block', null] },
+        5: { level: '5', wisdom: 0, constitution: 88, strength: 12, defense: 14, moves: ['meatyCharge(1)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(100,1)'] },
+        6: { level: '6', wisdom: 0, constitution: 103, strength: 14, defense: 16, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(100,1)'] },
+        7: { level: '7', wisdom: 0, constitution: 118, strength: 16, defense: 19, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(100,2)'] },
+        8: { level: '8', wisdom: 0, constitution: 133, strength: 18, defense: 22, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(125,2)'] },
+        9: { level: '9', wisdom: 0, constitution: 148, strength: 20, defense: 25, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,1)', 'block', 'screamAndCharge(125,2)'] },
+        10: { level: '10', wisdom: 0, constitution: 163, strength: 23, defense: 28, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(125,2)'] },
+    },
     orcWarrior: {
         1: { level: '1', wisdom: 0, constitution: 15, strength: 3, defense: 6, moves: ['meatyCharge(1)', null, null, 'block', null] },
         2: { level: '2', wisdom: 0, constitution: 33, strength: 4, defense: 8, moves: ['meatyCharge(1)', null, null, 'block', null] },

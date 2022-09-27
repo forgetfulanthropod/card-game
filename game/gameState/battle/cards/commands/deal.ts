@@ -1,9 +1,8 @@
-import type { BattleCursor, CommandId } from 'shared'
 import { getDamage } from '../../util/applyDamage'
 import { evalAll, evalAllAsHtml } from './util'
 
 import type { Executors, Explainers } from './util'
-import { applyDamage, updateNpcMoves } from '@/gameState'
+import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
     const [damageHtml, times] = evalAllAsHtml(dslArgs)
@@ -62,17 +61,4 @@ export const execute: Executors['deal'] = ({
             scene,
         })
     )
-
-    if (damageChangesEnemyIntent(scene)) {
-        logger.info('updating the NPC moves due to enemy damage')
-        updateNpcMoves(scene)
-    }
-}
-
-function damageChangesEnemyIntent(scene: BattleCursor): boolean {
-    const specialCommanIds: CommandId[] = ['mimicAttack']
-
-    return !!~scene.get('nextNpcCommands').findIndex(command => {
-        return specialCommanIds.includes(command.command.id)
-    })
 }

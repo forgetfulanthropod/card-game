@@ -13,6 +13,7 @@ export type {
     InteractionEventHandler,
     SpriteArgs,
     ContainerArgs,
+    DisplayObjectArgs,
 } from './_types'
 
 export { startChecking } from './_util'

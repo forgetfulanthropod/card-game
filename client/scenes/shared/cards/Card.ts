@@ -61,11 +61,7 @@ export function CardEl({
     let cardArtTexture
     let cardArtTextureOrBlank
     try {
-        const cardId = ['blockKnight', 'blockWizard', 'blockCleric'].includes(
-            card.id
-        )
-            ? 'block'
-            : card.id
+        const cardId = card.id.includes('block') ? 'block' : card.id
         cardArtTextureOrBlank = cardArtTexture = getTexture(
             `card${upperFirst(cardId)}`
         )

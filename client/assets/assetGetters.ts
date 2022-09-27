@@ -17,17 +17,22 @@ export const getCharTexture = (charId: CharacterId) =>
 export const getOrbTexture = (orbType: OrbType) =>
     getTexture(`orbOf${upperFirst(orbType)}` as OrbAssetId)
 
+export const haveEvilVersions: Partial<Record<CharacterId, boolean>> = {
+    skeletonWarrior: true,
+    matchaGelatinCube: true,
+    gnomeHooligan: true,
+    mimic: true,
+}
+
+export const haveEvilSkins: Partial<Record<CharacterId, boolean>> = {
+    orcWarrior: true,
+}
+
 export function getValidSpineAssetName(
     name: CharacterId,
     isPc?: boolean
 ): SpineAsset | null {
-    const haveEvilVersions: Partial<Record<CharacterId, boolean>> = {
-        skeletonWarrior: true,
-        matchaGelatinCube: true,
-        mimic: true,
-    }
-
-    //@ts-expect-error TODO this goes away when all characters have spines...
+    //@ts-expect-error
     const assetName: SpineAsset =
         !isPc && haveEvilVersions[name] ? `${name}NPCSpine` : `${name}Spine`
 
