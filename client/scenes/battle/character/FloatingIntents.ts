@@ -1,9 +1,16 @@
 import type { CharacterUid, CommandId, NextCommand } from 'shared'
+import { datum } from 'datums'
 import type { KeyTerm } from '../ExplanationBox'
 import { TermExplanationBox } from '../ExplanationBox'
 import { highlightIntentFrom, toDatum } from '@/util'
-import type { AssetKey, DisplayObject, PixiContainer } from '@/elementsUtil'
+import type {
+    AssetKey,
+    DisplayObject,
+    InteractionEvents,
+    PixiContainer,
+} from '@/elementsUtil'
 import {
+    If,
     glowFilter,
     Container,
     For,
@@ -95,29 +102,47 @@ function DamageIntended(
     const intentIconTexture = getTexture(commandMeta?.src ?? 'intentAttack')
     const amount = command.outcome.damages[cuid]
 
+    const isHoveringIntent = datum(false)
     const infoBox =
         commandMeta == null
             ? null
-            : TermExplanationBox({
-                  term: commandMeta.id,
-                  displayObjectArgs: { x: 10, y: 10 },
-              })
+            : If(isHoveringIntent, () =>
+                  TermExplanationBox({
+                      term: commandMeta.id,
+                      displayObjectArgs: { x: 50, y: 10 },
+                  })
+              )
+    const events: InteractionEvents = {
+        pointerover() {
+            isHoveringIntent.set(true)
+        },
+        pointerdown() {
+            isHoveringIntent.set(true)
+        },
+        pointerout() {
+            isHoveringIntent.set(false)
+        },
+    }
 
     return [
         Sprite({
-            scale: INTENT_ICON_WIDTH / intentIconTexture.width,
+            scale:
+                ((commandMeta ? 2 : 1) * INTENT_ICON_WIDTH) /
+                intentIconTexture.width,
             src: intentIconTexture,
             anchor: [0.4, 0.4],
+            events,
         }),
         Text({
             text: `${amount != null ? amount : '?'}`,
             anchor: 0.5,
+            events,
             style: {
                 fill: 'white',
                 strokeThickness: 5,
                 stroke: 'black',
                 fontFamily: 'sansFont',
-                fontSize: 18,
+                fontSize: 24,
             },
         }),
         ...(infoBox ? [infoBox] : []),

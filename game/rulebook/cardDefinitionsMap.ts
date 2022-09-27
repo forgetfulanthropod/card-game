@@ -283,7 +283,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'berserk',
         targetNum: 1,
         targetType: 'self',
-        actions: 'effect("berserk",3)',
+        actions: 'chain(effect("berserk",3), momentary())',
         type: 'enchantment',
         characterClass: 'rogue',
     },
@@ -294,10 +294,115 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'queue(2, strengthy = strength * 2; ifStance("avoidant", deal(strengthy)))',
+            'queue(2, strengthy = strength * 2; ifStance("avoidant", dealFromStance("avoidant", strengthy)))',
         type: 'attack',
         characterClass: 'rogue',
     },
+    stab: {
+        name: 'Stab',
+        energy: 1,
+        id: 'stab',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions:
+            'strengthy = strength + 6; chain(deal(strengthy), effect("bleed", 2))',
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    // catchTheKnife: {
+    //     name: 'Catch The Knife',
+    //     energy: 1,
+    //     id: 'catchTheKnife',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: 'effect("knifeCatcher", 1)', //todo
+    //     type: 'enchantment',
+    //     characterClass: 'rogue',
+    // },
+    // cowardlyTactics: {
+    //     name: 'Cowardly Tactics',
+    //     energy: 1,
+    //     id: 'cowardlyTactics',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: 'effect("cowardlyTactics", 1)', //todo
+    //     type: 'enchantment',
+    //     characterClass: 'rogue',
+    // },
+    // throwingKnife: {
+    //     name: 'Throwing Knife',
+    //     energy: 1,
+    //     id: 'throwingKnife',
+    //     targetNum: 1,
+    //     targetType: 'enemies',
+    //     actions:
+    //         'strengthy = strength * .5; chain(deal(strengthy), ifKilled(returnCardToHand()))', //todo
+    //     type: 'attack',
+    //     characterClass: 'rogue',
+    // },
+    // retreatToTheShadows: {
+    //     name: 'Retreat To The Shadows',
+    //     energy: 1,
+    //     id: 'retreatToTheShadows',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: 'toStance("avoidant")', //todo
+    //     type: 'utility',
+    //     characterClass: 'rogue',
+    // },
+    poisonedBlade: {
+        name: 'Poisoned Blade',
+        energy: 1,
+        id: 'poisonedBlade',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions:
+            'strengthy = strength * .5; chain(deal(strengthy), effect("poison", 5))',
+        type: 'utility',
+        characterClass: 'rogue',
+    },
+    // exponentialIllness: {
+    //     name: 'Exponential Illness',
+    //     energy: 1,
+    //     id: 'exponentialIllness',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: 'exponentialIllness(3)', //todo
+    //     type: 'utility',
+    //     characterClass: 'rogue',
+    // },
+    // twistTheKnife: {
+    //     name: 'Twist The Knife',
+    //     energy: 1,
+    //     id: 'twistTheKnife',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions:
+    //         'strengthy1 = 1.25 * strength; strengthy2 = .75; chain(deal(strengthy1), ifHealth("less than", .5, deal(strengthy2)))', //todo
+    //     type: 'attack',
+    //     characterClass: 'rogue',
+    // },
+    // flashbang: {
+    //     name: 'Flashbang',
+    //     energy: 2,
+    //     id: 'flashbang',
+    //     targetNum: 'all',
+    //     targetType: 'enemies',
+    //     actions:
+    //         'chain(effect("stunned", 1), effect("debilitated", 1), effect("unguarded", 1), momentary())', //todo
+    //     type: 'attack',
+    //     characterClass: 'rogue',
+    // },
+    // songOfCourage: {
+    //     name: 'Song Of Courage',
+    //     energy: 2,
+    //     id: 'songOfCourage',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: 'effect("melody", 2)', //todo
+    //     type: 'enchantment',
+    //     characterClass: 'bard',
+    // },
     dutifulStab: {
         name: 'Dutiful Stab',
         energy: 1,
@@ -405,7 +510,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'orbOfHolyLight',
         targetNum: 1,
         targetType: 'self',
-        actions: 'orbOfHolyLight()',
+        actions: 'orb("holyLight", 3)',
         type: 'enchantment',
         characterClass: 'cleric',
     },

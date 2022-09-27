@@ -157,6 +157,7 @@ export const orbAssets = {
     orbOfFrost: 'char status/orbs/frost.webp',
     orbOfLightning: 'char status/orbs/lightning.webp',
     orbOfProtection: 'char status/orbs/protection.webp',
+    orbOfHolyLight: 'char status/orbs/holyLight.webp',
 }
 
 export const signAssets = {

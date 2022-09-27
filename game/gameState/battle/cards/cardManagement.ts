@@ -63,7 +63,7 @@ function makeCards(scene: BattleCursor): Piles {
         // 'smite',
         // 'bless',
         // 'prayerOfGoodFortune', // todo
-        // 'orbOfHolyLight', // todo
+        'orbOfHolyLight', // todo
         // 'mantraOfPatience',
         // 'helpingHand',
         // 'orbOfProtection',
@@ -75,9 +75,9 @@ function makeCards(scene: BattleCursor): Piles {
         const ccuf = upperFirst(cm.class)
         cardIds.push(
             //@ts-expect-error
-            // `basicAttack${ccuf}`,
             `basicAttack${ccuf}`,
-            `block${ccuf}`
+            `basicAttack${ccuf}`
+            // `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
@@ -85,10 +85,15 @@ function makeCards(scene: BattleCursor): Piles {
             // 'magicalStorm',
             // 'parry',
             // 'smite'
+            // 'catchTheKnife',
+            // 'cowardlyTactics',
+            // 'throwingKnife',
+            // 'retreatToTheShadows',
+            // 'poisonedBlade',
+            // 'exponentialIllness',
+            // 'twistTheKnife',
+            // 'flashbang'
         )
-        cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        cardIds.push(getFirstCardIdForCharacterId(cm.id))
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
         if (cm.class === 'wizard') cardIds.push('trance')
         if (cm.class === 'cleric') cardIds.push('smite')

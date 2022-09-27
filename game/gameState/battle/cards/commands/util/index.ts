@@ -45,6 +45,7 @@ interface ArgsOf {
     choice: any[]
     chain: any[]
     deal: [damage: number, times?: number]
+    dealFromStance: [stance: StanceId, damage: number, times?: number]
     dwindle: []
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     ifFirstPlay: any[]

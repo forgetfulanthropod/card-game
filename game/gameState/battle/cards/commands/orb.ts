@@ -1,3 +1,4 @@
+import { startCase } from 'lodash'
 import type { CharacterUid, OrbType, BattleCursor } from 'shared'
 
 import type { Executors, Explainers } from './util'
@@ -6,7 +7,7 @@ import { evalAllAsHtml, evalAll } from './util'
 export const explain: Explainers['orb'] = args => {
     const [orbType, count] = evalAllAsHtml(args)
 
-    return `creates ${count} ${orbType} orbs`
+    return `creates ${count} orbs of ${startCase(orbType).toLowerCase()}`
 }
 
 export const execute: Executors['orb'] = ({ dslArgs, command, scene }) => {

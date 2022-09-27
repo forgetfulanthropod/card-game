@@ -11,12 +11,17 @@ import { updateNpcMoves } from '@/gameState'
 export function applyDamage(args: {
     damage: number
     targetUid: CharacterUid
-    attackerUid: CharacterUid
+    attackerUid?: CharacterUid
     scene: BattleCursor
+    attacker?: CharacterMeta
 }): number {
-    const { damage, targetUid, scene, attackerUid } = args
+    const { damage, targetUid, scene, attackerUid, attacker } = args
+    if (attacker == null && attackerUid == null) {
+        throw new Error('must provide attacker or attackerUid')
+    }
     const calcedDamage = getDamage({
-        attacker: scene.get('allCharacters', attackerUid),
+        //@ts-expect-error
+        attacker: attacker ?? scene.get('allCharacters', attackerUid),
         target: scene.get('allCharacters', targetUid),
         damage,
     })

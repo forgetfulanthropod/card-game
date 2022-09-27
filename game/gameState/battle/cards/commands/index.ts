@@ -9,6 +9,7 @@ import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWis
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
+import {explain as explainDealFromStance, execute as executeDealFromStance} from './dealFromStance'
 import {explain as explainDiscard, execute as executeDiscard} from './discard'
 import {explain as explainDoubleEnchantmentOrToken, execute as executeDoubleEnchantmentOrToken} from './doubleEnchantmentOrToken'
 import {explain as explainDraw, execute as executeDraw} from './draw'
@@ -41,6 +42,7 @@ export const explainers: Explainers = {
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
+    dealFromStance: explainDealFromStance,
     discard: explainDiscard,
     doubleEnchantmentOrToken: explainDoubleEnchantmentOrToken,
     draw: explainDraw,
@@ -73,6 +75,7 @@ export const executors: Executors = {
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
+    dealFromStance: executeDealFromStance,
     discard: executeDiscard,
     doubleEnchantmentOrToken: executeDoubleEnchantmentOrToken,
     draw: executeDraw,

@@ -11,7 +11,7 @@ const config = { randomDungeon: false }
 
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [
-        // [{ id: 'mimic', level: 3 }],
+        [{ id: 'mimic', level: 3 }],
         [
             { id: 'skeletonWarrior', level: 1 },
             { id: 'skeletonWarrior', level: 1 },
@@ -33,7 +33,7 @@ export const dungeonRooms: DungeonRoomMap = {
             { id: 'skeletonWarrior', level: 2 },
         ],
         [{ id: 'REST_SITE', level: 1 }],
-        [{ id: 'mimic', level: 3 }],
+        // [{ id: 'mimic', level: 3 }],
         // [{ id: 'bosshogJurgen', level: 4 }],
     ],
     'Hooligan’s Bluff': [],

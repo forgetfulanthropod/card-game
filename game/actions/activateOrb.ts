@@ -64,6 +64,22 @@ const orbActivators: Record<
             scene,
         })
     },
+    holyLight(character: CharacterMeta, scene: BattleCursor) {
+        scene.apply(['allCharacters', character.uid], cm => {
+            if (cm.health + 2 > cm.constitution)
+                return { ...cm, health: cm.constitution }
+            else return { ...cm, health: cm.health + 2 }
+        })
+        updateHand(scene)
+
+        emitMove({
+            moveName: '+2 strongblock!',
+            targetType: 'self',
+            characterUid: character.uid,
+            targetUids: [character.uid],
+            scene,
+        })
+    },
 }
 
 export const activateOrb: GameActions['activateOrb'] = ({
