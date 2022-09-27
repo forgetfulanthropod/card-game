@@ -41,9 +41,8 @@ export const entrySceneBackgrounds = {
 export const cardArtAssets = {
     cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
     cardDivineIntervention:
-        'public/assets/cards/Card PNG Breakdown/Card Art/divine intervention.png',
-    cardGuidingBolt:
-        'public/assets/cards/Card PNG Breakdown/Card Art/Guiding Bolt.png',
+        'cards/Card PNG Breakdown/Card Art/divine intervention.png',
+    cardGuidingBolt: 'cards/Card PNG Breakdown/Card Art/Guiding Bolt.png',
     cardSpellbook: 'cards/Card PNG Breakdown/Card Art/Spellbook.png',
     cardTestudoFormation:
         'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
