@@ -25,7 +25,8 @@ const staticEffectFuncs: Record<
         stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
     },
     berserk(stats) {
-        stats.strength += Math.ceil(stats.strength * 0.5)
+        if (stats.stance === 'aggressive')
+            stats.strength += Math.ceil(stats.strength * 0.5)
     },
     debilitated(stats) {
         stats.strength *= 0.5
