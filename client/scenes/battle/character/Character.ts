@@ -68,7 +68,7 @@ export function Character(props: CharacterProps): PixiContainer {
                 props.onClick(characterMeta.uid)
             },
         },
-        centerX: true,
+        _centerX: true,
     })
 
     const mainContainer = Container(

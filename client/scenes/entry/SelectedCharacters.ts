@@ -131,7 +131,7 @@ function Characters(charactersData: SelectedCharacters) {
                                     selectedCharacterId.set(c.id)
                                 },
                             },
-                            height: characterHeight,
+                            _height: characterHeight,
                         }) ??
                             Sprite({
                                 anchor: 0.5,
