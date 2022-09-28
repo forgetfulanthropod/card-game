@@ -20,6 +20,7 @@ export interface BattleScene extends SceneHas {
     cards: Piles
     newCardOptions: Pile
     energy: number
+    roundEnergy: number
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number

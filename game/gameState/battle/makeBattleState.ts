@@ -35,6 +35,7 @@ export function makeBattleState(args: {
         cards: getNullCards(),
         newCardOptions: {},
         energy: 3,
+        roundEnergy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         numRoomsPassed: -1,

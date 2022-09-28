@@ -116,6 +116,7 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
     displayArgs?: ContainerArgs,
     destroyOptions: DestroyOptions = { children: true }
 ): PixiContainer {
+    let warnedAlready = false
     const root = Container({}) as KeyedContainer
     onDestroyed(
         root,
@@ -124,8 +125,6 @@ export function For<T extends { key: string | number }[] | (string | number)[]>(
     )
 
     if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
-
-    let warnedAlready = false
     return root
 
     function handleUpdate(items: T) {

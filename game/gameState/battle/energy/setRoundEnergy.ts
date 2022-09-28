@@ -19,4 +19,5 @@ export function setRoundEnergy(scene: BattleCursor): void {
     }
 
     scene.set('energy', energy)
+    scene.set('roundEnergy', energy)
 }
