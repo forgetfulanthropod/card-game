@@ -16,7 +16,7 @@ export function calculateLoot(
     const gems = 0
     const tokenTBD = 0
     const fishStick = getRandomAmount()
-    const potion = Math.min(2, parseInt((getRandomAmount() / 3).toFixed(0)))
+    const potion = Math.max(2, parseInt((getRandomAmount() / 3).toFixed(0)))
     const swordShield = getRandomAmount()
     const bread = getRandomAmount()
 

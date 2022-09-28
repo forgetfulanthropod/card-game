@@ -4,6 +4,7 @@ import { ModalBackdrop } from '@sharedElements'
 import {
     getTexture,
     PixiContainer,
+    RoundedRectangleGradientSprite,
     Text,
     TweenableContainer,
     TweenablePixiContainer,
@@ -25,7 +26,7 @@ const LOOT_ITEMS_FINAL_POS = {
     rotation: 0,
     scale: 1,
     x: BASE_WIDTH,
-    y: -100,
+    y: 0,
 }
 
 const LOOT_ITEMS_START_POS = {
@@ -94,13 +95,9 @@ export function LootCollector(): PixiContainer {
         let lootItemsContainerY = BASE_HEIGHT + 200
 
         return lootItems.map((item, idx) => {
-            let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
-            let properItemName = getDisplayName(item.name)
-
-            const scale = getScale({ idx })
             const lootItemContainerArgs = {
                 name: `LootItemContainer_${item.name}`,
-                x: (lootItemsContainerX += 900),
+                x: lootItemsContainerX += 900,
                 y: lootItemsContainerY,
                 onClick: idx === 0 ? () => handleButtonPress() : () => {},
                 idx,
@@ -109,17 +106,40 @@ export function LootCollector(): PixiContainer {
             if (item.name === 'treasureChest')
                 return TreasureChest(lootItemContainerArgs)
 
-            const BlackRectBackground = Sprite({
-                src: Texture.WHITE,
-                scale: 1,
-                tint: 0,
-                height: ITEM_BOX_HEIGHT * scale,
-                width: ITEM_BOX_WIDTH * scale,
-                alpha: 0.5,
-                anchor: [0.5, 0.5],
-                x: 0,
-                y: 0,
-                name: 'BlackRectBackground',
+            const scale = getScale({ idx })
+            let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
+            let properItemName = getDisplayName(item.name)
+            let lootItemTextY = -300 * scale
+            let lootItemSpriteY =
+                lootItemTextY + getTexture(itemSrc).height * (2 * scale)
+
+            if (item.name === 'draftCard') {
+                lootItemTextY += 50
+                lootItemSpriteY += 50
+            }
+
+            const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
+                spriteArgs: {
+                    width: ITEM_BOX_WIDTH * scale,
+                    height: ITEM_BOX_HEIGHT * scale,
+                    x: 0,
+                    y: 0,
+                    name: 'ROUNDED_BLACK_BG',
+                    anchor: [0.5, 0.5],
+                    alpha: 0.6,
+                    tint: 1,
+                },
+                radius: 100,
+                gradientArgs: {
+                    x0: 0,
+                    x1: 500,
+                    y0: 0,
+                    y1: 500,
+                    colorStops: [
+                        { color: 'black', offset: 0 },
+                        { color: 'white', offset: 1 },
+                    ],
+                },
             })
 
             const LootItemSprite = Sprite({
@@ -127,7 +147,7 @@ export function LootCollector(): PixiContainer {
                 scale: 2 * scale,
                 anchor: [0.5, 0.5],
                 x: 0,
-                y: 50 * scale * 1.5,
+                y: lootItemSpriteY,
                 name: 'LootItemSprite',
             })
 
@@ -138,9 +158,9 @@ export function LootCollector(): PixiContainer {
                         : `Collect \n${item.count} ${properItemName}`,
                 anchor: [0.5, 0],
                 x: 0,
-                y: -(ITEM_BOX_HEIGHT / 2) * scale + (50 + scale),
+                y: lootItemTextY,
                 style: {
-                    fontSize: 70 * scale,
+                    fontSize: 80 * scale,
                     fill: 'white',
                     padding: 4,
                     align: 'center',
@@ -149,21 +169,32 @@ export function LootCollector(): PixiContainer {
                 name: 'LootItemText',
             })
 
-            const InactiveLootItemOverlay = Sprite({
-                src: Texture.WHITE,
-                scale: 1,
-                tint: 0,
-                height: ITEM_BOX_HEIGHT,
-                width: ITEM_BOX_WIDTH,
-                alpha: 0.5,
-                anchor: [0.5, 0.5],
-                x: 0,
-                y: 0,
-                name: 'InactiveLootItemOverlay',
+            const InactiveLootItemOverlay = RoundedRectangleGradientSprite({
+                spriteArgs: {
+                    width: ITEM_BOX_WIDTH * scale,
+                    height: ITEM_BOX_HEIGHT * scale,
+                    x: 0,
+                    y: 0,
+                    name: 'InactiveLootItemOverlay',
+                    anchor: [0.5, 0.5],
+                    alpha: 0.6,
+                    tint: 1,
+                },
+                radius: 100,
+                gradientArgs: {
+                    x0: 0,
+                    x1: 500,
+                    y0: 0,
+                    y1: 500,
+                    colorStops: [
+                        { color: 'black', offset: 0 },
+                        { color: 'white', offset: 1 },
+                    ],
+                },
             })
 
             const lootItemContainerChildren = [
-                BlackRectBackground,
+                RoundedBlackRectBackground,
                 LootItemSprite,
                 LootItemText,
             ]
@@ -244,7 +275,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
 
     setTimeout(() => {
         updateProgressBarFill()
-    }, 750)
+    }, 1250)
 
     if (upgraded) {
         // do TreasureChest upgrade animation
