@@ -110,12 +110,7 @@ function newPCMeta(args: {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
-    const stance: StanceId =
-        args.x > X_AGGRESSIVE_THRESH
-            ? 'aggressive'
-            : args.x > X_NEUTRAL_THRESH
-            ? 'neutral'
-            : 'avoidant'
+    const stance: StanceId = 'neutral'
     const stats = statsMap[args.name]
     return {
         ...stats,
