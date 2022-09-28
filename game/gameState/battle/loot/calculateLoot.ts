@@ -16,7 +16,7 @@ export function calculateLoot(
     const gems = 0
     const tokenTBD = 0
     const fishStick = getRandomAmount()
-    const potion = getRandomAmount()
+    const potion = Math.min(2, parseInt((getRandomAmount() / 3).toFixed(0)))
     const swordShield = getRandomAmount()
     const bread = getRandomAmount()
 
@@ -27,10 +27,10 @@ export function calculateLoot(
 
     return [
         { name: 'draftCard', count: 1 },
-        { name: 'fishStick', count: fishStick },
         { name: 'potion', count: potion },
-        { name: 'bread', count: bread },
         { name: 'swordShield', count: swordShield },
+        { name: 'fishStick', count: fishStick },
+        { name: 'bread', count: bread },
         { name: 'treasureChest', count: 1 },
     ]
 }

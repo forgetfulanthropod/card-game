@@ -12,6 +12,7 @@ import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import { animateTo } from '../shared/cards/Hand'
+import { LootFromGame } from 'shared'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -35,6 +36,23 @@ const ITEM_BOX_HEIGHT = 650
 const ITEM_BOX_WIDTH = 600
 
 const getScale = ({ idx }: { idx: number }) => (idx === 0 ? 1.5 : 1)
+
+const getDisplayName = (name: LootFromGame) => {
+    switch (name) {
+        case 'bread':
+            return 'Bread'
+        case 'fishStick':
+            return 'Fish'
+        case 'potion':
+            return 'Potions'
+        case 'swordShield':
+            return 'Armor'
+        case 'draftCard':
+            return 'Draft a Card'
+        default:
+            return 'Loot'
+    }
+}
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
@@ -69,7 +87,6 @@ export function LootCollector(): PixiContainer {
         })
     )
 
-
     function renderLoot() {
         const lootItems = scene.get('lootEarned')
 
@@ -78,6 +95,8 @@ export function LootCollector(): PixiContainer {
 
         return lootItems.map((item, idx) => {
             let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
+            let properItemName = getDisplayName(item.name)
+
             const scale = getScale({ idx })
             const lootItemContainerArgs = {
                 name: `LootItemContainer_${item.name}`,
@@ -116,12 +135,12 @@ export function LootCollector(): PixiContainer {
                 text:
                     item.name === 'draftCard'
                         ? 'Draft a Card'
-                        : `Collect \n${item.name}`,
+                        : `Collect \n${item.count} ${properItemName}`,
                 anchor: [0.5, 0],
                 x: 0,
                 y: -(ITEM_BOX_HEIGHT / 2) * scale + (50 + scale),
                 style: {
-                    fontSize: 80 * scale,
+                    fontSize: 70 * scale,
                     fill: 'white',
                     padding: 4,
                     align: 'center',
@@ -218,7 +237,9 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const chestBodySrc = getTexture('chestBody')
     const chestLidSrc = getTexture('chestLid')
     const progressBarBackingSrc = getTexture('healthBarBacking')
-    const progressBarFillSrc = new Texture(getTexture('healthBarHealth').baseTexture)
+    const progressBarFillSrc = new Texture(
+        getTexture('healthBarHealth').baseTexture
+    )
     const { progressPct, upgraded } = getBattleScene().get('treasureChest')
 
     setTimeout(() => {
@@ -281,7 +302,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         {
             pivot: [BASE_WIDTH / 2.5, 0],
             x: 0,
-            y: 25
+            y: 25,
         },
         ChestProgressBarBacking,
         ChestProgressBarFill

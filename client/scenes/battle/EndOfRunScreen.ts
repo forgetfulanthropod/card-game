@@ -44,7 +44,7 @@ export function EndOfRunScreen(): PixiContainer {
             .get('grind')}`,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 - 100,
+        y: BASE_HEIGHT / 2 - 50,
         style: {
             fontSize: 35,
             fill: 'white',
@@ -119,7 +119,7 @@ export function EndOfRunScreen(): PixiContainer {
         ModalBackdrop(),
         VictorySign,
         EnemiesKilled,
-        Placeholder,
+        // Placeholder,
         TotalScore,
         Retry,
         retryButton
