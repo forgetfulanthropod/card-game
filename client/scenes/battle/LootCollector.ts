@@ -40,14 +40,16 @@ const getScale = ({ idx }: { idx: number }) => (idx === 0 ? 1.5 : 1)
 
 const getDisplayName = (name: LootFromGame) => {
     switch (name) {
-        case 'bread':
-            return 'Bread'
-        case 'fishStick':
+        case 'fish':
             return 'Fish'
-        case 'potion':
-            return 'Potions'
-        case 'swordShield':
-            return 'Armor'
+        case 'copper':
+            return 'Copper'
+        case 'stone':
+            return 'Stone'
+        case 'gold':
+            return 'Gold'
+        case 'wood':
+            return 'Wood'
         case 'draftCard':
             return 'Draft a Card'
         default:
@@ -95,9 +97,10 @@ export function LootCollector(): PixiContainer {
         let lootItemsContainerY = BASE_HEIGHT + 200
 
         return lootItems.map((item, idx) => {
+            // Each loot container is created 900 pixels to the right of its neighbor (eg. the previous child in the lootItemsContainer array)
             const lootItemContainerArgs = {
                 name: `LootItemContainer_${item.name}`,
-                x: lootItemsContainerX += 900,
+                x: (lootItemsContainerX += 900),
                 y: lootItemsContainerY,
                 onClick: idx === 0 ? () => handleButtonPress() : () => {},
                 idx,
@@ -106,16 +109,26 @@ export function LootCollector(): PixiContainer {
             if (item.name === 'treasureChest')
                 return TreasureChest(lootItemContainerArgs)
 
+            // Define a bunch of properties manually to adjust for inconsistencies in asset sizing and scaling
             const scale = getScale({ idx })
-            let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
+            let itemSrc = item.name
             let properItemName = getDisplayName(item.name)
-            let lootItemTextY = -300 * scale
+            let lootItemTextY = -250 * scale
             let lootItemSpriteY =
-                lootItemTextY + getTexture(itemSrc).height * (2 * scale)
+                lootItemTextY + getTexture(itemSrc).height * (2 * scale) - 50
 
-            if (item.name === 'draftCard') {
-                lootItemTextY += 50
-                lootItemSpriteY += 50
+            const itemPositionMap: Record<
+                LootFromGame | 'default',
+                { scale: number; y: number }
+            > = {
+                draftCard: { scale: 0.45, y: 60 },
+                fish: { scale: 1.65 * scale, y: lootItemSpriteY - 40 },
+                wood: { scale: 1.75 * scale, y: lootItemSpriteY },
+                gold: { scale: 1.75 * scale, y: lootItemSpriteY },
+                copper: { scale: 1.75 * scale, y: lootItemSpriteY + 30 },
+                treasureChest: { scale: 1.75 * scale, y: lootItemSpriteY },
+                stone: { scale: 1.75 * scale, y: lootItemSpriteY - 30 },
+                default: { scale: 1.75 * scale, y: lootItemSpriteY },
             }
 
             const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
@@ -144,10 +157,10 @@ export function LootCollector(): PixiContainer {
 
             const LootItemSprite = Sprite({
                 src: getTexture(itemSrc),
-                scale: 2 * scale,
+                scale: itemPositionMap[item.name].scale,
                 anchor: [0.5, 0.5],
                 x: 0,
-                y: lootItemSpriteY,
+                y: itemPositionMap[item.name].y,
                 name: 'LootItemSprite',
             })
 
@@ -155,12 +168,12 @@ export function LootCollector(): PixiContainer {
                 text:
                     item.name === 'draftCard'
                         ? 'Draft a Card'
-                        : `Collect \n${item.count} ${properItemName}`,
+                        : `Collect ${item.count} ${properItemName}`,
                 anchor: [0.5, 0],
                 x: 0,
                 y: lootItemTextY,
                 style: {
-                    fontSize: 80 * scale,
+                    fontSize: 60 * scale,
                     fill: 'white',
                     padding: 4,
                     align: 'center',
