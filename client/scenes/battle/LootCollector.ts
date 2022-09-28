@@ -124,7 +124,7 @@ export function LootCollector(): PixiContainer {
                     height: ITEM_BOX_HEIGHT * scale,
                     x: 0,
                     y: 0,
-                    name: 'ROUNDED_BLACK_BG',
+                    name: 'RoundedBlackRectBackground',
                     anchor: [0.5, 0.5],
                     alpha: 0.6,
                     tint: 1,

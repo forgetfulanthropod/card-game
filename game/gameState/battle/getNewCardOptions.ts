@@ -1,4 +1,4 @@
-import { BattleScene, CharacterMeta, NUM_CARD_OPTIONS, Pile } from 'shared'
+import { BattleScene, CharacterMeta, NUM_DRAFT_CARD_OPTIONS, Pile } from 'shared'
 import { getAllPcs } from './characterGetters'
 import {
     getCardInstance,
@@ -17,7 +17,7 @@ export function getNewCardOptions(scene: BattleScene): Pile {
             `party must have exactly ${NUM_KAIJUS_IN_PARTY} kaijus...`
         )
 
-    for (let i = 0; i < NUM_CARD_OPTIONS; i++) {
+    for (let i = 0; i < NUM_DRAFT_CARD_OPTIONS; i++) {
         const card = updateExplanation(newCard(allPcs, i), toCursor(scene))
         newPile[card.uid] = card
     }
