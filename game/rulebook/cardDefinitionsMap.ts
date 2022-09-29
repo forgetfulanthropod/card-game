@@ -454,7 +454,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions:
             'strengthywisdomy = strength * .5 + wisdom * .5; chain(deal(strengthywisdomy), dwindle())',
         type: 'attack',
-        characterClass: 'cleric',
+        characterClass: 'rogue',
     },
     smite: {
         name: 'Smite',

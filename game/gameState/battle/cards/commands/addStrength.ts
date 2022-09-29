@@ -3,7 +3,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['addStrength'] = dslArgs => {
     const [stregth] = evalAllAsHtml(dslArgs)
-    return `+${stregth} stregth`
+    return `+${stregth} Strength`
 }
 
 export const execute: Executors['addStrength'] = ({

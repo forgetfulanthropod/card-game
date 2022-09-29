@@ -3,7 +3,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['addWisdom'] = dslArgs => {
     const [wisdom] = evalAllAsHtml(dslArgs)
-    return `+${wisdom} wisdom`
+    return `+${wisdom} Wisdom`
 }
 
 export const execute: Executors['addWisdom'] = ({

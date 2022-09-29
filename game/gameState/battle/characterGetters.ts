@@ -84,10 +84,13 @@ function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)
 
+    const likelihoods = allLivingPlayerCharacters.map(
+        c => stanceTypeMetaMap[c.stance].targetLikelihood
+    )
+    const maxLikelihood = Math.max(...likelihoods)
+
     const targetIndex = weightedRandom(
-        allLivingPlayerCharacters.map(
-            c => stanceTypeMetaMap[c.stance].targetLikelihood
-        )
+        likelihoods.map(likelihood => (likelihood === maxLikelihood ? 1 : 0))
     )
 
     return allLivingPlayerCharacters[targetIndex]
