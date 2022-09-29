@@ -17,9 +17,9 @@ export const dungeonRooms: DungeonRoomMap = {
             { id: 'matchaGelatinCube', level: 1 },
         ],
         [
-            { id: 'gnomeHooligan', level: 3 },
-            { id: 'orcWarrior', level: 3 },
-            { id: 'gnomeHooligan', level: 3 },
+            { id: 'gnomeHooligan', level: 2 },
+            { id: 'orcWarrior', level: 2 },
+            { id: 'gnomeHooligan', level: 2 },
         ],
         [
             { id: 'matchaGelatinCube', level: 4 },

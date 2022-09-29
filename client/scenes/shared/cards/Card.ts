@@ -197,17 +197,19 @@ function manageExplanationsEl(
     explanationsEl: PixiContainer,
     isLongHovered: Datum<boolean>
 ) {
+    explanationsEl.alpha = 0
+
+    portalize({
+        from: root,
+        to: () => getStage(),
+        content: explanationsEl,
+    })
+
     isLongHovered.onChange(is => {
         if (!is) {
             explanationsEl.alpha = 0
             return
         }
-
-        portalize({
-            from: root,
-            to: () => getStage(),
-            content: explanationsEl,
-        })
 
         const rootPosition = root.getGlobalPosition()
         explanationsEl.x = rootPosition.x
