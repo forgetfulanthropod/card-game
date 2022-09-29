@@ -20,17 +20,13 @@ const VICTORY_SIGN_FINAL_POS = {
 }
 
 // TODO end of run when user dies (eg. NPC wins)
-export function EndOfRunScreen(): PixiContainer {
+export function DefeatScreen(): PixiContainer {
     const scene = getBattleScene()
 
-    // setTimeout(() => {
-    //     animateTo(VictorySign, VICTORY_SIGN_FINAL_POS)
-    // }, 2000)
-
-    const VictorySign = TweenableContainer(
+    const DefeatSign = TweenableContainer(
         {},
         Sprite({
-            src: getTexture('victory'),
+            src: getTexture('defeat'),
             alpha: 1,
             scale: 0.4,
             x: BASE_WIDTH / 2,
@@ -44,21 +40,6 @@ export function EndOfRunScreen(): PixiContainer {
             .select('runScore')
             .select('attributes')
             .get('grind')}`,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 - 50,
-        style: {
-            fontSize: 35,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-        },
-        name: 'EnemiesKilled',
-    })
-
-    const Placeholder = Text({
-        text: `Placeholder: 0`,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 2 - 50,
@@ -122,9 +103,8 @@ export function EndOfRunScreen(): PixiContainer {
     const EndOfRunContainer = Container(
         { x: 0, y: 0, scale: 1, name: 'EndOfRunContainer' },
         ModalBackdrop(),
-        VictorySign,
+        DefeatSign,
         EnemiesKilled,
-        // Placeholder,
         TotalScore,
         Retry,
         retryButton

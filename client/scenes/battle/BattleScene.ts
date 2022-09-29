@@ -16,6 +16,7 @@ import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
 import { EndOfRunScreen } from './EndOfRunScreen'
+import { DefeatScreen } from './DefeatScreen'
 
 export function BattleScene(): PixiContainer {
     const hoveredCardUid = datum<CharacterUid | null>(null)
@@ -55,6 +56,7 @@ export function BattleScene(): PixiContainer {
                                     'choosing cards',
                                     'collecting loot',
                                     'won',
+                                    'lost'
                                 ].includes(sceneState) &&
                                 sceneState,
                             waitForDeathAnimationsDatum,
@@ -65,7 +67,11 @@ export function BattleScene(): PixiContainer {
                                 ? LootCollector()
                                 : sceneState === 'choosing cards'
                                 ? Container({}, LootCollector(), CardAdder())
-                                : EndOfRunScreen()
+                                : sceneState === 'won'
+                                ? EndOfRunScreen()
+                                : sceneState === 'lost'
+                                ? DefeatScreen()
+                                : Container({})
                     )
                 )
         ),
