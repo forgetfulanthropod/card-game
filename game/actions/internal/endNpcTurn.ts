@@ -21,6 +21,8 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     setRoundEnergy(scene)
     clearHasMoved(scene)
 
+    scene.set('isPlayerTurn', true)
+
     clearBlock(scene, 'pc')
 
     drawNewHand(scene)
