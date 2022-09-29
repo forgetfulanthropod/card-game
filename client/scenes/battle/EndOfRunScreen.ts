@@ -10,6 +10,7 @@ import {
     Sprite,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
+import { callApi } from '@/callApi'
 
 const VICTORY_SIGN_FINAL_POS = {
     rotation: 0,
@@ -111,6 +112,9 @@ export function EndOfRunScreen(): PixiContainer {
     })
 
     function handleButtonPress() {
+        void callApi('makeNewUser', {
+            username: localStorage.getItem('username') as string,
+        })
         localStorage.removeItem('username')
         window.location.reload()
     }
