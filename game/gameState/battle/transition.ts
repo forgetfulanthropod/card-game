@@ -27,6 +27,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
 
         return true
     } else if (winner === 'NPC') {
+        scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
         scene.set('state', 'lost')
         return true
     }
