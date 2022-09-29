@@ -54,7 +54,15 @@ export function InfoBox(
                       ),
                       Box(displayArgs, localBounds, padding),
                   ]
-                : [Box(displayArgs, localBounds, padding)])
+                : [
+                      Box(
+                          displayArgs,
+                          localBounds,
+                          padding,
+                          //@ts-expect-error
+                          displayArgs?.filters
+                      ),
+                  ])
         ),
 
         // Sprite({
