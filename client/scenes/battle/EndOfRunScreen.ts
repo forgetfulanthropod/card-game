@@ -22,7 +22,7 @@ const VICTORY_SIGN_FINAL_POS = {
 // TODO end of run when user dies (eg. NPC wins)
 export function EndOfRunScreen(): PixiContainer {
     const scene = getBattleScene()
-
+    const battleState = scene.get('state')
     // setTimeout(() => {
     //     animateTo(VictorySign, VICTORY_SIGN_FINAL_POS)
     // }, 2000)
@@ -30,7 +30,7 @@ export function EndOfRunScreen(): PixiContainer {
     const VictorySign = TweenableContainer(
         {},
         Sprite({
-            src: getTexture('victory'),
+            src: getTexture(`${battleState === 'won' ? 'victory' : 'defeat'}`),
             alpha: 1,
             scale: 0.4,
             x: BASE_WIDTH / 2,
