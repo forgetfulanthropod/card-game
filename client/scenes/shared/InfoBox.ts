@@ -35,7 +35,8 @@ export function InfoBox(
                           displayArgs,
                           localBounds,
                           padding + 12,
-                          displayArgs.filters
+                          //@ts-expect-error
+                          displayArgs?.filters
                       ),
                       Box(
                           {
