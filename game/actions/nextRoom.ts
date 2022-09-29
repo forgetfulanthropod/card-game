@@ -14,6 +14,7 @@ import { getRulebook } from '@/rulebook'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
+    scene.set('turnCount', 1)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
@@ -24,10 +25,9 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('state', 'in battle')
     scene.set('nextNpcCommands', getNpcMoves(scene))
     clearAllEffects(scene)
-    clearRoomCardModifiers(scene)
-    scene.set('turnCount', 1)
-    setRoundEnergy(scene)
     putAllCardsInDrawPile(scene)
+    clearRoomCardModifiers(scene)
+    setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)
     scene.set('isInMap', true)
