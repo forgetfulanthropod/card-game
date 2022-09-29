@@ -262,7 +262,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'swordSlash',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'deal(0.5 * strength, 2)',
+        actions:
+            'strengthy = 0.5 * strength; chain(deal(strengthy), effect("bleed", 2))',
         type: 'attack',
         characterClass: 'knight',
     },

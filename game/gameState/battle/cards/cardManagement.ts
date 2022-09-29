@@ -1,4 +1,4 @@
-import { set, upperFirst } from 'lodash'
+import { upperFirst } from 'lodash'
 import type {
     Card,
     CardId,
@@ -36,42 +36,47 @@ export function getNullCards(): Piles {
 }
 
 function makeCards(scene: BattleCursor): Piles {
-    const cardIds: CardId[] = [
-        // 'bodySlam',
-        // 'TEST_turnStartEffects',
-        // 'TEST_turnStartEffects',
-        // 'TEST_turnStartEffects',
-        // 'magicRitual',
-        // 'chainLightning',
-        // 'spellBook',
-        // 'fireball',
-        // 'orbOfFrost',
-        // 'basicAttackCleric',
-        // 'basicAttackKnight',
-        // 'blockCleric',
-        // 'blockKnight',
-        // 'blockWizard',
-        // 'swordSlash',
-        // 'dutifulStab',
-        // 'charge',
-        // 'testudoFormation',
-        // final cards below?
-        // 'arcanePower',
-        // 'scatterBrained',
-        // 'magicalStorm',
-        // 'guidingBolt',
-        // 'smite',
-        // 'bless',
-        // 'prayerOfGoodFortune', // todo
-        // 'orbOfHolyLight', // todo
-        // 'mantraOfPatience',
-        // 'helpingHand',
-        // 'orbOfProtection',
-        // 'orbOfLightning',
-    ]
+    // const cardIds: CardId[] = [
+    //     // 'bodySlam',
+    //     // 'TEST_turnStartEffects',
+    //     // 'TEST_turnStartEffects',
+    //     // 'TEST_turnStartEffects',
+    //     // 'magicRitual',
+    //     // 'chainLightning',
+    //     // 'spellBook',
+    //     // 'fireball',
+    //     // 'orbOfFrost',
+    //     // 'basicAttackCleric',
+    //     // 'basicAttackKnight',
+    //     // 'blockCleric',
+    //     // 'blockKnight',
+    //     // 'blockWizard',
+    //     // 'swordSlash',
+    //     // 'dutifulStab',
+    //     // 'charge',
+    //     // 'testudoFormation',
+    //     // final cards below?
+    //     // 'arcanePower',
+    //     // 'scatterBrained',
+    //     // 'magicalStorm',
+    //     // 'guidingBolt',
+    //     // 'smite',
+    //     // 'bless',
+    //     // 'prayerOfGoodFortune', // todo
+    //     // 'orbOfHolyLight', // todo
+    //     // 'mantraOfPatience',
+    //     // 'helpingHand',
+    //     // 'orbOfProtection',
+    //     // 'orbOfLightning',
+    // ]
 
     const allCharacters = vals(scene.get('allCharacters'))
+
+    const characterUidToCardIdMap: Record<CharacterUid, CardId[]> = {}
+
     allCharacters.forEach(cm => {
+        characterUidToCardIdMap[cm.uid] = []
+        const cardIds = characterUidToCardIdMap[cm.uid]
         const ccuf = upperFirst(cm.class)
         cardIds.push(
             //@ts-expect-error
@@ -101,18 +106,34 @@ function makeCards(scene: BattleCursor): Piles {
         if (cm.class === 'rogue') cardIds.push('patientAmbush')
     })
 
-    return {
-        draw: cardIds.reduce((acc, id, i) => {
-            // logger.info(JSON.stringify(allCharacters, null, '\n'))
-            const owningCharUid =
-                allCharacters[Math.floor((i * 3) / cardIds.length)].uid
+    const draw: Pile = {}
 
+    keys(characterUidToCardIdMap).forEach(characterUid => {
+        const cardIds = characterUidToCardIdMap[characterUid]
+
+        cardIds.forEach(id => {
             const card = updateExplanation(
-                getCardInstance(id, owningCharUid),
+                getCardInstance(id, characterUid),
                 scene
             )
-            return set(acc, card.uid, card)
-        }, {}),
+
+            draw[card.uid] = card
+        })
+    })
+
+    return {
+        draw,
+        // draw: cardIds.reduce((acc, id, i) => {
+        //     // logger.info(JSON.stringify(allCharacters, null, '\n'))
+        //     const owningCharUid =
+        //         allCharacters[Math.floor((i * 3) / cardIds.length)].uid
+
+        //     const card = updateExplanation(
+        //         getCardInstance(id, owningCharUid),
+        //         scene
+        //     )
+        //     return set(acc, card.uid, card)
+        // }, {}),
         hand: {},
         discard: {},
         removedRoom: {},
