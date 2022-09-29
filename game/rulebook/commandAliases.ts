@@ -69,7 +69,7 @@ export const meatyCharge = (x: number): CommandDefinition => ({
 })
 /**Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked) */
 export const bellowAndSing = (x: number, y: number): CommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength/2), effect("debilatated",${y})); effect("fatigue",${x})`,
+    actions: `ifDamageDealt(deal(strength/2), effect("debilitated",${y})); effect("fatigue",${x})`,
     id: `bellowAndSing(${x},${y})`,
     name: `Bellow and Sing ${x}-${y}`,
     targetNum: 1,

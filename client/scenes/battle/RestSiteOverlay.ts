@@ -14,9 +14,12 @@ import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
 
 export const plushyChoiceDescriptions = [
-    'revive a character with 25% Health',
-    'heal a character for 50% of its Health',
-    "bring back a character's exhausted abilities",
+    // 'revive a character with 25% Health',
+    // 'heal a character for 50% of its Health',
+    // "bring back a character's exhausted abilities",
+    'Heal all characters by 25%',
+    'Heal all characters by 25%',
+    'Heal all characters by 25%',
 ]
 
 export function RestSiteOverlay(): PixiContainer {

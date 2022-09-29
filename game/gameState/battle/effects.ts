@@ -88,7 +88,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
 
     cm.effects?.forEach(effect => {
         if (turnStartEffectIds.includes(effect.id as TurnStartEffectId)) return
-        staticEffectFuncs[effect.id as StaticEffectId](stats, effect.counter)
+        staticEffectFuncs[effect.id as StaticEffectId]?.(stats, effect.counter)
     })
 
     return stats
