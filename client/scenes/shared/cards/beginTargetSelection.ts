@@ -49,6 +49,7 @@ export function beginTargetSelection(
     const arrow = TargetSelectGraphic(origin, destination)
     cardEl.addChild(arrow)
 
+    localTree.set('selectedTargets', [])
     const selectedTargetsCursor = localTree.select('selectedTargets')
 
     const unsub = onUpdate(
