@@ -18,7 +18,7 @@ export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
 })
 /**Itchy Ooze (DOT X) */
 export const itchyOoze = (x: number): CommandDefinition => ({
-    actions: `dot(${x})`,
+    actions: `effect("poison", ${x})`,
     id: `itchyOoze(${x})`,
     name: `Itchy Ooze ${x}`,
     targetNum: 1,
