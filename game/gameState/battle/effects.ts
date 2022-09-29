@@ -25,8 +25,10 @@ const staticEffectFuncs: Record<
         stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
     },
     berserk(stats) {
-        if (stats.stance === 'aggressive')
-            stats.strength += Math.ceil(stats.strength * 0.5)
+        if (stats.stance !== 'aggressive') return
+
+        stats.strength += Math.ceil(stats.strength * 0.5)
+        stats.damageTakeMultiplicand *= 2
     },
     debilitated(stats) {
         stats.strength *= 0.5
@@ -86,7 +88,7 @@ export function calcPostEffectStats(cm: CharacterMeta) {
 
     cm.effects?.forEach(effect => {
         if (turnStartEffectIds.includes(effect.id as TurnStartEffectId)) return
-        staticEffectFuncs[effect.id as StaticEffectId](stats, effect.counter)
+        staticEffectFuncs[effect.id as StaticEffectId]?.(stats, effect.counter)
     })
 
     return stats

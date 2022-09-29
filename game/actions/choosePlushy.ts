@@ -19,10 +19,10 @@ function healAllPartyMembers(scene: BattleCursor) {
         'allCharacters',
         produce(ac => {
             for (const char of Object.values(ac)) {
-                if (!char.isPc) continue
+                if (!char.isPc || char.health < 0) continue
                 char.health = Math.min(
                     char.constitution,
-                    Math.ceil(char.health * 1.25)
+                    Math.ceil(char.health + char.constitution * 0.25)
                 )
             }
         })

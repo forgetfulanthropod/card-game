@@ -1,7 +1,7 @@
-import type { CharacterUid, CommandId, NextCommand } from 'shared'
+import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
 import { datum } from 'datums'
-import type { KeyTerm } from '../ExplanationBox'
-import { TermExplanationBox } from '../ExplanationBox'
+import type { KeyTerm } from '@sharedElements'
+import { TermExplanationBox } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
 import type {
     AssetKey,
@@ -79,8 +79,8 @@ function DamageIntended(
     cuid: CharacterUid
 ): DisplayObject[] {
     const commandIdToMetaMap: Record<
-        CommandId & KeyTerm,
-        { id: CommandId; src: AssetKey }
+        NpcCommandId & KeyTerm,
+        { id: NpcCommandId; src: AssetKey }
     > = {
         mimicAttack: {
             id: 'mimicAttack',

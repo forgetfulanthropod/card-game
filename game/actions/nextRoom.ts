@@ -17,7 +17,6 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
-    setRoundEnergy(scene)
     scene.apply('allCharacters', ac => ({
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
@@ -27,6 +26,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     clearAllEffects(scene)
     clearRoomCardModifiers(scene)
     scene.set('turnCount', 1)
+    setRoundEnergy(scene)
     putAllCardsInDrawPile(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)

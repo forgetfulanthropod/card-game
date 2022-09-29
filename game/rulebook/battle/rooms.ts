@@ -11,28 +11,24 @@ const config = { randomDungeon: false }
 
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [
-        [{ id: 'mimic', level: 3 }],
         [
             { id: 'skeletonWarrior', level: 1 },
             { id: 'skeletonWarrior', level: 1 },
             { id: 'matchaGelatinCube', level: 1 },
         ],
         [
-            { id: 'gnomeHooligan', level: 1 },
-            { id: 'orcWarrior', level: 1 },
-            { id: 'gnomeHooligan', level: 1 },
+            { id: 'gnomeHooligan', level: 3 },
+            { id: 'orcWarrior', level: 3 },
+            { id: 'gnomeHooligan', level: 3 },
         ],
         [
-            { id: 'matchaGelatinCube', level: 1 },
-            { id: 'skeletonWarrior', level: 2 },
-            { id: 'matchaGelatinCube', level: 1 },
+            { id: 'matchaGelatinCube', level: 4 },
+            { id: 'skeletonWarrior', level: 4 },
+            { id: 'matchaGelatinCube', level: 4 },
         ],
-        [
-            { id: 'skeletonWarrior', level: 2 },
-            { id: 'matchaGelatinCube', level: 2 },
-            { id: 'skeletonWarrior', level: 2 },
-        ],
+        [{ id: 'skeletonWarrior', level: 9 }],
         [{ id: 'REST_SITE', level: 1 }],
+        [{ id: 'mimic', level: 10 }],
         // [{ id: 'mimic', level: 3 }],
         // [{ id: 'bosshogJurgen', level: 4 }],
     ],

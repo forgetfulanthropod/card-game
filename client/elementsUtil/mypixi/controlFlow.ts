@@ -194,7 +194,7 @@ function isKeyedArray(
  * placing within another Container.
  */
 export function portalize(args: {
-    from: DisplayObject
+    from?: DisplayObject
     content: DisplayObject
     to?: () => PixiContainer | PixiContainer
     /** Name of child of `to` to insert child before */
@@ -213,7 +213,7 @@ export function portalize(args: {
         } else {
             to.addChild(content)
         }
-        from.on('destroyed', () => {
+        from?.on('destroyed', () => {
             to.removeChild(content)
             content.destroy({ children: true })
         })

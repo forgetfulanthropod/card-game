@@ -1,6 +1,6 @@
 import { Texture } from 'pixi.js'
 import { datum } from 'datums'
-import { ExplanationBox } from './ExplanationBox'
+import { ExplanationBox } from '@sharedElements'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     If,
@@ -14,9 +14,12 @@ import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
 
 export const plushyChoiceDescriptions = [
-    'revive a character with 25% Health',
-    'heal a character for 50% of its Health',
-    "bring back a character's exhausted abilities",
+    // 'revive a character with 25% Health',
+    // 'heal a character for 50% of its Health',
+    // "bring back a character's exhausted abilities",
+    'Heal all characters by 25%',
+    'Heal all characters by 25%',
+    'Heal all characters by 25%',
 ]
 
 export function RestSiteOverlay(): PixiContainer {
@@ -88,7 +91,7 @@ export function RestSiteOverlay(): PixiContainer {
             //     y: boundingBoxes[index][1] + boundingBoxes[index][3],
             // })
             return ExplanationBox({
-                text: plushyChoiceDescriptions[index],
+                texts: [plushyChoiceDescriptions[index]],
                 displayObjectArgs: {
                     x:
                         (boundingBoxes[index][0] +

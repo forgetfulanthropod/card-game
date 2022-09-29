@@ -144,6 +144,7 @@ function Options(
                         )
                     },
                 },
+                omitPointerAreaExtender: true,
             }),
             {
                 y: BASE_HEIGHT - CARD_WIDTH,

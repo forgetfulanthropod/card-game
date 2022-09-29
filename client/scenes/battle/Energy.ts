@@ -73,7 +73,7 @@ function EnergyEl(scene: ROBattleScene): PixiContainer {
             height: (energyWidth * BASE_WIDTH) / 1920,
         }),
         text,
-        For(roundsDatum, ({ key, isFull, index }) =>
+        For(roundsDatum, ({ isFull, index }) =>
             Container(
                 {
                     x: index < 3 ? -80 : 80,

@@ -1,10 +1,17 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { Tweener } from 'pixi-tweener'
-import type { InteractionEvent } from 'pixi.js'
+import type { DisplayObject, InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type { Card, CardType, CardUid, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
-import { upperCase, upperFirst } from 'lodash'
+import { datum } from 'datums'
+import { startCase, upperFirst } from 'lodash'
+import { keys } from 'shared/code'
+import {
+    ExplanationBox,
+    keyTermsMap,
+    TermExplanationBox,
+} from '../ExplanationBox'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
@@ -17,6 +24,11 @@ import type {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import {
+    portalize,
+    BASE_WIDTH,
+    BASE_HEIGHT,
+    flashTo,
+    getStage,
     getTexture,
     Container,
     getRenderer,
@@ -42,12 +54,14 @@ export function CardEl({
     card,
     hoveredCardUid,
     events,
+    omitPointerAreaExtender,
 }: {
     rotation?: number
     width: number
     card: Card
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
+    omitPointerAreaExtender?: boolean
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -69,16 +83,22 @@ export function CardEl({
         cardArtTextureOrBlank = Texture.WHITE
     }
 
-    return TweenableContainer(
+    const isLongHovered = datum(false)
+    const decoratedEvents: InteractionEvents = getDecoratedEvents({
+        events,
+        hoveredCardUid,
+        card,
+        isLongHovered,
+    })
+
+    const root = TweenableContainer(
         {
             name: card.uid,
             // cache: true, // doesn't update...
         },
         TweenableContainer(
             {
-                events:
-                    events ??
-                    (hoveredCardUid ? getEvents(card, hoveredCardUid) : {}),
+                events: decoratedEvents,
                 rotation,
                 scale,
                 y: (cardFrameTexture.height / 2) * scale,
@@ -101,9 +121,132 @@ export function CardEl({
             }),
             getEnergyContainer(card),
             ...getTexts(card, cardFrameTexture, colorStops),
-            PointerAreaExtender(cardFrameTexture.width, cardFrameTexture.height)
+            ...(omitPointerAreaExtender
+                ? []
+                : [
+                      PointerAreaExtender(
+                          cardFrameTexture.width,
+                          cardFrameTexture.height
+                      ),
+                  ])
         )
     )
+
+    manageExplanationsEl(root, ExplanationsEl(card, width), isLongHovered)
+
+    return root
+}
+
+function ExplanationsEl(card: Card, width: number) {
+    return Container(
+        {
+            // x: BASE_WIDTH / 2,
+            // y: BASE_HEIGHT * 0.6,
+            name: 'MY EXPLANATIONS',
+        },
+        ...TermExplanationBoxes(card.explanation, width)
+    )
+}
+
+function getDecoratedEvents({
+    events,
+    hoveredCardUid,
+    card,
+    isLongHovered,
+}: {
+    events: InteractionEvents | undefined
+    hoveredCardUid: Datum<CharacterUid | null> | undefined
+    card: Card
+    isLongHovered: Datum<boolean>
+}) {
+    const isHovering = datum(false)
+
+    const dynamicEvents =
+        events ?? (hoveredCardUid ? getEvents(card, hoveredCardUid) : {})
+
+    const decoratedEvents: InteractionEvents = {
+        ...dynamicEvents,
+        pointerover(e) {
+            dynamicEvents?.pointerover?.(e)
+
+            isHovering.set(true)
+            setTimeout(() => {
+                if (isHovering.val) isLongHovered.set(true)
+            }, 1000)
+        },
+        pointerdown(e) {
+            dynamicEvents?.pointerdown?.(e)
+
+            isHovering.set(true)
+            setTimeout(() => {
+                if (isHovering.val) isLongHovered.set(true)
+            }, 1000)
+        },
+        pointerout(e) {
+            dynamicEvents?.pointerout?.(e)
+
+            isHovering.set(false)
+            isLongHovered.set(false)
+        },
+    }
+    return decoratedEvents
+}
+
+function manageExplanationsEl(
+    root: TweenablePixiContainer,
+    explanationsEl: PixiContainer,
+    isLongHovered: Datum<boolean>
+) {
+    isLongHovered.onChange(is => {
+        if (!is) {
+            explanationsEl.alpha = 0
+            return
+        }
+
+        portalize({
+            from: root,
+            to: () => getStage(),
+            content: explanationsEl,
+        })
+
+        const rootPosition = root.getGlobalPosition()
+        explanationsEl.x = rootPosition.x
+        explanationsEl.y = rootPosition.y
+        explanationsEl.alpha = 1
+    })
+}
+
+function TermExplanationBoxes(
+    explanation: string,
+    width: number
+): DisplayObject[] {
+    const allKeyTerms = keys(keyTermsMap)
+    const terms = allKeyTerms
+        .filter(keyTerm => ~getIndex(keyTerm, explanation))
+        .sort(
+            (keyTermA, keyTermB) =>
+                getIndex(keyTermA, explanation) -
+                getIndex(keyTermB, explanation)
+        )
+
+    const boxes = terms.map(term =>
+        TermExplanationBox({ term, displayObjectArgs: { x: width * 0.85 } })
+    )
+
+    boxes.forEach((box, i) => {
+        if (i > 0) {
+            const lastBox = boxes[i - 1]
+            box.y = lastBox.y + lastBox.height + 10
+        }
+
+        return box
+    })
+
+    return boxes
+}
+
+function getIndex(term: string, explanation: string): number {
+    return explanation.toLowerCase().indexOf(startCase(term).toLowerCase())
 }
 
 export function CardSprite({
@@ -112,12 +255,14 @@ export function CardSprite({
     card,
     hoveredCardUid,
     events,
+    omitPointerAreaExtender,
 }: {
     rotation?: number
     width: number
     card: Card
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
+    omitPointerAreaExtender?: boolean
 }): PixiSprite {
     const el = CardEl({
         rotation,
@@ -125,6 +270,7 @@ export function CardSprite({
         card,
         hoveredCardUid,
         events,
+        omitPointerAreaExtender,
     })
     const src = getRenderer().generateTexture(el)
     // nextTick().then(() => el.destroy(true))
@@ -296,8 +442,22 @@ function getEvents(
                     cardEl.parent,
                     card
                 )
+        } else {
+            flashTo(
+                getStage(),
+                () =>
+                    ExplanationBox({
+                        texts: ['not enough energy!'],
+                        displayObjectArgs: {
+                            x: BASE_WIDTH / 2,
+                            y: BASE_HEIGHT * 0.6,
+                            borderThickness: 3,
+                        },
+                        color: 0xa240e8,
+                    }),
+                { durationMs: 1200 }
+            )
         }
-        //TODO: else flash not enough energy message
     }
     const pointerup: InteractionEventHandler = function ({
         currentTarget: cardEl,

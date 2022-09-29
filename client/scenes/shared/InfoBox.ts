@@ -1,15 +1,20 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { omit } from 'lodash'
-import type { PixiContainer, ContainerArgs } from '@/elementsUtil'
+import type { Filter } from 'pixi.js'
+import type { PixiContainer, ContainerArgs, PixiSprite } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
+
+export type InfoBoxDisplayArgs = ContainerArgs & {
+    padding?: number
+    colorStops?: ColorStop[]
+    borderRadius?: number
+    borderThickness?: number
+    borderColor?: number
+}
 
 export function InfoBox(
     contents: PixiContainer,
-    displayArgs: ContainerArgs & {
-        padding?: number
-        colorStops?: ColorStop[]
-        borderRadius?: number
-    } = {}
+    displayArgs: InfoBoxDisplayArgs = {}
 ) {
     const localBounds = contents.getLocalBounds()
 
@@ -22,25 +27,44 @@ export function InfoBox(
             x: padding,
             ...omit(displayArgs, 'filters', 'colorStops', 'padding'),
         },
-        RoundedRectangleGradientSprite({
-            radius: displayArgs.borderRadius ?? 20,
-            gradientArgs: {
-                x0: 0,
-                y0: 0,
-                x1: 0,
-                y1: localBounds.height,
-                colorStops: displayArgs.colorStops ?? [
-                    { color: 0x272753, offset: 0 },
-                ],
-            },
-            spriteArgs: {
-                width: localBounds.width + padding * 2,
-                height: localBounds.height + +padding * 2, // even padding all around
-                x: localBounds.left - padding,
-                y: localBounds.top - padding,
-                filters: displayArgs.filters,
-            },
-        }),
+        Container(
+            {},
+            ...(displayArgs.borderThickness
+                ? [
+                      Box(
+                          displayArgs,
+                          localBounds,
+                          padding + 12,
+                          //@ts-expect-error
+                          displayArgs?.filters
+                      ),
+                      Box(
+                          {
+                              ...displayArgs,
+                              colorStops: [
+                                  {
+                                      color:
+                                          displayArgs.borderColor ?? 0xffffff,
+                                      offset: 0,
+                                  },
+                              ],
+                          },
+                          localBounds,
+                          padding + 4
+                      ),
+                      Box(displayArgs, localBounds, padding),
+                  ]
+                : [
+                      Box(
+                          displayArgs,
+                          localBounds,
+                          padding,
+                          //@ts-expect-error
+                          displayArgs?.filters
+                      ),
+                  ])
+        ),
+
         // Sprite({
         //     src: PixiTexture.WHITE,
         //     tint: 0,
@@ -51,4 +75,37 @@ export function InfoBox(
         // }),
         contents
     )
+}
+
+function Box(
+    displayArgs: ContainerArgs & {
+        padding?: number | undefined
+        colorStops?: ColorStop[] | undefined
+        borderRadius?: number | undefined
+        borderThickness?: number | undefined
+        borderColor?: number | undefined
+    },
+    localBounds: { height: number; width: number; left: number; top: number },
+    padding: number,
+    filters?: Filter[]
+): PixiSprite {
+    return RoundedRectangleGradientSprite({
+        radius: displayArgs.borderRadius ?? 20,
+        gradientArgs: {
+            x0: 0,
+            y0: 0,
+            x1: 0,
+            y1: localBounds.height,
+            colorStops: displayArgs.colorStops ?? [
+                { color: 0x272753, offset: 0 },
+            ],
+        },
+        spriteArgs: {
+            width: localBounds.width + padding * 2,
+            height: localBounds.height + padding * 2,
+            x: localBounds.left - padding,
+            y: localBounds.top - padding,
+            filters,
+        },
+    })
 }

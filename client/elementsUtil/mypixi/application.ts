@@ -67,6 +67,10 @@ export function getPixiApp(): PixiApplication {
     return app
 }
 
+export function getStage(): PixiContainer {
+    return getPixiApp().stage
+}
+
 export function getRenderer(): Renderer {
     if (
         !(app instanceof PixiApplication) ||

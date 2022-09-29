@@ -73,7 +73,7 @@ const orbActivators: Record<
         updateHand(scene)
 
         emitMove({
-            moveName: '+2 strongblock!',
+            moveName: 'Holy Light',
             targetType: 'self',
             characterUid: character.uid,
             targetUids: [character.uid],
