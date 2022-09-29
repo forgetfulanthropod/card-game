@@ -530,7 +530,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'helpingHand',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'choice(addBlock(defense + 2), addWisdom(2), addStrength(2))',
+        actions: 'chain(addBlock(defense + 2), addWisdom(2), addStrength(2))',
         type: 'utility',
         characterClass: 'cleric',
     },

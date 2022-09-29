@@ -63,7 +63,7 @@ function makeCards(scene: BattleCursor): Piles {
         // 'smite',
         // 'bless',
         // 'prayerOfGoodFortune', // todo
-        'orbOfHolyLight', // todo
+        // 'orbOfHolyLight', // todo
         // 'mantraOfPatience',
         // 'helpingHand',
         // 'orbOfProtection',
