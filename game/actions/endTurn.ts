@@ -16,8 +16,12 @@ export const endTurn: GameActions['endTurn'] = args => {
 
     endRound(scene)
     clearBlock(scene, 'npc')
+
+    applyTurnStartEffects(scene, 'pc')
     applyTurnStartEffects(scene, 'npc')
     decrementEffects(scene, 'pc')
+    decrementEffects(scene, 'npc')
+
     popAndRunQueue(scene, 'npc')
 
     args.game.set('nextAction', {

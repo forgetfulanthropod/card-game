@@ -18,7 +18,7 @@ export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
 })
 /**Itchy Ooze (DOT X) */
 export const itchyOoze = (x: number): CommandDefinition => ({
-    actions: `effect("poison", ${x})`,
+    actions: `chain(deal(strength * .2), effect("poison", ${x}))`,
     id: `itchyOoze(${x})`,
     name: `Itchy Ooze ${x}`,
     targetNum: 1,
@@ -58,6 +58,14 @@ export const engulf = (x: number): CommandDefinition => ({
     name: `Engulf ${x}`,
     targetNum: 1,
     targetType: 'enemies',
+})
+/**Gnome bomb */
+export const gnomeBomb = (x: number): CommandDefinition => ({
+    actions: `deal(strength * .3)`,
+    id: `gnomeBomb(${x})`,
+    name: `Gnome Bomb ${x}`,
+    targetNum: -1,
+    targetType: 'allEnemies',
 })
 /**Meaty Charge (BA, applies bleed (X) if any damage goes unblocked) */
 export const meatyCharge = (x: number): CommandDefinition => ({

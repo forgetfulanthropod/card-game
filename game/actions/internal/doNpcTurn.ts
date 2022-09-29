@@ -7,26 +7,27 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
-const TIME_BETWEEN_NPC_MOVES = 1000
+const TIME_BETWEEN_NPC_MOVES = 2500
 
 export const doNpcTurn: InternalActions['doNpcTurn'] = ({ game, index }) => {
     const scene = getBattleSceneIn(game)
     const isBattleOver = maybeTransitionBattleState(scene)
+
     if (isBattleOver) return
     const processedCmds = scene.get('nextNpcCommands')
 
     logger.info(JSON.stringify({ processedCmds }))
 
-    if (processedCmds.length === 0) {
-        endNpcTurn(game)
-        return
-    }
+    // if (processedCmds.length === 0) {
+    //     endNpcTurn(game)
+    //     return
+    // }
 
-    const processedCmd = processedCmds[index]
-
-    const { targetUids, command } = processedCmd
-    if (validateCommand(scene.get(), command)) {
-        interpretCommand({ command, targetUids, scene })
+    if (processedCmds.length) {
+        const processedCmd = processedCmds[index]
+        const { targetUids, command } = processedCmd
+        if (validateCommand(scene.get(), command))
+            interpretCommand({ command, targetUids, scene })
     }
 
     if (index >= processedCmds.length - 1) {

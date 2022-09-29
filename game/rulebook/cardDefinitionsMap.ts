@@ -35,8 +35,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 0,
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'chain(effect("bleed", 2), effect("poison", 4), effect("passiveBlock", 2))',
+        actions: 'chain(effect("bleed", 2), effect("poison", 999))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -166,7 +165,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'fireball',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'deal(wisdom * 2.5)',
+        actions: 'wisdomy = wisdom * 2.5; deal(wisdomy)',
         type: 'attack',
         characterClass: 'wizard',
     },

@@ -1,4 +1,5 @@
-import { BattleCursor, NUM_ROOMS_BEFORE_GAME_OVER } from 'shared'
+import type { BattleCursor } from 'shared'
+import { NUM_ROOMS_BEFORE_GAME_OVER } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
@@ -15,14 +16,18 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
 
         if (gameIsOver) {
-            scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+            scene
+                .select('runScore')
+                .set('totalScore', calculateNewRunScore(scene))
             scene.set('state', 'won')
         } else {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('treasureChest', calculateChestProgress(scene))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-            scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+            scene
+                .select('runScore')
+                .set('totalScore', calculateNewRunScore(scene))
         }
 
         return true

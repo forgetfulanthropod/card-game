@@ -106,13 +106,13 @@ function getDamageTakeMulitplicandForStance(stance: StanceId) {
 
 export function applyTurnStartEffects(
     scene: BattleCursor,
-    nextTurn: 'pc' | 'npc'
+    whichSide: 'pc' | 'npc'
 ) {
-    const isPcStart = nextTurn === 'pc'
+    const isPcSide = whichSide === 'pc'
     scene.select('allCharacters').apply(
         produce(allCharacters => {
             for (const character of Object.values(allCharacters)) {
-                if (character.isPc === isPcStart) continue
+                if (character.isPc !== isPcSide) continue
                 character.effects.forEach(effect => {
                     turnStartEffectFuncs[effect.id as TurnStartEffectId]?.(
                         character,

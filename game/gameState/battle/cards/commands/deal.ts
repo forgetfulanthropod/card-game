@@ -44,7 +44,7 @@ export const execute: Executors['deal'] = ({
 }) => {
     const [damage, _times] = evalAll(dslArgs)
     const expectedNumTargets = command.targetNum
-    if (expectedNumTargets !== targetUids.length) {
+    if (expectedNumTargets > -1 && expectedNumTargets !== targetUids.length) {
         logger.error(
             `command ${command.id} received ${targetUids.length} targets, but ${expectedNumTargets} were expected`
         )

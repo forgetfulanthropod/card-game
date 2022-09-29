@@ -5,8 +5,6 @@ import {
     clearBlock,
     clearHasMoved,
     setRoundEnergy,
-    decrementEffects,
-    applyTurnStartEffects,
     popAndRunQueue,
     updateNpcMoves,
 } from '@/gameState'
@@ -23,10 +21,8 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     setRoundEnergy(scene)
     clearHasMoved(scene)
 
-    scene.set('isPlayerTurn', true)
     clearBlock(scene, 'pc')
-    applyTurnStartEffects(scene, 'pc')
-    decrementEffects(scene, 'npc')
+
     drawNewHand(scene)
     popAndRunQueue(scene, 'pc')
 

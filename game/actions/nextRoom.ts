@@ -15,6 +15,7 @@ import { getRulebook } from '@/rulebook'
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
     scene.set('turnCount', 1)
+    scene.set('isPlayerTurn', true)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)

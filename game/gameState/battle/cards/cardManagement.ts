@@ -82,6 +82,7 @@ function makeCards(scene: BattleCursor): Piles {
             //@ts-expect-error
             `basicAttack${ccuf}`,
             `block${ccuf}`
+            // 'TEST_turnStartEffects'
             // `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',

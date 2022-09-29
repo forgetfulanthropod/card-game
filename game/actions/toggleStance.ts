@@ -12,7 +12,7 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     if (
         !character.isPc ||
-        character.hasMoved ||
+        // character.hasMoved ||
         !scene.get().isPlayerTurn
         //  || scene.get().selectedCharacter !== character.uid
     )
@@ -25,6 +25,8 @@ export const toggleStance: GameActions['toggleStance'] = args => {
     const stanceIndex = stances.findIndex(v => stance === v)
 
     const nextIndex = (stanceIndex + 1) % stances.length
+
+    logger.info(`setting stance to ${stances[nextIndex]}`)
 
     stanceCursor.set(stances[nextIndex])
 

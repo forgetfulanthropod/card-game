@@ -5,6 +5,7 @@ import { keys } from 'shared/code'
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)
     scene.set('isPlayerTurn', false)
+
     // applyDOTDamages(scene)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)
