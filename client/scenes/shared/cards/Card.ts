@@ -73,14 +73,18 @@ export function CardEl({
     const scale = width / cardFrameTexture.width
 
     let cardArtTexture
-    let cardArtTextureOrBlank
     try {
         const cardId = card.id.includes('block') ? 'block' : card.id
-        cardArtTextureOrBlank = cardArtTexture = getTexture(
-            `card${upperFirst(cardId)}`
+
+        cardArtTexture = getTexture(
+            `card${
+                cardId.indexOf('basicAttack') === 0
+                    ? 'Attack'
+                    : upperFirst(cardId)
+            }`
         )
     } catch {
-        cardArtTextureOrBlank = Texture.WHITE
+        cardArtTexture = getTexture('cardArtPlaceholder')
     }
 
     const isLongHovered = datum(false)
@@ -105,8 +109,8 @@ export function CardEl({
             },
             // getGradientBackground(cardFrameTexture, colorStops),
             Sprite({
-                src: cardArtTextureOrBlank,
-                tint: cardArtTexture ? undefined : 0,
+                src: cardArtTexture,
+                // tint: cardArtTexture ? undefined : 0,
                 width: getTexture('cardBlock').width,
                 height: getTexture('cardBlock').height,
                 anchor: [0.5, 0.85],

@@ -44,7 +44,10 @@ export const entrySceneBackgrounds = {
 }
 
 export const cardArtAssets = {
+    cardArtPlaceholder: 'cards/Card PNG Breakdown/Card Art/placeholder.webp',
+    cardAttack: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
     cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardChainLightning: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
     cardDivineIntervention:
         'cards/Card PNG Breakdown/Card Art/divine intervention.png',
     cardGuidingBolt: 'cards/Card PNG Breakdown/Card Art/Guiding Bolt.png',
@@ -170,7 +173,7 @@ export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
     roomClearedSign: 'signs/roomCleared.png',
     victory: 'signs/victory.png',
-    defeat: 'signs/defeat.png'
+    defeat: 'signs/defeat.png',
 }
 
 export const characterClassAssets = {
