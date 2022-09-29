@@ -449,6 +449,7 @@ function getEvents(
                         displayObjectArgs: {
                             x: BASE_WIDTH / 2,
                             y: BASE_HEIGHT * 0.6,
+                            borderThickness: 3,
                         },
                         color: 0xa240e8,
                     }),

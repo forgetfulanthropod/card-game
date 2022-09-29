@@ -1,5 +1,6 @@
 import type { DisplayObject } from 'pixi.js'
 import { startCase } from 'lodash'
+import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
 import type { DisplayObjectArgs, PixiContainer } from '@/elementsUtil'
 import {
@@ -62,7 +63,7 @@ export function ExplanationBox({
 }: {
     texts: string[]
     color?: number
-    displayObjectArgs?: DisplayObjectArgs
+    displayObjectArgs?: InfoBoxDisplayArgs
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
         return ElToSprite(

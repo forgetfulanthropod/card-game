@@ -1,17 +1,20 @@
 import type { ColorStop } from '@pixi-essentials/gradients'
 import { omit } from 'lodash'
+import type { Filter } from 'pixi.js'
 import type { PixiContainer, ContainerArgs, PixiSprite } from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
 
+export type InfoBoxDisplayArgs = ContainerArgs & {
+    padding?: number
+    colorStops?: ColorStop[]
+    borderRadius?: number
+    borderThickness?: number
+    borderColor?: number
+}
+
 export function InfoBox(
     contents: PixiContainer,
-    displayArgs: ContainerArgs & {
-        padding?: number
-        colorStops?: ColorStop[]
-        borderRadius?: number
-        borderThickness?: number
-        borderColor?: number
-    } = {}
+    displayArgs: InfoBoxDisplayArgs = {}
 ) {
     const localBounds = contents.getLocalBounds()
 
@@ -25,10 +28,15 @@ export function InfoBox(
             ...omit(displayArgs, 'filters', 'colorStops', 'padding'),
         },
         Container(
-            { filters: displayArgs.filters },
+            {},
             ...(displayArgs.borderThickness
                 ? [
-                      Box(displayArgs, localBounds, padding + 12),
+                      Box(
+                          displayArgs,
+                          localBounds,
+                          padding + 12,
+                          displayArgs.filters
+                      ),
                       Box(
                           {
                               ...displayArgs,
@@ -69,7 +77,8 @@ function Box(
         borderColor?: number | undefined
     },
     localBounds: { height: number; width: number; left: number; top: number },
-    padding: number
+    padding: number,
+    filters?: Filter[]
 ): PixiSprite {
     return RoundedRectangleGradientSprite({
         radius: displayArgs.borderRadius ?? 20,
@@ -87,7 +96,7 @@ function Box(
             height: localBounds.height + padding * 2,
             x: localBounds.left - padding,
             y: localBounds.top - padding,
-            filters: displayArgs.filters,
+            filters,
         },
     })
 }
