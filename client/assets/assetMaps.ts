@@ -5,6 +5,11 @@ export const rootAssets = {
     potion: 'misc-png/INVENTORY_POTION.webp',
     swordShield: 'misc-png/INVENTORY_SWORDSHIELD.webp',
     bread: 'misc-png/ITEM_BREAD.webp',
+    fish: 'misc-png/ITEM_FISH.webp',
+    copper: 'misc-png/ITEM_COPPER.webp',
+    stone: 'misc-png/ITEM_STONE.webp',
+    gold: 'misc-png/ITEM_GOLD.webp',
+    wood: 'misc-png/ITEM_WOOD.webp',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',
@@ -73,6 +78,7 @@ export const cardAssets = {
     cardEnergy5: 'cards/Card PNG Breakdown/Mana Cost Numbers/5.png',
     cardBackPileSizeOverlay: 'cards/card back pile size overlay.webp',
     cardBack: 'cards/card back.webp',
+    draftCard: 'cards/draftCard.webp',
     ...cardArtAssets,
     ...cardTypeAssets,
 } as const

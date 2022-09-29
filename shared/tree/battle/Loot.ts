@@ -1,11 +1,12 @@
 export type LootFromGame =
     | 'draftCard'
-    | 'gems'
-    | 'tokenTBD'
-    | 'fishStick'
-    | 'potion'
-    | 'swordShield'
-    | 'bread'
+    // | 'gems'
+    // | 'tokenTBD'
+    | 'fish'
+    | 'copper'
+    | 'stone'
+    | 'gold'
+    | 'wood'
     | 'treasureChest'
 
 export type LootItem = {

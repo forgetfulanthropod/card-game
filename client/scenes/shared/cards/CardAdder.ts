@@ -2,7 +2,7 @@ import { vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { CardUid } from 'shared'
-import { NUM_CARD_OPTIONS } from 'shared'
+import { NUM_DRAFT_CARD_OPTIONS } from 'shared'
 import { ModalBackdrop } from '@sharedElements'
 import { AdjustmentFilter } from 'pixi-filters'
 import { CardEl } from './Card'
@@ -16,6 +16,7 @@ import {
     getTexture,
     glowFilter,
     If,
+    RoundedRectangleGradientSprite,
     Sprite,
     Text,
 } from '@/elementsUtil'
@@ -46,10 +47,10 @@ function NewCardOptions(): PixiContainer {
 
         setTimeout(() => {
             animateTo(card, {
-                scale: CARD_WIDTH / getTexture('cardBase').width,
+                scale: 1,
                 rotation,
                 x,
-                y: y - BASE_HEIGHT / 2,
+                y: y - BASE_HEIGHT / 2 + 150,
             })
         }, 10)
     })
@@ -64,11 +65,11 @@ function NewCardOptions(): PixiContainer {
 }
 
 function ScreenHeading() {
-    return Text({
-        text: 'Draft a card:',
+    const DraftCardText = Text({
+        text: 'Draft a card',
         anchor: [0.5, 0],
         x: BASE_WIDTH / 2,
-        y: 100,
+        y: 150,
         style: {
             fontSize: 80,
             fill: 'white',
@@ -77,6 +78,32 @@ function ScreenHeading() {
             fontWeight: 'bold',
         },
     })
+
+    const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
+        spriteArgs: {
+            width: DraftCardText.width * 2,
+            height: DraftCardText.height + 15,
+            x: BASE_WIDTH / 2,
+            y: 150 - 7.5,
+            name: 'RoundedBlackRectBackground',
+            anchor: [0.5, 0],
+            alpha: 1,
+            tint: 0,
+        },
+        radius: 100,
+        gradientArgs: {
+            x0: 0,
+            x1: 500,
+            y0: 0,
+            y1: 500,
+            colorStops: [
+                { color: 'black', offset: 0 },
+                { color: 'white', offset: 1 },
+            ],
+        },
+    })
+
+    return Container({}, RoundedBlackRectBackground, DraftCardText)
 }
 
 function Options(
@@ -123,7 +150,7 @@ function Options(
                 y: BASE_HEIGHT - CARD_WIDTH,
                 x:
                     BASE_WIDTH / 2 +
-                    (-(NUM_CARD_OPTIONS - 1) / 2 + i) * CARD_WIDTH * 1.2,
+                    (-(NUM_DRAFT_CARD_OPTIONS - 1) / 2 + i) * CARD_WIDTH * 1.6,
             }
         )
 

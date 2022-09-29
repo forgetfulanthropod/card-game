@@ -164,4 +164,4 @@ export type TargetType =
 export type Pile = Record<CardUid, Card>
 export type Piles = Record<PileId, Pile>
 
-export const NUM_CARD_OPTIONS = 5
+export const NUM_DRAFT_CARD_OPTIONS = 3

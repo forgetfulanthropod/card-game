@@ -358,7 +358,9 @@ function getTexts(
             },
         }),
         Text({
-            text: `<div style="font-family: sans-serif; padding: 4px;">${card.explanation}</div>`,
+            text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
+                card.explanation
+            )}</div>`,
             isHtml: true,
             x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.height * 0.15,
