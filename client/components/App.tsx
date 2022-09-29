@@ -5,6 +5,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { GameManager } from './GameManager'
 import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
+import { NewStartScreen } from './NewStartScreen'
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
@@ -25,7 +26,7 @@ export function App(): JSXElement {
     ) : ready ? (
         <GameManager username={username} />
     ) : (
-        <UsernameEntry
+        <NewStartScreen
             onEnter={username => {
                 localStorage.setItem('username', username)
                 setUsername(username)
