@@ -76,7 +76,7 @@ function makeCards(scene: BattleCursor): Piles {
         cardIds.push(
             //@ts-expect-error
             `basicAttack${ccuf}`,
-            `basicAttack${ccuf}`
+            `block${ccuf}`
             // `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',
