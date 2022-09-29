@@ -33,7 +33,11 @@ export const keyTermsMap = {
     fortified: 'receives 50% more block',
     berserk:
         '(aggressive stance only) gains 50% strength, takes 100% more damage',
-    trance: 'increase magic stat by 11%  the number of counters it currently has.',
+    trance: 'increase magic stat by 11% times the number of counters',
+    orbsOfProtection: 'blocks for 50% of Magic',
+    orbsOfLightning: 'deals 50% of Magic',
+    orbsOfFrost: '+2 Strongblock',
+    orbsOfHolyLight: 'heals for 12% of Magic',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap
@@ -51,8 +55,14 @@ export function TermExplanationBox({
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [`${startCase(term)}`, `${keyTermsMap[term]}`],
-        displayObjectArgs,
+        texts: [
+            `${startCase(term)}`.replace('Orbs', 'Orb'),
+            `${keyTermsMap[term]}`,
+        ],
+        displayObjectArgs: {
+            ...displayObjectArgs,
+            borderThickness: 3,
+        },
     })
 }
 
@@ -66,50 +76,30 @@ export function ExplanationBox({
     displayObjectArgs?: InfoBoxDisplayArgs
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
-        return ElToSprite(
-            Text({
-                text,
-                // isHtml: true,
-                style: {
-                    fill: 'white',
-                    wordWrapWidth: BASE_WIDTH * 0.2,
-                    wordWrap: true,
-                    fontWeight:
-                        texts.length > 1 && index === 0 ? 'bold' : '400',
-                },
-                anchor: [0.5, 0],
-            })
-        )
+        return Text({
+            text,
+            // isHtml: true,
+            style: {
+                fill: 'white',
+                wordWrapWidth: BASE_WIDTH * 0.2,
+                wordWrap: true,
+                fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
+            },
+        })
     })
 
     textEls.forEach((el, index) => {
         if (index > 0) {
             const lastEl = textEls[index - 1]
-            el.y = lastEl.y + lastEl.height
+            el.y = lastEl.y + lastEl.height + 5
         }
     })
 
-    return InfoBox(
-        // RoundedBordered(
-        //     Sprite({
-        //         src: Text({
-        //             text: plushyChoiceDescriptions[index],
-        //             style: {
-        //                 fill: 'white',
-        //                 wordWrapWidth: BASE_WIDTH * 0.2,
-        //                 wordWrap: true,
-        //             },
-        //         }).texture,
-        //     }),
-        //     { radius: 10, borderColor: 0xffffff, borderThickness: 2 }
-        // ),
-        Container({}, ...textEls),
-        {
-            ...(displayObjectArgs ?? {}),
-            padding: 25,
-            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
-        }
-    )
+    return InfoBox(Container({}, ...textEls), {
+        ...(displayObjectArgs ?? {}),
+        padding: 25,
+        ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+    })
 }
 
 function ElToSprite(el: DisplayObject) {
