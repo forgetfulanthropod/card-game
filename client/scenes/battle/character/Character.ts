@@ -234,7 +234,7 @@ function bindMoves(
                 targetUidsWaitingForImpact.val.includes(characterMeta.uid)
             ) {
                 if (mainAnimation) {
-                    triggerDamageAnimation(mainAnimation)
+                    triggerDamageAnimation(mainAnimation, characterMeta)
                 }
                 if (changes[uid].health)
                     flashDamageTo(
@@ -296,7 +296,10 @@ function bindMoves(
     }
 }
 
-function triggerDamageAnimation(mainAnimation: PixiSpine) {
+function triggerDamageAnimation(
+    mainAnimation: PixiSpine,
+    characterMeta: CharacterMeta
+) {
     mainAnimation.state.setAnimation(0, 'Damage', false)
 
     const takingDamageListener = {
@@ -306,7 +309,7 @@ function triggerDamageAnimation(mainAnimation: PixiSpine) {
         ) {
             if (event.data.name !== 'Taking Damage') return
 
-            unlockWaitingStatChanges(statChangesDatum)
+            unlockWaitingStatChanges(statChangesDatum, characterMeta)
 
             // const effectAnimation = AttackOverlayAnimation(characterMeta.isPc)
             // if (effectAnimation) mainAnimation.parent.addChild(effectAnimation)
@@ -319,33 +322,46 @@ function triggerDamageAnimation(mainAnimation: PixiSpine) {
     mainAnimation.state.addAnimation(0, 'Idle', true)
 }
 
-function unlockWaitingStatChanges(statChangesDatum: Datum<StatChangesMap>) {
+function unlockWaitingStatChanges(
+    statChangesDatum: Datum<StatChangesMap>,
+    characterMeta: CharacterMeta
+) {
     let statChanges = { ...statChangesDatum.val }
 
-    targetUidsWaitingForImpact.val.forEach(
-        uid =>
-            (statChanges[uid] = {
-                ...statChanges[uid],
-                wait: false,
-            })
-    )
+    const characterUid = characterMeta.uid
+
+    statChanges[characterUid] = {
+        ...statChanges[characterUid],
+        wait: false,
+    }
+
     statChangesDatum.set(statChanges)
+    // targetUidsWaitingForImpact.val.forEach(
+    //     uid =>
+    //         ()
+    // )
 
     // const targetUidsToClear = [...targetUidsWaitingForImpact.val]
     setTimeout(function clearProcessedChanges() {
-        if (
-            targetUidsWaitingForImpact.val.find(uid => statChanges[uid]?.wait)
-        ) {
-            setTimeout(clearProcessedChanges, 100)
+        // if (
+        //     targetUidsWaitingForImpact.val.find(uid => statChanges[uid]?.wait)
+        // ) {
+        //     setTimeout(clearProcessedChanges, 100)
 
-            return
-        }
+        //     return
+        // }
 
         statChanges = { ...statChangesDatum.val }
-        targetUidsWaitingForImpact.val.forEach(uid => (statChanges[uid] = {}))
-        targetUidsWaitingForImpact.set([])
+        statChanges[characterUid] = {}
+        // targetUidsWaitingForImpact.val.forEach(uid => ())
+        const waitingUids = targetUidsWaitingForImpact.val
+        const targetUidIndex = waitingUids.indexOf(characterUid)
+        targetUidsWaitingForImpact.set([
+            ...waitingUids.slice(0, targetUidIndex),
+            ...waitingUids.slice(targetUidIndex + 1),
+        ])
         statChangesDatum.set(statChanges)
-    }, 100)
+    }, 300)
 }
 
 function bindStatChanges(characterCursor: CharacterCursor) {

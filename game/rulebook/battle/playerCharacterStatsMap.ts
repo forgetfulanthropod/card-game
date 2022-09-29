@@ -82,7 +82,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         class: 'rogue',
 
         constitution: 40,
-        strength: 18,
+        strength: 12 + 1,
         wisdom: 14,
         defense: 5,
     },
@@ -116,7 +116,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 86,
         strength: 19,
-        wisdom: 10,
+        wisdom: 8,
         defense: 5,
     },
     lichLord: {

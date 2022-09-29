@@ -113,9 +113,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'rogue',
 
         constitution: 40,
-        strength: 12,
-        wisdom: 12,
-        defense: 3,
+        strength: 12 + 1, //drew did it
+        wisdom: 14,
+        defense: 5,
 
         uid: '',
         tokenId: '',
@@ -129,7 +129,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 86,
         strength: 19,
-        wisdom: 10,
+        wisdom: 8,
         defense: 5,
 
         uid: '',

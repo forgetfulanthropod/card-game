@@ -47,7 +47,7 @@ export function EffectOverlayManager(
                 }
 
                 statChangesDatum.set({
-                    ...statChangesDatum,
+                    ...statChangesDatum.val,
                     [characterMeta.uid]: {},
                 })
             }),
