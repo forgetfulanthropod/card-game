@@ -4,7 +4,7 @@ import type { InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type { Card, CardType, CardUid, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
-import { upperFirst } from 'lodash'
+import { upperCase, upperFirst } from 'lodash'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
@@ -210,7 +210,9 @@ function getTexts(
             },
         }),
         Text({
-            text: `<div style="font-family: sans-serif; padding: 4px;">${card.explanation}</div>`,
+            text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
+                card.explanation
+            )}</div>`,
             isHtml: true,
             x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.height * 0.15,

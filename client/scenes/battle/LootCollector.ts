@@ -52,6 +52,8 @@ const getDisplayName = (name: LootFromGame) => {
             return 'Wood'
         case 'draftCard':
             return 'Draft a Card'
+        case 'treasureChest':
+            return 'Chest'
         default:
             return 'Loot'
     }
@@ -59,8 +61,9 @@ const getDisplayName = (name: LootFromGame) => {
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
-    const lootScreenHasOpened = scene.get('lootScreenHasOpened')
+    const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
+    let updateProgressBarFill: () => void
 
     const [currentLootItem, ...remainingLootItems] = renderLoot()
     const lootItemsContainer = TweenableContainer(
@@ -78,6 +81,16 @@ export function LootCollector(): PixiContainer {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
         }, 2000)
+    }
+
+    if (lootItemsContainer.getChildAt(0).name === 'TreasureChestContainer') {
+        setTimeout(() => {
+            updateProgressBarFill()
+            applyOnClick(
+                lootItemsContainer.getChildAt(0) as PixiContainer,
+                () => handleButtonPress()
+            )
+        }, 1000)
     }
 
     const roomClearedSign = TweenableContainer(
@@ -105,13 +118,16 @@ export function LootCollector(): PixiContainer {
                 onClick: idx === 0 ? () => handleButtonPress() : () => {},
                 idx,
             }
+            let itemSrc = item.name
 
-            if (item.name === 'treasureChest')
-                return TreasureChest(lootItemContainerArgs)
+            if (item.name === 'treasureChest') {
+                const treasureChest = TreasureChest(lootItemContainerArgs)
+                updateProgressBarFill = treasureChest.updateProgressBarFill
+                return treasureChest.TreasureChestContainer
+            }
 
             // Define a bunch of properties manually to adjust for inconsistencies in asset sizing and scaling
             const scale = getScale({ idx })
-            let itemSrc = item.name
             let properItemName = getDisplayName(item.name)
             let lootItemTextY = -250 * scale
             let lootItemSpriteY =
@@ -240,14 +256,17 @@ export function LootCollector(): PixiContainer {
 
         const newCurrentItem = el.getChildAt(0) as TweenablePixiContainer
         transformIntoCurrentItem(newCurrentItem)
-        applyOnClick(newCurrentItem, () => handleButtonPress())
     }
 
     function transformIntoCurrentItem(el: TweenablePixiContainer) {
         if (el.name === 'TreasureChestContainer') {
             setTimeout(() => {
                 el.scale = { x: 1.25, y: 1.25 }
-            }, 500)
+            }, 200)
+            setTimeout(() => {
+                updateProgressBarFill()
+                applyOnClick(el, () => handleButtonPress())
+            }, 1000)
             return
         }
 
@@ -255,6 +274,7 @@ export function LootCollector(): PixiContainer {
         el.height = ITEM_BOX_HEIGHT * newScale
         el.width = ITEM_BOX_WIDTH * newScale
         el.getChildByName('InactiveLootItemOverlay').destroy()
+        applyOnClick(el, () => handleButtonPress())
     }
 
     function applyOnClick(
@@ -284,15 +304,8 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const progressBarFillSrc = new Texture(
         getTexture('healthBarHealth').baseTexture
     )
-    const { progressPct, upgraded } = getBattleScene().get('treasureChest')
-
-    setTimeout(() => {
-        updateProgressBarFill()
-    }, 1250)
-
-    if (upgraded) {
-        // do TreasureChest upgrade animation
-    }
+    const { progressPct, upgraded, level } =
+        getBattleScene().get('treasureChest')
 
     const ChestBody = Sprite({
         src: chestBodySrc,
@@ -311,7 +324,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     })
 
     const ChestProgressText = Text({
-        text: 'Chest Progress:',
+        text: `Level ${level}`,
         anchor: [0.5, 0.5],
         x: 0,
         y: 425,
@@ -366,9 +379,82 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
 
         ChestProgressBarFill.anchor.set(0, 0.5)
         ChestProgressBarFill.visible = true
+        ChestProgressPctText.visible = true
+        ChestLevelText.visible = true
+        ConfirmButton.visible = true
+        TreasureChestContainer.on('pointerdown', onClick)
 
         progressBarFillSrc.updateUvs()
+
+        if (upgraded) {
+            LevelUpText.visible = true
+            animateTo(LevelUpText, {
+                x: 500,
+                y: 0,
+                scale: 1.25,
+                rotation: 0,
+            })
+        }
     }
+
+    const ChestProgressPctText = Text({
+        text: `${(progressPct * 100).toFixed(0)}%`,
+        anchor: [0.5, 0.5],
+        x: 0,
+        y: 555,
+        style: {
+            fontSize: 40,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'bold',
+        },
+        visible: false,
+        name: 'ChestProgressPctText',
+    })
+
+    const ChestLevelText = Text({
+        text: `${(272 - 272 * progressPct).toFixed(0)} points to reach level ${
+            level + 1
+        }`,
+        anchor: [0.5, 0.5],
+        x: 0,
+        y: 655,
+        style: {
+            fontSize: 30,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'normal',
+        },
+        visible: false,
+        name: 'ChestLevelText',
+    })
+
+    const LevelUpText = TweenableContainer(
+        { visible: false },
+        Text({
+            text: `Level up!`,
+            anchor: [0.5, 0.5],
+            x: 0,
+            y: 450,
+            style: {
+                fontSize: 40,
+                fill: 'white',
+                padding: 4,
+                align: 'center',
+                fontWeight: 'bold',
+            },
+            name: 'ChestLevelText',
+        })
+    )
+
+    const ConfirmButton = Sprite({
+        src: getTexture('confirmButton'),
+        x: 750,
+        y: 465,
+        visible: false,
+    })
 
     const TreasureChestContainer = Container(
         {
@@ -376,13 +462,16 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
             y: BASE_HEIGHT,
             scale: idx === 0 ? 1.25 : 0,
             name: 'TreasureChestContainer',
-            onClick,
         },
         ChestBody,
         ChestLid,
         ChestProgressText,
-        ChestProgressBarContainer
+        ChestProgressBarContainer,
+        ChestProgressPctText,
+        ChestLevelText,
+        LevelUpText,
+        ConfirmButton
     )
 
-    return TreasureChestContainer
+    return { TreasureChestContainer, updateProgressBarFill }
 }
