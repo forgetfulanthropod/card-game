@@ -58,7 +58,7 @@ const turnStartEffectFuncs: Record<
     (cm: CharacterMeta, counter: number) => void
 > = {
     bleed(cm) {
-        cm.health -= Math.floor(cm.constitution * 0.05)
+        cm.health -= Math.ceil(cm.constitution * 0.05)
     },
     poison(cm, counter) {
         cm.health -= counter
