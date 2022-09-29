@@ -59,10 +59,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: true,
         class: 'knight',
 
-        constitution: 72,
-        strength: 8,
+        constitution: 80,
+        strength: 11,
         wisdom: 5,
-        defense: 5,
+        defense: 11,
     },
     frogWizard: {
         id: 'frogWizard',
@@ -82,9 +82,9 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         class: 'rogue',
 
         constitution: 40,
-        strength: 12,
-        wisdom: 12,
-        defense: 3,
+        strength: 18,
+        wisdom: 14,
+        defense: 5,
     },
     goblinDragon: {
         id: 'goblinDragon',
@@ -136,10 +136,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: false,
         class: 'cleric',
 
-        constitution: 78,
-        strength: 5,
-        wisdom: 7,
-        defense: 5,
+        constitution: 78 + 25,
+        strength: 5 + 1,
+        wisdom: 7 + 2,
+        defense: 5 + 4,
     },
     mimic: {
         id: 'mimic',
@@ -191,10 +191,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: true,
         class: 'knight',
 
-        constitution: 66,
-        strength: 9,
+        constitution: 74,
+        strength: 13,
         wisdom: 5,
-        defense: 5,
+        defense: 9,
     },
     skeletonWarrior: {
         id: 'skeletonWarrior',
@@ -202,10 +202,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: false,
         class: 'knight',
 
-        constitution: 54,
-        strength: 11,
+        constitution: 54 + 4,
+        strength: 11 + 3,
         wisdom: 4,
-        defense: 4,
+        defense: 4 + 3,
     },
     snacky: {
         id: 'snacky',
@@ -246,10 +246,10 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         isPc: true,
         class: 'knight',
 
-        constitution: 84,
+        constitution: 84 + 40,
         strength: 6,
         wisdom: 5,
-        defense: 5,
+        defense: 5 + 3,
     },
     wimpyGuard: {
         id: 'wimpyGuard',

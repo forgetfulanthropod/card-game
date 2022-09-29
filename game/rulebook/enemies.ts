@@ -3,7 +3,7 @@ type Level = string
 export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> = {
     skeletonWarrior: {
         // 1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', null, null, 'block', null] },
-        1: { level: '1', wisdom: 0, constitution: 19, strength: 10, defense: 7, moves: ['swordWack', 'swordWack', 'jab', 'strike', 'jab'] },
+        1: { level: '1', wisdom: 0, constitution: 19, strength: 10, defense: 7, moves: ['swordWack', 'rustyPokeLow', 'jab', 'strike', 'jab'] },
         2: { level: '2', wisdom: 0, constitution: 27, strength: 14, defense: 9, moves: ['swordWack', 'rustyPokeLow', 'swordWack', 'block', 'swordWack'] },
         3: { level: '3', wisdom: 0, constitution: 36, strength: 18, defense: 12, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', 'swordWack'] },
         4: { level: '4', wisdom: 0, constitution: 50, strength: 22, defense: 16, moves: ['swordWack', 'rustyPokeLow', 'slash', 'block', 'swordWack'] },

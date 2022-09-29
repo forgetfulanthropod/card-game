@@ -1,12 +1,23 @@
 import { assertFinite } from 'shared/code'
+import { getDamage } from '../../util/applyDamage'
 import type { Executors, Explainers } from './util'
-import { evalAllAsHtml } from './util'
+import { evalAllAsHtml, evalAll } from './util'
 import { applyDamage } from '@/gameState'
 
-export const explain: Explainers['smite'] = dslArgs => {
-    const [damage, block] = evalAllAsHtml(dslArgs)
+export const explain: Explainers['smite'] = (dslArgs, context) => {
+    const [damageHtml, blockHtml] = evalAllAsHtml(dslArgs)
+    const [damage] = evalAll(dslArgs)
 
-    return `Deal ${damage} damage. If enemy is killed, block ${block}.`
+    const damageHtmlArr =
+        damageHtml.split('>').length > 1
+            ? [damageHtml.split('>')[0] + '>', '</' + damageHtml.split('</')[1]]
+            : ['', '']
+
+    return `deals ${damageHtmlArr[0]}${getDamage({
+        damage,
+        attacker: context.characterMeta,
+        target: null,
+    })}${damageHtmlArr[1]} damage. If enemy is killed, block ${blockHtml}.`
 }
 
 export const execute: Executors['smite'] = ({

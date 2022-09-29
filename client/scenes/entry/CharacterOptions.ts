@@ -23,10 +23,11 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         displayName: 'Frog Knight',
         isPc: true,
         class: 'knight',
-        constitution: 72,
-        strength: 8,
+
+        constitution: 80,
+        strength: 11,
         wisdom: 5,
-        defense: 5,
+        defense: 11,
 
         uid: '',
         tokenId: '',
@@ -52,10 +53,10 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         isPc: true,
         class: 'knight',
 
-        constitution: 66,
-        strength: 9,
+        constitution: 74,
+        strength: 13,
         wisdom: 5,
-        defense: 5,
+        defense: 9,
 
         uid: '',
         tokenId: '',
@@ -67,10 +68,10 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         isPc: true,
         class: 'knight',
 
-        constitution: 54,
-        strength: 11,
+        constitution: 54 + 4,
+        strength: 11 + 3,
         wisdom: 4,
-        defense: 4,
+        defense: 4 + 3,
         uid: '',
         tokenId: '',
         nftName: '',
@@ -81,10 +82,10 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         isPc: true,
         class: 'cleric',
 
-        constitution: 78,
-        strength: 5,
-        wisdom: 7,
-        defense: 5,
+        constitution: 78 + 25,
+        strength: 5 + 1,
+        wisdom: 7 + 2,
+        defense: 5 + 4,
 
         uid: '',
         tokenId: '',
