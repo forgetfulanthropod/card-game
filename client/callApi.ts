@@ -8,9 +8,9 @@ export async function callApi<K extends ActionName>(
     // console.log('calling', method, args)
     const username = localStorage.getItem('username')
     if (username == null) {
-        toastWarn(
-            `call to ${method}: No username in localstorage. Can't call API.`
-        )
+        // toastWarn(
+        //     `call to ${method}: No username in localstorage. Can't call API.`
+        // )
         return
     }
 
@@ -26,14 +26,14 @@ export async function callApi<K extends ActionName>(
         })
         const json = await res.json()
         if (json?.status == null) {
-            toastWarn(`${method} invalid return type`)
+            // toastWarn(`${method} invalid return type`)
             return
         }
         if (json?.status === 'error') {
-            toastWarn(`${method}: server error: ${json?.message}`)
+            // toastWarn(`${method}: server error: ${json?.message}`)
             return
         }
     } catch (e) {
-        toastWarn(`call to ${method}: server is offline or did not return json`)
+        // toastWarn(`call to ${method}: server is offline or did not return json`)
     }
 }
