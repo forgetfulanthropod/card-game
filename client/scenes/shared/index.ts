@@ -4,8 +4,10 @@
 export * from './AbilityButtons'
 export * from './cards'
 export * from './CharacterInfo'
+export * from './DeckView'
+export * from './ExplanationBox'
 export * from './InfoBox'
 export * from './MainCharacterAnimation'
-export * from './PlainButton'
 export * from './ModalBackdrop'
+export * from './PlainButton'
 // @endindex

@@ -75,6 +75,8 @@ export type NpcCommandId =
     | 'matchaMash'
     | 'matchaMeld'
     | 'mimicAttack'
+    | 'infectiousBite'
+    | 'grudge'
     | 'passiveBlockCmd'
     | 'rest'
     | 'rustyPokeHigh'

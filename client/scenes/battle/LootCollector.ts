@@ -1,18 +1,19 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { ModalBackdrop } from '@sharedElements'
+import { ModalBackdrop, animateTo } from '@sharedElements'
+import type { LootFromGame } from 'shared'
+import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import {
     getTexture,
-    PixiContainer,
     Text,
     TweenableContainer,
-    TweenablePixiContainer,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    Sprite,
 } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
-import { animateTo } from '../shared/cards/Hand'
-import { LootFromGame } from 'shared'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -91,11 +92,11 @@ export function LootCollector(): PixiContainer {
         const lootItems = scene.get('lootEarned')
 
         let lootItemsContainerX = -900
-        let lootItemsContainerY = BASE_HEIGHT + 200
+        const lootItemsContainerY = BASE_HEIGHT + 200
 
         return lootItems.map((item, idx) => {
-            let itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
-            let properItemName = getDisplayName(item.name)
+            const itemSrc = item.name === 'draftCard' ? 'cardBack' : item.name
+            const properItemName = getDisplayName(item.name)
 
             const scale = getScale({ idx })
             const lootItemContainerArgs = {

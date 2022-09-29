@@ -1,14 +1,15 @@
 import { ModalBackdrop } from '@sharedElements'
+import type { PixiContainer } from '@/elementsUtil'
 import {
     getTexture,
-    PixiContainer,
     Text,
     TweenableContainer,
-    TweenablePixiContainer,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    Sprite,
 } from '@/elementsUtil'
-import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { animateTo } from '../shared/cards/Hand'
 
 const VICTORY_SIGN_FINAL_POS = {
     rotation: 0,
@@ -106,7 +107,7 @@ export function EndOfRunScreen(): PixiContainer {
         y: BASE_HEIGHT / 2 + 200,
         x: BASE_WIDTH / 2 - 200,
         scale: (1920 * 0.18) / getTexture('goButton').width,
-        onClick: handleButtonPress
+        onClick: handleButtonPress,
     })
 
     function handleButtonPress() {

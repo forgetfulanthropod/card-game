@@ -1,4 +1,4 @@
-import { omit, uniq } from 'lodash'
+import { omit } from 'lodash'
 import { compose } from 'datums'
 import type { Characters, CharacterUid } from 'shared'
 import { keys, sleep } from 'shared/code'
@@ -65,7 +65,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 onClick: () => {
                     localTree
                         .select('selectedTargets')
-                        .apply(arr => uniq([...arr, uid]))
+                        .apply(arr => [...arr, uid])
                 },
                 scale: 1,
             })
