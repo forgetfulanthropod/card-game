@@ -500,7 +500,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'wisdomy1 = wisdom * .75; wisdomy2 = wisdom * .25; psychicWarfare(wisdomy1,wisdomy2)',
+            'wisdomy1 = wisdom * .75; wisdomy2 = wisdom * .25; chain(psychicWarfare(wisdomy1,wisdomy2), dwindle())',
         type: 'attack',
         characterClass: 'wizard',
     },
