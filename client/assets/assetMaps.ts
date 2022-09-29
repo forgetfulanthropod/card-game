@@ -173,7 +173,7 @@ export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
     roomClearedSign: 'signs/roomCleared.png',
     victory: 'signs/victory.png',
-    defeat: 'signs/defeat.png',
+    defeat: 'signs/newDefeatBanner.png',
 }
 
 export const characterClassAssets = {
