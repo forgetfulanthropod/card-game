@@ -8,6 +8,18 @@ const fullGoodEarthImg = 'assets/root/good-earth.webp'
 export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
+    const [showText, setShowText] = useState(true)
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setShowText(showText => !showText)
+            console.log('interval running...')
+            console.log(`showText: ${showText}`)
+        }, 800)
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
 
     return <div
         onClick={() => props.onEnter('KaijuDemoOne')}
@@ -15,7 +27,9 @@ export function NewStartScreen(props: {
     >
         <div class={styles.startScreenContainer2}>
             <img class={styles.kaiju} src='./logos/NewKaijuLogo.png' />
-            <p className={styles.startGame}>START GAME</p>
+            {showText && <p className={styles.startGame} id='startGame'>
+                START GAME
+            </p>}
         </div>
     </div>
 }
