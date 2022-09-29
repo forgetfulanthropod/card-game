@@ -128,9 +128,9 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'wizard',
 
         constitution: 86,
-        strength: 5,
-        wisdom: 20,
-        defense: 9,
+        strength: 19,
+        wisdom: 10,
+        defense: 5,
 
         uid: '',
         tokenId: '',

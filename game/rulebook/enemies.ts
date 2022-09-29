@@ -19,7 +19,7 @@ export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> =
         1: { level: '1', wisdom: 0, constitution: 22, strength: 8, defense: 10, moves: ['itchyOoze(2)', 'block', 'basicAttack', 'block', 'basicAttack'] },
         2: { level: '2', wisdom: 0, constitution: 36, strength: 14, defense: 14, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'block', 'basicAttack', 'block'] },
         3: { level: '3', wisdom: 0, constitution: 55, strength: 20, defense: 17, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'itchyOoze(3)', 'block', 'surpriseAllergy(3,2)'] },
-        4: { level: '4', wisdom: 0, constitution: 72, strength: 26, defense: 22, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(4)', 'block', 'surpriseAllergy(3,2)'] },
+        4: { level: '4', wisdom: 0, constitution: 72, strength: 22, defense: 22, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(4)', 'block', 'surpriseAllergy(3,2)'] },
         5: { level: '5', wisdom: 0, constitution: 80, strength: 32, defense: 26, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOozeSpecial', 'block', 'surpriseAllergy(3,2)'] },
         6: { level: '6', wisdom: 0, constitution: 105, strength: 38, defense: 31, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(5)', 'block', 'engulf(50)'] },
         7: { level: '7', wisdom: 0, constitution: 130, strength: 44, defense: 36, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(6)', 'block', 'engulf(50)'] },

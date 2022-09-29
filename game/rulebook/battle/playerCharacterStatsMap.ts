@@ -116,7 +116,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 86,
         strength: 19,
-        wisdom: 5,
+        wisdom: 10,
         defense: 5,
     },
     lichLord: {
