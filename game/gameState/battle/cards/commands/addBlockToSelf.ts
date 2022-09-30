@@ -20,6 +20,6 @@ export const execute: Executors['addBlockToSelf'] = ({
 
     scene.apply(
         ['allCharacters', command.characterUid, 'block'],
-        b => b + block * calculatedStats.blockMultiplier
+        b => b + Math.ceil(block * calculatedStats.blockMultiplier)
     )
 }
