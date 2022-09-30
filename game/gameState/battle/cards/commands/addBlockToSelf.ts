@@ -1,9 +1,13 @@
 import type { Executors, Explainers } from './util'
-import { evalAll, evalAllAsHtml } from './util'
+import { getOuterHtmlArr, evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['addBlockToSelf'] = dslArgs => {
-    const [block] = evalAllAsHtml(dslArgs)
-    return `+${block} block to self`
+    const [blockHtml] = evalAllAsHtml(dslArgs)
+    const [block] = evalAll(dslArgs)
+    const outerHtmlArr = getOuterHtmlArr(blockHtml)
+    return `+${outerHtmlArr[0]}${Math.ceil(block)}${
+        outerHtmlArr[1]
+    } block to self`
 }
 
 export const execute: Executors['addBlockToSelf'] = ({

@@ -170,16 +170,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'wizard',
     },
     /**Target Attack Card, enchantment or ~~token~~ orb doubles the amount of damage it deals this turn. */
-    arcanePower: {
-        name: 'Arcane Power',
-        energy: 1,
-        id: 'arcanePower',
-        targetNum: 1,
-        targetType: ['orb', 'cardAttack', 'cardEnchantment'],
-        actions: 'doubleEnchantmentOrToken()',
-        type: 'utility',
-        characterClass: 'wizard',
-    },
+    // arcanePower: {
+    //     name: 'Arcane Power',
+    //     energy: 1,
+    //     id: 'arcanePower',
+    //     targetNum: 1,
+    //     targetType: ['orb', 'cardAttack', 'cardEnchantment'],
+    //     actions: 'doubleEnchantmentOrToken()',
+    //     type: 'utility',
+    //     characterClass: 'wizard',
+    // },
     scatterBrained: {
         name: 'Scatter Brained',
         energy: 1,

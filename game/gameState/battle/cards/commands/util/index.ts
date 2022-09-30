@@ -98,6 +98,12 @@ export function evalAll<T extends any[]>(angus: Anguify<T>): T {
     return angus.map(angu => angu.eval())
 }
 
+export function getOuterHtmlArr(html: string) {
+    return html.split('>').length > 1
+        ? [html.split('>')[0] + '>', '</' + html.split('</')[1]]
+        : ['', '']
+}
+
 export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
     const statsToColorsMap: Partial<Record<keyof CharacterStats, string>> = {
         strength: '#d44c47',

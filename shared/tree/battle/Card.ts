@@ -95,7 +95,7 @@ export type CommandId =
     | 'unknown'
 
 export type CardId =
-    | 'arcanePower'
+    // | 'arcanePower'
     | 'basicAttackBard'
     | 'basicAttackKnight'
     | 'basicAttackCleric'

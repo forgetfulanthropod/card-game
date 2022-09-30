@@ -1,5 +1,5 @@
 import { getDamage } from '../../util/applyDamage'
-import { evalAll, evalAllAsHtml } from './util'
+import { evalAll, evalAllAsHtml, getOuterHtmlArr } from './util'
 
 import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
@@ -7,21 +7,8 @@ import { applyDamage } from '@/gameState'
 export const explain: Explainers['deal'] = (dslArgs, context) => {
     const [damageHtml, times] = evalAllAsHtml(dslArgs)
     const [damage] = evalAll(dslArgs)
-    // logger.info(
-    //     JSON.stringify({
-    //         damage: damageHtml,
-    //         attacker: context.characterMeta,
-    //         target: null,
-    //     })
-    // )
-    // logger.info(`damageHtml: ${damageHtml}`)
 
-    const damageHtmlArr =
-        damageHtml.split('>').length > 1
-            ? [damageHtml.split('>')[0] + '>', '</' + damageHtml.split('</')[1]]
-            : ['', '']
-
-    // logger.info(`damageHtmlArr: ${damageHtmlArr}`)
+    const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
     let explication = `deals ${damageHtmlArr[0]}${getDamage({
         damage: damage,

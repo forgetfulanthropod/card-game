@@ -1,17 +1,14 @@
 import { assertFinite } from 'shared/code'
 import { getDamage } from '../../util/applyDamage'
 import type { Executors, Explainers } from './util'
-import { evalAllAsHtml, evalAll } from './util'
+import { getOuterHtmlArr, evalAllAsHtml, evalAll } from './util'
 import { applyDamage } from '@/gameState'
 
 export const explain: Explainers['smite'] = (dslArgs, context) => {
     const [damageHtml, blockHtml] = evalAllAsHtml(dslArgs)
     const [damage] = evalAll(dslArgs)
 
-    const damageHtmlArr =
-        damageHtml.split('>').length > 1
-            ? [damageHtml.split('>')[0] + '>', '</' + damageHtml.split('</')[1]]
-            : ['', '']
+    const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
     return `deals ${damageHtmlArr[0]}${getDamage({
         damage,
@@ -42,6 +39,6 @@ export const execute: Executors['smite'] = ({
     if (healthAfter <= 0) {
         scene
             .select('allCharacters', command.characterUid, 'block')
-            .apply(b => b + calculatedStats.defense)
+            .apply(b => b + Math.ceil(calculatedStats.defense))
     }
 }
