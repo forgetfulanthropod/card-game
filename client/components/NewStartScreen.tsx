@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
 
 import styles from './UsernameEntry.module.css'
-import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 
 const fullGoodEarthImg = 'assets/root/good-earth.webp'
 
@@ -22,7 +21,7 @@ export function NewStartScreen(props: {
     }, [])
 
     return <div
-        onClick={() => props.onEnter('KaijuDemoOne')}
+        onClick={() => props.onEnter('random-' + Math.random().toString())}
         class={styles.startScreenContainer2}
     >
         <div class={styles.startScreenContainer2}>
