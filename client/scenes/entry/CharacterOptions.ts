@@ -129,8 +129,8 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 86,
         strength: 19,
-        wisdom: 8,
-        defense: 5,
+        wisdom: 8 + 1,
+        defense: 5 + 1,
 
         uid: '',
         tokenId: '',

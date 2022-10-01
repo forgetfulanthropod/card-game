@@ -54,6 +54,23 @@ export const cardArtAssets = {
     cardSpellbook: 'cards/Card PNG Breakdown/Card Art/Spellbook.png',
     cardTestudoFormation:
         'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
+
+    cardOwnerTokenFrogKnight:
+        'cards/Card PNG Breakdown/Card Owner Token/frogKnight.png',
+    cardOwnerTokenMushroomFarmer:
+        'cards/Card PNG Breakdown/Card Owner Token/mushroomFarmer.png',
+    cardOwnerTokenPenguinKnight:
+        'cards/Card PNG Breakdown/Card Owner Token/penguinKnight.png',
+    cardOwnerTokenSkeletonWarrior:
+        'cards/Card PNG Breakdown/Card Owner Token/skeletonWarrior.png',
+    cardOwnerTokenmatchaGelatinCube:
+        'cards/Card PNG Breakdown/Card Owner Token/matchaGelatinCube.png',
+    cardOwnerTokenWarhog:
+        'cards/Card PNG Breakdown/Card Owner Token/warhog.png',
+    cardOwnerTokenGnomeHooligan:
+        'cards/Card PNG Breakdown/Card Owner Token/gnomeHooligan.png',
+    cardOwnerTokenJerry: 'cards/Card PNG Breakdown/Card Owner Token/jerry.png',
+
     // cardSweepTheLeg: 'cards/Sweep The Leg.webp',
     // cardShield: 'cards/Shield.webp',
     // cardShieldOfLight: 'cards/Shield of Light.webp',

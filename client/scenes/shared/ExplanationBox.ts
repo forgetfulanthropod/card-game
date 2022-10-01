@@ -84,6 +84,7 @@ export function ExplanationBox({
                 wordWrapWidth: BASE_WIDTH * 0.2,
                 wordWrap: true,
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
+                fontSize: 20,
             },
         })
     })

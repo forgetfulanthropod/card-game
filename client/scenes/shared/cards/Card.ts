@@ -124,6 +124,7 @@ export function CardEl({
                 anchor: 0.5,
             }),
             getEnergyContainer(card),
+            getCardOwnerToken(card),
             ...getTexts(card, cardFrameTexture, colorStops),
             ...(omitPointerAreaExtender
                 ? []
@@ -335,6 +336,26 @@ function getEnergyContainer(card: Card): PixiContainer {
             src: `cardEnergy${card.energy}`,
             anchor: 0.5,
         })
+    )
+}
+
+function getCardOwnerToken(card: Card): PixiContainer {
+    const cm = getBattleScene().get('allCharacters', card.characterUid)
+
+    const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}`)
+
+    if (src == null) console.error("couldn't find the token")
+
+    return Container(
+        {},
+        ...(src
+            ? [
+                  Sprite({
+                      src,
+                      anchor: 0.5,
+                  }),
+              ]
+            : [])
     )
 }
 

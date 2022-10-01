@@ -7,7 +7,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
-const TIME_BETWEEN_NPC_MOVES = 2500
+const TIME_BETWEEN_NPC_MOVES = 2000
 
 export const doNpcTurn: InternalActions['doNpcTurn'] = ({ game, index }) => {
     const scene = getBattleSceneIn(game)
