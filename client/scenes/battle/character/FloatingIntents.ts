@@ -29,7 +29,12 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
                 ? []
                 : nextNpcCommands
                       .filter(cmd => cmd.targetUids.includes(cuid))
-                      .map(cmd => ({ key: cmd.command.characterUid, ...cmd }))
+                      .map(cmd => ({
+                          key:
+                              cmd.command.characterUid +
+                              Math.random().toString(),
+                          ...cmd,
+                      }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
         index => ({ x: (index * INTENT_ICON_WIDTH) / 2 })
