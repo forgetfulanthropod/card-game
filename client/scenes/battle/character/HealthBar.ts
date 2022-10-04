@@ -10,8 +10,6 @@ import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
-    getStage,
-    portalize,
     For,
     If,
     onDestroyed,
@@ -21,7 +19,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { nextFrame, onUpdate, statChangesDatum, toDatum } from '@/util'
+import { onUpdate, statChangesDatum, toDatum } from '@/util'
 import { ExplanationBox } from '@/scenes/shared'
 
 export const HEALTH_BAR_WIDTH = 300
@@ -160,9 +158,9 @@ function InteractiveEffectCounter(
 
 const STANCE_TEXTS = [
     'Stance modifiers',
-    'Avoidant: -25%',
-    'Neutral: 0%',
     'Aggressive: +25%',
+    'Neutral: 0%',
+    'Avoidant: -25%',
 ]
 
 function StanceIndicator(
@@ -183,50 +181,64 @@ function StanceIndicator(
     )
 
     return If(data, ({ stance, uid }) => {
-        const width = HEALTH_BAR_WIDTH * 0.4
-
         const stanceSrc =
             stance === 'neutral'
                 ? getTexture('stanceNeutral')
                 : stance === 'aggressive'
                 ? getTexture('stanceAggressive')
                 : getTexture('stanceDefensive')
-        const root = Sprite({
-            src: stanceSrc,
-            x: HEALTH_BAR_WIDTH * 0.7,
-            y: 10,
-            anchor: [1, 0],
-            width,
-            height: (width / stanceSrc.width) * stanceSrc.height,
-            events: {
-                pointerover() {
-                    isHovered.set(true)
-                },
-                pointerup() {
-                    void callApi('toggleStance', { characterUid: uid })
-                },
-                pointerout() {
-                    isHovered.set(false)
-                },
+
+        const width = HEALTH_BAR_WIDTH * 0.25
+        const height: number = (width / stanceSrc.width) * stanceSrc.height
+
+        return Container(
+            {
+                x: HEALTH_BAR_WIDTH * 0.82,
+                y:
+                    stance === 'aggressive'
+                        ? -height * 0.2
+                        : stance === 'neutral'
+                        ? -height * 0.52
+                        : -height * 0.8,
             },
-        })
-
-        void nextFrame().then(() => {
-            const globalPos = root.getGlobalPosition()
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: ExplanationBox({
-                    texts: STANCE_TEXTS,
-                    displayObjectArgs: {
-                        x: globalPos.x + width * 0.25,
-                        y: globalPos.y,
+            ExplanationBox({
+                texts: STANCE_TEXTS,
+                displayObjectArgs: {
+                    borderThickness: 2,
+                    borderColor: 0x78726a,
+                    y: height * 0.18,
+                    x: width * 0.06,
+                },
+            }),
+            Sprite({
+                src: stanceSrc,
+                anchor: [1, 0],
+                width,
+                height,
+                events: {
+                    pointerover() {
+                        isHovered.set(true)
                     },
-                }),
+                    pointerup() {
+                        void callApi('toggleStance', { characterUid: uid })
+                    },
+                    pointerout() {
+                        isHovered.set(false)
+                    },
+                },
             })
-        })
+        )
 
-        return root
+        // void nextFrame().then(() => {
+        //     const globalPos = root.getGlobalPosition()
+        //     portalize({
+        //         from: root,
+        //         to: () => getStage(),
+        //         content: ,
+        //     })
+        // })
+
+        // return root
     })
 }
 
