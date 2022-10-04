@@ -47,9 +47,9 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
             onDestroy: [unsub],
         },
         HealthIndicator(characterCursor, isHovered),
+        BlockIndicator(characterCursor),
         StanceIndicator(characterCursor, isHovered),
-        EffectIndicators(characterCursor),
-        BlockIndicator(characterCursor)
+        EffectIndicators(characterCursor)
     )
     return root
 }
@@ -72,7 +72,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
         Container(
             {
                 // y: -50 *  SCALE_UNIVERSAL,
-                x: characterCursor.get('isPc') ? 255 : -80,
+                x: characterCursor.get('isPc') ? 260 : -80,
             },
             ...(block === 0
                 ? []
@@ -188,7 +188,7 @@ function StanceIndicator(
                 ? getTexture('stanceAggressive')
                 : getTexture('stanceDefensive')
 
-        const width = HEALTH_BAR_WIDTH * 0.25
+        const width = HEALTH_BAR_WIDTH * 0.27
         const height: number = (width / stanceSrc.width) * stanceSrc.height
 
         return Container(
@@ -206,7 +206,8 @@ function StanceIndicator(
                 displayObjectArgs: {
                     borderThickness: 2,
                     borderColor: 0x78726a,
-                    y: height * 0.18,
+                    fontSize: 30,
+                    y: height * -0.04,
                     x: width * 0.06,
                 },
             }),
@@ -263,6 +264,29 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
     })
 }
 
+function StanceBadge(characterCursor: ROCursor<CharacterMeta>) {
+    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
+        if (!isPc) return false
+        return { stance, uid }
+    })
+    const healthBarTexture = getTexture('healthBarAggressive')
+
+    return If(data, ({ stance }) => {
+        return Sprite({
+            src:
+                stance === 'neutral'
+                    ? 'stanceNeutralBadge'
+                    : stance === 'aggressive'
+                    ? 'stanceAggressiveBadge'
+                    : 'stanceDefensiveBadge',
+            scale: 0.6,
+            x: healthBarTexture.width * 0.9,
+            anchor: 0.5,
+            alpha: 0.5,
+        })
+    })
+}
+
 const spriteAnchor: [number, number] = [0, 0.5]
 
 function HealthIndicator(
@@ -301,6 +325,7 @@ function HealthIndicator(
             anchor: spriteAnchor,
         }),
         StanceBarIndicator(characterCursor),
+        StanceBadge(characterCursor),
 
         // todo: projected damage and DoT
         // ProjectedDamage(characterCursor),
@@ -337,7 +362,7 @@ function HealthIndicator(
             x: HEALTH_BAR_WIDTH / 2,
             style: {
                 fontFamily: 'bigFont',
-                fontSize: 20,
+                fontSize: 26,
                 fill: 'white',
                 stroke: '#111',
                 strokeThickness: 4,
