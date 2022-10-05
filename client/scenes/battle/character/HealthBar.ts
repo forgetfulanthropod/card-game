@@ -4,6 +4,7 @@ import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
+import { isMobileOnly } from 'mobile-device-detect'
 import type { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { callApi } from '@/callApi'
@@ -220,8 +221,11 @@ function StanceIndicator(
                     pointerover() {
                         isHovered.set(true)
                     },
-                    pointerup() {
+                    pointerdown() {
                         void callApi('toggleStance', { characterUid: uid })
+                    },
+                    pointerup() {
+                        if (isMobileOnly) isHovered.set(false)
                     },
                     pointerout() {
                         isHovered.set(false)
