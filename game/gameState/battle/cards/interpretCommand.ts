@@ -62,6 +62,10 @@ export function explainCommand(
     scene: BattleCursor | EntryCursor
 ): string {
     const context: ExplainerContext = {
+        scene:
+            (scene as BattleCursor).get('turnCount') != null
+                ? (scene as BattleCursor)
+                : undefined,
         command,
         characterMeta: getCharacterMeta(scene, command.characterUid),
     }

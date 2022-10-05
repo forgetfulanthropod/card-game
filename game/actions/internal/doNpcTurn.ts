@@ -16,7 +16,7 @@ export const doNpcTurn: InternalActions['doNpcTurn'] = ({ game, index }) => {
     if (isBattleOver) return
     const processedCmds = scene.get('nextNpcCommands')
 
-    logger.info(JSON.stringify({ processedCmds }))
+    // logger.info(JSON.stringify({ processedCmds }))
 
     // if (processedCmds.length === 0) {
     //     endNpcTurn(game)

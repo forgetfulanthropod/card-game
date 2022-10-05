@@ -10,6 +10,7 @@ export type InfoBoxDisplayArgs = ContainerArgs & {
     borderRadius?: number
     borderThickness?: number
     borderColor?: number
+    fontSize?: number
 }
 
 export function InfoBox(

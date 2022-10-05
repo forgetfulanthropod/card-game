@@ -8,6 +8,7 @@ import { applyDamage } from '@/gameState'
 export const explain: Explainers['psychicWarfare'] = (dslArgs, context) => {
     const [damageHtml, sameTargetAddendHtml] = evalAllAsHtml(dslArgs)
     const [damage, sameTargetAddend] = evalAll(dslArgs)
+
     return `deals ${damageHtml.split('>')[0]}>${getDamageWithAdditional({
         damage,
         attacker: context.characterMeta,

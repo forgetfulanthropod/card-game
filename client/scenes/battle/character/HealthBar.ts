@@ -72,7 +72,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
         Container(
             {
                 // y: -50 *  SCALE_UNIVERSAL,
-                x: characterCursor.get('isPc') ? 260 : -80,
+                x: characterCursor.get('isPc') ? 275 : -80,
             },
             ...(block === 0
                 ? []
