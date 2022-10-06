@@ -63,7 +63,7 @@ export const cardArtAssets = {
         'cards/Card PNG Breakdown/Card Owner Token/penguinKnight.png',
     cardOwnerTokenSkeletonWarrior:
         'cards/Card PNG Breakdown/Card Owner Token/skeletonWarrior.png',
-    cardOwnerTokenmatchaGelatinCube:
+    cardOwnerTokenMatchaGelatinCube:
         'cards/Card PNG Breakdown/Card Owner Token/matchaGelatinCube.png',
     cardOwnerTokenWarhog:
         'cards/Card PNG Breakdown/Card Owner Token/warhog.png',
