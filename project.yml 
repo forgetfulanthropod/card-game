@@ -1,0 +1,56 @@
+name: kaiju
+
+static_sites:
+    - name: client
+      environment_slug: html
+      github:
+          repo: kaiju_cards/kaiju
+          branch: main
+          deploy_on_push: true
+      source_dir: client
+      index_document: /public/index.html
+      error_document: error.html
+      routes:
+          - path: /
+
+    # - name: landing
+    # github:
+    #     repo: digitalocean/sample-monorepo
+    #     branch: main
+    #     deploy_on_push: true
+    # source_dir: landing
+    # dockerfile_path: landing/Dockerfile
+    # output_dir: /app
+    # error_document: error.html
+    # routes:
+    #     - path: /landing
+
+services:
+    - name: server
+      environment_slug: go
+      github:
+          repo: digitalocean/sample-monorepo
+          branch: main
+          deploy_on_push: true
+      source_dir: server
+      routes:
+          - path:
+
+    # - name: webhook
+    # environment_slug: go
+    # github:
+    #     repo: digitalocean/sample-monorepo
+    #     branch: main
+    #     deploy_on_push: true
+    # source_dir: webhook
+    # routes:
+    #     - path: /webhook
+# workers:
+# - name: worker
+#   github:
+#       repo: digitalocean/sample-monorepo
+#       branch: main
+#       deploy_on_push: true
+#   source_dir: worker
+#   dockerfile_path: worker/Dockerfile
+#   run_command: sh -c "cat ./ok && sleep infinity"
