@@ -1,0 +1,34 @@
+@import url('//fonts.googleapis.com/css2?family=Meddon&family=Nanum+Brush+Script&family=Estonia&family=Noto+Sans+JP:wght@500&family=Permanent+Marker&display=swap');
+
+.startScreenContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.kaijuLogo {
+    width: 30%;
+    position: absolute;
+    top: 15%;
+}
+
+.startGame {
+    color: white;
+    font-family: monospace;
+    font-size: 30px;
+    position: absolute;
+    bottom: 20%;
+    text-align: center;
+}
+
+@media screen and (min-width: 600px) { .startGame {font-size: 40px} }
+@media screen and (min-width: 900px) { .startGame {font-size: 50px} }
+@media screen and (min-width: 1200px) { .startGame {font-size: 70px} }
+@media screen and (min-width: 1500px) { .startGame {font-size: 80px} }
+@media screen and (min-width: 1800px) { .startGame {font-size: 90px} }
