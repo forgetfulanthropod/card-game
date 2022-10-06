@@ -154,6 +154,11 @@ function client:live-serve() {
     live-server builds/client --host=localhost --port=3000
 }
 
+## GAME (no has storage only memory <3)
+function game:build() {
+    cd game && npm run build
+}
+
 ## MAIN SERVER
 
 function server:server() {
