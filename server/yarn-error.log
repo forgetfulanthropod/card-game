@@ -2,7 +2,7 @@ Arguments:
   /Users/pictures/.nvm/versions/node/v16.13.0/bin/node /usr/local/Cellar/yarn/1.22.17_2/libexec/bin/yarn.js install
 
 PATH: 
-  /usr/local/opt/mongodb-community@4.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/opt/mongodb-community@4.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin
+  ./node_modules/.bin:/usr/local/opt/mongodb-community@4.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/usr/local/opt/mongodb-community@4.0/bin:/Users/pictures/.nvm/versions/node/v16.13.0/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin
 
 Yarn version: 
   1.22.17
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: connect ENETUNREACH 104.16.21.35:443
+  Error: connect ENETUNREACH 104.16.18.35:443
       at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1161:16)
 
 npm manifest: 
