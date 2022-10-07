@@ -1,5 +1,7 @@
 {
     "name": "kaiju-root",
+    "private": true,
+    "workspaces": ["shared", "game"],
     "engines": {
         "yarn": "1.22.17",
         "node": "16.13.0"
