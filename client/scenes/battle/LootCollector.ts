@@ -54,6 +54,8 @@ const getDisplayName = (name: LootFromGame) => {
             return 'Draft a Card'
         case 'treasureChest':
             return 'Chest'
+        case 'gems':
+            return 'Gems'
         default:
             return 'Loot'
     }
@@ -126,7 +128,7 @@ export function LootCollector(): PixiContainer {
                 return treasureChest.TreasureChestContainer
             }
 
-            // Define a bunch of properties manually to adjust for inconsistencies in asset sizing and scaling
+            // Adjust a bunch of properties manually to adjust for inconsistencies in asset sizing, naming and scaling
             const scale = getScale({ idx })
             let properItemName = getDisplayName(item.name)
             let lootItemTextY = -250 * scale
@@ -144,6 +146,10 @@ export function LootCollector(): PixiContainer {
                 copper: { scale: 1.75 * scale, y: lootItemSpriteY + 30 },
                 treasureChest: { scale: 1.75 * scale, y: lootItemSpriteY },
                 stone: { scale: 1.75 * scale, y: lootItemSpriteY - 30 },
+                gems: {
+                    scale: 1.75 * scale,
+                    y: lootItemSpriteY - 200 + idx * 75,
+                },
                 default: { scale: 1.75 * scale, y: lootItemSpriteY },
             }
 
