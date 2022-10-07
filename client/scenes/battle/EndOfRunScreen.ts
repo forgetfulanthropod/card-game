@@ -1,5 +1,9 @@
 import { ModalBackdrop } from '@sharedElements'
-import { PixiContainer, RoundedRectangleGradientSprite } from '@/elementsUtil'
+import {
+    PixiContainer,
+    PixiText,
+    RoundedRectangleGradientSprite,
+} from '@/elementsUtil'
 import {
     getTexture,
     Text,
@@ -21,13 +25,37 @@ const VICTORY_SIGN_FINAL_POS = {
     y: -300,
 }
 
-// TODO end of run when user dies (eg. NPC wins)
+// TODO: display both quantity & score value, animate only score value (eg. something like "Rooms Passed (5) = 50") and animate 50, assuming each room is worth 10 points
+// TODO: align the text to the left, score to the right on separate columns
+
+const animateNumberInElement = async (
+    element: PixiText,
+    text: string,
+    finalNumber: number,
+    speed: 'slow' | 'normal' | 'fast' = 'normal'
+): Promise<void> => {
+    let initialNumber = 0
+    const numberIncrement = speed === 'slow' ? 1 : speed === 'normal' ? 2 : 3
+    const intervalIncrement =
+        speed === 'slow' ? 100 : speed === 'normal' ? 25 : 10
+
+    return await new Promise(resolve => {
+        const tempInterval = setInterval(() => {
+            element.text = `${text}:    ${initialNumber}`
+            initialNumber += numberIncrement
+
+            if (initialNumber >= finalNumber) {
+                element.text = `${text}:    ${finalNumber}`
+                clearInterval(tempInterval)
+                resolve(void 0)
+            }
+        }, intervalIncrement)
+    })
+}
+
 export function EndOfRunScreen(): PixiContainer {
     const scene = getBattleScene()
     const battleState = scene.get('state')
-    // setTimeout(() => {
-    //     animateTo(VictorySign, VICTORY_SIGN_FINAL_POS)
-    // }, 2000)
 
     const VictorySign = TweenableContainer(
         {},
@@ -42,10 +70,7 @@ export function EndOfRunScreen(): PixiContainer {
     )
 
     const EnemiesKilled = Text({
-        text: `Enemies Killed: ${scene
-            .select('runScore')
-            .select('attributes')
-            .get('grind')}`,
+        text: ``,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2 - 200,
         y: BASE_HEIGHT / 2 - 50,
@@ -55,27 +80,45 @@ export function EndOfRunScreen(): PixiContainer {
             padding: 4,
             align: 'center',
             fontWeight: 'lighter',
+            fontFamily: 'bigFont',
         },
         name: 'EnemiesKilled',
     })
 
-    const Placeholder = Text({
-        text: `Placeholder: 0`,
+    const RoomsCleared = Text({
+        text: ``,
         anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 - 50,
+        x: BASE_WIDTH / 2 - 200,
+        y: BASE_HEIGHT / 2,
         style: {
             fontSize: 30,
             fill: 'white',
             padding: 4,
             align: 'center',
             fontWeight: 'lighter',
+            fontFamily: 'bigFont',
         },
-        name: 'EnemiesKilled',
+        name: 'RoomsCleared',
+    })
+
+    const BossesKilled = Text({
+        text: ``,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2 - 200,
+        y: BASE_HEIGHT / 2 + 50,
+        style: {
+            fontSize: 30,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name: 'Bosses Killed',
     })
 
     const TotalScore = Text({
-        text: `Total Score: ${scene.select('runScore').get('totalScore')}`,
+        text: ``,
         anchor: [0.5, 0.5],
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT / 2 + 175,
@@ -85,9 +128,147 @@ export function EndOfRunScreen(): PixiContainer {
             padding: 4,
             align: 'center',
             fontWeight: 'bold',
+            fontFamily: 'bigFont',
         },
         name: 'TotalScore',
     })
+
+    const CumulativeOverkill = Text({
+        text: ``,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2 + 200,
+        y: BASE_HEIGHT / 2 + 50,
+        style: {
+            fontSize: 30,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name: `TotalResourcesCollected`,
+    })
+
+    const totalResourcesCount = scene
+        .select('lootClaimed')
+        .get()
+        .reduce((acc, loot) => acc + loot.count, 0)
+
+    const TotalResourcesCollected = Text({
+        text: ``,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2 + 200,
+        y: BASE_HEIGHT / 2 - 50,
+        style: {
+            fontSize: 30,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name: `TotalResourcesCollected`,
+    })
+
+    const DeckSize = Text({
+        text: ``,
+        anchor: [0.5, 0.5],
+        x: BASE_WIDTH / 2 + 200,
+        y: BASE_HEIGHT / 2,
+        style: {
+            fontSize: 30,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name: `TotalResourcesCollected`,
+    })
+
+    const numRoomsPassed = scene.get('numRoomsPassed')
+    const totalScore = scene.select('runScore').get('totalScore')
+
+    // Runs text animations synchronously
+    ;(async () => {
+        await animateNumberInElement(
+            EnemiesKilled,
+            'Enemies Killed',
+            scene.select('runScore').select('attributes').get('grind'),
+            'slow'
+        )
+        await animateNumberInElement(
+            RoomsCleared,
+            'Rooms Cleared',
+            numRoomsPassed,
+            'slow'
+        )
+        await animateNumberInElement(BossesKilled, 'Bosses Killed', 0, 'slow')
+        await animateNumberInElement(
+            TotalResourcesCollected,
+            'Loot Earned',
+            totalResourcesCount,
+            'fast'
+        )
+        await animateNumberInElement(DeckSize, 'Card Deck Size', 0, 'slow')
+        await animateNumberInElement(
+            CumulativeOverkill,
+            'Cumulative Overkill',
+            0,
+            'fast'
+        )
+        await animateNumberInElement(
+            TotalScore,
+            'Total Score',
+            totalScore,
+            'fast'
+        )
+    })()
+
+    animateNumberInElement(
+        EnemiesKilled,
+        'Enemies Killed',
+        scene.select('runScore').select('attributes').get('grind'),
+        'slow'
+    )
+        .then(() =>
+            animateNumberInElement(
+                RoomsCleared,
+                'Rooms Cleared',
+                numRoomsPassed,
+                'slow'
+            )
+        )
+        .then(() =>
+            animateNumberInElement(BossesKilled, 'Bosses Killed', 0, 'slow')
+        )
+        .then(() =>
+            animateNumberInElement(
+                TotalResourcesCollected,
+                'Loot Earned',
+                totalResourcesCount,
+                'fast'
+            )
+        )
+        .then(() =>
+            animateNumberInElement(DeckSize, 'Card Deck Size', 0, 'slow')
+        )
+        .then(() =>
+            animateNumberInElement(
+                CumulativeOverkill,
+                'Cumulative Overkill',
+                0,
+                'fast'
+            )
+        )
+        .then(() =>
+            animateNumberInElement(
+                TotalScore,
+                'Total Score',
+                totalScore,
+                'fast'
+            )
+        )
 
     const Retry = Text({
         text: `Retry?`,
@@ -121,67 +302,12 @@ export function EndOfRunScreen(): PixiContainer {
         window.location.reload()
     }
 
-    const lootClaimedLeft: LootFromGame[] = ['fish', 'stone']
-
-    const lootClaimedRight: LootFromGame[] = ['copper', 'gold', 'wood']
-
-    let lootElementsInitialY = BASE_HEIGHT / 2 - 50
-    const lootElementsLeft = lootClaimedLeft.map(item => {
-        let totalCount = 0
-        scene.get('lootClaimed').forEach(loot => {
-            if (loot.name === item) {
-                totalCount += loot.count
-            }
-        })
-
-        return Text({
-            text: `${upperFirst(item)} Collected: ${totalCount}`,
-            anchor: [0.5, 0.5],
-            x: BASE_WIDTH / 2 - 200,
-            y: (lootElementsInitialY += 50),
-            style: {
-                fontSize: 30,
-                fill: 'white',
-                padding: 4,
-                align: 'center',
-                fontWeight: 'lighter',
-            },
-            name: `${item}CountText`,
-        })
-    })
-
-    lootElementsInitialY = BASE_HEIGHT / 2 - 100
-
-    const lootElementsRight = lootClaimedRight.map(item => {
-        let totalCount = 0
-        scene.get('lootClaimed').forEach(loot => {
-            if (loot.name === item) {
-                totalCount += loot.count
-            }
-        })
-
-        return Text({
-            text: `${upperFirst(item)} Collected: ${totalCount}`,
-            anchor: [0.5, 0.5],
-            x: BASE_WIDTH / 2 + 200,
-            y: (lootElementsInitialY += 50),
-            style: {
-                fontSize: 30,
-                fill: 'white',
-                padding: 4,
-                align: 'center',
-                fontWeight: 'lighter',
-            },
-            name: `${item}CountText`,
-        })
-    })
-
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
             width: 800,
             height: 200,
-            x: BASE_WIDTH/2,
-            y: (lootElementsInitialY) - 50 ,
+            x: BASE_WIDTH / 2,
+            y: BASE_HEIGHT / 2 - 100 + 100,
             name: 'RoundedBlackRectBackground',
             anchor: [0.5, 0.5],
             alpha: 0.6,
@@ -204,8 +330,12 @@ export function EndOfRunScreen(): PixiContainer {
         {},
         RoundedBlackRectBackground,
         EnemiesKilled,
-        ...lootElementsLeft,
-        ...lootElementsRight
+        RoomsCleared,
+        BossesKilled,
+        // ...lootElementsLeft,
+        TotalResourcesCollected,
+        CumulativeOverkill,
+        DeckSize
     )
 
     const EndOfRunContainer = Container(
