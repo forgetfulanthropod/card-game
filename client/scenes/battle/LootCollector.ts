@@ -2,6 +2,7 @@ import { Rectangle, Texture } from 'pixi.js'
 
 import { ModalBackdrop } from '@sharedElements'
 import {
+    getStage,
     getTexture,
     PixiContainer,
     RoundedRectangleGradientSprite,
@@ -65,16 +66,19 @@ export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
-    let updateProgressBarFill: () => void
+    let updateProgressBarFill: () => void // assigned to fn from chest when it is displayed, then called async
+    let lootItems = scene.get('lootEarned')
+    let currLootItemName = lootItems[0].name
+    let currLootItemCount = lootItems[0].count
 
-    const [currentLootItem, ...remainingLootItems] = renderLoot()
+    let [currLootItem, ...remainingLootItems] = renderLoot()
     const lootItemsContainer = TweenableContainer(
         {
             x: lootScreenHasOpened
                 ? LOOT_ITEMS_FINAL_POS.x
                 : LOOT_ITEMS_START_POS.x,
         },
-        currentLootItem,
+        currLootItem,
         ...remainingLootItems
     )
 
@@ -106,15 +110,13 @@ export function LootCollector(): PixiContainer {
     )
 
     function renderLoot() {
-        const lootItems = scene.get('lootEarned')
-
         let lootItemsContainerX = -900
         let lootItemsContainerY = BASE_HEIGHT + 200
 
         return lootItems.map((item, idx) => {
             // Each loot container is created 900 pixels to the right of its neighbor (eg. the previous child in the lootItemsContainer array)
             const lootItemContainerArgs = {
-                name: `LootItemContainer_${item.name}`,
+                name: `${item.name}`,
                 x: (lootItemsContainerX += 900),
                 y: lootItemsContainerY,
                 onClick: idx === 0 ? () => handleButtonPress() : () => {},
@@ -246,7 +248,15 @@ export function LootCollector(): PixiContainer {
 
     function handleButtonPress() {
         callApi('collectLoot', {})
-        shiftCurrentItem(lootItemsContainer)
+        lootItems = scene.get('lootEarned')
+        currLootItemName = lootItems[0].name
+        currLootItemCount = lootItems[0].count
+
+        if (currLootItem.name !== 'draftCard') {
+            // this condition prevents flash of draft card icon shifting when it's not supposed to
+            displayLootGained(currLootItemName, currLootItemCount)
+            shiftCurrentItem(lootItemsContainer)
+        }
     }
 
     function shiftCurrentItem(el: TweenablePixiContainer) {
@@ -281,6 +291,7 @@ export function LootCollector(): PixiContainer {
         el.width = ITEM_BOX_WIDTH * newScale
         el.getChildByName('InactiveLootItemOverlay').destroy()
         applyOnClick(el, () => handleButtonPress())
+        currLootItem = el
     }
 
     function applyOnClick(
@@ -290,6 +301,58 @@ export function LootCollector(): PixiContainer {
         el.interactive = true
         el.cursor = `url('assets/root/hand.webp'), pointer`
         el.on('pointerdown', onClick)
+    }
+
+    // TODO generalize args to 'text to display' and optional sprite to display (pass in src name) to use for achievements / score notifications, etc
+    // TODO add fade out through Tweener filter
+    // TODO add stacking logic (eg. if there's a currLootGained, add one below it, then when the top one disappears, push the rest up)
+    let currY = 50;
+    function displayLootGained(lootName: LootFromGame, quantity: number) {
+        const stage = getStage()
+        const lootGainedElementName = 'LootGainedContainer'
+        const LootGainedNumber = Text({
+            text: `+ ${quantity}`,
+            anchor: [0, 0],
+            x: 0,
+            y: 0,
+            style: {
+                fontSize: 60,
+                fill: 'white',
+                padding: 4,
+                align: 'center',
+                fontFamily: 'bigFont'
+            },
+            name: 'LootGainedNumber',
+        })
+
+        const currLootGainedText = stage.getChildByName(lootGainedElementName)
+        const verticalMargin = LootGainedNumber.height + 25
+        if (currLootGainedText) {
+            currY += verticalMargin
+        }
+
+        const LootItemSprite = Sprite({
+            src: getTexture(lootName), // important that the asset map matches all LootFromGame types
+            scale: 0.4,
+            anchor: [0, 0],
+            x: LootGainedNumber.x + LootGainedNumber.width + 25,
+            y: LootGainedNumber.y, // TODO: adjust based on unique item attr
+            name: 'LootItemSprite',
+        })
+
+        const LootGainedContainer = Container({
+            name: lootGainedElementName,
+            x: 50,
+            y: currY,
+        }, LootGainedNumber, LootItemSprite)
+
+        stage.addChild(LootGainedContainer)
+
+        setTimeout(() => {
+            LootGainedContainer.destroy(true)
+            currY -= verticalMargin
+            if (currY < 50) currY = 50
+        }, 2000)
     }
 
     const LootCollectorContainer = Container(
