@@ -1,13 +1,13 @@
+import { rmSync } from 'fs'
+import { fileURLToPath } from 'url'
 import { build as esbuild } from 'esbuild'
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
-import { rmSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { makeBuildInfo } from '../scripts/makeBuildInfo.mjs'
 
 const password = 'dailyship'
-const buildDir = 'client/public/'
-const entryPoint = 'client/index.tsx'
+const buildDir = 'public/'
+const entryPoint = 'index.tsx'
 const outFile = `${buildDir}/${password}.js`
 
 const args = process.argv.slice(2)
@@ -37,7 +37,7 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         sourcemap: !isProduction, //isDevelopment,
         keepNames: !isProduction,
         entryPoints: [entryPoint],
-        inject: ['client/config/preact-shim.js'],
+        inject: ['./config/preact-shim.js'],
         jsxFactory: 'h',
         jsxFragment: 'Fragment',
         bundle: true,
@@ -72,8 +72,8 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         plugins: [
             cssModulesPlugin(),
             alias({
-                react: `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
+                react: `./node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `./node_modules/preact/compat/dist/compat.js`,
             }),
         ],
     })

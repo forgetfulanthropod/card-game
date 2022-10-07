@@ -48,14 +48,14 @@ app.post('/api', api)
 
 app.use(
     '/assets',
-    express.static(__dirname + '../../public/assets', {
+    express.static(__dirname + '../../client/public/assets', {
         extensions: ['.atlas', '.txt'],
         maxAge: '1d',
     })
 )
 app.use(
     '/',
-    express.static(__dirname + '../../public/', {
+    express.static(__dirname + '../../client/public/', {
         extensions: ['.atlas', '.txt'],
     })
 )

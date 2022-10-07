@@ -33,9 +33,7 @@
         "pnpm-lock.yaml": true,
         "pnpm-workspace.yaml": true,
         "README.md": true,
-        "scripts": true,
-        "server.log": true,
-        "tsconfig.base.json": true
+        "server.log": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
