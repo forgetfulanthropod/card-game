@@ -165,7 +165,7 @@ function game:build() {
 
 function server:digitalocean() {
     bash run server:build
-    node --enable-source-maps builds/server.js
+    node builds/server.js
 }
 function server:server() {
     node --enable-source-maps builds/server.js
