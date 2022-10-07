@@ -4,6 +4,9 @@
       "yarn": "1.22.17",
       "node": "16.13.0"
     },
+    "scripts": {
+        "build": "node build.mjs"
+    },
     "dependencies": {
         "@monaco-editor/react": "^4.4.5",
         "@pixi-essentials/gradients": "^0.0.5",
