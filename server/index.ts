@@ -27,6 +27,8 @@ if (process.env.FORCE_NEW_DB === 'yes') {
     // TODO
 }
 
+const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
+
 const port = process.env.PORT ?? 3000
 
 export const buildInfo = {
@@ -42,23 +44,25 @@ const app: Application = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/api', api)
+app.post('/server/api', api)
 
 // express static server, ovverides maxAge for png files:
-
-app.use(
-    '/assets',
-    express.static(__dirname + '../../client/public/assets', {
-        extensions: ['.atlas', '.txt'],
-        maxAge: '1d',
-    })
-)
-app.use(
-    '/',
-    express.static(__dirname + '../../client/public/', {
-        extensions: ['.atlas', '.txt'],
-    })
-)
+if (isStagingServer) {
+    // if (true) {
+    app.use(
+        '/assets',
+        express.static(__dirname + '../../client/public/assets', {
+            extensions: ['.atlas', '.txt'],
+            maxAge: '1d',
+        })
+    )
+    app.use(
+        '/',
+        express.static(__dirname + '../../client/public/', {
+            extensions: ['.atlas', '.txt'],
+        })
+    )
+}
 
 if (process.env.USE_ROUTER !== 'yes') {
     const server = app.listen(port, function () {

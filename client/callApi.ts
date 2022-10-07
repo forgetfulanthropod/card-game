@@ -1,5 +1,4 @@
 import type { ActionName, AllActionArgs } from 'shared'
-import { toastWarn } from './util'
 
 export async function callApi<K extends ActionName>(
     method: K,
@@ -16,7 +15,7 @@ export async function callApi<K extends ActionName>(
 
     const fullArgs = { ...(args ?? {}), username, method: method }
     try {
-        const res = await fetch(`api`, {
+        const res = await fetch(`server/api`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -31,7 +30,6 @@ export async function callApi<K extends ActionName>(
         }
         if (json?.status === 'error') {
             // toastWarn(`${method}: server error: ${json?.message}`)
-            return
         }
     } catch (e) {
         // toastWarn(`call to ${method}: server is offline or did not return json`)

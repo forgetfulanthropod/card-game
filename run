@@ -165,13 +165,13 @@ function server:digitalocean() {
     node builds/server.js
 }
 function server:server() {
-    node --enable-source-maps builds/server.js
+    DEV_STATIC_ASSETS=yes node --enable-source-maps builds/server.js
 }
 function server:server-watch() {
-    nodemon --enable-source-maps --watch builds/server.js builds/server.js
+    DEV_STATIC_ASSETS=yes nodemon --enable-source-maps --watch builds/server.js builds/server.js
 }
 function server:server-watch-debug() {
-    nodemon --inspect --enable-source-maps --watch builds/server.js builds/server.js
+    DEV_STATIC_ASSETS=yes nodemon --inspect --enable-source-maps --watch builds/server.js builds/server.js
 }
 function server:build() {
     node scripts/serverEsbuild.mjs
