@@ -149,9 +149,7 @@ function npm-clean() {
 ## CLIENT
 
 function client:build() {
-    cd client
-    yarn install
-    node build.mjs
+    node clientEsbuild.mjs
 }
 function client:build-watch() {
     node scripts/clientEsbuild.mjs watch
