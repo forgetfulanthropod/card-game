@@ -44,7 +44,7 @@ const app: Application = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/server/api', api)
+app.post(`${isStagingServer ? '/server' : ''}/api`, api)
 
 // express static server, ovverides maxAge for png files:
 if (isStagingServer) {
