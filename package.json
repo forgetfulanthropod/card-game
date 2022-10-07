@@ -1,5 +1,9 @@
 {
     "name": "kaiju-root",
+    "engines": {
+        "yarn": "1.22.17",
+        "node": "16.13.0"
+    },
     "scripts": {
         "CI": "bash run CI"
     },
