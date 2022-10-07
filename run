@@ -13,16 +13,6 @@ function install-all() {
     pnpm i
 }
 
-function yarn-install-all() {
-    cd shared
-    yarn install
-    cd ../game
-    yarn install
-    cd ../server
-    yarn install
-    cd..
-}
-
 function CI() {
     set +e
     source ~/.bashrc
