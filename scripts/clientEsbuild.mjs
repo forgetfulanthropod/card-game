@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
 const password = 'dailyship'
-const buildDir = 'client/public/'
+const buildDir = 'public/'
 const entryPoint = 'client/index.tsx'
 const outFile = `${buildDir}/${password}.js`
 

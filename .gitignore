@@ -25,6 +25,6 @@ tsconfig.tsbuildinfo
 db.json
 server/leveldb
 server/temp
-client/public/*.css
-client/public/*.map
+public/*.css
+public/*.map
 dep-graph*.svg
