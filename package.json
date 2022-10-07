@@ -1,7 +1,6 @@
 {
     "name": "kaiju-root",
     "scripts": {
-        "preinstall": "[[ $STOP_NPM_INSTALL == 1 ]] && rm package.json || true && npm i -r",
         "CI": "bash run CI"
     },
     "dependencies": {
