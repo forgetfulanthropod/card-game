@@ -72,8 +72,8 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         plugins: [
             cssModulesPlugin(),
             alias({
-                react: `./node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `./node_modules/preact/compat/dist/compat.js`,
+                react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
             }),
         ],
     })
