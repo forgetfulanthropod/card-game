@@ -10,6 +10,7 @@ export const rootAssets = {
     stone: 'misc-png/ITEM_STONE.webp',
     gold: 'misc-png/ITEM_GOLD.webp',
     wood: 'misc-png/ITEM_WOOD.webp',
+    gems: 'misc-png/ITEM_GEM.svg',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',

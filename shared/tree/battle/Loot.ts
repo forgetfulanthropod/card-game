@@ -1,7 +1,6 @@
 export type LootFromGame =
     | 'draftCard'
-    // | 'gems'
-    // | 'tokenTBD'
+    | 'gems'
     | 'fish'
     | 'copper'
     | 'stone'
