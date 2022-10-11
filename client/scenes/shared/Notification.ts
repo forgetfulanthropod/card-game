@@ -1,4 +1,4 @@
-import { getStage, getTexture, Text } from '@/elementsUtil'
+import { getStage, getTexture, RoundedBordered, Text } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 
 const MIN_Y_OFFSET = 50
@@ -14,20 +14,30 @@ function displayScoreNotification<T extends string>(
 ) {
     const stage = getStage()
     const containerName = `NotificationContainer`
-    const NotificationIcon = Sprite({
-        src: getTexture(assetSrc),
-        scale: 0.2,
-        anchor: [0, 0],
-        x: 0,
-        y: 0, // TODO: adjust based on unique item attr
-        name: 'NotificationIcon',
-    })
+    const NotificationIcon = Container(
+        {},
+        RoundedBordered(
+            Sprite({
+                src: getTexture(assetSrc),
+                scale: 0.2,
+                anchor: [0, 0],
+                x: 0,
+                y: 0, // TODO: adjust based on unique item attr
+                name: 'NotificationIcon',
+            }),
+            {
+                radius: 20,
+                borderThickness: 6,
+                borderColor: 2,
+            }
+        )
+    )
 
     const TextToDisplay = Text({
         text: `${textToDisplay}`,
         anchor: [0, 0],
         x: NotificationIcon.x + NotificationIcon.width + BASE_PADDING,
-        y: NotificationIcon.y - 5,
+        y: NotificationIcon.y + 15,
         style: {
             fontSize: 40,
             fill: 'white',
@@ -73,7 +83,7 @@ function displayScoreNotification<T extends string>(
     stage.addChild(NotificationContainer)
 
     setTimeout(() => {
-        NotificationContainer.destroy({ children: true})
+        NotificationContainer.destroy({ children: true })
         currY -= verticalMargin
         if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
     }, 2000)

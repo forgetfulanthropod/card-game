@@ -40,7 +40,7 @@ export const RUN_SCORE_EVENT_META: Record<
     ENEMY_KILLED: {
         description: 'number of enemies defeated',
         pointValue: 5,
-        notificationText: 'Enemy defeated',
+        notificationText: '@unused',
         shortName: 'grind',
         attributeName: 'enemiesKilled',
     },
