@@ -1,9 +1,9 @@
-import { getStage, getTexture, RoundedBordered, Text } from '@/elementsUtil'
+import { getStage, getTexture, RoundedBordered, RoundedRectangleGradientSprite, Text } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 
 const MIN_Y_OFFSET = 50
 const MIN_X_OFFSET = 50
-const BASE_PADDING = 25
+const BASE_PADDING = 15
 let currY = MIN_Y_OFFSET
 
 // Can eventually separate logic and view if it ever becomes necessary
@@ -14,12 +14,13 @@ function displayScoreNotification<T extends string>(
 ) {
     const stage = getStage()
     const containerName = `NotificationContainer`
+
     const NotificationIcon = Container(
         {},
         RoundedBordered(
             Sprite({
                 src: getTexture(assetSrc),
-                scale: 0.2,
+                scale: 0.125,
                 anchor: [0, 0],
                 x: 0,
                 y: 0, // TODO: adjust based on unique item attr
@@ -27,8 +28,8 @@ function displayScoreNotification<T extends string>(
             }),
             {
                 radius: 20,
-                borderThickness: 6,
-                borderColor: 2,
+                borderThickness: 4,
+                borderColor: 0,
             }
         )
     )
@@ -36,14 +37,15 @@ function displayScoreNotification<T extends string>(
     const TextToDisplay = Text({
         text: `${textToDisplay}`,
         anchor: [0, 0],
-        x: NotificationIcon.x + NotificationIcon.width + BASE_PADDING,
-        y: NotificationIcon.y + 15,
+        x: NotificationIcon.x + NotificationIcon.width + BASE_PADDING - 5,
+        y: NotificationIcon.y + 7.5,
         style: {
-            fontSize: 40,
+            fontSize: 24,
             fill: 'white',
             padding: 4,
+            fontWeight: '100',
             align: 'center',
-            fontFamily: 'bigFont',
+            fontFamily: 'sansFont',
         },
         name: `${textToDisplay}`,
     })
@@ -54,7 +56,7 @@ function displayScoreNotification<T extends string>(
         x: TextToDisplay.x + TextToDisplay.width + BASE_PADDING,
         y: TextToDisplay.y,
         style: {
-            fontSize: 40,
+            fontSize: 28,
             fill: 'white',
             padding: 4,
             align: 'center',
@@ -69,12 +71,37 @@ function displayScoreNotification<T extends string>(
         currY += verticalMargin
     }
 
+    const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
+        spriteArgs: {
+            width: NotificationIcon.width + TextToDisplay.width + CountToDisplay.width + BASE_PADDING * 4,
+            height: TextToDisplay.height + BASE_PADDING * 2 + 5,
+            x: -15,
+            y: -10,
+            name: 'RoundedBlackRectBackground',
+            anchor: [0, 0],
+            alpha: 0.5,
+            tint: 1,
+        },
+        radius: 100,
+        gradientArgs: {
+            x0: 0,
+            x1: 500,
+            y0: 0,
+            y1: 500,
+            colorStops: [
+                { color: 'black', offset: 0 },
+                { color: 'white', offset: 1 },
+            ],
+        },
+    })
+
     const NotificationContainer = Container(
         {
             name: containerName,
             x: MIN_X_OFFSET,
             y: currY,
         },
+        RoundedBlackRectBackground,
         NotificationIcon,
         TextToDisplay,
         CountToDisplay

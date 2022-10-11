@@ -116,6 +116,18 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 char.isPc === false && removedCharacterUids.includes(char.uid)
         )
 
+        if (removedEnemyCharacters) {
+            setTimeout(
+                () =>
+                    handleScoringEvent(
+                        'ENEMY_KILLED',
+                        removedEnemyCharacters.length,
+                        removedEnemyCharacters
+                    ),
+                1000
+            ) // imperfect timing, but good enough for now
+        }
+
         waitForDeathAnimationsDatum.set(waiting)
 
         // console.log('animating out ', removedCharacterUids)
@@ -125,11 +137,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             removedCharacterUids
         ).then(() => {
             // console.log('animated out ', removedCharacterUids)
-            handleScoringEvent(
-                'ENEMY_KILLED',
-                removedEnemyCharacters.length,
-                removedEnemyCharacters
-            )
             const waiting: Record<CharacterUid, boolean> = {
                 ...waitForDeathAnimationsDatum.val,
             }
