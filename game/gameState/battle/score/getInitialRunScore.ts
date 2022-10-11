@@ -5,9 +5,9 @@ export function getInitialRunScore(): RunScore {
         totalScore: 0,
         currModifier: 1,
         attributes: {
-            grind: 0,
-            grunts: 0,
-            boss: 0,
+            enemiesKilled: 0,
+            roomsExitedFullHealth: 0,
+            bossRoomsExitedFullHealth: 0,
         },
     }
 }

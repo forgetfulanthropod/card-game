@@ -10,4 +10,5 @@ export * from './InfoBox'
 export * from './MainCharacterAnimation'
 export * from './ModalBackdrop'
 export * from './PlainButton'
+export * from './handleScoringEvent'
 // @endindex
