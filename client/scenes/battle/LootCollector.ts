@@ -256,7 +256,7 @@ export function LootCollector(): PixiContainer {
         currLootItemName = lootItems[0].name
         currLootItemCount = lootItems[0].count
 
-        if (currLootItem.name !== 'draftCard') {
+        if (!['draftCard', 'treasureChest'].includes(currLootItem.name)) {
             // this condition prevents flash of draft card icon shifting when it's not supposed to
             displayLootGained(currLootItemName, currLootItemCount)
             shiftCurrentItem(lootItemsContainer)
@@ -357,7 +357,7 @@ export function LootCollector(): PixiContainer {
         stage.addChild(LootGainedContainer)
 
         setTimeout(() => {
-            LootGainedContainer.destroy(true)
+            LootGainedContainer.destroy({ children: true, baseTexture: false, texture: false })
             currY -= verticalMargin
             if (currY < 50) currY = 50
         }, 2000)

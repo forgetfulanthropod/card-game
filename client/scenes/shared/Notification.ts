@@ -36,7 +36,11 @@ const displayScoreNotification = async <T extends string>(
 
     setTimeout(async () => {
         await animateNotificationOut(newNotification)
-        newNotification.destroy({ children: true })
+        newNotification.destroy({
+            children: true,
+            baseTexture: false,
+            texture: false,
+        })
         currY -= verticalMargin
         if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
     }, 2000)
@@ -74,11 +78,18 @@ function Notification<T extends string>(
     assetSrc: string,
     count: number
 ) {
+    let textureSrc
+    try {
+        textureSrc = getTexture(assetSrc)
+    } catch (e) {
+        console.error(e)
+    }
+
     const NotificationIcon = Container(
         {},
         RoundedBordered(
             Sprite({
-                src: getTexture(assetSrc),
+                src: textureSrc ?? getTexture('cardArtPlaceholder'),
                 scale: 0.125,
                 x: -300,
                 y: 0, // TODO: adjust based on unique item attr
@@ -154,7 +165,7 @@ function Notification<T extends string>(
             x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
             y: currY,
             alpha: 0,
-            scale: 2
+            scale: 2,
         },
         RoundedBlackRectBackground,
         NotificationIcon,
