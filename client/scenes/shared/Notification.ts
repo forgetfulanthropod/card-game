@@ -15,7 +15,15 @@ const MIN_Y_OFFSET = 50
 const MIN_X_OFFSET = 50
 const BASE_PADDING = 15
 const BASE_HEIGHT = 64
+const verticalMargin = BASE_HEIGHT + BASE_PADDING
+
+/**
+ * This variable keeps track of where the next subsequent Notification should be displayed on the screen.
+ * It is increased (eg. make position lower) when a Notification is added to the stage, and decreased when a Notification is removed.
+ * It is closed over by the Notification-adjacent functions, thus persisting its value throughout the stage's lifetime.
+ */
 let currY = MIN_Y_OFFSET
+let currNotificationsCount = 0
 const containerName = `NotificationContainer`
 
 const displayScoreNotification = async <T extends string>(
@@ -24,29 +32,28 @@ const displayScoreNotification = async <T extends string>(
     count: number
 ) => {
     const stage = getStage()
-    const existingNotification = stage.getChildByName(containerName)
-    const verticalMargin = BASE_HEIGHT + BASE_PADDING
-    if (existingNotification) {
-        currY += verticalMargin
-    }
+    adjustNextNotificationPosition(stage) // important to do this before creating new notification
 
     const newNotification = Notification(textToDisplay, assetSrc, count)
     stage.addChild(newNotification)
-    await animateElementSlamIn(newNotification)
+    currNotificationsCount++
+    await slamAnimateElIntoScreen(newNotification)
 
     setTimeout(async () => {
-        await animateNotificationOut(newNotification)
-        newNotification.destroy({
-            children: true,
-            baseTexture: false,
-            texture: false,
-        })
-        currY -= verticalMargin
-        if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
+        await destroyNotificationAndShiftRest(newNotification, stage)
     }, 2000)
 }
 
-const animateElementSlamIn = async (el: TweenablePixiContainer) => {
+const adjustNextNotificationPosition = (stage: PixiContainer) => {
+    const existingNotifications = stage.children.filter(
+        el => el.name === containerName
+    )
+    if (existingNotifications.length > 0) {
+        currY += verticalMargin
+    }
+}
+
+const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: el,
@@ -61,7 +68,29 @@ const animateElementSlamIn = async (el: TweenablePixiContainer) => {
     )
 }
 
-const animateNotificationOut = async (notification: PixiContainer) => {
+const destroyNotificationAndShiftRest = async (
+    newNotification: TweenablePixiContainer,
+    stage: PixiContainer
+): Promise<void> => {
+    await fadeNotificationOut(newNotification)
+    newNotification.destroy({
+        children: true,
+        baseTexture: false,
+        texture: false,
+    })
+    const existingNotifications = stage.children.filter(
+        el => el.name === containerName && el instanceof TweenablePixiContainer
+    ) as TweenablePixiContainer[]
+    currNotificationsCount--
+
+    existingNotifications.forEach(el => {
+        shiftNotificationUp(el, el.position.y)
+    })
+    currY -= verticalMargin
+    if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
+}
+
+const fadeNotificationOut = async (notification: PixiContainer) => {
     await Tweener.add(
         {
             target: notification,
@@ -69,6 +98,22 @@ const animateNotificationOut = async (notification: PixiContainer) => {
         },
         {
             alpha: 0,
+        }
+    )
+}
+
+const shiftNotificationUp = async (
+    el: TweenablePixiContainer,
+    initialY: number
+) => {
+    await Tweener.add(
+        {
+            target: el,
+            duration: 0.5,
+            ease: Easing.easeFromTo,
+        },
+        {
+            y: initialY - verticalMargin,
         }
     )
 }
