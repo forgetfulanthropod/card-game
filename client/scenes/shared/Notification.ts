@@ -1,20 +1,46 @@
-import { getStage, getTexture, RoundedBordered, RoundedRectangleGradientSprite, Text } from '@/elementsUtil'
+import {
+    getStage,
+    getTexture,
+    RoundedBordered,
+    RoundedRectangleGradientSprite,
+    Text,
+} from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 
 const MIN_Y_OFFSET = 50
 const MIN_X_OFFSET = 50
 const BASE_PADDING = 15
+const BASE_HEIGHT = 64
 let currY = MIN_Y_OFFSET
+const containerName = `NotificationContainer`
 
-// Can eventually separate logic and view if it ever becomes necessary
 function displayScoreNotification<T extends string>(
     textToDisplay: T,
     assetSrc: string,
     count: number
 ) {
     const stage = getStage()
-    const containerName = `NotificationContainer`
+    const existingNotification = stage.getChildByName(containerName)
+    const verticalMargin = BASE_HEIGHT + BASE_PADDING
+    if (existingNotification) {
+        currY += verticalMargin
+    }
 
+    const newNotification = Notification(textToDisplay, assetSrc, count)
+    stage.addChild(newNotification)
+
+    setTimeout(() => {
+        newNotification.destroy({ children: true })
+        currY -= verticalMargin
+        if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
+    }, 2000)
+}
+
+function Notification<T extends string>(
+    textToDisplay: T,
+    assetSrc: string,
+    count: number
+) {
     const NotificationIcon = Container(
         {},
         RoundedBordered(
@@ -65,15 +91,13 @@ function displayScoreNotification<T extends string>(
         name: `${count}`,
     })
 
-    const existingNotification = stage.getChildByName(containerName)
-    const verticalMargin = TextToDisplay.height + BASE_PADDING
-    if (existingNotification) {
-        currY += verticalMargin
-    }
-
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
-            width: NotificationIcon.width + TextToDisplay.width + CountToDisplay.width + BASE_PADDING * 4,
+            width:
+                NotificationIcon.width +
+                TextToDisplay.width +
+                CountToDisplay.width +
+                BASE_PADDING * 4,
             height: TextToDisplay.height + BASE_PADDING * 2 + 5,
             x: -15,
             y: -10,
@@ -107,13 +131,7 @@ function displayScoreNotification<T extends string>(
         CountToDisplay
     )
 
-    stage.addChild(NotificationContainer)
-
-    setTimeout(() => {
-        NotificationContainer.destroy({ children: true })
-        currY -= verticalMargin
-        if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
-    }, 2000)
+    return NotificationContainer
 }
 
-export { displayScoreNotification }
+export { displayScoreNotification, Notification }
