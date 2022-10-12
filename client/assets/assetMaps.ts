@@ -192,7 +192,8 @@ export const orbAssets = {
 
 export const signAssets = {
     skelepitDungeonSign: 'signs/skelepit dungeon.webp',
-    roomClearedSign: 'signs/roomCleared.png',
+    roomClearedSign: 'signs/newRoomClearedBanner.png',
+    draftCardBanner: 'signs/draftCardBanner.png',
     victory: 'signs/victory.png',
     defeat: 'signs/newDefeatBanner.png',
 }

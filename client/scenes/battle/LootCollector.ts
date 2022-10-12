@@ -24,7 +24,7 @@ const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
     scale: 1,
     x: 0,
-    y: -600,
+    y: -700,
 }
 
 const LOOT_ITEMS_FINAL_POS = {
