@@ -1,11 +1,15 @@
 import {
     getStage,
     getTexture,
+    PixiContainer,
     RoundedBordered,
     RoundedRectangleGradientSprite,
     Text,
+    TweenableContainer,
+    TweenablePixiContainer,
 } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
+import { Easing, Tweener } from 'pixi-tweener'
 
 const MIN_Y_OFFSET = 50
 const MIN_X_OFFSET = 50
@@ -14,11 +18,11 @@ const BASE_HEIGHT = 64
 let currY = MIN_Y_OFFSET
 const containerName = `NotificationContainer`
 
-function displayScoreNotification<T extends string>(
+const displayScoreNotification = async <T extends string>(
     textToDisplay: T,
     assetSrc: string,
     count: number
-) {
+) => {
     const stage = getStage()
     const existingNotification = stage.getChildByName(containerName)
     const verticalMargin = BASE_HEIGHT + BASE_PADDING
@@ -28,12 +32,41 @@ function displayScoreNotification<T extends string>(
 
     const newNotification = Notification(textToDisplay, assetSrc, count)
     stage.addChild(newNotification)
+    await animateElementSlamIn(newNotification)
 
-    setTimeout(() => {
+    setTimeout(async () => {
+        await animateNotificationOut(newNotification)
         newNotification.destroy({ children: true })
         currY -= verticalMargin
         if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
     }, 2000)
+}
+
+const animateElementSlamIn = async (el: TweenablePixiContainer) => {
+    await Tweener.add(
+        {
+            target: el,
+            duration: 0.75,
+            ease: Easing.bouncePast,
+        },
+        {
+            alpha: 1,
+            tweenableScale: 1,
+            x: MIN_X_OFFSET,
+        }
+    )
+}
+
+const animateNotificationOut = async (notification: PixiContainer) => {
+    await Tweener.add(
+        {
+            target: notification,
+            duration: 0.2,
+        },
+        {
+            alpha: 0,
+        }
+    )
 }
 
 function Notification<T extends string>(
@@ -47,8 +80,7 @@ function Notification<T extends string>(
             Sprite({
                 src: getTexture(assetSrc),
                 scale: 0.125,
-                anchor: [0, 0],
-                x: 0,
+                x: -300,
                 y: 0, // TODO: adjust based on unique item attr
                 name: 'NotificationIcon',
             }),
@@ -62,7 +94,6 @@ function Notification<T extends string>(
 
     const TextToDisplay = Text({
         text: `${textToDisplay}`,
-        anchor: [0, 0],
         x: NotificationIcon.x + NotificationIcon.width + BASE_PADDING - 5,
         y: NotificationIcon.y + 7.5,
         style: {
@@ -78,7 +109,6 @@ function Notification<T extends string>(
 
     const CountToDisplay = Text({
         text: `+ ${count}`,
-        anchor: [0, 0],
         x: TextToDisplay.x + TextToDisplay.width + BASE_PADDING,
         y: TextToDisplay.y,
         style: {
@@ -102,11 +132,10 @@ function Notification<T extends string>(
             x: -15,
             y: -10,
             name: 'RoundedBlackRectBackground',
-            anchor: [0, 0],
             alpha: 0.5,
             tint: 1,
         },
-        radius: 100,
+        radius: 40,
         gradientArgs: {
             x0: 0,
             x1: 500,
@@ -119,11 +148,13 @@ function Notification<T extends string>(
         },
     })
 
-    const NotificationContainer = Container(
+    const NotificationContainer = TweenableContainer(
         {
             name: containerName,
-            x: MIN_X_OFFSET,
+            x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
             y: currY,
+            alpha: 0,
+            scale: 2
         },
         RoundedBlackRectBackground,
         NotificationIcon,
