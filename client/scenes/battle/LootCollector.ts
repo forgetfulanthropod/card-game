@@ -14,7 +14,11 @@ import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import { animateTo } from '../shared/cards/Hand'
-import { LootFromGame } from 'shared'
+import {
+    LootFromGame,
+    TreasureChestLevel,
+    TreasureChestLevelThreshold,
+} from 'shared'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -306,7 +310,7 @@ export function LootCollector(): PixiContainer {
     // TODO generalize args to 'text to display' and optional sprite to display (pass in src name) to use for achievements / score notifications, etc
     // TODO add fade out through Tweener filter
     // TODO add stacking logic (eg. if there's a currLootGained, add one below it, then when the top one disappears, push the rest up)
-    let currY = 50;
+    let currY = 50
     function displayLootGained(lootName: LootFromGame, quantity: number) {
         const stage = getStage()
         const lootGainedElementName = 'LootGainedContainer'
@@ -320,7 +324,7 @@ export function LootCollector(): PixiContainer {
                 fill: 'white',
                 padding: 4,
                 align: 'center',
-                fontFamily: 'bigFont'
+                fontFamily: 'bigFont',
             },
             name: 'LootGainedNumber',
         })
@@ -340,11 +344,15 @@ export function LootCollector(): PixiContainer {
             name: 'LootItemSprite',
         })
 
-        const LootGainedContainer = Container({
-            name: lootGainedElementName,
-            x: 50,
-            y: currY,
-        }, LootGainedNumber, LootItemSprite)
+        const LootGainedContainer = Container(
+            {
+                name: lootGainedElementName,
+                x: 50,
+                y: currY,
+            },
+            LootGainedNumber,
+            LootItemSprite
+        )
 
         stage.addChild(LootGainedContainer)
 
@@ -373,8 +381,10 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const progressBarFillSrc = new Texture(
         getTexture('healthBarHealth').baseTexture
     )
-    const { progressPct, upgraded, level } =
-        getBattleScene().get('treasureChest')
+
+    const battleScene = getBattleScene()
+    const { progressPct, upgraded, level } = battleScene.get('treasureChest')
+    const { totalScore: currRunScore } = battleScene.get('runScore')
 
     const ChestBody = Sprite({
         src: chestBodySrc,
@@ -438,11 +448,15 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         const textureRef = getTexture('healthBarBacking')
         const totalWidth = textureRef.width
         const totalHeight = textureRef.height
+        const partialWidth =
+            totalWidth * (progressPct + 0.11) > totalWidth / 2
+                ? totalWidth * (progressPct - 0.11)
+                : totalWidth * (progressPct + 0.11)
 
         progressBarFillSrc.frame = new Rectangle(
             0,
             0,
-            totalWidth * progressPct,
+            partialWidth,
             totalHeight
         )
 
@@ -483,9 +497,10 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     })
 
     const ChestLevelText = Text({
-        text: `${(272 - 272 * progressPct).toFixed(0)} points to reach level ${
-            level + 1
-        }`,
+        text: `${
+            TreasureChestLevelThreshold[(level + 1) as TreasureChestLevel] -
+            currRunScore
+        } points to reach level ${level + 1}`,
         anchor: [0.5, 0.5],
         x: 0,
         y: 655,
