@@ -62,7 +62,12 @@ export function TermExplanationBoxes({
     )
 
     const subTermBoxes = keys(keyTermsMap)
-        .filter(term => ~getTermIndex(term, keyTermsMap[term]))
+        .filter(
+            term =>
+                ~terms.findIndex(
+                    mainTerm => ~getTermIndex(term, keyTermsMap[mainTerm])
+                )
+        )
         .map(term => TermExplanationBox({ term, displayObjectArgs }))
 
     const boxes = [...termBoxes, ...subTermBoxes]
