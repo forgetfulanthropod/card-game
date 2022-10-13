@@ -19,4 +19,5 @@ export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
 export { toggleStance } from './toggleStance'
 export { notifyRunScore } from './notifyRunScore'
+export { openLootCollector } from './openLootCollector'
 // @endindex

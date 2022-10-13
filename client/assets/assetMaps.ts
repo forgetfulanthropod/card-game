@@ -11,6 +11,7 @@ export const rootAssets = {
     gold: 'misc-png/ITEM_GOLD.webp',
     wood: 'misc-png/ITEM_WOOD.webp',
     gems: 'misc-png/ITEM_GEM.svg',
+    swordPiercing: 'effects/piercing.webp',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',
@@ -152,7 +153,6 @@ export const effectAssets: {
     effectBleed: 'effects/bleed.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigue: 'effects/fatigue.webp',
-    // effectPiercing,
     // temp: what is strongblock icon?
     effectStrongblock: 'intents/npc/Shield intent.webp',
     effectTrance: 'effects/magicalStorm.webp',

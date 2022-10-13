@@ -16,10 +16,9 @@ export function calculateNewRunScore(scene: BattleCursor): number {
         const { pointValue } = RUN_SCORE_EVENT_META[matchingEvent]
         newTotalScore += attributes[attributeName] * pointValue
     })
+    newTotalScore = newTotalScore * currModifier
 
-    scene.get('lootClaimed').forEach(loot => {
-            newTotalScore += loot.count
-    })
+    scene.select('runScore').set('totalScore', newTotalScore)
 
-    return newTotalScore * currModifier
+    return newTotalScore
 }

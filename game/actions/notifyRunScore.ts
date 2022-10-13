@@ -1,6 +1,7 @@
 import { GameActions, RUN_SCORE_EVENT_META } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
+import { calculateChestProgress, calculateNewRunScore } from '@/gameState'
 
 export const notifyRunScore: GameActions['notifyRunScore'] = args => {
     const { game, event, count } = args
@@ -16,6 +17,8 @@ export const notifyRunScore: GameActions['notifyRunScore'] = args => {
     const newCount = currCount + count
 
     attributeCount.set(newCount)
+    calculateNewRunScore(scene)
+    calculateChestProgress(scene)
 
     switch (event) {
         case 'ENEMY_KILLED':

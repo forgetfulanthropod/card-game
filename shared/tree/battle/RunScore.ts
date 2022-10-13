@@ -11,9 +11,10 @@ export type RunScoreAttribute = {
 
 export type RunScoreAttributeName =
     | 'enemiesKilled'
+    | 'roomsCleared'
+    | 'bossesKilled'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
-export type RunScoreAttributeShortName = 'grind' | 'grunts' | 'boss'
 
 export type RunScoreAttributeMeta = {
     description: string
@@ -21,14 +22,23 @@ export type RunScoreAttributeMeta = {
     notificationText: string
     attributeName: RunScoreAttributeName
     asset?: string
-    shortName?: RunScoreAttributeShortName
 }
+
+const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED'] as const
+export type NotifiableEvent = typeof notifiableEvent[number]
+
+export type RunScoreEvent =
+    | NotifiableEvent
+    | 'EXIT_ROOM_FULL_HEALTH'
+    | 'EXIT_BOSS_FULL_HEALTH'
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
     RunScoreEvent
 > = {
     enemiesKilled: 'ENEMY_KILLED',
+    roomsCleared: 'ROOM_CLEARED',
+    bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
 }
@@ -38,53 +48,37 @@ export const RUN_SCORE_EVENT_META: Record<
     RunScoreAttributeMeta
 > = {
     ENEMY_KILLED: {
-        description: 'number of enemies defeated',
+        description: 'Number of enemies defeated',
         pointValue: 5,
         notificationText: '@unused',
-        shortName: 'grind',
         attributeName: 'enemiesKilled',
     },
     EXIT_ROOM_FULL_HEALTH: {
-        description: 'number of enemy battles exited w/full health',
+        description:
+            'Number of normal battles completed with full party health',
         pointValue: 15,
         notificationText: 'Party in full health',
-        shortName: 'grunts',
         attributeName: 'roomsExitedFullHealth',
     },
     EXIT_BOSS_FULL_HEALTH: {
-        description: 'exit boss battle with full party health',
+        description: 'Number of boss battles completed with full party health',
         pointValue: 30,
         notificationText: 'Party in full health',
-        shortName: 'boss',
         attributeName: 'bossRoomsExitedFullHealth',
+    },
+    BOSS_KILLED: {
+        description: 'Number of bosses defeated',
+        pointValue: 10,
+        notificationText: '@unused',
+        attributeName: 'bossesKilled',
+    },
+    ROOM_CLEARED: {
+        description: 'Number of rooms cleared',
+        pointValue: 10,
+        notificationText: '@unused',
+        attributeName: 'roomsCleared',
     },
 }
 
-const notifiableEvent = ['ENEMY_KILLED'] as const
-export type NotifiableEvent = typeof notifiableEvent[number]
-
 export const isNotifiableEvent = (event: any): event is NotifiableEvent =>
     notifiableEvent.includes(event)
-
-export type RunScoreEvent =
-    | NotifiableEvent
-    | 'EXIT_ROOM_FULL_HEALTH'
-    | 'EXIT_BOSS_FULL_HEALTH'
-
-export const RunScoreEventMapping: Record<
-    RunScoreEvent,
-    RunScoreAttributeShortName
-> = {
-    ENEMY_KILLED: 'grind',
-    EXIT_ROOM_FULL_HEALTH: 'grunts',
-    EXIT_BOSS_FULL_HEALTH: 'boss',
-}
-
-export const ReverseRunScoreEventMapping: Record<
-    RunScoreAttributeShortName,
-    RunScoreEvent
-> = {
-    grind: 'ENEMY_KILLED',
-    grunts: 'EXIT_ROOM_FULL_HEALTH',
-    boss: 'EXIT_BOSS_FULL_HEALTH',
-}
