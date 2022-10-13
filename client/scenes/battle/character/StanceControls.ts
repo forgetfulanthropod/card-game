@@ -109,11 +109,11 @@ function StanceChambers(
                     const selectedStanceId = characterCursor.get('stance')
                     const stanceIndex = stanceIds.indexOf(selectedStanceId)
 
-                    console.log(
-                        selectedStanceId === stanceId
-                            ? 'toggling'
-                            : 'setting to ' + stanceId
-                    )
+                    // console.log(
+                    //     selectedStanceId === stanceId
+                    //         ? 'toggling'
+                    //         : 'setting to ' + stanceId
+                    // )
 
                     void callApi('chooseStance', {
                         characterUid: characterCursor.get('uid'),
