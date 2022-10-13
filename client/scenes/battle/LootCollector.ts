@@ -237,14 +237,27 @@ export function LootCollector(): PixiContainer {
                 },
             })
 
+            const confirmTexture = getTexture('confirmButton')
+            const ConfirmButton = Sprite({
+                x: 0,
+                y: BASE_HEIGHT / 2 + 100,
+                src: confirmTexture,
+                anchor: [0.5, 0.5],
+                width: BASE_WIDTH * 0.25,
+                onClick: () => {},
+                height:
+                    (BASE_WIDTH * 0.25 * confirmTexture.height) /
+                    confirmTexture.width,
+            })
+
             const lootItemContainerChildren = [
                 RoundedBlackRectBackground,
                 LootItemSprite,
                 LootItemText,
             ]
 
-            if (idx !== 0)
-                lootItemContainerChildren.push(InactiveLootItemOverlay)
+            if (idx === 0) lootItemContainerChildren.push(ConfirmButton)
+            else lootItemContainerChildren.push(InactiveLootItemOverlay)
 
             return Container(
                 lootItemContainerArgs,
