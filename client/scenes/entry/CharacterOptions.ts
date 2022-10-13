@@ -25,7 +25,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'knight',
 
         constitution: 80,
-        strength: 11,
+        strength: 10,
         wisdom: 5,
         defense: 11,
 
@@ -54,7 +54,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'knight',
 
         constitution: 74,
-        strength: 13,
+        strength: 12,
         wisdom: 5,
         defense: 9,
 
