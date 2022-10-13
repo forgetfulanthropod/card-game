@@ -1,6 +1,6 @@
 import type { BattleCursor } from 'shared'
 
-import { keys } from 'shared/code'
+import { setAllCharactersToUnmoved } from './setAllCharactersToUnmoved'
 
 export function endRound(scene: BattleCursor) {
     scene.apply('turnCount', c => c + 1)
@@ -9,16 +9,6 @@ export function endRound(scene: BattleCursor) {
     // applyDOTDamages(scene)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)
-}
-
-function setAllCharactersToUnmoved(scene: BattleCursor) {
-    scene.apply('allCharacters', ac => {
-        const newAc = { ...ac }
-        keys(newAc).forEach(k => {
-            newAc[k] = { ...newAc[k], hasMoved: false }
-        })
-        return newAc
-    })
 }
 
 function discardAllCards(scene: BattleCursor) {

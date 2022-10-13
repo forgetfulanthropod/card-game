@@ -11,6 +11,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
+import { setAllCharactersToUnmoved } from '@/gameState/battle/setAllCharactersToUnmoved'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -19,6 +20,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
+    setAllCharactersToUnmoved(scene)
     scene.apply('allCharacters', ac => ({
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
