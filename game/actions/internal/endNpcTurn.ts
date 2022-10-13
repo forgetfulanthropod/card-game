@@ -7,6 +7,7 @@ import {
     setRoundEnergy,
     popAndRunQueue,
     updateNpcMoves,
+    decrementEffects,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -27,6 +28,9 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
 
     drawNewHand(scene)
     popAndRunQueue(scene, 'pc')
+
+    decrementEffects(scene, 'pc')
+    decrementEffects(scene, 'npc')
 
     scene.set('damagesDealtThisTurn', [])
 }

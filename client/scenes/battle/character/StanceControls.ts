@@ -52,11 +52,6 @@ function StanceBadge(
                         scale: 100 / getTexture('stanceNeutralConfirmed').width,
                         x: getXOffset(),
                         anchor: 0.5,
-                        // alpha: 0.5,
-                        events: {
-                            pointerover,
-                            pointerdown: pointerover,
-                        },
                     })
             ),
             Sprite({

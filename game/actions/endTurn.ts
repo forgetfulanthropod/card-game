@@ -19,8 +19,6 @@ export const endTurn: GameActions['endTurn'] = args => {
 
     applyTurnStartEffects(scene, 'pc')
     applyTurnStartEffects(scene, 'npc')
-    decrementEffects(scene, 'pc')
-    decrementEffects(scene, 'npc')
 
     popAndRunQueue(scene, 'npc')
 
