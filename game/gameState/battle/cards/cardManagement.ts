@@ -102,7 +102,6 @@ function makeCards(scene: BattleCursor): Piles {
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
         if (cm.class === 'wizard') cardIds.push('orbOfLightning')
-        if (cm.class === 'wizard') cardIds.push('orbOfHolyLight')
         if (cm.class === 'cleric') cardIds.push('smite')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
         if (cm.class === 'rogue') cardIds.push('berserk')
