@@ -23,11 +23,11 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         } else {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
-            scene.set('treasureChest', calculateChestProgress(scene))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
             scene
                 .select('runScore')
                 .set('totalScore', calculateNewRunScore(scene))
+            scene.set('treasureChest', calculateChestProgress(scene))
         }
 
         return true

@@ -194,7 +194,7 @@ export function EndOfRunScreen(): PixiContainer {
         await animateNumberInElement(
             EnemiesKilled,
             'Enemies Killed',
-            scene.select('runScore').select('attributes').get('grind'),
+            scene.select('runScore').select('attributes').get('enemiesKilled'),
             'slow'
         )
         await animateNumberInElement(
@@ -224,51 +224,6 @@ export function EndOfRunScreen(): PixiContainer {
             'fast'
         )
     })()
-
-    animateNumberInElement(
-        EnemiesKilled,
-        'Enemies Killed',
-        scene.select('runScore').select('attributes').get('grind'),
-        'slow'
-    )
-        .then(() =>
-            animateNumberInElement(
-                RoomsCleared,
-                'Rooms Cleared',
-                numRoomsPassed,
-                'slow'
-            )
-        )
-        .then(() =>
-            animateNumberInElement(BossesKilled, 'Bosses Killed', 0, 'slow')
-        )
-        .then(() =>
-            animateNumberInElement(
-                TotalResourcesCollected,
-                'Loot Earned',
-                totalResourcesCount,
-                'fast'
-            )
-        )
-        .then(() =>
-            animateNumberInElement(DeckSize, 'Card Deck Size', 0, 'slow')
-        )
-        .then(() =>
-            animateNumberInElement(
-                CumulativeOverkill,
-                'Cumulative Overkill',
-                0,
-                'fast'
-            )
-        )
-        .then(() =>
-            animateNumberInElement(
-                TotalScore,
-                'Total Score',
-                totalScore,
-                'fast'
-            )
-        )
 
     const Retry = Text({
         text: `Retry?`,

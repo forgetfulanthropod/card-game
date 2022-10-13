@@ -33,6 +33,8 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     drawNewHand(scene)
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)
+    scene.select('treasureChest').set('state', 'pending')
+    scene.set('lootScreenHasOpened', false)
 }
 
 function getNextRoom(scene: BattleCursor) {

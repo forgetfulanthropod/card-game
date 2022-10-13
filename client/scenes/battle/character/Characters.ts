@@ -11,6 +11,7 @@ import { For } from '@/elementsUtil'
 import { localTree } from '@/data'
 import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
 import { callApi } from '@/callApi'
+import { handleScoringEvent } from '@/scenes/shared'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
@@ -115,6 +116,18 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 char.isPc === false && removedCharacterUids.includes(char.uid)
         )
 
+        if (removedEnemyCharacters) {
+            setTimeout(
+                () =>
+                    handleScoringEvent(
+                        'ENEMY_KILLED',
+                        removedEnemyCharacters.length,
+                        removedEnemyCharacters
+                    ),
+                1000
+            ) // imperfect timing, but good enough for now
+        }
+
         waitForDeathAnimationsDatum.set(waiting)
 
         // console.log('animating out ', removedCharacterUids)
@@ -124,7 +137,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             removedCharacterUids
         ).then(() => {
             // console.log('animated out ', removedCharacterUids)
-
             const waiting: Record<CharacterUid, boolean> = {
                 ...waitForDeathAnimationsDatum.val,
             }
@@ -134,10 +146,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             // console.log('updating to ', waiting)
 
             waitForDeathAnimationsDatum.set(waiting)
-            callApi('notifyRunScore', {
-                event: 'ENEMY_KILLED',
-                count: removedEnemyCharacters.length,
-            })
         })
     }
 }
