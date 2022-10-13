@@ -31,7 +31,7 @@ const staticEffectFuncs: Record<
         stats.damageTakeMultiplicand *= 2
     },
     debilitated(stats) {
-        stats.strength *= 0.5
+        stats.damageDealMultiplicand *= 2
     },
     fatigue(stats) {
         stats.strength *= 0.25

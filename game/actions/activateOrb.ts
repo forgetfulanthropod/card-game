@@ -14,6 +14,7 @@ import {
     applyDamage,
     calcPostEffectStats,
     emitMove,
+    getLivingNpcs,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { applyEffect } from '@/gameState/battle/cards/commands/effect'
@@ -23,12 +24,8 @@ const orbActivators: Record<
     (character: CharacterMeta, scene: BattleCursor) => void
 > = {
     protection(character: CharacterMeta, scene: BattleCursor) {
-        const block = Math.ceil(character.wisdom * 0.5)
-        const multiplier = calcPostEffectStats(character).blockMultiplier
-        scene.apply(
-            ['allCharacters', character.uid, 'block'],
-            b => b + block * multiplier
-        )
+        const block = character.wisdom * 0.5
+        applyBlock(character, scene, block)
 
         emitMove({
             moveName: 'Protection!',
@@ -39,16 +36,23 @@ const orbActivators: Record<
         })
     },
     lightning(character: CharacterMeta, scene: BattleCursor) {
-        const damage = Math.ceil(character.wisdom * 0.5)
-        const targetUid = getRandomLivingNpcUid(scene)
+        const damage = Math.ceil(character.wisdom * 0.4)
+        const targetUids = getLivingNpcs(scene.get()).map(npc => npc.uid)
 
-        applyDamage({ damage, targetUid, attackerUid: character.uid, scene })
+        targetUids.forEach(uid =>
+            applyDamage({
+                damage,
+                targetUid: uid,
+                attackerUid: character.uid,
+                scene,
+            })
+        )
 
         emitMove({
             moveName: 'Lightning!',
-            targetType: 'enemies',
+            targetType: 'allEnemies',
             characterUid: character.uid,
-            targetUids: [targetUid],
+            targetUids: [],
             scene,
         })
     },
@@ -70,6 +74,9 @@ const orbActivators: Record<
                 return { ...cm, health: cm.constitution }
             else return { ...cm, health: cm.health + 2 }
         })
+
+        applyBlock(character, scene, character.defense * 0.5)
+
         updateHand(scene)
 
         emitMove({
@@ -96,6 +103,17 @@ export const activateOrb: GameActions['activateOrb'] = ({
 
     updateHand(scene)
     maybeTransitionBattleState(scene)
+}
+
+function applyBlock(
+    character: CharacterMeta,
+    scene: BattleCursor,
+    block: number
+) {
+    const multiplier = calcPostEffectStats(character).blockMultiplier
+    scene.apply(['allCharacters', character.uid, 'block'], b =>
+        Math.ceil(b + block * multiplier)
+    )
 }
 
 function validate(character: CharacterMeta, orb: Orb) {
