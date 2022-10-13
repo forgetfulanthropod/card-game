@@ -14,23 +14,24 @@ export function calculateLoot(
     // TODO: Use scene and source to determine actual loot values
     const getRandomAmount = () => parseInt((Math.random() * 100).toFixed(0))
 
-    const fish = getRandomAmount()
-    const copper = getRandomAmount()
-    const stone = getRandomAmount()
-    const gold = getRandomAmount()
-    const wood = getRandomAmount()
+    // const fish = getRandomAmount()
+    // const copper = getRandomAmount()
+    // const stone = getRandomAmount()
+    // const gold = getRandomAmount()
+    // const wood = getRandomAmount()
     const gems = getRandomAmount()
-    const items = { fish, copper, stone, gold, wood }
+    // const items = { fish, copper, stone, gold, wood }
+    // const shuffledLootItems = shuffle(entries(items))
+    //     .filter(lootItem => {
+    //         const [name, count] = lootItem
+    //         return count > 0
+    //     })
+    //     .map(lootItem => {
+    //         const [name, count] = lootItem
+    //         return { name, count } as LootItem
+    //     })
 
-    const shuffledLootItems = shuffle(entries(items))
-        .filter(lootItem => {
-            const [name, count] = lootItem
-            return count > 0
-        })
-        .map(lootItem => {
-            const [name, count] = lootItem
-            return { name, count } as LootItem
-        })
+    const shuffledLootItems = [] as LootItem[]
 
     shuffledLootItems.unshift({ name: 'gems', count: gems })
     shuffledLootItems.unshift({ name: 'draftCard', count: 1 })

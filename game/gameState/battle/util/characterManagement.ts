@@ -11,6 +11,7 @@ import type {
 import { keys, vals } from 'shared/code'
 import { enemies, getRulebook } from '@/rulebook'
 import type { BaseHealth, EnemyDefinition } from '@/rulebook'
+import { playerCharacterStatsMap } from '@/rulebook/battle'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -143,7 +144,7 @@ export function newNPCMeta(args: {
     return {
         ...enemyDefinition,
         id: name,
-        displayName: '',
+        displayName: playerCharacterStatsMap[name].displayName,
         health: getHealthFromBase(enemyDefinition.constitution),
         constitution: getHealthFromBase(enemyDefinition.constitution),
         block: 0,

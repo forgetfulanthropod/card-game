@@ -2,7 +2,8 @@ import {
     BattleCursor,
     RunScore,
     RunScoreAttributeName,
-    RUN_SCORE_ATTR_META,
+    RUN_SCORE_EVENT_MAPPING,
+    RUN_SCORE_EVENT_META,
 } from 'shared'
 import { keys } from 'shared/code'
 
@@ -11,7 +12,8 @@ export function calculateNewRunScore(scene: BattleCursor): number {
     let newTotalScore = 0
 
     keys(attributes).forEach(attributeName => {
-        const { pointValue } = RUN_SCORE_ATTR_META[attributeName]
+        const matchingEvent = RUN_SCORE_EVENT_MAPPING[attributeName]
+        const { pointValue } = RUN_SCORE_EVENT_META[matchingEvent]
         newTotalScore += attributes[attributeName] * pointValue
     })
 

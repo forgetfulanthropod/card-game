@@ -65,45 +65,18 @@ function NewCardOptions(): PixiContainer {
 }
 
 function ScreenHeading() {
-    const DraftCardText = Text({
-        text: 'Draft a card',
+    const DraftCardBanner = Sprite({
+        src: getTexture('draftCardBanner'),
         anchor: [0.5, 0],
         x: BASE_WIDTH / 2,
-        y: 150,
-        style: {
-            fontSize: 80,
-            fill: 'white',
-            padding: 4,
-            align: 'left',
-            fontWeight: 'bold',
-        },
+        y: -350,
+        scale: 0.5,
     })
 
-    const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
-        spriteArgs: {
-            width: DraftCardText.width * 2,
-            height: DraftCardText.height + 15,
-            x: BASE_WIDTH / 2,
-            y: 150 - 7.5,
-            name: 'RoundedBlackRectBackground',
-            anchor: [0.5, 0],
-            alpha: 1,
-            tint: 0,
-        },
-        radius: 100,
-        gradientArgs: {
-            x0: 0,
-            x1: 500,
-            y0: 0,
-            y1: 500,
-            colorStops: [
-                { color: 'black', offset: 0 },
-                { color: 'white', offset: 1 },
-            ],
-        },
-    })
-
-    return Container({}, RoundedBlackRectBackground, DraftCardText)
+    return Container(
+        {},
+        DraftCardBanner
+    )
 }
 
 function Options(
