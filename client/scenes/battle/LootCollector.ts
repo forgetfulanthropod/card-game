@@ -19,6 +19,8 @@ import {
     TreasureChestLevel,
     TreasureChestLevelThreshold,
 } from 'shared'
+import { displayScoreNotification } from '../shared/Notification'
+import { upperFirst } from 'lodash'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -93,6 +95,7 @@ export function LootCollector(): PixiContainer {
         }, 2000)
     }
 
+    /** This is a fallback mechanism to do the progress bar fill animation in case the page is refreshed when the treasure chest is the current loot item */
     if (lootItemsContainer.getChildAt(0).name === 'TreasureChestContainer') {
         setTimeout(() => {
             updateProgressBarFill()
@@ -256,9 +259,13 @@ export function LootCollector(): PixiContainer {
         currLootItemName = lootItems[0].name
         currLootItemCount = lootItems[0].count
 
-        if (!['draftCard', 'treasureChest'].includes(currLootItem.name)) {
+        if (!['draftCard', 'treasureChest'].includes(currLootItemName)) {
             // this condition prevents flash of draft card icon shifting when it's not supposed to
-            displayLootGained(currLootItemName, currLootItemCount)
+            displayScoreNotification(
+                `Collected ${upperFirst(currLootItemName)}`,
+                currLootItemName,
+                currLootItemCount
+            )
             shiftCurrentItem(lootItemsContainer)
         }
     }
@@ -307,61 +314,6 @@ export function LootCollector(): PixiContainer {
         el.on('pointerdown', onClick)
     }
 
-    // TODO generalize args to 'text to display' and optional sprite to display (pass in src name) to use for achievements / score notifications, etc
-    // TODO add fade out through Tweener filter
-    // TODO add stacking logic (eg. if there's a currLootGained, add one below it, then when the top one disappears, push the rest up)
-    let currY = 50
-    function displayLootGained(lootName: LootFromGame, quantity: number) {
-        const stage = getStage()
-        const lootGainedElementName = 'LootGainedContainer'
-        const LootGainedNumber = Text({
-            text: `+ ${quantity}`,
-            anchor: [0, 0],
-            x: 0,
-            y: 0,
-            style: {
-                fontSize: 60,
-                fill: 'white',
-                padding: 4,
-                align: 'center',
-                fontFamily: 'bigFont',
-            },
-            name: 'LootGainedNumber',
-        })
-
-        const currLootGainedText = stage.getChildByName(lootGainedElementName)
-        const verticalMargin = LootGainedNumber.height + 25
-        if (currLootGainedText) {
-            currY += verticalMargin
-        }
-
-        const LootItemSprite = Sprite({
-            src: getTexture(lootName), // important that the asset map matches all LootFromGame types
-            scale: 0.4,
-            anchor: [0, 0],
-            x: LootGainedNumber.x + LootGainedNumber.width + 25,
-            y: LootGainedNumber.y, // TODO: adjust based on unique item attr
-            name: 'LootItemSprite',
-        })
-
-        const LootGainedContainer = Container(
-            {
-                name: lootGainedElementName,
-                x: 50,
-                y: currY,
-            },
-            LootGainedNumber,
-            LootItemSprite
-        )
-
-        stage.addChild(LootGainedContainer)
-
-        setTimeout(() => {
-            LootGainedContainer.destroy({ children: true, baseTexture: false, texture: false })
-            currY -= verticalMargin
-            if (currY < 50) currY = 50
-        }, 2000)
-    }
 
     const LootCollectorContainer = Container(
         { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
