@@ -160,7 +160,7 @@ function StanceChambers(
                             root.rotation + angleBetween * numberOfTurns
 
                         Tweener.add(
-                            { target: root, duration: 0.3 },
+                            { target: root, duration: 0.15 },
                             {
                                 rotation,
                             }
