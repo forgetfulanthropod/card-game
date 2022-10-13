@@ -93,6 +93,7 @@ export function LootCollector(): PixiContainer {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
         }, 2000)
+        displayScoreNotification('Completed Room', 'swordPiercing', 10)
     }
 
     /** This is a fallback mechanism to do the progress bar fill animation in case the page is refreshed when the treasure chest is the current loot item */
