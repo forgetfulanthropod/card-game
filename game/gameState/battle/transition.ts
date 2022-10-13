@@ -15,6 +15,8 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         const gameIsOver =
             scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
 
+        scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+
         if (gameIsOver) {
             scene
                 .select('runScore')
@@ -24,10 +26,8 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-            scene
-                .select('runScore')
-                .set('totalScore', calculateNewRunScore(scene))
-            scene.set('treasureChest', calculateChestProgress(scene))
+            calculateNewRunScore(scene)
+            calculateChestProgress(scene)
         }
 
         return true

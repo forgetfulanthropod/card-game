@@ -19,4 +19,5 @@ export { placeSelectedCharacters } from './placeSelectedCharacters'
 export { playCard } from './playCard'
 export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
+export { openLootCollector } from './openLootCollector'
 // @endindex

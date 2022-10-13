@@ -11,14 +11,17 @@ export function calculateChestProgress(scene: BattleCursor): TreasureChest {
     const { level: prevLevel, state: prevChestState } =
         scene.get('treasureChest')
 
-    if (prevChestState === 'calculated') {
-        return scene.get('treasureChest')
-    }
 
     const currRunScore = scene.get('runScore').totalScore
     const newLevel = calcNewChestLevel(currRunScore)
     const newProgressPct = calcNewProgressPct(currRunScore, newLevel)
     const upgraded = newLevel > prevLevel
+    scene.set('treasureChest', {
+        level: newLevel,
+        progressPct: newProgressPct,
+        state: 'calculated',
+        upgraded,
+    })
 
     return {
         level: newLevel,

@@ -1,4 +1,4 @@
-import { ModalBackdrop } from '@sharedElements'
+import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
     PixiContainer,
     PixiText,
@@ -191,6 +191,7 @@ export function EndOfRunScreen(): PixiContainer {
 
     // Runs text animations synchronously
     ;(async () => {
+        handleScoringEvent('ROOM_CLEARED', 1, {})
         await animateNumberInElement(
             EnemiesKilled,
             'Enemies Killed',
