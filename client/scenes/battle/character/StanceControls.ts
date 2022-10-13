@@ -186,7 +186,15 @@ function StanceChambers(
                 isHovered.onChange(is => {
                     root.renderable = is
                     root.interactive = is
-                    stanceBullets.forEach(b => (b.interactive = isHovered.val))
+                    stanceBullets.forEach(
+                        b => (b.interactive = isSecureContext)
+                    )
+                }),
+                onUpdate(characterCursor.select('hasMoved'), has => {
+                    if (!has) return
+                    root.renderable = false
+                    root.interactive = false
+                    stanceBullets.forEach(b => (b.interactive = false))
                 }),
             ],
         },
