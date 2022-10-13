@@ -138,6 +138,9 @@ export const characterStatusAssets = {
     stanceNeutral: 'stance/neutral stance.webp',
     stanceAvoidant: 'stance/defensive stance.webp',
     stanceAggressive: 'stance/aggressive stance.webp',
+    stanceNeutralConfirmed: 'stance/neutral stance confirmed.webp',
+    stanceAvoidantConfirmed: 'stance/defensive stance confirmed.webp',
+    stanceAggressiveConfirmed: 'stance/aggressive stance confirmed.webp',
     stanceCylinder: 'stance/Stance_Barrel.webp',
     blockIcon: 'char status/block icon.webp',
 }

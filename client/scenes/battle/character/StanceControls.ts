@@ -42,17 +42,35 @@ function StanceBadge(
             if (!characterCursor.get('hasMoved')) isHovered.set(true)
         }
 
-        return Sprite({
-            src: `stance${upperFirst(stance)}`,
-            scale: 90 / getTexture('stanceNeutral').width,
-            x: getXOffset(),
-            anchor: 0.5,
-            // alpha: 0.5,
-            events: {
-                pointerover,
-                pointerdown: pointerover,
-            },
-        })
+        return Container(
+            {},
+            If(
+                toDatum(characterCursor.select('hasMoved'), has => has),
+                () =>
+                    Sprite({
+                        src: `stance${upperFirst(stance)}Confirmed`,
+                        scale: 100 / getTexture('stanceNeutralConfirmed').width,
+                        x: getXOffset(),
+                        anchor: 0.5,
+                        // alpha: 0.5,
+                        events: {
+                            pointerover,
+                            pointerdown: pointerover,
+                        },
+                    })
+            ),
+            Sprite({
+                src: `stance${upperFirst(stance)}`,
+                scale: 90 / getTexture('stanceNeutral').width,
+                x: getXOffset(),
+                anchor: 0.5,
+                // alpha: 0.5,
+                events: {
+                    pointerover,
+                    pointerdown: pointerover,
+                },
+            })
+        )
     })
 }
 
