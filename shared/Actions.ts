@@ -31,6 +31,7 @@ interface BareGameActionArgs {
     endTurn: Empty
     exitDungeon: Empty
     finishCard: { cardUids: CardUid[] }
+    openLootCollector: Empty
     nextRoom: Empty
     notifyRunScore: { event: RunScoreEvent; count: number }
     confirmNextRoom: Empty

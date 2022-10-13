@@ -9,7 +9,6 @@ export const collectLoot: GameActions['collectLoot'] = args => {
     const scene = getBattleSceneIn(args.game)
     const remainingLoot = scene.get('lootEarned')
     if (remainingLoot[0].name === 'draftCard') {
-        scene.set('lootScreenHasOpened', true)
         scene.set('state', 'choosing cards')
         return
     }

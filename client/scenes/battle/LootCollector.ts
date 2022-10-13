@@ -1,6 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { ModalBackdrop } from '@sharedElements'
+import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
     getStage,
     getTexture,
@@ -58,7 +58,7 @@ const getDisplayName = (name: LootFromGame) => {
         case 'wood':
             return 'Wood'
         case 'draftCard':
-            return 'Draft a Card'
+            return 'Draft New Card'
         case 'treasureChest':
             return 'Chest'
         case 'gems':
@@ -73,6 +73,7 @@ export function LootCollector(): PixiContainer {
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
     let updateProgressBarFill: () => void // assigned to fn from chest when it is displayed, then called async
+    let refreshRunScore: () => void
     let lootItems = scene.get('lootEarned')
     let currLootItemName = lootItems[0].name
     let currLootItemCount = lootItems[0].count
@@ -89,15 +90,18 @@ export function LootCollector(): PixiContainer {
     )
 
     if (lootScreenHasOpened === false) {
+        handleScoringEvent('ROOM_CLEARED', 1)
         setTimeout(() => {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
+            callApi('openLootCollector', {})
         }, 2000)
     }
 
     /** This is a fallback mechanism to do the progress bar fill animation in case the page is refreshed when the treasure chest is the current loot item */
     if (lootItemsContainer.getChildAt(0).name === 'TreasureChestContainer') {
         setTimeout(() => {
+            refreshRunScore()
             updateProgressBarFill()
             applyOnClick(
                 lootItemsContainer.getChildAt(0) as PixiContainer,
@@ -134,6 +138,7 @@ export function LootCollector(): PixiContainer {
             if (item.name === 'treasureChest') {
                 const treasureChest = TreasureChest(lootItemContainerArgs)
                 updateProgressBarFill = treasureChest.updateProgressBarFill
+                refreshRunScore = treasureChest.refreshRunScore
                 return treasureChest.TreasureChestContainer
             }
 
@@ -198,7 +203,7 @@ export function LootCollector(): PixiContainer {
             const LootItemText = Text({
                 text:
                     item.name === 'draftCard'
-                        ? 'Draft a Card'
+                        ? properItemName
                         : `Collect ${item.count} ${properItemName}`,
                 anchor: [0.5, 0],
                 x: 0,
@@ -237,14 +242,27 @@ export function LootCollector(): PixiContainer {
                 },
             })
 
+            const confirmTexture = getTexture('confirmButton')
+            const ConfirmButton = Sprite({
+                x: 0,
+                y: BASE_HEIGHT / 2 + 100,
+                src: confirmTexture,
+                anchor: [0.5, 0.5],
+                width: BASE_WIDTH * 0.25,
+                onClick: () => {},
+                height:
+                    (BASE_WIDTH * 0.25 * confirmTexture.height) /
+                    confirmTexture.width,
+            })
+
             const lootItemContainerChildren = [
                 RoundedBlackRectBackground,
                 LootItemSprite,
                 LootItemText,
             ]
 
-            if (idx !== 0)
-                lootItemContainerChildren.push(InactiveLootItemOverlay)
+            if (idx === 0) lootItemContainerChildren.push(ConfirmButton)
+            else lootItemContainerChildren.push(InactiveLootItemOverlay)
 
             return Container(
                 lootItemContainerArgs,
@@ -291,6 +309,7 @@ export function LootCollector(): PixiContainer {
                 el.scale = { x: 1.25, y: 1.25 }
             }, 200)
             setTimeout(() => {
+                refreshRunScore()
                 updateProgressBarFill()
                 applyOnClick(el, () => handleButtonPress())
             }, 1000)
@@ -336,7 +355,11 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
 
     const battleScene = getBattleScene()
     const { progressPct, upgraded, level } = battleScene.get('treasureChest')
-    const { totalScore: currRunScore } = battleScene.get('runScore')
+    let { totalScore: currRunScore } = battleScene.get('runScore')
+    const refreshRunScore = () => {
+        currRunScore = battleScene.get('runScore').totalScore
+    }
+
 
     const ChestBody = Sprite({
         src: chestBodySrc,
@@ -402,7 +425,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         const totalHeight = textureRef.height
         const partialWidth =
             totalWidth * (progressPct + 0.11) > totalWidth / 2
-                ? totalWidth * (progressPct - 0.11)
+                ? totalWidth * (progressPct - 0.01)
                 : totalWidth * (progressPct + 0.11)
 
         progressBarFillSrc.frame = new Rectangle(
@@ -509,5 +532,5 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         ConfirmButton
     )
 
-    return { TreasureChestContainer, updateProgressBarFill }
+    return { TreasureChestContainer, updateProgressBarFill, refreshRunScore }
 }
