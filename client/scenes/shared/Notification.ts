@@ -38,6 +38,8 @@ const displayScoreNotification = async <T extends string>(
     stage.addChild(newNotification)
     currNotificationsCount++
     await slamAnimateElIntoScreen(newNotification)
+    // const delayUntilNextNotification = new Promise(r => setTimeout(r, 100))
+    // await delayUntilNextNotification
 
     setTimeout(async () => {
         await destroyNotificationAndShiftRest(newNotification, stage)
@@ -45,8 +47,8 @@ const displayScoreNotification = async <T extends string>(
 }
 
 const adjustNextNotificationPosition = (stage: PixiContainer) => {
-    const existingNotifications = stage.children.filter(
-        el => el.name === containerName
+    const existingNotifications = stage.children.filter(el =>
+        el.name.includes(containerName)
     )
     if (existingNotifications.length > 0) {
         currY += verticalMargin
@@ -79,12 +81,18 @@ const destroyNotificationAndShiftRest = async (
         texture: false,
     })
     const existingNotifications = stage.children.filter(
-        el => el.name === containerName && el instanceof TweenablePixiContainer
+        el => el.name.includes(containerName) && el instanceof TweenablePixiContainer
     ) as TweenablePixiContainer[]
     currNotificationsCount--
 
+    if (existingNotifications.length === 0) return
+
     existingNotifications.forEach(el => {
-        shiftNotificationUp(el, el.position.y)
+        try {
+            shiftNotificationUp(el, el.position.y)
+        } catch (e) {
+            console.error(e)
+        }
     })
     currY -= verticalMargin
     if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
@@ -131,11 +139,16 @@ function Notification<T extends string>(
     }
 
     const NotificationIcon = Container(
-        {},
+        {
+            height: 50,
+            width: 50,
+        },
         RoundedBordered(
             Sprite({
                 src: textureSrc ?? getTexture('cardArtPlaceholder'),
-                scale: 0.125,
+                // scale: 0.125,
+                height: 50,
+                width: 50,
                 x: -300,
                 y: 0, // TODO: adjust based on unique item attr
                 name: 'NotificationIcon',
@@ -184,7 +197,7 @@ function Notification<T extends string>(
                 TextToDisplay.width +
                 CountToDisplay.width +
                 BASE_PADDING * 4,
-            height: TextToDisplay.height + BASE_PADDING * 2 + 5,
+            height: NotificationIcon.height + BASE_PADDING,
             x: -15,
             y: -10,
             name: 'RoundedBlackRectBackground',
@@ -206,7 +219,7 @@ function Notification<T extends string>(
 
     const NotificationContainer = TweenableContainer(
         {
-            name: containerName,
+            name: `${containerName}_${currNotificationsCount}`,
             x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
             y: currY,
             alpha: 0,
