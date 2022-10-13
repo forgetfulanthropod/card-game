@@ -66,7 +66,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'sweepTheLeg',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), effect("debilitated",1))',
+        actions:
+            'strengthy = strength * 1.2; chain(deal(strengthy), effect("debilitated",2), effect("unguarded",2))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -422,7 +423,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * 2; chain(deal(strengthy), effect("vulnerable", 2))',
+            'strengthy = strength * 1.6; chain(deal(strengthy), effect("vulnerable", 2))',
         type: 'attack',
         characterClass: 'knight',
     },
