@@ -9,8 +9,10 @@ import { startCase, upperFirst } from 'lodash'
 import { keys } from 'shared/code'
 import {
     ExplanationBox,
+    getTermIndex,
     keyTermsMap,
     TermExplanationBox,
+    TermExplanationBoxes,
 } from '../ExplanationBox'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
@@ -95,6 +97,8 @@ export function CardEl({
         isLongHovered,
     })
 
+    const explanationsEl = ExplanationsEl(card, width)
+
     const root = TweenableContainer(
         {
             name: card.uid,
@@ -134,10 +138,11 @@ export function CardEl({
                           cardFrameTexture.height
                       ),
                   ])
-        )
+        ),
+        explanationsEl
     )
 
-    manageExplanationsEl(root, ExplanationsEl(card, width), isLongHovered)
+    manageExplanationsEl(root, explanationsEl, isLongHovered)
 
     return root
 }
@@ -149,7 +154,7 @@ function ExplanationsEl(card: Card, width: number) {
             // y: BASE_HEIGHT * 0.6,
             name: 'MY EXPLANATIONS',
         },
-        ...TermExplanationBoxes(card.explanation, width)
+        ...TermExplanationBoxesForCard(card.explanation, width)
     )
 }
 
@@ -177,7 +182,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 1000)
+            }, 800)
         },
         pointerdown(e) {
             dynamicEvents?.pointerdown?.(e)
@@ -185,7 +190,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 1000)
+            }, 800)
         },
         pointerout(e) {
             dynamicEvents?.pointerout?.(e)
@@ -204,56 +209,32 @@ function manageExplanationsEl(
 ) {
     explanationsEl.alpha = 0
 
-    portalize({
-        from: root,
-        to: () => getStage(),
-        content: explanationsEl,
-    })
-
     isLongHovered.onChange(is => {
         if (!is) {
             explanationsEl.alpha = 0
             return
         }
-
-        const rootPosition = root.getGlobalPosition()
-        explanationsEl.x = rootPosition.x
-        explanationsEl.y = rootPosition.y
         explanationsEl.alpha = 1
     })
 }
 
-function TermExplanationBoxes(
+function TermExplanationBoxesForCard(
     explanation: string,
     width: number
 ): DisplayObject[] {
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
-        .filter(keyTerm => ~getIndex(keyTerm, explanation))
+        .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
         .sort(
             (keyTermA, keyTermB) =>
-                getIndex(keyTermA, explanation) -
-                getIndex(keyTermB, explanation)
+                getTermIndex(keyTermA, explanation) -
+                getTermIndex(keyTermB, explanation)
         )
 
-    const boxes = terms.map(term =>
-        TermExplanationBox({ term, displayObjectArgs: { x: width * 0.85 } })
-    )
-
-    boxes.forEach((box, i) => {
-        if (i > 0) {
-            const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 10
-        }
-
-        return box
+    return TermExplanationBoxes({
+        terms,
+        displayObjectArgs: { x: width * 0.85 },
     })
-
-    return boxes
-}
-
-function getIndex(term: string, explanation: string): number {
-    return explanation.toLowerCase().indexOf(startCase(term).toLowerCase())
 }
 
 export function CardSprite({

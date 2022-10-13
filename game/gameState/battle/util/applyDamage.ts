@@ -93,9 +93,17 @@ export function getDamage({
     target: CharacterMeta | null
     damage: number
 }) {
-    const multiplicand =
-        calcPostEffectStats(attacker).damageDealMultiplicand *
-        (target ? calcPostEffectStats(target).damageTakeMultiplicand : 1)
+    const damageDealMultiplicand =
+        calcPostEffectStats(attacker).damageDealMultiplicand
+    const damageTakeMultiplicand = target
+        ? calcPostEffectStats(target).damageTakeMultiplicand
+        : 1
+
+    // logger.info(
+    //     JSON.stringify({ damageDealMultiplicand, damageTakeMultiplicand })
+    // )
+
+    const multiplicand = damageDealMultiplicand * damageTakeMultiplicand
     const calcedDamage = Math.ceil(damage * multiplicand)
     return calcedDamage
 }

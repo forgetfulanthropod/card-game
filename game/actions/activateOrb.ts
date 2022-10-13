@@ -36,7 +36,7 @@ const orbActivators: Record<
         })
     },
     lightning(character: CharacterMeta, scene: BattleCursor) {
-        const damage = Math.ceil(character.wisdom * 0.4)
+        const damage = Math.ceil(character.wisdom * 0.35)
         const targetUids = getLivingNpcs(scene.get()).map(npc => npc.uid)
 
         targetUids.forEach(uid =>
