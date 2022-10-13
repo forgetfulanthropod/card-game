@@ -144,6 +144,7 @@ export function clearAllEffects(scene: BattleCursor): void {
         'allCharacters',
         produce(ac => {
             Object.values(ac).forEach(cm => {
+                cm.block = 0
                 cm.effects = []
                 cm.orbs = []
             })
