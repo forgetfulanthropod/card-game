@@ -59,6 +59,7 @@ export type EnemyCharacterId =
     | 'matchaGelatinCube'
     | 'orcWarrior'
     | 'gnomeHooligan'
+    | 'warhog'
     | 'mimic'
     | 'bosshogJurgen'
     | 'toadmaw'

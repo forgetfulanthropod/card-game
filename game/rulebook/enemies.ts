@@ -54,6 +54,11 @@ export const enemies: Record<EnemyCharacterId, Record<Level, EnemyDefinition>> =
         9: { level: '9', wisdom: 0, constitution: 148, strength: 62, defense: 25, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,1)', 'block', 'screamAndCharge(125,2)'] },
         10: { level: '10', wisdom: 0, constitution: 163, strength: 68, defense: 28, moves: ['meatyCharge(2)', 'slash', 'bellowAndSing(2,2)', 'block', 'screamAndCharge(125,2)'] },
     },
+    warhog: {
+        1: { level: '1', wisdom: 0, constitution: 135, strength: 42, defense: 31, moves: ['swordWack', 'rustyPokeHigh', 'slash', 'block', 'startlingSpook(3,3)'] },
+
+        // 1: { level: '1', wisdom: 0, constitution: 190, strength: 30, defense: 30, moves: ['jurgenBellyFlop', 'jurgenRollAround', 'jurgenStampSnort', 'block', 'jurgenSitUpon'] },
+    },
     bosshogJurgen: {
         default: { level: 'default', wisdom: 0, constitution: 190, strength: 30, defense: 30, moves: ['jurgenBellyFlop', 'jurgenRollAround', 'jurgenStampSnort', 'block', 'jurgenSitUpon'] },
     },
