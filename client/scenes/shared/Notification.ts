@@ -75,13 +75,10 @@ const destroyNotificationAndShiftRest = async (
     stage: PixiContainer
 ): Promise<void> => {
     await fadeNotificationOut(newNotification)
-    newNotification.destroy({
-        children: true,
-        baseTexture: false,
-        texture: false,
-    })
     const existingNotifications = stage.children.filter(
-        el => el.name.includes(containerName) && el instanceof TweenablePixiContainer
+        el =>
+            el.name.includes(containerName) &&
+            el instanceof TweenablePixiContainer
     ) as TweenablePixiContainer[]
     currNotificationsCount--
 
@@ -89,13 +86,20 @@ const destroyNotificationAndShiftRest = async (
 
     existingNotifications.forEach(el => {
         try {
-            shiftNotificationUp(el, el.position.y)
+            shiftNotificationUp(el, el?.position?.y)
         } catch (e) {
             console.error(e)
         }
     })
     currY -= verticalMargin
     if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
+
+    Tweener.killTweensOf(newNotification)
+    newNotification.destroy({
+        children: true,
+        baseTexture: false,
+        texture: false,
+    })
 }
 
 const fadeNotificationOut = async (notification: PixiContainer) => {
