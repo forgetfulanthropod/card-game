@@ -30,15 +30,16 @@ type CardDefinitionsMap = {
 }
 
 export const cardDefinitionsMap: CardDefinitionsMap = {
-    TEST_turnStartEffects: {
-        name: 'TEST: megableed!!',
-        id: 'TEST_turnStartEffects',
+    leadRazor: {
+        name: 'Lead Razor',
+        id: 'leadRazor',
         energy: 1,
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(effect("bleed", 2), effect("poison", 2))',
+        actions:
+            'chain(effect("bleed", 2), effect("poison", 5), effect("debilitated", 1))',
         type: 'attack',
-        characterClass: 'knight',
+        characterClass: 'rogue',
     },
     shield: {
         name: 'Shield',

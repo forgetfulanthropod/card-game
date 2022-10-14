@@ -73,6 +73,8 @@ function StanceChambers(
     characterCursor: ROCursor<CharacterMeta>,
     isHovered: Datum<boolean>
 ) {
+    if (characterCursor.get('isPc') === false) return Container({})
+
     const data = compose(
         ([stanceData]) => {
             return stanceData
@@ -83,53 +85,7 @@ function StanceChambers(
         })
     )
 
-    const width = HEALTH_BAR_WIDTH * 0.27
-    const stanceSrcForSizing = getTexture('stanceAvoidant')
-    const scale: number = width / stanceSrcForSizing.width
-
-    if (characterCursor.get('isPc') === false) return Container({})
-
-    const cylinderMidRadius = getTexture('stanceCylinder').width * 0.26
-
-    const bottomChamberAngle = (Math.PI / 2) * 0.33
-    const xOffset = cylinderMidRadius * Math.cos(bottomChamberAngle)
-
-    const stanceBullets = stanceIds.map((stanceId, i) =>
-        Sprite({
-            src: `stance${upperFirst(stanceId)}`,
-            anchor: 0.5,
-            scale,
-            x: -xOffset + xOffset * i,
-            y:
-                i == 1
-                    ? -cylinderMidRadius
-                    : cylinderMidRadius * Math.sin(bottomChamberAngle),
-            events: {
-                pointerdown() {
-                    const selectedStanceId = characterCursor.get('stance')
-                    const stanceIndex = stanceIds.indexOf(selectedStanceId)
-
-                    // console.log(
-                    //     selectedStanceId === stanceId
-                    //         ? 'toggling'
-                    //         : 'setting to ' + stanceId
-                    // )
-
-                    void callApi('chooseStance', {
-                        characterUid: characterCursor.get('uid'),
-                        stanceId:
-                            selectedStanceId === stanceId
-                                ? stanceIds[
-                                      stanceIndex > 0
-                                          ? stanceIndex - 1
-                                          : stanceIds.length - 1
-                                  ]
-                                : stanceId,
-                    })
-                },
-            },
-        })
-    )
+    const stanceBullets = StanceBullets(characterCursor)
 
     let barrelAnim = getNullAnimation()
     let lastStance: StanceId = characterCursor.get('stance')
@@ -172,6 +128,15 @@ function StanceChambers(
                         const rotation =
                             root.rotation + angleBetween * numberOfTurns
 
+                        stanceBullets.forEach(b =>
+                            Tweener.add(
+                                { target: b, duration: 0.15 },
+                                {
+                                    rotation: -rotation,
+                                }
+                            )
+                        )
+
                         return Tweener.add(
                             { target: root, duration: 0.15 },
                             {
@@ -210,6 +175,54 @@ function StanceChambers(
     stanceBullets.forEach(b => (b.interactive = isHovered.val))
 
     return root
+}
+
+function StanceBullets(characterCursor: ROCursor<CharacterMeta>) {
+    const width = HEALTH_BAR_WIDTH * 0.27
+    const stanceSrcForSizing = getTexture('stanceAvoidant')
+
+    const scale: number = width / stanceSrcForSizing.width
+    const cylinderMidRadius = getTexture('stanceCylinder').width * 0.26
+
+    const bottomChamberAngle = (Math.PI / 2) * 0.33
+    const xOffset = cylinderMidRadius * Math.cos(bottomChamberAngle)
+
+    const stanceBullets = stanceIds.map((stanceId, i) =>
+        Sprite({
+            src: `stance${upperFirst(stanceId)}`,
+            anchor: 0.5,
+            scale,
+            x: -xOffset + xOffset * i,
+            y:
+                i == 1
+                    ? -cylinderMidRadius
+                    : cylinderMidRadius * Math.sin(bottomChamberAngle),
+            events: {
+                pointerdown() {
+                    const selectedStanceId = characterCursor.get('stance')
+                    const stanceIndex = stanceIds.indexOf(selectedStanceId)
+
+                    // console.log(
+                    //     selectedStanceId === stanceId
+                    //         ? 'toggling'
+                    //         : 'setting to ' + stanceId
+                    // )
+                    void callApi('chooseStance', {
+                        characterUid: characterCursor.get('uid'),
+                        stanceId:
+                            selectedStanceId === stanceId
+                                ? stanceIds[
+                                      stanceIndex > 0
+                                          ? stanceIndex - 1
+                                          : stanceIds.length - 1
+                                  ]
+                                : stanceId,
+                    })
+                },
+            },
+        })
+    )
+    return stanceBullets
 }
 
 function getXOffset() {

@@ -137,7 +137,7 @@ export type CardId =
     | 'stab'
     | 'sweepTheLeg'
     | 'swordSlash'
-    | 'TEST_turnStartEffects'
+    | 'leadRazor'
     | 'testudoFormation'
 export type BasicTargetType =
     | 'friends'

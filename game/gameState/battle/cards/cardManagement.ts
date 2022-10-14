@@ -38,9 +38,9 @@ export function getNullCards(): Piles {
 function makeCards(scene: BattleCursor): Piles {
     // const cardIds: CardId[] = [
     //     // 'bodySlam',
-    //     // 'TEST_turnStartEffects',
-    //     // 'TEST_turnStartEffects',
-    //     // 'TEST_turnStartEffects',
+    //     // 'leadRazor',
+    //     // 'leadRazor',
+    //     // 'leadRazor',
     //     // 'magicRitual',
     //     // 'chainLightning',
     //     // 'spellBook',
@@ -82,12 +82,12 @@ function makeCards(scene: BattleCursor): Piles {
             //@ts-expect-error
             `basicAttack${ccuf}`,
             `block${ccuf}`
-            // 'TEST_turnStartEffects'
+            // 'leadRazor'
             // `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
-            // 'TEST_turnStartEffects'
+            // 'leadRazor'
             // 'magicalStorm',
             // 'parry',
             // 'smite'
