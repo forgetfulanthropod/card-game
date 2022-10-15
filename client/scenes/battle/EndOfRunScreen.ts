@@ -228,23 +228,8 @@ export function EndOfRunScreen(): PixiContainer {
         callApi('openEndScreen', {})
     })()
 
-    const Retry = Text({
-        text: `Retry?`,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 + 250,
-        style: {
-            fontSize: 40,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'bold',
-        },
-        name: 'Retry',
-    })
-
-    const retryButton = Sprite({
-        src: getTexture('goButton'),
+    const tryAgainButton = Sprite({
+        src: getTexture('tryAgainButton'),
         anchor: 0,
         y: BASE_HEIGHT / 2 + 275,
         x: BASE_WIDTH / 2 - 185,
@@ -263,9 +248,9 @@ export function EndOfRunScreen(): PixiContainer {
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
             width: 800,
-            height: 200,
+            height: 350,
             x: BASE_WIDTH / 2,
-            y: BASE_HEIGHT / 2 - 100 + 100,
+            y: BASE_HEIGHT / 2 + 65,
             name: 'RoundedBlackRectBackground',
             anchor: [0.5, 0.5],
             alpha: 0.6,
@@ -302,8 +287,7 @@ export function EndOfRunScreen(): PixiContainer {
         VictorySign,
         lootElementsWithBg,
         TotalScore,
-        Retry,
-        retryButton
+        tryAgainButton
     )
 
     return EndOfRunContainer
