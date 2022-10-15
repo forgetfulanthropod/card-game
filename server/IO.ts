@@ -6,6 +6,7 @@ import { Server as SocketServer } from 'socket.io'
 import { maybeMakeUser } from './actions'
 
 const usernameToSocketId: Record<string, string> = {}
+const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
 
 export function getSocketId(username: string): string {
     if (has(usernameToSocketId, username)) {
@@ -35,7 +36,9 @@ export function mountIo(
     buildInfo: Record<string, unknown>,
     prefix: string
 ): void {
-    io = new SocketServer(server, { path: prefix + '/socket' })
+    io = new SocketServer(server, {
+        path: prefix + `${isStagingServer ? '/server' : ''}/socket`,
+    })
     refreshOnChange(io)
     io.on('connection', socket => {
         // logger.info(`socket connected: ${socket.id}`)

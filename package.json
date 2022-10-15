@@ -1,7 +1,12 @@
 {
     "name": "kaiju-root",
+    "private": true,
+    "workspaces": ["client", "shared", "game", "server"],
+    "engines": {
+        "yarn": "1.22.17",
+        "node": "16.13.0"
+    },
     "scripts": {
-        "preinstall": "[[ $STOP_NPM_INSTALL == 1 ]] && rm package.json || true && npm i -r",
         "CI": "bash run CI"
     },
     "dependencies": {

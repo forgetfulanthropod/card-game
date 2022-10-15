@@ -1,5 +1,6 @@
 {
     "name": "game",
+    "version": "1.0.0",
     "main": "index.ts",
     "scripts": {
         "build": "rm -rf dist && tsc && esbuild --bundle exports.ts --platform=node --outfile=./dist/exports.js"
@@ -7,7 +8,7 @@
     "dependencies": {
         "angu": "^0.12.0",
         "seedrandom": "^3.0.5",
-        "shared": "workspace:shared@*",
+        "shared": "1.0.0",
         "simple-color-converter": "^2.1.13"
     },
     "devDependencies": {

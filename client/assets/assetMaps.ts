@@ -16,8 +16,10 @@ export const rootAssets = {
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',
     door: 'misc-png/temp-door.webp',
-    endTurnButton: 'core-ui/end turn.webp',
-    confirmButton: 'core-ui/confirm.webp',
+    acceptButton: 'core-ui/newAccept.png',
+    endTurnButton: 'core-ui/newEndTurn.png',
+    confirmButton: 'core-ui/newConfirm.png',
+    skipButton: 'core-ui/newSkip.png',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
 }
@@ -68,10 +70,10 @@ export const cardArtAssets = {
     cardOwnerTokenMatchaGelatinCube:
         'cards/Card PNG Breakdown/Card Owner Token/matchaGelatinCube.png',
     cardOwnerTokenWarhog:
-        'cards/Card PNG Breakdown/Card Owner Token/warhog.png',
+        'cards/Card PNG Breakdown/Card Owner Token/warhog_.png',
     cardOwnerTokenGnomeHooligan:
         'cards/Card PNG Breakdown/Card Owner Token/gnomeHooligan.png',
-    cardOwnerTokenJerry: 'cards/Card PNG Breakdown/Card Owner Token/jerry.png',
+    cardOwnerTokenJerry: 'cards/Card PNG Breakdown/Card Owner Token/jerry_.png',
 
     // cardSweepTheLeg: 'cards/Sweep The Leg.webp',
     // cardShield: 'cards/Shield.webp',
@@ -136,14 +138,13 @@ export const cardAssets = {
 // }
 
 export const characterStatusAssets = {
-    stanceNeutral: 'char status/neutral stance.webp',
-    stanceDefensive: 'char status/defensive stance.webp',
-    stanceAggressive: 'char status/aggressive stance.webp',
-    stanceNeutralBadge: 'char status/neutral health badge.webp',
-    stanceDefensiveBadge: 'char status/defensive health badge.webp',
-    stanceAggressiveBadge: 'char status/aggressive health badge.webp',
-    healthBorder: 'char status/HEALTH_BORDER.webp',
-    healthTexture: 'char status/HEALTH_TEXTURE.webp',
+    stanceNeutral: 'stance/neutral stance.webp',
+    stanceAvoidant: 'stance/defensive stance.webp',
+    stanceAggressive: 'stance/aggressive stance.webp',
+    stanceNeutralConfirmed: 'stance/neutral stance confirmed.webp',
+    stanceAvoidantConfirmed: 'stance/defensive stance confirmed.webp',
+    stanceAggressiveConfirmed: 'stance/aggressive stance confirmed.webp',
+    stanceCylinder: 'stance/Stance_Barrel.webp',
     blockIcon: 'char status/block icon.webp',
 }
 export const effectAssets: {
@@ -164,6 +165,7 @@ export const effectAssets: {
 
 export const healthBarAssets = {
     healthBarAggressive: 'health bar/Aggressive Stance.webp',
+    healthBarNeutral: 'health bar/Neutral stance.webp',
     healthBarAvoidant: 'health bar/Avoidant stance.webp',
     healthBarDoT: 'health bar/DoT.webp',
     healthBarHealth: 'health bar/Health.webp',
@@ -184,10 +186,10 @@ export const intentAssets = {
 }
 
 export const orbAssets = {
-    orbOfFrost: 'char status/orbs/frost.webp',
-    orbOfLightning: 'char status/orbs/lightning.webp',
-    orbOfProtection: 'char status/orbs/protection.webp',
-    orbOfHolyLight: 'char status/orbs/holyLight.webp',
+    orbOfFrost: 'orbs/frost.webp',
+    orbOfLightning: 'orbs/lightning.webp',
+    orbOfProtection: 'orbs/protection.webp',
+    orbOfHolyLight: 'orbs/holyLight.webp',
 }
 
 export const signAssets = {

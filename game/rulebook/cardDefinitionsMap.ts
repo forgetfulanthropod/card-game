@@ -28,16 +28,18 @@ const blockBase = {
 type CardDefinitionsMap = {
     [Id in CardId]: CardDefinition & { id: Id }
 }
+
 export const cardDefinitionsMap: CardDefinitionsMap = {
-    TEST_turnStartEffects: {
-        name: 'TEST: megableed!!',
-        id: 'TEST_turnStartEffects',
-        energy: 0,
+    leadRazor: {
+        name: 'Lead Razor',
+        id: 'leadRazor',
+        energy: 1,
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(effect("bleed", 2), effect("poison", 999))',
+        actions:
+            'chain(effect("bleed", 2), effect("poison", 5), effect("debilitated", 1))',
         type: 'attack',
-        characterClass: 'knight',
+        characterClass: 'rogue',
     },
     shield: {
         name: 'Shield',
@@ -55,7 +57,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shieldOfLight',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'addBlock(wisdom * 1.5)',
+        actions: 'wisdomy = wisdom * 1.3; addBlock(wisdomy)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -65,7 +67,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'sweepTheLeg',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), effect("debilitated",1))',
+        actions:
+            'strengthy = strength * 1.2; chain(deal(strengthy), effect("debilitated",2), effect("unguarded",2))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -145,13 +148,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'chainLightning',
         targetNum: 3,
         targetType: 'enemies',
-        actions: 'deal(0.75 * wisdom, 3)',
+        actions: 'wisdomy = 0.75 * wisdom; deal(wisdomy, 3)',
         type: 'attack',
         characterClass: 'wizard',
     },
     spellBook: {
         name: 'Spell Book',
-        energy: 3,
+        energy: 2,
         id: 'spellBook',
         targetNum: 1,
         targetType: 'self',
@@ -274,7 +277,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = 0.75 * strength; defensey = defense * .5; chain(deal(strengthy),addBlockToSelf(defensey))',
+            'strengthy = 0.75 * strength; defensey = defense * 0.5; chain(deal(strengthy),addBlockToSelf(defensey))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -306,7 +309,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength + 6; chain(deal(strengthy), effect("bleed", 2))',
+            'strengthy = strength + 1; chain(deal(strengthy), effect("bleed", 2), effect("vulnerable", 1))',
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -358,7 +361,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * .5; chain(deal(strengthy), effect("poison", 5))',
+            'strengthy = strength * .6; chain(deal(strengthy), effect("poison", 5))',
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -420,7 +423,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'charge',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(strength), effect("vulnerable", 1))',
+        actions:
+            'strengthy = strength * 1.6; chain(deal(strengthy), effect("vulnerable", 2))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -442,7 +446,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'guidingBolt',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'chain(deal(wisdom), effect("unguarded", 2))',
+        actions:
+            'wisdomy = wisdom * 2; chain(deal(wisdomy), effect("unguarded", 3))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -469,7 +474,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
     bless: {
         name: 'Bless',
-        energy: 2,
+        energy: 1,
         id: 'bless',
         targetNum: 1,
         targetType: 'friends',

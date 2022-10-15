@@ -26,6 +26,7 @@ export const haveEvilVersions: Partial<Record<CharacterId, boolean>> = {
 
 export const haveEvilSkins: Partial<Record<CharacterId, boolean>> = {
     orcWarrior: true,
+    warhog: true,
 }
 
 export function getValidSpineAssetName(

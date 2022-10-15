@@ -119,7 +119,6 @@
         "**/node_modules/",
         "public/",
         "tests/",
-        "client/public_"
     ],
     "overrides": [
         {

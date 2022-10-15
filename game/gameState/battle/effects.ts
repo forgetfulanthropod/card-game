@@ -31,7 +31,7 @@ const staticEffectFuncs: Record<
         stats.damageTakeMultiplicand *= 2
     },
     debilitated(stats) {
-        stats.strength *= 0.5
+        stats.damageDealMultiplicand *= 0.5
     },
     fatigue(stats) {
         stats.strength *= 0.25
@@ -144,6 +144,7 @@ export function clearAllEffects(scene: BattleCursor): void {
         'allCharacters',
         produce(ac => {
             Object.values(ac).forEach(cm => {
+                cm.block = 0
                 cm.effects = []
                 cm.orbs = []
             })

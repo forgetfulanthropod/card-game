@@ -1,4 +1,5 @@
 import { build as esbuild } from 'esbuild'
+
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
 import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
@@ -72,8 +73,8 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         plugins: [
             cssModulesPlugin(),
             alias({
-                react: `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/client/node_modules/preact/compat/dist/compat.js`,
+                react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
             }),
         ],
     })

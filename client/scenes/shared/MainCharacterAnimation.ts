@@ -58,6 +58,7 @@ export function MainCharacterAnimation({
         },
         onSpineEvent,
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
+        isPc: characterMeta.isPc,
     })
 
     const timeoutId = setTimeout(() => {

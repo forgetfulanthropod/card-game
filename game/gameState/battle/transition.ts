@@ -15,7 +15,9 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         const gameIsOver =
             scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
 
-        scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+        if (scene.get('numRoomsPassed') === NUM_ROOMS_BEFORE_GAME_OVER - 1) {
+            scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+        }
 
         if (gameIsOver) {
             scene

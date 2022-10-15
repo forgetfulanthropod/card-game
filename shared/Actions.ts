@@ -13,6 +13,7 @@ import type {
     OwnedCharacterStats,
     Rulebook,
     RunScoreEvent,
+    StanceId,
 } from './tree'
 
 interface BareServerActionArgs {
@@ -44,7 +45,7 @@ interface BareGameActionArgs {
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
-    toggleStance: { characterUid: CharacterUid }
+    chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
 }
 
 // NOTE: below is not as complicated as it looks.

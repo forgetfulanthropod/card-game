@@ -10,6 +10,7 @@ import {
     BASE_WIDTH,
     Container,
 } from '@/elementsUtil'
+import { keys } from 'shared/code'
 
 export const keyTermsMap = {
     mimicAttack: 'deals 999 or copies the last hit taken this turn.',
@@ -33,14 +34,55 @@ export const keyTermsMap = {
     fortified: 'receives 50% more block',
     berserk:
         '(aggressive stance only) gains 50% strength, takes 100% more damage',
+    strongblock: 'receives 50% more block',
     trance: 'increase magic stat by 11% times the number of counters',
     orbsOfProtection: 'blocks for 50% of Magic',
-    orbsOfLightning: 'deals 50% of Magic',
+    orbsOfLightning: 'deals 35% of Magic to all enemies',
     orbsOfFrost: '+2 Strongblock',
-    orbsOfHolyLight: 'heals for 12% of Magic',
+    orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap
+
+export function getTermIndex(term: string, explanation: string): number {
+    return explanation
+        .toLowerCase()
+        .indexOf(' ' + startCase(term).toLowerCase())
+}
+
+export function TermExplanationBoxes({
+    terms,
+    displayObjectArgs,
+}: {
+    terms: KeyTerm[]
+    displayObjectArgs?: DisplayObjectArgs
+}): PixiContainer[] {
+    const termBoxes = terms.map(term =>
+        TermExplanationBox({ term, displayObjectArgs })
+    )
+
+    const subTermBoxes = keys(keyTermsMap)
+        .filter(
+            term =>
+                ~terms.findIndex(
+                    mainTerm => ~getTermIndex(term, keyTermsMap[mainTerm])
+                )
+        )
+        .map(term => TermExplanationBox({ term, displayObjectArgs }))
+
+    const boxes = [...termBoxes, ...subTermBoxes]
+
+    boxes.forEach((box, i) => {
+        if (i > 0) {
+            const lastBox = boxes[i - 1]
+            box.y = lastBox.y + lastBox.height + 10
+        }
+
+        return box
+    })
+
+    return boxes
+}
 
 export function TermExplanationBox({
     term,

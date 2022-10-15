@@ -4,10 +4,8 @@ import type { CharacterMeta, CharacterUid, Effect } from 'shared'
 
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
-import { isMobileOnly } from 'mobile-device-detect'
 import type { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
-import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
@@ -22,6 +20,8 @@ import {
 } from '@/elementsUtil'
 import { onUpdate, statChangesDatum, toDatum } from '@/util'
 import { ExplanationBox } from '@/scenes/shared'
+import { difference, omit, upperFirst } from 'lodash'
+import { StanceControls } from './StanceControls'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -39,17 +39,14 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
         }
     })
 
-    const isHovered = datum(false)
-
     const root = Container(
         {
             name: 'HealthBar',
             scale: 0.7,
             onDestroy: [unsub],
         },
-        HealthIndicator(characterCursor, isHovered),
         BlockIndicator(characterCursor),
-        StanceIndicator(characterCursor, isHovered),
+        HealthIndicator(characterCursor),
         EffectIndicators(characterCursor)
     )
     return root
@@ -73,7 +70,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
         Container(
             {
                 // y: -50 *  SCALE_UNIVERSAL,
-                x: characterCursor.get('isPc') ? 275 : -80,
+                x: characterCursor.get('isPc') ? 345 : -100,
             },
             ...(block === 0
                 ? []
@@ -157,146 +154,11 @@ function InteractiveEffectCounter(
     )
 }
 
-const STANCE_TEXTS = [
-    'Stance modifiers',
-    'Aggressive: +25%',
-    'Neutral: 0%',
-    'Avoidant: -25%',
-]
+export const spriteAnchor: [number, number] = [0, 0.5]
 
-function StanceIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    isHealthBarHovered: Datum<boolean>
-) {
+function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
     const isHovered = datum(false)
-    const data = compose(
-        ([stanceData, isHealthBarHovered, isHovered]) => {
-            return (isHovered || isHealthBarHovered) && stanceData
-        },
-        toDatum(characterCursor, ({ isPc, stance, uid }) => {
-            if (!isPc) return false
-            return { stance, uid }
-        }),
-        isHealthBarHovered,
-        isHovered
-    )
 
-    return If(data, ({ stance, uid }) => {
-        const stanceSrc =
-            stance === 'neutral'
-                ? getTexture('stanceNeutral')
-                : stance === 'aggressive'
-                ? getTexture('stanceAggressive')
-                : getTexture('stanceDefensive')
-
-        const width = HEALTH_BAR_WIDTH * 0.27
-        const height: number = (width / stanceSrc.width) * stanceSrc.height
-
-        return Container(
-            {
-                x: HEALTH_BAR_WIDTH * 0.82,
-                y:
-                    stance === 'aggressive'
-                        ? -height * 0.2
-                        : stance === 'neutral'
-                        ? -height * 0.52
-                        : -height * 0.8,
-            },
-            ExplanationBox({
-                texts: STANCE_TEXTS,
-                displayObjectArgs: {
-                    borderThickness: 2,
-                    borderColor: 0x78726a,
-                    fontSize: 30,
-                    y: height * -0.04,
-                    x: width * 0.06,
-                },
-            }),
-            Sprite({
-                src: stanceSrc,
-                anchor: [1, 0],
-                width,
-                height,
-                events: {
-                    pointerover() {
-                        isHovered.set(true)
-                    },
-                    pointerdown() {
-                        void callApi('toggleStance', { characterUid: uid })
-                    },
-                    pointerup() {
-                        if (isMobileOnly) isHovered.set(false)
-                    },
-                    pointerout() {
-                        isHovered.set(false)
-                    },
-                },
-            })
-        )
-
-        // void nextFrame().then(() => {
-        //     const globalPos = root.getGlobalPosition()
-        //     portalize({
-        //         from: root,
-        //         to: () => getStage(),
-        //         content: ,
-        //     })
-        // })
-
-        // return root
-    })
-}
-
-function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
-    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
-        if (!isPc) return false
-        return { stance, uid }
-    })
-
-    return If(data, ({ stance }) => {
-        if (stance === 'neutral') {
-            return Container({})
-        }
-
-        return Sprite({
-            src:
-                stance === 'aggressive'
-                    ? 'healthBarAggressive'
-                    : 'healthBarAvoidant',
-            anchor: spriteAnchor,
-        })
-    })
-}
-
-function StanceBadge(characterCursor: ROCursor<CharacterMeta>) {
-    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
-        if (!isPc) return false
-        return { stance, uid }
-    })
-    const healthBarTexture = getTexture('healthBarAggressive')
-
-    return If(data, ({ stance }) => {
-        return Sprite({
-            src:
-                stance === 'neutral'
-                    ? 'stanceNeutralBadge'
-                    : stance === 'aggressive'
-                    ? 'stanceAggressiveBadge'
-                    : 'stanceDefensiveBadge',
-            scale: 0.6,
-            x: healthBarTexture.width * 0.9,
-            anchor: 0.5,
-            alpha: 0.5,
-        })
-    })
-}
-
-const spriteAnchor: [number, number] = [0, 0.5]
-
-function HealthIndicator(
-    characterCursor: ROCursor<CharacterMeta>,
-    isHovered: Datum<boolean>
-) {
     let firstRender = true
     let lastHealth = 0
     return Container(
@@ -329,11 +191,7 @@ function HealthIndicator(
             anchor: spriteAnchor,
         }),
         StanceBarIndicator(characterCursor),
-        StanceBadge(characterCursor),
-
-        // todo: projected damage and DoT
-        // ProjectedDamage(characterCursor),
-        // ProjectedDoT(characterCursor),
+        StanceControls(characterCursor),
 
         Text({
             text: compose(
@@ -366,7 +224,7 @@ function HealthIndicator(
             x: HEALTH_BAR_WIDTH / 2,
             style: {
                 fontFamily: 'bigFont',
-                fontSize: 26,
+                fontSize: 30,
                 fill: 'white',
                 stroke: '#111',
                 strokeThickness: 4,
@@ -383,7 +241,6 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
         src: texture,
         scale: HEALTH_BAR_WIDTH / texture.width,
         anchor: spriteAnchor,
-        x: originalTexture.width * 0.1,
     })
 
     let lastHealth: number
@@ -423,10 +280,24 @@ function updateFrame(
     const startingHeight = textureRef.height
 
     texture.frame = new Rectangle(
-        startingWidth * (portionFrom + 0.1),
+        startingWidth * portionFrom,
         0,
-        startingWidth * (portionTo * 0.8),
+        startingWidth * portionTo,
         startingHeight
     )
     texture.updateUvs()
+}
+
+function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
+    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
+        if (!isPc) return false
+        return { stance, uid }
+    })
+
+    return If(data, ({ stance }) =>
+        Sprite({
+            src: `healthBar${upperFirst(stance)}`,
+            anchor: spriteAnchor,
+        })
+    )
 }

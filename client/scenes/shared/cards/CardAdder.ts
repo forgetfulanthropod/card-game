@@ -24,7 +24,7 @@ import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { callApi } from '@/callApi'
 
-const CARD_WIDTH = 290
+const CARD_WIDTH = 240
 
 export function CardAdder(): PixiContainer {
     // const w = 400
@@ -73,10 +73,7 @@ function ScreenHeading() {
         scale: 0.5,
     })
 
-    return Container(
-        {},
-        DraftCardBanner
-    )
+    return Container({}, DraftCardBanner)
 }
 
 function Options(
@@ -123,14 +120,14 @@ function Options(
                 y: BASE_HEIGHT - CARD_WIDTH,
                 x:
                     BASE_WIDTH / 2 +
-                    (-(NUM_DRAFT_CARD_OPTIONS - 1) / 2 + i) * CARD_WIDTH * 1.6,
+                    (-(NUM_DRAFT_CARD_OPTIONS - 1) / 2 + i) * CARD_WIDTH * 1.8,
             }
         )
 
         return cardEl
     })
 
-    return cardEls
+    return cardEls.reverse()
 }
 
 function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {

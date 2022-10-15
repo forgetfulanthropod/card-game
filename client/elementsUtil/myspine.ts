@@ -21,15 +21,18 @@ export function Spine<Name extends SpineAsset>(props: {
     events?: InteractionEvents
     onSpineEvent?: (e: string) => void
     onDestroy?: Callback[]
+    isPc?: boolean
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
 
     if (haveEvilSkins[props.name.replace('Spine', '') as CharacterId]) {
         const skinNames = spine.skeleton.data.skins.map(skin => skin.name)
 
+        console.log({ skinNames })
+
         if (!skinNames?.[1]) console.error('missing the second (evil) skin...')
 
-        spine.skeleton.setSkinByName(skinNames[1])
+        spine.skeleton.setSkinByName(skinNames[props.isPc ? 0 : 1])
     }
 
     if (props.x != null) spine.x = props.x

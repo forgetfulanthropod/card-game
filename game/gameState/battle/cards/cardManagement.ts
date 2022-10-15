@@ -38,9 +38,9 @@ export function getNullCards(): Piles {
 function makeCards(scene: BattleCursor): Piles {
     // const cardIds: CardId[] = [
     //     // 'bodySlam',
-    //     // 'TEST_turnStartEffects',
-    //     // 'TEST_turnStartEffects',
-    //     // 'TEST_turnStartEffects',
+    //     // 'leadRazor',
+    //     // 'leadRazor',
+    //     // 'leadRazor',
     //     // 'magicRitual',
     //     // 'chainLightning',
     //     // 'spellBook',
@@ -82,12 +82,12 @@ function makeCards(scene: BattleCursor): Piles {
             //@ts-expect-error
             `basicAttack${ccuf}`,
             `block${ccuf}`
-            // 'TEST_turnStartEffects'
+            // 'leadRazor'
             // `block${ccuf}`,
             // `block${ccuf}`,
             // 'helpingHand',
             // 'smite'
-            // 'TEST_turnStartEffects'
+            // 'leadRazor'
             // 'magicalStorm',
             // 'parry',
             // 'smite'
@@ -101,10 +101,10 @@ function makeCards(scene: BattleCursor): Piles {
             // 'flashbang'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        if (cm.class === 'wizard') cardIds.push('trance')
+        if (cm.class === 'wizard') cardIds.push('orbOfLightning')
+        if (cm.class === 'wizard') cardIds.push('orbOfFrost')
         if (cm.class === 'cleric') cardIds.push('smite')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
-        if (cm.class === 'wizard') cardIds.push('orbOfHolyLight')
         if (cm.class === 'rogue') cardIds.push('berserk')
         if (cm.class === 'rogue') cardIds.push('patientAmbush')
     })

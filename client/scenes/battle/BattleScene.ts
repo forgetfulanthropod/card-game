@@ -65,7 +65,7 @@ export function BattleScene(): PixiContainer {
                             sceneState === 'collecting loot'
                                 ? LootCollector()
                                 : sceneState === 'choosing cards'
-                                ? Container({}, LootCollector(), CardAdder())
+                                ? CardAdder()
                                 : sceneState === 'won' || sceneState === 'lost'
                                 ? EndOfRunScreen()
                                 : Container({})

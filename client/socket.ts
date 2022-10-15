@@ -21,7 +21,10 @@ let socket = null as unknown as Socket
 export function prepareSocket(): void {
     if (socket != null) throw Error('socket is already prepared')
     socket = io({
-        path: urlPrefix?.length > 0 ? `/${urlPrefix}/socket` : '/socket',
+        path:
+            urlPrefix?.length > 0
+                ? `/${urlPrefix}/server/socket`
+                : '/server/socket',
     })
     socket.on('connect', () => {
         const username = localStorage.getItem('username')

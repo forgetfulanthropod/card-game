@@ -3,14 +3,19 @@
     "tasks": [
         {
             "label": "Do everything",
-            "dependsOn": ["tsc all", "esbuild all", "run server"],
+            "dependsOn": [
+                "tsc all",
+                "esbuild all",
+                "run server"
+            ],
             "dependsOrder": "parallel",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
             "isBackground": true,
-            "detail": "tsc + esbuild + node"
+            "detail": "tsc + esbuild + node",
+            "problemMatcher": []
         },
         {
             "label": "tsc all",
@@ -32,7 +37,9 @@
             "presentation": {
                 "group": "group1"
             },
-            "problemMatcher": ["$esbuild-watch"],
+            "problemMatcher": [
+                "$esbuild-watch"
+            ],
             "isBackground": true
         },
         {
@@ -46,7 +53,9 @@
             "label": "eslint all cached",
             "type": "shell",
             "command": "bash run lint",
-            "problemMatcher": ["$eslint-stylish"],
+            "problemMatcher": [
+                "$eslint-stylish"
+            ],
             "detail": "node builds/server/server.js"
         }
     ]

@@ -3,8 +3,8 @@ import type { StanceId, GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
 import { updateNpcMoves, updateHand } from '@/gameState'
 
-export const toggleStance: GameActions['toggleStance'] = args => {
-    const { characterUid } = args
+export const chooseStance: GameActions['chooseStance'] = args => {
+    const { characterUid, stanceId } = args
     const scene = getBattleSceneIn(args.game)
 
     const characterCursor = scene.select('allCharacters').select(characterUid)
@@ -12,23 +12,15 @@ export const toggleStance: GameActions['toggleStance'] = args => {
 
     if (
         !character.isPc ||
-        // character.hasMoved ||
+        character.hasMoved ||
         !scene.get().isPlayerTurn
         //  || scene.get().selectedCharacter !== character.uid
     )
         return
 
-    const stanceCursor = characterCursor.select('stance')
+    logger.info(`setting stance to ${stanceId}`)
 
-    const stances: StanceId[] = ['avoidant', 'neutral', 'aggressive']
-    const stance = stanceCursor.get()
-    const stanceIndex = stances.findIndex(v => stance === v)
-
-    const nextIndex = (stanceIndex + 1) % stances.length
-
-    logger.info(`setting stance to ${stances[nextIndex]}`)
-
-    stanceCursor.set(stances[nextIndex])
+    characterCursor.select('stance').set(stanceId)
 
     updateNpcMoves(scene)
 

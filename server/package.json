@@ -1,10 +1,12 @@
 {
     "name": "server",
+    "version": "1.0.0",
     "dependencies": {
+        "game": "1.0.0",
+        "shared": "1.0.0",
+
         "classic-level": "^1.2.0",
-        "game": "workspace:game@*",
         "level": "^8.0.0",
-        "shared": "workspace:shared@*",
         "socket.io": "^4.5.1"
     }
 }
