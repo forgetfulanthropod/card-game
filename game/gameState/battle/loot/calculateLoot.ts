@@ -19,7 +19,7 @@ export function calculateLoot(
     // const stone = getRandomAmount()
     // const gold = getRandomAmount()
     // const wood = getRandomAmount()
-    const gems = getRandomAmount()
+    // const gems = getRandomAmount()
     // const items = { fish, copper, stone, gold, wood }
     // const shuffledLootItems = shuffle(entries(items))
     //     .filter(lootItem => {
@@ -33,7 +33,7 @@ export function calculateLoot(
 
     const shuffledLootItems = [] as LootItem[]
 
-    shuffledLootItems.unshift({ name: 'gems', count: gems })
+    // shuffledLootItems.unshift({ name: 'gems', count: gems })
     shuffledLootItems.unshift({ name: 'draftCard', count: 1 })
     shuffledLootItems.push({ name: 'treasureChest', count: 1 })
 

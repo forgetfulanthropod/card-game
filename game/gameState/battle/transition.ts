@@ -24,6 +24,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
                 .select('runScore')
                 .set('totalScore', calculateNewRunScore(scene))
             scene.set('state', 'won')
+            scene.set('endScreenHasOpened', true)
         } else {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))

@@ -15,8 +15,6 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
-import { LootFromGame } from 'shared'
-import { upperFirst } from 'lodash'
 
 const VICTORY_SIGN_FINAL_POS = {
     rotation: 0,
@@ -191,7 +189,10 @@ export function EndOfRunScreen(): PixiContainer {
 
     // Runs text animations synchronously
     ;(async () => {
-        handleScoringEvent('ROOM_CLEARED', 1, {})
+        // if state has not transitioned, then
+        if (scene.get('endScreenHasOpened') === false && scene.get('state') === 'won') {
+            handleScoringEvent('ROOM_CLEARED', 1, {})
+        }
         await animateNumberInElement(
             EnemiesKilled,
             'Enemies Killed',
@@ -224,6 +225,7 @@ export function EndOfRunScreen(): PixiContainer {
             totalScore,
             'fast'
         )
+        callApi('openEndScreen', {})
     })()
 
     const Retry = Text({
