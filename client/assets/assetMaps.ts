@@ -16,8 +16,10 @@ export const rootAssets = {
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',
     door: 'misc-png/temp-door.webp',
-    endTurnButton: 'core-ui/end turn.webp',
-    confirmButton: 'core-ui/confirm.webp',
+    acceptButton: 'core-ui/newAccept.png',
+    endTurnButton: 'core-ui/newEndTurn.png',
+    confirmButton: 'core-ui/newConfirm.png',
+    skipButton: 'core-ui/newSkip.png',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
 }

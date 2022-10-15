@@ -122,7 +122,7 @@ export function LootCollector(): PixiContainer {
 
     function renderLoot() {
         let lootItemsContainerX = -900
-        let lootItemsContainerY = BASE_HEIGHT + 200
+        let lootItemsContainerY = BASE_HEIGHT + 100
 
         return lootItems.map((item, idx) => {
             // Each loot container is created 900 pixels to the right of its neighbor (eg. the previous child in the lootItemsContainer array)
@@ -132,6 +132,7 @@ export function LootCollector(): PixiContainer {
                 y: lootItemsContainerY,
                 onClick: idx === 0 ? () => handleButtonPress() : () => {},
                 idx,
+                scale: 0.9,
             }
             let itemSrc = item.name
 
@@ -243,16 +244,26 @@ export function LootCollector(): PixiContainer {
             })
 
             const confirmTexture = getTexture('confirmButton')
+
             const ConfirmButton = Sprite({
+                // x: (-confirmTexture.width / 2) * 1.25,
                 x: 0,
-                y: BASE_HEIGHT / 2 + 100,
+                y: BASE_HEIGHT / 2 + 200,
                 src: confirmTexture,
                 anchor: [0.5, 0.5],
-                width: BASE_WIDTH * 0.25,
+                scale: 1.25,
                 onClick: () => {},
-                height:
-                    (BASE_WIDTH * 0.25 * confirmTexture.height) /
-                    confirmTexture.width,
+            })
+
+            const skipTexture = getTexture('skipButton')
+
+            const SkipButton = Sprite({
+                x: ConfirmButton.x + skipTexture.width * 1.25,
+                y: ConfirmButton.y,
+                src: skipTexture,
+                scale: ConfirmButton.scale.x,
+                anchor: [0.5, 0.5],
+                onClick: () => {},
             })
 
             const lootItemContainerChildren = [
@@ -333,7 +344,6 @@ export function LootCollector(): PixiContainer {
         el.on('pointerdown', onClick)
     }
 
-
     const LootCollectorContainer = Container(
         { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
         ModalBackdrop(),
@@ -359,7 +369,6 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     const refreshRunScore = () => {
         currRunScore = battleScene.get('runScore').totalScore
     }
-
 
     const ChestBody = Sprite({
         src: chestBodySrc,
