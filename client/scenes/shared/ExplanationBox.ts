@@ -38,7 +38,7 @@ export const keyTermsMap = {
     trance: 'increase magic stat by 11% times the number of counters',
     orbsOfProtection: 'blocks for 50% of Magic',
     orbsOfLightning: 'deals 35% of Magic to all enemies',
-    orbsOfFrost: '+2 Strongblock',
+    orbsOfFrost: '+1 Strongblock to party\n+1 Fatigue to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 }
 

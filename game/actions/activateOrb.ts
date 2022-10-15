@@ -15,6 +15,8 @@ import {
     calcPostEffectStats,
     emitMove,
     getLivingNpcs,
+    getCharacterMeta,
+    getLivingPcs,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { applyEffect } from '@/gameState/battle/cards/commands/effect'
@@ -57,11 +59,23 @@ const orbActivators: Record<
         })
     },
     frost(character: CharacterMeta, scene: BattleCursor) {
-        applyEffect(scene, [character.uid], 'strongblock', 2)
+        applyEffect(
+            scene,
+            getLivingPcs(scene.get()).map(c => c.uid),
+            'strongblock',
+            1
+        )
+        applyEffect(
+            scene,
+            getLivingNpcs(scene.get()).map(c => c.uid),
+            'tired',
+            1
+        )
+
         updateHand(scene)
 
         emitMove({
-            moveName: '+2 strongblock!',
+            moveName: 'Orb of Frost',
             targetType: 'self',
             characterUid: character.uid,
             targetUids: [character.uid],

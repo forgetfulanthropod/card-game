@@ -37,7 +37,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'chain(effect("bleed", 2), effect("poison", 5), effect("debilitated", 1))',
+            'chain(effect("bleed", 2), effect("poison", 5), effect("fatigued", 1))',
         type: 'attack',
         characterClass: 'rogue',
     },
