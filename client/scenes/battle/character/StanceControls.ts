@@ -9,13 +9,20 @@ import { last, upperFirst } from 'lodash'
 import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
 import { getNullAnimation } from '@/scenes/shared/cards/Card'
 import { Tweener } from 'pixi-tweener'
+import { ExplanationBox } from '@/scenes/shared'
 
-const STANCE_TEXTS = [
-    'Stance modifiers',
-    'Aggressive: +25%',
-    'Neutral: 0%',
-    'Avoidant: -25%',
-]
+const STANCE_TEXTS: Record<StanceId, string[]> = {
+    avoidant: ['Avoidant', 'take 25% less damage', 'deal 25% less damage'],
+    neutral: ['Neutral', 'no modifier'],
+    aggressive: ['Aggressive', 'deal 25% more damage', 'take 25% more damage'],
+}
+
+// [
+//     'Stance modifiers',
+//     'Aggressive: +25%',
+//     'Neutral: 0%',
+//     'Avoidant: -25%',
+// ]
 const stanceIds: StanceId[] = ['avoidant', 'neutral', 'aggressive']
 
 export function StanceControls(characterCursor: ROCursor<CharacterMeta>) {
@@ -85,19 +92,18 @@ function StanceChambers(
         })
     )
 
-    const stanceBullets = StanceBullets(characterCursor)
-
+    const angleBetween = (Math.PI * 2) / 3
     let barrelAnim = getNullAnimation()
     let lastStance: StanceId = characterCursor.get('stance')
-
-    const angleBetween = (Math.PI * 2) / 3
+    const rotationForStance =
+        angleBetween - angleBetween * stanceIds.indexOf(lastStance)
+    const stanceBullets = StanceBullets(characterCursor, -rotationForStance)
 
     const root = Container(
         {
             x: getXOffset(),
             y: 50,
-            rotation:
-                angleBetween - angleBetween * stanceIds.indexOf(lastStance),
+            rotation: rotationForStance,
             events: {
                 pointerdown() {
                     if (isMobileOnly) {
@@ -177,7 +183,10 @@ function StanceChambers(
     return root
 }
 
-function StanceBullets(characterCursor: ROCursor<CharacterMeta>) {
+function StanceBullets(
+    characterCursor: ROCursor<CharacterMeta>,
+    rotation: number
+) {
     const width = HEALTH_BAR_WIDTH * 0.27
     const stanceSrcForSizing = getTexture('stanceAvoidant')
 
@@ -186,6 +195,8 @@ function StanceBullets(characterCursor: ROCursor<CharacterMeta>) {
 
     const bottomChamberAngle = (Math.PI / 2) * 0.33
     const xOffset = cylinderMidRadius * Math.cos(bottomChamberAngle)
+
+    const hoveredStanceId = datum<null | StanceId>(null)
 
     const stanceBullets = stanceIds.map((stanceId, i) =>
         Sprite({
@@ -197,8 +208,17 @@ function StanceBullets(characterCursor: ROCursor<CharacterMeta>) {
                 i == 1
                     ? -cylinderMidRadius
                     : cylinderMidRadius * Math.sin(bottomChamberAngle),
+            rotation,
             events: {
+                pointerover() {
+                    hoveredStanceId.set(stanceId)
+                },
                 pointerdown() {
+                    hoveredStanceId.set(stanceId)
+                },
+                pointerup() {
+                    hoveredStanceId.set(null)
+
                     const selectedStanceId = characterCursor.get('stance')
                     const stanceIndex = stanceIds.indexOf(selectedStanceId)
 
@@ -222,9 +242,30 @@ function StanceBullets(characterCursor: ROCursor<CharacterMeta>) {
             },
         })
     )
-    return stanceBullets
+
+    const explanation = If(
+        compose(([stanceId]) => {
+            if (!stanceId) return false
+
+            return STANCE_TEXTS[stanceId]
+        }, hoveredStanceId),
+        (texts: string[]) =>
+            ExplanationBox({
+                texts,
+                displayObjectArgs: {
+                    x: width * 2,
+                    y: -0.6 * width,
+                    borderColor: 0xffffff,
+                    borderThickness: 1,
+                },
+            })
+    )
+
+    explanation.rotation = rotation
+
+    return [...stanceBullets, explanation]
 }
 
 function getXOffset() {
-    return getTexture('healthBarAggressive').width * 1.0
+    return getTexture('healthBarAggressive').width * 1.07
 }
