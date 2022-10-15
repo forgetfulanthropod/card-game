@@ -12,6 +12,7 @@ export const rootAssets = {
     wood: 'misc-png/ITEM_WOOD.webp',
     gems: 'misc-png/ITEM_GEM.svg',
     swordPiercing: 'effects/piercing.webp',
+    overkill: 'misc-png/SKULL_25-0.webp',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',

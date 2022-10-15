@@ -26,6 +26,13 @@ const handleScoringEvent = (
             case 'ROOM_CLEARED':
                 displayScoreNotification('Completed Room', 'swordPiercing', 10)
                 break
+            case 'OVERKILL':
+                displayScoreNotification(
+                    'Overkill',
+                    'overkill',
+                    count * RUN_SCORE_EVENT_META['OVERKILL'].pointValue
+                )
+                break
         }
     }
 

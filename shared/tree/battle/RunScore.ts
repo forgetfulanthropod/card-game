@@ -13,6 +13,7 @@ export type RunScoreAttributeName =
     | 'enemiesKilled'
     | 'roomsCleared'
     | 'bossesKilled'
+    | 'cumulativeOverkill'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
 
@@ -24,7 +25,7 @@ export type RunScoreAttributeMeta = {
     asset?: string
 }
 
-const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED'] as const
+const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED', 'OVERKILL'] as const
 export type NotifiableEvent = typeof notifiableEvent[number]
 
 export type RunScoreEvent =
@@ -38,6 +39,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
 > = {
     enemiesKilled: 'ENEMY_KILLED',
     roomsCleared: 'ROOM_CLEARED',
+    cumulativeOverkill: 'OVERKILL',
     bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
@@ -49,7 +51,7 @@ export const RUN_SCORE_EVENT_META: Record<
 > = {
     ENEMY_KILLED: {
         description: 'Number of enemies defeated',
-        pointValue: 5,
+        pointValue: 3,
         notificationText: '@unused',
         attributeName: 'enemiesKilled',
     },
@@ -77,6 +79,12 @@ export const RUN_SCORE_EVENT_META: Record<
         pointValue: 10,
         notificationText: '@unused',
         attributeName: 'roomsCleared',
+    },
+    OVERKILL: {
+        description: 'Cumulative damage inflicted on top of dead enemy',
+        pointValue: 0.25,
+        notificationText: '@unused',
+        attributeName: 'cumulativeOverkill',
     },
 }
 
