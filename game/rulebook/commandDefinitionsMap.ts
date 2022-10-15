@@ -16,7 +16,7 @@ const singleOpponentTargetCommands = {
     /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).*/
     mimicAttack: ['Mimic Attack', 'mimicAttack()'],
     /**Rusty Poke (DOT 2, also applies Fatigue 1) */
-    rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigue", 1)'],
+    rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigued", 1)'],
     /**Rusty Poke (DOT 2) */
     rustyPokeLow: ['Rusty Poke Low', 'deal(strength)'],
     /**Basic Attack */
@@ -26,7 +26,7 @@ const singleOpponentTargetCommands = {
     /**Itchy Ooze (DOT 2, applies Poison 1 if any damage goes unblocked.) */
     itchyOozeSpecial: [
         'Itchy Ooze Special',
-        'ifDamageDealt(dot(2), effect("poison", 1))',
+        'ifDamageDealt(dot(2), effect("poisoned", 1))',
     ],
     /**Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes. */
     jurgenBellyFlop: ['Jurgen Belly Flop', 'deal(min1(30 - damageTaken()))'],
@@ -73,7 +73,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions:
-            'effect("fatigue", 2, "enemies"); effect("unguarded", 2, "enemies")',
+            'effect("fatigued", 2, "enemies"); effect("unguarded", 2, "enemies")',
     },
 
     /**Guards!!! (summons up to 2 cultist guards) */

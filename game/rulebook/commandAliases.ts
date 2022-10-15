@@ -2,7 +2,7 @@ import type { CommandDefinition } from 'shared'
 
 /**Startling Spook (Applies Unguarded x, Fatigue x) */
 export const startlingSpook = (x: number, y: number): CommandDefinition => ({
-    actions: `effect("unguarded",${x}); effect("fatigue",${y})`,
+    actions: `effect("unguarded",${x}); effect("fatigued",${y})`,
     id: `startlingSpook(${x},${y})`,
     name: `Startling Spook ${x}-${y}`,
     targetNum: 1,
@@ -10,7 +10,7 @@ export const startlingSpook = (x: number, y: number): CommandDefinition => ({
 })
 /**Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X) */
 export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength/2), effect("poison",${x}), effect("fatigue",${y}))`,
+    actions: `ifDamageDealt(deal(strength/2), effect("poisoned",${x}), effect("fatigued",${y}))`,
     id: `surpriseAllergy(${x},${y})`,
     name: `Surprise Allergy ${x}-${y}`,
     targetNum: 1,
@@ -18,7 +18,7 @@ export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
 })
 /**Itchy Ooze (DOT X) */
 export const itchyOoze = (x: number): CommandDefinition => ({
-    actions: `chain(deal(strength * .2), effect("poison", ${x}))`,
+    actions: `chain(deal(strength * .2), effect("poisoned", ${x}))`,
     id: `itchyOoze(${x})`,
     name: `Itchy Ooze ${x}`,
     targetNum: 1,
@@ -27,7 +27,7 @@ export const itchyOoze = (x: number): CommandDefinition => ({
 /** copy last damage dealt */
 export const mimicAttack = (): CommandDefinition => ({
     actions: `mimicAttack()`,
-    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
     id: `mimicAttack`,
     name: `Mimic Attack`,
     targetNum: 1,
@@ -36,7 +36,7 @@ export const mimicAttack = (): CommandDefinition => ({
 /** deal strength */
 // export const chomp = (): CommandDefinition => ({
 //     actions: `deal(strength)`,
-//     // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+//     // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
 //     id: `chomp`,
 //     name: `Chomp`,
 //     targetNum: 1,
@@ -45,7 +45,7 @@ export const mimicAttack = (): CommandDefinition => ({
 /**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
 export const infectiousBite = (x: number): CommandDefinition => ({
     actions: `deal(strength)`,
-    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poison",${x}))`,
+    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
     id: `infectiousBite(${x})`,
     name: `Infectious Bite ${x}`,
     targetNum: 1,
@@ -77,7 +77,7 @@ export const meatyCharge = (x: number): CommandDefinition => ({
 })
 /**Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked) */
 export const bellowAndSing = (x: number, y: number): CommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength/2), effect("debilitated",${y})); effect("fatigue",${x})`,
+    actions: `ifDamageDealt(deal(strength/2), effect("debilitated",${y})); effect("fatigued",${x})`,
     id: `bellowAndSing(${x},${y})`,
     name: `Bellow and Sing ${x}-${y}`,
     targetNum: 1,
