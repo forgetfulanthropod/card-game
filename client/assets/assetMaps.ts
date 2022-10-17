@@ -12,6 +12,7 @@ export const rootAssets = {
     wood: 'misc-png/ITEM_WOOD.webp',
     gems: 'misc-png/ITEM_GEM.svg',
     swordPiercing: 'effects/piercing.webp',
+    overkill: 'misc-png/SKULL_25-0.webp',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',
@@ -20,6 +21,7 @@ export const rootAssets = {
     endTurnButton: 'core-ui/newEndTurn.png',
     confirmButton: 'core-ui/newConfirm.png',
     skipButton: 'core-ui/newSkip.png',
+    tryAgainButton: 'core-ui/newTryAgain.png',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
 }

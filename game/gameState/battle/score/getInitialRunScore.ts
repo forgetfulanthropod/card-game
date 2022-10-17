@@ -8,6 +8,7 @@ export function getInitialRunScore(): RunScore {
             enemiesKilled: 0,
             roomsCleared: 0,
             bossesKilled: 0,
+            cumulativeOverkill: 0,
             roomsExitedFullHealth: 0,
             bossRoomsExitedFullHealth: 0,
         },

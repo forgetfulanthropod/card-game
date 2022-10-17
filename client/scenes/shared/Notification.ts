@@ -26,6 +26,13 @@ let currY = MIN_Y_OFFSET
 let currNotificationsCount = 0
 const containerName = `NotificationContainer`
 
+/**
+ * To display multiple notifications simultaneously, simply call this function without awaiting it (it will still clean up fine)
+ * KNOWN BUG: when many notifications show up at once, the latter ones will not be pushed all the way up to the screen
+ * @param textToDisplay
+ * @param assetSrc
+ * @param count
+ */
 const displayScoreNotification = async <T extends string>(
     textToDisplay: T,
     assetSrc: string,
@@ -38,8 +45,6 @@ const displayScoreNotification = async <T extends string>(
     stage.addChild(newNotification)
     currNotificationsCount++
     await slamAnimateElIntoScreen(newNotification)
-    // const delayUntilNextNotification = new Promise(r => setTimeout(r, 100))
-    // await delayUntilNextNotification
 
     setTimeout(async () => {
         await destroyNotificationAndShiftRest(newNotification, stage)
@@ -84,6 +89,9 @@ const destroyNotificationAndShiftRest = async (
 
     if (existingNotifications.length === 0) return
 
+    currY -= verticalMargin
+    if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
+
     existingNotifications.forEach(el => {
         try {
             shiftNotificationUp(el, el?.position?.y)
@@ -91,8 +99,6 @@ const destroyNotificationAndShiftRest = async (
             console.error(e)
         }
     })
-    currY -= verticalMargin
-    if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
 
     Tweener.killTweensOf(newNotification)
     newNotification.destroy({
@@ -223,7 +229,7 @@ function Notification<T extends string>(
 
     const NotificationContainer = TweenableContainer(
         {
-            name: `${containerName}_${currNotificationsCount}`,
+            name: `${containerName}_${assetSrc}_${currNotificationsCount}`,
             x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
             y: currY,
             alpha: 0,
