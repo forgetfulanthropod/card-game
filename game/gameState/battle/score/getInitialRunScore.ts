@@ -11,6 +11,7 @@ export function getInitialRunScore(): RunScore {
             cumulativeOverkill: 0,
             roomsExitedFullHealth: 0,
             bossRoomsExitedFullHealth: 0,
+            highestDamageHit: 0
         },
     }
 }

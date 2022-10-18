@@ -16,6 +16,7 @@ export type RunScoreAttributeName =
     | 'cumulativeOverkill'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
+    | 'highestDamageHit'
 
 export type RunScoreAttributeMeta = {
     description: string
@@ -30,6 +31,7 @@ export type NotifiableEvent = typeof notifiableEvent[number]
 
 export type RunScoreEvent =
     | NotifiableEvent
+    | 'HIGHEST_DAMAGE'
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
@@ -41,6 +43,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
+    highestDamageHit: 'HIGHEST_DAMAGE'
 }
 
 export const RUN_SCORE_EVENT_META: Record<
@@ -84,6 +87,12 @@ export const RUN_SCORE_EVENT_META: Record<
         notificationText: '@unused',
         attributeName: 'cumulativeOverkill',
     },
+    HIGHEST_DAMAGE: {
+        description: 'Highest damage from single hit',
+        pointValue: 0.3,
+        notificationText: '@unused',
+        attributeName: 'highestDamageHit'
+    }
 }
 
 export const isNotifiableEvent = (event: any): event is NotifiableEvent =>

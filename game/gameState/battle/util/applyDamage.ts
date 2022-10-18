@@ -7,6 +7,7 @@ import type {
 import { calcPostEffectStats } from '../effects'
 import { removeDeadCharacterCards } from './removeDeadCharacterCards'
 import { updateNpcMoves } from '@/gameState'
+import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 
 export function applyDamage(args: {
     damage: number
@@ -19,6 +20,9 @@ export function applyDamage(args: {
     if (attacker == null && attackerUid == null) {
         throw new Error('must provide attacker or attackerUid')
     }
+
+    checkServerScoringEvent('HIGHEST_DAMAGE', scene, args)
+
     const calcedDamage = getDamage({
         //@ts-expect-error
         attacker: attacker ?? scene.get('allCharacters', attackerUid),
