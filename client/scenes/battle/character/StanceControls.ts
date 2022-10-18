@@ -3,13 +3,20 @@ import { CharacterMeta, StanceId } from 'shared'
 import { compose, Datum, datum } from 'datums'
 import { isMobileOnly } from 'mobile-device-detect'
 import { callApi } from '@/callApi'
-import { If, getTexture, Container, Sprite } from '@/elementsUtil'
-import { onUpdate, toDatum } from '@/util'
+import {
+    If,
+    getTexture,
+    Container,
+    Sprite,
+    portalize,
+    getStage,
+} from '@/elementsUtil'
+import { nextTick, onUpdate, toDatum } from '@/util'
 import { last, upperFirst } from 'lodash'
 import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
 import { getNullAnimation } from '@/scenes/shared/cards/Card'
 import { Tweener } from 'pixi-tweener'
-import { ExplanationBox } from '@/scenes/shared'
+import { ExplanationBox, TermExplanationBox } from '@/scenes/shared'
 
 const STANCE_TEXTS: Record<StanceId, string[]> = {
     avoidant: ['Avoidant', 'take 25% less damage', 'deal 25% less damage'],
@@ -31,7 +38,16 @@ export function StanceControls(characterCursor: ROCursor<CharacterMeta>) {
     return Container(
         {},
         StanceBadge(characterCursor, isHovered),
-        StanceChambers(characterCursor, isHovered)
+        If(
+            compose(
+                ([isHovered, hasMoved]) => {
+                    return isHovered && !hasMoved
+                },
+                isHovered,
+                toDatum(characterCursor.select('hasMoved'), has => has)
+            ),
+            () => StanceChambers(characterCursor, isHovered)
+        )
     )
 }
 
@@ -39,27 +55,37 @@ function StanceBadge(
     characterCursor: ROCursor<CharacterMeta>,
     isHovered: Datum<boolean>
 ) {
-    const data = toDatum(characterCursor, ({ isPc, stance, uid }) => {
-        if (!isPc) return false
-        return { stance, uid }
-    })
+    const badgeWidth = 100
+    const characterDatum = toDatum(
+        characterCursor,
+        ({ isPc, stance, hasMoved, uid }) => {
+            if (!isPc) return false
+            return { stance, hasMoved, uid }
+        }
+    )
 
-    return If(data, ({ stance }) => {
+    return If(characterDatum, ({ hasMoved, stance }) => {
         const pointerover = () => {
-            if (!characterCursor.get('hasMoved')) isHovered.set(true)
+            isHovered.set(true)
+        }
+        const pointerout = () => {
+            if (hasMoved) isHovered.set(false)
         }
 
+        const hasMovedDatum = toDatum(
+            characterCursor.select('hasMoved'),
+            has => has
+        )
         return Container(
             {},
-            If(
-                toDatum(characterCursor.select('hasMoved'), has => has),
-                () =>
-                    Sprite({
-                        src: `stance${upperFirst(stance)}Confirmed`,
-                        scale: 100 / getTexture('stanceNeutralConfirmed').width,
-                        x: getXOffset(),
-                        anchor: 0.5,
-                    })
+            If(hasMovedDatum, () =>
+                Sprite({
+                    src: `stance${upperFirst(stance)}Confirmed`,
+                    scale:
+                        badgeWidth / getTexture('stanceNeutralConfirmed').width,
+                    x: getXOffset(),
+                    anchor: 0.5,
+                })
             ),
             Sprite({
                 src: `stance${upperFirst(stance)}`,
@@ -70,8 +96,45 @@ function StanceBadge(
                 events: {
                     pointerover,
                     pointerdown: pointerover,
+                    pointerout,
+                    pointerup: pointerout,
                 },
-            })
+            }),
+            If(
+                compose(
+                    ([hasMoved, isHovered]) => {
+                        return hasMoved && isHovered
+                    },
+                    hasMovedDatum,
+                    isHovered
+                ),
+                () => {
+                    const root = Container({})
+
+                    nextTick().then(() =>
+                        portalize({
+                            from: root,
+                            to: () => getStage(),
+                            content: ExplanationBox({
+                                texts: [
+                                    `(locked) ${STANCE_TEXTS[stance][0]}`,
+                                    STANCE_TEXTS[stance][1],
+                                ],
+                                displayObjectArgs: {
+                                    x:
+                                        root.getGlobalPosition().x +
+                                        badgeWidth * 3,
+                                    y: root.getGlobalPosition().y,
+                                    borderColor: 0xffffff,
+                                    borderThickness: 1,
+                                },
+                            }),
+                        })
+                    )
+
+                    return root
+                }
+            )
         )
     })
 }
@@ -154,19 +217,6 @@ function StanceChambers(
                     lastStance = stance
                     //counter-animate bullets
                 }),
-                isHovered.onChange(is => {
-                    root.renderable = is
-                    root.interactive = is
-                    stanceBullets.forEach(
-                        b => (b.interactive = isSecureContext)
-                    )
-                }),
-                onUpdate(characterCursor.select('hasMoved'), has => {
-                    if (!has) return
-                    root.renderable = false
-                    root.interactive = false
-                    stanceBullets.forEach(b => (b.interactive = false))
-                }),
             ],
         },
         Sprite({
@@ -175,10 +225,6 @@ function StanceChambers(
         }),
         ...stanceBullets
     )
-
-    root.renderable = isHovered.val
-    root.interactive = isHovered.val
-    stanceBullets.forEach(b => (b.interactive = isHovered.val))
 
     return root
 }
@@ -249,16 +295,27 @@ function StanceBullets(
 
             return STANCE_TEXTS[stanceId]
         }, hoveredStanceId),
-        (texts: string[]) =>
-            ExplanationBox({
-                texts,
-                displayObjectArgs: {
-                    x: width * 2,
-                    y: -0.6 * width,
-                    borderColor: 0xffffff,
-                    borderThickness: 1,
-                },
-            })
+        (texts: string[]) => {
+            const root = Container({})
+
+            nextTick().then(() =>
+                portalize({
+                    from: root,
+                    to: () => getStage(),
+                    content: ExplanationBox({
+                        texts,
+                        displayObjectArgs: {
+                            x: root.getGlobalPosition().x + width * 1.5,
+                            y: root.getGlobalPosition().y + -0.6 * width,
+                            borderColor: 0xffffff,
+                            borderThickness: 1,
+                        },
+                    }),
+                })
+            )
+
+            return root
+        }
     )
 
     explanation.rotation = rotation

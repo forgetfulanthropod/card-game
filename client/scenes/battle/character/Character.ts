@@ -20,34 +20,25 @@ import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { EffectOverlayManager } from './EffectOverlayManager'
-import { getOrbTexture, getCharTexture } from '@/assets'
+import { getCharTexture } from '@/assets'
 import {
     hoveredCharacterUid,
     nextTick,
-    onUpdate,
     playDamageAnimation,
     statChangesDatum,
     targetUidsWaitingForImpact,
     toDatum,
 } from '@/util'
-import {
-    Adjust,
-    Container,
-    flashTo,
-    If,
-    SCALE_UNIVERSAL,
-    Sprite,
-    Text,
-} from '@/elementsUtil'
+import { Adjust, Container, flashTo, If, Sprite } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
-import { callApi } from '@/callApi'
 import { socketOn } from '@/socket'
 import { getBattleScene } from '@/data'
+import { OrbManager } from './OrbManager'
 
 const SHOW_HIT_TIME = 1000
 
-type CharacterCursor = ROCursor<CharacterMeta>
+export type CharacterCursor = ROCursor<CharacterMeta>
 interface CharacterProps {
     onClick: (c: CharacterUid) => void
     scale: number
@@ -85,15 +76,15 @@ export function Character(props: CharacterProps): PixiContainer {
             : []),
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, props.onClick),
+        Adjust(HealthBar(characterMeta.uid), { y: 11 }),
         If(
             toDatum(getBattleScene().select('isPlayerTurn'), is => is),
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
-                    y: -220,
-                    x: -30,
+                    y: 0,
+                    x: characterMeta.block > 0 ? 300 : 260,
                 })
-        ),
-        Adjust(HealthBar(characterMeta.uid), { y: 11 })
+        )
     )
 
     setTimeout(
@@ -111,6 +102,9 @@ export function Character(props: CharacterProps): PixiContainer {
         y: -50,
     })
 
+    const orbOffset =
+        characterMeta.id === 'jerry' ? 150 : mainContainer.height * 0.92
+
     return Container(
         {
             name: 'Character Wrap',
@@ -125,7 +119,7 @@ export function Character(props: CharacterProps): PixiContainer {
         },
 
         mainContainer,
-        OrbManager(props.cursor, mainContainer.height * 0.92),
+        OrbManager(props.cursor, orbOffset),
         EffectOverlayManager(characterMeta, -mainContainer.height * 0.5),
         hitContainer
     )
@@ -143,64 +137,6 @@ function FallBackCharacterSprite(
         events: { pointerup: () => onClick(characterMeta.uid) },
         x: ((characterMeta.isPc ? 1 : -2) * charSrc.width) / 4,
     })
-}
-
-function OrbManager(
-    characterCursor: CharacterCursor,
-    offset: number
-): PixiContainer {
-    const orbContainer = Container({
-        x: 0,
-        y: -offset,
-        name: 'OrbContainer',
-    })
-    const orbWidth = 45
-
-    const orbsCursor = characterCursor.select('orbs')
-    const unsub = onUpdate(
-        orbsCursor,
-        orbs => {
-            if (orbs == null) {
-                unsub?.()
-                return
-            }
-            orbContainer.removeChildren()
-            orbs.forEach((orb, i) => {
-                orbContainer.addChild(
-                    Container(
-                        {
-                            x: i * orbWidth * 1.5,
-                            onClick: async () => {
-                                await callApi('activateOrb', {
-                                    characterUid: characterCursor.get('uid'),
-                                    orb,
-                                })
-                            },
-                        },
-                        Sprite({
-                            src: getOrbTexture(orb.type),
-                            width: orbWidth * SCALE_UNIVERSAL,
-                            height: orbWidth * SCALE_UNIVERSAL,
-                        }),
-                        Text({
-                            text: `${orb.remainingCount}`,
-                            style: {
-                                fontFamily: 'bigFont',
-                                fontSize: 14 * SCALE_UNIVERSAL,
-                                fill: ['#fff', '#eee'], // gradient
-                                // letterSpacing: -5,
-                                stroke: '#333',
-                                strokeThickness: 5,
-                            },
-                        })
-                    )
-                )
-            })
-        },
-        true
-    )
-
-    return orbContainer
 }
 
 function bindDOT(

@@ -5,8 +5,8 @@ import type {
     CommandId,
 } from 'shared'
 import { calcPostEffectStats } from '../effects'
-import { removeDeadCharacterCards } from './removeDeadCharacterCards'
 import { updateNpcMoves } from '@/gameState'
+import { clearDead } from './clearDead'
 
 export function applyDamage(args: {
     damage: number
@@ -67,17 +67,17 @@ function manageSideEffectsOfNewDamage(
     targetUid: CharacterUid,
     calcedDamage: number
 ) {
-    if (didTargetDie(scene, targetUid)) removeDeadCharacterCards(scene)
-
-    scene.apply('damagesDealtThisTurn', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+    if (didTargetDie(scene, targetUid)) clearDead(scene)
 
     if (damageChangesEnemyIntent(scene)) {
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)
     }
+
+    scene.apply('damagesDealtThisTurn', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
 }
 
 function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {
