@@ -50,6 +50,7 @@ export function makeBattleState(args: {
         lootEarned: getInitialLoot(),
         lootClaimed: [],
         lootScreenHasOpened: false,
+        endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
     }

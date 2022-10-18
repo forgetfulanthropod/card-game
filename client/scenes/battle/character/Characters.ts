@@ -1,6 +1,6 @@
 import { omit } from 'lodash'
 import { compose } from 'datums'
-import type { Characters, CharacterUid } from 'shared'
+import { Characters, CharacterUid, RUN_SCORE_EVENT_META } from 'shared'
 import { keys, sleep } from 'shared/code'
 import type { DisplayObject } from 'pixi.js'
 import { ColorOverlayFilter } from 'pixi-filters'
@@ -117,15 +117,18 @@ export function Characters(scene: ROBattleScene): PixiContainer {
         )
 
         if (removedEnemyCharacters) {
-            setTimeout(
-                () =>
-                    handleScoringEvent(
-                        'ENEMY_KILLED',
-                        removedEnemyCharacters.length,
-                        removedEnemyCharacters
-                    ),
-                1000
-            ) // imperfect timing, but good enough for now
+            setTimeout(() => {
+                handleScoringEvent(
+                    'ENEMY_KILLED',
+                    removedEnemyCharacters.length,
+                    removedEnemyCharacters
+                )
+                for (let char of removedEnemyCharacters) {
+                    if (char.health < 0) {
+                        handleScoringEvent('OVERKILL', -char.health)
+                    }
+                }
+            }, 1000) // imperfect timing, but good enough for now
         }
 
         waitForDeathAnimationsDatum.set(waiting)

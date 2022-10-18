@@ -36,6 +36,7 @@ export interface BattleScene extends SceneHas {
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
     lootScreenHasOpened: boolean
+    endScreenHasOpened: boolean
     treasureChest: TreasureChest
     runScore: RunScore
 }
