@@ -17,6 +17,7 @@ import {
     getLivingNpcs,
     getCharacterMeta,
     getLivingPcs,
+    updateNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { applyEffect } from '@/gameState/battle/cards/commands/effect'
@@ -142,6 +143,8 @@ function activate(orb: Orb, character: CharacterMeta, scene: BattleCursor) {
     orbActivators[orb.type](character, scene)
 
     decrementCounter(character, orb, scene)
+
+    updateNpcMoves(scene)
 }
 
 function decrementCounter(
