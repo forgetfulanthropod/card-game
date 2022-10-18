@@ -157,15 +157,15 @@ function DamageIntended(
 function BlockIntended(amount: number) {
     return [
         Sprite({
-            y: -10,
-            x: -460,
+            y: -190,
+            x: -290,
             scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
             src: 'intentBlock',
             anchor: [0.2, 0.2],
         }),
         Text({
-            y: -10,
-            x: -460,
+            y: -190,
+            x: -290,
             text: `${amount}`,
             anchor: 0.5,
             style: {

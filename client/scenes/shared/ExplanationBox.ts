@@ -13,33 +13,35 @@ import {
 import { keys } from 'shared/code'
 
 export const keyTermsMap = {
-    mimicAttack: 'deals 999 or copies the last hit taken this turn.',
-    infectiousBite: 'unblocked damage becomes Poison',
-    grudge: 'intentGrudge',
-
     momentary: 'removed until end of room',
     dwindle: 'costs +1 energy each use in room',
 
-    fatigue: 'deals 25% less damage',
-    courageous: 'deals 15% more damage',
-    debilitated: 'deals 50% less damage',
-    unready: 'receives 12% more damage',
-    unguarded: 'receives 25% more damage',
-    vulnerable: 'receives 50% more damage',
-    bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
-    poison: '(unblockable) receives 1 damage per stack',
-    stunned: 'cannot take an action this turn',
-    targeted: 'receives 15% more damage',
-    guarded: 'receives 25% more block',
-    fortified: 'receives 50% more block',
-    berserk:
-        '(aggressive stance only) gains 50% strength, takes 100% more damage',
-    strongblock: 'receives 50% more block',
-    trance: 'increase magic stat by 11% times the number of counters',
     orbsOfProtection: 'blocks for 50% of Magic',
     orbsOfLightning: 'deals 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Fatigue to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
+
+    grudge: 'intentGrudge',
+    infectiousBite: 'unblocked damage becomes Poison',
+    mimicAttack: 'deals 999 or copies the last hit taken this turn.',
+
+    berserk:
+        '(aggressive stance only) gains 50% strength, takes 100% more damage',
+    bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
+    courageous: 'deals 15% more damage',
+    debilitated: 'deals 50% less damage',
+    entranced: 'increase magic stat by 11% times the number of counters',
+    fatigued: 'deals 25% less damage',
+    fortified: 'receives 50% more block',
+    guarded: 'receives 25% more block',
+    poisoned: '(unblockable) receives 1 damage per stack',
+    strongblock: 'receives 50% more block',
+    stunned: 'cannot take an action this turn',
+    targeted: 'receives 15% more damage',
+    tired: 'deals 12% less damage',
+    unguarded: 'receives 25% more damage',
+    unready: 'receives 12% more damage',
+    vulnerable: 'receives 50% more damage',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap

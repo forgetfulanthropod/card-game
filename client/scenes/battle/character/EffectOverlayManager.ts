@@ -42,7 +42,7 @@ export function EffectOverlayManager(
                         setTimeout(() => {
                             root.addChild(anim)
                             setTimeout(() => root.removeChild(anim), 1000)
-                        }, i * TIME_BETWEEN_OVERLAY_ANIMATIONS)
+                        }, (i + 1) * TIME_BETWEEN_OVERLAY_ANIMATIONS)
                     })
                 }
 
