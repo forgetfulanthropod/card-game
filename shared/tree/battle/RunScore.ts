@@ -25,12 +25,11 @@ export type RunScoreAttributeMeta = {
     asset?: string
 }
 
-const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED', 'OVERKILL', 'EXIT_ROOM_FULL_HEALTH'] as const
+const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED', 'OVERKILL', 'EXIT_ROOM_FULL_HEALTH', 'EXIT_BOSS_FULL_HEALTH'] as const
 export type NotifiableEvent = typeof notifiableEvent[number]
 
 export type RunScoreEvent =
     | NotifiableEvent
-    | 'EXIT_BOSS_FULL_HEALTH'
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
@@ -63,7 +62,7 @@ export const RUN_SCORE_EVENT_META: Record<
     },
     EXIT_BOSS_FULL_HEALTH: {
         description: 'Number of boss battles completed with full party health',
-        pointValue: 30,
+        pointValue: 20,
         notificationText: 'Party in full health',
         attributeName: 'bossRoomsExitedFullHealth',
     },

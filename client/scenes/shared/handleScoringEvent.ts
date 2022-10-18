@@ -38,6 +38,12 @@ const handleScoringEvent = (
                 break
             case 'EXIT_ROOM_FULL_HEALTH':
                 displayScoreNotification('Team in Full Health', 'swordShield', scorePointsToAdd)
+                break
+            case 'EXIT_BOSS_FULL_HEALTH':
+                displayScoreNotification('Team in Full Health (Boss)', 'swordShield', scorePointsToAdd)
+                break
+            case 'BOSS_KILLED':
+                displayScoreNotification('Boss Defeated', 'stanceAggressive', scorePointsToAdd)
         }
     }
 

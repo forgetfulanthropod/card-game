@@ -13,6 +13,7 @@ export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
 export type DungeonRoom = ReadonlyArray<{
     id: EnemyCharacterId | 'REST_SITE'
     level: string | number
+    boss?: true
 }>
 
 export const NUM_ROOMS_BEFORE_GAME_OVER = 5
