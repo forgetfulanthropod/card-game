@@ -13,6 +13,8 @@ const handleScoringEvent = (
     data?: any
 ) => {
     if (isNotifiableEvent(event)) {
+        const scorePointsToAdd = RUN_SCORE_EVENT_META[event].pointValue * count
+
         switch (event) {
             case 'ENEMY_KILLED':
                 const { id, displayName } = data[0] as CharacterMeta
@@ -20,19 +22,22 @@ const handleScoringEvent = (
                 displayScoreNotification(
                     `${displayName} defeated`,
                     `${id}Profile`,
-                    RUN_SCORE_EVENT_META[event].pointValue * count
+                    scorePointsToAdd
                 )
                 break
             case 'ROOM_CLEARED':
-                displayScoreNotification('Completed Room', 'swordPiercing', 10)
+                displayScoreNotification('Completed Room', 'swordPiercing', scorePointsToAdd)
+
                 break
             case 'OVERKILL':
                 displayScoreNotification(
                     'Overkill',
                     'overkill',
-                    count * RUN_SCORE_EVENT_META['OVERKILL'].pointValue
+                    scorePointsToAdd
                 )
                 break
+            case 'EXIT_ROOM_FULL_HEALTH':
+                displayScoreNotification('Team in Full Health', 'swordShield', scorePointsToAdd)
         }
     }
 
