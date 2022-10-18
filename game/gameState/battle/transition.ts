@@ -6,6 +6,10 @@ import { checkWinner } from './round'
 import { getNewCardOptions } from './getNewCardOptions'
 import { calculateLoot, calculateChestProgress } from './loot'
 import { calculateNewRunScore } from './score'
+import { setAllCharactersToUnmoved } from './setAllCharactersToUnmoved'
+import { resetStances } from './resetStances'
+import { clearAllEffects } from './effects'
+import { clearRoomCardModifiers, putAllCardsInDrawPile } from './cards'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
@@ -26,9 +30,16 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('state', 'won')
             scene.set('endScreenHasOpened', true)
         } else {
+            setAllCharactersToUnmoved(scene)
+            clearAllEffects(scene)
+            resetStances(scene)
+            clearRoomCardModifiers(scene)
+            putAllCardsInDrawPile(scene)
+
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
+
             calculateNewRunScore(scene)
             calculateChestProgress(scene)
         }

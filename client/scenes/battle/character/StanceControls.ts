@@ -111,7 +111,9 @@ function StanceBadge(
                 () => {
                     const root = Container({})
 
-                    nextTick().then(() =>
+                    nextTick().then(() => {
+                        if (root == null) return
+
                         portalize({
                             from: root,
                             to: () => getStage(),
@@ -130,7 +132,7 @@ function StanceBadge(
                                 },
                             }),
                         })
-                    )
+                    })
 
                     return root
                 }

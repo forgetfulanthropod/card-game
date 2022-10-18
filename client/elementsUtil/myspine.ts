@@ -28,7 +28,7 @@ export function Spine<Name extends SpineAsset>(props: {
     if (haveEvilSkins[props.name.replace('Spine', '') as CharacterId]) {
         const skinNames = spine.skeleton.data.skins.map(skin => skin.name)
 
-        console.log({ skinNames })
+        // console.log({ skinNames })
 
         if (!skinNames?.[1]) console.error('missing the second (evil) skin...')
 

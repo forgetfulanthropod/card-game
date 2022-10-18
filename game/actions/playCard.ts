@@ -12,8 +12,10 @@ export const playCard: GameActions['playCard'] = args => {
 
     // logger.info(`playing card ${card.uid}`)
     if (isPlayable({ card, scene })) {
-        play({ card, targetUids: args.targetUids, scene })
         scene.select('allCharacters', card.characterUid).set('hasMoved', true)
+
+        play({ card, targetUids: args.targetUids, scene })
+
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
     }
