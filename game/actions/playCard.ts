@@ -1,7 +1,13 @@
 import type { Card, BattleCursor, GameActions } from 'shared'
 
 import { throwNull } from 'shared/code'
-import { discard, getEnergy, play, updateHand } from '@/gameState'
+import {
+    discard,
+    getEnergy,
+    play,
+    updateHand,
+    updateNpcMoves,
+} from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
 export const playCard: GameActions['playCard'] = args => {
@@ -18,6 +24,8 @@ export const playCard: GameActions['playCard'] = args => {
 
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
+
+        updateNpcMoves(scene)
     }
 
     updateHand(scene)
