@@ -3,16 +3,10 @@ import { CharacterMeta, Effect } from 'shared'
 import { compose, datum } from 'datums'
 import { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
-import {
-    getStage,
-    glowFilter,
-    If,
-    PixiContainer,
-    portalize,
-} from '@/elementsUtil'
+import { glowFilter, PixiContainer } from '@/elementsUtil'
 import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
-import { nextTick, statChangesDatum, toDatum } from '@/util'
-import { ExplanationBox, TermExplanationBox } from '@/scenes/shared'
+import { statChangesDatum, toDatum } from '@/util'
+import { TermExplanationIf, ExplanationBox } from '@sharedElements'
 
 export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
@@ -83,24 +77,10 @@ function InteractiveEffectCounter(
                 strokeThickness: 5,
             },
         }),
-        If(isHovered, () => {
-            const root = Container({})
-
-            nextTick().then(() =>
-                portalize({
-                    from: root,
-                    to: () => getStage(),
-                    content: TermExplanationBox({
-                        term: effect.id,
-                        displayObjectArgs: {
-                            x: root.getGlobalPosition().x + width,
-                            y: root.getGlobalPosition().y,
-                        },
-                    }),
-                })
-            )
-
-            return root
+        TermExplanationIf({
+            isShown: isHovered,
+            term: effect.id,
+            xOffset: width,
         })
     )
 

@@ -16,7 +16,12 @@ import { last, upperFirst } from 'lodash'
 import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
 import { getNullAnimation } from '@/scenes/shared/cards/Card'
 import { Tweener } from 'pixi-tweener'
-import { ExplanationBox, TermExplanationBox } from '@/scenes/shared'
+import {
+    ExplanationBox,
+    ExplanationIf,
+    TermExplanationBox,
+    TermExplanationIf,
+} from '@sharedElements'
 
 const STANCE_TEXTS: Record<StanceId, string[]> = {
     avoidant: ['Avoidant', 'take 25% less damage', 'deal 25% less damage'],
@@ -100,43 +105,20 @@ function StanceBadge(
                     pointerup: pointerout,
                 },
             }),
-            If(
-                compose(
+            ExplanationIf({
+                isShown: compose(
                     ([hasMoved, isHovered]) => {
                         return hasMoved && isHovered
                     },
                     hasMovedDatum,
                     isHovered
-                ),
-                () => {
-                    const root = Container({})
-
-                    nextTick().then(() => {
-                        if (root == null) return
-
-                        portalize({
-                            from: root,
-                            to: () => getStage(),
-                            content: ExplanationBox({
-                                texts: [
-                                    `(locked) ${STANCE_TEXTS[stance][0]}`,
-                                    STANCE_TEXTS[stance][1],
-                                ],
-                                displayObjectArgs: {
-                                    x:
-                                        root.getGlobalPosition().x +
-                                        badgeWidth * 3,
-                                    y: root.getGlobalPosition().y,
-                                    borderColor: 0xffffff,
-                                    borderThickness: 1,
-                                },
-                            }),
-                        })
-                    })
-
-                    return root
-                }
-            )
+                ) as unknown as Datum<boolean>,
+                texts: [
+                    `(locked) ${STANCE_TEXTS[stance][0]}`,
+                    STANCE_TEXTS[stance][1],
+                ],
+                xOffset: badgeWidth * 3,
+            })
         )
     })
 }

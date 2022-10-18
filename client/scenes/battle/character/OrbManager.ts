@@ -15,7 +15,12 @@ import { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { CharacterCursor } from './Character'
 import { datum } from 'datums'
-import { ExplanationBox, KeyTerm, TermExplanationBox } from '@/scenes/shared'
+import {
+    ExplanationBox,
+    KeyTerm,
+    TermExplanationBox,
+    TermExplanationIf,
+} from '@/scenes/shared'
 import { omit, upperFirst } from 'lodash'
 
 export function OrbManager(
@@ -82,26 +87,10 @@ export function OrbManager(
                         strokeThickness: 5,
                     },
                 }),
-                If(isHovered, () => {
-                    const root = Container({})
-
-                    nextTick().then(() =>
-                        portalize({
-                            from: root,
-                            to: () => getStage(),
-                            content: TermExplanationBox({
-                                term: `orbsOf${upperFirst(
-                                    orb.type
-                                )}` as KeyTerm,
-                                displayObjectArgs: {
-                                    x: root.getGlobalPosition().x + 100,
-                                    y: root.getGlobalPosition().y,
-                                },
-                            }),
-                        })
-                    )
-
-                    return root
+                TermExplanationIf({
+                    isShown: isHovered,
+                    term: `orbsOf${upperFirst(orb.type)}` as KeyTerm,
+                    xOffset: 100,
                 })
             )
 

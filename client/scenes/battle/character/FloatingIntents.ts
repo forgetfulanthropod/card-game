@@ -1,6 +1,6 @@
 import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
 import { datum } from 'datums'
-import type { KeyTerm } from '@sharedElements'
+import { KeyTerm, TermExplanationIf } from '@sharedElements'
 import { TermExplanationBox } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
 import type {
@@ -111,12 +111,12 @@ function DamageIntended(
     const infoBox =
         commandMeta == null
             ? null
-            : If(isHoveringIntent, () =>
-                  TermExplanationBox({
-                      term: commandMeta.id,
-                      displayObjectArgs: { x: 50, y: 10 },
-                  })
-              )
+            : TermExplanationIf({
+                  isShown: isHoveringIntent,
+                  term: commandMeta.id,
+                  xOffset: 50,
+                  yOffset: 10,
+              })
     const events: InteractionEvents = {
         pointerover() {
             isHoveringIntent.set(true)
