@@ -1,5 +1,10 @@
 import { ROCursor } from 'sbaobab'
-import { RunScoreEvent, isNotifiableEvent, BattleScene } from 'shared'
+import {
+    RunScoreEvent,
+    isNotifiableEvent,
+    BattleScene,
+    TOTAL_ROOMS_PER_RUN,
+} from 'shared'
 import { vals } from 'shared/code'
 import { handleScoringEvent } from './handleScoringEvent'
 
@@ -13,12 +18,15 @@ const checkOtherScoringEvents = (
     if (isNotifiableEvent(event)) {
         switch (event) {
             case 'ROOM_CLEARED':
+                checkHealthLost(scene)
                 handleCharsInFullHealth(scene)
                 handleBossRoom(scene)
                 break
         }
     }
 }
+
+const checkHealthLost = (scene: ROCursor<BattleScene>) => {}
 
 const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
     const userCharsInFullHealth = vals(scene.get('allCharacters')).filter(
@@ -33,12 +41,17 @@ const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
             ? 'EXIT_BOSS_FULL_HEALTH'
             : 'EXIT_ROOM_FULL_HEALTH'
 
-        handleScoringEvent(roomTypeEvent, 1)
+        handleScoringEvent(roomTypeEvent, 1, scene)
     }
 }
 
 const roomContainsBoss = (scene: ROCursor<BattleScene>): boolean => {
-    const currentRoom = scene.get('rooms')[scene.get('numRoomsPassed')]
+    let numRoomsPassed = scene.get('numRoomsPassed')
+    if (numRoomsPassed === TOTAL_ROOMS_PER_RUN) {
+        // This is needed bc this fn is still called in the last room
+        numRoomsPassed--
+    }
+    const currentRoom = scene.get('rooms')[numRoomsPassed]
     const boss = currentRoom.filter(enemyChar => enemyChar.boss)
     return boss.length > 0
 }
@@ -48,7 +61,7 @@ const roomContainsBoss = (scene: ROCursor<BattleScene>): boolean => {
  */
 const handleBossRoom = (scene: ROCursor<BattleScene>): void => {
     if (roomContainsBoss(scene)) {
-        handleScoringEvent('BOSS_KILLED', 1)
+        handleScoringEvent('BOSS_KILLED', 1, scene)
     }
 }
 

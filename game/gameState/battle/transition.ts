@@ -1,5 +1,5 @@
 import type { BattleCursor } from 'shared'
-import { NUM_ROOMS_BEFORE_GAME_OVER } from 'shared'
+import { TOTAL_ROOMS_PER_RUN } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
@@ -11,11 +11,11 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
-        // Add + 1 to check since the increment occur until later (eg. in nextRoom)
         const gameIsOver =
-            scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
+        scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
 
-        if (scene.get('numRoomsPassed') === NUM_ROOMS_BEFORE_GAME_OVER - 1) {
+        if (scene.get('numRoomsPassed') === TOTAL_ROOMS_PER_RUN - 1) {
+            // Handles the very last room (since nextRoom will never be called from there)
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
         }
 
@@ -24,7 +24,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
                 .select('runScore')
                 .set('totalScore', calculateNewRunScore(scene))
             scene.set('state', 'won')
-            scene.set('endScreenHasOpened', true)
+            // scene.set('endScreenHasOpened', true)
         } else {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))

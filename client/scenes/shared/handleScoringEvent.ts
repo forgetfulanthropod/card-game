@@ -1,15 +1,19 @@
 import { callApi } from '@/callApi'
+import { ROCursor } from 'sbaobab'
 import {
     RunScoreEvent,
     isNotifiableEvent,
     RUN_SCORE_EVENT_META,
     CharacterMeta,
+    BattleScene,
 } from 'shared'
+import { checkOtherScoringEvents } from './checkOtherScoringEvents'
 import { displayScoreNotification } from './Notification'
 
 const handleScoringEvent = (
     event: RunScoreEvent,
     count: number,
+    scene: ROCursor<BattleScene>,
     data?: any
 ) => {
     if (isNotifiableEvent(event)) {
@@ -27,7 +31,7 @@ const handleScoringEvent = (
                 break
             case 'ROOM_CLEARED':
                 displayScoreNotification('Completed Room', 'swordPiercing', scorePointsToAdd)
-
+                checkOtherScoringEvents(event, scene)
                 break
             case 'OVERKILL':
                 displayScoreNotification(

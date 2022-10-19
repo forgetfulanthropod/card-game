@@ -18,6 +18,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('turnCount', 1)
     scene.set('isPlayerTurn', true)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+    scene.select('runScore').select('attributes').set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
     setAllCharactersToUnmoved(scene)

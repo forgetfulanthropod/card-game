@@ -1,6 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { checkOtherScoringEvents, handleScoringEvent, ModalBackdrop } from '@sharedElements'
+import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
     getStage,
     getTexture,
@@ -90,8 +90,7 @@ export function LootCollector(): PixiContainer {
     )
 
     if (lootScreenHasOpened === false) {
-        handleScoringEvent('ROOM_CLEARED', 1)
-        checkOtherScoringEvents('ROOM_CLEARED', scene)
+        handleScoringEvent('ROOM_CLEARED', 1, scene)
         setTimeout(() => {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)

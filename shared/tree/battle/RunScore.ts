@@ -11,7 +11,7 @@ export type RunScoreAttribute = {
 
 export type RunScoreAttributeName =
     | 'enemiesKilled'
-    | 'roomsCleared'
+    | 'roomsCleared' // exists as a sort of redundant data field (eg. it's also present at the top-level tree) mostly for convenience when updating and calculating score
     | 'bossesKilled'
     | 'cumulativeOverkill'
     | 'roomsExitedFullHealth'

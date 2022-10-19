@@ -16,4 +16,4 @@ export type DungeonRoom = ReadonlyArray<{
     boss?: true
 }>
 
-export const NUM_ROOMS_BEFORE_GAME_OVER = 5
+export const TOTAL_ROOMS_PER_RUN = 6
