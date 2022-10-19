@@ -1,7 +1,7 @@
 import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
 import { datum } from 'datums'
 import { KeyTerm, TermExplanationIf } from '@sharedElements'
-import { TermExplanationBox } from '@sharedElements'
+import { TermExplanation } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
 import type {
     AssetKey,

@@ -6,7 +6,7 @@ import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { glowFilter, PixiContainer } from '@/elementsUtil'
 import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
-import { TermExplanationIf, ExplanationBox } from '@sharedElements'
+import { TermExplanationIf, Explanation } from '@sharedElements'
 
 export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')

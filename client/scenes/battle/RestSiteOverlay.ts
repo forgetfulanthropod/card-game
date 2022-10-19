@@ -1,6 +1,6 @@
 import { Texture } from 'pixi.js'
 import { datum } from 'datums'
-import { ExplanationBox } from '@sharedElements'
+import { Explanation } from '@sharedElements'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     If,
@@ -90,7 +90,7 @@ export function RestSiteOverlay(): PixiContainer {
             //     x: boundingBoxes[index][0],
             //     y: boundingBoxes[index][1] + boundingBoxes[index][3],
             // })
-            return ExplanationBox({
+            return Explanation({
                 texts: [plushyChoiceDescriptions[index]],
                 displayObjectArgs: {
                     x:

@@ -16,7 +16,7 @@ import {
     Text,
 } from '@/elementsUtil'
 import { onUpdate, statChangesDatum, toDatum } from '@/util'
-import { ExplanationBox } from '@/scenes/shared'
+import { Explanation } from '@/scenes/shared'
 import { difference, omit, upperFirst } from 'lodash'
 import { StanceControls } from './StanceControls'
 import { EffectIndicators } from './EffectIndicators'

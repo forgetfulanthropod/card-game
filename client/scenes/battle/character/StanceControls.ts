@@ -17,9 +17,9 @@ import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
 import { getNullAnimation } from '@/scenes/shared/cards/Card'
 import { Tweener } from 'pixi-tweener'
 import {
-    ExplanationBox,
+    Explanation,
     ExplanationIf,
-    TermExplanationBox,
+    TermExplanation,
     TermExplanationIf,
 } from '@sharedElements'
 
@@ -286,7 +286,7 @@ function StanceBullets(
                 portalize({
                     from: root,
                     to: () => getStage(),
-                    content: ExplanationBox({
+                    content: Explanation({
                         texts,
                         displayObjectArgs: {
                             x: root.getGlobalPosition().x + width * 1.5,

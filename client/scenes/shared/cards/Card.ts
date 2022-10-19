@@ -8,12 +8,11 @@ import { datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
 import { keys } from 'shared/code'
 import {
-    ExplanationBox,
+    Explanation,
     getTermIndex,
     keyTermsMap,
-    TermExplanationBox,
-    TermExplanationBoxes,
-} from '../ExplanationBox'
+    TermExplanationsIf,
+} from '../Explanation'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
@@ -93,15 +92,20 @@ export function CardEl({
     const decoratedEvents: InteractionEvents = getDecoratedEvents({
         events,
         hoveredCardUid,
-        card,
         isLongHovered,
+        card,
     })
-
-    const explanationsEl = ExplanationsEl(card, width)
 
     const root = TweenableContainer(
         {
             name: card.uid,
+            onDestroy: !hoveredCardUid
+                ? []
+                : [
+                      hoveredCardUid.onChange(uid => {
+                          if (uid !== card.uid) isLongHovered.set(false)
+                      }),
+                  ],
             // cache: true, // doesn't update...
         },
         TweenableContainer(
@@ -139,24 +143,22 @@ export function CardEl({
                       ),
                   ])
         ),
-        explanationsEl
+        TermExplanationsForCard(card.explanation, width, isLongHovered)
     )
-
-    manageExplanationsEl(root, explanationsEl, isLongHovered)
 
     return root
 }
 
-function ExplanationsEl(card: Card, width: number) {
-    return Container(
-        {
-            // x: BASE_WIDTH / 2,
-            // y: BASE_HEIGHT * 0.6,
-            name: 'MY EXPLANATIONS',
-        },
-        ...TermExplanationBoxesForCard(card.explanation, width)
-    )
-}
+// function ExplanationsEl(card: Card, width: number) {
+//     return Container(
+//         {
+//             // x: BASE_WIDTH / 2,
+//             // y: BASE_HEIGHT * 0.6,
+//             name: 'MY EXPLANATIONS',
+//         },
+//         ...
+//     )
+// }
 
 function getDecoratedEvents({
     events,
@@ -202,26 +204,27 @@ function getDecoratedEvents({
     return decoratedEvents
 }
 
-function manageExplanationsEl(
-    root: TweenablePixiContainer,
-    explanationsEl: PixiContainer,
-    isLongHovered: Datum<boolean>
-) {
-    explanationsEl.alpha = 0
+// function manageExplanationsEl(
+//     root: TweenablePixiContainer,
+//     explanationsEl: PixiContainer,
+//     isLongHovered: Datum<boolean>
+// ) {
+//     explanationsEl.alpha = 0
 
-    isLongHovered.onChange(is => {
-        if (!is) {
-            explanationsEl.alpha = 0
-            return
-        }
-        explanationsEl.alpha = 1
-    })
-}
+//     isLongHovered.onChange(is => {
+//         if (!is) {
+//             explanationsEl.alpha = 0
+//             return
+//         }
+//         explanationsEl.alpha = 1
+//     })
+// }
 
-function TermExplanationBoxesForCard(
+function TermExplanationsForCard(
     explanation: string,
-    width: number
-): DisplayObject[] {
+    width: number,
+    isLongHovered: Datum<boolean>
+): DisplayObject {
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
         .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
@@ -231,9 +234,10 @@ function TermExplanationBoxesForCard(
                 getTermIndex(keyTermB, explanation)
         )
 
-    return TermExplanationBoxes({
+    return TermExplanationsIf({
+        areShown: isLongHovered,
         terms,
-        displayObjectArgs: { x: width * 0.85 },
+        xOffset: width,
     })
 }
 
@@ -454,7 +458,7 @@ function getEvents(
             flashTo(
                 getStage(),
                 () =>
-                    ExplanationBox({
+                    Explanation({
                         texts: ['not enough energy!'],
                         displayObjectArgs: {
                             x: BASE_WIDTH / 2,

@@ -2,7 +2,13 @@ import type { DisplayObject } from 'pixi.js'
 import { startCase } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
-import type { DisplayObjectArgs, PixiContainer } from '@/elementsUtil'
+import {
+    DisplayObjectArgs,
+    getStage,
+    If,
+    PixiContainer,
+    portalize,
+} from '@/elementsUtil'
 import {
     getRenderer,
     Sprite,
@@ -11,6 +17,8 @@ import {
     Container,
 } from '@/elementsUtil'
 import { keys } from 'shared/code'
+import { Datum } from 'datums'
+import { nextTick } from '@/util'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
@@ -52,7 +60,42 @@ export function getTermIndex(term: string, explanation: string): number {
         .indexOf(' ' + startCase(term).toLowerCase())
 }
 
-export function TermExplanationBoxes({
+export function TermExplanationsIf({
+    areShown,
+    terms,
+    xOffset = 0,
+    yOffset = 0,
+}: {
+    areShown: Datum<boolean>
+    terms: KeyTerm[]
+    xOffset?: number
+    yOffset?: number
+}) {
+    return If(areShown, () => {
+        const root = Container({})
+
+        nextTick().then(() =>
+            portalize({
+                from: root,
+                to: () => getStage(),
+                content: Container(
+                    {},
+                    ...TermExplanations({
+                        terms,
+                        displayObjectArgs: {
+                            x: root.getGlobalPosition().x + xOffset,
+                            y: root.getGlobalPosition().y + yOffset,
+                        },
+                    })
+                ),
+            })
+        )
+
+        return root
+    })
+}
+
+export function TermExplanations({
     terms,
     displayObjectArgs,
 }: {
@@ -60,7 +103,7 @@ export function TermExplanationBoxes({
     displayObjectArgs?: DisplayObjectArgs
 }): PixiContainer[] {
     const termBoxes = terms.map(term =>
-        TermExplanationBox({ term, displayObjectArgs })
+        TermExplanation({ term, displayObjectArgs })
     )
 
     const subTermBoxes = keys(keyTermsMap)
@@ -70,7 +113,7 @@ export function TermExplanationBoxes({
                     mainTerm => ~getTermIndex(term, keyTermsMap[mainTerm])
                 )
         )
-        .map(term => TermExplanationBox({ term, displayObjectArgs }))
+        .map(term => TermExplanation({ term, displayObjectArgs }))
 
     const boxes = [...termBoxes, ...subTermBoxes]
 
@@ -86,14 +129,46 @@ export function TermExplanationBoxes({
     return boxes
 }
 
-export function TermExplanationBox({
+export function TermExplanationIf({
+    isShown,
+    term,
+    xOffset = 0,
+    yOffset = 0,
+}: {
+    isShown: Datum<boolean>
+    term: KeyTerm
+    xOffset?: number
+    yOffset?: number
+}): PixiContainer {
+    return If(isShown, () => {
+        const root = Container({})
+
+        nextTick().then(() =>
+            portalize({
+                from: root,
+                to: () => getStage(),
+                content: TermExplanation({
+                    term,
+                    displayObjectArgs: {
+                        x: root.getGlobalPosition().x + xOffset,
+                        y: root.getGlobalPosition().y + yOffset,
+                    },
+                }),
+            })
+        )
+
+        return root
+    })
+}
+
+export function TermExplanation({
     term,
     displayObjectArgs,
 }: {
     term: KeyTerm
     displayObjectArgs?: DisplayObjectArgs
 }): PixiContainer {
-    return ExplanationBox({
+    return Explanation({
         // text: `<div style="font-family: sans-serif">
         //     <b>${startCase(term)}</b>
         //     <br/>
@@ -110,7 +185,39 @@ export function TermExplanationBox({
     })
 }
 
-export function ExplanationBox({
+export function ExplanationIf({
+    isShown,
+    texts,
+    xOffset = 0,
+    yOffset = 0,
+}: {
+    isShown: Datum<boolean>
+    texts: string[]
+    xOffset?: number
+    yOffset?: number
+}): PixiContainer {
+    return If(isShown, () => {
+        const root = Container({})
+
+        nextTick().then(() =>
+            portalize({
+                from: root,
+                to: () => getStage(),
+                content: Explanation({
+                    texts,
+                    displayObjectArgs: {
+                        x: root.getGlobalPosition().x + xOffset,
+                        y: root.getGlobalPosition().y + yOffset,
+                    },
+                }),
+            })
+        )
+
+        return root
+    })
+}
+
+export function Explanation({
     texts,
     color,
     displayObjectArgs,

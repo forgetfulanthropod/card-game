@@ -16,9 +16,9 @@ import { callApi } from '@/callApi'
 import { CharacterCursor } from './Character'
 import { datum } from 'datums'
 import {
-    ExplanationBox,
+    Explanation,
     KeyTerm,
-    TermExplanationBox,
+    TermExplanation,
     TermExplanationIf,
 } from '@/scenes/shared'
 import { omit, upperFirst } from 'lodash'
