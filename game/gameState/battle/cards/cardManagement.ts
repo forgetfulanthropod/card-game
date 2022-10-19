@@ -15,6 +15,8 @@ import { keys, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import type { EntryCursor } from '@/util'
+import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
+import { shufflePile } from './shufflePile'
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
@@ -125,7 +127,7 @@ function makeCards(scene: BattleCursor): Piles {
     })
 
     return {
-        draw,
+        draw: shufflePile(draw),
         // draw: cardIds.reduce((acc, id, i) => {
         //     // logger.info(JSON.stringify(allCharacters, null, '\n'))
         //     const owningCharUid =
