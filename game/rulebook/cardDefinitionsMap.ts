@@ -102,6 +102,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'knight',
     },
+    zap: {
+        name: 'Zap!',
+        energy: 2,
+        id: 'zap',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions:
+            'wisdomy = wisdom * .4; chain(deal(wisdomy), effect("stunned", 1))',
+        type: 'enchantment',
+        characterClass: 'wizard',
+    },
     orbOfLightning: {
         name: 'Orb of Lightning',
         energy: 1,
@@ -200,7 +211,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'trance',
         targetNum: 0,
         targetType: 'self',
-        actions: 'chain(effect("entranceed", 3), momentary())',
+        actions: 'chain(effect("entranced", 3), momentary())',
         type: 'utility',
         characterClass: 'wizard',
     },

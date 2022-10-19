@@ -2,7 +2,7 @@ import type { ColorStop } from '@pixi-essentials/gradients'
 import { Tweener } from 'pixi-tweener'
 import type { DisplayObject, InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type { Card, CardType, CardUid, CharacterUid } from 'shared'
+import type { Card, CardType, CardUid, CharacterUid, TargetType } from 'shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
@@ -449,7 +449,11 @@ function getEvents(
         clearLastTargetSelection()
 
         if (getBattleScene().get().energy >= card.energy) {
-            if (card.targetType !== 'self')
+            if (
+                !(['self', 'allEnemies'] as TargetType[]).includes(
+                    card.targetType
+                )
+            )
                 clearLastTargetSelection = beginTargetSelection(
                     cardEl.parent,
                     card
@@ -474,7 +478,9 @@ function getEvents(
     const pointerup: InteractionEventHandler = function ({
         currentTarget: cardEl,
     }) {
-        if (card.targetType === 'self') {
+        if (
+            (['self', 'allEnemies'] as TargetType[]).includes(card.targetType)
+        ) {
             // console.log('Card.ts: playing card')
 
             void callApi('playCard', {
