@@ -8,14 +8,18 @@ import { nextRoom } from './nextRoom'
 export const collectLoot: GameActions['collectLoot'] = args => {
     const scene = getBattleSceneIn(args.game)
     const remainingLoot = scene.get('lootEarned')
+
+    if (isEmpty(remainingLoot)) {
+        return nextRoom(args)
+    }
+
     if (remainingLoot[0].name === 'draftCard') {
-        scene.set('state', 'choosing cards')
-        return
+        return scene.set('state', 'choosing cards')
     }
 
     const newRemainingLoot = collectCurrentLootItem(scene)
     if (isEmpty(newRemainingLoot)) {
-        nextRoom(args)
+        return nextRoom(args)
     }
 
     return
