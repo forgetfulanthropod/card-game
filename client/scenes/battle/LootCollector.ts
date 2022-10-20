@@ -90,7 +90,7 @@ export function LootCollector(): PixiContainer {
     )
 
     if (lootScreenHasOpened === false) {
-        handleScoringEvent('ROOM_CLEARED', 1)
+        handleScoringEvent('ROOM_CLEARED', 1, scene)
         setTimeout(() => {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
@@ -468,7 +468,7 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
         text: `${(progressPct * 100).toFixed(0)}%`,
         anchor: [0.5, 0.5],
         x: 0,
-        y: 555,
+        y: 565,
         style: {
             fontSize: 40,
             fill: 'white',
@@ -482,12 +482,12 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
 
     const ChestLevelText = Text({
         text: `${
-            TreasureChestLevelThreshold[(level + 1) as TreasureChestLevel] -
-            currRunScore
+            (TreasureChestLevelThreshold[(level + 1) as TreasureChestLevel] -
+            currRunScore).toFixed(0)
         } points to reach level ${level + 1}`,
         anchor: [0.5, 0.5],
         x: 0,
-        y: 655,
+        y: 665,
         style: {
             fontSize: 30,
             fill: 'white',

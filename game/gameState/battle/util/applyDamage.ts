@@ -6,6 +6,7 @@ import type {
 } from 'shared'
 import { calcPostEffectStats } from '../effects'
 import { updateNpcMoves } from '@/gameState'
+import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
 
 export function applyDamage(args: {
@@ -19,6 +20,9 @@ export function applyDamage(args: {
     if (attacker == null && attackerUid == null) {
         throw new Error('must provide attacker or attackerUid')
     }
+
+    checkServerScoringEvent('highestDamageHit', scene, args)
+
     const calcedDamage = getDamage({
         //@ts-expect-error
         attacker: attacker ?? scene.get('allCharacters', attackerUid),
@@ -78,6 +82,16 @@ function manageSideEffectsOfNewDamage(
         ...damages,
         { amount: calcedDamage, targetUid },
     ])
+
+    scene.apply('damagesDealtThisRoom', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
+
+    if (damageChangesEnemyIntent(scene)) {
+        logger.info('updating the NPC moves due to enemy damage')
+        updateNpcMoves(scene)
+    }
 }
 
 function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {

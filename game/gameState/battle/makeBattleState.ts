@@ -43,6 +43,7 @@ export function makeBattleState(args: {
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         damagesDealtThisTurn: [],
+        damagesDealtThisRoom: [],
         queue: [],
         requireAction: null,
         isInMap: true,
@@ -53,6 +54,10 @@ export function makeBattleState(args: {
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
+        runDuration: {
+            startTime: new Date().toUTCString(),
+            endTime: null
+        }
     }
     return bs
 }

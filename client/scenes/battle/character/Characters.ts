@@ -121,11 +121,14 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                 handleScoringEvent(
                     'ENEMY_KILLED',
                     removedEnemyCharacters.length,
+                    scene,
                     removedEnemyCharacters
                 )
                 for (let char of removedEnemyCharacters) {
                     if (char.health < 0) {
-                        handleScoringEvent('OVERKILL', -char.health)
+                        handleScoringEvent('OVERKILL', -char.health, scene)
+                    } else if (char.health === 0) {
+                        handleScoringEvent('PERFECT_KILL', 1, scene, char)
                     }
                 }
             }, 1000) // imperfect timing, but good enough for now

@@ -18,6 +18,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('turnCount', 1)
     scene.set('isPlayerTurn', true)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+    scene.select('runScore').select('attributes').set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
     scene.apply('allCharacters', ac => ({
@@ -29,6 +30,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)
+    scene.set('damagesDealtThisRoom', [])
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)
     scene.select('treasureChest').set('state', 'pending')

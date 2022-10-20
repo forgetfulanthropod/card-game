@@ -1,5 +1,5 @@
 import type { BattleCursor } from 'shared'
-import { NUM_ROOMS_BEFORE_GAME_OVER } from 'shared'
+import { TOTAL_ROOMS_PER_RUN } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
@@ -10,25 +10,19 @@ import { setAllCharactersToUnmoved } from './setAllCharactersToUnmoved'
 import { resetStances } from './resetStances'
 import { clearAllEffects } from './effects'
 import { clearRoomCardModifiers, putAllCardsInDrawPile } from './cards'
+import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
 
     if (winner === 'PC') {
-        // Add + 1 to check since the increment occur until later (eg. in nextRoom)
         const gameIsOver =
-            scene.get('numRoomsPassed') + 1 >= NUM_ROOMS_BEFORE_GAME_OVER
-
-        if (scene.get('numRoomsPassed') === NUM_ROOMS_BEFORE_GAME_OVER - 1) {
-            scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-        }
+            scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
 
         if (gameIsOver) {
-            scene
-                .select('runScore')
-                .set('totalScore', calculateNewRunScore(scene))
             scene.set('state', 'won')
-            scene.set('endScreenHasOpened', true)
+            scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+            checkServerScoringEvent('minsUnderRunThreshold', scene, {})
         } else {
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)
@@ -40,13 +34,13 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
 
-            calculateNewRunScore(scene)
-            calculateChestProgress(scene)
         }
 
+        calculateChestProgress(scene)
+        calculateNewRunScore(scene)
         return true
     } else if (winner === 'NPC') {
-        scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+        calculateNewRunScore(scene)
         scene.set('state', 'lost')
         return true
     }

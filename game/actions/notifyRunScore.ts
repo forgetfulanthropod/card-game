@@ -17,17 +17,8 @@ export const notifyRunScore: GameActions['notifyRunScore'] = args => {
     const newCount = currCount + count
 
     attributeCount.set(newCount)
+    // 2 calls below might be unnecessary
     calculateNewRunScore(scene)
     calculateChestProgress(scene)
-
-    switch (event) {
-        case 'ENEMY_KILLED':
-            break
-        case 'EXIT_BOSS_FULL_HEALTH':
-            break
-        case 'EXIT_ROOM_FULL_HEALTH':
-            break
-    }
-
     return
 }

@@ -1,0 +1,87 @@
+import { ROCursor } from 'sbaobab'
+import {
+    RunScoreEvent,
+    isNotifiableEvent,
+    BattleScene,
+    TOTAL_ROOMS_PER_RUN,
+} from 'shared'
+import { vals } from 'shared/code'
+import { handleScoringEvent } from './handleScoringEvent'
+
+export const NUM_KAIJUS_IN_PARTY = 3
+
+const checkOtherScoringEvents = (
+    event: RunScoreEvent,
+    scene: ROCursor<BattleScene>
+) => {
+    // could change this to be isParentEvent or eventHasDerivedScoringEvents
+    if (isNotifiableEvent(event)) {
+        switch (event) {
+            case 'ROOM_CLEARED':
+                handleCharsInFullHealth(scene)
+                handleBossRoomCleared(scene)
+                break
+        }
+    }
+}
+
+const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
+    const userCharsInFullHealth = vals(scene.get('allCharacters')).filter(
+        meta => meta.isPc && meta.constitution === meta.health
+    )
+
+    const partyInFullHealth =
+        userCharsInFullHealth.length === NUM_KAIJUS_IN_PARTY
+
+    const roomHadBoss = roomContainsBoss(scene)
+
+    if (partyInFullHealth) {
+        const roomTypeEvent: RunScoreEvent = roomHadBoss
+            ? 'EXIT_BOSS_FULL_HEALTH'
+            : 'EXIT_ROOM_FULL_HEALTH'
+
+        handleScoringEvent(roomTypeEvent, 1, scene)
+    } else if (roomHadBoss) {
+        checkHealthLostInBossRoom(scene)
+    }
+}
+
+/**
+ * This implementation (as well as boss prop in rooms.ts) would need to be moved to Character, if we decide to include other non-boss chars in boss rooms
+ */
+const handleBossRoomCleared = (scene: ROCursor<BattleScene>): void => {
+    if (roomContainsBoss(scene)) {
+        handleScoringEvent('BOSS_KILLED', 1, scene)
+    }
+}
+
+const roomContainsBoss = (scene: ROCursor<BattleScene>): boolean => {
+    const numRoomsPassed = scene
+        .select('runScore')
+        .select('attributes')
+        .get('roomsCleared')
+    console.log(
+        `'running roomContainsBoss' current numRoomsPassed: ${numRoomsPassed}`
+    )
+    const currentRoom = scene.get('rooms')[numRoomsPassed]
+    console.log(currentRoom)
+    const boss = currentRoom.filter(enemyChar => enemyChar.boss)
+    return boss.length > 0
+}
+
+const checkHealthLostInBossRoom = (scene: ROCursor<BattleScene>) => {
+    const totalHealthLost = scene
+        .get('damagesDealtThisRoom')
+        .reduce((prev, curr) => {
+            if (!curr.targetUid.includes('pc')) {
+                return 0
+            }
+            return curr.amount
+        }, 0)
+
+    if (totalHealthLost < 15) {
+        handleScoringEvent('EXIT_BOSS_LOW_DAMAGE', 1, scene)
+    }
+}
+
+export { checkOtherScoringEvents }

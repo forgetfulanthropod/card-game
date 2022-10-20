@@ -191,7 +191,8 @@ export function EndOfRunScreen(): PixiContainer {
     ;(async () => {
         // if state has not transitioned, then
         if (scene.get('endScreenHasOpened') === false && scene.get('state') === 'won') {
-            handleScoringEvent('ROOM_CLEARED', 1, {})
+            handleScoringEvent('ROOM_CLEARED', 1, scene)
+            callApi('openEndScreen', {})
         }
         await animateNumberInElement(
             EnemiesKilled,
