@@ -30,7 +30,11 @@ const handleScoringEvent = (
                 )
                 break
             case 'ROOM_CLEARED':
-                displayScoreNotification('Completed Room', 'swordPiercing', scorePointsToAdd)
+                displayScoreNotification(
+                    'Completed Room',
+                    'swordPiercing',
+                    scorePointsToAdd
+                )
                 checkOtherScoringEvents(event, scene)
                 break
             case 'OVERKILL':
@@ -41,13 +45,25 @@ const handleScoringEvent = (
                 )
                 break
             case 'EXIT_ROOM_FULL_HEALTH':
-                displayScoreNotification('Team in Full Health', 'swordShield', scorePointsToAdd)
+                displayScoreNotification(
+                    'Team in Full Health',
+                    'swordShield',
+                    scorePointsToAdd
+                )
                 break
             case 'EXIT_BOSS_FULL_HEALTH':
-                displayScoreNotification('Team in Full Health (Boss)', 'swordShield', scorePointsToAdd)
+                displayScoreNotification(
+                    'Team in Full Health (Boss)',
+                    'swordShield',
+                    scorePointsToAdd
+                )
                 break
             case 'BOSS_KILLED':
-                displayScoreNotification('Boss Defeated', 'stanceAggressive', scorePointsToAdd)
+                displayScoreNotification(
+                    'Boss Defeated',
+                    'stanceAggressive',
+                    scorePointsToAdd
+                )
         }
     }
 

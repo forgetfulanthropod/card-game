@@ -21,7 +21,7 @@ export function applyDamage(args: {
         throw new Error('must provide attacker or attackerUid')
     }
 
-    checkServerScoringEvent('HIGHEST_DAMAGE', scene, args)
+    checkServerScoringEvent('highestDamageHit', scene, args)
 
     const calcedDamage = getDamage({
         //@ts-expect-error

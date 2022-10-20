@@ -6,6 +6,7 @@ import { checkWinner } from './round'
 import { getNewCardOptions } from './getNewCardOptions'
 import { calculateLoot, calculateChestProgress } from './loot'
 import { calculateNewRunScore } from './score'
+import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
@@ -20,22 +21,19 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         }
 
         if (gameIsOver) {
-            scene
-                .select('runScore')
-                .set('totalScore', calculateNewRunScore(scene))
             scene.set('state', 'won')
-            // scene.set('endScreenHasOpened', true)
+            checkServerScoringEvent('minsUnderRunThreshold', scene, {})
         } else {
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-            calculateNewRunScore(scene)
-            calculateChestProgress(scene)
         }
 
+        calculateChestProgress(scene)
+        calculateNewRunScore(scene)
         return true
     } else if (winner === 'NPC') {
-        scene.select('runScore').set('totalScore', calculateNewRunScore(scene))
+        calculateNewRunScore(scene)
         scene.set('state', 'lost')
         return true
     }

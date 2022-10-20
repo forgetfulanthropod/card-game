@@ -53,6 +53,10 @@ export function makeBattleState(args: {
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
+        runDuration: {
+            startTime: new Date().toUTCString(),
+            endTime: null
+        }
     }
     return bs
 }

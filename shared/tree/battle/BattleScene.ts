@@ -39,6 +39,10 @@ export interface BattleScene extends SceneHas {
     endScreenHasOpened: boolean
     treasureChest: TreasureChest
     runScore: RunScore
+    runDuration: {
+        startTime: string
+        endTime: string | null
+    }
 }
 
 /** May later have e.g. DOT effects */
@@ -54,7 +58,7 @@ export interface NextCommand {
     targetUids: CharacterUid[]
 }
 
-type BattleWinState =
+export type BattleWinState =
     | 'in battle'
     | 'won'
     | 'lost'

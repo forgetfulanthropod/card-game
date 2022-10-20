@@ -17,6 +17,7 @@ export type RunScoreAttributeName =
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
     | 'highestDamageHit'
+    | 'minsUnderRunThreshold'
 
 export type RunScoreAttributeMeta = {
     description: string
@@ -26,12 +27,17 @@ export type RunScoreAttributeMeta = {
     asset?: string
 }
 
-const notifiableEvent = ['ENEMY_KILLED', 'ROOM_CLEARED', 'BOSS_KILLED', 'OVERKILL', 'EXIT_ROOM_FULL_HEALTH', 'EXIT_BOSS_FULL_HEALTH'] as const
+const notifiableEvent = [
+    'ENEMY_KILLED',
+    'ROOM_CLEARED',
+    'BOSS_KILLED',
+    'OVERKILL',
+    'EXIT_ROOM_FULL_HEALTH',
+    'EXIT_BOSS_FULL_HEALTH',
+] as const
 export type NotifiableEvent = typeof notifiableEvent[number]
 
-export type RunScoreEvent =
-    | NotifiableEvent
-    | 'HIGHEST_DAMAGE'
+export type RunScoreEvent = NotifiableEvent | 'HIGHEST_DAMAGE' | 'RUN_COMPLETED'
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
@@ -43,7 +49,8 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
-    highestDamageHit: 'HIGHEST_DAMAGE'
+    highestDamageHit: 'HIGHEST_DAMAGE',
+    minsUnderRunThreshold: 'RUN_COMPLETED',
 }
 
 export const RUN_SCORE_EVENT_META: Record<
@@ -91,9 +98,17 @@ export const RUN_SCORE_EVENT_META: Record<
         description: 'Highest damage from single hit',
         pointValue: 0.3,
         notificationText: '@unused',
-        attributeName: 'highestDamageHit'
-    }
+        attributeName: 'highestDamageHit',
+    },
+    RUN_COMPLETED: {
+        description: 'Completed run in under X minutes',
+        pointValue: 10,
+        notificationText: '@unused',
+        attributeName: 'minsUnderRunThreshold',
+    },
 }
 
 export const isNotifiableEvent = (event: any): event is NotifiableEvent =>
     notifiableEvent.includes(event)
+
+export const RUN_TIME_THRESHOLD_MINS = 15

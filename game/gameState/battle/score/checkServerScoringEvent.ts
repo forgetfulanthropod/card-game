@@ -4,6 +4,8 @@ import {
     BattleCursor,
     CharacterUid,
     CharacterMeta,
+    RunScoreAttributeName,
+    RUN_TIME_THRESHOLD_MINS,
 } from 'shared'
 
 type applyDamageArgs = {
@@ -15,15 +17,17 @@ type applyDamageArgs = {
 }
 
 const checkServerScoringEvent = (
-    event: RunScoreEvent,
+    event: RunScoreAttributeName,
     scene: BattleCursor,
     data: any
 ) => {
     if (!isNotifiableEvent(event)) {
         switch (event) {
-            case 'HIGHEST_DAMAGE':
+            case 'highestDamageHit':
                 checkHighestDamageHit(scene, data as applyDamageArgs)
                 break
+            case 'minsUnderRunThreshold':
+                checkMinsUnderRunThreshold(scene)
         }
     }
 }
@@ -41,6 +45,32 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
                 .select('runScore')
                 .select('attributes')
                 .set('highestDamageHit', damage)
+        }
+    }
+}
+
+const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
+    const sceneState = scene.get('state')
+    if (sceneState !== 'won') {
+        return
+    }
+
+    scene.select('runDuration').set('endTime', new Date().toUTCString()) // might need to use library or time in DB for this?
+    const startTime = scene.select('runDuration').get('startTime')
+    const endTime = scene.select('runDuration').get('endTime')
+
+    if (endTime) {
+        const totalTimeInSeconds =
+            (new Date(endTime).getTime() - new Date(startTime).getTime()) / 1000
+
+        const minutes = ~~((totalTimeInSeconds % 3600) / 60)
+        const hours = ~~(totalTimeInSeconds / 3600)
+
+        if (hours <= 0 && minutes < RUN_TIME_THRESHOLD_MINS) {
+            scene
+                .select('runScore')
+                .select('attributes')
+                .set('minsUnderRunThreshold', RUN_TIME_THRESHOLD_MINS - minutes)
         }
     }
 }
