@@ -37,6 +37,13 @@ const handleScoringEvent = (
                 )
                 checkOtherScoringEvents(event, scene)
                 break
+            case 'WIN_NO_ENERGY_USED':
+                displayScoreNotification(
+                    'No Energy Used Last Turn',
+                    'remainingEnergy',
+                    scorePointsToAdd
+                )
+                break
             case 'OVERKILL':
                 displayScoreNotification(
                     'Overkill',

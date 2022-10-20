@@ -18,6 +18,7 @@ export type RunScoreAttributeName =
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
     | 'bossRoomsExitedLowDamage'
+    | 'winsNoEnergyUsedLastTurn'
     | 'highestDamageHit'
     | 'minsUnderRunThreshold'
 
@@ -37,6 +38,7 @@ const notifiableEvent = [
     'EXIT_ROOM_FULL_HEALTH',
     'EXIT_BOSS_FULL_HEALTH',
     'EXIT_BOSS_LOW_DAMAGE',
+    'WIN_NO_ENERGY_USED'
 ] as const
 export type NotifiableEvent = typeof notifiableEvent[number]
 
@@ -56,8 +58,10 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     highestDamageHit: 'HIGHEST_DAMAGE',
     minsUnderRunThreshold: 'RUN_COMPLETED',
     bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE',
+    winsNoEnergyUsedLastTurn: 'WIN_NO_ENERGY_USED'
 }
 
+//TODO: Adjust point values to remove decimals
 export const RUN_SCORE_EVENT_META: Record<
     RunScoreEvent,
     RunScoreAttributeMeta
@@ -92,6 +96,11 @@ export const RUN_SCORE_EVENT_META: Record<
         description: 'Number of rooms cleared',
         pointValue: 10,
         attributeName: 'roomsCleared',
+    },
+    WIN_NO_ENERGY_USED: {
+        description: 'Won battle without spending energy in last turn',
+        pointValue: 8,
+        attributeName: 'winsNoEnergyUsedLastTurn',
     },
     OVERKILL: {
         description: 'Cumulative damage inflicted on top of dead enemy',

@@ -10,6 +10,9 @@ import { handleScoringEvent } from './handleScoringEvent'
 
 export const NUM_KAIJUS_IN_PARTY = 3
 
+/**
+ * This fn makes roundtrips to handleScoringEvent to allow for overriding between events that also have a *parent* event that always comes before them (eg. exit room w/full health vs exit boss room w/full health, both come after ROOM_CLEARED)
+ */
 const checkOtherScoringEvents = (
     event: RunScoreEvent,
     scene: ROCursor<BattleScene>
@@ -20,6 +23,7 @@ const checkOtherScoringEvents = (
             case 'ROOM_CLEARED':
                 handleCharsInFullHealth(scene)
                 handleBossRoomCleared(scene)
+                handleNoEnergyUsed(scene)
                 break
         }
     }
@@ -81,6 +85,13 @@ const checkHealthLostInBossRoom = (scene: ROCursor<BattleScene>) => {
 
     if (totalHealthLost < 15) {
         handleScoringEvent('EXIT_BOSS_LOW_DAMAGE', 1, scene)
+    }
+}
+
+const handleNoEnergyUsed = (scene: ROCursor<BattleScene>) => {
+    const noEnergyUsed = scene.get('energy') === scene.get('roundEnergy')
+    if (noEnergyUsed) {
+        handleScoringEvent('WIN_NO_ENERGY_USED', 1, scene)
     }
 }
 

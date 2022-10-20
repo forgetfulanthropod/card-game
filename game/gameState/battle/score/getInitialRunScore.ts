@@ -14,7 +14,8 @@ export function getInitialRunScore(): RunScore {
             bossRoomsExitedFullHealth: 0,
             bossRoomsExitedLowDamage: 0,
             highestDamageHit: 0,
-            minsUnderRunThreshold: 0
+            minsUnderRunThreshold: 0,
+            winsNoEnergyUsedLastTurn: 0,
         },
     }
 }
