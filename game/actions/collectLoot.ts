@@ -10,9 +10,8 @@ export const collectLoot: GameActions['collectLoot'] = args => {
     const remainingLoot = scene.get('lootEarned')
 
     if (isEmpty(remainingLoot)) {
-        return nextRoom(args)
+        return
     }
-
     if (remainingLoot[0].name === 'draftCard') {
         return scene.set('state', 'choosing cards')
     }
