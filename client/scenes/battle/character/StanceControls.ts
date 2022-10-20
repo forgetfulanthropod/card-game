@@ -162,6 +162,10 @@ function StanceChambers(
                 },
             },
             onDestroy: [
+                () => {
+                    Tweener.killTweensOf(root)
+                    stanceBullets.forEach(b => Tweener.killTweensOf(b))
+                },
                 onUpdate(characterCursor.select('stance'), stance => {
                     //animate cylinder
                     const currentIndex = stanceIds.indexOf(lastStance)
