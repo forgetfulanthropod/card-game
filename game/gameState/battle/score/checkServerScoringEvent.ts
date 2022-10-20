@@ -1,12 +1,12 @@
 import {
-    RunScoreEvent,
-    isNotifiableEvent,
     BattleCursor,
     CharacterUid,
     CharacterMeta,
     RunScoreAttributeName,
     RUN_TIME_THRESHOLD_MINS,
+    NonNotifiableEvent,
 } from 'shared'
+import { vals } from 'shared/code'
 
 type applyDamageArgs = {
     damage: number
@@ -17,18 +17,17 @@ type applyDamageArgs = {
 }
 
 const checkServerScoringEvent = (
-    event: RunScoreAttributeName,
+    event: NonNotifiableEvent,
     scene: BattleCursor,
     data: any
 ) => {
-    if (!isNotifiableEvent(event)) {
-        switch (event) {
-            case 'highestDamageHit':
-                checkHighestDamageHit(scene, data as applyDamageArgs)
-                break
-            case 'minsUnderRunThreshold':
-                checkMinsUnderRunThreshold(scene)
-        }
+    switch (event) {
+        case 'HIGHEST_DAMAGE':
+            checkHighestDamageHit(scene, data as applyDamageArgs)
+            break
+        case 'RUN_COMPLETED':
+            checkMinsUnderRunThreshold(scene)
+            checkSurvivingKaiju(scene)
     }
 }
 
@@ -41,10 +40,11 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
     if (userIsAttacker) {
         const prevHighest = scene.get('runScore').attributes.highestDamageHit
         if (damage > prevHighest) {
-            scene
-                .select('runScore')
-                .select('attributes')
-                .set('highestDamageHit', damage)
+            updateRunScoreAttribute(
+                scene,
+                'highestDamageHit',
+                parseInt(damage.toFixed(0))
+            )
         }
     }
 }
@@ -67,12 +67,37 @@ const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
         const hours = ~~(totalTimeInSeconds / 3600)
 
         if (hours <= 0 && minutes < RUN_TIME_THRESHOLD_MINS) {
-            scene
-                .select('runScore')
-                .select('attributes')
-                .set('minsUnderRunThreshold', RUN_TIME_THRESHOLD_MINS - minutes)
+            updateRunScoreAttribute(
+                scene,
+                'minsUnderRunThreshold',
+                RUN_TIME_THRESHOLD_MINS - minutes
+            )
         }
     }
+}
+
+const checkSurvivingKaiju = (scene: BattleCursor) => {
+    const survivingKaiju = vals(scene.get('allCharacters')).filter(
+        char => char.isPc
+    )
+    updateRunScoreAttribute(scene, 'survivingKaiju', survivingKaiju.length)
+
+    const healthRemaining = survivingKaiju.reduce((prev, curr) => {
+        return prev + curr.health
+    }, 0)
+
+    updateRunScoreAttribute(scene, 'finalUserHealthRemaining', healthRemaining)
+    console.log(
+        'finished updating surviving kaiju and health remaining for score'
+    )
+}
+
+const updateRunScoreAttribute = (
+    scene: BattleCursor,
+    attribute: RunScoreAttributeName,
+    count: number
+): void => {
+    scene.select('runScore').select('attributes').set(attribute, count)
 }
 
 export { checkServerScoringEvent }

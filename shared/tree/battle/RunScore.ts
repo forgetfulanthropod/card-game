@@ -21,6 +21,9 @@ export type RunScoreAttributeName =
     | 'winsNoEnergyUsedLastTurn'
     | 'highestDamageHit'
     | 'minsUnderRunThreshold'
+    | 'survivingKaiju'
+    | 'finalUserHealthRemaining'
+    | 'null' // used for derived score events
 
 export type RunScoreAttributeMeta = {
     description: string
@@ -29,20 +32,25 @@ export type RunScoreAttributeMeta = {
     asset?: string
 }
 
-const notifiableEvent = [
-    'ENEMY_KILLED',
-    'ROOM_CLEARED',
-    'BOSS_KILLED',
-    'OVERKILL',
-    'PERFECT_KILL',
-    'EXIT_ROOM_FULL_HEALTH',
-    'EXIT_BOSS_FULL_HEALTH',
-    'EXIT_BOSS_LOW_DAMAGE',
-    'WIN_NO_ENERGY_USED'
-] as const
-export type NotifiableEvent = typeof notifiableEvent[number]
+export type NotifiableEvent =
+    | 'ENEMY_KILLED'
+    | 'ROOM_CLEARED'
+    | 'BOSS_KILLED'
+    | 'OVERKILL'
+    | 'PERFECT_KILL'
+    | 'EXIT_ROOM_FULL_HEALTH'
+    | 'EXIT_BOSS_FULL_HEALTH'
+    | 'EXIT_BOSS_LOW_DAMAGE'
+    | 'WIN_NO_ENERGY_USED'
 
-export type RunScoreEvent = NotifiableEvent | 'HIGHEST_DAMAGE' | 'RUN_COMPLETED'
+export type NonNotifiableEvent =
+    | 'HIGHEST_DAMAGE'
+    | 'RUN_COMPLETED'
+    | 'SURVIVING_KAIJU'
+    | 'FINAL_USER_HEALTH_REMAINING'
+    | 'NULL'
+
+export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
@@ -58,7 +66,10 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     highestDamageHit: 'HIGHEST_DAMAGE',
     minsUnderRunThreshold: 'RUN_COMPLETED',
     bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE',
-    winsNoEnergyUsedLastTurn: 'WIN_NO_ENERGY_USED'
+    winsNoEnergyUsedLastTurn: 'WIN_NO_ENERGY_USED',
+    finalUserHealthRemaining: 'FINAL_USER_HEALTH_REMAINING',
+    survivingKaiju: 'SURVIVING_KAIJU',
+    null: 'NULL',
 }
 
 //TODO: Adjust point values to remove decimals
@@ -119,13 +130,26 @@ export const RUN_SCORE_EVENT_META: Record<
         attributeName: 'highestDamageHit',
     },
     RUN_COMPLETED: {
-        description: 'Completed run in under X minutes',
-        pointValue: 10,
-        attributeName: 'minsUnderRunThreshold',
+        description:
+            'Completed run (no score by itself but has derived events)',
+        pointValue: 0,
+        attributeName: 'null',
+    },
+    SURVIVING_KAIJU: {
+        description: 'Number of Kaiju alive at the end of run',
+        pointValue: 5,
+        attributeName: 'survivingKaiju',
+    },
+    FINAL_USER_HEALTH_REMAINING: {
+        description: 'Amount of health remaining at end of run',
+        pointValue: 0.15,
+        attributeName: 'finalUserHealthRemaining',
+    },
+    NULL: {
+        description: 'Can be optionally used for derived events',
+        pointValue: 0,
+        attributeName: 'null',
     },
 }
-
-export const isNotifiableEvent = (event: any): event is NotifiableEvent =>
-    notifiableEvent.includes(event)
 
 export const RUN_TIME_THRESHOLD_MINS = 15

@@ -22,7 +22,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         if (gameIsOver) {
             scene.set('state', 'won')
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-            checkServerScoringEvent('minsUnderRunThreshold', scene, {})
+            checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)

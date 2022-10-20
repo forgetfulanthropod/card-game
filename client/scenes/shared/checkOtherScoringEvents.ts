@@ -1,9 +1,8 @@
 import { ROCursor } from 'sbaobab'
 import {
     RunScoreEvent,
-    isNotifiableEvent,
     BattleScene,
-    TOTAL_ROOMS_PER_RUN,
+    NotifiableEvent,
 } from 'shared'
 import { vals } from 'shared/code'
 import { handleScoringEvent } from './handleScoringEvent'
@@ -14,18 +13,16 @@ export const NUM_KAIJUS_IN_PARTY = 3
  * This fn makes roundtrips to handleScoringEvent to allow for overriding between events that also have a *parent* event that always comes before them (eg. exit room w/full health vs exit boss room w/full health, both come after ROOM_CLEARED)
  */
 const checkOtherScoringEvents = (
-    event: RunScoreEvent,
+    event: NotifiableEvent,
     scene: ROCursor<BattleScene>
 ) => {
     // could change this to be isParentEvent or eventHasDerivedScoringEvents
-    if (isNotifiableEvent(event)) {
-        switch (event) {
-            case 'ROOM_CLEARED':
-                handleCharsInFullHealth(scene)
-                handleBossRoomCleared(scene)
-                handleNoEnergyUsed(scene)
-                break
-        }
+    switch (event) {
+        case 'ROOM_CLEARED':
+            handleCharsInFullHealth(scene)
+            handleBossRoomCleared(scene)
+            handleNoEnergyUsed(scene)
+            break
     }
 }
 
