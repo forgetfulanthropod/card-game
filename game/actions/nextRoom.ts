@@ -34,6 +34,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)
+    scene.set('damagesDealtThisRoom', [])
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)
     scene.select('treasureChest').set('state', 'pending')

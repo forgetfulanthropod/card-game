@@ -78,6 +78,11 @@ function manageSideEffectsOfNewDamage(
         { amount: calcedDamage, targetUid },
     ])
 
+    scene.apply('damagesDealtThisRoom', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
+
     if (damageChangesEnemyIntent(scene)) {
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)

@@ -16,6 +16,7 @@ export type RunScoreAttributeName =
     | 'cumulativeOverkill'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
+    | 'bossRoomsExitedLowDamage'
     | 'highestDamageHit'
     | 'minsUnderRunThreshold'
 
@@ -34,6 +35,7 @@ const notifiableEvent = [
     'OVERKILL',
     'EXIT_ROOM_FULL_HEALTH',
     'EXIT_BOSS_FULL_HEALTH',
+    'EXIT_BOSS_LOW_DAMAGE'
 ] as const
 export type NotifiableEvent = typeof notifiableEvent[number]
 
@@ -51,6 +53,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
     highestDamageHit: 'HIGHEST_DAMAGE',
     minsUnderRunThreshold: 'RUN_COMPLETED',
+    bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE'
 }
 
 export const RUN_SCORE_EVENT_META: Record<
@@ -73,6 +76,12 @@ export const RUN_SCORE_EVENT_META: Record<
     EXIT_BOSS_FULL_HEALTH: {
         description: 'Number of boss battles completed with full party health',
         pointValue: 20,
+        notificationText: 'Party in full health',
+        attributeName: 'bossRoomsExitedFullHealth',
+    },
+    EXIT_BOSS_LOW_DAMAGE: {
+        description: 'Exit Boss Battle without losing more than 15 health',
+        pointValue: 12,
         notificationText: 'Party in full health',
         attributeName: 'bossRoomsExitedFullHealth',
     },

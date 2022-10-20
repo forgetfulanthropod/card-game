@@ -58,6 +58,13 @@ const handleScoringEvent = (
                     scorePointsToAdd
                 )
                 break
+            case 'EXIT_BOSS_LOW_DAMAGE':
+                displayScoreNotification(
+                    'Team Lost Under 15 Health (Boss)',
+                    'swordShield',
+                    scorePointsToAdd
+                )
+                break
             case 'BOSS_KILLED':
                 displayScoreNotification(
                     'Boss Defeated',
