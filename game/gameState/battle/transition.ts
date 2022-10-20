@@ -13,15 +13,11 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
 
     if (winner === 'PC') {
         const gameIsOver =
-        scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
-
-        if (scene.get('numRoomsPassed') === TOTAL_ROOMS_PER_RUN - 1) {
-            // Handles the very last room (since nextRoom will never be called from there)
-            scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-        }
+            scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
 
         if (gameIsOver) {
             scene.set('state', 'won')
+            scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             checkServerScoringEvent('minsUnderRunThreshold', scene, {})
         } else {
             scene.set('state', 'collecting loot')
