@@ -44,6 +44,13 @@ const handleScoringEvent = (
                     scorePointsToAdd
                 )
                 break
+            case 'PERFECT_KILL':
+                displayScoreNotification(
+                    'Perfect Kill',
+                    'overkill',
+                    scorePointsToAdd
+                )
+                break
             case 'EXIT_ROOM_FULL_HEALTH':
                 displayScoreNotification(
                     'Team in Full Health',
@@ -71,6 +78,7 @@ const handleScoringEvent = (
                     'stanceAggressive',
                     scorePointsToAdd
                 )
+                break
         }
     }
 
