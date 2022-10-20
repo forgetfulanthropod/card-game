@@ -1,7 +1,7 @@
 import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
 import { datum } from 'datums'
-import type { KeyTerm } from '@sharedElements'
-import { TermExplanationBox } from '@sharedElements'
+import { KeyTerm, TermExplanationIf } from '@sharedElements'
+import { TermExplanation } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
 import type {
     AssetKey,
@@ -111,12 +111,12 @@ function DamageIntended(
     const infoBox =
         commandMeta == null
             ? null
-            : If(isHoveringIntent, () =>
-                  TermExplanationBox({
-                      term: commandMeta.id,
-                      displayObjectArgs: { x: 50, y: 10 },
-                  })
-              )
+            : TermExplanationIf({
+                  isShown: isHoveringIntent,
+                  term: commandMeta.id,
+                  xOffset: 50,
+                  yOffset: 10,
+              })
     const events: InteractionEvents = {
         pointerover() {
             isHoveringIntent.set(true)
@@ -157,13 +157,15 @@ function DamageIntended(
 function BlockIntended(amount: number) {
     return [
         Sprite({
-            x: 90,
+            y: -190,
+            x: -290,
             scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
             src: 'intentBlock',
             anchor: [0.2, 0.2],
         }),
         Text({
-            x: 90,
+            y: -190,
+            x: -290,
             text: `${amount}`,
             anchor: 0.5,
             style: {

@@ -80,7 +80,7 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
 }
 */
 
-function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
+function getPCTarget(ac: CharacterMeta[], npcUid: CharacterUid): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)
 
@@ -89,8 +89,20 @@ function getPCTarget(ac: CharacterMeta[]): CharacterMeta {
     )
     const maxLikelihood = Math.max(...likelihoods)
 
-    const targetIndex = weightedRandom(
-        likelihoods.map(likelihood => (likelihood === maxLikelihood ? 1 : 0))
+    // const targetIndex = weightedRandom(
+    //     likelihoods.map(likelihood => (likelihood === maxLikelihood ? 1 : 0))
+    // )
+    const verticalPlacementDifferentials = allLivingPlayerCharacters.map(
+        (cm, i) =>
+            likelihoods[i] === maxLikelihood
+                ? Math.abs(cm.y - ac.find(c => c.uid === npcUid)!.y)
+                : Number.POSITIVE_INFINITY
+    )
+    const targetIndex = likelihoods.findIndex(
+        (likelihood, i) =>
+            likelihood === maxLikelihood &&
+            verticalPlacementDifferentials[i] ===
+                Math.min(...verticalPlacementDifferentials)
     )
 
     return allLivingPlayerCharacters[targetIndex]
@@ -102,7 +114,8 @@ export function getCommandTargets(
 ): CharacterUid[] {
     if (command.targetType === 'enemies') {
         return range(command.targetNum).map(
-            () => getPCTarget(vals(scene.allCharacters)).uid
+            () =>
+                getPCTarget(vals(scene.allCharacters), command.characterUid).uid
         )
     } else if (command.targetType === 'allEnemies') {
         return getLivingPcs(scene).map(c => c.uid)

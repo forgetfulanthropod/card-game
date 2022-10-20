@@ -10,7 +10,7 @@ import { turnEndClearEffects } from 'shared'
 import produce from 'immer'
 import { getRulebook } from '@/rulebook'
 
-const turnStartEffectIds = ['bleed', 'poison', 'passiveBlock'] as const
+const turnStartEffectIds = ['bleed', 'poisoned', 'passiveBlock'] as const
 type TurnStartEffectId = typeof turnStartEffectIds[number]
 type StaticEffectId = Exclude<EffectId, TurnStartEffectId>
 
@@ -18,12 +18,6 @@ const staticEffectFuncs: Record<
     StaticEffectId,
     (stats: CalculatedCharacterStats, counter: number) => void
 > = {
-    smallDamageIncrease(stats) {
-        stats.damageTakeAddend += 4
-    },
-    trance(stats, counter) {
-        stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
-    },
     berserk(stats) {
         if (stats.stance !== 'aggressive') return
 
@@ -33,23 +27,32 @@ const staticEffectFuncs: Record<
     debilitated(stats) {
         stats.damageDealMultiplicand *= 0.5
     },
-    fatigue(stats) {
-        stats.strength *= 0.25
+    doubleDamage(stats) {
+        stats.strength *= 2
+    },
+    entranced(stats, counter) {
+        stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
+    },
+    fatigued(stats) {
+        stats.damageDealMultiplicand *= 0.75
+    },
+    smallDamageIncrease(stats) {
+        stats.damageTakeAddend += 4
+    },
+    strongblock(stats) {
+        stats.blockMultiplier *= 1.5
     },
     stunned(stats) {
         stats.isSkipped = true
     },
-    strongblock(stats) {
-        stats.blockMultiplier *= 1.5
+    tired(stats) {
+        stats.damageDealMultiplicand *= 0.88
     },
     unguarded(stats) {
         stats.damageTakeMultiplicand *= 1.25
     },
     vulnerable(stats) {
         stats.damageTakeMultiplicand *= 1.5
-    },
-    doubleDamage(stats) {
-        stats.strength *= 2
     },
 }
 
@@ -60,7 +63,7 @@ const turnStartEffectFuncs: Record<
     bleed(cm) {
         cm.health -= Math.ceil(cm.constitution * 0.05)
     },
-    poison(cm, counter) {
+    poisoned(cm, counter) {
         cm.health -= counter
     },
     passiveBlock(cm, counter) {

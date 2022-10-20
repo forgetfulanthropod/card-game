@@ -47,7 +47,7 @@ export const characterIdToAbilitiesMap: Partial<
     ],
     warhog: [
         {
-            name: 'Irresistable Target',
+            name: 'Irresistible Target',
         },
         {
             name: 'Growth Spurt',

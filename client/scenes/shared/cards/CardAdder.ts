@@ -93,6 +93,7 @@ function Options(
             CardEl({
                 card,
                 width: CARD_WIDTH,
+                hoveredCardUid: selectedCardUid,
                 events: {
                     pointerup() {
                         cardEls.forEach(el => {

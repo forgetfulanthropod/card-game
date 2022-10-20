@@ -12,9 +12,9 @@ const config = { randomDungeon: false }
 export const dungeonRooms: DungeonRoomMap = {
     'Skelepit Dungeon': [
         [
-            { id: 'skeletonWarrior', level: 1, },
             { id: 'skeletonWarrior', level: 1 },
             { id: 'matchaGelatinCube', level: 1 },
+            { id: 'skeletonWarrior', level: 1 },
         ],
         [
             { id: 'gnomeHooligan', level: 2 },

@@ -127,7 +127,7 @@ function bottomLeftCornerOf(uid: CharacterUid) {
         getBattleScene().select('allCharacters').select(uid),
         cm => ({
             x: cm.screenX - 30,
-            y: cm.screenY,
+            y: cm.screenY + 12,
         })
     )
 }
@@ -135,7 +135,7 @@ function bottomRightCornerOf(uid: CharacterUid) {
     return toDatum(
         getBattleScene().select('allCharacters').select(uid),
         cm => ({
-            x: cm.screenX + HEALTH_BAR_WIDTH * 0.75,
+            x: cm.screenX + HEALTH_BAR_WIDTH * 1,
             y: cm.screenY,
         })
     )
@@ -178,7 +178,7 @@ function EnemyIntentArrow(
                 rotation,
                 x: origin.val.x,
                 y: origin.val.y,
-                alpha: 0.6,
+                alpha: 1, // overlap issue with transparency
             }),
             Sprite({
                 src: 'enemyIntentArrowHead',
@@ -188,6 +188,7 @@ function EnemyIntentArrow(
                 rotation,
                 x: destination.val.x,
                 y: destination.val.y,
+                alpha: 1, // overlap issue with transparency
             })
         )
     }

@@ -37,7 +37,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'chain(effect("bleed", 2), effect("poison", 5), effect("debilitated", 1))',
+            'chain(effect("bleed", 2), effect("poisoned", 5), effect("fatigued", 1))',
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -101,6 +101,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: 'deal(strength)',
         type: 'attack',
         characterClass: 'knight',
+    },
+    zap: {
+        name: 'Zap!',
+        energy: 2,
+        id: 'zap',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions:
+            'wisdomy = wisdom * .4; chain(deal(wisdomy), effect("stunned", 1))',
+        type: 'enchantment',
+        characterClass: 'wizard',
     },
     orbOfLightning: {
         name: 'Orb of Lightning',
@@ -200,7 +211,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'trance',
         targetNum: 0,
         targetType: 'self',
-        actions: 'chain(effect("trance", 3), momentary())',
+        actions: 'chain(effect("entranced", 3), momentary())',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -210,7 +221,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     //     id: 'trance',
     //     targetNum: 0,
     //     targetType: 'self',
-    //     actions: 'chain(effect("trance", 2), orb("frost", 2))',
+    //     actions: 'chain(effect("entranceed", 2), orb("frost", 2))',
     //     type: 'utility',
     //     characterClass: 'wizard',
     // },
@@ -361,7 +372,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * .6; chain(deal(strengthy), effect("poison", 5))',
+            'strengthy = strength * .6; chain(deal(strengthy), effect("poisoned", 5))',
         type: 'utility',
         characterClass: 'rogue',
     },

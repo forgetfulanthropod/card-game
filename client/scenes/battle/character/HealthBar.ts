@@ -1,15 +1,12 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid, Effect } from 'shared'
+import type { CharacterMeta, CharacterUid } from 'shared'
 
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
-import type { VisibleEffect as VisibleEffectId } from '@/assets'
-import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { getBattleScene } from '@/data'
 import type { PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
-    For,
     If,
     onDestroyed,
     getTexture,
@@ -19,9 +16,10 @@ import {
     Text,
 } from '@/elementsUtil'
 import { onUpdate, statChangesDatum, toDatum } from '@/util'
-import { ExplanationBox } from '@/scenes/shared'
+import { Explanation } from '@/scenes/shared'
 import { difference, omit, upperFirst } from 'lodash'
 import { StanceControls } from './StanceControls'
+import { EffectIndicators } from './EffectIndicators'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -95,62 +93,6 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                       }),
                   ])
         )
-    )
-}
-
-function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
-    const effectsCursor = characterCursor.select('effects')
-    const data = compose(
-        ([statChanges, effects], lastOut) => {
-            if (statChanges[characterCursor.get('uid')]?.wait) return lastOut
-
-            return effects
-        },
-        statChangesDatum,
-        toDatum(effectsCursor, effects =>
-            effects
-                .filter(e => !invisibleEffects.includes(e.id))
-                .map(e => ({
-                    ...e,
-                    key: e.id + e.counter,
-                    id: e.id as VisibleEffectId,
-                }))
-        )
-    )
-
-    return For(
-        //@ts-expect-error
-        data,
-        //@ts-expect-error
-        effect => InteractiveEffectCounter(effect),
-        idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
-    )
-}
-
-function InteractiveEffectCounter(
-    effect: Effect & { id: VisibleEffectId }
-): PixiContainer {
-    return Container(
-        {
-            name: `Effect-${effect.id}`,
-        },
-        Sprite({
-            src: getEffectIconSrc(effect.id),
-            width: 80 * SCALE_UNIVERSAL,
-            height: 80 * SCALE_UNIVERSAL,
-            anchor: [0.5, 0.4],
-        }),
-        Text({
-            text: `${effect.counter}`,
-            anchor: [0.6, 1],
-            style: {
-                fontFamily: ['bigFont', 'monospace'],
-                fontSize: 30 * SCALE_UNIVERSAL,
-                fill: 'white',
-                stroke: 'black',
-                strokeThickness: 5,
-            },
-        })
     )
 }
 

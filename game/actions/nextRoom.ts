@@ -21,16 +21,12 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.select('runScore').select('attributes').set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
-    setAllCharactersToUnmoved(scene)
     scene.apply('allCharacters', ac => ({
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
     }))
     scene.set('state', 'in battle')
     scene.set('nextNpcCommands', getNpcMoves(scene))
-    clearAllEffects(scene)
-    putAllCardsInDrawPile(scene)
-    clearRoomCardModifiers(scene)
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)

@@ -42,7 +42,7 @@ export function EffectOverlayManager(
                         setTimeout(() => {
                             root.addChild(anim)
                             setTimeout(() => root.removeChild(anim), 1000)
-                        }, i * TIME_BETWEEN_OVERLAY_ANIMATIONS)
+                        }, (i + 1) * TIME_BETWEEN_OVERLAY_ANIMATIONS)
                     })
                 }
 
@@ -71,7 +71,7 @@ export function getAnimationsFrom(
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'bleed'))
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
-    if (changes.effects?.find(e => e.id === 'poison'))
+    if (changes.effects?.find(e => e.id === 'poisoned'))
         animations.push(PoisonOverlayAnimation(characterMeta.isPc))
     if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))

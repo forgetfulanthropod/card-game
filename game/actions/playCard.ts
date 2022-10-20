@@ -4,9 +4,9 @@ import { throwNull } from 'shared/code'
 import {
     discard,
     getEnergy,
-    getLivingNpcs,
     play,
     updateHand,
+    updateNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 
@@ -18,13 +18,16 @@ export const playCard: GameActions['playCard'] = args => {
 
     // logger.info(`playing card ${card.uid}`)
     if (isPlayable({ card, scene })) {
-        play({ card, targetUids: args.targetUids, scene })
         scene.select('allCharacters', card.characterUid).set('hasMoved', true)
+
+        play({ card, targetUids: args.targetUids, scene })
+
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
+
+        updateNpcMoves(scene)
     }
 
-    clearDead(scene)
     updateHand(scene)
 }
 
@@ -38,25 +41,4 @@ function isPlayable({
     const hasEnoughEnergy = getEnergy(card) <= scene.select('energy').get()
 
     return hasEnoughEnergy
-}
-
-function clearDead(scene: BattleCursor) {
-    //todo
-    // clearDeadCharacters(scene)
-    clearDeadCommands(scene)
-}
-
-function clearDeadCommands(scene: BattleCursor) {
-    const livingNpcUids = getLivingNpcs(scene.get()).map(npc => npc.uid)
-    if (scene.get('nextNpcCommands').length !== livingNpcUids.length) {
-        scene.apply('nextNpcCommands', nextCommands =>
-            nextCommands.filter(cmd =>
-                livingNpcUids.includes(cmd.command.characterUid)
-            )
-        )
-    }
-}
-
-function _clearDeadCharacters(_scene: BattleCursor) {
-    throw new Error('Function not implemented.')
 }

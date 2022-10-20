@@ -139,6 +139,7 @@ export type CardId =
     | 'swordSlash'
     | 'leadRazor'
     | 'testudoFormation'
+    | 'zap'
 export type BasicTargetType =
     | 'friends'
     | 'enemies'

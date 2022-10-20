@@ -16,6 +16,10 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
         target: null,
     })}${damageHtmlArr[1]} damage`
 
+    if (context.command.targetType === 'allEnemies') {
+        explication += ' to all enemies'
+    }
+
     if (times != null) {
         explication += ` ${times} times`
     }

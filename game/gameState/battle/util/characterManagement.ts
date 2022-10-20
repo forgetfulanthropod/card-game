@@ -75,9 +75,9 @@ function makeLeftPositions(): [
     [number, number]
 ] {
     const measurements = [
-        [30.25, 34.2],
-        [22.7, 50.23],
-        [14.01, 67.16],
+        [31, 34.2],
+        [18.5, 50.23],
+        [6, 67.16],
     ]
 
     return measurements.map(m => [m[0] + CENTERING_X_OFFSET, m[1]]) as [
@@ -87,14 +87,17 @@ function makeLeftPositions(): [
     ]
 }
 
-function makePositions({ n = 6 }: { n?: number }): [number, number][] {
+function makePositions({ n = 3 }: { n?: number }): [number, number][] {
     const measurements = [
-        [55.55, 34.2],
-        [60.9, 50.23],
-        [68.07, 67.16],
-        [76.37, 50],
-        [69.62, 32.5],
-        [82.13, 67.5],
+        // [55.55, 34.2],
+        // [60.9, 50.23],
+        // [68.07, 67.16],
+        [60.37, 34.2],
+        [69.62, 50.23],
+        [78.13, 67.16],
+        // [76.37, 50],
+        // [69.62, 32.5],
+        // [82.13, 67.5],
     ]
 
     return measurements

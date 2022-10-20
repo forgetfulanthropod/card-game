@@ -152,15 +152,16 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
-    effectBerserk: 'effects/berserk_temp.png',
+    effectBerserk: 'effects/berserk_temp.webp',
     effectBleed: 'effects/bleed.webp',
     effectDebilitated: 'effects/debilitated.webp',
-    effectFatigue: 'effects/fatigue.webp',
+    effectFatigued: 'effects/fatigue.webp',
     // temp: what is strongblock icon?
     effectStrongblock: 'intents/npc/Shield intent.webp',
-    effectTrance: 'effects/magicalStorm.webp',
-    effectPoison: 'effects/poison_skull.webp',
+    effectEntranced: 'effects/magicalStorm.webp',
+    effectPoisoned: 'effects/poison_skull.webp',
     effectStunned: 'effects/stunned.webp',
+    effectTired: 'effects/tired.webp',
     effectUnguarded: 'effects/unguarded_v2.webp',
     effectVulnerable: 'effects/vulnerable_v2.webp',
 }

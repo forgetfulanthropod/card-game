@@ -15,6 +15,8 @@ import { keys, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import type { EntryCursor } from '@/util'
+import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
+import { shufflePile } from './shufflePile'
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
@@ -103,6 +105,7 @@ function makeCards(scene: BattleCursor): Piles {
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
         if (cm.class === 'wizard') cardIds.push('orbOfLightning')
         if (cm.class === 'wizard') cardIds.push('orbOfFrost')
+        if (cm.class === 'wizard') cardIds.push('zap')
         if (cm.class === 'cleric') cardIds.push('smite')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
         if (cm.class === 'rogue') cardIds.push('berserk')
@@ -125,7 +128,7 @@ function makeCards(scene: BattleCursor): Piles {
     })
 
     return {
-        draw,
+        draw: shufflePile(draw),
         // draw: cardIds.reduce((acc, id, i) => {
         //     // logger.info(JSON.stringify(allCharacters, null, '\n'))
         //     const owningCharUid =
