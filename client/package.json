@@ -24,7 +24,7 @@
         "pixi.js": "^6.3.2",
         "preact": "^10.7.2",
         "react-hot-toast": "^2.2.0",
-        "shared": "workspace:shared@*",
+        "shared": "1.0.0",
         "socket.io-client": "^4.5.1",
         "styled-components": "^5.3.5"
     },
