@@ -19,6 +19,7 @@ export function getInitialRunScore(): RunScore {
             survivingKaiju: 0,
             finalUserHealthRemaining: 0,
             hitsOverVulgarThreshold: 0,
+            roomsWonZeroDamage: 0,
             null: 0
         },
     }

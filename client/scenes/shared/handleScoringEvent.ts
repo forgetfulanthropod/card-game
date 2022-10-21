@@ -35,7 +35,7 @@ const handleScoringEvent = (
             )
             checkOtherScoringEvents(event, scene)
             break
-        case 'WIN_NO_ENERGY_USED':
+        case 'ROOM_WIN_NO_ENERGY_USED':
             displayScoreNotification(
                 'No Energy Used Last Turn',
                 'remainingEnergy',
@@ -80,6 +80,12 @@ const handleScoringEvent = (
                 scorePointsToAdd
             )
             break
+        case 'ROOM_WIN_ZERO_DAMAGE':
+            displayScoreNotification(
+                'Lost No Health',
+                'swordShield',
+                scorePointsToAdd
+            )
     }
 
     callApi('notifyRunScore', { event, count })

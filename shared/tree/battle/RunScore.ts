@@ -24,6 +24,7 @@ export type RunScoreAttributeName =
     | 'minsUnderRunThreshold'
     | 'survivingKaiju'
     | 'finalUserHealthRemaining'
+    | 'roomsWonZeroDamage'
     | 'null' // used for derived and/or server side score events
 
 export type RunScoreEventMeta = {
@@ -42,7 +43,8 @@ export type NotifiableEvent =
     | 'EXIT_ROOM_FULL_HEALTH'
     | 'EXIT_BOSS_FULL_HEALTH'
     | 'EXIT_BOSS_LOW_DAMAGE'
-    | 'WIN_NO_ENERGY_USED'
+    | 'ROOM_WIN_NO_ENERGY_USED'
+    | 'ROOM_WIN_ZERO_DAMAGE'
 
 export type NonNotifiableEvent =
     | 'HIGHEST_DAMAGE'
@@ -69,9 +71,10 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     hitsOverVulgarThreshold: 'HIT_VULGAR_THRESHOLD',
     minsUnderRunThreshold: 'RUN_COMPLETED',
     bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE',
-    winsNoEnergyUsedLastTurn: 'WIN_NO_ENERGY_USED',
+    winsNoEnergyUsedLastTurn: 'ROOM_WIN_NO_ENERGY_USED',
     finalUserHealthRemaining: 'FINAL_USER_HEALTH_REMAINING',
     survivingKaiju: 'SURVIVING_KAIJU',
+    roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
     null: 'NULL',
 }
 
@@ -108,7 +111,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 10,
         attributeName: 'roomsCleared',
     },
-    WIN_NO_ENERGY_USED: {
+    ROOM_WIN_NO_ENERGY_USED: {
         description: 'Won battle without spending energy in last turn',
         pointValue: 8,
         attributeName: 'winsNoEnergyUsedLastTurn',
@@ -149,6 +152,11 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description: 'Number of hits that dealt >55 damage in a single turn',
         pointValue: 1,
         attributeName: 'hitsOverVulgarThreshold',
+    },
+    ROOM_WIN_ZERO_DAMAGE: {
+        description: 'Lose 0 health during a room',
+        pointValue: 3,
+        attributeName: 'roomsWonZeroDamage',
     },
     NULL: {
         description: 'Can be optionally used for derived events',
