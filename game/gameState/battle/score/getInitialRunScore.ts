@@ -18,6 +18,7 @@ export function getInitialRunScore(): RunScore {
             winsNoEnergyUsedLastTurn: 0,
             survivingKaiju: 0,
             finalUserHealthRemaining: 0,
+            hitsOverVulgarThreshold: 0,
             null: 0
         },
     }

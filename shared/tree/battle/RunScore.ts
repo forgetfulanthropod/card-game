@@ -20,12 +20,13 @@ export type RunScoreAttributeName =
     | 'bossRoomsExitedLowDamage'
     | 'winsNoEnergyUsedLastTurn'
     | 'highestDamageHit'
+    | 'hitsOverVulgarThreshold'
     | 'minsUnderRunThreshold'
     | 'survivingKaiju'
     | 'finalUserHealthRemaining'
-    | 'null' // used for derived score events
+    | 'null' // used for derived and/or server side score events
 
-export type RunScoreAttributeMeta = {
+export type RunScoreEventMeta = {
     description: string
     pointValue: number // eg. the number of points that 1 single "count" in RunScoreAttribute is worth
     attributeName: RunScoreAttributeName
@@ -48,6 +49,7 @@ export type NonNotifiableEvent =
     | 'RUN_COMPLETED'
     | 'SURVIVING_KAIJU'
     | 'FINAL_USER_HEALTH_REMAINING'
+    | 'HIT_VULGAR_THRESHOLD'
     | 'NULL'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
@@ -64,6 +66,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
     highestDamageHit: 'HIGHEST_DAMAGE',
+    hitsOverVulgarThreshold: 'HIT_VULGAR_THRESHOLD',
     minsUnderRunThreshold: 'RUN_COMPLETED',
     bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE',
     winsNoEnergyUsedLastTurn: 'WIN_NO_ENERGY_USED',
@@ -73,10 +76,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
 }
 
 //TODO: Adjust point values to remove decimals
-export const RUN_SCORE_EVENT_META: Record<
-    RunScoreEvent,
-    RunScoreAttributeMeta
-> = {
+export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     ENEMY_KILLED: {
         description: 'Number of enemies defeated',
         pointValue: 3,
@@ -144,6 +144,11 @@ export const RUN_SCORE_EVENT_META: Record<
         description: 'Amount of health remaining at end of run',
         pointValue: 0.15,
         attributeName: 'finalUserHealthRemaining',
+    },
+    HIT_VULGAR_THRESHOLD: {
+        description: 'Number of hits that dealt >55 damage in a single turn',
+        pointValue: 1,
+        attributeName: 'hitsOverVulgarThreshold',
     },
     NULL: {
         description: 'Can be optionally used for derived events',

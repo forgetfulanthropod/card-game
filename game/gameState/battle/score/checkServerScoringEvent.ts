@@ -46,6 +46,14 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
                 parseInt(damage.toFixed(0))
             )
         }
+        checkDamageOverThreshold(damage, scene)
+    }
+}
+
+const checkDamageOverThreshold = (damage: number, scene: BattleCursor) => {
+    const VULGAR_DAMAGE_THRESHOLD = 55
+    if (damage > VULGAR_DAMAGE_THRESHOLD) {
+        incrementRunScoreAttribute(scene, 'hitsOverVulgarThreshold')
     }
 }
 
@@ -98,6 +106,15 @@ const updateRunScoreAttribute = (
     count: number
 ): void => {
     scene.select('runScore').select('attributes').set(attribute, count)
+}
+
+export const incrementRunScoreAttribute = (
+    scene: BattleCursor,
+    attribute: RunScoreAttributeName
+): void => {
+    const attributes = scene.select('runScore').select('attributes')
+    const prevValue = attributes.get(attribute)
+    attributes.set(attribute, prevValue + 1)
 }
 
 export { checkServerScoringEvent }
