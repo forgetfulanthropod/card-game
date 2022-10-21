@@ -6,7 +6,7 @@ import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 
-const password = 'dailyship'
+const password = 'spin-triangle-smooth'
 const buildDir = 'public/'
 const entryPoint = 'client/index.tsx'
 const outFile = `${buildDir}/${password}.js`
