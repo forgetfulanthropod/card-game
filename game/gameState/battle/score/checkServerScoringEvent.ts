@@ -28,8 +28,13 @@ const checkServerScoringEvent = (
         case 'RUN_COMPLETED':
             checkMinsUnderRunThreshold(scene)
             checkSurvivingKaiju(scene)
+            break
         case 'BLOCK_OVER_THRESHOLD':
             checkBlocksAppliedInTurn(scene)
+            break
+        case 'HIT_VULGAR_THRESHOLD':
+            checkDamageDealtInTurn(scene)
+            break
     }
 }
 
@@ -48,14 +53,6 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
                 parseInt(damage.toFixed(0))
             )
         }
-        checkDamageOverThreshold(damage, scene)
-    }
-}
-
-const checkDamageOverThreshold = (damage: number, scene: BattleCursor) => {
-    const VULGAR_DAMAGE_THRESHOLD = 55
-    if (damage > VULGAR_DAMAGE_THRESHOLD) {
-        incrementRunScoreAttribute(scene, 'hitsOverVulgarThreshold')
     }
 }
 
@@ -111,6 +108,22 @@ const checkBlocksAppliedInTurn = (scene: BattleCursor) => {
         }, 0)
     if (totalBlockApplied > BLOCK_THRESHOLD) {
         incrementRunScoreAttribute(scene, 'blocksOverThreshold')
+    }
+}
+
+const checkDamageDealtInTurn = (scene: BattleCursor) => {
+    const VULGAR_DAMAGE_THRESHOLD = 20
+    const totalDamageApplied = scene
+        .get('damagesDealtThisTurn')
+        .reduce((prev, curr) => {
+            if (curr.targetUid.includes('pc')) {
+                return prev + 0
+            }
+            return prev + curr.amount
+        }, 0)
+
+    if (totalDamageApplied > VULGAR_DAMAGE_THRESHOLD) {
+        incrementRunScoreAttribute(scene, 'hitsOverVulgarThreshold')
     }
 }
 

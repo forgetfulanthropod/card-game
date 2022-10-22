@@ -33,6 +33,7 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     decrementEffects(scene, 'pc')
     decrementEffects(scene, 'npc')
 
+    checkServerScoringEvent('HIT_VULGAR_THRESHOLD', scene)
     checkServerScoringEvent('BLOCK_OVER_THRESHOLD', scene)
 
     scene.set('damagesDealtThisTurn', [])
