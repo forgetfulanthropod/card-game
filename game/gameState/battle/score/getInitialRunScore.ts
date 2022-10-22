@@ -20,6 +20,7 @@ export function getInitialRunScore(): RunScore {
             finalUserHealthRemaining: 0,
             hitsOverVulgarThreshold: 0,
             roomsWonZeroDamage: 0,
+            blocksOverThreshold: 0,
             null: 0
         },
     }

@@ -10,6 +10,7 @@ import {
     decrementEffects,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
+import { checkServerScoringEvent } from '@/gameState/battle/score/checkServerScoringEvent'
 
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
@@ -32,5 +33,8 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     decrementEffects(scene, 'pc')
     decrementEffects(scene, 'npc')
 
+    checkServerScoringEvent('BLOCK_OVER_THRESHOLD', scene)
+
     scene.set('damagesDealtThisTurn', [])
+    scene.set('blocksAppliedThisTurn', [])
 }

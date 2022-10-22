@@ -19,7 +19,7 @@ type applyDamageArgs = {
 const checkServerScoringEvent = (
     event: NonNotifiableEvent,
     scene: BattleCursor,
-    data: any
+    data?: any
 ) => {
     switch (event) {
         case 'HIGHEST_DAMAGE':
@@ -28,6 +28,8 @@ const checkServerScoringEvent = (
         case 'RUN_COMPLETED':
             checkMinsUnderRunThreshold(scene)
             checkSurvivingKaiju(scene)
+        case 'BLOCK_OVER_THRESHOLD':
+            checkBlocksAppliedInTurn(scene)
     }
 }
 
@@ -95,9 +97,21 @@ const checkSurvivingKaiju = (scene: BattleCursor) => {
     }, 0)
 
     updateRunScoreAttribute(scene, 'finalUserHealthRemaining', healthRemaining)
-    console.log(
-        'finished updating surviving kaiju and health remaining for score'
-    )
+}
+
+const checkBlocksAppliedInTurn = (scene: BattleCursor) => {
+    const BLOCK_THRESHOLD = 40
+    const totalBlockApplied = scene
+        .get('blocksAppliedThisTurn')
+        .reduce((prev, curr) => {
+            if (curr.targetUid.includes('pc')) {
+                return prev + curr.amount
+            }
+            return prev + 0
+        }, 0)
+    if (totalBlockApplied > BLOCK_THRESHOLD) {
+        incrementRunScoreAttribute(scene, 'blocksOverThreshold')
+    }
 }
 
 const updateRunScoreAttribute = (
