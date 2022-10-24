@@ -14,4 +14,4 @@ export {
     getInitialTreasureChest,
     calculateChestProgress,
 } from './loot'
-export { getInitialRunScore, calculateNewRunScore } from './score'
+export { getInitialRunScore, calculateNewRunScore, getInitialRunDuration } from './score'
