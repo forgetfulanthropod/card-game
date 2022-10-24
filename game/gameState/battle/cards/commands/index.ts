@@ -15,6 +15,7 @@ import {explain as explainDoubleEnchantmentOrToken, execute as executeDoubleEnch
 import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
+import {explain as explainEffectAll, execute as executeEffectAll} from './effectAll'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
@@ -48,6 +49,7 @@ export const explainers: Explainers = {
     draw: explainDraw,
     dwindle: explainDwindle,
     effect: explainEffect,
+    effectAll: explainEffectAll,
     ifDamageDealt: explainIfDamageDealt,
     ifFirstPlay: explainIfFirstPlay,
     ifStance: explainIfStance,
@@ -81,6 +83,7 @@ export const executors: Executors = {
     draw: executeDraw,
     dwindle: executeDwindle,
     effect: executeEffect,
+    effectAll: executeEffectAll,
     ifDamageDealt: executeIfDamageDealt,
     ifFirstPlay: executeIfFirstPlay,
     ifStance: executeIfStance,

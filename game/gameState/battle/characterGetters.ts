@@ -30,11 +30,19 @@ export function getRandomLivingNpcUid(scene: BattleCursor): CharacterUid {
     return uids[randomIndex]
 }
 
+export function getLivingNpcUids(scene: BattleScene): CharacterUid[] {
+    return getLivingNpcs(scene).map(c => c.uid)
+}
+
 export function getLivingNpcs(scene: BattleScene): EnemyCharacterMeta[] {
     //@ts-expect-error
     return vals(scene.allCharacters).filter(
         c => !c.isPc && c.health > 0
     ) as EnemyCharacterMeta[]
+}
+
+export function getLivingPcUids(scene: BattleScene): CharacterUid[] {
+    return getLivingPcs(scene).map(c => c.uid)
 }
 
 export function getLivingPcs(scene: BattleScene): CharacterMeta[] {

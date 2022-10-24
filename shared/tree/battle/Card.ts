@@ -112,6 +112,7 @@ export type CardId =
     | 'charge'
     | 'dutifulStab'
     | 'fireball'
+    | 'flashBang'
     | 'guidingBolt'
     | 'gnomeBomb'
     | 'helpingHand'
