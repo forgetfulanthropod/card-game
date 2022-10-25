@@ -28,6 +28,7 @@ export type RunScoreAttributeName =
     | 'blocksOverThreshold'
     | 'roomsZeroStanceChanges'
     | 'stanceChangesOverThreshold'
+    | 'cardsPlayedOverThreshold'
     | 'null' // used for derived and/or server side score events
 
 export type RunScoreEventMeta = {
@@ -58,6 +59,7 @@ export type NonNotifiableEvent =
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
     | 'STANCE_CHANGES'
+    | 'CARDS_OVER_THRESHOLD'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
@@ -83,6 +85,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
     stanceChangesOverThreshold: 'STANCE_CHANGES',
     roomsZeroStanceChanges: 'STANCE_CHANGES',
+    cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
     null: 'NULL',
 }
 
@@ -173,8 +176,13 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     },
     STANCE_CHANGES: {
         description: 'Generate over 40 block in a single turn',
-        pointValue: 1,
+        pointValue: 1, // need to fix
         attributeName: 'null',
+    },
+    CARDS_OVER_THRESHOLD: {
+        description: 'Number of cards over 5 played in a single turn',
+        pointValue: 2,
+        attributeName: 'cardsPlayedOverThreshold',
     },
     NULL: {
         description: 'Can be optionally used for derived events',

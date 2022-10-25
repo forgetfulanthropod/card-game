@@ -42,6 +42,7 @@ export function makeBattleState(args: {
         rooms: getRulebook().dungeonRooms['Skelepit Dungeon'],
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
+        cardsPlayedThisTurn: [],
         blocksAppliedThisTurn: [],
         stanceChangesThisRoom: [],
         damagesDealtThisTurn: [],

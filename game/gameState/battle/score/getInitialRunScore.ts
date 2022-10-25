@@ -23,6 +23,7 @@ export function getInitialRunScore(): RunScore {
             blocksOverThreshold: 0,
             stanceChangesOverThreshold: 0,
             roomsZeroStanceChanges: 0,
+            cardsPlayedOverThreshold: 0,
             null: 0
         },
     }

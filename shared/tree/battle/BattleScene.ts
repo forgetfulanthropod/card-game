@@ -28,6 +28,9 @@ export interface BattleScene extends SceneHas {
     rooms: DungeonRoom[]
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {
+        timestamp: string
+    })[]
     blocksAppliedThisTurn: { amount: number; targetUid: CharacterUid }[]
     stanceChangesThisRoom: { newStance: StanceId; targetUid: CharacterUid }[]
     damagesDealtThisTurn: { amount: number; targetUid: CharacterUid }[]

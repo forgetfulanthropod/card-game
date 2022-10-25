@@ -60,7 +60,6 @@ const roomContainsBoss = (scene: ROCursor<BattleScene>): boolean => {
         .select('attributes')
         .get('roomsCleared')
     const currentRoom = scene.get('rooms')[numRoomsPassed]
-    console.log(currentRoom)
     const boss = currentRoom.filter(enemyChar => enemyChar.boss)
     return boss.length > 0
 }

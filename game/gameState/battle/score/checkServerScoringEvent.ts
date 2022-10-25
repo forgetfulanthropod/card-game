@@ -39,6 +39,8 @@ const checkServerScoringEvent = (
         case 'STANCE_CHANGES':
             checkStanceChanges(scene)
             break
+        case 'CARDS_OVER_THRESHOLD':
+            checkCardsOverThreshold(scene)
     }
 }
 
@@ -144,6 +146,14 @@ const checkStanceChanges = (scene: BattleCursor) => {
             stanceChanges.length - STANCE_CHANGES_THRESHOLD,
             true
         )
+    }
+}
+
+const checkCardsOverThreshold = (scene: BattleCursor) => {
+    const CARDS_PLAYED_THRESHOLD = 5
+    const cardsPlayed = scene.get('cardsPlayedThisTurn')
+    if (cardsPlayed.length > CARDS_PLAYED_THRESHOLD) {
+        incrementRunScoreAttribute(scene, 'cardsPlayedOverThreshold')
     }
 }
 
