@@ -8,6 +8,7 @@ import {
     clearRoomCardModifiers,
     drawNewHand,
     setRoundEnergy,
+    resetStances
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
@@ -30,6 +31,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     drawNewHand(scene)
+    resetStances(scene)
     scene.set('damagesDealtThisRoom', [])
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)

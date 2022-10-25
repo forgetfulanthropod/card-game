@@ -43,6 +43,7 @@ export function makeBattleState(args: {
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         blocksAppliedThisTurn: [],
+        stanceChangesThisRoom: [],
         damagesDealtThisTurn: [],
         damagesDealtThisRoom: [],
         queue: [],

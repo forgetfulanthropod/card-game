@@ -7,6 +7,7 @@ import {
     NonNotifiableEvent,
 } from 'shared'
 import { vals } from 'shared/code'
+import { trackStanceChanges } from '../endRound'
 
 type applyDamageArgs = {
     damage: number
@@ -34,6 +35,9 @@ const checkServerScoringEvent = (
             break
         case 'HIT_VULGAR_THRESHOLD':
             checkDamageDealtInTurn(scene)
+            break
+        case 'STANCE_CHANGES':
+            checkStanceChanges(scene)
             break
     }
 }
@@ -127,12 +131,34 @@ const checkDamageDealtInTurn = (scene: BattleCursor) => {
     }
 }
 
+const checkStanceChanges = (scene: BattleCursor) => {
+    trackStanceChanges(scene) // used for final turn update
+    const STANCE_CHANGES_THRESHOLD = 3
+    const stanceChanges = scene.get('stanceChangesThisRoom')
+    if (stanceChanges.length === 0) {
+        incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
+    } else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
+        updateRunScoreAttribute(
+            scene,
+            'stanceChangesOverThreshold',
+            stanceChanges.length - STANCE_CHANGES_THRESHOLD,
+            true
+        )
+    }
+}
+
 const updateRunScoreAttribute = (
     scene: BattleCursor,
     attribute: RunScoreAttributeName,
-    count: number
+    count: number,
+    increment?: true
 ): void => {
-    scene.select('runScore').select('attributes').set(attribute, count)
+    const attributes = scene.select('runScore').select('attributes')
+    if (increment) {
+        attributes.apply(attribute, prev => prev + count)
+    } else {
+        attributes.set(attribute, count)
+    }
 }
 
 export const incrementRunScoreAttribute = (

@@ -8,6 +8,7 @@ export { maybeTransitionBattleState } from './transition'
 export { makeBattleState } from './makeBattleState'
 export { getNpcMoves, updateNpcMoves } from './npcMoves'
 export { endRound } from './endRound'
+export { resetStances } from './resetStances'
 export {
     calculateLoot,
     getInitialLoot,

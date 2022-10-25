@@ -26,6 +26,8 @@ export type RunScoreAttributeName =
     | 'finalUserHealthRemaining'
     | 'roomsWonZeroDamage'
     | 'blocksOverThreshold'
+    | 'roomsZeroStanceChanges'
+    | 'stanceChangesOverThreshold'
     | 'null' // used for derived and/or server side score events
 
 export type RunScoreEventMeta = {
@@ -55,6 +57,7 @@ export type NonNotifiableEvent =
     | 'HIT_VULGAR_THRESHOLD'
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
+    | 'STANCE_CHANGES'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
@@ -78,6 +81,8 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     survivingKaiju: 'SURVIVING_KAIJU',
     roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
     blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
+    stanceChangesOverThreshold: 'STANCE_CHANGES',
+    roomsZeroStanceChanges: 'STANCE_CHANGES',
     null: 'NULL',
 }
 
@@ -165,6 +170,11 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description: 'Generate over 40 block in a single turn',
         pointValue: 1,
         attributeName: 'blocksOverThreshold',
+    },
+    STANCE_CHANGES: {
+        description: 'Generate over 40 block in a single turn',
+        pointValue: 1,
+        attributeName: 'null',
     },
     NULL: {
         description: 'Can be optionally used for derived events',

@@ -21,6 +21,8 @@ export function getInitialRunScore(): RunScore {
             hitsOverVulgarThreshold: 0,
             roomsWonZeroDamage: 0,
             blocksOverThreshold: 0,
+            stanceChangesOverThreshold: 0,
+            roomsZeroStanceChanges: 0,
             null: 0
         },
     }

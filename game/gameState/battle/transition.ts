@@ -26,20 +26,20 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         } else {
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)
-            resetStances(scene)
             clearRoomCardModifiers(scene)
             putAllCardsInDrawPile(scene)
 
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-
         }
 
+        checkServerScoringEvent('STANCE_CHANGES', scene, {})
         calculateChestProgress(scene)
         calculateNewRunScore(scene)
         return true
     } else if (winner === 'NPC') {
+        checkServerScoringEvent('STANCE_CHANGES', scene, {})
         calculateNewRunScore(scene)
         scene.set('state', 'lost')
         return true

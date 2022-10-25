@@ -8,7 +8,10 @@ export type Characters = Record<CharacterUid, CharacterMeta>
 export type EnemyCharacters = Record<CharacterUid, EnemyCharacterMeta>
 
 /** TODO: simplify CharacterMeta, CharacterStats, OwnedCharacterStats,   */
-export type EnemyCharacterMeta = Omit<CharacterMeta, 'stance' | 'class'> & {
+export type EnemyCharacterMeta = Omit<
+    CharacterMeta,
+    'stance' | 'class' | 'stanceInPrevTurn'
+> & {
     id: EnemyCharacterId
     level: string | number
 }
@@ -26,6 +29,7 @@ export interface CharacterMeta extends CharacterStats {
     screenX: number
     screenY: number
     stance: StanceId
+    stanceInPrevTurn: StanceId
     effects: Effect[]
     orbs: Orb[]
 }
