@@ -109,9 +109,25 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions:
-            'wisdomy = wisdom * .4; chain(deal(wisdomy), effect("stunned", 1))',
+            'wisdomy = wisdom * .4; chain(deal(wisdomy), effect("vulnerable", 1))',
         type: 'enchantment',
         characterClass: 'wizard',
+    },
+    // Target enemy receives Stun (1).  All enemies gain Debilitated (1) and Unguarded (1) .  Momentary
+    flashBang: {
+        name: 'Flash Bang',
+        energy: 2,
+        id: 'flashBang',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `chain(
+            effect("stunned", 1),
+            effectAll("debilitated", 1),
+            effectAll("vulnerable", 1),
+            momentary()
+        )`,
+        type: 'utility',
+        characterClass: 'rogue',
     },
     orbOfLightning: {
         name: 'Orb of Lightning',

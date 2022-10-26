@@ -35,35 +35,36 @@ export function s(n: number) {
 }
 
 interface ArgsOf {
+    chain: any[]
+    choice: any[]
+    killIf: [condition: boolean]
+
     addBlock: [block: number]
     addBlockToSelf: [block: number]
-    addWisdom: [block: number]
-    addStrength: [block: number]
     addEnergy: [energy: number]
     addEnergyPerRound: [energy: number]
+    addStrength: [block: number]
+    addWisdom: [block: number]
 
-    choice: any[]
-    chain: any[]
     deal: [damage: number, times?: number]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     dwindle: []
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
+    effectAll: [id: EffectId, increase: number, targetType?: BasicTargetType]
+    ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
+    ifStance: [stanceId: StanceId, conditionalMove: any]
     momentary: []
     orb: [type: OrbType, count: number]
-    text: [str: string]
-    ifDamageDealt: [mainMove: any, conditionalMove: any]
-    ifStance: [stanceId: StanceId, conditionalMove: any]
-    smite: [damage: number, block: number]
     queue: [numTurns: number, move: any]
+    smite: [damage: number, block: number]
+    text: [str: string]
 
-    killIf: [condition: boolean]
-
-    draw: [numCards: number]
     discard: [numCards: number]
+    doubleEnchantmentOrToken: []
+    draw: [numCards: number]
     orbOfHolyLight: []
     psychicWarfare: [damage: number, sameTargetAddend: number]
-    doubleEnchantmentOrToken: []
     require: [type: RequiredActionName, least: number, most: number]
 
     mimicAttack: []

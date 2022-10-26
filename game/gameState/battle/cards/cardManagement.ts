@@ -108,8 +108,9 @@ function makeCards(scene: BattleCursor): Piles {
         if (cm.class === 'wizard') cardIds.push('zap')
         if (cm.class === 'cleric') cardIds.push('smite')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
-        if (cm.class === 'rogue') cardIds.push('berserk')
-        if (cm.class === 'rogue') cardIds.push('patientAmbush')
+        // if (cm.class === 'rogue') cardIds.push('berserk')
+        if (cm.class === 'rogue') cardIds.push('flashBang')
+        // if (cm.class === 'rogue') cardIds.push('patientAmbush')
     })
 
     const draw: Pile = {}

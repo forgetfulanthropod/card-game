@@ -28,10 +28,10 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
+            putAllCardsInDrawPile(scene)
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)
             clearRoomCardModifiers(scene)
-            putAllCardsInDrawPile(scene)
 
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
