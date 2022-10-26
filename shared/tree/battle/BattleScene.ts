@@ -5,7 +5,7 @@ import type { DungeonRoom } from '../Dungeon'
 import type { CharacterUid } from './Character'
 import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
-import type { Characters } from './Characters'
+import type { Characters, StanceId } from './Characters'
 import type { CommandQueue } from './CommandQueue'
 import type { ClaimableLoot, ClaimedLoot, TreasureChest, RunScore } from '.'
 
@@ -28,6 +28,11 @@ export interface BattleScene extends SceneHas {
     rooms: DungeonRoom[]
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {
+        timestamp: string
+    })[]
+    blocksAppliedThisTurn: { amount: number; targetUid: CharacterUid }[]
+    stanceChangesThisRoom: { newStance: StanceId; targetUid: CharacterUid }[]
     damagesDealtThisTurn: { amount: number; targetUid: CharacterUid }[]
     damagesDealtThisRoom: { amount: number; targetUid: CharacterUid }[]
     requireAction: RequiredAction | null

@@ -8,10 +8,11 @@ export { maybeTransitionBattleState } from './transition'
 export { makeBattleState } from './makeBattleState'
 export { getNpcMoves, updateNpcMoves } from './npcMoves'
 export { endRound } from './endRound'
+export { resetStances } from './resetStances'
 export {
     calculateLoot,
     getInitialLoot,
     getInitialTreasureChest,
     calculateChestProgress,
 } from './loot'
-export { getInitialRunScore, calculateNewRunScore } from './score'
+export { getInitialRunScore, calculateNewRunScore, getInitialRunDuration } from './score'

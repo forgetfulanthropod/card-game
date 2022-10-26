@@ -125,6 +125,7 @@ function newPCMeta(args: {
         screenX: (scale * BASE_WIDTH * args.x) / 100,
         screenY: (scale * BASE_HEIGHT * args.y) / 100,
         stance,
+        stanceInPrevTurn: stance,
         hasMoved: false,
         health: stats.constitution,
         block: 0,

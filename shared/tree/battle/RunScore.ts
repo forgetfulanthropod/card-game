@@ -18,29 +18,50 @@ export type RunScoreAttributeName =
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
     | 'bossRoomsExitedLowDamage'
+    | 'winsNoEnergyUsedLastTurn'
     | 'highestDamageHit'
+    | 'hitsOverVulgarThreshold'
     | 'minsUnderRunThreshold'
+    | 'survivingKaiju'
+    | 'finalUserHealthRemaining'
+    | 'roomsWonZeroDamage'
+    | 'blocksOverThreshold'
+    | 'roomsZeroStanceChanges'
+    | 'stanceChangesOverThreshold'
+    | 'cardsPlayedOverThreshold'
+    | 'null' // used for derived and/or server side score events
 
-export type RunScoreAttributeMeta = {
+export type RunScoreEventMeta = {
     description: string
     pointValue: number // eg. the number of points that 1 single "count" in RunScoreAttribute is worth
     attributeName: RunScoreAttributeName
     asset?: string
 }
 
-const notifiableEvent = [
-    'ENEMY_KILLED',
-    'ROOM_CLEARED',
-    'BOSS_KILLED',
-    'OVERKILL',
-    'PERFECT_KILL',
-    'EXIT_ROOM_FULL_HEALTH',
-    'EXIT_BOSS_FULL_HEALTH',
-    'EXIT_BOSS_LOW_DAMAGE',
-] as const
-export type NotifiableEvent = typeof notifiableEvent[number]
+export type NotifiableEvent =
+    | 'ENEMY_KILLED'
+    | 'ROOM_CLEARED'
+    | 'BOSS_KILLED'
+    | 'OVERKILL'
+    | 'PERFECT_KILL'
+    | 'EXIT_ROOM_FULL_HEALTH'
+    | 'EXIT_BOSS_FULL_HEALTH'
+    | 'EXIT_BOSS_LOW_DAMAGE'
+    | 'ROOM_WIN_NO_ENERGY_USED'
+    | 'ROOM_WIN_ZERO_DAMAGE'
 
-export type RunScoreEvent = NotifiableEvent | 'HIGHEST_DAMAGE' | 'RUN_COMPLETED'
+export type NonNotifiableEvent =
+    | 'HIGHEST_DAMAGE'
+    | 'RUN_COMPLETED'
+    | 'SURVIVING_KAIJU'
+    | 'FINAL_USER_HEALTH_REMAINING'
+    | 'HIT_VULGAR_THRESHOLD'
+    | 'BLOCK_OVER_THRESHOLD'
+    | 'NULL'
+    | 'STANCE_CHANGES'
+    | 'CARDS_OVER_THRESHOLD'
+
+export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
 export const RUN_SCORE_EVENT_MAPPING: Record<
     RunScoreAttributeName,
@@ -54,14 +75,22 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
     highestDamageHit: 'HIGHEST_DAMAGE',
+    hitsOverVulgarThreshold: 'HIT_VULGAR_THRESHOLD',
     minsUnderRunThreshold: 'RUN_COMPLETED',
     bossRoomsExitedLowDamage: 'EXIT_BOSS_LOW_DAMAGE',
+    winsNoEnergyUsedLastTurn: 'ROOM_WIN_NO_ENERGY_USED',
+    finalUserHealthRemaining: 'FINAL_USER_HEALTH_REMAINING',
+    survivingKaiju: 'SURVIVING_KAIJU',
+    roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
+    blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
+    stanceChangesOverThreshold: 'STANCE_CHANGES',
+    roomsZeroStanceChanges: 'STANCE_CHANGES',
+    cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
+    null: 'NULL',
 }
 
-export const RUN_SCORE_EVENT_META: Record<
-    RunScoreEvent,
-    RunScoreAttributeMeta
-> = {
+//TODO: Adjust point values to remove decimals
+export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     ENEMY_KILLED: {
         description: 'Number of enemies defeated',
         pointValue: 3,
@@ -93,6 +122,11 @@ export const RUN_SCORE_EVENT_META: Record<
         pointValue: 10,
         attributeName: 'roomsCleared',
     },
+    ROOM_WIN_NO_ENERGY_USED: {
+        description: 'Won battle without spending energy in last turn',
+        pointValue: 8,
+        attributeName: 'winsNoEnergyUsedLastTurn',
+    },
     OVERKILL: {
         description: 'Cumulative damage inflicted on top of dead enemy',
         pointValue: 0.25,
@@ -110,13 +144,51 @@ export const RUN_SCORE_EVENT_META: Record<
         attributeName: 'highestDamageHit',
     },
     RUN_COMPLETED: {
-        description: 'Completed run in under X minutes',
-        pointValue: 10,
-        attributeName: 'minsUnderRunThreshold',
+        description:
+            'Completed run (no score by itself but has derived events)',
+        pointValue: 0,
+        attributeName: 'null',
+    },
+    SURVIVING_KAIJU: {
+        description: 'Number of Kaiju alive at the end of run',
+        pointValue: 5,
+        attributeName: 'survivingKaiju',
+    },
+    FINAL_USER_HEALTH_REMAINING: {
+        description: 'Amount of health remaining at end of run',
+        pointValue: 0.15,
+        attributeName: 'finalUserHealthRemaining',
+    },
+    HIT_VULGAR_THRESHOLD: {
+        description: 'Number of hits that dealt >55 damage in a single turn',
+        pointValue: 1,
+        attributeName: 'hitsOverVulgarThreshold',
+    },
+    ROOM_WIN_ZERO_DAMAGE: {
+        description: 'Lose 0 health during a room',
+        pointValue: 3,
+        attributeName: 'roomsWonZeroDamage',
+    },
+    BLOCK_OVER_THRESHOLD: {
+        description: 'Generate over 40 block in a single turn',
+        pointValue: 1,
+        attributeName: 'blocksOverThreshold',
+    },
+    STANCE_CHANGES: {
+        description: 'Generate over 40 block in a single turn',
+        pointValue: 1, // need to fix
+        attributeName: 'null',
+    },
+    CARDS_OVER_THRESHOLD: {
+        description: 'Number of cards over 5 played in a single turn',
+        pointValue: 2,
+        attributeName: 'cardsPlayedOverThreshold',
+    },
+    NULL: {
+        description: 'Can be optionally used for derived events',
+        pointValue: 0,
+        attributeName: 'null',
     },
 }
-
-export const isNotifiableEvent = (event: any): event is NotifiableEvent =>
-    notifiableEvent.includes(event)
 
 export const RUN_TIME_THRESHOLD_MINS = 15
