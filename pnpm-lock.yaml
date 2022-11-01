@@ -71,8 +71,9 @@ importers:
     specifiers:
       '@monaco-editor/react': ^4.4.5
       '@pixi-essentials/gradients': ^0.0.5
-      '@pixi-spine/all-4.1': ^3.1.0
+      '@pixi-spine/all-4.1': ^3.1.0a
       '@pixi/animate': ^2.0.2
+      '@pixi/sound': ^5.0.0
       '@pixi/text': ^6.5.4
       '@pixi/text-html': ^2.1.1
       '@pixi/utils': ^6.5.4
@@ -97,6 +98,7 @@ importers:
       '@pixi-essentials/gradients': 0.0.5
       '@pixi-spine/all-4.1': 3.1.0_@pixi+utils@6.5.5
       '@pixi/animate': 2.0.2_0a4024322176880cfe5a0af899f30f16
+      '@pixi/sound': 5.0.0
       '@pixi/text': 6.5.5_@pixi+utils@6.5.5
       '@pixi/text-html': 2.1.1_0a4024322176880cfe5a0af899f30f16
       '@pixi/utils': 6.5.5
@@ -1189,6 +1191,14 @@ packages:
     resolution: {integrity: sha512-wA2PEVoHYaRiQ0/zvq8nqJZkzDT3qLRl8S7yVfL1yhsbCsh6KI0hjCwqy8b8xCAVAMwkInzWx64lvQbfActnAg==}
     dependencies:
       ismobilejs: 1.1.1
+    dev: false
+
+  /@pixi/sound/5.0.0:
+    resolution: {integrity: sha512-bBtAPbIy5x851WwEHGccvlli0PQbgzRkEOR8V5gfUtUwGRjPnOwpw/Jalc/TbTgauN+tysiR/0PAAlMctrbRaQ==}
+    engines: {node: '>=12', npm: '>=7', yarn: please-use-npm}
+    peerDependencies:
+      '@pixi/assets': ^7.0.0-X
+      '@pixi/core': ^7.0.0-X
     dev: false
 
   /@pixi/sprite-animated/6.4.2_29488554f0dadcd80af62121b716c5e5:

@@ -1,9 +1,11 @@
-import { Loader } from 'pixi.js'
+import { Loader, Resource } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 import { uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
 import { loadAllAnimateFiles } from './myanimate'
 import { assetMaps } from '@/assets'
+import deluxeAssetMap from '@/assets/deluxeAssetMap'
+import { keys } from 'shared/code'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -20,7 +22,7 @@ export function assetsLoadedPromise() {
 }
 
 export type AssetKey = keyof typeof allAssets
-// TODO: add back basic and deluxe
+
 export function startLoadingAssets() {
     const unique = uniqBy(Object.entries(allAssets), ([name, _]) => name)
 
@@ -29,9 +31,23 @@ export function startLoadingAssets() {
     }
 
     Loader.shared.load()
-    Loader.shared.onComplete.once(() => resolveLoaderPromise(null))
+    Loader.shared.onComplete.once(() => {
+        resolveLoaderPromise(null)
+
+        keys(deluxeAssetMap).forEach(deluxeAssetKey => {
+            Loader.shared.add(
+                deluxeAssetKey,
+                'assets/' + deluxeAssetMap[deluxeAssetKey]
+            )
+        })
+        Loader.shared.load()
+    })
 
     loadAllAnimateFiles()
+}
+
+export function getSound(assetId: string): object {
+    return Loader.shared.resources?.[assetId]
 }
 
 export function getTexture(assetId: AssetKey): PixiTexture {

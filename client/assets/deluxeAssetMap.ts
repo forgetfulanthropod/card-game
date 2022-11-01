@@ -1,0 +1,25 @@
+export default {
+    musicDefeat: 'sfx/Defeat.mp3',
+
+    soundNotEnoughEnergy: 'sfx/not enough energy.mp3',
+    soundBlock: 'sfx/block.mp3',
+    soundDraw: 'sfx/Card_draw_2.mp3',
+    soundHighlight: 'sfx/Card_highlight_2.mp3',
+
+    soundFrogKnightAttack: 'sfx/Frog Knight Attack.mp3',
+    soundFrogKnightTakingDamage: 'sfx/Frog Knight Taking Damage.mp3',
+    soundMushroomFarmerAttack: 'sfx/Mushroom Farmer Attack.mp3',
+    soundMushroomFarmerTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+    soundPenguinKnightAttack: 'sfx/Matcha Attack v2.mp3',
+    soundPenguinKnightTakingDamage: 'sfx/Matcha Taking Damage v2.mp3',
+    soundSkeletonWarriorAttack: 'sfx/Matcha Attack v2.mp3',
+    soundSkeletonWarriorTakingDamage: 'sfx/Matcha Taking Damage v2.mp3',
+    soundMatchaGelatinCubeAttack: 'sfx/Matcha Attack v2.mp3',
+    soundMatchaGelatinCubeTakingDamage: 'sfx/Matcha Taking Damage v2.mp3',
+    soundWarhogAttack: 'sfx/Mushroom Farmer Attack.mp3',
+    soundWarhogTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+    soundGnomeHooliganAttack: 'sfx/Mushroom Farmer Attack.mp3',
+    soundGnomeHooliganTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+    soundJerryAttack: 'sfx/Mushroom Farmer Attack.mp3',
+    soundJerryTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+}
