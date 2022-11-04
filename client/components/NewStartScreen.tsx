@@ -1,35 +1,49 @@
 import { useState, useEffect } from 'preact/hooks'
-
-import styles from './NewStartScreen.module.css'
+import { PrimaryButton } from './StartScreen'
 
 export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
-    const [showText, setShowText] = useState(true)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setShowText(showText => !showText)
-        }, 800)
-
-        return () => {
-            clearInterval(interval)
-        }
-    }, [])
-
     return <div
-        onClick={() => props.onEnter('random-' + Math.random().toString())}
-        class={styles.startScreenContainer}
+        className='border-2 grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'
     >
         <video
             src='./assets/backgrounds/main_menu_shed_bg.webm'
             autoPlay
             loop
-            style={{ maxWidth: '100%' }}
+            className='max-w-full absolute -z-50'
         />
-        <img class={styles.kaijuLogo} src='./logos/NewKaijuLogo.png' />
-        {showText && <p className={styles.startGame} id='startGame'>
-            START GAME
-        </p>}
+
+        <div className='nav w-full border-2 border-red-500 row-span-1 flex p-4 justify-between'>
+            <div className='border flex w-1/6 p-4'>
+                <img className='' src='./logos/NewKaijuLogo.png' />
+            </div>
+            <div className='border flex items-center'>
+                <PrimaryButton text='sign in' type='primary' size='small'/>
+            </div>
+        </div>
+
+        <div className='bottom h-full row-span-3 grid grid-cols-12'>
+            <div className='left-buttons h-full border-2 col-span-4 flex flex-col justify-end gap-8 p-8'>
+                <PrimaryButton
+                    text='tutorial'
+                    onClick={() =>
+                        props.onEnter('random-' + Math.random().toString())
+                    }
+                    type='secondary'
+                    size='large'
+                    />
+                <PrimaryButton
+                    text='play now'
+                    onClick={() =>
+                        props.onEnter('random-' + Math.random().toString())
+                    }
+                    type='primary'
+                    size='large'
+                    />
+            </div>
+            <div className='mid-buttons h-full border-2 col-span-4'></div>
+            <div className='right-buttons h-full border-2 col-span-4'></div>
+        </div>
     </div>
 }
