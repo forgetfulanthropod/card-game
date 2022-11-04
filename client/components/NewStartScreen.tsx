@@ -25,7 +25,7 @@ export function NewStartScreen(props: {
             src='./assets/backgrounds/main_menu_shed_bg.webm'
             autoPlay
             loop
-            style={{maxWidth: '110%'}}
+            style={{ maxWidth: '100%' }}
         />
         <img class={styles.kaijuLogo} src='./logos/NewKaijuLogo.png' />
         {showText && <p className={styles.startGame} id='startGame'>

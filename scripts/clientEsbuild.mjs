@@ -1,6 +1,9 @@
 import { build as esbuild } from 'esbuild'
 
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
+import postCssPlugin from 'esbuild-style-plugin'
+import tailwindPlugin from 'tailwindcss'
+import autoprefixerPlugin from 'autoprefixer'
 import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
@@ -72,6 +75,9 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         },
         plugins: [
             cssModulesPlugin(),
+            postCssPlugin({ postcss: {
+                plugins: [tailwindPlugin, autoprefixerPlugin]
+            }}),
             alias({
                 react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
                 'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
