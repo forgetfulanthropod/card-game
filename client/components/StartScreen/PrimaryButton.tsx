@@ -16,14 +16,14 @@ export const PrimaryButton = (props: {
 
     const sizeClass =
         props.size === 'large'
-            ? 'py-6 text-5xl px-6'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-sm sm:py-3 sm:px-3 sm:text-3xl'
             : props.size === 'small'
-            ? 'py-3 text-3xl px-8'
+            ? 'px-1 text-sm sm:py-2 sm:px-4 sm:text-2xl'
             : ''
 
     return <button
         onClick={props.onClick}
-        className={`text-white rounded-xl shadow-2xl ${colorClass} ${sizeClass}`}
+        className={`w-full text-white rounded-xl shadow-2xl ${colorClass} ${sizeClass}`}
     >
         <p className='uppercase font-bold'>{props.text}</p>
     </button>
