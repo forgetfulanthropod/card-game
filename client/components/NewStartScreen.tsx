@@ -1,6 +1,7 @@
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { useState, useEffect } from 'preact/hooks'
 import { PrimaryButton } from './StartScreen'
+import { GameModeContainer } from './StartScreen/GameModeContainer'
 import { NavIconWrapper } from './StartScreen/NavIconWrapper'
 
 export function NewStartScreen(props: {
@@ -50,7 +51,11 @@ export function NewStartScreen(props: {
                     </NavIconWrapper>
                 </div>
                 <div className='flex items-center h-full'>
-                    <PrimaryButton text='sign in' type='default' size='medium' />
+                    <PrimaryButton
+                        text='sign in'
+                        type='default'
+                        size='medium'
+                    />
                 </div>
             </div>
         </div>
@@ -78,19 +83,37 @@ export function NewStartScreen(props: {
                 <div className='h-1/6 w-full flex border-2 xl:pt-4 xl:gap-4'>
                     <PrimaryButton
                         text='quests'
-                        onClick={() => window.open('https://gq.kaijucards.io/', '_blank')}
+                        onClick={() =>
+                            window.open('https://gq.kaijucards.io/', '_blank')
+                        }
                         type='white'
                         size='small'
                     />
                     <PrimaryButton
                         text='forge'
-                        onClick={() => window.open('https://forge.kaijucards.io/', '_blank')}
+                        onClick={() =>
+                            window.open(
+                                'https://forge.kaijucards.io/',
+                                '_blank'
+                            )
+                        }
                         type='white'
                         size='small'
                     />
                 </div>
             </div>
-            <div className='right-buttons h-full border-2 col-span-4'></div>
+            <div className='right-buttons h-full border-2 col-span-4 flex flex-col justify-end gap-2 sm:gap-8 p-1 sm:p-3 md:p-5 xl:gap-6 xl:p-10'>
+                <GameModeContainer
+                    text='Play The First Siege'
+                    isNew
+                    imgSrc='./assets/main-menu/firstSiegeBanner.webp'
+                />
+                <GameModeContainer
+                    text='Play Daily Seed'
+                    imgSrc='./assets/main-menu/goodEarthMap.webp'
+                    isComingSoon
+                />
+            </div>
         </div>
     </div>
 }
