@@ -8,7 +8,7 @@ import {
     selectedCharacterPlaceIndex,
 } from './CharacterOptions'
 import { getEntryScene } from '@/data'
-import type { DisplayObject, PixiContainer } from '@/elementsUtil'
+import type { AssetKey, DisplayObject, PixiContainer } from '@/elementsUtil'
 import {
     glowFilter,
     isTextureKey,
@@ -151,14 +151,16 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
     const rays = characters.map((c, index): PixiContainer | null => {
         if (c != null) return null
 
+        const src = getTexture(`pedestalRay${index}` as AssetKey)
+
         return Container(
             {
                 zIndex: index,
             },
             Sprite({
                 name: `pedestalRay${index}`,
-                src: `pedestalRay${index}`,
-                scale: BASE_WIDTH / getTexture(`pedestalRay${index}`).width,
+                src,
+                scale: BASE_WIDTH / src.width,
             }),
             Container(
                 {},

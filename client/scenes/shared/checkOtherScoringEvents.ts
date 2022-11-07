@@ -1,27 +1,24 @@
 import { ROCursor } from 'sbaobab'
-import {
-    RunScoreEvent,
-    isNotifiableEvent,
-    BattleScene,
-    TOTAL_ROOMS_PER_RUN,
-} from 'shared'
+import { RunScoreEvent, BattleScene, NotifiableEvent } from 'shared'
 import { vals } from 'shared/code'
 import { handleScoringEvent } from './handleScoringEvent'
 
 export const NUM_KAIJUS_IN_PARTY = 3
 
+/**
+ * This fn makes roundtrips to handleScoringEvent to allow for overriding between events that also have a *parent* event that always comes before them (eg. exit room w/full health vs exit boss room w/full health, both come after ROOM_CLEARED)
+ */
 const checkOtherScoringEvents = (
-    event: RunScoreEvent,
+    event: NotifiableEvent,
     scene: ROCursor<BattleScene>
 ) => {
     // could change this to be isParentEvent or eventHasDerivedScoringEvents
-    if (isNotifiableEvent(event)) {
-        switch (event) {
-            case 'ROOM_CLEARED':
-                handleCharsInFullHealth(scene)
-                handleBossRoomCleared(scene)
-                break
-        }
+    switch (event) {
+        case 'ROOM_CLEARED':
+            handleCharsInFullHealth(scene)
+            handleBossRoomCleared(scene)
+            handleNoEnergyUsed(scene)
+            break
     }
 }
 
@@ -43,6 +40,8 @@ const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
         handleScoringEvent(roomTypeEvent, 1, scene)
     } else if (roomHadBoss) {
         checkHealthLostInBossRoom(scene)
+    } else {
+        checkHealthLostInRoom(scene)
     }
 }
 
@@ -60,28 +59,40 @@ const roomContainsBoss = (scene: ROCursor<BattleScene>): boolean => {
         .select('runScore')
         .select('attributes')
         .get('roomsCleared')
-    console.log(
-        `'running roomContainsBoss' current numRoomsPassed: ${numRoomsPassed}`
-    )
     const currentRoom = scene.get('rooms')[numRoomsPassed]
-    console.log(currentRoom)
     const boss = currentRoom.filter(enemyChar => enemyChar.boss)
     return boss.length > 0
 }
 
 const checkHealthLostInBossRoom = (scene: ROCursor<BattleScene>) => {
-    const totalHealthLost = scene
-        .get('damagesDealtThisRoom')
-        .reduce((prev, curr) => {
-            if (!curr.targetUid.includes('pc')) {
-                return 0
-            }
-            return curr.amount
-        }, 0)
+    const totalHealthLost = getTotalHealthLost(scene)
 
     if (totalHealthLost < 15) {
         handleScoringEvent('EXIT_BOSS_LOW_DAMAGE', 1, scene)
     }
+}
+
+const checkHealthLostInRoom = (scene: ROCursor<BattleScene>) => {
+    const totalHealthLost = getTotalHealthLost(scene)
+    if (totalHealthLost === 0) {
+        handleScoringEvent('ROOM_WIN_ZERO_DAMAGE', 1, scene)
+    }
+}
+
+const handleNoEnergyUsed = (scene: ROCursor<BattleScene>) => {
+    const noEnergyUsed = scene.get('energy') === scene.get('roundEnergy')
+    if (noEnergyUsed) {
+        handleScoringEvent('ROOM_WIN_NO_ENERGY_USED', 1, scene)
+    }
+}
+
+const getTotalHealthLost = (scene: ROCursor<BattleScene>): number => {
+    return scene.get('damagesDealtThisRoom').reduce((prev, curr) => {
+        if (curr.targetUid.includes('pc')) {
+            return curr.amount + prev
+        }
+        return prev + 0
+    }, 0)
 }
 
 export { checkOtherScoringEvents }

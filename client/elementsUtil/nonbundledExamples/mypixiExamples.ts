@@ -52,7 +52,7 @@ export function IfExample(): PixiContainer {
         cond,
         () =>
             Text({ text: 'it is true', style: { fontSize: 100, fill: 'red' } }),
-        () => Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+        () => Sprite({ src: getTexture('bookleProfile'), x: 500, y: 500 })
     )
 }
 
@@ -86,7 +86,11 @@ export function PortalizeExample(): PixiContainer {
         style: { fontSize: 100, fill: 'red' },
     })
     const cont = If(shown, () => {
-        const sprite = Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+        const sprite = Sprite({
+            src: getTexture('bookleProfile'),
+            x: 500,
+            y: 500,
+        })
 
         const t1 = Text({
             text: 'in sprite',
@@ -109,7 +113,7 @@ export function PortalizeExample(): PixiContainer {
 }
 
 export function AdjustExample(): PixiContainer {
-    const sprite = Sprite({ src: getTexture('bookle'), x: 500, y: 500 })
+    const sprite = Sprite({ src: getTexture('bookleProfile'), x: 500, y: 500 })
     const adjustedOnce = Adjust(sprite, {
         x: 100,
         y: 0,

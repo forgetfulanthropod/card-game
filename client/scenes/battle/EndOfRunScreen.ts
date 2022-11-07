@@ -185,7 +185,7 @@ export function EndOfRunScreen(): PixiContainer {
     })
 
     const numRoomsPassed = scene.get('numRoomsPassed')
-    const totalScore = scene.select('runScore').get('totalScore')
+    const totalScore = scene.select('runScore').get('totalScore') // currently bugged - value is retrieved before it's finished updating. maybe can call API to refresh before getting it
 
     // Runs text animations synchronously
     ;(async () => {

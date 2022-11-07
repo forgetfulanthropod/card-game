@@ -2,7 +2,7 @@ import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
 import { getNullCards } from './cards'
 import { makeCharacters } from './util'
-import { getInitialLoot, getInitialTreasureChest, getInitialRunScore } from '.'
+import { getInitialLoot, getInitialTreasureChest, getInitialRunScore, getInitialRunDuration } from '.'
 import { getRulebook } from '@/rulebook'
 
 export function makeBattleState(args: {
@@ -42,6 +42,9 @@ export function makeBattleState(args: {
         rooms: getRulebook().dungeonRooms['Skelepit Dungeon'],
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
+        cardsPlayedThisTurn: [],
+        blocksAppliedThisTurn: [],
+        stanceChangesThisRoom: [],
         damagesDealtThisTurn: [],
         damagesDealtThisRoom: [],
         queue: [],
@@ -54,10 +57,7 @@ export function makeBattleState(args: {
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
-        runDuration: {
-            startTime: new Date().toUTCString(),
-            endTime: null
-        }
+        runDuration: getInitialRunDuration()
     }
     return bs
 }

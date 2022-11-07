@@ -21,7 +21,9 @@ export function applyDamage(args: {
         throw new Error('must provide attacker or attackerUid')
     }
 
-    checkServerScoringEvent('highestDamageHit', scene, args)
+    if (attackerUid?.includes('pc')) {
+        checkServerScoringEvent('HIGHEST_DAMAGE', scene, args)
+    }
 
     const calcedDamage = getDamage({
         //@ts-expect-error
@@ -72,11 +74,6 @@ function manageSideEffectsOfNewDamage(
     calcedDamage: number
 ) {
     if (didTargetDie(scene, targetUid)) clearDead(scene)
-
-    if (damageChangesEnemyIntent(scene)) {
-        logger.info('updating the NPC moves due to enemy damage')
-        updateNpcMoves(scene)
-    }
 
     scene.apply('damagesDealtThisTurn', damages => [
         ...damages,

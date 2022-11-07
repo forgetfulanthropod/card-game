@@ -1,16 +1,14 @@
-import { Loader } from 'pixi.js'
+import { Loader, Resource } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
-import { uniqBy } from 'lodash'
+import { uniqBy, upperFirst } from 'lodash'
 import type { PixiTexture } from './mypixi'
 import { loadAllAnimateFiles } from './myanimate'
-import { assetMaps } from '@/assets'
+import { AssetKey, AssetMaps, assetMaps, deluxeAssetMaps } from '@/assets'
+
+import { keys } from 'shared/code'
+import { SoundAssetKey } from '@/assets/deluxeAssetMaps'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
-
-const allAssets: Record<string, string> = {}
-for (const map of Object.values(assetMaps)) {
-    Object.assign(allAssets, map)
-}
 
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
@@ -19,19 +17,41 @@ export function assetsLoadedPromise() {
     return promise
 }
 
-export type AssetKey = keyof typeof allAssets
-// TODO: add back basic and deluxe
 export function startLoadingAssets() {
-    const unique = uniqBy(Object.entries(allAssets), ([name, _]) => name)
+    loadAssetMaps(assetMaps)
+
+    Loader.shared.onComplete.once(() => {
+        resolveLoaderPromise(null)
+
+        loadAllAnimateFiles()
+        loadAssetMaps(deluxeAssetMaps)
+    })
+}
+
+function loadAssetMaps(assetMaps: AssetMaps) {
+    const flatAssets: Record<string, string> = {}
+
+    for (const map of Object.values(assetMaps)) {
+        Object.assign(flatAssets, map)
+    }
+
+    const unique = uniqBy(Object.entries(flatAssets), ([name, _]) => name)
 
     for (const [name, url] of unique) {
         Loader.shared.add(name, 'assets/' + url)
     }
 
     Loader.shared.load()
-    Loader.shared.onComplete.once(() => resolveLoaderPromise(null))
+}
 
-    loadAllAnimateFiles()
+export function playSound(assetId: SoundAssetKey): void {
+    getSound(assetId)
+        //@ts-expect-error
+        ?.sound?.play?.()
+}
+
+export function getSound(assetId: string): object {
+    return Loader.shared.resources?.[assetId]
 }
 
 export function getTexture(assetId: AssetKey): PixiTexture {

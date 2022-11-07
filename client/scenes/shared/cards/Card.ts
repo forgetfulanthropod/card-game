@@ -40,7 +40,7 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
-import type { CardTypeAssetId } from '@/assets'
+import type { AssetKey, CardTypeAssetId } from '@/assets'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -82,7 +82,7 @@ export function CardEl({
                 cardId.indexOf('basicAttack') === 0
                     ? 'Attack'
                     : upperFirst(cardId)
-            }`
+            }` as AssetKey
         )
     } catch {
         cardArtTexture = getTexture('cardArtPlaceholder')
@@ -318,7 +318,7 @@ function getEnergyContainer(card: Card): PixiContainer {
             anchor: 0.5,
         }),
         Sprite({
-            src: `cardEnergy${card.energy}`,
+            src: `cardEnergy${card.energy}` as AssetKey,
             anchor: 0.5,
         })
     )
@@ -327,7 +327,7 @@ function getEnergyContainer(card: Card): PixiContainer {
 function getCardOwnerToken(card: Card): PixiContainer {
     const cm = getBattleScene().get('allCharacters', card.characterUid)
 
-    const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}`)
+    const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}` as AssetKey)
 
     if (src == null) console.error("couldn't find the token")
 

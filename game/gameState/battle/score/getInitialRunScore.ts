@@ -14,7 +14,17 @@ export function getInitialRunScore(): RunScore {
             bossRoomsExitedFullHealth: 0,
             bossRoomsExitedLowDamage: 0,
             highestDamageHit: 0,
-            minsUnderRunThreshold: 0
+            minsUnderRunThreshold: 0,
+            winsNoEnergyUsedLastTurn: 0,
+            survivingKaiju: 0,
+            finalUserHealthRemaining: 0,
+            hitsOverVulgarThreshold: 0,
+            roomsWonZeroDamage: 0,
+            blocksOverThreshold: 0,
+            stanceChangesOverThreshold: 0,
+            roomsZeroStanceChanges: 0,
+            cardsPlayedOverThreshold: 0,
+            null: 0
         },
     }
 }

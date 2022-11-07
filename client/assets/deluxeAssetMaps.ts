@@ -1,0 +1,29 @@
+export type SoundAssetKey = keyof typeof soundAssets
+
+export const soundAssets = {
+    musicDefeat: 'sfx/Defeat.mp3',
+
+    soundNotEnoughEnergy: 'sfx/not enough energy.mp3',
+    soundBlock: 'sfx/block.mp3',
+    soundDraw: 'sfx/Card_draw_2.mp3',
+    soundHighlight: 'sfx/Card_highlight_2.mp3',
+
+    soundGenericTakingDamage: 'sfx/Card_highlight_2.mp3',
+
+    soundFrogKnightAttack: 'sfx/Frog Knight Attack.mp3',
+    soundFrogKnightTakingDamage: 'sfx/Frog Knight Taking Damage.mp3',
+    soundMushroomFarmerAttack: 'sfx/Mushroom Farmer Attack.mp3',
+    soundMushroomFarmerTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+    soundPenguinKnightAttack: 'sfx/Penguin Knight Attack.mp3',
+    soundPenguinKnightTakingDamage: 'sfx/Penguin Knight Taking Damage.mp3',
+    soundSkeletonWarriorAttack: 'sfx/Skeleton Warrior Attack.mp3',
+    soundSkeletonWarriorTakingDamage: 'sfx/Skeleton Warrior Taking Damage.mp3',
+    soundMatchaGelatinCubeAttack: 'sfx/Matcha Attack v2.mp3',
+    soundMatchaGelatinCubeTakingDamage: 'sfx/Matcha Taking Damage v2.mp3',
+    soundWarhogAttack: 'sfx/Warhog Attack.mp3',
+    soundWarhogTakingDamage: 'sfx/Warhog Taking Damage.mp3',
+    soundGnomeHooliganAttack: 'sfx/Gnome Hooligan Attack.mp3',
+    soundGnomeHooliganTakingDamage: 'sfx/Gnome Hooligan Taking Damage.mp3',
+    soundJerryAttack: 'sfx/Jerry Attack.mp3',
+    soundJerryTakingDamage: 'sfx/Jerry Taking Damage.mp3',
+}

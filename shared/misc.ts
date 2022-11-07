@@ -15,3 +15,7 @@ export type SceneHas = Readonly<{
 
 export type SceneId = 'entry' | 'battle'
 export type Scene = BattleScene | EntryScene
+
+export type NestedKeys<T> = T extends object
+    ? { [K in keyof T]-?: K | NestedKeys<T[K]> }[keyof T]
+    : never

@@ -26,7 +26,7 @@ export const keyTermsMap = {
 
     orbsOfProtection: 'blocks for 50% of Magic',
     orbsOfLightning: 'deals 35% of Magic to all enemies',
-    orbsOfFrost: '+1 Strongblock to party\n+1 Fatigue to enemies',
+    orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 
     grudge: 'intentGrudge',

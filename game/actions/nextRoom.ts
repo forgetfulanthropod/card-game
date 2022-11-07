@@ -8,6 +8,7 @@ import {
     clearRoomCardModifiers,
     drawNewHand,
     setRoundEnergy,
+    resetStances,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
@@ -18,7 +19,10 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('turnCount', 1)
     scene.set('isPlayerTurn', true)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-    scene.select('runScore').select('attributes').set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
+    scene
+        .select('runScore')
+        .select('attributes')
+        .set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
     const nextRoom = getNextRoom(scene)
     const newNpcs = makeNpcsForRoom(nextRoom)
     scene.apply('allCharacters', ac => ({
@@ -29,7 +33,9 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('nextNpcCommands', getNpcMoves(scene))
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
+    scene.set('cardsPlayedThisTurn', [])
     drawNewHand(scene)
+    resetStances(scene)
     scene.set('damagesDealtThisRoom', [])
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)

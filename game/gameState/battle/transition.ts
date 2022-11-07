@@ -14,32 +14,31 @@ import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
+    const gameIsOver = scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
+
+    if (winner) {
+        checkServerScoringEvent('STANCE_CHANGES', scene, {})
+        calculateNewRunScore(scene)
+        calculateChestProgress(scene)
+    }
 
     if (winner === 'PC') {
-        const gameIsOver =
-            scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
-
         if (gameIsOver) {
             scene.set('state', 'won')
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-            checkServerScoringEvent('minsUnderRunThreshold', scene, {})
+            checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
             putAllCardsInDrawPile(scene)
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)
-            resetStances(scene)
             clearRoomCardModifiers(scene)
 
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
         }
-
-        calculateChestProgress(scene)
-        calculateNewRunScore(scene)
         return true
     } else if (winner === 'NPC') {
-        calculateNewRunScore(scene)
         scene.set('state', 'lost')
         return true
     }
