@@ -45,9 +45,14 @@ function loadAssetMaps(assetMaps: AssetMaps) {
 }
 
 export function playSound(assetId: SoundAssetKey): void {
-    getSound(assetId)
-        //@ts-expect-error
-        ?.sound?.play?.()
+    const sound = getSound(assetId)
+    if (sound == null) return
+
+    //@ts-expect-error
+    sound.sound?.volume = 0.5
+
+    //@ts-expect-error
+    sound?.sound?.play?.()
 }
 
 export function getSound(assetId: string): object {
