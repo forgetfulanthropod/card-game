@@ -14,11 +14,11 @@ export function NewStartScreen(props: {
             className='max-w-full absolute -z-50'
         />
 
-        <div className='nav w-full border-2 border-red-800 row-span-1 flex p-4 justify-between items-center'>
-            <div className='border flex w-12 2xs:w-14 xs:w-18 sm:w-32 xl:w-64'>
+        <div className='nav w-full border-2 border-red-800 row-span-1 flex p-4 justify-between items-start'>
+            <div className='border flex w-12 2xs:w-14 xs:w-18 sm:w-32 xl:w-56'>
                 <img src='./logos/KaijuCards.png' />
             </div>
-            <div className='navRight flex justify-between sm:pl-12 sm:pr-8 border-2 border-orange-400 items-center w-full'>
+            <div className='navRight flex justify-between sm:pl-12 sm:pr-6 border-2 border-orange-400 items-start w-full'>
                 <div className='grid grid-cols-4 border-4 mr-4'>
                     <NavIconWrapper>
                         <img
@@ -49,8 +49,8 @@ export function NewStartScreen(props: {
                         />
                     </NavIconWrapper>
                 </div>
-                <div className='flex items-center'>
-                    <PrimaryButton text='sign in' type='default' size='small' />
+                <div className='flex items-center h-full'>
+                    <PrimaryButton text='sign in' type='default' size='medium' />
                 </div>
             </div>
         </div>
@@ -74,7 +74,22 @@ export function NewStartScreen(props: {
                     size='large'
                 />
             </div>
-            <div className='mid-buttons h-full border-2 col-span-4'></div>
+            <div className='mid-buttons h-full border-2 col-span-4 flex items-end gap-2 sm:gap-8 p-1 sm:p-3 md:p-5 xl:gap-6 xl:p-10'>
+                <div className='h-1/6 w-full flex border-2 xl:pt-4 xl:gap-4'>
+                    <PrimaryButton
+                        text='quests'
+                        onClick={() => window.open('https://gq.kaijucards.io/', '_blank')}
+                        type='white'
+                        size='small'
+                    />
+                    <PrimaryButton
+                        text='forge'
+                        onClick={() => window.open('https://forge.kaijucards.io/', '_blank')}
+                        type='white'
+                        size='small'
+                    />
+                </div>
+            </div>
             <div className='right-buttons h-full border-2 col-span-4'></div>
         </div>
     </div>
