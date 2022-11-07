@@ -46,10 +46,11 @@ function loadAssetMaps(assetMaps: AssetMaps) {
 
 export function playSound(assetId: SoundAssetKey): void {
     const sound = getSound(assetId)
-    if (sound == null) return
-
     //@ts-expect-error
-    sound.sound?.volume = 0.5
+    if (sound?.sound == null) return
+
+    // @ts-expect-error
+    sound.sound.volume = 0.5
 
     //@ts-expect-error
     sound?.sound?.play?.()
