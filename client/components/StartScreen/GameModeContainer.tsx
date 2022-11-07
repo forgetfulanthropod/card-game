@@ -9,7 +9,7 @@ export const GameModeContainer = ({
     isNew?: true
     isComingSoon?: true
 }) => {
-    return <div className='game-mode-container shadow-2xl hover:scale-105 transition-all uppercase'>
+    return <div className='game-mode-container shadow-2xl hover:scale-105 cursor-pointer transition-all uppercase'>
         <div className='game-mode-header bg-gradient-to-r from-black/90 via-[#858585]/90 to-[#AFAFAF]/80 rounded-t-xl border border-black flex justify-between items-center py-1 px-3 font-semibold text-2xl'>
             <h1 className='game-mode-header-text text-white'>{text}</h1>
             {isNew && NewIcon}
@@ -35,5 +35,5 @@ const NewIcon =
 
 const ComingSoonText =
     <div className='game-mode-image-placeholder-text text-white absolute left-0 right-0 top-1/3'>
-        <h1 className='w-full h-full text-center text-5xl font-semibold opacity-60'>Coming Soon</h1>
+        <h1 className='w-full h-full text-center text-2xl xl:text-4xl font-semibold opacity-60'>Coming Soon</h1>
     </div>
