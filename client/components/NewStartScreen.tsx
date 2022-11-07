@@ -15,7 +15,7 @@ export function NewStartScreen(props: {
         />
 
         <div className='nav w-full border-2 border-red-800 row-span-1 flex p-4 justify-between items-center'>
-            <div className='border flex w-12 2xs:w-14 xs:w-18 sm:w-32'>
+            <div className='border flex w-12 2xs:w-14 xs:w-18 sm:w-32 xl:w-64'>
                 <img src='./logos/KaijuCards.png' />
             </div>
             <div className='navRight flex justify-between sm:pl-12 sm:pr-8 border-2 border-orange-400 items-center w-full'>
@@ -49,7 +49,7 @@ export function NewStartScreen(props: {
                         />
                     </NavIconWrapper>
                 </div>
-                <div className='border flex items-center'>
+                <div className='flex items-center'>
                     <PrimaryButton text='sign in' type='default' size='small' />
                 </div>
             </div>
