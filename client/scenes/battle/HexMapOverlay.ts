@@ -4,7 +4,7 @@ import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { MainCharacterAnimation } from '../shared'
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import type { AssetKey, PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     glowFilter,
     Adjust,
@@ -104,7 +104,7 @@ type MapNode = {
 }
 
 function TileForNode(node: MapNode, depth: number, yOffset: number) {
-    const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}`)
+    const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}` as AssetKey)
     const displayWidth = (BASE_WIDTH / 7) * 2
 
     if (node == null) return Container({})

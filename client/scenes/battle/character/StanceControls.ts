@@ -10,6 +10,7 @@ import {
     Sprite,
     portalize,
     getStage,
+    AssetKey,
 } from '@/elementsUtil'
 import { nextTick, onUpdate, toDatum } from '@/util'
 import { last, upperFirst } from 'lodash'
@@ -85,7 +86,7 @@ function StanceBadge(
             {},
             If(hasMovedDatum, () =>
                 Sprite({
-                    src: `stance${upperFirst(stance)}Confirmed`,
+                    src: `stance${upperFirst(stance)}Confirmed` as AssetKey,
                     scale:
                         badgeWidth / getTexture('stanceNeutralConfirmed').width,
                     x: getXOffset(),
@@ -93,7 +94,7 @@ function StanceBadge(
                 })
             ),
             Sprite({
-                src: `stance${upperFirst(stance)}`,
+                src: `stance${upperFirst(stance)}` as AssetKey,
                 scale: 90 / getTexture('stanceNeutral').width,
                 x: getXOffset(),
                 anchor: 0.5,
@@ -234,7 +235,7 @@ function StanceBullets(
 
     const stanceBullets = stanceIds.map((stanceId, i) =>
         Sprite({
-            src: `stance${upperFirst(stanceId)}`,
+            src: `stance${upperFirst(stanceId)}` as AssetKey,
             anchor: 0.5,
             scale,
             x: -xOffset + xOffset * i,

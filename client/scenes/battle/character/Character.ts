@@ -36,7 +36,9 @@ import {
     flashTo,
     getSound,
     If,
+    playSound,
     Sprite,
+    SoundAssetKey,
 } from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
@@ -395,13 +397,12 @@ function flashDamageTo(
 }
 
 function playAttackSound(characterMeta: CharacterMeta) {
-    //@ts-expect-error
-    getSound(`sound${upperFirst(characterMeta.id)}Attack`)?.sound?.play?.()
+    playSound(`sound${upperFirst(characterMeta.id)}Attack` as SoundAssetKey)
 }
 
 function playTakingDamageSound(characterMeta: CharacterMeta) {
-    getSound(
-        `sound${upperFirst(characterMeta.id)}TakingDamage`
-        //@ts-expect-error
-    )?.sound?.play?.()
+    playSound(`soundGenericTakingDamage`)
+    playSound(
+        `sound${upperFirst(characterMeta.id)}TakingDamage` as SoundAssetKey
+    )
 }

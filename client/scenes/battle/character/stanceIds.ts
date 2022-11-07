@@ -3,7 +3,7 @@ import { CharacterMeta, StanceId } from 'shared'
 import { compose, datum } from 'datums'
 import { isMobileOnly } from 'mobile-device-detect'
 import { callApi } from '@/callApi'
-import { If, getTexture, Container, Sprite } from '@/elementsUtil'
+import { If, getTexture, Container, Sprite, AssetKey } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { upperFirst } from 'lodash'
 import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
@@ -43,7 +43,7 @@ export function StanceChambers(characterCursor: ROCursor<CharacterMeta>) {
         // }),
         ...stanceIds.map((stanceId, i) =>
             Sprite({
-                src: `stance${upperFirst(stanceId)}`,
+                src: `stance${upperFirst(stanceId)}` as AssetKey,
                 anchor: 0.5,
                 scale,
                 x: -40 + 80 * i,
@@ -85,7 +85,7 @@ export function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
     return If(data, ({ stance }) =>
         Sprite({
-            src: `healthBar${upperFirst(stance)}`,
+            src: `healthBar${upperFirst(stance)}` as AssetKey,
             anchor: spriteAnchor,
         })
     )
@@ -99,7 +99,7 @@ export function StanceBadge(characterCursor: ROCursor<CharacterMeta>) {
 
     return If(data, ({ stance }) => {
         return Sprite({
-            src: `stance${upperFirst(stance)}`,
+            src: `stance${upperFirst(stance)}` as AssetKey,
             scale: 90 / getTexture('stanceNeutral').width,
             x: healthBarTexture.width * 0.92,
             anchor: [0, 0.5],

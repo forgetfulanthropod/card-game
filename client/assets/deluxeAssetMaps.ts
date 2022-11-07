@@ -1,10 +1,14 @@
-export default {
+export type SoundAssetKey = keyof typeof soundAssets
+
+export const soundAssets = {
     musicDefeat: 'sfx/Defeat.mp3',
 
     soundNotEnoughEnergy: 'sfx/not enough energy.mp3',
     soundBlock: 'sfx/block.mp3',
     soundDraw: 'sfx/Card_draw_2.mp3',
     soundHighlight: 'sfx/Card_highlight_2.mp3',
+
+    soundGenericTakingDamage: 'sfx/Card_highlight_2.mp3',
 
     soundFrogKnightAttack: 'sfx/Frog Knight Attack.mp3',
     soundFrogKnightTakingDamage: 'sfx/Frog Knight Taking Damage.mp3',

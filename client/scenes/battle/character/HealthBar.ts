@@ -5,7 +5,7 @@ import type { CharacterMeta, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { getBattleScene } from '@/data'
-import type { PixiContainer, PixiTexture } from '@/elementsUtil'
+import type { AssetKey, PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
     If,
     onDestroyed,
@@ -238,7 +238,7 @@ function StanceBarIndicator(characterCursor: ROCursor<CharacterMeta>) {
 
     return If(data, ({ stance }) =>
         Sprite({
-            src: `healthBar${upperFirst(stance)}`,
+            src: `healthBar${upperFirst(stance)}` as AssetKey,
             anchor: spriteAnchor,
         })
     )

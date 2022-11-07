@@ -1,3 +1,4 @@
+import { AssetKey } from '@/assets'
 import { callApi } from '@/callApi'
 import { ROCursor } from 'sbaobab'
 import {
@@ -23,7 +24,7 @@ const handleScoringEvent = (
 
             displayScoreNotification(
                 `${displayName} defeated`,
-                `${id}Profile`,
+                `${id}Profile` as AssetKey,
                 scorePointsToAdd
             )
             break

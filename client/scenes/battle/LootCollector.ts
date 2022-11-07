@@ -2,6 +2,7 @@ import { Rectangle, Texture } from 'pixi.js'
 
 import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
+    AssetKey,
     getStage,
     getTexture,
     PixiContainer,
@@ -148,7 +149,9 @@ export function LootCollector(): PixiContainer {
             let properItemName = getDisplayName(item.name)
             let lootItemTextY = -250 * scale
             let lootItemSpriteY =
-                lootItemTextY + getTexture(itemSrc).height * (2 * scale) - 50
+                lootItemTextY +
+                getTexture(itemSrc as AssetKey).height * (2 * scale) -
+                50
 
             const itemPositionMap: Record<
                 LootFromGame | 'default',
@@ -193,7 +196,7 @@ export function LootCollector(): PixiContainer {
             })
 
             const LootItemSprite = Sprite({
-                src: getTexture(itemSrc),
+                src: getTexture(itemSrc as AssetKey),
                 scale: itemPositionMap[item.name].scale,
                 anchor: [0.5, 0.5],
                 x: 0,
@@ -292,7 +295,7 @@ export function LootCollector(): PixiContainer {
             // this condition prevents flash of draft card icon shifting when it's not supposed to
             displayScoreNotification(
                 `Collected ${upperFirst(currLootItemName)}`,
-                currLootItemName,
+                currLootItemName as AssetKey,
                 currLootItemCount
             )
             shiftCurrentItem(lootItemsContainer)
@@ -481,10 +484,10 @@ function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {
     })
 
     const ChestLevelText = Text({
-        text: `${
-            (TreasureChestLevelThreshold[(level + 1) as TreasureChestLevel] -
-            currRunScore).toFixed(0)
-        } points to reach level ${level + 1}`,
+        text: `${(
+            TreasureChestLevelThreshold[(level + 1) as TreasureChestLevel] -
+            currRunScore
+        ).toFixed(0)} points to reach level ${level + 1}`,
         anchor: [0.5, 0.5],
         x: 0,
         y: 665,

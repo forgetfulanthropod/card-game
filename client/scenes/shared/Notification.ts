@@ -1,4 +1,5 @@
 import {
+    AssetKey,
     getStage,
     getTexture,
     PixiContainer,
@@ -35,7 +36,7 @@ const containerName = `NotificationContainer`
  */
 const displayScoreNotification = async <T extends string>(
     textToDisplay: T,
-    assetSrc: string,
+    assetSrc: AssetKey,
     count: number
 ) => {
     const stage = getStage()
@@ -138,7 +139,7 @@ const shiftNotificationUp = async (
 
 function Notification<T extends string>(
     textToDisplay: T,
-    assetSrc: string,
+    assetSrc: AssetKey,
     count: number
 ) {
     let textureSrc
