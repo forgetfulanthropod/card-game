@@ -6,9 +6,7 @@ import { NavIconWrapper } from './StartScreen/NavIconWrapper'
 export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
-    return <div
-        className='border-2 border-yellow-400 grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'
-    >
+    return <div className='border-2 border-yellow-400 grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
         <video
             src='./assets/backgrounds/main_menu_shed_bg.webm'
             autoPlay
@@ -16,9 +14,7 @@ export function NewStartScreen(props: {
             className='max-w-full absolute -z-50'
         />
 
-        <div className='nav w-full border-2 border-red-800 row-span-1 flex p-4 justify-between items-center'
-        // style={{ scale: `${scale}` }}
-        >
+        <div className='nav w-full border-2 border-red-800 row-span-1 flex p-4 justify-between items-center'>
             <div className='border flex w-12 2xs:w-14 xs:w-18 sm:w-32'>
                 <img src='./logos/KaijuCards.png' />
             </div>
@@ -54,13 +50,13 @@ export function NewStartScreen(props: {
                     </NavIconWrapper>
                 </div>
                 <div className='border flex items-center'>
-                    <PrimaryButton text='sign in' type='primary' size='small' />
+                    <PrimaryButton text='sign in' type='default' size='small' />
                 </div>
             </div>
         </div>
 
         <div className='bottom h-full row-span-3 grid grid-cols-12'>
-            <div className='left-buttons h-full border-2 col-span-4 flex flex-col justify-end gap-2 sm:gap-8 p-1 sm:p-3 md:p-5'>
+            <div className='left-buttons h-full border-2 col-span-4 flex flex-col justify-end gap-2 sm:gap-8 p-1 sm:p-3 md:p-5 xl:gap-6 xl:p-10'>
                 <PrimaryButton
                     text='tutorial'
                     onClick={() =>
