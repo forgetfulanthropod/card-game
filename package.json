@@ -15,6 +15,10 @@
         "CI": "bash run CI"
     },
     "dependencies": {
+        "@solana/web3.js": "^1.66.2",
+        "@web3auth/base": "^3.0.4",
+        "@web3auth/modal": "^3.0.4",
+        "@web3auth/solana-provider": "^3.0.4",
         "classic-level": "^1.2.0",
         "datums": "^1.0.7",
         "deep-diff": "^1.0.2",

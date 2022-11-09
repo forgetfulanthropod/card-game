@@ -28,5 +28,5 @@ declare global {
     type Unbind = () => void
     type ROBattleScene = ROCursor<BattleScene>
     // eslint-disable-next-line no-var
-    var process: { env: { [key: string]: string } }
+    // var process: { env: { [key: string]: string } }
 }

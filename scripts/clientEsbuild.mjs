@@ -83,6 +83,7 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
                 'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
             }),
         ],
+        logLevel: 'error'
     })
         .then(() => console.log(`${time()}: client build succeeded`))
         .catch(err => console.error('CLIENT BUILD FAILED:', err))
