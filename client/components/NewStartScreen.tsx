@@ -9,7 +9,7 @@ export function NewStartScreen(props: {
 }): JSXElement {
     return <div className='grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
         <video
-            src='./assets/backgrounds/main_menu_shed_bg.webm'
+            src='./assets/backgrounds/main_menu_shed_bg.mp4'
             autoPlay
             loop
             className='max-w-full absolute -z-50'
