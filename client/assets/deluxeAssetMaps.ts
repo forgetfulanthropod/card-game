@@ -29,7 +29,7 @@ export const soundAssets = {
 }
 
 export const videoAssets = {
-    mapBg: 'hex map/dungeon test bg for export.mp4',
+    // mapBg: 'hex map/dungeon test bg for export.mp4',
 }
 
 export const sequences = {

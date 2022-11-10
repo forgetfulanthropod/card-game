@@ -49,6 +49,10 @@ export const entrySceneBackgrounds = {
     skelepitEntrySceneBackground: 'backgrounds/temple_background_4.webp',
 }
 
+export const hexMapBackgrounds = {
+    hooligansBluffHexMapBg: 'hex map/the first siege mock up.png',
+}
+
 export const cardArtAssets = {
     cardArtPlaceholder: 'cards/Card PNG Breakdown/Card Art/placeholder.webp',
     cardAttack: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',

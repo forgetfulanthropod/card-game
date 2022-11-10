@@ -33,9 +33,8 @@ interface BareGameActionArgs {
     finishCard: { cardUids: CardUid[] }
     openLootCollector: Empty
     openEndScreen: Empty
-    nextRoom: Empty
+    nextRoom: { choice: 0 | 1 | 2 | 3 }
     notifyRunScore: { event: RunScoreEvent; count: number }
-    confirmNextRoom: Empty
     choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {

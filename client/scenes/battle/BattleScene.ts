@@ -91,7 +91,7 @@ export function BattleScene(): PixiContainer {
                 if (battleRoomInfo) root.removeChild(battleRoomInfo)
                 battleRoomInfo = BattleRoomInfo({
                     info: [
-                        num == null
+                        num == null || num === -1
                             ? ''
                             : `${num} room${num === 1 ? '' : 's'} cleared`,
                     ],
