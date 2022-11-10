@@ -1,12 +1,17 @@
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
-import { useState, useEffect } from 'preact/hooks'
+import { useState, useEffect } from 'react'
 import { PrimaryButton } from './StartScreen'
 import { GameModeContainer } from './StartScreen/GameModeContainer'
 import { NavIconWrapper } from './StartScreen/NavIconWrapper'
+import { Web3Auth } from '@web3auth/modal'
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
+import { useWeb3Auth } from '@/hooks/useWeb3Auth'
 
 export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
+    const { web3Auth } = useWeb3Auth()
+
     return <div className='grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
         <video
             src='./assets/backgrounds/main_menu_shed_bg.mp4'

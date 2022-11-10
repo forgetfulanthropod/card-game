@@ -1,9 +1,9 @@
 import './global.css'
 
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useState } from 'react'
 
 import { GameManager } from './GameManager'
-import { UsernameEntry } from './UsernameEntry'
+// import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
 import { NewStartScreen } from './NewStartScreen'
 

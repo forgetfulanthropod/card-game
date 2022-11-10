@@ -1,5 +1,5 @@
 import { omit } from 'lodash'
-import { useRef, useState } from 'preact/hooks'
+import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import type { ROCursor } from 'sbaobab'
 import type { Gamestate } from 'shared'
@@ -39,9 +39,9 @@ function GamestateEditor(props: { top: string }): JSXElement {
     const [shown, setShown] = useState(false)
     const title = 'Edit gamestate tree'
     return <Root shown={shown} top={props.top} styleChildren={false}>
-        <span onClick={() => setShown(s => !s)}>
+        {/* <span onClick={() => setShown(s => !s)}>
             {shown ? <b>{title}</b> : title}
-        </span>
+        </span> */}
         {shown && <Monaco
             mref={ref}
             defaultValue={JSON.stringify(
@@ -80,11 +80,11 @@ function OneSidebar<T>(props: {
     const [events, setEvents] = useState(c.get())
     c.on('update', () => setEvents(c.get()))
     return <Root shown={shown} top={props.top} styleChildren={true}>
-        <span onClick={() => setShown(s => !s)}>
+        {/* <span onClick={() => setShown(s => !s)}>
             {shown ? <b>{props.title}</b> : props.title}
-        </span>
+        </span> */}
         {shown && <div>
-            {events.map((e, i) => <div key={i}>{JSON.stringify(e)}</div>)}
+            {/* {events.map((e, i) => <div key={i}>{JSON.stringify(e)}</div>)} */}
         </div>}
     </Root>
 }

@@ -1,5 +1,5 @@
-import type { ComponentChildren, JSX } from 'preact'
-import type { StateUpdater } from 'preact/hooks'
+// import type { ComponentChildren, JSX } from 'react'
+// import type { StateUpdater } from 'preact/hooks'
 import type { ROCursor } from 'sbaobab'
 import type { BattleScene } from 'shared'
 
@@ -9,9 +9,9 @@ declare global {
     // type JSXElement = PJSXElement
     /** Maybe type */
     type Mb<T> = T | null | undefined
-    type Children = ComponentChildren
+    // type Children = ComponentChildren
     type Callback = () => void
-    type Setter<T> = StateUpdater<T | undefined>
+    // type Setter<T> = StateUpdater<T | undefined>
     type Empty = Record<string, never>
     type Rect = [left: number, top: number, width: number, height: number]
 
@@ -28,5 +28,6 @@ declare global {
     type Unbind = () => void
     type ROBattleScene = ROCursor<BattleScene>
     // eslint-disable-next-line no-var
-    // var process: { env: { [key: string]: string } }
+    // @ts-expect-error
+    var process: { env: { [key: string]: string } }
 }
