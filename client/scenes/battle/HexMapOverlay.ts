@@ -25,6 +25,7 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
+import { mean } from 'lodash'
 
 export function HexMapOverlay(): PixiContainer {
     hoveredCharacterUid.set(null)
@@ -50,7 +51,13 @@ export function HexMapOverlay(): PixiContainer {
         //     src: 'mapBg',
         //     scale: 1,
         // }),
-        Container({}, ...AllTiles())
+        Container(
+            {
+                x: BASE_WIDTH * 0.05,
+                y: BASE_HEIGHT * 0.75,
+            },
+            ...AllTiles()
+        )
     )
 }
 
@@ -158,15 +165,18 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     if (node == null) return Container({})
 
-    const { choice } = getCurrentRoomAndChoiceFromNode(node)
+    const { choice, currentRoom } = getCurrentRoomAndChoiceFromNode(node)
+
+    const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
     const root = Container(
         {
             x: depth * displayWidth * 0.41,
-            y: BASE_HEIGHT * 0.8 + displayWidth * 0.18 * yOffset,
-            filters: !~choice
-                ? [new AdjustmentFilter({ brightness: 0.5 })]
-                : [],
+            y: displayWidth * 0.18 * yOffset,
+            filters:
+                !~choice && !isPlayerCharacterRoom
+                    ? [new AdjustmentFilter({ brightness: 0.5 })]
+                    : [],
         },
         Sprite({
             src: texture,
@@ -226,7 +236,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const characters: CharacterMeta[] = isPlayerCharacterRoom
         ? vals(scene.get('allCharacters')).filter(c => c.isPc && c.health > 0)
-        : nodeDepth <= numRoomsPassed
+        : nodeDepth < numRoomsPassed
         ? []
         : node.enemies.map(
               (e): CharacterMeta => ({ id: e.id, isPc: false } as CharacterMeta)
@@ -234,7 +244,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const root = Container(
         {
-            scale: 0.55,
+            scale: 0.45,
             y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
             events: {
@@ -270,13 +280,16 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
             if (!~choice) anim.cursor = 'default'
 
+            const pcXPositions = [180, 0, 180]
+            const npcXPositions = [-50, 130, -50]
+            const xPositions = characterMeta.isPc ? pcXPositions : npcXPositions
+
+            const yPositions = [70, 155, 270]
+            const isSolo = characters.length === 1
+
             return Adjust(anim, {
-                x: characterMeta.isPc
-                    ? 120 * (2 - i)
-                    : i === 2
-                    ? -50
-                    : 180 * i - 50,
-                y: characters.length === 1 ? 110 : 110 * i,
+                x: isSolo ? mean(xPositions) : xPositions[i],
+                y: isSolo ? mean(yPositions) : yPositions[i],
             })
         })
     )

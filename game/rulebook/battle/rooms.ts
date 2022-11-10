@@ -86,15 +86,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '2_0',
             enemies: [
                 {
-                    id: 'gnomeHooligan',
-                    level: 2,
-                },
-                {
                     id: 'orcWarrior',
-                    level: 2,
-                },
-                {
-                    id: 'gnomeHooligan',
                     level: 2,
                 },
             ],
@@ -104,6 +96,42 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '2_4',
             enemies: [
                 {
+                    id: 'skeletonWarrior',
+                    level: 1,
+                },
+                {
+                    id: 'skeletonWarrior',
+                    level: 2,
+                },
+                {
+                    id: 'skeletonWarrior',
+                    level: 1,
+                },
+            ],
+            edges: ['2_6', '', '3_3', ''],
+        },
+        '2_6': {
+            uid: '2_6',
+            enemies: [
+                {
+                    id: 'matchaGelatinCube',
+                    level: 3,
+                },
+                {
+                    id: 'skeletonWarrior',
+                    level: 3,
+                },
+                {
+                    id: 'matchaGelatinCube',
+                    level: 3,
+                },
+            ],
+            edges: ['', '3_7', '', ''],
+        },
+        '3_1': {
+            uid: '3_1',
+            enemies: [
+                {
                     id: 'gnomeHooligan',
                     level: 2,
                 },
@@ -116,42 +144,22 @@ export const dungeonRooms: DungeonRoomMaps = {
                     level: 2,
                 },
             ],
-            edges: ['2_6', '', '3_3', ''],
-        },
-        '2_6': {
-            uid: '2_6',
-            enemies: [
-                {
-                    id: 'matchaGelatinCube',
-                    level: 4,
-                },
-                {
-                    id: 'skeletonWarrior',
-                    level: 4,
-                },
-                {
-                    id: 'matchaGelatinCube',
-                    level: 4,
-                },
-            ],
-            edges: ['', '3_7', '', ''],
-        },
-        '3_1': {
-            uid: '3_1',
-            enemies: [
-                {
-                    id: 'warhog',
-                    level: 1,
-                },
-            ],
             edges: ['', '', '4_0', ''],
         },
         '3_3': {
             uid: '3_3',
             enemies: [
                 {
+                    id: 'gnomeHooligan',
+                    level: 2,
+                },
+                {
                     id: 'warhog',
                     level: 1,
+                },
+                {
+                    id: 'gnomeHooligan',
+                    level: 3,
                 },
             ],
             edges: ['', '4_4', '', ''],
@@ -160,7 +168,15 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '3_7',
             enemies: [
                 {
-                    id: 'warhog',
+                    id: 'gnomeHooligan',
+                    level: 1,
+                },
+                {
+                    id: 'gnomeHooligan',
+                    level: 2,
+                },
+                {
+                    id: 'gnomeHooligan',
                     level: 1,
                 },
             ],
@@ -170,8 +186,8 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '4_0',
             enemies: [
                 {
-                    id: 'warhog',
-                    level: 1,
+                    id: 'orcWarrior',
+                    level: 3,
                 },
             ],
             edges: ['', '5_1', '', ''],
@@ -190,7 +206,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '4_8',
             enemies: [
                 {
-                    id: 'warhog',
+                    id: 'mimic',
                     level: 1,
                 },
             ],
@@ -200,7 +216,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '5_1',
             enemies: [
                 {
-                    id: 'warhog',
+                    id: 'matchaGelatinCube',
                     level: 1,
                 },
             ],
@@ -210,7 +226,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '5_3',
             enemies: [
                 {
-                    id: 'warhog',
+                    id: 'matchaGelatinCube',
                     level: 1,
                 },
             ],
@@ -220,7 +236,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             uid: '5_7',
             enemies: [
                 {
-                    id: 'warhog',
+                    id: 'matchaGelatinCube',
                     level: 1,
                 },
             ],
