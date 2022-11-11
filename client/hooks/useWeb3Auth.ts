@@ -115,7 +115,7 @@ const getLoginMethodsConfig = () => {
     ] as const
 
     const disabledLoginMethodsParam: LoginMethodConfig = {};
-    loginMethods.forEach(method => disabledLoginMethodsParam[method] = { name: `${method} login`, showOnModal: true})
+    loginMethods.forEach(method => disabledLoginMethodsParam[method] = { name: `${method} login`, showOnModal: false})
 
     return disabledLoginMethodsParam
 }

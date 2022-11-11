@@ -22,7 +22,7 @@ export function NewStartScreen(props: {
         setIsLoggedIn(true)
     }
 
-    return <div className='grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
+    return <div className='font-sharp grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
         <video
             src='./assets/backgrounds/main_menu_shed_bg.mp4'
             autoPlay

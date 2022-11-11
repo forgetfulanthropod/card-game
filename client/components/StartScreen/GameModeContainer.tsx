@@ -10,7 +10,7 @@ export const GameModeContainer = ({
     isComingSoon?: true
 }) => {
     return <div className='game-mode-container drop-shadow-4xl hover:scale-105 cursor-pointer transition-all uppercase'>
-        <div className='game-mode-header bg-gradient-to-r from-black/90 via-[#858585]/90 to-[#AFAFAF]/80 rounded-t-xl flex justify-between items-center py-[2px] px-3 font-semibold text-[6px] md:text-[0.65rem] lg:text-lg xl:text-2xl xl:py-2'>
+        <div className='game-mode-header bg-gradient-to-r from-black/90 via-[#858585]/90 to-[#AFAFAF]/80 rounded-t-xl flex justify-between items-center py-[2px] px-3 font-semibold text-[6px] md:text-[0.65rem] lg:text-lg xl:text-2xl 2xl:text-4xl xl:py-2'>
             <h1 className='game-mode-header-text text-white'>{text}</h1>
             {isNew && NewIcon}
         </div>

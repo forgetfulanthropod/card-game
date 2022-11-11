@@ -16,12 +16,15 @@ module.exports = {
           '0 45px 65px rgba(0, 0, 0, 0.25)'
         ]
       },
+      fontFamily: {
+        'sharp': ['Jockey One', 'sans-serif']
+      },
     },
     screens: {
       '2xs': '365px',
       'xs': '480px',
       ...defaultTheme.screens
-    }
+    },
   },
   plugins: [],
 }
