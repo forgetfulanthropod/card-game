@@ -1,8 +1,8 @@
 import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { useState, useEffect } from 'react'
 import { PrimaryButton } from './StartScreen'
-import { GameModeContainer } from './StartScreen/GameModeContainer'
-import { NavIconWrapper } from './StartScreen/NavIconWrapper'
+import { GameModeContainer } from './StartScreen'
+import { NavIconWrapper } from './StartScreen'
 import { Web3Auth } from '@web3auth/modal'
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
 import { useWeb3Auth } from '@/hooks/useWeb3Auth'
@@ -11,6 +11,16 @@ export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
     const { web3Auth } = useWeb3Auth()
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const handleWeb3AuthLogin = async () => {
+        if (!web3Auth) return
+
+        await web3Auth.connect()
+        console.log('web3auth is connected!!!')
+        console.log(web3Auth.status)
+        setIsLoggedIn(true)
+    }
 
     return <div className='grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
         <video
@@ -54,13 +64,18 @@ export function NewStartScreen(props: {
                         />
                     </NavIconWrapper>
                 </div>
-                <div className='flex items-center h-full'>
-                    <PrimaryButton
-                        text='sign in'
-                        type='default'
-                        size='medium'
-                    />
-                </div>
+                {isLoggedIn ? (
+                    <p className='text-white text-2xl'>logged in</p>
+                ) : (
+                    <div className='flex items-center h-full'>
+                        <PrimaryButton
+                            text='sign in'
+                            type='default'
+                            size='medium'
+                            onClick={handleWeb3AuthLogin}
+                        />
+                    </div>
+                )}
             </div>
         </div>
 

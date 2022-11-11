@@ -29,7 +29,7 @@ export const GameModeContainer = ({
 }
 
 const NewIcon =
-    <div className='text-white bg-red-500 font-bold rounded-xl lg:py-1  lg:px-3 flex items-center border-2 border-red-200 relative justify-center'>
+    <div className='text-white bg-red-500 font-bold rounded-xl lg:py-0  lg:px-3 flex items-center border-2 border-red-200 relative justify-center'>
         <p className='px-1'>
             New
         </p>
