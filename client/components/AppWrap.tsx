@@ -1,4 +1,5 @@
 import { styled } from '@/config'
+import { FC } from 'react'
 
 const Relative = styled.div`
     position: relative;
@@ -7,6 +8,10 @@ const Relative = styled.div`
     font-size: 1.3vw;
 `
 
-export function AppWrap(props: { children: Children }): JSXElement {
-    return <Relative>{props.children}</Relative>
+type Props = {
+    children?: React.ReactNode
+  };
+
+export const AppWrap: FC<Props> = ({children} ) => {
+    return <Relative>{children}</Relative>
 }

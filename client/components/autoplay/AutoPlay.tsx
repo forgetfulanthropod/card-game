@@ -1,6 +1,6 @@
 /** NOT MAINTAINED OR WORKING */
 import { sample, values } from 'lodash'
-import { useState } from 'preact/hooks'
+import { useState } from 'react'
 import toast from 'react-hot-toast'
 import type {
     BattleScene,

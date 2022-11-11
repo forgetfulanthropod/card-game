@@ -1,8 +1,8 @@
-import 'preact/debug'
+// import 'preact/debug'
 
 import './config/nullUtil' // eslint-disable-line import/no-internal-modules
 import './util/misc' // eslint-disable-line import/no-internal-modules
-import { render } from 'preact'
+import { render } from 'react-dom'
 
 import { App } from './components'
 import { startLoadingAssets } from './elementsUtil'

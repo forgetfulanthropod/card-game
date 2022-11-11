@@ -9,16 +9,16 @@ export const GameModeContainer = ({
     isNew?: true
     isComingSoon?: true
 }) => {
-    return <div className='game-mode-container shadow-2xl hover:scale-105 cursor-pointer transition-all uppercase'>
-        <div className='game-mode-header bg-gradient-to-r from-black/90 via-[#858585]/90 to-[#AFAFAF]/80 rounded-t-xl border border-black flex justify-between items-center py-1 px-3 font-semibold text-[6px] md:text-xs lg:text-lg'>
+    return <div className='game-mode-container drop-shadow-4xl hover:scale-105 cursor-pointer transition-all uppercase'>
+        <div className='game-mode-header bg-gradient-to-r from-black/90 via-[#858585]/90 to-[#AFAFAF]/80 rounded-t-xl flex justify-between items-center py-[2px] px-3 font-semibold text-[6px] md:text-[0.65rem] lg:text-lg xl:text-2xl 2xl:text-4xl xl:py-2'>
             <h1 className='game-mode-header-text text-white'>{text}</h1>
             {isNew && NewIcon}
         </div>
         <div className='game-mode-image-container relative'>
-            <div className='game-mode-image flex w-full h-16 md:h-24 lg:h-32 xl:h-40'>
+            <div className='game-mode-image flex w-full h-16 md:h-20 lg:h-32 xl:h-40 2xl:h-56'>
                 <img
                     src={imgSrc}
-                    className={`rounded-b-xl object-cover object-top w-full h-full border-x border-b border-black ${
+                    className={`rounded-b-xl object-cover object-top w-full h-full  border-black ${
                         isComingSoon && ' grayscale brightness-50'
                     }`}
                 ></img>
@@ -29,8 +29,10 @@ export const GameModeContainer = ({
 }
 
 const NewIcon =
-    <div className='text-white bg-red-500 font-bold rounded-xl px-3 flex items-center border-2 border-red-200 '>
-        <p>New</p>
+    <div className='text-white bg-red-500 font-bold rounded-xl lg:py-0  lg:px-3 flex items-center border-2 border-red-200 relative justify-center'>
+        <p className='px-1'>
+            New
+        </p>
     </div>
 
 const ComingSoonText =

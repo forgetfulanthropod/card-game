@@ -9,28 +9,28 @@ export const PrimaryButton = (props: {
 }) => {
     const colorClass =
         props.type === 'primary'
-            ? 'bg-gradient-to-b from-[#F2B518] to-[#EB4511] border-[#762200]'
+            ? 'from-[#F2B518] to-[#EB4511] border-[#762200] bg-gradient-to-l '
             : props.type === 'secondary'
-            ? 'bg-gradient-to-b from-[#323232] to-[#101010] border-black'
+            ? 'from-[#323232] to-[#101010] border-black bg-gradient-to-l '
             : props.type === 'default'
-            ? 'bg-gradient-to-b from-[#4395FF] to-[#2F437D] border-[#172442]'
+            ? 'from-[#4395FF] to-[#2F437D] border-[#172442] bg-gradient-to-l '
             : props.type === 'white'
-            ? 'bg-gradient-to-b from-[#FFFFFF]/50 to-[#D4D4D4]/40 border-[#E0E0E0]'
+            ? 'from-slate-100/30 via-slate-400/40 to-slate-600/30 border-[#E0E0E0] bg-gradient-to-l backdrop-blur-md'
             : ''
 
     const sizeClass =
         props.size === 'large'
-            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-lg sm:py-3 sm:px-3 sm:text-3xl xl:py-5 xl:text-5xl'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-lg sm:py-3 sm:px-3 sm:text-3xl xl:py-5 xl:text-5xl 2xl:py-7 2xl:text-7xl'
             : props.size === 'medium'
-            ? 'px-3 text-sm sm:py-1 sm:px-5 sm:text-xl xl:py-3 xl:px-10 xl:text-3xl'
+            ? 'px-3 text-sm sm:py-1 sm:px-5 sm:text-xl xl:py-3 xl:px-10 xl:text-3xl 2xl:text-5xl'
             : props.size === 'small'
-            ? 'px-1 sm:py-2 sm:px-4 text-sm sm:text-lg xl:text-2xl'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-base sm:py-3 sm:px-3 sm:text-md xl:py-5 xl:text-2xl 2xl:py-7 2xl:text-5xl'
             : ''
 
     return <button
         onClick={props.onClick}
-        className={`border w-full text-white shadow-2xl hover:scale-105 transition rounded-3xl ${colorClass} ${sizeClass}`}
+        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl ${colorClass} ${sizeClass}`}
     >
-        <p className='uppercase font-bold'>{props.text}</p>
+        <p className='uppercase'>{props.text}</p>
     </button>
 }

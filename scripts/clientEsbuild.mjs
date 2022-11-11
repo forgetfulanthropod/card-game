@@ -8,6 +8,8 @@ import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 
 const password = 'dailyship'
 const buildDir = 'public/'
@@ -41,9 +43,12 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         sourcemap: !isProduction, //isDevelopment,
         keepNames: !isProduction,
         entryPoints: [entryPoint],
-        inject: ['client/config/preact-shim.js'],
-        jsxFactory: 'h',
-        jsxFragment: 'Fragment',
+        // inject: ['client/config/preact-shim.js'],
+        // jsxFactory: 'h',
+        // jsxFragment: 'Fragment',
+        // jsxImportSource: 'preact',
+        // jsx: 'transform',
+        keepNames: true,
         bundle: true,
         outfile: outFile,
         target: 'es6',
@@ -52,6 +57,8 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
             '.tsx': 'tsx',
             '.svg': 'dataurl',
             '.css': 'css',
+            '.map': 'json',
+            '.js': 'js'
             // '.png': 'file',
             // '.webp': 'file',
             // '.jpg': 'file',
@@ -75,14 +82,20 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         },
         plugins: [
             cssModulesPlugin(),
+            NodeModulesPolyfillPlugin(),
+            NodeGlobalsPolyfillPlugin({
+                process: true,
+                buffer: true
+            }),
             postCssPlugin({ postcss: {
                 plugins: [tailwindPlugin, autoprefixerPlugin]
             }}),
-            alias({
-                react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-            }),
+            // alias({
+            //     'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            //     'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            // }),
         ],
+        logLevel: 'error',
     })
         .then(() => console.log(`${time()}: client build succeeded`))
         .catch(err => console.error('CLIENT BUILD FAILED:', err))

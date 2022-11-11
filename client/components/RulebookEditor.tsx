@@ -1,6 +1,6 @@
-import { h, Fragment, JSX, Ref, RefObject } from 'preact' // eslint-disable-line
+import { Fragment, Ref, RefObject } from 'react' // eslint-disable-line
 
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'react'
 import type { Rulebook } from 'shared'
 import toast from 'react-hot-toast'
 import { useCursor } from './util'
