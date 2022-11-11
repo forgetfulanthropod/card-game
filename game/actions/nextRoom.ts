@@ -39,7 +39,6 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('cardsPlayedThisRoom', [])
     scene.set('cardsPlayedThisTurn', [])
     drawNewHand(scene)
-    resetStances(scene)
     scene.set('damagesDealtThisRoom', [])
     scene.set('isInMap', true)
     scene.select('treasureChest').set('upgraded', false)

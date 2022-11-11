@@ -50,7 +50,8 @@ export const entrySceneBackgrounds = {
 }
 
 export const hexMapBackgrounds = {
-    hooligansBluffHexMapBg: 'hex map/the first siege mock up.png',
+    hooligansBluffHexMapBg:
+        'hex map/hooligans bluff/the first siege mock up.png',
 }
 
 export const cardArtAssets = {
@@ -274,12 +275,12 @@ export const mapAssets = {
 }
 
 export const mapTileAssets = {
-    mapTile1: 'hex map/Tile 1.png',
-    mapTile2: 'hex map/Tile 2.png',
-    mapTile3: 'hex map/Tile 3.png',
-    mapTile4: 'hex map/Tile 4.png',
-    mapTile5: 'hex map/Tile 5.png',
-    mapTile6: 'hex map/Tile 6.png',
-    mapTile7: 'hex map/Tile 7.png',
-    mapTile8: 'hex map/Tile 8.png',
+    mapTile1: 'hex map/hooligans bluff/base tile.webp',
+    mapTile2: 'hex map/hooligans bluff/base tile.webp',
+    mapTile3: 'hex map/hooligans bluff/base tile.webp',
+    mapTile4: 'hex map/hooligans bluff/base tile.webp',
+    mapTile5: 'hex map/hooligans bluff/base tile.webp',
+    mapTile6: 'hex map/hooligans bluff/base tile.webp',
+    mapTile7: 'hex map/hooligans bluff/base tile.webp',
+    mapTile8: 'hex map/hooligans bluff/base tile.webp',
 }

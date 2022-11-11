@@ -1,5 +1,4 @@
 import type { BattleCursor } from 'shared'
-import { TOTAL_ROOMS_PER_RUN } from 'shared'
 
 import { vals } from 'shared/code'
 import { checkWinner } from './round'
@@ -14,7 +13,7 @@ import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
-    const gameIsOver = scene.get('numRoomsPassed') + 1 >= TOTAL_ROOMS_PER_RUN
+    const gameIsOver = !!scene.get('currentRoom').enemies.find(e => e.boss)
 
     if (winner) {
         checkServerScoringEvent('STANCE_CHANGES', scene, {})
@@ -28,6 +27,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
+            resetStances(scene)
             putAllCardsInDrawPile(scene)
             setAllCharactersToUnmoved(scene)
             clearAllEffects(scene)

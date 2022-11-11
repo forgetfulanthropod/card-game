@@ -144,7 +144,7 @@ export const dungeonRooms: DungeonRoomMaps = {
                     level: 2,
                 },
             ],
-            edges: ['', '', '4_0', ''],
+            edges: ['3_3', '', '4_0', ''],
         },
         '3_3': {
             uid: '3_3',
@@ -268,6 +268,7 @@ export const dungeonRooms: DungeonRoomMaps = {
                 {
                     id: 'mimic',
                     level: 10,
+                    boss: true,
                 },
             ],
             edges: ['', '', '6-b', ''],

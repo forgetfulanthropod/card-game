@@ -161,7 +161,7 @@ function sortAndRemoveDuplicates(allTiles: PixiContainer[]) {
 
 function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
     const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}` as AssetKey)
-    const displayWidth = BASE_WIDTH * 0.24
+    const displayWidth = BASE_WIDTH * 0.12
 
     if (node == null) return Container({})
 
@@ -171,8 +171,8 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const root = Container(
         {
-            x: depth * displayWidth * 0.41,
-            y: displayWidth * 0.18 * yOffset,
+            x: depth * displayWidth * 0.82,
+            y: displayWidth * 0.36 * yOffset,
             filters:
                 !~choice && !isPlayerCharacterRoom
                     ? [new AdjustmentFilter({ brightness: 0.5 })]
@@ -236,7 +236,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const characters: CharacterMeta[] = isPlayerCharacterRoom
         ? vals(scene.get('allCharacters')).filter(c => c.isPc && c.health > 0)
-        : nodeDepth < numRoomsPassed
+        : nodeDepth <= numRoomsPassed
         ? []
         : node.enemies.map(
               (e): CharacterMeta => ({ id: e.id, isPc: false } as CharacterMeta)

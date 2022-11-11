@@ -25,5 +25,3 @@ export type RoomEnemies = ReadonlyArray<{
     level: string | number
     boss?: true
 }>
-
-export const TOTAL_ROOMS_PER_RUN = 6
