@@ -10,7 +10,13 @@ import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { checkOtherScoringEvents, MainCharacterAnimation } from '../shared'
-import { AssetKey, loopSong, PixiContainer, PixiSprite } from '@/elementsUtil'
+import {
+    AssetKey,
+    loopSong,
+    PixiContainer,
+    PixiSprite,
+    Spine,
+} from '@/elementsUtil'
 import {
     glowFilter,
     Adjust,
@@ -43,9 +49,9 @@ export function HexMapOverlay(): PixiContainer {
             },
             defaultCursor: true,
         }),
-        Background({
-            srcs: ['hooligansBluffHexMapBg'],
-            scale: 1,
+        Spine({
+            name: 'hooligansBluffHexMapBg',
+            animation: 'animation',
         }),
         // VideoBackground({
         //     name: 'mapBg',

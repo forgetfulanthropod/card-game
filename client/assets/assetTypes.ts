@@ -22,5 +22,7 @@ export type AnimationId =
     | 'Idle'
     | RestSiteAnimationId
     | BattleSceneAnimationId
+    | HexMapSceneAnimationId
 export type RestSiteAnimationId = 'Position 1' | 'Position 2' | 'Position 3'
 export type BattleSceneAnimationId = 'animation'
+export type HexMapSceneAnimationId = 'animation'

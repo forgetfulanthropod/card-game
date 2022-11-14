@@ -49,11 +49,6 @@ export const entrySceneBackgrounds = {
     skelepitEntrySceneBackground: 'backgrounds/temple_background_4.webp',
 }
 
-export const hexMapBackgrounds = {
-    hooligansBluffHexMapBg:
-        'hex map/hooligans bluff/the first siege mock up.png',
-}
-
 export const cardArtAssets = {
     cardArtPlaceholder: 'cards/Card PNG Breakdown/Card Art/placeholder.webp',
     cardAttack: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
@@ -217,6 +212,8 @@ export const characterClassAssets = {
 } as const
 
 export const spineAssets = {
+    hooligansBluffHexMapBg: 'spines/scenes/hex map/hooligans bluff/sky.json',
+
     hooligansBluffBg1_0:
         'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_1.json',
     hooligansBluffBg1_1:
