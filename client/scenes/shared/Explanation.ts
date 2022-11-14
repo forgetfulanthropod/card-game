@@ -55,9 +55,10 @@ export const keyTermsMap = {
 export type KeyTerm = keyof typeof keyTermsMap
 
 export function getTermIndex(term: string, explanation: string): number {
-    return explanation
-        .toLowerCase()
-        .indexOf(' ' + startCase(term).toLowerCase())
+    const lowerCaseTerm = startCase(term).toLowerCase()
+    var re = new RegExp(`${lowerCaseTerm}`, 'g')
+
+    return explanation.toLowerCase().search(re)
 }
 
 export function TermExplanationsIf({
@@ -199,7 +200,9 @@ export function ExplanationIf({
     return If(isShown, () => {
         const root = Container({})
 
-        nextTick().then(() =>
+        nextTick().then(() => {
+            if (root == null) return
+
             portalize({
                 from: root,
                 to: () => getStage(),
@@ -211,7 +214,7 @@ export function ExplanationIf({
                     },
                 }),
             })
-        )
+        })
 
         return root
     })

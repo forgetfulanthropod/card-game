@@ -18,7 +18,7 @@ export const collectLoot: GameActions['collectLoot'] = args => {
 
     const newRemainingLoot = collectCurrentLootItem(scene)
     if (isEmpty(newRemainingLoot)) {
-        return nextRoom(args)
+        return (args.game.select('scene') as BattleCursor).set('isInMap', true)
     }
 
     return

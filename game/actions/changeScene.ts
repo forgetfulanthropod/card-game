@@ -25,6 +25,5 @@ export const changeScene: GameActions['changeScene'] = args => {
         )
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
-        nextRoom({ game })
     }
 }

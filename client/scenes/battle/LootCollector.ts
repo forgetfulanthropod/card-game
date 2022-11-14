@@ -5,7 +5,9 @@ import {
     AssetKey,
     getStage,
     getTexture,
+    loopSong,
     PixiContainer,
+    playSongOnce,
     RoundedRectangleGradientSprite,
     Text,
     TweenableContainer,
@@ -80,6 +82,10 @@ export function LootCollector(): PixiContainer {
     let currLootItemCount = lootItems[0].count
 
     let [currLootItem, ...remainingLootItems] = renderLoot()
+
+    if (currLootItem.name !== 'TreasureChestContainer')
+        setTimeout(() => playSongOnce('roomVictoryMusicHooligansBluff'), 0)
+
     const lootItemsContainer = TweenableContainer(
         {
             x: lootScreenHasOpened

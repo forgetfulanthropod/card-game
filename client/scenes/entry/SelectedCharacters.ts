@@ -85,7 +85,8 @@ export function SelectedCharactersEl(): PixiContainer {
 
 function SelectedCharacterText() {
     return Text({
-        text: 'CHOOSE YOUR CHARACTERS',
+        // text: 'CHOOSE YOUR CHARACTERS',
+        text: 'CHOOSE   YOUR   KAIJU',
         x: BASE_WIDTH * 0.506,
         y: BASE_HEIGHT * 0.565,
         anchor: 0.5,

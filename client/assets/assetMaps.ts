@@ -212,6 +212,19 @@ export const characterClassAssets = {
 } as const
 
 export const spineAssets = {
+    hooligansBluffHexMapBg: 'spines/scenes/hex map/hooligans bluff/sky.json',
+
+    hooligansBluffBg1_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_1.json',
+    hooligansBluffBg1_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg2_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_2.json',
+    hooligansBluffBg2_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg3_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_3/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+
     frogKnightSpine: 'spines/characters/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
         'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
@@ -270,12 +283,12 @@ export const mapAssets = {
 }
 
 export const mapTileAssets = {
-    mapTile1: 'hex map/Tile 1.png',
-    mapTile2: 'hex map/Tile 2.png',
-    mapTile3: 'hex map/Tile 3.png',
-    mapTile4: 'hex map/Tile 4.png',
-    mapTile5: 'hex map/Tile 5.png',
-    mapTile6: 'hex map/Tile 6.png',
-    mapTile7: 'hex map/Tile 7.png',
-    mapTile8: 'hex map/Tile 8.png',
+    mapTile1: 'hex map/hooligans bluff/base tile.webp',
+    mapTile2: 'hex map/hooligans bluff/base tile.webp',
+    mapTile3: 'hex map/hooligans bluff/base tile.webp',
+    mapTile4: 'hex map/hooligans bluff/base tile.webp',
+    mapTile5: 'hex map/hooligans bluff/base tile.webp',
+    mapTile6: 'hex map/hooligans bluff/base tile.webp',
+    mapTile7: 'hex map/hooligans bluff/base tile.webp',
+    mapTile8: 'hex map/hooligans bluff/base tile.webp',
 }

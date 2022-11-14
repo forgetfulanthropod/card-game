@@ -1,7 +1,9 @@
 import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
+    loopSong,
     PixiContainer,
     PixiText,
+    playSongOnce,
     RoundedRectangleGradientSprite,
 } from '@/elementsUtil'
 import {
@@ -54,6 +56,10 @@ const animateNumberInElement = async (
 export function EndOfRunScreen(): PixiContainer {
     const scene = getBattleScene()
     const battleState = scene.get('state')
+
+    battleState === 'won'
+        ? loopSong('runVictoryMusicHooligansBluff')
+        : loopSong('defeatMusicHooligansBluff')
 
     const VictorySign = TweenableContainer(
         {},
@@ -190,7 +196,10 @@ export function EndOfRunScreen(): PixiContainer {
     // Runs text animations synchronously
     ;(async () => {
         // if state has not transitioned, then
-        if (scene.get('endScreenHasOpened') === false && scene.get('state') === 'won') {
+        if (
+            scene.get('endScreenHasOpened') === false &&
+            scene.get('state') === 'won'
+        ) {
             handleScoringEvent('ROOM_CLEARED', 1, scene)
             callApi('openEndScreen', {})
         }

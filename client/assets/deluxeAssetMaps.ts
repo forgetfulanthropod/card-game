@@ -1,6 +1,8 @@
-export type SoundAssetKey = keyof typeof soundAssets
+export type SoundAssetKey = SoundEffectAssetKey | MusicAssetKey
 
-export const soundAssets = {
+export type SoundEffectAssetKey = keyof typeof soundEffectAssets
+
+export const soundEffectAssets = {
     musicDefeat: 'sfx/Defeat.mp3',
 
     soundNotEnoughEnergy: 'sfx/not enough energy.mp3',
@@ -29,7 +31,21 @@ export const soundAssets = {
 }
 
 export const videoAssets = {
-    mapBg: 'hex map/dungeon test bg for export.mp4',
+    // mapBg: 'hex map/dungeon test bg for export.mp4',
+}
+
+export type MusicAssetKey = keyof typeof musicAssets
+
+export const musicAssets = {
+    entrySceneMusicHooligansBluff:
+        'music/Main Theme Variants/boss_battle_and_character_select.mp3',
+    hexMapMusicHooligansBluff: 'music/Main Theme Variants/map_1.mp3',
+    battleMusicHooligansBluff: 'music/Main Theme Variants/combat_default.mp3',
+    bossBattleMusicHooligansBluff:
+        'music/Main Theme Variants/boss_battle_and_character_select.mp3',
+    roomVictoryMusicHooligansBluff: 'music/Room_Victory.mp3',
+    defeatMusicHooligansBluff: 'music/defeat song_v1.mp3',
+    runVictoryMusicHooligansBluff: 'music/entire_run_victory_song_v1.mp3',
 }
 
 export const sequences = {

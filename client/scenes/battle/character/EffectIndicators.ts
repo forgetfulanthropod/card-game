@@ -62,8 +62,7 @@ function InteractiveEffectCounter(
         },
         Sprite({
             src: getEffectIconSrc(effect.id),
-            width: width,
-            height: width,
+            scale: width / getEffectIconSrc(effect.id).width,
             anchor: [0.5, 0.4],
         }),
         Text({
