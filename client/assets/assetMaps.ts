@@ -217,6 +217,17 @@ export const characterClassAssets = {
 } as const
 
 export const spineAssets = {
+    hooligansBluffBg1_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_1.json',
+    hooligansBluffBg1_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg2_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_2.json',
+    hooligansBluffBg2_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg3_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_3/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+
     frogKnightSpine: 'spines/characters/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
         'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',

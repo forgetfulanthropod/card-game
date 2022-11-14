@@ -7,7 +7,6 @@ import {
     PixiText,
     PixiTexture,
 } from './aliases'
-import 'pixi-sound'
 
 import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import type {

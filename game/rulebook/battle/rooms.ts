@@ -263,7 +263,7 @@ export const dungeonRooms: DungeonRoomMaps = {
             edges: ['', '7_7', '', ''],
         },
         '7_7': {
-            uid: '3_7',
+            uid: '7_7',
             enemies: [
                 {
                     id: 'mimic',

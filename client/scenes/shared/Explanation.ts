@@ -200,7 +200,9 @@ export function ExplanationIf({
     return If(isShown, () => {
         const root = Container({})
 
-        nextTick().then(() =>
+        nextTick().then(() => {
+            if (root == null) return
+
             portalize({
                 from: root,
                 to: () => getStage(),
@@ -212,7 +214,7 @@ export function ExplanationIf({
                     },
                 }),
             })
-        )
+        })
 
         return root
     })

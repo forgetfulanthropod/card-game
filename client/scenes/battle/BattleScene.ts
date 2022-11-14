@@ -17,13 +17,21 @@ import { HexMapOverlay } from './HexMapOverlay'
 import { LootCollector } from './LootCollector'
 import { RestSiteOverlay } from './RestSiteOverlay'
 import { Background } from '@/scenes'
-import { Container, DisplayObject, If, loopSong } from '@/elementsUtil'
+import {
+    AssetKey,
+    Container,
+    DisplayObject,
+    If,
+    loopSong,
+    SpineAsset,
+} from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
 import { EndOfRunScreen } from './EndOfRunScreen'
 import { ROCursor } from 'sbaobab'
+import { SpineBackground } from '../background'
 
 export function BattleSceneEl(): PixiContainer {
     const hoveredCardUid = datum<CardUid | null>(null)
@@ -44,7 +52,7 @@ export function BattleSceneEl(): PixiContainer {
                 ),
             ],
         },
-        Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
+        // Background({ scale: 1, spineSrc: 'hooligansBluffSpine' }),
         intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
@@ -83,14 +91,23 @@ export function BattleSceneEl(): PixiContainer {
     return root
 }
 
+const allSrcs: SpineAsset[][] = [
+    ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
+    ['hooligansBluffBg2_0', 'hooligansBluffBg2_1'],
+    ['hooligansBluffBg3_0'],
+]
+
 function CoreScene(
     scene: ROCursor<BattleScene>,
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
     loopSong('battleMusicHooligansBluff')
 
+    const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
+
     return Container(
         {},
+        SpineBackground({ srcs: allSrcs[sceneIndex] }),
         Characters(scene),
         Cards({ scene, hoveredCardUid }),
         Energy({ scene }),

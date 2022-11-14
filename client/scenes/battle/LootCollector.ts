@@ -72,8 +72,6 @@ const getDisplayName = (name: LootFromGame) => {
 }
 
 export function LootCollector(): PixiContainer {
-    setTimeout(() => playSongOnce('roomVictoryMusicHooligansBluff'), 500)
-
     const scene = getBattleScene()
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
@@ -84,6 +82,10 @@ export function LootCollector(): PixiContainer {
     let currLootItemCount = lootItems[0].count
 
     let [currLootItem, ...remainingLootItems] = renderLoot()
+
+    if (currLootItem.name !== 'TreasureChestContainer')
+        setTimeout(() => playSongOnce('roomVictoryMusicHooligansBluff'), 0)
+
     const lootItemsContainer = TweenableContainer(
         {
             x: lootScreenHasOpened
