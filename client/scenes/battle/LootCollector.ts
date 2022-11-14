@@ -5,7 +5,9 @@ import {
     AssetKey,
     getStage,
     getTexture,
+    loopSong,
     PixiContainer,
+    playSongOnce,
     RoundedRectangleGradientSprite,
     Text,
     TweenableContainer,
@@ -70,6 +72,8 @@ const getDisplayName = (name: LootFromGame) => {
 }
 
 export function LootCollector(): PixiContainer {
+    setTimeout(() => playSongOnce('roomVictoryMusicHooligansBluff'), 500)
+
     const scene = getBattleScene()
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x

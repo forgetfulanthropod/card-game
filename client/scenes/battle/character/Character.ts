@@ -21,7 +21,7 @@ import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { EffectOverlayManager } from './EffectOverlayManager'
-import { getCharTexture } from '@/assets'
+import { getCharTexture, SoundEffectAssetKey } from '@/assets'
 import {
     hoveredCharacterUid,
     nextTick,
@@ -397,12 +397,16 @@ function flashDamageTo(
 }
 
 function playAttackSound(characterMeta: CharacterMeta) {
-    playSound(`sound${upperFirst(characterMeta.id)}Attack` as SoundAssetKey)
+    playSound(
+        `sound${upperFirst(characterMeta.id)}Attack` as SoundEffectAssetKey
+    )
 }
 
 function playTakingDamageSound(characterMeta: CharacterMeta) {
     playSound(`soundGenericTakingDamage`)
     playSound(
-        `sound${upperFirst(characterMeta.id)}TakingDamage` as SoundAssetKey
+        `sound${upperFirst(
+            characterMeta.id
+        )}TakingDamage` as SoundEffectAssetKey
     )
 }

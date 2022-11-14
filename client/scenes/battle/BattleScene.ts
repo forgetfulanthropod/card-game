@@ -1,5 +1,12 @@
-import { datum, compose } from 'datums'
-import type { CharacterUid, PileId, RequiredAction } from 'shared'
+import { datum, compose, Datum } from 'datums'
+import type {
+    BattleCursor,
+    BattleScene,
+    CardUid,
+    CharacterUid,
+    PileId,
+    RequiredAction,
+} from 'shared'
 import { sampleSize } from 'lodash'
 import { Cards, CardAdder, BattleSceneCharacterInfo } from '@sharedElements'
 import { keys } from 'shared/code'
@@ -10,15 +17,16 @@ import { HexMapOverlay } from './HexMapOverlay'
 import { LootCollector } from './LootCollector'
 import { RestSiteOverlay } from './RestSiteOverlay'
 import { Background } from '@/scenes'
-import { Container, If } from '@/elementsUtil'
+import { Container, DisplayObject, If, loopSong } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
 import { EndOfRunScreen } from './EndOfRunScreen'
+import { ROCursor } from 'sbaobab'
 
-export function BattleScene(): PixiContainer {
-    const hoveredCardUid = datum<CharacterUid | null>(null)
+export function BattleSceneEl(): PixiContainer {
+    const hoveredCardUid = datum<CardUid | null>(null)
 
     const scene = getBattleScene()
 
@@ -40,37 +48,7 @@ export function BattleScene(): PixiContainer {
         intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
-            () =>
-                Container(
-                    {},
-                    Characters(scene),
-                    Cards({ scene, hoveredCardUid }),
-                    Energy({ scene }),
-                    BattleSceneCharacterInfo(),
-                    If(
-                        compose(
-                            ([waitForDeathAnimations, sceneState]) =>
-                                !keys(waitForDeathAnimations).length &&
-                                [
-                                    'choosing cards',
-                                    'collecting loot',
-                                    'won',
-                                    'lost',
-                                ].includes(sceneState) &&
-                                sceneState,
-                            waitForDeathAnimationsDatum,
-                            toDatum(scene.select('state'), state => state)
-                        ),
-                        sceneState =>
-                            sceneState === 'collecting loot'
-                                ? LootCollector()
-                                : sceneState === 'choosing cards'
-                                ? CardAdder()
-                                : sceneState === 'won' || sceneState === 'lost'
-                                ? EndOfRunScreen()
-                                : Container({})
-                    )
-                )
+            () => CoreScene(scene, hoveredCardUid)
         ),
         If(
             toDatum(scene.select('isInMap'), is => is),
@@ -104,6 +82,45 @@ export function BattleScene(): PixiContainer {
 
     return root
 }
+
+function CoreScene(
+    scene: ROCursor<BattleScene>,
+    hoveredCardUid: Datum<CardUid | null>
+): DisplayObject {
+    loopSong('battleMusicHooligansBluff')
+
+    return Container(
+        {},
+        Characters(scene),
+        Cards({ scene, hoveredCardUid }),
+        Energy({ scene }),
+        BattleSceneCharacterInfo(),
+        If(
+            compose(
+                ([waitForDeathAnimations, sceneState]) =>
+                    !keys(waitForDeathAnimations).length &&
+                    [
+                        'choosing cards',
+                        'collecting loot',
+                        'won',
+                        'lost',
+                    ].includes(sceneState) &&
+                    sceneState,
+                waitForDeathAnimationsDatum,
+                toDatum(scene.select('state'), state => state)
+            ),
+            sceneState =>
+                sceneState === 'collecting loot'
+                    ? LootCollector()
+                    : sceneState === 'choosing cards'
+                    ? CardAdder()
+                    : sceneState === 'won' || sceneState === 'lost'
+                    ? EndOfRunScreen()
+                    : Container({})
+        )
+    )
+}
+
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {
     if (req == null) return
     const { type, least } = req

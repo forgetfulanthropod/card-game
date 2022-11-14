@@ -6,7 +6,11 @@ import { loadAllAnimateFiles } from './myanimate'
 import { AssetKey, AssetMaps, assetMaps, deluxeAssetMaps } from '@/assets'
 
 import { keys } from 'shared/code'
-import { SoundAssetKey } from '@/assets/deluxeAssetMaps'
+import {
+    MusicAssetKey,
+    SoundAssetKey,
+    SoundEffectAssetKey,
+} from '@/assets/deluxeAssetMaps'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
@@ -44,8 +48,44 @@ function loadAssetMaps(assetMaps: AssetMaps) {
     Loader.shared.load()
 }
 
-export function playSound(assetId: SoundAssetKey): void {
-    const sound = getSound(assetId)
+let latestLoopingSong: object | null = null
+let successfullyLooping: boolean
+let latestSongId: MusicAssetKey
+let retrySongTimeout: number
+
+export function playSongOnce(songId: MusicAssetKey) {
+    loopSong(songId, false)
+}
+
+export function loopSong(songId: MusicAssetKey, loop = true): boolean {
+    const sound = getSound(songId)
+
+    latestSongId = songId
+
+    //@ts-expect-error
+    latestLoopingSong?.stop()
+
+    //@ts-expect-error
+    successfullyLooping = sound?.sound != null
+
+    clearTimeout(retrySongTimeout)
+    retrySongTimeout = setTimeout(() => {
+        if (!successfullyLooping) loopSong(latestSongId)
+    }, 500)
+
+    if (!successfullyLooping) return false
+
+    //@ts-expect-error
+    latestLoopingSong = sound?.sound
+
+    //@ts-expect-error
+    latestLoopingSong?.play?.({ loop })
+
+    return true
+}
+
+export function playSound(soundEffectId: SoundEffectAssetKey): void {
+    const sound = getSound(soundEffectId)
     //@ts-expect-error
     if (sound?.sound == null) return
 
@@ -56,7 +96,7 @@ export function playSound(assetId: SoundAssetKey): void {
     sound?.sound?.play?.()
 }
 
-export function getSound(assetId: string): object {
+export function getSound(assetId: SoundAssetKey): object {
     return Loader.shared.resources?.[assetId]
 }
 

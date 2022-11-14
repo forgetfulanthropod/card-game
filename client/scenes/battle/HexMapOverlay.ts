@@ -10,7 +10,7 @@ import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { checkOtherScoringEvents, MainCharacterAnimation } from '../shared'
-import type { AssetKey, PixiContainer, PixiSprite } from '@/elementsUtil'
+import { AssetKey, loopSong, PixiContainer, PixiSprite } from '@/elementsUtil'
 import {
     glowFilter,
     Adjust,
@@ -29,6 +29,7 @@ import { mean } from 'lodash'
 
 export function HexMapOverlay(): PixiContainer {
     hoveredCharacterUid.set(null)
+    loopSong('hexMapMusicHooligansBluff')
 
     return Container(
         {},
@@ -231,12 +232,15 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
 
-    const nodeDepth = parseInt(node.uid.split('_')[0])
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
+    const isCurrentRoomPastThisDepth =
+        parseInt(currentRoom.uid.split('_')[0]) >
+        parseInt(node.uid.split('_')[0])
+    const wasRoomJustVisited = node.edges.includes(currentRoom.uid)
 
     const characters: CharacterMeta[] = isPlayerCharacterRoom
         ? vals(scene.get('allCharacters')).filter(c => c.isPc && c.health > 0)
-        : nodeDepth <= numRoomsPassed
+        : isCurrentRoomPastThisDepth || wasRoomJustVisited
         ? []
         : node.enemies.map(
               (e): CharacterMeta => ({ id: e.id, isPc: false } as CharacterMeta)

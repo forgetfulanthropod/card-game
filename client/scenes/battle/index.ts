@@ -1,3 +1,3 @@
-import { BattleScene } from './BattleScene'
+import { BattleSceneEl } from './BattleScene'
 
-export { BattleScene }
+export { BattleSceneEl as BattleScene }
