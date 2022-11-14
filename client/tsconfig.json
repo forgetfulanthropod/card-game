@@ -15,5 +15,13 @@
             // "react-dom": ["./node_modules/preact/compat"]
         }
     },
-    "references": [{ "path": "../shared" }]
+    "references": [{ "path": "../shared" }],
+    "include": [
+        "*",
+        "**/*",
+        "**/*.json",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.ts"
+    ]
 }
