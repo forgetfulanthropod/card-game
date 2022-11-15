@@ -6,7 +6,10 @@ import {
     SafeEventEmitterProvider,
     WALLET_ADAPTERS,
 } from '@web3auth/base'
-import { OpenloginAdapter, OpenloginAdapterOptions } from '@web3auth/openlogin-adapter'
+import {
+    OpenloginAdapter,
+    OpenloginAdapterOptions,
+} from '@web3auth/openlogin-adapter'
 import SolanaRPC from '@/chain/solanaRPC'
 
 const clientId =
@@ -14,7 +17,7 @@ const clientId =
 
 export const useWeb3Auth = () => {
     const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
-    const [solanaRPC, setSolanaRPC] = useState<SolanaRPC|null>(null)
+    const [solanaRPC, setSolanaRPC] = useState<SolanaRPC | null>(null)
     const [provider, setProvider] = useState<SafeEventEmitterProvider | null>(
         null
     )
@@ -24,13 +27,12 @@ export const useWeb3Auth = () => {
         chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.SOLANA,
             chainId: '0x1', // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
-            rpcTarget: 'https://api.mainnet-beta.solana.com',
+            rpcTarget: 'https://still-weathered-pond.solana-mainnet.quiknode.pro/',
         },
         uiConfig: {
             theme: 'dark',
             loginMethodsOrder: ['twitter'],
-            appLogo:
-                'https://web3auth.io/images/w3a-L-Favicon-1.svg', // Your App Logo Here
+            appLogo: 'https://web3auth.io/images/w3a-L-Favicon-1.svg', // Your App Logo Here
         },
     }
 
@@ -41,10 +43,8 @@ export const useWeb3Auth = () => {
             uxMode: 'popup',
             whiteLabel: {
                 name: 'Your app Name',
-                logoLight:
-                    'https://web3auth.io/images/w3a-L-Favicon-1.svg',
-                logoDark:
-                    'https://web3auth.io/images/w3a-D-Favicon-1.svg',
+                logoLight: 'https://web3auth.io/images/w3a-L-Favicon-1.svg',
+                logoDark: 'https://web3auth.io/images/w3a-D-Favicon-1.svg',
                 defaultLanguage: 'en',
                 dark: true, // whether to enable dark mode. defaultValue: false
             },
@@ -64,7 +64,7 @@ export const useWeb3Auth = () => {
             [WALLET_ADAPTERS.OPENLOGIN]: {
                 label: 'openlogin',
                 showOnModal: true, // setting it to false will hide all social login methods from modal.
-                loginMethods: getLoginMethodsConfig()
+                loginMethods: getLoginMethodsConfig(),
             },
             [WALLET_ADAPTERS.TORUS_SOLANA]: {
                 label: 'torus',
@@ -79,20 +79,25 @@ export const useWeb3Auth = () => {
 
     useEffect(() => {
         const init = async () => {
-
+            console.log('INIT WEB3 AUTH')
             try {
                 const web3auth = new Web3Auth(web3AuthOptions)
-                const openloginAdapter = new OpenloginAdapter(openLoginAdapterOptions)
+                const openloginAdapter = new OpenloginAdapter(
+                    openLoginAdapterOptions
+                )
 
                 web3auth.configureAdapter(openloginAdapter)
-                setWeb3Auth(web3auth)
                 await web3auth.initModal(initModalConfig)
 
                 if (web3auth.provider) {
                     setProvider(web3auth.provider)
                     setSolanaRPC(new SolanaRPC(web3auth.provider))
-                    console.log('inside useweb3auth... solana rpc has been set!')
+                    console.log(
+                        'inside useweb3auth... solana rpc has been set!'
+                    )
                 }
+
+                setWeb3Auth(web3auth)
             } catch (error) {
                 console.error(error)
             }
@@ -120,11 +125,17 @@ const getLoginMethodsConfig = () => {
         'linkedin',
         'weibo',
         'wechat',
-        'email_passwordless'
+        'email_passwordless',
     ] as const
 
-    const disabledLoginMethodsParam: LoginMethodConfig = {};
-    loginMethods.forEach(method => disabledLoginMethodsParam[method] = { name: `${method} login`, showOnModal: false})
+    const disabledLoginMethodsParam: LoginMethodConfig = {}
+    loginMethods.forEach(
+        method =>
+            (disabledLoginMethodsParam[method] = {
+                name: `${method} login`,
+                showOnModal: false,
+            })
+    )
 
     return disabledLoginMethodsParam
 }

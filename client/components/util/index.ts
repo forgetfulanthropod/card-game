@@ -10,3 +10,7 @@ export function useCursor<T>(cursor: ROCursor<T>): T {
     }, [cursor])
     return v
 }
+
+export const getShortWalletAddress = (walletAddress: string) => {
+    return `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`
+}

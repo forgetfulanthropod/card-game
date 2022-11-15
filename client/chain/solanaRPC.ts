@@ -29,7 +29,6 @@ export default class SolanaRPC {
             params: [],
         })
         const connection = new Connection(connectionConfig.rpcTarget)
-        console.log({ connection })
 
         this.connection = connection
     }

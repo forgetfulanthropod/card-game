@@ -7,18 +7,32 @@ import { Web3Auth } from '@web3auth/modal'
 import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
 import { useWeb3Auth } from '@/hooks/useWeb3Auth'
 import SolanaRPC from '@/chain/solanaRPC'
+import { UserProfileIcon } from './StartScreen/UserProfileIcon'
+
+export interface UserDoc {
+    walletAddress: string
+    numKaijusOwned: number
+}
 
 export function NewStartScreen(props: {
     onEnter: (username: string) => void
 }): JSXElement {
     const { web3Auth, provider } = useWeb3Auth()
-    // const { solanaRPC } = useSolanaRPC();
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userDoc, setUserDoc] = useState({
-        walletAddress: '',
-    })
-    const [kaijusOwned, setKaijusOwned] = useState(0)
     const [solanaRPC, setSolanaRPC] = useState<SolanaRPC | null>(null)
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [userDoc, setUserDoc] = useState<UserDoc>({
+        walletAddress: '',
+        numKaijusOwned: 0,
+    })
+
+    useEffect(() => {
+        // check if theres a cached provider or a cached user session previously available
+        // if it exists, load and auto connect
+        // connect to Solana as well
+        // if it exists but expired, reset the storage items
+        // if there is none, leave everything until user interaction time
+    }, [])
 
     useEffect(() => {
         handleWeb3AuthLogin().then(() => {
@@ -32,25 +46,29 @@ export function NewStartScreen(props: {
             return
         }
 
+        console.log('connecting to web3auth')
         await web3Auth.connect()
+        console.log('finished web3auth.connect')
+        console.log(web3Auth.provider)
 
-        console.log('connecteed to web3auth....')
         if (web3Auth && web3Auth.provider) {
+            console.log('should always hit right')
             const solanaRPC = new SolanaRPC(web3Auth.provider)
             initUserDoc(solanaRPC)
             setSolanaRPC(solanaRPC)
+        } else {
+            console.log('no provider wtf')
         }
     }
 
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
-        console.log('connecting to solana....')
+        console.log('initializing userDoc....')
         await solanaRPC.asyncInitConnection()
         const walletAddress = (await solanaRPC?.getAccounts())[0]
-        console.log({walletAddress})
-        setUserDoc({ walletAddress })
+        const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
+        setUserDoc({ walletAddress, numKaijusOwned })
         setIsLoggedIn(true)
-        console.log('settig kaijus owned...')
-        setKaijusOwned((await solanaRPC.getKaijusOwnedByUser()).length)
+        console.log({ userDoc: { walletAddress, numKaijusOwned } })
     }
 
     return <div className='font-sharp grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
@@ -95,11 +113,16 @@ export function NewStartScreen(props: {
                         />
                     </NavIconWrapper>
                 </div>
-                {isLoggedIn ? (
-                    <p className='text-white text-2xl'>
-                        {`${userDoc.walletAddress.slice(0, 4)}...`} owns{' '}
-                        {kaijusOwned} kaijus
-                    </p>
+                {isLoggedIn && web3Auth ? (
+                    <UserProfileIcon
+                        logout={async () => {
+                            console.log(`web3Auth.status ${web3Auth.status}`)
+                            await web3Auth?.logout()
+                            setIsLoggedIn(false)
+                            console.log(`web3Auth.status ${web3Auth.status}`)
+                        }}
+                        userDoc={userDoc}
+                    />
                 ) : (
                     <div className='flex items-center h-full'>
                         <PrimaryButton
@@ -127,7 +150,7 @@ export function NewStartScreen(props: {
                         if (!isLoggedIn) {
                             handleWeb3AuthLogin()
                         } else if (isLoggedIn) {
-                            if (kaijusOwned === 0) {
+                            if (userDoc.numKaijusOwned === 0) {
                                 window.alert('BUY A KAIJU FIRST!')
                             } else {
                                 props.onEnter(
