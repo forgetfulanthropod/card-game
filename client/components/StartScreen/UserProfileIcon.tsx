@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
+import { useState, useRef } from 'react'
 import type { UserDoc } from '../NewStartScreen'
 import { getShortWalletAddress } from '../util'
 
@@ -11,10 +12,12 @@ export const UserProfileIcon = ({
 }) => {
     const walletAddress = getShortWalletAddress(userDoc.walletAddress)
     const [showActions, setShowActions] = useState(false)
+    const actionsRef = useRef(null)
+    useOutsideClickDismisser(actionsRef, setShowActions)
 
     return <div className='flex flex-col items-end text-white'>
         <button
-            className={`text-sm lg:text-2xl from-[#52636d] to-[#70818b] bg-gradient-to-l p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
+            className={`text-sm lg:text-2xl from-[#4d5961] to-[#2e353a] bg-gradient-to-l backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
             onClick={() => setShowActions(actions => !actions)}
         >
             <img
@@ -27,9 +30,10 @@ export const UserProfileIcon = ({
             </div>
         </button>
         <button
-            className={`text-white mt-2 rounded-xl bg-[#364046] font-sans p-1 w-2/3 font-medium z-50 text-sm shadow-3xl transition-all ${
+            className={`text-white mt-2 rounded-xl bg-slate-700 font-sans p-1 w-2/3 font-medium z-50 text-sm shadow-3xl transition-all ${
                 showActions ? 'opacity-100 visible' : 'opacity-0 invisible'
             }`}
+            ref={actionsRef}
         >
             <p className='py-2 hover:bg-slate-900 rounded-lg'>Account</p>
             <p className='py-2 hover:bg-slate-900 rounded-lg' onClick={logout}>

@@ -35,9 +35,12 @@ export function NewStartScreen(props: {
     }, [])
 
     useEffect(() => {
-        handleWeb3AuthLogin().then(() => {
-            console.log('USEFFECT - web3auth login handled')
-        })
+        console.log(web3Auth?.cachedAdapter)
+        if (web3Auth?.cachedAdapter) {
+            handleWeb3AuthLogin().then(() => {
+                console.log('USEFFECT - web3auth login handled')
+            })
+        }
     }, [web3Auth])
 
     const handleWeb3AuthLogin = async () => {
