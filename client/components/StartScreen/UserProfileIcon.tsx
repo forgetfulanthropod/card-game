@@ -17,12 +17,12 @@ export const UserProfileIcon = ({
 
     return <div className='flex flex-col items-end text-white'>
         <button
-            className={`text-sm lg:text-2xl from-[#4d5961] to-[#2e353a] bg-gradient-to-l backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
+            className={`text-sm lg:text-2xl from-[#444486] to-[#3E3E7A] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
             onClick={() => setShowActions(actions => !actions)}
         >
             <img
                 src='./assets/character profiles/penguinKnight.webp'
-                className='max-w-full h-6 md:h-9 lg:h-12 rounded-2xl '
+                className='max-w-full h-6 md:h-9 lg:h-12 rounded-2xl border border-black'
             />
             <div className='flex flex-col items-start'>
                 {/* <p className='px-2'>KAIJU_123</p> */}
