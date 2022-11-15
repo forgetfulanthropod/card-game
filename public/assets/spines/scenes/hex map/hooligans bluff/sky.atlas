@@ -1,23 +1,29 @@
 sky.webp
-size:926,437
+size:837,1179
 filter:Linear,Linear
+pma:true
 scale:0.4
 Cloud 1
-bounds:773,57,150,40
+bounds:741,110,150,40
+rotate:90
 Cloud 2
-bounds:825,260,175,48
+bounds:773,423,175,48
 rotate:90
 Cloud 3
-bounds:825,99,159,56
+bounds:773,262,159,56
 rotate:90
 Cloud 4
-bounds:883,177,108,41
+bounds:783,2,108,41
 rotate:90
 Cloud 5
-bounds:773,245,190,50
+bounds:773,600,190,50
 rotate:90
 Cloud 6
-bounds:883,287,148,41
+bounds:783,112,148,41
 rotate:90
+Layer 1
+bounds:2,792,833,385
+Layer 2
+bounds:2,43,737,312
 Sky
-bounds:2,2,769,433
+bounds:2,357,769,433
