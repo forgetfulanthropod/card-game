@@ -9,6 +9,7 @@ import { useWeb3Auth } from '@/hooks/useWeb3Auth'
 import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
+import { openNewTab } from './util'
 
 const WALLET_GATING_ENABLED = true // TODO move to env
 
@@ -29,7 +30,7 @@ export function NewStartScreen(props: {
         numKaijusOwned: 0,
     })
 
-    const [showGatedModal, setShowGatedModal] = useState(false)
+    const [showGateModal, setShowGateModal] = useState(false)
 
     useEffect(() => {
         // check if theres a cached provider or a cached user session previously available
@@ -88,14 +89,10 @@ export function NewStartScreen(props: {
         if (!isLoggedIn) return handleLogin()
 
         if (userDoc.numKaijusOwned === 0 && WALLET_GATING_ENABLED) {
-            showWalletGateModal()
+            setShowGateModal(true)
         } else {
             enterGame()
         }
-    }
-
-    const showWalletGateModal = () => {
-        setShowGatedModal(true)
     }
 
     const enterGame = () => {
@@ -103,12 +100,12 @@ export function NewStartScreen(props: {
     }
 
     return <>
-        {showGatedModal && <WalletGateModal
-            setShowGatedModal={setShowGatedModal}
+        {showGateModal && <WalletGateModal
+            setShowGateModal={setShowGateModal}
         />}
         <div
             className={`font-sharp grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
-                showGatedModal ? 'pointer-events-none' : 'pointer-events-auto'
+                showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
             }`}
         >
             <video
@@ -189,23 +186,13 @@ export function NewStartScreen(props: {
                     <div className='h-auto w-full flex xl:pt-4 gap-2 xl:gap-4'>
                         <PrimaryButton
                             text='quests'
-                            onClick={() =>
-                                window.open(
-                                    'https://gq.kaijucards.io/',
-                                    '_blank'
-                                )
-                            }
+                            onClick={openNewTab('https://gq.kaijucards.io/')}
                             type='white'
                             size='small'
                         />
                         <PrimaryButton
                             text='forge'
-                            onClick={() =>
-                                window.open(
-                                    'https://forge.kaijucards.io/',
-                                    '_blank'
-                                )
-                            }
+                            onClick={openNewTab('https://forge.kaijucards.io/')}
                             type='white'
                             size='small'
                         />

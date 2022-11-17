@@ -29,7 +29,7 @@ export const PrimaryButton = (props: {
 
     return <button
         onClick={props.onClick}
-        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl ${colorClass} ${sizeClass}`}
+        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl whitespace-nowrap ${colorClass} ${sizeClass}`}
     >
         <p className='uppercase'>{props.text}</p>
     </button>
