@@ -1,4 +1,4 @@
-import { Fragment, h, JSX, RefObject } from 'preact' // eslint-disable-line
+import { Fragment, RefObject } from 'react' // eslint-disable-line
 
 import type { OnMount } from '@monaco-editor/react'
 import Editor from '@monaco-editor/react'
@@ -33,6 +33,7 @@ export function Monaco(props: {
         <Editor
             onMount={
                 (async editor => {
+                    //@ts-expect-error
                     mref.current = editor
                     // void editor.getAction(`editor.foldLevel${foldLevel}`).run()
                     await editor.getAction('editor.foldRecursively').run()

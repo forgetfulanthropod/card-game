@@ -69,6 +69,7 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
     successfullyLooping = sound?.sound != null
 
     clearTimeout(retrySongTimeout)
+    //@ts-expect-error
     retrySongTimeout = setTimeout(() => {
         if (!successfullyLooping) loopSong(latestSongId)
     }, 500)
