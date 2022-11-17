@@ -72,12 +72,13 @@ function AllTiles(): PixiContainer[] {
     const tileGraphMap = getTileGraphMap()
     const rootNode = tileGraphMap[keys(tileGraphMap)[0]]
     const allTiles: PixiContainer[] = []
+    let depthsAndYOffsets: [number, number][] = []
 
     addNodeAboveRight(rootNode, 1, 0)
     addNode(rootNode, 1, 0)
     addNodeBelowRight(rootNode, 1, 0)
 
-    return sortAndRemoveDuplicates(allTiles)
+    return sortNodes(allTiles)
 
     function addNodeAbove(node: DungeonRoom, depth: number, yOffset: number) {
         const nextNode = tileGraphMap[node.edges[0]]
@@ -144,20 +145,32 @@ function AllTiles(): PixiContainer[] {
     }
 
     function addNode(node: DungeonRoom, depth: number, yOffset: number) {
+        if (
+            !depthsAndYOffsets.find(
+                ([ndepth, nyOffset]) => ndepth === depth && nyOffset === yOffset
+            )
+        )
+            depthsAndYOffsets.push([depth, yOffset])
+        else return
+
         allTiles.push(TileForNode(node, depth, yOffset))
     }
 }
 
-function sortAndRemoveDuplicates(allTiles: PixiContainer[]) {
-    const sorted = allTiles.sort((tileA, tileB) => {
+function sortNodes(allTiles: PixiContainer[]) {
+    return allTiles.sort((tileA, tileB) => {
         return tileA.y - tileB.y
     })
-    const unique = sorted.filter((tile, i) => {
-        return !sorted
-            .slice(0, i)
-            .find(tile2 => tile2.x === tile.x && tile2.y === tile.y)
-    })
-    return unique
+    // const unique = sorted.filter((tile, i) => {
+    //     const passesFilter = !sorted
+    //         .slice(0, i)
+    //         .find(tile2 => tile2.x === tile.x && tile2.y === tile.y)
+
+    //     if (!passesFilter) setTimeout(() => tile.destroy(true), 0)
+
+    //     return passesFilter
+    // })
+    // return unique
 }
 
 // type DungeonRoom = {
@@ -284,7 +297,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
             if (!~choice && !isPlayerCharacterRoom)
                 setTimeout(
-                    () => (anim.state.timeScale = 0),
+                    () => anim?.state && (anim.state.timeScale = 0),
                     Math.random() * 1000
                 )
 
