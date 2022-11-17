@@ -1,5 +1,5 @@
 import { keys } from 'shared/code'
-import { sequences } from './assetMaps'
+import { sequences } from './deluxeAssetMaps'
 
 export const sequenceMap: Record<string, (keyof typeof sequences)[]> = {
     block: [],

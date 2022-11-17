@@ -40,7 +40,7 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
-import type { CardTypeAssetId } from '@/assets'
+import type { AssetKey, CardTypeAssetId } from '@/assets'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -82,7 +82,7 @@ export function CardEl({
                 cardId.indexOf('basicAttack') === 0
                     ? 'Attack'
                     : upperFirst(cardId)
-            }`
+            }` as AssetKey
         )
     } catch {
         cardArtTexture = getTexture('cardArtPlaceholder')
@@ -149,17 +149,6 @@ export function CardEl({
     return root
 }
 
-// function ExplanationsEl(card: Card, width: number) {
-//     return Container(
-//         {
-//             // x: BASE_WIDTH / 2,
-//             // y: BASE_HEIGHT * 0.6,
-//             name: 'MY EXPLANATIONS',
-//         },
-//         ...
-//     )
-// }
-
 function getDecoratedEvents({
     events,
     hoveredCardUid,
@@ -203,22 +192,6 @@ function getDecoratedEvents({
     }
     return decoratedEvents
 }
-
-// function manageExplanationsEl(
-//     root: TweenablePixiContainer,
-//     explanationsEl: PixiContainer,
-//     isLongHovered: Datum<boolean>
-// ) {
-//     explanationsEl.alpha = 0
-
-//     isLongHovered.onChange(is => {
-//         if (!is) {
-//             explanationsEl.alpha = 0
-//             return
-//         }
-//         explanationsEl.alpha = 1
-//     })
-// }
 
 function TermExplanationsForCard(
     explanation: string,
@@ -282,34 +255,6 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
     )
 }
 
-// function getGradientBackground(
-//     cardFrameTexture: PixiTexture,
-//     colorStops: ColorStop[]
-// ) {
-//     return RoundedRectangleGradientSprite({
-//         radius: cardFrameTexture.width / 15,
-//         gradientArgs: {
-//             x0: 0,
-//             y0: 0,
-//             x1: 0,
-//             y1: cardFrameTexture.height,
-//             colorStops,
-//         },
-//         spriteArgs: {
-//             width: cardFrameTexture.width,
-//             height: cardFrameTexture.height,
-//             anchor: 0.5,
-//         },
-//     })
-// }
-
-// function getCardFrameSprite(cardFrameTexture: PixiTexture) {
-//     return Sprite({
-//         src: cardFrameTexture,
-//         anchor: 0.5,
-//     })
-// }
-
 function getEnergyContainer(card: Card): PixiContainer {
     return Container(
         {},
@@ -318,7 +263,7 @@ function getEnergyContainer(card: Card): PixiContainer {
             anchor: 0.5,
         }),
         Sprite({
-            src: `cardEnergy${card.energy}`,
+            src: `cardEnergy${card.energy}` as AssetKey,
             anchor: 0.5,
         })
     )
@@ -327,7 +272,7 @@ function getEnergyContainer(card: Card): PixiContainer {
 function getCardOwnerToken(card: Card): PixiContainer {
     const cm = getBattleScene().get('allCharacters', card.characterUid)
 
-    const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}`)
+    const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}` as AssetKey)
 
     if (src == null) console.error("couldn't find the token")
 

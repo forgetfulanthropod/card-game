@@ -11,7 +11,7 @@ export const choosePlushy: GameActions['choosePlushy'] = args => {
     healAllPartyMembers(scene)
 
     scene.set('isInRestSite', false)
-    nextRoom({ game: args.game })
+    scene.set('isInMap', true)
 }
 
 function healAllPartyMembers(scene: BattleCursor) {

@@ -266,7 +266,8 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
         }),
-        ...AbilityButtons(props.abilities),
+        // ...AbilityButtons(props.abilities),
+        ...AbilityButtons([]),
         Adjust(allCharCards, {
             y: 220,
             x: -allCharCards.width + contentWidth / 2 + mainPadding,

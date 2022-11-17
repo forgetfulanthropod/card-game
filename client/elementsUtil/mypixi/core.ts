@@ -7,6 +7,7 @@ import {
     PixiText,
     PixiTexture,
 } from './aliases'
+
 import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import type {
     ContainerArgs,

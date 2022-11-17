@@ -8,7 +8,7 @@ import {
     selectedCharacterPlaceIndex,
 } from './CharacterOptions'
 import { getEntryScene } from '@/data'
-import type { DisplayObject, PixiContainer } from '@/elementsUtil'
+import type { AssetKey, DisplayObject, PixiContainer } from '@/elementsUtil'
 import {
     glowFilter,
     isTextureKey,
@@ -85,7 +85,8 @@ export function SelectedCharactersEl(): PixiContainer {
 
 function SelectedCharacterText() {
     return Text({
-        text: 'CHOOSE YOUR CHARACTERS',
+        // text: 'CHOOSE YOUR CHARACTERS',
+        text: 'CHOOSE   YOUR   KAIJU',
         x: BASE_WIDTH * 0.506,
         y: BASE_HEIGHT * 0.565,
         anchor: 0.5,
@@ -151,14 +152,16 @@ function PedestalRays(characters: (PixiContainer | null)[]) {
     const rays = characters.map((c, index): PixiContainer | null => {
         if (c != null) return null
 
+        const src = getTexture(`pedestalRay${index}` as AssetKey)
+
         return Container(
             {
                 zIndex: index,
             },
             Sprite({
                 name: `pedestalRay${index}`,
-                src: `pedestalRay${index}`,
-                scale: BASE_WIDTH / getTexture(`pedestalRay${index}`).width,
+                src,
+                scale: BASE_WIDTH / src.width,
             }),
             Container(
                 {},

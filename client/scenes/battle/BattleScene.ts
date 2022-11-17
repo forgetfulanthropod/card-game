@@ -1,5 +1,12 @@
-import { datum, compose } from 'datums'
-import type { CharacterUid, PileId, RequiredAction } from 'shared'
+import { datum, compose, Datum } from 'datums'
+import type {
+    BattleCursor,
+    BattleScene,
+    CardUid,
+    CharacterUid,
+    PileId,
+    RequiredAction,
+} from 'shared'
 import { sampleSize } from 'lodash'
 import { Cards, CardAdder, BattleSceneCharacterInfo } from '@sharedElements'
 import { keys } from 'shared/code'
@@ -10,15 +17,24 @@ import { HexMapOverlay } from './HexMapOverlay'
 import { LootCollector } from './LootCollector'
 import { RestSiteOverlay } from './RestSiteOverlay'
 import { Background } from '@/scenes'
-import { Container, If } from '@/elementsUtil'
+import {
+    AssetKey,
+    Container,
+    DisplayObject,
+    If,
+    loopSong,
+    SpineAsset,
+} from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
 import { EndOfRunScreen } from './EndOfRunScreen'
+import { ROCursor } from 'sbaobab'
+import { SpineBackground } from '../background'
 
-export function BattleScene(): PixiContainer {
-    const hoveredCardUid = datum<CharacterUid | null>(null)
+export function BattleSceneEl(): PixiContainer {
+    const hoveredCardUid = datum<CardUid | null>(null)
 
     const scene = getBattleScene()
 
@@ -36,41 +52,11 @@ export function BattleScene(): PixiContainer {
                 ),
             ],
         },
-        Background({ scale: 1, srcs: ['Skelepit Dungeon'] }),
+        // Background({ scale: 1, spineSrc: 'hooligansBluffSpine' }),
         intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
-            () =>
-                Container(
-                    {},
-                    Characters(scene),
-                    Cards({ scene, hoveredCardUid }),
-                    Energy({ scene }),
-                    BattleSceneCharacterInfo(),
-                    If(
-                        compose(
-                            ([waitForDeathAnimations, sceneState]) =>
-                                !keys(waitForDeathAnimations).length &&
-                                [
-                                    'choosing cards',
-                                    'collecting loot',
-                                    'won',
-                                    'lost',
-                                ].includes(sceneState) &&
-                                sceneState,
-                            waitForDeathAnimationsDatum,
-                            toDatum(scene.select('state'), state => state)
-                        ),
-                        sceneState =>
-                            sceneState === 'collecting loot'
-                                ? LootCollector()
-                                : sceneState === 'choosing cards'
-                                ? CardAdder()
-                                : sceneState === 'won' || sceneState === 'lost'
-                                ? EndOfRunScreen()
-                                : Container({})
-                    )
-                )
+            () => CoreScene(scene, hoveredCardUid)
         ),
         If(
             toDatum(scene.select('isInMap'), is => is),
@@ -91,7 +77,7 @@ export function BattleScene(): PixiContainer {
                 if (battleRoomInfo) root.removeChild(battleRoomInfo)
                 battleRoomInfo = BattleRoomInfo({
                     info: [
-                        num == null
+                        num == null || num === -1
                             ? ''
                             : `${num} room${num === 1 ? '' : 's'} cleared`,
                     ],
@@ -104,6 +90,54 @@ export function BattleScene(): PixiContainer {
 
     return root
 }
+
+const allSrcs: SpineAsset[][] = [
+    ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
+    ['hooligansBluffBg2_0', 'hooligansBluffBg2_1'],
+    ['hooligansBluffBg3_0'],
+]
+
+function CoreScene(
+    scene: ROCursor<BattleScene>,
+    hoveredCardUid: Datum<CardUid | null>
+): DisplayObject {
+    loopSong('battleMusicHooligansBluff')
+
+    const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
+
+    return Container(
+        {},
+        SpineBackground({ srcs: allSrcs[sceneIndex] }),
+        Characters(scene),
+        Cards({ scene, hoveredCardUid }),
+        Energy({ scene }),
+        BattleSceneCharacterInfo(),
+        If(
+            compose(
+                ([waitForDeathAnimations, sceneState]) =>
+                    !keys(waitForDeathAnimations).length &&
+                    [
+                        'choosing cards',
+                        'collecting loot',
+                        'won',
+                        'lost',
+                    ].includes(sceneState) &&
+                    sceneState,
+                waitForDeathAnimationsDatum,
+                toDatum(scene.select('state'), state => state)
+            ),
+            sceneState =>
+                sceneState === 'collecting loot'
+                    ? LootCollector()
+                    : sceneState === 'choosing cards'
+                    ? CardAdder()
+                    : sceneState === 'won' || sceneState === 'lost'
+                    ? EndOfRunScreen()
+                    : Container({})
+        )
+    )
+}
+
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {
     if (req == null) return
     const { type, least } = req

@@ -1,6 +1,6 @@
 import type { RequiredAction } from '@actions'
 import type { SceneHas } from '@misc'
-import type { DungeonRoom } from '../Dungeon'
+import type { DungeonRoom, DungeonRoomMap, DungeonRoomMaps } from '../Dungeon'
 
 import type { CharacterUid } from './Character'
 import type { Piles, Pile, Card, Command } from './Card'
@@ -24,8 +24,9 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
+    rooms: DungeonRoomMap
     numRoomsPassed: number
-    rooms: DungeonRoom[]
+    currentRoom: DungeonRoom
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
     cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {

@@ -75,11 +75,6 @@ function manageSideEffectsOfNewDamage(
 ) {
     if (didTargetDie(scene, targetUid)) clearDead(scene)
 
-    if (damageChangesEnemyIntent(scene)) {
-        logger.info('updating the NPC moves due to enemy damage')
-        updateNpcMoves(scene)
-    }
-
     scene.apply('damagesDealtThisTurn', damages => [
         ...damages,
         { amount: calcedDamage, targetUid },

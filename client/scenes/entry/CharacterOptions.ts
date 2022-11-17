@@ -12,6 +12,7 @@ import {
     getTexture,
     Sprite,
     glowFilter,
+    AssetKey,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid, onUpdate } from '@/util'
@@ -145,7 +146,7 @@ export function CharacterOptions() {
     const options = defaultOwnedCharacters.map((c, index) => {
         const width = 115
         const margin = width * 0.2
-        const src = getTexture(`${c.id}Profile`)
+        const src = getTexture(`${c.id}Profile` as AssetKey)
 
         return Container(
             {

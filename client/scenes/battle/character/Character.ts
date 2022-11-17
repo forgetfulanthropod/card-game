@@ -1,5 +1,6 @@
 import type { Datum } from 'datums'
 import { datum } from 'datums'
+// import { sound } from '@pixi/sound'
 import type { Listener, ROCursor } from 'sbaobab'
 import type {
     CardHit,
@@ -20,7 +21,7 @@ import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { EffectOverlayManager } from './EffectOverlayManager'
-import { getCharTexture } from '@/assets'
+import { getCharTexture, SoundEffectAssetKey } from '@/assets'
 import {
     hoveredCharacterUid,
     nextTick,
@@ -29,12 +30,22 @@ import {
     targetUidsWaitingForImpact,
     toDatum,
 } from '@/util'
-import { Adjust, Container, flashTo, If, Sprite } from '@/elementsUtil'
+import {
+    Adjust,
+    Container,
+    flashTo,
+    getSound,
+    If,
+    playSound,
+    Sprite,
+    SoundAssetKey,
+} from '@/elementsUtil'
 import type { PixiContainer, PixiSpine } from '@/elementsUtil'
 
 import { socketOn } from '@/socket'
 import { getBattleScene } from '@/data'
 import { OrbManager } from './OrbManager'
+import { upperFirst } from 'lodash'
 
 const SHOW_HIT_TIME = 1000
 
@@ -227,6 +238,7 @@ function bindMoves(
             statChangesDatum.set(statChanges)
 
             mainAnimation.state.setAnimation(0, 'Attack', false)
+            playAttackSound(characterMeta)
             mainAnimation.state.addAnimation(0, 'Idle', true)
         }
     }
@@ -237,6 +249,7 @@ function triggerDamageAnimation(
     characterMeta: CharacterMeta
 ) {
     mainAnimation.state.setAnimation(0, 'Damage', false)
+    playTakingDamageSound(characterMeta)
 
     const takingDamageListener = {
         event: function reactToDamage(
@@ -381,4 +394,19 @@ function flashDamageTo(
     flashTo(aboveCharacterContainer, () => HitInfo({ damage }), {
         durationMs: SHOW_HIT_TIME,
     })
+}
+
+function playAttackSound(characterMeta: CharacterMeta) {
+    playSound(
+        `sound${upperFirst(characterMeta.id)}Attack` as SoundEffectAssetKey
+    )
+}
+
+function playTakingDamageSound(characterMeta: CharacterMeta) {
+    playSound(`soundGenericTakingDamage`)
+    playSound(
+        `sound${upperFirst(
+            characterMeta.id
+        )}TakingDamage` as SoundEffectAssetKey
+    )
 }

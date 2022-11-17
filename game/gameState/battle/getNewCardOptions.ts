@@ -1,5 +1,10 @@
-import { BattleScene, CharacterMeta, NUM_DRAFT_CARD_OPTIONS, Pile } from 'shared'
-import { getAllPcs } from './characterGetters'
+import {
+    BattleScene,
+    CharacterMeta,
+    NUM_DRAFT_CARD_OPTIONS,
+    Pile,
+} from 'shared'
+import { getAllPcs, getLivingPcs } from './characterGetters'
 import {
     getCardInstance,
     getRandomCardIdOfClass,
@@ -11,25 +16,21 @@ export const NUM_KAIJUS_IN_PARTY = 3
 
 export function getNewCardOptions(scene: BattleScene): Pile {
     const newPile: Pile = {}
-    const allPcs = getAllPcs(scene)
-    if (allPcs.length !== NUM_KAIJUS_IN_PARTY)
-        throw new Error(
-            `party must have exactly ${NUM_KAIJUS_IN_PARTY} kaijus...`
-        )
+    const livingPcs = getLivingPcs(scene)
 
-    for (let i = 0; i < NUM_DRAFT_CARD_OPTIONS; i++) {
-        const card = updateExplanation(newCard(allPcs, i), toCursor(scene))
+    for (let i = 0; i < livingPcs.length; i++) {
+        const card = updateExplanation(newCard(livingPcs, i), toCursor(scene))
         newPile[card.uid] = card
     }
 
     return newPile
 }
 
-function newCard(allPcs: CharacterMeta[], i: number) {
+function newCard(characters: CharacterMeta[], i: number) {
     const character =
-        i < NUM_KAIJUS_IN_PARTY
-            ? allPcs[i]
-            : allPcs[Math.floor(srandom() * allPcs.length)]
+        i < characters.length
+            ? characters[i]
+            : characters[Math.floor(srandom() * characters.length)]
 
     return getCardInstance(
         getRandomCardIdOfClass(character.class),

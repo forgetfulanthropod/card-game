@@ -4909,6 +4909,11 @@ pixi-projection@^0.4.4:
   resolved "https://registry.yarnpkg.com/pixi-projection/-/pixi-projection-0.4.4.tgz#2d39bcba084f63f7fc0460e9520ebb2d44912c71"
   integrity sha512-oZMlfx7CFjxw4F0jkZXdOtJ5rbnHCQ+EdM6f6++CbzQvYnhB9ULKSobP2ZgrQ4oXag1KRJYwwSMSlz77lU/4wA==
 
+pixi-sound@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/pixi-sound/-/pixi-sound-3.0.5.tgz#b9edc12ee543ac3470c763484e1d1f7c4e842e2b"
+  integrity sha512-I3qDfaDI3xSwMuH8ZbhIyoZiRv0jEDxR60D2rBZTTvlK5owxo5Sx4vDaQlrIyETilTU0xvBtiwh7fPGKBOsCTw==
+
 pixi-tweener@^0.12.2:
   version "0.12.2"
   resolved "https://registry.yarnpkg.com/pixi-tweener/-/pixi-tweener-0.12.2.tgz#4f97381306494fc337197ba745c93043b02a0ac6"

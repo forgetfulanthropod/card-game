@@ -8,12 +8,20 @@ interface DungeonLevelI {
     modifier: number
 }
 
-export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
+export type RoomUid = string
 
-export type DungeonRoom = ReadonlyArray<{
+export type DungeonRoomMaps = Record<DungeonName, DungeonRoomMap>
+
+export type DungeonRoomMap = Record<RoomUid, DungeonRoom>
+
+export type DungeonRoom = {
+    uid: RoomUid
+    enemies: RoomEnemies
+    edges: [RoomUid, RoomUid, RoomUid, RoomUid]
+}
+
+export type RoomEnemies = ReadonlyArray<{
     id: EnemyCharacterId | 'REST_SITE'
     level: string | number
     boss?: true
 }>
-
-export const TOTAL_ROOMS_PER_RUN = 6
