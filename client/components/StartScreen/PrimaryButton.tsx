@@ -11,11 +11,11 @@ export const PrimaryButton = (props: {
         props.type === 'primary'
             ? 'from-[#F2B518] to-[#EB4511] border-[#762200] bg-gradient-to-l '
             : props.type === 'secondary'
-            ? 'from-[#323232] to-[#101010] border-black bg-gradient-to-l '
+            ? 'from-stone-900 to-stone-800 border-black bg-gradient-to-r'
             : props.type === 'default'
             ? 'from-[#272756] to-[#603a71] bg-gradient-to-r '
             : props.type === 'white'
-            ? 'from-slate-100/30 via-slate-400/40 to-slate-600/30 border-[#E0E0E0] bg-gradient-to-l backdrop-blur-md'
+            ? 'from-stone-100/40 via-stone-400/40 to-stone-600/40 border-[#E0E0E0] bg-gradient-to-l backdrop-blur-md'
             : ''
 
     const sizeClass =
