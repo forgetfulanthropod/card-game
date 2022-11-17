@@ -12,10 +12,10 @@ import {
 import { Container, Sprite } from '@/elementsUtil'
 import { Easing, Tweener } from 'pixi-tweener'
 
-const MIN_Y_OFFSET = 50
+const MIN_Y_OFFSET = 80
 const MIN_X_OFFSET = 50
 const BASE_PADDING = 15
-const BASE_HEIGHT = 64
+const BASE_HEIGHT = 65
 const verticalMargin = BASE_HEIGHT + BASE_PADDING
 
 /**
@@ -25,6 +25,8 @@ const verticalMargin = BASE_HEIGHT + BASE_PADDING
  */
 let currY = MIN_Y_OFFSET
 let currNotificationsCount = 0
+let itemsToDestroy = 0
+const positionsInQueue = {}
 const containerName = `NotificationContainer`
 
 /**
@@ -41,23 +43,38 @@ const displayScoreNotification = async <T extends string>(
 ) => {
     const stage = getStage()
     adjustNextNotificationPosition(stage) // important to do this before creating new notification
-
+    // console.log(
+    //     `creating ${textToDisplay}... AT currY: ${currY}, currNotificationsCount: ${currNotificationsCount}`
+    // )
     const newNotification = Notification(textToDisplay, assetSrc, count)
     stage.addChild(newNotification)
-    currNotificationsCount++
     await slamAnimateElIntoScreen(newNotification)
 
     setTimeout(async () => {
-        await destroyNotificationAndShiftRest(newNotification, stage)
+        // console.log(
+        //     `destroying ${textToDisplay}... currY: ${currY}, currNotificationsCount: ${currNotificationsCount}`
+        // )
+        itemsToDestroy++
+        // console.log({ itemsToDestroy })
+        await destroyNotification(newNotification, stage)
+        itemsToDestroy--
+
+        // console.log({ itemsToDestroy })
+        if (itemsToDestroy === 0) {
+            // console.log('now can shift rest of items - will only do once')
+            shiftExistingItems(stage)
+        }
     }, 2000)
 }
 
 const adjustNextNotificationPosition = (stage: PixiContainer) => {
+    currNotificationsCount++
+
     const existingNotifications = stage.children.filter(el =>
         el.name.includes(containerName)
     )
     if (existingNotifications.length > 0) {
-        currY += verticalMargin
+        currY += verticalMargin // makes the next notification render at a lower y axis
     }
 }
 
@@ -76,7 +93,7 @@ const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
     )
 }
 
-const destroyNotificationAndShiftRest = async (
+const destroyNotification = async (
     newNotification: TweenablePixiContainer,
     stage: PixiContainer
 ): Promise<void> => {
@@ -86,20 +103,12 @@ const destroyNotificationAndShiftRest = async (
             el.name.includes(containerName) &&
             el instanceof TweenablePixiContainer
     ) as TweenablePixiContainer[]
-    currNotificationsCount--
 
     if (existingNotifications.length === 0) return
 
     currY -= verticalMargin
     if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
-
-    existingNotifications.forEach(el => {
-        try {
-            shiftNotificationUp(el, el?.position?.y)
-        } catch (e) {
-            console.error(e)
-        }
-    })
+    currNotificationsCount--
 
     Tweener.killTweensOf(newNotification)
     newNotification.destroy({
@@ -121,9 +130,19 @@ const fadeNotificationOut = async (notification: PixiContainer) => {
     )
 }
 
+const shiftExistingItems = (stage: PixiContainer) => {
+    const existingNotifications = stage.children.filter(
+        el =>
+            el.name.includes(containerName) &&
+            el instanceof TweenablePixiContainer
+    ) as TweenablePixiContainer[]
+    existingNotifications.forEach(el => {
+        shiftNotificationUp(el)
+    })
+}
+
 const shiftNotificationUp = async (
     el: TweenablePixiContainer,
-    initialY: number
 ) => {
     await Tweener.add(
         {
@@ -132,11 +151,14 @@ const shiftNotificationUp = async (
             ease: Easing.easeFromTo,
         },
         {
-            y: initialY - verticalMargin,
+            y: el.position.y - verticalMargin,
         }
     )
 }
 
+/**
+ * Begins at alpha 0, is then faded into the screen by slamAnimateElIntoScreen
+ */
 function Notification<T extends string>(
     textToDisplay: T,
     assetSrc: AssetKey,
