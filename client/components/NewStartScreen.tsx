@@ -111,6 +111,7 @@ export function NewStartScreen(props: {
             <video
                 src='./assets/backgrounds/main_menu_shed_bg.mp4'
                 autoPlay
+                muted
                 loop
                 className='max-w-full absolute -z-50'
             />
