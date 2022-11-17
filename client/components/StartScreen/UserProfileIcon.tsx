@@ -17,7 +17,7 @@ export const UserProfileIcon = ({
 
     return <div className='flex flex-col items-end text-white'>
         <button
-            className={`text-sm lg:text-2xl from-[#444486] to-[#3E3E7A] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
+            className={`text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
             onClick={() => setShowActions(actions => !actions)}
         >
             <img

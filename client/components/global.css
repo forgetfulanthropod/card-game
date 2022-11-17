@@ -12,6 +12,8 @@ body {
     padding: 0;
     overflow: hidden;
     background: black;
+    -webkit-font-smoothing: antialiased;
+    font-smooth: auto;
 }
 
 img {

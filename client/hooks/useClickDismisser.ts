@@ -14,8 +14,8 @@ export const useOutsideClickDismisser = <T>(
     setItemIsVisible: Dispatch<SetStateAction<boolean>>
 ) => {
     useEffect(() => {
-        const handleClickOutside = (event: any) => {
-            if (ref?.current && !ref?.current?.contains(event.target)) {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (ref?.current && !ref?.current?.contains(event.target as Node)) {
                 setItemIsVisible(false)
             }
         }

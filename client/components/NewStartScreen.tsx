@@ -9,6 +9,8 @@ import { useWeb3Auth } from '@/hooks/useWeb3Auth'
 import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 
+const WALLET_GATING_ENABLED = true // TODO move to env
+
 export interface UserDoc {
     walletAddress: string
     numKaijusOwned: number
@@ -37,13 +39,13 @@ export function NewStartScreen(props: {
     useEffect(() => {
         console.log(web3Auth?.cachedAdapter)
         if (web3Auth?.cachedAdapter) {
-            handleWeb3AuthLogin().then(() => {
+            handleLogin().then(() => {
                 console.log('USEFFECT - web3auth login handled')
             })
         }
     }, [web3Auth])
 
-    const handleWeb3AuthLogin = async () => {
+    const handleLogin = async () => {
         if (!web3Auth) {
             console.log('NO WEB3AUTH FOUND')
             return
@@ -72,6 +74,29 @@ export function NewStartScreen(props: {
         setUserDoc({ walletAddress, numKaijusOwned })
         setIsLoggedIn(true)
         console.log({ userDoc: { walletAddress, numKaijusOwned } })
+    }
+
+    const handleLogout = async () => {
+        await web3Auth?.logout()
+        setIsLoggedIn(false)
+    }
+
+    const handlePlayButtonClick = () => {
+        if (!isLoggedIn) return handleLogin()
+
+        if (userDoc.numKaijusOwned === 0 && WALLET_GATING_ENABLED) {
+            showWalletGateModal()
+        } else {
+            enterGame()
+        }
+    }
+
+    const showWalletGateModal = () => {
+        window.alert('BUY A KAIJU FIRST!')
+    }
+
+    const enterGame = () => {
+        props.onEnter('random-' + Math.random().toString())
     }
 
     return <div className='font-sharp grid grid-rows-4 absolute left-0 w-full h-full pointer-events-auto'>
@@ -117,22 +142,14 @@ export function NewStartScreen(props: {
                     </NavIconWrapper>
                 </div>
                 {isLoggedIn && web3Auth ? (
-                    <UserProfileIcon
-                        logout={async () => {
-                            console.log(`web3Auth.status ${web3Auth.status}`)
-                            await web3Auth?.logout()
-                            setIsLoggedIn(false)
-                            console.log(`web3Auth.status ${web3Auth.status}`)
-                        }}
-                        userDoc={userDoc}
-                    />
+                    <UserProfileIcon logout={handleLogout} userDoc={userDoc} />
                 ) : (
                     <div className='flex items-center h-full'>
                         <PrimaryButton
                             text='sign in'
                             type='default'
                             size='medium'
-                            onClick={handleWeb3AuthLogin}
+                            onClick={handleLogin}
                         />
                     </div>
                 )}
@@ -149,19 +166,7 @@ export function NewStartScreen(props: {
                 />
                 <PrimaryButton
                     text='play now'
-                    onClick={() => {
-                        if (!isLoggedIn) {
-                            handleWeb3AuthLogin()
-                        } else if (isLoggedIn) {
-                            if (userDoc.numKaijusOwned === 0) {
-                                window.alert('BUY A KAIJU FIRST!')
-                            } else {
-                                props.onEnter(
-                                    'random-' + Math.random().toString()
-                                )
-                            }
-                        }
-                    }}
+                    onClick={handlePlayButtonClick}
                     type='primary'
                     size='large'
                 />
@@ -195,11 +200,11 @@ export function NewStartScreen(props: {
                     isNew
                     imgSrc='./assets/main-menu/firstSiegeBanner.webp'
                 />
-                <GameModeContainer
+                {/* <GameModeContainer
                     text='Play Daily Seed'
                     imgSrc='./assets/main-menu/goodEarthMap.webp'
                     isComingSoon
-                />
+                /> */}
             </div>
         </div>
     </div>

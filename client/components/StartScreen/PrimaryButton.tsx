@@ -13,7 +13,7 @@ export const PrimaryButton = (props: {
             : props.type === 'secondary'
             ? 'from-[#323232] to-[#101010] border-black bg-gradient-to-l '
             : props.type === 'default'
-            ? 'from-[#4395FF] to-[#2F437D] border-[#172442] bg-gradient-to-l '
+            ? 'from-[#272756] to-[#603a71] bg-gradient-to-r '
             : props.type === 'white'
             ? 'from-slate-100/30 via-slate-400/40 to-slate-600/30 border-[#E0E0E0] bg-gradient-to-l backdrop-blur-md'
             : ''
