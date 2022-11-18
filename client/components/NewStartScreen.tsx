@@ -113,7 +113,7 @@ export function NewStartScreen(props: {
                 autoPlay
                 muted
                 loop
-                className='max-w-full absolute -z-50'
+                className='w-full max-w-full absolute -z-50'
             />
 
             <div className='nav w-full row-span-1 flex p-2 xs:p-4 lg:p-8 justify-between items-start'>
@@ -126,27 +126,28 @@ export function NewStartScreen(props: {
                             <img
                                 src='./logos/MagicEden.png'
                                 alt='Magic Eden Marketplace'
-                            />
+                                className='w-auto h-full'
+                                />
                         </NavIconWrapper>
                         <NavIconWrapper>
                             <img
                                 src='./logos/Twitter.png'
                                 alt='Twitter'
-                                className='p-1 sm:p-2 sm:ml-4'
+                                className=' scale-75 w-auto h-full'
                             />
                         </NavIconWrapper>
                         <NavIconWrapper>
                             <img
                                 src='./logos/Discord.png'
                                 alt='Discord'
-                                className='scale-110'
+                                className='scale-110 w-auto h-full'
                             />
                         </NavIconWrapper>
                         <NavIconWrapper>
                             <img
                                 src='./logos/Settings.svg'
                                 alt='Settings'
-                                className='filter brightness-0 invert'
+                                className='filter brightness-0 invert w-auto h-full'
                             />
                         </NavIconWrapper>
                     </div>
