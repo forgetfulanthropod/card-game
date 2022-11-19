@@ -4,7 +4,7 @@ const unknownEnemyFiller = {
     class: 'knight',
     constitution: 100,
     strength: 20,
-    wisdom: 5,
+    magic: 5,
     defense: 5,
 } as const
 
@@ -17,7 +17,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 160,
         strength: 27,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     bogSpirit: {
@@ -28,7 +28,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 224,
         strength: 16,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     bookle: {
@@ -39,7 +39,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 60,
         strength: 10,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     bumbit: {
@@ -50,7 +50,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 58,
         strength: 18,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     frogKnight: {
@@ -61,7 +61,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 80,
         strength: 10,
-        wisdom: 5,
+        magic: 5,
         defense: 11,
     },
     frogWizard: {
@@ -72,7 +72,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 66,
         strength: 24,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     gnomeHooligan: {
@@ -83,7 +83,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 40,
         strength: 12 + 1,
-        wisdom: 14,
+        magic: 14,
         defense: 5,
     },
     goblinDragon: {
@@ -94,7 +94,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 120,
         strength: 13,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     greenJester: {
@@ -105,7 +105,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 120,
         strength: 34,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     jerry: {
@@ -116,7 +116,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 86,
         strength: 19,
-        wisdom: 8 + 1,
+        magic: 8 + 1,
         defense: 5 + 1,
     },
     lichLord: {
@@ -127,7 +127,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 250,
         strength: 27,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     matchaGelatinCube: {
@@ -138,7 +138,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 78 + 25,
         strength: 5 + 1,
-        wisdom: 7 + 2,
+        magic: 7 + 2,
         defense: 5 + 4,
     },
     mimic: {
@@ -149,7 +149,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 130,
         strength: 12,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     mushroomFarmer: {
@@ -160,7 +160,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 112,
         strength: 8,
-        wisdom: 9,
+        magic: 9,
         defense: 6,
     },
     notoriousBEAN: {
@@ -171,7 +171,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 75,
         strength: 14,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     orcWarrior: {
@@ -182,7 +182,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 88,
         strength: 12,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     penguinKnight: {
@@ -193,7 +193,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 74,
         strength: 12,
-        wisdom: 5,
+        magic: 5,
         defense: 9,
     },
     skeletonWarrior: {
@@ -204,7 +204,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 54 + 4,
         strength: 11 + 3,
-        wisdom: 4,
+        magic: 4,
         defense: 4 + 3,
     },
     snacky: {
@@ -215,7 +215,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 67,
         strength: 16,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     theHatefly: {
@@ -226,7 +226,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 300,
         strength: 22,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     trioOfFools: {
@@ -237,7 +237,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 110,
         strength: 15,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     warhog: {
@@ -248,7 +248,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 84 + 40,
         strength: 6,
-        wisdom: 5,
+        magic: 5,
         defense: 5 + 3,
     },
     wimpyGuard: {
@@ -259,7 +259,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 170,
         strength: 24,
-        wisdom: 5,
+        magic: 5,
         defense: 5,
     },
     bosshogJurgen: {

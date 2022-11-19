@@ -12,7 +12,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
-import { setAllCharactersToUnmoved } from '@/gameState/battle/setAllCharactersToUnmoved'
+import { setAllCharactersToUnmoved } from '@/gameState/battle/characters/setAllCharactersToUnmoved'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)

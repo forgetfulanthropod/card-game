@@ -1,6 +1,6 @@
 import type { BattleCursor, Piles } from 'shared'
 import { keys, vals } from 'shared/code'
-import { getDeadPcs } from '../characterGetters'
+import { getDeadPcs } from '../characters/characterGetters'
 
 export function removeDeadCharacterCards(scene: BattleCursor) {
     getDeadPcs(scene.get()).forEach(({ uid }) => {

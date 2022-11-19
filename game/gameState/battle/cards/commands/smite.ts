@@ -29,7 +29,7 @@ export const execute: Executors['smite'] = ({
     const healthBefore = scene.get('allCharacters', targetUid).health
     assertFinite({ healthBefore })
     applyDamage({
-        damage: calculatedStats.wisdom,
+        damage: calculatedStats.magic,
         targetUid,
         attackerUid: command.characterUid,
         scene,

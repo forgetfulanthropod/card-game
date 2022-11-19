@@ -9,6 +9,7 @@ import {
     updateNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
+import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -28,6 +29,7 @@ export const playCard: GameActions['playCard'] = args => {
         updateNpcMoves(scene)
     }
 
+    updateCharacters(scene)
     updateHand(scene)
 }
 

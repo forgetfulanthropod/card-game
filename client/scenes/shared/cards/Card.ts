@@ -16,13 +16,15 @@ import {
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
 import { hoveredCharacterUid } from '@/util'
-import type {
+import {
     InteractionEventHandler,
     InteractionEvents,
     PixiText,
     PixiTexture,
     PixiSprite,
     TweenablePixiContainer,
+    CurvedText,
+    Adjust,
 } from '@/elementsUtil'
 import {
     portalize,
@@ -293,25 +295,32 @@ function getTexts(
     card: Card,
     cardFrameTexture: PixiTexture,
     colorStops: ColorStop[]
-): PixiText[] {
+): DisplayObject[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
     const cardFrameScale = cardFrameTexture.width / 791
 
     return [
-        Text({
-            text: card.name,
-            y: -cardFrameTexture.height / 2 + marginV,
-            anchor: [0.5, 0.2],
-            style: {
-                fontSize: 54 * cardFrameScale,
-                fontFamily: 'bigFont',
-                fill: 'white',
-                stroke: 'black',
-                strokeThickness: 6 * cardFrameScale,
-                lineHeight: 0,
-            },
-        }),
+        Adjust(
+            CurvedText({
+                text: Text({
+                    text: card.name,
+                    anchor: [0.5, 0.2],
+                    style: {
+                        fontSize: 54 * cardFrameScale,
+                        fontFamily: 'bigFont',
+                        fill: 'white',
+                        stroke: 'black',
+                        strokeThickness: 6 * cardFrameScale,
+                        lineHeight: 0,
+                    },
+                }),
+                radius: cardFrameTexture.height * 0.5,
+            }),
+            {
+                y: cardFrameTexture.width * 0.15,
+            }
+        ),
         Text({
             text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
                 card.explanation
@@ -322,10 +331,10 @@ function getTexts(
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: 40 * cardFrameScale,
+                fontSize: 35 * cardFrameScale,
                 fontFamily: 'monoFont',
                 fill: 'black',
-                lineHeight: 40 * cardFrameScale,
+                lineHeight: 36 * cardFrameScale,
             },
         }),
         Text({
@@ -395,14 +404,15 @@ function getEvents(
 
         if (getBattleScene().get().energy >= card.energy) {
             if (
-                !(['self', 'allEnemies'] as TargetType[]).includes(
-                    card.targetType
-                )
+                !(
+                    ['self', 'allEnemies', 'allFriends'] as TargetType[]
+                ).includes(card.targetType)
             )
                 clearLastTargetSelection = beginTargetSelection(
                     cardEl.parent,
                     card
                 )
+            else callApi('playCard', { cardUid: card.uid, targetUids: [] })
         } else {
             flashTo(
                 getStage(),

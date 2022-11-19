@@ -12,6 +12,7 @@ import { keys, vals } from 'shared/code'
 import { enemies, getRulebook } from '@/rulebook'
 import type { BaseHealth, EnemyDefinition } from '@/rulebook'
 import { playerCharacterStatsMap } from '@/rulebook/battle'
+import { calculateStats } from '../characters/effects'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -116,7 +117,7 @@ function newPCMeta(args: {
     const scale = 1
     const stance: StanceId = 'neutral'
     const stats = statsMap[args.name]
-    return {
+    const characterMeta = {
         ...stats,
         uid: args.uid,
         isPc: true,
@@ -131,7 +132,13 @@ function newPCMeta(args: {
         block: 0,
         effects: [],
         orbs: [],
+        statModifiersMap: {
+            round: {},
+            room: {},
+            run: {},
+        },
     }
+    return { ...characterMeta, calculatedStats: calculateStats(characterMeta) }
 }
 
 export function newNPCMeta(args: {
@@ -145,7 +152,7 @@ export function newNPCMeta(args: {
     const enemyDefinition = enemies[name][level] as EnemyDefinition
     // debugger
 
-    return {
+    const cm = {
         ...enemyDefinition,
         id: name,
         displayName: playerCharacterStatsMap[name].displayName,
@@ -161,7 +168,14 @@ export function newNPCMeta(args: {
         hasMoved: false,
         effects: [],
         orbs: [],
+        statModifiersMap: {
+            round: {},
+            room: {},
+            run: {},
+        },
     }
+
+    return { ...cm, calculatedStats: calculateStats(cm) }
 }
 
 function getHealthFromBase(base: BaseHealth): number {

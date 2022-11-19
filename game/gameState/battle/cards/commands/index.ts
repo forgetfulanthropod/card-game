@@ -4,8 +4,6 @@ import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock
 import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from './addBlockToSelf'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
-import {explain as explainAddStrength, execute as executeAddStrength} from './addStrength'
-import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWisdom'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
@@ -21,6 +19,7 @@ import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './if
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
+import {explain as explainModifyStat, execute as executeModifyStat} from './modifyStat'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
@@ -38,8 +37,6 @@ export const explainers: Explainers = {
     addBlockToSelf: explainAddBlockToSelf,
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
-    addStrength: explainAddStrength,
-    addWisdom: explainAddWisdom,
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
@@ -55,6 +52,7 @@ export const explainers: Explainers = {
     ifStance: explainIfStance,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
+    modifyStat: explainModifyStat,
     momentary: explainMomentary,
     orb: explainOrb,
     orbOfHolyLight: explainOrbOfHolyLight,
@@ -72,8 +70,6 @@ export const executors: Executors = {
     addBlockToSelf: executeAddBlockToSelf,
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
-    addStrength: executeAddStrength,
-    addWisdom: executeAddWisdom,
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
@@ -89,6 +85,7 @@ export const executors: Executors = {
     ifStance: executeIfStance,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
+    modifyStat: executeModifyStat,
     momentary: executeMomentary,
     orb: executeOrb,
     orbOfHolyLight: executeOrbOfHolyLight,

@@ -3,6 +3,8 @@ import type {
     CalculatedCharacterStats,
     CharacterMeta,
     EffectId,
+    EnemyCharacterMeta,
+    ModifiableStatName,
     StanceId,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
@@ -31,7 +33,7 @@ const staticEffectFuncs: Record<
         stats.strength *= 2
     },
     entranced(stats, counter) {
-        stats.wisdom += Math.ceil(stats.wisdom * 0.11 * counter)
+        stats.magic += Math.ceil(stats.magic * 0.11 * counter)
     },
     fatigued(stats) {
         stats.damageDealMultiplicand *= 0.75
@@ -71,22 +73,31 @@ const turnStartEffectFuncs: Record<
     },
 } as const
 
-/** pure function */
-export function calcPostEffectStats(cm: CharacterMeta) {
+type CharacterMetaForCalculatingStats =
+    | Omit<EnemyCharacterMeta, 'calculatedStats'>
+    | Omit<CharacterMeta, 'calculatedStats'>
+
+export function calculateStats(
+    cm: CharacterMetaForCalculatingStats
+): CalculatedCharacterStats {
+    //@ts-expect-error
+    const stance = cm.stance ?? 'neutral'
+
     const stats: CalculatedCharacterStats = {
         block: cm.block,
         blockMultiplier: 1,
-        constitution: cm.constitution,
-        defense: cm.defense,
-        wisdom: cm.wisdom,
-        strength: cm.strength,
+        constitution:
+            cm.constitution + getStatModifierAddend(cm, 'constitution'),
+        defense: cm.defense + getStatModifierAddend(cm, 'defense'),
+        magic: cm.magic + getStatModifierAddend(cm, 'magic'),
+        strength: cm.strength + getStatModifierAddend(cm, 'strength'),
         isSkipped: false,
-        damageDealMultiplicand: getDamageDealMulitplicandForStance(cm.stance),
+        damageDealMultiplicand: getDamageDealMulitplicandForStance(stance),
         damageDealAddend: 0,
-        damageTakeMultiplicand: getDamageTakeMulitplicandForStance(cm.stance),
+        damageTakeMultiplicand: getDamageTakeMulitplicandForStance(stance),
         damageTakeAddend: 0,
         health: cm.health,
-        stance: cm.stance,
+        stance,
     }
 
     cm.effects?.forEach(effect => {
@@ -95,6 +106,17 @@ export function calcPostEffectStats(cm: CharacterMeta) {
     })
 
     return stats
+}
+
+function getStatModifierAddend(
+    cm: CharacterMetaForCalculatingStats,
+    stat: ModifiableStatName
+): number {
+    return (
+        (cm.statModifiersMap?.round[stat] ?? 0) +
+        (cm.statModifiersMap?.room[stat] ?? 0) +
+        (cm.statModifiersMap?.run[stat] ?? 0)
+    )
 }
 
 function getDamageDealMulitplicandForStance(stance: StanceId) {

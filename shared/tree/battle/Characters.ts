@@ -1,4 +1,10 @@
-import type { CharacterStats, CharacterUid } from './Character'
+import type {
+    CalculatedCharacterStats,
+    CharacterStats,
+    CharacterUid,
+    StatModifiers,
+    StatModifiersMap,
+} from './Character'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
 
@@ -14,6 +20,7 @@ export type EnemyCharacterMeta = Omit<
 > & {
     id: EnemyCharacterId
     level: string | number
+    calculatedStats?: CalculatedCharacterStats
 }
 export interface CharacterMeta extends CharacterStats {
     id: CharacterId
@@ -32,6 +39,8 @@ export interface CharacterMeta extends CharacterStats {
     stanceInPrevTurn: StanceId
     effects: Effect[]
     orbs: Orb[]
+    statModifiersMap: StatModifiersMap
+    calculatedStats: CalculatedCharacterStats
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 

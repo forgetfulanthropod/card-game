@@ -17,6 +17,8 @@ import type {
     StanceId,
     CharacterMeta,
     Card,
+    ModifiableStatName,
+    StatModifierExpiration,
 } from 'shared'
 
 export type { Value as VAngu } from 'angu'
@@ -43,8 +45,12 @@ interface ArgsOf {
     addBlockToSelf: [block: number]
     addEnergy: [energy: number]
     addEnergyPerRound: [energy: number]
-    addStrength: [block: number]
-    addWisdom: [block: number]
+    modifyStat: [
+        statName: ModifiableStatName,
+        amount: number,
+        expiration: StatModifierExpiration,
+        targetType?: BasicTargetType
+    ]
 
     deal: [damage: number, times?: number]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
@@ -108,7 +114,7 @@ export function getOuterHtmlArr(html: string) {
 export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
     const statsToColorsMap: Partial<Record<keyof CharacterStats, string>> = {
         strength: '#d44c47',
-        wisdom: '#9e6ec2',
+        magic: '#9e6ec2',
         defense: '#337ea9',
         constitution: '#1cc8af',
     }

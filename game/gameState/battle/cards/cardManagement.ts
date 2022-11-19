@@ -14,7 +14,7 @@ import type {
 import { keys, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
-import type { EntryCursor } from '@/util'
+import { EntryCursor, srandInt } from '@/util'
 import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
 import { shufflePile } from './shufflePile'
 
@@ -103,11 +103,18 @@ function makeCards(scene: BattleCursor): Piles {
             // 'flashbang'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        if (cm.class === 'wizard') cardIds.push('orbOfLightning')
-        if (cm.class === 'wizard') cardIds.push('orbOfFrost')
-        if (cm.class === 'wizard') cardIds.push('zap')
+        if (cm.class === 'wizard')
+            cardIds.push(
+                ['orbOfLightning', 'orbOfFrost', 'zap'][
+                    srandInt(0, 2)
+                ] as CardId
+            )
         if (cm.class === 'cleric') cardIds.push('smite')
-        if (cm.class === 'knight') cardIds.push('dutifulStab')
+
+        if (cm.class === 'cleric') cardIds.push('ancientVerse')
+        if (cm.class === 'cleric') cardIds.push('momentOfClarity')
+
+        if (cm.class === 'knight') cardIds.push('sweepTheLeg')
         // if (cm.class === 'rogue') cardIds.push('berserk')
         if (cm.class === 'rogue') cardIds.push('flashBang')
         // if (cm.class === 'rogue') cardIds.push('patientAmbush')
