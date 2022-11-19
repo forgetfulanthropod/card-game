@@ -85,10 +85,11 @@ export function NewStartScreen(props: {
         setIsLoggedIn(false)
     }
 
-    const handlePlayButtonClick = () => {
-        if (!isLoggedIn) return handleLogin()
+    const handlePlayButtonClick = async () => {
+        if (!isLoggedIn || !solanaRPC) return handleLogin()
 
-        if (userDoc.numKaijusOwned === 0 && WALLET_GATING_ENABLED) {
+        const userOwnsKaijus = await solanaRPC.userOwnsKaijus()
+        if (userOwnsKaijus === false && WALLET_GATING_ENABLED) {
             setShowGateModal(true)
         } else {
             enterGame()
@@ -117,17 +118,17 @@ export function NewStartScreen(props: {
             />
 
             <div className='nav w-full row-span-1 flex p-2 xs:p-4 lg:p-8 justify-between items-start'>
-                <div className='flex w-12 2xs:w-14 xs:w-20 sm:w-24 md:w-28 xl:w-56 cursor-pointer hover:scale-105 transition'>
+                <div className='flex w-1/6 cursor-pointer hover:scale-105 transition'>
                     <img src='./logos/KaijuCards.png' />
                 </div>
-                <div className='navRight flex justify-between sm:pl-12 xs:pt-2 xs:pl-6 lg:pt-4 items-start w-full'>
-                    <div className='grid grid-cols-4 mr-4'>
+                <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full'>
+                    <div className='grid grid-cols-4 mr-4 w-1/3'>
                         <NavIconWrapper>
                             <img
                                 src='./logos/MagicEden.png'
                                 alt='Magic Eden Marketplace'
                                 className='w-auto h-full'
-                                />
+                            />
                         </NavIconWrapper>
                         <NavIconWrapper>
                             <img
