@@ -133,7 +133,7 @@ function newPCMeta(args: {
         effects: [],
         orbs: [],
         statModifiersMap: {
-            round: {},
+            turn: {},
             room: {},
             run: {},
         },
@@ -169,7 +169,7 @@ export function newNPCMeta(args: {
         effects: [],
         orbs: [],
         statModifiersMap: {
-            round: {},
+            turn: {},
             room: {},
             run: {},
         },

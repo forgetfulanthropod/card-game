@@ -77,7 +77,7 @@ function getUpdatedModifiers(
     expiration: StatModifierExpiration
 ) {
     const updatedModifiers = {
-        round: { ...modifiers.round },
+        turn: { ...modifiers.turn },
         room: { ...modifiers.room },
         run: { ...modifiers.run },
     }

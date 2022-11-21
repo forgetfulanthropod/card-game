@@ -17,7 +17,7 @@ export type ModifiableStatName =
 
 export type StatModifiers = Partial<Pick<CharacterStats, ModifiableStatName>>
 
-export type StatModifierExpiration = 'round' | 'room' | 'run'
+export type StatModifierExpiration = 'turn' | 'room' | 'run'
 export type StatModifiersMap = Record<StatModifierExpiration, StatModifiers>
 
 export type CharacterStats = Readonly<{
