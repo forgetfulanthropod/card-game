@@ -21,13 +21,13 @@ export const explain: Explainers['modifyStat'] = dslArgs => {
     const [statName, addend, expiration, targetType] = evalAll(dslArgs)
     return `${addend >= 0 ? '+' : ''}${addend} ${statName}${
         targetType != null
-            ? ' to' +
+            ? ' to ' +
               targetType
                   .replace(/([A-Z])/g, ' $1')
                   .toLowerCase()
                   .trim()
             : ''
-    } ${expiration !== 'room' ? `until end of ${expiration}` : ''}`
+    } until end of ${expiration}`
 }
 
 export const execute: Executors['modifyStat'] = ({
