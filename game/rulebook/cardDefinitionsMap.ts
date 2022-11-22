@@ -594,8 +594,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
             chain(
-                modifyStat("strength", 6, "round"),
-                modifyStat("magic", 6, "round"),
+                modifyStat("strength", 6, "turn"),
+                modifyStat("magic", 6, "turn"),
                 momentary()
             )`,
         type: 'utility',

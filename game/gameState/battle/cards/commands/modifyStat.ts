@@ -27,7 +27,7 @@ export const explain: Explainers['modifyStat'] = dslArgs => {
                   .toLowerCase()
                   .trim()
             : ''
-    } until end of ${expiration}`
+    } this ${expiration}`
 }
 
 export const execute: Executors['modifyStat'] = ({
@@ -41,13 +41,15 @@ export const execute: Executors['modifyStat'] = ({
     switch (targetType) {
         case 'allFriends':
             uids = getLivingPcUids(scene.get())
+            break
         case 'allEnemies':
             uids = getLivingNpcUids(scene.get())
+            break
     }
 
     applyStatModifiers({
         scene,
-        uids: targetUids,
+        uids,
         stats: { [statName]: addend },
         expiration,
     })
@@ -64,8 +66,12 @@ function applyStatModifiers({
     stats: Partial<Pick<CharacterStats, ModifiableStatName>>
     expiration: StatModifierExpiration
 }) {
-    uids.map(uid =>
+    uids.forEach(uid =>
         scene.apply(['allCharacters', uid, 'statModifiersMap'], modifiers => {
+            logger.info(
+                'should be applying these modifierss..' +
+                    JSON.stringify({ uid, stats, expiration, modifiers })
+            )
             return getUpdatedModifiers(modifiers, stats, expiration)
         })
     )

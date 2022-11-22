@@ -27,6 +27,8 @@ export const playCard: GameActions['playCard'] = args => {
             discard({ cardUids: [args.cardUid], scene })
 
         updateNpcMoves(scene)
+    } else {
+        logger.error('tried to play unplayable card: ' + args.cardUid)
     }
 
     updateCharacters(scene)

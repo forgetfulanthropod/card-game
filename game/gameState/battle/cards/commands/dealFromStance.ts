@@ -53,8 +53,6 @@ export const execute: Executors['dealFromStance'] = ({
         return
     }
 
-    logger.info(`dealing to targetUids: ${targetUids}.. damage: ${damage}`)
-
     targetUids.forEach(targetUid =>
         applyDamage({
             damage,
