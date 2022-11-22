@@ -326,12 +326,13 @@ function getTexts(
                 card.explanation
             )}</div>`,
             isHtml: true,
-            x: -cardFrameTexture.width / 2 + marginH,
             y: cardFrameTexture.height * 0.15,
+            anchor: [0.5, 0],
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
                 fontSize: 35 * cardFrameScale,
+                align: 'center',
                 fontFamily: 'monoFont',
                 fill: 'black',
                 lineHeight: 36 * cardFrameScale,
@@ -354,7 +355,7 @@ function getTexts(
 }
 
 function getMargins(cardFrameTexture: PixiTexture) {
-    const marginH = cardFrameTexture.width * 0.2
+    const marginH = cardFrameTexture.width * 0.15
     const marginV = cardFrameTexture.width * 0.12
     return { marginH, marginV }
 }
