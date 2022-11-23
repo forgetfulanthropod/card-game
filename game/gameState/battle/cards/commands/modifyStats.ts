@@ -53,7 +53,7 @@ function getStatModHtml(statName: ModifiableStatName, addend: number) {
     return `${addend >= 0 ? '+' : ''}${applyStatHtml(
         statName,
         addend.toString()
-    )} ${upperFirst(statName)}`
+    )} <b>${upperFirst(statName)}</b>`
 }
 
 export const execute: Executors['modifyStats'] = ({

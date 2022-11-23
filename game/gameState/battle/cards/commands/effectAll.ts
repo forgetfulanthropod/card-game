@@ -21,7 +21,7 @@ export const explain: Explainers['effectAll'] = (dslArgs, context) => {
 
     const friendsOrEnemies = isTargetingFriendsOrEnemies(context.command)
 
-    return `+${increase} ${startCase(id)} to all ${friendsOrEnemies}`
+    return `+${increase} <b>${startCase(id)}</b> to all ${friendsOrEnemies}`
 }
 
 export const execute: Executors['effectAll'] = ({
