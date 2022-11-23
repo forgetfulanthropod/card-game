@@ -22,8 +22,11 @@ export function Spine<Name extends SpineAsset>(props: {
     onSpineEvent?: (e: string) => void
     onDestroy?: Callback[]
     isPc?: boolean
+    scale?: number
 }): PixiSpine {
     const spine = new PixiSpine(spineData(props.name))
+
+    if (props.scale != null) spine.scale.set(props.scale, props.scale)
 
     if (haveEvilSkins[props.name.replace('Spine', '') as CharacterId]) {
         const skinNames = spine.skeleton.data.skins.map(skin => skin.name)

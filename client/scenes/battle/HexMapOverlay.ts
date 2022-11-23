@@ -37,6 +37,12 @@ export function HexMapOverlay(): PixiContainer {
     hoveredCharacterUid.set(null)
     loopSong('hexMapMusicHooligansBluff')
 
+    const spineBg = Spine({
+        name: 'hooligansBluffHexMapBg',
+        animation: 'animation',
+        scale: 1.2,
+    })
+
     return Container(
         {},
         Sprite({
@@ -49,10 +55,7 @@ export function HexMapOverlay(): PixiContainer {
             },
             defaultCursor: true,
         }),
-        Spine({
-            name: 'hooligansBluffHexMapBg',
-            animation: 'animation',
-        }),
+        Adjust(spineBg, { y: BASE_HEIGHT / 2 - spineBg.height * 0.52 }),
         // VideoBackground({
         //     name: 'mapBg',
         //     src: 'mapBg',
