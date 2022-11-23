@@ -37,7 +37,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'chain(effect("bleed", 2), effect("poisoned", 5), effect("fatigued", 1))',
+            'strengthy = strength * .2; chain(deal(strengthy), effect("bleed", 2), effect("poisoned", 5), effect("fatigued", 1))',
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -565,9 +565,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
             chain(
-                addBlock(defense + 2),
-                modifyStat("magic", 2, "room"),
-                modifyStat("strength", 2, "room")
+                addBlock(defense),
+                modifyStats("strength|magic", "2|2", "room")
             )`,
         type: 'utility',
         characterClass: 'cleric',
@@ -580,8 +579,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'allFriends',
         actions: `
             chain(
-                modifyStat("magic", 2, "room", "allFriends"),
-                modifyStat("strength", 2, "room", "allFriends")
+                modifyStats("strength|magic", "2|2", "room", "allFriends")
             )`,
         type: 'utility',
         characterClass: 'cleric',
@@ -594,8 +592,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
             chain(
-                modifyStat("strength", 6, "turn"),
-                modifyStat("magic", 6, "turn"),
+                modifyStats("strength|magic", "6|6", "turn"),
                 momentary()
             )`,
         type: 'utility',

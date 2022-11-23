@@ -212,7 +212,7 @@ function TermExplanationsForCard(
     return TermExplanationsIf({
         areShown: isLongHovered,
         terms,
-        xOffset: width,
+        xOffset: width * 0.77,
     })
 }
 
@@ -299,6 +299,10 @@ function getTexts(
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
     const cardFrameScale = cardFrameTexture.width / 791
+    const explanationFontSize = getExplanationFontSize(
+        cardFrameScale,
+        card.explanation
+    )
 
     return [
         Adjust(
@@ -331,11 +335,11 @@ function getTexts(
             style: {
                 wordWrap: true,
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: 35 * cardFrameScale,
+                fontSize: explanationFontSize,
                 align: 'center',
                 fontFamily: 'monoFont',
                 fill: 'black',
-                lineHeight: 36 * cardFrameScale,
+                lineHeight: explanationFontSize * 1.1,
             },
         }),
         Text({
@@ -352,6 +356,24 @@ function getTexts(
             },
         }),
     ]
+}
+
+function getExplanationFontSize(cardFrameScale: number, explanation: string) {
+    const minExplanationFontSize = 35 * cardFrameScale
+    const maxExplanationFontSize = 55 * cardFrameScale
+    const unclampedExplanationFontSize =
+        55 - getPlainTextLength(explanation) * 1
+    const explanationFontSize =
+        unclampedExplanationFontSize < minExplanationFontSize
+            ? minExplanationFontSize
+            : unclampedExplanationFontSize > maxExplanationFontSize
+            ? maxExplanationFontSize
+            : unclampedExplanationFontSize
+    return explanationFontSize
+}
+
+function getPlainTextLength(text: string) {
+    return text.replace(/(<([^>]+)>)/gi, '').length
 }
 
 function getMargins(cardFrameTexture: PixiTexture) {
@@ -423,7 +445,7 @@ function getEvents(
                         displayObjectArgs: {
                             x: BASE_WIDTH / 2,
                             y: BASE_HEIGHT * 0.6,
-                            borderThickness: 3,
+                            borderThickness: 2,
                         },
                         color: 0xa240e8,
                     }),

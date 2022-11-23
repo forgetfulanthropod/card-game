@@ -38,12 +38,12 @@ export const keyTermsMap = {
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
     courageous: 'deals 15% more damage',
     debilitated: 'deals 50% less damage',
-    entranced: 'increase magic stat by 11% times the number of counters',
+    entranced: 'increases Magic by 1 per stack',
     fatigued: 'deals 25% less damage',
     fortified: 'receives 50% more block',
-    guarded: 'receives 25% more block',
+    // guarded: 'receives 25% more block',
     poisoned: '(unblockable) receives 1 damage per stack',
-    strongblock: 'receives 50% more block',
+    strongblock: 'increases Defense by 2 per stack',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 15% more damage',
     tired: 'deals 12% less damage',
@@ -121,7 +121,7 @@ export function TermExplanations({
     boxes.forEach((box, i) => {
         if (i > 0) {
             const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 10
+            box.y = lastBox.y + lastBox.height + 5
         }
 
         return box
@@ -169,19 +169,23 @@ export function TermExplanation({
     term: KeyTerm
     displayObjectArgs?: DisplayObjectArgs
 }): PixiContainer {
+    let topText = startCase(term).replace('Orbs', 'Orb')
+
+    if (topText.includes('Orb')) {
+        topText = topText + ' (clickable!)'
+    }
+
     return Explanation({
         // text: `<div style="font-family: sans-serif">
         //     <b>${startCase(term)}</b>
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [
-            `${startCase(term)}`.replace('Orbs', 'Orb'),
-            `${keyTermsMap[term]}`,
-        ],
+        texts: [topText, `${keyTermsMap[term]}`],
         displayObjectArgs: {
+            borderThickness: 2,
+            padding: 10,
             ...displayObjectArgs,
-            borderThickness: 3,
         },
     })
 }
@@ -209,6 +213,8 @@ export function ExplanationIf({
                 content: Explanation({
                     texts,
                     displayObjectArgs: {
+                        borderThickness: 2,
+                        padding: 10,
                         x: root.getGlobalPosition().x + xOffset,
                         y: root.getGlobalPosition().y + yOffset,
                     },
@@ -251,8 +257,8 @@ export function Explanation({
     })
 
     return InfoBox(Container({}, ...textEls), {
-        ...(displayObjectArgs ?? {}),
         padding: 25,
+        ...(displayObjectArgs ?? {}),
         ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
     })
 }

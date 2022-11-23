@@ -5,7 +5,7 @@ import { calculateStats } from '@/gameState'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `+${block} block`
+    return `Give target Kaiju<br> +${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({

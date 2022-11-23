@@ -33,7 +33,7 @@ const staticEffectFuncs: Record<
         stats.strength *= 2
     },
     entranced(stats, counter) {
-        stats.magic += Math.ceil(stats.magic * 0.11 * counter)
+        stats.magic += counter
     },
     fatigued(stats) {
         stats.damageDealMultiplicand *= 0.75
@@ -41,8 +41,8 @@ const staticEffectFuncs: Record<
     smallDamageIncrease(stats) {
         stats.damageTakeAddend += 4
     },
-    strongblock(stats) {
-        stats.blockMultiplier *= 1.5
+    strongblock(stats, counter) {
+        stats.defense += counter * 2
     },
     stunned(stats) {
         stats.isSkipped = true

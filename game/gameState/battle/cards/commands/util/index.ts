@@ -36,7 +36,7 @@ export function s(n: number) {
     return n > 1 ? 's' : ''
 }
 
-interface ArgsOf {
+export interface ActionArgs {
     chain: any[]
     choice: any[]
     killIf: [condition: boolean]
@@ -45,9 +45,9 @@ interface ArgsOf {
     addBlockToSelf: [block: number]
     addEnergy: [energy: number]
     addEnergyPerRound: [energy: number]
-    modifyStat: [
-        statName: ModifiableStatName,
-        amount: number,
+    modifyStats: [
+        statNames: string, //ModifiableStatName[],
+        amounts: string, //number[],
         expiration: StatModifierExpiration,
         targetType?: BasicTargetType
     ]
@@ -84,7 +84,7 @@ export type Locals = CalculatedCharacterStats & {
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }
 
 export type Executors = {
-    [K in keyof ArgsOf]: (args: ExecuteArgs<Anguify<ArgsOf[K]>>) => void
+    [K in keyof ActionArgs]: (args: ExecuteArgs<Anguify<ActionArgs[K]>>) => void
 }
 
 export type ExplainerContext = {
@@ -94,8 +94,8 @@ export type ExplainerContext = {
 }
 
 export type Explainers = {
-    [K in keyof ArgsOf]: (
-        dslArgs: Anguify<ArgsOf[K]>,
+    [K in keyof ActionArgs]: (
+        dslArgs: Anguify<ActionArgs[K]>,
         context: ExplainerContext
     ) => string
 }
@@ -111,33 +111,39 @@ export function getOuterHtmlArr(html: string) {
         : ['', '']
 }
 
+const statsToColorsMap: Partial<Record<keyof CharacterStats, string>> = {
+    strength: '#d44c47',
+    magic: '#9e6ec2',
+    defense: '#337ea9',
+    constitution: '#1cc8af',
+}
+
 export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
-    const statsToColorsMap: Partial<Record<keyof CharacterStats, string>> = {
-        strength: '#d44c47',
-        magic: '#9e6ec2',
-        defense: '#337ea9',
-        constitution: '#1cc8af',
-    }
-
     return angus.map(angu => {
-        let color = ''
-        Object.keys(statsToColorsMap).map(stat => {
-            const statColor = statsToColorsMap[
-                stat as keyof CharacterStats
-            ] as string
-            if (angu.name().includes(stat)) {
-                if (!color.length) color = statColor
-                else color = blend(color, statColor)
-            }
-        })
+        const statName = angu.name()
+        const rawValue = angu.eval()
+        const value =
+            typeof rawValue === 'number' ? Math.ceil(rawValue) : rawValue
 
-        const rawVal = angu.eval()
-        const val = typeof rawVal === 'number' ? Math.ceil(rawVal) : rawVal
-
-        return color
-            ? `<span style="color: ${color}; font-weight: bold;">${val}</span>`
-            : `${val}`
+        return applyStatHtml(statName, value)
     })
+}
+
+export function applyStatHtml(statName: string, value: string) {
+    let color = ''
+    Object.keys(statsToColorsMap).map(stat => {
+        const statColor = statsToColorsMap[
+            stat as keyof CharacterStats
+        ] as string
+        if (statName.includes(stat)) {
+            if (!color.length) color = statColor
+            else color = blend(color, statColor)
+        }
+    })
+
+    return color
+        ? `<span style="color: ${color}; font-weight: bold;">${value}</span>`
+        : `${value}`
 }
 
 function blend(color1Hex: string, color2Hex: string) {
