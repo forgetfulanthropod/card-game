@@ -10,7 +10,7 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
 
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
-    let explication = `deals ${damageHtmlArr[0]}${getDamage({
+    let explication = `deal ${damageHtmlArr[0]}${getDamage({
         damage: damage,
         attacker: context.characterMeta,
         target: null,

@@ -199,7 +199,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'wizard',
     },
-    /**Target Attack Card, enchantment or ~~token~~ orb doubles the amount of damage it deals this turn. */
+    /**Target Attack Card, enchantment or ~~token~~ orb doubles the amount of damage it deal this turn. */
     // arcanePower: {
     //     name: 'Arcane Power',
     //     energy: 1,
