@@ -359,10 +359,10 @@ function getTexts(
 }
 
 function getExplanationFontSize(cardFrameScale: number, explanation: string) {
-    const minExplanationFontSize = 35 * cardFrameScale
-    const maxExplanationFontSize = 55 * cardFrameScale
+    const minExplanationFontSize = Math.round(35 * cardFrameScale)
+    const maxExplanationFontSize = Math.round(50 * cardFrameScale)
     const unclampedExplanationFontSize =
-        55 - getPlainTextLength(explanation) * 1
+        maxExplanationFontSize + 10 - getPlainTextLength(explanation) * 2
     const explanationFontSize =
         unclampedExplanationFontSize < minExplanationFontSize
             ? minExplanationFontSize

@@ -30,8 +30,6 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
 
             clearRoomCardModifiers(scene)
 
-            putAllCardsInDrawPile(scene)
-
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))

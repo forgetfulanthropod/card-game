@@ -18,6 +18,8 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
 
     if (context.command.targetType === 'allEnemies') {
         explication += ' to all enemies'
+    } else {
+        explication += ' to target'
     }
 
     if (times != null) {
