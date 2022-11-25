@@ -11,7 +11,7 @@ import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
 
-const WALLET_GATING_ENABLED = true // TODO move to env
+const WALLET_GATING_ENABLED = false // TODO move to env
 
 export interface UserDoc {
     walletAddress: string
@@ -86,10 +86,9 @@ export function NewStartScreen(props: {
     }
 
     const handlePlayButtonClick = () => {
-        if (!isLoggedIn) return handleLogin()
-
-        if (userDoc.numKaijusOwned === 0 && WALLET_GATING_ENABLED) {
-            setShowGateModal(true)
+        if (WALLET_GATING_ENABLED) {
+            if (!isLoggedIn) return handleLogin()
+            if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         } else {
             enterGame()
         }
