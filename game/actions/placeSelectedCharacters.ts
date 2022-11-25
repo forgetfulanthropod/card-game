@@ -10,8 +10,22 @@ export const placeSelectedCharacters: GameActions['placeSelectedCharacters'] =
         scene.apply(
             'selectedCharacters',
             produce(selected => {
-                for (const { character, index } of args.characters) {
-                    selected[index] = character
+                for (const {
+                    allCharacterOptionsIndex,
+                    placeIndex,
+                } of args.characters) {
+                    const characterStats = scene.get('allCharacterOptions')[
+                        allCharacterOptionsIndex
+                    ]
+                    selected[placeIndex] = {
+                        ...characterStats,
+                        uid: `pc-${characterStats.id}-${
+                            (Math.random() * 10000) | 0
+                        }`,
+                        isPc: true,
+                        tokenId: '',
+                        nftName: '',
+                    }
                 }
             })
         )
