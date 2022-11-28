@@ -4,7 +4,7 @@ import type {
     CharacterMeta,
     CommandId,
 } from 'shared'
-import { calcPostEffectStats } from '../effects'
+import { calculateStats } from '../characters/effects'
 import { updateNpcMoves } from '@/gameState'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
@@ -105,9 +105,9 @@ export function getDamage({
     damage: number
 }) {
     const damageDealMultiplicand =
-        calcPostEffectStats(attacker).damageDealMultiplicand
+        calculateStats(attacker).damageDealMultiplicand
     const damageTakeMultiplicand = target
-        ? calcPostEffectStats(target).damageTakeMultiplicand
+        ? calculateStats(target).damageTakeMultiplicand
         : 1
 
     // logger.info(

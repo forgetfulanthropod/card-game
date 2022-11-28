@@ -43,7 +43,7 @@ function InteractiveEffectCounter(
     const isHovered = datum(false)
     const pointerover = () => isHovered.set(true)
     const pointerout = () => isHovered.set(false)
-    const width = 80
+    const width = 60
 
     const root = Container(
         {
@@ -70,7 +70,7 @@ function InteractiveEffectCounter(
             anchor: [0.6, 1],
             style: {
                 fontFamily: ['bigFont', 'monospace'],
-                fontSize: 30,
+                fontSize: 36,
                 fill: 'white',
                 stroke: 'black',
                 strokeThickness: 5,

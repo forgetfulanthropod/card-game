@@ -1,21 +1,6 @@
-import type {
-    CharacterMeta,
-    BattleCursor,
-    Command,
-    EnemyCharacterMeta,
-} from 'shared'
-
+import { BattleCursor, Command, EnemyCharacterMeta } from 'shared'
 import { enemies } from '@/rulebook'
-
-// TODO: move command definitions into rulebook object
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { commandDefinitionsMap } from '@/rulebook/commandDefinitionsMap'
-
-export function checkWinner(ac: CharacterMeta[]): null | 'PC' | 'NPC' {
-    if (ac.every(c => c.isPc || c.health <= 0)) return 'PC'
-    if (ac.every(c => !c.isPc || c.health <= 0)) return 'NPC'
-    return null
-}
 
 export function getNpcMove(
     scene: BattleCursor,

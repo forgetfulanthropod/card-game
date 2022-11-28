@@ -13,7 +13,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase] = evalAllAsHtml(dslArgs)
-    return `+${increase} ${startCase(id)}`
+    return `+${increase} <b>${startCase(id)}</b>`
 }
 
 export const execute: Executors['effect'] = ({

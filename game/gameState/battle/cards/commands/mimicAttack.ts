@@ -2,7 +2,7 @@ import { applyDamage } from '../../util'
 import type { Executors, Explainers } from './util'
 
 export const explain: Explainers['mimicAttack'] = () => {
-    return 'mimics the last attack against this character, otherwise deals 999'
+    return 'mimics the last attack against this character, otherwise deal 999'
 }
 
 export const execute: Executors['mimicAttack'] = ({

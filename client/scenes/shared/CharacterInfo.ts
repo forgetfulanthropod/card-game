@@ -32,7 +32,7 @@ import {
 
 const stats = [
     { key: 'strength', displayName: 'Strength', color: 0xd44c47 },
-    { key: 'wisdom', displayName: 'Magic', color: 0x9e6ec2 },
+    { key: 'magic', displayName: 'Magic', color: 0x9e6ec2 },
     { key: 'defense', displayName: 'Defense', color: 0x337ea9 },
     { key: 'constitution', displayName: 'Health', color: 0x1cc8af },
 ] as const
@@ -86,7 +86,7 @@ export function BattleSceneCharacterInfo() {
             toDatum(getBattleScene().select('allCharacters'), ac => ac),
             isDoneAnimatingOutDatum
         ),
-        //@ts-ignore
+        //@ts-expect-error
         (cm: CharacterMeta) => {
             const root = RootCharacterInfo(cm, 0, 78)
 
@@ -137,7 +137,7 @@ function RootCharacterInfo(
     x = BASE_WIDTH * 0.67,
     y = 78
 ): PixiContainer {
-    const characterInfo = CharacterInfo(cm as OwnedCharacterStats)
+    const characterInfo = CharacterInfo(cm as CharacterMeta)
 
     return Adjust(characterInfo, {
         x: characterInfo.width * 0.5 + x,
@@ -145,7 +145,7 @@ function RootCharacterInfo(
     })
 }
 
-export function CharacterInfo(cm: OwnedCharacterStats) {
+export function CharacterInfo(cm: CharacterMeta) {
     const abilities = characterIdToAbilitiesMap[cm.id]
 
     if (abilities == null) throw new Error('PCs need abilities!')
@@ -157,11 +157,11 @@ export function CharacterInfo(cm: OwnedCharacterStats) {
     )
 }
 
-function getAllPossibleCardsForCharacter(cm: OwnedCharacterStats): Card[] {
+function getAllPossibleCardsForCharacter(cm: CharacterMeta): Card[] {
     return vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
 }
 
-function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
+function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
     // const allCharCards =
     //     getTree().get('scene', 'id') === 'entry'
@@ -237,7 +237,10 @@ function FullInfoBox(props: { cm: OwnedCharacterStats; abilities: Ability[] }) {
                         anchor: [0.5, 0],
                     }),
                     Text({
-                        text: `${props.cm[stat.key]}`,
+                        text: `${
+                            props.cm.calculatedStats?.[stat.key] ??
+                            props.cm[stat.key]
+                        }`,
                         style: {
                             fontFamily: 'bigFont',
                             fontSize: 32,

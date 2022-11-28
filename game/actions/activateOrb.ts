@@ -12,7 +12,7 @@ import {
     getRandomLivingNpcUid,
     updateHand,
     applyDamage,
-    calcPostEffectStats,
+    calculateStats,
     emitMove,
     getLivingNpcs,
     getCharacterMeta,
@@ -27,7 +27,7 @@ const orbActivators: Record<
     (character: CharacterMeta, scene: BattleCursor) => void
 > = {
     protection(character: CharacterMeta, scene: BattleCursor) {
-        const block = character.wisdom * 0.5
+        const block = character.magic * 0.5
         applyBlock(character, scene, block)
 
         emitMove({
@@ -39,7 +39,7 @@ const orbActivators: Record<
         })
     },
     lightning(character: CharacterMeta, scene: BattleCursor) {
-        const damage = Math.ceil(character.wisdom * 0.35)
+        const damage = Math.ceil(character.magic * 0.35)
         const targetUids = getLivingNpcs(scene.get()).map(npc => npc.uid)
 
         targetUids.forEach(uid =>
@@ -125,7 +125,7 @@ function applyBlock(
     scene: BattleCursor,
     block: number
 ) {
-    const multiplier = calcPostEffectStats(character).blockMultiplier
+    const multiplier = calculateStats(character).blockMultiplier
     scene.apply(['allCharacters', character.uid, 'block'], b =>
         Math.ceil(b + block * multiplier)
     )

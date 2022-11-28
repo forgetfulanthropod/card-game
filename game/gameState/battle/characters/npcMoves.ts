@@ -1,8 +1,8 @@
 import type { BattleCursor, NextCommand } from 'shared'
 import { nonNulls } from 'shared/code'
-import { simulateCommand } from './cards'
+import { simulateCommand } from '../cards'
 import { getLivingNpcs, getCommandTargets } from './characterGetters'
-import { getNpcMove } from './round'
+import { getNpcMove } from './getNpcMove'
 
 export function getNpcMoves(scene: BattleCursor): NextCommand[] {
     const movable = getLivingNpcs(scene.get())

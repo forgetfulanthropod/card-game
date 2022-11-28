@@ -1,15 +1,14 @@
 import type { BattleCursor } from 'shared'
 
 import { vals } from 'shared/code'
-import { checkWinner } from './round'
-import { getNewCardOptions } from './getNewCardOptions'
+import { checkWinner } from './checkWinner'
+
 import { calculateLoot, calculateChestProgress } from './loot'
 import { calculateNewRunScore } from './score'
-import { setAllCharactersToUnmoved } from './setAllCharactersToUnmoved'
-import { resetStances } from './resetStances'
-import { clearAllEffects } from './effects'
 import { clearRoomCardModifiers, putAllCardsInDrawPile } from './cards'
 import { checkServerScoringEvent } from './score/checkServerScoringEvent'
+import { clearCharacterModifiersForRoom } from './characters/clearCharacterModifiersForRoom'
+import { getNewCardOptions } from './cards/getNewCardOptions'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
@@ -27,10 +26,8 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
-            resetStances(scene)
-            putAllCardsInDrawPile(scene)
-            setAllCharactersToUnmoved(scene)
-            clearAllEffects(scene)
+            clearCharacterModifiersForRoom(scene)
+
             clearRoomCardModifiers(scene)
 
             scene.set('state', 'collecting loot')

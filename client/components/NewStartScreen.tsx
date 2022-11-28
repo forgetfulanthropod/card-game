@@ -11,7 +11,7 @@ import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
 
-const WALLET_GATING_ENABLED = true // TODO move to env
+const WALLET_GATING_ENABLED = false // TODO move to env
 
 export interface UserDoc {
     walletAddress: string
@@ -85,12 +85,10 @@ export function NewStartScreen(props: {
         setIsLoggedIn(false)
     }
 
-    const handlePlayButtonClick = async () => {
-        if (!isLoggedIn || !solanaRPC) return handleLogin()
-
-        const userOwnsKaijus = await solanaRPC.userOwnsKaijus()
-        if (userOwnsKaijus === false && WALLET_GATING_ENABLED) {
-            setShowGateModal(true)
+    const handlePlayButtonClick = () => {
+        if (WALLET_GATING_ENABLED) {
+            if (!isLoggedIn) return handleLogin()
+            if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         } else {
             enterGame()
         }

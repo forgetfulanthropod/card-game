@@ -25,7 +25,7 @@ export const explain: Explainers['dealFromStance'] = (dslArgs, context) => {
 
     // logger.info(`damageHtmlArr: ${damageHtmlArr}`)
 
-    let explication = `deals ${damageHtmlArr[0]}${getDamage({
+    let explication = `deal ${damageHtmlArr[0]}${getDamage({
         damage: damage,
         attacker,
         target: null,
@@ -52,8 +52,6 @@ export const execute: Executors['dealFromStance'] = ({
         )
         return
     }
-
-    logger.info(`dealing to targetUids: ${targetUids}.. damage: ${damage}`)
 
     targetUids.forEach(targetUid =>
         applyDamage({

@@ -1,6 +1,6 @@
 import type { DisplayObject } from 'pixi.js'
 
-const config = { shouldCheck: false }
+const config = { shouldCheck: true }
 
 const WARN_COUNT = 3
 const INTERVAL = 5000
@@ -30,7 +30,9 @@ export function startChecking(el: DisplayObject) {
 // eslint-disable-next-line no-var
 var getStackTrace = function () {
     const obj = {}
-    Error.captureStackTrace(obj, getStackTrace)
+    if (Error.captureStackTrace !== undefined) {
+        Error.captureStackTrace(obj, getStackTrace)
+    }
     // @ts-expect-error
     return obj.stack
 }

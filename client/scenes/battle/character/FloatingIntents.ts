@@ -141,8 +141,10 @@ function DamageIntended(
         Text({
             text: `${
                 amount != null
-                    ? amount + getBattleScene().get('allCharacters', cuid).block
-                    : '?'
+                    ? amount +
+                          getBattleScene().get('allCharacters', cuid)?.block ??
+                      0
+                    : '0'
             }`,
             anchor: 0.5,
             events,
@@ -170,7 +172,7 @@ function BlockIntended(amount: number) {
         Text({
             y: -190,
             x: -290,
-            text: `${amount}`,
+            text: `${amount ?? '?'}`,
             anchor: 0.5,
             style: {
                 fill: 'white',

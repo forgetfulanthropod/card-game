@@ -96,6 +96,7 @@ export type CommandId =
 
 export type CardId =
     // | 'arcanePower'
+    | 'ancientVerse'
     | 'basicAttackBard'
     | 'basicAttackKnight'
     | 'basicAttackCleric'
@@ -120,6 +121,7 @@ export type CardId =
     | 'trance'
     | 'magicRitual'
     | 'mantraOfPatience'
+    | 'momentOfClarity'
     | 'orbOfFrost'
     | 'orbOfHolyLight'
     | 'orbOfLightning'
@@ -144,25 +146,25 @@ export type CardId =
 export type BasicTargetType =
     | 'friends'
     | 'enemies'
+    | 'allFriends'
     | 'allEnemies'
     | 'self'
     | 'card'
     | 'cardAttack'
     | 'cardEnchantment'
     | 'orb'
-export type TargetType =
-    | BasicTargetType
-    | Array<
-          | BasicTargetType
-          | {
-                type: BasicTargetType
-                constraint?: {
-                    key: string
-                    comparator: '<=' | '>='
-                    value: number
-                }
-            }
-      >
+export type TargetType = BasicTargetType
+// | Array<
+//       | BasicTargetType
+//       | {
+//             type: BasicTargetType
+//             constraint?: {
+//                 key: string
+//                 comparator: '<=' | '>='
+//                 value: number
+//             }
+//         }
+//   >
 
 export type Pile = Record<CardUid, Card>
 export type Piles = Record<PileId, Pile>

@@ -7,7 +7,7 @@ import {
     NonNotifiableEvent,
 } from 'shared'
 import { vals } from 'shared/code'
-import { trackStanceChanges } from '../endRound'
+import { trackStanceChanges } from '../characters/trackStanceChanges'
 
 type applyDamageArgs = {
     damage: number

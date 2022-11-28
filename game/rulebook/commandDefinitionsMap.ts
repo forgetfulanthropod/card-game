@@ -13,7 +13,7 @@ type CommandDefinitionsMap = {
  **/
 const singleOpponentTargetCommands = {
     swordWack: ['Sword Wack', 'deal(strength)'],
-    /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deals the same amount of damage back to the player).*/
+    /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deal the same amount of damage back to the player).*/
     mimicAttack: ['Mimic Attack', 'mimicAttack()'],
     /**Rusty Poke (DOT 2, also applies Fatigue 1) */
     rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigued", 1)'],
@@ -42,7 +42,7 @@ const singleOpponentTargetCommands = {
     matchaMadness: ['Matcha Madness', 'effect("poison", 3, "all")'],
     /**Matcha Meld: Block equal to DEF and Level 1 and 2 matchas, will attempt to rejoin the matcha with the highest HP. If successful, the lesser Matcha will add their HP to the greater matcha and the lesser Matcha will be removed from the field. The targeted matcha will level up if it exceeds the minimum health threshold for the next level of matcha. */
     matchaMeld: ['Matcha Meld', 'TODO'],
-    /**Ancient Strike (Deals 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn. */
+    /**Ancient Strike (deal 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn. */
     ancientStrike: [
         'Ancient Strike',
         'ifDamageDealt(deal(strength * 2), effect("stunned", 1))',
@@ -57,7 +57,7 @@ const singleOpponentTargetCommands = {
 
 // @ts-expect-error // our shorthand doesn't have perfect type inference...
 export const commandDefinitionsMap: CommandDefinitionsMap = {
-    /**Eviscerating Sweep (Deals 100%, Splash Damage) applies vulnerable (3) */
+    /**Eviscerating Sweep (deal 100%, Splash Damage) applies vulnerable (3) */
     evisceratingSweep: {
         name: 'Eviscerating Sweep',
         id: 'evisceratingSweep',

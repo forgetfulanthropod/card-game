@@ -8,7 +8,7 @@ export const startlingSpook = (x: number, y: number): CommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
-/**Surprise Allergy (Deals 50% of attack damage, applies Poison X if unblocked, Fatigue X) */
+/**Surprise Allergy (deal 50% of attack damage, applies Poison X if unblocked, Fatigue X) */
 export const surpriseAllergy = (x: number, y: number): CommandDefinition => ({
     actions: `ifDamageDealt(deal(strength/2), effect("poisoned",${x}), effect("fatigued",${y}))`,
     id: `surpriseAllergy(${x},${y})`,
@@ -51,7 +51,7 @@ export const infectiousBite = (x: number): CommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
-/**Engulf (Deals X% of attack damage, applies Stun if any damage goes unblocked) */
+/**Engulf (deal X% of attack damage, applies Stun if any damage goes unblocked) */
 export const engulf = (x: number): CommandDefinition => ({
     actions: `ifDamageDealt(deal(strength*0.${x}), effect("stunned",1))`,
     id: `engulf(${x})`,
@@ -75,7 +75,7 @@ export const meatyCharge = (x: number): CommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
-/**Bellow and Sing, deals 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked) */
+/**Bellow and Sing, deal 50% of attack damage, applies fatigue (X) (applies debilatated (X) if any damage goes unblocked) */
 export const bellowAndSing = (x: number, y: number): CommandDefinition => ({
     actions: `ifDamageDealt(deal(strength/2), effect("debilitated",${y})); effect("fatigued",${x})`,
     id: `bellowAndSing(${x},${y})`,
@@ -83,7 +83,7 @@ export const bellowAndSing = (x: number, y: number): CommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
-/**Scream and Charge (Deals X% of attack damage, applies Unguarded (X) after) */
+/**Scream and Charge (deal X% of attack damage, applies Unguarded (X) after) */
 export const screamAndCharge = (x: number, y: number): CommandDefinition => ({
     actions: `deal(strength*0.${x}); effect("unguarded",${y})`,
     id: `screamAndCharge(${x},${y})`,

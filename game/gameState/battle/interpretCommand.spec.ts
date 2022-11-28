@@ -99,14 +99,14 @@ const interpretCommandSuite = {
     },
     smite() {
         const scene = freshBattleScene()
-        scene.select('allCharacters', pc1).merge({ wisdom: 0, block: 0 })
+        scene.select('allCharacters', pc1).merge({ magic: 0, block: 0 })
         // should not give block to pc1
         interpretCommand({
             command: makeCmd(pc1, 'smite()'),
             scene,
             targetUids: [npc1],
         })
-        scene.select('allCharacters', pc2).merge({ wisdom: 1000, block: 0 })
+        scene.select('allCharacters', pc2).merge({ magic: 1000, block: 0 })
         // should give block to pc2
         interpretCommand({
             command: makeCmd(pc2, 'smite()'),

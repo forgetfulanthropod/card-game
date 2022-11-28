@@ -9,6 +9,17 @@ export type CharacterAbility = {
 }
 
 export type CharacterUid = string & Brandify
+export type ModifiableStatName =
+    | 'strength'
+    | 'magic'
+    | 'defense'
+    | 'constitution'
+
+export type StatModifiers = Partial<Pick<CharacterStats, ModifiableStatName>>
+
+export type StatModifierExpiration = 'turn' | 'room' | 'run'
+export type StatModifiersMap = Record<StatModifierExpiration, StatModifiers>
+
 export type CharacterStats = Readonly<{
     /** TODO: rename this to ID  */
     id: CharacterId
@@ -20,7 +31,7 @@ export type CharacterStats = Readonly<{
     /** base attack */
     strength: number
     /** base magic */
-    wisdom: number
+    magic: number
     /** base block */
     defense: number
     // abilities: CharacterAbility[]
@@ -33,7 +44,7 @@ export interface CalculatedCharacterStats {
     block: number
     constitution: number
     strength: number
-    wisdom: number
+    magic: number
     defense: number
     damageDealMultiplicand: number
     damageDealAddend: number

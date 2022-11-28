@@ -17,7 +17,7 @@ import type { ExplainerContext } from './commands/util'
 import type { EntryCursor } from '@/util'
 import { clearHappened, emit, getHappened } from '@/util'
 import {
-    calcPostEffectStats,
+    calculateStats,
     emitMove,
     getCharacterMeta,
     maybeTransitionBattleState,
@@ -54,7 +54,7 @@ function localsFromCommand(
             ? (scene as BattleCursor).get('allCharacters', targetUids[0])
                   ?.health
             : undefined
-    return { ...calcPostEffectStats(cardOwner), targetHealth }
+    return { ...calculateStats(cardOwner), targetHealth }
 }
 
 export function explainCommand(

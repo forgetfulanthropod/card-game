@@ -4,12 +4,8 @@ import {
     NUM_DRAFT_CARD_OPTIONS,
     Pile,
 } from 'shared'
-import { getAllPcs, getLivingPcs } from './characterGetters'
-import {
-    getCardInstance,
-    getRandomCardIdOfClass,
-    updateExplanation,
-} from './cards'
+import { getAllPcs, getLivingPcs } from '../characters/characterGetters'
+import { getCardInstance, getRandomCardIdOfClass, updateExplanation } from '.'
 import { toCursor } from '@/util'
 
 export const NUM_KAIJUS_IN_PARTY = 3

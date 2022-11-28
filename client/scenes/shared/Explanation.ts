@@ -25,28 +25,28 @@ export const keyTermsMap = {
     dwindle: 'costs +1 energy each use in room',
 
     orbsOfProtection: 'blocks for 50% of Magic',
-    orbsOfLightning: 'deals 35% of Magic to all enemies',
+    orbsOfLightning: 'deal 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 
     grudge: 'intentGrudge',
     infectiousBite: 'unblocked damage becomes Poison',
-    mimicAttack: 'deals 999 or copies the last hit taken this turn.',
+    mimicAttack: 'deal 999 or copies the last hit taken this turn.',
 
     berserk:
         '(aggressive stance only) gains 50% strength, takes 100% more damage',
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
-    courageous: 'deals 15% more damage',
-    debilitated: 'deals 50% less damage',
-    entranced: 'increase magic stat by 11% times the number of counters',
-    fatigued: 'deals 25% less damage',
+    courageous: 'deal 15% more damage',
+    debilitated: 'deal 50% less damage',
+    entranced: 'increases Magic by 1 per stack',
+    fatigued: 'deal 25% less damage',
     fortified: 'receives 50% more block',
-    guarded: 'receives 25% more block',
+    // guarded: 'receives 25% more block',
     poisoned: '(unblockable) receives 1 damage per stack',
-    strongblock: 'receives 50% more block',
+    strongblock: 'increases Defense by 2 per stack',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 15% more damage',
-    tired: 'deals 12% less damage',
+    tired: 'deal 12% less damage',
     unguarded: 'receives 25% more damage',
     unready: 'receives 12% more damage',
     vulnerable: 'receives 50% more damage',
@@ -121,7 +121,7 @@ export function TermExplanations({
     boxes.forEach((box, i) => {
         if (i > 0) {
             const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 10
+            box.y = lastBox.y + lastBox.height + 5
         }
 
         return box
@@ -169,19 +169,23 @@ export function TermExplanation({
     term: KeyTerm
     displayObjectArgs?: DisplayObjectArgs
 }): PixiContainer {
+    let topText = startCase(term).replace('Orbs', 'Orb')
+
+    if (topText.includes('Orb')) {
+        topText = topText + ' (clickable!)'
+    }
+
     return Explanation({
         // text: `<div style="font-family: sans-serif">
         //     <b>${startCase(term)}</b>
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [
-            `${startCase(term)}`.replace('Orbs', 'Orb'),
-            `${keyTermsMap[term]}`,
-        ],
+        texts: [topText, `${keyTermsMap[term]}`],
         displayObjectArgs: {
+            borderThickness: 2,
+            padding: 10,
             ...displayObjectArgs,
-            borderThickness: 3,
         },
     })
 }
@@ -209,6 +213,8 @@ export function ExplanationIf({
                 content: Explanation({
                     texts,
                     displayObjectArgs: {
+                        borderThickness: 2,
+                        padding: 10,
                         x: root.getGlobalPosition().x + xOffset,
                         y: root.getGlobalPosition().y + yOffset,
                     },
@@ -251,8 +257,8 @@ export function Explanation({
     })
 
     return InfoBox(Container({}, ...textEls), {
-        ...(displayObjectArgs ?? {}),
         padding: 25,
+        ...(displayObjectArgs ?? {}),
         ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
     })
 }

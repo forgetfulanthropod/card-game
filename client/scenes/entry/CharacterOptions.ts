@@ -27,7 +27,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 80,
         strength: 10,
-        wisdom: 5,
+        magic: 5,
         defense: 11,
 
         uid: '',
@@ -41,7 +41,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
         class: 'cleric',
         constitution: 112,
         strength: 8,
-        wisdom: 9,
+        magic: 9,
         defense: 6,
 
         uid: '',
@@ -56,7 +56,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 74,
         strength: 12,
-        wisdom: 5,
+        magic: 5,
         defense: 9,
 
         uid: '',
@@ -71,7 +71,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 54 + 4,
         strength: 11 + 3,
-        wisdom: 4,
+        magic: 4,
         defense: 4 + 3,
         uid: '',
         tokenId: '',
@@ -85,7 +85,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 78 + 25,
         strength: 5 + 1,
-        wisdom: 7 + 2,
+        magic: 7 + 2,
         defense: 5 + 4,
 
         uid: '',
@@ -100,7 +100,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 84,
         strength: 6,
-        wisdom: 4,
+        magic: 4,
         defense: 8,
 
         uid: '',
@@ -115,7 +115,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 40,
         strength: 12 + 1, //drew did it
-        wisdom: 14,
+        magic: 14,
         defense: 5,
 
         uid: '',
@@ -130,7 +130,7 @@ const defaultOwnedCharacters: OwnedCharacterStats[] = [
 
         constitution: 86,
         strength: 19,
-        wisdom: 8 + 1,
+        magic: 8 + 1,
         defense: 5 + 1,
 
         uid: '',
