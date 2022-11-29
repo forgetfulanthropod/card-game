@@ -24,13 +24,26 @@ import {
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
 } from 'shared'
-import { Texture } from 'pixi.js'
+import { ITextStyle, Texture } from 'pixi.js'
 
-const VICTORY_SIGN_FINAL_POS = {
-    rotation: 0,
-    scale: 1,
-    x: 0,
-    y: -300,
+const getShowOnHoverFns = (el: PixiContainer) => {
+    let waitingTimer: NodeJS.Timeout | null = null
+
+    const onMouseover = () => {
+        waitingTimer = setTimeout(() => {
+            getStage().addChild(el)
+        }, 200)
+    }
+
+    const onMouseout = () => {
+        if (waitingTimer !== null) {
+            clearTimeout(waitingTimer)
+            getStage().removeChild(el)
+        } else {
+        }
+    }
+
+    return { onMouseover, onMouseout }
 }
 
 const animateNumberInElement = async (
@@ -46,7 +59,7 @@ const animateNumberInElement = async (
 
     return await new Promise(resolve => {
         const tempInterval = setInterval(() => {
-            element.text = `${initialNumber} points`
+            element.text = `${initialNumber} ${text}`
             initialNumber += numberIncrement
 
             if (initialNumber >= finalNumber) {
@@ -58,38 +71,49 @@ const animateNumberInElement = async (
     })
 }
 
+const getPosition = () => {
+    const ITEMS_PER_COLUMN = 9
+
+    const leftColumnX = BASE_WIDTH / 2 - 500
+    const rightColumnX = BASE_WIDTH / 2 + 50
+    const x = itemsOnScreen <= ITEMS_PER_COLUMN ? leftColumnX : rightColumnX
+
+    const Y_MARGIN = 38
+    const Y_BASE = BASE_HEIGHT / 2 - 180
+    const y =
+        itemsOnScreen <= ITEMS_PER_COLUMN
+            ? Y_BASE + Y_MARGIN * itemsOnScreen
+            : Y_BASE + Y_MARGIN * (itemsOnScreen - ITEMS_PER_COLUMN)
+
+    return { x, y }
+}
+
+const baseStyle: Partial<ITextStyle> = {
+    fontSize: 24,
+    fill: 'white',
+    padding: 4,
+    align: 'center',
+    fontWeight: 'lighter',
+    fontFamily: 'bigFont',
+}
+
 let itemsOnScreen = 0
-const createScoreCategoryItem = (
+const ScoreAttributeItem = (
     attribute: RunScoreAttributeName,
     score: number
 ) => {
     itemsOnScreen++
 
-    const getPosition = () => {
-        const ITEMS_PER_COLUMN = 9
-
-        const leftColumnX = BASE_WIDTH / 2 - 500
-        const rightColumnX = BASE_WIDTH / 2 + 50
-        const x = itemsOnScreen <= ITEMS_PER_COLUMN ? leftColumnX : rightColumnX
-
-        const Y_MARGIN = 38
-        const Y_BASE = BASE_HEIGHT / 2 - 180
-        const y =
-            itemsOnScreen <= ITEMS_PER_COLUMN
-                ? Y_BASE + Y_MARGIN * itemsOnScreen
-                : Y_BASE + Y_MARGIN * (itemsOnScreen - ITEMS_PER_COLUMN)
-
-        return { x, y }
-    }
-
     const { x, y } = getPosition()
     const attributeEvent =
         RUN_SCORE_EVENT_MAPPING[attribute as RunScoreAttributeName]
-    const keyword = RUN_SCORE_EVENT_META[attributeEvent].keyword
-    const descriptionTitle = RUN_SCORE_EVENT_META[attributeEvent].description
-    const {pointValue} = RUN_SCORE_EVENT_META[attributeEvent]
-    const descriptionSubtitle =
-        `${pointValue} ${pointValue === 1 ? 'point' : 'points'} per unit`
+
+    const { keyword, description, pointValue } =
+        RUN_SCORE_EVENT_META[attributeEvent]
+
+    const descriptionSubtitle = `${pointValue} ${
+        pointValue === 1 ? 'point' : 'points'
+    } per unit`
 
     const Title = Text({
         text: keyword,
@@ -97,12 +121,7 @@ const createScoreCategoryItem = (
         x,
         y,
         style: {
-            fontSize: 24,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
+            ...baseStyle,
         },
         name: attribute,
     })
@@ -113,122 +132,54 @@ const createScoreCategoryItem = (
         x: x + 425,
         y,
         style: {
-            fontSize: 24,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
+            ...baseStyle,
             fontFamily: 'sansFont',
         },
         name: `${attribute}_score`,
     })
 
     const ExplanationTitle = Text({
-        text: descriptionTitle,
-        anchor: [0, 0],
+        text: description,
         x: 15,
         y: 10,
         style: {
-            fontSize: 24,
+            ...baseStyle,
             fill: '#BDCCD4',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
         },
-        name: attribute,
     })
     const ExplanationSubtitle = Text({
         text: descriptionSubtitle,
-        // anchor: [1, 0],
-        // x: 375,
-        anchor: [0, 0],
         x: 15,
         y: 40,
         style: {
+            ...baseStyle,
             fontSize: 20,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
             fontFamily: 'sansFont',
             fontStyle: 'italic',
         },
-        name: attribute,
     })
-
-    // const ExplanationBg = RoundedRectangleGradientSprite({
-    //     spriteArgs: {
-    //         width:
-    //             Math.max(ExplanationTitle.width, ExplanationSubtitle.width) +
-    //             40,
-    //         height: ExplanationTitle.height + ExplanationSubtitle.height + 30,
-    //         x: 0,
-    //         y: 0,
-    //         name: 'RoundedBlackRectBackground',
-    //         anchor: [0, 0],
-    //         alpha: 0.8,
-    //         tint: 1,
-    //     },
-    //     radius: 20,
-    //     gradientArgs: {
-    //         x0: 0,
-    //         x1: 0,
-    //         y0: 0,
-    //         y1: 500,
-    //         colorStops: [{ color: 0x272753, offset: 0 }],
-    //     },
-    // })
-
-    // const Explanation = Container(
-    //     {
-    //         x: x + Title.width + 25,
-    //         y: y - 24,
-    //         name: `${name}Explanation`,
-    //         zIndex: 999999,
-    //     },
-    //     ExplanationBg,
-    //     ExplanationTitle,
-    //     ExplanationSubtitle
-    // )
 
     const ExplanationInfoBox = InfoBox(
         Container({}, ExplanationTitle, ExplanationSubtitle),
         {
             x: x + Title.width + 25,
             y: y - 24,
-            name: `${name}Explanation`,
+            name: `${keyword} Explanation`,
             zIndex: 999,
             padding: 8,
-            borderThickness: 1,
+            borderColor: 0x44403c,
+            colorStops: [{ color: 0x57534e, offset: 0 }],
+            alpha: 0.95,
         }
     )
 
-    let waitingTimer: NodeJS.Timeout | null = null
-
-    const onMouseover = () => {
-        waitingTimer = setTimeout(() => {
-            getStage().addChild(ExplanationInfoBox)
-        }, 200)
-    }
-
-    const onMouseout = () => {
-        console.log(waitingTimer)
-        if (waitingTimer !== null) {
-            clearTimeout(waitingTimer)
-            getStage().removeChild(ExplanationInfoBox)
-        } else {
-        }
-    }
+    const { onMouseout, onMouseover } = getShowOnHoverFns(ExplanationInfoBox)
 
     const ScoreItemContainer = TweenableContainer(
         { onMouseover, onMouseout },
         Title,
         Points
     )
-
-    ScoreItemContainer.interactive = true
-    ScoreItemContainer.cursor = `url('assets/root/hand.webp'), pointer`
 
     return ScoreItemContainer
 }
@@ -258,11 +209,11 @@ export function EndOfRunScreen(): PixiContainer {
     for (let attribute in runScoreAttributes) {
         const points = runScoreAttributes[attribute as RunScoreAttributeName]
         if (points === 0) continue
-        const element = createScoreCategoryItem(
+        const ScoreAttribute = ScoreAttributeItem(
             attribute as RunScoreAttributeName,
             points
         )
-        runScorePixiElements.push(element)
+        runScorePixiElements.push(ScoreAttribute)
     }
 
     const TotalScoreTitle = Text({
@@ -304,7 +255,7 @@ export function EndOfRunScreen(): PixiContainer {
         x: BASE_WIDTH / 2 - 500,
         y: BASE_HEIGHT / 2 + 210,
         anchor: [0, 0.5],
-        alpha: 0.1
+        alpha: 0.1,
     })
 
     const TotalScoreContainer = Container(
@@ -314,11 +265,9 @@ export function EndOfRunScreen(): PixiContainer {
         TotalScore
     )
 
-    const totalScore = scene.select('runScore').get('totalScore') // currently bugged - value is retrieved before it's finished updating. maybe can call API to refresh before getting it
-
     // Runs text animations synchronously
     ;(async () => {
-        // if state has not transitioned, then
+        // below condition will only be met once (even after refresh)
         if (
             scene.get('endScreenHasOpened') === false &&
             scene.get('state') === 'won'
@@ -326,7 +275,12 @@ export function EndOfRunScreen(): PixiContainer {
             handleScoringEvent('ROOM_CLEARED', 1, scene)
             callApi('openEndScreen', {})
         }
-        await animateNumberInElement(TotalScore, 'points', totalScore, 'normal')
+        await animateNumberInElement(
+            TotalScore,
+            'points',
+            scene.select('runScore').get('totalScore'),
+            'normal'
+        )
         callApi('openEndScreen', {})
     })()
 
