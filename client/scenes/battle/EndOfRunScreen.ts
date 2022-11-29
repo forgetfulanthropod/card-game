@@ -1,5 +1,6 @@
-import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
+import { handleScoringEvent, InfoBox, ModalBackdrop } from '@sharedElements'
 import {
+    getStage,
     loopSong,
     PixiContainer,
     PixiText,
@@ -18,7 +19,11 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
-import { RunScoreAttributeName, RUN_SCORE_EVENT_MAPPING, RUN_SCORE_EVENT_META } from 'shared'
+import {
+    RunScoreAttributeName,
+    RUN_SCORE_EVENT_MAPPING,
+    RUN_SCORE_EVENT_META,
+} from 'shared'
 import { Texture } from 'pixi.js'
 
 const VICTORY_SIGN_FINAL_POS = {
@@ -41,11 +46,11 @@ const animateNumberInElement = async (
 
     return await new Promise(resolve => {
         const tempInterval = setInterval(() => {
-            element.text = `${initialNumber}`
+            element.text = `${initialNumber} points`
             initialNumber += numberIncrement
 
             if (initialNumber >= finalNumber) {
-                element.text = `${finalNumber.toFixed(0)}`
+                element.text = `${finalNumber.toFixed(0)} ${text}`
                 clearInterval(tempInterval)
                 resolve(void 0)
             }
@@ -55,7 +60,7 @@ const animateNumberInElement = async (
 
 let itemsOnScreen = 0
 const createScoreCategoryItem = (
-    name: string,
+    attribute: RunScoreAttributeName,
     score: number
 ) => {
     itemsOnScreen++
@@ -78,9 +83,16 @@ const createScoreCategoryItem = (
     }
 
     const { x, y } = getPosition()
+    const attributeEvent =
+        RUN_SCORE_EVENT_MAPPING[attribute as RunScoreAttributeName]
+    const keyword = RUN_SCORE_EVENT_META[attributeEvent].keyword
+    const descriptionTitle = RUN_SCORE_EVENT_META[attributeEvent].description
+    const {pointValue} = RUN_SCORE_EVENT_META[attributeEvent]
+    const descriptionSubtitle =
+        `${pointValue} ${pointValue === 1 ? 'point' : 'points'} per unit`
 
     const Title = Text({
-        text: name,
+        text: keyword,
         anchor: [0, 0.5],
         x,
         y,
@@ -92,7 +104,7 @@ const createScoreCategoryItem = (
             fontWeight: 'lighter',
             fontFamily: 'bigFont',
         },
-        name,
+        name: attribute,
     })
 
     const Points = Text({
@@ -108,10 +120,117 @@ const createScoreCategoryItem = (
             fontWeight: 'lighter',
             fontFamily: 'sansFont',
         },
-        name: `${name}_score`,
+        name: `${attribute}_score`,
     })
 
-    return TweenableContainer({ }, Title, Points)
+    const ExplanationTitle = Text({
+        text: descriptionTitle,
+        anchor: [0, 0],
+        x: 15,
+        y: 10,
+        style: {
+            fontSize: 24,
+            fill: '#BDCCD4',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name: attribute,
+    })
+    const ExplanationSubtitle = Text({
+        text: descriptionSubtitle,
+        // anchor: [1, 0],
+        // x: 375,
+        anchor: [0, 0],
+        x: 15,
+        y: 40,
+        style: {
+            fontSize: 20,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'sansFont',
+            fontStyle: 'italic',
+        },
+        name: attribute,
+    })
+
+    // const ExplanationBg = RoundedRectangleGradientSprite({
+    //     spriteArgs: {
+    //         width:
+    //             Math.max(ExplanationTitle.width, ExplanationSubtitle.width) +
+    //             40,
+    //         height: ExplanationTitle.height + ExplanationSubtitle.height + 30,
+    //         x: 0,
+    //         y: 0,
+    //         name: 'RoundedBlackRectBackground',
+    //         anchor: [0, 0],
+    //         alpha: 0.8,
+    //         tint: 1,
+    //     },
+    //     radius: 20,
+    //     gradientArgs: {
+    //         x0: 0,
+    //         x1: 0,
+    //         y0: 0,
+    //         y1: 500,
+    //         colorStops: [{ color: 0x272753, offset: 0 }],
+    //     },
+    // })
+
+    // const Explanation = Container(
+    //     {
+    //         x: x + Title.width + 25,
+    //         y: y - 24,
+    //         name: `${name}Explanation`,
+    //         zIndex: 999999,
+    //     },
+    //     ExplanationBg,
+    //     ExplanationTitle,
+    //     ExplanationSubtitle
+    // )
+
+    const ExplanationInfoBox = InfoBox(
+        Container({}, ExplanationTitle, ExplanationSubtitle),
+        {
+            x: x + Title.width + 25,
+            y: y - 24,
+            name: `${name}Explanation`,
+            zIndex: 999,
+            padding: 8,
+            borderThickness: 1,
+        }
+    )
+
+    let waitingTimer: NodeJS.Timeout | null = null
+
+    const onMouseover = () => {
+        waitingTimer = setTimeout(() => {
+            getStage().addChild(ExplanationInfoBox)
+        }, 200)
+    }
+
+    const onMouseout = () => {
+        console.log(waitingTimer)
+        if (waitingTimer !== null) {
+            clearTimeout(waitingTimer)
+            getStage().removeChild(ExplanationInfoBox)
+        } else {
+        }
+    }
+
+    const ScoreItemContainer = TweenableContainer(
+        { onMouseover, onMouseout },
+        Title,
+        Points
+    )
+
+    ScoreItemContainer.interactive = true
+    ScoreItemContainer.cursor = `url('assets/root/hand.webp'), pointer`
+
+    return ScoreItemContainer
 }
 
 export function EndOfRunScreen(): PixiContainer {
@@ -139,11 +258,8 @@ export function EndOfRunScreen(): PixiContainer {
     for (let attribute in runScoreAttributes) {
         const points = runScoreAttributes[attribute as RunScoreAttributeName]
         if (points === 0) continue
-        const attributeEvent = RUN_SCORE_EVENT_MAPPING[attribute as RunScoreAttributeName]
-        const description = RUN_SCORE_EVENT_META[attributeEvent].shortDescription
-
         const element = createScoreCategoryItem(
-            description,
+            attribute as RunScoreAttributeName,
             points
         )
         runScorePixiElements.push(element)
@@ -155,7 +271,7 @@ export function EndOfRunScreen(): PixiContainer {
         x: BASE_WIDTH / 2 - 500,
         y: BASE_HEIGHT / 2 + 265,
         style: {
-            fontSize: 50,
+            fontSize: 64,
             fill: 'white',
             padding: 4,
             align: 'center',
@@ -167,8 +283,8 @@ export function EndOfRunScreen(): PixiContainer {
 
     const TotalScore = Text({
         text: ``,
-        anchor: [0, 0.5],
-        x: BASE_WIDTH / 2 + 400,
+        anchor: [1, 0.5],
+        x: BASE_WIDTH / 2 + 450,
         y: BASE_HEIGHT / 2 + 265,
         style: {
             fontSize: 50,
@@ -184,10 +300,11 @@ export function EndOfRunScreen(): PixiContainer {
     const TopBorder = Sprite({
         src: Texture.WHITE,
         width: 1000,
-        height: 3,
+        height: 2,
         x: BASE_WIDTH / 2 - 500,
-        y: BASE_HEIGHT / 2 + 200,
+        y: BASE_HEIGHT / 2 + 210,
         anchor: [0, 0.5],
+        alpha: 0.1
     })
 
     const TotalScoreContainer = Container(
@@ -209,7 +326,7 @@ export function EndOfRunScreen(): PixiContainer {
             handleScoringEvent('ROOM_CLEARED', 1, scene)
             callApi('openEndScreen', {})
         }
-        await animateNumberInElement(TotalScore, '', totalScore, 'fast')
+        await animateNumberInElement(TotalScore, 'points', totalScore, 'normal')
         callApi('openEndScreen', {})
     })()
 
