@@ -5,6 +5,7 @@ import {
     PixiText,
     playSongOnce,
     RoundedRectangleGradientSprite,
+    TweenablePixiContainer,
 } from '@/elementsUtil'
 import {
     getTexture,
@@ -17,6 +18,8 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
+import { RunScoreAttributeName, RUN_SCORE_EVENT_MAPPING, RUN_SCORE_EVENT_META } from 'shared'
+import { Texture } from 'pixi.js'
 
 const VICTORY_SIGN_FINAL_POS = {
     rotation: 0,
@@ -24,9 +27,6 @@ const VICTORY_SIGN_FINAL_POS = {
     x: 0,
     y: -300,
 }
-
-// TODO: display both quantity & score value, animate only score value (eg. something like "Rooms Passed (5) = 50") and animate 50, assuming each room is worth 10 points
-// TODO: align the text to the left, score to the right on separate columns
 
 const animateNumberInElement = async (
     element: PixiText,
@@ -41,16 +41,77 @@ const animateNumberInElement = async (
 
     return await new Promise(resolve => {
         const tempInterval = setInterval(() => {
-            element.text = `${text}:    ${initialNumber}`
+            element.text = `${initialNumber}`
             initialNumber += numberIncrement
 
             if (initialNumber >= finalNumber) {
-                element.text = `${text}:    ${finalNumber}`
+                element.text = `${finalNumber.toFixed(0)}`
                 clearInterval(tempInterval)
                 resolve(void 0)
             }
         }, intervalIncrement)
     })
+}
+
+let itemsOnScreen = 0
+const createScoreCategoryItem = (
+    name: string,
+    score: number
+) => {
+    itemsOnScreen++
+
+    const getPosition = () => {
+        const ITEMS_PER_COLUMN = 9
+
+        const leftColumnX = BASE_WIDTH / 2 - 500
+        const rightColumnX = BASE_WIDTH / 2 + 50
+        const x = itemsOnScreen <= ITEMS_PER_COLUMN ? leftColumnX : rightColumnX
+
+        const Y_MARGIN = 38
+        const Y_BASE = BASE_HEIGHT / 2 - 180
+        const y =
+            itemsOnScreen <= ITEMS_PER_COLUMN
+                ? Y_BASE + Y_MARGIN * itemsOnScreen
+                : Y_BASE + Y_MARGIN * (itemsOnScreen - ITEMS_PER_COLUMN)
+
+        return { x, y }
+    }
+
+    const { x, y } = getPosition()
+
+    const Title = Text({
+        text: name,
+        anchor: [0, 0.5],
+        x,
+        y,
+        style: {
+            fontSize: 24,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'bigFont',
+        },
+        name,
+    })
+
+    const Points = Text({
+        text: `${score}`,
+        anchor: [1, 0.5],
+        x: x + 425,
+        y,
+        style: {
+            fontSize: 24,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'sansFont',
+        },
+        name: `${name}_score`,
+    })
+
+    return TweenableContainer({ }, Title, Points)
 }
 
 export function EndOfRunScreen(): PixiContainer {
@@ -61,71 +122,38 @@ export function EndOfRunScreen(): PixiContainer {
         ? loopSong('runVictoryMusicHooligansBluff')
         : loopSong('defeatMusicHooligansBluff')
 
-    const VictorySign = TweenableContainer(
+    const RunResultBanner = TweenableContainer(
         {},
         Sprite({
             src: getTexture(`${battleState === 'won' ? 'victory' : 'defeat'}`),
             alpha: 1,
-            scale: 0.4,
+            scale: 0.35,
             x: BASE_WIDTH / 2,
-            y: BASE_HEIGHT / 2 - 300,
+            y: BASE_HEIGHT / 2 - 360,
             anchor: [0.5, 0.5],
         })
     )
 
-    const EnemiesKilled = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 - 200,
-        y: BASE_HEIGHT / 2 - 50,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: 'EnemiesKilled',
-    })
+    const runScoreAttributes = scene.get('runScore').attributes
+    const runScorePixiElements: TweenablePixiContainer[] = []
+    for (let attribute in runScoreAttributes) {
+        const points = runScoreAttributes[attribute as RunScoreAttributeName]
+        if (points === 0) continue
+        const attributeEvent = RUN_SCORE_EVENT_MAPPING[attribute as RunScoreAttributeName]
+        const description = RUN_SCORE_EVENT_META[attributeEvent].shortDescription
 
-    const RoomsCleared = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 - 200,
-        y: BASE_HEIGHT / 2,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: 'RoomsCleared',
-    })
+        const element = createScoreCategoryItem(
+            description,
+            points
+        )
+        runScorePixiElements.push(element)
+    }
 
-    const BossesKilled = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 - 200,
-        y: BASE_HEIGHT / 2 + 50,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: 'Bosses Killed',
-    })
-
-    const TotalScore = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2,
-        y: BASE_HEIGHT / 2 + 175,
+    const TotalScoreTitle = Text({
+        text: `Total Score`,
+        anchor: [0, 0.5],
+        x: BASE_WIDTH / 2 - 500,
+        y: BASE_HEIGHT / 2 + 265,
         style: {
             fontSize: 50,
             fill: 'white',
@@ -134,63 +162,41 @@ export function EndOfRunScreen(): PixiContainer {
             fontWeight: 'bold',
             fontFamily: 'bigFont',
         },
+        name: 'TotalScoreTitle',
+    })
+
+    const TotalScore = Text({
+        text: ``,
+        anchor: [0, 0.5],
+        x: BASE_WIDTH / 2 + 400,
+        y: BASE_HEIGHT / 2 + 265,
+        style: {
+            fontSize: 50,
+            fill: 'white',
+            padding: 4,
+            align: 'center',
+            fontWeight: 'lighter',
+            fontFamily: 'sansFont',
+        },
         name: 'TotalScore',
     })
 
-    const CumulativeOverkill = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 + 200,
-        y: BASE_HEIGHT / 2 + 50,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: `TotalResourcesCollected`,
+    const TopBorder = Sprite({
+        src: Texture.WHITE,
+        width: 1000,
+        height: 3,
+        x: BASE_WIDTH / 2 - 500,
+        y: BASE_HEIGHT / 2 + 200,
+        anchor: [0, 0.5],
     })
 
-    const totalResourcesCount = scene
-        .select('lootClaimed')
-        .get()
-        .reduce((acc, loot) => acc + loot.count, 0)
+    const TotalScoreContainer = Container(
+        {},
+        TopBorder,
+        TotalScoreTitle,
+        TotalScore
+    )
 
-    const TotalResourcesCollected = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 + 200,
-        y: BASE_HEIGHT / 2 - 50,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: `TotalResourcesCollected`,
-    })
-
-    const DeckSize = Text({
-        text: ``,
-        anchor: [0.5, 0.5],
-        x: BASE_WIDTH / 2 + 200,
-        y: BASE_HEIGHT / 2,
-        style: {
-            fontSize: 30,
-            fill: 'white',
-            padding: 4,
-            align: 'center',
-            fontWeight: 'lighter',
-            fontFamily: 'bigFont',
-        },
-        name: `TotalResourcesCollected`,
-    })
-
-    const numRoomsPassed = scene.get('numRoomsPassed')
     const totalScore = scene.select('runScore').get('totalScore') // currently bugged - value is retrieved before it's finished updating. maybe can call API to refresh before getting it
 
     // Runs text animations synchronously
@@ -203,47 +209,16 @@ export function EndOfRunScreen(): PixiContainer {
             handleScoringEvent('ROOM_CLEARED', 1, scene)
             callApi('openEndScreen', {})
         }
-        await animateNumberInElement(
-            EnemiesKilled,
-            'Enemies Killed',
-            scene.select('runScore').select('attributes').get('enemiesKilled'),
-            'slow'
-        )
-        await animateNumberInElement(
-            RoomsCleared,
-            'Rooms Cleared',
-            numRoomsPassed,
-            'slow'
-        )
-        await animateNumberInElement(BossesKilled, 'Bosses Killed', 0, 'slow')
-        await animateNumberInElement(
-            TotalResourcesCollected,
-            'Loot Earned',
-            totalResourcesCount,
-            'fast'
-        )
-        await animateNumberInElement(DeckSize, 'Card Deck Size', 0, 'slow')
-        await animateNumberInElement(
-            CumulativeOverkill,
-            'Cumulative Overkill',
-            0,
-            'fast'
-        )
-        await animateNumberInElement(
-            TotalScore,
-            'Total Score',
-            totalScore,
-            'fast'
-        )
+        await animateNumberInElement(TotalScore, '', totalScore, 'fast')
         callApi('openEndScreen', {})
     })()
 
     const tryAgainButton = Sprite({
         src: getTexture('tryAgainButton'),
         anchor: 0,
-        y: BASE_HEIGHT / 2 + 275,
+        y: BASE_HEIGHT / 2 + 380,
         x: BASE_WIDTH / 2 - 185,
-        scale: (1920 * 0.18) / getTexture('goButton').width,
+        scale: 0.6,
         onClick: handleButtonPress,
     })
 
@@ -257,8 +232,8 @@ export function EndOfRunScreen(): PixiContainer {
 
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
-            width: 800,
-            height: 350,
+            width: 1100,
+            height: 525,
             x: BASE_WIDTH / 2,
             y: BASE_HEIGHT / 2 + 65,
             name: 'RoundedBlackRectBackground',
@@ -266,7 +241,7 @@ export function EndOfRunScreen(): PixiContainer {
             alpha: 0.6,
             tint: 1,
         },
-        radius: 100,
+        radius: 50,
         gradientArgs: {
             x0: 0,
             x1: 500,
@@ -282,21 +257,15 @@ export function EndOfRunScreen(): PixiContainer {
     const lootElementsWithBg = Container(
         {},
         RoundedBlackRectBackground,
-        EnemiesKilled,
-        RoomsCleared,
-        BossesKilled,
-        // ...lootElementsLeft,
-        TotalResourcesCollected,
-        CumulativeOverkill,
-        DeckSize
+        ...runScorePixiElements
     )
 
     const EndOfRunContainer = Container(
         { x: 0, y: 0, scale: 1, name: 'EndOfRunContainer' },
         ModalBackdrop(),
-        VictorySign,
         lootElementsWithBg,
-        TotalScore,
+        RunResultBanner,
+        TotalScoreContainer,
         tryAgainButton
     )
 
