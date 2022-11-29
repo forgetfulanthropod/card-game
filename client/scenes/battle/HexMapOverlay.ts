@@ -218,8 +218,6 @@ function TileContents(node: DungeonRoom | null): PixiContainer {
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    if (node.enemies[0]?.id === 'REST_SITE') return RestSiteContents(node)
-
     return TileCharacters(node)
 }
 
@@ -229,7 +227,7 @@ function RestSiteContents(node: DungeonRoom): PixiSprite {
     const { choice } = getCurrentRoomAndChoiceFromNode(node)
 
     const root = Sprite({
-        scale: 255 / src.width,
+        scale: 150 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
         events: {
@@ -255,6 +253,10 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
     const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
+
+    if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
+        return RestSiteContents(node)
+
     const isCurrentRoomPastThisDepth =
         parseInt(currentRoom.uid.split('_')[0]) >
         parseInt(node.uid.split('_')[0])
