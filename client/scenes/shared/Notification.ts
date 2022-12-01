@@ -18,8 +18,9 @@ const BASE_PADDING = 15
 const BASE_HEIGHT = 65
 const VERTICAL_MARGIN = (BASE_HEIGHT + BASE_PADDING) as 80
 
-interface NotificationMetadata {
+type NotificationMetadata = {
     elementName: string
+    isFadingIn: boolean
 }
 
 class NotificationSpawner {
@@ -35,18 +36,40 @@ class NotificationSpawner {
         assetSrc: AssetKey,
         count: number
     ) {
-        const newNotification = Notification(textToDisplay, assetSrc, count)
+        const notification = Notification(textToDisplay, assetSrc, count)
+        const metadata = this.getInitialMetadata(notification)
+        this.queue.unshift(metadata)
+        this.stage.addChild(notification)
+        this.triggerAnimations()
+        this.setDestroyTimer(notification)
+    }
 
-        const initialMetadata: NotificationMetadata = {
-            elementName: newNotification.name,
-        }
-        this.queue.unshift(initialMetadata)
+    private getInitialMetadata(
+        el: TweenablePixiContainer
+    ): NotificationMetadata {
+        return { elementName: el.name, isFadingIn: true }
+    }
 
-        this.stage.addChild(newNotification)
+    private async triggerAnimations() {
+        this.queue.forEach(async (el, idx) => {
+            const pixiEl = this.stage.getChildByName(
+                el.elementName
+            ) as TweenablePixiContainer
+            const targetY = this.getTargetY(idx)
+            if (el.isFadingIn) {
+                 // this adjusts the starting position in case other notifications are displayed concurrently.
+                 // otherwise, all the concurrent notifications would first fade into the same y-position (before being adjusted to their correct one).
+                Tweener.killTweensOf(pixiEl)
+                pixiEl.position.set(pixiEl.position.x, targetY)
+                this.slamAnimateElIntoScreen(pixiEl, targetY)
+            } else {
+                this.shiftElement(pixiEl, targetY)
+            }
+        })
+    }
 
-        this.slamAnimateElIntoScreen(newNotification, MIN_Y_OFFSET)
-        this.refreshQueue()
-        this.setDestroyTimer(newNotification)
+    private getTargetY(index: number) {
+        return index * VERTICAL_MARGIN + MIN_Y_OFFSET
     }
 
     private async slamAnimateElIntoScreen(
@@ -66,20 +89,15 @@ class NotificationSpawner {
                 y: targetY,
             }
         )
-    }
-
-    private async refreshQueue() {
-        this.queue.forEach(async (el, idx) => {
-            const pixiEl = this.stage.getChildByName(
-                el.elementName
-            ) as TweenablePixiContainer
-            const targetY = this.getTargetY(idx)
-            this.shiftElement(pixiEl, targetY)
-        })
-    }
-
-    private getTargetY(index: number) {
-        return index * VERTICAL_MARGIN + MIN_Y_OFFSET
+        const actualY = el.position.y
+        if (Math.abs(targetY - actualY) > 5) {
+            // this means the tweener was cancelled (and another one triggered) by a concurrent notification, so we shouldn't update the metadata yet
+        } else {
+            const elMetadataIdx = this.queue.findIndex(
+                queueEl => queueEl.elementName === el.name
+            )
+            this.queue[elMetadataIdx].isFadingIn = false
+        }
     }
 
     private async shiftElement(el: TweenablePixiContainer, targetY: number) {
@@ -108,6 +126,7 @@ class NotificationSpawner {
             )
             Tweener.killTweensOf(el)
             el.destroy()
+            this.queue.pop()
         }, 3000)
     }
 }
@@ -125,6 +144,7 @@ const displayScoreNotification = (
     spawner.spawn(textToDisplay, assetSrc, count)
 }
 
+/** Initial opacity 0, is animated to opacity 1 by spawner */
 function Notification(
     textToDisplay: string,
     assetSrc: AssetKey,
@@ -217,7 +237,7 @@ function Notification(
 
     const NotificationContainer = TweenableContainer(
         {
-            name: `${assetSrc}NotificationContainer${uid()}`,
+            name: `${textToDisplay}${uid()}`,
             x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
             y: -20,
             alpha: 0,
