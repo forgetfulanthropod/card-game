@@ -150,9 +150,6 @@ export function NewStartScreen(props: {
                                 className='filter brightness-0 invert w-auto h-full'
                             />
                         </NavIconWrapper>
-                        <NavIconWrapper>
-                            <p className='border h-full flex items-center text-lg text-white'>Blog</p>
-                        </NavIconWrapper>
                     </div>
                     {isLoggedIn && web3Auth ? (
                         <UserProfileIcon
