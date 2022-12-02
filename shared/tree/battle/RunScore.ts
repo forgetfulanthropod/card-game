@@ -154,7 +154,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description:
             'Final hit against enemy exacly equal to its remaining health',
         shortDescription: 'Perfect Kills',
-        pointValue: 2,
+        pointValue: 4,
         attributeName: 'perfectKills',
         keyword: 'Perfect Kill'
     },
@@ -167,9 +167,9 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     },
     RUN_COMPLETED: {
         description:
-            'Completed run (no score by itself but has derived events)',
+            'Completed run under 15 minutes',
         shortDescription: 'Completed Run Under 15 Mins',
-        pointValue: 0,
+        pointValue: 2,
         attributeName: 'null',
         keyword: `Mustn't Tarry`
     },
