@@ -27,7 +27,7 @@ export const rootAssets = {
 }
 
 export const fontAssets = {
-    bigFont: 'root/fonts/Aesthet Nova/Aesthet Nova W05 Black.ttf',
+    bigFont: 'root/fonts/Aesthet-Nova/Aesthet-Nova-W05-Black.ttf',
     sansFont: 'root/fonts/Space Grotesk/SpaceGrotesk-VariableFont_wght.ttf',
     monoFont: 'root/fonts/Space Mono/SpaceMono-Bold.ttf',
 } as const

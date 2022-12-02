@@ -19,3 +19,11 @@ body {
 img {
     -webkit-user-drag: none;
 }
+
+@layer base {
+    @font-face {
+        font-family: Aesthet Nova;
+        font-weight: 400;
+        src: url('../../public/assets/root/fonts/Aesthet-Nova/Aesthet-Nova-W05-Black.ttf');
+    }
+}
