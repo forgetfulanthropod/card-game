@@ -35,7 +35,6 @@ export function calculateLoot(
 
     // shuffledLootItems.unshift({ name: 'gems', count: gems })
     shuffledLootItems.unshift({ name: 'draftCard', count: 1 })
-    shuffledLootItems.push({ name: 'treasureChest', count: 1 })
 
     return shuffledLootItems
 }
