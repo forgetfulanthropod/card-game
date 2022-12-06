@@ -249,7 +249,7 @@ export const spineAssets = {
 
     damageTextSpine: 'spines/damage/Text.json',
 
-    restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
+    // restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
     // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     // mushroomFarmerSpineWebp:
     //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
@@ -258,6 +258,17 @@ export const spineAssets = {
     // matchaGelatinCubeSpineWebp:
     //     'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.webp',
 } as const
+
+export const scenes = {
+    restSiteBg:
+        'scenes/rest site/hooligans bluff/plush bg (20221122113046).webp',
+    restSiteFrog:
+        'scenes/rest site/hooligans bluff/frog plush (20221122112943).png',
+    restSiteWarhog:
+        'scenes/rest site/hooligans bluff/hog plush (20221122113003).png',
+    restSitePenguin:
+        'scenes/rest site/hooligans bluff/penguin plush (20221122112928).png',
+}
 
 export const matchaEntryAssets = {
     pedestalRay0: 'scenes/entry matcha/Pedestal_ray_Left.webp',

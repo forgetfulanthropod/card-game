@@ -15,7 +15,7 @@ import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'
 import { HexMapOverlay } from './HexMapOverlay'
 import { LootCollector } from './LootCollector'
-import { RestSiteOverlay } from './RestSiteOverlay'
+import { RestSiteOverlay } from './RestSiteOverlayPicnic'
 import { Background } from '@/scenes'
 import {
     AssetKey,

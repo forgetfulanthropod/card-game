@@ -1,3 +1,3 @@
 export * from './battle'
-export { initialEntryState } from './entryState'
+export { getInitialEntryState } from './entryState'
 export { getInitialGameState } from './initial'

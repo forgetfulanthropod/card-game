@@ -1,6 +1,7 @@
 import type {
     CharacterId,
     CharacterPlaceIndex,
+    CharacterStats,
     OwnedCharacterStats,
     SelectedCharacters,
 } from 'shared'
@@ -18,132 +19,134 @@ import { callApi } from '@/callApi'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene } from '@/data'
 
-const defaultOwnedCharacters: OwnedCharacterStats[] = [
-    {
-        id: 'frogKnight',
-        displayName: 'Frog Knight',
-        isPc: true,
-        class: 'knight',
+// const defaultOwnedCharacters: OwnedCharacterStats[] = [
+//     {
+//         id: 'frogKnight',
+//         displayName: 'Frog Knight',
+//         isPc: true,
+//         class: 'knight',
 
-        constitution: 80,
-        strength: 10,
-        magic: 5,
-        defense: 11,
+//         constitution: 80,
+//         strength: 10,
+//         magic: 5,
+//         defense: 11,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'mushroomFarmer',
-        displayName: 'Mushroom Farmer',
-        isPc: true,
-        class: 'cleric',
-        constitution: 112,
-        strength: 8,
-        magic: 9,
-        defense: 6,
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'mushroomFarmer',
+//         displayName: 'Mushroom Farmer',
+//         isPc: true,
+//         class: 'cleric',
+//         constitution: 112,
+//         strength: 8,
+//         magic: 9,
+//         defense: 6,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'penguinKnight',
-        displayName: 'Penguin Knight',
-        isPc: true,
-        class: 'knight',
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'penguinKnight',
+//         displayName: 'Penguin Knight',
+//         isPc: true,
+//         class: 'knight',
 
-        constitution: 74,
-        strength: 12,
-        magic: 5,
-        defense: 9,
+//         constitution: 74,
+//         strength: 12,
+//         magic: 5,
+//         defense: 9,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'skeletonWarrior',
-        displayName: 'Skeleton Warrior',
-        isPc: true,
-        class: 'knight',
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'skeletonWarrior',
+//         displayName: 'Skeleton Warrior',
+//         isPc: true,
+//         class: 'knight',
 
-        constitution: 54 + 4,
-        strength: 11 + 3,
-        magic: 4,
-        defense: 4 + 3,
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'matchaGelatinCube',
-        displayName: 'Matcha Gelatin Cube',
-        isPc: true,
-        class: 'cleric',
+//         constitution: 54 + 4,
+//         strength: 11 + 3,
+//         magic: 4,
+//         defense: 4 + 3,
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'matchaGelatinCube',
+//         displayName: 'Matcha Gelatin Cube',
+//         isPc: true,
+//         class: 'cleric',
 
-        constitution: 78 + 25,
-        strength: 5 + 1,
-        magic: 7 + 2,
-        defense: 5 + 4,
+//         constitution: 78 + 25,
+//         strength: 5 + 1,
+//         magic: 7 + 2,
+//         defense: 5 + 4,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'warhog',
-        displayName: 'Warhog',
-        isPc: true,
-        class: 'cleric',
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'warhog',
+//         displayName: 'Warhog',
+//         isPc: true,
+//         class: 'cleric',
 
-        constitution: 84,
-        strength: 6,
-        magic: 4,
-        defense: 8,
+//         constitution: 84,
+//         strength: 6,
+//         magic: 4,
+//         defense: 8,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'gnomeHooligan',
-        displayName: 'Gnome Hooligan',
-        isPc: true,
-        class: 'rogue',
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'gnomeHooligan',
+//         displayName: 'Gnome Hooligan',
+//         isPc: true,
+//         class: 'rogue',
 
-        constitution: 40,
-        strength: 12 + 1, //drew did it
-        magic: 14,
-        defense: 5,
+//         constitution: 40,
+//         strength: 12 + 1, //drew did it
+//         magic: 14,
+//         defense: 5,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-    {
-        id: 'jerry',
-        displayName: 'Jerry',
-        isPc: true,
-        class: 'wizard',
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+//     {
+//         id: 'jerry',
+//         displayName: 'Jerry',
+//         isPc: true,
+//         class: 'wizard',
 
-        constitution: 86,
-        strength: 19,
-        magic: 8 + 1,
-        defense: 5 + 1,
+//         constitution: 86,
+//         strength: 19,
+//         magic: 8 + 1,
+//         defense: 5 + 1,
 
-        uid: '',
-        tokenId: '',
-        nftName: '',
-    },
-]
+//         uid: '',
+//         tokenId: '',
+//         nftName: '',
+//     },
+// ]
 
 export const selectedCharacterId = datum<null | CharacterId>(null)
 export const selectedCharacterPlaceIndex = datum<CharacterPlaceIndex>(2)
 
 export function CharacterOptions() {
-    const options = defaultOwnedCharacters.map((c, index) => {
+    const allCharacterOptions = getEntryScene().get('allCharacterOptions')
+
+    const options = allCharacterOptions.map((c, index) => {
         const width = 115
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile` as AssetKey)
@@ -194,7 +197,7 @@ export function CharacterOptions() {
                     options.forEach(o => (o.filters = []))
                     if (id == null || hoveredCharacterUid.val == null) return
 
-                    const i = defaultOwnedCharacters.findIndex(c => c.id === id)
+                    const i = allCharacterOptions.findIndex(c => c.id === id)
                     options[i].filters = [glowFilter]
                 }, true),
                 hoveredCharacterUid.onChange(uid => {
@@ -228,32 +231,26 @@ export function CharacterOptions() {
 }
 
 function chooseOwnedCharacterAt(
-    ownedCharacterIndex: number,
+    allCharacterOptionsIndex: number,
     selectedCharacterPlaceIndex: CharacterPlaceIndex
 ) {
-    const uid = `pc-${ownedCharacterIndex}-${(Math.random() * 10000) | 0}`
-
     void callApi('placeSelectedCharacters', {
         characters: [
             {
-                character: {
-                    ...defaultOwnedCharacters[ownedCharacterIndex],
-                    uid,
-                },
-                index: selectedCharacterPlaceIndex,
+                allCharacterOptionsIndex,
+                placeIndex: selectedCharacterPlaceIndex,
             },
         ],
     })
 }
 
-async function _fillUnselectedSlots(charactersData: SelectedCharacters) {
-    if (charactersData[2]) return
-
-    const additions = range(1)
-        .filter(i => charactersData[i] == null)
-        .map(i => ({
-            character: defaultOwnedCharacters[i],
-            index: 1 as CharacterPlaceIndex,
-        }))
-    await callApi('placeSelectedCharacters', { characters: additions })
+export async function composeDefaultParty() {
+    const defaultCharacterOptionsIndices = [6, 5, 0]
+    void callApi('placeSelectedCharacters', {
+        characters: range(0, 3).map(placeIndex => ({
+            allCharacterOptionsIndex:
+                defaultCharacterOptionsIndices[placeIndex],
+            placeIndex: placeIndex as CharacterPlaceIndex,
+        })),
+    })
 }

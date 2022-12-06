@@ -7,6 +7,7 @@ import type { SceneId } from './misc'
 
 import type {
     CardUid,
+    CharacterStats,
     CharacterUid,
     Gamestate,
     Orb,
@@ -38,8 +39,8 @@ interface BareGameActionArgs {
     choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {
-            character: OwnedCharacterStats
-            index: CharacterPlaceIndex
+            allCharacterOptionsIndex: number
+            placeIndex: CharacterPlaceIndex
         }[]
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
