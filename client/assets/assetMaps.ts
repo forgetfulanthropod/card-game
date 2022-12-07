@@ -245,7 +245,7 @@ export const spineAssets = {
     orcWarriorNPCSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
 
-    warhogSkinsSpine: 'spines/characters/warhog_/Warhog.json',
+    warhogSkinsSpine: 'spines/characters/warhog/warhog.json',
     warhogSpine: 'SKIN: warhogSkinsSpine -> 0',
     plaguehogSpine: 'SKIN: warhogSkinsSpine -> 1',
     bosshogJurgenSpine: 'SKIN: warhogSkinsSpine -> 2',
