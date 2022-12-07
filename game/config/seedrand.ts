@@ -6,9 +6,10 @@ declare global {
 }
 let seed = Math.random().toString()
 logger.info(`setting random seed: ${seed}`)
-global.srandom = () => seedrandom(seed)()
+global.srandom = seedrandom(seed)
 
 export function setGlobalRandomSeed(): void {
     seed = Math.random().toString()
+    global.srandom = seedrandom(seed)
     logger.info(`setting random seed: ${seed}`)
 }
