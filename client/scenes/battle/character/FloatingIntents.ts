@@ -105,7 +105,9 @@ function DamageIntended(
     const commandMeta = commandIdToMetaMap?.[command.command.id]
 
     const intentIconTexture = getTexture(commandMeta?.src ?? 'intentAttack')
-    const amount = command.outcome.damages[cuid]
+    const amount =
+        (command.outcome.damages?.[cuid] ?? 0) -
+        (command.outcome.blocks?.[cuid] ?? 0)
 
     const isHoveringIntent = datum(false)
     const infoBox =
@@ -139,13 +141,7 @@ function DamageIntended(
             events,
         }),
         Text({
-            text: `${
-                amount != null
-                    ? amount +
-                          getBattleScene().get('allCharacters', cuid)?.block ??
-                      0
-                    : '0'
-            }`,
+            text: `${amount}`,
             anchor: 0.5,
             events,
             style: {
