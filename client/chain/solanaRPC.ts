@@ -182,7 +182,8 @@ export default class SolanaRPC {
         const kaijusOwned = tokenAccounts.filter(account => {
             const data = account.account.data as ParsedAccountData
             const nftPublicKey = data?.parsed?.info?.mint // the particular nft's public key, not its mint authority
-            return kaijuNFTIds.includes(nftPublicKey)
+            const amountOwned = data?.parsed?.info?.tokenAmount?.amount // will be === 1 if user still owns the kaiju
+            return (kaijuNFTIds.includes(nftPublicKey) && amountOwned > 0)
         })
         console.log({ tokenAccounts })
         console.log({ kaijusOwned })

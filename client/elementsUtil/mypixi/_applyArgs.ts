@@ -29,10 +29,12 @@ export function applyDisplayObjectArgs(
 
     if (args.onMouseover != null) {
         el.interactive = true
+        el.cursor = `url('assets/root/hand.webp'), pointer`
         el.on('pointerover', args.onMouseover)
     }
     if (args.onMouseout != null) {
         el.interactive = true
+        el.cursor = `url('assets/root/hand.webp'), pointer`
         el.on('pointerout', args.onMouseout)
     }
 

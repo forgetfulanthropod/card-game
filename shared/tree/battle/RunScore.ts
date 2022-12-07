@@ -35,6 +35,8 @@ export type RunScoreEventMeta = {
     description: string
     pointValue: number // eg. the number of points that 1 single "count" in RunScoreAttribute is worth
     attributeName: RunScoreAttributeName
+    shortDescription: string
+    keyword: string
     asset?: string
 }
 
@@ -93,101 +95,139 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
 export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     ENEMY_KILLED: {
         description: 'Number of enemies defeated',
+        shortDescription: 'Enemies Defeated',
         pointValue: 3,
         attributeName: 'enemiesKilled',
+        keyword: 'Enemies Defeated'
     },
     EXIT_ROOM_FULL_HEALTH: {
         description:
             'Number of normal battles completed with full party health',
         pointValue: 6,
+        shortDescription: 'Rooms Completed with Full Health',
         attributeName: 'roomsExitedFullHealth',
+        keyword: 'Grunts'
     },
     EXIT_BOSS_FULL_HEALTH: {
         description: 'Number of boss battles completed with full party health',
+        shortDescription: 'Boss Rooms Completed in Full Health',
         pointValue: 20,
         attributeName: 'bossRoomsExitedFullHealth',
+        keyword: 'Was That A Boss?'
     },
     EXIT_BOSS_LOW_DAMAGE: {
         description: 'Exit Boss Battle without losing more than 15 health',
+        shortDescription: 'Boss Battles Lost <15 Health',
         pointValue: 12,
         attributeName: 'bossRoomsExitedFullHealth',
+        keyword: 'Just a Fleshwound'
     },
     BOSS_KILLED: {
         description: 'Number of bosses defeated',
+        shortDescription: 'Bosses Defeated',
         pointValue: 10,
         attributeName: 'bossesKilled',
+        keyword: 'Bosses Defeated'
     },
     ROOM_CLEARED: {
         description: 'Number of rooms cleared',
+        shortDescription: 'Rooms Cleared',
         pointValue: 10,
         attributeName: 'roomsCleared',
+        keyword: 'Rooms Cleared'
     },
     ROOM_WIN_NO_ENERGY_USED: {
         description: 'Won battle without spending energy in last turn',
+        shortDescription: 'Battle Won w/Idle Last Turn',
         pointValue: 8,
         attributeName: 'winsNoEnergyUsedLastTurn',
+        keyword: 'Walk Away'
     },
     OVERKILL: {
         description: 'Cumulative damage inflicted on top of dead enemy',
+        shortDescription: 'Cumulative Overkill',
         pointValue: 0.25,
         attributeName: 'cumulativeOverkill',
+        keyword: 'Overkill'
     },
     PERFECT_KILL: {
         description:
             'Final hit against enemy exacly equal to its remaining health',
-        pointValue: 2,
+        shortDescription: 'Perfect Kills',
+        pointValue: 4,
         attributeName: 'perfectKills',
+        keyword: 'Perfect Kill'
     },
     HIGHEST_DAMAGE: {
         description: 'Highest damage from single hit',
+        shortDescription: 'Highest Damage From Single Hit',
         pointValue: 0.3,
         attributeName: 'highestDamageHit',
+        keyword: 'Number Go Up'
     },
     RUN_COMPLETED: {
         description:
-            'Completed run (no score by itself but has derived events)',
-        pointValue: 0,
+            'Completed run under 15 minutes',
+        shortDescription: 'Completed Run Under 15 Mins',
+        pointValue: 2,
         attributeName: 'null',
+        keyword: `Mustn't Tarry`
     },
     SURVIVING_KAIJU: {
         description: 'Number of Kaiju alive at the end of run',
+        shortDescription: 'Surviving Kaiju',
         pointValue: 5,
         attributeName: 'survivingKaiju',
+        keyword: 'Present and Accounted For'
     },
     FINAL_USER_HEALTH_REMAINING: {
         description: 'Amount of health remaining at end of run',
+        shortDescription: 'Total Health Remaining',
         pointValue: 0.15,
         attributeName: 'finalUserHealthRemaining',
+        keyword: 'For Your Health'
     },
     HIT_VULGAR_THRESHOLD: {
         description: 'Number of hits that dealt >55 damage in a single turn',
+        shortDescription: 'Hits Dealt Over 55 Damage',
         pointValue: 1,
         attributeName: 'hitsOverVulgarThreshold',
+        keyword: 'A Vulgar Display of Power'
     },
     ROOM_WIN_ZERO_DAMAGE: {
         description: 'Lose 0 health during a room',
+        shortDescription: 'Rooms Beat with 0 Lost Health',
         pointValue: 3,
         attributeName: 'roomsWonZeroDamage',
+        keyword: `Feelin' Fine`
     },
     BLOCK_OVER_THRESHOLD: {
         description: 'Generate over 40 block in a single turn',
+        shortDescription: 'Turns with Over 40 Block',
         pointValue: 1,
         attributeName: 'blocksOverThreshold',
+        keyword: `Fortified`
     },
     STANCE_CHANGES: {
-        description: 'Generate over 40 block in a single turn',
+        description: 'Stances Changed',
+        shortDescription: 'Stance Changes over 5',
         pointValue: 1, // need to fix
         attributeName: 'null',
+        keyword: `Quick Footed`
     },
     CARDS_OVER_THRESHOLD: {
         description: 'Number of cards over 5 played in a single turn',
+        shortDescription: 'Cards Over 5 Played',
         pointValue: 2,
         attributeName: 'cardsPlayedOverThreshold',
+        keyword: `Long Combo`
     },
     NULL: {
         description: 'Can be optionally used for derived events',
+        shortDescription: 'NULL',
         pointValue: 0,
         attributeName: 'null',
+        keyword: `Null`
     },
 }
 

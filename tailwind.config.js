@@ -17,8 +17,13 @@ module.exports = {
         ]
       },
       fontFamily: {
-        'sharp': ['Jockey One', 'sans-serif']
+        'sharp': ['Jockey One', 'sans-serif'],
+        'bigFont' : ['Aesthet Nova', 'sans-serif']
       },
+      screens: {
+        'mobile': { 'raw': '(min-height: 500px) and (min-width: 300px)'},
+        'base-screen': { 'raw': '(min-height: 720px) and (min-width: 1280px)'},
+      }
     },
     screens: {
       '2xs': '365px',

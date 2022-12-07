@@ -91,7 +91,7 @@ const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
 
 const checkSurvivingKaiju = (scene: BattleCursor) => {
     const survivingKaiju = vals(scene.get('allCharacters')).filter(
-        char => char.isPc
+        char => char.isPc && char.health > 0
     )
     updateRunScoreAttribute(scene, 'survivingKaiju', survivingKaiju.length)
 

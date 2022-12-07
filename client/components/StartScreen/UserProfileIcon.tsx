@@ -29,16 +29,16 @@ export const UserProfileIcon = ({
                 <p className='px-2'>{walletAddress}</p>
             </div>
         </button>
-        <button
-            className={`text-white mt-2 rounded-xl bg-stone-700 font-sans p-1 w-2/3 font-medium z-50 text-sm shadow-3xl transition-all ${
+        <div
+            className={`flex flex-col text-white mt-2 rounded-xl bg-stone-700 font-sans p-1 w-2/3 font-medium z-50 text-sm shadow-3xl transition-all ${
                 showActions ? 'opacity-100 visible' : 'opacity-0 invisible'
             }`}
             ref={actionsRef}
         >
-            <p className='py-2 hover:bg-stone-900 rounded-lg'>Account</p>
-            <p className='py-2 hover:bg-stone-900 rounded-lg' onClick={logout}>
+            <button className='py-2 hover:bg-stone-900 rounded-lg'>Account</button>
+            <button className='py-2 hover:bg-stone-900 rounded-lg' onClick={logout}>
                 Log Out
-            </p>
-        </button>
+            </button>
+        </div>
     </div>
 }
