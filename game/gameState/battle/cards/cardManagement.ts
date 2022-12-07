@@ -38,40 +38,6 @@ export function getNullCards(): Piles {
 }
 
 function makeCards(scene: BattleCursor): Piles {
-    // const cardIds: CardId[] = [
-    //     // 'bodySlam',
-    //     // 'leadRazor',
-    //     // 'leadRazor',
-    //     // 'leadRazor',
-    //     // 'magicRitual',
-    //     // 'chainLightning',
-    //     // 'spellBook',
-    //     // 'fireball',
-    //     // 'orbOfFrost',
-    //     // 'basicAttackCleric',
-    //     // 'basicAttackKnight',
-    //     // 'blockCleric',
-    //     // 'blockKnight',
-    //     // 'blockWizard',
-    //     // 'swordSlash',
-    //     // 'dutifulStab',
-    //     // 'charge',
-    //     // 'testudoFormation',
-    //     // final cards below?
-    //     // 'arcanePower',
-    //     // 'scatterBrained',
-    //     // 'magicalStorm',
-    //     // 'guidingBolt',
-    //     // 'smite',
-    //     // 'bless',
-    //     // 'prayerOfGoodFortune', // todo
-    //     // 'orbOfHolyLight', // todo
-    //     // 'mantraOfPatience',
-    //     // 'helpingHand',
-    //     // 'orbOfProtection',
-    //     // 'orbOfLightning',
-    // ]
-
     const allCharacters = vals(scene.get('allCharacters'))
 
     const characterUidToCardIdMap: Record<CharacterUid, CardId[]> = {}

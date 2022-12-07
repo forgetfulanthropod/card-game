@@ -6,7 +6,7 @@ import type { ROCursor } from 'sbaobab'
 import type { CharacterId } from 'shared'
 import type { InteractionEvents } from './mypixi'
 import { bindEvents, startChecking } from './mypixi'
-import type { AnimationId, SpineAsset } from '@/assets'
+import { AnimationId, SpineAsset, spineAssets } from '@/assets'
 import { haveEvilSkins } from '@/assets'
 import { onUpdate } from '@/util'
 
@@ -28,6 +28,22 @@ export function Spine<Name extends SpineAsset>(props: {
 
     if (props.scale != null) spine.scale.set(props.scale, props.scale)
 
+    if (usesSkinDSL(props.name)) {
+        const skinNames = spine.skeleton.data.skins.map(skin => skin.name)
+
+        const { resourceName, skinIndex } = getSkinInfo(props.name)
+
+        console.log({ skinNames, skinIndex })
+
+        if (!skinNames?.[skinIndex])
+            console.error(
+                `missing skin of ${resourceName} at index ${skinIndex}`
+            )
+
+        spine.skeleton.setSkinByName(skinNames[skinIndex])
+    }
+
+    // todo: delete old skin stuff here
     if (haveEvilSkins[props.name.replace('Spine', '') as CharacterId]) {
         const skinNames = spine.skeleton.data.skins.map(skin => skin.name)
 
@@ -37,6 +53,7 @@ export function Spine<Name extends SpineAsset>(props: {
 
         spine.skeleton.setSkinByName(skinNames[props.isPc ? 0 : 1])
     }
+    // endtodo
 
     if (props.x != null) spine.x = props.x
     if (props.y != null) spine.y = props.y
@@ -80,8 +97,28 @@ export function Spine<Name extends SpineAsset>(props: {
 }
 
 function spineData(name: SpineAsset): SkeletonData {
+    let resourceName = name
+
+    if (usesSkinDSL(name)) ({ resourceName } = getSkinInfo(name))
+
     return (
-        Loader.shared.resources[name].spineData ??
-        throwNull(`spineData '${name}'`)
+        Loader.shared.resources[resourceName].spineData ??
+        throwNull(`spineData '${resourceName}'`)
     )
+}
+
+function usesSkinDSL(name: SpineAsset): boolean {
+    return spineAssets[name].indexOf('SKIN') === 0
+}
+
+function getSkinInfo(name: SpineAsset): {
+    resourceName: SpineAsset
+    skinIndex: number
+} {
+    const skin = spineAssets[name]
+    const [resourceName, skinIndex] = skin.replace('SKIN: ', '').split(' -> ')
+    return {
+        resourceName: resourceName as SpineAsset,
+        skinIndex: parseInt(skinIndex),
+    }
 }

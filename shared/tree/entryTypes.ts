@@ -4,6 +4,7 @@ import type {
     CharacterUid,
     OwnedCharacterStats,
     Pile,
+    PlayerCharacterStats,
 } from './battle'
 
 export type SelectedCharacter = OwnedCharacterStats | null
@@ -17,7 +18,7 @@ export interface EntryScene extends SceneHas {
     id: 'entry'
     selectedCharacters: SelectedCharacters
     fullSelectedCharacterDecks: Record<CharacterUid, Pile>
-    allCharacterOptions: CharacterStats[]
+    allCharacterOptions: PlayerCharacterStats[]
     selectedLevel: {
         name: string
         num: number

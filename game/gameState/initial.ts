@@ -11,7 +11,7 @@ const config = {
 function initialOwnedCharacters(): OwnedCharacterStatsMap {
     const { characters: statsMap } = getRulebook()
 
-    let oc: OwnedCharacterStatsMap = {}
+    let oc = {} as OwnedCharacterStatsMap
     const characterIds = keys(statsMap)
     vals(statsMap).forEach((c, i) => {
         for (let j = 0; j < NUM_OF_EACH_CHAR; j++) {

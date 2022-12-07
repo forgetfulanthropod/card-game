@@ -67,6 +67,22 @@ export const gnomeBomb = (x: number): CommandDefinition => ({
     targetNum: -1,
     targetType: 'allEnemies',
 })
+/**Bucket of Bang Snaps*/
+export const bucketOfBangSnaps = (): CommandDefinition => ({
+    actions: `chain(deal(strength * .3), effect("unready", 2))`,
+    id: `bucketOfBangSnaps`,
+    name: `Bucket of Bang Snaps`,
+    targetNum: -1,
+    targetType: 'allEnemies',
+})
+/**Fire Cracker*/
+export const fireCracker = (): CommandDefinition => ({
+    actions: `chain(deal(strength * 1.1), effect("unguarded", 2))`,
+    id: `fireCracker`,
+    name: `Fire Cracker`,
+    targetNum: 1,
+    targetType: 'allEnemies',
+})
 /**Meaty Charge (BA, applies bleed (X) if any damage goes unblocked) */
 export const meatyCharge = (x: number): CommandDefinition => ({
     actions: `ifDamageDealt(deal(strength), effect("bleed",${x}))`,

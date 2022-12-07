@@ -1,4 +1,4 @@
-import type { DungeonRoom, EnemyCharacterId, RoomEnemies } from 'shared'
+import type { DungeonRoom, NonPlayerCharacterId, RoomEnemies } from 'shared'
 import { newNPCMeta, rearrangeNpcs } from './characterManagement'
 
 export function makeRoomNpcs(nextRoom: RoomEnemies) {
@@ -10,7 +10,7 @@ export function makeRoomNpcs(nextRoom: RoomEnemies) {
             return [
                 uid,
                 newNPCMeta({
-                    name: name as EnemyCharacterId,
+                    name: name as NonPlayerCharacterId,
                     level,
                     uid,
                     x: 0,

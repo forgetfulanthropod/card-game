@@ -21,6 +21,8 @@ type AliasedCommandId =
     | `infectiousBite(${number})`
     | `engulf(${number})`
     | `gnomeBomb(${number})`
+    | `bucketOfBangSnaps(${number})`
+    | `fireCracker(${number})`
     | `meatyCharge(${number})`
     | `bellowAndSing(${number},${number})`
     | `screamAndCharge(${number},${number})`
@@ -60,6 +62,8 @@ export type NpcCommandId =
     | 'evisceratingSweep'
     | 'grudge'
     | 'gnomeBomb'
+    | 'bucketOfBangSnaps'
+    | 'fireCracker'
     | 'hansBuffBlock'
     | 'hansCurse'
     | 'hansGuards'
@@ -132,7 +136,6 @@ export type CardId =
     // | 'prayerOfGoodFortune'
     | 'psychicWarfare'
     | 'scatterBrained'
-    | 'shield'
     | 'shieldOfLight'
     | 'smite'
     | 'spellBook'

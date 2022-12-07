@@ -1,6 +1,6 @@
 import type { CommandDefinition, NpcCommandId } from 'shared'
 import { entryMap } from 'shared/code'
-import { enemies } from './enemies'
+import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 import * as alias from './commandAliases'
 // TODO eventually: remove ? before : below
 type CommandDefinitionsMap = {
@@ -150,7 +150,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
  * mutates commandDefinitionsMap in place
  */
 function generateParameterizedCommands() {
-    for (const levelObj of Object.values(enemies))
+    for (const levelObj of Object.values(npcStatsMapByLevel))
         for (const enemy of Object.values(levelObj))
             for (const commandId of enemy.moves) {
                 if (commandId == null || !commandId.includes('(')) continue

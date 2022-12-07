@@ -1,5 +1,11 @@
 import type { Brandify } from '@misc'
-import type { CharacterClass, CharacterId, StanceId } from './Characters'
+import type {
+    CharacterClass,
+    CharacterId,
+    NonPlayerCharacterId,
+    PlayerCharacterId,
+    StanceId,
+} from './Characters'
 
 export type CharacterAbility = {
     displayName: string
@@ -38,6 +44,14 @@ export type CharacterStats = Readonly<{
 }> &
     Brandify
 
+export type PlayerCharacterStats = Readonly<
+    CharacterStats & { id: PlayerCharacterId }
+>
+
+export type NonPlayerCharacterStats = Readonly<
+    CharacterStats & { id: NonPlayerCharacterId }
+>
+
 /** Result of applying effects to character */
 export interface CalculatedCharacterStats {
     isSkipped: boolean
@@ -63,4 +77,7 @@ export type OwnedCharacterStats = CharacterStats &
     }> &
     Brandify
 
-export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
+export type OwnedCharacterStatsMap = Record<
+    PlayerCharacterId,
+    OwnedCharacterStats
+>

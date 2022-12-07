@@ -1,6 +1,6 @@
 import type { DisplayObject } from 'pixi.js'
 
-const config = { shouldCheck: true }
+const config = { shouldCheck: false }
 
 const WARN_COUNT = 3
 const INTERVAL = 5000

@@ -65,6 +65,7 @@ export function HexMapOverlay(): PixiContainer {
             {
                 x: BASE_WIDTH * 0.05,
                 y: BASE_HEIGHT * 0.75,
+                scale: 2,
             },
             ...AllTiles()
         )
@@ -277,8 +278,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             x: characters?.[0]?.isPc ? -60 : 0,
             events: {
                 pointerdown() {
-                    if (~checkOtherScoringEvents)
-                        void callApi('nextRoom', { choice })
+                    void callApi('nextRoom', { choice })
                 },
                 pointerover() {
                     if (~choice && !isPlayerCharacterRoom)
@@ -300,11 +300,12 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
             if (anim == null) throw new Error('missing a spine broken')
 
-            if (!~choice && !isPlayerCharacterRoom)
-                setTimeout(
-                    () => anim?.state && (anim.state.timeScale = 0),
-                    Math.random() * 1000
-                )
+            // freezes animation..
+            // if (!~choice && !isPlayerCharacterRoom)
+            //     setTimeout(
+            //         () => anim?.state && (anim.state.timeScale = 0),
+            //         Math.random() * 1000
+            //     )
 
             if (!~choice) anim.cursor = 'default'
 

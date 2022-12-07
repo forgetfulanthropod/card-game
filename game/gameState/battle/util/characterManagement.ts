@@ -3,16 +3,18 @@ import type {
     CharacterId,
     Characters,
     EnemyCharacterMeta,
-    EnemyCharacterId,
+    NonPlayerCharacterId,
     EnemyCharacters,
     OwnedCharacterStats,
     StanceId,
+    PlayerCharacterId,
 } from 'shared'
 import { keys, vals } from 'shared/code'
-import { enemies, getRulebook } from '@/rulebook'
+import { npcStatsMapByLevel, getRulebook } from '@/rulebook'
 import type { BaseHealth, EnemyDefinition } from '@/rulebook'
 import { playerCharacterStatsMap } from '@/rulebook/battle'
 import { calculateStats } from '../characters/effects'
+import { startCase } from 'lodash'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -26,7 +28,12 @@ export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return newPCMeta({ uid: c.uid, name: c.id, x, y })
+            return newPCMeta({
+                uid: c.uid,
+                name: c.id as PlayerCharacterId,
+                x,
+                y,
+            })
         }),
     ]
     const o: Characters = {}
@@ -43,12 +50,7 @@ export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
 
     const npcKeys = keys(npcs)
     vals(npcs).forEach((npc, i) => {
-        const [x, y] =
-            keys(npcs).length === 1
-                ? positions[0]
-                : keys(npcs).length === 2
-                ? positionBetween(positions[i], positions[i + 1])
-                : positions[i]
+        const [x, y] = positions[i]
 
         rearrangedNpcs[npcKeys[i]] = {
             ...npc,
@@ -62,12 +64,18 @@ export function rearrangeNpcs(npcs: EnemyCharacters): EnemyCharacters {
     return rearrangedNpcs
 }
 
-export function getEnemyPositions(n: number) {
-    if (n === 1) return makePositions({ n: 2 }).slice(1)
+export function getEnemyPositions(n: number): [number, number][] {
+    const threePoints = getThreePointGrid()
 
-    return makePositions({
-        n,
-    })
+    if (n === 1) return [threePoints[1]]
+
+    if (n === 2)
+        return [
+            positionBetween(threePoints[0], threePoints[1]),
+            positionBetween(threePoints[1], threePoints[2]),
+        ]
+
+    return threePoints
 }
 
 function makeLeftPositions(): [
@@ -88,29 +96,23 @@ function makeLeftPositions(): [
     ]
 }
 
-function makePositions({ n = 3 }: { n?: number }): [number, number][] {
+function getThreePointGrid() {
     const measurements = [
-        // [55.55, 34.2],
-        // [60.9, 50.23],
-        // [68.07, 67.16],
         [60.37, 34.2],
         [69.62, 50.23],
         [78.13, 67.16],
-        // [76.37, 50],
-        // [69.62, 32.5],
-        // [82.13, 67.5],
     ]
 
-    return measurements
-        .map(m => [m[0] + CENTERING_X_OFFSET, m[1]] as [number, number])
-        .slice(0, n)
+    return measurements.map(
+        m => [m[0] + CENTERING_X_OFFSET, m[1]] as [number, number]
+    )
 }
 
 function newPCMeta(args: {
     x: number
     y: number
     uid: string
-    name: CharacterId
+    name: PlayerCharacterId
 }): CharacterMeta {
     const { characters: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
@@ -144,18 +146,18 @@ function newPCMeta(args: {
 export function newNPCMeta(args: {
     x: number
     y: number
-    name: EnemyCharacterId
+    name: NonPlayerCharacterId
     uid: string
     level: string | number
 }): EnemyCharacterMeta {
     const { name, level } = args
-    const enemyDefinition = enemies[name][level] as EnemyDefinition
+    const enemyDefinition = npcStatsMapByLevel[name][level] as EnemyDefinition
     // debugger
 
     const cm = {
         ...enemyDefinition,
         id: name,
-        displayName: playerCharacterStatsMap[name].displayName,
+        displayName: startCase(name),
         health: getHealthFromBase(enemyDefinition.constitution),
         constitution: getHealthFromBase(enemyDefinition.constitution),
         block: 0,

@@ -5,6 +5,7 @@ import type {
     EntryScene,
     Gamestate,
     OwnedCharacterStats,
+    PlayerCharacterId,
     Scene,
 } from 'shared'
 
@@ -53,6 +54,6 @@ export const getEntryScene = (): ROCursor<EntryScene> => {
 }
 
 export const getOwnedCharacters = (): ROCursor<
-    Record<string, OwnedCharacterStats>
+    Record<PlayerCharacterId, OwnedCharacterStats>
 > => getTree().select('ownedCharacters')
 export const getScene = (): ROCursor<Scene> => getTree().select('scene')
