@@ -30,4 +30,5 @@ declare global {
     // eslint-disable-next-line no-var
     // @ts-expect-error
     var process: { env: { [key: string]: string } }
+    var gtag: Gtag.Gtag // defined in index.html
 }

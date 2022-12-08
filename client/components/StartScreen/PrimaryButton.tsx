@@ -20,11 +20,11 @@ export const PrimaryButton = (props: {
 
     const sizeClass =
         props.size === 'large'
-            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-lg sm:py-3 sm:px-3 sm:text-3xl lg:py-5 lg:text-5xl xl:py-7 xl:text-7xl'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-lg sm:py-3 sm:px-3 sm:text-3xl lg:py-5 lg:text-5xl xl:py-7 xl:text-6xl'
             : props.size === 'medium'
             ? 'px-3 text-sm sm:py-1 sm:px-5 sm:text-xl xl:py-3 xl:px-10 xl:text-3xl 2xl:text-5xl'
             : props.size === 'small'
-            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-base sm:py-3 sm:px-3 sm:text-md xl:py-5 xl:text-2xl 2xl:py-7 2xl:text-5xl'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-base sm:py-3 sm:px-3 sm:text-md xl:py-5 xl:text-2xl 2xl:py-6 2xl:text-5xl'
             : ''
 
     return <button

@@ -103,7 +103,7 @@ export function NewStartScreen(props: {
             setShowGateModal={setShowGateModal}
         />}
         <div
-            className={`font-sharp grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
+            className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
                 showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
             }`}
         >
@@ -118,7 +118,9 @@ export function NewStartScreen(props: {
             <div className='nav w-full row-span-1 flex p-2 xs:p-4 lg:p-8 justify-between items-start'>
                 <div className='flex flex-col items-center w-1/6 cursor-pointer hover:scale-105 transition text-white '>
                     <img src='./logos/KaijuCards.png' />
-                    <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>closed alpha</p>
+                    <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>
+                        closed alpha
+                    </p>
                 </div>
                 <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>
                     <div className='grid grid-cols-5 items-center mr-4'>
