@@ -129,8 +129,8 @@ export function LootCollector(): PixiContainer {
         {
             alpha: lootScreenHasOpened ? 1 : 0,
             scale: lootScreenHasOpened ? 1 : 0,
-            x: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.x : 1900,
-            y: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.y : 900,
+            x: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.x : 1950,
+            y: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.y : 1000,
         },
         Sprite({
             src: getTexture('roomClearedSign'),
