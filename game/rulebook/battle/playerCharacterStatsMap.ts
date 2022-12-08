@@ -1,4 +1,10 @@
-import type { CharacterId, CharacterStats } from 'shared'
+import type {
+    CharacterId,
+    CharacterStats,
+    NonPlayerCharacterId,
+    PlayerCharacterId,
+    PlayerCharacterStats,
+} from 'shared'
 
 const unknownEnemyFiller = {
     class: 'knight',
@@ -8,7 +14,10 @@ const unknownEnemyFiller = {
     defense: 5,
 } as const
 
-export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
+export const playerCharacterStatsMap: Record<
+    PlayerCharacterId,
+    PlayerCharacterStats
+> = {
     bloatDemon: {
         id: 'bloatDemon',
         displayName: 'Bloat Demon',
@@ -141,17 +150,6 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         magic: 7 + 2,
         defense: 5 + 4,
     },
-    mimic: {
-        id: 'mimic',
-        displayName: 'Mimic',
-        isPc: false,
-        class: 'knight',
-
-        constitution: 130,
-        strength: 12,
-        magic: 5,
-        defense: 5,
-    },
     mushroomFarmer: {
         id: 'mushroomFarmer',
         displayName: 'Mushroom Farmer',
@@ -248,7 +246,7 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
 
         constitution: 84 + 40,
         strength: 6,
-        magic: 5,
+        magic: 7,
         defense: 5 + 3,
     },
     wimpyGuard: {
@@ -261,29 +259,5 @@ export const playerCharacterStatsMap: Record<CharacterId, CharacterStats> = {
         strength: 24,
         magic: 5,
         defense: 5,
-    },
-    bosshogJurgen: {
-        id: 'bosshogJurgen',
-        displayName: 'bosshogJurgen',
-        isPc: false,
-        ...unknownEnemyFiller,
-    },
-    toadmaw: {
-        id: 'toadmaw',
-        displayName: 'toadmaw',
-        isPc: false,
-        ...unknownEnemyFiller,
-    },
-    cultist: {
-        id: 'cultist',
-        displayName: 'cultist',
-        isPc: false,
-        ...unknownEnemyFiller,
-    },
-    halfdan: {
-        id: 'halfdan',
-        displayName: 'halfdan',
-        isPc: false,
-        ...unknownEnemyFiller,
     },
 }

@@ -39,7 +39,7 @@ export const fontAssets = {
 const caveFinal = 'backgrounds/Matcha_Caves.webp'
 export const dungeonBackgroundAssets = {
     'Skelepit Dungeon': caveFinal,
-    // 'Hooligan’s Bluff': caveFinal,
+    // 'Hooligans Bluff': caveFinal,
     // 'The Matcha Caves': caveFinal,
     // 'Fort Skeleton': caveFinal,
     // 'The Ninth Trash Hole of Hell': caveFinal,
@@ -153,6 +153,8 @@ export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
     effectBerserk: 'effects/berserk_temp.webp',
+    effectEmboldened: 'effects/berserk_temp.webp', //temp
+    effectCourageous: 'effects/berserk_temp.webp', //temp
     effectBleed: 'effects/bleed.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigued: 'effects/fatigue.webp',
@@ -237,15 +239,26 @@ export const spineAssets = {
         'spines/characters/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
     matchaGelatinCubeNPCSpine:
         'spines/characters/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
-    gnomeHooliganSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
-    gnomeHooliganNPCSpine:
-        'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
+    // gnomeHooliganNPCSpine:
+    //     'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
     orcWarriorSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     orcWarriorNPCSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
-    warhogSpine: 'spines/characters/warhog/Warhog.json',
+
+    warhogSkinsSpine: 'spines/characters/warhog/warhog.json',
+    warhogSpine: 'SKIN: warhogSkinsSpine -> 0',
+    plaguehogSpine: 'SKIN: warhogSkinsSpine -> 1',
+    bosshogJurgenSpine: 'SKIN: warhogSkinsSpine -> 2',
+    groghogSpine: 'SKIN: warhogSkinsSpine -> 3',
+    warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
+
     mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
-    // bosshogJurgenNPCSpine: 'spines/characters/bosshogJurgen/Warhog.json',
+
+    gnomeSkinsSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
+    gnomeHooliganSpine: 'SKIN: gnomeSkinsSpine -> 3',
+    gnomeProspectorSpine: 'SKIN: gnomeSkinsSpine -> 5',
+    gnomeBanditSpine: 'SKIN: gnomeSkinsSpine -> 0',
+    gnomeBigBomberSpine: 'SKIN: gnomeSkinsSpine -> 2',
 
     damageTextSpine: 'spines/damage/Text.json',
 

@@ -41,16 +41,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
-    shield: {
-        name: 'Shield',
-        energy: 1,
-        id: 'shield',
-        targetNum: 1,
-        targetType: 'friends',
-        actions: 'addBlock(defense + 2)',
-        type: 'defense',
-        characterClass: 'knight',
-    },
     shieldOfLight: {
         name: 'Shield of Light',
         energy: 1,
@@ -505,7 +495,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'bless',
         targetNum: -1,
         targetType: 'allFriends',
-        actions: 'effectAll("strongblock", 1)',
+        actions:
+            'chain(effectAll("emboldened", 1), effectAll("strongblock", 2))',
         type: 'defense',
         characterClass: 'cleric',
     },

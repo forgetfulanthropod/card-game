@@ -65,19 +65,26 @@ export function MainCharacterAnimation({
         root.state.setAnimation(0, 'Idle', true).mixDuration = 0.2
     }, Math.random() * 2000)
 
+    // DEBUG
+    // console.log({
+    //     name: characterMeta.id,
+    //     spine: root,
+    //     skeleton: root.skeleton,
+    // })
+
     onDestroyed(root, () => clearTimeout(timeoutId))
 
     updateGlow(hoveredCharacterUid.val)
 
-    const heightOverrides: Partial<Record<CharacterId, number>> = {
-        matchaGelatinCube: 0.78,
-        frogKnight: 1.4,
-        warhog: 0.8,
-        jerry: 1.2,
-        gnomeHooligan: 1.2,
-        penguinKnight: 1.2,
-        skeletonWarrior: 0.75,
-    }
+    // const heightOverrides: Partial<Record<CharacterId, number>> = {
+    //     matchaGelatinCube: 0.78,
+    //     frogKnight: 1.4,
+    //     warhog: 0.8,
+    //     jerry: 1.2,
+    //     gnomeHooligan: 1.2,
+    //     penguinKnight: 1.2,
+    //     skeletonWarrior: 0.75,
+    // }
 
     // //@ts-expect-error
     // const desiredHeight = (heightOverrides?.[characterMeta.id] ?? 1) * height // TODO: what is it tho
@@ -85,7 +92,7 @@ export function MainCharacterAnimation({
     //     desiredHeight / root.height,
     //     (desiredHeight * 1.2) / root.width
     // )
-    const desiredScale = 0.0826 * (heightOverrides?.[characterMeta.id] ?? 1) // 260/matcha height
+    const desiredScale = 0.0826 // 260/matcha height
     // console.log({ name: characterMeta.id, desiredScale })
     root.scale.set((characterMeta.isPc ? 1 : -1) * desiredScale, desiredScale)
 

@@ -26,11 +26,17 @@ const staticEffectFuncs: Record<
         stats.strength += Math.ceil(stats.strength * 0.5)
         stats.damageTakeMultiplicand *= 2
     },
+    courageous(stats) {
+        stats.damageDealMultiplicand *= 1.15
+    },
     debilitated(stats) {
         stats.damageDealMultiplicand *= 0.5
     },
     doubleDamage(stats) {
         stats.strength *= 2
+    },
+    emboldened(stats) {
+        stats.damageDealMultiplicand *= 1.25
     },
     entranced(stats, counter) {
         stats.magic += counter
@@ -41,8 +47,8 @@ const staticEffectFuncs: Record<
     smallDamageIncrease(stats) {
         stats.damageTakeAddend += 4
     },
-    strongblock(stats, counter) {
-        stats.defense += counter * 2
+    strongblock(stats) {
+        stats.blockMultiplier *= 1.5
     },
     stunned(stats) {
         stats.isSkipped = true

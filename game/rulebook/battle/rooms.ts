@@ -3,10 +3,13 @@ import type {
     DungeonRoom,
     DungeonRoomMap,
     DungeonRoomMaps,
-    EnemyCharacterId,
+    NonPlayerCharacterId,
+    RoomCategoryId,
+    RoomEnemies,
 } from 'shared'
-import { throwNull } from 'shared/code'
-import { enemies } from '@/rulebook'
+import { keys, throwNull } from 'shared/code'
+import { npcStatsMapByLevel } from '@/rulebook'
+import { srandInt } from '@/util'
 // - Room 1:  Two level 1 Skeletons, One level 1 Matcha
 // - Room 2: Two level 1 Matchas, One level 2 Skeleton
 // - Room 3: Two Level 2 Skeletons, One Level 2 Matcha
@@ -14,270 +17,418 @@ import { enemies } from '@/rulebook'
 
 const config = { randomDungeon: false }
 
-export const dungeonRooms: DungeonRoomMaps = {
-    'Skelepit Dungeon': {
-        root: {
-            uid: 'root',
-            enemies: [],
-            edges: ['', '1_1', '', ''],
+const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
+    events: [
+        [
+            {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+            {
+                id: 'orcWarrior',
+                level: 3,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'skeletonWarrior',
+                level: 2,
+            },
+            {
+                id: 'matchaGelatinCube',
+                level: 3,
+            },
+            {
+                id: 'skeletonWarrior',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'matchaGelatinCube',
+                level: 2,
+            },
+            {
+                id: 'skeletonWarrior',
+                level: 3,
+            },
+            {
+                id: 'matchaGelatinCube',
+                level: 1,
+            },
+        ],
+        [
+            {
+                id: 'matchaGelatinCube',
+                level: 2,
+            },
+            {
+                id: 'matchaGelatinCube',
+                level: 2,
+            },
+            {
+                id: 'matchaGelatinCube',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'orcWarrior',
+                level: 2,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 3,
+            },
+            {
+                id: 'orcWarrior',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'skeletonWarrior',
+                level: 8,
+            },
+        ],
+    ],
+    tierOne: [
+        [
+            {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+            {
+                id: 'warhogRaider',
+                level: 2,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 2,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+        ],
+        [
+            {
+                id: 'gnomeProspector',
+                level: 2,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'plaguehog',
+                level: 2,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'warhogRaider',
+                level: 4,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBigBomber',
+                level: 4,
+            },
+        ],
+    ],
+    tierTwo: [
+        [
+            {
+                id: 'groghog',
+                level: 2,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 3,
+            },
+            {
+                id: 'groghog',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'gnomeProspector',
+                level: 2,
+            },
+            {
+                id: 'groghog',
+                level: 2,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 3,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBandit',
+                level: 2,
+            },
+            {
+                id: 'plaguehog',
+                level: 3,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'gnomeProspector',
+                level: 3,
+            },
+            {
+                id: 'groghog',
+                level: 2,
+            },
+            {
+                id: 'warhogRaider',
+                level: 2,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBigBomber',
+                level: 2,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 2,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 3,
+            },
+        ],
+    ],
+    tierThree: [
+        [
+            {
+                id: 'gnomeBigBomber',
+                level: 3,
+            },
+            {
+                id: 'plaguehog',
+                level: 3,
+            },
+            {
+                id: 'warhogRaider',
+                level: 3,
+            },
+        ],
+        [
+            {
+                id: 'plaguehog',
+                level: 9,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBandit',
+                level: 3,
+            },
+            {
+                id: 'groghog',
+                level: 3,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 3,
+            },
+        ],
+        [
+            {
+                id: 'gnomeBandit',
+                level: 9,
+            },
+        ],
+    ],
+    bosses: [
+        [
+            {
+                id: 'bosshogJurgen',
+                level: 9,
+            },
+        ],
+    ],
+}
+
+export function getDungeonRooms(): DungeonRoomMaps {
+    const roomSkeletons: DungeonRoomMaps = {
+        'Skelepit Dungeon': {},
+        'Hooligans Bluff': {
+            root: {
+                uid: 'root',
+                enemies: [],
+                edges: ['', '1_1', '', ''],
+            },
+            '1_1': {
+                uid: '1_1',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['1_3', '', '2_0', ''],
+            },
+            '1_3': {
+                uid: '1_3',
+                enemies: [],
+                category: 'events',
+                edges: ['', '2_4', '', ''],
+            },
+            '2_0': {
+                uid: '2_0',
+                enemies: [],
+                category: 'events',
+                edges: ['', '3_1', '', ''],
+            },
+            '2_4': {
+                uid: '2_4',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['2_6', '', '3_3', ''],
+            },
+            '2_6': {
+                uid: '2_6',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['', '3_7', '', ''],
+            },
+            '3_1': {
+                uid: '3_1',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['3_3', '', '4_0', ''],
+            },
+            '3_3': {
+                uid: '3_3',
+                enemies: [],
+                category: 'events',
+                edges: ['', '4_4', '', ''],
+            },
+            '3_7': {
+                uid: '3_7',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['', '', '4_8', ''],
+            },
+            '4_0': {
+                uid: '4_0',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['', '5_1', '', ''],
+            },
+            '4_4': {
+                uid: '4_4',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['4_8', '', '5_3', ''],
+            },
+            '4_8': {
+                uid: '4_8',
+                enemies: [],
+                category: 'events',
+                edges: ['', '5_7', '', ''],
+            },
+            '5_1': {
+                uid: '5_1',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['5_3', '', '', ''],
+            },
+            '5_3': {
+                uid: '5_3',
+                enemies: [],
+                category: 'events',
+                edges: ['', '6_4', '', ''],
+            },
+            '5_7': {
+                uid: '5_7',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['', '', '6_6', ''],
+            },
+            '6_4': {
+                uid: '6_4',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['6_6', '', '', ''],
+            },
+            '6_6': {
+                uid: '6_6',
+                enemies: [
+                    {
+                        id: 'REST_SITE',
+                        level: 1,
+                    },
+                ],
+                edges: ['', '7_7', '', ''],
+            },
+            '7_7': {
+                uid: '7_7',
+                enemies: [
+                    {
+                        id: 'bosshogJurgen',
+                        level: 10,
+                        boss: true,
+                    },
+                ],
+                edges: ['', '', '6-b', ''],
+            },
         },
-        '1_1': {
-            uid: '1_1',
-            enemies: [
-                {
-                    id: 'skeletonWarrior',
-                    level: 1,
-                },
-                // {
-                //     id: 'matchaGelatinCube',
-                //     level: 1,
-                // },
-                // {
-                //     id: 'skeletonWarrior',
-                //     level: 1,
-                // },
-            ],
-            edges: ['1_3', '', '2_0', ''],
-        },
-    },
-    'Hooligan’s Bluff': {
-        root: {
-            uid: 'root',
-            enemies: [],
-            edges: ['', '1_1', '', ''],
-        },
-        '1_1': {
-            uid: '1_1',
-            enemies: [
-                {
-                    id: 'skeletonWarrior',
-                    level: 1,
-                },
-                // {
-                //     id: 'matchaGelatinCube',
-                //     level: 1,
-                // },
-                // {
-                //     id: 'skeletonWarrior',
-                //     level: 1,
-                // },
-            ],
-            edges: ['1_3', '', '2_0', ''],
-        },
-        '1_3': {
-            uid: '1_3',
-            enemies: [
-                // {
-                //     id: 'skeletonWarrior',
-                //     level: 1,
-                // },
-                {
-                    id: 'matchaGelatinCube',
-                    level: 1,
-                },
-                // {
-                //     id: 'skeletonWarrior',
-                //     level: 1,
-                // },
-            ],
-            edges: ['', '2_4', '', ''],
-        },
-        '2_0': {
-            uid: '2_0',
-            enemies: [
-                {
-                    id: 'orcWarrior',
-                    level: 2,
-                },
-            ],
-            edges: ['', '3_1', '', ''],
-        },
-        '2_4': {
-            uid: '2_4',
-            enemies: [
-                {
-                    id: 'skeletonWarrior',
-                    level: 1,
-                },
-                {
-                    id: 'skeletonWarrior',
-                    level: 2,
-                },
-                {
-                    id: 'skeletonWarrior',
-                    level: 1,
-                },
-            ],
-            edges: ['2_6', '', '3_3', ''],
-        },
-        '2_6': {
-            uid: '2_6',
-            enemies: [
-                {
-                    id: 'matchaGelatinCube',
-                    level: 3,
-                },
-                {
-                    id: 'skeletonWarrior',
-                    level: 3,
-                },
-                {
-                    id: 'matchaGelatinCube',
-                    level: 3,
-                },
-            ],
-            edges: ['', '3_7', '', ''],
-        },
-        '3_1': {
-            uid: '3_1',
-            enemies: [
-                {
-                    id: 'gnomeHooligan',
-                    level: 2,
-                },
-                {
-                    id: 'orcWarrior',
-                    level: 2,
-                },
-                {
-                    id: 'gnomeHooligan',
-                    level: 2,
-                },
-            ],
-            edges: ['3_3', '', '4_0', ''],
-        },
-        '3_3': {
-            uid: '3_3',
-            enemies: [
-                {
-                    id: 'gnomeHooligan',
-                    level: 2,
-                },
-                {
-                    id: 'warhog',
-                    level: 1,
-                },
-                {
-                    id: 'gnomeHooligan',
-                    level: 3,
-                },
-            ],
-            edges: ['', '4_4', '', ''],
-        },
-        '3_7': {
-            uid: '3_7',
-            enemies: [
-                {
-                    id: 'gnomeHooligan',
-                    level: 1,
-                },
-                {
-                    id: 'gnomeHooligan',
-                    level: 2,
-                },
-                {
-                    id: 'gnomeHooligan',
-                    level: 1,
-                },
-            ],
-            edges: ['', '', '4_8', ''],
-        },
-        '4_0': {
-            uid: '4_0',
-            enemies: [
-                {
-                    id: 'orcWarrior',
-                    level: 3,
-                },
-            ],
-            edges: ['', '5_1', '', ''],
-        },
-        '4_4': {
-            uid: '4_4',
-            enemies: [
-                {
-                    id: 'warhog',
-                    level: 1,
-                },
-            ],
-            edges: ['4_8', '', '5_3', ''],
-        },
-        '4_8': {
-            uid: '4_8',
-            enemies: [
-                {
-                    id: 'mimic',
-                    level: 1,
-                },
-            ],
-            edges: ['', '5_7', '', ''],
-        },
-        '5_1': {
-            uid: '5_1',
-            enemies: [
-                {
-                    id: 'matchaGelatinCube',
-                    level: 1,
-                },
-            ],
-            edges: ['5_3', '', '', ''],
-        },
-        '5_3': {
-            uid: '5_3',
-            enemies: [
-                {
-                    id: 'matchaGelatinCube',
-                    level: 1,
-                },
-            ],
-            edges: ['', '6_4', '', ''],
-        },
-        '5_7': {
-            uid: '5_7',
-            enemies: [
-                {
-                    id: 'matchaGelatinCube',
-                    level: 1,
-                },
-            ],
-            edges: ['', '', '6_6', ''],
-        },
-        '6_4': {
-            uid: '6_4',
-            enemies: [
-                {
-                    id: 'warhog',
-                    level: 1,
-                },
-            ],
-            edges: ['6_6', '', '', ''],
-        },
-        '6_6': {
-            uid: '6_6',
-            enemies: [
-                {
-                    id: 'REST_SITE',
-                    level: 1,
-                },
-            ],
-            edges: ['', '7_7', '', ''],
-        },
-        '7_7': {
-            uid: '7_7',
-            enemies: [
-                {
-                    id: 'mimic',
-                    level: 10,
-                    boss: true,
-                },
-            ],
-            edges: ['', '', '6-b', ''],
-        },
-    },
-    // 'Hooligan’s Bluff': {},
-    'Fort Skeleton': {},
-    'The Ninth Trash Hole of Hell': {},
-    'The Matcha Caves': {},
+        'Fort Skeleton': {},
+        'The Ninth Trash Hole of Hell': {},
+        'The Matcha Caves': {},
+    }
+
+    return fillRooms(roomSkeletons)
+}
+
+function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
+    keys(roomSkeletons).forEach(roomSkeletonKey =>
+        keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
+            const room = roomSkeletons[roomSkeletonKey][roomUid]
+
+            if (room.category == null) return
+
+            room.enemies = randomRoomOfCategory(room.category)
+        })
+    )
+
+    return roomSkeletons
+}
+
+function randomRoomOfCategory(category: keyof typeof roomOptions): RoomEnemies {
+    const options = roomOptions[category]
+
+    return options[srandInt(0, options.length)]
 }
 
 // if (config.randomDungeon)

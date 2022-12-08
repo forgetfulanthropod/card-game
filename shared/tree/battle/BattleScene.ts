@@ -74,7 +74,7 @@ export type BattleWinState =
 
 export type DungeonName =
     | 'Skelepit Dungeon'
-    | 'Hooligan’s Bluff'
+    | 'Hooligans Bluff'
     | 'The Matcha Caves'
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'

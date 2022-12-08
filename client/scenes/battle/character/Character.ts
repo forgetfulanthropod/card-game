@@ -105,7 +105,7 @@ export function Character(props: CharacterProps): PixiContainer {
                     y: 22,
                 })
             ),
-        1000 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
+        0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
     )
 
     const hitContainer = Container({

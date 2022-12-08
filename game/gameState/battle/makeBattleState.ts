@@ -43,9 +43,9 @@ export function makeBattleState(args: {
         roundEnergy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        rooms: getRulebook().dungeonRooms['Hooligan’s Bluff'],
+        rooms: getRulebook().dungeonRooms['Hooligans Bluff'],
         numRoomsPassed: -1,
-        currentRoom: getRulebook().dungeonRooms['Hooligan’s Bluff'].root,
+        currentRoom: getRulebook().dungeonRooms['Hooligans Bluff'].root,
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         cardsPlayedThisTurn: [],

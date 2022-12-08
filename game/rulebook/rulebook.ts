@@ -2,14 +2,14 @@ import type { DungeonLevel, Rulebook } from 'shared'
 import { rulebookVersion } from 'shared/code'
 
 import {
-    dungeonRooms,
+    getDungeonRooms,
     stanceTypeMetaMap,
     playerCharacterStatsMap,
 } from './battle'
 
 const dungeonLevels: DungeonLevel[] = [
     { name: 'Skelepit Dungeon', num: 0, modifier: 1 },
-    { name: 'Hooligan’s Bluff', num: 1, modifier: 1 },
+    { name: 'Hooligans Bluff', num: 1, modifier: 1 },
     { name: 'The Matcha Caves', num: 2, modifier: 2 },
     { name: 'Fort Skeleton', num: 3, modifier: 3 },
     {
@@ -25,7 +25,7 @@ const defaultRulebook: Rulebook = {
     characters: playerCharacterStatsMap,
     dungeonLevels,
     stanceTypeMetaMap,
-    dungeonRooms,
+    dungeonRooms: getDungeonRooms(),
     // npcNames,
 }
 let rulebook = defaultRulebook

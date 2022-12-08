@@ -1,9 +1,9 @@
-import type { CharacterId, EntryScene } from 'shared'
+import type { CharacterId, EntryScene, PlayerCharacterId } from 'shared'
 
 import { getRulebook } from '@/rulebook'
 import { getCharacterMeta } from './battle'
 
-const allCharacterOptionsIds: CharacterId[] = [
+const allCharacterOptionsIds: PlayerCharacterId[] = [
     'frogKnight',
     'mushroomFarmer',
     'penguinKnight',

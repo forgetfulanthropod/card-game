@@ -42,7 +42,7 @@ function loadAssetMaps(assetMaps: AssetMaps) {
     const unique = uniqBy(Object.entries(flatAssets), ([name, _]) => name)
 
     for (const [name, url] of unique) {
-        Loader.shared.add(name, 'assets/' + url)
+        if (url.indexOf('SKIN') !== 0) Loader.shared.add(name, 'assets/' + url)
     }
 
     Loader.shared.load()

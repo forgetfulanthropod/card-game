@@ -7,6 +7,7 @@ import { getEntryScene } from '@/data'
 import { loopSong, PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { onUpdate } from '@/util'
+import { callApi } from '@/callApi'
 
 const NUM_CHARACTERS_REQUIRED = 3
 
