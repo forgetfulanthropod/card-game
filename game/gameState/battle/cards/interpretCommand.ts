@@ -162,7 +162,7 @@ function executeCommand({
             // throw Error(jss`error in command: ${output.value}`)
         }
     } catch (e) {
-        logger.error(['[executeCommand] angu error:', e])
+        logger.error(['error in command:', command.actions, command.id])
     }
 
     maybeTransitionBattleState(scene)

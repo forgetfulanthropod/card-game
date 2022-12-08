@@ -65,11 +65,12 @@ export function MainCharacterAnimation({
         root.state.setAnimation(0, 'Idle', true).mixDuration = 0.2
     }, Math.random() * 2000)
 
-    console.log({
-        name: characterMeta.id,
-        spine: root,
-        skeleton: root.skeleton,
-    })
+    // DEBUG
+    // console.log({
+    //     name: characterMeta.id,
+    //     spine: root,
+    //     skeleton: root.skeleton,
+    // })
 
     onDestroyed(root, () => clearTimeout(timeoutId))
 

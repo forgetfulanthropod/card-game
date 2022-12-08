@@ -1,11 +1,18 @@
-import type { CommandDefinition, NpcCommandId } from 'shared'
-import { entryMap } from 'shared/code'
+import type {
+    ActionName,
+    CardAction,
+    CommandDefinition,
+    CommandId,
+    NpcCommandId,
+} from 'shared'
+import { entryMap, keys } from 'shared/code'
 import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 import * as alias from './commandAliases'
 // TODO eventually: remove ? before : below
-type CommandDefinitionsMap = {
-    [Id in NpcCommandId]: CommandDefinition & { id: Id }
-}
+type CommandDefinitionsMap = Record<
+    NpcCommandId,
+    { id: NpcCommandId } & Omit<CommandDefinition, 'id'>
+>
 
 /**
  * simple commands which targe one opponent
@@ -14,7 +21,7 @@ type CommandDefinitionsMap = {
 const singleOpponentTargetCommands = {
     swordWack: ['Sword Wack', 'deal(strength)'],
     /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deal the same amount of damage back to the player).*/
-    mimicAttack: ['Mimic Attack', 'mimicAttack()'],
+    mimicAttack: ['Mimic Attack', 'mimicAttack'],
     /**Rusty Poke (DOT 2, also applies Fatigue 1) */
     rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigued", 1)'],
     /**Rusty Poke (DOT 2) */
@@ -34,8 +41,6 @@ const singleOpponentTargetCommands = {
     jurgenStampSnort: ['Jurgen Stamp Snort', 'effect("doubleDamage", 1)'],
     /**Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target. */
     jurgenSitUpon: ['Jurgen Sit Upon', 'deal(strength/2); effect("stunned",1)'],
-    /**Attack (Attacks for 4) */
-    attack4: ['Attack4', 'deal(4)'],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
@@ -53,22 +58,23 @@ const singleOpponentTargetCommands = {
     jab: ['Jab', 'deal(strength * .5)'],
     /**Strike */
     strike: ['Strike', 'deal(strength + 2)'],
-} as const
+}
 
-// @ts-expect-error // our shorthand doesn't have perfect type inference...
 export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Eviscerating Sweep (deal 100%, Splash Damage) applies vulnerable (3) */
     evisceratingSweep: {
         name: 'Eviscerating Sweep',
+        //@ts-expect-error
         id: 'evisceratingSweep',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'deal(strength); effect{"vulnerable", 3}',
+        actions: 'chain(deal(strength), effect("vulnerable", 3))',
     },
 
     /**Blood Moon Curse (all player characters receive fatigue (2), unguarded (2)) */
     hansCurse: {
         name: 'Hans Curse',
+        //@ts-expect-error
         id: 'hansCurse',
         targetNum: -1,
         targetType: 'allEnemies',
@@ -79,6 +85,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Guards!!! (summons up to 2 cultist guards) */
     hansGuards: {
         name: 'Hans Guards',
+        //@ts-expect-error
         id: 'hansGuards',
         targetNum: 0,
         targetType: 'self',
@@ -88,6 +95,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
     passiveBlockCmd: {
         name: 'Passive Block',
+        //@ts-expect-error
         id: 'passiveBlockCmd',
         targetNum: 0,
         targetType: 'self',
@@ -97,6 +105,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Buff/Block (Gives +3 damage to all of Hans' Guards and Hans himself till the end of the following turn). */
     hansBuffBlock: {
         name: 'Hans Buff Block',
+        //@ts-expect-error
         id: 'hansBuffBlock',
         targetNum: 0,
         targetType: 'self',
@@ -106,6 +115,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Rest (does nothing) */
     rest: {
         name: 'Rest',
+        //@ts-expect-error
         id: 'rest',
         targetNum: 0,
         targetType: 'self',
@@ -115,6 +125,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**'Block' */
     block: {
         name: 'Block',
+        //@ts-expect-error
         id: 'block',
         targetNum: 1,
         targetType: 'self',
@@ -124,6 +135,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Slash (SL) */
     slash: {
         name: 'Slash',
+        //@ts-expect-error
         id: 'slash',
         targetNum: 2,
         targetType: 'enemies',
@@ -132,18 +144,84 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     /**Roll Around (same as Belly Flop, but with Slash damage) */
     jurgenRollAround: {
         name: 'Roll Around',
+        //@ts-expect-error
         id: 'jurgenRollAround',
         targetNum: 2,
         targetType: 'enemies',
         actions: 'deal(strength/2)',
     },
-    ...entryMap(singleOpponentTargetCommands, (id, [displayName, actions]) => ({
-        actions,
-        id,
-        name: displayName,
+
+    /**Bucket of Bang Snaps*/
+    bucketOfBangSnaps: {
+        actions: `chain(deal(strength * .2), effectAll("unguarded", 2), effectAll("tired", 2))`,
+        //@ts-expect-error
+        id: `bucketOfBangSnaps`,
+        name: `Bucket of Bang Snaps`,
+        targetNum: -1,
+        targetType: 'allEnemies',
+    },
+    /**Bucket of Bang Snaps*/
+    yodel: {
+        actions: `chain(deal(strength * .5), effectAll("emboldened", 2, "allFriends"))`,
+        //@ts-expect-error
+        id: `yodel`,
+        name: `Bucket of Bang Snaps`,
         targetNum: 1,
         targetType: 'enemies',
-    })),
+    },
+    /**Bucket of Bang Snaps*/
+    demolitionCharge: {
+        actions: `ifDamageDealt(deal(strength), chain(effect("courageous", 2, "self"), effect("tired", 1)))`,
+        //@ts-expect-error
+        id: `demolitionCharge`,
+        name: `Demolition Charge`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    /**Fire Cracker*/
+    fireCracker: {
+        actions: `chain(deal(strength * 1.1), effect("unguarded", 2))`,
+        //@ts-expect-error
+        id: `fireCracker`,
+        name: `Fire Cracker`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    grudge: {
+        actions: `chain(deal(strength * 1.1), effect("unguarded", 2))`,
+        //@ts-expect-error
+        id: `grudge`,
+        name: `Fire Cracker`,
+        targetNum: 1,
+        targetType: 'allEnemies',
+    },
+    gnomeBomb: {
+        actions: `deal(strength * .3)`,
+        //@ts-expect-error
+        id: `gnomeBomb`,
+        name: `Fire Cracker`,
+        targetNum: -1,
+        targetType: 'allEnemies',
+    },
+
+    ...(() => {
+        const singleTargetDefinitions: Partial<
+            Record<NpcCommandId, CommandDefinition>
+        > = {}
+
+        keys(singleOpponentTargetCommands).forEach(commandId => {
+            const command = singleOpponentTargetCommands[commandId]
+            singleTargetDefinitions[commandId] = {
+                id: commandId,
+                name: command[0],
+                actions: command[1],
+                targetNum: 1,
+                targetType: 'enemies',
+            }
+        })
+
+        return singleTargetDefinitions
+    })(),
 }
 
 /**

@@ -8,7 +8,7 @@ export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
 
 export type DSLString = string & Brandify
 
-type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
+export type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
 
 export interface Command extends CommandDefinition {
     characterUid: CharacterUid
@@ -27,6 +27,9 @@ type AliasedCommandId =
     | `bellowAndSing(${number},${number})`
     | `screamAndCharge(${number},${number})`
 
+export interface NpcCommandDefinition extends CommandDefinition {
+    id: NpcCommandId
+}
 export interface CommandDefinition {
     id: CommandId
     name: string
@@ -55,10 +58,10 @@ export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
 export type NpcCommandId =
     | 'ancientStrike'
-    | 'attack4'
     | 'basicAttack'
     | 'block'
     | 'chomp'
+    | 'demolitionCharge'
     | 'evisceratingSweep'
     | 'grudge'
     | 'gnomeBomb'
@@ -68,7 +71,6 @@ export type NpcCommandId =
     | 'hansCurse'
     | 'hansGuards'
     | 'hansMagicMissile'
-    | 'infectiousBite'
     | 'itchyOozeSpecial'
     | 'jab'
     | 'jurgenBellyFlop'
@@ -80,7 +82,6 @@ export type NpcCommandId =
     | 'matchaMash'
     | 'matchaMeld'
     | 'mimicAttack'
-    | 'infectiousBite'
     | 'grudge'
     | 'passiveBlockCmd'
     | 'rest'
@@ -89,6 +90,7 @@ export type NpcCommandId =
     | 'slash'
     | 'strike'
     | 'swordWack'
+    | 'yodel'
     | AliasedCommandId
 export type CommandId =
     | NpcCommandId

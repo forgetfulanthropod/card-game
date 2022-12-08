@@ -33,7 +33,8 @@ export function Spine<Name extends SpineAsset>(props: {
 
         const { resourceName, skinIndex } = getSkinInfo(props.name)
 
-        console.log({ skinNames, skinIndex })
+        // DEBUG
+        // console.log({ skinNames, skinIndex })
 
         if (!skinNames?.[skinIndex])
             console.error(

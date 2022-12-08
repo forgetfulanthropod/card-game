@@ -65,7 +65,8 @@ export function HexMapOverlay(): PixiContainer {
             {
                 x: BASE_WIDTH * 0.05,
                 y: BASE_HEIGHT * 0.75,
-                scale: 2,
+                // TODO: zoomed panning
+                // scale: 2,
             },
             ...AllTiles()
         )

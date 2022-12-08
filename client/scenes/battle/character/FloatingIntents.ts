@@ -91,10 +91,10 @@ function DamageIntended(
             id: 'mimicAttack',
             src: 'intentMimic',
         },
-        infectiousBite: {
-            id: 'infectiousBite',
-            src: 'intentInfectiousBite',
-        },
+        // infectiousBite: {
+        //     id: 'infectiousBite',
+        //     src: 'intentInfectiousBite',
+        // },
         grudge: {
             id: 'grudge',
             src: 'intentGrudge',

@@ -21,15 +21,15 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
     events: [
         [
             {
+                id: 'gnomeBandit',
+                level: 1,
+            },
+            {
                 id: 'orcWarrior',
                 level: 3,
             },
             {
                 id: 'gnomeBandit',
-                level: 1,
-            },
-            {
-                id: 'gnomeBandit',
                 level: 2,
             },
         ],
@@ -39,22 +39,22 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
             {
-                id: 'skeletonWarrior',
-                level: 2,
-            },
-            {
                 id: 'matchaGelatinCube',
                 level: 3,
+            },
+            {
+                id: 'skeletonWarrior',
+                level: 2,
             },
         ],
         [
             {
-                id: 'skeletonWarrior',
-                level: 3,
-            },
-            {
                 id: 'matchaGelatinCube',
                 level: 2,
+            },
+            {
+                id: 'skeletonWarrior',
+                level: 3,
             },
             {
                 id: 'matchaGelatinCube',
@@ -76,10 +76,6 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             },
         ],
         [
-            {
-                id: 'orcWarrior',
-                level: 2,
-            },
             {
                 id: 'orcWarrior',
                 level: 2,
@@ -87,6 +83,10 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             {
                 id: 'gnomeProspector',
                 level: 3,
+            },
+            {
+                id: 'orcWarrior',
+                level: 2,
             },
         ],
         [
@@ -99,12 +99,12 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
     tierOne: [
         [
             {
-                id: 'warhogRaider',
-                level: 2,
-            },
-            {
                 id: 'gnomeBandit',
                 level: 1,
+            },
+            {
+                id: 'warhogRaider',
+                level: 2,
             },
             {
                 id: 'gnomeBandit',
@@ -113,12 +113,12 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
         ],
         [
             {
-                id: 'gnomeBigBomber',
-                level: 2,
-            },
-            {
                 id: 'gnomeBandit',
                 level: 1,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 2,
             },
             {
                 id: 'gnomeBandit',
@@ -165,21 +165,21 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
             {
-                id: 'groghog',
-                level: 2,
-            },
-            {
                 id: 'gnomeProspector',
                 level: 3,
+            },
+            {
+                id: 'groghog',
+                level: 2,
             },
         ],
         [
             {
-                id: 'groghog',
+                id: 'gnomeProspector',
                 level: 2,
             },
             {
-                id: 'gnomeProspector',
+                id: 'groghog',
                 level: 2,
             },
             {
@@ -193,12 +193,12 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
             {
-                id: 'gnomeBandit',
-                level: 2,
-            },
-            {
                 id: 'plaguehog',
                 level: 3,
+            },
+            {
+                id: 'gnomeBandit',
+                level: 2,
             },
         ],
         [
@@ -257,11 +257,11 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 3,
             },
             {
-                id: 'gnomeBandit',
+                id: 'groghog',
                 level: 3,
             },
             {
-                id: 'groghog',
+                id: 'gnomeBandit',
                 level: 3,
             },
         ],
