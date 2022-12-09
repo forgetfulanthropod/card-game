@@ -13,8 +13,8 @@ import { openNewTab } from './util'
 
 const WALLET_GATING_ENABLED = false // TODO move to env
 
-export interface UserDoc {
-    walletAddress: string
+export type UserDoc = {
+    walletAddress: string | null
     numKaijusOwned: number
 }
 
@@ -26,18 +26,14 @@ export function NewStartScreen(props: {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userDoc, setUserDoc] = useState<UserDoc>({
-        walletAddress: '',
+        walletAddress: null,
         numKaijusOwned: 0,
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
 
     useEffect(() => {
-        // check if theres a cached provider or a cached user session previously available
-        // if it exists, load and auto connect
-        // connect to Solana as well
-        // if it exists but expired, reset the storage items
-        // if there is none, leave everything until user interaction time
+        gtag('event', 'view_start_screen')
     }, [])
 
     useEffect(() => {
@@ -77,6 +73,16 @@ export function NewStartScreen(props: {
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
         setUserDoc({ walletAddress, numKaijusOwned })
         setIsLoggedIn(true)
+
+        // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
+        gtag('set', {
+            user_id: walletAddress,
+        })
+
+        gtag('event', 'login', {
+            method: 'connect_wallet',
+        })
+
         console.log({ userDoc: { walletAddress, numKaijusOwned } })
     }
 
@@ -95,7 +101,10 @@ export function NewStartScreen(props: {
     }
 
     const enterGame = () => {
-        props.onEnter('random-' + Math.random().toString())
+        props.onEnter(
+            userDoc.walletAddress ?? 'random-' + Math.random().toString()
+        )
+        gtag('event', 'begin_game')
     }
 
     return <>
@@ -153,21 +162,12 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    {isLoggedIn && web3Auth ? (
-                        <UserProfileIcon
-                            logout={handleLogout}
-                            userDoc={userDoc}
-                        />
-                    ) : (
-                        <div className='flex items-center h-full'>
-                            <PrimaryButton
-                                text='sign in'
-                                type='default'
-                                size='medium'
-                                onClick={handleLogin}
-                            />
-                        </div>
-                    )}
+                    <UserProfileIcon
+                        login={handleLogin}
+                        logout={handleLogout}
+                        isLoggedIn={isLoggedIn}
+                        userDoc={userDoc}
+                    />
                 </div>
             </div>
 
