@@ -452,8 +452,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         // TODO: "You may only play this card if this character is in an avoidant stance."
-        actions:
-            'chain(addBlock(defense), effect("strongblock", 1, "friends"))',
+        actions: 'chain(addBlock(defense), effect("strongblock", 1))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -496,7 +495,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions:
-            'chain(effectAll("emboldened", 1), effectAll("strongblock", 2))',
+            'chain(effectAll("courageous", 1), effectAll("strongblock", 2))',
         type: 'defense',
         characterClass: 'cleric',
     },

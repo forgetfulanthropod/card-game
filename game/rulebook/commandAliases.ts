@@ -54,13 +54,13 @@ export const engulf = (x: number): NpcCommandDefinition => ({
     targetType: 'enemies',
 })
 /**Gnome bomb */
-export const gnomeBomb = (x: number): NpcCommandDefinition => ({
-    actions: `deal(strength * .3)`,
-    id: `gnomeBomb(${x})`,
-    name: `Gnome Bomb ${x}`,
-    targetNum: -1,
-    targetType: 'allEnemies',
-})
+// export const gnomeBomb = (x: number): NpcCommandDefinition => ({
+//     actions: `deal(strength * .3)`,
+//     id: `gnomeBomb(${x})`,
+//     name: `Gnome Bomb ${x}`,
+//     targetNum: -1,
+//     targetType: 'allEnemies',
+// })
 /**Meaty Charge (BA, applies bleed (X) if any damage goes unblocked) */
 export const meatyCharge = (x: number): NpcCommandDefinition => ({
     actions: `ifDamageDealt(deal(strength), effect("bleed",${x}))`,

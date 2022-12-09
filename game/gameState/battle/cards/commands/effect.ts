@@ -65,7 +65,7 @@ function getTargetUids(
     }
     if (targetType == null) {
         targetUids = givenUids
-    } else if (['friends', 'enemies'].includes(targetType)) {
+    } else if (['allFriends', 'allEnemies'].includes(targetType)) {
         const ac = scene.get('allCharacters')
         const isPcSource = ac[command.characterUid].isPc
         const shouldBePc = isPcSource === (targetType === 'friends') // NOR

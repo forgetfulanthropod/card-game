@@ -42,7 +42,13 @@ function isPlayable({
     card: Card
     scene: BattleCursor
 }): boolean {
-    const hasEnoughEnergy = getEnergy(card) <= scene.select('energy').get()
+    if (getEnergy(card) > scene.get('energy')) return false
 
-    return hasEnoughEnergy
+    if (
+        card.id === 'patientAmbush' &&
+        scene.get('allCharacters', card.characterUid, 'stance') !== 'avoidant'
+    )
+        return false
+
+    return true
 }
