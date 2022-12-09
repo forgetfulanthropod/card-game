@@ -396,7 +396,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [
                     {
                         id: 'bosshogJurgen',
-                        level: 10,
+                        level: 'default',
                         boss: true,
                     },
                 ],
