@@ -104,7 +104,7 @@ class NotificationSpawner {
         await Tweener.add(
             {
                 target: el,
-                duration: 0.7,
+                duration: 0.4,
                 ease: Easing.easeFromTo,
             },
             {
