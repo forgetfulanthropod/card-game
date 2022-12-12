@@ -412,13 +412,21 @@ export function getDungeonRooms(): DungeonRoomMaps {
 }
 
 function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
-    keys(roomSkeletons).forEach(roomSkeletonKey => {
-        const takenRoomIndicesOfCategory: number[] = []
+    const takenRoomIndicesByCategory: Record<RoomCategoryId, number[]> = {
+        events: [],
+        tierOne: [],
+        tierTwo: [],
+        tierThree: [],
+        bosses: [],
+    }
 
+    keys(roomSkeletons).forEach(roomSkeletonKey => {
         keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
             const room = roomSkeletons[roomSkeletonKey][roomUid]
 
             if (room.category == null) return
+            const takenRoomIndicesOfCategory =
+                takenRoomIndicesByCategory[room.category]
 
             room.enemies = randomRoomOfCategory(
                 room.category,
@@ -442,6 +450,8 @@ function randomRoomOfCategory(
         takenRoomIndicesOfCategory.length < roomsOfCategory.length
     )
         return randomRoomOfCategory(category, takenRoomIndicesOfCategory)
+
+    takenRoomIndicesOfCategory.push(randomRoomIndex)
 
     return roomsOfCategory[randomRoomIndex]
 }
