@@ -412,23 +412,38 @@ export function getDungeonRooms(): DungeonRoomMaps {
 }
 
 function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
-    keys(roomSkeletons).forEach(roomSkeletonKey =>
+    keys(roomSkeletons).forEach(roomSkeletonKey => {
+        const takenRoomIndicesOfCategory: number[] = []
+
         keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
             const room = roomSkeletons[roomSkeletonKey][roomUid]
 
             if (room.category == null) return
 
-            room.enemies = randomRoomOfCategory(room.category)
+            room.enemies = randomRoomOfCategory(
+                room.category,
+                takenRoomIndicesOfCategory
+            )
         })
-    )
+    })
 
     return roomSkeletons
 }
 
-function randomRoomOfCategory(category: keyof typeof roomOptions): RoomEnemies {
-    const options = roomOptions[category]
+function randomRoomOfCategory(
+    category: keyof typeof roomOptions,
+    takenRoomIndicesOfCategory: number[]
+): RoomEnemies {
+    const roomsOfCategory = roomOptions[category]
+    const randomRoomIndex = srandInt(0, roomsOfCategory.length)
 
-    return options[srandInt(0, options.length)]
+    if (
+        takenRoomIndicesOfCategory.includes(randomRoomIndex) &&
+        takenRoomIndicesOfCategory.length < roomsOfCategory.length
+    )
+        return randomRoomOfCategory(category, takenRoomIndicesOfCategory)
+
+    return roomsOfCategory[randomRoomIndex]
 }
 
 // if (config.randomDungeon)
