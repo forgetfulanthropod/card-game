@@ -10,6 +10,7 @@ import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
+import { callServerApi } from '@/callServerApi'
 
 const WALLET_GATING_ENABLED = false // TODO move to env
 
@@ -73,6 +74,7 @@ export function NewStartScreen(props: {
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
         setUserDoc({ walletAddress, numKaijusOwned })
         setIsLoggedIn(true)
+        callServerApi('login', {username: walletAddress})
 
         // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
         gtag('set', {

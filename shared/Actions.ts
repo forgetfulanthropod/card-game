@@ -17,10 +17,11 @@ import type {
     StanceId,
 } from './tree'
 
-interface BareServerActionArgs {
+export interface BareServerActionArgs {
     incrementTestCounter: Empty
     makeNewUser: { username: string }
     maybeMakeUser: { username: string }
+    login: { username: string }
 }
 
 interface BareGameActionArgs {
