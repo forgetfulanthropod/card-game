@@ -12,6 +12,7 @@ import { callApi } from '@/callApi'
 const NUM_CHARACTERS_REQUIRED = 3
 
 export function DungeonEntryScene(): PixiContainer {
+    gtag('event', 'ui_ux_view', { page_title: 'Character Select' })
     const selectedCharactersCursor =
         getEntryScene().select('selectedCharacters')
 

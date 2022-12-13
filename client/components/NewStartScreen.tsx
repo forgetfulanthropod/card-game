@@ -33,11 +33,12 @@ export function NewStartScreen(props: {
     const [showGateModal, setShowGateModal] = useState(false)
 
     useEffect(() => {
-        gtag('event', 'view_start_screen')
+        gtag('event', 'ui_ux_view', {
+            page_title: 'Start Screen',
+        })
     }, [])
 
     useEffect(() => {
-        console.log(web3Auth?.cachedAdapter)
         if (web3Auth?.cachedAdapter) {
             handleLogin().then(() => {
                 console.log('USEFFECT - web3auth login handled')
@@ -54,7 +55,6 @@ export function NewStartScreen(props: {
         console.log('connecting to web3auth')
         await web3Auth.connect()
         console.log('finished web3auth.connect')
-        console.log(web3Auth.provider)
 
         if (web3Auth && web3Auth.provider) {
             console.log('should always hit right')
@@ -104,7 +104,7 @@ export function NewStartScreen(props: {
         props.onEnter(
             userDoc.walletAddress ?? 'random-' + Math.random().toString()
         )
-        gtag('event', 'begin_game')
+        gtag('event', 'enter_game')
     }
 
     return <>

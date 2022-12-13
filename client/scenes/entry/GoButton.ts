@@ -17,6 +17,9 @@ export function GoButton(): PixiContainer {
         async onClick() {
             root.visible = false
             await callApi('changeScene', { newSceneName: 'battle' })
+            gtag('event', 'ui_ux_view', { page_title: 'Battle' })
+            gtag('event', 'run_start', { map_seed: 1, run_id: 1, try_again: 'false'}) //TODO fill out with real values
+            gtag('event', 'level_start', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 }) //TODO fill out with real values
         },
         events: {
             pointerover() {

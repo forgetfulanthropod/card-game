@@ -102,6 +102,8 @@ function CoreScene(
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
     loopSong('battleMusicHooligansBluff')
+    gtag('event', 'ui_ux_view', { page_title: 'Battle Scene' })
+    gtag('event', 'level_start', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
 
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
