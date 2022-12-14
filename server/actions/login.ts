@@ -1,27 +1,29 @@
 import type { ServerActions } from 'shared'
-
-import { makeNewUser } from './makeNewUser'
-import { getGamestate } from '@/db'
-import { emitNewGamestate } from '@/IO'
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { DatabasePool } from 'slonik'
+import { getLogger } from '@/../game'
 
 export const login: ServerActions['login'] = async ({ walletAddress }) => {
-    console.log('Handling login server action... args: ', walletAddress)
+    const logger = getLogger()
+    
     try {
+        logger.info(`Handling login for: ${walletAddress}`)
         const db = await getDbClient()
-
         const existingUserId = await getExistingUser(db, walletAddress)
+
         if (existingUserId) {
-            console.log('existing user', existingUserId)
-            return {userId: existingUserId}
-        } else {
-            const newUserID = await createNewUser(db, walletAddress)
-            console.log('created new user', newUserID)
-            return {userId: newUserID}
+            logger.info(
+                `Wallet ${walletAddress} has an existing userId: ${existingUserId}`
+            )
+            return { userId: existingUserId }
         }
+
+        const newUserID = await createNewUser(db, walletAddress)
+        logger.info(`Wallet ${walletAddress} created new userId: ${newUserID}.`)
+
+        return { userId: newUserID }
     } catch (e) {
-        console.error(e)
+        logger.error(e)
         return null
     }
 }

@@ -17,8 +17,6 @@ export async function api(req: Request, res: Response): Promise<void> {
     try {
         if (method in serverActions) {
             const m = method as keyof typeof serverActions
-            const body = req.body
-            console.log(req.body)
             const response = await serverActions[m](req.body)
             res.send(response)
         } else if (isGameAction(method)) {

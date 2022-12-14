@@ -19,8 +19,8 @@ export async function callServerApi<K extends keyof ServerActions>(
             },
             body: JSON.stringify(fullArgs),
         })
-        console.log({res})
         const json = (await res.json()) as BareServerActionsMeta[K]['res']
+        console.log('Server API Response: ', json)
         return json
     } catch (e) {
         console.error(e)

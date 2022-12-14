@@ -11,12 +11,14 @@ import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
+import { UserID } from 'shared'
 
 const WALLET_GATING_ENABLED = false // TODO move to env
 
 export type UserDoc = {
     walletAddress: string | null
     numKaijusOwned: number
+    userId: UserID
 }
 
 export function NewStartScreen(props: {
@@ -29,6 +31,7 @@ export function NewStartScreen(props: {
     const [userDoc, setUserDoc] = useState<UserDoc>({
         walletAddress: null,
         numKaijusOwned: 0,
+        userId: '',
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
@@ -72,21 +75,23 @@ export function NewStartScreen(props: {
         await solanaRPC.asyncInitConnection()
         const walletAddress = (await solanaRPC?.getAccounts())[0]
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
-        setUserDoc({ walletAddress, numKaijusOwned })
+        const userIdRes = await callServerApi('login', { walletAddress })
+        if (!userIdRes) {
+            return window.alert('Something went wrong. Please try again.')
+        }
+        const { userId } = userIdRes
+        setUserDoc({ walletAddress, numKaijusOwned, userId })
         setIsLoggedIn(true)
-        const userId = await callServerApi('login', {walletAddress})
-        console.log({userId})
+        console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
 
         // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
         gtag('set', {
-            user_id: walletAddress,
+            user_id: userId,
         })
 
         gtag('event', 'login', {
             method: 'connect_wallet',
         })
-
-        console.log({ userDoc: { walletAddress, numKaijusOwned } })
     }
 
     const handleLogout = async () => {
