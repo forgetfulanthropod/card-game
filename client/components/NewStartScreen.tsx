@@ -74,7 +74,8 @@ export function NewStartScreen(props: {
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
         setUserDoc({ walletAddress, numKaijusOwned })
         setIsLoggedIn(true)
-        callServerApi('login', {username: walletAddress})
+        const userId = await callServerApi('login', {walletAddress})
+        console.log({userId})
 
         // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
         gtag('set', {

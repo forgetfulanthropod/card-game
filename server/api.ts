@@ -11,25 +11,28 @@ import { doActionAndTakeSteps } from './sleepLoop'
 satisfies<ServerActions>(serverActions)
 
 export async function api(req: Request, res: Response): Promise<void> {
-    const username = req.body.username
-    if (typeof username !== 'string') return err(res, 'no username')
-
     const method = req.body.method
     if (typeof method !== 'string') return err(res, 'no method')
 
     try {
         if (method in serverActions) {
             const m = method as keyof typeof serverActions
-            await serverActions[m]({ username })
+            const body = req.body
+            console.log(req.body)
+            const response = await serverActions[m](req.body)
+            res.send(response)
         } else if (isGameAction(method)) {
+            const username = req.body.username
+            if (typeof username !== 'string') return err(res, 'no username')
+
             const gamestate = await getGamestate(username)
             if (gamestate == null) return err(res, 'no gamestate for this user')
             const game = new SBaobab(gamestate).select()
             await doActionAndTakeSteps({ ...req.body, game })
+            res.send({ status: 'success' })
         } else {
             return err(res, 'invalid method')
         }
-        res.send({ status: 'success' })
         return undefined
     } catch (e) {
         const err = e as unknown as Error

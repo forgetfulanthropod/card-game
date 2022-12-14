@@ -9,6 +9,7 @@ import {
     DatabasePool,
     DatabaseTransactionConnection, stringifyDsn,
   } from "slonik";
+import * as z from 'zod'
 
 export type DbClient =
   | DatabasePool
@@ -21,7 +22,6 @@ export const getDbClient = async () => {
   if (pool) return pool;
   const logger = getLogger()
   loadDotEnv()
-  console.log(process.env)
 
   const url = stringifyDsn({
     username: process.env.PGUSER,
@@ -33,7 +33,6 @@ export const getDbClient = async () => {
 
   const ssl = { ca: readFileSync(path.resolve("CA_CERT.crt")) }
   const maximumPoolSize = 15;
-  logger.info({ maximumPoolSize, databaseName: process.env.PGDATABASE });
   pool = await createPool(url, {
     ssl,
     maximumPoolSize,
@@ -42,3 +41,12 @@ export const getDbClient = async () => {
 
   return pool;
 }
+
+export const sql = createSqlTag({
+  typeAliases: {
+    userId: z.object({
+      userId: z.string(),
+    }),
+    void: z.object({}).strict(),
+  }
+})

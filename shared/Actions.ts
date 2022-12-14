@@ -15,13 +15,30 @@ import type {
     Rulebook,
     RunScoreEvent,
     StanceId,
+    UserID,
 } from './tree'
 
-export interface BareServerActionArgs {
-    incrementTestCounter: Empty
-    makeNewUser: { username: string }
-    maybeMakeUser: { username: string }
-    login: { username: string }
+export interface BareServerActionsMeta {
+    incrementTestCounter: {
+        args: Empty
+        res: Promise<void> | void
+    }
+    makeNewUser: {
+        args: { username: string }
+        res: Promise<void> | void
+    }
+    maybeMakeUser: {
+        args: { username: string }
+        res: Promise<void> | void
+    }
+    login: {
+        args: { walletAddress: string }
+        res: Promise<{ userId: UserID } | null>
+    }
+}
+
+export type BareServerActionArgs = {
+    [K in keyof BareServerActionsMeta]: BareServerActionsMeta[K]['args']
 }
 
 interface BareGameActionArgs {
@@ -62,9 +79,9 @@ export type GameActions = {
 }
 /** Map from server action name to function signature */
 export type ServerActions = {
-    [K in keyof BareServerActionArgs]: (
-        args: BareServerActionArgs[K]
-    ) => Promise<void> | void
+    [K in keyof BareServerActionsMeta]: (
+        args: BareServerActionsMeta[K]['args']
+    ) => BareServerActionsMeta[K]['res']
 }
 
 // export type GameActionArgs = {

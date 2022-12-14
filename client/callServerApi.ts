@@ -1,10 +1,15 @@
-import type { BareServerActionArgs } from 'shared'
+import type {
+    ServerActions,
+    BareServerActionsMeta,
+} from 'shared'
 
-export async function callServerApi<K extends keyof BareServerActionArgs>(
+export async function callServerApi<K extends keyof ServerActions>(
     method: K,
-    args: BareServerActionArgs[K]
-): Promise<void> {
+    args: BareServerActionsMeta[K]['args']
+): Promise<BareServerActionsMeta[K]['res']> {
     const fullArgs = { ...(args ?? {}), method: method }
+    console.log('Calling Server API: ', { args, method })
+
     try {
         const res = await fetch(`server/api`, {
             method: 'POST',
@@ -14,11 +19,9 @@ export async function callServerApi<K extends keyof BareServerActionArgs>(
             },
             body: JSON.stringify(fullArgs),
         })
-        const json = await res.json()
-        if (json?.status === null || json?.status === 'error') {
-            console.error(json?.status)
-            return
-        }
+        console.log({res})
+        const json = (await res.json()) as BareServerActionsMeta[K]['res']
+        return json
     } catch (e) {
         console.error(e)
     }
