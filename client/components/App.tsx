@@ -6,6 +6,7 @@ import { GameManager } from './GameManager'
 // import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
 import { NewStartScreen } from './NewStartScreen'
+import { callServerApi } from '@/callServerApi'
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
@@ -21,18 +22,21 @@ export function App(): JSXElement {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleStartGame = async (userId: string) => {
+        localStorage.setItem('username', userId)
+        setUsername(userId)
+        emitUsername(userId)
+        const runId = await callServerApi('startRun', {userId})
+        setReady(true)
+    }
+
     return username && !ready ? (
         <>loading</>
     ) : ready ? (
         <GameManager username={username} />
     ) : (
         <NewStartScreen
-            onEnter={username => {
-                localStorage.setItem('username', username)
-                setUsername(username)
-                emitUsername(username)
-                setReady(true)
-            }}
+            onEnter={handleStartGame}
         />
     )
 }

@@ -13,6 +13,7 @@ import type {
     Orb,
     OwnedCharacterStats,
     Rulebook,
+    RunID,
     RunScoreEvent,
     StanceId,
     UserID,
@@ -33,7 +34,11 @@ export interface BareServerActionsMeta {
     }
     login: {
         args: { walletAddress: string }
-        res: Promise<{ userId: UserID } | null>
+        res: Promise<{ userId: UserID }>
+    }
+    startRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID }>
     }
 }
 

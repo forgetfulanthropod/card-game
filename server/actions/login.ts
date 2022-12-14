@@ -4,11 +4,9 @@ import { getLogger } from '@/../game'
 import { getUserId } from './internal'
 
 export const login: ServerActions['login'] = async ({ walletAddress }) => {
-    const connection = await getDbClient()
-    const logger = getLogger()
-
     logger.info(`Handling login for: ${walletAddress}`)
 
+    const connection = await getDbClient()
     const userId = await getUserId({ connection, walletAddress })
     await trackNewLogin({ connection, userId })
     return { userId }

@@ -22,7 +22,7 @@ export type UserDoc = {
 }
 
 export function NewStartScreen(props: {
-    onEnter: (username: string) => void
+    onEnter: (userId: string) => void
 }): JSXElement {
     const { web3Auth, provider } = useWeb3Auth()
     const [solanaRPC, setSolanaRPC] = useState<SolanaRPC | null>(null)
@@ -77,7 +77,9 @@ export function NewStartScreen(props: {
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
         const userIdRes = await callServerApi('login', { walletAddress })
         if (!userIdRes) {
-            return window.alert('Something went wrong. Please try again.')
+            return window.alert(
+                'Something went wrong. Please logging in try again.'
+            )
         }
         const { userId } = userIdRes
         setUserDoc({ walletAddress, numKaijusOwned, userId })
@@ -109,9 +111,7 @@ export function NewStartScreen(props: {
     }
 
     const enterGame = () => {
-        props.onEnter(
-            userDoc.walletAddress ?? 'random-' + Math.random().toString()
-        )
+        props.onEnter(userDoc.userId)
         gtag('event', 'enter_game')
     }
 

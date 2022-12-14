@@ -13,7 +13,10 @@ export const WalletGateModal = ({
 
     return <div className='bg-black/40 w-full h-full absolute z-50 text-white font-sharp pointer-events-auto'>
         <div className='flex h-full w-full justify-center items-center'>
-            <div className='w-1/2 bg-stone-900/90 rounded-xl border border-black flex flex-col items-center p-2 sm:p-4 md:p-6 lg:p-8 xl:p-10 relative shadow-3xl' ref={modalBoxRef}>
+            <div
+                className='w-1/2 bg-stone-900/90 rounded-xl border border-black flex flex-col items-center p-2 sm:p-4 md:p-6 lg:p-8 xl:p-10 relative shadow-3xl'
+                ref={modalBoxRef}
+            >
                 <button
                     onClick={() => setShowGateModal(false)}
                     className='absolute py-2 px-4 top-0 right-0 text-stone-300 cursor-pointer md:text-lg lg:text-xl'
@@ -26,18 +29,18 @@ export const WalletGateModal = ({
                 ></img>
                 <h1
                     className='uppercase text-lg
-                sm:text-2xl sm:py-2
-                md:text-3xl
-                lg:text-4xl lg:py-3
-                xl:text-5xl xl:py-6'
+                    sm:text-2xl sm:py-2
+                    md:text-3xl
+                    lg:text-4xl lg:py-3
+                    xl:text-5xl xl:py-6'
                 >
                     Kaiju not found
                 </h1>
                 <p
                     className='text-center font-mono pb-2 text-[7px]
-                sm:pb-4 sm:text-xs sm:px-2
-                md:pb-6 md:px-4
-                xl:pb-12 xl:px-8 xl:text-base'
+                    sm:pb-4 sm:text-xs sm:px-2
+                    md:pb-6 md:px-4
+                    xl:pb-12 xl:px-8 xl:text-base'
                 >
                     The closed alpha is only available for Kaiju Cards holders.
                     Buy any Kaiju Cards NFT to get access or{' '}
