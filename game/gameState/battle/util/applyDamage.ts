@@ -3,11 +3,14 @@ import type {
     BattleCursor,
     CharacterMeta,
     CommandId,
+    Effect,
+    CharacterId,
 } from 'shared'
 import { calculateStats } from '../characters/effects'
 import { updateNpcMoves } from '@/gameState'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
+import { applyEffect } from '../cards/commands/effect'
 
 export function applyDamage(args: {
     damage: number
@@ -89,6 +92,8 @@ function manageSideEffectsOfNewDamage(
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)
     }
+
+    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
 }
 
 function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {
@@ -125,4 +130,54 @@ function damageChangesEnemyIntent(scene: BattleCursor): boolean {
     return !!~scene.get('nextNpcCommands').findIndex(command => {
         return specialCommanIds.includes(command.command.id)
     })
+}
+
+function maybeApplyDamageThresholdDebuffs(
+    scene: BattleCursor,
+    targetUid: CharacterUid,
+    calcedDamage: number
+) {
+    const target = scene.get('allCharacters', targetUid)
+
+    const characterIdToThresholdEffectsMap: Partial<
+        Record<CharacterId, { health: number; effects: Effect[] }[]>
+    > = {
+        gnomeBigBomber: [
+            {
+                health: 0.6,
+                effects: [
+                    {
+                        id: 'debilitated',
+                        counter: 2,
+                    },
+                ],
+            },
+            {
+                health: 0.4,
+                effects: [
+                    {
+                        id: 'stunned',
+                        counter: 1,
+                    },
+                ],
+            },
+        ],
+    }
+
+    if (characterIdToThresholdEffectsMap[target.id] != null) {
+        // const thresholdEffects = characterIdToThresholdEffectsMap[target.id]
+        // const character = scene.get('allCharacters', targetUid)
+        // thresholdEffects?.forEach(thresholdEffect => {
+        //     if (
+        //         thresholdEffect.health <
+        //             character.health / character.constitution &&
+        //         thresholdEffect.health >
+        //             (character.health + calcedDamage) / character.constitution
+        //     ) {
+        //         thresholdEffect.effects.map(effect =>
+        //             applyEffect(scene, [targetUid], effect.id, effect.counter)
+        //         )
+        //     }
+        // })
+    }
 }

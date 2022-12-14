@@ -67,7 +67,7 @@ function InteractiveEffectCounter(
         }),
         Text({
             text: `${effect.counter}`,
-            anchor: [0.6, 1],
+            anchor: [1, 1],
             style: {
                 fontFamily: ['bigFont', 'monospace'],
                 fontSize: 36,

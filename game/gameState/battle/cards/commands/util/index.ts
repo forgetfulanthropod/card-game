@@ -58,6 +58,11 @@ export interface ActionArgs {
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     effectAll: [id: EffectId, increase: number, targetType?: BasicTargetType]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
+    ifDamageDealtApplyEffect: [
+        damage: number,
+        effectId: EffectId,
+        counter: number
+    ]
     ifFirstPlay: any[]
     ifStance: [stanceId: StanceId, conditionalMove: any]
     momentary: []

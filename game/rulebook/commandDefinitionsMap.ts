@@ -149,9 +149,26 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: 'deal(strength/2)',
     },
 
+    bigBomb1: {
+        actions: `chain()`,
+        //@ts-expect-error
+        id: `bigBomb1`,
+        name: `Big Bomb`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    bigBomb2: {
+        actions: `deal(strength * 3)`,
+        //@ts-expect-error
+        id: `bigBomb2`,
+        name: `Big Bomb`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+
     /**Bucket of Bang Snaps: Deal 33% three times. Applies Unready (2) if any damage goes unblocked.*/
     bucketOfBangSnaps: {
-        actions: `ifDamageDealt(deal(strength * .2), effect("unready", 2))`,
+        actions: `ifDamageDealtApplyEffect(strength * .33, "unready", 2)`,
         //@ts-expect-error
         id: `bucketOfBangSnaps`,
         name: `Bucket of Bang Snaps`,

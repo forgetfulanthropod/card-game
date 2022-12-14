@@ -31,6 +31,7 @@ export const effectIds = [
     'stunned',
     'tired',
     'unguarded',
+    'unready',
     'vulnerable',
 ] as const
 

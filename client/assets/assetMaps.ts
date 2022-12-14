@@ -103,7 +103,8 @@ export const cardAssets = {
     cardEnergy4: 'cards/Card PNG Breakdown/Mana Cost Numbers/4.png',
     cardEnergy5: 'cards/Card PNG Breakdown/Mana Cost Numbers/5.png',
     cardBackPileSizeOverlay: 'cards/card back pile size overlay.webp',
-    cardBack: 'cards/card back.webp',
+    drawPile: 'cards/draw.webp',
+    discardPile: 'cards/discard.webp',
     draftCard: 'cards/draftCard.webp',
     ...cardArtAssets,
     ...cardTypeAssets,
@@ -152,20 +153,20 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
-    effectBerserk: 'effects/berserk_temp.webp',
-    effectBrave: 'effects/brave.png',
-    effectCourageous: 'effects/courageous.png',
+    effectBerserk: 'effects/berserk.webp',
     effectBleed: 'effects/bleed.webp',
+    effectBrave: 'effects/brave.webp',
+    effectCourageous: 'effects/courageous.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigued: 'effects/fatigue.webp',
-    // temp: what is strongblock icon?
-    effectStrongblock: 'intents/npc/Shield intent.webp',
+    effectStrongblock: 'effects/strongblock.webp',
     effectEntranced: 'effects/magicalStorm.webp',
     effectPoisoned: 'effects/poison_skull.webp',
     effectStunned: 'effects/stunned.webp',
     effectTired: 'effects/tired.webp',
-    effectUnguarded: 'effects/unguarded_v2.webp',
-    effectVulnerable: 'effects/vulnerable_v2.webp',
+    effectUnguarded: 'effects/unguarded.webp',
+    effectUnready: 'effects/unready.webp',
+    effectVulnerable: 'effects/vulnerable.webp',
 }
 
 export const healthBarAssets = {
@@ -180,14 +181,17 @@ export const healthBarAssets = {
     healthBarShadow: 'health bar/Shadow.webp',
 }
 
+export type IntentAssetKey = keyof typeof intentAssets
 export const intentAssets = {
-    enemyIntentArrowHead: 'intents/arrow_4_head.webp',
-    enemyIntentArrowTail: 'intents/arrow_4_tail.webp',
+    enemyIntentArrowHead: 'intents/arrow_4_head_bright.webp',
+    enemyIntentArrowTail: 'intents/arrow_4_tail_bright.webp',
     intentAttack: 'intents/floating intent amount.webp',
     intentMimic: 'intents/Mimic.webp',
     intentInfectiousBite: 'intents/Infectious Bite.webp',
     intentGrudge: 'intents/Grudge.webp',
     intentBlock: 'intents/npc/Shield intent.webp',
+    intentBigBomb1: 'intents/gnomeBomb1.webp',
+    intentBigBomb2: 'intents/gnomeBomb2.webp',
 }
 
 export const orbAssets = {

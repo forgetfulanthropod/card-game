@@ -59,6 +59,9 @@ const staticEffectFuncs: Record<
     unguarded(stats) {
         stats.damageTakeMultiplicand *= 1.25
     },
+    unready(stats) {
+        stats.damageTakeMultiplicand *= 1.12
+    },
     vulnerable(stats) {
         stats.damageTakeMultiplicand *= 1.5
     },
@@ -177,6 +180,23 @@ export function clearAllEffects(scene: BattleCursor): void {
             Object.values(ac).forEach(cm => {
                 cm.block = 0
                 cm.effects = []
+                // test all
+                // cm.effects = [
+                //     { id: 'berserk', counter: 2 },
+                //     { id: 'bleed', counter: 2 },
+                //     { id: 'brave', counter: 2 },
+                //     { id: 'courageous', counter: 2 },
+                //     { id: 'debilitated', counter: 2 },
+                //     { id: 'fatigued', counter: 2 },
+                //     { id: 'strongblock', counter: 2 },
+                //     { id: 'entranced', counter: 2 },
+                //     { id: 'poisoned', counter: 2 },
+                //     { id: 'stunned', counter: 2 },
+                //     { id: 'tired', counter: 2 },
+                //     { id: 'unguarded', counter: 2 },
+                //     { id: 'unready', counter: 2 },
+                //     { id: 'vulnerable', counter: 2 },
+                // ]
                 cm.orbs = []
             })
         })

@@ -293,7 +293,20 @@ export function getDungeonRooms(): DungeonRoomMaps {
             },
             '1_1': {
                 uid: '1_1',
-                enemies: [],
+                enemies: [
+                    {
+                        id: 'gnomeBigBomber',
+                        level: 1,
+                    },
+                    {
+                        id: 'gnomeProspector',
+                        level: 1,
+                    },
+                    {
+                        id: 'gnomeBandit',
+                        level: 1,
+                    },
+                ],
                 category: 'tierOne',
                 edges: ['1_3', '', '2_0', ''],
             },
@@ -424,7 +437,7 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
         keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
             const room = roomSkeletons[roomSkeletonKey][roomUid]
 
-            if (room.category == null) return
+            if (room.category == null || room.enemies.length) return
             const takenRoomIndicesOfCategory =
                 takenRoomIndicesByCategory[room.category]
 

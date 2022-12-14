@@ -202,6 +202,17 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                 !~choice && !isPlayerCharacterRoom
                     ? [new AdjustmentFilter({ brightness: 0.5 })]
                     : [],
+            events: {
+                pointerdown() {
+                    if (~choice) void callApi('nextRoom', { choice })
+                },
+                pointerover() {
+                    if (~choice) root.filters = [glowFilter]
+                },
+                pointerout() {
+                    root.filters = []
+                },
+            },
         },
         Sprite({
             src: texture,
@@ -232,17 +243,7 @@ function RestSiteContents(node: DungeonRoom): PixiSprite {
         scale: 150 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
-        events: {
-            pointerdown() {
-                if (~choice) void callApi('nextRoom', { choice })
-            },
-            pointerover() {
-                if (~choice) root.filters = [glowFilter]
-            },
-            pointerout() {
-                root.filters = []
-            },
-        },
+        events: {},
     })
 
     return root

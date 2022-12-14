@@ -15,6 +15,7 @@ import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainEffectAll, execute as executeEffectAll} from './effectAll'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
+import {explain as explainIfDamageDealtApplyEffect, execute as executeIfDamageDealtApplyEffect} from './ifDamageDealtApplyEffect'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
@@ -48,6 +49,7 @@ export const explainers: Explainers = {
     effect: explainEffect,
     effectAll: explainEffectAll,
     ifDamageDealt: explainIfDamageDealt,
+    ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
     ifStance: explainIfStance,
     killIf: explainKillIf,
@@ -81,6 +83,7 @@ export const executors: Executors = {
     effect: executeEffect,
     effectAll: executeEffectAll,
     ifDamageDealt: executeIfDamageDealt,
+    ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
     ifStance: executeIfStance,
     killIf: executeKillIf,

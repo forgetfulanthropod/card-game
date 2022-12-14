@@ -38,9 +38,6 @@ export function BattleSceneEl(): PixiContainer {
 
     const scene = getBattleScene()
 
-    /** NOTE: name is used for lookup */
-    const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-
     const root = Container(
         {
             name: 'BattleScene',
@@ -52,8 +49,6 @@ export function BattleSceneEl(): PixiContainer {
                 ),
             ],
         },
-        // Background({ scale: 1, spineSrc: 'hooligansBluffSpine' }),
-        intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
             () => CoreScene(scene, hoveredCardUid)
