@@ -26,17 +26,17 @@ const staticEffectFuncs: Record<
         stats.strength += Math.ceil(stats.strength * 0.5)
         stats.damageTakeMultiplicand *= 2
     },
-    courageous(stats) {
+    brave(stats) {
         stats.damageDealMultiplicand *= 1.15
+    },
+    courageous(stats) {
+        stats.damageDealMultiplicand *= 1.25
     },
     debilitated(stats) {
         stats.damageDealMultiplicand *= 0.5
     },
     doubleDamage(stats) {
         stats.strength *= 2
-    },
-    emboldened(stats) {
-        stats.damageDealMultiplicand *= 1.25
     },
     entranced(stats, counter) {
         stats.magic += counter

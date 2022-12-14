@@ -396,7 +396,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [
                     {
                         id: 'bosshogJurgen',
-                        level: 10,
+                        level: 'default',
                         boss: true,
                     },
                 ],
@@ -412,23 +412,48 @@ export function getDungeonRooms(): DungeonRoomMaps {
 }
 
 function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
-    keys(roomSkeletons).forEach(roomSkeletonKey =>
+    const takenRoomIndicesByCategory: Record<RoomCategoryId, number[]> = {
+        events: [],
+        tierOne: [],
+        tierTwo: [],
+        tierThree: [],
+        bosses: [],
+    }
+
+    keys(roomSkeletons).forEach(roomSkeletonKey => {
         keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
             const room = roomSkeletons[roomSkeletonKey][roomUid]
 
             if (room.category == null) return
+            const takenRoomIndicesOfCategory =
+                takenRoomIndicesByCategory[room.category]
 
-            room.enemies = randomRoomOfCategory(room.category)
+            room.enemies = randomRoomOfCategory(
+                room.category,
+                takenRoomIndicesOfCategory
+            )
         })
-    )
+    })
 
     return roomSkeletons
 }
 
-function randomRoomOfCategory(category: keyof typeof roomOptions): RoomEnemies {
-    const options = roomOptions[category]
+function randomRoomOfCategory(
+    category: keyof typeof roomOptions,
+    takenRoomIndicesOfCategory: number[]
+): RoomEnemies {
+    const roomsOfCategory = roomOptions[category]
+    const randomRoomIndex = srandInt(0, roomsOfCategory.length)
 
-    return options[srandInt(0, options.length)]
+    if (
+        takenRoomIndicesOfCategory.includes(randomRoomIndex) &&
+        takenRoomIndicesOfCategory.length < roomsOfCategory.length
+    )
+        return randomRoomOfCategory(category, takenRoomIndicesOfCategory)
+
+    takenRoomIndicesOfCategory.push(randomRoomIndex)
+
+    return roomsOfCategory[randomRoomIndex]
 }
 
 // if (config.randomDungeon)

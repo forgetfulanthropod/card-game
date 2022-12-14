@@ -20,7 +20,7 @@ type AliasedCommandId =
     | `itchyOoze(${number})`
     | `infectiousBite(${number})`
     | `engulf(${number})`
-    | `gnomeBomb(${number})`
+    // | `gnomeBomb(${number})`
     | `bucketOfBangSnaps(${number})`
     | `fireCracker(${number})`
     | `meatyCharge(${number})`

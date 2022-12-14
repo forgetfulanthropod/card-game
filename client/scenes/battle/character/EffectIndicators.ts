@@ -33,7 +33,7 @@ export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
         data,
         //@ts-expect-error
         effect => InteractiveEffectCounter(effect),
-        idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
+        idx => ({ y: 50, x: idx * 50 })
     )
 }
 

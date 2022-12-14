@@ -36,8 +36,8 @@ export const keyTermsMap = {
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
-    courageous: 'deal 15% more damage',
-    emboldened: 'deal 25% more damage',
+    brave: 'deal 15% more damage',
+    courageous: 'deal 25% more damage',
     debilitated: 'deal 50% less damage',
     entranced: 'increases Magic by 1 per stack',
     fatigued: 'deal 25% less damage',
