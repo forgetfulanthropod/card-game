@@ -1,62 +1,32 @@
-import type { ServerActions } from 'shared'
+import type { ServerActions, AuthUserDBActionProps } from 'shared'
 import { getDbClient, sql as sqlTag } from '@/db/client'
-import { DatabasePool } from 'slonik'
 import { getLogger } from '@/../game'
+import { getUserId } from './internal'
 
 export const login: ServerActions['login'] = async ({ walletAddress }) => {
+    const connection = await getDbClient()
     const logger = getLogger()
-    
-    try {
-        logger.info(`Handling login for: ${walletAddress}`)
-        const db = await getDbClient()
-        const existingUserId = await getExistingUser(db, walletAddress)
 
-        if (existingUserId) {
-            logger.info(
-                `Wallet ${walletAddress} has an existing userId: ${existingUserId}`
-            )
-            return { userId: existingUserId }
-        }
+    logger.info(`Handling login for: ${walletAddress}`)
 
-        const newUserID = await createNewUser(db, walletAddress)
-        logger.info(`Wallet ${walletAddress} created new userId: ${newUserID}.`)
-
-        return { userId: newUserID }
-    } catch (e) {
-        logger.error(e)
-        return null
-    }
+    const userId = await getUserId({ connection, walletAddress })
+    await trackNewLogin({ connection, userId })
+    return { userId }
 }
 
-const getExistingUser = async (
-    connection: DatabasePool,
-    walletAddress: string
-): Promise<string | null> => {
-    let sql = sqlTag.typeAlias('userId')
+const trackNewLogin = async (props: AuthUserDBActionProps): Promise<void> => {
+    const { connection, userId } = props
+    let sql = sqlTag.typeAlias('void')
 
-    return await connection.maybeOneFirst(sql`
-        SELECT
-            user_id
-        FROM
-            kaiju.user_info
+    await connection.any(sql`
+        UPDATE
+          kaiju.user_info
+        SET
+          last_login_ts = now(),
+          last_auth_method = 'connect_wallet'
         WHERE
-            wallet_address = ${walletAddress}
+          user_id = ${userId}
     `)
-}
 
-const createNewUser = async (
-    connection: DatabasePool,
-    walletAddress: string
-): Promise<string> => {
-    let sql = sqlTag.typeAlias('userId')
-
-    return await connection.oneFirst(sql`
-        INSERT INTO kaiju.user_info (
-            wallet_address, initial_auth_method
-        )
-        VALUES
-            (${walletAddress}, 'connect_wallet')
-        RETURNING
-            user_id
-    `)
+    return
 }
