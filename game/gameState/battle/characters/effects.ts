@@ -26,17 +26,17 @@ const staticEffectFuncs: Record<
         stats.strength += Math.ceil(stats.strength * 0.5)
         stats.damageTakeMultiplicand *= 2
     },
-    courageous(stats) {
+    brave(stats) {
         stats.damageDealMultiplicand *= 1.15
+    },
+    courageous(stats) {
+        stats.damageDealMultiplicand *= 1.25
     },
     debilitated(stats) {
         stats.damageDealMultiplicand *= 0.5
     },
     doubleDamage(stats) {
         stats.strength *= 2
-    },
-    emboldened(stats) {
-        stats.damageDealMultiplicand *= 1.25
     },
     entranced(stats, counter) {
         stats.magic += counter
@@ -58,6 +58,9 @@ const staticEffectFuncs: Record<
     },
     unguarded(stats) {
         stats.damageTakeMultiplicand *= 1.25
+    },
+    unready(stats) {
+        stats.damageTakeMultiplicand *= 1.12
     },
     vulnerable(stats) {
         stats.damageTakeMultiplicand *= 1.5
@@ -177,6 +180,23 @@ export function clearAllEffects(scene: BattleCursor): void {
             Object.values(ac).forEach(cm => {
                 cm.block = 0
                 cm.effects = []
+                // test all
+                // cm.effects = [
+                //     { id: 'berserk', counter: 2 },
+                //     { id: 'bleed', counter: 2 },
+                //     { id: 'brave', counter: 2 },
+                //     { id: 'courageous', counter: 2 },
+                //     { id: 'debilitated', counter: 2 },
+                //     { id: 'fatigued', counter: 2 },
+                //     { id: 'strongblock', counter: 2 },
+                //     { id: 'entranced', counter: 2 },
+                //     { id: 'poisoned', counter: 2 },
+                //     { id: 'stunned', counter: 2 },
+                //     { id: 'tired', counter: 2 },
+                //     { id: 'unguarded', counter: 2 },
+                //     { id: 'unready', counter: 2 },
+                //     { id: 'vulnerable', counter: 2 },
+                // ]
                 cm.orbs = []
             })
         })

@@ -1,4 +1,4 @@
-import type { DisplayObject } from 'pixi.js'
+import { DisplayObject, Texture } from 'pixi.js'
 import { startCase } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -36,18 +36,18 @@ export const keyTermsMap = {
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
-    courageous: 'deal 15% more damage',
-    emboldened: 'deal 25% more damage',
-    debilitated: 'deal 50% less damage',
+    brave: 'deals 15% more damage',
+    courageous: 'deals 25% more damage',
+    debilitated: 'deals 50% less damage',
     entranced: 'increases Magic by 1 per stack',
-    fatigued: 'deal 25% less damage',
+    fatigued: 'deals 25% less damage',
     fortified: 'receives 50% more block',
     // guarded: 'receives 25% more block',
     poisoned: '(unblockable) receives 1 damage per stack',
     strongblock: 'receives 50% more block',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 15% more damage',
-    tired: 'deal 12% less damage',
+    tired: 'deals 12% less damage',
     unguarded: 'receives 25% more damage',
     unready: 'receives 12% more damage',
     vulnerable: 'receives 50% more damage',
@@ -239,7 +239,7 @@ export function Explanation({
     const textEls = texts.map((text, index) => {
         return Text({
             text,
-            // isHtml: true,
+            isHtml: true,
             style: {
                 fill: 'white',
                 wordWrapWidth: BASE_WIDTH * 0.2,
@@ -250,18 +250,36 @@ export function Explanation({
         })
     })
 
+    const margin = 5
+
     textEls.forEach((el, index) => {
         if (index > 0) {
             const lastEl = textEls[index - 1]
-            el.y = lastEl.y + lastEl.height + 5
+            el.y = lastEl.y + lastEl.height + margin
         }
     })
 
-    return InfoBox(Container({}, ...textEls), {
-        padding: 25,
-        ...(displayObjectArgs ?? {}),
-        ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
-    })
+    return InfoBox(
+        Container(
+            {},
+            Sprite({
+                src: Texture.EMPTY,
+                width: textEls.reduce(
+                    (maxW, el) => Math.max(el.width, maxW),
+                    0
+                ),
+                height:
+                    textEls.reduce((totalH, el) => totalH + el.height, 0) +
+                    margin * (textEls.length - 1),
+            }),
+            ...textEls
+        ),
+        {
+            padding: 25,
+            ...(displayObjectArgs ?? {}),
+            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+        }
+    )
 }
 
 function ElToSprite(el: DisplayObject) {

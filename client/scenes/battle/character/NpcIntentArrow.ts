@@ -4,7 +4,7 @@ import type { CharacterUid, NextCommand } from 'shared'
 import { vals } from 'shared/code'
 import { HEALTH_BAR_WIDTH } from './HealthBar'
 import { getBattleScene } from '@/data'
-import type { PixiText } from '@/elementsUtil'
+import { getStage, PixiText } from '@/elementsUtil'
 import {
     getElByPath,
     Container,
@@ -32,11 +32,7 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
         from: root,
         content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: () =>
-            getElByPath({
-                path: ['BattleScene', 'IntentArrowsContainer'],
-                strict: false,
-            }),
+        to: () => getStage(),
     })
 
     return root
@@ -182,6 +178,7 @@ function EnemyIntentArrow(
             }),
             Sprite({
                 src: 'enemyIntentArrowHead',
+                name: 'enemyIntentArrowHead',
                 scale,
                 anchor: [0, 0.5],
                 pivot: [1, 0.5],

@@ -3,16 +3,14 @@ import type {
     CardAction,
     CommandDefinition,
     CommandId,
+    NpcCommandDefinition,
     NpcCommandId,
 } from 'shared'
 import { entryMap, keys } from 'shared/code'
 import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 import * as alias from './commandAliases'
 // TODO eventually: remove ? before : below
-type CommandDefinitionsMap = Record<
-    NpcCommandId,
-    { id: NpcCommandId } & Omit<CommandDefinition, 'id'>
->
+type CommandDefinitionsMap = Record<NpcCommandId, NpcCommandDefinition>
 
 /**
  * simple commands which targe one opponent
@@ -151,18 +149,35 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: 'deal(strength/2)',
     },
 
-    /**Bucket of Bang Snaps*/
+    bigBomb1: {
+        actions: `chain()`,
+        //@ts-expect-error
+        id: `bigBomb1`,
+        name: `Big Bomb`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    bigBomb2: {
+        actions: `deal(strength * 3)`,
+        //@ts-expect-error
+        id: `bigBomb2`,
+        name: `Big Bomb`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+
+    /**Bucket of Bang Snaps: Deal 33% three times. Applies Unready (2) if any damage goes unblocked.*/
     bucketOfBangSnaps: {
-        actions: `chain(deal(strength * .2), effectAll("unguarded", 2), effectAll("tired", 2))`,
+        actions: `ifDamageDealtApplyEffect(strength * .33, "unready", 2)`,
         //@ts-expect-error
         id: `bucketOfBangSnaps`,
         name: `Bucket of Bang Snaps`,
         targetNum: -1,
         targetType: 'allEnemies',
     },
-    /**Bucket of Bang Snaps*/
+    /**yodel attacks for 50%.  After this turn, the enemy party will gain Emboldened (2).*/
     yodel: {
-        actions: `chain(deal(strength * .5), effectAll("emboldened", 2, "allFriends"))`,
+        actions: `chain(deal(strength * .5), effect("courageous", 2, "allFriends"))`,
         //@ts-expect-error
         id: `yodel`,
         name: `Bucket of Bang Snaps`,
@@ -180,7 +195,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**Fire Cracker*/
     fireCracker: {
-        actions: `chain(deal(strength * 1.1), effect("unguarded", 2))`,
+        actions: `chain(deal(strength * 1.2), effect("unguarded", 2))`,
         //@ts-expect-error
         id: `fireCracker`,
         name: `Fire Cracker`,
@@ -195,13 +210,14 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: 1,
         targetType: 'allEnemies',
     },
+
     gnomeBomb: {
-        actions: `deal(strength * .3)`,
+        actions: `deal(strength)`,
         //@ts-expect-error
         id: `gnomeBomb`,
-        name: `Fire Cracker`,
-        targetNum: -1,
-        targetType: 'allEnemies',
+        name: `Gnome Bomb`,
+        targetNum: 1,
+        targetType: 'enemies',
     },
 
     ...(() => {

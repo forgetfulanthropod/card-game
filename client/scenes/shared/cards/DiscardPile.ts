@@ -12,34 +12,34 @@ import {
 } from '@/elementsUtil'
 
 export function DiscardPile(pile: Pile): PixiContainer {
+    const src = getTexture('discardPile')
     return Container(
         {
-            x: BASE_WIDTH * 0.96,
-            y: BASE_HEIGHT * 0.98,
-            scale: 0.7,
-            angle: 20,
+            x: BASE_WIDTH,
+            y: BASE_HEIGHT,
         },
 
         Sprite({
-            src: getCardBackSrc(),
+            src,
             anchor: [1, 1],
         }),
         Sprite({
             src: getCardBackPileSizeSrc(),
-            x: -getCardBackSrc().width,
-            y: -getCardBackSrc().height,
+            scale: 0.7,
+            x: -src.width,
+            y: -65,
             anchor: [0.5, 0.5],
         }),
         Text({
             text: `${vals(pile).length}`,
             anchor: [0.5, 0.5],
-            x: -getCardBackSrc().width,
-            y: -getCardBackSrc().height,
+            x: -src.width,
+            y: -65,
             // width: getCardBackPileSizeSrc().width * 0.5,
             // height: getCardBackPileSizeSrc().height * 0.5,
             style: {
                 fill: 0xffffff,
-                fontSize: 48,
+                fontSize: 48 * 0.7,
                 fontFamily: 'bigFont',
             },
         })
@@ -48,8 +48,4 @@ export function DiscardPile(pile: Pile): PixiContainer {
 
 function getCardBackPileSizeSrc() {
     return getTexture('cardBackPileSizeOverlay')
-}
-
-function getCardBackSrc() {
-    return getTexture('cardBack')
 }

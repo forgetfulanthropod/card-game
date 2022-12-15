@@ -20,7 +20,7 @@ type AliasedCommandId =
     | `itchyOoze(${number})`
     | `infectiousBite(${number})`
     | `engulf(${number})`
-    | `gnomeBomb(${number})`
+    // | `gnomeBomb(${number})`
     | `bucketOfBangSnaps(${number})`
     | `fireCracker(${number})`
     | `meatyCharge(${number})`
@@ -59,14 +59,17 @@ export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 export type NpcCommandId =
     | 'ancientStrike'
     | 'basicAttack'
+    | 'bigBomb1'
+    | 'bigBomb2'
     | 'block'
+    | 'bucketOfBangSnaps'
     | 'chomp'
     | 'demolitionCharge'
     | 'evisceratingSweep'
-    | 'grudge'
-    | 'gnomeBomb'
-    | 'bucketOfBangSnaps'
     | 'fireCracker'
+    | 'gnomeBomb'
+    | 'grudge'
+    | 'grudge'
     | 'hansBuffBlock'
     | 'hansCurse'
     | 'hansGuards'
@@ -82,7 +85,6 @@ export type NpcCommandId =
     | 'matchaMash'
     | 'matchaMeld'
     | 'mimicAttack'
-    | 'grudge'
     | 'passiveBlockCmd'
     | 'rest'
     | 'rustyPokeHigh'

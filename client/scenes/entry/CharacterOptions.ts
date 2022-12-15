@@ -19,127 +19,6 @@ import { callApi } from '@/callApi'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene } from '@/data'
 
-// const defaultOwnedCharacters: OwnedCharacterStats[] = [
-//     {
-//         id: 'frogKnight',
-//         displayName: 'Frog Knight',
-//         isPc: true,
-//         class: 'knight',
-
-//         constitution: 80,
-//         strength: 10,
-//         magic: 5,
-//         defense: 11,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'mushroomFarmer',
-//         displayName: 'Mushroom Farmer',
-//         isPc: true,
-//         class: 'cleric',
-//         constitution: 112,
-//         strength: 8,
-//         magic: 9,
-//         defense: 6,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'penguinKnight',
-//         displayName: 'Penguin Knight',
-//         isPc: true,
-//         class: 'knight',
-
-//         constitution: 74,
-//         strength: 12,
-//         magic: 5,
-//         defense: 9,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'skeletonWarrior',
-//         displayName: 'Skeleton Warrior',
-//         isPc: true,
-//         class: 'knight',
-
-//         constitution: 54 + 4,
-//         strength: 11 + 3,
-//         magic: 4,
-//         defense: 4 + 3,
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'matchaGelatinCube',
-//         displayName: 'Matcha Gelatin Cube',
-//         isPc: true,
-//         class: 'cleric',
-
-//         constitution: 78 + 25,
-//         strength: 5 + 1,
-//         magic: 7 + 2,
-//         defense: 5 + 4,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'warhog',
-//         displayName: 'Warhog',
-//         isPc: true,
-//         class: 'cleric',
-
-//         constitution: 84,
-//         strength: 6,
-//         magic: 4,
-//         defense: 8,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'gnomeHooligan',
-//         displayName: 'Gnome Hooligan',
-//         isPc: true,
-//         class: 'rogue',
-
-//         constitution: 40,
-//         strength: 12 + 1, //drew did it
-//         magic: 14,
-//         defense: 5,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-//     {
-//         id: 'jerry',
-//         displayName: 'Jerry',
-//         isPc: true,
-//         class: 'wizard',
-
-//         constitution: 86,
-//         strength: 19,
-//         magic: 8 + 1,
-//         defense: 5 + 1,
-
-//         uid: '',
-//         tokenId: '',
-//         nftName: '',
-//     },
-// ]
-
 export const selectedCharacterId = datum<null | CharacterId>(null)
 export const selectedCharacterPlaceIndex = datum<CharacterPlaceIndex>(2)
 
@@ -155,26 +34,26 @@ export function CharacterOptions() {
             {
                 x: 78 + (index % 2) * (width + margin),
                 y: 54 + Math.floor(index / 2) * (width + margin),
-                events: {
-                    pointerup() {
-                        chooseOwnedCharacterAt(
-                            index,
-                            selectedCharacterPlaceIndex.val
-                        )
+                // events: {
+                //     pointerup() {
+                //         chooseOwnedCharacterAt(
+                //             index,
+                //             selectedCharacterPlaceIndex.val
+                //         )
 
-                        setTimeout(() => {
-                            if (
-                                getEntryScene()
-                                    .get('selectedCharacters')
-                                    .filter(c => c != null).length < 3
-                            )
-                                selectedCharacterPlaceIndex.set(
-                                    ((selectedCharacterPlaceIndex.val + 1) %
-                                        3) as CharacterPlaceIndex
-                                )
-                        }, 100)
-                    },
-                },
+                //         setTimeout(() => {
+                //             if (
+                //                 getEntryScene()
+                //                     .get('selectedCharacters')
+                //                     .filter(c => c != null).length < 3
+                //             )
+                //                 selectedCharacterPlaceIndex.set(
+                //                     ((selectedCharacterPlaceIndex.val + 1) %
+                //                         3) as CharacterPlaceIndex
+                //                 )
+                //         }, 100)
+                //     },
+                // },
             },
             RoundedBordered(
                 Sprite({

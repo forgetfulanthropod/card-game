@@ -57,6 +57,10 @@ export function isAlive(scene: BattleScene, uid: CharacterUid): boolean {
     return scene.allCharacters[uid]?.health > 0
 }
 
+export function isPc(scene: BattleScene, uid: CharacterUid): boolean {
+    return scene.allCharacters[uid].isPc
+}
+
 export function getCharacterMeta(
     scene: BattleCursor | EntryCursor,
     uid: CharacterUid

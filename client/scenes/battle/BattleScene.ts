@@ -38,9 +38,6 @@ export function BattleSceneEl(): PixiContainer {
 
     const scene = getBattleScene()
 
-    /** NOTE: name is used for lookup */
-    const intentArrowContainer = Container({ name: 'IntentArrowsContainer' })
-
     const root = Container(
         {
             name: 'BattleScene',
@@ -52,8 +49,6 @@ export function BattleSceneEl(): PixiContainer {
                 ),
             ],
         },
-        // Background({ scale: 1, spineSrc: 'hooligansBluffSpine' }),
-        intentArrowContainer,
         If(
             toDatum(scene.select('isInMap'), is => !is),
             () => CoreScene(scene, hoveredCardUid)
@@ -101,7 +96,7 @@ function CoreScene(
     scene: ROCursor<BattleScene>,
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
-    loopSong('battleMusicHooligansBluff')
+    playLoopingMusic(scene)
     gtag('event', 'ui_ux_view', { page_title: 'Battle Scene' })
     gtag('event', 'level_start', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
 
@@ -138,6 +133,17 @@ function CoreScene(
                     : Container({})
         )
     )
+}
+
+function playLoopingMusic(scene: ROCursor<BattleScene>) {
+    const category = scene.get('currentRoom', 'category')
+    if (category === 'tierOne') loopSong('battleMusicHooligansBluffTierOne')
+    else if (category === 'tierTwo')
+        loopSong('battleMusicHooligansBluffTierTwo')
+    else if (category === 'tierThree')
+        loopSong('battleMusicHooligansBluffTierThree')
+    else if (category === 'bosses')
+        loopSong('battleMusicHooligansBluffTierThree')
 }
 
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {

@@ -203,6 +203,17 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                 !~choice && !isPlayerCharacterRoom
                     ? [new AdjustmentFilter({ brightness: 0.5 })]
                     : [],
+            events: {
+                pointerdown() {
+                    if (~choice) void callApi('nextRoom', { choice })
+                },
+                pointerover() {
+                    if (~choice) root.filters = [glowFilter]
+                },
+                pointerout() {
+                    root.filters = []
+                },
+            },
         },
         Sprite({
             src: texture,
@@ -233,17 +244,7 @@ function RestSiteContents(node: DungeonRoom): PixiSprite {
         scale: 150 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
-        events: {
-            pointerdown() {
-                if (~choice) void callApi('nextRoom', { choice })
-            },
-            pointerover() {
-                if (~choice) root.filters = [glowFilter]
-            },
-            pointerout() {
-                root.filters = []
-            },
-        },
+        events: {},
     })
 
     return root
@@ -278,18 +279,18 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             scale: 0.45,
             y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
-            events: {
-                pointerdown() {
-                    void callApi('nextRoom', { choice })
-                },
-                pointerover() {
-                    if (~choice && !isPlayerCharacterRoom)
-                        root.filters = [glowFilter]
-                },
-                pointerout() {
-                    root.filters = []
-                },
-            },
+            // events: {
+            //     pointerdown() {
+            //         void callApi('nextRoom', { choice })
+            //     },
+            //     pointerover() {
+            //         if (~choice && !isPlayerCharacterRoom)
+            //             root.filters = [glowFilter]
+            //     },
+            //     pointerout() {
+            //         root.filters = []
+            //     },
+            // },
         },
         ...characters.map((characterMeta, i) => {
             const anim = MainCharacterAnimation({

@@ -9,6 +9,7 @@ import {
     drawNewHand,
     setRoundEnergy,
     resetStances,
+    updateNpcMoves,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
@@ -34,7 +35,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
         ...newNpcs,
     }))
     scene.set('state', 'in battle')
-    scene.set('nextNpcCommands', getNpcMoves(scene))
+    updateNpcMoves(scene)
     setRoundEnergy(scene)
     scene.set('cardsPlayedThisRoom', [])
     scene.set('cardsPlayedThisTurn', [])
