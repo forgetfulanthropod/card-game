@@ -21,18 +21,20 @@ export function App(): JSXElement {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+    const handleStartGame = async (userId: string) => {
+        localStorage.setItem('username', userId)
+        setUsername(userId)
+        emitUsername(userId)
+        setReady(true)
+    }
+
     return username && !ready ? (
         <>loading</>
     ) : ready ? (
         <GameManager username={username} />
     ) : (
         <NewStartScreen
-            onEnter={username => {
-                localStorage.setItem('username', username)
-                setUsername(username)
-                emitUsername(username)
-                setReady(true)
-            }}
+            onEnter={handleStartGame}
         />
     )
 }

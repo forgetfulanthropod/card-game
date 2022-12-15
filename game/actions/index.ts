@@ -20,4 +20,5 @@ export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
 export { openLootCollector } from './openLootCollector'
 export { openEndScreen } from './openEndScreen'
+export { setRunId } from './setRunId'
 // @endindex

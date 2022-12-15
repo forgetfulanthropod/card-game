@@ -34,6 +34,7 @@ import { Background } from '../background'
 import { mean } from 'lodash'
 
 export function HexMapOverlay(): PixiContainer {
+    gtag('event', 'ui_ux_view', { page_title: 'Hex Map' })
     hoveredCharacterUid.set(null)
     loopSong('hexMapMusicHooligansBluff')
 

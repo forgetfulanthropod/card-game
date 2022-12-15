@@ -1,33 +1,59 @@
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
-import { useState, useRef } from 'react'
+import { useState, useRef, MouseEvent, useEffect } from 'react'
 import type { UserDoc } from '../NewStartScreen'
 import { getShortWalletAddress } from '../util'
 
 export const UserProfileIcon = ({
+    login,
     logout,
+    isLoggedIn,
     userDoc,
 }: {
+    login: () => Promise<void>
     logout: () => void
+    isLoggedIn: boolean
     userDoc: UserDoc
 }) => {
-    const walletAddress = getShortWalletAddress(userDoc.walletAddress)
+    const { walletAddress } = userDoc
+
     const [showActions, setShowActions] = useState(false)
+    const [shortAddress, setShortAddress] = useState('')
+
     const actionsRef = useRef(null)
     useOutsideClickDismisser(actionsRef, setShowActions)
+
+    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        if (isLoggedIn) {
+            setShowActions(actions => !actions)
+        } else {
+            login()
+        }
+    }
+
+    useEffect(() => {
+        if (walletAddress)
+            setShortAddress(getShortWalletAddress(walletAddress ?? '0x000000'))
+    }, [walletAddress])
 
     return <div className='flex flex-col items-end text-white'>
         <button
             className={`text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black`}
-            onClick={() => setShowActions(actions => !actions)}
+            onClick={handleClick}
         >
-            <img
-                src='./assets/character profiles/penguinKnight.webp'
-                className='max-w-full h-6 md:h-9 lg:h-12 rounded-2xl border border-black'
-            />
-            <div className='flex flex-col items-start'>
-                {/* <p className='px-2'>KAIJU_123</p> */}
-                <p className='px-2'>{walletAddress}</p>
-            </div>
+            {isLoggedIn ? (
+                <>
+                    <img
+                        src='./assets/character profiles/penguinKnight.webp'
+                        className='max-w-full h-6 md:h-9 lg:h-12 rounded-2xl border border-black'
+                    />
+                    <div className='flex flex-col items-start'>
+                        <p className='px-2'>{shortAddress}</p>
+                    </div>
+                </>
+            ) : (
+                <p className='lg:text-4xl lg:px-3'>SIGN IN</p>
+            )}
         </button>
         <div
             className={`flex flex-col text-white mt-2 rounded-xl bg-stone-700 font-sans p-1 w-2/3 font-medium z-50 text-sm shadow-3xl transition-all ${
@@ -35,8 +61,16 @@ export const UserProfileIcon = ({
             }`}
             ref={actionsRef}
         >
-            <button className='py-2 hover:bg-stone-900 rounded-lg'>Account</button>
-            <button className='py-2 hover:bg-stone-900 rounded-lg' onClick={logout}>
+            <button className='py-2 hover:bg-stone-900 rounded-lg'>
+                Account
+            </button>
+            <button
+                className='py-2 hover:bg-stone-900 rounded-lg'
+                onClick={() => {
+                    logout()
+                    setShowActions(false)
+                }}
+            >
                 Log Out
             </button>
         </div>

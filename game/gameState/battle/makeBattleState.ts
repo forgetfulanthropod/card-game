@@ -64,6 +64,7 @@ export function makeBattleState(args: {
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
         runDuration: getInitialRunDuration(),
+        runId: null
     }
     return bs
 }

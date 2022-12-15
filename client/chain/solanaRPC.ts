@@ -71,10 +71,10 @@ export default class SolanaRPC {
         }
     }
 
-    signMessage = async (): Promise<string> => {
+    signMessage = async (message: string): Promise<string> => {
         try {
             const solanaWallet = new SolanaWallet(this.provider)
-            const msg = Buffer.from('Test Signing Message ', 'utf8')
+            const msg = Buffer.from(message, 'utf8')
             const res = await solanaWallet.signMessage(msg)
             return res.toString()
         } catch (error) {

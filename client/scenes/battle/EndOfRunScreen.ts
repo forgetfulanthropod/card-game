@@ -185,6 +185,10 @@ const ScoreAttributeItem = (
 }
 
 export function EndOfRunScreen(): PixiContainer {
+    gtag('event', 'ui_ux_view', { page_title: 'End of Run Screen' })
+    gtag('event', 'level_end', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
+    gtag('event', 'run_end', { map_seed: 1, run_id: 1, try_again: 'false'}) //TODO fill out with real values
+
     const scene = getBattleScene()
     const battleState = scene.get('state')
 
@@ -299,6 +303,7 @@ export function EndOfRunScreen(): PixiContainer {
         })
         localStorage.removeItem('username')
         window.location.reload()
+        gtag('event', 'run_start', { map_seed: 1, run_id: 1, try_again: 'true'}) //TODO fill out with real values
     }
 
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({

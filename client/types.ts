@@ -30,4 +30,6 @@ declare global {
     // eslint-disable-next-line no-var
     // @ts-expect-error
     var process: { env: { [key: string]: string } }
+    var gtag: Gtag.Gtag
+    interface Window { dataLayer: any}
 }

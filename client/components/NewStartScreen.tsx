@@ -10,38 +10,39 @@ import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
+import { callServerApi } from '@/callServerApi'
+import { UserID } from 'shared'
 
 const WALLET_GATING_ENABLED = false // TODO move to env
 
-export interface UserDoc {
-    walletAddress: string
+export type UserDoc = {
+    walletAddress: string | null
     numKaijusOwned: number
+    userId: UserID
 }
 
 export function NewStartScreen(props: {
-    onEnter: (username: string) => void
+    onEnter: (userId: string) => void
 }): JSXElement {
     const { web3Auth, provider } = useWeb3Auth()
     const [solanaRPC, setSolanaRPC] = useState<SolanaRPC | null>(null)
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userDoc, setUserDoc] = useState<UserDoc>({
-        walletAddress: '',
+        walletAddress: null,
         numKaijusOwned: 0,
+        userId: '',
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
 
     useEffect(() => {
-        // check if theres a cached provider or a cached user session previously available
-        // if it exists, load and auto connect
-        // connect to Solana as well
-        // if it exists but expired, reset the storage items
-        // if there is none, leave everything until user interaction time
+        gtag('event', 'ui_ux_view', {
+            page_title: 'Start Screen',
+        })
     }, [])
 
     useEffect(() => {
-        console.log(web3Auth?.cachedAdapter)
         if (web3Auth?.cachedAdapter) {
             handleLogin().then(() => {
                 console.log('USEFFECT - web3auth login handled')
@@ -58,7 +59,6 @@ export function NewStartScreen(props: {
         console.log('connecting to web3auth')
         await web3Auth.connect()
         console.log('finished web3auth.connect')
-        console.log(web3Auth.provider)
 
         if (web3Auth && web3Auth.provider) {
             console.log('should always hit right')
@@ -75,9 +75,25 @@ export function NewStartScreen(props: {
         await solanaRPC.asyncInitConnection()
         const walletAddress = (await solanaRPC?.getAccounts())[0]
         const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
-        setUserDoc({ walletAddress, numKaijusOwned })
+        const userIdRes = await callServerApi('login', { walletAddress })
+        if (!userIdRes) {
+            return window.alert(
+                'Something went wrong. Please logging in try again.'
+            )
+        }
+        const { userId } = userIdRes
+        setUserDoc({ walletAddress, numKaijusOwned, userId })
         setIsLoggedIn(true)
-        console.log({ userDoc: { walletAddress, numKaijusOwned } })
+        console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
+
+        // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
+        gtag('set', {
+            user_id: userId,
+        })
+
+        gtag('event', 'login', {
+            method: 'connect_wallet',
+        })
     }
 
     const handleLogout = async () => {
@@ -95,7 +111,8 @@ export function NewStartScreen(props: {
     }
 
     const enterGame = () => {
-        props.onEnter('random-' + Math.random().toString())
+        props.onEnter(userDoc.userId)
+        gtag('event', 'enter_game')
     }
 
     return <>
@@ -103,7 +120,7 @@ export function NewStartScreen(props: {
             setShowGateModal={setShowGateModal}
         />}
         <div
-            className={`font-sharp grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
+            className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
                 showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
             }`}
         >
@@ -118,7 +135,9 @@ export function NewStartScreen(props: {
             <div className='nav w-full row-span-1 flex p-2 xs:p-4 lg:p-8 justify-between items-start'>
                 <div className='flex flex-col items-center w-1/6 cursor-pointer hover:scale-105 transition text-white '>
                     <img src='./logos/KaijuCards.png' />
-                    <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>closed alpha</p>
+                    <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>
+                        closed alpha
+                    </p>
                 </div>
                 <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>
                     <div className='grid grid-cols-5 items-center mr-4'>
@@ -151,21 +170,12 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    {isLoggedIn && web3Auth ? (
-                        <UserProfileIcon
-                            logout={handleLogout}
-                            userDoc={userDoc}
-                        />
-                    ) : (
-                        <div className='flex items-center h-full'>
-                            <PrimaryButton
-                                text='sign in'
-                                type='default'
-                                size='medium'
-                                onClick={handleLogin}
-                            />
-                        </div>
-                    )}
+                    <UserProfileIcon
+                        login={handleLogin}
+                        logout={handleLogout}
+                        isLoggedIn={isLoggedIn}
+                        userDoc={userDoc}
+                    />
                 </div>
             </div>
 

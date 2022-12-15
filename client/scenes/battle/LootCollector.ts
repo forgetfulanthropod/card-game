@@ -73,6 +73,7 @@ const getDisplayName = (name: LootFromGame) => {
 }
 
 export function LootCollector(): PixiContainer {
+    gtag('event', 'level_end', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
     const scene = getBattleScene()
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x

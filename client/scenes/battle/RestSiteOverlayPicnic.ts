@@ -23,6 +23,7 @@ export const plushyChoiceDescriptions = [
 ]
 
 export function RestSiteOverlay(): PixiContainer {
+    gtag('event', 'ui_ux_view', { page_title: 'Rest Site' })
     const animations: AnimationId[] = ['Position 3', 'Position 2', 'Position 1']
 
     const xya = {
