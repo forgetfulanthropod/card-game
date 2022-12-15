@@ -1,4 +1,4 @@
-import type { DisplayObject } from 'pixi.js'
+import { DisplayObject, Texture } from 'pixi.js'
 import { startCase } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -239,7 +239,7 @@ export function Explanation({
     const textEls = texts.map((text, index) => {
         return Text({
             text,
-            // isHtml: true,
+            isHtml: true,
             style: {
                 fill: 'white',
                 wordWrapWidth: BASE_WIDTH * 0.2,
@@ -250,18 +250,36 @@ export function Explanation({
         })
     })
 
+    const margin = 5
+
     textEls.forEach((el, index) => {
         if (index > 0) {
             const lastEl = textEls[index - 1]
-            el.y = lastEl.y + lastEl.height + 5
+            el.y = lastEl.y + lastEl.height + margin
         }
     })
 
-    return InfoBox(Container({}, ...textEls), {
-        padding: 25,
-        ...(displayObjectArgs ?? {}),
-        ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
-    })
+    return InfoBox(
+        Container(
+            {},
+            Sprite({
+                src: Texture.EMPTY,
+                width: textEls.reduce(
+                    (maxW, el) => Math.max(el.width, maxW),
+                    0
+                ),
+                height:
+                    textEls.reduce((totalH, el) => totalH + el.height, 0) +
+                    margin * (textEls.length - 1),
+            }),
+            ...textEls
+        ),
+        {
+            padding: 25,
+            ...(displayObjectArgs ?? {}),
+            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+        }
+    )
 }
 
 function ElToSprite(el: DisplayObject) {

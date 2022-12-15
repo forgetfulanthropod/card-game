@@ -107,9 +107,9 @@ function DamageIntended(
             id: 'bigBomb1',
             src: 'intentBigBomb1',
             explanation: [
-                `Gnome Big Bomber has charged their Big Bomb.  They will attack for [strength * 3] this turn.`,
-                `If Gnome Big Bomber loses 40% of their starting health, they gain Debilitated (2).`,
-                `If they lose 75% or more health, they gain Stun (1).`,
+                `Gnome Big Bomber is charging their Big Bomb.  They will attack for [strength * 3] next turn.`,
+                `If Gnome Big Bomber loses 40% of their starting health, they gain +2 <b>Debilitated</b>`,
+                `If they lose 75% or more health, they gain +2 <b>Stun</b>`,
             ],
         },
         bigBomb2: {
@@ -148,6 +148,7 @@ function DamageIntended(
         gnomeBomb: {
             id: 'gnomeBomb',
             src: 'intentAttack',
+            explanation: ['deal [strength * .3] to all friendly Kaiju'],
         },
         grudge: {
             id: 'grudge',
@@ -261,7 +262,7 @@ function DamageIntended(
                   isShown: isHoveringIntent,
                   texts: [
                       startCase(commandMeta.id),
-                      ...commandMeta.explanation,
+                      ...transformExplanation(commandMeta.explanation),
                   ],
                   xOffset: 50,
                   yOffset: 10,
@@ -313,6 +314,12 @@ function DamageIntended(
         }),
         ...(infoBox ? [infoBox] : []),
     ]
+}
+
+function transformExplanation(explanation: string) {
+    const statSlots = explanation.match(/[.+]/g)
+
+    return explanation
 }
 
 function BlockIntended(amount: number) {

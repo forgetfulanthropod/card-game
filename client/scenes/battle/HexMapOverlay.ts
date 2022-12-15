@@ -278,18 +278,18 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             scale: 0.45,
             y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
-            events: {
-                pointerdown() {
-                    void callApi('nextRoom', { choice })
-                },
-                pointerover() {
-                    if (~choice && !isPlayerCharacterRoom)
-                        root.filters = [glowFilter]
-                },
-                pointerout() {
-                    root.filters = []
-                },
-            },
+            // events: {
+            //     pointerdown() {
+            //         void callApi('nextRoom', { choice })
+            //     },
+            //     pointerover() {
+            //         if (~choice && !isPlayerCharacterRoom)
+            //             root.filters = [glowFilter]
+            //     },
+            //     pointerout() {
+            //         root.filters = []
+            //     },
+            // },
         },
         ...characters.map((characterMeta, i) => {
             const anim = MainCharacterAnimation({
