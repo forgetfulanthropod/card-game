@@ -17,6 +17,9 @@ import { setAllCharactersToUnmoved } from '@/gameState/battle/characters/setAllC
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
+
+    if (!scene.get('isInMap')) return
+
     scene.set('turnCount', 1)
     scene.set('isPlayerTurn', true)
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
