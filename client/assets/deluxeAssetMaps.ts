@@ -38,11 +38,15 @@ export type MusicAssetKey = keyof typeof musicAssets
 
 export const musicAssets = {
     entrySceneMusicHooligansBluff:
-        'music/Main Theme Variants/boss_battle_and_character_select.mp3',
+        'music/Main Theme Variants/character_select.mp3',
     hexMapMusicHooligansBluff: 'music/Main Theme Variants/map_1.mp3',
-    battleMusicHooligansBluff: 'music/Main Theme Variants/combat_default.mp3',
-    bossBattleMusicHooligansBluff:
-        'music/Main Theme Variants/boss_battle_and_character_select.mp3',
+    battleMusicHooligansBluffTierOne:
+        'music/Main Theme Variants/hooligans_bluff_combat->tierOne.mp3',
+    battleMusicHooligansBluffTierTwo:
+        'music/Main Theme Variants/hooligans_bluff_combat->tierTwo.mp3',
+    battleMusicHooligansBluffTierThree:
+        'music/Main Theme Variants/hooligans_bluff_combat->tierThree.mp3',
+    bossBattleMusicHooligansBluff: 'music/Main Theme Variants/boss_battle.mp3',
     roomVictoryMusicHooligansBluff: 'music/Room_Victory.mp3',
     defeatMusicHooligansBluff: 'music/defeat song_v1.mp3',
     runVictoryMusicHooligansBluff: 'music/entire_run_victory_song_v1.mp3',

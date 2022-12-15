@@ -317,7 +317,7 @@ function DamageIntended(
 }
 
 function transformExplanation(explanation: string) {
-    const statSlots = explanation.match(/[.+]/g)
+    // const statSlots = explanation.match(/[.+]/g)
 
     return explanation
 }

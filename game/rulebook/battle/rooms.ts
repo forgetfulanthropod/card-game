@@ -413,6 +413,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                         boss: true,
                     },
                 ],
+                category: 'bosses',
                 edges: ['', '', '6-b', ''],
             },
         },

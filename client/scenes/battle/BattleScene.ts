@@ -96,7 +96,7 @@ function CoreScene(
     scene: ROCursor<BattleScene>,
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
-    loopSong('battleMusicHooligansBluff')
+    playLoopingMusic(scene)
 
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
@@ -131,6 +131,17 @@ function CoreScene(
                     : Container({})
         )
     )
+}
+
+function playLoopingMusic(scene: ROCursor<BattleScene>) {
+    const category = scene.get('currentRoom', 'category')
+    if (category === 'tierOne') loopSong('battleMusicHooligansBluffTierOne')
+    else if (category === 'tierTwo')
+        loopSong('battleMusicHooligansBluffTierTwo')
+    else if (category === 'tierThree')
+        loopSong('battleMusicHooligansBluffTierThree')
+    else if (category === 'bosses')
+        loopSong('battleMusicHooligansBluffTierThree')
 }
 
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {
