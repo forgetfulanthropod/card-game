@@ -47,6 +47,7 @@ import { hoveredCharacterUid, onUpdate } from '@/util'
 // })
 
 export function SelectedCharactersEl(): PixiContainer {
+    console.log('selected characters...')
     const selectedCharacters = getEntryScene().select('selectedCharacters')
 
     const numSelected = selectedCharacters

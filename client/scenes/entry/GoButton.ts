@@ -17,6 +17,7 @@ export function GoButton(): PixiContainer {
         await callApi('changeScene', { newSceneName: 'battle' })
         const scene = getBattleScene()
         const userId = scene.get('username')
+
         const { runId } = await callServerApi('startRun', {
             userId,
         })

@@ -36,7 +36,7 @@ export function NewStartScreen(props: {
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
-    const [showTutorial, setShowTutorial] = useState(true)
+    const [showTutorial, setShowTutorial] = useState(false)
 
     useEffect(() => {
         gtag('event', 'ui_ux_view', {
