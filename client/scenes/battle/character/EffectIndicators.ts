@@ -3,7 +3,7 @@ import { CharacterMeta, Effect } from 'shared'
 import { compose, datum } from 'datums'
 import { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
-import { glowFilter, PixiContainer } from '@/elementsUtil'
+import { glowFilter, If, PixiContainer } from '@/elementsUtil'
 import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
 import { TermExplanationIf, Explanation } from '@sharedElements'
@@ -60,11 +60,13 @@ function InteractiveEffectCounter(
                 ),
             ],
         },
-        Sprite({
-            src: getEffectIconSrc(effect.id),
-            scale: width / getEffectIconSrc(effect.id).width,
-            anchor: [0.5, 0.4],
-        }),
+        If(datum(true), () =>
+            Sprite({
+                src: getEffectIconSrc(effect.id),
+                scale: width / getEffectIconSrc(effect.id).width,
+                anchor: [0.5, 0.4],
+            })
+        ),
         Text({
             text: `${effect.counter}`,
             anchor: [1, 1],

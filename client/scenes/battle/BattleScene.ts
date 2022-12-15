@@ -140,8 +140,7 @@ function playLoopingMusic(scene: ROCursor<BattleScene>) {
         loopSong('battleMusicHooligansBluffTierTwo')
     else if (category === 'tierThree')
         loopSong('battleMusicHooligansBluffTierThree')
-    else if (category === 'bosses')
-        loopSong('battleMusicHooligansBluffTierThree')
+    else if (category === 'bosses') loopSong('bossBattleMusicHooligansBluff')
 }
 
 function immediatelyTakeRequiredAction(req: RequiredAction | null) {

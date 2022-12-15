@@ -212,12 +212,13 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
 
     gnomeBomb: {
-        actions: `deal(strength)`,
+        actions: `deal(strength * .3)`,
         //@ts-expect-error
         id: `gnomeBomb`,
         name: `Gnome Bomb`,
-        targetNum: 1,
-        targetType: 'enemies',
+        explanation: 'deal strength',
+        targetNum: -1,
+        targetType: 'allEnemies',
     },
 
     ...(() => {

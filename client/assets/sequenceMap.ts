@@ -1,18 +1,27 @@
 import { keys } from 'shared/code'
 import { sequences } from './deluxeAssetMaps'
 
-export const sequenceMap: Record<string, (keyof typeof sequences)[]> = {
-    block: [],
-    loseBlock: [],
-    breakBlock: [],
-    poison: [],
+type SequenceMapKey = keyof typeof sequenceMap
+type SequenceFrames = (keyof typeof sequences)[]
+
+export const sequenceMap = {
+    KC_FX_AdvAttack_121222_: [] as SequenceFrames,
+    KC_FX_BasicAttack_121222_: [] as SequenceFrames,
+    KC_FX_Bleed_121222_: [] as SequenceFrames,
+    KC_FX_BlockBreak_121222_: [] as SequenceFrames,
+    KC_FX_BlockBreakShort_121222_: [] as SequenceFrames,
+    KC_FX_GainEnergy_121222_: [] as SequenceFrames,
+    KC_FX_GainHealth_121222_: [] as SequenceFrames,
+    KC_FX_Poison_121222_: [] as SequenceFrames,
+    KC_FX_PsychicAttack_121222_: [] as SequenceFrames,
+    KC_FX_Shield_121222_: [] as SequenceFrames,
 }
 
-keys(sequences).map(s => {
-    if (s.includes('_Block_')) sequenceMap.block.push(s)
-    else if (s.includes('_Defense_')) sequenceMap.loseBlock.push(s)
-    else if (s.includes('_BlockBreak_')) sequenceMap.breakBlock.push(s)
-    else if (s.includes('_Poison001_')) sequenceMap.poison.push(s)
+keys(sequences).forEach(s => {
+    keys(sequenceMap).forEach(
+        sequenceKey =>
+            s.includes(sequenceKey) && sequenceMap[sequenceKey].push(s)
+    )
 })
 
-console.log(sequenceMap)
+console.log({ sequenceMap })

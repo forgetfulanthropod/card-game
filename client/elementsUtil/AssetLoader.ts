@@ -2,7 +2,7 @@ import { Loader, Resource } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
 import { uniqBy, upperFirst } from 'lodash'
 import type { PixiTexture } from './mypixi'
-import { loadAllAnimateFiles } from './myanimate'
+// import { loadAllAnimateFiles } from './myanimate'
 import { AssetKey, AssetMaps, assetMaps, deluxeAssetMaps } from '@/assets'
 
 import { keys } from 'shared/code'
@@ -27,7 +27,7 @@ export function startLoadingAssets() {
     Loader.shared.onComplete.once(() => {
         resolveLoaderPromise(null)
 
-        loadAllAnimateFiles()
+        // loadAllAnimateFiles()
         loadAssetMaps(deluxeAssetMaps)
     })
 }
