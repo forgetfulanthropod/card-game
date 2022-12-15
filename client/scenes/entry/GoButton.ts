@@ -1,6 +1,6 @@
 import { callApi } from '@/callApi'
 import { callServerApi } from '@/callServerApi'
-import { getBattleScene } from '@/data'
+import { getTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
     glowFilter,
@@ -14,15 +14,12 @@ import {
 export function GoButton(): PixiContainer {
     const startRun = async () => {
         root.visible = false
-        await callApi('changeScene', { newSceneName: 'battle' })
-        const scene = getBattleScene()
-        const userId = scene.get('username')
-
+        const userId = getTree().get('username')
         const { runId } = await callServerApi('startRun', {
             userId,
         })
+        await callApi('changeScene', { newSceneName: 'battle' })
         await callApi('setRunId', { userId, runId })
-        gtag('event', 'ui_ux_view', { page_title: 'Battle' })
         gtag('event', 'run_start', {
             map_seed: 1,
             run_id: runId,
