@@ -1,6 +1,6 @@
 node_modules/
 .runenv
-.env
+*.env
 .eslintcache
 
 .DS_Store

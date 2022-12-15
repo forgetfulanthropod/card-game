@@ -3,6 +3,7 @@ import type { Application } from 'express'
 import express from 'express'
 import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
+import { config as loadDotEnv } from 'dotenv'
 
 import { api } from './api'
 import { mountIo as fullMountIo } from './IO'
@@ -65,6 +66,7 @@ if (isStagingServer) {
 }
 
 if (process.env.USE_ROUTER !== 'yes') {
+    loadDotEnv()
     const server = app.listen(port, function () {
         logger.info(`Serving on http://localhost:${port}`)
     })
