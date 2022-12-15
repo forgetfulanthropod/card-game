@@ -4,6 +4,7 @@ import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock
 import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from './addBlockToSelf'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
+import {explain as explainBellyFlop, execute as executeBellyFlop} from './bellyFlop'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
@@ -38,6 +39,7 @@ export const explainers: Explainers = {
     addBlockToSelf: explainAddBlockToSelf,
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
+    bellyFlop: explainBellyFlop,
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
@@ -72,6 +74,7 @@ export const executors: Executors = {
     addBlockToSelf: executeAddBlockToSelf,
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
+    bellyFlop: executeBellyFlop,
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,

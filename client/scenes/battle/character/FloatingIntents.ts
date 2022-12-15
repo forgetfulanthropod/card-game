@@ -106,20 +106,10 @@ function DamageIntended(
         bigBomb1: {
             id: 'bigBomb1',
             src: 'intentBigBomb1',
-            explanation: [
-                `Gnome Big Bomber is charging their Big Bomb.  They will attack for [strength * 3] next turn.`,
-                `If Gnome Big Bomber loses 40% of their starting health, they gain +2 <b>Debilitated</b>`,
-                `If they lose 75% or more health, they gain +2 <b>Stun</b>`,
-            ],
         },
         bigBomb2: {
             id: 'bigBomb2',
             src: 'intentBigBomb2',
-            explanation: [
-                `Gnome Big Bomber has charged their Big Bomb.  They will attack for [strength * 3] this turn.`,
-                `If Gnome Big Bomber loses 40% of their starting health, they gain Debilitated (2).`,
-                `If they lose 75% or more health, they gain Stun (1).`,
-            ],
         },
         block: {
             id: 'block',
@@ -148,7 +138,6 @@ function DamageIntended(
         gnomeBomb: {
             id: 'gnomeBomb',
             src: 'intentAttack',
-            explanation: ['deal [strength * .3] to all friendly Kaiju'],
         },
         grudge: {
             id: 'grudge',
@@ -181,14 +170,23 @@ function DamageIntended(
         jurgenBellyFlop: {
             id: 'jurgenBellyFlop',
             src: 'intentAttack',
+            explanation: [
+                'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes.',
+            ],
         },
         jurgenRollAround: {
             id: 'jurgenRollAround',
             src: 'intentAttack',
+            explanation: [
+                'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
+            ],
         },
         jurgenSitUpon: {
             id: 'jurgenSitUpon',
             src: 'intentAttack',
+            explanation: [
+                'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
+            ],
         },
         jurgenStampSnort: {
             id: 'jurgenStampSnort',

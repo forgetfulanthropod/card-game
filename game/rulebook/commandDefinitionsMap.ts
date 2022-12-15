@@ -34,7 +34,7 @@ const singleOpponentTargetCommands = {
         'ifDamageDealt(dot(2), effect("poisoned", 1))',
     ],
     /**Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes. */
-    jurgenBellyFlop: ['Jurgen Belly Flop', 'deal(min1(30 - damageTaken()))'],
+    jurgenBellyFlop: ['Jurgen Belly Flop', 'bellyFlop(strength)'],
     /**Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn. */
     jurgenStampSnort: ['Jurgen Stamp Snort', 'effect("doubleDamage", 1)'],
     /**Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target. */
@@ -146,7 +146,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         id: 'jurgenRollAround',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'deal(strength/2)',
+        actions: 'bellyFlop(strength / 2)',
     },
 
     bigBomb1: {

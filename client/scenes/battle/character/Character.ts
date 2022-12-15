@@ -93,7 +93,7 @@ export function Character(props: CharacterProps): PixiContainer {
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
                     y: 0,
-                    x: characterMeta.block > 0 ? 300 : 260,
+                    x: 300,
                 })
         )
     )
