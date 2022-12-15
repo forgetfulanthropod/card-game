@@ -40,6 +40,10 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<{ runId: RunID }>
     }
+    getCurrentRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID }>
+    }
 }
 
 export type BareServerActionArgs = {
@@ -70,6 +74,7 @@ interface BareGameActionArgs {
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
+    setRunId: { userId: UserID, runId: RunID }
 }
 
 // NOTE: below is not as complicated as it looks.

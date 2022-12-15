@@ -8,6 +8,7 @@ import type { StatChangeMap } from './CardHit'
 import type { Characters, StanceId } from './Characters'
 import type { CommandQueue } from './CommandQueue'
 import type { ClaimableLoot, ClaimedLoot, TreasureChest, RunScore } from '.'
+import { RunID } from '../User'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -50,6 +51,7 @@ export interface BattleScene extends SceneHas {
         startTime: string
         endTime: string | null
     }
+    runId: RunID | null
 }
 
 /** May later have e.g. DOT effects */

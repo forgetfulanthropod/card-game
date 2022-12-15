@@ -6,7 +6,6 @@ import { GameManager } from './GameManager'
 // import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
 import { NewStartScreen } from './NewStartScreen'
-import { callServerApi } from '@/callServerApi'
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
@@ -26,7 +25,6 @@ export function App(): JSXElement {
         localStorage.setItem('username', userId)
         setUsername(userId)
         emitUsername(userId)
-        const runId = await callServerApi('startRun', {userId})
         setReady(true)
     }
 
