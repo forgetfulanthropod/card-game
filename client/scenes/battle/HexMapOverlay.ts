@@ -241,7 +241,9 @@ function TileContents(node: DungeonRoom | null) {
             scale: 0.7,
         })
 
-    return TileCharacters(node)
+    return Adjust(TileCharacters(node), {
+        scale: node.category === 'bosses' ? 0.6 : 0.45,
+    })
 }
 
 function RestSiteContents(node: DungeonRoom): PixiSprite {
@@ -285,7 +287,6 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const root = Container(
         {
-            scale: 0.45,
             y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
             // events: {

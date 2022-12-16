@@ -318,8 +318,14 @@ export function getDungeonRooms(): DungeonRoomMaps {
             },
             '1_3': {
                 uid: '1_3',
-                enemies: [],
-                category: 'events',
+                enemies: [
+                    {
+                        id: 'bosshogJurgen',
+                        level: 'default',
+                        boss: true,
+                    },
+                ],
+                category: 'bosses',
                 edges: ['', '2_4', '', ''],
             },
             '2_0': {
