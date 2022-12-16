@@ -165,19 +165,21 @@ function maybeApplyDamageThresholdDebuffs(
     }
 
     if (characterIdToThresholdEffectsMap[target.id] != null) {
-        // const thresholdEffects = characterIdToThresholdEffectsMap[target.id]
-        // const character = scene.get('allCharacters', targetUid)
-        // thresholdEffects?.forEach(thresholdEffect => {
-        //     if (
-        //         thresholdEffect.health <
-        //             character.health / character.constitution &&
-        //         thresholdEffect.health >
-        //             (character.health + calcedDamage) / character.constitution
-        //     ) {
-        //         thresholdEffect.effects.map(effect =>
-        //             applyEffect(scene, [targetUid], effect.id, effect.counter)
-        //         )
-        //     }
-        // })
+        const thresholdEffects = characterIdToThresholdEffectsMap[target.id]
+        const character = scene.get('allCharacters', targetUid)
+        thresholdEffects?.forEach(thresholdEffect => {
+            if (
+                thresholdEffect.health >
+                    character.health / character.constitution &&
+                thresholdEffect.health <=
+                    (character.health + calcedDamage) / character.constitution
+            ) {
+                thresholdEffect.effects.map(effect =>
+                    applyEffect(scene, [targetUid], effect.id, effect.counter)
+                )
+            }
+        })
+
+        updateNpcMoves(scene)
     }
 }

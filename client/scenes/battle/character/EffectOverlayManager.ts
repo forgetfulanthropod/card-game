@@ -42,7 +42,7 @@ export function EffectOverlayManager(
                         setTimeout(() => {
                             root.addChild(anim)
                             setTimeout(() => root.removeChild(anim), 1000)
-                        }, (i + 1) * TIME_BETWEEN_OVERLAY_ANIMATIONS)
+                        }, i * TIME_BETWEEN_OVERLAY_ANIMATIONS)
                     })
                 }
 
@@ -77,7 +77,7 @@ export function getAnimationsFrom(
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
     }
     if ((changes.block ?? 0) < 0) {
-        if (characterMeta.health <= 0)
+        if (changes.health ?? 0 >= 0)
             animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
         else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))
     }

@@ -11,11 +11,12 @@ export function SequenceAnimation(
         sequenceMap[sequenceKey]?.map(assetKey => getTexture(assetKey))
     )
 
+    animation.loop = false
+    animation.anchor.set(isPc ? 0.5 : 0, 0.5)
+    animation.animationSpeed = 0.5
+
     setTimeout(() => {
-        animation.scale.set(1.7)
-        animation.anchor.set(isPc ? 0.5 : -0.2, 0.5)
-        animation.animationSpeed = 0.5
-        animation.play()
+        animation.gotoAndPlay(0)
     }, 0)
 
     return animation

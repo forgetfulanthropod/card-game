@@ -79,6 +79,7 @@ export interface ActionArgs {
     require: [type: RequiredActionName, least: number, most: number]
 
     mimicAttack: []
+    bellyFlop: [damage: number]
 }
 
 export type Locals = CalculatedCharacterStats & {

@@ -92,7 +92,11 @@ function dist([x1, y1]: [number, number], [x2, y2]: [number, number]) {
 }
 */
 
-function getPCTarget(ac: CharacterMeta[], npcUid: CharacterUid): CharacterMeta {
+function getPCTarget(
+    ac: CharacterMeta[],
+    npcUid: CharacterUid,
+    index = 0
+): CharacterMeta {
     const { stanceTypeMetaMap } = getRulebook()
     const allLivingPlayerCharacters = ac.filter(c => c.isPc && c.health > 0)
 
@@ -117,6 +121,17 @@ function getPCTarget(ac: CharacterMeta[], npcUid: CharacterUid): CharacterMeta {
                 Math.min(...verticalPlacementDifferentials)
     )
 
+    if (index > 0) {
+        const targetACIndex = ac.findIndex(
+            c => c.uid === allLivingPlayerCharacters[targetIndex].uid
+        )
+        return getPCTarget(
+            [...ac.slice(0, targetACIndex), ...ac.slice(targetACIndex + 1)],
+            npcUid,
+            index - 1
+        )
+    }
+
     return allLivingPlayerCharacters[targetIndex]
 }
 
@@ -126,8 +141,9 @@ export function getCommandTargets(
 ): CharacterUid[] {
     if (command.targetType === 'enemies') {
         return range(command.targetNum).map(
-            () =>
-                getPCTarget(vals(scene.allCharacters), command.characterUid).uid
+            (_, i) =>
+                getPCTarget(vals(scene.allCharacters), command.characterUid, i)
+                    .uid
         )
     } else if (command.targetType === 'allEnemies') {
         return getLivingPcs(scene).map(c => c.uid)
