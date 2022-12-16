@@ -66,13 +66,25 @@
     </style>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B9HWVKN8ZF"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+        const isLocal = document.location.hostname === 'localhost'
+        const GTAG_ID = isLocal ? 'G-B9HWVKN8ZF' : 'G-ZJEB0NYGHB';
 
-        gtag('config', 'G-B9HWVKN8ZF', { 'debug_mode': true });
+        const GTAG_URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`
+        const gaSrcScript = document.createElement('script')
+        gaSrcScript.setAttribute('src', GTAG_URL)
+        gaSrcScript.setAttribute('async', true)
+        document.head.appendChild(gaSrcScript)
+
+        const gaConfigScript = document.createElement('script')
+        gaConfigScript.text = `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);};
+            gtag('js', new Date());
+            gtag('config', GTAG_ID, { 'debug_mode': isLocal });
+            console.log({GTAG_ID, isLocal})
+        `
+        document.head.appendChild(gaConfigScript)
     </script>
 </head>
 

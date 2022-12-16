@@ -12,6 +12,7 @@ import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
 import { UserID } from 'shared'
+import { TutorialModal } from './StartScreen/TutorialModal'
 
 const WALLET_GATING_ENABLED = false // TODO move to env
 
@@ -35,6 +36,7 @@ export function NewStartScreen(props: {
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
+    const [showTutorial, setShowTutorial] = useState(false)
 
     useEffect(() => {
         gtag('event', 'ui_ux_view', {
@@ -86,7 +88,6 @@ export function NewStartScreen(props: {
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
 
-        // need to change this to a UUID retrieved from roundtrip call to postgres' user table!
         gtag('set', {
             user_id: userId,
         })
@@ -118,6 +119,9 @@ export function NewStartScreen(props: {
     return <>
         {showGateModal && <WalletGateModal
             setShowGateModal={setShowGateModal}
+        />}
+        {showTutorial && <TutorialModal
+            setShowTutorial={setShowTutorial}
         />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
@@ -185,7 +189,7 @@ export function NewStartScreen(props: {
                     <div className='h-auto w-full flex xl:pt-4 gap-4 md:gap-8 xl:gap-12'>
                         <PrimaryButton
                             text='tutorial'
-                            onClick={() => {}}
+                            onClick={() => setShowTutorial(true)}
                             type='secondary'
                             size='large'
                         />

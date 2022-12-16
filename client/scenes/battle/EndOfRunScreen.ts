@@ -25,6 +25,7 @@ import {
     RUN_SCORE_EVENT_META,
 } from 'shared'
 import { ITextStyle, Texture } from 'pixi.js'
+import { callServerApi } from '@/callServerApi'
 
 const getShowOnHoverFns = (el: PixiContainer) => {
     let waitingTimer: NodeJS.Timeout | null = null
@@ -186,8 +187,6 @@ const ScoreAttributeItem = (
 
 export function EndOfRunScreen(): PixiContainer {
     gtag('event', 'ui_ux_view', { page_title: 'End of Run Screen' })
-    gtag('event', 'level_end', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
-    gtag('event', 'run_end', { map_seed: 1, run_id: 1, try_again: 'false'}) //TODO fill out with real values
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
@@ -271,14 +270,36 @@ export function EndOfRunScreen(): PixiContainer {
 
     // Runs text animations synchronously
     ;(async () => {
+        const screenHasNotOpened = scene.get('endScreenHasOpened') === false
+        const isVictory = scene.get('state') === 'won'
+
         // below condition will only be met once (even after refresh)
-        if (
-            scene.get('endScreenHasOpened') === false &&
-            scene.get('state') === 'won'
-        ) {
-            handleScoringEvent('ROOM_CLEARED', 1, scene)
-            callApi('openEndScreen', {})
+        if (screenHasNotOpened) {
+            gtag('event', 'level_end', {
+                room_number: scene.get('numRoomsPassed'), // no +1 bc it should already be updated
+                room_id: scene.get('currentRoom').uid,
+                room_tier: scene.get('currentRoom').category,
+                run_id: scene.get('runId'),
+            })
+
+            gtag('event', 'run_end', {
+                map_seed: 1,
+                run_id: scene.get('runId'),
+            })
+
+            if (isVictory) {
+                handleScoringEvent('ROOM_CLEARED', 1, scene)
+                callApi('openEndScreen', {})
+            }
+
+            const {runId} = await callServerApi('endRun', {
+                userId: scene.get('username'),
+            })
+            if (runId === null) {
+                console.warn('Tried to end run but runId was null')
+            }
         }
+
         await animateNumberInElement(
             TotalScore,
             'points',
@@ -297,13 +318,13 @@ export function EndOfRunScreen(): PixiContainer {
         onClick: handleButtonPress,
     })
 
+    /** Takes you to character select screen */
     function handleButtonPress() {
         void callApi('makeNewUser', {
             username: localStorage.getItem('username') as string,
         })
         localStorage.removeItem('username')
         window.location.reload()
-        gtag('event', 'run_start', { map_seed: 1, run_id: 1, try_again: 'true'}) //TODO fill out with real values
     }
 
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({

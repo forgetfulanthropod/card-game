@@ -1,0 +1,70 @@
+import {
+    AuthUserDBActionProps,
+    ServerActions,
+    Gamestate,
+    Scene,
+    BattleScene,
+} from 'shared'
+import { getDbClient, sql as sqlTag } from '@/db/client'
+import { round } from 'lodash'
+import { getGamestate } from '@/db'
+
+export const endRun: ServerActions['endRun'] = async ({
+    userId,
+}) => {
+    logger.info(`Ending run for: ${userId}`)
+    const connection = await getDbClient()
+    const gameState = await getGamestate(userId)
+    let sql = sqlTag.typeAlias('void')
+
+    if (!gameState) {
+        logger.error(`No gamestate found for ${userId}`)
+        return { runId: null }
+    }
+
+    if (!isBattleScene(gameState.scene)) {
+        logger.warn('Not in battle scene')
+        return { runId: null }
+    }
+
+    const { runId, state } = gameState.scene
+    const totalScore = round(gameState.scene.runScore.totalScore, 0)
+    logger.info({ runId, totalScore, state })
+
+    if (state !== 'won' && state !== 'lost') {
+        logger.warn('Not in battle end state')
+        return { runId: null }
+    }
+
+    const runIsValid = validateRun({ connection, userId, gameState })
+    if (!runIsValid) {
+        logger.error('Run is not valid')
+        return { runId: null }
+    }
+
+    await connection.query(sql`
+        UPDATE
+            kaiju.user_run
+        SET
+            run_status = ${state},
+            end_ts = now(),
+            run_duration_in_sec = null,
+            run_score = ${totalScore},
+            game_state = ${JSON.stringify(gameState)}
+        WHERE
+            run_id = ${runId};
+    `)
+
+    return { runId }
+}
+
+const validateRun = async (
+    props: AuthUserDBActionProps & { gameState: Gamestate }
+): Promise<Boolean> => {
+    // TODO
+    return true
+}
+
+const isBattleScene = (scene: Scene): scene is BattleScene => {
+    return scene.id === 'battle'
+}

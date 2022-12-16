@@ -1,6 +1,5 @@
 import type { BattleCursor, GameActions } from 'shared'
 import produce from 'immer'
-import { nextRoom } from './nextRoom'
 import { getBattleSceneIn } from '@/util'
 
 export const choosePlushy: GameActions['choosePlushy'] = args => {

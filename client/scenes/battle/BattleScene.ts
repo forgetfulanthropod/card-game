@@ -98,7 +98,12 @@ function CoreScene(
 ): DisplayObject {
     playLoopingMusic(scene)
     gtag('event', 'ui_ux_view', { page_title: 'Battle Scene' })
-    gtag('event', 'level_start', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
+    gtag('event', 'level_start', {
+        room_number: scene.get('numRoomsPassed') + 1, //1-indexed
+        room_id: scene.get('currentRoom').uid,
+        room_tier: scene.get('currentRoom').category,
+        run_id: scene.get('runId'),
+    })
 
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 

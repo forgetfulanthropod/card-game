@@ -3,7 +3,6 @@ import type { BattleCursor, ClaimableLoot, GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
 import { getInitialLoot } from '@/gameState'
 import { isEmpty, keys, last } from 'lodash'
-import { nextRoom } from './nextRoom'
 
 export const collectLoot: GameActions['collectLoot'] = args => {
     const scene = getBattleSceneIn(args.game)

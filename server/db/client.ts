@@ -1,7 +1,6 @@
 import { getLogger } from '@/../game'
 import { readFileSync } from 'fs'
 import path from 'path'
-import { config as loadDotEnv } from 'dotenv'
 import {
     createPool,
     createSqlTag,
@@ -22,8 +21,6 @@ let pool: DatabasePool | null = null
 export const getDbClient = async () => {
     if (pool) return pool
     const logger = getLogger()
-    loadDotEnv()
-
     const url = stringifyDsn({
         username: process.env.PGUSER,
         password: process.env.PGPASSWORD,
@@ -32,10 +29,12 @@ export const getDbClient = async () => {
         databaseName: process.env.PGDATABASE,
     })
 
+    const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
+
     const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
     const maximumPoolSize = 15
     pool = await createPool(url, {
-        ssl,
+        ssl: isLocalhost ? undefined : ssl,
         maximumPoolSize,
         typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
     })

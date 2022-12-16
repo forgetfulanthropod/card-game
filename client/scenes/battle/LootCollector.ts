@@ -3,7 +3,6 @@ import { Rectangle, Texture } from 'pixi.js'
 import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
     AssetKey,
-    getStage,
     getTexture,
     loopSong,
     PixiContainer,
@@ -73,8 +72,13 @@ const getDisplayName = (name: LootFromGame) => {
 }
 
 export function LootCollector(): PixiContainer {
-    gtag('event', 'level_end', { room_number: 1, room_id: 1, room_tier: 1, run_id: 1 })
     const scene = getBattleScene()
+    gtag('event', 'level_end', {
+        room_number: scene.get('numRoomsPassed') + 1,
+        room_id: scene.get('currentRoom').uid,
+        room_tier: scene.get('currentRoom').category,
+        run_id: scene.get('runId'),
+    })
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
     let updateProgressBarFill: () => void // assigned to fn from chest when it is displayed, then called async
