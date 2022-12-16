@@ -25,14 +25,6 @@ export function GoButton(): PixiContainer {
             run_id: runId,
             try_again: 'false',
         })
-
-        // TODO move below to hex map level entry on click
-        // gtag('event', 'level_start', {
-        //     room_number: scene.get('numRoomsPassed') + 1,
-        //     room_id: 1,
-        //     room_tier: 1,
-        //     run_id: 1,
-        // }) //TODO fill out with real values
     }
 
     const bg = Sprite({

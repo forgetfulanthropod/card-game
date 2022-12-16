@@ -99,7 +99,7 @@ function CoreScene(
     playLoopingMusic(scene)
     gtag('event', 'ui_ux_view', { page_title: 'Battle Scene' })
     gtag('event', 'level_start', {
-        room_number: scene.get('numRoomsPassed'), //0-indexed
+        room_number: scene.get('numRoomsPassed') + 1, //1-indexed
         room_id: scene.get('currentRoom').uid,
         room_tier: scene.get('currentRoom').category,
         run_id: scene.get('runId'),
