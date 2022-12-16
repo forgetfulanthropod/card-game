@@ -18,17 +18,21 @@ export function ResetButton(props: { username: string }): JSXElement {
     return <Root
         onPointerDown={() => {
             release = false
-            setTimeout(() => {
+            setTimeout(async () => {
                 if (!release) {
                     localStorage.removeItem('username')
+                    // await callApi('makeNewUser', { username: props.username })
+                    // localStorage.removeItem('username') TODO: log out...
                     window.location.reload()
                 }
             }, 2500)
         }}
         onPointerUp={async () => {
             release = true
-            await callApi('makeNewUser', { username: props.username })
             window.location.reload()
+            // location.replace(
+            //     window.location.href.replace('#continue', '') + '#continue'
+            // )
         }}
     >
         ↺

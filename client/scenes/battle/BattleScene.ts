@@ -64,24 +64,24 @@ export function BattleSceneEl(): PixiContainer {
     )
 
     let battleRoomInfo: null | PixiContainer
-    root.on(
-        'destroyed',
-        onUpdate(
-            scene.select('numRoomsPassed'),
-            num => {
-                if (battleRoomInfo) root.removeChild(battleRoomInfo)
-                battleRoomInfo = BattleRoomInfo({
-                    info: [
-                        num == null || num === -1
-                            ? ''
-                            : `${num} room${num === 1 ? '' : 's'} cleared`,
-                    ],
-                })
-                root.addChild(battleRoomInfo)
-            },
-            true
-        )
-    )
+    // root.on(
+    //     'destroyed',
+    //     onUpdate(
+    //         scene.select('numRoomsPassed'),
+    //         num => {
+    //             if (battleRoomInfo) root.removeChild(battleRoomInfo)
+    //             battleRoomInfo = BattleRoomInfo({
+    //                 info: [
+    //                     num == null || num === -1
+    //                         ? ''
+    //                         : `${num} room${num === 1 ? '' : 's'} cleared`,
+    //                 ],
+    //             })
+    //             root.addChild(battleRoomInfo)
+    //         },
+    //         true
+    //     )
+    // )
 
     return root
 }
