@@ -24,6 +24,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         if (gameIsOver) {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             scene.set('state', 'won')
+            scene.select('runDuration').set('endTime', new Date().getTime())
             checkServerScoringEvent('RUN_COMPLETED', scene, {})
         } else {
             clearCharacterModifiersForRoom(scene)

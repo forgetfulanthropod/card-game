@@ -68,14 +68,11 @@ const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
         return
     }
 
-    scene.select('runDuration').set('endTime', new Date().toUTCString()) // might need to use library or time in DB for this?
     const startTime = scene.select('runDuration').get('startTime')
     const endTime = scene.select('runDuration').get('endTime')
 
     if (endTime) {
-        const totalTimeInSeconds =
-            (new Date(endTime).getTime() - new Date(startTime).getTime()) / 1000
-
+        const totalTimeInSeconds = (endTime - startTime) / 1000
         const minutes = ~~((totalTimeInSeconds % 3600) / 60)
         const hours = ~~(totalTimeInSeconds / 3600)
 

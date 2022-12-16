@@ -9,9 +9,7 @@ import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
 
-export const endRun: ServerActions['endRun'] = async ({
-    userId,
-}) => {
+export const endRun: ServerActions['endRun'] = async ({ userId }) => {
     logger.info(`Ending run for: ${userId}`)
     const connection = await getDbClient()
     const gameState = await getGamestate(userId)
@@ -29,6 +27,13 @@ export const endRun: ServerActions['endRun'] = async ({
 
     const { runId, state } = gameState.scene
     const totalScore = round(gameState.scene.runScore.totalScore, 0)
+    const { startTime, endTime } = gameState.scene.runDuration
+
+    let runDuration = 0
+    if (endTime) {
+        runDuration = getRunDurationInSec(startTime, endTime)
+    }
+
     logger.info({ runId, totalScore, state })
 
     if (state !== 'won' && state !== 'lost') {
@@ -48,7 +53,7 @@ export const endRun: ServerActions['endRun'] = async ({
         SET
             run_status = ${state},
             end_ts = now(),
-            run_duration_in_sec = null,
+            run_duration_in_sec = ${runDuration},
             run_score = ${totalScore},
             game_state = ${JSON.stringify(gameState)}
         WHERE
@@ -67,4 +72,8 @@ const validateRun = async (
 
 const isBattleScene = (scene: Scene): scene is BattleScene => {
     return scene.id === 'battle'
+}
+
+const getRunDurationInSec = (startTime: number, endTime: number): number => {
+    return ~~((endTime - startTime) / 1000)
 }
