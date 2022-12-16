@@ -188,7 +188,6 @@ export const intentAssets = {
     intentAttack: 'intents/floating intent amount.webp',
     intentBellyFlop: 'intents/belly button.webp',
     intentRollAround: 'intents/belly button.webp',
-    intentSitUpon: 'intents/belly button.webp',
     intentMimic: 'intents/Mimic.webp',
     intentInfectiousBite: 'intents/Infectious Bite.webp',
     intentGrudge: 'intents/Grudge.webp',
@@ -313,6 +312,7 @@ export const characterProfileAssets = {
 
 export const mapAssets = {
     mapRestSite: 'hex map/rest site2.webp',
+    mapEventSite: 'hex map/event site.webp',
 }
 
 export const mapTileAssets = {

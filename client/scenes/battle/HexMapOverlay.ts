@@ -229,10 +229,17 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
     return root
 }
 
-function TileContents(node: DungeonRoom | null): PixiContainer {
+function TileContents(node: DungeonRoom | null) {
     if (node == null) return Container({})
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
+
+    if (node.category === 'events')
+        return Sprite({
+            src: 'mapEventSite',
+            anchor: [0.5, 0.8],
+            scale: 0.7,
+        })
 
     return TileCharacters(node)
 }

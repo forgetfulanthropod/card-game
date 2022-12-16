@@ -178,12 +178,11 @@ const commandIdToMetaMap: Record<
         id: 'jurgenRollAround',
         src: 'intentRollAround',
         explanation: [
-            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
+            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 20 damage each, but will deal 1 point less for every point of damage he takes.',
         ],
     },
     jurgenSitUpon: {
         id: 'jurgenSitUpon',
-        src: 'intentSitUpon',
         explanation: [
             'Jürgen sits on one of your characters.  This attack does 60 damage and gives Stun (1) to the target.',
         ],
@@ -284,7 +283,7 @@ function DebuffIntended(
     return [
         Container(
             {
-                x: 40,
+                x: 60,
             },
             Sprite({
                 scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,

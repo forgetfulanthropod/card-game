@@ -67,16 +67,16 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     return If(data, block =>
         Container(
             {
-                // y: -50 *  SCALE_UNIVERSAL,
-                x: characterCursor.get('isPc') ? 345 : -100,
+                y: -90,
+                x: characterCursor.get('isPc') ? 325 : -100,
             },
             ...(block === 0
                 ? []
                 : [
                       Sprite({
                           src: getTexture('blockIcon'),
-                          width: 90 * SCALE_UNIVERSAL,
-                          height: 90 * SCALE_UNIVERSAL,
+                          width: 105,
+                          height: 105,
                           anchor: [0.5, 0.45],
                       }),
                       Text({
@@ -85,7 +85,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                           style: {
                               // fontFamily: ['bigFont', 'monospace'],
                               fontFamily: ['sansFont'],
-                              fontSize: 28,
+                              fontSize: 30,
                               fill: 'white',
                               stroke: 'black',
                               strokeThickness: 5,
