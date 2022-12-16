@@ -361,7 +361,8 @@ function BlockIntended(amount: number, command: NextCommand) {
 }
 
 function getCommandObjects(command: NextCommand) {
-    const commandMeta = commandIdToMetaMap[command.command.id as NpcCommandId]
+    const commandMeta =
+        commandIdToMetaMap[command.command.id as NpcCommandId] ?? {}
 
     const xOffset = 65
 
@@ -381,7 +382,7 @@ function getCommandObjects(command: NextCommand) {
           })
         : ExplanationIf({
               isShown: isHoveringIntent,
-              texts: [startCase(commandMeta.id)],
+              texts: [startCase(command.command.id)],
               xOffset,
               isHtml: true,
           })
