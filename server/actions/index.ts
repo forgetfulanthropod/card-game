@@ -5,4 +5,5 @@ export { maybeMakeUser } from './maybeMakeUser'
 export { login } from './login'
 export { startRun } from './startRun'
 export { getCurrentRun } from './getCurrentRun'
+export { endRun } from './endRun'
 // @endindex

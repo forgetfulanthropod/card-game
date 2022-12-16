@@ -23,7 +23,6 @@ export function GoButton(): PixiContainer {
         gtag('event', 'run_start', {
             map_seed: 1,
             run_id: runId,
-            try_again: 'false',
         })
     }
 

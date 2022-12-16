@@ -25,6 +25,7 @@ import {
     RUN_SCORE_EVENT_META,
 } from 'shared'
 import { ITextStyle, Texture } from 'pixi.js'
+import { callServerApi } from '@/callServerApi'
 
 const getShowOnHoverFns = (el: PixiContainer) => {
     let waitingTimer: NodeJS.Timeout | null = null
@@ -291,7 +292,12 @@ export function EndOfRunScreen(): PixiContainer {
                 callApi('openEndScreen', {})
             }
 
-            // TODO: callApi('finishRun', { userId: })
+            const {runId} = await callServerApi('endRun', {
+                userId: scene.get('username'),
+            })
+            if (runId === null) {
+                console.warn('Tried to end run but runId was null')
+            }
         }
 
         await animateNumberInElement(

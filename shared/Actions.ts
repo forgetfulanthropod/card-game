@@ -44,6 +44,10 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<{ runId: RunID }>
     }
+    endRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID | null }>
+    }
 }
 
 export type BareServerActionArgs = {
