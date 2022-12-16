@@ -78,7 +78,7 @@ function FloatingIntent(
         ...(!isFriendlyIntent && effects
             ? DebuffIntended(targetCharacterUid, nextCmd)
             : []),
-        ...(!isFriendlyIntent && damage ? DamageIntended(damage, nextCmd) : []),
+        ...(!isFriendlyIntent ? DamageIntended(damage, nextCmd) : []),
     ]
 
     const root = Container(
@@ -119,10 +119,12 @@ const commandIdToMetaMap: Record<
     bigBomb1: {
         id: 'bigBomb1',
         src: 'intentBigBomb1',
+        explanation: ['Gnome Big Bomber is charging his Big Bomb'],
     },
     bigBomb2: {
         id: 'bigBomb2',
         src: 'intentBigBomb2',
+        explanation: ['Gnome Big Bomber has charged his Big Bomb'],
     },
     block: {
         id: 'block',
@@ -237,38 +239,31 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
     return [
         Container(
             {},
-            ...(commandMeta.src
+            Sprite({
+                scale:
+                    INTENT_ICON_WIDTH /
+                    getTexture(commandMeta?.src ?? 'intentAttack').width,
+                src: getTexture(commandMeta?.src ?? 'intentAttack'),
+                anchor: commandMeta?.src ? [0.8, 0.4] : 0.4,
+                events,
+            }),
+            ...(amount
                 ? [
-                      Sprite({
-                          scale:
-                              INTENT_ICON_WIDTH /
-                              getTexture(commandMeta.src).width,
-                          src: getTexture(commandMeta.src),
-                          anchor: 0.4,
+                      Text({
+                          text: `${amount}`,
+                          anchor: 0.5,
+                          x: commandMeta.src ? -50 : 0,
                           events,
+                          style: {
+                              fill: 'white',
+                              strokeThickness: 5,
+                              stroke: 'black',
+                              fontFamily: 'sansFont',
+                              fontSize: 24,
+                          },
                       }),
                   ]
                 : []),
-            Sprite({
-                scale: INTENT_ICON_WIDTH / getTexture('intentAttack').width,
-                src: getTexture('intentAttack'),
-                anchor: 0.4,
-                events,
-                x: commandMeta.src ? -50 : 0,
-            }),
-            Text({
-                text: `${amount}`,
-                anchor: 0.5,
-                x: commandMeta.src ? -50 : 0,
-                events,
-                style: {
-                    fill: 'white',
-                    strokeThickness: 5,
-                    stroke: 'black',
-                    fontFamily: 'sansFont',
-                    fontSize: 24,
-                },
-            }),
             infoBox
         ),
     ]
@@ -370,7 +365,10 @@ function getCommandObjects(command: NextCommand) {
     let infoBox = commandMeta.explanation
         ? ExplanationIf({
               isShown: isHoveringIntent,
-              texts: [startCase(commandMeta.id), ...commandMeta.explanation],
+              texts: [
+                  startCase(commandMeta.id).replace(/[0-9]/g, ''),
+                  ...commandMeta.explanation,
+              ],
               xOffset,
               isHtml: true,
           })
