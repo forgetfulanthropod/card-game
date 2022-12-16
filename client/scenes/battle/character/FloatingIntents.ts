@@ -1,4 +1,9 @@
-import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
+import type {
+    CharacterUid,
+    NextCommand,
+    NpcCommandId,
+    TargetType,
+} from 'shared'
 import { datum } from 'datums'
 import {
     Explanation,
@@ -9,7 +14,8 @@ import {
 } from '@sharedElements'
 import { TermExplanation } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
-import type {
+import {
+    Adjust,
     AssetKey,
     DisplayObject,
     IntentAssetKey,
@@ -51,16 +57,29 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
 
 function FloatingIntent(
     nextCmd: NextCommand,
-    cuid: CharacterUid
+    targetCharacterUid: CharacterUid
 ): DisplayObject {
     if (nextCmd == null) throw new Error("it's broken")
 
-    const children =
-        nextCmd.command.targetType === 'self'
-            ? BlockIntended(
-                  nextCmd.outcome.blocks[nextCmd.command.characterUid]
-              )
-            : DamageIntended(nextCmd, cuid)
+    const block = nextCmd.outcome.blocks[targetCharacterUid] ?? 0
+    const damage = (nextCmd.outcome.damages[targetCharacterUid] ?? 0) - block
+    const effects = nextCmd.outcome.effects[targetCharacterUid]
+
+    // intents on player characters never friendly?
+    const isFriendlyIntent = !getBattleScene().get(
+        'allCharacters',
+        targetCharacterUid,
+        'isPc'
+    )
+
+    const children = [
+        ...(isFriendlyIntent && effects ? BuffIntended(nextCmd) : []),
+        ...(block > 0 ? BlockIntended(block, nextCmd) : []),
+        ...(!isFriendlyIntent && effects
+            ? DebuffIntended(targetCharacterUid, nextCmd)
+            : []),
+        ...(!isFriendlyIntent && damage ? DamageIntended(damage, nextCmd) : []),
+    ]
 
     const root = Container(
         {
@@ -87,197 +106,290 @@ function FloatingIntent(
     }
 }
 
-function DamageIntended(
-    command: NextCommand,
-    cuid: CharacterUid
-): DisplayObject[] {
-    const commandIdToMetaMap: Record<
-        (NpcCommandId & KeyTerm) | NpcCommandId,
-        { id: NpcCommandId; src: IntentAssetKey; explanation?: string[] }
-    > = {
-        ancientStrike: {
-            id: 'ancientStrike',
-            src: 'intentAttack',
-        },
-        basicAttack: {
-            id: 'basicAttack',
-            src: 'intentAttack',
-        },
-        bigBomb1: {
-            id: 'bigBomb1',
-            src: 'intentBigBomb1',
-        },
-        bigBomb2: {
-            id: 'bigBomb2',
-            src: 'intentBigBomb2',
-        },
-        block: {
-            id: 'block',
-            src: 'intentAttack',
-        },
-        bucketOfBangSnaps: {
-            id: 'bucketOfBangSnaps',
-            src: 'intentAttack',
-        },
-        chomp: {
-            id: 'chomp',
-            src: 'intentAttack',
-        },
-        demolitionCharge: {
-            id: 'demolitionCharge',
-            src: 'intentAttack',
-        },
-        evisceratingSweep: {
-            id: 'evisceratingSweep',
-            src: 'intentAttack',
-        },
-        fireCracker: {
-            id: 'fireCracker',
-            src: 'intentAttack',
-        },
-        gnomeBomb: {
-            id: 'gnomeBomb',
-            src: 'intentAttack',
-        },
-        grudge: {
-            id: 'grudge',
-            src: 'intentGrudge',
-        },
-        hansBuffBlock: {
-            id: 'hansBuffBlock',
-            src: 'intentAttack',
-        },
-        hansCurse: {
-            id: 'hansCurse',
-            src: 'intentAttack',
-        },
-        hansGuards: {
-            id: 'hansGuards',
-            src: 'intentAttack',
-        },
-        hansMagicMissile: {
-            id: 'hansMagicMissile',
-            src: 'intentAttack',
-        },
-        itchyOozeSpecial: {
-            id: 'itchyOozeSpecial',
-            src: 'intentAttack',
-        },
-        jab: {
-            id: 'jab',
-            src: 'intentAttack',
-        },
-        jurgenBellyFlop: {
-            id: 'jurgenBellyFlop',
-            src: 'intentAttack',
-            explanation: [
-                'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes.',
-            ],
-        },
-        jurgenRollAround: {
-            id: 'jurgenRollAround',
-            src: 'intentAttack',
-            explanation: [
-                'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
-            ],
-        },
-        jurgenSitUpon: {
-            id: 'jurgenSitUpon',
-            src: 'intentAttack',
-            explanation: [
-                'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
-            ],
-        },
-        jurgenStampSnort: {
-            id: 'jurgenStampSnort',
-            src: 'intentAttack',
-        },
-        matchaMadness: {
-            id: 'matchaMadness',
-            src: 'intentAttack',
-        },
-        matchaMash: {
-            id: 'matchaMash',
-            src: 'intentAttack',
-        },
-        matchaMeld: {
-            id: 'matchaMeld',
-            src: 'intentAttack',
-        },
-        mimicAttack: {
-            id: 'mimicAttack',
-            src: 'intentMimic',
-            explanation: ['copies last hit this turn or deals 999'],
-        },
-        passiveBlockCmd: {
-            id: 'passiveBlockCmd',
-            src: 'intentAttack',
-        },
-        rest: {
-            id: 'rest',
-            src: 'intentAttack',
-        },
-        rustyPokeHigh: {
-            id: 'rustyPokeHigh',
-            src: 'intentAttack',
-        },
-        rustyPokeLow: {
-            id: 'rustyPokeLow',
-            src: 'intentAttack',
-        },
-        slash: {
-            id: 'slash',
-            src: 'intentAttack',
-        },
-        strike: {
-            id: 'strike',
-            src: 'intentAttack',
-        },
-        swordWack: {
-            id: 'swordWack',
-            src: 'intentAttack',
-        },
-        yodel: {
-            id: 'yodel',
-            src: 'intentAttack',
-        },
-    }
+const commandIdToMetaMap: Record<
+    (NpcCommandId & KeyTerm) | NpcCommandId,
+    { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+> = {
+    ancientStrike: {
+        id: 'ancientStrike',
+    },
+    basicAttack: {
+        id: 'basicAttack',
+    },
+    bigBomb1: {
+        id: 'bigBomb1',
+        src: 'intentBigBomb1',
+    },
+    bigBomb2: {
+        id: 'bigBomb2',
+        src: 'intentBigBomb2',
+    },
+    block: {
+        id: 'block',
+    },
+    bucketOfBangSnaps: {
+        id: 'bucketOfBangSnaps',
+    },
+    chomp: {
+        id: 'chomp',
+    },
+    demolitionCharge: {
+        id: 'demolitionCharge',
+    },
+    evisceratingSweep: {
+        id: 'evisceratingSweep',
+    },
+    fireCracker: {
+        id: 'fireCracker',
+    },
+    gnomeBomb: {
+        id: 'gnomeBomb',
+    },
+    grudge: {
+        id: 'grudge',
+        src: 'intentGrudge',
+    },
+    hansBuffBlock: {
+        id: 'hansBuffBlock',
+    },
+    hansCurse: {
+        id: 'hansCurse',
+    },
+    hansGuards: {
+        id: 'hansGuards',
+    },
+    hansMagicMissile: {
+        id: 'hansMagicMissile',
+    },
+    itchyOozeSpecial: {
+        id: 'itchyOozeSpecial',
+    },
+    jab: {
+        id: 'jab',
+    },
+    jurgenBellyFlop: {
+        id: 'jurgenBellyFlop',
+        src: 'intentBellyFlop',
+        explanation: [
+            'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes.',
+        ],
+    },
+    jurgenRollAround: {
+        id: 'jurgenRollAround',
+        src: 'intentRollAround',
+        explanation: [
+            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 15 damage each, but will deal 1 point less for every point of damage he takes.',
+        ],
+    },
+    jurgenSitUpon: {
+        id: 'jurgenSitUpon',
+        src: 'intentSitUpon',
+        explanation: [
+            'Jürgen sits on one of your characters.  This attack does 60 damage and gives Stun (1) to the target.',
+        ],
+    },
+    jurgenStampSnort: {
+        id: 'jurgenStampSnort',
+        explanation: ['Bosshog Jürgen will do double damage next turn.'],
+    },
+    matchaMadness: {
+        id: 'matchaMadness',
+    },
+    matchaMash: {
+        id: 'matchaMash',
+    },
+    matchaMeld: {
+        id: 'matchaMeld',
+    },
+    mimicAttack: {
+        id: 'mimicAttack',
+        src: 'intentMimic',
+        explanation: ['copies last hit this turn or deals 999'],
+    },
+    passiveBlockCmd: {
+        id: 'passiveBlockCmd',
+    },
+    rest: {
+        id: 'rest',
+    },
+    rustyPokeHigh: {
+        id: 'rustyPokeHigh',
+    },
+    rustyPokeLow: {
+        id: 'rustyPokeLow',
+    },
+    slash: {
+        id: 'slash',
+    },
+    strike: {
+        id: 'strike',
+    },
+    swordWack: {
+        id: 'swordWack',
+    },
+    yodel: {
+        id: 'yodel',
+    },
+}
 
-    //@ts-ignore
-    const commandMeta = commandIdToMetaMap?.[command.command.id]
+function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
+    const { commandMeta, events, infoBox } = getCommandObjects(command)
 
-    const intentIconTexture = getTexture(commandMeta?.src ?? 'intentAttack')
-    const amount =
-        (command.outcome.damages?.[cuid] ?? 0) -
-        (command.outcome.blocks?.[cuid] ?? 0)
+    return [
+        Container(
+            {},
+            ...(commandMeta.src
+                ? [
+                      Sprite({
+                          scale:
+                              INTENT_ICON_WIDTH /
+                              getTexture(commandMeta.src).width,
+                          src: getTexture(commandMeta.src),
+                          anchor: 0.4,
+                          events,
+                      }),
+                  ]
+                : []),
+            Sprite({
+                scale: INTENT_ICON_WIDTH / getTexture('intentAttack').width,
+                src: getTexture('intentAttack'),
+                anchor: 0.4,
+                events,
+                x: commandMeta.src ? -50 : 0,
+            }),
+            Text({
+                text: `${amount}`,
+                anchor: 0.5,
+                x: commandMeta.src ? -50 : 0,
+                events,
+                style: {
+                    fill: 'white',
+                    strokeThickness: 5,
+                    stroke: 'black',
+                    fontFamily: 'sansFont',
+                    fontSize: 24,
+                },
+            }),
+            infoBox
+        ),
+    ]
+}
+
+function DebuffIntended(
+    targetCharacterUid: CharacterUid,
+    command: NextCommand
+) {
+    const { commandMeta, events, infoBox } = getCommandObjects(command)
+
+    return [
+        Container(
+            {
+                x: 40,
+            },
+            Sprite({
+                scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
+                src: 'intentDebuff',
+                anchor: 0.4,
+                events,
+            }),
+            infoBox
+        ),
+    ]
+}
+
+function BuffIntended(command: NextCommand) {
+    const { events, infoBox } = getCommandObjects(command)
+
+    return [
+        Container(
+            {
+                y: -190,
+                x: -340,
+            },
+            Sprite({
+                scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
+                src: 'intentBuff',
+                anchor: 0.2,
+                events,
+            }),
+            infoBox
+        ),
+    ]
+}
+
+function BlockIntended(amount: number, command: NextCommand) {
+    const isHoveringIntent = datum(false)
+
+    return [
+        Container(
+            {
+                y: -190,
+                x: -380,
+            },
+            Sprite({
+                scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
+                src: 'intentBlock',
+                anchor: 0.2,
+                events: {
+                    pointerover() {
+                        isHoveringIntent.set(true)
+                    },
+                    pointerdown() {
+                        isHoveringIntent.set(true)
+                    },
+                    pointerout() {
+                        isHoveringIntent.set(false)
+                    },
+                },
+            }),
+            Text({
+                text: `${amount ?? '?'}`,
+                anchor: 0.5,
+                style: {
+                    fill: 'white',
+                    strokeThickness: 5,
+                    stroke: 0,
+                    fontFamily: 'sansFont',
+                },
+            }),
+            ExplanationIf({
+                isShown: isHoveringIntent,
+                texts: [`intends to block for ${amount}`],
+                xOffset: 65,
+            })
+        ),
+    ]
+}
+
+function getCommandObjects(command: NextCommand) {
+    const commandMeta = commandIdToMetaMap[command.command.id as NpcCommandId]
+
+    const xOffset = 65
 
     const isHoveringIntent = datum(false)
-    const infoBox =
-        commandMeta == null
-            ? null
-            : commandMeta.explanation
-            ? ExplanationIf({
-                  isShown: isHoveringIntent,
-                  texts: [
-                      startCase(commandMeta.id),
-                      ...transformExplanation(commandMeta.explanation),
-                  ],
-                  xOffset: 50,
-                  yOffset: 10,
-              })
-            : Object.hasOwn(keyTermsMap, commandMeta.id)
-            ? TermExplanationIf({
-                  isShown: isHoveringIntent,
-                  term: commandMeta.id,
-                  xOffset: 50,
-                  yOffset: 10,
-              })
-            : ExplanationIf({
-                  isShown: isHoveringIntent,
-                  texts: [startCase(commandMeta.id)],
-                  xOffset: 50,
-                  yOffset: 10,
-              })
+    let infoBox = commandMeta.explanation
+        ? ExplanationIf({
+              isShown: isHoveringIntent,
+              texts: [startCase(commandMeta.id), ...commandMeta.explanation],
+              xOffset,
+              isHtml: true,
+          })
+        : Object.hasOwn(keyTermsMap, commandMeta.id)
+        ? TermExplanationIf({
+              isShown: isHoveringIntent,
+              term: commandMeta.id as KeyTerm,
+              xOffset,
+          })
+        : ExplanationIf({
+              isShown: isHoveringIntent,
+              texts: [startCase(commandMeta.id)],
+              xOffset,
+              isHtml: true,
+          })
+
+    infoBox = Adjust(infoBox, {
+        y: -30,
+    })
 
     const events: InteractionEvents = {
         pointerover() {
@@ -290,56 +402,5 @@ function DamageIntended(
             isHoveringIntent.set(false)
         },
     }
-
-    return [
-        Sprite({
-            scale: INTENT_ICON_WIDTH / intentIconTexture.width,
-            src: intentIconTexture,
-            anchor: [0.4, 0.4],
-            events,
-        }),
-        Text({
-            text: `${amount}`,
-            anchor: 0.5,
-            events,
-            style: {
-                fill: 'white',
-                strokeThickness: 5,
-                stroke: 'black',
-                fontFamily: 'sansFont',
-                fontSize: 24,
-            },
-        }),
-        ...(infoBox ? [infoBox] : []),
-    ]
-}
-
-function transformExplanation(explanation: string) {
-    // const statSlots = explanation.match(/[.+]/g)
-
-    return explanation
-}
-
-function BlockIntended(amount: number) {
-    return [
-        Sprite({
-            y: -190,
-            x: -290,
-            scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
-            src: 'intentBlock',
-            anchor: [0.2, 0.2],
-        }),
-        Text({
-            y: -190,
-            x: -290,
-            text: `${amount ?? '?'}`,
-            anchor: 0.5,
-            style: {
-                fill: 'white',
-                strokeThickness: 5,
-                stroke: 0,
-                fontFamily: 'sansFont',
-            },
-        }),
-    ]
+    return { commandMeta, events, infoBox }
 }

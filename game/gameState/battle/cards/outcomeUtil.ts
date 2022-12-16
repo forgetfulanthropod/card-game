@@ -1,4 +1,6 @@
-import type { BattleScene, StatChangeMap } from 'shared'
+import { deepEqual, deepStrictEqual } from 'assert'
+import { isEqual } from 'lodash'
+import type { BattleScene, Effect, StatChangeMap } from 'shared'
 
 export function extractDamages(
     prev: BattleScene,
@@ -24,4 +26,18 @@ export function extractBlocks(
         }
     }
     return blocks
+}
+
+export function extractEffects(
+    prev: BattleScene,
+    next: BattleScene
+): StatChangeMap {
+    const effectsChanged: StatChangeMap = {}
+    for (const [uid, { effects: effects }] of Object.entries(
+        prev.allCharacters
+    )) {
+        if (!isEqual(effects, next.allCharacters[uid].effects))
+            effectsChanged[uid] = 1
+    }
+    return effectsChanged
 }

@@ -195,14 +195,16 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
+    const filters =
+        !~choice && !isPlayerCharacterRoom
+            ? [new AdjustmentFilter({ brightness: 0.5 })]
+            : []
+
     const root = Container(
         {
             x: depth * displayWidth * 0.82,
             y: displayWidth * 0.36 * yOffset,
-            filters:
-                !~choice && !isPlayerCharacterRoom
-                    ? [new AdjustmentFilter({ brightness: 0.5 })]
-                    : [],
+            filters,
             events: {
                 pointerdown() {
                     if (~choice) void callApi('nextRoom', { choice })
@@ -211,7 +213,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     if (~choice) root.filters = [glowFilter]
                 },
                 pointerout() {
-                    root.filters = []
+                    if (~choice) root.filters = filters
                 },
             },
         },
