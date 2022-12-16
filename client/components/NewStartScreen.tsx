@@ -75,8 +75,7 @@ export function NewStartScreen(props: {
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
         console.log('initializing userDoc....')
         await solanaRPC.asyncInitConnection()
-        const walletAddress = (await solanaRPC?.getAccounts())[0]
-        const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
+        const walletAddress = await solanaRPC.getPublicKey()
         const userIdRes = await callServerApi('login', { walletAddress })
         if (!userIdRes) {
             return window.alert(
@@ -84,6 +83,7 @@ export function NewStartScreen(props: {
             )
         }
         const { userId } = userIdRes
+        const numKaijusOwned = await solanaRPC.getKaijusOwnedByUser()
         setUserDoc({ walletAddress, numKaijusOwned, userId })
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })

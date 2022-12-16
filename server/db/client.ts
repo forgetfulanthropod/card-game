@@ -36,7 +36,7 @@ export const getDbClient = async () => {
     pool = await createPool(url, {
         ssl: isLocalhost ? undefined : ssl,
         maximumPoolSize,
-        typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
+        // typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
     })
 
     return pool
@@ -48,8 +48,11 @@ export const sql = createSqlTag({
             userId: z.string(),
         }),
         id: z.object({
-            userId: z.number(),
+            id: z.number(),
         }),
         void: z.object({}).strict(),
+        number: z.object({
+            number: z.number(),
+        }),
     },
 })

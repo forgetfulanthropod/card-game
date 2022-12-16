@@ -48,6 +48,10 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<{ runId: RunID | null }>
     }
+    getNumKaijuInGoodEarth: {
+        args: { walletAddress: string }
+        res: Promise<{ numKaijuOwned: number }>
+    }
 }
 
 export type BareServerActionArgs = {
