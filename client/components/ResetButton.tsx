@@ -20,8 +20,8 @@ export function ResetButton(props: { username: string }): JSXElement {
             release = false
             setTimeout(async () => {
                 if (!release) {
-                    localStorage.removeItem('username')
-                    // await callApi('makeNewUser', { username: props.username })
+                    // localStorage.removeItem('username')
+                    await callApi('makeNewUser', { username: props.username })
                     // localStorage.removeItem('username') TODO: log out...
                     window.location.reload()
                 }
