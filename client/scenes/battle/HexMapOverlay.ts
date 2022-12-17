@@ -1,6 +1,7 @@
 import { Texture } from 'pixi.js'
 import type {
     BattleCursor,
+    BattleScene,
     CharacterMeta,
     DungeonRoom,
     DungeonRoomMap,
@@ -33,6 +34,7 @@ import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
 import { mean } from 'lodash'
+import { ROCursor } from 'sbaobab'
 
 export function HexMapOverlay(): PixiContainer {
     gtag('event', 'ui_ux_view', { page_title: 'Hex Map' })
@@ -286,7 +288,7 @@ function AnimatedCharacters(
     currentRoom: DungeonRoom,
     node: DungeonRoom,
     isPlayerCharacterRoom: boolean,
-    scene: BattleCursor,
+    scene: ROCursor<BattleScene>,
     choice: number
 ) {
     const isCurrentRoomPastThisDepth =
