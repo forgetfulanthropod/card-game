@@ -51,7 +51,7 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
                       }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
-        index => ({ x: (index * INTENT_ICON_WIDTH) / 2 })
+        index => ({ x: index * INTENT_ICON_WIDTH })
     )
 }
 
@@ -278,7 +278,7 @@ function DebuffIntended(
     return [
         Container(
             {
-                x: 60,
+                x: 30,
             },
             Sprite({
                 scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
@@ -298,7 +298,7 @@ function BuffIntended(command: NextCommand) {
         Container(
             {
                 y: -190,
-                x: -340,
+                x: -40,
             },
             Sprite({
                 scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
@@ -318,7 +318,7 @@ function BlockIntended(amount: number, command: NextCommand) {
         Container(
             {
                 y: -190,
-                x: -380,
+                x: -80,
             },
             Sprite({
                 scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,

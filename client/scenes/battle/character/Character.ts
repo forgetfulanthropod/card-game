@@ -15,7 +15,7 @@ import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
 import type { TrackEntry } from '@pixi-spine/all-4.1'
 import { diff } from 'deep-diff'
-import { HealthBar } from './HealthBar'
+import { HealthBar, HEALTH_BAR_WIDTH } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
@@ -93,7 +93,7 @@ export function Character(props: CharacterProps): PixiContainer {
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
                     y: 0,
-                    x: 300,
+                    x: characterMeta.isPc ? HEALTH_BAR_WIDTH : 0,
                 })
         )
     )

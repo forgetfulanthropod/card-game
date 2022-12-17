@@ -325,7 +325,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                         boss: true,
                     },
                 ],
-                category: 'tierOne',
+                category: 'tierThree',
                 edges: ['', '2_4', '', ''],
             },
             '2_0': {

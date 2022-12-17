@@ -234,13 +234,6 @@ function TileContents(node: DungeonRoom | null) {
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    if (node.category === 'events')
-        return Sprite({
-            src: 'mapEventSite',
-            anchor: [0.5, 0.8],
-            scale: 0.7,
-        })
-
     return Adjust(TileCharacters(node), {
         scale: node.category === 'bosses' ? 0.6 : 0.45,
     })
@@ -271,6 +264,13 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
         return RestSiteContents(node)
+
+    if (node.category === 'events')
+        return Sprite({
+            src: 'mapEventSite',
+            anchor: [0.5, 0.8],
+            scale: 0.7,
+        })
 
     const isCurrentRoomPastThisDepth =
         parseInt(currentRoom.uid.split('_')[0]) >

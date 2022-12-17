@@ -142,7 +142,8 @@ function CoreScene(
 
 function playLoopingMusic(scene: ROCursor<BattleScene>) {
     const category = scene.get('currentRoom', 'category')
-    if (category === 'tierOne') loopSong('battleMusicHooligansBluffTierOne')
+    if (category === 'tierOne' || 'events')
+        loopSong('battleMusicHooligansBluffTierOne')
     else if (category === 'tierTwo')
         loopSong('battleMusicHooligansBluffTierTwo')
     else if (category === 'tierThree')
