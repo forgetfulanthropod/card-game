@@ -8,11 +8,13 @@ export const UserProfileIcon = ({
     logout,
     isLoggedIn,
     userDoc,
+    ownsKaijus,
 }: {
     login: () => Promise<void>
     logout: () => void
     isLoggedIn: boolean
     userDoc: UserDoc
+    ownsKaijus: boolean
 }) => {
     const { walletAddress } = userDoc
 
@@ -43,10 +45,10 @@ export const UserProfileIcon = ({
         >
             {isLoggedIn ? (
                 <>
-                    <img
+                    {ownsKaijus && <img
                         src='./assets/character profiles/penguinKnight.webp'
                         className='max-w-full h-6 md:h-9 lg:h-12 rounded-2xl border border-black'
-                    />
+                    />}
                     <div className='flex flex-col items-start'>
                         <p className='px-2'>{shortAddress}</p>
                     </div>

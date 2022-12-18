@@ -27,7 +27,7 @@ export const useWeb3Auth = () => {
         chainConfig: {
             chainNamespace: CHAIN_NAMESPACES.SOLANA,
             chainId: '0x1', // Please use 0x1 for Mainnet, 0x2 for Testnet, 0x3 for Devnet
-            rpcTarget: 'https://divine-broken-fog.solana-devnet.quiknode.pro/',
+            rpcTarget: process.env.RPC_URL,
         },
         uiConfig: {
             theme: 'dark',

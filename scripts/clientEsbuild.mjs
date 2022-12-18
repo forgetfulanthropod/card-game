@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { config as loadDotEnv } from 'dotenv'
 
 const password = 'dailyship'
 const buildDir = 'public/'
@@ -19,15 +20,19 @@ const outFile = `${buildDir}/${password}.js`
 const args = process.argv.slice(2)
 const shouldWatchArgv = args[0] === 'watch'
 
-const isProduction = process.env.production === 'yes'
-
 console.log('process.env.PWD:', process.env.PWD)
 
 console.log('substitutions:', makeSubstitutions())
 
+
 function makeSubstitutions() {
+    loadDotEnv();
+    const walletGated = process.env.WALLET_GATED === 'true'
+    const rpcUrl = `"${process.env.RPC_URL}"`
     return {
         ...makeBuildInfo('CLIENT_'),
+        ['process.env.WALLET_GATED']: walletGated, // true in prod
+        ['process.env.RPC_URL']: rpcUrl,
         global: 'window',
     }
 }
@@ -36,6 +41,8 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
+    loadDotEnv();
+    const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
     esbuild({
