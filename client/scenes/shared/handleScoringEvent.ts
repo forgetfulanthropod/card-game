@@ -20,8 +20,12 @@ const handleScoringEvent = (
 
     switch (event) {
         case 'ENEMY_KILLED':
-            const { id, displayName } = data[0] as CharacterMeta
+            if (!data[0]) {
+                return
+            }
 
+            const id = data[0]?.id as CharacterMeta
+            const displayName = data[0]?.displayName as CharacterMeta
             displayScoreNotification(
                 `${displayName} defeated`,
                 `${id}Profile` as AssetKey,

@@ -48,8 +48,8 @@ export interface BattleScene extends SceneHas {
     treasureChest: TreasureChest
     runScore: RunScore
     runDuration: {
-        startTime: string
-        endTime: string | null
+        startTime: number
+        endTime: number | null
     }
     runId: RunID | null
 }

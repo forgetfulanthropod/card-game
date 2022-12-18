@@ -32,11 +32,12 @@ export const getDbClient = async () => {
     const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
 
     const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
-    const maximumPoolSize = 15
+    const maximumPoolSize = parseInt(process.env.MAX_POOL_SIZE ?? '20')
+
     pool = await createPool(url, {
         ssl: isLocalhost ? undefined : ssl,
         maximumPoolSize,
-        typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
+        // typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
     })
 
     return pool
@@ -48,8 +49,11 @@ export const sql = createSqlTag({
             userId: z.string(),
         }),
         id: z.object({
-            userId: z.number(),
+            id: z.number(),
         }),
         void: z.object({}).strict(),
+        number: z.object({
+            number: z.number(),
+        }),
     },
 })

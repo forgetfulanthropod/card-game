@@ -14,7 +14,8 @@ import { callServerApi } from '@/callServerApi'
 import { UserID } from 'shared'
 import { TutorialModal } from './StartScreen/TutorialModal'
 
-const WALLET_GATING_ENABLED = false // TODO move to env
+const WALLET_GATED = process.env.WALLET_GATED
+console.log({WALLET_GATED, RPC_URL: process.env.RPC_URL})
 
 export type UserDoc = {
     walletAddress: string | null
@@ -75,8 +76,7 @@ export function NewStartScreen(props: {
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
         console.log('initializing userDoc....')
         await solanaRPC.asyncInitConnection()
-        const walletAddress = (await solanaRPC?.getAccounts())[0]
-        const numKaijusOwned = (await solanaRPC.getKaijusOwnedByUser()).length
+        const walletAddress = await solanaRPC.getPublicKey()
         const userIdRes = await callServerApi('login', { walletAddress })
         if (!userIdRes) {
             return window.alert(
@@ -84,6 +84,7 @@ export function NewStartScreen(props: {
             )
         }
         const { userId } = userIdRes
+        const numKaijusOwned = await solanaRPC.getKaijusOwnedByUser()
         setUserDoc({ walletAddress, numKaijusOwned, userId })
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
@@ -103,12 +104,11 @@ export function NewStartScreen(props: {
     }
 
     const handlePlayButtonClick = () => {
-        if (WALLET_GATING_ENABLED) {
+        if (WALLET_GATED) {
             if (!isLoggedIn) return handleLogin()
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
-        } else {
-            enterGame()
         }
+        enterGame()
     }
 
     const enterGame = () => {
@@ -179,6 +179,7 @@ export function NewStartScreen(props: {
                         logout={handleLogout}
                         isLoggedIn={isLoggedIn}
                         userDoc={userDoc}
+                        ownsKaijus={userDoc.numKaijusOwned > 0}
                     />
                 </div>
             </div>
