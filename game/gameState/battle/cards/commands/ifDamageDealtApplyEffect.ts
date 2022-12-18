@@ -32,7 +32,6 @@ export const execute: Executors['ifDamageDealtApplyEffect'] = ({
             attackerUid: command.characterUid,
         })
 
-        logger.info('damage applied')
         const healthAfter = scene.get('allCharacters', targetUid, 'health')
 
         if (healthBefore !== healthAfter)

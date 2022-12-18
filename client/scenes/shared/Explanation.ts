@@ -196,11 +196,13 @@ export function ExplanationIf({
     texts,
     xOffset = 0,
     yOffset = 0,
+    isHtml = false,
 }: {
     isShown: Datum<boolean>
     texts: string[]
     xOffset?: number
     yOffset?: number
+    isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
         const root = Container({})
@@ -231,15 +233,17 @@ export function Explanation({
     texts,
     color,
     displayObjectArgs,
+    isHtml = false,
 }: {
     texts: string[]
     color?: number
     displayObjectArgs?: InfoBoxDisplayArgs
+    isHtml?: boolean
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
         return Text({
             text,
-            isHtml: true,
+            isHtml,
             style: {
                 fill: 'white',
                 wordWrapWidth: BASE_WIDTH * 0.2,

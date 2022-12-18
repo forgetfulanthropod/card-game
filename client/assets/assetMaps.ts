@@ -186,10 +186,14 @@ export const intentAssets = {
     enemyIntentArrowHead: 'intents/arrow_4_head_bright.webp',
     enemyIntentArrowTail: 'intents/arrow_4_tail_bright.webp',
     intentAttack: 'intents/floating intent amount.webp',
+    intentBellyFlop: 'intents/belly button.webp',
+    intentRollAround: 'intents/belly button.webp',
     intentMimic: 'intents/Mimic.webp',
     intentInfectiousBite: 'intents/Infectious Bite.webp',
     intentGrudge: 'intents/Grudge.webp',
-    intentBlock: 'intents/npc/Shield intent.webp',
+    intentBlock: 'intents/block.webp',
+    intentBuff: 'intents/buff.webp',
+    intentDebuff: 'intents/debuff.webp',
     intentBigBomb1: 'intents/gnomeBomb1.webp',
     intentBigBomb2: 'intents/gnomeBomb2.webp',
 }
@@ -308,6 +312,7 @@ export const characterProfileAssets = {
 
 export const mapAssets = {
     mapRestSite: 'hex map/rest site2.webp',
+    mapEventSite: 'hex map/event site.webp',
 }
 
 export const mapTileAssets = {

@@ -1,5 +1,7 @@
 import { Texture } from 'pixi.js'
 import type {
+    BattleCursor,
+    BattleScene,
     CharacterMeta,
     DungeonRoom,
     DungeonRoomMap,
@@ -32,6 +34,7 @@ import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
 import { mean } from 'lodash'
+import { ROCursor } from 'sbaobab'
 
 export function HexMapOverlay(): PixiContainer {
     gtag('event', 'ui_ux_view', { page_title: 'Hex Map' })
@@ -195,14 +198,16 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
+    const filters =
+        !~choice && !isPlayerCharacterRoom
+            ? [new AdjustmentFilter({ brightness: 0.5 })]
+            : []
+
     const root = Container(
         {
             x: depth * displayWidth * 0.82,
             y: displayWidth * 0.36 * yOffset,
-            filters:
-                !~choice && !isPlayerCharacterRoom
-                    ? [new AdjustmentFilter({ brightness: 0.5 })]
-                    : [],
+            filters,
             events: {
                 pointerdown() {
                     if (~choice) void callApi('nextRoom', { choice })
@@ -211,7 +216,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     if (~choice) root.filters = [glowFilter]
                 },
                 pointerout() {
-                    root.filters = []
+                    if (~choice) root.filters = filters
                 },
             },
         },
@@ -227,12 +232,14 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
     return root
 }
 
-function TileContents(node: DungeonRoom | null): PixiContainer {
+function TileContents(node: DungeonRoom | null) {
     if (node == null) return Container({})
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    return TileCharacters(node)
+    return Adjust(TileCharacters(node), {
+        scale: node.category === 'bosses' ? 0.6 : 0.45,
+    })
 }
 
 function RestSiteContents(node: DungeonRoom): PixiSprite {
@@ -261,6 +268,29 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
     if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
         return RestSiteContents(node)
 
+    if (!isPlayerCharacterRoom && node.category === 'events')
+        return Sprite({
+            src: 'mapEventSite',
+            anchor: [0.5, 0.8],
+            scale: 0.7,
+        })
+
+    return AnimatedCharacters(
+        currentRoom,
+        node,
+        isPlayerCharacterRoom,
+        scene,
+        choice
+    )
+}
+
+function AnimatedCharacters(
+    currentRoom: DungeonRoom,
+    node: DungeonRoom,
+    isPlayerCharacterRoom: boolean,
+    scene: ROCursor<BattleScene>,
+    choice: number
+) {
     const isCurrentRoomPastThisDepth =
         parseInt(currentRoom.uid.split('_')[0]) >
         parseInt(node.uid.split('_')[0])
@@ -276,21 +306,8 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const root = Container(
         {
-            scale: 0.45,
             y: -60,
             x: characters?.[0]?.isPc ? -60 : 0,
-            // events: {
-            //     pointerdown() {
-            //         void callApi('nextRoom', { choice })
-            //     },
-            //     pointerover() {
-            //         if (~choice && !isPlayerCharacterRoom)
-            //             root.filters = [glowFilter]
-            //     },
-            //     pointerout() {
-            //         root.filters = []
-            //     },
-            // },
         },
         ...characters.map((characterMeta, i) => {
             const anim = MainCharacterAnimation({
@@ -309,7 +326,6 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             //         () => anim?.state && (anim.state.timeScale = 0),
             //         Math.random() * 1000
             //     )
-
             if (!~choice) anim.cursor = 'default'
 
             const pcXPositions = [180, 0, 180]
@@ -325,7 +341,6 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             })
         })
     )
-
     return root
 }
 
@@ -343,35 +358,7 @@ function getTileGraphMap(): DungeonRoomMap {
     console.log({ rooms: getBattleScene().get('rooms') })
 
     return getBattleScene().get('rooms')
-
-    // TODO: copied from game/rooms.ts
-    // const rooms = getBattleScene().get('rooms')
-
-    // console.log({ rooms })
-
-    // const graph: Record<RoomUid, MapNode> = {
-    //     'room 0': {
-    //         depth: 0,
-    //         enemies: [],
-    //         edges: ['', getNodeId(0)],
-    //     },
-    // }
-
-    // rooms.forEach((room, i) => {
-    //     const edges: [string, string] = ['', getNodeId(i + 1)]
-    //     if ((i + 1) % 2) edges.reverse()
-
-    //     graph[getNodeId(i)] = {
-    //         depth: i + 1,
-    //         enemies: rooms[i],
-    //         edges,
-    //     }
-    // })
-
-    // return graph
 }
-
-// type RoomUid = string
 
 function getNodeId(i: number): RoomUid {
     return `${i}-${i % 2 ? 'a' : 'b'}`

@@ -58,6 +58,7 @@ export interface BattleScene extends SceneHas {
 export interface CommandOutcome {
     damages: StatChangeMap
     blocks: StatChangeMap
+    effects: StatChangeMap
 }
 
 export interface NextCommand {

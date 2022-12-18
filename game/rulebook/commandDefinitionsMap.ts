@@ -35,10 +35,11 @@ const singleOpponentTargetCommands = {
     ],
     /**Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes. */
     jurgenBellyFlop: ['Jurgen Belly Flop', 'bellyFlop(strength)'],
-    /**Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn. */
-    jurgenStampSnort: ['Jurgen Stamp Snort', 'effect("doubleDamage", 1)'],
     /**Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target. */
-    jurgenSitUpon: ['Jurgen Sit Upon', 'deal(strength/2); effect("stunned",1)'],
+    jurgenSitUpon: [
+        'Jurgen Sit Upon',
+        'deal(strength*3/4); effect("stunned",1)',
+    ],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
@@ -85,9 +86,19 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         name: 'Hans Guards',
         //@ts-expect-error
         id: 'hansGuards',
-        targetNum: 0,
+        targetNum: 1,
         targetType: 'self',
         actions: 'summon("cultistGuard"); summon("cultistGuard")',
+    },
+
+    /**Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn. */
+    jurgenStampSnort: {
+        name: 'Jurgen Stamp Snort',
+        //@ts-expect-error
+        id: 'jurgenStampSnort',
+        targetNum: 1,
+        targetType: 'self',
+        actions: 'effect("doubleDamage", 2); addBlock(defense)',
     },
 
     /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
