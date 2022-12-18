@@ -73,6 +73,7 @@ export const useWeb3Auth = () => {
             [WALLET_ADAPTERS.PHANTOM]: {
                 label: 'phantom',
                 showOnModal: true,
+                showOnMobile: true,
             },
         },
     }

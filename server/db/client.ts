@@ -32,7 +32,8 @@ export const getDbClient = async () => {
     const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
 
     const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
-    const maximumPoolSize = 15
+    const maximumPoolSize = parseInt(process.env.MAX_POOL_SIZE ?? '20')
+
     pool = await createPool(url, {
         ssl: isLocalhost ? undefined : ssl,
         maximumPoolSize,
