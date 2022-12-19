@@ -110,6 +110,7 @@ function CoreScene(
     return Container(
         {},
         SpineBackground({ srcs: allSrcs[sceneIndex] }),
+        Container({ name: 'NpcIntentArrowContainer' }),
         Characters(scene),
         Cards({ scene, hoveredCardUid }),
         Energy({ scene }),

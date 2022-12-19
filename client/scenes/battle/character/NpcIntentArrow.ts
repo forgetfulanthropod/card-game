@@ -25,14 +25,14 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
     )
 
     const root = Container({
-        onDestroy: [nextCmd.destroy],
+        onDestroy: [() => nextCmd?.destroy && nextCmd.destroy()],
     })
 
     portalize({
         from: root,
         content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: () => getStage(),
+        to: () => getStage().getChildByName('NpcIntentArrowContainer', true),
     })
 
     return root
@@ -71,7 +71,7 @@ function getIntentText(
     )}`
 }
 
-function IntentArrows(
+export function IntentArrows(
     uid: CharacterUid,
     nextCmd: RODatum<NextCommand | undefined> & { destroy: Callback },
     isHovered: RODatum<boolean>

@@ -295,21 +295,28 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '1_1',
                 enemies: [
                     {
-                        id: 'gnomeBigBomber',
+                        id: 'plaguehog',
                         level: 1,
                     },
                     {
-                        id: 'gnomeProspector',
+                        id: 'warhogRaider',
                         level: 1,
                     },
                     {
-                        id: 'gnomeBandit',
+                        id: 'groghog',
                         level: 1,
                     },
                     // {
-                    //     id: 'bosshogJurgen',
-                    //     level: 'default',
-                    //     boss: true,
+                    //     id: 'gnomeBigBomber',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'gnomeProspector',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'gnomeBandit',
+                    //     level: 1,
                     // },
                 ],
                 category: 'tierOne',

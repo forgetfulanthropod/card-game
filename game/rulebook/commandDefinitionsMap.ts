@@ -160,8 +160,108 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: 'bellyFlop(strength / 2)',
     },
 
+    //hogs start
+
+    hypnosis: {
+        actions: `chain(deal(strength / 2), effect("debilitated", 1))`,
+        //@ts-expect-error
+        id: `hypnosis`,
+        name: `Hypnosis`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    psychicBolt: {
+        explanation:
+            'Attacks for 50%. Target character receives Unguarded and Fatigued (1)',
+        actions: `chain(deal(strength * .5), effect("unguarded", 1), effect("fatigued", 1))`,
+        //@ts-expect-error
+        id: `psychicBolt`,
+        name: `Psychic Bolt`,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    spiritQuest: {
+        explanation: 'All enemies receive Brave (2)',
+        actions: `effectAll("brave", 2, "friends")`,
+        //@ts-expect-error
+        id: `spiritQuest`,
+        name: `Spirit Quest`,
+        targetNum: -1,
+        targetType: 'allFriends',
+    },
+
+    snortinTime: {
+        actions: `effect("unguarded", 2)`,
+        //@ts-expect-error
+        id: `snortinTime`,
+        explanation: '',
+        name: ``,
+        targetNum: -1,
+        targetType: 'allEnemies',
+    },
+    tummySlam: {
+        actions: `ifDamageDealtApplyEffect(strength * .6, "tired", 2)`,
+        //@ts-expect-error
+        id: `tummySlam`,
+        explanation:
+            'Attacks for 60% of Basic Attack twice. If any damage goes unblocked, the targeted character gains Tired (1).',
+        name: ``,
+        targetNum: 2,
+        targetType: 'enemies',
+    },
+    bigBelly: {
+        actions: `chain(addBlock(defense * .5), addBlockToSelf(defense * .5))`,
+        //@ts-expect-error
+        id: `bigBelly`,
+        explanation: 'Applies 50% block to all Enemies.',
+        name: ``,
+        targetNum: -1,
+        targetType: 'allFriends',
+    },
+    quickNap: {
+        actions: `chain(effect("doubleDamage", 2), heal(health * .1))`,
+        //@ts-expect-error
+        id: `quickNap`,
+        explanation:
+            'Naps.  Doubles Warhog Raider’s damage the following turn.  Heal Warhog Raider for 10% of its base health.',
+        name: ``,
+        targetNum: 1,
+        targetType: 'self',
+    },
+
+    violentSneeze: {
+        actions: `chain(deal(strength * .5), effect("vulnerable", 3))`,
+        //@ts-expect-error
+        id: `violentSneeze`,
+        explanation: 'Deals 50% to target character, applies Vulnerable (3)',
+        name: ``,
+        targetNum: 2,
+        targetType: 'enemies',
+    },
+    surpriseAllergy: {
+        actions: `ifDamageDealtApplyEffect(strength * .5, "poison", 5)`,
+        //@ts-expect-error
+        id: `surpriseAllergy`,
+        explanation:
+            'Deals 50% to target character, applies 5 Poison if damage goes unblocked.',
+        name: ``,
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    parasiticNibble: {
+        actions: `chain(deal(strength * .75), heal(health * .05))`,
+        //@ts-expect-error
+        id: `parasiticNibble`,
+        explanation: 'Deal 75%.  Heal for 5% of base health.',
+        name: ``,
+        targetNum: 1,
+        targetType: 'self',
+    },
+
+    //hogs end
+
     bigBomb1: {
-        actions: `chain()`,
+        actions: `""`,
         //@ts-expect-error
         id: `bigBomb1`,
         name: `Big Bomb`,

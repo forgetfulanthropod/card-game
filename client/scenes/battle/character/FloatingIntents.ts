@@ -4,9 +4,8 @@ import type {
     NpcCommandId,
     TargetType,
 } from 'shared'
-import { datum } from 'datums'
+import { datum, RODatum } from 'datums'
 import {
-    Explanation,
     ExplanationIf,
     KeyTerm,
     keyTermsMap,
@@ -16,14 +15,12 @@ import { TermExplanation } from '@sharedElements'
 import { highlightIntentFrom, toDatum } from '@/util'
 import {
     Adjust,
-    AssetKey,
     DisplayObject,
     IntentAssetKey,
     InteractionEvents,
     PixiContainer,
 } from '@/elementsUtil'
 import {
-    If,
     glowFilter,
     Container,
     For,
@@ -33,6 +30,7 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { startCase } from 'lodash'
+import { IntentArrows } from './NpcIntentArrow'
 
 const INTENT_ICON_WIDTH = 66
 
@@ -75,9 +73,7 @@ function FloatingIntent(
     const children = [
         ...(isFriendlyIntent && effects ? BuffIntended(nextCmd) : []),
         ...(block > 0 ? BlockIntended(block, nextCmd) : []),
-        ...(!isFriendlyIntent && effects
-            ? DebuffIntended(targetCharacterUid, nextCmd)
-            : []),
+        ...(!isFriendlyIntent && effects ? DebuffIntended(nextCmd) : []),
         ...(!isFriendlyIntent ? DamageIntended(damage, nextCmd) : []),
     ]
 
@@ -106,16 +102,12 @@ function FloatingIntent(
     }
 }
 
-const commandIdToMetaMap: Record<
-    (NpcCommandId & KeyTerm) | NpcCommandId,
-    { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+const commandIdToMetaMap: Partial<
+    Record<
+        (NpcCommandId & KeyTerm) | NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    >
 > = {
-    ancientStrike: {
-        id: 'ancientStrike',
-    },
-    basicAttack: {
-        id: 'basicAttack',
-    },
     bigBomb1: {
         id: 'bigBomb1',
         src: 'intentBigBomb1',
@@ -126,48 +118,9 @@ const commandIdToMetaMap: Record<
         src: 'intentBigBomb2',
         explanation: ['Gnome Big Bomber has charged his Big Bomb'],
     },
-    block: {
-        id: 'block',
-    },
-    bucketOfBangSnaps: {
-        id: 'bucketOfBangSnaps',
-    },
-    chomp: {
-        id: 'chomp',
-    },
-    demolitionCharge: {
-        id: 'demolitionCharge',
-    },
-    evisceratingSweep: {
-        id: 'evisceratingSweep',
-    },
-    fireCracker: {
-        id: 'fireCracker',
-    },
-    gnomeBomb: {
-        id: 'gnomeBomb',
-    },
     grudge: {
         id: 'grudge',
         src: 'intentGrudge',
-    },
-    hansBuffBlock: {
-        id: 'hansBuffBlock',
-    },
-    hansCurse: {
-        id: 'hansCurse',
-    },
-    hansGuards: {
-        id: 'hansGuards',
-    },
-    hansMagicMissile: {
-        id: 'hansMagicMissile',
-    },
-    itchyOozeSpecial: {
-        id: 'itchyOozeSpecial',
-    },
-    jab: {
-        id: 'jab',
     },
     jurgenBellyFlop: {
         id: 'jurgenBellyFlop',
@@ -193,48 +146,17 @@ const commandIdToMetaMap: Record<
         id: 'jurgenStampSnort',
         explanation: ['Bosshog Jürgen will do double damage next turn.'],
     },
-    matchaMadness: {
-        id: 'matchaMadness',
-    },
-    matchaMash: {
-        id: 'matchaMash',
-    },
-    matchaMeld: {
-        id: 'matchaMeld',
-    },
     mimicAttack: {
         id: 'mimicAttack',
         src: 'intentMimic',
         explanation: ['copies last hit this turn or deals 999'],
     },
-    passiveBlockCmd: {
-        id: 'passiveBlockCmd',
-    },
-    rest: {
-        id: 'rest',
-    },
-    rustyPokeHigh: {
-        id: 'rustyPokeHigh',
-    },
-    rustyPokeLow: {
-        id: 'rustyPokeLow',
-    },
-    slash: {
-        id: 'slash',
-    },
-    strike: {
-        id: 'strike',
-    },
-    swordWack: {
-        id: 'swordWack',
-    },
-    yodel: {
-        id: 'yodel',
-    },
 }
 
 function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
     const { commandMeta, events, infoBox } = getCommandObjects(command)
+
+    if (amount === 0) return []
 
     return [
         Container(
@@ -269,10 +191,7 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
     ]
 }
 
-function DebuffIntended(
-    targetCharacterUid: CharacterUid,
-    command: NextCommand
-) {
+function DebuffIntended(command: NextCommand) {
     const { commandMeta, events, infoBox } = getCommandObjects(command)
 
     return [
@@ -281,7 +200,7 @@ function DebuffIntended(
                 x: 30,
             },
             Sprite({
-                scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
+                scale: INTENT_ICON_WIDTH / getTexture('intentDebuff').width,
                 src: 'intentDebuff',
                 anchor: 0.4,
                 events,
@@ -356,8 +275,10 @@ function BlockIntended(amount: number, command: NextCommand) {
 }
 
 function getCommandObjects(command: NextCommand) {
+    const commandId = command.command.id
     const commandMeta =
-        commandIdToMetaMap[command.command.id as NpcCommandId] ?? {}
+        commandIdToMetaMap[commandId as NpcCommandId] ??
+        ({} as { id: NpcCommandId; src?: IntentAssetKey; explanation?: string })
 
     const xOffset = 65
 
@@ -366,21 +287,21 @@ function getCommandObjects(command: NextCommand) {
         ? ExplanationIf({
               isShown: isHoveringIntent,
               texts: [
-                  startCase(commandMeta.id).replace(/[0-9]/g, ''),
+                  startCase(commandId).replace(/[0-9]/g, ''),
                   ...commandMeta.explanation,
               ],
               xOffset,
               isHtml: true,
           })
-        : Object.hasOwn(keyTermsMap, commandMeta.id)
+        : Object.hasOwn(keyTermsMap, commandId)
         ? TermExplanationIf({
               isShown: isHoveringIntent,
-              term: commandMeta.id as KeyTerm,
+              term: commandId as KeyTerm,
               xOffset,
           })
         : ExplanationIf({
               isShown: isHoveringIntent,
-              texts: [startCase(command.command.id)],
+              texts: [startCase(commandId)],
               xOffset,
               isHtml: true,
           })

@@ -57,6 +57,7 @@ export interface ActionArgs {
     dwindle: []
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     effectAll: [id: EffectId, increase: number, targetType?: BasicTargetType]
+    heal: [amount: number]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifDamageDealtApplyEffect: [
         damage: number,
