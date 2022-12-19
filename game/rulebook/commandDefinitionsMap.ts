@@ -255,7 +255,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         explanation: 'Deal 75%.  Heal for 5% of base health.',
         name: ``,
         targetNum: 1,
-        targetType: 'self',
+        targetType: 'enemies',
     },
 
     //hogs end

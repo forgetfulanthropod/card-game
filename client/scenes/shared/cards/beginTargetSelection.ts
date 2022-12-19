@@ -56,11 +56,18 @@ export function beginTargetSelection(
         selectedTargetsCursor,
         debounce((targets: string[]) => {
             if (targets.length === numTargets) {
-                // console.log('beginTargetSelection: playing card')
                 void callApi('playCard', {
-                    cardUid: cardEl.name, //cardMeta.id,
+                    cardUid: cardEl.name,
                     targetUids: targets,
                 })
+
+                cleanup()
+            } else if (targets.length > numTargets) {
+                void callApi('playCard', {
+                    cardUid: cardEl.name,
+                    targetUids: targets.slice(targets.length - numTargets),
+                })
+
                 cleanup()
             } else {
                 console.error()
