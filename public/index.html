@@ -102,7 +102,9 @@
     </div>
     <script>
         (async () => {
-            const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+            // const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+            const pwd = 'dailyship'
+            await new Promise(resolve => setTimeout(resolve, 100))
 
             try {
                 const head = document.getElementsByTagName("head")[0]

@@ -294,18 +294,18 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '1_1': {
                 uid: '1_1',
                 enemies: [
-                    {
-                        id: 'plaguehog',
-                        level: 1,
-                    },
-                    {
-                        id: 'warhogRaider',
-                        level: 1,
-                    },
-                    {
-                        id: 'groghog',
-                        level: 1,
-                    },
+                    // {
+                    //     id: 'plaguehog',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'warhogRaider',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'groghog',
+                    //     level: 1,
+                    // },
                     // {
                     //     id: 'gnomeBigBomber',
                     //     level: 1,
