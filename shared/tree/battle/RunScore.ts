@@ -209,7 +209,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         keyword: `Fortified`,
     },
     STANCE_CHANGES_OVER: {
-        description: 'Stances Changed',
+        description: 'Number of stance changes over 5 in a single battle',
         shortDescription: 'Number of stance changes over 5 in a single battle',
         pointValue: 1,
         attributeName: 'stanceChangesOverThreshold',
