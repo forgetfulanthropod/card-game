@@ -17,6 +17,7 @@ import {
     WalletMultiButton,
 } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+require('@solana/wallet-adapter-react-ui/styles.css')
 
 const WALLET_GATED = process.env.WALLET_GATED
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
