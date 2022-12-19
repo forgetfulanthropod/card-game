@@ -323,7 +323,6 @@ export function EndOfRunScreen(): PixiContainer {
         void callApi('makeNewUser', {
             username: localStorage.getItem('username') as string,
         })
-        localStorage.removeItem('username')
         window.location.reload()
     }
 
