@@ -294,18 +294,18 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '1_1': {
                 uid: '1_1',
                 enemies: [
-                    {
-                        id: 'gnomeBigBomber',
-                        level: 1,
-                    },
-                    {
-                        id: 'gnomeProspector',
-                        level: 1,
-                    },
-                    {
-                        id: 'gnomeBandit',
-                        level: 1,
-                    },
+                    // {
+                    //     id: 'gnomeBigBomber',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'gnomeProspector',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'gnomeBandit',
+                    //     level: 1,
+                    // },
                 ],
                 category: 'tierOne',
                 // category: 'tierOne',
@@ -314,20 +314,20 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '1_3': {
                 uid: '1_3',
                 enemies: [
-                    {
-                        id: 'plaguehog',
-                        level: 1,
-                    },
-                    {
-                        id: 'warhogRaider',
-                        level: 1,
-                    },
-                    {
-                        id: 'groghog',
-                        level: 1,
-                    },
+                    // {
+                    //     id: 'plaguehog',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'warhogRaider',
+                    //     level: 1,
+                    // },
+                    // {
+                    //     id: 'groghog',
+                    //     level: 1,
+                    // },
                 ],
-                category: 'tierThree',
+                category: 'tierOne',
                 edges: ['', '2_4', '', ''],
             },
             '2_0': {
