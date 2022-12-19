@@ -156,7 +156,7 @@ const commandIdToMetaMap: Partial<
 function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
     const { commandMeta, events, infoBox } = getCommandObjects(command)
 
-    if (amount === 0) return []
+    if (amount === 0 && commandMeta?.src == null) return []
 
     return [
         Container(
