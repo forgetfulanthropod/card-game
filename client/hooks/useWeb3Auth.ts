@@ -92,7 +92,7 @@ export const useWeb3Auth = () => {
 
                 if (web3auth.provider) {
                     setProvider(web3auth.provider)
-                    setSolanaRPC(new SolanaRPC(web3auth.provider))
+                    // setSolanaRPC(new SolanaRPC(web3auth.provider))
                     console.log(
                         'inside useweb3auth... solana rpc has been set!'
                     )

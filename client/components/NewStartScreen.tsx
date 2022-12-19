@@ -13,9 +13,14 @@ import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
 import { UserID } from 'shared'
 import { TutorialModal } from './StartScreen/TutorialModal'
+import {
+    WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+require('@solana/wallet-adapter-react-ui/styles.css')
 
 const WALLET_GATED = process.env.WALLET_GATED
-console.log({WALLET_GATED, RPC_URL: process.env.RPC_URL})
+console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
     walletAddress: string | null
@@ -26,8 +31,20 @@ export type UserDoc = {
 export function NewStartScreen(props: {
     onEnter: (userId: string) => void
 }): JSXElement {
-    const { web3Auth, provider } = useWeb3Auth()
-    const [solanaRPC, setSolanaRPC] = useState<SolanaRPC | null>(null)
+    const { connection } = useConnection()
+    const encodedPublicKey = useWallet().publicKey
+    const [publicKey, setPublicKey] = useState('')
+    useEffect(() => {
+        if (connection && encodedPublicKey) {
+            const publicKey = encodedPublicKey?.toBase58()
+            setPublicKey(publicKey)
+            const solana = new SolanaRPC(connection, publicKey)
+            console.log({ connection, publicKey })
+            initUserDoc(solana).then(() => {
+                console.log('UserDoc initialized')
+            })
+        }
+    }, [connection, encodedPublicKey])
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [userDoc, setUserDoc] = useState<UserDoc>({
@@ -45,38 +62,8 @@ export function NewStartScreen(props: {
         })
     }, [])
 
-    useEffect(() => {
-        if (web3Auth?.cachedAdapter) {
-            handleLogin().then(() => {
-                console.log('USEFFECT - web3auth login handled')
-            })
-        }
-    }, [web3Auth])
-
-    const handleLogin = async () => {
-        if (!web3Auth) {
-            console.log('NO WEB3AUTH FOUND')
-            return
-        }
-
-        console.log('connecting to web3auth')
-        await web3Auth.connect()
-        console.log('finished web3auth.connect')
-
-        if (web3Auth && web3Auth.provider) {
-            console.log('should always hit right')
-            const solanaRPC = new SolanaRPC(web3Auth.provider)
-            initUserDoc(solanaRPC)
-            setSolanaRPC(solanaRPC)
-        } else {
-            console.log('no provider wtf')
-        }
-    }
-
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
-        console.log('initializing userDoc....')
-        await solanaRPC.asyncInitConnection()
-        const walletAddress = await solanaRPC.getPublicKey()
+        const walletAddress = solanaRPC.publicKey
         const userIdRes = await callServerApi('login', { walletAddress })
         if (!userIdRes) {
             return window.alert(
@@ -98,14 +85,8 @@ export function NewStartScreen(props: {
         })
     }
 
-    const handleLogout = async () => {
-        await web3Auth?.logout()
-        setIsLoggedIn(false)
-    }
-
     const handlePlayButtonClick = () => {
         if (WALLET_GATED) {
-            if (!isLoggedIn) return handleLogin()
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
         enterGame()
@@ -119,10 +100,9 @@ export function NewStartScreen(props: {
     return <>
         {showGateModal && <WalletGateModal
             setShowGateModal={setShowGateModal}
+            publicKey={publicKey}
         />}
-        {showTutorial && <TutorialModal
-            setShowTutorial={setShowTutorial}
-        />}
+        {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
                 showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
@@ -174,12 +154,7 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    <UserProfileIcon
-                        login={handleLogin}
-                        logout={handleLogout}
-                        isLoggedIn={isLoggedIn}
-                        userDoc={userDoc}
-                        ownsKaijus={userDoc.numKaijusOwned > 0}
+                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont'
                     />
                 </div>
             </div>
