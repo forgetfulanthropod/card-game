@@ -36,7 +36,10 @@ const checkServerScoringEvent = (
         case 'HIT_VULGAR_THRESHOLD':
             checkDamageDealtInTurn(scene)
             break
-        case 'STANCE_CHANGES':
+        case 'STANCE_CHANGES_OVER':
+            checkStanceChanges(scene)
+            break
+        case 'STANCE_CHANGES_UNDER':
             checkStanceChanges(scene)
             break
         case 'CARDS_OVER_THRESHOLD':
@@ -132,10 +135,10 @@ const checkDamageDealtInTurn = (scene: BattleCursor) => {
 
 const checkStanceChanges = (scene: BattleCursor) => {
     trackStanceChanges(scene) // used for final turn update
-    const STANCE_CHANGES_THRESHOLD = 3
+    const STANCE_CHANGES_THRESHOLD = 5
     const stanceChanges = scene.get('stanceChangesThisRoom')
     if (stanceChanges.length === 0) {
-        // incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
+        incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
     } else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
         updateRunScoreAttribute(
             scene,

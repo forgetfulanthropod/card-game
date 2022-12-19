@@ -26,7 +26,7 @@ export type RunScoreAttributeName =
     | 'finalUserHealthRemaining'
     | 'roomsWonZeroDamage'
     | 'blocksOverThreshold'
-    // | 'roomsZeroStanceChanges'
+    | 'roomsZeroStanceChanges'
     | 'stanceChangesOverThreshold'
     | 'cardsPlayedOverThreshold'
     | 'null' // used for derived and/or server side score events
@@ -60,7 +60,8 @@ export type NonNotifiableEvent =
     | 'HIT_VULGAR_THRESHOLD'
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
-    | 'STANCE_CHANGES'
+    | 'STANCE_CHANGES_OVER'
+    | 'STANCE_CHANGES_UNDER'
     | 'CARDS_OVER_THRESHOLD'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
@@ -85,8 +86,8 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     survivingKaiju: 'SURVIVING_KAIJU',
     roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
     blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
-    stanceChangesOverThreshold: 'STANCE_CHANGES',
-    // roomsZeroStanceChanges: 'STANCE_CHANGES', // todo put back in
+    stanceChangesOverThreshold: 'STANCE_CHANGES_OVER',
+    roomsZeroStanceChanges: 'STANCE_CHANGES_UNDER',
     cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
     null: 'NULL',
 }
@@ -207,12 +208,19 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         attributeName: 'blocksOverThreshold',
         keyword: `Fortified`,
     },
-    STANCE_CHANGES: {
+    STANCE_CHANGES_OVER: {
         description: 'Stances Changed',
         shortDescription: 'Number of stance changes over 5 in a single battle',
-        pointValue: 1, // need to fix
-        attributeName: 'null',
+        pointValue: 1,
+        attributeName: 'stanceChangesOverThreshold',
         keyword: `Quick Footed`,
+    },
+    STANCE_CHANGES_UNDER: {
+        description: 'Stances Changed Under',
+        shortDescription: "Didn't change character stances in a battle",
+        pointValue: 7,
+        attributeName: 'roomsZeroStanceChanges',
+        keyword: `Steady Stance`,
     },
     CARDS_OVER_THRESHOLD: {
         description: 'Play 5 or more cards in a single turn',
