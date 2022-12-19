@@ -26,7 +26,7 @@ export type RunScoreAttributeName =
     | 'finalUserHealthRemaining'
     | 'roomsWonZeroDamage'
     | 'blocksOverThreshold'
-    | 'roomsZeroStanceChanges'
+    // | 'roomsZeroStanceChanges'
     | 'stanceChangesOverThreshold'
     | 'cardsPlayedOverThreshold'
     | 'null' // used for derived and/or server side score events
@@ -86,7 +86,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
     blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
     stanceChangesOverThreshold: 'STANCE_CHANGES',
-    roomsZeroStanceChanges: 'STANCE_CHANGES',
+    // roomsZeroStanceChanges: 'STANCE_CHANGES', // todo put back in
     cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
     null: 'NULL',
 }
@@ -209,7 +209,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     },
     STANCE_CHANGES: {
         description: 'Stances Changed',
-        shortDescription: 'Stance Changes over 5',
+        shortDescription: 'Number of stance changes over 5 in a single battle',
         pointValue: 1, // need to fix
         attributeName: 'null',
         keyword: `Quick Footed`,
