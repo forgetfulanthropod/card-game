@@ -13,7 +13,7 @@ import {
 import SolanaRPC from '@/chain/solanaRPC'
 
 const clientId =
-    'BP1YocnslDonXIeUl3UCHspqktxarNggpqJ4XZkq1AUQdTTGYukBt9i9Ft0uegY4jxDh4b9HP9Y9qIn7lMzMGGg'
+    'BJaYppmI_VLiFpLgONXI36enJpCVv2B7C_jzpo6YZERju9bQTTBoPo3B0gzTso-Ab6v5KC6iBwANc1dPAaYjYvg'
 
 export const useWeb3Auth = () => {
     const [web3Auth, setWeb3Auth] = useState<Web3Auth | null>(null)
@@ -39,7 +39,7 @@ export const useWeb3Auth = () => {
     const openLoginAdapterOptions: OpenloginAdapterOptions = {
         adapterSettings: {
             clientId,
-            network: 'testnet',
+            network: 'mainnet',
             uxMode: 'popup',
             whiteLabel: {
                 name: 'Your app Name',

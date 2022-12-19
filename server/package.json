@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "dependencies": {
         "classic-level": "^1.2.0",
+        "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "game": "1.0.0",
         "level": "^8.0.0",
