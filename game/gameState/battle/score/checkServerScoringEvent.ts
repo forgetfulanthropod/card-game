@@ -135,7 +135,7 @@ const checkStanceChanges = (scene: BattleCursor) => {
     const STANCE_CHANGES_THRESHOLD = 3
     const stanceChanges = scene.get('stanceChangesThisRoom')
     if (stanceChanges.length === 0) {
-        incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
+        // incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
     } else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
         updateRunScoreAttribute(
             scene,
