@@ -43,7 +43,7 @@ const singleOpponentTargetCommands = {
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
-    matchaMadness: ['Matcha Madness', 'effect("poison", 3, "all")'],
+    matchaMadness: ['Matcha Madness', 'effect("poisoned", 3, "allEnemies")'],
     /**Matcha Meld: Block equal to DEF and Level 1 and 2 matchas, will attempt to rejoin the matcha with the highest HP. If successful, the lesser Matcha will add their HP to the greater matcha and the lesser Matcha will be removed from the field. The targeted matcha will level up if it exceeds the minimum health threshold for the next level of matcha. */
     matchaMeld: ['Matcha Meld', 'TODO'],
     /**Ancient Strike (deal 200%) if any damage goes unblocked, the targeted Kaiju is stunned for 1 turn. */
