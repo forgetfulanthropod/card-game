@@ -21,6 +21,7 @@ export function ResetButton(props: { username: string }): JSXElement {
     const actionsRef = useRef(null)
     useOutsideClickDismisser(actionsRef, setShowActions)
     const [sfxIsMuted, setSfxIsMuted] = useState(false)
+    const [musicIsMuted, setMusicIsMuted] = useState(false)
 
     const handleClick = () => {
         setShowActions(actions => !actions)
@@ -33,6 +34,7 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleMuteMusic = () => {
         toggleMuteMusic()
+        setMusicIsMuted(muted => !muted)
         //TODO
     }
 
@@ -78,7 +80,7 @@ export function ResetButton(props: { username: string }): JSXElement {
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
                 onClick={handleMuteMusic}
             >
-                Mute Music
+                {musicIsMuted ? 'Unmute Music' : 'Mute Music'}
             </button>
             <button
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'

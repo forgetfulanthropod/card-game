@@ -26,6 +26,8 @@ export const toggleMuteSFX = () => {
 
 export const toggleMuteMusic = () => {
     muteMusic = !muteMusic
+    //@ts-expect-error
+    latestLoopingSong?.paused = muteMusic
 }
 
 export function assetsLoadedPromise() {
@@ -69,6 +71,7 @@ export function playSongOnce(songId: MusicAssetKey) {
 }
 
 export function loopSong(songId: MusicAssetKey, loop = true): boolean {
+    if (muteMusic) { return false }
     const sound = getSound(songId)
 
     latestSongId = songId
