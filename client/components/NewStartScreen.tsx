@@ -124,7 +124,7 @@ export function NewStartScreen(props: {
                     </p>
                 </div>
                 <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>
-                    <div className='grid grid-cols-5 items-center mr-4'>
+                    <div className='grid grid-cols-3 items-center mr-4'>
                         <NavIconWrapper>
                             <img
                                 src='./logos/MagicEden.png'
@@ -144,13 +144,6 @@ export function NewStartScreen(props: {
                                 src='./logos/Discord.png'
                                 alt='Discord'
                                 className='scale-110 w-auto h-full'
-                            />
-                        </NavIconWrapper>
-                        <NavIconWrapper>
-                            <img
-                                src='./logos/Settings.svg'
-                                alt='Settings'
-                                className='filter brightness-0 invert w-auto h-full'
                             />
                         </NavIconWrapper>
                     </div>
