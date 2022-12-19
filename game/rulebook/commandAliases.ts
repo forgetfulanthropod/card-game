@@ -38,7 +38,7 @@ export const itchyOoze = (x: number): NpcCommandDefinition => ({
 // })
 /**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
 export const infectiousBite = (x: number): NpcCommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength), effect("poison", ${x})`,
+    actions: `ifDamageDealt(deal(strength), effect("poisoned", ${x})`,
     // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
     id: `infectiousBite(${x})`,
     name: `Infectious Bite ${x}`,
