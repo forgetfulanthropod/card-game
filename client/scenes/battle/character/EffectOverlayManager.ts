@@ -73,10 +73,10 @@ export function getAnimationsFrom(
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'poisoned'))
         animations.push(PoisonOverlayAnimation(characterMeta.isPc))
-    if ((changes.effects ?? 0) > 0) {
+    if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
     }
-    if ((changes.effects ?? 0) < 0) {
+    if ((changes.block ?? 0) < 0) {
         if (changes.health ?? 0 >= 0)
             animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
         else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))

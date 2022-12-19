@@ -14,21 +14,30 @@ import {
     Sprite,
     glowFilter,
     AssetKey,
+    Adjust,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 import { getEntryScene } from '@/data'
+import { AdjustmentFilter } from 'pixi-filters'
 
 export const selectedCharacterId = datum<null | CharacterId>(null)
 export const selectedCharacterPlaceIndex = datum<CharacterPlaceIndex>(2)
 
 export function CharacterOptions() {
+    const grayScaleFilter = new AdjustmentFilter({
+        saturation: 0,
+    })
     const allCharacterOptions = getEntryScene().get('allCharacterOptions')
 
     const options = allCharacterOptions.map((c, index) => {
         const width = 115
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile` as AssetKey)
+
+        const isSelected = ['warhog', 'frogKnight', 'gnomeHooligan'].includes(
+            c.id
+        )
 
         return Container(
             {
@@ -55,15 +64,20 @@ export function CharacterOptions() {
                 //     },
                 // },
             },
-            RoundedBordered(
-                Sprite({
-                    src,
-                    scale: width / src.width,
-                }),
+            Adjust(
+                RoundedBordered(
+                    Sprite({
+                        src,
+                        scale: width / src.width,
+                    }),
+                    {
+                        radius: 20,
+                        borderThickness: 6,
+                        borderColor: 0,
+                    }
+                ),
                 {
-                    radius: 20,
-                    borderThickness: 6,
-                    borderColor: 0,
+                    filters: isSelected ? [] : [grayScaleFilter],
                 }
             )
         )
