@@ -50,6 +50,7 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         sourcemap: !isProduction, //isDevelopment,
         keepNames: !isProduction,
         entryPoints: [entryPoint],
+        external: ['@solana/wallet-adapter-react', '@solana/wallet-adapter-base', '@solana/wallet-adapter-react-ui', '@solana/wallet-adapter-wallets'],
         // inject: ['client/config/preact-shim.js'],
         // jsxFactory: 'h',
         // jsxFragment: 'Fragment',

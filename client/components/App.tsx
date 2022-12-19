@@ -20,7 +20,6 @@ import {
 import {
     WalletModalProvider,
 } from '@solana/wallet-adapter-react-ui'
-require('@solana/wallet-adapter-react-ui/styles.css')
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
