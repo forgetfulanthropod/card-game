@@ -4,6 +4,7 @@ import express from 'express'
 import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
 import { config as loadDotEnv } from 'dotenv'
+import cors from 'cors'
 
 import { api } from './api'
 import { mountIo as fullMountIo } from './IO'
@@ -42,6 +43,7 @@ logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 
 const app: Application = express()
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
