@@ -17,15 +17,19 @@ Loader.registerPlugin(WebfontLoaderPlugin)
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
 
-let muteMusic = false
-let muteSFX = false
+export let muteMusic = !!(localStorage.getItem('muteMusic') === 'true')
+export let muteSFX = !!(localStorage.getItem('muteSFX') === 'true')
+localStorage.setItem('muteMusic', muteMusic ? 'true' : 'false')
+localStorage.setItem('muteSFX', muteSFX ? 'true' : 'false')
 
 export const toggleMuteSFX = () => {
     muteSFX = !muteSFX
+    localStorage.setItem('muteSFX', muteSFX ? 'true' : 'false')
 }
 
 export const toggleMuteMusic = () => {
     muteMusic = !muteMusic
+    localStorage.setItem('muteMusic', muteMusic ? 'true' : 'false')
     if (muteMusic) {
         //@ts-expect-error
         latestLoopingSong?.pause()
@@ -76,9 +80,6 @@ export function playSongOnce(songId: MusicAssetKey) {
 }
 
 export function loopSong(songId: MusicAssetKey, loop = true): boolean {
-    if (muteMusic) {
-        return false
-    }
     const sound = getSound(songId)
 
     latestSongId = songId
@@ -100,8 +101,13 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
     //@ts-expect-error
     latestLoopingSong = sound?.sound
 
-    //@ts-expect-error
-    latestLoopingSong?.play?.({ loop })
+    if (muteMusic) {
+        //@ts-expect-error
+        latestLoopingSong?.pause()
+    } else {
+        //@ts-expect-error
+        latestLoopingSong?.play?.({ loop })
+    }
 
     return true
 }

@@ -2,7 +2,7 @@ import { callApi } from '@/callApi'
 import { styled } from '@/config'
 import { useState, useRef, MouseEvent, useEffect } from 'react'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
-import { toggleMuteMusic, toggleMuteSFX } from '@/elementsUtil'
+import { muteMusic, muteSFX, toggleMuteMusic, toggleMuteSFX } from '@/elementsUtil'
 
 const Root = styled.button`
     position: absolute;
@@ -20,8 +20,8 @@ export function ResetButton(props: { username: string }): JSXElement {
     const [showActions, setShowActions] = useState(false)
     const actionsRef = useRef(null)
     useOutsideClickDismisser(actionsRef, setShowActions)
-    const [sfxIsMuted, setSfxIsMuted] = useState(false)
-    const [musicIsMuted, setMusicIsMuted] = useState(false)
+    const [sfxIsMuted, setSfxIsMuted] = useState(muteSFX)
+    const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
 
     const handleClick = () => {
         setShowActions(actions => !actions)
