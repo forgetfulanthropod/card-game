@@ -26,6 +26,7 @@ import {
 } from 'shared'
 import { ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
+import { round } from 'lodash'
 
 const getShowOnHoverFns = (el: PixiContainer) => {
     let waitingTimer: NodeJS.Timeout | null = null
@@ -117,7 +118,7 @@ const ScoreAttributeItem = (
     } per unit`
 
     const Title = Text({
-        text: keyword,
+        text: `${keyword}   x   ${score}`,
         anchor: [0, 0.5],
         x,
         y,
@@ -128,7 +129,7 @@ const ScoreAttributeItem = (
     })
 
     const Points = Text({
-        text: `${score}`,
+        text: `${score * pointValue} pts`,
         anchor: [1, 0.5],
         x: x + 425,
         y,
