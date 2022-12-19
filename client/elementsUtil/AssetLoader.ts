@@ -28,7 +28,10 @@ export const toggleMuteMusic = () => {
     muteMusic = !muteMusic
     if (muteMusic) {
         //@ts-expect-error
-        latestLoopingSong?.pause
+        latestLoopingSong?.pause()
+    } else {
+        //@ts-expect-error
+        latestLoopingSong?.play()
     }
 }
 
@@ -73,7 +76,9 @@ export function playSongOnce(songId: MusicAssetKey) {
 }
 
 export function loopSong(songId: MusicAssetKey, loop = true): boolean {
-    if (muteMusic) { return false }
+    if (muteMusic) {
+        return false
+    }
     const sound = getSound(songId)
 
     latestSongId = songId
@@ -102,7 +107,9 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
 }
 
 export function playSound(soundEffectId: SoundEffectAssetKey): void {
-    if (muteSFX) { return }
+    if (muteSFX) {
+        return
+    }
     const sound = getSound(soundEffectId)
     //@ts-expect-error
     if (sound?.sound == null) return
