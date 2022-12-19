@@ -24,9 +24,8 @@ export const execute: Executors['heal'] = ({
 }) => {
     const [amount] = evalAll(dslArgs)
 
-    targetUids.forEach(uid => {
-        scene
-            .select('allCharacters', uid, 'health')
-            .apply(h => h + Math.ceil(amount))
-    })
+    // ALWAYS HEALS SELF
+    scene
+        .select('allCharacters', command.characterUid, 'health')
+        .apply(h => h + Math.ceil(amount))
 }

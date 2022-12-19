@@ -2,7 +2,7 @@ import type { CharacterMeta, StatChangesMap } from 'shared'
 import type { MovieClip } from '@pixi/animate'
 import { keys } from 'shared/code'
 import type { AnimatedSprite } from 'pixi.js'
-import type { PixiContainer } from '@/elementsUtil'
+import { GainHealthAnimation, PixiContainer } from '@/elementsUtil'
 import {
     PoisonOverlayAnimation,
     BreakBlockOverlayAnimation,
@@ -67,8 +67,10 @@ export function getAnimationsFrom(
 
     if (changes == null) return animations
 
-    if (changes.health)
+    if ((changes?.health ?? 0) < 0)
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
+    if ((changes?.health ?? 0) > 0)
+        animations.push(GainHealthAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'bleed'))
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'poisoned'))

@@ -140,11 +140,16 @@ export function getCommandTargets(
     command: Command
 ): CharacterUid[] {
     if (command.targetType === 'enemies') {
-        return range(command.targetNum).map(
-            (_, i) =>
-                getPCTarget(vals(scene.allCharacters), command.characterUid, i)
-                    .uid
-        )
+        return range(command.targetNum)
+            .map(
+                (_, i) =>
+                    getPCTarget(
+                        vals(scene.allCharacters),
+                        command.characterUid,
+                        i
+                    )?.uid
+            )
+            .filter(uid => uid != null)
     } else if (command.targetType === 'allEnemies') {
         return getLivingPcs(scene).map(c => c.uid)
     } else if (command.targetType === 'self') {
