@@ -2,6 +2,7 @@ import { callApi } from '@/callApi'
 import { styled } from '@/config'
 import { useState, useRef, MouseEvent, useEffect } from 'react'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
+import { toggleMuteMusic, toggleMuteSFX } from '@/elementsUtil'
 
 const Root = styled.button`
     position: absolute;
@@ -19,16 +20,19 @@ export function ResetButton(props: { username: string }): JSXElement {
     const [showActions, setShowActions] = useState(false)
     const actionsRef = useRef(null)
     useOutsideClickDismisser(actionsRef, setShowActions)
+    const [sfxIsMuted, setSfxIsMuted] = useState(false)
 
     const handleClick = () => {
         setShowActions(actions => !actions)
     }
 
     const handleMuteSFX = () => {
-        //TODO
+        toggleMuteSFX()
+        setSfxIsMuted(muted => !muted)
     }
 
     const handleMuteMusic = () => {
+        toggleMuteMusic()
         //TODO
     }
 
@@ -68,7 +72,7 @@ export function ResetButton(props: { username: string }): JSXElement {
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
                 onClick={handleMuteSFX}
             >
-                Mute SFX
+                {sfxIsMuted ? 'Unmute SFX' : 'Mute SFX'}
             </button>
             <button
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
@@ -79,14 +83,13 @@ export function ResetButton(props: { username: string }): JSXElement {
             <button
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
                 onClick={async () => {
-                    localStorage.removeItem('username')
                     await callApi('makeNewUser', {
                         username: props.username,
                     })
                     window.location.reload()
                 }}
             >
-                Abandon Run
+                Restart Run
             </button>
         </div>
     </div>
