@@ -17,7 +17,6 @@ import {
     WalletMultiButton,
 } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-require('@solana/wallet-adapter-react-ui/styles.css')
 
 const WALLET_GATED = process.env.WALLET_GATED
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
@@ -54,7 +53,7 @@ export function NewStartScreen(props: {
     })
 
     const [showGateModal, setShowGateModal] = useState(false)
-    const [showTutorial, setShowTutorial] = useState(true)
+    const [showTutorial, setShowTutorial] = useState(false)
 
     useEffect(() => {
         gtag('event', 'ui_ux_view', {
