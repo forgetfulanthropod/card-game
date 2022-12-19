@@ -67,9 +67,9 @@ export function getAnimationsFrom(
 
     if (changes == null) return animations
 
-    if (changes?.health ?? 0 > 0)
+    if ((changes?.health ?? 0) < 0)
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
-    if (changes?.health ?? 0 < 0)
+    if ((changes?.health ?? 0) > 0)
         animations.push(GainHealthAnimation(characterMeta.isPc))
     if (changes.effects?.find(e => e.id === 'bleed'))
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
