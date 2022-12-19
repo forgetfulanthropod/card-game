@@ -17,8 +17,8 @@ Loader.registerPlugin(WebfontLoaderPlugin)
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
 
-var muteMusic = false
-var muteSFX = false
+let muteMusic = false
+let muteSFX = false
 
 export const toggleMuteSFX = () => {
     muteSFX = !muteSFX
@@ -26,8 +26,10 @@ export const toggleMuteSFX = () => {
 
 export const toggleMuteMusic = () => {
     muteMusic = !muteMusic
-    //@ts-expect-error
-    latestLoopingSong?.paused = muteMusic
+    if (muteMusic) {
+        //@ts-expect-error
+        latestLoopingSong?.pause
+    }
 }
 
 export function assetsLoadedPromise() {

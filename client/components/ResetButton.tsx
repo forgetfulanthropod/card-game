@@ -93,6 +93,18 @@ export function ResetButton(props: { username: string }): JSXElement {
             >
                 Restart Run
             </button>
+            <button
+                className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
+                onClick={async () => {
+                    localStorage.removeItem('username')
+                    await callApi('makeNewUser', {
+                        username: props.username,
+                    })
+                    window.location.reload()
+                }}
+            >
+                Back to Main Menu
+            </button>
         </div>
     </div>
 }
