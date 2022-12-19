@@ -239,7 +239,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
     },
     surpriseAllergy: {
-        actions: `ifDamageDealtApplyEffect(strength * .5, "poison", 5)`,
+        actions: `ifDamageDealtApplyEffect(strength * .5, "poisoned", 5)`,
         //@ts-expect-error
         id: `surpriseAllergy`,
         explanation:
