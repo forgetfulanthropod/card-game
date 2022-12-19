@@ -17,6 +17,19 @@ Loader.registerPlugin(WebfontLoaderPlugin)
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
 
+var muteMusic = false
+var muteSFX = false
+
+export const toggleMuteSFX = () => {
+    muteSFX = !muteSFX
+}
+
+export const toggleMuteMusic = () => {
+    muteMusic = !muteMusic
+    //@ts-expect-error
+    latestLoopingSong?.paused = muteMusic
+}
+
 export function assetsLoadedPromise() {
     return promise
 }
@@ -58,6 +71,7 @@ export function playSongOnce(songId: MusicAssetKey) {
 }
 
 export function loopSong(songId: MusicAssetKey, loop = true): boolean {
+    if (muteMusic) { return false }
     const sound = getSound(songId)
 
     latestSongId = songId
@@ -86,6 +100,7 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
 }
 
 export function playSound(soundEffectId: SoundEffectAssetKey): void {
+    if (muteSFX) { return }
     const sound = getSound(soundEffectId)
     //@ts-expect-error
     if (sound?.sound == null) return
