@@ -1,7 +1,7 @@
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import React, { useRef, useState } from 'react'
 
-type Tutorial = 'Cards' | 'Stance'
+type Tutorial = 'Cards' | 'Stance' | 'EnemyIntents'
 type Page = 1 | 2 | 3 | 4
 
 export const TutorialModal = ({
@@ -35,10 +35,14 @@ export const TutorialModal = ({
             }
             return setPage(page => (page + 1) as Page)
         } else if (currentTutorial === 'Stance') {
-            if (page === 4) {
+            if (page === 3) {
+                setCurrentTutorial('EnemyIntents')
+                setPage(1)
                 return
             }
             return setPage(page => (page + 1) as Page)
+        } else if (currentTutorial === 'EnemyIntents') {
+            setShowTutorial(false)
         }
     }
 
@@ -50,17 +54,20 @@ export const TutorialModal = ({
             >
                 <img
                     src={`./assets/tutorials/${currentTutorial}${page}.png`}
-                    className='scale-125'
+                    className='scale-105 hover:cursor-pointer'
                     onClick={handleClick}
                 ></img>
-                {(currentTutorial === 'Stance' || page > 1) && <img
+                {(currentTutorial === 'Stance' ||
+                    currentTutorial === 'EnemyIntents' ||
+                    page > 1) && <img
                     src={`./assets/tutorials/LeftArrow.png`}
-                    className='scale-125 absolute'
+                    className='w-16 h-16 -left-32 md:w-32 md:h-32 top-1/2 md:-left-48 absolute hover:cursor-pointer'
                     onClick={handleLeftArrowClick}
                 ></img>}
-                {(currentTutorial === 'Cards' || page < 4) && <img
+                {(currentTutorial === 'Cards' ||
+                    currentTutorial === 'Stance') && <img
                     src={`./assets/tutorials/RightArrow.png`}
-                    className='scale-125 absolute'
+                    className='w-16 h-16 -right-32 md:w-32 md:h-32 top-1/2 md:-right-48 absolute hover:cursor-pointer'
                     onClick={handleRightArrowClick}
                 ></img>}
             </div>
