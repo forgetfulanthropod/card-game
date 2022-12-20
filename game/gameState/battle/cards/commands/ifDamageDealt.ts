@@ -13,8 +13,10 @@ export const execute: Executors['ifDamageDealt'] = ({
     targetUids,
     scene,
 }) => {
-    if (targetUids.length !== 1)
-        throw Error('ifDamageDealt requires exactly one target')
+    if (targetUids.length !== 1) {
+        logger.error('ifDamageDealt requires exactly one target')
+        throw Error()
+    }
     const targetUid = targetUids[0]
     const healthBefore = scene.get('allCharacters', targetUid).health
     assertFinite({ healthBefore })

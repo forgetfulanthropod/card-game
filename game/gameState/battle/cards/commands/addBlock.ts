@@ -1,11 +1,11 @@
 import type { BattleCursor, CharacterUid } from 'shared'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
-import { calcPostEffectStats } from '@/gameState'
+import { calculateStats } from '@/gameState'
 
 export const explain: Explainers['addBlock'] = dslArgs => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `+${block} block`
+    return `Give target Kaiju +${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({
@@ -14,16 +14,19 @@ export const execute: Executors['addBlock'] = ({
     scene,
 }) => {
     const [block] = evalAll(dslArgs)
-    scene.apply(['allCharacters', targetUids[0], 'block'], b =>
-        Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))
-    )
 
-    scene.apply('blocksAppliedThisTurn', blocks => [
-        ...blocks,
-        { amount: block, targetUid: targetUids[0] },
-    ])
+    targetUids.forEach(targetUid => {
+        scene.apply(['allCharacters', targetUid, 'block'], b =>
+            Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))
+        )
+
+        scene.apply('blocksAppliedThisTurn', blocks => [
+            ...blocks,
+            { amount: block, targetUid },
+        ])
+    })
 }
 
 function getBlockMultiplier(uid: CharacterUid, scene: BattleCursor): number {
-    return calcPostEffectStats(scene.get('allCharacters', uid)).blockMultiplier
+    return calculateStats(scene.get('allCharacters', uid)).blockMultiplier
 }

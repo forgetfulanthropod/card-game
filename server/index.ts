@@ -3,6 +3,8 @@ import type { Application } from 'express'
 import express from 'express'
 import { getLogger, setGlobalRandomSeed } from 'game'
 import type { Logger } from 'winston'
+import { config as loadDotEnv } from 'dotenv'
+import cors from 'cors'
 
 import { api } from './api'
 import { mountIo as fullMountIo } from './IO'
@@ -20,7 +22,7 @@ global.logger = getLogger()
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
-    setGlobalRandomSeed()
+    setGlobalRandomSeed('seedOne')
 }
 
 if (process.env.FORCE_NEW_DB === 'yes') {
@@ -41,6 +43,7 @@ logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 
 const app: Application = express()
 
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -65,6 +68,7 @@ if (isStagingServer) {
 }
 
 if (process.env.USE_ROUTER !== 'yes') {
+    loadDotEnv()
     const server = app.listen(port, function () {
         logger.info(`Serving on http://localhost:${port}`)
     })

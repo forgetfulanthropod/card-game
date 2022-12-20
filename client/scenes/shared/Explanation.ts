@@ -1,4 +1,4 @@
-import type { DisplayObject } from 'pixi.js'
+import { DisplayObject, Texture } from 'pixi.js'
 import { startCase } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -25,23 +25,24 @@ export const keyTermsMap = {
     dwindle: 'costs +1 energy each use in room',
 
     orbsOfProtection: 'blocks for 50% of Magic',
-    orbsOfLightning: 'deals 35% of Magic to all enemies',
+    orbsOfLightning: 'deal 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 
     grudge: 'intentGrudge',
     infectiousBite: 'unblocked damage becomes Poison',
-    mimicAttack: 'deals 999 or copies the last hit taken this turn.',
+    mimicAttack: 'deal 999 or copies the last hit taken this turn.',
 
     berserk:
-        '(aggressive stance only) gains 50% strength, takes 100% more damage',
+        '(aggressive stance only) deals 50% more damage, takes 100% more damage',
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
-    courageous: 'deals 15% more damage',
+    brave: 'deals 15% more damage',
+    courageous: 'deals 25% more damage',
     debilitated: 'deals 50% less damage',
-    entranced: 'increase magic stat by 11% times the number of counters',
+    entranced: 'increases Magic by 1 per stack',
     fatigued: 'deals 25% less damage',
     fortified: 'receives 50% more block',
-    guarded: 'receives 25% more block',
+    // guarded: 'receives 25% more block',
     poisoned: '(unblockable) receives 1 damage per stack',
     strongblock: 'receives 50% more block',
     stunned: 'cannot take an action this turn',
@@ -55,9 +56,10 @@ export const keyTermsMap = {
 export type KeyTerm = keyof typeof keyTermsMap
 
 export function getTermIndex(term: string, explanation: string): number {
-    return explanation
-        .toLowerCase()
-        .indexOf(' ' + startCase(term).toLowerCase())
+    const lowerCaseTerm = startCase(term).toLowerCase()
+    var re = new RegExp(`${lowerCaseTerm}`, 'g')
+
+    return explanation.toLowerCase().search(re)
 }
 
 export function TermExplanationsIf({
@@ -120,7 +122,7 @@ export function TermExplanations({
     boxes.forEach((box, i) => {
         if (i > 0) {
             const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 10
+            box.y = lastBox.y + lastBox.height + 5
         }
 
         return box
@@ -168,19 +170,23 @@ export function TermExplanation({
     term: KeyTerm
     displayObjectArgs?: DisplayObjectArgs
 }): PixiContainer {
+    let topText = startCase(term).replace('Orbs', 'Orb')
+
+    if (topText.includes('Orb')) {
+        topText = topText + ' (clickable!)'
+    }
+
     return Explanation({
         // text: `<div style="font-family: sans-serif">
         //     <b>${startCase(term)}</b>
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [
-            `${startCase(term)}`.replace('Orbs', 'Orb'),
-            `${keyTermsMap[term]}`,
-        ],
+        texts: [topText, `${keyTermsMap[term]}`],
         displayObjectArgs: {
+            borderThickness: 2,
+            padding: 10,
             ...displayObjectArgs,
-            borderThickness: 3,
         },
     })
 }
@@ -190,28 +196,34 @@ export function ExplanationIf({
     texts,
     xOffset = 0,
     yOffset = 0,
+    isHtml = false,
 }: {
     isShown: Datum<boolean>
     texts: string[]
     xOffset?: number
     yOffset?: number
+    isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
         const root = Container({})
 
-        nextTick().then(() =>
+        nextTick().then(() => {
+            if (root == null) return
+
             portalize({
                 from: root,
                 to: () => getStage(),
                 content: Explanation({
                     texts,
                     displayObjectArgs: {
+                        borderThickness: 2,
+                        padding: 10,
                         x: root.getGlobalPosition().x + xOffset,
                         y: root.getGlobalPosition().y + yOffset,
                     },
                 }),
             })
-        )
+        })
 
         return root
     })
@@ -221,15 +233,17 @@ export function Explanation({
     texts,
     color,
     displayObjectArgs,
+    isHtml = false,
 }: {
     texts: string[]
     color?: number
     displayObjectArgs?: InfoBoxDisplayArgs
+    isHtml?: boolean
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
         return Text({
             text,
-            // isHtml: true,
+            isHtml,
             style: {
                 fill: 'white',
                 wordWrapWidth: BASE_WIDTH * 0.2,
@@ -240,18 +254,36 @@ export function Explanation({
         })
     })
 
+    const margin = 5
+
     textEls.forEach((el, index) => {
         if (index > 0) {
             const lastEl = textEls[index - 1]
-            el.y = lastEl.y + lastEl.height + 5
+            el.y = lastEl.y + lastEl.height + margin
         }
     })
 
-    return InfoBox(Container({}, ...textEls), {
-        ...(displayObjectArgs ?? {}),
-        padding: 25,
-        ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
-    })
+    return InfoBox(
+        Container(
+            {},
+            Sprite({
+                src: Texture.EMPTY,
+                width: textEls.reduce(
+                    (maxW, el) => Math.max(el.width, maxW),
+                    0
+                ),
+                height:
+                    textEls.reduce((totalH, el) => totalH + el.height, 0) +
+                    margin * (textEls.length - 1),
+            }),
+            ...textEls
+        ),
+        {
+            padding: 25,
+            ...(displayObjectArgs ?? {}),
+            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+        }
+    )
 }
 
 function ElToSprite(el: DisplayObject) {

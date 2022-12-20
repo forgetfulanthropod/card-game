@@ -2,13 +2,14 @@ import seedrandom from 'seedrandom'
 
 declare global {
     // eslint-disable-next-line no-var
-    var srandom: ReturnType<typeof seedrandom>
+    var srandom: () => number
 }
-const seed = Math.random().toString()
+// let seed = Math.random().toString()
+let seed = 'seedOne'
 logger.info(`setting random seed: ${seed}`)
 global.srandom = seedrandom(seed)
 
-export function setGlobalRandomSeed(seed = 'kaiju'): void {
-    logger.info(`setting random seed: ${seed}`)
+export function setGlobalRandomSeed(seed: string): void {
     global.srandom = seedrandom(seed)
+    logger.info(`setting random seed: ${seed}`)
 }

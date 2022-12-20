@@ -30,8 +30,9 @@ export function startChecking(el: DisplayObject) {
 // eslint-disable-next-line no-var
 var getStackTrace = function () {
     const obj = {}
-    // @ts-expect-error
-    Error.captureStackTrace(obj, getStackTrace)
+    if (Error.captureStackTrace !== undefined) {
+        Error.captureStackTrace(obj, getStackTrace)
+    }
     // @ts-expect-error
     return obj.stack
 }

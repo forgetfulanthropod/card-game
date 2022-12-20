@@ -3,17 +3,25 @@
     "extends": "../tsconfig.base.json",
     "compilerOptions": {
         "lib": ["dom", "dom.iterable", "esnext"],
-        "types": [],
-        "jsxImportSource": "preact",
+        // "types": [""],
+        // "jsxImportSource": "preact",
         "jsx": "react-jsx",
         "paths": {
             "shared": ["../shared"],
             "shared/code": ["../shared/code"],
             "@/*": ["./*"],
             "@sharedElements": ["./scenes/shared"],
-            "react": ["./node_modules/preact/compat"],
-            "react-dom": ["./node_modules/preact/compat"]
+            // "react": ["./node_modules/preact/compat"],
+            // "react-dom": ["./node_modules/preact/compat"]
         }
     },
-    "references": [{ "path": "../shared" }]
+    "references": [{ "path": "../shared" }],
+    "include": [
+        "*",
+        "**/*",
+        "**/*.json",
+        "**/*.tsx",
+        "**/*.js",
+        "**/*.ts"
+    ]
 }

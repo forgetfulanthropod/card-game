@@ -287,7 +287,9 @@ function StanceBullets(
         (texts: string[]) => {
             const root = Container({})
 
-            nextTick().then(() =>
+            nextTick().then(() => {
+                if (root == null) return
+
                 portalize({
                     from: root,
                     to: () => getStage(),
@@ -297,11 +299,12 @@ function StanceBullets(
                             x: root.getGlobalPosition().x + width * 1.5,
                             y: root.getGlobalPosition().y + -0.6 * width,
                             borderColor: 0xffffff,
-                            borderThickness: 1,
+                            padding: 15,
+                            borderThickness: 2,
                         },
                     }),
                 })
-            )
+            })
 
             return root
         }

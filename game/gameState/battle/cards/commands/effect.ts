@@ -13,7 +13,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase] = evalAllAsHtml(dslArgs)
-    return `+${increase} ${startCase(id)}`
+    return `+${increase} <b>${startCase(id)}</b>`
 }
 
 export const execute: Executors['effect'] = ({
@@ -65,10 +65,10 @@ function getTargetUids(
     }
     if (targetType == null) {
         targetUids = givenUids
-    } else if (['friends', 'enemies'].includes(targetType)) {
+    } else if (['allFriends', 'allEnemies'].includes(targetType)) {
         const ac = scene.get('allCharacters')
         const isPcSource = ac[command.characterUid].isPc
-        const shouldBePc = isPcSource === (targetType === 'friends') // NOR
+        const shouldBePc = isPcSource === (targetType === 'allFriends') // NOR
         targetUids = Object.values(ac)
             .filter(x => x.isPc === shouldBePc)
             .map(x => x.uid)

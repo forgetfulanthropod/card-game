@@ -1,9 +1,9 @@
 export function getInitialRunDuration(): {
-    startTime: string
-    endTime: string | null
+    startTime: number
+    endTime: number | null
 } {
     return {
-        startTime: new Date().toUTCString(),
+        startTime: new Date().getTime(),
         endTime: null,
     }
 }

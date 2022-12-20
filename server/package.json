@@ -2,11 +2,14 @@
     "name": "server",
     "version": "1.0.0",
     "dependencies": {
-        "game": "1.0.0",
-        "shared": "1.0.0",
-
         "classic-level": "^1.2.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.3",
+        "game": "1.0.0",
         "level": "^8.0.0",
+        "pg-native": "^3.0.1",
+        "shared": "1.0.0",
+        "slonik": "33",
         "socket.io": "^4.5.1"
     }
 }

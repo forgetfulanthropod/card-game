@@ -1,6 +1,6 @@
 /* eslint-disable import/no-relative-parent-imports */
-import type { AnimateAsset } from '@pixi/animate'
-import { Graphics, MovieClip, load } from '@pixi/animate'
+// import type { AnimateAsset } from '@pixi/animate'
+// import { Graphics, MovieClip, load } from '@pixi/animate'
 import { keys, random } from 'lodash'
 
 import { allAnimations } from '../animations'
@@ -9,58 +9,64 @@ import { SequenceAnimation } from './SequenceAnimation'
 
 const allAnimationKeys = keys(allAnimations)
 
-export function loadAllAnimateFiles(): void {
-    allAnimationKeys.forEach(k =>
-        //@ts-expect-error
-        allAnimations[k].setup({ MovieClip, Graphics })
-    )
+// export function loadAllAnimateFiles(): void {
+//     allAnimationKeys.forEach(k =>
+//         //@ts-expect-error
+//         allAnimations[k].setup({ MovieClip, Graphics })
+//     )
 
-    allAnimationKeys.map(k => {
-        load(allAnimations[k], () => {})
-    })
-}
+//     allAnimationKeys.map(k => {
+//         load(allAnimations[k], () => {})
+//     })
+// }
 
 export function AttackOverlayAnimation(isPc: boolean) {
-    return Animation(getOneOf(['BasicAttack001'], isPc), isPc)
+    return SequenceAnimation('KC_FX_BasicAttack_121222_', isPc)
+    // return Animation(getOneOf(['BasicAttack001'], isPc), isPc)
+}
+
+export function GainHealthAnimation(isPc: boolean) {
+    return SequenceAnimation('KC_FX_GainHealth_121222_', isPc)
 }
 
 export function BleedOverlayAnimation(isPc: boolean) {
-    return Animation(getOneOf(['Bleed'], isPc), isPc)
+    return SequenceAnimation('KC_FX_Bleed_121222_', isPc)
+    // return Animation(getOneOf(['Bleed'], isPc), isPc)
 }
 
 export function GainBlockOverlayAnimation(isPc: boolean) {
-    return SequenceAnimation('block', isPc)
+    return SequenceAnimation('KC_FX_Shield_121222_', isPc)
 }
 
 export function LoseBlockOverlayAnimation(isPc: boolean) {
-    return SequenceAnimation('loseBlock', isPc)
+    return SequenceAnimation('KC_FX_Shield_121222_', isPc)
 }
 
 export function BreakBlockOverlayAnimation(isPc: boolean) {
-    return SequenceAnimation('breakBlock', isPc)
+    return SequenceAnimation('KC_FX_BlockBreak_121222_', isPc)
 }
 
 export function PoisonOverlayAnimation(isPc: boolean) {
-    return SequenceAnimation('poison', isPc)
+    return SequenceAnimation('KC_FX_Poison_121222_', isPc)
 }
 
-function Animation(data: AnimateAsset, isPc: boolean) {
-    const firstLibKey = keys(data.lib)[0]
-    const EffectMovieClip = data?.lib?.[firstLibKey]
-    // console.log({ data, firstLibKey })
+// function Animation(data: AnimateAsset, isPc: boolean) {
+//     const firstLibKey = keys(data.lib)[0]
+//     const EffectMovieClip = data?.lib?.[firstLibKey]
+//     // console.log({ data, firstLibKey })
 
-    const newClip = new EffectMovieClip() as MovieClip
+//     const newClip = new EffectMovieClip() as MovieClip
 
-    newClip.scale.set(2.5)
-    newClip.y -= (data?.height * 2.5) / 2
-    newClip.x = isPc ? -300 : 0
-    newClip.loop = false
-    newClip.autoReset = false
+//     newClip.scale.set(2.5)
+//     newClip.y -= (data?.height * 2.5) / 2
+//     newClip.x = isPc ? -300 : 0
+//     newClip.loop = false
+//     newClip.autoReset = false
 
-    setTimeout(() => newClip.destroy(), 1500)
+//     setTimeout(() => newClip.destroy(), 1500)
 
-    return newClip
-}
+//     return newClip
+// }
 
 function getOneOf(possibilities: string[], isPc: boolean) {
     const animKeys = allAnimationKeys.filter(key => {

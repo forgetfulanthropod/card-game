@@ -7,7 +7,6 @@ import {
     PixiText,
     PixiTexture,
 } from './aliases'
-import 'pixi-sound'
 
 import { applyShownArgs, applyDisplayObjectArgs } from './_applyArgs'
 import type {
@@ -19,6 +18,9 @@ import type {
 } from './_types'
 import { startChecking } from './_util'
 import { onUpdate } from '@/util'
+import { Point, SimpleRope } from 'pixi.js'
+import { DisplayObject } from '@pixi/animate'
+import { getRenderer } from './application'
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
@@ -47,6 +49,36 @@ export function Container(
     startChecking(c)
     return c
 }
+
+export function CurvedText({
+    text,
+    radius,
+}: {
+    text: PixiText
+    radius: number
+}) {
+    const numPointsInHalfCircle = 200
+
+    text.updateText(true) // necessary!
+    const textTexture = getRenderer().generateTexture(text)
+    text.destroy(true)
+
+    let numPointsInSegment = Math.round(
+        (textTexture.width / (radius * Math.PI)) * numPointsInHalfCircle
+    )
+
+    const step = Math.PI / numPointsInHalfCircle
+
+    const points = []
+    for (let i = numPointsInSegment / 2; i >= -numPointsInSegment / 2; i--) {
+        const x = radius * Math.cos(Math.PI / 2 + step * i)
+        const y = radius * Math.sin(Math.PI / 2 + step * i)
+        points.push(new Point(x, -y))
+    }
+
+    return new SimpleRope(textTexture, points)
+}
+
 export function Text(args: TextArgs): PixiText {
     const text = args.text
 

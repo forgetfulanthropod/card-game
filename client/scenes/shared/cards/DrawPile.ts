@@ -12,21 +12,22 @@ import {
 } from '@/elementsUtil'
 
 export function DrawPile(pile: Pile): PixiContainer {
+    const src = getTexture('drawPile')
+
     return Container(
         {
-            x: BASE_WIDTH * 0.03,
-            y: BASE_HEIGHT * 0.98,
-            scale: 0.7,
-            angle: -20,
+            x: 0,
+            y: BASE_HEIGHT,
         },
         Sprite({
-            src: getCardBackSrc(),
+            src: src,
             anchor: [0, 1],
         }),
         Sprite({
             src: getCardBackPileSizeSrc(),
-            x: getCardBackSrc().width,
-            y: -getCardBackSrc().height,
+            scale: 0.7,
+            x: src.width,
+            y: -65,
             anchor: [0.5, 0.5],
         }),
         Text({
@@ -34,11 +35,11 @@ export function DrawPile(pile: Pile): PixiContainer {
             anchor: [0.5, 0.5],
             // width: getCardBackPileSizeSrc().width * 0.5,
             // height: getCardBackPileSizeSrc().height * 0.5,
-            x: getCardBackSrc().width,
-            y: -getCardBackSrc().height,
+            x: src.width,
+            y: -65,
             style: {
                 fill: 0xffffff,
-                fontSize: 48,
+                fontSize: 48 * 0.7,
                 fontFamily: 'bigFont',
             },
         })
@@ -47,8 +48,4 @@ export function DrawPile(pile: Pile): PixiContainer {
 
 function getCardBackPileSizeSrc() {
     return getTexture('cardBackPileSizeOverlay')
-}
-
-function getCardBackSrc() {
-    return getTexture('cardBack')
 }

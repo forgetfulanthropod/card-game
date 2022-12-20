@@ -4,6 +4,7 @@ import { keys } from 'shared/code'
 import type { CharacterPlaceIndex, SelectedCharacters } from 'shared'
 
 import {
+    composeDefaultParty,
     selectedCharacterId,
     selectedCharacterPlaceIndex,
 } from './CharacterOptions'
@@ -46,7 +47,17 @@ import { hoveredCharacterUid, onUpdate } from '@/util'
 // })
 
 export function SelectedCharactersEl(): PixiContainer {
+    console.log('selected characters...')
     const selectedCharacters = getEntryScene().select('selectedCharacters')
+
+    const numSelected = selectedCharacters
+        .get()
+        .reduce(
+            (accumulator, character) =>
+                accumulator + (character != null ? 1 : 0),
+            0
+        )
+    if (numSelected === 0) composeDefaultParty()
 
     const root = Container({
         onDestroy: [
@@ -85,7 +96,8 @@ export function SelectedCharactersEl(): PixiContainer {
 
 function SelectedCharacterText() {
     return Text({
-        text: 'CHOOSE YOUR CHARACTERS',
+        // text: 'CHOOSE YOUR CHARACTERS',
+        text: 'CHOOSE   YOUR   KAIJU',
         x: BASE_WIDTH * 0.506,
         y: BASE_HEIGHT * 0.565,
         anchor: 0.5,

@@ -1,6 +1,6 @@
 import type { RequiredAction } from '@actions'
 import type { SceneHas } from '@misc'
-import type { DungeonRoom } from '../Dungeon'
+import type { DungeonRoom, DungeonRoomMap, DungeonRoomMaps } from '../Dungeon'
 
 import type { CharacterUid } from './Character'
 import type { Piles, Pile, Card, Command } from './Card'
@@ -8,6 +8,7 @@ import type { StatChangeMap } from './CardHit'
 import type { Characters, StanceId } from './Characters'
 import type { CommandQueue } from './CommandQueue'
 import type { ClaimableLoot, ClaimedLoot, TreasureChest, RunScore } from '.'
+import { RunID } from '../User'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -24,8 +25,9 @@ export interface BattleScene extends SceneHas {
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number
+    rooms: DungeonRoomMap
     numRoomsPassed: number
-    rooms: DungeonRoom[]
+    currentRoom: DungeonRoom
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
     cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {
@@ -46,15 +48,17 @@ export interface BattleScene extends SceneHas {
     treasureChest: TreasureChest
     runScore: RunScore
     runDuration: {
-        startTime: string
-        endTime: string | null
+        startTime: number
+        endTime: number | null
     }
+    runId: RunID | null
 }
 
 /** May later have e.g. DOT effects */
 export interface CommandOutcome {
     damages: StatChangeMap
     blocks: StatChangeMap
+    effects: StatChangeMap
 }
 
 export interface NextCommand {
@@ -73,7 +77,7 @@ export type BattleWinState =
 
 export type DungeonName =
     | 'Skelepit Dungeon'
-    | 'Hooligan’s Bluff'
+    | 'Hooligans Bluff'
     | 'The Matcha Caves'
     | 'Fort Skeleton'
     | 'The Ninth Trash Hole of Hell'

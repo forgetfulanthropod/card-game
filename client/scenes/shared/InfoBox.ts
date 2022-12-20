@@ -23,6 +23,8 @@ export function InfoBox(
 
     const padding = displayArgs.padding ?? paddingPortion * localBounds.width
 
+    const baseBorderRadius = displayArgs.borderRadius ?? 25
+
     return Container(
         {
             x: padding,
@@ -33,15 +35,16 @@ export function InfoBox(
             ...(displayArgs.borderThickness
                 ? [
                       Box(
-                          displayArgs,
+                          { ...displayArgs, borderRadius: baseBorderRadius },
                           localBounds,
-                          padding + 12,
+                          padding + displayArgs.borderThickness * 4,
                           //@ts-expect-error
                           displayArgs?.filters
                       ),
                       Box(
                           {
                               ...displayArgs,
+                              borderRadius: baseBorderRadius * 0.7,
                               colorStops: [
                                   {
                                       color:
@@ -51,9 +54,16 @@ export function InfoBox(
                               ],
                           },
                           localBounds,
-                          padding + 4
+                          padding + displayArgs.borderThickness
                       ),
-                      Box(displayArgs, localBounds, padding),
+                      Box(
+                          {
+                              ...displayArgs,
+                              borderRadius: baseBorderRadius * 0.65,
+                          },
+                          localBounds,
+                          padding
+                      ),
                   ]
                 : [
                       Box(
@@ -90,8 +100,10 @@ function Box(
     padding: number,
     filters?: Filter[]
 ): PixiSprite {
+    const borderRadius = displayArgs?.borderRadius ?? -1
+
     return RoundedRectangleGradientSprite({
-        radius: displayArgs.borderRadius ?? 20,
+        radius: borderRadius > 0 ? borderRadius : 20,
         gradientArgs: {
             x0: 0,
             y0: 0,

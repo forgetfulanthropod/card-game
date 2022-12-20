@@ -15,13 +15,13 @@ import { keys } from 'shared/code'
 import { MainCharacterAnimation } from '@sharedElements'
 import type { TrackEntry } from '@pixi-spine/all-4.1'
 import { diff } from 'deep-diff'
-import { HealthBar } from './HealthBar'
+import { HealthBar, HEALTH_BAR_WIDTH } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 import { FloatingIntents } from './FloatingIntents'
 
 import { EffectOverlayManager } from './EffectOverlayManager'
-import { getCharTexture } from '@/assets'
+import { getCharTexture, SoundEffectAssetKey } from '@/assets'
 import {
     hoveredCharacterUid,
     nextTick,
@@ -93,7 +93,7 @@ export function Character(props: CharacterProps): PixiContainer {
             () =>
                 Adjust(FloatingIntents(characterMeta.uid), {
                     y: 0,
-                    x: characterMeta.block > 0 ? 300 : 260,
+                    x: characterMeta.isPc ? HEALTH_BAR_WIDTH : 0,
                 })
         )
     )
@@ -105,7 +105,7 @@ export function Character(props: CharacterProps): PixiContainer {
                     y: 22,
                 })
             ),
-        1000 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
+        0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
     )
 
     const hitContainer = Container({
@@ -397,12 +397,16 @@ function flashDamageTo(
 }
 
 function playAttackSound(characterMeta: CharacterMeta) {
-    playSound(`sound${upperFirst(characterMeta.id)}Attack` as SoundAssetKey)
+    playSound(
+        `sound${upperFirst(characterMeta.id)}Attack` as SoundEffectAssetKey
+    )
 }
 
 function playTakingDamageSound(characterMeta: CharacterMeta) {
     playSound(`soundGenericTakingDamage`)
     playSound(
-        `sound${upperFirst(characterMeta.id)}TakingDamage` as SoundAssetKey
+        `sound${upperFirst(
+            characterMeta.id
+        )}TakingDamage` as SoundEffectAssetKey
     )
 }

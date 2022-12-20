@@ -4,17 +4,21 @@ import { SelectedCharactersEl } from './SelectedCharacters'
 import { GoButton } from './GoButton'
 import { CharacterOptions } from './CharacterOptions'
 import { getEntryScene } from '@/data'
-import type { PixiContainer } from '@/elementsUtil'
+import { loopSong, PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { onUpdate } from '@/util'
+import { callApi } from '@/callApi'
 
 const NUM_CHARACTERS_REQUIRED = 3
 
 export function DungeonEntryScene(): PixiContainer {
+    gtag('event', 'ui_ux_view', { page_title: 'Character Select' })
     const selectedCharactersCursor =
         getEntryScene().select('selectedCharacters')
 
     const startButton = GoButton()
+
+    loopSong('entrySceneMusicHooligansBluff')
 
     return Container(
         {

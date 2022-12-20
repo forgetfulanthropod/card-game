@@ -27,7 +27,7 @@ export const rootAssets = {
 }
 
 export const fontAssets = {
-    bigFont: 'root/fonts/Aesthet Nova/Aesthet Nova W05 Black.ttf',
+    bigFont: 'root/fonts/Aesthet-Nova/Aesthet-Nova-W05-Black.ttf',
     sansFont: 'root/fonts/Space Grotesk/SpaceGrotesk-VariableFont_wght.ttf',
     monoFont: 'root/fonts/Space Mono/SpaceMono-Bold.ttf',
 } as const
@@ -39,7 +39,7 @@ export const fontAssets = {
 const caveFinal = 'backgrounds/Matcha_Caves.webp'
 export const dungeonBackgroundAssets = {
     'Skelepit Dungeon': caveFinal,
-    // 'Hooligan’s Bluff': caveFinal,
+    // 'Hooligans Bluff': caveFinal,
     // 'The Matcha Caves': caveFinal,
     // 'Fort Skeleton': caveFinal,
     // 'The Ninth Trash Hole of Hell': caveFinal,
@@ -103,7 +103,8 @@ export const cardAssets = {
     cardEnergy4: 'cards/Card PNG Breakdown/Mana Cost Numbers/4.png',
     cardEnergy5: 'cards/Card PNG Breakdown/Mana Cost Numbers/5.png',
     cardBackPileSizeOverlay: 'cards/card back pile size overlay.webp',
-    cardBack: 'cards/card back.webp',
+    drawPile: 'cards/draw.webp',
+    discardPile: 'cards/discard.webp',
     draftCard: 'cards/draftCard.webp',
     ...cardArtAssets,
     ...cardTypeAssets,
@@ -152,18 +153,20 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
-    effectBerserk: 'effects/berserk_temp.webp',
+    effectBerserk: 'effects/berserk.webp',
     effectBleed: 'effects/bleed.webp',
+    effectBrave: 'effects/brave.webp',
+    effectCourageous: 'effects/courageous.webp',
     effectDebilitated: 'effects/debilitated.webp',
     effectFatigued: 'effects/fatigue.webp',
-    // temp: what is strongblock icon?
-    effectStrongblock: 'intents/npc/Shield intent.webp',
+    effectStrongblock: 'effects/strongblock.webp',
     effectEntranced: 'effects/magicalStorm.webp',
     effectPoisoned: 'effects/poison_skull.webp',
     effectStunned: 'effects/stunned.webp',
     effectTired: 'effects/tired.webp',
-    effectUnguarded: 'effects/unguarded_v2.webp',
-    effectVulnerable: 'effects/vulnerable_v2.webp',
+    effectUnguarded: 'effects/unguarded.webp',
+    effectUnready: 'effects/unready.webp',
+    effectVulnerable: 'effects/vulnerable.webp',
 }
 
 export const healthBarAssets = {
@@ -178,14 +181,21 @@ export const healthBarAssets = {
     healthBarShadow: 'health bar/Shadow.webp',
 }
 
+export type IntentAssetKey = keyof typeof intentAssets
 export const intentAssets = {
-    enemyIntentArrowHead: 'intents/arrow_4_head.webp',
-    enemyIntentArrowTail: 'intents/arrow_4_tail.webp',
+    enemyIntentArrowHead: 'intents/arrow_4_head_bright.webp',
+    enemyIntentArrowTail: 'intents/arrow_4_tail_bright.webp',
     intentAttack: 'intents/floating intent amount.webp',
+    intentBellyFlop: 'intents/belly button.webp',
+    intentRollAround: 'intents/belly button.webp',
     intentMimic: 'intents/Mimic.webp',
     intentInfectiousBite: 'intents/Infectious Bite.webp',
     intentGrudge: 'intents/Grudge.webp',
-    intentBlock: 'intents/npc/Shield intent.webp',
+    intentBlock: 'intents/block.webp',
+    intentBuff: 'intents/buff.webp',
+    intentDebuff: 'intents/debuff.webp',
+    intentBigBomb1: 'intents/gnomeBomb1.webp',
+    intentBigBomb2: 'intents/gnomeBomb2.webp',
 }
 
 export const orbAssets = {
@@ -212,6 +222,19 @@ export const characterClassAssets = {
 } as const
 
 export const spineAssets = {
+    hooligansBluffHexMapBg: 'spines/scenes/hex map/hooligans bluff/sky.json',
+
+    hooligansBluffBg1_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_1.json',
+    hooligansBluffBg1_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_1/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg2_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_2.json',
+    hooligansBluffBg2_1:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_2/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+    hooligansBluffBg3_0:
+        'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_3/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
+
     frogKnightSpine: 'spines/characters/frogKnight/FrogKnight.json',
     mushroomFarmerSpine:
         'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
@@ -224,19 +247,30 @@ export const spineAssets = {
         'spines/characters/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
     matchaGelatinCubeNPCSpine:
         'spines/characters/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
-    gnomeHooliganSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
-    gnomeHooliganNPCSpine:
-        'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
+    // gnomeHooliganNPCSpine:
+    //     'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
     orcWarriorSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     orcWarriorNPCSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
-    warhogSpine: 'spines/characters/warhog/Warhog.json',
+
+    warhogSkinsSpine: 'spines/characters/warhog/warhog.json',
+    warhogSpine: 'SKIN: warhogSkinsSpine -> 0',
+    plaguehogSpine: 'SKIN: warhogSkinsSpine -> 1',
+    bosshogJurgenSpine: 'SKIN: warhogSkinsSpine -> 2',
+    groghogSpine: 'SKIN: warhogSkinsSpine -> 3',
+    warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
+
     mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
-    // bosshogJurgenNPCSpine: 'spines/characters/bosshogJurgen/Warhog.json',
+
+    gnomeSkinsSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
+    gnomeHooliganSpine: 'SKIN: gnomeSkinsSpine -> 3',
+    gnomeProspectorSpine: 'SKIN: gnomeSkinsSpine -> 5',
+    gnomeBanditSpine: 'SKIN: gnomeSkinsSpine -> 0',
+    gnomeBigBomberSpine: 'SKIN: gnomeSkinsSpine -> 2',
 
     damageTextSpine: 'spines/damage/Text.json',
 
-    restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
+    // restSiteSceneSpine: 'spines/scenes/rest site/penguin plush export.json',
     // frogKnightSpineWebp: 'spine/frogKnight/FrogKnight.webp',
     // mushroomFarmerSpineWebp:
     //     'spine/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.webp',
@@ -245,6 +279,17 @@ export const spineAssets = {
     // matchaGelatinCubeSpineWebp:
     //     'spine/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.webp',
 } as const
+
+export const scenes = {
+    restSiteBg:
+        'scenes/rest site/hooligans bluff/plush bg (20221122113046).webp',
+    restSiteFrog:
+        'scenes/rest site/hooligans bluff/frog plush (20221122112943).png',
+    restSiteWarhog:
+        'scenes/rest site/hooligans bluff/hog plush (20221122113003).png',
+    restSitePenguin:
+        'scenes/rest site/hooligans bluff/penguin plush (20221122112928).png',
+}
 
 export const matchaEntryAssets = {
     pedestalRay0: 'scenes/entry matcha/Pedestal_ray_Left.webp',
@@ -265,266 +310,18 @@ export const characterProfileAssets = {
     warhogProfile: 'character profiles/warhog.webp',
 }
 
-export const sequences = {
-    // @index(['../../public/assets/fx sequences/**/*.svg'], f => `${f.name}: '${f.path.replace('../../public/assets/', '')}.svg',`)
-    KC_FX_Block_v4_001_0001:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0001.svg',
-    KC_FX_Block_v4_001_0002:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0002.svg',
-    KC_FX_Block_v4_001_0003:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0003.svg',
-    KC_FX_Block_v4_001_0004:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0004.svg',
-    KC_FX_Block_v4_001_0005:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0005.svg',
-    KC_FX_Block_v4_001_0006:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0006.svg',
-    KC_FX_Block_v4_001_0007:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0007.svg',
-    KC_FX_Block_v4_001_0008:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0008.svg',
-    KC_FX_Block_v4_001_0009:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0009.svg',
-    KC_FX_Block_v4_001_0010:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0010.svg',
-    KC_FX_Block_v4_001_0011:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0011.svg',
-    KC_FX_Block_v4_001_0012:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0012.svg',
-    KC_FX_Block_v4_001_0013:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0013.svg',
-    KC_FX_Block_v4_001_0014:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0014.svg',
-    KC_FX_Block_v4_001_0015:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0015.svg',
-    KC_FX_Block_v4_001_0016:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0016.svg',
-    KC_FX_Block_v4_001_0017:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0017.svg',
-    KC_FX_Block_v4_001_0018:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0018.svg',
-    KC_FX_Block_v4_001_0019:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0019.svg',
-    KC_FX_Block_v4_001_0020:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0020.svg',
-    KC_FX_Block_v4_001_0021:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0021.svg',
-    KC_FX_Block_v4_001_0022:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0022.svg',
-    KC_FX_Block_v4_001_0023:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0023.svg',
-    KC_FX_Block_v4_001_0024:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0024.svg',
-    KC_FX_Block_v4_001_0025:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0025.svg',
-    KC_FX_Block_v4_001_0026:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0026.svg',
-    KC_FX_Block_v4_001_0027:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0027.svg',
-    KC_FX_Block_v4_001_0028:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0028.svg',
-    KC_FX_Block_v4_001_0029:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0029.svg',
-    KC_FX_Block_v4_001_0030:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0030.svg',
-    KC_FX_Block_v4_001_0031:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0031.svg',
-    KC_FX_Block_v4_001_0032:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0032.svg',
-    KC_FX_Block_v4_001_0033:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0033.svg',
-    KC_FX_Block_v4_001_0034:
-        'fx sequences/KC_FX_Block_v3_001/KC_FX_Block_v4_001_0034.svg',
-    KC_FX_BlockBreak_v1_001_0001:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0001.svg',
-    KC_FX_BlockBreak_v1_001_0002:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0002.svg',
-    KC_FX_BlockBreak_v1_001_0003:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0003.svg',
-    KC_FX_BlockBreak_v1_001_0004:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0004.svg',
-    KC_FX_BlockBreak_v1_001_0005:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0005.svg',
-    KC_FX_BlockBreak_v1_001_0006:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0006.svg',
-    KC_FX_BlockBreak_v1_001_0007:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0007.svg',
-    KC_FX_BlockBreak_v1_001_0008:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0008.svg',
-    KC_FX_BlockBreak_v1_001_0009:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0009.svg',
-    KC_FX_BlockBreak_v1_001_0010:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0010.svg',
-    KC_FX_BlockBreak_v1_001_0011:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0011.svg',
-    KC_FX_BlockBreak_v1_001_0012:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0012.svg',
-    KC_FX_BlockBreak_v1_001_0013:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0013.svg',
-    KC_FX_BlockBreak_v1_001_0014:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0014.svg',
-    KC_FX_BlockBreak_v1_001_0015:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0015.svg',
-    KC_FX_BlockBreak_v1_001_0016:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0016.svg',
-    KC_FX_BlockBreak_v1_001_0017:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0017.svg',
-    KC_FX_BlockBreak_v1_001_0018:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0018.svg',
-    KC_FX_BlockBreak_v1_001_0019:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0019.svg',
-    KC_FX_BlockBreak_v1_001_0020:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0020.svg',
-    KC_FX_BlockBreak_v1_001_0021:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0021.svg',
-    KC_FX_BlockBreak_v1_001_0022:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0022.svg',
-    KC_FX_BlockBreak_v1_001_0023:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0023.svg',
-    KC_FX_BlockBreak_v1_001_0024:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0024.svg',
-    KC_FX_BlockBreak_v1_001_0025:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0025.svg',
-    KC_FX_BlockBreak_v1_001_0026:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0026.svg',
-    KC_FX_BlockBreak_v1_001_0027:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0027.svg',
-    KC_FX_BlockBreak_v1_001_0028:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0028.svg',
-    KC_FX_BlockBreak_v1_001_0029:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0029.svg',
-    KC_FX_BlockBreak_v1_001_0030:
-        'fx sequences/KC_FX_BlockBreak_v1_001/KC_FX_BlockBreak_v1_001_0030.svg',
-    KC_FX_Defense_v1_0010001:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010001.svg',
-    KC_FX_Defense_v1_0010002:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010002.svg',
-    KC_FX_Defense_v1_0010003:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010003.svg',
-    KC_FX_Defense_v1_0010004:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010004.svg',
-    KC_FX_Defense_v1_0010005:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010005.svg',
-    KC_FX_Defense_v1_0010006:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010006.svg',
-    KC_FX_Defense_v1_0010007:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010007.svg',
-    KC_FX_Defense_v1_0010008:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010008.svg',
-    KC_FX_Defense_v1_0010009:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010009.svg',
-    KC_FX_Defense_v1_0010010:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010010.svg',
-    KC_FX_Defense_v1_0010011:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010011.svg',
-    KC_FX_Defense_v1_0010012:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010012.svg',
-    KC_FX_Defense_v1_0010013:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010013.svg',
-    KC_FX_Defense_v1_0010014:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010014.svg',
-    KC_FX_Defense_v1_0010015:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010015.svg',
-    KC_FX_Defense_v1_0010016:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010016.svg',
-    KC_FX_Defense_v1_0010017:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010017.svg',
-    KC_FX_Defense_v1_0010018:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010018.svg',
-    KC_FX_Defense_v1_0010019:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010019.svg',
-    KC_FX_Defense_v1_0010020:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010020.svg',
-    KC_FX_Defense_v1_0010021:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010021.svg',
-    KC_FX_Defense_v1_0010022:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010022.svg',
-    KC_FX_Defense_v1_0010023:
-        'fx sequences/KC_FX_BlockDefense_v1_001/KC_FX_Defense_v1_0010023.svg',
-    KC_FX_Poison001_Player0001:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0001.svg',
-    KC_FX_Poison001_Player0002:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0002.svg',
-    KC_FX_Poison001_Player0003:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0003.svg',
-    KC_FX_Poison001_Player0004:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0004.svg',
-    KC_FX_Poison001_Player0005:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0005.svg',
-    KC_FX_Poison001_Player0006:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0006.svg',
-    KC_FX_Poison001_Player0007:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0007.svg',
-    KC_FX_Poison001_Player0008:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0008.svg',
-    KC_FX_Poison001_Player0009:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0009.svg',
-    KC_FX_Poison001_Player0010:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0010.svg',
-    KC_FX_Poison001_Player0011:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0011.svg',
-    KC_FX_Poison001_Player0012:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0012.svg',
-    KC_FX_Poison001_Player0013:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0013.svg',
-    KC_FX_Poison001_Player0014:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0014.svg',
-    KC_FX_Poison001_Player0015:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0015.svg',
-    KC_FX_Poison001_Player0016:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0016.svg',
-    KC_FX_Poison001_Player0017:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0017.svg',
-    KC_FX_Poison001_Player0018:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0018.svg',
-    KC_FX_Poison001_Player0019:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0019.svg',
-    KC_FX_Poison001_Player0020:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0020.svg',
-    KC_FX_Poison001_Player0021:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0021.svg',
-    KC_FX_Poison001_Player0022:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0022.svg',
-    KC_FX_Poison001_Player0023:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0023.svg',
-    KC_FX_Poison001_Player0024:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0024.svg',
-    KC_FX_Poison001_Player0025:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0025.svg',
-    KC_FX_Poison001_Player0026:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0026.svg',
-    KC_FX_Poison001_Player0027:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0027.svg',
-    KC_FX_Poison001_Player0028:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0028.svg',
-    KC_FX_Poison001_Player0029:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0029.svg',
-    KC_FX_Poison001_Player0030:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0030.svg',
-    KC_FX_Poison001_Player0031:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0031.svg',
-    KC_FX_Poison001_Player0032:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0032.svg',
-    KC_FX_Poison001_Player0033:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0033.svg',
-    KC_FX_Poison001_Player0034:
-        'fx sequences/KC_FX_Poison001_Player/KC_FX_Poison001_Player0034.svg',
-    // @endindex
-}
-
 export const mapAssets = {
-    mapBg: 'hex map/dungeon test bg for export.mp4',
-    mapFire: 'hex map/fire test.mov',
     mapRestSite: 'hex map/rest site2.webp',
+    mapEventSite: 'hex map/event site.webp',
 }
 
 export const mapTileAssets = {
-    mapTile1: 'hex map/Tile 1.png',
-    mapTile2: 'hex map/Tile 2.png',
-    mapTile3: 'hex map/Tile 3.png',
-    mapTile4: 'hex map/Tile 4.png',
-    mapTile5: 'hex map/Tile 5.png',
-    mapTile6: 'hex map/Tile 6.png',
-    mapTile7: 'hex map/Tile 7.png',
-    mapTile8: 'hex map/Tile 8.png',
+    mapTile1: 'hex map/hooligans bluff/base tile.webp',
+    mapTile2: 'hex map/hooligans bluff/base tile.webp',
+    mapTile3: 'hex map/hooligans bluff/base tile.webp',
+    mapTile4: 'hex map/hooligans bluff/base tile.webp',
+    mapTile5: 'hex map/hooligans bluff/base tile.webp',
+    mapTile6: 'hex map/hooligans bluff/base tile.webp',
+    mapTile7: 'hex map/hooligans bluff/base tile.webp',
+    mapTile8: 'hex map/hooligans bluff/base tile.webp',
 }

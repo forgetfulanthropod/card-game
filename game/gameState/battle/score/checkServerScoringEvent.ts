@@ -7,7 +7,7 @@ import {
     NonNotifiableEvent,
 } from 'shared'
 import { vals } from 'shared/code'
-import { trackStanceChanges } from '../endRound'
+import { trackStanceChanges } from '../characters/trackStanceChanges'
 
 type applyDamageArgs = {
     damage: number
@@ -36,7 +36,10 @@ const checkServerScoringEvent = (
         case 'HIT_VULGAR_THRESHOLD':
             checkDamageDealtInTurn(scene)
             break
-        case 'STANCE_CHANGES':
+        case 'STANCE_CHANGES_OVER':
+            checkStanceChanges(scene)
+            break
+        case 'STANCE_CHANGES_UNDER':
             checkStanceChanges(scene)
             break
         case 'CARDS_OVER_THRESHOLD':
@@ -68,14 +71,11 @@ const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
         return
     }
 
-    scene.select('runDuration').set('endTime', new Date().toUTCString()) // might need to use library or time in DB for this?
     const startTime = scene.select('runDuration').get('startTime')
     const endTime = scene.select('runDuration').get('endTime')
 
     if (endTime) {
-        const totalTimeInSeconds =
-            (new Date(endTime).getTime() - new Date(startTime).getTime()) / 1000
-
+        const totalTimeInSeconds = (endTime - startTime) / 1000
         const minutes = ~~((totalTimeInSeconds % 3600) / 60)
         const hours = ~~(totalTimeInSeconds / 3600)
 
@@ -91,7 +91,7 @@ const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
 
 const checkSurvivingKaiju = (scene: BattleCursor) => {
     const survivingKaiju = vals(scene.get('allCharacters')).filter(
-        char => char.isPc
+        char => char.isPc && char.health > 0
     )
     updateRunScoreAttribute(scene, 'survivingKaiju', survivingKaiju.length)
 
@@ -135,7 +135,7 @@ const checkDamageDealtInTurn = (scene: BattleCursor) => {
 
 const checkStanceChanges = (scene: BattleCursor) => {
     trackStanceChanges(scene) // used for final turn update
-    const STANCE_CHANGES_THRESHOLD = 3
+    const STANCE_CHANGES_THRESHOLD = 5
     const stanceChanges = scene.get('stanceChangesThisRoom')
     if (stanceChanges.length === 0) {
         incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')

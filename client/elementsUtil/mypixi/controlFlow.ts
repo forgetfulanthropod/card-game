@@ -202,6 +202,9 @@ export function portalize(args: {
     nextFrame?: boolean
 }): void {
     const { from, content, before } = args
+
+    if (from == null) return
+
     const to_ =
         args.to ?? getPixiApp()?.stage ?? throwNull('app.stage and args.to')
     function attach() {

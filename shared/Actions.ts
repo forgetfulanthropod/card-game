@@ -7,19 +7,55 @@ import type { SceneId } from './misc'
 
 import type {
     CardUid,
+    CharacterStats,
     CharacterUid,
     Gamestate,
     Orb,
     OwnedCharacterStats,
     Rulebook,
+    RunID,
     RunScoreEvent,
     StanceId,
+    UserID,
 } from './tree'
 
-interface BareServerActionArgs {
-    incrementTestCounter: Empty
-    makeNewUser: { username: string }
-    maybeMakeUser: { username: string }
+export interface BareServerActionsMeta {
+    incrementTestCounter: {
+        args: Empty
+        res: Promise<void> | void
+    }
+    makeNewUser: {
+        args: { username: string }
+        res: Promise<void> | void
+    }
+    maybeMakeUser: {
+        args: { username: string }
+        res: Promise<void> | void
+    }
+    login: {
+        args: { walletAddress: string }
+        res: Promise<{ userId: UserID }>
+    }
+    startRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID }>
+    }
+    getCurrentRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID }>
+    }
+    endRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID | null }>
+    }
+    getNumKaijuInGoodEarth: {
+        args: { walletAddress: string }
+        res: Promise<{ numKaijuOwned: number }>
+    }
+}
+
+export type BareServerActionArgs = {
+    [K in keyof BareServerActionsMeta]: BareServerActionsMeta[K]['args']
 }
 
 interface BareGameActionArgs {
@@ -33,20 +69,20 @@ interface BareGameActionArgs {
     finishCard: { cardUids: CardUid[] }
     openLootCollector: Empty
     openEndScreen: Empty
-    nextRoom: Empty
+    nextRoom: { choice: 0 | 1 | 2 | 3 }
     notifyRunScore: { event: RunScoreEvent; count: number }
-    confirmNextRoom: Empty
     choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {
-            character: OwnedCharacterStats
-            index: CharacterPlaceIndex
+            allCharacterOptionsIndex: number
+            placeIndex: CharacterPlaceIndex
         }[]
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
+    setRunId: { userId: UserID, runId: RunID }
 }
 
 // NOTE: below is not as complicated as it looks.
@@ -61,9 +97,9 @@ export type GameActions = {
 }
 /** Map from server action name to function signature */
 export type ServerActions = {
-    [K in keyof BareServerActionArgs]: (
-        args: BareServerActionArgs[K]
-    ) => Promise<void> | void
+    [K in keyof BareServerActionsMeta]: (
+        args: BareServerActionsMeta[K]['args']
+    ) => BareServerActionsMeta[K]['res']
 }
 
 // export type GameActionArgs = {

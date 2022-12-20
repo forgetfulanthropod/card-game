@@ -1,4 +1,10 @@
-import type { CharacterStats, CharacterUid } from './Character'
+import type {
+    CalculatedCharacterStats,
+    CharacterStats,
+    CharacterUid,
+    StatModifiers,
+    StatModifiersMap,
+} from './Character'
 import type { Effect } from './Effect'
 import type { Orb } from './Orb'
 
@@ -12,8 +18,9 @@ export type EnemyCharacterMeta = Omit<
     CharacterMeta,
     'stance' | 'class' | 'stanceInPrevTurn'
 > & {
-    id: EnemyCharacterId
+    id: NonPlayerCharacterId
     level: string | number
+    calculatedStats?: CalculatedCharacterStats
 }
 export interface CharacterMeta extends CharacterStats {
     id: CharacterId
@@ -32,10 +39,12 @@ export interface CharacterMeta extends CharacterStats {
     stanceInPrevTurn: StanceId
     effects: Effect[]
     orbs: Orb[]
+    statModifiersMap: StatModifiersMap
+    calculatedStats: CalculatedCharacterStats
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
-export type CharacterId =
+export type PlayerCharacterId =
     | 'bloatDemon'
     | 'bogSpirit'
     | 'bookle'
@@ -47,8 +56,10 @@ export type CharacterId =
     | 'greenJester'
     | 'jerry'
     | 'lichLord'
+    | 'matchaGelatinCube'
     | 'mushroomFarmer'
     | 'notoriousBEAN'
+    | 'orcWarrior'
     | 'penguinKnight'
     | 'skeletonWarrior'
     | 'snacky'
@@ -56,16 +67,27 @@ export type CharacterId =
     | 'trioOfFools'
     | 'warhog'
     | 'wimpyGuard'
-    | EnemyCharacterId
 
-export type EnemyCharacterId =
-    | 'skeletonWarrior'
-    | 'matchaGelatinCube'
-    | 'orcWarrior'
-    | 'gnomeHooligan'
-    | 'warhog'
-    | 'mimic'
+/**
+ * to make a player character with same Id, just copy the ID over,
+ * duplicate iDs are ok, so vice versa too!
+ */
+export type NonPlayerCharacterId =
     | 'bosshogJurgen'
-    | 'toadmaw'
     | 'cultist'
+    | 'gnomeBandit'
+    | 'gnomeBigBomber'
+    | 'gnomeHooligan'
+    | 'gnomeProspector'
+    | 'groghog'
     | 'halfdan'
+    | 'matchaGelatinCube'
+    | 'mimic'
+    | 'orcWarrior'
+    | 'plaguehog'
+    | 'skeletonWarrior'
+    | 'toadmaw'
+    | 'warhog'
+    | 'warhogRaider'
+
+export type CharacterId = PlayerCharacterId | NonPlayerCharacterId

@@ -23,14 +23,18 @@
         "pixi-viewport": "^4.34.4",
         "pixi-webfont-loader": "^1.0.2",
         "pixi.js": "^6.3.2",
-        "preact": "^10.7.2",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "react-hot-toast": "^2.2.0",
         "shared": "1.0.0",
         "socket.io-client": "^4.5.1",
         "styled-components": "^5.3.5"
     },
     "devDependencies": {
+        "@types/gtag.js": "^0.0.12",
         "@types/marked": "^4.0.3",
+        "@types/react": "^18.0.25",
+        "@types/react-dom": "^18.0.8",
         "monaco-editor": "^0.33.0"
     },
     "bookmarks": {

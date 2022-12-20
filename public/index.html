@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>v0.0.12</title>
+    <title>Kaiju Cards v0.1.0</title>
     <meta charset="utf-8" />
     <link rel="icon" href="favicon.png" />
 
@@ -34,6 +34,7 @@
     <!-- <meta name="description" content="" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
 
     <!-- <link rel="stylesheet" href="out.css" /> -->
     <style>
@@ -63,6 +64,28 @@
             height: 100%;
         }
     </style>
+
+    <!-- Google tag (gtag.js) -->
+    <script>
+        const isLocal = document.location.hostname === 'localhost'
+        const GTAG_ID = isLocal ? 'G-B9HWVKN8ZF' : 'G-ZJEB0NYGHB';
+
+        const GTAG_URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`
+        const gaSrcScript = document.createElement('script')
+        gaSrcScript.setAttribute('src', GTAG_URL)
+        gaSrcScript.setAttribute('async', true)
+        document.head.appendChild(gaSrcScript)
+
+        const gaConfigScript = document.createElement('script')
+        gaConfigScript.text = `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);};
+            gtag('js', new Date());
+            gtag('config', GTAG_ID, { 'debug_mode': isLocal });
+            console.log({GTAG_ID, isLocal})
+        `
+        document.head.appendChild(gaConfigScript)
+    </script>
 </head>
 
 <body>
@@ -79,7 +102,9 @@
     </div>
     <script>
         (async () => {
-            const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+            // const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+            const pwd = 'dailyship'
+            await new Promise(resolve => setTimeout(resolve, 100))
 
             try {
                 const head = document.getElementsByTagName("head")[0]

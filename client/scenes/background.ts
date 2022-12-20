@@ -1,9 +1,14 @@
 import type { Datum } from 'datums'
 
-import type {
+import {
     AssetKey,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
     PixiContainer,
     PlayablePixiSprite,
+    Spine,
+    SpineAsset,
 } from '@/elementsUtil'
 import { PngLayersBackground, VideoBackground } from '@/elementsUtil'
 
@@ -46,4 +51,18 @@ export function Background({
     }
 
     throw new Error('must have src or srcs')
+}
+
+export function SpineBackground({ srcs }: { srcs: SpineAsset[] }) {
+    return Container(
+        {},
+        ...srcs.map(src => {
+            return Spine({
+                name: src,
+                animation: 'animation',
+                x: BASE_WIDTH / 2,
+                y: BASE_HEIGHT,
+            })
+        })
+    )
 }

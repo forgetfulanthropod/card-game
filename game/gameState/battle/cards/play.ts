@@ -1,5 +1,5 @@
 import type { Card, CharacterUid, BattleCursor } from 'shared'
-import { getLivingNpcs } from '../characterGetters'
+import { getLivingNpcs } from '../characters/characterGetters'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 
 import { interpretCommand } from './interpretCommand'
@@ -37,7 +37,7 @@ export function play({
             timestamp: new Date().toISOString(),
         },
     ])
-    
+
     checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
 }
 

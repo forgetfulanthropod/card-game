@@ -1,29 +1,177 @@
-import { useState, useEffect } from 'preact/hooks'
+import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
+import { useState, useEffect } from 'react'
+import { PrimaryButton } from './StartScreen'
+import { GameModeContainer } from './StartScreen'
+import { NavIconWrapper } from './StartScreen'
+import { Web3Auth } from '@web3auth/modal'
+import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
+import { useWeb3Auth } from '@/hooks/useWeb3Auth'
+import SolanaRPC from '@/chain/solanaRPC'
+import { UserProfileIcon } from './StartScreen/UserProfileIcon'
+import { WalletGateModal } from './StartScreen/WalletGateModal'
+import { openNewTab } from './util'
+import { callServerApi } from '@/callServerApi'
+import { UserID } from 'shared'
+import { TutorialModal } from './StartScreen/TutorialModal'
+import {
+    WalletMultiButton,
+} from '@solana/wallet-adapter-react-ui'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+require('@solana/wallet-adapter-react-ui/styles.css')
 
-import styles from './NewStartScreen.module.css'
+const WALLET_GATED = process.env.WALLET_GATED
+console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
+
+export type UserDoc = {
+    walletAddress: string | null
+    numKaijusOwned: number
+    userId: UserID
+}
 
 export function NewStartScreen(props: {
-    onEnter: (username: string) => void
+    onEnter: (userId: string) => void
 }): JSXElement {
-    const [showText, setShowText] = useState(true)
+    const { connection } = useConnection()
+    const encodedPublicKey = useWallet().publicKey
+    const [publicKey, setPublicKey] = useState('')
+    useEffect(() => {
+        if (connection && encodedPublicKey) {
+            const publicKey = encodedPublicKey?.toBase58()
+            setPublicKey(publicKey)
+            const solana = new SolanaRPC(connection, publicKey)
+            console.log({ connection, publicKey })
+            initUserDoc(solana).then(() => {
+                console.log('UserDoc initialized')
+            })
+        }
+    }, [connection, encodedPublicKey])
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [userDoc, setUserDoc] = useState<UserDoc>({
+        walletAddress: null,
+        numKaijusOwned: 0,
+        userId: '',
+    })
+
+    const [showGateModal, setShowGateModal] = useState(false)
+    const [showTutorial, setShowTutorial] = useState(false)
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setShowText(showText => !showText)
-        }, 800)
-
-        return () => {
-            clearInterval(interval)
-        }
+        gtag('event', 'ui_ux_view', {
+            page_title: 'Start Screen',
+        })
     }, [])
 
-    return <div
-        onClick={() => props.onEnter('random-' + Math.random().toString())}
-        class={styles.startScreenContainer}
-    >
-        {/* <img class={styles.kaijuLogo} src='./logos/NewKaijuLogo.png' /> */}
-        {showText && <p className={styles.startGame} id='startGame'>
-            START GAME
-        </p>}
-    </div>
+    const initUserDoc = async (solanaRPC: SolanaRPC) => {
+        const walletAddress = solanaRPC.publicKey
+        const userIdRes = await callServerApi('login', { walletAddress })
+        if (!userIdRes) {
+            return window.alert(
+                'Something went wrong. Please logging in try again.'
+            )
+        }
+        const { userId } = userIdRes
+        const numKaijusOwned = await solanaRPC.getKaijusOwnedByUser()
+        setUserDoc({ walletAddress, numKaijusOwned, userId })
+        setIsLoggedIn(true)
+        console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
+
+        gtag('set', {
+            user_id: userId,
+        })
+
+        gtag('event', 'login', {
+            method: 'connect_wallet',
+        })
+    }
+
+    const handlePlayButtonClick = () => {
+        if (WALLET_GATED) {
+            if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
+        }
+        enterGame()
+    }
+
+    const enterGame = () => {
+        props.onEnter(userDoc.userId)
+        gtag('event', 'enter_game')
+    }
+
+    return <>
+        {showGateModal && <WalletGateModal
+            setShowGateModal={setShowGateModal}
+            publicKey={publicKey}
+        />}
+        {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
+        <div
+            className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
+                showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
+            }`}
+        >
+            <video
+                src='./assets/backgrounds/main_menu_shed_bg.mp4'
+                autoPlay
+                muted
+                loop
+                className='w-full max-w-full absolute -z-50'
+            />
+
+            <div className='nav w-full row-span-1 flex p-2 xs:p-4 lg:p-8 justify-between items-start'>
+                <div className='flex flex-col items-center w-1/6 cursor-pointer hover:scale-105 transition text-white '>
+                    <img src='./logos/KaijuCards.png' />
+                    <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>
+                        closed alpha
+                    </p>
+                </div>
+                <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>
+                    <div className='grid grid-cols-3 items-center mr-4'>
+                        <NavIconWrapper>
+                            <img
+                                src='./logos/MagicEden.png'
+                                alt='Magic Eden Marketplace'
+                                className='lg:w-auto h-full'
+                            />
+                        </NavIconWrapper>
+                        <NavIconWrapper>
+                            <img
+                                src='./logos/Twitter.png'
+                                alt='Twitter'
+                                className=' scale-75 w-auto h-full'
+                            />
+                        </NavIconWrapper>
+                        <NavIconWrapper>
+                            <img
+                                src='./logos/Discord.png'
+                                alt='Discord'
+                                className='scale-110 w-auto h-full'
+                            />
+                        </NavIconWrapper>
+                    </div>
+                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont'
+                    />
+                </div>
+            </div>
+
+            <div className='bottom h-full p-2 row-span-3 grid grid-cols-12'>
+                <div className='left-buttons h-full col-span-2 flex flex-col justify-end gap-2 lg:gap-4 xl:gap-6 px-3 p-2  xl:p-10'></div>
+                <div className='mid-buttons h-full col-span-8 flex items-end gap-2 sm:gap-8 p-1 sm:p-2 xl:p-10'>
+                    <div className='h-auto w-full flex xl:pt-4 gap-4 md:gap-8 xl:gap-12'>
+                        <PrimaryButton
+                            text='tutorial'
+                            onClick={() => setShowTutorial(true)}
+                            type='secondary'
+                            size='large'
+                        />
+                        <PrimaryButton
+                            text='play now'
+                            onClick={handlePlayButtonClick}
+                            type='primary'
+                            size='large'
+                        />
+                    </div>
+                </div>
+                <div className='right-buttons h-full col-span-2 flex flex-col justify-end gap-2 sm:gap-4 xl:gap-6 p-1 px-3 sm:p-2 md:px-4 xl:p-10'></div>
+            </div>
+        </div>
+    </>
 }

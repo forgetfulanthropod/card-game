@@ -2,7 +2,6 @@ import {
     AssetKey,
     getStage,
     getTexture,
-    PixiContainer,
     RoundedBordered,
     RoundedRectangleGradientSprite,
     Text,
@@ -10,135 +9,144 @@ import {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
+import { uid } from '@pixi/utils'
 import { Easing, Tweener } from 'pixi-tweener'
 
-const MIN_Y_OFFSET = 50
+const MIN_Y_OFFSET = 40
 const MIN_X_OFFSET = 50
 const BASE_PADDING = 15
-const BASE_HEIGHT = 64
-const verticalMargin = BASE_HEIGHT + BASE_PADDING
+const BASE_HEIGHT = 65
+const VERTICAL_MARGIN = (BASE_HEIGHT + BASE_PADDING) as 80
 
-/**
- * This variable keeps track of where the next subsequent Notification should be displayed on the screen.
- * It is increased (eg. make position lower) when a Notification is added to the stage, and decreased when a Notification is removed.
- * It is closed over by the Notification-adjacent functions, thus persisting its value throughout the stage's lifetime.
- */
-let currY = MIN_Y_OFFSET
-let currNotificationsCount = 0
-const containerName = `NotificationContainer`
-
-/**
- * To display multiple notifications simultaneously, simply call this function without awaiting it (it will still clean up fine)
- * KNOWN BUG: when many notifications show up at once, the latter ones will not be pushed all the way up to the screen
- * @param textToDisplay
- * @param assetSrc
- * @param count
- */
-const displayScoreNotification = async <T extends string>(
-    textToDisplay: T,
-    assetSrc: AssetKey,
-    count: number
-) => {
-    const stage = getStage()
-    adjustNextNotificationPosition(stage) // important to do this before creating new notification
-
-    const newNotification = Notification(textToDisplay, assetSrc, count)
-    stage.addChild(newNotification)
-    currNotificationsCount++
-    await slamAnimateElIntoScreen(newNotification)
-
-    setTimeout(async () => {
-        await destroyNotificationAndShiftRest(newNotification, stage)
-    }, 2000)
+type NotificationMetadata = {
+    elementName: string
+    isFadingIn: boolean
 }
 
-const adjustNextNotificationPosition = (stage: PixiContainer) => {
-    const existingNotifications = stage.children.filter(el =>
-        el.name.includes(containerName)
-    )
-    if (existingNotifications.length > 0) {
-        currY += verticalMargin
+class NotificationSpawner {
+    private stage
+    private queue: NotificationMetadata[] = []
+
+    constructor() {
+        this.stage = getStage()
+    }
+
+    public async spawn(
+        textToDisplay: string,
+        assetSrc: AssetKey,
+        count: number
+    ) {
+        const notification = Notification(textToDisplay, assetSrc, count)
+        const metadata = this.getInitialMetadata(notification)
+        this.queue.unshift(metadata)
+        this.stage.addChild(notification)
+        this.triggerAnimations()
+        this.setDestroyTimer(notification)
+    }
+
+    private getInitialMetadata(
+        el: TweenablePixiContainer
+    ): NotificationMetadata {
+        return { elementName: el.name, isFadingIn: true }
+    }
+
+    private async triggerAnimations() {
+        this.queue.forEach(async (el, idx) => {
+            const pixiEl = this.stage.getChildByName(
+                el.elementName
+            ) as TweenablePixiContainer
+            const targetY = this.getTargetY(idx)
+            if (el.isFadingIn) {
+                 // this adjusts the starting position in case other notifications are displayed concurrently.
+                 // otherwise, all the concurrent notifications would first fade into the same y-position (before being adjusted to their correct one).
+                Tweener.killTweensOf(pixiEl)
+                pixiEl.position.set(pixiEl.position.x, targetY)
+                this.slamAnimateElIntoScreen(pixiEl, targetY)
+            } else {
+                this.shiftElement(pixiEl, targetY)
+            }
+        })
+    }
+
+    private getTargetY(index: number) {
+        return index * VERTICAL_MARGIN + MIN_Y_OFFSET
+    }
+
+    private async slamAnimateElIntoScreen(
+        el: TweenablePixiContainer,
+        targetY: number
+    ) {
+        await Tweener.add(
+            {
+                target: el,
+                duration: 0.6,
+                ease: Easing.bouncePast,
+            },
+            {
+                alpha: 1,
+                tweenableScale: 1,
+                x: MIN_X_OFFSET,
+                y: targetY,
+            }
+        )
+        const actualY = el.position.y
+        if (Math.abs(targetY - actualY) > 5) {
+            // this means the tweener was cancelled (and another one triggered) by a concurrent notification, so we shouldn't update the metadata yet
+        } else {
+            const elMetadataIdx = this.queue.findIndex(
+                queueEl => queueEl.elementName === el.name
+            )
+            this.queue[elMetadataIdx].isFadingIn = false
+        }
+    }
+
+    private async shiftElement(el: TweenablePixiContainer, targetY: number) {
+        await Tweener.add(
+            {
+                target: el,
+                duration: 0.4,
+                ease: Easing.easeFromTo,
+            },
+            {
+                y: targetY,
+            }
+        )
+    }
+
+    private async setDestroyTimer(el: TweenablePixiContainer) {
+        setTimeout(async () => {
+            await Tweener.add(
+                {
+                    target: el,
+                    duration: 0.2,
+                },
+                {
+                    alpha: 0,
+                }
+            )
+            Tweener.killTweensOf(el)
+            el.destroy()
+            this.queue.pop()
+        }, 3000)
     }
 }
 
-const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
-    await Tweener.add(
-        {
-            target: el,
-            duration: 0.75,
-            ease: Easing.bouncePast,
-        },
-        {
-            alpha: 1,
-            tweenableScale: 1,
-            x: MIN_X_OFFSET,
-        }
-    )
-}
+let spawner: NotificationSpawner
 
-const destroyNotificationAndShiftRest = async (
-    newNotification: TweenablePixiContainer,
-    stage: PixiContainer
-): Promise<void> => {
-    await fadeNotificationOut(newNotification)
-    const existingNotifications = stage.children.filter(
-        el =>
-            el.name.includes(containerName) &&
-            el instanceof TweenablePixiContainer
-    ) as TweenablePixiContainer[]
-    currNotificationsCount--
-
-    if (existingNotifications.length === 0) return
-
-    currY -= verticalMargin
-    if (currY < MIN_Y_OFFSET) currY = MIN_Y_OFFSET
-
-    existingNotifications.forEach(el => {
-        try {
-            shiftNotificationUp(el, el?.position?.y)
-        } catch (e) {
-            console.error(e)
-        }
-    })
-
-    Tweener.killTweensOf(newNotification)
-    newNotification.destroy({
-        children: true,
-        baseTexture: false,
-        texture: false,
-    })
-}
-
-const fadeNotificationOut = async (notification: PixiContainer) => {
-    await Tweener.add(
-        {
-            target: notification,
-            duration: 0.2,
-        },
-        {
-            alpha: 0,
-        }
-    )
-}
-
-const shiftNotificationUp = async (
-    el: TweenablePixiContainer,
-    initialY: number
+const displayScoreNotification = (
+    textToDisplay: string,
+    assetSrc: AssetKey,
+    count: number
 ) => {
-    await Tweener.add(
-        {
-            target: el,
-            duration: 0.5,
-            ease: Easing.easeFromTo,
-        },
-        {
-            y: initialY - verticalMargin,
-        }
-    )
+    if (!spawner) {
+        spawner = new NotificationSpawner()
+    }
+    spawner.spawn(textToDisplay, assetSrc, count)
 }
 
-function Notification<T extends string>(
-    textToDisplay: T,
+/** Initial opacity 0, is animated to opacity 1 by spawner */
+function Notification(
+    textToDisplay: string,
     assetSrc: AssetKey,
     count: number
 ) {
@@ -146,7 +154,7 @@ function Notification<T extends string>(
     try {
         textureSrc = getTexture(assetSrc)
     } catch (e) {
-        console.error(e)
+        console.warn(e)
     }
 
     const NotificationIcon = Container(
@@ -157,7 +165,6 @@ function Notification<T extends string>(
         RoundedBordered(
             Sprite({
                 src: textureSrc ?? getTexture('cardArtPlaceholder'),
-                // scale: 0.125,
                 height: 50,
                 width: 50,
                 x: -300,
@@ -230,9 +237,9 @@ function Notification<T extends string>(
 
     const NotificationContainer = TweenableContainer(
         {
-            name: `${containerName}_${assetSrc}_${currNotificationsCount}`,
+            name: `${textToDisplay}${uid()}`,
             x: MIN_X_OFFSET - RoundedBlackRectBackground.width / 2,
-            y: currY,
+            y: -20,
             alpha: 0,
             scale: 2,
         },
@@ -245,4 +252,4 @@ function Notification<T extends string>(
     return NotificationContainer
 }
 
-export { displayScoreNotification, Notification }
+export { displayScoreNotification }

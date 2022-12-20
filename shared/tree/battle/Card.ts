@@ -8,7 +8,7 @@ export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
 
 export type DSLString = string & Brandify
 
-type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
+export type CardAction = string //  regex(/(wordA|wordB|wordC)+$/)
 
 export interface Command extends CommandDefinition {
     characterUid: CharacterUid
@@ -20,11 +20,16 @@ type AliasedCommandId =
     | `itchyOoze(${number})`
     | `infectiousBite(${number})`
     | `engulf(${number})`
-    | `gnomeBomb(${number})`
+    // | `gnomeBomb(${number})`
+    | `bucketOfBangSnaps(${number})`
+    | `fireCracker(${number})`
     | `meatyCharge(${number})`
     | `bellowAndSing(${number},${number})`
     | `screamAndCharge(${number},${number})`
 
+export interface NpcCommandDefinition extends CommandDefinition {
+    id: NpcCommandId
+}
 export interface CommandDefinition {
     id: CommandId
     name: string
@@ -53,18 +58,24 @@ export type CardType = 'attack' | 'defense' | 'enchantment' | 'utility'
 
 export type NpcCommandId =
     | 'ancientStrike'
-    | 'attack4'
     | 'basicAttack'
+    | 'bigBelly'
+    | 'bigBomb1'
+    | 'bigBomb2'
     | 'block'
+    | 'bucketOfBangSnaps'
     | 'chomp'
+    | 'demolitionCharge'
     | 'evisceratingSweep'
-    | 'grudge'
+    | 'fireCracker'
     | 'gnomeBomb'
+    | 'grudge'
+    | 'grudge'
     | 'hansBuffBlock'
     | 'hansCurse'
     | 'hansGuards'
     | 'hansMagicMissile'
-    | 'infectiousBite'
+    | 'hypnosis'
     | 'itchyOozeSpecial'
     | 'jab'
     | 'jurgenBellyFlop'
@@ -76,15 +87,22 @@ export type NpcCommandId =
     | 'matchaMash'
     | 'matchaMeld'
     | 'mimicAttack'
-    | 'infectiousBite'
-    | 'grudge'
+    | 'parasiticNibble'
     | 'passiveBlockCmd'
+    | 'psychicBolt'
+    | 'quickNap'
     | 'rest'
     | 'rustyPokeHigh'
     | 'rustyPokeLow'
     | 'slash'
+    | 'snortinTime'
+    | 'spiritQuest'
     | 'strike'
+    | 'surpriseAllergy'
     | 'swordWack'
+    | 'tummySlam'
+    | 'violentSneeze'
+    | 'yodel'
     | AliasedCommandId
 export type CommandId =
     | NpcCommandId
@@ -96,6 +114,7 @@ export type CommandId =
 
 export type CardId =
     // | 'arcanePower'
+    | 'ancientVerse'
     | 'basicAttackBard'
     | 'basicAttackKnight'
     | 'basicAttackCleric'
@@ -120,6 +139,7 @@ export type CardId =
     | 'trance'
     | 'magicRitual'
     | 'mantraOfPatience'
+    | 'momentOfClarity'
     | 'orbOfFrost'
     | 'orbOfHolyLight'
     | 'orbOfLightning'
@@ -130,7 +150,6 @@ export type CardId =
     // | 'prayerOfGoodFortune'
     | 'psychicWarfare'
     | 'scatterBrained'
-    | 'shield'
     | 'shieldOfLight'
     | 'smite'
     | 'spellBook'
@@ -144,25 +163,25 @@ export type CardId =
 export type BasicTargetType =
     | 'friends'
     | 'enemies'
+    | 'allFriends'
     | 'allEnemies'
     | 'self'
     | 'card'
     | 'cardAttack'
     | 'cardEnchantment'
     | 'orb'
-export type TargetType =
-    | BasicTargetType
-    | Array<
-          | BasicTargetType
-          | {
-                type: BasicTargetType
-                constraint?: {
-                    key: string
-                    comparator: '<=' | '>='
-                    value: number
-                }
-            }
-      >
+export type TargetType = BasicTargetType
+// | Array<
+//       | BasicTargetType
+//       | {
+//             type: BasicTargetType
+//             constraint?: {
+//                 key: string
+//                 comparator: '<=' | '>='
+//                 value: number
+//             }
+//         }
+//   >
 
 export type Pile = Record<CardUid, Card>
 export type Piles = Record<PileId, Pile>

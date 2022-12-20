@@ -11,13 +11,13 @@ import type {
 import { entryMap } from 'shared/code'
 import type { Locals } from './commands'
 import { executors, explainers } from './commands'
-import { extractBlocks, extractDamages } from './outcomeUtil'
+import { extractBlocks, extractDamages, extractEffects } from './outcomeUtil'
 import { standardOperators } from './standardOperators'
 import type { ExplainerContext } from './commands/util'
 import type { EntryCursor } from '@/util'
 import { clearHappened, emit, getHappened } from '@/util'
 import {
-    calcPostEffectStats,
+    calculateStats,
     emitMove,
     getCharacterMeta,
     maybeTransitionBattleState,
@@ -54,7 +54,7 @@ function localsFromCommand(
             ? (scene as BattleCursor).get('allCharacters', targetUids[0])
                   ?.health
             : undefined
-    return { ...calcPostEffectStats(cardOwner), targetHealth }
+    return { ...calculateStats(cardOwner), targetHealth }
 }
 
 export function explainCommand(
@@ -113,7 +113,7 @@ interface CommandDetail {
 /** Does not modify game state (or shouldn't) */
 export function simulateCommand(args: CommandDetail): CommandOutcome {
     const locals = localsFromCommand(args)
-    if (locals.isSkipped) return { damages: {}, blocks: {} }
+    if (locals.isSkipped) return { damages: {}, blocks: {}, effects: {} }
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
     const username = args.scene.get('username')
     const happened = getHappened(username)
@@ -124,7 +124,8 @@ export function simulateCommand(args: CommandDetail): CommandOutcome {
     }
     const damages = extractDamages(args.scene.get(), sceneCopy.get())
     const blocks = extractBlocks(args.scene.get(), sceneCopy.get())
-    return { damages, blocks }
+    const effects = extractEffects(args.scene.get(), sceneCopy.get())
+    return { damages, blocks, effects }
 }
 
 function executeCommand({
@@ -162,7 +163,7 @@ function executeCommand({
             // throw Error(jss`error in command: ${output.value}`)
         }
     } catch (e) {
-        logger.error(['[executeCommand] angu error:', e])
+        logger.error(['error in command:', command.actions, command.id])
     }
 
     maybeTransitionBattleState(scene)

@@ -3,7 +3,7 @@ import { CharacterMeta, Effect } from 'shared'
 import { compose, datum } from 'datums'
 import { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
-import { glowFilter, PixiContainer } from '@/elementsUtil'
+import { glowFilter, If, PixiContainer } from '@/elementsUtil'
 import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
 import { TermExplanationIf, Explanation } from '@sharedElements'
@@ -33,7 +33,7 @@ export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
         data,
         //@ts-expect-error
         effect => InteractiveEffectCounter(effect),
-        idx => ({ y: 50 * SCALE_UNIVERSAL, x: idx * 50 * SCALE_UNIVERSAL })
+        idx => ({ y: 50, x: idx * 50 })
     )
 }
 
@@ -43,7 +43,7 @@ function InteractiveEffectCounter(
     const isHovered = datum(false)
     const pointerover = () => isHovered.set(true)
     const pointerout = () => isHovered.set(false)
-    const width = 80
+    const width = 60
 
     const root = Container(
         {
@@ -60,18 +60,19 @@ function InteractiveEffectCounter(
                 ),
             ],
         },
-        Sprite({
-            src: getEffectIconSrc(effect.id),
-            width: width,
-            height: width,
-            anchor: [0.5, 0.4],
-        }),
+        If(datum(true), () =>
+            Sprite({
+                src: getEffectIconSrc(effect.id),
+                scale: width / getEffectIconSrc(effect.id).width,
+                anchor: [0.5, 0.4],
+            })
+        ),
         Text({
             text: `${effect.counter}`,
-            anchor: [0.6, 1],
+            anchor: [1, 1],
             style: {
                 fontFamily: ['bigFont', 'monospace'],
-                fontSize: 30,
+                fontSize: 36,
                 fill: 'white',
                 stroke: 'black',
                 strokeThickness: 5,

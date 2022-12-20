@@ -18,7 +18,6 @@ const DEBUG = false
 export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('ending NPC turn')
-    updateNpcMoves(scene)
 
     setRoundEnergy(scene)
     clearHasMoved(scene)
@@ -30,7 +29,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     drawNewHand(scene)
     popAndRunQueue(scene, 'pc')
 
-    decrementEffects(scene, 'pc')
     decrementEffects(scene, 'npc')
 
     checkServerScoringEvent('HIT_VULGAR_THRESHOLD', scene)
@@ -38,4 +36,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
 
     scene.set('damagesDealtThisTurn', [])
     scene.set('blocksAppliedThisTurn', [])
+
+    updateNpcMoves(scene)
 }

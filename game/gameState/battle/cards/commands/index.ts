@@ -4,8 +4,7 @@ import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock
 import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from './addBlockToSelf'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
-import {explain as explainAddStrength, execute as executeAddStrength} from './addStrength'
-import {explain as explainAddWisdom, execute as executeAddWisdom} from './addWisdom'
+import {explain as explainBellyFlop, execute as executeBellyFlop} from './bellyFlop'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
@@ -16,11 +15,14 @@ import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainEffectAll, execute as executeEffectAll} from './effectAll'
+import {explain as explainHeal, execute as executeHeal} from './heal'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
+import {explain as explainIfDamageDealtApplyEffect, execute as executeIfDamageDealtApplyEffect} from './ifDamageDealtApplyEffect'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
+import {explain as explainModifyStats, execute as executeModifyStats} from './modifyStats'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
@@ -38,8 +40,7 @@ export const explainers: Explainers = {
     addBlockToSelf: explainAddBlockToSelf,
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
-    addStrength: explainAddStrength,
-    addWisdom: explainAddWisdom,
+    bellyFlop: explainBellyFlop,
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
@@ -50,11 +51,14 @@ export const explainers: Explainers = {
     dwindle: explainDwindle,
     effect: explainEffect,
     effectAll: explainEffectAll,
+    heal: explainHeal,
     ifDamageDealt: explainIfDamageDealt,
+    ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
     ifStance: explainIfStance,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
+    modifyStats: explainModifyStats,
     momentary: explainMomentary,
     orb: explainOrb,
     orbOfHolyLight: explainOrbOfHolyLight,
@@ -72,8 +76,7 @@ export const executors: Executors = {
     addBlockToSelf: executeAddBlockToSelf,
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
-    addStrength: executeAddStrength,
-    addWisdom: executeAddWisdom,
+    bellyFlop: executeBellyFlop,
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
@@ -84,11 +87,14 @@ export const executors: Executors = {
     dwindle: executeDwindle,
     effect: executeEffect,
     effectAll: executeEffectAll,
+    heal: executeHeal,
     ifDamageDealt: executeIfDamageDealt,
+    ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
     ifStance: executeIfStance,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
+    modifyStats: executeModifyStats,
     momentary: executeMomentary,
     orb: executeOrb,
     orbOfHolyLight: executeOrbOfHolyLight,

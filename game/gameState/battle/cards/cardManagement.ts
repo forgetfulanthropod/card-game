@@ -14,7 +14,7 @@ import type {
 import { keys, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
-import type { EntryCursor } from '@/util'
+import { EntryCursor, srandInt } from '@/util'
 import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
 import { shufflePile } from './shufflePile'
 
@@ -38,40 +38,6 @@ export function getNullCards(): Piles {
 }
 
 function makeCards(scene: BattleCursor): Piles {
-    // const cardIds: CardId[] = [
-    //     // 'bodySlam',
-    //     // 'leadRazor',
-    //     // 'leadRazor',
-    //     // 'leadRazor',
-    //     // 'magicRitual',
-    //     // 'chainLightning',
-    //     // 'spellBook',
-    //     // 'fireball',
-    //     // 'orbOfFrost',
-    //     // 'basicAttackCleric',
-    //     // 'basicAttackKnight',
-    //     // 'blockCleric',
-    //     // 'blockKnight',
-    //     // 'blockWizard',
-    //     // 'swordSlash',
-    //     // 'dutifulStab',
-    //     // 'charge',
-    //     // 'testudoFormation',
-    //     // final cards below?
-    //     // 'arcanePower',
-    //     // 'scatterBrained',
-    //     // 'magicalStorm',
-    //     // 'guidingBolt',
-    //     // 'smite',
-    //     // 'bless',
-    //     // 'prayerOfGoodFortune', // todo
-    //     // 'orbOfHolyLight', // todo
-    //     // 'mantraOfPatience',
-    //     // 'helpingHand',
-    //     // 'orbOfProtection',
-    //     // 'orbOfLightning',
-    // ]
-
     const allCharacters = vals(scene.get('allCharacters'))
 
     const characterUidToCardIdMap: Record<CharacterUid, CardId[]> = {}
@@ -103,14 +69,15 @@ function makeCards(scene: BattleCursor): Piles {
             // 'flashbang'
         )
         cardIds.push(getFirstCardIdForCharacterId(cm.id))
-        if (cm.class === 'wizard') cardIds.push('orbOfLightning')
-        if (cm.class === 'wizard') cardIds.push('orbOfFrost')
-        if (cm.class === 'wizard') cardIds.push('zap')
-        if (cm.class === 'cleric') cardIds.push('smite')
+        if (cm.class === 'wizard')
+            cardIds.push(
+                ['orbOfLightning', 'orbOfFrost', 'zap'][
+                    srandInt(0, 2)
+                ] as CardId
+            )
+        if (cm.class === 'cleric') cardIds.push('shieldOfLight')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
-        // if (cm.class === 'rogue') cardIds.push('berserk')
-        if (cm.class === 'rogue') cardIds.push('flashBang')
-        // if (cm.class === 'rogue') cardIds.push('patientAmbush')
+        if (cm.class === 'rogue') cardIds.push('patientAmbush')
     })
 
     const draw: Pile = {}

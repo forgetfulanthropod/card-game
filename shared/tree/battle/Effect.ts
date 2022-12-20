@@ -18,6 +18,8 @@ addCounter(targetUid, counterId)
 export const effectIds = [
     'berserk',
     'bleed',
+    'brave',
+    'courageous',
     'debilitated',
     'doubleDamage',
     'entranced',
@@ -29,6 +31,7 @@ export const effectIds = [
     'stunned',
     'tired',
     'unguarded',
+    'unready',
     'vulnerable',
 ] as const
 

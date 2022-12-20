@@ -1,5 +1,5 @@
 import type { Brandify } from '@misc'
-import type { DungeonName, EnemyCharacterId } from './battle'
+import type { DungeonName, NonPlayerCharacterId } from './battle'
 
 export type DungeonLevel = Readonly<DungeonLevelI> & Brandify
 interface DungeonLevelI {
@@ -8,12 +8,28 @@ interface DungeonLevelI {
     modifier: number
 }
 
-export type DungeonRoomMap = Record<DungeonName, DungeonRoom[]>
+export type RoomUid = string
 
-export type DungeonRoom = ReadonlyArray<{
-    id: EnemyCharacterId | 'REST_SITE'
+export type DungeonRoomMaps = Record<DungeonName, DungeonRoomMap>
+
+export type DungeonRoomMap = Record<RoomUid, DungeonRoom>
+
+export type RoomCategoryId =
+    | 'events'
+    | 'tierOne'
+    | 'tierTwo'
+    | 'tierThree'
+    | 'bosses'
+
+export type DungeonRoom = {
+    uid: RoomUid
+    enemies: RoomEnemies
+    edges: [RoomUid, RoomUid, RoomUid, RoomUid]
+    category?: RoomCategoryId
+}
+
+export type RoomEnemies = {
+    id: NonPlayerCharacterId | 'REST_SITE'
     level: string | number
     boss?: true
-}>
-
-export const TOTAL_ROOMS_PER_RUN = 6
+}[]

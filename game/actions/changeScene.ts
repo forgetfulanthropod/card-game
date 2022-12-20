@@ -1,7 +1,6 @@
 import type { GameActions, OwnedCharacterStats } from 'shared'
 
-import { nextRoom } from './nextRoom'
-import { makeBattleState, setCards } from '@/gameState'
+import { clearAllEffects, makeBattleState, setCards } from '@/gameState'
 import { getRulebook } from '@/rulebook'
 import { getBattleSceneIn, getEntrySceneIn } from '@/util'
 
@@ -25,6 +24,5 @@ export const changeScene: GameActions['changeScene'] = args => {
         )
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
-        nextRoom({ game })
     }
 }

@@ -5,4 +5,4 @@ export { resetRulebook, setRulebook } from './rulebook'
 export { cardDefinitionsMap } from './cardDefinitionsMap'
 // todo: integrate into rulebook
 export { getRulebook } from './rulebook'
-export * from './enemies'
+export * from './npcStatsMapByLevel'

@@ -1,5 +1,4 @@
 import type { GameActions } from 'shared'
-import { nextRoom } from './nextRoom'
 import { getBattleSceneIn } from '@/util'
 
 export const addCardToDeck: GameActions['addCardToDeck'] = args => {
@@ -20,5 +19,9 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     })
 
     scene.set('lootEarned', scene.get('lootEarned').slice(1))
-    scene.set('state', 'collecting loot')
+    if (scene.get('lootEarned').length > 0) {
+        scene.set('state', 'collecting loot')
+    } else {
+        scene.set('isInMap', true)
+    }
 }

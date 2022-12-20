@@ -10,7 +10,7 @@ export const explain: Explainers['smite'] = (dslArgs, context) => {
 
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
-    return `deals ${damageHtmlArr[0]}${getDamage({
+    return `deal ${damageHtmlArr[0]}${getDamage({
         damage,
         attacker: context.characterMeta,
         target: null,
@@ -29,7 +29,7 @@ export const execute: Executors['smite'] = ({
     const healthBefore = scene.get('allCharacters', targetUid).health
     assertFinite({ healthBefore })
     applyDamage({
-        damage: calculatedStats.wisdom,
+        damage: calculatedStats.magic,
         targetUid,
         attackerUid: command.characterUid,
         scene,

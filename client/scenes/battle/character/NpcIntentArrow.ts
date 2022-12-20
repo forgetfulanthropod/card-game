@@ -4,7 +4,7 @@ import type { CharacterUid, NextCommand } from 'shared'
 import { vals } from 'shared/code'
 import { HEALTH_BAR_WIDTH } from './HealthBar'
 import { getBattleScene } from '@/data'
-import type { PixiText } from '@/elementsUtil'
+import { getStage, PixiText } from '@/elementsUtil'
 import {
     getElByPath,
     Container,
@@ -25,18 +25,14 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
     )
 
     const root = Container({
-        onDestroy: [nextCmd.destroy],
+        onDestroy: [() => nextCmd?.destroy && nextCmd.destroy()],
     })
 
     portalize({
         from: root,
         content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: () =>
-            getElByPath({
-                path: ['BattleScene', 'IntentArrowsContainer'],
-                strict: false,
-            }),
+        to: () => getStage().getChildByName('NpcIntentArrowContainer', true),
     })
 
     return root
@@ -57,7 +53,7 @@ function IntentText(
     onDestroyed(
         text,
         commandDatum.onChange(
-            _c => (text.text = getIntentText(commandDatum)),
+            _ => (text.text = getIntentText(commandDatum)),
             true
         )
     )
@@ -75,7 +71,7 @@ function getIntentText(
     )}`
 }
 
-function IntentArrows(
+export function IntentArrows(
     uid: CharacterUid,
     nextCmd: RODatum<NextCommand | undefined> & { destroy: Callback },
     isHovered: RODatum<boolean>
@@ -135,7 +131,7 @@ function bottomRightCornerOf(uid: CharacterUid) {
     return toDatum(
         getBattleScene().select('allCharacters').select(uid),
         cm => ({
-            x: cm.screenX + HEALTH_BAR_WIDTH * 1,
+            x: cm.screenX + HEALTH_BAR_WIDTH * 1.1,
             y: cm.screenY,
         })
     )
@@ -182,6 +178,7 @@ function EnemyIntentArrow(
             }),
             Sprite({
                 src: 'enemyIntentArrowHead',
+                name: 'enemyIntentArrowHead',
                 scale,
                 anchor: [0, 0.5],
                 pivot: [1, 0.5],

@@ -3,9 +3,10 @@ import { Rectangle, Texture } from 'pixi.js'
 import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
 import {
     AssetKey,
-    getStage,
     getTexture,
+    loopSong,
     PixiContainer,
+    playSongOnce,
     RoundedRectangleGradientSprite,
     Text,
     TweenableContainer,
@@ -22,6 +23,7 @@ import {
 } from 'shared'
 import { displayScoreNotification } from '../shared/Notification'
 import { upperFirst } from 'lodash'
+import { Easing, Tweener } from 'pixi-tweener'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -71,6 +73,12 @@ const getDisplayName = (name: LootFromGame) => {
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
+    gtag('event', 'level_end', {
+        room_number: scene.get('numRoomsPassed') + 1,
+        room_id: scene.get('currentRoom').uid,
+        room_tier: scene.get('currentRoom').category,
+        run_id: scene.get('runId'),
+    })
     const lootScreenHasOpened = scene.get('lootScreenHasOpened') // used to determine initial positioning of the main container and whether to do the animation
     let currLootItemsX = LOOT_ITEMS_FINAL_POS.x
     let updateProgressBarFill: () => void // assigned to fn from chest when it is displayed, then called async
@@ -80,6 +88,10 @@ export function LootCollector(): PixiContainer {
     let currLootItemCount = lootItems[0].count
 
     let [currLootItem, ...remainingLootItems] = renderLoot()
+
+    if (currLootItem.name !== 'TreasureChestContainer')
+        setTimeout(() => playSongOnce('roomVictoryMusicHooligansBluff'), 0)
+
     const lootItemsContainer = TweenableContainer(
         {
             x: lootScreenHasOpened
@@ -90,13 +102,20 @@ export function LootCollector(): PixiContainer {
         ...remainingLootItems
     )
 
-    if (lootScreenHasOpened === false) {
-        handleScoringEvent('ROOM_CLEARED', 1, scene)
-        setTimeout(() => {
-            animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
-            animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
-            callApi('openLootCollector', {})
-        }, 2000)
+    const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
+        await Tweener.add(
+            {
+                target: el,
+                duration: 1,
+                ease: Easing.bouncePast,
+            },
+            {
+                alpha: 1,
+                tweenableScale: 1,
+                x: 0,
+                y: 0,
+            }
+        )
     }
 
     /** This is a fallback mechanism to do the progress bar fill animation in case the page is refreshed when the treasure chest is the current loot item */
@@ -112,14 +131,27 @@ export function LootCollector(): PixiContainer {
     }
 
     const roomClearedSign = TweenableContainer(
-        {},
+        {
+            alpha: lootScreenHasOpened ? 1 : 0,
+            scale: lootScreenHasOpened ? 1 : 0,
+            x: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.x : 1950,
+            y: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.y : 1000,
+        },
         Sprite({
             src: getTexture('roomClearedSign'),
-            alpha: 1,
-            x: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.x : 0,
-            y: lootScreenHasOpened ? ROOM_CLEARED_FINAL_POS.y : 0,
         })
     )
+
+    if (lootScreenHasOpened === false) {
+        handleScoringEvent('ROOM_CLEARED', 1, scene)
+        slamAnimateElIntoScreen(roomClearedSign)
+
+        setTimeout(() => {
+            animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
+            animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
+            callApi('openLootCollector', {})
+        }, 2000)
+    }
 
     function renderLoot() {
         let lootItemsContainerX = -900

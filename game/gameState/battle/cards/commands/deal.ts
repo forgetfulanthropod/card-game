@@ -10,7 +10,7 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
 
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
-    let explication = `deals ${damageHtmlArr[0]}${getDamage({
+    let explication = `deal ${damageHtmlArr[0]}${getDamage({
         damage: damage,
         attacker: context.characterMeta,
         target: null,
@@ -18,6 +18,8 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
 
     if (context.command.targetType === 'allEnemies') {
         explication += ' to all enemies'
+    } else {
+        explication += ' to target'
     }
 
     if (times != null) {
@@ -41,8 +43,6 @@ export const execute: Executors['deal'] = ({
         )
         return
     }
-
-    logger.info(`dealing to targetUids: ${targetUids}.. damage: ${damage}`)
 
     targetUids.forEach(targetUid =>
         applyDamage({

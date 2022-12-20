@@ -4,16 +4,18 @@ import type {
     StanceId,
     StanceStats,
     CharacterStats,
+    PlayerCharacterId,
+    PlayerCharacterStats,
 } from './battle'
-import type { DungeonLevel, DungeonRoomMap } from './Dungeon'
+import type { DungeonLevel, DungeonRoomMap, DungeonRoomMaps } from './Dungeon'
 
 export type Rulebook = Readonly<{
     version: string
     savedAt?: string
     name: string
-    characters: Record<CharacterId, CharacterStats>
+    characters: Record<PlayerCharacterId, PlayerCharacterStats>
     dungeonLevels: DungeonLevel[]
-    dungeonRooms: DungeonRoomMap
+    dungeonRooms: DungeonRoomMaps
     stanceTypeMetaMap: Record<StanceId, StanceStats>
 }> &
     Brandify

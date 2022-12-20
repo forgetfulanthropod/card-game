@@ -1,5 +1,11 @@
 import type { Brandify } from '@misc'
-import type { CharacterClass, CharacterId, StanceId } from './Characters'
+import type {
+    CharacterClass,
+    CharacterId,
+    NonPlayerCharacterId,
+    PlayerCharacterId,
+    StanceId,
+} from './Characters'
 
 export type CharacterAbility = {
     displayName: string
@@ -9,6 +15,17 @@ export type CharacterAbility = {
 }
 
 export type CharacterUid = string & Brandify
+export type ModifiableStatName =
+    | 'strength'
+    | 'magic'
+    | 'defense'
+    | 'constitution'
+
+export type StatModifiers = Partial<Pick<CharacterStats, ModifiableStatName>>
+
+export type StatModifierExpiration = 'turn' | 'room' | 'run'
+export type StatModifiersMap = Record<StatModifierExpiration, StatModifiers>
+
 export type CharacterStats = Readonly<{
     /** TODO: rename this to ID  */
     id: CharacterId
@@ -20,12 +37,20 @@ export type CharacterStats = Readonly<{
     /** base attack */
     strength: number
     /** base magic */
-    wisdom: number
+    magic: number
     /** base block */
     defense: number
     // abilities: CharacterAbility[]
 }> &
     Brandify
+
+export type PlayerCharacterStats = Readonly<
+    CharacterStats & { id: PlayerCharacterId }
+>
+
+export type NonPlayerCharacterStats = Readonly<
+    CharacterStats & { id: NonPlayerCharacterId }
+>
 
 /** Result of applying effects to character */
 export interface CalculatedCharacterStats {
@@ -33,7 +58,7 @@ export interface CalculatedCharacterStats {
     block: number
     constitution: number
     strength: number
-    wisdom: number
+    magic: number
     defense: number
     damageDealMultiplicand: number
     damageDealAddend: number
@@ -52,4 +77,7 @@ export type OwnedCharacterStats = CharacterStats &
     }> &
     Brandify
 
-export type OwnedCharacterStatsMap = Record<CharacterUid, OwnedCharacterStats>
+export type OwnedCharacterStatsMap = Record<
+    PlayerCharacterId,
+    OwnedCharacterStats
+>

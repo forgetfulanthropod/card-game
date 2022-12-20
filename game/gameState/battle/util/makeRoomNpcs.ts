@@ -1,7 +1,7 @@
-import type { DungeonRoom, EnemyCharacterId } from 'shared'
+import type { DungeonRoom, NonPlayerCharacterId, RoomEnemies } from 'shared'
 import { newNPCMeta, rearrangeNpcs } from './characterManagement'
 
-export function makeRoomNpcs(nextRoom: DungeonRoom) {
+export function makeRoomNpcs(nextRoom: RoomEnemies) {
     if (nextRoom[0].id === 'REST_SITE') return {}
 
     let newNpcs = Object.fromEntries(
@@ -10,7 +10,7 @@ export function makeRoomNpcs(nextRoom: DungeonRoom) {
             return [
                 uid,
                 newNPCMeta({
-                    name: name as EnemyCharacterId,
+                    name: name as NonPlayerCharacterId,
                     level,
                     uid,
                     x: 0,

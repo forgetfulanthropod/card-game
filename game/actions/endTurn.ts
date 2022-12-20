@@ -8,6 +8,7 @@ import {
     popAndRunQueue,
     endRound,
 } from '@/gameState'
+import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 
@@ -19,6 +20,10 @@ export const endTurn: GameActions['endTurn'] = args => {
 
     applyTurnStartEffects(scene, 'pc')
     applyTurnStartEffects(scene, 'npc')
+
+    decrementEffects(scene, 'pc')
+
+    clearCharacterStatModifiers(scene, 'turn')
 
     popAndRunQueue(scene, 'npc')
 

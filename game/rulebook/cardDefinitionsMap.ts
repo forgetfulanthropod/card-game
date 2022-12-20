@@ -5,7 +5,7 @@ const basicMagicAttackBase = {
     energy: 1,
     targetNum: 1,
     targetType: 'enemies',
-    actions: 'deal(wisdom)',
+    actions: 'deal(magic)',
     type: 'attack',
 } as const
 const basicAttackBase = {
@@ -37,19 +37,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'chain(effect("bleed", 2), effect("poisoned", 5), effect("fatigued", 1))',
+            'strengthy = strength * .2; chain(deal(strengthy), effect("bleed", 2), effect("poisoned", 5), effect("fatigued", 1))',
         type: 'attack',
         characterClass: 'rogue',
-    },
-    shield: {
-        name: 'Shield',
-        energy: 1,
-        id: 'shield',
-        targetNum: 1,
-        targetType: 'friends',
-        actions: 'addBlock(defense + 2)',
-        type: 'defense',
-        characterClass: 'knight',
     },
     shieldOfLight: {
         name: 'Shield of Light',
@@ -57,7 +47,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shieldOfLight',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'wisdomy = wisdom * 1.3; addBlock(wisdomy)',
+        actions: 'magical = magic * 1.3; addBlock(magical)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -109,7 +99,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions:
-            'wisdomy = wisdom * .4; chain(deal(wisdomy), effect("vulnerable", 1))',
+            'magical = magic * .4; chain(deal(magical), effect("vulnerable", 1))',
         type: 'enchantment',
         characterClass: 'wizard',
     },
@@ -175,7 +165,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'chainLightning',
         targetNum: 3,
         targetType: 'enemies',
-        actions: 'wisdomy = 0.75 * wisdom; deal(wisdomy, 3)',
+        actions: 'magical = 0.75 * magic; deal(magical, 3)',
         type: 'attack',
         characterClass: 'wizard',
     },
@@ -195,11 +185,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'fireball',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'wisdomy = wisdom * 2.5; deal(wisdomy)',
+        actions: 'magical = magic * 2.5; deal(magical)',
         type: 'attack',
         characterClass: 'wizard',
     },
-    /**Target Attack Card, enchantment or ~~token~~ orb doubles the amount of damage it deals this turn. */
+    /**Target Attack Card, enchantment or ~~token~~ orb doubles the amount of damage it deal this turn. */
     // arcanePower: {
     //     name: 'Arcane Power',
     //     energy: 1,
@@ -462,8 +452,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         // TODO: "You may only play this card if this character is in an avoidant stance."
-        actions:
-            'chain(addBlock(defense), effect("strongblock", 1, "friends"))',
+        actions: 'chain(addBlock(defense), effect("strongblock", 1))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -474,7 +463,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'wisdomy = wisdom * 2; chain(deal(wisdomy), effect("unguarded", 3))',
+            'magical = magic * 2; chain(deal(magical), effect("unguarded", 3))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -485,7 +474,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthywisdomy = strength * .5 + wisdom * .5; chain(deal(strengthywisdomy), dwindle())',
+            'strengthymagical = strength * .5 + magic * .5; chain(deal(strengthymagical), dwindle())',
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -495,7 +484,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'smite',
         targetNum: 1,
         targetType: 'enemies',
-        actions: 'smite(wisdom, defense)',
+        actions: 'smite(magic, defense)',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -503,9 +492,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Bless',
         energy: 1,
         id: 'bless',
-        targetNum: 1,
-        targetType: 'friends',
-        actions: 'effect("strongblock", 2)',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions:
+            'chain(effectAll("courageous", 1), effectAll("strongblock", 2))',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -533,7 +523,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'wisdomy1 = wisdom * .75; wisdomy2 = wisdom * .33; chain(psychicWarfare(wisdomy1,wisdomy2), dwindle())',
+            'magical1 = magic * .75; magical2 = magic * .33; chain(psychicWarfare(magical1,magical2), dwindle())',
         type: 'attack',
         characterClass: 'wizard',
     },
@@ -563,7 +553,38 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'helpingHand',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'chain(addBlock(defense + 2), addWisdom(2), addStrength(2))',
+        actions: `
+            chain(
+                addBlock(defense),
+                modifyStats("strength|magic", "2|2", "room")
+            )`,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    ancientVerse: {
+        name: 'Ancient Verse',
+        energy: 1,
+        id: 'ancientVerse',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: `
+            chain(
+                modifyStats("strength|magic", "2|2", "room", "allFriends")
+            )`,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    momentOfClarity: {
+        name: 'Moment Of Clarity',
+        energy: 1,
+        id: 'momentOfClarity',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            chain(
+                modifyStats("strength|magic", "6|6", "turn"),
+                momentary()
+            )`,
         type: 'utility',
         characterClass: 'cleric',
     },

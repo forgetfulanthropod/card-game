@@ -1,10 +1,16 @@
 import { build as esbuild } from 'esbuild'
 
 import cssModulesPlugin from 'esbuild-css-modules-plugin'
+import postCssPlugin from 'esbuild-style-plugin'
+import tailwindPlugin from 'tailwindcss'
+import autoprefixerPlugin from 'autoprefixer'
 import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
+import { config as loadDotEnv } from 'dotenv'
 
 const password = 'arbitrary-orange-eleven'
 const buildDir = 'public/'
@@ -14,15 +20,19 @@ const outFile = `${buildDir}/${password}.js`
 const args = process.argv.slice(2)
 const shouldWatchArgv = args[0] === 'watch'
 
-const isProduction = process.env.production === 'yes'
-
 console.log('process.env.PWD:', process.env.PWD)
 
 console.log('substitutions:', makeSubstitutions())
 
+
 function makeSubstitutions() {
+    loadDotEnv();
+    const walletGated = process.env.WALLET_GATED === 'true'
+    const rpcUrl = `"${process.env.RPC_URL}"`
     return {
         ...makeBuildInfo('CLIENT_'),
+        ['process.env.WALLET_GATED']: walletGated, // true in prod
+        ['process.env.RPC_URL']: rpcUrl,
         global: 'window',
     }
 }
@@ -31,6 +41,8 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
+    loadDotEnv();
+    const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
     esbuild({
@@ -38,9 +50,13 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         sourcemap: !isProduction, //isDevelopment,
         keepNames: !isProduction,
         entryPoints: [entryPoint],
-        inject: ['client/config/preact-shim.js'],
-        jsxFactory: 'h',
-        jsxFragment: 'Fragment',
+        // external: ['@solana/wallet-adapter-react-ui/styles.css'],
+        // inject: ['client/config/preact-shim.js'],
+        // jsxFactory: 'h',
+        // jsxFragment: 'Fragment',
+        // jsxImportSource: 'preact',
+        // jsx: 'transform',
+        keepNames: true,
         bundle: true,
         outfile: outFile,
         target: 'es6',
@@ -49,12 +65,14 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
             '.tsx': 'tsx',
             '.svg': 'dataurl',
             '.css': 'css',
+            '.map': 'json',
+            '.js': 'js',
+            '.ttf': 'file',
             // '.png': 'file',
             // '.webp': 'file',
             // '.jpg': 'file',
             // '.mp4': 'file',
             // '.webm': 'file',
-            // '.ttf': 'file',
             // '.atlas': 'file',
             // '.json': 'file',
         },
@@ -72,11 +90,20 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         },
         plugins: [
             cssModulesPlugin(),
-            alias({
-                react: `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-                'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            NodeModulesPolyfillPlugin(),
+            NodeGlobalsPolyfillPlugin({
+                process: true,
+                buffer: true
             }),
+            postCssPlugin({ postcss: {
+                plugins: [tailwindPlugin, autoprefixerPlugin]
+            }}),
+            // alias({
+            //     'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            //     'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
+            // }),
         ],
+        logLevel: 'error',
     })
         .then(() => console.log(`${time()}: client build succeeded`))
         .catch(err => console.error('CLIENT BUILD FAILED:', err))
