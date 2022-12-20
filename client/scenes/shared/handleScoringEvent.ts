@@ -34,7 +34,7 @@ const handleScoringEvent = (
             break
         case 'ROOM_CLEARED':
             displayScoreNotification(
-                'Completed Room',
+                'Room Cleared',
                 'swordPiercing',
                 scorePointsToAdd
             )
@@ -42,7 +42,7 @@ const handleScoringEvent = (
             break
         case 'ROOM_WIN_NO_ENERGY_USED':
             displayScoreNotification(
-                'No Energy Used Last Turn',
+                RUN_SCORE_EVENT_META[event].keyword,
                 'remainingEnergy',
                 scorePointsToAdd
             )
@@ -59,21 +59,21 @@ const handleScoringEvent = (
             break
         case 'EXIT_ROOM_FULL_HEALTH':
             displayScoreNotification(
-                'Team in Full Health',
+                RUN_SCORE_EVENT_META[event].keyword,
                 'swordShield',
                 scorePointsToAdd
             )
             break
         case 'EXIT_BOSS_FULL_HEALTH':
             displayScoreNotification(
-                'Team in Full Health (Boss)',
+                RUN_SCORE_EVENT_META[event].keyword,
                 'swordShield',
                 scorePointsToAdd
             )
             break
         case 'EXIT_BOSS_LOW_DAMAGE':
             displayScoreNotification(
-                'Team Lost Under 15 Health (Boss)',
+                RUN_SCORE_EVENT_META[event].keyword,
                 'swordShield',
                 scorePointsToAdd
             )
@@ -87,7 +87,7 @@ const handleScoringEvent = (
             break
         case 'ROOM_WIN_ZERO_DAMAGE':
             displayScoreNotification(
-                'Lost No Health',
+                RUN_SCORE_EVENT_META[event].keyword,
                 'swordShield',
                 scorePointsToAdd
             )

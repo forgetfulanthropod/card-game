@@ -139,7 +139,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     },
     ROOM_WIN_NO_ENERGY_USED: {
         description: 'Won battle without spending energy in last turn',
-        shortDescription: 'Battle Won w/Idle Last Turn',
+        shortDescription: 'No Energy Used Last Turn',
         pointValue: 3,
         attributeName: 'winsNoEnergyUsedLastTurn',
         keyword: 'Walk Away',
