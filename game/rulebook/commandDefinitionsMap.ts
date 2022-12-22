@@ -372,7 +372,7 @@ function generateParameterizedCommands() {
                 })
                 if (!(baseId in alias))
                     throw Error(`'${baseId}' is not a known alias`)
-                if (baseId in commandDefinitionsMap) continue
+                if (`${baseId}(${args})` in commandDefinitionsMap) continue
                 // @ts-expect-error
                 const baseCommand = alias[baseId]
                 commandDefinitionsMap[commandId] = baseCommand(...args)

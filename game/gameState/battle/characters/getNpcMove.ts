@@ -11,6 +11,7 @@ export function getNpcMove(
     const moves = enemy.moves
     const move = moves[(scene.get('turnCount') - 1) % moves.length]
     if (move == null) return move
+    logger.info(JSON.stringify({ move, commandDefinitionsMap }))
 
     return {
         ...commandDefinitionsMap[move],

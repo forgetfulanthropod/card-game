@@ -22,7 +22,7 @@ global.logger = getLogger()
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')
-    setGlobalRandomSeed('seedOne')
+    setGlobalRandomSeed('seedTwo')
 }
 
 if (process.env.FORCE_NEW_DB === 'yes') {

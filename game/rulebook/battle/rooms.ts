@@ -294,6 +294,18 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '1_1': {
                 uid: '1_1',
                 enemies: [
+                    {
+                        id: 'matchaGelatinCube',
+                        level: 2,
+                    },
+                    {
+                        id: 'matchaGelatinCube',
+                        level: 2,
+                    },
+                    {
+                        id: 'matchaGelatinCube',
+                        level: 2,
+                    },
                     // {
                     //     id: 'gnomeBigBomber',
                     //     level: 1,

@@ -9,6 +9,8 @@ export function getNpcMoves(scene: BattleCursor): NextCommand[] {
 
     const cmds = nonNulls(movable.map(attacker => getNpcMove(scene, attacker)))
 
+    logger.info(JSON.stringify({ cmds }))
+
     return cmds.map(command => {
         const targetUids = getCommandTargets(scene.get(), command)
         const outcome = simulateCommand({ command, scene, targetUids })
