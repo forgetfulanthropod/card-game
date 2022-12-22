@@ -1,3 +1,4 @@
+import { collectData } from '@/analytics/collectData'
 import { callApi } from '@/callApi'
 import { callServerApi } from '@/callServerApi'
 import { getTree } from '@/data'
@@ -20,7 +21,7 @@ export function GoButton(): PixiContainer {
         })
         await callApi('changeScene', { newSceneName: 'battle' })
         await callApi('setRunId', { userId, runId })
-        gtag('event', 'run_start', {
+        collectData('run_start', {
             map_seed: 1,
             run_id: runId,
         })

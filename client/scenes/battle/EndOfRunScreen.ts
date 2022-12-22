@@ -27,6 +27,7 @@ import {
 import { ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
 import { round } from 'lodash'
+import { collectData } from '@/analytics/collectData'
 
 const getShowOnHoverFns = (el: PixiContainer) => {
     let waitingTimer: NodeJS.Timeout | null = null
@@ -187,7 +188,7 @@ const ScoreAttributeItem = (
 }
 
 export function EndOfRunScreen(): PixiContainer {
-    gtag('event', 'ui_ux_view', { page_title: 'End of Run Screen' })
+    collectData('ui_ux_view', { page_title: 'End of Run Screen' })
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
@@ -207,7 +208,6 @@ export function EndOfRunScreen(): PixiContainer {
             anchor: [0.5, 0.5],
         })
     )
-
 
     const TotalScoreTitle = Text({
         text: `Total Score`,
@@ -299,26 +299,23 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const lootElementsWithBg = Container(
-        {},
-        RoundedBlackRectBackground,
-    )
+    const lootElementsWithBg = Container({}, RoundedBlackRectBackground)
 
-     // Runs text animations synchronously
-     ;(async () => {
+    // Runs text animations synchronously
+    ;(async () => {
         const screenHasNotOpened = scene.get('endScreenHasOpened') === false
         const isVictory = scene.get('state') === 'won'
 
         // below condition will only be met once (even after refresh)
         if (screenHasNotOpened) {
-            gtag('event', 'level_end', {
+            collectData('level_end', {
                 room_number: scene.get('numRoomsPassed'), // no +1 bc it should already be updated
                 room_id: scene.get('currentRoom').uid,
                 room_tier: scene.get('currentRoom').category,
                 run_id: scene.get('runId'),
             })
 
-            gtag('event', 'run_end', {
+            collectData('run_end', {
                 map_seed: 1,
                 run_id: scene.get('runId'),
             })
@@ -328,10 +325,9 @@ export function EndOfRunScreen(): PixiContainer {
                 callApi('openEndScreen', {})
             }
 
-            const {runId} = await callServerApi('endRun', {
+            const { runId } = await callServerApi('endRun', {
                 userId: scene.get('username'),
             })
-
 
             if (runId === null) {
                 console.warn('Tried to end run but runId was null')
@@ -341,7 +337,8 @@ export function EndOfRunScreen(): PixiContainer {
         const runScoreAttributes = scene.get('runScore').attributes
 
         for (let attribute in runScoreAttributes) {
-            const points = runScoreAttributes[attribute as RunScoreAttributeName]
+            const points =
+                runScoreAttributes[attribute as RunScoreAttributeName]
             if (points === 0) continue
             const ScoreAttribute = ScoreAttributeItem(
                 attribute as RunScoreAttributeName,

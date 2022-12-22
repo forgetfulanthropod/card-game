@@ -32,6 +32,7 @@ import { callApi } from '@/callApi'
 import { EndOfRunScreen } from './EndOfRunScreen'
 import { ROCursor } from 'sbaobab'
 import { SpineBackground } from '../background'
+import { collectData } from '@/analytics/collectData'
 
 export function BattleSceneEl(): PixiContainer {
     const hoveredCardUid = datum<CardUid | null>(null)
@@ -97,8 +98,8 @@ function CoreScene(
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
     playLoopingMusic(scene)
-    gtag('event', 'ui_ux_view', { page_title: 'Battle Scene' })
-    gtag('event', 'level_start', {
+    collectData('ui_ux_view', { page_title: 'Battle Scene' })
+    collectData('level_start', {
         room_number: scene.get('numRoomsPassed') + 1, //1-indexed
         room_id: scene.get('currentRoom').uid,
         room_tier: scene.get('currentRoom').category,

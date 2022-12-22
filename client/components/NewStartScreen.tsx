@@ -13,10 +13,9 @@ import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
 import { UserID } from 'shared'
 import { TutorialModal } from './StartScreen/TutorialModal'
-import {
-    WalletMultiButton,
-} from '@solana/wallet-adapter-react-ui'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { collectData, initAnalytics } from '@/analytics/collectData'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
 const WALLET_GATED = process.env.WALLET_GATED
@@ -57,9 +56,10 @@ export function NewStartScreen(props: {
     const [showTutorial, setShowTutorial] = useState(false)
 
     useEffect(() => {
-        gtag('event', 'ui_ux_view', {
+        collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })
+
     }, [])
 
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
@@ -76,11 +76,8 @@ export function NewStartScreen(props: {
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
 
-        gtag('set', {
-            user_id: userId,
-        })
-
-        gtag('event', 'login', {
+        initAnalytics(userId)
+        collectData('login', {
             method: 'connect_wallet',
         })
     }
@@ -94,7 +91,7 @@ export function NewStartScreen(props: {
 
     const enterGame = () => {
         props.onEnter(userDoc.userId)
-        gtag('event', 'enter_game')
+        collectData('enter_game', {})
     }
 
     return <>
@@ -147,8 +144,7 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont'
-                    />
+                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont' />
                 </div>
             </div>
 

@@ -8,11 +8,12 @@ import { loopSong, PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
 import { onUpdate } from '@/util'
 import { callApi } from '@/callApi'
+import { collectData } from '@/analytics/collectData'
 
 const NUM_CHARACTERS_REQUIRED = 3
 
 export function DungeonEntryScene(): PixiContainer {
-    gtag('event', 'ui_ux_view', { page_title: 'Character Select' })
+    collectData('ui_ux_view', { page_title: 'Character Select' })
     const selectedCharactersCursor =
         getEntryScene().select('selectedCharacters')
 

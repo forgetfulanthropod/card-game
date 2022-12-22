@@ -12,6 +12,7 @@ import {
 } from '@/elementsUtil'
 import type { AnimationId } from '@/assets'
 import { callApi } from '@/callApi'
+import { collectData } from '@/analytics/collectData'
 
 export const plushyChoiceDescriptions = [
     // 'revive a character with 25% Health',
@@ -23,7 +24,7 @@ export const plushyChoiceDescriptions = [
 ]
 
 export function RestSiteOverlay(): PixiContainer {
-    gtag('event', 'ui_ux_view', { page_title: 'Rest Site' })
+    collectData('ui_ux_view', { page_title: 'Rest Site' })
     const animations: AnimationId[] = ['Position 3', 'Position 2', 'Position 1']
 
     const xya = {
