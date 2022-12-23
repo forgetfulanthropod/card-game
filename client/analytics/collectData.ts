@@ -37,9 +37,11 @@ type AnalyticsEventMeta = {
         method: AnalyticsLoginMethods
     }
     ui_ux_view: {
-        page_title: PageTitle
+        page_title: AnalyticsPageTitle
     }
     enter_game: Empty
+    tutorial_begin: Empty
+    tutorial_complete: Empty
 }
 
 type AnalyticsRoomEventParams = {
@@ -56,7 +58,7 @@ type AnalyticsRunEventParams = {
 
 type AnalyticsLoginMethods = 'connect_wallet'
 
-type PageTitle =
+type AnalyticsPageTitle =
     | 'Battle Scene'
     | 'End of Run Screen'
     | 'Hex Map'
