@@ -288,7 +288,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**yodel attacks for 50%.  After this turn, the enemy party will gain Emboldened (2).*/
     yodel: {
-        actions: `chain(deal(strength * .5), effect("courageous", 2, "allFriends"))`,
+        actions: `chain(deal(strength * .5), queue(effect("courageous", 2, "allFriends"), 1))`,
         //@ts-expect-error
         id: `yodel`,
         name: `Bucket of Bang Snaps`,
@@ -323,7 +323,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
 
     gnomeBomb: {
-        actions: `deal(strength * .3)`,
+        actions: `ifDamageDealtApplyEffect(strength * .3, 'tired', 1)`,
         //@ts-expect-error
         id: `gnomeBomb`,
         name: `Gnome Bomb`,

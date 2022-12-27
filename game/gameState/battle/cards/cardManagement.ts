@@ -11,7 +11,7 @@ import type {
     CharacterId,
 } from 'shared'
 
-import { keys, vals } from 'shared/code'
+import { keys, mapToObj, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import { EntryCursor, srandInt } from '@/util'
@@ -20,11 +20,25 @@ import { shufflePile } from './shufflePile'
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
-        const newHand = { ...hand }
-        keys(hand).forEach(
-            cardUid =>
-                (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
+        const newHand = {} as typeof hand
+
+        const characterUidsToYPositionMap: Record<CharacterUid, number> = {}
+        vals(scene.get('allCharacters')).forEach(
+            c => (characterUidsToYPositionMap[c.uid] = c.y)
         )
+        const yOf = (uid: CharacterUid) => characterUidsToYPositionMap[uid]
+
+        keys(hand)
+            .sort((cardAUid, cardBUid) => {
+                return yOf(hand[cardAUid].characterUid) <
+                    yOf(hand[cardBUid].characterUid)
+                    ? -1
+                    : 1
+            })
+            .forEach(
+                cardUid =>
+                    (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
+            )
         return newHand
     })
 }

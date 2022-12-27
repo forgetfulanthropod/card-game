@@ -343,7 +343,7 @@ function getTexts(
             },
         }),
         Text({
-            text: card.characterClass,
+            text: upperFirst(card.characterClass),
             y: cardFrameTexture.height * 0.4,
             anchor: 0.5,
             style: {
@@ -351,7 +351,7 @@ function getTexts(
                 fontFamily: 'sansFont',
                 fill: colorStops[0].color,
                 stroke: 'black',
-                strokeThickness: 8,
+                strokeThickness: 3,
                 letterSpacing: 3 * cardFrameScale,
             },
         }),

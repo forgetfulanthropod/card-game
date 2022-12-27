@@ -18,7 +18,7 @@ import {
 } from '@/elementsUtil'
 import { keys } from 'shared/code'
 import { Datum } from 'datums'
-import { nextTick } from '@/util'
+import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
@@ -73,28 +73,18 @@ export function TermExplanationsIf({
     xOffset?: number
     yOffset?: number
 }) {
-    return If(areShown, () => {
-        const root = Container({})
-
-        nextTick().then(() =>
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: Container(
-                    {},
-                    ...TermExplanations({
-                        terms,
-                        displayObjectArgs: {
-                            x: root.getGlobalPosition().x + xOffset,
-                            y: root.getGlobalPosition().y + yOffset,
-                        },
-                    })
-                ),
+    return If(areShown, () =>
+        portalizeExplanations(
+            Container({}),
+            TermExplanations({
+                terms,
+                displayObjectArgs: {
+                    x: xOffset,
+                    y: yOffset,
+                },
             })
         )
-
-        return root
-    })
+    )
 }
 
 export function TermExplanations({
@@ -143,24 +133,38 @@ export function TermExplanationIf({
     yOffset?: number
 }): PixiContainer {
     return If(isShown, () => {
-        const root = Container({})
-
-        nextTick().then(() =>
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: TermExplanation({
-                    term,
-                    displayObjectArgs: {
-                        x: root.getGlobalPosition().x + xOffset,
-                        y: root.getGlobalPosition().y + yOffset,
-                    },
-                }),
-            })
-        )
-
-        return root
+        return portalizeExplanations(Container({}), [
+            TermExplanation({
+                term,
+                displayObjectArgs: { x: xOffset, y: yOffset },
+            }),
+        ])
     })
+}
+
+function portalizeExplanations(
+    root: PixiContainer<DisplayObject>,
+    content: PixiContainer[]
+) {
+    nextTick().then(() => {
+        if (root == null || root.parent == null) return
+
+        if (targetUidsWaitingForImpact.val.length) return
+
+        portalize({
+            from: root,
+            content: Container(
+                {
+                    x: root.getGlobalPosition().x,
+                    y: root.getGlobalPosition().y,
+                },
+                ...content
+            ),
+            nextFrame: true,
+        })
+    })
+
+    return root
 }
 
 export function TermExplanation({
@@ -205,27 +209,18 @@ export function ExplanationIf({
     isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
-        const root = Container({})
-
-        nextTick().then(() => {
-            if (root == null) return
-
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: Explanation({
-                    texts,
-                    displayObjectArgs: {
-                        borderThickness: 2,
-                        padding: 10,
-                        x: root.getGlobalPosition().x + xOffset,
-                        y: root.getGlobalPosition().y + yOffset,
-                    },
-                }),
-            })
-        })
-
-        return root
+        return portalizeExplanations(Container({}), [
+            Explanation({
+                texts,
+                isHtml,
+                displayObjectArgs: {
+                    borderThickness: 2,
+                    padding: 10,
+                    x: xOffset,
+                    y: yOffset,
+                },
+            }),
+        ])
     })
 }
 

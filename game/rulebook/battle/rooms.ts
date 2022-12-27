@@ -294,30 +294,30 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '1_1': {
                 uid: '1_1',
                 enemies: [
-                    {
-                        id: 'matchaGelatinCube',
-                        level: 2,
-                    },
-                    {
-                        id: 'matchaGelatinCube',
-                        level: 2,
-                    },
-                    {
-                        id: 'matchaGelatinCube',
-                        level: 2,
-                    },
                     // {
-                    //     id: 'gnomeBigBomber',
-                    //     level: 1,
+                    //     id: 'matchaGelatinCube',
+                    //     level: 2,
                     // },
                     // {
-                    //     id: 'gnomeProspector',
-                    //     level: 1,
+                    //     id: 'matchaGelatinCube',
+                    //     level: 2,
                     // },
                     // {
-                    //     id: 'gnomeBandit',
-                    //     level: 1,
+                    //     id: 'matchaGelatinCube',
+                    //     level: 2,
                     // },
+                    {
+                        id: 'gnomeBigBomber',
+                        level: 1,
+                    },
+                    {
+                        id: 'gnomeProspector',
+                        level: 1,
+                    },
+                    {
+                        id: 'gnomeBandit',
+                        level: 1,
+                    },
                 ],
                 category: 'tierOne',
                 // category: 'tierOne',
