@@ -9,7 +9,7 @@ import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
 
-export const endRun: ServerActions['endRun'] = async ({ userId }) => {
+export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     logger.info(`Ending run for: ${userId}`)
     const connection = await getDbClient()
     const gameState = await getGamestate(userId)
@@ -36,8 +36,8 @@ export const endRun: ServerActions['endRun'] = async ({ userId }) => {
 
     logger.info({ runId, totalScore, state })
 
-    if (state !== 'won' && state !== 'lost') {
-        logger.warn('Not in battle end state')
+    if (!restart && state !== 'won' && state !== 'lost') {
+        logger.warn('Not in battle end state') // only ok when restarting
         return { runId: null }
     }
 
@@ -51,7 +51,7 @@ export const endRun: ServerActions['endRun'] = async ({ userId }) => {
         UPDATE
             kaiju.user_run
         SET
-            run_status = ${state},
+            run_status = ${restart ? 'abandoned' : state },
             end_ts = now(),
             run_duration_in_sec = ${runDuration},
             run_score = ${totalScore},

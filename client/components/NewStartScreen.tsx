@@ -24,10 +24,10 @@ const GAME_IS_LIVE = process.env.GAME_IS_LIVE
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
-    walletAddress: string | null
+    walletAddress: string
     numKaijusOwned: number
     userId: UserID
-}
+} | null
 
 export function NewStartScreen(props: {
     onEnter: (userId: string) => void
@@ -48,11 +48,7 @@ export function NewStartScreen(props: {
     }, [connection, encodedPublicKey])
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userDoc, setUserDoc] = useState<UserDoc>({
-        walletAddress: null,
-        numKaijusOwned: 0,
-        userId: '',
-    })
+    const [userDoc, setUserDoc] = useState<UserDoc>(null)
 
     const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
@@ -62,7 +58,6 @@ export function NewStartScreen(props: {
         collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })
-
     }, [])
 
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
@@ -86,16 +81,17 @@ export function NewStartScreen(props: {
     }
 
     const handlePlayButtonClick = () => {
-        if (!GAME_IS_LIVE) {
+        if (!userDoc) {
+            console.warn('No User Doc')
+            return
+        }
+        else if (!GAME_IS_LIVE) {
             return setShowClosedGameModal(true)
         }
-        if (WALLET_GATED) {
+        else if (WALLET_GATED) {
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
-        enterGame()
-    }
 
-    const enterGame = () => {
         props.onEnter(userDoc.userId)
         collectData('enter_game', {})
     }
@@ -111,7 +107,9 @@ export function NewStartScreen(props: {
             publicKey={publicKey}
         />}
         {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
-        {showClosedGameModal && <ClosedGameModal setShowModal={setShowClosedGameModal}/>}
+        {showClosedGameModal && <ClosedGameModal
+            setShowModal={setShowClosedGameModal}
+        />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
                 showGateModal ? 'pointer-events-none' : 'pointer-events-auto'

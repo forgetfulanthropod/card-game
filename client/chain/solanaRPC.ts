@@ -145,25 +145,35 @@ export default class SolanaRPC {
 
     getKaijusOwnedByUser = async () => {
         console.log('Getting kaijus owned by user')
+        try {
+            if (!this.connection) {
+                console.warn('No Solana RPC Connection!')
+                return 0
+            }
+            const walletAddress = await this.publicKey as string
+            const tokenAccounts = await this.getTokenAccounts(
+                this.connection,
+                walletAddress
+            )
+            const numKaijuInWallet = tokenAccounts.filter(account => {
+                const data = account.account.data as ParsedAccountData
+                const nftPublicKey = data?.parsed?.info?.mint // the particular nft's public key, not its mint authority
+                const amountOwned = data?.parsed?.info?.tokenAmount?.amount // will be === 1 if user still owns the kaiju
+                return (kaijuNFTIds.includes(nftPublicKey) && amountOwned > 0)
+            }).length
 
-        if (!this.connection) return 0
-        const walletAddress = await this.publicKey as string
-        const tokenAccounts = await this.getTokenAccounts(
-            this.connection,
-            walletAddress
-        )
-        const numKaijuInWallet = tokenAccounts.filter(account => {
-            const data = account.account.data as ParsedAccountData
-            const nftPublicKey = data?.parsed?.info?.mint // the particular nft's public key, not its mint authority
-            const amountOwned = data?.parsed?.info?.tokenAmount?.amount // will be === 1 if user still owns the kaiju
-            return (kaijuNFTIds.includes(nftPublicKey) && amountOwned > 0)
-        }).length
+            const numKaijuInGoodEarth = await this.getKaijuInGoodEarth(walletAddress)
+            console.log({ numKaijuInWallet })
+            console.log({ numKaijuInGoodEarth })
 
-        const numKaijuInGoodEarth = await this.getKaijuInGoodEarth(walletAddress)
-        console.log({ numKaijuInWallet })
-        console.log({ numKaijuInGoodEarth })
+            return numKaijuInWallet + numKaijuInGoodEarth
+        } catch (e) {
+            console.error(e)
+            return 0
+        } finally {
+            return 0
+        }
 
-        return numKaijuInWallet + numKaijuInGoodEarth
     }
 
     userOwnsKaijus = async () => {

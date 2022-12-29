@@ -16,7 +16,7 @@ export const UserProfileIcon = ({
     userDoc: UserDoc
     ownsKaijus: boolean
 }) => {
-    const { walletAddress } = userDoc
+    const walletAddress = userDoc?.walletAddress
 
     const [showActions, setShowActions] = useState(false)
     const [shortAddress, setShortAddress] = useState('')
