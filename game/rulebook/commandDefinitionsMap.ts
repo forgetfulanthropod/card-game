@@ -297,7 +297,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**Bucket of Bang Snaps*/
     demolitionCharge: {
-        actions: `ifDamageDealt(deal(strength), chain(effect("courageous", 2, "self"), effect("tired", 1)))`,
+        actions: `ifDamageDealt(deal(strength), chain(queue(effect("courageous", 1, "self"), 1), effect("tired", 1)))`,
         //@ts-expect-error
         id: `demolitionCharge`,
         name: `Demolition Charge`,
