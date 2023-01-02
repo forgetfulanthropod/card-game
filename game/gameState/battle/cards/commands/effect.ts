@@ -13,7 +13,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase, targetType] = evalAllAsHtml(dslArgs)
-    return `+${increase} <b>${startCase(id).toLowerCase()}</b>${
+    return `+${increase} <b>${startCase(id)}</b>${
         targetType ? ' to ' + startCase(targetType).toLowerCase() : ''
     }`
 }
