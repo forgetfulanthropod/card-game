@@ -45,7 +45,7 @@ export interface BareServerActionsMeta {
         res: Promise<{ runId: RunID }>
     }
     endRun: {
-        args: { userId: UserID }
+        args: { userId: UserID, restart?: true }
         res: Promise<{ runId: RunID | null }>
     }
     getNumKaijuInGoodEarth: {

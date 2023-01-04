@@ -1,3 +1,4 @@
+import { collectData } from '@/analytics/collectData'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import React, { useRef, useState } from 'react'
 
@@ -10,7 +11,9 @@ export const TutorialModal = ({
     setShowTutorial: (value: React.SetStateAction<boolean>) => void
 }) => {
     const modalBoxRef = useRef(null)
-    useOutsideClickDismisser(modalBoxRef, setShowTutorial)
+    useOutsideClickDismisser(modalBoxRef, setShowTutorial, () =>
+        collectData('tutorial_complete', {})
+    )
     const [currentTutorial, setCurrentTutorial] = useState<Tutorial>('Cards')
     const [page, setPage] = useState<Page>(1)
 
@@ -43,6 +46,7 @@ export const TutorialModal = ({
             return setPage(page => (page + 1) as Page)
         } else if (currentTutorial === 'EnemyIntents') {
             setShowTutorial(false)
+            collectData('tutorial_complete', {})
         }
     }
 

@@ -31,6 +31,7 @@ import {
 import { ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
 import { round } from 'lodash'
+import { collectData } from '@/analytics/collectData'
 
 const getShowOnHoverFns = (el: PixiContainer) => {
     let waitingTimer: NodeJS.Timeout | null = null
@@ -133,7 +134,7 @@ const ScoreAttributeItem = (
     })
 
     const Points = Text({
-        text: `${score * pointValue} pts`,
+        text: `${round(score * pointValue, 1)} pts`,
         anchor: [1, 0.5],
         x: x + 425,
         y,
@@ -191,7 +192,7 @@ const ScoreAttributeItem = (
 }
 
 export function EndOfRunScreen(): PixiContainer {
-    gtag('event', 'ui_ux_view', { page_title: 'End of Run Screen' })
+    collectData('ui_ux_view', { page_title: 'End of Run Screen' })
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
@@ -211,18 +212,6 @@ export function EndOfRunScreen(): PixiContainer {
             anchor: [0.5, 0.5],
         })
     )
-
-    const runScoreAttributes = scene.get('runScore').attributes
-    const runScorePixiElements: TweenablePixiContainer[] = []
-    for (let attribute in runScoreAttributes) {
-        const points = runScoreAttributes[attribute as RunScoreAttributeName]
-        if (points === 0) continue
-        const ScoreAttribute = ScoreAttributeItem(
-            attribute as RunScoreAttributeName,
-            points
-        )
-        runScorePixiElements.push(ScoreAttribute)
-    }
 
     const TotalScoreTitle = Text({
         text: `Total Score`,
@@ -355,11 +344,62 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const lootElementsWithBg = Container(
-        {},
-        RoundedBlackRectBackground,
-        ...runScorePixiElements
-    )
+    const lootElementsWithBg = Container({}, RoundedBlackRectBackground)
+
+    // Runs text animations synchronously
+    ;(async () => {
+        const screenHasNotOpened = scene.get('endScreenHasOpened') === false
+        const isVictory = scene.get('state') === 'won'
+
+        // below condition will only be met once (even after refresh)
+        if (screenHasNotOpened) {
+            collectData('level_end', {
+                room_number: scene.get('numRoomsPassed'), // no +1 bc it should already be updated
+                room_id: scene.get('currentRoom').uid,
+                room_tier: scene.get('currentRoom').category,
+                run_id: scene.get('runId'),
+            })
+
+            collectData('run_end', {
+                map_seed: 1,
+                run_id: scene.get('runId'),
+            })
+
+            if (isVictory) {
+                handleScoringEvent('ROOM_CLEARED', 1, scene)
+                callApi('openEndScreen', {})
+            }
+
+            const { runId } = await callServerApi('endRun', {
+                userId: scene.get('username'),
+            })
+
+            if (runId === null) {
+                console.warn('Tried to end run but runId was null')
+            }
+        }
+
+        const runScoreAttributes = scene.get('runScore').attributes
+
+        for (let attribute in runScoreAttributes) {
+            const points =
+                runScoreAttributes[attribute as RunScoreAttributeName]
+            if (points === 0) continue
+            const ScoreAttribute = ScoreAttributeItem(
+                attribute as RunScoreAttributeName,
+                points
+            )
+            lootElementsWithBg.addChild(ScoreAttribute)
+        }
+
+        await animateNumberInElement(
+            TotalScore,
+            'points',
+            scene.select('runScore').get('totalScore'),
+            'normal'
+        )
+        callApi('openEndScreen', {})
+    })()
 
     const EndOfRunContainer = Container(
         { x: 0, y: 0, scale: 1, name: 'EndOfRunContainer' },

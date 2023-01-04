@@ -13,20 +13,21 @@ import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
 import { UserID } from 'shared'
 import { TutorialModal } from './StartScreen/TutorialModal'
-import {
-    WalletMultiButton,
-} from '@solana/wallet-adapter-react-ui'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { collectData, initAnalytics } from '@/analytics/collectData'
+import { ClosedGameModal } from './StartScreen/ClosedGameModal'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
 const WALLET_GATED = process.env.WALLET_GATED
+const GAME_IS_LIVE = process.env.GAME_IS_LIVE
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
-    walletAddress: string | null
+    walletAddress: string
     numKaijusOwned: number
     userId: UserID
-}
+} | null
 
 export function NewStartScreen(props: {
     onEnter: (userId: string) => void
@@ -47,17 +48,14 @@ export function NewStartScreen(props: {
     }, [connection, encodedPublicKey])
 
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const [userDoc, setUserDoc] = useState<UserDoc>({
-        walletAddress: null,
-        numKaijusOwned: 0,
-        userId: '',
-    })
+    const [userDoc, setUserDoc] = useState<UserDoc>(null)
 
     const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
+    const [showClosedGameModal, setShowClosedGameModal] = useState(false)
 
     useEffect(() => {
-        gtag('event', 'ui_ux_view', {
+        collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })
     }, [])
@@ -76,25 +74,31 @@ export function NewStartScreen(props: {
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
 
-        gtag('set', {
-            user_id: userId,
-        })
-
-        gtag('event', 'login', {
+        initAnalytics(userId)
+        collectData('login', {
             method: 'connect_wallet',
         })
     }
 
     const handlePlayButtonClick = () => {
-        if (WALLET_GATED) {
+        if (!userDoc) {
+            console.warn('No User Doc')
+            return
+        }
+        else if (!GAME_IS_LIVE) {
+            return setShowClosedGameModal(true)
+        }
+        else if (WALLET_GATED) {
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
-        enterGame()
+
+        props.onEnter(userDoc.userId)
+        collectData('enter_game', {})
     }
 
-    const enterGame = () => {
-        props.onEnter(userDoc.userId)
-        gtag('event', 'enter_game')
+    const handleTutorialClick = () => {
+        setShowTutorial(true)
+        collectData('tutorial_begin', {})
     }
 
     return <>
@@ -103,6 +107,9 @@ export function NewStartScreen(props: {
             publicKey={publicKey}
         />}
         {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
+        {showClosedGameModal && <ClosedGameModal
+            setShowModal={setShowClosedGameModal}
+        />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
                 showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
@@ -124,22 +131,22 @@ export function NewStartScreen(props: {
                     </p>
                 </div>
                 <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>
-                    <div className='grid grid-cols-3 items-center mr-4'>
-                        <NavIconWrapper>
+                    <div className='grid grid-cols-3 items-center mr-4 pointer-events-auto'>
+                        <NavIconWrapper link='https://magiceden.io/marketplace/kaiju_cards'>
                             <img
                                 src='./logos/MagicEden.png'
                                 alt='Magic Eden Marketplace'
                                 className='lg:w-auto h-full'
                             />
                         </NavIconWrapper>
-                        <NavIconWrapper>
+                        <NavIconWrapper link='https://twitter.com/KaijuCards'>
                             <img
                                 src='./logos/Twitter.png'
                                 alt='Twitter'
                                 className=' scale-75 w-auto h-full'
                             />
                         </NavIconWrapper>
-                        <NavIconWrapper>
+                        <NavIconWrapper link='https://dsc.gg/kaijucards'>
                             <img
                                 src='./logos/Discord.png'
                                 alt='Discord'
@@ -147,8 +154,7 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont'
-                    />
+                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont' />
                 </div>
             </div>
 
@@ -158,7 +164,7 @@ export function NewStartScreen(props: {
                     <div className='h-auto w-full flex xl:pt-4 gap-4 md:gap-8 xl:gap-12'>
                         <PrimaryButton
                             text='tutorial'
-                            onClick={() => setShowTutorial(true)}
+                            onClick={handleTutorialClick}
                             type='secondary'
                             size='large'
                         />

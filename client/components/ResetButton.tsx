@@ -2,7 +2,13 @@ import { callApi } from '@/callApi'
 import { styled } from '@/config'
 import { useState, useRef, MouseEvent, useEffect } from 'react'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
-import { muteMusic, muteSFX, toggleMuteMusic, toggleMuteSFX } from '@/elementsUtil'
+import {
+    muteMusic,
+    muteSFX,
+    toggleMuteMusic,
+    toggleMuteSFX,
+} from '@/elementsUtil'
+import { callServerApi } from '@/callServerApi'
 
 const Root = styled.button`
     position: absolute;
@@ -85,6 +91,10 @@ export function ResetButton(props: { username: string }): JSXElement {
             <button
                 className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'
                 onClick={async () => {
+                    await callServerApi('endRun', {
+                        userId: props.username,
+                        restart: true,
+                    })
                     await callApi('makeNewUser', {
                         username: props.username,
                     })

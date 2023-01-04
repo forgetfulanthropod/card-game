@@ -24,6 +24,7 @@ import {
 import { displayScoreNotification } from '../shared/Notification'
 import { upperFirst } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
+import { collectData } from '@/analytics/collectData'
 
 const ROOM_CLEARED_FINAL_POS = {
     rotation: 0,
@@ -73,7 +74,7 @@ const getDisplayName = (name: LootFromGame) => {
 
 export function LootCollector(): PixiContainer {
     const scene = getBattleScene()
-    gtag('event', 'level_end', {
+    collectData('level_end', {
         room_number: scene.get('numRoomsPassed') + 1,
         room_id: scene.get('currentRoom').uid,
         room_tier: scene.get('currentRoom').category,
