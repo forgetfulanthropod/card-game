@@ -366,7 +366,7 @@ export function EndOfRunScreen(): PixiContainer {
             })
 
             if (isVictory) {
-                handleScoringEvent('ROOM_CLEARED', 1, scene)
+                depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
                 callApi('openEndScreen', {})
             }
 
