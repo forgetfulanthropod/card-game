@@ -124,22 +124,22 @@ export function Characters(scene: ROBattleScene): PixiContainer {
                     scene,
                     removedEnemyCharacters
                 )
-                for (let char of removedEnemyCharacters) {
-                    if (char.health < 0) {
-                        depricatedScoreUpdateFromClient(
-                            'OVERKILL',
-                            -char.health,
-                            scene
-                        )
-                    } else if (char.health === 0) {
-                        depricatedScoreUpdateFromClient(
-                            'PERFECT_KILL',
-                            1,
-                            scene,
-                            char
-                        )
-                    }
-                }
+                // for (let char of removedEnemyCharacters) {
+                //     if (char.health < 0) {
+                //         depricatedScoreUpdateFromClient(
+                //             'OVERKILL',
+                //             -char.health,
+                //             scene
+                //         )
+                //     } else if (char.health === 0) {
+                //         depricatedScoreUpdateFromClient(
+                //             'PERFECT_KILL',
+                //             1,
+                //             scene,
+                //             char
+                //         )
+                //     }
+                // }
             }, 1000) // imperfect timing, but good enough for now
         }
 
