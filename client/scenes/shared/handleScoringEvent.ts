@@ -17,6 +17,8 @@ export const depricatedScoreUpdateFromClient = (
     scene: ROCursor<BattleScene>,
     data?: any
 ) => {
+    showScoreUpdateNotification({ event, count, data })
+
     callApi('notifyRunScore', { event, count })
 }
 
