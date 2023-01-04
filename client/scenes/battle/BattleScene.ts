@@ -8,7 +8,12 @@ import type {
     RequiredAction,
 } from 'shared'
 import { sampleSize } from 'lodash'
-import { Cards, CardAdder, BattleSceneCharacterInfo } from '@sharedElements'
+import {
+    Cards,
+    CardAdder,
+    BattleSceneCharacterInfo,
+    showScoreUpdateNotification,
+} from '@sharedElements'
 import { keys } from 'shared/code'
 import { Characters } from './character'
 import { Energy } from './Energy'
@@ -47,6 +52,9 @@ export function BattleSceneEl(): PixiContainer {
                     immediatelyTakeRequiredAction,
                     true
                 ),
+                onUpdate(scene.select('runScoreUpdate'), update => {
+                    update && showScoreUpdateNotification(update)
+                }),
             ],
         },
         If(

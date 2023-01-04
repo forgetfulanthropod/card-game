@@ -1,6 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { handleScoringEvent, ModalBackdrop } from '@sharedElements'
+import { depricatedScoreUpdateFromClient, ModalBackdrop } from '@sharedElements'
 import {
     AssetKey,
     getTexture,
@@ -143,7 +143,7 @@ export function LootCollector(): PixiContainer {
     )
 
     if (lootScreenHasOpened === false) {
-        handleScoringEvent('ROOM_CLEARED', 1, scene)
+        depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
         slamAnimateElIntoScreen(roomClearedSign)
 
         setTimeout(() => {

@@ -1,4 +1,8 @@
-import { handleScoringEvent, InfoBox, ModalBackdrop } from '@sharedElements'
+import {
+    depricatedScoreUpdateFromClient,
+    InfoBox,
+    ModalBackdrop,
+} from '@sharedElements'
 import {
     getStage,
     loopSong,
@@ -289,11 +293,11 @@ export function EndOfRunScreen(): PixiContainer {
             })
 
             if (isVictory) {
-                handleScoringEvent('ROOM_CLEARED', 1, scene)
+                depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
                 callApi('openEndScreen', {})
             }
 
-            const {runId} = await callServerApi('endRun', {
+            const { runId } = await callServerApi('endRun', {
                 userId: scene.get('username'),
             })
             if (runId === null) {

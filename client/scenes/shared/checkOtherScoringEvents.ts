@@ -1,7 +1,7 @@
 import { ROCursor } from 'sbaobab'
 import { RunScoreEvent, BattleScene, NotifiableEvent } from 'shared'
 import { vals } from 'shared/code'
-import { handleScoringEvent } from './handleScoringEvent'
+import { depricatedScoreUpdateFromClient } from './handleScoringEvent'
 
 export const NUM_KAIJUS_IN_PARTY = 3
 
@@ -37,7 +37,7 @@ const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
             ? 'EXIT_BOSS_FULL_HEALTH'
             : 'EXIT_ROOM_FULL_HEALTH'
 
-        handleScoringEvent(roomTypeEvent, 1, scene)
+        depricatedScoreUpdateFromClient(roomTypeEvent, 1, scene)
     } else if (roomHadBoss) {
         checkHealthLostInBossRoom(scene)
     } else {
@@ -50,7 +50,7 @@ const handleCharsInFullHealth = (scene: ROCursor<BattleScene>) => {
  */
 const handleBossRoomCleared = (scene: ROCursor<BattleScene>): void => {
     if (roomContainsBoss(scene)) {
-        handleScoringEvent('BOSS_KILLED', 1, scene)
+        depricatedScoreUpdateFromClient('BOSS_KILLED', 1, scene)
     }
 }
 
@@ -68,21 +68,21 @@ const checkHealthLostInBossRoom = (scene: ROCursor<BattleScene>) => {
     const totalHealthLost = getTotalHealthLost(scene)
 
     if (totalHealthLost < 15) {
-        handleScoringEvent('EXIT_BOSS_LOW_DAMAGE', 1, scene)
+        depricatedScoreUpdateFromClient('EXIT_BOSS_LOW_DAMAGE', 1, scene)
     }
 }
 
 const checkHealthLostInRoom = (scene: ROCursor<BattleScene>) => {
     const totalHealthLost = getTotalHealthLost(scene)
     if (totalHealthLost === 0) {
-        handleScoringEvent('ROOM_WIN_ZERO_DAMAGE', 1, scene)
+        depricatedScoreUpdateFromClient('ROOM_WIN_ZERO_DAMAGE', 1, scene)
     }
 }
 
 const handleNoEnergyUsed = (scene: ROCursor<BattleScene>) => {
     const noEnergyUsed = scene.get('energy') === scene.get('roundEnergy')
     if (noEnergyUsed) {
-        handleScoringEvent('ROOM_WIN_NO_ENERGY_USED', 1, scene)
+        depricatedScoreUpdateFromClient('ROOM_WIN_NO_ENERGY_USED', 1, scene)
     }
 }
 

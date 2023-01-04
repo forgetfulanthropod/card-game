@@ -4,6 +4,12 @@ export type RunScore = {
     attributes: Record<RunScoreAttributeName, number>
 }
 
+export type RunScoreUpdate = {
+    event: NotifiableEvent
+    count: number
+    data?: any
+}
+
 export type RunScoreAttribute = {
     keyword: RunScoreAttributeName
     count: number
