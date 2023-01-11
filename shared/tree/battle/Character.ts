@@ -72,8 +72,8 @@ export interface CalculatedCharacterStats {
 export type OwnedCharacterStats = CharacterStats &
     Readonly<{
         uid: string
-        tokenId: string
-        nftName: string
+        // tokenId: string
+        // nftName: string
     }> &
     Brandify
 

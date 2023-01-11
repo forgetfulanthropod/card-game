@@ -206,6 +206,6 @@ function makeRandId() {
     return srandom().toString().slice(2)
 }
 
-function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
+function getCardClass(id: keyof typeof cardDefinitionsMap) {
     return cardDefinitionsMap[id].characterClass
 }

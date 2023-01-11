@@ -7,4 +7,5 @@ export { startRun } from './startRun'
 export { getCurrentRun } from './getCurrentRun'
 export { endRun } from './endRun'
 export { getNumKaijuInGoodEarth } from './getNumKaijuInGoodEarth'
+export { getSchema } from './getSchema'
 // @endindex

@@ -23,8 +23,8 @@ export const placeSelectedCharacters: GameActions['placeSelectedCharacters'] =
                             (Math.random() * 10000) | 0
                         }`,
                         isPc: true,
-                        tokenId: '',
-                        nftName: '',
+                        // tokenId: '',
+                        // nftName: '',
                     }
                 }
             })

@@ -1,19 +1,23 @@
 import { startCase } from 'lodash'
-import type {
+import {
     BasicTargetType,
     BattleCursor,
     CharacterUid,
     Command,
     EffectId,
+    effectIds,
 } from 'shared'
 import { setAt } from 'shared/code'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
     const [id, increase, targetType] = evalAllAsHtml(dslArgs)
-    return `+${increase} <b>${startCase(id)}</b>${
+    return `+${increase} <b>${startCase(id)
+        .replace('Debuff', '')
+        .replace('Buff', '')}</b>${
         targetType ? ' to ' + startCase(targetType).toLowerCase() : ''
     }`
 }
@@ -27,7 +31,12 @@ export const execute: Executors['effect'] = ({
     const [id, increase] = evalAll(dslArgs)
     const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
 
-    applyEffect(scene, targetUids, id, increase)
+    const effectIdIndex = effectIds
+        .map(id => id.replace('Debuff', '').replace('Buff', ''))
+        .indexOf(id)
+    if (~effectIdIndex)
+        applyEffect(scene, targetUids, effectIds[effectIdIndex], increase)
+    else logger.warn(`tried to apply invalid effect ${id}`)
 }
 
 export function applyEffect(
@@ -56,26 +65,11 @@ function getTargetUids(
     scene: BattleCursor
 ) {
     let targetType = evalAll(dslArgs)[2]
-    let targetUids
 
-    if (targetType == null) {
-        targetUids = givenUids
-        if (givenUids.length === 0 && typeof command.targetType === 'string')
-            targetType = command.targetType as BasicTargetType
-    }
-    if (targetType == null) {
-        targetUids = givenUids
-    } else if (['allFriends', 'allEnemies'].includes(targetType)) {
-        const ac = scene.get('allCharacters')
-        const isPcSource = ac[command.characterUid].isPc
-        const shouldBePc = isPcSource === (targetType === 'allFriends') // NOR
-        targetUids = Object.values(ac)
-            .filter(x => x.isPc === shouldBePc)
-            .map(x => x.uid)
-    } else if (['self'].includes(targetType)) {
-        targetUids = [command.characterUid]
-    } else {
-        targetUids = givenUids
-    }
-    return targetUids
+    return getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids,
+    })
 }

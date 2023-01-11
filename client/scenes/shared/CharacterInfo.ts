@@ -23,12 +23,13 @@ import {
     Adjust,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, toDatum } from '@/util'
-import type { Ability } from '@/data'
+import { Ability, getTree } from '@/data'
 import {
     getBattleScene,
     getEntryScene,
     characterIdToAbilitiesMap,
 } from '@/data'
+import { CardsTiltedInLine } from './cards'
 
 const stats = [
     { key: 'strength', displayName: 'Strength', color: 0xd44c47 },
@@ -163,15 +164,15 @@ function getAllPossibleCardsForCharacter(cm: CharacterMeta): Card[] {
 
 function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
-    // const allCharCards =
-    //     getTree().get('scene', 'id') === 'entry'
-    //         ? CardsTiltedInLine({
-    //               cards: getAllPossibleCardsForCharacter(props.cm),
-    //               parentWidth: contentWidth * 0.8,
-    //           })
-    //         : Container({})
+    const allCharCards =
+        getTree().get('scene', 'id') === 'entry'
+            ? CardsTiltedInLine({
+                  cards: getAllPossibleCardsForCharacter(props.cm),
+                  parentWidth: contentWidth * 0.8,
+              })
+            : Container({})
 
-    const allCharCards = Container({})
+    // const allCharCards = Container({})
 
     const classOutlineFilter = new OutlineFilter(5, 0)
     const classOutlineFilter2 = new OutlineFilter(3, 0)

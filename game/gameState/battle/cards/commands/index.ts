@@ -28,7 +28,9 @@ import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
 import {explain as explainPsychicWarfare, execute as executePsychicWarfare} from './psychicWarfare'
 import {explain as explainQueue, execute as executeQueue} from './queue'
+import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} from './removeAllDebuffs'
 import {explain as explainRequire, execute as executeRequire} from './require'
+import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
 // @endindex
@@ -64,7 +66,9 @@ export const explainers: Explainers = {
     orbOfHolyLight: explainOrbOfHolyLight,
     psychicWarfare: explainPsychicWarfare,
     queue: explainQueue,
+    removeAllDebuffs: explainRemoveAllDebuffs,
     require: explainRequire,
+    setStance: explainSetStance,
     smite: explainSmite,
     text: explainText,
     // @endindex
@@ -100,7 +104,9 @@ export const executors: Executors = {
     orbOfHolyLight: executeOrbOfHolyLight,
     psychicWarfare: executePsychicWarfare,
     queue: executeQueue,
+    removeAllDebuffs: executeRemoveAllDebuffs,
     require: executeRequire,
+    setStance: executeSetStance,
     smite: executeSmite,
     text: executeText,
     // @endindex

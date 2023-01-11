@@ -47,7 +47,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'shieldOfLight',
         targetNum: 1,
         targetType: 'friends',
-        actions: 'magical = magic * 1.3; addBlock(magical)',
+        actions:
+            'magicaldefensey = magic * 0.5 + defense; addBlock(magicaldefensey)',
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -217,7 +218,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'trance',
         targetNum: 0,
         targetType: 'self',
-        actions: 'chain(effect("entranced", 3), momentary())',
+        actions: 'chain(effect("entranced", 5), momentary())',
         type: 'utility',
         characterClass: 'wizard',
     },
@@ -543,7 +544,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(queue(1, addEnergy(2)), momentary())',
+        actions: 'chain(draw(1), queue(1, addEnergy(2)), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -581,11 +582,722 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
+            defensey = 0.75 * defense;
             chain(
+                removeAllDebuffs(),
                 modifyStats("strength|magic", "6|6", "turn"),
+                addBlock(defensey),
                 momentary()
             )`,
         type: 'utility',
         characterClass: 'cleric',
+    },
+    enchantedStrike: {
+        name: 'Enchanted Strike',
+        energy: 1,
+        id: 'enchantedStrike',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthymagicy = 0.65 * magic + 0.6 * strength;
+            deal(strengthymagicy)
+        `,
+        type: 'attack',
+        characterClass: 'cleric',
+    },
+    songOfTheBrazen: {
+        name: 'Song of the Brazen',
+        energy: 0,
+        id: 'songOfTheBrazen',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            strengthy1 = strength * .35;
+            magicy1 = magic * .35;
+            strengthy2 = strength * .5;
+            magicy2 = magic * .5;
+            ifStance(
+              "aggressive",
+                modifyStats(
+                    "turn",
+                    "friends",
+                    "strength",
+                    strengthy1,
+                    "magic",
+                    magicy1
+                ),
+                modifyStats(
+                   "turn",
+                   "friends",
+                   "strength",
+                   strengthy2,
+                   "magic",
+                   magicy2
+                 ),
+             )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfGoodHealth: {
+        name: 'Song of Good Health',
+        energy: 1,
+        id: 'songOfGoodHealth',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            strenghtymagicy = 0.5 * strength + 0.5 * magic;
+            magicy = .35 * magic;
+            chain(
+                addBlock(strengthymagicy);
+                heal(magicy);
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfTheWarrior: {
+        name: 'Song of the Warrior',
+        energy: 1,
+        id: 'songOfTheWarrior',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            strengthy1 = strength;
+            strengthy2 = 0.75 * strength;
+            chain(
+                modifyStats(strengthy1);
+                addBlock(strengthy2);
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfWizadry: {
+        name: 'Song of Wizadry',
+        energy: 1,
+        id: 'songOfWizadry',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicy1 = strength;
+            magicy2 = 0.75 * strength;
+            chain(
+                modifyStats(magicy1);
+                addBlock(magicy2);
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfTheHuntsman: {
+        name: 'Song of the Huntsman',
+        energy: 2,
+        id: 'songOfTheHuntsman',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                effect(stun,1);
+                effect(ignoreBlock,1);
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfFortitude: {
+        name: 'Song of Fortitude',
+        energy: 1,
+        id: 'songOfFortitude',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            defenceymagicky = 0.5 * defence + 0.5 * magic;
+            chain(
+                addBlock(defenceymagicy);
+                effect(guarded,2);
+                effect(fatigue,1,allEnemies)
+            )`,
+        type: 'defense',
+        characterClass: 'bard',
+    },
+    songOfSilence: {
+        name: 'Song of Silence',
+        energy: 1,
+        id: 'songOfSilence',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            effect(unguarded, 2);
+            effect(debilitated,2);
+            effect(fatigue,1);
+            effect(targeted,1)
+        `,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    rapidFireBolts: {
+        name: 'Rapid Fire Bolts',
+        energy: 1,
+        id: 'rapidFireBolts',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            strengthy = 0.5 * strength;
+            deal(strengthy);
+        `,
+        type: 'attack',
+        characterClass: 'bard',
+    },
+    swissArmyWand: {
+        name: 'Swiss Army Wand',
+        energy: 1,
+        id: 'swissArmyWand',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            defenseymagicy = 0.25 * defense + 0.5 * magic;
+            magicy = 0.25 * magic;
+            chain(
+                draw(2),
+                discard(1),
+                addBlock(defenseymagicy),
+                modifyStats("magic", magicy, "turn")
+            )
+        `,
+        type: 'utility',
+        characterClass: 'wizard',
+    },
+    warStomp: {
+        name: 'War Stomp',
+        energy: 1,
+        id: 'warStomp',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            strengthy = 0.4 * strength;
+            effect(tired,1);
+            deal(strengthy);
+            `,
+        type: 'attack',
+        characterClass: 'warhog',
+    },
+    magicalTrebuchet: {
+        name: 'Magical Trebuchet',
+        energy: 1,
+        id: 'magicalTrebuchet',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            magicy= 1.25 * magic;
+            ifStance("avoidant", dealFromStance("avoidant",magicy)),
+        `,
+        type: 'attack',
+        characterClass: 'wizard',
+    },
+    tubularCellWall: {
+        name: 'Tubular Cell Wall',
+        energy: 1,
+        id: 'tubularCellWall',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            defensey = 0.75 * defense
+            defenseymagicy = 0.5 * defense + 0.25 * magic
+            chain(
+                addBlock(defensey);
+                addBlockToSelf(defenseymagicy);
+                 ),
+            `,
+        type: 'attack',
+        characterClass: 'mushroomFarmer',
+    },
+    cultivate: {
+        name: 'Cultivate',
+        energy: 0,
+        id: 'cultivate',
+        targetNum: 0,
+        targetType: 'self',
+        actions: `
+            chain(
+                draw(1);
+                discard(1);
+                addEnergy(1)
+                ),
+            `,
+        type: 'utility',
+        characterClass: 'mushroomFarmer',
+    },
+    sleepyTimeSpores: {
+        name: 'Sleepy Time Spores',
+        energy: 1,
+        id: 'sleepyTimeSpores',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            addEffect(fatigue,1)
+            `,
+        type: 'utility',
+        characterClass: 'mushroomFarmer',
+    },
+    valiantJab: {
+        name: 'Valiant Jab',
+        energy: 1,
+        id: 'valiantJab',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                deal(strength),
+                addEffect(unguarded,1),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'penguinKnight',
+    },
+    featheredFortress: {
+        name: 'Feathered Fortress',
+        energy: 1,
+        id: 'featheredFortress',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            chain(
+                addBlock(defense),
+                addEffect(strongBlock,2),
+                ifStance("neutral",addEffect(resistant,1)),
+                ),
+            `,
+        type: 'defense',
+        characterClass: 'penguinKnight',
+    },
+    hedgedBet: {
+        name: 'Hedged Bet',
+        energy: 1,
+        id: 'hedgedBet',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthymagicy = 0.5 * strength + 0.5 * magic
+            chain(
+                deal(strengthymagicy),
+                addBlockToSelf(defense),
+                draw(1),
+                discard(1),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'snacky',
+    },
+    compulsiveGambler: {
+        name: 'Compulsive Gambler',
+        energy: 0,
+        id: 'compulsiveGambler',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            chain(
+                draw(3),
+                discard(2),
+                ),
+            `,
+        type: 'utility',
+        characterClass: 'snacky',
+    },
+    youGottaStealMoneyToMakeMoney: {
+        name: 'You Gotta Steal Money to Make Money',
+        energy: 1,
+        id: 'youGottaStealMoneyToMakeMoney',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                strengthymagicy = 0.15 * magic + 0.1 * strength
+                handSizey = strengthymagicy * handSize
+                deal(handSizey),
+                draw(2),
+                dwindle(),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'snacky',
+    },
+    jerryIsEternal: {
+        name: 'Jerry Is Eternal',
+        energy: 1,
+        id: 'jerryIsEternal',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            chain(
+                addBlock(magic),
+                addEffect("resistant",1),
+                addEffect("trance",2)
+            )
+        `,
+        type: 'defense',
+        characterClass: 'jerry',
+    },
+    itIsWeakToJerry: {
+        name: 'It is Weak to Jerry',
+        energy: 1,
+        id: 'itIsWeakToJerry',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                addEffect(debilitated,1),
+                addEffect(unguarded,1),
+                addEffect(tense,1),
+                dwindle(),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'jerry',
+    },
+    slipperyLittleGuy: {
+        name: 'Slippery Little Guy',
+        energy: 0,
+        id: 'slipperyLittleGuy',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                deal(strength),
+                setStance("neutral"),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'frogKnight',
+    },
+    smallButStoic: {
+        name: 'Small But Stoic',
+        energy: 1,
+        id: 'smallButStoic',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            defensey = 0.5 * defense
+            chain(
+                removeDebuff(unguarded,fatigue,debilitated,vulnerable,tired),
+                addBlock(defensey),
+                draw(1),
+                ),
+            `,
+        type: 'utility',
+        characterClass: 'frogKnight',
+    },
+    beVerySmall: {
+        name: 'Be Very Small',
+        energy: 0,
+        id: 'beVerySmall',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            setStance("avoidant"),
+            `,
+        type: 'utility',
+        characterClass: 'gnomeHooligan',
+    },
+    bellyFlop: {
+        name: 'Belly Flop',
+        energy: 1,
+        id: 'bellyFlop',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            defensey = 0.5 * defense
+            chain(
+                deal(defense),
+                addBlock(defensey),
+                ),
+            `,
+        type: 'attack',
+        characterClass: 'warhog',
+    },
+    screechOfTheBean: {
+        name: 'Screech of the B.E.A.N.',
+        energy: 1,
+        id: 'screechOfTheBean',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            strengthy = 0.5 * strength
+            deal(strengthy),
+            `,
+        type: 'attack',
+        characterClass: 'notoriousBean',
+    },
+    magicShield: {
+        name: 'Magic Shield',
+        energy: 1,
+        id: 'magicShield',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            defenseymagicy = 0.5 * defense + 0.75 * magic;
+            addBlock(defenseymagicy)
+        `,
+        type: 'defense',
+        characterClass: 'wizard',
+    },
+    huntedByTheBean: {
+        name: 'Hunted by the Bean',
+        energy: 1,
+        id: 'huntedByTheBean',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            chain(
+                effect(vulnerable,2),
+                effect(bleed,3),
+                momentary(),
+            )`,
+        type: 'utility',
+        characterClass: 'notoriousBean',
+    },
+    beanNeverMisses: {
+        name: 'B.E.A.N. Never Misses',
+        energy: 1,
+        id: 'beanNeverMisses',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = 1.25 * strength;
+            dealPiercing(strengthy)
+            `,
+        type: 'attack',
+        characterClass: 'notoriousBean',
+    },
+    hope: {
+        name: 'Hope',
+        energy: 0,
+        id: 'hope',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: `
+            chain(
+                addBlock(1),
+                draw(2),
+                momentary(),
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    songOfClarity: {
+        name: 'Song of Clarity',
+        energy: 1,
+        id: 'songOfClarity',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicky = 0.2 * magic;
+            chain(
+                removeAllDebuffs(),
+                heal(magicky),
+                effect(emboldened,1),
+                effect(guarded,1),
+                momentary(),
+            )`,
+        type: 'utility',
+        characterClass: 'bard',
+    },
+    dummyBomb: {
+        name: 'Dummy Bomb',
+        energy: -1,
+        id: 'dummyBomb',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            explain:"if this card is discarded, ",deal(strength),
+            onDiscard(deal(strength)),
+            `,
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    twistTheKnife: {
+        name: 'Twist The Knife',
+        energy: 1,
+        id: 'twistTheKnife',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = 1.25 * strength;
+            strengthx = 1.5 * strength;
+            ifHealth =< targetHealth * 0.5, deal(strengthx)
+            `,
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    retreatToTheShadows: {
+        name: 'Retreat to the Shadows',
+        energy: 0,
+        id: 'retreatToTheShadows',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            setStance("avoidant"),
+            `,
+        type: 'utility',
+        characterClass: 'rogue',
+    },
+    crimeAlwaysPays: {
+        name: 'Crime Always Pays',
+        energy: 1,
+        id: 'crimeAlwaysPays',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = 0.2 * strength;
+            deal(strengthy * handSize),
+            `,
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    declarationOfPeace: {
+        name: 'Declaration of Peace',
+        energy: 2,
+        id: 'declarationOfPeace',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            effect(debilitated,1),
+            addBlockToSelf(defense),
+            `,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    prayerOfGoodFortune: {
+        name: 'Prayer of Good Fortune',
+        energy: 2,
+        id: 'prayerOfGoodFortune',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            addBlock(incomingDamageIntended),
+            `,
+        type: 'defense',
+        characterClass: 'cleric',
+    },
+    prayerOfGoodHealth: {
+        name: 'Prayer of Good Health',
+        energy: 0,
+        id: 'prayerOfGoodHealth',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicy = 0.2 * magic;
+            heal(magicy);
+            `,
+        // brittle(3)
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    fellTheMighty: {
+        name: 'Fell the Mighty',
+        energy: 1,
+        id: 'fellTheMighty',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            healthy = targetMaxHealth * 0.33;
+            deal(healthy),
+            brittle(3),
+            `,
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    burnIncense: {
+        name: 'Burn Incesne',
+        energy: -1,
+        id: 'burnIncense',
+        targetNum: 1,
+        targetType: 'self',
+        on: {
+            discard: 'addEnergy(1)',
+        },
+        actions: `"if this card is discarded, gain 1 energy"`,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    retreat: {
+        name: 'Retreat',
+        energy: 1,
+        id: 'retreat',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `
+            chain(
+                addBlock(defense),
+                setStance("avoidant"),
+            )`,
+        type: 'defense',
+        characterClass: 'knight',
+    },
+    bigLunge: {
+        name: 'Big Lunge',
+        energy: 1,
+        id: 'bigLunge',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = 1.5 * strength;
+            chain(
+                deal(strengthy),
+                setStance("aggressive", "self")
+            )`,
+        type: 'attack',
+        characterClass: 'knight',
+    },
+    hammerThrow: {
+        name: 'Hammer Throw',
+        energy: 2,
+        id: 'hammerThrow',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            effect(stun,1),
+            `,
+        type: 'utility',
+        characterClass: 'knight',
+    },
+    killingBlow: {
+        name: 'Killing Blow',
+        energy: 2,
+        id: 'killingBlow',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = 2.2 * strength;
+            chain(
+                deal(strengthy),
+                ifKilled(addEnergy(1)),
+            )`,
+        type: 'attack',
+        characterClass: 'knight',
+    },
+    cleave: {
+        name: 'Cleave',
+        energy: 1,
+        id: 'cleave',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            strengthy = 0.6 * strength;
+            ifStance("aggressive", deal(strengthy))
+            `,
+        type: 'attack',
+        characterClass: 'knight',
+    },
+    whirlingBladesOfDeath: {
+        name: 'Whirling Blades of Death',
+        energy: 1,
+        id: 'whirlingBladesOfDeath',
+        targetNum: 1,
+        targetType: 'self',
+        // TODO: REFLECT
+        actions: `
+            strengthy = 0.4 * strength;
+            chain(
+                addBlock(defense),
+                effect("reflect", strengthy)
+            )`,
+        type: 'defense',
+        characterClass: 'knight',
     },
 }

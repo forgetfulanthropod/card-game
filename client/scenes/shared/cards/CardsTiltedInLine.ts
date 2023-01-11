@@ -1,8 +1,17 @@
 import 'pixi-projection'
 import type { Card } from 'shared'
-import { CardSprite } from './Card'
-import type { PixiContainer } from '@/elementsUtil'
+import { CardEl, CardSprite } from './Card'
+import {
+    Adjust,
+    PixiContainer,
+    PixiSprite,
+    portalize,
+    Sprite,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
+import { Texture } from 'pixi.js'
+import { nextFrame, nextTick } from '@/util'
 
 export function CardsTiltedInLine({
     cards,
@@ -28,20 +37,78 @@ export function CardsTiltedInLine({
     const leftMargin =
         (parentWidth - allCardsWidth) / 2 + bgPaddingPortion * parentWidth
 
-    const cardEls = cards.map((cardMeta, index) => {
+    const cardsSortedByEnergyCost = cards.sort((cardA, cardB) => {
+        return cardB.energy - cardA.energy
+    })
+
+    let fullSizeCard: TweenablePixiContainer | null
+    let hoveringCardDetails = false
+
+    const cardEls = cardsSortedByEnergyCost.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
+        sprite.interactive = false
         sprite.scale.x = -tiltFactor
+
+        const clearOldFullSizeCard = () => {
+            hoveringCardDetails = false
+
+            fullSizeCard && root.removeChild(fullSizeCard)
+
+            fullSizeCard?.destroy()
+            fullSizeCard?.children?.pop()?.destroy()
+
+            fullSizeCard = null
+        }
 
         const c = Container(
             {
                 x: (cards.length - 1 - index) * spaceBetween + leftMargin,
                 y: parentWidth * bgPaddingPortion,
+                events: {
+                    pointerover: () => {
+                        clearOldFullSizeCard()
+
+                        const cardWidth = 400
+                        fullSizeCard = Adjust(
+                            CardEl({
+                                card: cardMeta,
+                                width: cardWidth,
+                                showTermExplanations: true,
+                            }),
+                            {
+                                name: 'FULL SIZE CARD',
+                                x: c.x - cardWidth * 0.38,
+                                y: c.y - cardWidth * 0.2,
+                            }
+                        )
+
+                        fullSizeCard.children.forEach(
+                            c => (c.interactive = false)
+                        )
+
+                        // fullSizeCard.interactive = true
+                        // fullSizeCard.on(
+                        //     'pointerover',
+                        //     () => (hoveringCardDetails = true)
+                        // )
+                        // fullSizeCard.on('pointerout', () =>
+                        //     clearOldFullSizeCard()
+                        // )
+
+                        root.addChild(fullSizeCard)
+                    },
+                    pointerout: async () => {
+                        // await nextTick()
+
+                        // if (hoveringCardDetails) return
+
+                        clearOldFullSizeCard()
+                    },
+                },
             },
             sprite
         )
-
-        c.addChild(sprite)
 
         //@ts-expect-error
         c.convertTo2d()
@@ -54,6 +121,52 @@ export function CardsTiltedInLine({
 
         return c
     })
+
+    // const cardInteractionOverlays = cardsSortedByEnergyCost.map(
+    //     (cardMeta, index) => {
+    //         // const cardSprite = CardSprite({ card: cardMeta, width: cardWidth })
+    //         let fullSizeCard: PixiSprite | null
+
+    //         return Container(
+    //             {
+    //                 name: 'card interaction overlay?',
+    //                 x: cardEls[index].x,
+    //                 y: cardEls[index].y,
+    //             },
+    //             Sprite({
+    //                 src: Texture.EMPTY,
+    //                 width: 45,
+    //                 height: 90,
+    //                 events: {
+    //                     pointerover() {
+    //                         fullSizeCard = Adjust(
+    //                             CardSprite({
+    //                                 card: cardMeta,
+    //                                 width: 300,
+    //                             }),
+    //                             {
+    //                                 name: 'FULL SIZE CARD',
+    //                                 x: cardEls[index].x,
+    //                                 y: cardEls[index].y,
+    //                                 anchor: [1, 0.5],
+    //                             }
+    //                         )
+    //                         // console.log('pointer over', { fullSizeCard })
+    //                         root.addChild(fullSizeCard)
+    //                     },
+    //                     pointerout() {
+    //                         // console.log('pointer out')
+    //                         fullSizeCard && root.removeChild(fullSizeCard)
+
+    //                         fullSizeCard?.destroy()
+
+    //                         fullSizeCard = null
+    //                     },
+    //                 },
+    //             })
+    //         )
+    //     }
+    // )
 
     const bgWidth = parentWidth * (1 + bgPaddingPortion * 2)
     const bgHeight = cardWidth * 1.4 + parentWidth * bgPaddingPortion * 2
@@ -75,7 +188,8 @@ export function CardsTiltedInLine({
             },
         }),
         ...cardEls
+        // ...cardInteractionOverlays
     )
-    root.cacheAsBitmap = true
+
     return root
 }

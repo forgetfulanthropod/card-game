@@ -19,6 +19,7 @@ import type {
     Card,
     ModifiableStatName,
     StatModifierExpiration,
+    TargetType,
 } from 'shared'
 
 export type { Value as VAngu } from 'angu'
@@ -69,6 +70,8 @@ export interface ActionArgs {
     momentary: []
     orb: [type: OrbType, count: number]
     queue: [numTurns: number, move: any]
+    removeAllDebuffs: [targetType?: TargetType]
+    setStance: [stance: StanceId, targetType?: TargetType]
     smite: [damage: number, block: number]
     text: [str: string]
 
