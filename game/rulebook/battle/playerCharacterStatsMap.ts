@@ -125,7 +125,7 @@ export const playerCharacterStatsMap: Record<
 
         constitution: 86,
         strength: 19,
-        magic: 8 + 1,
+        magic: 14,
         defense: 5 + 1,
     },
     lichLord: {
