@@ -2,7 +2,15 @@ import type { ColorStop } from '@pixi-essentials/gradients'
 import { Tweener } from 'pixi-tweener'
 import type { DisplayObject, InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type { Card, CardType, CardUid, CharacterUid, TargetType } from 'shared'
+import type {
+    Card,
+    CardType,
+    CardUid,
+    CharacterMeta,
+    CharacterUid,
+    OwnedCharacterStats,
+    TargetType,
+} from 'shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
@@ -15,7 +23,7 @@ import {
 } from '../Explanation'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
-import { hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid, nextFrame, nextTick } from '@/util'
 import {
     InteractionEventHandler,
     InteractionEvents,
@@ -40,7 +48,7 @@ import {
     Text,
     TweenableContainer,
 } from '@/elementsUtil'
-import { getBattleScene } from '@/data'
+import { getBattleScene, getEntryScene } from '@/data'
 import { callApi } from '@/callApi'
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 
@@ -58,6 +66,10 @@ export function CardEl({
     hoveredCardUid,
     events,
     omitPointerAreaExtender,
+    showTermExplanations,
+    explanationsOnLeft,
+    explanationsAdjustX,
+    explanationsAdjustY,
 }: {
     rotation?: number
     width: number
@@ -65,10 +77,15 @@ export function CardEl({
     hoveredCardUid?: Datum<CharacterUid | null>
     events?: InteractionEvents
     omitPointerAreaExtender?: boolean
+    showTermExplanations?: boolean
+    explanationsOnLeft?: boolean
+    explanationsAdjustX?: number
+    explanationsAdjustY?: number
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
-    if (card.type == null) return TweenableContainer({}, TweenableContainer({}))
+    if (card.type == null || cardFrameTexture.baseTexture == null)
+        return TweenableContainer({}, TweenableContainer({}))
 
     // console.log({ cardType: card.type, cardFrameTexture })
 
@@ -90,7 +107,7 @@ export function CardEl({
         cardArtTexture = getTexture('cardArtPlaceholder')
     }
 
-    const isLongHovered = datum(false)
+    const isLongHovered = datum(showTermExplanations ?? false)
     const decoratedEvents: InteractionEvents = getDecoratedEvents({
         events,
         hoveredCardUid,
@@ -98,16 +115,25 @@ export function CardEl({
         card,
     })
 
+    const termExplanationsForCard = TermExplanationsForCard(
+        card.explanation,
+        width,
+        isLongHovered
+    )
+
     const root = TweenableContainer(
         {
             name: card.uid,
-            onDestroy: !hoveredCardUid
-                ? []
-                : [
-                      hoveredCardUid.onChange(uid => {
-                          if (uid !== card.uid) isLongHovered.set(false)
-                      }),
-                  ],
+            onDestroy: [
+                ...(!hoveredCardUid
+                    ? []
+                    : [
+                          hoveredCardUid.onChange(uid => {
+                              if (uid !== card.uid) isLongHovered.set(false)
+                          }),
+                      ]),
+                () => termExplanationsForCard.destroy(true),
+            ],
             // cache: true, // doesn't update...
         },
         TweenableContainer(
@@ -145,7 +171,13 @@ export function CardEl({
                       ),
                   ])
         ),
-        TermExplanationsForCard(card.explanation, width, isLongHovered)
+        Adjust(termExplanationsForCard, {
+            x:
+                (explanationsOnLeft
+                    ? -termExplanationsForCard.width - width
+                    : 0) + (explanationsAdjustX ?? 0),
+            y: explanationsAdjustY ?? 0,
+        })
     )
 
     return root
@@ -199,7 +231,7 @@ function TermExplanationsForCard(
     explanation: string,
     width: number,
     isLongHovered: Datum<boolean>
-): DisplayObject {
+): PixiContainer {
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
         .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
@@ -222,7 +254,7 @@ export function CardSprite({
     card,
     hoveredCardUid,
     events,
-    omitPointerAreaExtender,
+    omitPointerAreaExtender = true,
 }: {
     rotation?: number
     width: number
@@ -239,9 +271,10 @@ export function CardSprite({
         events,
         omitPointerAreaExtender,
     })
-    const src = getRenderer().generateTexture(el)
-    // nextTick().then(() => el.destroy(true))
-    return Sprite({ src, onDestroy: [() => el.destroy(true)] })
+
+    nextTick().then(() => el.destroy())
+    // nextTick().then(() => el.destroy(true)) //somehow this deletes the basetextures within the card textures???
+    return Sprite({ src: getRenderer().generateTexture(el) })
 }
 
 function PointerAreaExtender(width: number, height: number): PixiContainer {
@@ -272,7 +305,14 @@ function getEnergyContainer(card: Card): PixiContainer {
 }
 
 function getCardOwnerToken(card: Card): PixiContainer {
-    const cm = getBattleScene().get('allCharacters', card.characterUid)
+    let cm: OwnedCharacterStats
+    try {
+        cm = getBattleScene().get('allCharacters', card.characterUid)
+    } catch {
+        cm = getEntryScene()
+            .get('selectedCharacters')
+            .find(c => c?.uid === card.characterUid)!
+    }
 
     const src = getTexture(`cardOwnerToken${upperFirst(cm.id)}` as AssetKey)
 

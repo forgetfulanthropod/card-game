@@ -58,7 +58,7 @@ export type PlayerCharacterId =
     | 'lichLord'
     | 'matchaGelatinCube'
     | 'mushroomFarmer'
-    | 'notoriousBEAN'
+    | 'notoriousBean'
     | 'orcWarrior'
     | 'penguinKnight'
     | 'skeletonWarrior'

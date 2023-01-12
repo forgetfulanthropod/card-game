@@ -100,6 +100,8 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
 
     //@ts-expect-error
     latestLoopingSong = sound?.sound
+    // @ts-expect-error
+    if (latestLoopingSong) latestLoopingSong.volume = 0.5
 
     if (muteMusic) {
         //@ts-expect-error
@@ -109,7 +111,7 @@ export function loopSong(songId: MusicAssetKey, loop = true): boolean {
         latestLoopingSong?.play?.({ loop })
     }
 
-    return true
+    return !!latestLoopingSong
 }
 
 export function playSound(soundEffectId: SoundEffectAssetKey): void {

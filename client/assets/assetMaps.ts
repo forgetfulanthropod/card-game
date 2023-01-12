@@ -125,7 +125,7 @@ export const cardAssets = {
 //     matchaGelatinCube: 'gen0_cards/matcha_gelatin_cube-200.webp',
 //     mimic: 'gen0_cards/mimic-200.webp',
 //     mushroomFarmer: 'gen0_cards/Mushroom_Farmer2-200.webp',
-//     notoriousBEAN: 'chars/NotoriousBEAN200.webp',
+//     notoriousBean: 'chars/NotoriousBEAN200.webp',
 //     orcWarrior: 'chars/orcWarrior-200.webp',
 //     penguinKnight: 'gen0_cards/PenguinKnight-200.webp',
 //     skeletonWarrior: 'chars/Skeleton_Warrior_sprite-200.webp',
@@ -153,20 +153,20 @@ export const characterStatusAssets = {
 export const effectAssets: {
     [K in VisibleEffect as `effect${Capitalize<K>}`]: string
 } = {
-    effectBerserk: 'effects/berserk.webp',
-    effectBleed: 'effects/bleed.webp',
-    effectBrave: 'effects/brave.webp',
-    effectCourageous: 'effects/courageous.webp',
-    effectDebilitated: 'effects/debilitated.webp',
-    effectFatigued: 'effects/fatigue.webp',
-    effectStrongblock: 'effects/strongblock.webp',
-    effectEntranced: 'effects/magicalStorm.webp',
-    effectPoisoned: 'effects/poison_skull.webp',
-    effectStunned: 'effects/stunned.webp',
-    effectTired: 'effects/tired.webp',
-    effectUnguarded: 'effects/unguarded.webp',
-    effectUnready: 'effects/unready.webp',
-    effectVulnerable: 'effects/vulnerable.webp',
+    effectBerserkBuff: 'effects/berserk.webp',
+    effectBleedDebuff: 'effects/bleed.webp',
+    effectBraveBuff: 'effects/brave.webp',
+    effectCourageousBuff: 'effects/courageous.webp',
+    effectDebilitatedDebuff: 'effects/debilitated.webp',
+    effectFatiguedDebuff: 'effects/fatigue.webp',
+    effectStrongblockBuff: 'effects/strongblock.webp',
+    effectEntrancedBuff: 'effects/magicalStorm.webp',
+    effectPoisonedDebuff: 'effects/poison_skull.webp',
+    effectStunnedDebuff: 'effects/stunned.webp',
+    effectTiredDebuff: 'effects/tired.webp',
+    effectUnguardedDebuff: 'effects/unguarded.webp',
+    effectUnreadyDebuff: 'effects/unready.webp',
+    effectVulnerableDebuff: 'effects/vulnerable.webp',
 }
 
 export const healthBarAssets = {

@@ -21,8 +21,8 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
                 [uid]: {
                     ...c,
                     uid,
-                    tokenId: j.toString(),
-                    nftName: uid,
+                    // tokenId: j.toString(),
+                    // nftName: uid,
                     isPc: true,
                 },
             }

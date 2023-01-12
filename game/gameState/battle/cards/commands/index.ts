@@ -5,6 +5,7 @@ import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
 import {explain as explainBellyFlop, execute as executeBellyFlop} from './bellyFlop'
+import {explain as explainBrittle, execute as executeBrittle} from './brittle'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
@@ -15,10 +16,12 @@ import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainEffectAll, execute as executeEffectAll} from './effectAll'
+import {explain as explainExplain, execute as executeExplain} from './explain'
 import {explain as explainHeal, execute as executeHeal} from './heal'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfDamageDealtApplyEffect, execute as executeIfDamageDealtApplyEffect} from './ifDamageDealtApplyEffect'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
+import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
@@ -28,7 +31,9 @@ import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
 import {explain as explainPsychicWarfare, execute as executePsychicWarfare} from './psychicWarfare'
 import {explain as explainQueue, execute as executeQueue} from './queue'
+import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} from './removeAllDebuffs'
 import {explain as explainRequire, execute as executeRequire} from './require'
+import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
 // @endindex
@@ -41,6 +46,7 @@ export const explainers: Explainers = {
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
     bellyFlop: explainBellyFlop,
+    brittle: explainBrittle,
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
@@ -51,10 +57,12 @@ export const explainers: Explainers = {
     dwindle: explainDwindle,
     effect: explainEffect,
     effectAll: explainEffectAll,
+    explain: explainExplain,
     heal: explainHeal,
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
+    ifKilled: explainIfKilled,
     ifStance: explainIfStance,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
@@ -64,7 +72,9 @@ export const explainers: Explainers = {
     orbOfHolyLight: explainOrbOfHolyLight,
     psychicWarfare: explainPsychicWarfare,
     queue: explainQueue,
+    removeAllDebuffs: explainRemoveAllDebuffs,
     require: explainRequire,
+    setStance: explainSetStance,
     smite: explainSmite,
     text: explainText,
     // @endindex
@@ -77,6 +87,7 @@ export const executors: Executors = {
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
     bellyFlop: executeBellyFlop,
+    brittle: executeBrittle,
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
@@ -87,10 +98,12 @@ export const executors: Executors = {
     dwindle: executeDwindle,
     effect: executeEffect,
     effectAll: executeEffectAll,
+    explain: executeExplain,
     heal: executeHeal,
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
+    ifKilled: executeIfKilled,
     ifStance: executeIfStance,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
@@ -100,7 +113,9 @@ export const executors: Executors = {
     orbOfHolyLight: executeOrbOfHolyLight,
     psychicWarfare: executePsychicWarfare,
     queue: executeQueue,
+    removeAllDebuffs: executeRemoveAllDebuffs,
     require: executeRequire,
+    setStance: executeSetStance,
     smite: executeSmite,
     text: executeText,
     // @endindex

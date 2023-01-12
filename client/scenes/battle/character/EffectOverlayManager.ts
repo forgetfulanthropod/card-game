@@ -71,15 +71,15 @@ export function getAnimationsFrom(
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
     if ((changes?.health ?? 0) > 0)
         animations.push(GainHealthAnimation(characterMeta.isPc))
-    if (changes.effects?.find(e => e.id === 'bleed'))
+    if (changes.effects?.find(e => e.id === 'bleedDebuff'))
         animations.push(BleedOverlayAnimation(characterMeta.isPc))
-    if (changes.effects?.find(e => e.id === 'poisoned'))
+    if (changes.effects?.find(e => e.id === 'poisonedDebuff'))
         animations.push(PoisonOverlayAnimation(characterMeta.isPc))
     if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
     }
     if ((changes.block ?? 0) < 0) {
-        if (changes.health ?? 0 >= 0)
+        if (characterMeta.block > 0)
             animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
         else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))
     }

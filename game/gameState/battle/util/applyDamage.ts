@@ -163,7 +163,7 @@ function maybeApplyDamageThresholdDebuffs(
                 health: 0.6,
                 effects: [
                     {
-                        id: 'debilitated',
+                        id: 'debilitatedDebuff',
                         counter: 2,
                     },
                 ],
@@ -172,7 +172,7 @@ function maybeApplyDamageThresholdDebuffs(
                 health: 0.4,
                 effects: [
                     {
-                        id: 'stunned',
+                        id: 'stunnedDebuff',
                         counter: 1,
                     },
                 ],

@@ -17,6 +17,7 @@ import {
     getLivingNpcUids,
     getLivingPcUids,
 } from '../../characters/characterGetters'
+import { getTargetText } from './util/getTargetText'
 import {
     ActionArgs,
     Anguify,
@@ -33,20 +34,6 @@ export const explain: Explainers['modifyStats'] = dslArgs => {
         .map((_, i) => getStatModHtml(statNames[i], addends[i]))
         .join(' and ')}
     until end of ${expiration}`
-}
-
-function getTargetText(targetType: BasicTargetType | undefined) {
-    return ` ${
-        targetType == null
-            ? 'target'
-            : targetType === 'allFriends'
-            ? 'all friendly'
-            : targetType === 'allEnemies'
-            ? 'all enemy'
-            : targetType === 'enemies'
-            ? 'target'
-            : ''
-    } Kaiju`
 }
 
 function getStatModHtml(statName: ModifiableStatName, addend: number) {
@@ -94,8 +81,10 @@ function getLocals(
 ] {
     const [statNamesString, addendsString, expiration, targetType] =
         evalAll(dslArgs)
-    const statNames = statNamesString.split('|') as ModifiableStatName[]
-    const addends = addendsString.split('|').map(a => parseInt(a))
+    const statNames = String(statNamesString).split('|') as ModifiableStatName[]
+    const addends = String(addendsString)
+        .split('|')
+        .map(a => parseInt(a))
 
     return [statNames, addends, expiration, targetType]
 }

@@ -83,12 +83,22 @@ export function NewStartScreen(props: {
     const handlePlayButtonClick = () => {
         if (!userDoc) {
             console.warn('No User Doc')
+
+            if (!WALLET_GATED) {
+                const walletAddress = Math.random().toString()
+                setUserDoc({
+                    walletAddress,
+                    numKaijusOwned: 1,
+                    userId: `anonymous-${walletAddress}`,
+                })
+            }
+
             return
-        }
-        else if (!GAME_IS_LIVE) {
+        } else if (!GAME_IS_LIVE) {
+            console.warn('Game is not live!')
             return setShowClosedGameModal(true)
-        }
-        else if (WALLET_GATED) {
+        } else if (WALLET_GATED) {
+            console.log('showing wallet gate')
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
 

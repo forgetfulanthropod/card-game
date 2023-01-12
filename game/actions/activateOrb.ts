@@ -63,13 +63,13 @@ const orbActivators: Record<
         applyEffect(
             scene,
             getLivingPcs(scene.get()).map(c => c.uid),
-            'strongblock',
+            'strongblockBuff',
             1
         )
         applyEffect(
             scene,
             getLivingNpcs(scene.get()).map(c => c.uid),
-            'tired',
+            'tiredDebuff',
             1
         )
 

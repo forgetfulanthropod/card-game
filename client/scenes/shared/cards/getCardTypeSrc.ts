@@ -7,7 +7,6 @@ import type { PixiTexture } from '@/elementsUtil'
 export function getCardTypeTexture(cardType: CardType): PixiTexture {
     const assetId = `cardType${startCase(cardType)}` as CardTypeAssetId
 
-    //eslint-disable-next-line
     return getTexture(assetId)!
 }
 

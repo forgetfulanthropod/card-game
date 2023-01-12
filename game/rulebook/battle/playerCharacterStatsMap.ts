@@ -161,8 +161,8 @@ export const playerCharacterStatsMap: Record<
         magic: 9,
         defense: 6,
     },
-    notoriousBEAN: {
-        id: 'notoriousBEAN',
+    notoriousBean: {
+        id: 'notoriousBean',
         displayName: 'Notorious B.E.A.N',
         isPc: true,
         class: 'knight',
