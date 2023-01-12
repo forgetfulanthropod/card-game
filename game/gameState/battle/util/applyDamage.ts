@@ -11,6 +11,7 @@ import { updateNpcMoves } from '@/gameState'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
 import { applyEffect } from '../cards/commands/effect'
+import { updateScore } from '@/gameState'
 
 export function applyDamage(args: {
     damage: number
@@ -76,24 +77,39 @@ function manageSideEffectsOfNewDamage(
     targetUid: CharacterUid,
     calcedDamage: number
 ) {
-    if (didTargetDie(scene, targetUid)) clearDead(scene)
+    if (didTargetDie(scene, targetUid)) {
+        clearDead(scene)
 
-    scene.apply('damagesDealtThisTurn', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+        applyKillScores(scene, targetUid)
+    }
 
-    scene.apply('damagesDealtThisRoom', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
 
     if (damageChangesEnemyIntent(scene)) {
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)
     }
 
-    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
+    recordDamage(scene, calcedDamage, targetUid)
+}
+
+function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
+    const remainingHealth = scene.select('allCharacters').get(targetUid).health
+    if (remainingHealth === 0) {
+        updateScore({
+            scene,
+            event: 'PERFECT_KILL',
+            count: 1,
+            notify: true,
+        })
+    } else {
+        updateScore({
+            scene,
+            event: 'OVERKILL',
+            count: -remainingHealth,
+            notify: true,
+        })
+    }
 }
 
 function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {
@@ -182,4 +198,20 @@ function maybeApplyDamageThresholdDebuffs(
 
         updateNpcMoves(scene)
     }
+}
+
+function recordDamage(
+    scene: BattleCursor,
+    calcedDamage: number,
+    targetUid: CharacterUid
+) {
+    scene.apply('damagesDealtThisTurn', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
+
+    scene.apply('damagesDealtThisRoom', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
 }

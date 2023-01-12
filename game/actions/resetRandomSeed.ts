@@ -4,4 +4,4 @@ import type { GameActions } from 'shared'
 import { setGlobalRandomSeed } from '@/config/seedrand'
 
 export const resetRandomSeed: GameActions['resetRandomSeed'] = () =>
-    setGlobalRandomSeed('seedOne')
+    setGlobalRandomSeed('seedTwo')

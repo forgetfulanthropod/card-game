@@ -63,8 +63,9 @@ export function makeBattleState(args: {
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
+        runScoreUpdate: null,
         runDuration: getInitialRunDuration(),
-        runId: null
+        runId: null,
     }
     return bs
 }

@@ -43,26 +43,26 @@ export function CharacterOptions() {
             {
                 x: 78 + (index % 2) * (width + margin),
                 y: 54 + Math.floor(index / 2) * (width + margin),
-                // events: {
-                //     pointerup() {
-                //         chooseOwnedCharacterAt(
-                //             index,
-                //             selectedCharacterPlaceIndex.val
-                //         )
+                events: {
+                    pointerup() {
+                        chooseOwnedCharacterAt(
+                            index,
+                            selectedCharacterPlaceIndex.val
+                        )
 
-                //         setTimeout(() => {
-                //             if (
-                //                 getEntryScene()
-                //                     .get('selectedCharacters')
-                //                     .filter(c => c != null).length < 3
-                //             )
-                //                 selectedCharacterPlaceIndex.set(
-                //                     ((selectedCharacterPlaceIndex.val + 1) %
-                //                         3) as CharacterPlaceIndex
-                //                 )
-                //         }, 100)
-                //     },
-                // },
+                        setTimeout(() => {
+                            if (
+                                getEntryScene()
+                                    .get('selectedCharacters')
+                                    .filter(c => c != null).length < 3
+                            )
+                                selectedCharacterPlaceIndex.set(
+                                    ((selectedCharacterPlaceIndex.val + 1) %
+                                        3) as CharacterPlaceIndex
+                                )
+                        }, 100)
+                    },
+                },
             },
             Adjust(
                 RoundedBordered(
@@ -77,7 +77,7 @@ export function CharacterOptions() {
                     }
                 ),
                 {
-                    filters: isSelected ? [] : [grayScaleFilter],
+                    // filters: isSelected ? [] : [grayScaleFilter],
                 }
             )
         )
@@ -138,7 +138,7 @@ function chooseOwnedCharacterAt(
 }
 
 export async function composeDefaultParty() {
-    const defaultCharacterOptionsIndices = [6, 5, 0]
+    const defaultCharacterOptionsIndices = [7, 1, 2]
     void callApi('placeSelectedCharacters', {
         characters: range(0, 3).map(placeIndex => ({
             allCharacterOptionsIndex:

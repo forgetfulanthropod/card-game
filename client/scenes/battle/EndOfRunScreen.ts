@@ -1,4 +1,8 @@
-import { handleScoringEvent, InfoBox, ModalBackdrop } from '@sharedElements'
+import {
+    depricatedScoreUpdateFromClient,
+    InfoBox,
+    ModalBackdrop,
+} from '@sharedElements'
 import {
     getStage,
     loopSong,
@@ -257,6 +261,47 @@ export function EndOfRunScreen(): PixiContainer {
         TotalScoreTitle,
         TotalScore
     )
+
+    // Runs text animations synchronously
+    ;(async () => {
+        const screenHasNotOpened = scene.get('endScreenHasOpened') === false
+        const isVictory = scene.get('state') === 'won'
+
+        // below condition will only be met once (even after refresh)
+        if (screenHasNotOpened) {
+            gtag('event', 'level_end', {
+                room_number: scene.get('numRoomsPassed'), // no +1 bc it should already be updated
+                room_id: scene.get('currentRoom').uid,
+                room_tier: scene.get('currentRoom').category,
+                run_id: scene.get('runId'),
+            })
+
+            gtag('event', 'run_end', {
+                map_seed: 1,
+                run_id: scene.get('runId'),
+            })
+
+            if (isVictory) {
+                depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
+                callApi('openEndScreen', {})
+            }
+
+            const { runId } = await callServerApi('endRun', {
+                userId: scene.get('username'),
+            })
+            if (runId === null) {
+                console.warn('Tried to end run but runId was null')
+            }
+        }
+
+        await animateNumberInElement(
+            TotalScore,
+            'points',
+            scene.select('runScore').get('totalScore'),
+            'normal'
+        )
+        callApi('openEndScreen', {})
+    })()
 
     const tryAgainButton = Sprite({
         src: getTexture('tryAgainButton'),

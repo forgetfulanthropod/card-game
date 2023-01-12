@@ -1,6 +1,6 @@
 import { pick } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { CardUid, CharacterUid, Pile } from 'shared'
+import type { Card, CardUid, CharacterUid, Pile } from 'shared'
 import { assertFinite, keys, vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { CardEl } from './Card'
@@ -20,12 +20,11 @@ import type {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 
-const CARD_H_TO_W_RATIO = 630 / 450
-const CARD_WIDTH_IN_HAND = 220
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
-const CARD_WIDTH_FULL = 320
+const CARD_WIDTH = 260
+const CARD_WIDTH_FULL = 450
+const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
-const CARD_WIDTH = 270
 
 export function Hand(
     pile: Pile,
@@ -34,7 +33,7 @@ export function Hand(
     const total = keys(pile).length
 
     const children = vals(pile).map((card, index) => {
-        const { x, y, rotation } = getXYRotationForNthCard(index + 1, total)
+        const { x, y, rotation } = getXYRotationForCard(card, pile)
         return Adjust(
             CardEl({
                 rotation,
@@ -45,6 +44,9 @@ export function Hand(
             { x, y }
         )
     })
+
+    lastCardOwnerUidDealt = null
+    accumulatedGap = 0
 
     const root = Container(
         {
@@ -141,9 +143,7 @@ function getFocus(
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
             y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.6,
-            scale:
-                (CARD_WIDTH_FULL / CARD_WIDTH_IN_HAND) *
-                initialDisplayVal.scale,
+            scale: (CARD_WIDTH_FULL / CARD_WIDTH) * initialDisplayVal.scale,
         })
     }
 }
@@ -246,37 +246,51 @@ export function animateTo(
 }
 type XYRotation = { x: number; y: number; rotation: number }
 
-function getXYRotationForNthCard(
-    n: number,
-    numCardsInHand: number
+let lastCardOwnerUidDealt: CharacterUid | null
+let accumulatedGap: number = 0
+
+function getXYRotationForCard(
+    card: Card,
+    pile: Pile
+    // n: number,
+    // numCardsInHand: number
 ): XYRotation {
-    // circular imports require defining constants here
     const RIGHT_TO_LEFT = 1
     const MAX_HAND_WIDTH = BASE_WIDTH * 0.4
-    const MAX_HAND_SIZE = 12
+    const Y_OFFSET = BASE_HEIGHT * 0.21
+
     // const MAX_CARD_ROTATION = Math.PI * 0.1
-    const Y_MAX_OFFSET = BASE_HEIGHT * 0.22
-    const Y_MIN_OFFSET = BASE_HEIGHT * 0.2
+    // const Y_MAX_OFFSET = BASE_HEIGHT * 0.22
+    // const Y_MIN_OFFSET = BASE_HEIGHT * 0.2
+
+    const n = keys(pile).indexOf(card.uid) + 1
+    const numCardsInHand = keys(pile).length
 
     if (n < 1 || n > numCardsInHand)
         throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
 
     const handWidth = Math.min(
-        (numCardsInHand - 1) * CARD_WIDTH * 0.9,
+        (numCardsInHand - 1) * CARD_WIDTH * 0.77,
         MAX_HAND_WIDTH
     )
 
-    const xPlacementPortion =
+    let xPlacementPortion =
         RIGHT_TO_LEFT * 1 - (2 * (n - 1)) / Math.max(numCardsInHand - 1, 1) // -1 -> 1
 
-    // const endCardRotation =
-    //     ((numCardsInHand - 1) / (MAX_HAND_SIZE - 1)) * MAX_CARD_ROTATION
+    const owningCharacterSwitchGap =
+        lastCardOwnerUidDealt != null &&
+        lastCardOwnerUidDealt != card.characterUid
+            ? (accumulatedGap += CARD_WIDTH * 0.25)
+            : accumulatedGap
+
+    lastCardOwnerUidDealt = card.characterUid
 
     return assertFinite({
-        x: handWidth * 0.5 * xPlacementPortion,
-        y:
-            -Y_MIN_OFFSET -
-            (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
+        x: handWidth * 0.5 * xPlacementPortion - owningCharacterSwitchGap,
+        y: -Y_OFFSET,
+        // y:
+        //     -Y_MIN_OFFSET -
+        //     (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
         // rotation: xPlacementPortion * endCardRotation,
         rotation: 0,
     })

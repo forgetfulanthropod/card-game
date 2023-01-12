@@ -12,8 +12,10 @@ import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['effect'] = dslArgs => {
-    const [id, increase] = evalAllAsHtml(dslArgs)
-    return `+${increase} <b>${startCase(id)}</b>`
+    const [id, increase, targetType] = evalAllAsHtml(dslArgs)
+    return `+${increase} <b>${startCase(id)}</b>${
+        targetType ? ' to ' + startCase(targetType).toLowerCase() : ''
+    }`
 }
 
 export const execute: Executors['effect'] = ({
@@ -24,8 +26,6 @@ export const execute: Executors['effect'] = ({
 }) => {
     const [id, increase] = evalAll(dslArgs)
     const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
-
-    // logger.info(`adding effect ${id}`)
 
     applyEffect(scene, targetUids, id, increase)
 }
