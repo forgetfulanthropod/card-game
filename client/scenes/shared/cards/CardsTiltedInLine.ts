@@ -75,6 +75,9 @@ export function CardsTiltedInLine({
                                 card: cardMeta,
                                 width: cardWidth,
                                 showTermExplanations: true,
+                                explanationsOnLeft: true,
+                                explanationsAdjustX: -420,
+                                explanationsAdjustY: 200,
                             }),
                             {
                                 name: 'FULL SIZE CARD',

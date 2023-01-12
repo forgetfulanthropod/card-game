@@ -146,21 +146,23 @@ function portalizeExplanations(
     root: PixiContainer<DisplayObject>,
     content: PixiContainer[]
 ) {
-    nextTick().then(() => {
-        if (root == null || root.parent == null) return
+    nextFrame().then(() => {
+        nextFrame().then(() => {
+            if (root == null || root.parent == null) return
 
-        if (targetUidsWaitingForImpact.val.length) return
+            if (targetUidsWaitingForImpact.val.length) return
 
-        portalize({
-            from: root,
-            content: Container(
-                {
-                    x: root.getGlobalPosition().x,
-                    y: root.getGlobalPosition().y,
-                },
-                ...content
-            ),
-            nextFrame: true,
+            portalize({
+                from: root,
+                content: Container(
+                    {
+                        x: root.getGlobalPosition().x,
+                        y: root.getGlobalPosition().y,
+                    },
+                    ...content
+                ),
+                // nextFrame: true,
+            })
         })
     })
 
@@ -258,6 +260,8 @@ export function Explanation({
         }
     })
 
+    console.log({ textEls, texts })
+
     return InfoBox(
         Container(
             {},
@@ -267,9 +271,7 @@ export function Explanation({
                     (maxW, el) => Math.max(el.width, maxW),
                     0
                 ),
-                height:
-                    textEls.reduce((totalH, el) => totalH + el.height, 0) +
-                    margin * (textEls.length - 1),
+                height: textEls.reduce((totalH, el) => totalH + el.height, 0),
             }),
             ...textEls
         ),

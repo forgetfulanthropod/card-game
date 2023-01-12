@@ -97,7 +97,7 @@ export function calculateStats(
     const stance = cm.stance ?? 'neutral'
 
     const stats: CalculatedCharacterStats = {
-        block: cm.block,
+        block: cm.block ?? 0,
         blockMultiplier: 1,
         constitution:
             cm.constitution + getStatModifierAddend(cm, 'constitution'),

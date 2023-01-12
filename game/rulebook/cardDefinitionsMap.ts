@@ -785,7 +785,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             magicy= 1.25 * magic;
-            ifStance("avoidant", dealFromStance("avoidant",magicy)),
+            ifStance("avoidant", dealFromStance("avoidant",magicy))
         `,
         type: 'attack',
         characterClass: 'wizard',
@@ -1099,14 +1099,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
     dummyBomb: {
         name: 'Dummy Bomb',
-        energy: -1,
+        energy: 9,
         id: 'dummyBomb',
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            explain:"if this card is discarded, ",deal(strength),
-            onDiscard(deal(strength)),
-            `,
+            explain("If this card is discarded, deal ", strength, " to all enemies")
+        `,
+        //TODO: implement
+        on: {
+            discard: 'deal(strength)',
+        },
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1116,11 +1119,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'twistTheKnife',
         targetNum: 1,
         targetType: 'enemies',
+        //TODO
         actions: `
             strengthy = 1.25 * strength;
             strengthx = 1.5 * strength;
-            ifHealth =< targetHealth * 0.5, deal(strengthx)
-            `,
+            ifHealth("=<", targetHealth * 0.5, deal(strengthx), deal(strengthy))
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1131,8 +1135,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'self',
         actions: `
-            setStance("avoidant"),
-            `,
+            setStance("avoidant")
+        `,
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -1144,8 +1148,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             strengthy = 0.2 * strength;
-            deal(strengthy * handSize),
-            `,
+            chain(
+                deal(strengthy * handSize),
+                explain("(hand size * ", strengthy, ")")
+            )
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1156,9 +1163,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            effect(debilitated,1),
-            addBlockToSelf(defense),
-            `,
+            chain(
+                effect("debilitated",1),
+                addBlockToSelf(defense)
+            )
+        `,
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -1169,8 +1178,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            addBlock(incomingDamageIntended),
-            `,
+            chain(
+                addBlock(incomingDamageIntended),
+                "(equal to damage intended for this Kaiju)"
+            )
+        `,
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -1182,8 +1194,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
             magicy = 0.2 * magic;
-            heal(magicy);
-            `,
+            heal(magicy)
+        `,
         // brittle(3)
         type: 'utility',
         characterClass: 'cleric',
@@ -1194,11 +1206,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'fellTheMighty',
         targetNum: 1,
         targetType: 'enemies',
+        // TODO: targetMaxHealth
+        // healthy = targetMaxHealth * 0.33;
         actions: `
-            healthy = targetMaxHealth * 0.33;
-            deal(healthy),
-            brittle(3),
-            `,
+            healthy = 0;
+            chain(
+                deal(healthy),
+                "(one third of target max health)",
+                brittle(3)
+            )
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1224,7 +1241,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 addBlock(defense),
-                setStance("avoidant"),
+                setStance("avoidant")
             )`,
         type: 'defense',
         characterClass: 'knight',
@@ -1251,8 +1268,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            effect(stun,1),
-            `,
+            effect("stun",1)
+        `,
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1264,9 +1281,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             strengthy = 2.2 * strength;
-            chain(
+            ifKilled(
                 deal(strengthy),
-                ifKilled(addEnergy(1)),
+                addEnergy(1)
             )`,
         type: 'attack',
         characterClass: 'knight',

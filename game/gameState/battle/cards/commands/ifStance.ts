@@ -4,7 +4,7 @@ import { evalAllAsHtml } from './util'
 
 export const explain: Explainers['ifStance'] = dslArgs => {
     const [stance, explanation] = evalAllAsHtml(dslArgs)
-    return `if in ${stance} stance:<br/>${explanation}`
+    return `if in ${stance} stance,<br/>${explanation}`
 }
 
 export const execute: Executors['ifStance'] = ({ dslArgs, scene, command }) => {

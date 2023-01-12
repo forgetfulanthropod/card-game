@@ -67,6 +67,9 @@ export function CardEl({
     events,
     omitPointerAreaExtender,
     showTermExplanations,
+    explanationsOnLeft,
+    explanationsAdjustX,
+    explanationsAdjustY,
 }: {
     rotation?: number
     width: number
@@ -75,6 +78,9 @@ export function CardEl({
     events?: InteractionEvents
     omitPointerAreaExtender?: boolean
     showTermExplanations?: boolean
+    explanationsOnLeft?: boolean
+    explanationsAdjustX?: number
+    explanationsAdjustY?: number
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -109,16 +115,25 @@ export function CardEl({
         card,
     })
 
+    const termExplanationsForCard = TermExplanationsForCard(
+        card.explanation,
+        width,
+        isLongHovered
+    )
+
     const root = TweenableContainer(
         {
             name: card.uid,
-            onDestroy: !hoveredCardUid
-                ? []
-                : [
-                      hoveredCardUid.onChange(uid => {
-                          if (uid !== card.uid) isLongHovered.set(false)
-                      }),
-                  ],
+            onDestroy: [
+                ...(!hoveredCardUid
+                    ? []
+                    : [
+                          hoveredCardUid.onChange(uid => {
+                              if (uid !== card.uid) isLongHovered.set(false)
+                          }),
+                      ]),
+                () => termExplanationsForCard.destroy(true),
+            ],
             // cache: true, // doesn't update...
         },
         TweenableContainer(
@@ -156,7 +171,13 @@ export function CardEl({
                       ),
                   ])
         ),
-        TermExplanationsForCard(card.explanation, width, isLongHovered)
+        Adjust(termExplanationsForCard, {
+            x:
+                (explanationsOnLeft
+                    ? -termExplanationsForCard.width - width
+                    : 0) + (explanationsAdjustX ?? 0),
+            y: explanationsAdjustY ?? 0,
+        })
     )
 
     return root
@@ -210,7 +231,7 @@ function TermExplanationsForCard(
     explanation: string,
     width: number,
     isLongHovered: Datum<boolean>
-): DisplayObject {
+): PixiContainer {
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
         .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
