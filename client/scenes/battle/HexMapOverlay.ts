@@ -38,7 +38,7 @@ import { ROCursor } from 'sbaobab'
 import { collectData } from '@/analytics/collectData'
 
 export function HexMapOverlay(): PixiContainer {
-    collectData('ui_ux_view', { page_title: 'Hex Map'})
+    collectData('ui_ux_view', { page_title: 'Hex Map' })
     hoveredCharacterUid.set(null)
     loopSong('hexMapMusicHooligansBluff')
 
@@ -71,7 +71,7 @@ export function HexMapOverlay(): PixiContainer {
                 x: BASE_WIDTH * 0.05,
                 y: BASE_HEIGHT * 0.75,
                 // TODO: zoomed panning
-                scale: 1.1,
+                scale: 1.05,
             },
             ...AllTiles()
         )
@@ -206,8 +206,8 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const root = Container(
         {
-            x: depth * displayWidth * 0.82,
-            y: displayWidth * 0.36 * yOffset,
+            x: depth * displayWidth * 0.78,
+            y: displayWidth * 0.34 * yOffset,
             filters,
             events: {
                 pointerdown() {

@@ -645,11 +645,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strenghtymagicy = 0.5 * strength + 0.5 * magic;
-            magicy = .35 * magic;
+            strengthymagicy = 0.5 * strength + 0.5 * magic;
+            magicy = 0.35 * magic;
             chain(
-                addBlock(strengthymagicy);
-                heal(magicy);
+                addBlock(strengthymagicy),
+                heal(magicy)
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -664,8 +664,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy1 = strength;
             strengthy2 = 0.75 * strength;
             chain(
-                modifyStats(strengthy1);
-                addBlock(strengthy2);
+                modifyStats(strengthy1),
+                addBlock(strengthy2)
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -680,8 +680,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy1 = strength;
             magicy2 = 0.75 * strength;
             chain(
-                modifyStats(magicy1);
-                addBlock(magicy2);
+                modifyStats(magicy1),
+                addBlock(magicy2)
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -1220,7 +1220,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         characterClass: 'rogue',
     },
     burnIncense: {
-        name: 'Burn Incesne',
+        name: 'Burn Incense',
         energy: -1,
         id: 'burnIncense',
         targetNum: 1,
@@ -1268,7 +1268,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            effect("stunned",1)
+            chain(
+                effect("stunned",1),
+                brittle(2)
+            )
         `,
         type: 'utility',
         characterClass: 'knight',
