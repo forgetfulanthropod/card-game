@@ -48,9 +48,11 @@ export function CardsTiltedInLine({
         (parentWidth - allCardsWidth) / 2 + bgPaddingPortion * parentWidth
 
     const cardsSorted = cards.sort((cardA, cardB) => {
+        //@ts-expect-error
         const energyA = characterClasses.includes(cardA.characterClass)
             ? cardA.energy
             : -99
+        //@ts-expect-error
         const energyB = characterClasses.includes(cardB.characterClass)
             ? cardB.energy
             : -99
