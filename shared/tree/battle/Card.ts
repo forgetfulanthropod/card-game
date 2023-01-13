@@ -144,6 +144,7 @@ export type CardId =
     | 'blockCleric'
     | 'blockRogue'
     | 'blockWizard'
+    | 'blockBard'
     | 'swordSlash'
     | 'parry'
     | 'berserk'

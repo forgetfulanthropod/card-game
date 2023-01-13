@@ -168,7 +168,7 @@ export const playerCharacterStatsMap: Record<
         class: 'bard',
 
         constitution: 75,
-        strength: 16,
+        strength: 12,
         magic: 7,
         defense: 5,
     },

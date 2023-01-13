@@ -277,6 +277,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'blockWizard',
         characterClass: 'wizard',
     },
+    blockBard: {
+        ...blockBase,
+        id: 'blockBard',
+        characterClass: 'bard',
+    },
     swordSlash: {
         name: 'Sword Slash',
         energy: 1,
