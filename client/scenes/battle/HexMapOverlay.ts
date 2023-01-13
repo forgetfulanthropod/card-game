@@ -249,7 +249,7 @@ function RestSiteContents(node: DungeonRoom): PixiSprite {
     const { choice } = getCurrentRoomAndChoiceFromNode(node)
 
     const root = Sprite({
-        scale: 150 / src.width,
+        scale: 100 / src.width,
         src: 'mapRestSite',
         anchor: 0.5,
         events: {},

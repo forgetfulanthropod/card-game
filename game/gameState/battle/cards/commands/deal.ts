@@ -3,9 +3,10 @@ import { evalAll, evalAllAsHtml, getOuterHtmlArr } from './util'
 
 import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
+import { upperFirst } from 'lodash'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
-    const [damageHtml, times] = evalAllAsHtml(dslArgs)
+    const [damageHtml, modifier] = evalAllAsHtml(dslArgs)
     const [damage] = evalAll(dslArgs)
 
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
@@ -22,9 +23,7 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
         explication += ' to target'
     }
 
-    if (times != null) {
-        explication += ` ${times} times`
-    }
+    if (modifier) explication += ` <b>${upperFirst(modifier)}</b>`
 
     return explication
 }
@@ -35,7 +34,7 @@ export const execute: Executors['deal'] = ({
     command,
     targetUids,
 }) => {
-    const [damage, _times] = evalAll(dslArgs)
+    const [damage, modifier] = evalAll(dslArgs)
     const expectedNumTargets = command.targetNum
     if (expectedNumTargets > -1 && expectedNumTargets !== targetUids.length) {
         logger.error(
@@ -50,6 +49,7 @@ export const execute: Executors['deal'] = ({
             targetUid,
             attackerUid: command.characterUid,
             scene,
+            piercing: modifier === 'piercing',
         })
     )
 }

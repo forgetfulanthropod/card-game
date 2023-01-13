@@ -168,8 +168,8 @@ export const playerCharacterStatsMap: Record<
         class: 'bard',
 
         constitution: 75,
-        strength: 14,
-        magic: 5,
+        strength: 16,
+        magic: 7,
         defense: 5,
     },
     orcWarrior: {

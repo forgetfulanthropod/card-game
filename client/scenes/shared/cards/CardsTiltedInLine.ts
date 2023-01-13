@@ -1,8 +1,9 @@
 import 'pixi-projection'
-import type { Card } from 'shared'
+import type { Card, CharacterClass } from 'shared'
 import { CardEl, CardSprite } from './Card'
 import {
     Adjust,
+    cardTypeAssets,
     PixiContainer,
     PixiSprite,
     portalize,
@@ -12,6 +13,15 @@ import {
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
 import { Texture } from 'pixi.js'
 import { nextFrame, nextTick } from '@/util'
+import { getBattleScene } from '@/data'
+
+const characterClasses: CharacterClass[] = [
+    'rogue',
+    'knight',
+    'wizard',
+    'bard',
+    'cleric',
+]
 
 export function CardsTiltedInLine({
     cards,
@@ -37,14 +47,21 @@ export function CardsTiltedInLine({
     const leftMargin =
         (parentWidth - allCardsWidth) / 2 + bgPaddingPortion * parentWidth
 
-    const cardsSortedByEnergyCost = cards.sort((cardA, cardB) => {
-        return cardB.energy - cardA.energy
+    const cardsSorted = cards.sort((cardA, cardB) => {
+        const energyA = characterClasses.includes(cardA.characterClass)
+            ? cardA.energy
+            : -99
+        const energyB = characterClasses.includes(cardB.characterClass)
+            ? cardB.energy
+            : -99
+
+        return energyB - energyA || (cardA.name > cardB.name ? 1 : -1)
     })
 
     let fullSizeCard: TweenablePixiContainer | null
     let hoveringCardDetails = false
 
-    const cardEls = cardsSortedByEnergyCost.map((cardMeta, index) => {
+    const cardEls = cardsSorted.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
         sprite.interactive = false

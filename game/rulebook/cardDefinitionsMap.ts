@@ -1021,9 +1021,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.5 * strength
-            deal(strengthy),
-            `,
+            strengthy = 0.5 * strength;
+            deal(strengthy)
+        `,
         type: 'attack',
         characterClass: 'notoriousBean',
     },
@@ -1048,10 +1048,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect(vulnerable,2),
-                effect(bleed,3),
-                momentary(),
-            )`,
+                effect("vulnerable",2),
+                effect("bleed",3),
+                momentary()
+            )
+        `,
         type: 'utility',
         characterClass: 'notoriousBean',
     },
@@ -1063,8 +1064,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             strengthy = 1.25 * strength;
-            dealPiercing(strengthy)
-            `,
+            deal(strengthy, "piercing")
+        `,
         type: 'attack',
         characterClass: 'notoriousBean',
     },

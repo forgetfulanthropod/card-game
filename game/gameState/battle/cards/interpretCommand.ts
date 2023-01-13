@@ -56,12 +56,13 @@ function localsFromCommand(
                   ?.health
             : undefined
 
-    const incomingDamageIntended = (scene as BattleCursor)
-        .get('nextNpcCommands')
-        ?.reduce(
-            (sum, command) => sum + command.outcome.damages[targetUids[0]],
-            0
-        )
+    const incomingDamageIntended =
+        (scene as BattleCursor)
+            .get('nextNpcCommands')
+            ?.reduce(
+                (sum, command) => sum + command.outcome.damages[targetUids[0]],
+                0
+            ) ?? 0
 
     const handSize = Object.keys(
         (scene as BattleCursor).get('cards', 'hand') ?? {}

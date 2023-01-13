@@ -54,7 +54,7 @@ export interface ActionArgs {
         targetType?: BasicTargetType
     ]
 
-    deal: [damage: number, times?: number]
+    deal: [damage: number, modifier?: 'piercing']
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     heal: [amount: number]

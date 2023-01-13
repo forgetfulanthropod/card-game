@@ -9,6 +9,7 @@ import type {
     Pile,
     OwnedCharacterStats,
     CharacterId,
+    CharacterMeta,
 } from 'shared'
 
 import { keys, mapToObj, vals } from 'shared/code'
@@ -81,7 +82,10 @@ function makeCards(scene: BattleCursor): Piles {
             // 'twistTheKnife',
             // 'flashbang'
         )
-        cardIds.push(getFirstCardIdForCharacterId(cm.id))
+
+        getFirstCardIdForCharacterId(cm.id) &&
+            cardIds.push(getFirstCardIdForCharacterId(cm.id))
+
         if (cm.class === 'wizard')
             cardIds.push(
                 ['orbOfLightning', 'orbOfFrost', 'zap'][
@@ -133,6 +137,7 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
     const characterIdToCardIdMap: Partial<Record<CharacterId, CardId>> = {
         frogKnight: 'charge',
         mushroomFarmer: 'helpingHand',
+        notoriousBean: 'beanNeverMisses',
         penguinKnight: 'parry',
         skeletonWarrior: 'swordSlash',
         matchaGelatinCube: 'shieldOfLight',
@@ -148,10 +153,11 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
 /**
  * random but not a basic starter...
  */
-export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
+export function getRandomCardIdForCharacter(cm: CharacterMeta): CardId {
     const idPool = keys(cardDefinitionsMap).filter(
         cardId =>
-            getCardClass(cardId) === characterClass &&
+            (getCardClass(cardId) === cm.class ||
+                getCardClass(cardId) === cm.id) &&
             !~cardId.indexOf('basicAttack') &&
             !~cardId.indexOf('strike') &&
             !~cardId.indexOf('block')
@@ -168,7 +174,9 @@ export function getFullDeckForCharacter(
     scene: EntryCursor
 ): Pile {
     const idPool = keys(cardDefinitionsMap).filter(
-        cardId => getCardClass(cardId) === character.class
+        cardId =>
+            getCardClass(cardId) === character.class ||
+            getCardClass(cardId) === character.id
     )
 
     const pile: Pile = {}

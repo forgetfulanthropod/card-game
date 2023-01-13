@@ -44,6 +44,7 @@ export const keyTermsMap = {
     fortified: 'receives 50% more block',
     guarded: 'receives 25% less damage',
     poisoned: '(unblockable) receives 1 damage per stack',
+    piercing: 'ignores block',
     strongblock: 'receives 50% more block',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 5 extra damage',

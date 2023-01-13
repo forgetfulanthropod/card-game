@@ -166,6 +166,7 @@ export const effectAssets: {
     effectFatiguedDebuff: 'effects/fatigue.webp',
     effectStrongblockBuff: 'effects/strongblock.webp',
     effectEntrancedBuff: 'effects/magicalStorm.webp',
+    effectGuardedBuff: 'effects/strongblock.webp',
     effectPoisonedDebuff: 'effects/poison_skull.webp',
     effectStunnedDebuff: 'effects/stunned.webp',
     effectTiredDebuff: 'effects/tired.webp',

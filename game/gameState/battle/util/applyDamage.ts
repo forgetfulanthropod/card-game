@@ -19,8 +19,9 @@ export function applyDamage(args: {
     attackerUid?: CharacterUid
     scene: BattleCursor
     attacker?: CharacterMeta
+    piercing?: boolean
 }): number {
-    const { damage, targetUid, scene, attackerUid, attacker } = args
+    const { damage, targetUid, scene, attackerUid, attacker, piercing } = args
     if (attacker == null && attackerUid == null) {
         throw new Error('must provide attacker or attackerUid')
     }
@@ -36,7 +37,12 @@ export function applyDamage(args: {
         damage,
     })
 
-    const unblockedDamage = applyCalcedDamage(scene, targetUid, calcedDamage)
+    const unblockedDamage = applyCalcedDamage({
+        scene,
+        targetUid,
+        calcedDamage,
+        piercing,
+    })
 
     manageSideEffectsOfNewDamage(scene, targetUid, calcedDamage)
 
@@ -46,16 +52,22 @@ export function applyDamage(args: {
     return unblockedDamage
 }
 
-function applyCalcedDamage(
-    scene: BattleCursor,
-    targetUid: CharacterUid,
+function applyCalcedDamage({
+    scene,
+    targetUid,
+    calcedDamage,
+    piercing = false,
+}: {
+    scene: BattleCursor
+    targetUid: CharacterUid
     calcedDamage: number
-) {
+    piercing?: boolean
+}) {
     let unblockedDamage = Number.NEGATIVE_INFINITY
 
     scene.select('allCharacters').apply(targetUid, c => {
         let health = c.health
-        let block = c.block
+        let block = piercing ? 0 : c.block
 
         unblockedDamage = calcedDamage - block
 
@@ -66,7 +78,7 @@ function applyCalcedDamage(
             block -= calcedDamage
         }
 
-        return { ...c, health, block }
+        return { ...c, health, block: piercing ? c.block : block }
     })
 
     return unblockedDamage
