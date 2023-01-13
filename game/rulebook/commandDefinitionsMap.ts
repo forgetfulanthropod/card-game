@@ -182,7 +182,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     spiritQuest: {
         explanation: 'All enemies receive Brave (2)',
-        actions: `effectAll("brave", 2, "friends")`,
+        actions: `effect("brave", 2, "allFriends")`,
         //@ts-expect-error
         id: `spiritQuest`,
         name: `Spirit Quest`,

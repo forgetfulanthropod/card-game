@@ -35,9 +35,12 @@ export function CharacterOptions() {
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile` as AssetKey)
 
-        const isSelected = ['warhog', 'frogKnight', 'gnomeHooligan'].includes(
-            c.id
-        )
+        const isValidOption = [
+            'warhog',
+            'frogKnight',
+            'gnomeHooligan',
+            'notoriousBean',
+        ].includes(c.id)
 
         return Container(
             {
@@ -77,7 +80,7 @@ export function CharacterOptions() {
                     }
                 ),
                 {
-                    // filters: isSelected ? [] : [grayScaleFilter],
+                    filters: isValidOption ? [] : [grayScaleFilter],
                 }
             )
         )
@@ -138,7 +141,7 @@ function chooseOwnedCharacterAt(
 }
 
 export async function composeDefaultParty() {
-    const defaultCharacterOptionsIndices = [7, 1, 2]
+    const defaultCharacterOptionsIndices = [0, 1, 2]
     void callApi('placeSelectedCharacters', {
         characters: range(0, 3).map(placeIndex => ({
             allCharacterOptionsIndex:

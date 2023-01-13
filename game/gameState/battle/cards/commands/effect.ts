@@ -31,21 +31,29 @@ export const execute: Executors['effect'] = ({
     const [id, increase] = evalAll(dslArgs)
     const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
 
-    const effectIdIndex = effectIds
-        .map(id => id.replace('Debuff', '').replace('Buff', ''))
-        .indexOf(id)
-    if (~effectIdIndex)
-        applyEffect(scene, targetUids, effectIds[effectIdIndex], increase)
-    else logger.warn(`tried to apply invalid effect ${id}`)
+    applyEffect(scene, targetUids, id, increase)
 }
 
 export function applyEffect(
     scene: BattleCursor,
     targetUids: CharacterUid[],
-    id: EffectId,
+    idPartial: EffectId,
     increase: number
 ) {
+    const id: EffectId =
+        effectIds[
+            effectIds
+                .map(id => id.replace('Debuff', '').replace('Buff', ''))
+                .indexOf(idPartial)
+        ]
+
+    if (!id) {
+        logger.warn(`tried to apply invalid effect ${id}`)
+        return
+    }
+
     const ac = scene.select('allCharacters')
+
     for (const uid of targetUids) {
         ac.select(uid, 'effects').apply(effects => {
             const i = effects.findIndex(e => e.id === id)

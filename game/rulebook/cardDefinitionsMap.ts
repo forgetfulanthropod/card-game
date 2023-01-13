@@ -113,8 +113,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `chain(
             effect("stunned", 1),
-            effectAll("debilitated", 1),
-            effectAll("vulnerable", 1),
+            effect("debilitated", 1, "allEnemies"),
+            effect("vulnerable", 1, "allEnemies"),
             momentary()
         )`,
         type: 'utility',
@@ -495,8 +495,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'bless',
         targetNum: -1,
         targetType: 'allFriends',
-        actions:
-            'chain(effectAll("courageous", 1), effectAll("strongblock", 2))',
+        actions: `chain(
+            effect("courageous", 1, "allFriends"),
+            effect("strongblock", 2, "allFriends")
+        )`,
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -612,29 +614,26 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strengthy1 = strength * .35;
-            magicy1 = magic * .35;
-            strengthy2 = strength * .5;
-            magicy2 = magic * .5;
+            strengthy1 = strength * .5;
+            magicy1 = magic * .5;
+            strengthy2 = strength * .35;
+            magicy2 = magic * .35;
             ifStance(
-              "aggressive",
+                "aggressive",
                 modifyStats(
+                    "strength|magic",
+                    "" + strengthy1 + "|" + magicy1,
                     "turn",
-                    "friends",
-                    "strength",
-                    strengthy1,
-                    "magic",
-                    magicy1
+                    "friends"
                 ),
                 modifyStats(
-                   "turn",
-                   "friends",
-                   "strength",
-                   strengthy2,
-                   "magic",
-                   magicy2
-                 ),
-             )`,
+                    "strength|magic",
+                    "" + strengthy2 + "|" + magicy2,
+                    "turn",
+                    "friends"
+                )
+            )
+        `,
         type: 'utility',
         characterClass: 'bard',
     },
@@ -664,7 +663,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy1 = strength;
             strengthy2 = 0.75 * strength;
             chain(
-                modifyStats(strengthy1),
+                modifyStats("strength", strengthy1, "turn"),
                 addBlock(strengthy2)
             )`,
         type: 'utility',
@@ -680,7 +679,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy1 = strength;
             magicy2 = 0.75 * strength;
             chain(
-                modifyStats(magicy1),
+                modifyStats("magic", magicy1, "turn"),
                 addBlock(magicy2)
             )`,
         type: 'utility',
@@ -694,8 +693,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect(stun,1);
-                effect(ignoreBlock,1);
+                effect("stun",1),
+                effect("vulnerable",2),
+                discardRandom(2),
+                momentary()
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -709,10 +710,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             defenceymagicky = 0.5 * defence + 0.5 * magic;
             chain(
-                addBlock(defenceymagicy);
-                effect(guarded,2);
-                effect(fatigue,1,allEnemies)
-            )`,
+                addBlock(defenceymagicy),
+                effect("guarded",2),
+                effect("fatigued",1,"allEnemies")
+            )
+        `,
         type: 'defense',
         characterClass: 'bard',
     },
@@ -723,10 +725,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            effect(unguarded, 2);
-            effect(debilitated,2);
-            effect(fatigue,1);
-            effect(targeted,1)
+            chain(
+                effect("unguarded", 2),
+                effect("debilitated",2),
+                effect("fatigued",1),
+                effect("targeted",1)
+            )
         `,
         type: 'utility',
         characterClass: 'bard',
@@ -739,7 +743,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'allEnemies',
         actions: `
             strengthy = 0.5 * strength;
-            deal(strengthy);
+            deal(strengthy)
         `,
         type: 'attack',
         characterClass: 'bard',
@@ -815,11 +819,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         actions: `
             chain(
-                draw(1);
-                discard(1);
+                draw(1),
+                discard(1),
                 addEnergy(1)
-                ),
-            `,
+            )
+        `,
         type: 'utility',
         characterClass: 'mushroomFarmer',
     },
@@ -1074,8 +1078,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 addBlock(1),
                 draw(2),
-                momentary(),
-            )`,
+                momentary()
+            )
+        `,
         type: 'utility',
         characterClass: 'bard',
     },
@@ -1090,10 +1095,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 removeAllDebuffs(),
                 heal(magicky),
-                effect(emboldened,1),
-                effect(guarded,1),
-                momentary(),
-            )`,
+                effect("courageous",1),
+                effect("guarded",1),
+                momentary()
+            )
+        `,
         type: 'utility',
         characterClass: 'bard',
     },

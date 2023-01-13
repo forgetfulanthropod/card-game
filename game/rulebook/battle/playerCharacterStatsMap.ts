@@ -124,7 +124,7 @@ export const playerCharacterStatsMap: Record<
         class: 'wizard',
 
         constitution: 86,
-        strength: 19,
+        strength: 999,
         magic: 14,
         defense: 5 + 1,
     },
@@ -165,7 +165,7 @@ export const playerCharacterStatsMap: Record<
         id: 'notoriousBean',
         displayName: 'Notorious B.E.A.N',
         isPc: true,
-        class: 'knight',
+        class: 'bard',
 
         constitution: 75,
         strength: 14,

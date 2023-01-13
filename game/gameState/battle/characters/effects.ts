@@ -28,16 +28,16 @@ const staticEffectFuncs: Record<
         if (stats.stance !== 'aggressive') return
 
         stats.strength += Math.ceil(stats.strength * 0.5)
-        stats.damageTakeMultiplicand *= 2
+        stats.damageTakeMultiplicand += 1
     },
     braveBuff(stats) {
-        stats.damageDealMultiplicand *= 1.15
+        stats.damageDealMultiplicand += 0.15
     },
     courageousBuff(stats) {
-        stats.damageDealMultiplicand *= 1.25
+        stats.damageDealMultiplicand += 0.25
     },
     debilitatedDebuff(stats) {
-        stats.damageDealMultiplicand *= 0.5
+        stats.damageDealMultiplicand -= 0.5
     },
     doubleDamageBuff(stats) {
         stats.strength *= 2
@@ -46,28 +46,34 @@ const staticEffectFuncs: Record<
         stats.magic += counter
     },
     fatiguedDebuff(stats) {
-        stats.damageDealMultiplicand *= 0.75
+        stats.damageDealMultiplicand -= 0.25
+    },
+    guardedBuff(stats) {
+        stats.damageTakeMultiplicand -= 0.25
     },
     smallDamageIncreaseBuff(stats) {
         stats.damageTakeAddend += 4
     },
     strongblockBuff(stats) {
-        stats.blockMultiplier *= 1.5
+        stats.blockMultiplier += 0.5
     },
     stunnedDebuff(stats) {
         stats.isSkipped = true
     },
+    targetedDebuff(stats) {
+        stats.damageTakeAddend += 5
+    },
     tiredDebuff(stats) {
-        stats.damageDealMultiplicand *= 0.88
+        stats.damageDealMultiplicand -= 0.12
     },
     unguardedDebuff(stats) {
-        stats.damageTakeMultiplicand *= 1.25
+        stats.damageTakeMultiplicand += 0.25
     },
     unreadyDebuff(stats) {
-        stats.damageTakeMultiplicand *= 1.12
+        stats.damageTakeMultiplicand += 0.12
     },
     vulnerableDebuff(stats) {
-        stats.damageTakeMultiplicand *= 1.5
+        stats.damageTakeMultiplicand += 0.5
     },
 }
 

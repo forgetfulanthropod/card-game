@@ -15,7 +15,6 @@ import { keys, mapToObj, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import { EntryCursor, srandInt } from '@/util'
-import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
 import { shufflePile } from './shufflePile'
 
 export function updateHand(scene: BattleCursor) {

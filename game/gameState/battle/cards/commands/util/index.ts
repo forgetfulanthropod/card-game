@@ -57,7 +57,6 @@ export interface ActionArgs {
     deal: [damage: number, times?: number]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
-    effectAll: [id: EffectId, increase: number, targetType?: BasicTargetType]
     heal: [amount: number]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifDamageDealtApplyEffect: [
@@ -67,7 +66,11 @@ export interface ActionArgs {
     ]
     ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
-    ifStance: [stanceId: StanceId, conditionalMove: any]
+    ifStance: [
+        stanceId: StanceId,
+        conditionalTrueMove: any,
+        conditionalFalseMove?: any
+    ]
 
     brittle: [count: number]
     dwindle: []
@@ -81,6 +84,7 @@ export interface ActionArgs {
     text: [str: string]
 
     discard: [numCards: number]
+    discardRandom: [numCards: number]
     doubleEnchantmentOrToken: []
     draw: [numCards: number]
     orbOfHolyLight: []

@@ -3,9 +3,11 @@ import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 import { calculateStats } from '@/gameState'
 
-export const explain: Explainers['addBlock'] = dslArgs => {
+export const explain: Explainers['addBlock'] = (dslArgs, context) => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `Give target Kaiju +${block} block`
+    return `Give ${
+        context.command.targetNum > -1 ? 'target Kaiju' : 'all Friendly Kaiju'
+    } +${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({

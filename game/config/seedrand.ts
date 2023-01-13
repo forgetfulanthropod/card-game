@@ -5,7 +5,7 @@ declare global {
     var srandom: () => number
 }
 // let seed = Math.random().toString()
-let seed = 'seedTwo'
+let seed = 'seedThree'
 logger.info(`setting random seed: ${seed}`)
 global.srandom = seedrandom(seed)
 

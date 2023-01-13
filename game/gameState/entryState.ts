@@ -5,12 +5,14 @@ import { getCharacterMeta } from './battle'
 
 const allCharacterOptionsIds: PlayerCharacterId[] = [
     'frogKnight',
-    'mushroomFarmer',
+    'gnomeHooligan',
+    'warhog',
+    'notoriousBean',
     'penguinKnight',
     'skeletonWarrior',
     'matchaGelatinCube',
-    'warhog',
-    'gnomeHooligan',
+    'mushroomFarmer',
+    'snacky',
     'jerry',
 ]
 

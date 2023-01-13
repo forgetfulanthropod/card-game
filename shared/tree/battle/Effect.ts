@@ -29,11 +29,14 @@ export const effectIds = [
     'unguardedDebuff',
     'vulnerableDebuff',
 
+    'targetedDebuff',
+
     'passiveBlockBuff',
     'strongblockBuff',
 
     'braveBuff',
     'courageousBuff',
+    'guardedBuff',
 
     'entrancedBuff',
 

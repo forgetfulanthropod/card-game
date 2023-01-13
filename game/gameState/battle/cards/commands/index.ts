@@ -11,11 +11,11 @@ import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
 import {explain as explainDealFromStance, execute as executeDealFromStance} from './dealFromStance'
 import {explain as explainDiscard, execute as executeDiscard} from './discard'
+import {explain as explainDiscardRandom, execute as executeDiscardRandom} from './discardRandom'
 import {explain as explainDoubleEnchantmentOrToken, execute as executeDoubleEnchantmentOrToken} from './doubleEnchantmentOrToken'
 import {explain as explainDraw, execute as executeDraw} from './draw'
 import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
-import {explain as explainEffectAll, execute as executeEffectAll} from './effectAll'
 import {explain as explainExplain, execute as executeExplain} from './explain'
 import {explain as explainHeal, execute as executeHeal} from './heal'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
@@ -52,11 +52,11 @@ export const explainers: Explainers = {
     deal: explainDeal,
     dealFromStance: explainDealFromStance,
     discard: explainDiscard,
+    discardRandom: explainDiscardRandom,
     doubleEnchantmentOrToken: explainDoubleEnchantmentOrToken,
     draw: explainDraw,
     dwindle: explainDwindle,
     effect: explainEffect,
-    effectAll: explainEffectAll,
     explain: explainExplain,
     heal: explainHeal,
     ifDamageDealt: explainIfDamageDealt,
@@ -93,11 +93,11 @@ export const executors: Executors = {
     deal: executeDeal,
     dealFromStance: executeDealFromStance,
     discard: executeDiscard,
+    discardRandom: executeDiscardRandom,
     doubleEnchantmentOrToken: executeDoubleEnchantmentOrToken,
     draw: executeDraw,
     dwindle: executeDwindle,
     effect: executeEffect,
-    effectAll: executeEffectAll,
     explain: executeExplain,
     heal: executeHeal,
     ifDamageDealt: executeIfDamageDealt,

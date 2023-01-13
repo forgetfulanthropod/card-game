@@ -62,20 +62,25 @@ export const cardArtAssets = {
         'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
 
     cardOwnerTokenFrogKnight:
-        'cards/Card PNG Breakdown/Card Owner Token/frogKnight.png',
+        'cards/Card PNG Breakdown/Card Owner Token/frogKnight.webp',
     cardOwnerTokenMushroomFarmer:
-        'cards/Card PNG Breakdown/Card Owner Token/mushroomFarmer.png',
+        'cards/Card PNG Breakdown/Card Owner Token/mushroomFarmer.webp',
+    cardOwnerTokenNotoriousBean:
+        'cards/Card PNG Breakdown/Card Owner Token/notoriousBean.webp',
     cardOwnerTokenPenguinKnight:
-        'cards/Card PNG Breakdown/Card Owner Token/penguinKnight.png',
+        'cards/Card PNG Breakdown/Card Owner Token/penguinKnight.webp',
     cardOwnerTokenSkeletonWarrior:
-        'cards/Card PNG Breakdown/Card Owner Token/skeletonWarrior.png',
+        'cards/Card PNG Breakdown/Card Owner Token/skeletonWarrior.webp',
+    cardOwnerTokenSnacky:
+        'cards/Card PNG Breakdown/Card Owner Token/snacky.webp',
     cardOwnerTokenMatchaGelatinCube:
-        'cards/Card PNG Breakdown/Card Owner Token/matchaGelatinCube.png',
+        'cards/Card PNG Breakdown/Card Owner Token/matchaGelatinCube.webp',
     cardOwnerTokenWarhog:
-        'cards/Card PNG Breakdown/Card Owner Token/warhog_.png',
+        'cards/Card PNG Breakdown/Card Owner Token/warhog_.webp',
     cardOwnerTokenGnomeHooligan:
-        'cards/Card PNG Breakdown/Card Owner Token/gnomeHooligan.png',
-    cardOwnerTokenJerry: 'cards/Card PNG Breakdown/Card Owner Token/jerry_.png',
+        'cards/Card PNG Breakdown/Card Owner Token/gnomeHooligan.webp',
+    cardOwnerTokenJerry:
+        'cards/Card PNG Breakdown/Card Owner Token/jerry_.webp',
 
     // cardSweepTheLeg: 'cards/Sweep The Leg.webp',
     // cardShield: 'cards/Shield.webp',
@@ -95,7 +100,7 @@ export const cardTypeAssets = {
 export const cardAssets = {
     remainingEnergy: 'cards/energy flame.webp',
     cardBase: 'cards/Card PNG Breakdown/Card Base.webp',
-    cardEnergy: 'cards/Card PNG Breakdown/ManaCostGem.png',
+    cardEnergy: 'cards/Card PNG Breakdown/ManaCostGem.webp',
     cardEnergy0: 'cards/Card PNG Breakdown/Mana Cost Numbers/0.png',
     cardEnergy1: 'cards/Card PNG Breakdown/Mana Cost Numbers/1.png',
     cardEnergy2: 'cards/Card PNG Breakdown/Mana Cost Numbers/2.png',
@@ -164,6 +169,8 @@ export const effectAssets: {
     effectPoisonedDebuff: 'effects/poison_skull.webp',
     effectStunnedDebuff: 'effects/stunned.webp',
     effectTiredDebuff: 'effects/tired.webp',
+    //TODO: placeholder icon
+    effectTargetedDebuff: 'effects/tired.webp',
     effectUnguardedDebuff: 'effects/unguarded.webp',
     effectUnreadyDebuff: 'effects/unready.webp',
     effectVulnerableDebuff: 'effects/vulnerable.webp',
@@ -236,6 +243,7 @@ export const spineAssets = {
         'spines/scenes/battle/hooligans bluff/HooligansBluffAnimated_Segment_3/KAIJU_BG_Bluffs_Rig_Prep_Segment_3.json',
 
     frogKnightSpine: 'spines/characters/frogKnight/FrogKnight.json',
+    jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
     mushroomFarmerSpine:
         'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
     penguinKnightSpine: 'spines/characters/penguinKnight/imported.json',
@@ -247,11 +255,11 @@ export const spineAssets = {
         'spines/characters/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
     matchaGelatinCubeNPCSpine:
         'spines/characters/matchaGelatinCubeNPC/Matcha_MJ_Rig_Prep_v04.json',
-    // gnomeHooliganNPCSpine:
-    //     'spines/characters/gnomeHooliganNPC/Gnome_Hooligan.json',
+    notoriousBeanSpine:
+        'spines/characters/notoriousBean/NotoriousBean_01_SH_09-28-2022.json',
     orcWarriorSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
     orcWarriorNPCSpine: 'spines/characters/orcWarriorNPC/Orc_MJ_REF_ONLY.json',
-    jerrySpine: 'spines/characters/jerry/Jerry_MJ_Rig_Prep_v4.json',
+    snackySpine: 'spines/characters/snacky/Snacky_01_SH_09-06-2022.json',
 
     warhogSkinsSpine: 'spines/characters/warhog/warhog.json',
     warhogSpine: 'SKIN: warhogSkinsSpine -> 0',
@@ -305,8 +313,10 @@ export const characterProfileAssets = {
     jerryProfile: 'character profiles/jerry.webp',
     matchaGelatinCubeProfile: 'character profiles/matchaGelatinCube.webp',
     mushroomFarmerProfile: 'character profiles/mushroomFarmer.webp',
+    notoriousBeanProfile: 'character profiles/notoriousBean.webp',
     penguinKnightProfile: 'character profiles/penguinKnight.webp',
     skeletonWarriorProfile: 'character profiles/skeletonWarrior.webp',
+    snackyProfile: 'character profiles/snacky.webp',
     warhogProfile: 'character profiles/warhog.webp',
 }
 
