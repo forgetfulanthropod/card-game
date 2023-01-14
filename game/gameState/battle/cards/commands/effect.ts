@@ -40,12 +40,13 @@ export function applyEffect(
     idPartial: EffectId,
     increase: number
 ) {
-    const id: EffectId =
-        effectIds[
-            effectIds
-                .map(id => id.replace('Debuff', '').replace('Buff', ''))
-                .indexOf(idPartial)
-        ]
+    const id: EffectId = effectIds.includes(idPartial)
+        ? idPartial
+        : effectIds[
+              effectIds
+                  .map(id => id.replace('Debuff', '').replace('Buff', ''))
+                  .indexOf(idPartial)
+          ]
 
     if (!id) {
         logger.warn(`tried to apply invalid effect ${id}`)

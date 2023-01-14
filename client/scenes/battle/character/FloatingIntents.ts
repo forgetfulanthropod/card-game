@@ -48,7 +48,7 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
                       }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
-        index => ({ x: index * INTENT_ICON_WIDTH })
+        index => ({ x: index * INTENT_ICON_WIDTH * 1.1 })
     )
 }
 
@@ -222,15 +222,14 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
                     INTENT_ICON_WIDTH /
                     getTexture(commandMeta?.src ?? 'intentAttack').width,
                 src: getTexture(commandMeta?.src ?? 'intentAttack'),
-                anchor: commandMeta?.src ? [0.8, 0.4] : 0.4,
+                anchor: commandMeta?.src ? [0.1, 0.4] : 0.4,
                 events,
             }),
             ...(amount
                 ? [
                       Text({
                           text: `${amount}`,
-                          anchor: 0.5,
-                          x: commandMeta.src ? -50 : 0,
+                          anchor: commandMeta?.src ? [0.2, 0.5] : 0.5,
                           events,
                           style: {
                               fill: 'white',
