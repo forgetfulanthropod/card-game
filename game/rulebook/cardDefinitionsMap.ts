@@ -653,7 +653,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy = 0.35 * magic;
             chain(
                 addBlock(strengthymagicy),
-                heal(magicy)
+                heal(magicy),
+                brittle(5)
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -713,11 +714,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            defenceymagicky = 0.5 * defence + 0.5 * magic;
+            defenseymagicky = 0.5 * defense + 0.5 * magic;
             chain(
-                addBlock(defenceymagicy),
+                addBlock(defenseymagicy),
                 effect("guarded",2),
-                effect("fatigued",1,"allEnemies")
+                effect("fatigued",1,"allEnemies"),
+                momentary()
             )
         `,
         type: 'defense',
@@ -734,7 +736,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 effect("unguarded", 2),
                 effect("debilitated",2),
                 effect("fatigued",1),
-                effect("targeted",1)
+                effect("targeted",1),
+                momentary()
             )
         `,
         type: 'utility',
@@ -780,8 +783,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'allEnemies',
         actions: `
             strengthy = 0.4 * strength;
-            effect(tired,1);
-            deal(strengthy);
+            chain(
+                effect(tired,1),
+                deal(strengthy)
+            )
             `,
         type: 'attack',
         characterClass: 'warhog',
@@ -915,13 +920,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
+            strengthymagicy = 0.15 * magic + 0.1 * strength;
+            handSizey = strengthymagicy * handSize;
             chain(
-                strengthymagicy = 0.15 * magic + 0.1 * strength
-                handSizey = strengthymagicy * handSize
                 deal(handSizey),
                 draw(2),
-                dwindle(),
-                ),
+                dwindle()
+            )
             `,
         type: 'attack',
         characterClass: 'snacky',
@@ -968,8 +973,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 deal(strength),
-                setStance("neutral"),
-                ),
+                setStance("neutral")
+            )
             `,
         type: 'attack',
         characterClass: 'frogKnight',
@@ -981,12 +986,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'self',
         actions: `
-            defensey = 0.5 * defense
+            defensey = 0.5 * defense;
             chain(
-                removeDebuff(unguarded,fatigue,debilitated,vulnerable,tired),
+                removeAllDebuffs(),
                 addBlock(defensey),
-                draw(1),
-                ),
+                draw(1)
+            )
             `,
         type: 'utility',
         characterClass: 'frogKnight',
@@ -998,8 +1003,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'self',
         actions: `
-            setStance("avoidant"),
-            `,
+            setStance("avoidant")
+        `,
         type: 'utility',
         characterClass: 'gnomeHooligan',
     },
@@ -1010,12 +1015,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            defensey = 0.5 * defense
+            defensey = 0.5 * defense;
             chain(
                 deal(defense),
-                addBlock(defensey),
-                ),
-            `,
+                addBlock(defensey)
+            )
+        `,
         type: 'attack',
         characterClass: 'warhog',
     },
