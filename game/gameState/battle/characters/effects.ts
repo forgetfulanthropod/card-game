@@ -132,9 +132,9 @@ function getStatModifierAddend(
     stat: ModifiableStatName
 ): number {
     return (
-        (cm.statModifiersMap?.turn[stat] ?? 0) +
-        (cm.statModifiersMap?.room[stat] ?? 0) +
-        (cm.statModifiersMap?.run[stat] ?? 0)
+        (cm.statModifiersMap?.turn?.[stat] ?? 0) +
+        (cm.statModifiersMap?.room?.[stat] ?? 0) +
+        (cm.statModifiersMap?.run?.[stat] ?? 0)
     )
 }
 

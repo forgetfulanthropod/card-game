@@ -141,7 +141,7 @@ function chooseOwnedCharacterAt(
 }
 
 export async function composeDefaultParty() {
-    const defaultCharacterOptionsIndices = [0, 1, 2]
+    const defaultCharacterOptionsIndices = [3, 2, 0]
     void callApi('placeSelectedCharacters', {
         characters: range(0, 3).map(placeIndex => ({
             allCharacterOptionsIndex:

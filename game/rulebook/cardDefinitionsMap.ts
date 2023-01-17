@@ -714,7 +714,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            defenseymagicky = 0.5 * defense + 0.5 * magic;
+            defenseymagicy = 0.5 * defense + 0.5 * magic;
             chain(
                 addBlock(defenseymagicy),
                 effect("guarded",2),
@@ -1018,7 +1018,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             defensey = 0.5 * defense;
             chain(
                 deal(defense),
-                addBlock(defensey)
+                addBlockToSelf(defensey)
             )
         `,
         type: 'attack',
