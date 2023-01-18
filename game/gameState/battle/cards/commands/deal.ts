@@ -4,6 +4,7 @@ import { evalAll, evalAllAsHtml, getOuterHtmlArr } from './util'
 import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
 import { upperFirst } from 'lodash'
+import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
     const [damageHtml, modifier] = evalAllAsHtml(dslArgs)
@@ -17,11 +18,10 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
         target: null,
     })}${damageHtmlArr[1]} damage`
 
-    if (context.command.targetType === 'allEnemies') {
-        explication += ' to all enemies'
-    } else {
-        explication += ' to target'
-    }
+    explication += getTargetText(
+        context.command.targetType,
+        context.characterMeta
+    )
 
     if (modifier) explication += ` <b>${upperFirst(modifier)}</b>`
 

@@ -57,7 +57,7 @@ export function CardsTiltedInLine({
             ? cardB.energy
             : -99
 
-        return energyB - energyA || (cardA.name > cardB.name ? 1 : -1)
+        return energyB - energyA || (cardA.name < cardB.name ? 1 : -1)
     })
 
     let fullSizeCard: TweenablePixiContainer | null

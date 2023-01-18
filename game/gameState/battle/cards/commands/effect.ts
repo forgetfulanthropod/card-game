@@ -17,12 +17,12 @@ import { getTargetText } from './util/getTargetText'
 export const explain: Explainers['effect'] = (dslArgs, context) => {
     const [id, increase, _] = evalAllAsHtml(dslArgs)
     const [__, ___, targetType] = evalAll(dslArgs)
-    return `+${increase} <b>${startCase(id)
-        .replace('Debuff', '')
-        .replace('Buff', '')}</b>${getTargetText(
+    return `${getTargetText(
         targetType ?? context.command.targetType,
         context.characterMeta
-    )}`
+    )} gains <b>${startCase(id)
+        .replace('Debuff', '')
+        .replace('Buff', '')}</b> (${increase})`
 }
 
 export const execute: Executors['effect'] = ({

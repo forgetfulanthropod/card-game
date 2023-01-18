@@ -7,17 +7,17 @@ export function getTargetText(
 ) {
     return ` ${
         targetType == null
-            ? 'target Kaiju'
+            ? 'Target Kaiju'
             : targetType === 'allFriends'
-            ? 'all friendly Kaiju'
+            ? 'All friendly Kaiju'
             : targetType === 'allEnemies'
-            ? 'all enemy Kaiju'
+            ? 'Every enemy'
             : targetType === 'enemies'
-            ? 'target Kaiju'
+            ? 'Enemy target'
             : targetType === 'friends'
-            ? 'friendly Kaiju'
+            ? 'Target Kaiju'
             : targetType === 'self'
-            ? `this <br/>${upperFirst(startCase(cm.id))}`
+            ? `This <br/>${upperFirst(startCase(cm.id))}`
             : ''
     }`
 }

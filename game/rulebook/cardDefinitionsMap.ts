@@ -783,8 +783,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             strengthy = 0.5 * strength;
             chain(
-                effect("tired",1),
-                deal(strengthy)
+                deal(strengthy),
+                effect("tired",1)
             )
             `,
         type: 'attack',
