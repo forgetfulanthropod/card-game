@@ -20,20 +20,20 @@
     "npm.packageManager": "pnpm",
     "files.exclude": {
         ".eslintcache": true,
-        ".github": true,
+        // ".github": true,
         ".prettierignore": true,
         ".prettierrc.json": true,
         "**/dist/": true,
-        "**/node_modules/": true,
+        // "**/node_modules/": true,
         "**/pnpm-lock.yaml": true,
         "**/tsconfig.tsbuildinfo": true,
         "arkit.json": true,
-        "builds": true,
+        // "builds": true,
         "ignore": true,
         "pnpm-lock.yaml": true,
         "pnpm-workspace.yaml": true,
-        "README.md": true,
-        "server.log": true
+        // "README.md": true,
+        // "server.log": true
     },
     "editor.codeActionsOnSave": {
         // "source.organizeImports": true,
