@@ -35,24 +35,10 @@ import { round } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { compose, Datum, datum } from 'datums'
 
-const getShowOnHoverFns = (el: PixiContainer) => {
-    let waitingTimer: NodeJS.Timeout | null = null
-    const onMouseover = () => {
-        // waitingTimer = setTimeout(() => {
-        getStage().addChild(el)
-        // }, 200)
-    }
-
-    const onMouseout = () => {
-        // if (waitingTimer !== null) {
-        // clearTimeout(waitingTimer)
-        getStage().removeChild(el)
-        // } else {
-        // }
-    }
-
-    return { onMouseover, onMouseout }
-}
+const getShowOnHoverFns = (el: PixiContainer) => ({
+    onMouseover: () => getStage().addChild(el),
+    onMouseout: () => getStage().removeChild(el),
+})
 
 const animateNumberInElement = async (
     element: PixiText,
@@ -79,6 +65,7 @@ const animateNumberInElement = async (
     })
 }
 
+let itemsOnScreen = 0
 const getScoreItemPosition = () => {
     const ITEMS_PER_COLUMN = 9
 
@@ -105,7 +92,6 @@ const baseStyle: Partial<ITextStyle> = {
     fontFamily: 'bigFont',
 }
 
-let itemsOnScreen = 0
 const ScoreAttributeItem = (
     attribute: RunScoreAttributeName,
     score: number
@@ -197,23 +183,28 @@ export function EndOfRunScreen(): PixiContainer {
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
-    const showLeaderboard = datum(false)
+    const showLeaderboard = datum(true)
 
     battleState === 'won'
         ? loopSong('runVictoryMusicHooligansBluff')
         : loopSong('defeatMusicHooligansBluff')
 
-    const RunResultBanner = TweenableContainer(
-        {},
-        Sprite({
-            src: getTexture(`${battleState === 'won' ? 'victory' : 'defeat'}`),
-            alpha: 1,
-            scale: 0.35,
-            x: BASE_WIDTH / 2,
-            y: BASE_HEIGHT / 2 - 360,
-            anchor: [0.5, 0.5],
-        })
-    )
+    // --- Pixi Elements ---
+    const RunResultBanner = () => {
+        const src = getTexture(
+            `${battleState === 'won' ? 'victory' : 'defeat'}`
+        )
+        const scale = 0.35
+        return TweenableContainer(
+            {},
+            Sprite({
+                src,
+                scale,
+                x: BASE_WIDTH / 2 - (src.width * scale) / 2,
+                y: BASE_HEIGHT / 2 - 550,
+            })
+        )
+    }
 
     const TotalScoreTitle = Text({
         text: `Total Score`,
@@ -273,14 +264,6 @@ export function EndOfRunScreen(): PixiContainer {
         onClick: handleTryAgain,
     })
 
-    /** Takes you to character select screen */
-    function handleTryAgain() {
-        void callApi('makeNewUser', {
-            username: localStorage.getItem('username') as string,
-        })
-        window.location.reload()
-    }
-
     const showLeaderboardButton = Sprite({
         src: getTexture('endTurnButton'),
         anchor: 0,
@@ -327,14 +310,20 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const LeaderboardTimeOption = (text: string, active: boolean) => {
+    type LeaderboardTimeToggle = 0 | 1 | 2
+    const activeTimeOption = datum<LeaderboardTimeToggle>(0)
+
+    const LeaderboardTimeOption = (
+        text: string = 'default',
+        active: boolean = false,
+        id: LeaderboardTimeToggle
+    ) => {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 200,
-                height: 50,
+                width: 500,
+                height: 85,
                 anchor: [0, 0],
                 alpha: 0.8,
-                // tint: 1,
             },
             radius: 50,
             gradientArgs: {
@@ -342,48 +331,84 @@ export function EndOfRunScreen(): PixiContainer {
                 y0: 0,
                 x1: 0,
                 y1: 50,
-                colorStops: [{ color: active ? 'white' : 'black', offset: 0 }],
+                colorStops: [{ color: active ? 'white' : 0x404040, offset: 0 }],
             },
         })
 
-        const TextDisplay = Text({
+        const TimeOptionText = Text({
             text,
             anchor: [0, 0],
             x: Background.width / 2,
             style: {
                 fill: active ? 'black' : 'white',
+                fontFamily: 'bigFont',
+                fontWeight: '100',
+                fontSize: 36
             },
         })
 
         return Container(
             {
-                y: BASE_HEIGHT / 2 - 150,
+                name: `${text}_Container`,
+                y: BASE_HEIGHT / 2 - 430,
+                onClick: () => activeTimeOption.set(id),
             },
             Background,
-            Adjust(TextDisplay, {
-                x: Background.width / 2 - TextDisplay.width / 2,
-                y: Background.height / 2 - TextDisplay.height / 2
+            Adjust(TimeOptionText, {
+                x: Background.width / 2 - TimeOptionText.width / 2,
+                y: Background.height / 2 - TimeOptionText.height / 2,
             })
         )
     }
 
+    const createTimeOption = (index: LeaderboardTimeToggle) => {
+        const isActive = activeTimeOption.val === index
+        switch (index) {
+            case 0:
+                return Adjust(LeaderboardTimeOption('TODAY', isActive, 0), {
+                    x: BASE_WIDTH / 2 - 800,
+                })
+            case 1:
+                return Adjust(LeaderboardTimeOption('THIS WEEK', isActive, 1), {
+                    x: BASE_WIDTH / 2 - 250,
+                })
+            case 2:
+                return Adjust(LeaderboardTimeOption('ALL TIME', isActive, 2), {
+                    x: BASE_WIDTH / 2 + 300,
+                })
+        }
+    }
+
     const LeaderboardTimeToggles = Container(
         {},
-        Adjust(LeaderboardTimeOption('Today', true), { x: 475 }),
-        Adjust(LeaderboardTimeOption('Week', false), { x: 850 }),
-        Adjust(LeaderboardTimeOption('All Time', false), { x: 1225 }),
+        createTimeOption(0),
+        createTimeOption(1),
+        createTimeOption(2)
     )
+
+    activeTimeOption.onChange(() => {
+        LeaderboardTimeToggles.children.forEach(child => {
+            child.destroy()
+        })
+        LeaderboardTimeToggles.removeChildren()
+        LeaderboardTimeToggles.addChild(
+            createTimeOption(0),
+            createTimeOption(1),
+            createTimeOption(2)
+        )
+    })
+
     const Leaderboard = Container(
         {},
         RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 1100,
-                height: 525,
+                width: 1700,
+                height: 800,
                 x: BASE_WIDTH / 2,
-                y: BASE_HEIGHT / 2 + 65,
+                y: BASE_HEIGHT / 2 - 75,
                 name: 'LeaderboardBackground',
                 anchor: [0.5, 0.5],
-                alpha: 0.8,
+                alpha: 0.75,
                 tint: 1,
             },
             radius: 50,
@@ -398,7 +423,7 @@ export function EndOfRunScreen(): PixiContainer {
         LeaderboardTimeToggles
     )
 
-    const lootElementsWithBg = Container({}, RoundedBlackRectBackground)
+    const ScoreElements = Container({}, RoundedBlackRectBackground)
 
     // Runs text animations synchronously
     ;(async () => {
@@ -443,7 +468,7 @@ export function EndOfRunScreen(): PixiContainer {
                 attribute as RunScoreAttributeName,
                 points
             )
-            lootElementsWithBg.addChild(ScoreAttribute)
+            ScoreElements.addChild(ScoreAttribute)
         }
 
         await animateNumberInElement(
@@ -457,6 +482,8 @@ export function EndOfRunScreen(): PixiContainer {
 
     const TogglableMainContainer = Container({})
     const TogglableButtonsContainer = Container({})
+
+    // --- Handlers ---
     const handleLeaderboardToggle = (showLeaderboard: boolean) => {
         TogglableMainContainer.removeChildren()
         TogglableButtonsContainer.removeChildren()
@@ -468,8 +495,9 @@ export function EndOfRunScreen(): PixiContainer {
                 x: BASE_WIDTH / 2 - backToScoreButton.width / 2,
             })
         } else {
-            TogglableMainContainer.addChild(lootElementsWithBg)
+            TogglableMainContainer.addChild(ScoreElements)
             TogglableMainContainer.addChild(TotalScoreContainer)
+            TogglableMainContainer.addChild(RunResultBanner())
             TogglableButtonsContainer.addChild(tryAgainButton)
             TogglableButtonsContainer.addChild(showLeaderboardButton)
             Adjust(showLeaderboardButton, { x: BASE_WIDTH / 2 + 75 })
@@ -481,10 +509,17 @@ export function EndOfRunScreen(): PixiContainer {
         true
     )
 
+    /** Takes you to character select screen */
+    function handleTryAgain() {
+        void callApi('makeNewUser', {
+            username: localStorage.getItem('username') as string,
+        })
+        window.location.reload()
+    }
+
     const EndOfRunContainer = Container(
         { x: 0, y: 0, scale: 1, name: 'EndOfRunContainer' },
         ModalBackdrop(),
-        RunResultBanner,
         TogglableMainContainer,
         TogglableButtonsContainer
     )
