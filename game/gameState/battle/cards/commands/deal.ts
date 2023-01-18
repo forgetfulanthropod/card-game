@@ -18,10 +18,9 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
         target: null,
     })}${damageHtmlArr[1]} damage`
 
-    explication += getTargetText(
-        context.command.targetType,
-        context.characterMeta
-    )
+    explication +=
+        ' to ' +
+        getTargetText(context.command.targetType, context.characterMeta)
 
     if (modifier) explication += ` <b>${upperFirst(modifier)}</b>`
 

@@ -17,7 +17,9 @@ export function getTargetText(
             : targetType === 'friends'
             ? 'target Kaiju'
             : targetType === 'self'
-            ? `this <br/>${upperFirst(startCase(cm.id))}`
+            ? `this <span style="white-space:nowrap">${upperFirst(
+                  startCase(cm.id)
+              )}</span>`
             : ''
     }`
 }
