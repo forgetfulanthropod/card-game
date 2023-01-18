@@ -106,7 +106,7 @@ export function explainCommand(
         logger.error(['non-string result:', res])
         return 'error!'
     }
-    return res
+    return `${res}.`
 }
 
 export function explainActions(
