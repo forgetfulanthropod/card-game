@@ -9,7 +9,7 @@ export function getTargetText(
         targetType == null
             ? 'target Kaiju'
             : targetType === 'allFriends'
-            ? 'all friendly Kaiju'
+            ? 'every friendly Kaiju'
             : targetType === 'allEnemies'
             ? 'every enemy'
             : targetType === 'enemies'
