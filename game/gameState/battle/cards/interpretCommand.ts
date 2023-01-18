@@ -48,7 +48,7 @@ function localsFromCommand(
         (scene as BattleCursor).get('allCharacters', command.characterUid) ??
         (scene as EntryCursor)
             .get('selectedCharacters')
-            .find(c => c?.uid === command.characterUid)
+            ?.find(c => c?.uid === command.characterUid)
 
     const targetHealth =
         targetUids.length === 1

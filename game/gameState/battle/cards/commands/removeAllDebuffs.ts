@@ -8,7 +8,8 @@ import { getTargetText } from './util/getTargetText'
 export const explain: Explainers['removeAllDebuffs'] = (dslArgs, context) => {
     const [targetTypeOverride] = evalAll(dslArgs)
     return `remove all debuffs from ${getTargetText(
-        targetTypeOverride ?? context.command.targetType
+        targetTypeOverride ?? context.command.targetType,
+        context.characterMeta
     )}`
 }
 
@@ -28,13 +29,9 @@ export const execute: Executors['removeAllDebuffs'] = ({
     })
 
     targetUids.forEach(uid =>
-        scene
-            .select('allCharacters', 'targetUid')
-            .apply(cm => ({
-                ...cm,
-                effects: cm.effects.filter(
-                    effect => !effect.id.includes('Debuff')
-                ),
-            }))
+        scene.select('allCharacters', 'targetUid').apply(cm => ({
+            ...cm,
+            effects: cm.effects.filter(effect => !effect.id.includes('Debuff')),
+        }))
     )
 }

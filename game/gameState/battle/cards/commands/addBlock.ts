@@ -2,12 +2,14 @@ import type { BattleCursor, CharacterUid } from 'shared'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 import { calculateStats } from '@/gameState'
+import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['addBlock'] = (dslArgs, context) => {
     const [block] = evalAllAsHtml(dslArgs)
-    return `Give ${
-        context.command.targetNum > -1 ? 'target Kaiju' : 'all Friendly Kaiju'
-    } +${block} block`
+    return `Give ${getTargetText(
+        context.command.targetType,
+        context.characterMeta
+    )} +${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({

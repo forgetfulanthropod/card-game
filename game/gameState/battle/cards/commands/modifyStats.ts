@@ -27,10 +27,10 @@ import {
 } from './util'
 import { evalAllAsHtml, evalAll } from './util'
 
-export const explain: Explainers['modifyStats'] = dslArgs => {
+export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
 
-    return `Give ${getTargetText(targetType)} ${statNames
+    return `Give ${getTargetText(targetType, context.characterMeta)} ${statNames
         .map((_, i) => getStatModHtml(statNames[i], addends[i]))
         .join(' and ')}
     until end of ${expiration}`

@@ -22,6 +22,7 @@ import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
+    brittle: 'breaks after (X) uses',
     dwindle: 'costs +1 energy each use in room',
 
     orbsOfProtection: 'blocks for 50% of Magic',

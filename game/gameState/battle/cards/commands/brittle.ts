@@ -4,7 +4,7 @@ import { evalAll, Executors, Explainers } from './util'
 
 export const explain: Explainers['brittle'] = dslArgs => {
     const [count] = evalAll(dslArgs)
-    return 'Brittle' + (count ? `(${count})` : '')
+    return '<b>Brittle</b>' + (count ? ` (${count})` : '')
 }
 
 export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {

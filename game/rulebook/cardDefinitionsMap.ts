@@ -112,7 +112,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `chain(
-            effect("stunned", 1),
+            effect("stunned", 1, "enemies"),
             effect("debilitated", 1, "allEnemies"),
             effect("vulnerable", 1, "allEnemies"),
             momentary()
@@ -718,8 +718,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 addBlock(defenseymagicy),
                 effect("guarded",2),
-                effect("fatigued",1,"allEnemies"),
-                momentary()
+                effect("tired",1,"allEnemies")
             )
         `,
         type: 'defense',
@@ -782,9 +781,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.4 * strength;
+            strengthy = 0.5 * strength;
             chain(
-                effect(tired,1),
+                effect("tired",1),
                 deal(strengthy)
             )
             `,
@@ -973,7 +972,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 deal(strength),
-                setStance("neutral")
+                setStance("neutral", "self")
             )
             `,
         type: 'attack',
@@ -1015,7 +1014,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            defensey = 0.5 * defense;
+            defensey = 0.65 * defense;
             chain(
                 deal(defense),
                 addBlockToSelf(defensey)
@@ -1031,9 +1030,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.5 * strength;
-            deal(strengthy)
-        `,
+            strengthy = 0.25 * strength;
+            chain(
+                deal(strengthy),
+                effect("fatigue",1),
+                effect("tired",1),
+                discard(1)
+            )
+            `,
         type: 'attack',
         characterClass: 'notoriousBean',
     },
@@ -1086,8 +1090,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions: `
+            defensey = 0.1 * defense;
             chain(
-                addBlock(1),
+                addBlock(defensey),
                 draw(2),
                 momentary()
             )
@@ -1116,7 +1121,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
     dummyBomb: {
         name: 'Dummy Bomb',
-        energy: 9,
+        energy: -1,
         id: 'dummyBomb',
         targetNum: -1,
         targetType: 'allEnemies',
@@ -1195,9 +1200,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
+            addBlock("incomingDamageIntended");
             chain(
-                addBlock(incomingDamageIntended),
-                "(equal to damage intended for this Kaiju)"
+                "Generate block equal to the amount of damage target<br/>Kaiju would take this turn.",
+                brittle(1)
             )
         `,
         type: 'defense',
@@ -1223,16 +1229,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'fellTheMighty',
         targetNum: 1,
         targetType: 'enemies',
-        // TODO: targetMaxHealth
-        // healthy = targetMaxHealth * 0.33;
         actions: `
-            healthy = 0;
+            strengthy = strength * 4;
             chain(
-                deal(healthy),
-                "(one third of target max health)",
-                brittle(3)
+                deal(strengthy),
+                brittle(1)
             )
-        `,
+            `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1273,7 +1276,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy = 1.5 * strength;
             chain(
                 deal(strengthy),
-                setStance("aggressive", "self")
+                setStance("aggressive", "self"),
+                discard(1)
             )`,
         type: 'attack',
         characterClass: 'knight',
@@ -1286,10 +1290,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect("stunned",1),
+                effect("stun",1),
+                discard(1),
                 brittle(2)
-            )
-        `,
+            )`,
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1336,5 +1340,53 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             )`,
         type: 'defense',
         characterClass: 'knight',
+    },
+    gargantuanGnomeBomb: {
+        name: 'Gargantuan Gnome Bomb',
+        energy: 0,
+        id: 'gargantuanGnomeBomb',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthymagicy = 0.65 * magic + 0.65 * strength;
+            chain(
+                deal(strengthymagicy),
+                brittle(2)
+            )
+            `,
+        type: 'attack',
+        characterClass: 'gnomeHooligan',
+    },
+    tinyKleptomaniac: {
+        name: 'Tiny Kleptomaniac',
+        energy: 0,
+        id: 'tinyKleptomaniac',
+        targetNum: -1,
+        targetType: 'friends',
+        actions: `
+            chain(
+                draw(3),
+                discard(2),
+                momentary()
+            )
+        `,
+        type: 'utility',
+        characterClass: 'gnomeHooligan',
+    },
+    barterWithTheUnderworld: {
+        name: 'Barter With The Underworld',
+        energy: 1,
+        id: 'barterWithTheUnderworld',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions: `
+            magicy = magic * .15;
+            chain(
+                deal(magicy * discardPileSize),
+                explain(magicy, "* discard pile size")
+            )
+        `,
+        type: 'attack',
+        characterClass: 'wizard',
     },
 }

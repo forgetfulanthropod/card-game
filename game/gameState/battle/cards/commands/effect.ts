@@ -12,14 +12,17 @@ import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
+import { getTargetText } from './util/getTargetText'
 
-export const explain: Explainers['effect'] = dslArgs => {
-    const [id, increase, targetType] = evalAllAsHtml(dslArgs)
+export const explain: Explainers['effect'] = (dslArgs, context) => {
+    const [id, increase, _] = evalAllAsHtml(dslArgs)
+    const [__, ___, targetType] = evalAll(dslArgs)
     return `+${increase} <b>${startCase(id)
         .replace('Debuff', '')
-        .replace('Buff', '')}</b>${
-        targetType ? ' to ' + startCase(targetType).toLowerCase() : ''
-    }`
+        .replace('Buff', '')}</b>${getTargetText(
+        targetType ?? context.command.targetType,
+        context.characterMeta
+    )}`
 }
 
 export const execute: Executors['effect'] = ({
