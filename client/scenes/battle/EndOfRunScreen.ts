@@ -183,7 +183,7 @@ export function EndOfRunScreen(): PixiContainer {
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
-    const showLeaderboard = datum(true)
+    const showLeaderboard = datum(false)
 
     battleState === 'won'
         ? loopSong('runVictoryMusicHooligansBluff')
