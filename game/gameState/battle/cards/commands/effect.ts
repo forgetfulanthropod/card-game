@@ -16,13 +16,14 @@ import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['effect'] = (dslArgs, context) => {
     const [id, increase, _] = evalAllAsHtml(dslArgs)
-    const [__, ___, targetType] = evalAll(dslArgs)
-    return `<span style="white-space:nowrap">${getTargetText(
-        targetType ?? context.command.targetType,
+    const [__, ___, targetTypeArg] = evalAll(dslArgs)
+    const targetType = targetTypeArg ?? context.command.targetType
+    return `${getTargetText(
+        targetType,
         context.characterMeta
     )} gains <b>${startCase(id)
         .replace('Debuff', '')
-        .replace('Buff', '')}</b> (${increase})</span>`
+        .replace('Buff', '')}</b>&nbsp;(${increase})`
 }
 
 export const execute: Executors['effect'] = ({

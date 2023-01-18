@@ -7,7 +7,7 @@ import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['setStance'] = (dslArgs, context) => {
     const [stance, targetTypeOverride] = evalAll(dslArgs)
-    return `Set stance of ${getTargetText(
+    return `Set the stance of ${getTargetText(
         targetTypeOverride ?? context.command.targetType,
         context.characterMeta
     )} to ${stance} (even if locked)`

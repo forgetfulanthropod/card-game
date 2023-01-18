@@ -5,7 +5,7 @@ export function getTargetText(
     targetType: BasicTargetType | undefined,
     cm: CharacterMeta
 ) {
-    return ` ${
+    return `${
         targetType == null
             ? 'target Kaiju'
             : targetType === 'allFriends'
@@ -17,9 +17,7 @@ export function getTargetText(
             : targetType === 'friends'
             ? 'target Kaiju'
             : targetType === 'self'
-            ? `this <span style="white-space:nowrap">${upperFirst(
-                  startCase(cm.id)
-              )}</span>`
+            ? `this ${upperFirst(startCase(cm.id).split(' ').join('&nbsp;'))}`
             : ''
     }`
 }
