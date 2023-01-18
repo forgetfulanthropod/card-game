@@ -245,7 +245,7 @@ export function Explanation({
             isHtml,
             style: {
                 fill: 'white',
-                wordWrapWidth: BASE_WIDTH * 0.2,
+                wordWrapWidth: BASE_WIDTH * 0.18,
                 wordWrap: true,
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
                 fontSize: displayObjectArgs?.fontSize ?? 20,

@@ -399,7 +399,7 @@ function getTexts(
 }
 
 function getExplanationFontSize(cardFrameScale: number, explanation: string) {
-    const minExplanationFontSize = Math.round(35 * cardFrameScale)
+    const minExplanationFontSize = Math.round(32 * cardFrameScale)
     const maxExplanationFontSize = Math.round(50 * cardFrameScale)
     const unclampedExplanationFontSize =
         maxExplanationFontSize + 10 - getPlainTextLength(explanation) * 2

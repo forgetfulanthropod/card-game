@@ -3,21 +3,31 @@ import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 import { calculateStats } from '@/gameState'
 import { getTargetText } from './util/getTargetText'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 export const explain: Explainers['addBlock'] = (dslArgs, context) => {
     const [block] = evalAllAsHtml(dslArgs)
+    const [_, targetType] = evalAll(dslArgs)
     return `Give ${getTargetText(
-        context.command.targetType,
+        targetType ?? context.command.targetType,
         context.characterMeta
     )} +${block} block`
 }
 
 export const execute: Executors['addBlock'] = ({
     dslArgs,
-    targetUids,
+    targetUids: givenUids,
     scene,
+    command,
 }) => {
-    const [block] = evalAll(dslArgs)
+    const [block, targetType] = evalAll(dslArgs)
+
+    const targetUids = getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids,
+    })
 
     targetUids.forEach(targetUid => {
         scene.apply(['allCharacters', targetUid, 'block'], b =>

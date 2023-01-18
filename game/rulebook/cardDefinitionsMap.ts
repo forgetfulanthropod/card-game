@@ -299,8 +299,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'parry',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strengthy = 0.75 * strength; defensey = defense * 0.5; chain(deal(strengthy),addBlockToSelf(defensey))',
+        actions: `
+            strengthy = 0.75 * strength;
+            defensey = defense * 0.5;
+            chain(
+                deal(strengthy),
+                addBlock(defensey, "self")
+            )
+        `,
         type: 'attack',
         characterClass: 'knight',
     },
@@ -810,13 +816,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            defensey = 0.75 * defense
-            defenseymagicy = 0.5 * defense + 0.25 * magic
+            defensey = 0.75 * defense;
+            defenseymagicy = 0.5 * defense + 0.25 * magic;
             chain(
-                addBlock(defensey);
-                addBlockToSelf(defenseymagicy);
-                 ),
-            `,
+                addBlock(defensey),
+                addBlock(defenseymagicy, "self")
+            ),
+        `,
         type: 'attack',
         characterClass: 'mushroomFarmer',
     },
@@ -889,7 +895,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthymagicy = 0.5 * strength + 0.5 * magic
             chain(
                 deal(strengthymagicy),
-                addBlockToSelf(defense),
+                addBlock(defense, "self"),
                 draw(1),
                 discard(1),
                 ),
@@ -995,18 +1001,18 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'frogKnight',
     },
-    beVerySmall: {
-        name: 'Be Very Small',
-        energy: 0,
-        id: 'beVerySmall',
-        targetNum: 1,
-        targetType: 'self',
-        actions: `
-            setStance("avoidant")
-        `,
-        type: 'utility',
-        characterClass: 'gnomeHooligan',
-    },
+    // beVerySmall: {
+    //     name: 'Be Very Small',
+    //     energy: 0,
+    //     id: 'beVerySmall',
+    //     targetNum: 1,
+    //     targetType: 'self',
+    //     actions: `
+    //         setStance("avoidant")
+    //     `,
+    //     type: 'utility',
+    //     characterClass: 'gnomeHooligan',
+    // },
     bellyFlop: {
         name: 'Belly Flop',
         energy: 1,
@@ -1017,7 +1023,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             defensey = 0.65 * defense;
             chain(
                 deal(defense),
-                addBlockToSelf(defensey)
+                addBlock(defensey, "self")
             )
         `,
         type: 'attack',
@@ -1187,7 +1193,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 effect("debilitated",1),
-                addBlockToSelf(defense)
+                addBlock(defense, "self")
             )
         `,
         type: 'utility',

@@ -117,6 +117,7 @@ export type CommandId =
 
 export type CardId =
     // | 'arcanePower'
+    // | 'beVerySmall'
     // | 'catchTheKnife'
     // | 'coldTrance'
     // | 'constraint'
@@ -138,7 +139,6 @@ export type CardId =
     | 'beanNeverMisses'
     | 'bellyFlop'
     | 'berserk'
-    | 'beVerySmall'
     | 'bigLunge'
     | 'bless'
     | 'blockBard'
@@ -162,8 +162,8 @@ export type CardId =
     | 'fellTheMighty'
     | 'fireball'
     | 'flashBang'
-    | 'gnomeBomb'
     | 'gargantuanGnomeBomb'
+    | 'gnomeBomb'
     | 'guidingBolt'
     | 'hammerThrow'
     | 'hedgedBet'

@@ -43,8 +43,7 @@ export interface ActionArgs {
     explain: any[]
     killIf: [condition: boolean]
 
-    addBlock: [block: number]
-    addBlockToSelf: [block: number]
+    addBlock: [block: number, targetType?: BasicTargetType]
     addEnergy: [energy: number]
     addEnergyPerRound: [energy: number]
     modifyStats: [

@@ -10,7 +10,7 @@ export const explain: Explainers['setStance'] = (dslArgs, context) => {
     return `Set the stance of ${getTargetText(
         targetTypeOverride ?? context.command.targetType,
         context.characterMeta
-    )} to ${stance} (even if locked)`
+    )} to ${stance} (even&nbsp;if&nbsp;locked)`
 }
 
 export const execute: Executors['setStance'] = ({

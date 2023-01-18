@@ -1,7 +1,6 @@
 import type { Executors, Explainers } from './util'
 // @index(['./*.ts'], (f, _) => `import {explain as explain${pascalCase(f.name)}, execute as execute${pascalCase(f.name)}} from '${f.path}'`)
 import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
-import {explain as explainAddBlockToSelf, execute as executeAddBlockToSelf} from './addBlockToSelf'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
 import {explain as explainBellyFlop, execute as executeBellyFlop} from './bellyFlop'
@@ -42,7 +41,6 @@ export type { Locals } from './util'
 export const explainers: Explainers = {
     // @index(['./*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
     addBlock: explainAddBlock,
-    addBlockToSelf: explainAddBlockToSelf,
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
     bellyFlop: explainBellyFlop,
@@ -83,7 +81,6 @@ export const explainers: Explainers = {
 export const executors: Executors = {
     // @index(['./*.ts'], (f, _) => `${f.name}: execute${_.pascalCase(f.name)},`)
     addBlock: executeAddBlock,
-    addBlockToSelf: executeAddBlockToSelf,
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
     bellyFlop: executeBellyFlop,
