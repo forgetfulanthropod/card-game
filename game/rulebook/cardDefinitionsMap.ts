@@ -1296,7 +1296,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect("stun",1),
+                effect("stunned",1),
                 discard(1),
                 brittle(2)
             )`,
