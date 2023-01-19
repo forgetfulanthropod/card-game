@@ -45,7 +45,7 @@ export interface BareServerActionsMeta {
         res: Promise<{ runId: RunID }>
     }
     endRun: {
-        args: { userId: UserID, restart?: true }
+        args: { userId: UserID; restart?: true }
         res: Promise<{ runId: RunID | null }>
     }
     getNumKaijuInGoodEarth: {
@@ -82,7 +82,7 @@ interface BareGameActionArgs {
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
-    setRunId: { userId: UserID, runId: RunID }
+    setRunId: { userId: UserID; runId: RunID }
 }
 
 // NOTE: below is not as complicated as it looks.
@@ -92,7 +92,7 @@ interface BareGameActionArgs {
 /** Map from game action name to function signature */
 export type GameActions = {
     [K in keyof BareGameActionArgs]: (
-        args: BareGameActionArgs[K] & { game: Gamecursor }
+        args: BareGameActionArgs[K] & { game: Gamecursor; username?: string }
     ) => void
 }
 /** Map from server action name to function signature */

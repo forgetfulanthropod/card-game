@@ -8,6 +8,7 @@ import {
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
+import { endRunMetrics } from '@/metrics'
 
 export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     logger.info(`Ending run for: ${userId}`)
@@ -32,33 +33,39 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     let runDuration = 0
     if (endTime) {
         runDuration = getRunDurationInSec(startTime, endTime)
+    } else {
+        let newEndTime = Date.now()
+        runDuration = getRunDurationInSec(startTime, newEndTime)
     }
 
-    logger.info({ runId, totalScore, state })
+    logger.info({ userId, runId, totalScore, state, runDuration })
 
     if (!restart && state !== 'won' && state !== 'lost') {
         logger.warn('Not in battle end state') // only ok when restarting
         return { runId: null }
     }
 
-    const runIsValid = validateRun({ connection, userId, gameState })
-    if (!runIsValid) {
-        logger.error('Run is not valid')
-        return { runId: null }
+    if (connection !== null) {
+        const runIsValid = validateRun({ connection, userId, gameState })
+        if (!runIsValid) {
+            logger.error('Run is not valid')
+            return { runId: null }
+        }
+        await connection.query(sql`
+            UPDATE
+                kaiju.user_run
+            SET
+                run_status = ${restart ? 'abandoned' : state},
+                end_ts = now(),
+                run_duration_in_sec = ${runDuration},
+                run_score = ${totalScore},
+                game_state = ${JSON.stringify(gameState)}
+            WHERE
+               run_id = ${runId};
+        `)
     }
 
-    await connection.query(sql`
-        UPDATE
-            kaiju.user_run
-        SET
-            run_status = ${restart ? 'abandoned' : state },
-            end_ts = now(),
-            run_duration_in_sec = ${runDuration},
-            run_score = ${totalScore},
-            game_state = ${JSON.stringify(gameState)}
-        WHERE
-            run_id = ${runId};
-    `)
+    endRunMetrics(gameState.scene, runDuration, restart, userId)
 
     return { runId }
 }

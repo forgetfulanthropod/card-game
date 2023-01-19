@@ -17,6 +17,7 @@
     "dependencies": {
         "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
         "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
+        "@influxdata/influxdb-client": "^1.33.0",
         "@solana/wallet-adapter-base": "^0.9.20",
         "@solana/wallet-adapter-react": "^0.15.26",
         "@solana/wallet-adapter-react-ui": "^0.9.25",
