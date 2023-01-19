@@ -22,7 +22,7 @@ export const chooseStance: GameActions['chooseStance'] = args => {
     logger.debug(`${character.id} setting stance to ${stanceId}`)
 
     characterCursor.select('stance').set(stanceId)
-    chooseStanceMetric(character, stanceId, scene)
+    chooseStanceMetric(character, stanceId, scene, args.username)
 
     updateNpcMoves(scene)
 

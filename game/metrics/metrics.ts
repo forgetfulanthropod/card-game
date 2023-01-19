@@ -59,7 +59,7 @@ export const chooseStanceMetric = (
     character: CharacterMeta,
     stanceId: string,
     scene: BattleCursor,
-    username: string = ''
+    username: string | undefined = ''
 ) => {
     let tags = {
         character_name: character.id,
