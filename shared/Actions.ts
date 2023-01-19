@@ -10,6 +10,7 @@ import type {
     CharacterStats,
     CharacterUid,
     Gamestate,
+    Leaderboard,
     Orb,
     OwnedCharacterStats,
     Rulebook,
@@ -45,12 +46,16 @@ export interface BareServerActionsMeta {
         res: Promise<{ runId: RunID }>
     }
     endRun: {
-        args: { userId: UserID, restart?: true }
+        args: { userId: UserID; restart?: true }
         res: Promise<{ runId: RunID | null }>
     }
     getNumKaijuInGoodEarth: {
         args: { walletAddress: string }
         res: Promise<{ numKaijuOwned: number }>
+    }
+    getLeaderboard: {
+        args: Empty
+        res: Promise<Leaderboard>
     }
 }
 
@@ -82,7 +87,7 @@ interface BareGameActionArgs {
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
-    setRunId: { userId: UserID, runId: RunID }
+    setRunId: { userId: UserID; runId: RunID }
 }
 
 // NOTE: below is not as complicated as it looks.
