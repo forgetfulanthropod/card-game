@@ -31,9 +31,10 @@ import {
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
-import { round } from 'lodash'
+import { round, sortBy } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { compose, Datum, datum } from 'datums'
+import { getShortWalletAddress } from '@/components/util'
 
 const getShowOnHoverFns = (el: PixiContainer) => ({
     onMouseover: () => getStage().addChild(el),
@@ -343,7 +344,7 @@ export function EndOfRunScreen(): PixiContainer {
                 fill: active ? 'black' : 'white',
                 fontFamily: 'bigFont',
                 fontWeight: '100',
-                fontSize: 36
+                fontSize: 36,
             },
         })
 
@@ -398,6 +399,92 @@ export function EndOfRunScreen(): PixiContainer {
         )
     })
 
+    const LeaderboardEntry = (
+        walletAddress: string,
+        highScore: number,
+        endTime: number,
+        inScreenIdx: number
+    ) => {
+        const y = BASE_HEIGHT / 2 - 100 - 105 * inScreenIdx
+        const x = BASE_WIDTH / 2
+        const style = {
+            fill: 'white'
+        }
+
+        return Container(
+            {},
+            RoundedRectangleGradientSprite({
+                spriteArgs: {
+                    width: 1600,
+                    height: 100,
+                    x,
+                    y,
+                    name: 'LeaderboardBackground',
+                    anchor: [0.5, 0.5],
+                    alpha: 0.85,
+                },
+                radius: 30,
+                gradientArgs: {
+                    x0: 0,
+                    y0: 0,
+                    x1: 0,
+                    y1: 100,
+                    colorStops: [{ color: 0x334155, offset: 0 }],
+                },
+            }),
+            Text({
+                text: 'RANK',
+                y: BASE_HEIGHT / 2 - 300,
+                x: x - 700,
+                style,
+            }),
+            Text({
+                text: 'USER',
+                y: BASE_HEIGHT / 2 - 300,
+                x: x - 400,
+                style,
+            }),
+            Text({
+                text: 'SCORE',
+                y: BASE_HEIGHT / 2 - 300,
+                x: x - 100,
+                style,
+            }),
+            Text({
+                text: 'TEAM',
+                y: BASE_HEIGHT / 2 - 300,
+                x: x + 250,
+                style,
+            }),
+            Text({
+                text: 'DATE',
+                y: BASE_HEIGHT / 2 - 300,
+                x: x + 600,
+                style,
+            }),
+            Text({
+                text: getShortWalletAddress(walletAddress),
+                y: y - 10,
+                x: x - 400,
+                style,
+            }),
+            Text({
+                text: highScore,
+                y: y - 10,
+                x: x - 100,
+                style,
+            }),
+            Text({
+                text: new Date(endTime).toDateString(),
+                y: y - 10,
+                x: x + 500,
+                style,
+            })
+        )
+    }
+
+    const LeaderboardEntries = Container({})
+
     const Leaderboard = Container(
         {},
         RoundedRectangleGradientSprite({
@@ -420,7 +507,8 @@ export function EndOfRunScreen(): PixiContainer {
                 colorStops: [{ color: 0x272753, offset: 0 }],
             },
         }),
-        LeaderboardTimeToggles
+        LeaderboardTimeToggles,
+        LeaderboardEntries
     )
 
     const ScoreElements = Container({}, RoundedBlackRectBackground)
@@ -429,6 +517,22 @@ export function EndOfRunScreen(): PixiContainer {
     ;(async () => {
         const screenHasNotOpened = scene.get('endScreenHasOpened') === false
         const isVictory = scene.get('state') === 'won'
+        const leaderboards = await callServerApi('getLeaderboard', {})
+        const sortedLeaderboards = sortBy(
+            leaderboards,
+            entry => entry.highest_score
+        )
+        sortedLeaderboards.forEach((entry, idx) => {
+            console.log(entry, idx)
+            LeaderboardEntries.addChild(
+                LeaderboardEntry(
+                    entry.wallet_address,
+                    entry.highest_score,
+                    entry.end_ts,
+                    idx
+                )
+            )
+        })
 
         // below condition will only be met once (even after refresh)
         if (screenHasNotOpened) {

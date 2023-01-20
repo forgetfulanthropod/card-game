@@ -250,6 +250,7 @@ export const RUN_TIME_THRESHOLD_MINS = 15
 
 export type Leaderboard = readonly {
     user_id: UserID
+    wallet_address: string
     highest_score: number
     start_ts: number // unix ts
     end_ts: number // unix ts
