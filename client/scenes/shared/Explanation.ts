@@ -262,7 +262,7 @@ export function Explanation({
         }
     })
 
-    console.log({ textEls, texts })
+    // console.log({ textEls, texts })
 
     return InfoBox(
         Container(

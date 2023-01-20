@@ -1,7 +1,9 @@
 #! RUN_TESTS=yes esr runTests.ts
+// npm install -g esbuild-runner
+
 /* eslint-disable no-console, import/first, import/no-internal-modules */
-import winston from 'winston'
-global.logger = winston.createLogger()
+import './config/logger'
+import './config/seedrand'
 
 type SuiteName = string
 type TestName = string

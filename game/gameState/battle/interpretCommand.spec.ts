@@ -1,12 +1,20 @@
 import { deepStrictEqual as equals, ok as truthy } from 'assert'
-import { SBaobab } from 'sbaobab'
-import type { Card, CharacterUid, Command, Gamestate, TargetType } from 'shared'
+import { SBaobab, SCursor } from 'sbaobab'
+import type {
+    BattleCursor,
+    Card,
+    CharacterUid,
+    Command,
+    Gamestate,
+    TargetType,
+} from 'shared'
 import { interpretCommand, play } from './cards'
 // @ts-ignore
 import exampleBattleScene_ from './exampleBattlescene.json'
 // eslint-disable-next-line import/no-internal-modules
 import { explainCommand } from './cards/interpretCommand'
 import { getBattleSceneIn } from '@/util'
+import { playCard } from '@/actions'
 
 const exampleBattleScene = exampleBattleScene_ as unknown as Gamestate
 const originalScene = exampleBattleScene_.scene
@@ -37,6 +45,52 @@ const interpretCommandSuite = {
             targetUids: [pc1],
         })
         equals(scene.get('energy'), 3 + 2)
+    },
+    brittle() {
+        const { scene, game } = freshGameAndBattleScene()
+
+        addCardToHand(
+            {
+                characterUid: pc1,
+                uid: 'a',
+                explanation: '',
+
+                name: 'Song of Good Health',
+                energy: 1,
+                id: 'songOfGoodHealth',
+                targetNum: 1,
+                targetType: 'friends',
+                actions: `brittle(2)`,
+                type: 'utility',
+                characterClass: 'bard',
+            },
+            scene
+        )
+        playCard({ cardUid: 'a', targetUids: [npc1], game })
+
+        equals(scene.get('cards', 'discard', 'a').actions, 'brittle(1)')
+
+        addCardToHand(
+            {
+                characterUid: pc1,
+                uid: 'b',
+                explanation: '',
+
+                name: 'Song of Good Health',
+                energy: 1,
+                id: 'songOfGoodHealth',
+                targetNum: 1,
+                targetType: 'friends',
+                actions: `brittle(1)`,
+                type: 'utility',
+                characterClass: 'bard',
+            },
+            scene
+        )
+        playCard({ cardUid: 'b', targetUids: [npc1], game })
+
+        equals(!!scene.get('cards', 'removedRun', 'b'), true)
+        equals(!!scene.get('cards', 'discard', 'b'), false)
     },
     // addStrength() { },
     // addWisdom() {},
@@ -221,8 +275,21 @@ function makeCmd(
     }
 }
 
-function freshBattleScene() {
-    const state = new SBaobab(exampleBattleScene).select()
-    const scene = getBattleSceneIn(state)
+function addCardToHand(card: Card, scene: BattleCursor) {
+    scene.select('cards', 'hand').set(card.uid, card)
+}
+
+function freshGame() {
+    return new SBaobab(exampleBattleScene).select()
+}
+
+function freshBattleScene(game?: SCursor<Gamestate>) {
+    const scene = getBattleSceneIn(game ?? freshGame())
     return scene
+}
+
+function freshGameAndBattleScene() {
+    const game = freshGame()
+    const scene = freshBattleScene(game)
+    return { game, scene }
 }

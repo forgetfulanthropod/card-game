@@ -2,6 +2,7 @@ import { Toaster } from 'react-hot-toast'
 
 import { AppWrap } from './AppWrap'
 import { ResetButton } from './ResetButton'
+import { RulebookEditor } from './RulebookEditor'
 
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
