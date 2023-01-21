@@ -21,35 +21,26 @@ let pool: DatabasePool | null = null
 export const getDbClient = async () => {
     if (pool) return pool
     const logger = getLogger()
-    try {
-        const url = stringifyDsn({
-            username: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            host: process.env.PGHOST,
-            port: Number(process.env.PGPORT),
-            databaseName: process.env.PGDATABASE,
-        })
+    const url = stringifyDsn({
+        username: process.env.PGUSER,
+        password: process.env.PGPASSWORD,
+        host: process.env.PGHOST,
+        port: Number(process.env.PGPORT),
+        databaseName: process.env.PGDATABASE,
+    })
 
-        const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
+    const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
 
-        const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
-        const maximumPoolSize = parseInt(process.env.MAX_POOL_SIZE ?? '20')
+    const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
+    const maximumPoolSize = parseInt(process.env.MAX_POOL_SIZE ?? '20')
 
-        pool = await createPool(url, {
-            ssl: isLocalhost ? undefined : ssl,
-            maximumPoolSize,
-            // typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
-        })
+    pool = await createPool(url, {
+        ssl: isLocalhost ? undefined : ssl,
+        maximumPoolSize,
+        // typeParsers: [{ name: 'int8', parse: val => BigInt(val) }],
+    })
 
-        return pool
-    } catch (e) {
-        const err = e as unknown as Error
-        const msg = err.message
-        logger.error(
-            `exception occured in connecting to DB: ${msg} ${err.stack}`
-        )
-        return null
-    }
+    return pool
 }
 
 export const sql = createSqlTag({

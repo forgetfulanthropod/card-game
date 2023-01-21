@@ -45,25 +45,23 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
         return { runId: null }
     }
 
-    if (connection !== null) {
-        const runIsValid = validateRun({ connection, userId, gameState })
-        if (!runIsValid) {
-            logger.error('Run is not valid')
-            return { runId: null }
-        }
-        await connection.query(sql`
-            UPDATE
-                kaiju.user_run
-            SET
-                run_status = ${restart ? 'abandoned' : state},
-                end_ts = now(),
-                run_duration_in_sec = ${runDuration},
-                run_score = ${totalScore},
-                game_state = ${JSON.stringify(gameState)}
-            WHERE
-               run_id = ${runId};
-        `)
+    const runIsValid = validateRun({ connection, userId, gameState })
+    if (!runIsValid) {
+        logger.error('Run is not valid')
+        return { runId: null }
     }
+    await connection.query(sql`
+        UPDATE
+            kaiju.user_run
+        SET
+            run_status = ${restart ? 'abandoned' : state},
+            end_ts = now(),
+            run_duration_in_sec = ${runDuration},
+            run_score = ${totalScore},
+            game_state = ${JSON.stringify(gameState)}
+        WHERE
+           run_id = ${runId};
+    `)
 
     endRunMetrics(gameState.scene, runDuration, restart, userId)
 
