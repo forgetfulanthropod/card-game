@@ -248,11 +248,13 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
 
 export const RUN_TIME_THRESHOLD_MINS = 15
 
-export type Leaderboard = readonly {
+export type Leaderboard = readonly LeaderboardEntry[]
+
+export type LeaderboardEntry = {
     user_id: UserID
     wallet_address: string
     highest_score: number
     start_ts: number // unix ts
     end_ts: number // unix ts
     run_id: RunID
-}[]
+}

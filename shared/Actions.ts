@@ -54,7 +54,7 @@ export interface BareServerActionsMeta {
         res: Promise<{ numKaijuOwned: number }>
     }
     getLeaderboard: {
-        args: Empty
+        args: { userId: UserID }
         res: Promise<Leaderboard>
     }
 }
