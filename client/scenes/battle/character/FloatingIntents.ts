@@ -101,12 +101,22 @@ function FloatingIntent(
     }
 }
 
-const commandIdToMetaMap: Partial<
-    Record<
-        (NpcCommandId & KeyTerm) | NpcCommandId,
-        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
-    >
+const commandIdToMetaMap: Record<
+    NpcCommandId,
+    { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
 > = {
+    ancientStrike: {
+        id: 'ancientStrike',
+        explanation: [],
+    },
+    basicAttack: {
+        id: 'basicAttack',
+        explanation: [],
+    },
+    bigBelly: {
+        id: 'bigBelly',
+        explanation: [],
+    },
     bigBomb1: {
         id: 'bigBomb1',
         src: 'intentBigBomb1',
@@ -123,9 +133,69 @@ const commandIdToMetaMap: Partial<
             'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
         ],
     },
+    block: {
+        id: 'block',
+        explanation: [],
+    },
+    bucketOfBangSnaps: {
+        id: 'bucketOfBangSnaps',
+        explanation: [
+            'Applies <b>Unready</b> (2) if any damage goes unblocked',
+        ],
+    },
+    chomp: {
+        id: 'chomp',
+        explanation: [],
+    },
+    demolitionCharge: {
+        id: 'demolitionCharge',
+        explanation: [
+            'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
+        ],
+    },
+    evisceratingSweep: {
+        id: 'evisceratingSweep',
+        explanation: [],
+    },
+    fireCracker: {
+        id: 'fireCracker',
+        explanation: ['Applies <b>Unguarded</b> (2)'],
+    },
+    gnomeBomb: {
+        id: 'gnomeBomb',
+        explanation: ['Applies <b>Tired</b> (1) if any damage goes unblocked'],
+    },
     grudge: {
         id: 'grudge',
         src: 'intentGrudge',
+    },
+    hansBuffBlock: {
+        id: 'hansBuffBlock',
+        explanation: [],
+    },
+    hansCurse: {
+        id: 'hansCurse',
+        explanation: [],
+    },
+    hansGuards: {
+        id: 'hansGuards',
+        explanation: [],
+    },
+    hansMagicMissile: {
+        id: 'hansMagicMissile',
+        explanation: [],
+    },
+    hypnosis: {
+        id: 'hypnosis',
+        explanation: [],
+    },
+    itchyOozeSpecial: {
+        id: 'itchyOozeSpecial',
+        explanation: [],
+    },
+    jab: {
+        id: 'jab',
+        explanation: [],
     },
     jurgenBellyFlop: {
         id: 'jurgenBellyFlop',
@@ -151,10 +221,88 @@ const commandIdToMetaMap: Partial<
         id: 'jurgenStampSnort',
         explanation: ['Bosshog Jürgen will do double damage next turn'],
     },
+    matchaMadness: {
+        id: 'matchaMadness',
+        explanation: [],
+    },
+    matchaMash: {
+        id: 'matchaMash',
+        explanation: [],
+    },
+    matchaMeld: {
+        id: 'matchaMeld',
+        explanation: [],
+    },
     mimicAttack: {
         id: 'mimicAttack',
         src: 'intentMimic',
         explanation: ['copies last hit this turn or deals 999'],
+    },
+    parasiticNibble: {
+        id: 'parasiticNibble',
+        explanation: [],
+    },
+    passiveBlockCmd: {
+        id: 'passiveBlockCmd',
+        explanation: [],
+    },
+    psychicBolt: {
+        id: 'psychicBolt',
+        explanation: [],
+    },
+    quickNap: {
+        id: 'quickNap',
+        explanation: [],
+    },
+    rest: {
+        id: 'rest',
+        explanation: [],
+    },
+    rustyPokeHigh: {
+        id: 'rustyPokeHigh',
+        explanation: [],
+    },
+    rustyPokeLow: {
+        id: 'rustyPokeLow',
+        explanation: [],
+    },
+    slash: {
+        id: 'slash',
+        explanation: [],
+    },
+    snortinTime: {
+        id: 'snortinTime',
+        explanation: [],
+    },
+    spiritQuest: {
+        id: 'spiritQuest',
+        explanation: [],
+    },
+    strike: {
+        id: 'strike',
+        explanation: [],
+    },
+    surpriseAllergy: {
+        id: 'surpriseAllergy',
+        explanation: [],
+    },
+    swordWack: {
+        id: 'swordWack',
+        explanation: [],
+    },
+    tummySlam: {
+        id: 'tummySlam',
+        explanation: [],
+    },
+    violentSneeze: {
+        id: 'violentSneeze',
+        explanation: [],
+    },
+    yodel: {
+        id: 'yodel',
+        explanation: [
+            'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
+        ],
     },
 
     //matcha
@@ -177,35 +325,6 @@ const commandIdToMetaMap: Partial<
         explanation: [
             'Applies <b>Poisoned</b> (3) and <b>Fatigued</b> (2) if any damage goes unblocked',
         ],
-    },
-
-    // gnome
-    gnomeBomb: {
-        id: 'gnomeBomb',
-        explanation: ['Applies <b>Tired</b> (1) if any damage goes unblocked'],
-    },
-    yodel: {
-        id: 'yodel',
-        explanation: [
-            'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
-        ],
-    },
-    demolitionCharge: {
-        id: 'demolitionCharge',
-        explanation: [
-            'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
-        ],
-    },
-
-    bucketOfBangSnaps: {
-        id: 'bucketOfBangSnaps',
-        explanation: [
-            'Applies <b>Unready</b> (2) if any damage goes unblocked',
-        ],
-    },
-    fireCracker: {
-        id: 'fireCracker',
-        explanation: ['Applies <b>Unguarded</b> (2)'],
     },
 }
 

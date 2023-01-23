@@ -50,10 +50,16 @@ export function RulebookEditor(props: { username: string }): JSXElement {
     const { username } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(true)
+
+    if (!isLoaded) return <></>
+
     const rulebooks = useCursor(getTree().select('rulebooks'))
     const curRulebook = useCursor(getTree().select('curRulebook'))
     const name = curRulebook != null ? JSON.parse(curRulebook).name : null
     useEffect(() => {
+        setTimeout(() => setIsLoaded(true), 1000)
+
         if (curRulebook == null) return
         ref.current?.setValue(curRulebook)
     }, [curRulebook])

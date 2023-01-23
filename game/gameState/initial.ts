@@ -9,7 +9,7 @@ const config = {
     includeRulebook: true,
 }
 function initialOwnedCharacters(): OwnedCharacterStatsMap {
-    const { characters: statsMap } = getRulebook()
+    const { playerCharacterStatsMap: statsMap } = getRulebook()
 
     let oc = {} as OwnedCharacterStatsMap
     const characterIds = keys(statsMap)

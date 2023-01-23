@@ -32,7 +32,7 @@ export const keyTermsMap = {
 
     grudge: 'intentGrudge',
     infectiousBite: 'unblocked damage becomes Poison',
-    mimicAttack: 'deal 999 or copies the last hit taken this turn.',
+    mimicAttack: 'deal 999 or copies the last hit taken this turn',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',

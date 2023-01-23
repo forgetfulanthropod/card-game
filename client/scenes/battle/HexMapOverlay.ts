@@ -80,7 +80,7 @@ export function HexMapOverlay(): PixiContainer {
 
 function AllTiles(): PixiContainer[] {
     const tileGraphMap = getTileGraphMap()
-    const rootNode = tileGraphMap[keys(tileGraphMap)[0]]
+    const rootNode = tileGraphMap['root']
     const allTiles: PixiContainer[] = []
     let depthsAndYOffsets: [number, number][] = []
 

@@ -85,11 +85,11 @@ export function NewStartScreen(props: {
             console.warn('No User Doc')
 
             if (!WALLET_GATED) {
-                const walletAddress = Math.random().toString()
+                const walletAddress = Math.random().toString().slice(2)
                 setUserDoc({
                     walletAddress,
                     numKaijusOwned: 1,
-                    userId: `anonymous-${walletAddress}`,
+                    userId: `${walletAddress}`,
                 })
             }
 

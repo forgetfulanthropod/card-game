@@ -7,8 +7,8 @@ import type {
     NpcCommandId,
 } from 'shared'
 import { entryMap, keys } from 'shared/code'
-import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 import * as alias from './commandAliases'
+import { getRulebook } from './rulebook'
 // TODO eventually: remove ? before : below
 type CommandDefinitionsMap = Record<NpcCommandId, NpcCommandDefinition>
 
@@ -356,7 +356,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
  * mutates commandDefinitionsMap in place
  */
 function generateParameterizedCommands() {
-    for (const levelObj of Object.values(npcStatsMapByLevel))
+    for (const levelObj of Object.values(getRulebook().npcStatsMapByLevel))
         for (const enemy of Object.values(levelObj))
             for (const commandId of enemy.moves) {
                 if (commandId == null || !commandId.includes('(')) continue

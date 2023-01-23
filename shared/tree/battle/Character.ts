@@ -1,4 +1,5 @@
 import type { Brandify } from '@misc'
+import { NpcCommandId } from './Card'
 import type {
     CharacterClass,
     CharacterId,
@@ -50,6 +51,25 @@ export type PlayerCharacterStats = Readonly<
 
 export type NonPlayerCharacterStats = Readonly<
     CharacterStats & { id: NonPlayerCharacterId }
+>
+
+export type BaseHealth = number | `${number}-${number}` | `>${number}`
+export type EnemyDefinition = {
+    // displayName: string
+    // level: number | string | null
+    // id: string
+    constitution: BaseHealth
+    strength: number
+    defense: number
+    magic: number
+    level: number | string
+    // TODO: rename to commands
+    moves: readonly (NpcCommandId | null)[]
+}
+type Level = string
+export type NpcStatsMapByLevel = Record<
+    NonPlayerCharacterId,
+    Record<Level, EnemyDefinition>
 >
 
 /** Result of applying effects to character */
