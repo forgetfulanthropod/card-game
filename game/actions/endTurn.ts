@@ -1,6 +1,6 @@
 import type { GameActions } from 'shared'
 
-import { endTurnMetric } from '@/metrics'
+import { trackMetric } from 'server/metrics'
 import { getBattleSceneIn } from '@/util'
 import {
     applyTurnStartEffects,
@@ -15,7 +15,7 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
-    endTurnMetric(scene, args.username)
+    trackMetric('endTurn', { scene })
 
     endRound(scene)
     clearBlock(scene, 'npc')

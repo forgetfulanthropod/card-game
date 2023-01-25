@@ -1,5 +1,5 @@
 import { AuthUserDBActionProps, BUILD_VER, RunID, ServerActions } from 'shared'
-import { startRunMetric } from '@/metrics'
+import { trackMetric } from '@/metrics'
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { getGamestate } from '@/db'
 
@@ -10,7 +10,7 @@ export const startRun: ServerActions['startRun'] = async ({ userId }) => {
     await cleanUpPreviousRuns({ connection, userId })
     const runId = await createNewRun({ connection, userId })
 
-    startRunMetric(runId, userId)
+    trackMetric('startRun', { runId, username: userId })
     logger.info(`${userId} started runId: ${runId}`)
     return { runId }
 }

@@ -1,4 +1,4 @@
-import { writeMetric } from 'server/metrics'
+import { metricField, writeMetric } from 'server/metrics'
 import type {
     Card,
     BattleCursor,
@@ -7,12 +7,30 @@ import type {
     DungeonRoom,
 } from 'shared'
 
-export const playCardMetric = (
-    card: Card,
-    scene: BattleCursor,
-    targetUids: CharacterUid[],
-    username: string = ''
-) => {
+// TODO: discussion: put these meta interfaces/types in another file along
+// with the server metric args?
+export interface BareGameMetricsArgs {
+    playCard: { card: Card; targetUids: CharacterUid[] }
+    chooseStance: { character: CharacterMeta; stanceId: string }
+    nextRoom: { choice: number; chosenRoom: DungeonRoom }
+    addCardToDeck: { card: Card }
+    endTurn: {}
+}
+
+export type GameMetricsArgs = {
+    [K in keyof BareGameMetricsArgs]: BareGameMetricsArgs[K] & {
+        scene: BattleCursor
+    }
+}
+export type GameMetrics = {
+    [K in keyof GameMetricsArgs]: (args: GameMetricsArgs[K]) => void
+}
+
+// TODO: discussion: should the tags by typed and put in a meta interface
+// like the args as well? Possibly return { name, fields, tags } from each
+// metric function and put the actual call to write somewhere else
+export const playCard: GameMetrics['playCard'] = args => {
+    const { card, targetUids, scene } = args
     interface tagInfo {
         card_name: string
         card_energy: number
@@ -41,6 +59,7 @@ export const playCardMetric = (
         play_order: scene.get('cardsPlayedThisTurn').length,
         target_type: card.targetType,
         run_id: scene.get('runId'),
+        user_name: scene.get('username'),
     })
     if (targetUids.length == 1) {
         let target = scene.get('allCharacters', targetUids[0])
@@ -49,18 +68,11 @@ export const playCardMetric = (
     } else {
         tags.target_id = 'multiple'
     }
-    if (username) {
-        tags.user_name = username
-    }
-    writeMetric('card_play', 1, tags)
+    writeMetric('card_play', tags)
 }
 
-export const chooseStanceMetric = (
-    character: CharacterMeta,
-    stanceId: string,
-    scene: BattleCursor,
-    username: string | undefined = ''
-) => {
+export const chooseStance: GameMetrics['chooseStance'] = args => {
+    const { character, stanceId, scene } = args
     let tags = {
         character_name: character.id,
         character_class: character.class,
@@ -68,49 +80,38 @@ export const chooseStanceMetric = (
         turn_count: scene.get('turnCount'),
         stance_name: stanceId,
         run_id: scene.get('runId'),
+        user_name: scene.get('username'),
     }
-    if (username) {
-        Object.assign(tags, { user_name: username })
-    }
-    writeMetric('choose_stance', 1, tags)
+    writeMetric('choose_stance', tags)
 }
 
-export const nextRoomMetric = (
-    choice: number,
-    chosenRoom: DungeonRoom,
-    runId: number,
-    username: string = ''
-) => {
+export const nextRoom: GameMetrics['nextRoom'] = args => {
+    const { choice, chosenRoom, scene } = args
     let tags = {
         room_choice: chosenRoom.uid,
         room_category: chosenRoom.category,
-        run_id: runId,
+        run_id: scene.get('runId'),
+        user_name: scene.get('username'),
     }
-    if (username) {
-        Object.assign(tags, { user_name: username })
-    }
-    writeMetric('next_room', choice, tags)
+    let fields = [metricField({ value: choice })]
+    writeMetric('next_room', tags, fields)
 }
 
-export const addCardToDeckMetric = (
-    card: Card,
-    runId: number,
-    username: string | undefined = ''
-) => {
+export const addCardToDeck: GameMetrics['addCardToDeck'] = args => {
+    const { card, scene } = args
     let tags = {
         card_name: card.id,
         card_type: card.type,
         card_energy: card.energy,
         character_class: card.characterClass,
-        run_id: runId,
+        run_id: scene.get('runId'),
+        user_name: scene.get('username'),
     }
-    if (username) {
-        Object.assign(tags, { user_name: username })
-    }
-    writeMetric('card_draft', 1, tags)
+    writeMetric('card_draft', tags)
 }
 
-export const endTurnMetric = (scene: BattleCursor, username: string = '') => {
+export const endTurn: GameMetrics['endTurn'] = args => {
+    let { scene } = args
     let cards = scene.get('cardsPlayedThisTurn')
     let damages = scene.get('damagesDealtThisTurn')
     let blocks = scene.get('blocksAppliedThisTurn')
@@ -119,13 +120,11 @@ export const endTurnMetric = (scene: BattleCursor, username: string = '') => {
         num_cards_played: cards.length,
         num_damage_cards: damages.length,
         num_block_cards: blocks.length,
-        //NOT ACCURATE COUNT; parry that's a damage card that also adds block only counts damage here
+        // NOT ACCURATE COUNT; parry that's a damage card that also adds block only counts damage here
         turn_damage_dealt: damages.reduce((n, { amount }) => n + amount, 0),
         turn_block_added: blocks.reduce((n, { amount }) => n + amount, 0),
         run_id: scene.get('runId'),
+        username: scene.get('username'),
     }
-    if (username) {
-        Object.assign(tags, { user_name: username })
-    }
-    writeMetric('turn_end', 1, tags)
+    writeMetric('turn_end', tags)
 }

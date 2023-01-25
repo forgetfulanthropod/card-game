@@ -1,2 +1,3 @@
-export { writeMetric } from './influx'
+export { FieldType, metricField, writeMetric } from './influx'
 export * from './metrics'
+export { trackMetric } from './trackMetric'

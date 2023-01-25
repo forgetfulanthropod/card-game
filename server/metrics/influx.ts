@@ -4,15 +4,28 @@ import { getLogger } from 'game'
 
 const logger = getLogger()
 let _db: InfluxDB
-let enableMetrics = true
+let enableMetrics: boolean = true
 
-const getInfluxDb = () => {
+let influxOrg: string
+let influxBucket: string
+
+const getInfluxDb = (): InfluxDB | undefined => {
     if (_db) return _db
-    const influxUrl = process.env.INFLUX_URL || ''
-    const influxApiToken = process.env.INFLUX_TOKEN || ''
+    const influxUrl = process.env.INFLUX_URL
+    const influxApiToken = process.env.INFLUX_TOKEN
     if (!influxUrl || !influxApiToken) {
         logger.error(
             'no influx url or token defined. check your INFLUX_URL and INFLUX_TOKEN variable in env'
+        )
+        logger.error('METRICS DISABLED')
+        enableMetrics = false
+        return
+    }
+    influxOrg = process.env.INFLUX_ORG || ''
+    influxBucket = process.env.INFLUX_BUCKET || ''
+    if (!influxOrg || !influxBucket) {
+        logger.error(
+            'no influx organization or bucket defined. check your INFLUX_ORG and INFLUX_BUCKET variables in env'
         )
         logger.error('METRICS DISABLED')
         enableMetrics = false
@@ -25,40 +38,61 @@ const getInfluxDb = () => {
     return _db
 }
 
+export enum FieldType {
+    'int',
+    'float',
+    'string',
+}
+
+interface MetricField {
+    name: string
+    type: FieldType
+    value: number | string
+}
+
+interface MetricFieldOptional {
+    name?: string
+    type?: FieldType
+    value?: number | string
+}
+
+const defaultMetricField: MetricField = {
+    name: 'value',
+    type: FieldType.int,
+    value: 1,
+}
+
+export function metricField(): MetricField
+export function metricField(obj: MetricFieldOptional): MetricField
+export function metricField(
+    t: MetricFieldOptional | undefined = undefined
+): MetricField {
+    if (!t) return defaultMetricField
+    else return { ...defaultMetricField, ...t }
+}
+
 // TODO: allow for data points with multiple values
 export const writeMetric = (
     name: string,
-    value: any,
     tags = {},
-    valueType = 0
+    fields: MetricFieldOptional[] = [defaultMetricField]
 ) => {
-    if (!enableMetrics) {
-        return
-    }
-    const influxOrg = process.env.INFLUX_ORG
-    const influxBucket = process.env.INFLUX_BUCKET
-    if (!influxOrg || !influxBucket) {
-        logger.error(
-            'no influx organization or bucket defined. check your INFLUX_ORG and INFLUX_BUCKET variables in env'
-        )
-        logger.error('METRICS DISABLED')
-        enableMetrics = false
-        return
-    }
+    if (!enableMetrics) return
     try {
         let point = new Point(name)
-        if (valueType == 0) {
-            point = point.intField('value', value)
-        } else if (valueType == 1) {
-            point = new Point(name).floatField('value', value)
-        } else {
-            point = new Point(name).stringField('value', value)
-        }
+        fields.forEach(field => {
+            const finalField = metricField(field)
+            if (field.type == FieldType.int)
+                point.intField(finalField.name, field.value)
+            else if (field.type == FieldType.float)
+                point.floatField(finalField.name, field.value)
+            else point.stringField(finalField.name, field.value)
+        })
         for (const [tagKey, tagValue] of Object.entries(tags)) {
             try {
                 let tagString = String(tagValue)
                 if (tagString != '' && tagString.slice(-1) != '\\') {
-                    point = point.tag(tagKey, tagString)
+                    point.tag(tagKey, tagString)
                 }
             } catch (e) {
                 const err = e as Error
@@ -72,11 +106,15 @@ export const writeMetric = (
             logger.error('could not get db connection')
             return
         }
+        // TODO: use a single/shared writeApi and make all writes async
+        // right now writeApi closes (flushes) on every point; will probably not scale
         const writeApi = db.getWriteApi(influxOrg, influxBucket)
         writeApi.writePoint(point)
         writeApi.close().then(() => {
             logger.debug(
-                `metric written: ${name}: ${value}, ${JSON.stringify(tags)}`
+                `metric written: ${name}: ${fields
+                    .map(f => `${f.name}: ${f.value}`)
+                    .join(', ')}; ${JSON.stringify(tags)}`
             )
         })
     } catch (e) {

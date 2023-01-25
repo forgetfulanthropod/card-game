@@ -10,7 +10,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
-import { playCardMetric } from '@/metrics'
+import { trackMetric } from 'server/metrics'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -22,7 +22,7 @@ export const playCard: GameActions['playCard'] = args => {
     if (isPlayable({ card, scene })) {
         scene.select('allCharacters', card.characterUid).set('hasMoved', true)
         // get target hp before card play for metric
-        playCardMetric(card, scene, args.targetUids, args.username)
+        trackMetric('playCard', { card, scene, targetUids: args.targetUids })
         play({ card, targetUids: args.targetUids, scene })
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })

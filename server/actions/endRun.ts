@@ -8,7 +8,7 @@ import {
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
-import { endRunMetrics } from '@/metrics'
+import { trackMetric } from '@/metrics'
 
 export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     logger.info(`Ending run for: ${userId}`)
@@ -63,7 +63,11 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
            run_id = ${runId};
     `)
 
-    endRunMetrics(gameState.scene, runDuration, restart, userId)
+    trackMetric('endRun', {
+        scene: gameState.scene,
+        runDuration,
+        restart: restart || false,
+    })
 
     return { runId }
 }

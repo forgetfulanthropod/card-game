@@ -1,24 +1,31 @@
-import type { Gamestate, BattleScene } from 'shared'
-import { writeMetric } from './influx'
+import type { BattleScene } from 'shared'
+import { FieldType, writeMetric } from './influx'
 
-export const startRunMetric = (runId: number, username: string = '') => {
-    let tags = {
-        run_id: runId,
-    }
-    if (username) {
-        Object.assign(tags, { user_name: username })
-    }
-    writeMetric('run_start', 1, tags)
+export interface BareServerMetricsArgs {
+    startRun: { runId: number; username: string }
+    endRun: { runDuration: number; restart: boolean; scene: BattleScene }
 }
 
-export const endRunMetrics = (
-    scene: BattleScene,
-    runDuration: number,
-    restart: boolean | undefined,
-    username: string | undefined = ''
-) => {
-    const { runId, state } = scene
-    let stateName = restart ? 'restart' : state
+export type ServerMetricsArgs = {
+    [K in keyof BareServerMetricsArgs]: BareServerMetricsArgs[K]
+}
+
+export type ServerMetrics = {
+    [K in keyof ServerMetricsArgs]: (args: ServerMetricsArgs[K]) => void
+}
+
+export const startRun: ServerMetrics['startRun'] = args => {
+    const { runId, username } = args
+    let tags = {
+        run_id: runId,
+        user_name: username,
+    }
+    writeMetric('run_start', tags)
+}
+
+export const endRun: ServerMetrics['endRun'] = args => {
+    const { runDuration, restart, scene } = args
+    let stateName = restart ? 'restart' : scene.state
     let currentRoom = scene.currentRoom.uid
     if (currentRoom == 'root') {
         currentRoom = '0_0'
@@ -26,15 +33,15 @@ export const endRunMetrics = (
     let tags = {
         state: stateName,
         current_room: currentRoom,
-        run_id: runId,
-        user_name: username,
-    }
-    if (username) {
-        Object.assign(tags, { user_name: username })
+        run_id: scene.runId,
+        user_name: scene.username,
     }
 
-    const totalScore = scene.runScore.totalScore || 0
-    writeMetric('run_end', 1, tags)
-    writeMetric('run_score', totalScore, tags)
-    writeMetric('run_duration', runDuration, tags)
+    const totalScore = scene.runScore.totalScore
+    // TODO: discussion: put in one measurement or keep separate?
+    writeMetric('run_end', tags)
+    writeMetric('run_score', tags, [
+        { value: totalScore, type: FieldType.float },
+    ])
+    writeMetric('run_duration', tags, [{ value: runDuration }])
 }

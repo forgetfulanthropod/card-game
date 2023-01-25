@@ -1,6 +1,6 @@
 import type { GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
-import { addCardToDeckMetric } from '@/metrics'
+import { trackMetric } from 'server/metrics'
 
 export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -9,7 +9,7 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
 
     if (card == null) throw new Error("that card uid isn't an option..")
 
-    addCardToDeckMetric(card, scene.get('runId') || 0, args.username)
+    trackMetric('addCardToDeck', { card, scene })
 
     scene.apply('cards', cards => {
         return {

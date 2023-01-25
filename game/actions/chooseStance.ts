@@ -2,7 +2,7 @@ import type { StanceId, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
 import { updateNpcMoves, updateHand } from '@/gameState'
-import { chooseStanceMetric } from '@/metrics'
+import { trackMetric } from 'server/metrics'
 
 export const chooseStance: GameActions['chooseStance'] = args => {
     const { characterUid, stanceId } = args
@@ -22,7 +22,7 @@ export const chooseStance: GameActions['chooseStance'] = args => {
     logger.debug(`${character.id} setting stance to ${stanceId}`)
 
     characterCursor.select('stance').set(stanceId)
-    chooseStanceMetric(character, stanceId, scene, args.username)
+    trackMetric('chooseStance', { character, stanceId, scene })
 
     updateNpcMoves(scene)
 
