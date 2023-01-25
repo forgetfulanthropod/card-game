@@ -6,7 +6,8 @@ import type {
 export async function callServerApi<K extends keyof ServerActions>(
     method: K,
     args: BareServerActionsMeta[K]['args']
-): Promise<BareServerActionsMeta[K]['res']> {
+    //@ts-expect-error
+): BareServerActionsMeta[K]['res'] {
     const fullArgs = { ...(args ?? {}), method: method }
     console.log('Calling Server API: ', { args, method })
 

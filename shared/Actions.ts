@@ -23,15 +23,15 @@ import type {
 export interface BareServerActionsMeta {
     incrementTestCounter: {
         args: Empty
-        res: Promise<void> | void
+        res: Promise<void>
     }
     makeNewUser: {
         args: { username: string }
-        res: Promise<void> | void
+        res: Promise<void>
     }
     maybeMakeUser: {
         args: { username: string }
-        res: Promise<void> | void
+        res: Promise<void>
     }
     login: {
         args: { walletAddress: string }

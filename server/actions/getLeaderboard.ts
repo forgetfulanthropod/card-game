@@ -1,6 +1,7 @@
 import {
     AuthUserDBActionProps,
     Leaderboard,
+    LEADERBOARD_ENTRIES_TO_DISPLAY,
     RunID,
     ServerActions,
 } from 'shared'
@@ -13,6 +14,8 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     let sql = sqlTag.typeAlias('leaderboard')
 
     logger.info(`Getting leaderboards for ${userId}`)
+
+    //TODO add rank to sql return
     const leaderboard: Leaderboard = await connection.many(sql`
         WITH
             tmp AS
@@ -23,7 +26,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 ORDER BY
                     highest_score DESC
                 LIMIT
-                    100
+                    ${LEADERBOARD_ENTRIES_TO_DISPLAY}
             )
         SELECT
             *

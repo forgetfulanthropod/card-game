@@ -25,6 +25,9 @@ import {
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import {
+    Leaderboard,
+    LEADERBOARD_ENTRIES_PER_PAGE,
+    MAX_LEADERBOARD_PAGE,
     RunScoreAttributeName,
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
@@ -184,7 +187,106 @@ export function EndOfRunScreen(): PixiContainer {
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
-    const showLeaderboard = datum(false)
+    const showLeaderboard = datum(true)
+    const currLeaderboardPage = datum(0)
+    const userId = scene.get('username')
+    const leaderboardsss = callServerApi('getLeaderboard', {
+        userId,
+    })
+
+    const leaderboard = callServerApi('getLeaderboard', {
+        userId,
+    }).then(leaderboard => {
+        const sortedLeaderboards = sortBy(
+            leaderboard,
+            entry => entry.highest_score
+        ).reverse()
+
+        renderLeaderboardsPage(sortedLeaderboards, 0)
+        return sortedLeaderboards as Leaderboard
+    })
+
+    const changeLeaderboardPage = (direction: 'next' | 'prev') => {
+        if (direction === 'prev') {
+            if (currLeaderboardPage.val > 0)
+                currLeaderboardPage.set(currLeaderboardPage.val - 1)
+        } else if (direction === 'next') {
+            if (currLeaderboardPage.val < MAX_LEADERBOARD_PAGE - 1)
+                currLeaderboardPage.set(currLeaderboardPage.val + 1)
+        }
+    }
+
+    currLeaderboardPage.onChange(newPage => {
+        leaderboard.then(board => {
+            renderLeaderboardsPage(board, newPage)
+            LeaderboardPageButtons.removeChildren()
+            if (newPage > 0 && newPage < MAX_LEADERBOARD_PAGE - 1) {
+                LeaderboardPageButtons.addChild(PageUpArrow)
+                LeaderboardPageButtons.addChild(PageDownArrow)
+            } else if (newPage === 0) {
+                LeaderboardPageButtons.addChild(PageDownArrow)
+            } else if (newPage === MAX_LEADERBOARD_PAGE - 1) {
+                LeaderboardPageButtons.addChild(PageUpArrow)
+            }
+        })
+        console.log(newPage)
+    })
+
+    const renderLeaderboardsPage = (
+        sortedLeaderboard: Leaderboard,
+        page: number
+    ) => {
+        LeaderboardEntries.children.forEach(child => {
+            child.destroy()
+        })
+        LeaderboardEntries.removeChildren()
+
+        const entryIsInRange = (idx: number): boolean => {
+            const lowerBound = page * LEADERBOARD_ENTRIES_PER_PAGE - 1
+            const upperBound =
+                LEADERBOARD_ENTRIES_PER_PAGE +
+                page * LEADERBOARD_ENTRIES_PER_PAGE
+
+            if (idx > lowerBound && idx < upperBound) {
+                return true
+            }
+            return false
+        }
+
+        let inScreenIdx = 0
+        sortedLeaderboard.forEach((entry, idx) => {
+            const entryIsCurrentUser = entry.user_id === userId
+            if (!entryIsInRange(idx) && !entryIsCurrentUser) {
+                return
+            }
+            if (entryIsInRange(idx)) {
+                inScreenIdx++
+                LeaderboardEntries.addChild(
+                    LeaderboardEntry(
+                        entry.wallet_address,
+                        entry.highest_score,
+                        entry.end_ts,
+                        inScreenIdx - 1,
+                        idx + 1,
+                        false
+                    )
+                )
+            }
+
+            if (entryIsCurrentUser) {
+                LeaderboardEntries.addChild(
+                    LeaderboardEntry(
+                        entry.wallet_address,
+                        entry.highest_score,
+                        entry.end_ts,
+                        inScreenIdx - 1,
+                        idx + 1,
+                        true
+                    )
+                )
+            }
+        })
+    }
 
     battleState === 'won'
         ? loopSong('runVictoryMusicHooligansBluff')
@@ -276,16 +378,29 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const backToScoreButton = Sprite({
-        src: getTexture('skipButton'),
-        anchor: 0,
-        y: BASE_HEIGHT / 2 + 400,
-        // x: BASE_WIDTH / 2,
-        scale: 0.6,
+    const backToScoreButton = Text({
+        text: '❎',
+        // anchor: 0,
+        y: BASE_HEIGHT / 2 - 500,
+        x: BASE_WIDTH / 2 + 800,
+        style: {
+            fontSize: 64
+        },
         onClick: () => {
             showLeaderboard.set(!showLeaderboard.val)
         },
     })
+
+    // const backToScoreButton = Sprite({
+    //     src: getTexture('skipButton'),
+    //     anchor: 0,
+    //     y: BASE_HEIGHT / 2 + 400,
+    //     // x: BASE_WIDTH / 2,
+    //     scale: 0.6,
+    //     onClick: () => {
+    //         showLeaderboard.set(!showLeaderboard.val)
+    //     },
+    // })
 
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
@@ -380,92 +495,40 @@ export function EndOfRunScreen(): PixiContainer {
         }
     }
 
-    const LeaderboardTimeToggles = Container(
+    const style = {
+        fill: 'white',
+        fontFamily: 'monoFont'
+    }
+
+    const PageUpArrow = Text({
+        name: 'PageUpArrow',
+        text: '⬆️',
+        x: BASE_WIDTH / 2 + 785,
+        y: BASE_HEIGHT / 2 - 250,
+        style: {
+            fontSize: 42,
+        },
+        onClick: () => changeLeaderboardPage('prev'),
+    })
+
+    const PageDownArrow = Text({
+        name: 'PageDownArrow',
+        text: '⬇️',
+        x: BASE_WIDTH / 2 + 785,
+        y: BASE_HEIGHT / 2 + 215,
+        style: {
+            fontSize: 42,
+        },
+        onClick: () => changeLeaderboardPage('next'),
+    })
+
+    const LeaderboardPageButtons = Container({}, PageDownArrow)
+
+    const LeaderboardContextMenu = Container(
         {},
         createTimeOption(0),
         createTimeOption(1),
-        createTimeOption(2)
-    )
-
-    activeTimeOption.onChange(() => {
-        LeaderboardTimeToggles.children.forEach(child => {
-            child.destroy()
-        })
-        LeaderboardTimeToggles.removeChildren()
-        LeaderboardTimeToggles.addChild(
-            createTimeOption(0),
-            createTimeOption(1),
-            createTimeOption(2)
-        )
-    })
-
-    const style = {
-        fill: 'white',
-    }
-
-    const LeaderboardEntry = (
-        walletAddress: string,
-        highScore: number,
-        endTime: number,
-        inScreenIdx: number,
-        rank: number,
-        isSelf: boolean
-    ) => {
-        const y = isSelf
-            ? BASE_HEIGHT / 2 + 375
-            : BASE_HEIGHT / 2 - 200 + 105 * inScreenIdx
-        const x = BASE_WIDTH / 2
-
-        return Container(
-            {},
-            RoundedRectangleGradientSprite({
-                spriteArgs: {
-                    width: 1600,
-                    height: 100,
-                    x,
-                    y,
-                    name: 'LeaderboardBackground',
-                    anchor: [0.5, 0.5],
-                    alpha: 0.85,
-                },
-                radius: 30,
-                gradientArgs: {
-                    x0: 0,
-                    y0: 0,
-                    x1: 0,
-                    y1: 100,
-                    colorStops: [{ color: isSelf ? 0x64748b : 0x334155, offset: 0 }],
-                },
-            }),
-            Text({
-                text: rank,
-                y: y - 10,
-                x: x - 700,
-                style,
-            }),
-            Text({
-                text: getShortWalletAddress(walletAddress) + (isSelf ? ' ' : ''),
-                y: y - 10,
-                x: x - 400,
-                style,
-            }),
-            Text({
-                text: highScore,
-                y: y - 10,
-                x: x - 100,
-                style,
-            }),
-            Text({
-                text: new Date(endTime).toDateString(),
-                y: y - 10,
-                x: x + 500,
-                style,
-            })
-        )
-    }
-
-    const LeaderboardEntries = Container(
-        {},
+        createTimeOption(2),
         Text({
             text: 'RANK',
             y: BASE_HEIGHT / 2 - 300,
@@ -498,6 +561,86 @@ export function EndOfRunScreen(): PixiContainer {
         })
     )
 
+    activeTimeOption.onChange(() => {
+        LeaderboardContextMenu.children.forEach(child => {
+            child.destroy()
+        })
+        LeaderboardContextMenu.removeChildren()
+        LeaderboardContextMenu.addChild(
+            createTimeOption(0),
+            createTimeOption(1),
+            createTimeOption(2)
+        )
+    })
+
+    const LeaderboardEntry = (
+        walletAddress: string,
+        highScore: number,
+        endTime: number,
+        inScreenIdx: number,
+        rank: number,
+        isSelf: boolean
+    ) => {
+        const y = isSelf
+            ? BASE_HEIGHT / 2 + 375
+            : BASE_HEIGHT / 2 - 200 + 105 * inScreenIdx
+        const x = BASE_WIDTH / 2
+        const date = new Date(endTime)
+
+        return Container(
+            {},
+            RoundedRectangleGradientSprite({
+                spriteArgs: {
+                    width: 1550,
+                    height: 100,
+                    x,
+                    y,
+                    name: 'LeaderboardBackground',
+                    anchor: [0.5, 0.5],
+                    alpha: 1,
+                },
+                radius: 30,
+                gradientArgs: {
+                    x0: 0,
+                    y0: 0,
+                    x1: 0,
+                    y1: 100,
+                    colorStops: [
+                        { color: isSelf ? 0x7D4E57 : rank % 2 > 0 ? 0x212D40 : 0x364156, offset: 0 },
+                    ],
+                },
+            }),
+            Text({
+                text: `${rank}.`,
+                y: y - 10,
+                x: x - 700,
+                style,
+            }),
+            Text({
+                text:
+                    getShortWalletAddress(walletAddress) +
+                    (isSelf ? ' (YOU)' : ''),
+                y: y - 10,
+                x: x - 400,
+                style,
+            }),
+            Text({
+                text: highScore,
+                y: y - 10,
+                x: x - 100,
+                style,
+            }),
+            Text({
+                text: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`,
+                y: y - 10,
+                x: x + 500,
+                style,
+            })
+        )
+    }
+
+    const LeaderboardEntries = Container({})
+
     const Leaderboard = Container(
         {},
         RoundedRectangleGradientSprite({
@@ -508,8 +651,8 @@ export function EndOfRunScreen(): PixiContainer {
                 y: BASE_HEIGHT / 2,
                 name: 'LeaderboardBackground',
                 anchor: [0.5, 0.5],
-                alpha: 0.75,
-                tint: 1,
+                alpha: 0.9,
+                // tint: 1,
             },
             radius: 50,
             gradientArgs: {
@@ -517,10 +660,11 @@ export function EndOfRunScreen(): PixiContainer {
                 y0: 0,
                 x1: 0,
                 y1: 500,
-                colorStops: [{ color: 0x272753, offset: 0 }],
+                colorStops: [{ color: 0x11151c, offset: 0 }],
             },
         }),
-        LeaderboardTimeToggles,
+        LeaderboardContextMenu,
+        LeaderboardPageButtons,
         LeaderboardEntries
     )
 
@@ -530,33 +674,6 @@ export function EndOfRunScreen(): PixiContainer {
     ;(async () => {
         const screenHasNotOpened = scene.get('endScreenHasOpened') === false
         const isVictory = scene.get('state') === 'won'
-        const leaderboards = await callServerApi('getLeaderboard', {
-            userId: scene.get('username'),
-        })
-        const sortedLeaderboards = sortBy(
-            leaderboards,
-            entry => entry.highest_score
-        ).reverse()
-
-        sortedLeaderboards.forEach((entry, idx) => {
-            const entryIsCurrentUser = entry.user_id === scene.get('username')
-            if (entry.user_id === scene.get('username')) {
-                console.log({ entry })
-            } else if (idx >= 5) {
-                return
-            }
-
-            LeaderboardEntries.addChild(
-                LeaderboardEntry(
-                    entry.wallet_address,
-                    entry.highest_score,
-                    entry.end_ts,
-                    idx,
-                    idx + 1,
-                    entryIsCurrentUser
-                )
-            )
-        })
 
         // below condition will only be met once (even after refresh)
         if (screenHasNotOpened) {
@@ -578,7 +695,7 @@ export function EndOfRunScreen(): PixiContainer {
             }
 
             const { runId } = await callServerApi('endRun', {
-                userId: scene.get('username'),
+                userId,
             })
 
             if (runId === null) {
@@ -619,9 +736,9 @@ export function EndOfRunScreen(): PixiContainer {
         if (showLeaderboard) {
             TogglableMainContainer.addChild(Leaderboard)
             TogglableButtonsContainer.addChild(backToScoreButton)
-            Adjust(backToScoreButton, {
-                x: BASE_WIDTH / 2 - backToScoreButton.width / 2,
-            })
+            // Adjust(backToScoreButton, {
+            //     x: BASE_WIDTH / 2 - backToScoreButton.width / 2,
+            // })
         } else {
             TogglableMainContainer.addChild(ScoreElements)
             TogglableMainContainer.addChild(TotalScoreContainer)
