@@ -269,9 +269,11 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
     // const isCurrentRoomPastThisDepth =
     //     parseInt(currentRoom.uid.split('_')[0]) >
     //     parseInt(node.uid.split('_')[0])
-    const wasRoomVisited = scene
-        .get('roomUidsVisited')
-        ?.includes(currentRoom.uid)
+    const wasRoomVisited = scene.get('roomUidsVisited')?.includes(node.uid)
+
+    console.log(scene.get('roomUidsVisited'), node.uid, {
+        wasRoomVisited,
+    })
 
     if (wasRoomVisited) return Container({})
 
