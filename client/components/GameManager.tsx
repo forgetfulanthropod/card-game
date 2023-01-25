@@ -4,6 +4,7 @@ import { AppWrap } from './AppWrap'
 import { ResetButton } from './ResetButton'
 import { AwaitGameState } from './AwaitGameState'
 import { RulebookEditor } from './RulebookEditor'
+import { SceneEditor } from './SceneEditor'
 
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
@@ -23,6 +24,7 @@ export function GameManager(props: { username: string }): JSXElement {
         ) : (
             <AwaitGameState>
                 <RulebookEditor username={username} />
+                <SceneEditor />
             </AwaitGameState>
         )}
         {/* <TestCounter /> */}

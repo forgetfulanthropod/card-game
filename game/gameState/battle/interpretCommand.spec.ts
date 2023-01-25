@@ -5,7 +5,7 @@ import type {
     Card,
     CharacterUid,
     Command,
-    Gamestate,
+    GameState,
     TargetType,
 } from 'shared'
 import { interpretCommand, play } from './cards'
@@ -16,7 +16,7 @@ import { explainCommand } from './cards/interpretCommand'
 import { getBattleSceneIn } from '@/util'
 import { playCard } from '@/actions'
 
-const exampleBattleScene = exampleBattleScene_ as unknown as Gamestate
+const exampleBattleScene = exampleBattleScene_ as unknown as GameState
 const originalScene = exampleBattleScene_.scene
 
 const pc1 = 'pc-1'
@@ -283,7 +283,7 @@ function freshGame() {
     return new SBaobab(exampleBattleScene).select()
 }
 
-function freshBattleScene(game?: SCursor<Gamestate>) {
+function freshBattleScene(game?: SCursor<GameState>) {
     const scene = getBattleSceneIn(game ?? freshGame())
     return scene
 }

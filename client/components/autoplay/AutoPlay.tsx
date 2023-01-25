@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import type {
     BattleScene,
     EntryScene,
-    Gamestate,
+    GameState,
     OwnedCharacterStats,
 } from 'shared'
 
@@ -78,7 +78,7 @@ class Runner {
         }
     }
 
-    async entryStep(tree: Gamestate) {
+    async entryStep(tree: GameState) {
         const scene = tree.scene as EntryScene
         if (
             scene.selectedCharacters.filter(c => c != null).length === 0 &&
@@ -98,7 +98,7 @@ class Runner {
         await callApi('changeScene', { newSceneName: 'battle' })
     }
 
-    battleStep(tree: Gamestate) {
+    battleStep(tree: GameState) {
         const scene = tree.scene as BattleScene
         // const doorOptions = scene.doors.options
         // if (doorOptions.length > 0) {
@@ -146,7 +146,7 @@ function addNewCharacter(availableChars: OwnedCharacterStats[]) {
     // })
 }
 
-function getAvailableChars(scene: EntryScene, tree: Gamestate) {
+function getAvailableChars(scene: EntryScene, tree: GameState) {
     return values(tree.ownedCharacters)
 
     // const pointsRemaining =

@@ -33,7 +33,7 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
-import { mean } from 'lodash'
+import { intersection, mean } from 'lodash'
 import { ROCursor } from 'sbaobab'
 import { collectData } from '@/analytics/collectData'
 
@@ -266,6 +266,15 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
+    const isCurrentRoomPastThisDepth =
+        parseInt(currentRoom.uid.split('_')[0]) >
+        parseInt(node.uid.split('_')[0])
+    const wasRoomVisited = scene
+        .get('roomUidsVisited')
+        ?.includes(currentRoom.uid)
+
+    if (isCurrentRoomPastThisDepth || wasRoomVisited) return Container({})
+
     if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
         return RestSiteContents(node)
 
@@ -276,31 +285,17 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
             scale: 0.7,
         })
 
-    return AnimatedCharacters(
-        currentRoom,
-        node,
-        isPlayerCharacterRoom,
-        scene,
-        choice
-    )
+    return AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice)
 }
 
 function AnimatedCharacters(
-    currentRoom: DungeonRoom,
     node: DungeonRoom,
     isPlayerCharacterRoom: boolean,
     scene: ROCursor<BattleScene>,
     choice: number
 ) {
-    const isCurrentRoomPastThisDepth =
-        parseInt(currentRoom.uid.split('_')[0]) >
-        parseInt(node.uid.split('_')[0])
-    const wasRoomJustVisited = node.edges.includes(currentRoom.uid)
-
     const characters: CharacterMeta[] = isPlayerCharacterRoom
         ? vals(scene.get('allCharacters')).filter(c => c.isPc && c.health > 0)
-        : isCurrentRoomPastThisDepth || wasRoomJustVisited
-        ? []
         : node.enemies.map(
               (e): CharacterMeta => ({ id: e.id, isPc: false } as CharacterMeta)
           )
@@ -356,8 +351,6 @@ function getCurrentRoomAndChoiceFromNode(node: DungeonRoom) {
 }
 
 function getTileGraphMap(): DungeonRoomMap {
-    console.log({ rooms: getBattleScene().get('rooms') })
-
     return getBattleScene().get('rooms')
 }
 
