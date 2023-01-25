@@ -266,14 +266,14 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
-    const isCurrentRoomPastThisDepth =
-        parseInt(currentRoom.uid.split('_')[0]) >
-        parseInt(node.uid.split('_')[0])
+    // const isCurrentRoomPastThisDepth =
+    //     parseInt(currentRoom.uid.split('_')[0]) >
+    //     parseInt(node.uid.split('_')[0])
     const wasRoomVisited = scene
         .get('roomUidsVisited')
         ?.includes(currentRoom.uid)
 
-    if (isCurrentRoomPastThisDepth || wasRoomVisited) return Container({})
+    if (wasRoomVisited) return Container({})
 
     if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
         return RestSiteContents(node)
