@@ -336,3 +336,16 @@ export const mapTileAssets = {
     mapTile7: 'hex map/hooligans bluff/base tile.webp',
     mapTile8: 'hex map/hooligans bluff/base tile.webp',
 }
+
+export const userAvatarAssets = {
+    userAvatar1: 'user/profilePic/pixelated1.svg',
+    userAvatar2: 'user/profilePic/pixelated2.svg',
+    userAvatar3: 'user/profilePic/pixelated3.svg',
+    userAvatar4: 'user/profilePic/pixelated4.svg',
+    userAvatar5: 'user/profilePic/pixelated5.svg',
+    userAvatar6: 'user/profilePic/pixelated6.svg',
+    userAvatar7: 'user/profilePic/pixelated7.svg',
+    userAvatar8: 'user/profilePic/pixelated8.svg',
+    userAvatar9: 'user/profilePic/pixelated9.svg',
+    userAvatar10: 'user/profilePic/pixelated10.svg'
+}

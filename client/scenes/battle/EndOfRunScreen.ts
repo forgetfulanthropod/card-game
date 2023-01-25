@@ -5,11 +5,13 @@ import {
 } from '@sharedElements'
 import {
     Adjust,
+    AssetKey,
     getStage,
     loopSong,
     PixiContainer,
     PixiText,
     playSongOnce,
+    RoundedBordered,
     RoundedRectangleGradientSprite,
     TweenablePixiContainer,
 } from '@/elementsUtil'
@@ -190,10 +192,6 @@ export function EndOfRunScreen(): PixiContainer {
     const showLeaderboard = datum(true)
     const currLeaderboardPage = datum(0)
     const userId = scene.get('username')
-    const leaderboardsss = callServerApi('getLeaderboard', {
-        userId,
-    })
-
     const leaderboard = callServerApi('getLeaderboard', {
         userId,
     }).then(leaderboard => {
@@ -378,13 +376,13 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const backToScoreButton = Text({
+    const closeModalButton = Text({
         text: '❎',
         // anchor: 0,
         y: BASE_HEIGHT / 2 - 500,
         x: BASE_WIDTH / 2 + 800,
         style: {
-            fontSize: 64
+            fontSize: 64,
         },
         onClick: () => {
             showLeaderboard.set(!showLeaderboard.val)
@@ -436,8 +434,8 @@ export function EndOfRunScreen(): PixiContainer {
     ) => {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 500,
-                height: 85,
+                width: 450,
+                height: 75,
                 anchor: [0, 0],
                 alpha: 0.8,
             },
@@ -459,14 +457,14 @@ export function EndOfRunScreen(): PixiContainer {
                 fill: active ? 'black' : 'white',
                 fontFamily: 'bigFont',
                 fontWeight: '100',
-                fontSize: 36,
+                fontSize: 30,
             },
         })
 
         return Container(
             {
                 name: `${text}_Container`,
-                y: BASE_HEIGHT / 2 - 430,
+                y: BASE_HEIGHT / 2 - 325,
                 onClick: () => activeTimeOption.set(id),
             },
             Background,
@@ -482,11 +480,11 @@ export function EndOfRunScreen(): PixiContainer {
         switch (index) {
             case 0:
                 return Adjust(LeaderboardTimeOption('TODAY', isActive, 0), {
-                    x: BASE_WIDTH / 2 - 800,
+                    x: BASE_WIDTH / 2 - 750,
                 })
             case 1:
                 return Adjust(LeaderboardTimeOption('THIS WEEK', isActive, 1), {
-                    x: BASE_WIDTH / 2 - 250,
+                    x: BASE_WIDTH / 2 - 225,
                 })
             case 2:
                 return Adjust(LeaderboardTimeOption('ALL TIME', isActive, 2), {
@@ -497,7 +495,7 @@ export function EndOfRunScreen(): PixiContainer {
 
     const style = {
         fill: 'white',
-        fontFamily: 'monoFont'
+        fontFamily: 'monoFont',
     }
 
     const PageUpArrow = Text({
@@ -524,41 +522,42 @@ export function EndOfRunScreen(): PixiContainer {
 
     const LeaderboardPageButtons = Container({}, PageDownArrow)
 
+    const y = BASE_HEIGHT / 2 - 200
     const LeaderboardContextMenu = Container(
         {},
         createTimeOption(0),
         createTimeOption(1),
-        createTimeOption(2),
-        Text({
-            text: 'RANK',
-            y: BASE_HEIGHT / 2 - 300,
-            x: BASE_WIDTH / 2 - 700,
-            style,
-        }),
-        Text({
-            text: 'USER',
-            y: BASE_HEIGHT / 2 - 300,
-            x: BASE_WIDTH / 2 - 400,
-            style,
-        }),
-        Text({
-            text: 'SCORE',
-            y: BASE_HEIGHT / 2 - 300,
-            x: BASE_WIDTH / 2 - 100,
-            style,
-        }),
-        Text({
-            text: 'TEAM',
-            y: BASE_HEIGHT / 2 - 300,
-            x: BASE_WIDTH / 2 + 250,
-            style,
-        }),
-        Text({
-            text: 'DATE',
-            y: BASE_HEIGHT / 2 - 300,
-            x: BASE_WIDTH / 2 + 600,
-            style,
-        })
+        createTimeOption(2)
+        // Text({
+        //     text: 'RANK',
+        //     y,
+        //     x: BASE_WIDTH / 2 - 700,
+        //     style,
+        // }),
+        // Text({
+        //     text: 'USER',
+        //     y,
+        //     x: BASE_WIDTH / 2 - 400,
+        //     style,
+        // }),
+        // Text({
+        //     text: 'SCORE',
+        //     y,
+        //     x: BASE_WIDTH / 2 - 100,
+        //     style,
+        // }),
+        // Text({
+        //     text: 'TEAM',
+        //     y,
+        //     x: BASE_WIDTH / 2 + 250,
+        //     style,
+        // }),
+        // Text({
+        //     text: 'DATE',
+        //     y,
+        //     x: BASE_WIDTH / 2 + 600,
+        //     style,
+        // })
     )
 
     activeTimeOption.onChange(() => {
@@ -583,9 +582,31 @@ export function EndOfRunScreen(): PixiContainer {
     ) => {
         const y = isSelf
             ? BASE_HEIGHT / 2 + 375
-            : BASE_HEIGHT / 2 - 200 + 105 * inScreenIdx
+            : BASE_HEIGHT / 2 - 165 + 105 * inScreenIdx
         const x = BASE_WIDTH / 2
         const date = new Date(endTime)
+
+        // TODO: CHANGE TO ACTUAL CHARACTER TEXTURE
+        const renderTeamCompUnit = (idx: number) => {
+            return Container(
+                {
+                    y: y - 35,
+                    x: x + 50 + (idx * 100),
+                },
+                RoundedBordered(
+                    Sprite({
+                        src: getTexture(idx === 1 ? 'penguinKnightProfile' : idx === 2 ? 'warhogProfile' : 'gnomeHooliganProfile'),
+                        scale: 0.2,
+
+                    }),
+                    {
+                        radius: 20,
+                        borderThickness: 3,
+                        borderColor: 0,
+                    }
+                )
+            )
+        }
 
         return Container(
             {},
@@ -606,7 +627,14 @@ export function EndOfRunScreen(): PixiContainer {
                     x1: 0,
                     y1: 100,
                     colorStops: [
-                        { color: isSelf ? 0x7D4E57 : rank % 2 > 0 ? 0x212D40 : 0x364156, offset: 0 },
+                        {
+                            color: isSelf
+                                ? 0x7d4e57
+                                : rank % 2 > 0
+                                ? 0x212d40
+                                : 0x364156,
+                            offset: 0,
+                        },
                     ],
                 },
             }),
@@ -624,14 +652,25 @@ export function EndOfRunScreen(): PixiContainer {
                 x: x - 400,
                 style,
             }),
+            Sprite({
+                src: `userAvatar${Math.ceil(10 * Math.random())}` as AssetKey,
+                y: y - 20,
+                x: x - 460,
+                scale: 0.5
+            }),
             Text({
                 text: highScore,
                 y: y - 10,
                 x: x - 100,
                 style,
             }),
+            renderTeamCompUnit(0),
+            renderTeamCompUnit(1),
+            renderTeamCompUnit(2),
             Text({
-                text: `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`,
+                text: `${
+                    date.getMonth() + 1
+                }/${date.getDate()}/${date.getFullYear()}`,
                 y: y - 10,
                 x: x + 500,
                 style,
@@ -641,14 +680,25 @@ export function EndOfRunScreen(): PixiContainer {
 
     const LeaderboardEntries = Container({})
 
+    const LeaderboardSign = TweenableContainer(
+        {
+            x: 290,
+            y: -275,
+            scale: 0.35,
+        },
+        Sprite({
+            src: getTexture('roomClearedSign'),
+        })
+    )
+
     const Leaderboard = Container(
         {},
         RoundedRectangleGradientSprite({
             spriteArgs: {
                 width: 1700,
-                height: 950,
+                height: 900,
                 x: BASE_WIDTH / 2,
-                y: BASE_HEIGHT / 2,
+                y: BASE_HEIGHT / 2 + 50,
                 name: 'LeaderboardBackground',
                 anchor: [0.5, 0.5],
                 alpha: 0.9,
@@ -665,7 +715,8 @@ export function EndOfRunScreen(): PixiContainer {
         }),
         LeaderboardContextMenu,
         LeaderboardPageButtons,
-        LeaderboardEntries
+        LeaderboardEntries,
+        LeaderboardSign
     )
 
     const ScoreElements = Container({}, RoundedBlackRectBackground)
@@ -735,7 +786,7 @@ export function EndOfRunScreen(): PixiContainer {
 
         if (showLeaderboard) {
             TogglableMainContainer.addChild(Leaderboard)
-            TogglableButtonsContainer.addChild(backToScoreButton)
+            TogglableButtonsContainer.addChild(closeModalButton)
             // Adjust(backToScoreButton, {
             //     x: BASE_WIDTH / 2 - backToScoreButton.width / 2,
             // })
@@ -749,10 +800,9 @@ export function EndOfRunScreen(): PixiContainer {
         }
     }
 
-    showLeaderboard.onChange(
-        showLeaderboard => handleLeaderboardToggle(showLeaderboard),
-        true
-    )
+    showLeaderboard.onChange(showLeaderboard => {
+        handleLeaderboardToggle(showLeaderboard)
+    }, true)
 
     /** Takes you to character select screen */
     function handleTryAgain() {

@@ -27,7 +27,7 @@ export interface BareServerActionsMeta {
     }
     makeNewUser: {
         args: { username: string }
-        res: Promise<void>
+        res: void
     }
     maybeMakeUser: {
         args: { username: string }

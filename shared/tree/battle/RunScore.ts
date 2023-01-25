@@ -1,4 +1,5 @@
 import { RunID, UserID } from '../User'
+import { CharacterId, Characters, PlayerCharacterId } from './Characters'
 
 export type RunScore = {
     totalScore: number
@@ -257,4 +258,6 @@ export type LeaderboardEntry = {
     start_ts: number // unix ts
     end_ts: number // unix ts
     run_id: RunID
+    all_characters?: string // in reality is of Characters type, before parsing
+    teamComp?: CharacterId[]
 }

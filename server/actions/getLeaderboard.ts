@@ -1,7 +1,11 @@
+import { keys } from 'lodash'
 import {
     AuthUserDBActionProps,
+    CharacterId,
+    Characters,
     Leaderboard,
     LEADERBOARD_ENTRIES_TO_DISPLAY,
+    PlayerCharacterId,
     RunID,
     ServerActions,
 } from 'shared'
@@ -23,22 +27,41 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                     *
                 FROM
                     user_run_leaderboard
-                ORDER BY
-                    highest_score DESC
-                LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY}
+                WHERE
+                    user_id = ${userId}
             )
         SELECT
             *
         FROM
+            user_run_leaderboard
+
+        UNION
+
+        SELECT
+            *
+        FROM
             tmp
-        NATURAL FULL JOIN
-            (   SELECT
-                    *
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    user_id = ${userId}) AS u;
+        ORDER BY
+            highest_score DESC
+        LIMIT
+            ${LEADERBOARD_ENTRIES_TO_DISPLAY};
     `)
-    return leaderboard
+
+    const leaderboardWithTeamComp = leaderboard.map(entry => {
+        const { all_characters } = entry
+        if (!all_characters) {
+            return entry
+        }
+
+        let teamComp: CharacterId[] = []
+        const chars = JSON.parse(all_characters) as Characters
+        keys(chars).forEach(key => {
+            if (chars[key].isPc) {
+                teamComp.push(chars[key].id)
+            }
+        })
+        return { ...entry, teamComp }
+    }) as Leaderboard
+
+    return leaderboardWithTeamComp
 }
