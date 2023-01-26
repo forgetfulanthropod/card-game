@@ -29,11 +29,13 @@ function makeSubstitutions() {
     loadDotEnv();
     const walletGated = process.env.WALLET_GATED === 'true'
     const gameIsLive = process.env.GAME_IS_LIVE === 'true'
+    const isProduction = process.env.IS_PRODUCTION === 'true'
     const rpcUrl = `"${process.env.RPC_URL}"`
     return {
         ...makeBuildInfo('CLIENT_'),
         ['process.env.WALLET_GATED']: walletGated, // true in prod
         ['process.env.GAME_IS_LIVE']: gameIsLive,
+        ['process.env.IS_PRODUCTION']: isProduction,
         ['process.env.RPC_URL']: rpcUrl,
         global: 'window',
     }

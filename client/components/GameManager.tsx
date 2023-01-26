@@ -8,7 +8,7 @@ import { SceneEditor } from './SceneEditor'
 
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
-    const isProduction = process.env.IS_PRODUCTION === 'true'
+    const isProduction = process.env.IS_PRODUCTION
 
     return <AppWrap>
         {/* <div>
