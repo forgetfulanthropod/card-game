@@ -3,7 +3,7 @@ import { SBaobab } from 'sbaobab'
 import type {
     BattleScene,
     EntryScene,
-    Gamestate,
+    GameState,
     OwnedCharacterStats,
     PlayerCharacterId,
     Scene,
@@ -11,10 +11,10 @@ import type {
 
 /** Global variables for file */
 const state = {
-    gamestate: null as ROBaobab<Gamestate> | null,
+    gamestate: null as ROBaobab<GameState> | null,
 }
 
-export function initializeBoababTree(gamestate: Gamestate): void {
+export function initializeBoababTree(gamestate: GameState): void {
     state.gamestate = new SBaobab(gamestate)
     // @ts-expect-error
     window.tree = state.gamestate
@@ -29,7 +29,7 @@ export function isTreeInitialized(): boolean {
  *  write synchronous code everywhere in app, we just need to
  *  wait for callbacks in onRulebook and onGamestate
  */
-export function getTree(): ROBaobab<Gamestate> {
+export function getTree(): ROBaobab<GameState> {
     if (state.gamestate == null) {
         throw Error(
             'tried to get tree before it was loaded. Did you wait for onGamestate?'

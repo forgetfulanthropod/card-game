@@ -27,14 +27,14 @@ export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {
 
             if (count > 1) {
                 card.actions = card.actions.replace(
-                    /dwindle(.+)/,
-                    `dwindle(${count - 1})`
+                    /brittle(.+)/,
+                    `brittle(${count - 1})`
                 )
             } else {
                 delete piles.hand[cardUid]
                 delete piles.discard[cardUid]
                 delete piles.draw[cardUid]
-                piles.removedRoom[cardUid] = card
+                piles.removedRun[cardUid] = card
             }
         })
     )

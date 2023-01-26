@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync } from 'fs'
 import { homedir } from 'os'
 import { difference } from 'lodash'
-import type { Gamestate, Rulebook } from 'shared'
+import type { GameState, Rulebook } from 'shared'
 
 export const prefix = homedir() + '/rulebooks/'
 export const toPath = (id: string): string => prefix + id + '.json'
@@ -24,7 +24,7 @@ export function updateClientRulebookData(_username: string): void {
     */
 }
 
-export function getRulebookNames(): Gamestate['rulebooks'] {
+export function getRulebookNames(): GameState['rulebooks'] {
     if (!existsSync(prefix)) {
         mkdirSync(prefix)
     }

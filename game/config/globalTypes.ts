@@ -1,6 +1,6 @@
 import type { SCursor } from 'sbaobab'
-import type { Gamestate } from 'shared'
+import type { GameState } from 'shared'
 
 declare global {
-    type Gamecursor = SCursor<Gamestate>
+    type Gamecursor = SCursor<GameState>
 }

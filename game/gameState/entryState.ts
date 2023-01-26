@@ -17,7 +17,7 @@ const allCharacterOptionsIds: PlayerCharacterId[] = [
 ]
 
 export function getInitialEntryState(): EntryScene {
-    const { characters: statsMap } = getRulebook()
+    const { playerCharacterStatsMap: statsMap } = getRulebook()
 
     return {
         id: 'entry',

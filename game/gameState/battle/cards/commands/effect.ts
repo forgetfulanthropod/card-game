@@ -18,9 +18,10 @@ export const explain: Explainers['effect'] = (dslArgs, context) => {
     const [id, increase, _] = evalAllAsHtml(dslArgs)
     const [__, ___, targetTypeArg] = evalAll(dslArgs)
     const targetType = targetTypeArg ?? context.command.targetType
-    return `${getTargetText(targetType, context.characterMeta)} gain${
-        ['allEnemies', 'allFriends'].includes(targetType) ? '' : 's'
-    } <b>${startCase(id)
+    return `${getTargetText(
+        targetType,
+        context.characterMeta
+    )} gains <b>${startCase(id)
         .replace('Debuff', '')
         .replace('Buff', '')}</b>&nbsp;(${increase})`
 }

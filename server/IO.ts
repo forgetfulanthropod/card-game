@@ -1,7 +1,7 @@
 import { watchFile } from 'fs'
 import type { Server } from 'http'
 import { has } from 'lodash'
-import type { Gamestate, NetworkEvent } from 'shared'
+import type { GameState, NetworkEvent } from 'shared'
 import { Server as SocketServer } from 'socket.io'
 import { maybeMakeUser } from './actions'
 
@@ -16,7 +16,7 @@ export function getSocketId(username: string): string {
 }
 let io: null | SocketServer = null
 
-export function emitNewGamestate(username: string, gamestate: Gamestate) {
+export function emitNewGamestate(username: string, gamestate: GameState) {
     if (io == null) throw Error('io is null')
     const socketId = getSocketId(username)
     io.to(socketId).emit('update', { data: gamestate })

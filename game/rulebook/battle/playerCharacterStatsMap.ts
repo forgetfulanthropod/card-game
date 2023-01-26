@@ -209,7 +209,7 @@ export const playerCharacterStatsMap: Record<
         id: 'snacky',
         displayName: 'Snacky',
         isPc: true,
-        class: 'knight',
+        class: 'bard',
 
         constitution: 67,
         strength: 16,

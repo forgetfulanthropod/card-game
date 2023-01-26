@@ -3,10 +3,13 @@ import { pacificDate } from 'shared/code'
 import type { GameActions } from 'shared'
 
 import { resetRulebook, setRulebook } from '@/rulebook'
-import { prefix, stringifyRulebook, toPath } from '@/util'
+import { isProduction, prefix, stringifyRulebook, toPath } from '@/util'
 
 export const rulebookAction: GameActions['rulebookAction'] = args => {
     logger.info(`rulebookAction performing action ${args.do}`)
+    if (isProduction)
+        return logger.info('tried to update rulebook in production!')
+
     if (!existsSync(prefix)) {
         mkdirSync(prefix)
     }

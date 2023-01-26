@@ -3,16 +3,15 @@
  */
 
 import type { SCursor } from 'sbaobab'
-import type { SceneId } from './misc'
+import type { Scene, SceneId } from './misc'
 
 import type {
+    BattleScene,
     CardUid,
-    CharacterStats,
     CharacterUid,
-    Gamestate,
     Leaderboard,
+    GameState,
     Orb,
-    OwnedCharacterStats,
     Rulebook,
     RunID,
     RunScoreEvent,
@@ -86,6 +85,7 @@ interface BareGameActionArgs {
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
+    setBattleScene: { scene: BattleScene }
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
     setRunId: { userId: UserID; runId: RunID }
 }
@@ -155,7 +155,7 @@ export type CallReturn =
     | { status: 'success' }
     | { status: 'error'; message: string }
 
-export type Gamecursor = SCursor<Gamestate>
+export type Gamecursor = SCursor<GameState>
 
 // ======= Little types for specific actions =======
 

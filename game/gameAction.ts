@@ -1,7 +1,10 @@
 import type { BattleCursor, GameActionCall, GameActions } from 'shared'
 import { satisfies, throwNull } from 'shared/code'
 import * as actions from './actions'
+import { config as loadDotEnv } from 'dotenv'
+
 satisfies<GameActions>(actions)
+
 export function doGameAction(args: GameActionCall) {
     const { game, method } = args
     if (

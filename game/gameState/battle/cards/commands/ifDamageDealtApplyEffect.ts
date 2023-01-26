@@ -21,8 +21,6 @@ export const execute: Executors['ifDamageDealtApplyEffect'] = ({
 }) => {
     const [damage, effectId, counter] = evalAll(dslArgs)
 
-    logger.info(JSON.stringify({ damage, effectId, counter }))
-
     targetUids.forEach(targetUid => {
         const healthBefore = scene.get('allCharacters', targetUid, 'health')
         applyDamage({

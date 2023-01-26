@@ -8,7 +8,6 @@ import type {
     RoomEnemies,
 } from 'shared'
 import { keys, throwNull } from 'shared/code'
-import { npcStatsMapByLevel } from '@/rulebook'
 import { srandInt } from '@/util'
 // - Room 1:  Two level 1 Skeletons, One level 1 Matcha
 // - Room 2: Two level 1 Matchas, One level 2 Skeleton

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { GameManager } from './GameManager'
 // import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
-import { NewStartScreen } from './NewStartScreen'
+import { GAME_IS_LIVE, NewStartScreen } from './NewStartScreen'
 import {
     ConnectionProvider,
     WalletProvider,
@@ -15,11 +15,9 @@ import {
     SolflareWalletAdapter,
     SlopeWalletAdapter,
     GlowWalletAdapter,
-    LedgerWalletAdapter
+    LedgerWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
-import {
-    WalletModalProvider,
-} from '@solana/wallet-adapter-react-ui'
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
@@ -37,7 +35,13 @@ export function App(): JSXElement {
 
     const endpoint = process.env.RPC_URL ?? 'https://api.metaplex.solana.com/'
 
-    const wallets = [new PhantomWalletAdapter(), new SolflareWalletAdapter(), new SlopeWalletAdapter(), new GlowWalletAdapter(), new LedgerWalletAdapter()]
+    const wallets = [
+        new PhantomWalletAdapter(),
+        new SolflareWalletAdapter(),
+        new SlopeWalletAdapter(),
+        new GlowWalletAdapter(),
+        new LedgerWalletAdapter(),
+    ]
 
     console.log({ endpoint })
 
@@ -52,9 +56,9 @@ export function App(): JSXElement {
         <ConnectionProvider endpoint={endpoint}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>
-                    {username && !ready ? (
+                    {GAME_IS_LIVE && username && !ready ? (
                         <>loading</>
-                    ) : ready ? (
+                    ) : GAME_IS_LIVE && ready ? (
                         <GameManager username={username} />
                     ) : (
                         <NewStartScreen onEnter={handleStartGame} />

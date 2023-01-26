@@ -1208,7 +1208,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             addBlock("incomingDamageIntended");
             chain(
-                "Generate block equal to the amount of damage target<br/>Kaiju would take this turn.",
+                "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
                 brittle(1)
             )
         `,
@@ -1296,7 +1296,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect("stun",1),
+                effect("stunned",1),
                 discard(1),
                 brittle(2)
             )`,
