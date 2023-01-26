@@ -1,3 +1,5 @@
+import { RunID, UserID } from '../User'
+
 export type RunScore = {
     totalScore: number
     currModifier: number
@@ -245,3 +247,11 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
 }
 
 export const RUN_TIME_THRESHOLD_MINS = 15
+
+export type Leaderboard = readonly {
+    user_id: UserID
+    highest_score: number
+    start_ts: number // unix ts
+    end_ts: number // unix ts
+    run_id: RunID
+}[]

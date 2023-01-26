@@ -8,11 +8,10 @@ import type { Scene, SceneId } from './misc'
 import type {
     BattleScene,
     CardUid,
-    CharacterStats,
     CharacterUid,
+    Leaderboard,
     GameState,
     Orb,
-    OwnedCharacterStats,
     Rulebook,
     RunID,
     RunScoreEvent,
@@ -52,6 +51,10 @@ export interface BareServerActionsMeta {
     getNumKaijuInGoodEarth: {
         args: { walletAddress: string }
         res: Promise<{ numKaijuOwned: number }>
+    }
+    getLeaderboard: {
+        args: Empty
+        res: Promise<Leaderboard>
     }
 }
 
