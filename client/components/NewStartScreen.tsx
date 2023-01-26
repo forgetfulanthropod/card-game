@@ -19,8 +19,8 @@ import { collectData, initAnalytics } from '@/analytics/collectData'
 import { ClosedGameModal } from './StartScreen/ClosedGameModal'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
-const WALLET_GATED = process.env.WALLET_GATED
-const GAME_IS_LIVE = process.env.GAME_IS_LIVE
+export const WALLET_GATED = process.env.WALLET_GATED === 'true'
+export const GAME_IS_LIVE = process.env.GAME_IS_LIVE === 'true'
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
@@ -81,14 +81,14 @@ export function NewStartScreen(props: {
     }
 
     const handlePlayButtonClick = () => {
+        if (!GAME_IS_LIVE) {
+            return setShowClosedGameModal(true)
+        }
         if (!userDoc) {
             console.warn('No User Doc')
             return
         }
-        else if (!GAME_IS_LIVE) {
-            return setShowClosedGameModal(true)
-        }
-        else if (WALLET_GATED) {
+        if (WALLET_GATED) {
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
 
