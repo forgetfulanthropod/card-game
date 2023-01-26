@@ -8,4 +8,4 @@ export * from './treeHelpers'
 
 loadDotEnv()
 
-export const isProduction = process.env.IS_PRODUCTION
+export const isProduction = process.env.IS_PRODUCTION === 'true'

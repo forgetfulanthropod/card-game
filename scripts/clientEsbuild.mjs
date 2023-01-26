@@ -27,8 +27,8 @@ console.log('substitutions:', makeSubstitutions())
 
 function makeSubstitutions() {
     loadDotEnv();
-    const walletGated = process.env.WALLET_GATED
-    const gameIsLive = process.env.GAME_IS_LIVE
+    const walletGated = process.env.WALLET_GATED === 'true'
+    const gameIsLive = process.env.GAME_IS_LIVE === 'true'
     const rpcUrl = `"${process.env.RPC_URL}"`
     return {
         ...makeBuildInfo('CLIENT_'),
@@ -44,7 +44,7 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
     loadDotEnv();
-    const isProduction = process.env.IS_PRODUCTION
+    const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
     esbuild({
