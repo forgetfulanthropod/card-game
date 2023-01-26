@@ -80,7 +80,7 @@ export function NewStartScreen(props: {
         })
     }
 
-    const handlePlayButtonClick = () => {
+    const handlePlayButtonClick = async () => {
         if (!GAME_IS_LIVE) {
             return setShowClosedGameModal(true)
         }
@@ -89,10 +89,12 @@ export function NewStartScreen(props: {
 
             if (!WALLET_GATED) {
                 const walletAddress = Math.random().toString().slice(2)
+                const {userId} = await callServerApi('login', { walletAddress })
+
                 setUserDoc({
                     walletAddress,
                     numKaijusOwned: 1,
-                    userId: `${walletAddress}`,
+                    userId,
                 })
             }
 
@@ -180,7 +182,7 @@ export function NewStartScreen(props: {
                         />
                         <PrimaryButton
                             text='play now'
-                            onClick={handlePlayButtonClick}
+                            onClick={   handlePlayButtonClick}
                             type='primary'
                             size='large'
                         />
