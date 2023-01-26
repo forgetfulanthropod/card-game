@@ -4,7 +4,7 @@ import type { ROCursor } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import type { Gamestate } from 'shared'
+import type { GameState } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
 
@@ -35,7 +35,7 @@ export function prepareSocket(): void {
 
     socket.on('refresh', () => window.location.reload())
 
-    socket.on('update', ({ data }: { data: Gamestate }) => {
+    socket.on('update', ({ data }: { data: GameState }) => {
         log('received server data', data)
         // getTree().set(data)
         updateBoabab(data)
@@ -58,7 +58,7 @@ export function socketOn(
     return () => socket.off(event, callback)
 }
 
-function updateBoabab(fromServer: Gamestate): void {
+function updateBoabab(fromServer: GameState): void {
     if (!isTreeInitialized()) {
         initializeBoababTree(fromServer)
         void startPixi(

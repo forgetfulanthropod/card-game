@@ -6,6 +6,7 @@ import {
     stanceTypeMetaMap,
     playerCharacterStatsMap,
 } from './battle'
+import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 
 const dungeonLevels: DungeonLevel[] = [
     { name: 'Skelepit Dungeon', num: 0, modifier: 1 },
@@ -22,7 +23,8 @@ const dungeonLevels: DungeonLevel[] = [
 const defaultRulebook: Rulebook = {
     version: rulebookVersion,
     name: 'default',
-    characters: playerCharacterStatsMap,
+    npcStatsMapByLevel: npcStatsMapByLevel,
+    playerCharacterStatsMap: playerCharacterStatsMap,
     dungeonLevels,
     stanceTypeMetaMap,
     dungeonRooms: getDungeonRooms(),

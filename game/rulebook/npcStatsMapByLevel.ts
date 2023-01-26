@@ -1,6 +1,10 @@
-import type { NonPlayerCharacterId, NpcCommandId } from 'shared'
-type Level = string
-export const npcStatsMapByLevel: Record<NonPlayerCharacterId, Record<Level, EnemyDefinition>> = {
+import type {
+    NonPlayerCharacterId,
+    NpcCommandId,
+    NpcStatsMapByLevel,
+} from 'shared'
+
+export const npcStatsMapByLevel: NpcStatsMapByLevel = {
     skeletonWarrior: {
         // 1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', null, null, 'block', null] },
         1: { level: '1', magic: 0, constitution: 19, strength: 10, defense: 7, moves: ['swordWack', 'rustyPokeLow', 'jab', 'strike', 'jab'] },
@@ -156,17 +160,3 @@ export const npcStatsMapByLevel: Record<NonPlayerCharacterId, Record<Level, Enem
         10: { level: 10, strength: 40, magic: 0, defense: 90, constitution: 200, moves: ['violentSneeze', 'surpriseAllergy', 'strike', 'parasiticNibble', 'block'],},
     },
 } as const // prettier-ignore
-
-export type BaseHealth = number | `${number}-${number}` | `>${number}`
-export type EnemyDefinition = {
-    // displayName: string
-    // level: number | string | null
-    // id: string
-    constitution: BaseHealth
-    strength: number
-    defense: number
-    magic: number
-    level: number | string
-    // TODO: rename to commands
-    moves: readonly (NpcCommandId | null)[]
-}

@@ -50,6 +50,7 @@ export function RulebookEditor(props: { username: string }): JSXElement {
     const { username } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
+
     const rulebooks = useCursor(getTree().select('rulebooks'))
     const curRulebook = useCursor(getTree().select('curRulebook'))
     const name = curRulebook != null ? JSON.parse(curRulebook).name : null
@@ -68,7 +69,9 @@ export function RulebookEditor(props: { username: string }): JSXElement {
     return <>
         {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
         <ButtonGroup>
-            <button onClick={() => setShown(s => !s)}>Open/close</button>
+            <button onClick={() => setShown(s => !s)}>
+                {!shown ? 'edit rulebook' : 'minimize editor'}
+            </button>
             <Selector
                 value={name}
                 options={rulebooks}
@@ -84,14 +87,12 @@ export function RulebookEditor(props: { username: string }): JSXElement {
                 <button
                     onClick={() => addNewRulebook(ref, rulebooks, username)}
                 >
-                    Save new
+                    save new
                 </button>
                 <button onClick={() => overwriteRulebook(ref, name, username)}>
-                    Overwrite
+                    overwrite
                 </button>
-                <button onClick={() => deleteRulebook(name)}>
-                    Delete current
-                </button>
+                <button onClick={() => deleteRulebook(name)}>delete</button>
             </>}
         </ButtonGroup>
     </>

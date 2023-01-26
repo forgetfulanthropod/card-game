@@ -7,6 +7,7 @@ import { render } from 'react-dom'
 import { App } from './components'
 import { startLoadingAssets } from './elementsUtil'
 import { prepareSocket } from './socket'
+import { GAME_IS_LIVE } from './components/NewStartScreen'
 
 // @ts-expect-error
 window.loadedJs = true // for the password logic in index.html
@@ -21,7 +22,9 @@ console.log('client build info:', JSON.stringify(clientBuildInfo))
 const preactRoot = document.getElementById('preact-root') as HTMLDivElement
 
 function main() {
-    startLoadingAssets()
+    if (GAME_IS_LIVE) {
+        startLoadingAssets()
+    }
     prepareSocket()
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)

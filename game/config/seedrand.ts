@@ -9,6 +9,8 @@ let seed = 'seedThree'
 logger.info(`setting random seed: ${seed}`)
 global.srandom = seedrandom(seed)
 
+export const srandom = global.srandom
+
 export function setGlobalRandomSeed(seed: string): void {
     global.srandom = seedrandom(seed)
     logger.info(`setting random seed: ${seed}`)

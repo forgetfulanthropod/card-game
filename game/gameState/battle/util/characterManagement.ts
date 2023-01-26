@@ -8,10 +8,12 @@ import type {
     OwnedCharacterStats,
     StanceId,
     PlayerCharacterId,
+    BaseHealth,
+    EnemyDefinition,
 } from 'shared'
 import { keys, vals } from 'shared/code'
-import { npcStatsMapByLevel, getRulebook } from '@/rulebook'
-import type { BaseHealth, EnemyDefinition } from '@/rulebook'
+import { getRulebook } from '@/rulebook'
+// import type { BaseHealth, EnemyDefinition } from '@/rulebook'
 import { playerCharacterStatsMap } from '@/rulebook/battle'
 import { calculateStats } from '../characters/effects'
 import { startCase } from 'lodash'
@@ -114,7 +116,7 @@ function newPCMeta(args: {
     uid: string
     name: PlayerCharacterId
 }): CharacterMeta {
-    const { characters: statsMap } = getRulebook()
+    const { playerCharacterStatsMap: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceId = 'neutral'
@@ -151,7 +153,9 @@ export function newNPCMeta(args: {
     level: string | number
 }): EnemyCharacterMeta {
     const { name, level } = args
-    const enemyDefinition = npcStatsMapByLevel[name][level] as EnemyDefinition
+    const enemyDefinition = getRulebook().npcStatsMapByLevel[name][
+        level
+    ] as EnemyDefinition
     // debugger
 
     const cm = {

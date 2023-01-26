@@ -2,7 +2,7 @@ import { omit } from 'lodash'
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import type { ROCursor } from 'sbaobab'
-import type { Gamestate } from 'shared'
+import type { GameState } from 'shared'
 
 import type { MonacoRef } from './Monaco'
 import { Monaco } from './Monaco'
@@ -54,7 +54,7 @@ function GamestateEditor(props: { top: string }): JSXElement {
                 const curString = ref.current.getValue()
                 let parsed = null
                 try {
-                    parsed = JSON.parse(curString) as Partial<Gamestate>
+                    parsed = JSON.parse(curString) as Partial<GameState>
                 } catch (e) {
                     toast.error('json parse error')
                     return
