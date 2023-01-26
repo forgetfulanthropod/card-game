@@ -1,8 +1,8 @@
 import type { EffectId } from 'shared'
 
 export const invisibleEffects_ = [
-    'smallDamageIncrease',
-    'doubleDamage',
-    'passiveBlock',
+    'smallDamageIncreaseBuff',
+    'doubleDamageBuff',
+    'passiveBlockBuff',
 ] as const
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_

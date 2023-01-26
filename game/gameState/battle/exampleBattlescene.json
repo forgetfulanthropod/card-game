@@ -1,7 +1,7 @@
 {
     "scene": {
-        "name": "battle",
-        "username": "bob",
+        "id": "battle",
+        "username": "anonymous-0.42219146365670146",
         "dungeonName": "Skelepit Dungeon",
         "turnCount": 1,
         "state": "in battle",
@@ -9,165 +9,677 @@
         "isPlayerTurn": true,
         "allCharacters": {
             "pc-1": {
-                "name": "skeletonWarrior",
-                "displayName": "Skeleton Warrior",
+                "id": "notoriousBean",
+                "displayName": "Notorious B.E.A.N",
                 "isPc": true,
-                "class": "knight",
-                "constitution": 54,
-                "strength": 11,
-                "wisdom": 4,
-                "defense": 4,
+                "class": "bard",
+                "constitution": 75,
+                "strength": 12,
+                "magic": 7,
+                "defense": 5,
                 "uid": "pc-1",
-                "x": 30.24730500951173,
-                "y": 34.19864559819413,
-                "screenX": 580.7482561826253,
-                "screenY": 369.34537246049666,
-                "stance": "aggressive",
+                "x": 36,
+                "y": 34.2,
+                "screenX": 691.2,
+                "screenY": 369.36,
+                "stance": "neutral",
+                "stanceInPrevTurn": "neutral",
                 "hasMoved": false,
-                "health": 54,
+                "health": 75,
                 "block": 0,
                 "effects": [],
-                "orbs": []
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 75,
+                    "defense": 5,
+                    "magic": 7,
+                    "strength": 12,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 75,
+                    "stance": "neutral"
+                }
             },
             "pc-2": {
-                "name": "frogKnight",
+                "id": "warhog",
+                "displayName": "Warhog",
+                "isPc": true,
+                "class": "cleric",
+                "constitution": 124,
+                "strength": 6,
+                "magic": 7,
+                "defense": 8,
+                "uid": "pc-2",
+                "x": 23.5,
+                "y": 50.23,
+                "screenX": 451.2,
+                "screenY": 542.4839999999999,
+                "stance": "neutral",
+                "stanceInPrevTurn": "neutral",
+                "hasMoved": false,
+                "health": 124,
+                "block": 0,
+                "effects": [],
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 124,
+                    "defense": 8,
+                    "magic": 7,
+                    "strength": 6,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 124,
+                    "stance": "neutral"
+                }
+            },
+            "pc-3": {
+                "id": "frogKnight",
                 "displayName": "Frog Knight",
                 "isPc": true,
                 "class": "knight",
-                "constitution": 72,
-                "strength": 8,
-                "wisdom": 5,
-                "defense": 5,
-                "uid": "pc-2",
-                "x": 22.70133164235891,
-                "y": 50.22573363431151,
-                "screenX": 435.865567533291,
-                "screenY": 542.4379232505643,
-                "stance": "aggressive",
-                "hasMoved": false,
-                "health": 72,
-                "block": 0,
-                "effects": [],
-                "orbs": []
-            },
-            "pc-3": {
-                "name": "mushroomFarmer",
-                "displayName": "Mushroom Farmer",
-                "isPc": true,
-                "class": "cleric",
-                "constitution": 112,
-                "strength": 8,
-                "wisdom": 9,
-                "defense": 6,
+                "constitution": 80,
+                "strength": 10,
+                "magic": 5,
+                "defense": 11,
                 "uid": "pc-3",
-                "x": 14.013950538998099,
-                "y": 67.15575620767494,
-                "screenX": 269.0678503487635,
-                "screenY": 725.2821670428893,
-                "stance": "aggressive",
+                "x": 11,
+                "y": 67.16,
+                "screenX": 211.2,
+                "screenY": 725.328,
+                "stance": "neutral",
+                "stanceInPrevTurn": "neutral",
                 "hasMoved": false,
-                "health": 112,
+                "health": 80,
                 "block": 0,
                 "effects": [],
-                "orbs": []
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 80,
+                    "defense": 11,
+                    "magic": 5,
+                    "strength": 10,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 80,
+                    "stance": "neutral"
+                }
             },
             "npc-1": {
                 "level": "1",
-                "wisdom": 0,
-                "constitution": 24,
-                "strength": 3,
-                "defense": 10,
+                "strength": 5,
+                "magic": 0,
+                "defense": 2,
+                "constitution": 11,
                 "moves": [
-                    "basicAttack",
-                    "block",
-                    "basicAttack",
-                    "block",
-                    "basicAttack"
+                    "gnomeBomb",
+                    "bucketOfBangSnaps",
+                    "fireCracker",
+                    "block"
                 ],
-                "name": "matchaGelatinCube",
-                "displayName": "",
-                "health": 24,
+                "id": "gnomeBandit",
+                "displayName": "Gnome Bandit",
+                "health": 11,
                 "block": 0,
                 "uid": "npc-1",
                 "isPc": false,
-                "x": 55.55555555555556,
-                "y": 32.5,
-                "screenX": 1066.6666666666667,
-                "screenY": 351,
+                "x": 65.37,
+                "y": 34.2,
+                "screenX": 1255.104,
+                "screenY": 369.36,
                 "hasMoved": false,
                 "effects": [],
-                "orbs": []
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 11,
+                    "defense": 2,
+                    "magic": 0,
+                    "strength": 5,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 11,
+                    "stance": "neutral"
+                }
             },
             "npc-2": {
-                "level": "2",
-                "wisdom": 0,
-                "constitution": 27,
-                "strength": 6,
-                "defense": 9,
-                "moves": [
-                    "swordWack",
-                    "rustyPokeLow",
-                    "swordWack",
-                    "block",
-                    "swordWack"
-                ],
-                "name": "skeletonWarrior",
-                "displayName": "",
-                "health": 27,
+                "level": 2,
+                "strength": 10,
+                "magic": 0,
+                "defense": 8,
+                "constitution": 24,
+                "moves": ["bigBomb1", "bigBomb2", "block"],
+                "id": "gnomeBigBomber",
+                "displayName": "Gnome Big Bomber",
+                "health": 24,
                 "block": 0,
                 "uid": "npc-2",
                 "isPc": false,
-                "x": 60.900140646976084,
-                "y": 50,
-                "screenX": 1169.2827004219407,
-                "screenY": 540,
+                "x": 74.62,
+                "y": 50.23,
+                "screenX": 1432.7040000000002,
+                "screenY": 542.4839999999999,
                 "hasMoved": false,
                 "effects": [],
-                "orbs": []
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 24,
+                    "defense": 8,
+                    "magic": 0,
+                    "strength": 10,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 24,
+                    "stance": "neutral"
+                }
             },
             "npc-3": {
                 "level": "1",
-                "wisdom": 0,
-                "constitution": 24,
-                "strength": 3,
-                "defense": 10,
+                "strength": 5,
+                "magic": 0,
+                "defense": 2,
+                "constitution": 11,
                 "moves": [
-                    "basicAttack",
-                    "block",
-                    "basicAttack",
-                    "block",
-                    "basicAttack"
+                    "gnomeBomb",
+                    "bucketOfBangSnaps",
+                    "fireCracker",
+                    "block"
                 ],
-                "name": "matchaGelatinCube",
-                "displayName": "",
-                "health": 24,
+                "id": "gnomeBandit",
+                "displayName": "Gnome Bandit",
+                "health": 11,
                 "block": 0,
                 "uid": "npc-3",
                 "isPc": false,
-                "x": 68.07313642756681,
-                "y": 67.5,
-                "screenX": 1307.0042194092828,
-                "screenY": 729,
+                "x": 83.13,
+                "y": 67.16,
+                "screenX": 1596.0959999999998,
+                "screenY": 725.328,
                 "hasMoved": false,
                 "effects": [],
-                "orbs": []
+                "orbs": [],
+                "statModifiersMap": { "turn": {}, "room": {}, "run": {} },
+                "calculatedStats": {
+                    "block": 0,
+                    "blockMultiplier": 1,
+                    "constitution": 11,
+                    "defense": 2,
+                    "magic": 0,
+                    "strength": 5,
+                    "isSkipped": false,
+                    "damageDealMultiplicand": 1,
+                    "damageDealAddend": 0,
+                    "damageTakeMultiplicand": 1,
+                    "damageTakeAddend": 0,
+                    "health": 11,
+                    "stance": "neutral"
+                }
             }
         },
         "cards": {
-            "draw": {},
-            "hand": {},
+            "draw": {
+                "blockKnight-020964905015248787": {
+                    "name": "Shield",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "friends",
+                    "actions": "addBlock(defense)",
+                    "type": "defense",
+                    "id": "blockKnight",
+                    "characterClass": "knight",
+                    "uid": "blockKnight-020964905015248787",
+                    "characterUid": "pc-3",
+                    "explanation": "Give target Kaiju +<span style=\"color: #337ea9; font-weight: bold;\">11</span> block."
+                },
+                "bodySlam-4576805181930412": {
+                    "name": "Shield Bash",
+                    "energy": 1,
+                    "id": "bodySlam",
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "chain(deal(block), \"(equal to block)\")",
+                    "type": "attack",
+                    "characterClass": "knight",
+                    "uid": "bodySlam-4576805181930412",
+                    "characterUid": "pc-2",
+                    "explanation": "Deal 0 damage to enemy target.<br/>(equal to block)."
+                },
+                "dutifulStab-9476526870587197": {
+                    "name": "Dutiful Stab",
+                    "energy": 1,
+                    "id": "dutifulStab",
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "chain(deal(strength), effect(\"debilitated\",1))",
+                    "type": "attack",
+                    "characterClass": "knight",
+                    "uid": "dutifulStab-9476526870587197",
+                    "characterUid": "pc-3",
+                    "explanation": "Deal <span style=\"color: #d44c47; font-weight: bold;\">10</span> damage to enemy target.<br/>Enemy target gains <b>Debilitated</b>&nbsp;(1)."
+                },
+                "shieldOfLight-6599628095635601": {
+                    "name": "Shield of Light",
+                    "energy": 1,
+                    "id": "shieldOfLight",
+                    "targetNum": 1,
+                    "targetType": "friends",
+                    "actions": "magicaldefensey = magic * 0.5 + defense; addBlock(magicaldefensey)",
+                    "type": "defense",
+                    "characterClass": "cleric",
+                    "uid": "shieldOfLight-6599628095635601",
+                    "characterUid": "pc-2",
+                    "explanation": "Give target Kaiju +<span style=\"color: #454396; font-weight: bold;\">12</span> block."
+                },
+                "basicAttackBard-3485147917762803": {
+                    "name": "Magic Attack",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "deal(magic)",
+                    "type": "attack",
+                    "id": "basicAttackBard",
+                    "characterClass": "bard",
+                    "uid": "basicAttackBard-3485147917762803",
+                    "characterUid": "pc-1",
+                    "explanation": "deal <span style=\"color: #9e6ec2; font-weight: bold;\">7</span> damage to enemy target."
+                },
+                "basicAttackKnight-48713410878301777": {
+                    "name": "Attack",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "deal(strength)",
+                    "type": "attack",
+                    "id": "basicAttackKnight",
+                    "characterClass": "knight",
+                    "uid": "basicAttackKnight-48713410878301777",
+                    "characterUid": "pc-3",
+                    "explanation": "deal <span style=\"color: #d44c47; font-weight: bold;\">10</span> damage to enemy target."
+                }
+            },
+            "hand": {
+                "blockBard-6305034294160633": {
+                    "name": "Shield",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "friends",
+                    "actions": "addBlock(defense)",
+                    "type": "defense",
+                    "id": "blockBard",
+                    "characterClass": "bard",
+                    "uid": "blockBard-6305034294160633",
+                    "characterUid": "pc-1",
+                    "explanation": "Give target Kaiju +<span style=\"color: #337ea9; font-weight: bold;\">5</span> block."
+                },
+                "beanNeverMisses-34634478940238766": {
+                    "name": "B.E.A.N. Never Misses",
+                    "energy": 1,
+                    "id": "beanNeverMisses",
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "\n            strengthy = 1.25 * strength;\n            deal(strengthy, \"piercing\")\n        ",
+                    "type": "attack",
+                    "characterClass": "notoriousBean",
+                    "uid": "beanNeverMisses-34634478940238766",
+                    "characterUid": "pc-1",
+                    "explanation": "deal <span style=\"color: #d44c47; font-weight: bold;\">15</span> damage to enemy target <b>Piercing</b>."
+                },
+                "blockCleric-028755044865110116": {
+                    "name": "Shield",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "friends",
+                    "actions": "addBlock(defense)",
+                    "type": "defense",
+                    "id": "blockCleric",
+                    "characterClass": "cleric",
+                    "uid": "blockCleric-028755044865110116",
+                    "characterUid": "pc-2",
+                    "explanation": "Give target Kaiju +<span style=\"color: #337ea9; font-weight: bold;\">8</span> block."
+                },
+                "basicAttackCleric-16206557554506149": {
+                    "name": "Attack",
+                    "energy": 1,
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "deal(strength)",
+                    "type": "attack",
+                    "id": "basicAttackCleric",
+                    "characterClass": "cleric",
+                    "uid": "basicAttackCleric-16206557554506149",
+                    "characterUid": "pc-2",
+                    "explanation": "deal <span style=\"color: #d44c47; font-weight: bold;\">6</span> damage to enemy target."
+                },
+                "charge-8384445773463401": {
+                    "name": "Charge",
+                    "energy": 2,
+                    "id": "charge",
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "actions": "strengthy = strength * 1.6; chain(deal(strengthy), effect(\"vulnerable\", 2))",
+                    "type": "attack",
+                    "characterClass": "knight",
+                    "uid": "charge-8384445773463401",
+                    "characterUid": "pc-3",
+                    "explanation": "Deal <span style=\"color: #d44c47; font-weight: bold;\">16</span> damage to enemy target.<br/>Enemy target gains <b>Vulnerable</b>&nbsp;(2)."
+                }
+            },
             "discard": {},
             "removedRoom": {},
             "removedRun": {}
         },
         "newCardOptions": {},
         "energy": 3,
+        "roundEnergy": 3,
         "isBasicLoaded": false,
         "isDeluxeLoaded": false,
-        "numRoomsPassed": 1,
-        "nextNpcCommands": [],
+        "rooms": {
+            "root": {
+                "uid": "root",
+                "enemies": [],
+                "edges": ["", "1_1", "", ""]
+            },
+            "1_1": {
+                "uid": "1_1",
+                "enemies": [
+                    { "id": "gnomeBandit", "level": 1 },
+                    { "id": "gnomeBigBomber", "level": 2 },
+                    { "id": "gnomeBandit", "level": 1 }
+                ],
+                "category": "tierOne",
+                "edges": ["1_3", "", "2_0", ""]
+            },
+            "1_3": {
+                "uid": "1_3",
+                "enemies": [{ "id": "warhogRaider", "level": 4 }],
+                "category": "tierOne",
+                "edges": ["", "2_4", "", ""]
+            },
+            "2_0": {
+                "uid": "2_0",
+                "enemies": [
+                    { "id": "matchaGelatinCube", "level": 2 },
+                    { "id": "matchaGelatinCube", "level": 2 },
+                    { "id": "matchaGelatinCube", "level": 2 }
+                ],
+                "category": "events",
+                "edges": ["", "3_1", "", ""]
+            },
+            "2_4": {
+                "uid": "2_4",
+                "enemies": [
+                    { "id": "gnomeProspector", "level": 2 },
+                    { "id": "gnomeProspector", "level": 2 }
+                ],
+                "category": "tierOne",
+                "edges": ["2_6", "", "3_3", ""]
+            },
+            "2_6": {
+                "uid": "2_6",
+                "enemies": [
+                    { "id": "gnomeBigBomber", "level": 2 },
+                    { "id": "gnomeBigBomber", "level": 2 },
+                    { "id": "gnomeBigBomber", "level": 3 }
+                ],
+                "category": "tierTwo",
+                "edges": ["", "3_7", "", ""]
+            },
+            "3_1": {
+                "uid": "3_1",
+                "enemies": [
+                    { "id": "plaguehog", "level": 2 },
+                    { "id": "gnomeProspector", "level": 2 }
+                ],
+                "category": "tierOne",
+                "edges": ["3_3", "", "4_0", ""]
+            },
+            "3_3": {
+                "uid": "3_3",
+                "enemies": [
+                    { "id": "orcWarrior", "level": 2 },
+                    { "id": "gnomeProspector", "level": 3 },
+                    { "id": "orcWarrior", "level": 2 }
+                ],
+                "category": "events",
+                "edges": ["", "4_4", "", ""]
+            },
+            "3_7": {
+                "uid": "3_7",
+                "enemies": [
+                    { "id": "gnomeProspector", "level": 2 },
+                    { "id": "groghog", "level": 2 },
+                    { "id": "gnomeBigBomber", "level": 3 }
+                ],
+                "category": "tierTwo",
+                "edges": ["", "", "4_8", ""]
+            },
+            "4_0": {
+                "uid": "4_0",
+                "enemies": [
+                    { "id": "gnomeBandit", "level": 2 },
+                    { "id": "plaguehog", "level": 3 },
+                    { "id": "gnomeBandit", "level": 2 }
+                ],
+                "category": "tierTwo",
+                "edges": ["", "5_1", "", ""]
+            },
+            "4_4": {
+                "uid": "4_4",
+                "enemies": [{ "id": "gnomeBandit", "level": 9 }],
+                "category": "tierThree",
+                "edges": ["4_8", "", "5_3", ""]
+            },
+            "4_8": {
+                "uid": "4_8",
+                "enemies": [
+                    { "id": "skeletonWarrior", "level": 2 },
+                    { "id": "matchaGelatinCube", "level": 3 },
+                    { "id": "skeletonWarrior", "level": 2 }
+                ],
+                "category": "events",
+                "edges": ["", "5_7", "", ""]
+            },
+            "5_1": {
+                "uid": "5_1",
+                "enemies": [
+                    { "id": "gnomeProspector", "level": 3 },
+                    { "id": "groghog", "level": 2 },
+                    { "id": "warhogRaider", "level": 2 }
+                ],
+                "category": "tierTwo",
+                "edges": ["5_3", "", "", ""]
+            },
+            "5_3": {
+                "uid": "5_3",
+                "enemies": [
+                    { "id": "matchaGelatinCube", "level": 2 },
+                    { "id": "skeletonWarrior", "level": 3 },
+                    { "id": "matchaGelatinCube", "level": 1 }
+                ],
+                "category": "events",
+                "edges": ["", "6_4", "", ""]
+            },
+            "5_7": {
+                "uid": "5_7",
+                "enemies": [{ "id": "plaguehog", "level": 9 }],
+                "category": "tierThree",
+                "edges": ["", "", "6_6", ""]
+            },
+            "6_4": {
+                "uid": "6_4",
+                "enemies": [
+                    { "id": "gnomeBandit", "level": 3 },
+                    { "id": "groghog", "level": 3 },
+                    { "id": "gnomeBandit", "level": 3 }
+                ],
+                "category": "tierThree",
+                "edges": ["6_6", "", "", ""]
+            },
+            "6_6": {
+                "uid": "6_6",
+                "enemies": [{ "id": "REST_SITE", "level": 1 }],
+                "edges": ["", "7_7", "", ""]
+            },
+            "7_7": {
+                "uid": "7_7",
+                "enemies": [
+                    { "id": "bosshogJurgen", "level": "default", "boss": true }
+                ],
+                "category": "bosses",
+                "edges": ["", "", "6-b", ""]
+            }
+        },
+        "numRoomsPassed": 0,
+        "currentRoom": {
+            "uid": "1_1",
+            "enemies": [
+                { "id": "gnomeBandit", "level": 1 },
+                { "id": "gnomeBigBomber", "level": 2 },
+                { "id": "gnomeBandit", "level": 1 }
+            ],
+            "edges": ["1_3", "", "2_0", ""],
+            "category": "tierOne"
+        },
+        "nextNpcCommands": [
+            {
+                "command": {
+                    "actions": "ifDamageDealtApplyEffect(strength * .3, 'tired', 1)",
+                    "id": "gnomeBomb",
+                    "name": "Gnome Bomb",
+                    "explanation": "deal strength",
+                    "targetNum": -1,
+                    "targetType": "allEnemies",
+                    "characterUid": "npc-1"
+                },
+                "targetUids": ["pc-1", "pc-2", "pc-3"],
+                "outcome": {
+                    "damages": {
+                        "pc-1": 2,
+                        "pc-2": 2,
+                        "pc-3": 2
+                    },
+                    "blocks": {},
+                    "effects": {
+                        "pc-1": 1,
+                        "pc-2": 1,
+                        "pc-3": 1
+                    }
+                }
+            },
+            {
+                "command": {
+                    "actions": "\"\"",
+                    "id": "bigBomb1",
+                    "name": "Big Bomb",
+                    "targetNum": 1,
+                    "targetType": "enemies",
+                    "characterUid": "npc-2"
+                },
+                "targetUids": ["pc-2"],
+                "outcome": { "damages": {}, "blocks": {}, "effects": {} }
+            },
+            {
+                "command": {
+                    "actions": "ifDamageDealtApplyEffect(strength * .3, 'tired', 1)",
+                    "id": "gnomeBomb",
+                    "name": "Gnome Bomb",
+                    "explanation": "deal strength",
+                    "targetNum": -1,
+                    "targetType": "allEnemies",
+                    "characterUid": "npc-3"
+                },
+                "targetUids": ["pc-1", "pc-2", "pc-3"],
+                "outcome": {
+                    "damages": {
+                        "pc-1": 2,
+                        "pc-2": 2,
+                        "pc-3": 2
+                    },
+                    "blocks": {},
+                    "effects": {
+                        "pc-1": 1,
+                        "pc-2": 1,
+                        "pc-3": 1
+                    }
+                }
+            }
+        ],
         "cardsPlayedThisRoom": [],
-        "queue": []
+        "cardsPlayedThisTurn": [],
+        "blocksAppliedThisTurn": [],
+        "stanceChangesThisRoom": [],
+        "damagesDealtThisTurn": [],
+        "damagesDealtThisRoom": [],
+        "queue": [],
+        "requireAction": null,
+        "isInMap": false,
+        "isInRestSite": false,
+        "lootEarned": [],
+        "lootClaimed": [],
+        "lootScreenHasOpened": false,
+        "endScreenHasOpened": false,
+        "treasureChest": {
+            "level": 1,
+            "progressPct": 0,
+            "state": "pending",
+            "upgraded": false
+        },
+        "runScore": {
+            "totalScore": 0,
+            "currModifier": 1,
+            "attributes": {
+                "enemiesKilled": 0,
+                "roomsCleared": 0,
+                "bossesKilled": 0,
+                "cumulativeOverkill": 0,
+                "perfectKills": 0,
+                "roomsExitedFullHealth": 0,
+                "bossRoomsExitedFullHealth": 0,
+                "bossRoomsExitedLowDamage": 0,
+                "highestDamageHit": 0,
+                "minsUnderRunThreshold": 0,
+                "winsNoEnergyUsedLastTurn": 0,
+                "survivingKaiju": 0,
+                "finalUserHealthRemaining": 0,
+                "hitsOverVulgarThreshold": 0,
+                "roomsWonZeroDamage": 0,
+                "blocksOverThreshold": 0,
+                "stanceChangesOverThreshold": 0,
+                "roomsZeroStanceChanges": 0,
+                "cardsPlayedOverThreshold": 0,
+                "null": 0
+            }
+        },
+        "runScoreUpdate": null,
+        "runDuration": { "startTime": 1674201232922, "endTime": null }
     },
     "events": {
         "world$": [],

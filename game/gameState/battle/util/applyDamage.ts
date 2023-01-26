@@ -11,6 +11,7 @@ import { updateNpcMoves } from '@/gameState'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
 import { applyEffect } from '../cards/commands/effect'
+import { updateScore } from '@/gameState'
 
 export function applyDamage(args: {
     damage: number
@@ -18,8 +19,9 @@ export function applyDamage(args: {
     attackerUid?: CharacterUid
     scene: BattleCursor
     attacker?: CharacterMeta
+    piercing?: boolean
 }): number {
-    const { damage, targetUid, scene, attackerUid, attacker } = args
+    const { damage, targetUid, scene, attackerUid, attacker, piercing } = args
     if (attacker == null && attackerUid == null) {
         throw new Error('must provide attacker or attackerUid')
     }
@@ -35,7 +37,12 @@ export function applyDamage(args: {
         damage,
     })
 
-    const unblockedDamage = applyCalcedDamage(scene, targetUid, calcedDamage)
+    const unblockedDamage = applyCalcedDamage({
+        scene,
+        targetUid,
+        calcedDamage,
+        piercing,
+    })
 
     manageSideEffectsOfNewDamage(scene, targetUid, calcedDamage)
 
@@ -45,16 +52,22 @@ export function applyDamage(args: {
     return unblockedDamage
 }
 
-function applyCalcedDamage(
-    scene: BattleCursor,
-    targetUid: CharacterUid,
+function applyCalcedDamage({
+    scene,
+    targetUid,
+    calcedDamage,
+    piercing = false,
+}: {
+    scene: BattleCursor
+    targetUid: CharacterUid
     calcedDamage: number
-) {
+    piercing?: boolean
+}) {
     let unblockedDamage = Number.NEGATIVE_INFINITY
 
     scene.select('allCharacters').apply(targetUid, c => {
         let health = c.health
-        let block = c.block
+        let block = piercing ? 0 : c.block
 
         unblockedDamage = calcedDamage - block
 
@@ -65,7 +78,7 @@ function applyCalcedDamage(
             block -= calcedDamage
         }
 
-        return { ...c, health, block }
+        return { ...c, health, block: piercing ? c.block : block }
     })
 
     return unblockedDamage
@@ -76,24 +89,39 @@ function manageSideEffectsOfNewDamage(
     targetUid: CharacterUid,
     calcedDamage: number
 ) {
-    if (didTargetDie(scene, targetUid)) clearDead(scene)
+    if (didTargetDie(scene, targetUid)) {
+        clearDead(scene)
 
-    scene.apply('damagesDealtThisTurn', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+        applyKillScores(scene, targetUid)
+    }
 
-    scene.apply('damagesDealtThisRoom', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
 
     if (damageChangesEnemyIntent(scene)) {
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)
     }
 
-    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
+    recordDamage(scene, calcedDamage, targetUid)
+}
+
+function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
+    const remainingHealth = scene.select('allCharacters').get(targetUid).health
+    if (remainingHealth === 0) {
+        updateScore({
+            scene,
+            event: 'PERFECT_KILL',
+            count: 1,
+            notify: true,
+        })
+    } else {
+        updateScore({
+            scene,
+            event: 'OVERKILL',
+            count: -remainingHealth,
+            notify: true,
+        })
+    }
 }
 
 function didTargetDie(scene: BattleCursor, targetUid: CharacterUid) {
@@ -147,7 +175,7 @@ function maybeApplyDamageThresholdDebuffs(
                 health: 0.6,
                 effects: [
                     {
-                        id: 'debilitated',
+                        id: 'debilitatedDebuff',
                         counter: 2,
                     },
                 ],
@@ -156,7 +184,7 @@ function maybeApplyDamageThresholdDebuffs(
                 health: 0.4,
                 effects: [
                     {
-                        id: 'stunned',
+                        id: 'stunnedDebuff',
                         counter: 1,
                     },
                 ],
@@ -182,4 +210,20 @@ function maybeApplyDamageThresholdDebuffs(
 
         updateNpcMoves(scene)
     }
+}
+
+function recordDamage(
+    scene: BattleCursor,
+    calcedDamage: number,
+    targetUid: CharacterUid
+) {
+    scene.apply('damagesDealtThisTurn', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
+
+    scene.apply('damagesDealtThisRoom', damages => [
+        ...damages,
+        { amount: calcedDamage, targetUid },
+    ])
 }

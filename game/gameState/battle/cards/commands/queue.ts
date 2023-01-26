@@ -1,11 +1,13 @@
-import type { Executors, Explainers } from './util'
+import { evalAll, Executors, Explainers } from './util'
 import { evalAllAsHtml, s } from './util'
 import { enqueueAction } from '@/gameState'
 
 export const explain: Explainers['queue'] = dslArgs => {
-    const [turnsAway, nextAction] = evalAllAsHtml(dslArgs)
+    const [turnsAway, nextAction] = evalAll(dslArgs)
 
-    return `in ${turnsAway} turn${s(parseInt(turnsAway))}:<br/>${nextAction}`
+    return `${
+        turnsAway === 1 ? 'next turn' : `in ${turnsAway} turns`
+    }, ${nextAction}`
 }
 
 export const execute: Executors['queue'] = ({

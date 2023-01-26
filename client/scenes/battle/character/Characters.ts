@@ -11,7 +11,7 @@ import { For } from '@/elementsUtil'
 import { localTree } from '@/data'
 import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
 import { callApi } from '@/callApi'
-import { handleScoringEvent } from '@/scenes/shared'
+import { depricatedScoreUpdateFromClient } from '@/scenes/shared'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
@@ -118,19 +118,28 @@ export function Characters(scene: ROBattleScene): PixiContainer {
 
         if (removedEnemyCharacters) {
             setTimeout(() => {
-                handleScoringEvent(
+                depricatedScoreUpdateFromClient(
                     'ENEMY_KILLED',
                     removedEnemyCharacters.length,
                     scene,
                     removedEnemyCharacters
                 )
-                for (let char of removedEnemyCharacters) {
-                    if (char.health < 0) {
-                        handleScoringEvent('OVERKILL', -char.health, scene)
-                    } else if (char.health === 0) {
-                        handleScoringEvent('PERFECT_KILL', 1, scene, char)
-                    }
-                }
+                // for (let char of removedEnemyCharacters) {
+                //     if (char.health < 0) {
+                //         depricatedScoreUpdateFromClient(
+                //             'OVERKILL',
+                //             -char.health,
+                //             scene
+                //         )
+                //     } else if (char.health === 0) {
+                //         depricatedScoreUpdateFromClient(
+                //             'PERFECT_KILL',
+                //             1,
+                //             scene,
+                //             char
+                //         )
+                //     }
+                // }
             }, 1000) // imperfect timing, but good enough for now
         }
 

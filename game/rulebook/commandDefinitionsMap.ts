@@ -7,8 +7,8 @@ import type {
     NpcCommandId,
 } from 'shared'
 import { entryMap, keys } from 'shared/code'
-import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 import * as alias from './commandAliases'
+import { getRulebook } from './rulebook'
 // TODO eventually: remove ? before : below
 type CommandDefinitionsMap = Record<NpcCommandId, NpcCommandDefinition>
 
@@ -182,7 +182,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     spiritQuest: {
         explanation: 'All enemies receive Brave (2)',
-        actions: `effectAll("brave", 2, "friends")`,
+        actions: `effect("brave", 2, "allFriends")`,
         //@ts-expect-error
         id: `spiritQuest`,
         name: `Spirit Quest`,
@@ -288,7 +288,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**yodel attacks for 50%.  After this turn, the enemy party will gain Emboldened (2).*/
     yodel: {
-        actions: `chain(deal(strength * .5), effect("courageous", 2, "allFriends"))`,
+        actions: `chain(deal(strength * .5), queue(effect("courageous", 2, "allFriends"), 1))`,
         //@ts-expect-error
         id: `yodel`,
         name: `Bucket of Bang Snaps`,
@@ -297,7 +297,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**Bucket of Bang Snaps*/
     demolitionCharge: {
-        actions: `ifDamageDealt(deal(strength), chain(effect("courageous", 2, "self"), effect("tired", 1)))`,
+        actions: `ifDamageDealt(deal(strength), chain(queue(effect("courageous", 1, "self"), 1), effect("tired", 1)))`,
         //@ts-expect-error
         id: `demolitionCharge`,
         name: `Demolition Charge`,
@@ -323,7 +323,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
 
     gnomeBomb: {
-        actions: `deal(strength * .3)`,
+        actions: `ifDamageDealtApplyEffect(strength * .3, 'tired', 1)`,
         //@ts-expect-error
         id: `gnomeBomb`,
         name: `Gnome Bomb`,
@@ -356,7 +356,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
  * mutates commandDefinitionsMap in place
  */
 function generateParameterizedCommands() {
-    for (const levelObj of Object.values(npcStatsMapByLevel))
+    for (const levelObj of Object.values(getRulebook().npcStatsMapByLevel))
         for (const enemy of Object.values(levelObj))
             for (const commandId of enemy.moves) {
                 if (commandId == null || !commandId.includes('(')) continue
@@ -372,7 +372,7 @@ function generateParameterizedCommands() {
                 })
                 if (!(baseId in alias))
                     throw Error(`'${baseId}' is not a known alias`)
-                if (baseId in commandDefinitionsMap) continue
+                if (`${baseId}(${args})` in commandDefinitionsMap) continue
                 // @ts-expect-error
                 const baseCommand = alias[baseId]
                 commandDefinitionsMap[commandId] = baseCommand(...args)

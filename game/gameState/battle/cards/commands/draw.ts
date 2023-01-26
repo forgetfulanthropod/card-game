@@ -6,7 +6,7 @@ import { evalAllAsHtml, evalAll } from './util'
 
 export const explain: Explainers['draw'] = dslArgs => {
     const [numCards] = evalAllAsHtml(dslArgs)
-    return `draw ${numCards}`
+    return `Draw ${numCards}`
 }
 
 export const execute: Executors['draw'] = ({ dslArgs, scene }) => {

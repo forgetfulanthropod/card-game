@@ -14,7 +14,7 @@ export const explain: Explainers['smite'] = (dslArgs, context) => {
         damage,
         attacker: context.characterMeta,
         target: null,
-    })}${damageHtmlArr[1]} damage. If enemy is killed, block ${blockHtml}.`
+    })}${damageHtmlArr[1]} damage. If enemy is killed, block ${blockHtml}`
 }
 
 export const execute: Executors['smite'] = ({

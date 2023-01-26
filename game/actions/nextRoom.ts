@@ -25,6 +25,7 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
 
     const chosenRoom = getChosenRoom(scene, args.choice)
+    scene.apply('roomUidsVisited', uids => [...uids, chosenRoom.uid])
     scene.set('currentRoom', chosenRoom)
 
     scene

@@ -58,6 +58,12 @@ function mp4-to-webm() {
 function png-to-webp() {
     path=$1
     mogrify -format webp $1.png
+
+    # alternate
+    # parallel -eta cwebp {} -o {.}.webp ::: *.png
+
+    # https://developers.google.com/speed/webp/docs/cwebp
+    # https://savannah.gnu.org/projects/parallel/
 }
 
 function generate-indices() {

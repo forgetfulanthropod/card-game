@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Kaiju Cards</title>
+    <title>Kaiju Cards v0.1.0</title>
     <meta charset="utf-8" />
     <link rel="icon" href="favicon.png" />
 
@@ -68,7 +68,12 @@
     <!-- Google tag (gtag.js) -->
     <script>
         const isLocal = document.location.hostname === 'localhost'
-        const GTAG_ID = isLocal ? 'G-B9HWVKN8ZF' : 'G-ZJEB0NYGHB';
+        const isStage = document.location.hostname.includes('test')
+        const isProd = document.location.hostname.includes('play')
+        const GTAG_ID =
+            isLocal ? 'G-K4EZ7S800L' :
+            isStage ? 'G-N5VM62XZG6' :
+            isProd ? 'G-ZJEB0NYGHB' : '';
 
         const GTAG_URL = `https://www.googletagmanager.com/gtag/js?id=${GTAG_ID}`
         const gaSrcScript = document.createElement('script')
@@ -81,7 +86,7 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);};
             gtag('js', new Date());
-            gtag('config', GTAG_ID, { 'debug_mode': isLocal });
+            gtag('config', GTAG_ID, { 'debug_mode': isLocal || isStage });
             console.log({GTAG_ID, isLocal})
         `
         document.head.appendChild(gaConfigScript)
@@ -102,8 +107,8 @@
     </div>
     <script>
         (async () => {
-            // const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
-            const pwd = 'dailyship'
+            const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
+            // const pwd = 'dailyship'
             await new Promise(resolve => setTimeout(resolve, 100))
 
             try {

@@ -18,10 +18,11 @@ import {
 } from '@/elementsUtil'
 import { keys } from 'shared/code'
 import { Datum } from 'datums'
-import { nextTick } from '@/util'
+import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
+    brittle: 'breaks after (X) uses',
     dwindle: 'costs +1 energy each use in room',
 
     orbsOfProtection: 'blocks for 50% of Magic',
@@ -31,7 +32,7 @@ export const keyTermsMap = {
 
     grudge: 'intentGrudge',
     infectiousBite: 'unblocked damage becomes Poison',
-    mimicAttack: 'deal 999 or copies the last hit taken this turn.',
+    mimicAttack: 'deal 999 or copies the last hit taken this turn',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
@@ -42,11 +43,12 @@ export const keyTermsMap = {
     entranced: 'increases Magic by 1 per stack',
     fatigued: 'deals 25% less damage',
     fortified: 'receives 50% more block',
-    // guarded: 'receives 25% more block',
+    guarded: 'receives 25% less damage',
     poisoned: '(unblockable) receives 1 damage per stack',
+    piercing: 'ignores block',
     strongblock: 'receives 50% more block',
     stunned: 'cannot take an action this turn',
-    targeted: 'receives 15% more damage',
+    targeted: 'receives 5 extra damage',
     tired: 'deals 12% less damage',
     unguarded: 'receives 25% more damage',
     unready: 'receives 12% more damage',
@@ -73,28 +75,18 @@ export function TermExplanationsIf({
     xOffset?: number
     yOffset?: number
 }) {
-    return If(areShown, () => {
-        const root = Container({})
-
-        nextTick().then(() =>
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: Container(
-                    {},
-                    ...TermExplanations({
-                        terms,
-                        displayObjectArgs: {
-                            x: root.getGlobalPosition().x + xOffset,
-                            y: root.getGlobalPosition().y + yOffset,
-                        },
-                    })
-                ),
+    return If(areShown, () =>
+        portalizeExplanations(
+            Container({}),
+            TermExplanations({
+                terms,
+                displayObjectArgs: {
+                    x: xOffset,
+                    y: yOffset,
+                },
             })
         )
-
-        return root
-    })
+    )
 }
 
 export function TermExplanations({
@@ -143,24 +135,40 @@ export function TermExplanationIf({
     yOffset?: number
 }): PixiContainer {
     return If(isShown, () => {
-        const root = Container({})
+        return portalizeExplanations(Container({}), [
+            TermExplanation({
+                term,
+                displayObjectArgs: { x: xOffset, y: yOffset },
+            }),
+        ])
+    })
+}
 
-        nextTick().then(() =>
+function portalizeExplanations(
+    root: PixiContainer<DisplayObject>,
+    content: PixiContainer[]
+) {
+    nextFrame().then(() => {
+        nextFrame().then(() => {
+            if (root == null || root.parent == null) return
+
+            if (targetUidsWaitingForImpact.val.length) return
+
             portalize({
                 from: root,
-                to: () => getStage(),
-                content: TermExplanation({
-                    term,
-                    displayObjectArgs: {
-                        x: root.getGlobalPosition().x + xOffset,
-                        y: root.getGlobalPosition().y + yOffset,
+                content: Container(
+                    {
+                        x: root.getGlobalPosition().x,
+                        y: root.getGlobalPosition().y,
                     },
-                }),
+                    ...content
+                ),
+                // nextFrame: true,
             })
-        )
-
-        return root
+        })
     })
+
+    return root
 }
 
 export function TermExplanation({
@@ -205,27 +213,18 @@ export function ExplanationIf({
     isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
-        const root = Container({})
-
-        nextTick().then(() => {
-            if (root == null) return
-
-            portalize({
-                from: root,
-                to: () => getStage(),
-                content: Explanation({
-                    texts,
-                    displayObjectArgs: {
-                        borderThickness: 2,
-                        padding: 10,
-                        x: root.getGlobalPosition().x + xOffset,
-                        y: root.getGlobalPosition().y + yOffset,
-                    },
-                }),
-            })
-        })
-
-        return root
+        return portalizeExplanations(Container({}), [
+            Explanation({
+                texts,
+                isHtml,
+                displayObjectArgs: {
+                    borderThickness: 2,
+                    padding: 10,
+                    x: xOffset,
+                    y: yOffset,
+                },
+            }),
+        ])
     })
 }
 
@@ -246,7 +245,7 @@ export function Explanation({
             isHtml,
             style: {
                 fill: 'white',
-                wordWrapWidth: BASE_WIDTH * 0.2,
+                wordWrapWidth: BASE_WIDTH * 0.18,
                 wordWrap: true,
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
                 fontSize: displayObjectArgs?.fontSize ?? 20,
@@ -263,6 +262,8 @@ export function Explanation({
         }
     })
 
+    // console.log({ textEls, texts })
+
     return InfoBox(
         Container(
             {},
@@ -272,9 +273,7 @@ export function Explanation({
                     (maxW, el) => Math.max(el.width, maxW),
                     0
                 ),
-                height:
-                    textEls.reduce((totalH, el) => totalH + el.height, 0) +
-                    margin * (textEls.length - 1),
+                height: textEls.reduce((totalH, el) => totalH + el.height, 0),
             }),
             ...textEls
         ),

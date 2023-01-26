@@ -1,8 +1,27 @@
 import 'pixi-projection'
-import type { Card } from 'shared'
-import { CardSprite } from './Card'
-import type { PixiContainer } from '@/elementsUtil'
+import type { Card, CharacterClass } from 'shared'
+import { CardEl, CardSprite } from './Card'
+import {
+    Adjust,
+    cardTypeAssets,
+    PixiContainer,
+    PixiSprite,
+    portalize,
+    Sprite,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
 import { RoundedRectangleGradientSprite, Container } from '@/elementsUtil'
+import { Texture } from 'pixi.js'
+import { nextFrame, nextTick } from '@/util'
+import { getBattleScene } from '@/data'
+
+const characterClasses: CharacterClass[] = [
+    'rogue',
+    'knight',
+    'wizard',
+    'bard',
+    'cleric',
+]
 
 export function CardsTiltedInLine({
     cards,
@@ -28,20 +47,90 @@ export function CardsTiltedInLine({
     const leftMargin =
         (parentWidth - allCardsWidth) / 2 + bgPaddingPortion * parentWidth
 
-    const cardEls = cards.map((cardMeta, index) => {
+    const cardsSorted = cards.sort((cardA, cardB) => {
+        //@ts-expect-error
+        const energyA = characterClasses.includes(cardA.characterClass)
+            ? cardA.energy
+            : -99
+        //@ts-expect-error
+        const energyB = characterClasses.includes(cardB.characterClass)
+            ? cardB.energy
+            : -99
+
+        return energyB - energyA || (cardA.name < cardB.name ? 1 : -1)
+    })
+
+    let fullSizeCard: TweenablePixiContainer | null
+    let hoveringCardDetails = false
+
+    const cardEls = cardsSorted.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
 
+        sprite.interactive = false
         sprite.scale.x = -tiltFactor
+
+        const clearOldFullSizeCard = () => {
+            hoveringCardDetails = false
+
+            fullSizeCard && root.removeChild(fullSizeCard)
+
+            fullSizeCard?.destroy()
+            fullSizeCard?.children?.pop()?.destroy()
+
+            fullSizeCard = null
+        }
 
         const c = Container(
             {
                 x: (cards.length - 1 - index) * spaceBetween + leftMargin,
                 y: parentWidth * bgPaddingPortion,
+                events: {
+                    pointerover: () => {
+                        clearOldFullSizeCard()
+
+                        const cardWidth = 400
+                        fullSizeCard = Adjust(
+                            CardEl({
+                                card: cardMeta,
+                                width: cardWidth,
+                                showTermExplanations: true,
+                                explanationsOnLeft: true,
+                                explanationsAdjustX: -420,
+                                explanationsAdjustY: 200,
+                            }),
+                            {
+                                name: 'FULL SIZE CARD',
+                                x: c.x - cardWidth * 0.38,
+                                y: c.y - cardWidth * 0.2,
+                            }
+                        )
+
+                        fullSizeCard.children.forEach(
+                            c => (c.interactive = false)
+                        )
+
+                        // fullSizeCard.interactive = true
+                        // fullSizeCard.on(
+                        //     'pointerover',
+                        //     () => (hoveringCardDetails = true)
+                        // )
+                        // fullSizeCard.on('pointerout', () =>
+                        //     clearOldFullSizeCard()
+                        // )
+
+                        root.addChild(fullSizeCard)
+                    },
+                    pointerout: async () => {
+                        // await nextTick()
+
+                        // if (hoveringCardDetails) return
+
+                        clearOldFullSizeCard()
+                    },
+                },
             },
             sprite
         )
-
-        c.addChild(sprite)
 
         //@ts-expect-error
         c.convertTo2d()
@@ -54,6 +143,52 @@ export function CardsTiltedInLine({
 
         return c
     })
+
+    // const cardInteractionOverlays = cardsSortedByEnergyCost.map(
+    //     (cardMeta, index) => {
+    //         // const cardSprite = CardSprite({ card: cardMeta, width: cardWidth })
+    //         let fullSizeCard: PixiSprite | null
+
+    //         return Container(
+    //             {
+    //                 name: 'card interaction overlay?',
+    //                 x: cardEls[index].x,
+    //                 y: cardEls[index].y,
+    //             },
+    //             Sprite({
+    //                 src: Texture.EMPTY,
+    //                 width: 45,
+    //                 height: 90,
+    //                 events: {
+    //                     pointerover() {
+    //                         fullSizeCard = Adjust(
+    //                             CardSprite({
+    //                                 card: cardMeta,
+    //                                 width: 300,
+    //                             }),
+    //                             {
+    //                                 name: 'FULL SIZE CARD',
+    //                                 x: cardEls[index].x,
+    //                                 y: cardEls[index].y,
+    //                                 anchor: [1, 0.5],
+    //                             }
+    //                         )
+    //                         // console.log('pointer over', { fullSizeCard })
+    //                         root.addChild(fullSizeCard)
+    //                     },
+    //                     pointerout() {
+    //                         // console.log('pointer out')
+    //                         fullSizeCard && root.removeChild(fullSizeCard)
+
+    //                         fullSizeCard?.destroy()
+
+    //                         fullSizeCard = null
+    //                     },
+    //                 },
+    //             })
+    //         )
+    //     }
+    // )
 
     const bgWidth = parentWidth * (1 + bgPaddingPortion * 2)
     const bgHeight = cardWidth * 1.4 + parentWidth * bgPaddingPortion * 2
@@ -75,7 +210,8 @@ export function CardsTiltedInLine({
             },
         }),
         ...cardEls
+        // ...cardInteractionOverlays
     )
-    root.cacheAsBitmap = true
+
     return root
 }

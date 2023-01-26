@@ -6,16 +6,27 @@ import {
     CharacterMeta,
     BattleScene,
     NotifiableEvent,
+    RunScoreUpdate,
 } from 'shared'
 import { checkOtherScoringEvents } from './checkOtherScoringEvents'
 import { displayScoreNotification } from './Notification'
 
-const handleScoringEvent = (
+export const depricatedScoreUpdateFromClient = (
     event: NotifiableEvent,
     count: number,
     scene: ROCursor<BattleScene>,
     data?: any
 ) => {
+    showScoreUpdateNotification({ event, count, data })
+
+    callApi('notifyRunScore', { event, count })
+}
+
+export const showScoreUpdateNotification = ({
+    event,
+    count,
+    data,
+}: RunScoreUpdate) => {
     const scorePointsToAdd = RUN_SCORE_EVENT_META[event].pointValue * count
 
     switch (event) {
@@ -38,7 +49,7 @@ const handleScoringEvent = (
                 'swordPiercing',
                 scorePointsToAdd
             )
-            checkOtherScoringEvents(event, scene)
+            // checkOtherScoringEvents(event, scene)
             break
         case 'ROOM_WIN_NO_ENERGY_USED':
             displayScoreNotification(
@@ -92,8 +103,4 @@ const handleScoringEvent = (
                 scorePointsToAdd
             )
     }
-
-    callApi('notifyRunScore', { event, count })
 }
-
-export { handleScoringEvent }

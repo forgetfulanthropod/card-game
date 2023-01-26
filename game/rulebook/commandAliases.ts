@@ -13,7 +13,7 @@ export const surpriseAllergy = (
     x: number,
     y: number
 ): NpcCommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength/2), effect("poisoned",${x}), effect("fatigued",${y}))`,
+    actions: `ifDamageDealt(deal(strength/2), chain(effect("poisoned",${x}), effect("fatigued",${y})))`,
     id: `surpriseAllergy(${x},${y})`,
     name: `Surprise Allergy ${x}-${y}`,
     targetNum: 1,

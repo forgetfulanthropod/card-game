@@ -19,4 +19,5 @@ export {
     getInitialRunScore,
     calculateNewRunScore,
     getInitialRunDuration,
+    updateScore,
 } from './score'

@@ -1,19 +1,29 @@
 import { startCase } from 'lodash'
-import type {
+import {
     BasicTargetType,
     BattleCursor,
     CharacterUid,
     Command,
     EffectId,
+    effectIds,
 } from 'shared'
 import { setAt } from 'shared/code'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
+import { getTargetText } from './util/getTargetText'
 
-export const explain: Explainers['effect'] = dslArgs => {
-    const [id, increase] = evalAllAsHtml(dslArgs)
-    return `+${increase} <b>${startCase(id)}</b>`
+export const explain: Explainers['effect'] = (dslArgs, context) => {
+    const [id, increase, _] = evalAllAsHtml(dslArgs)
+    const [__, ___, targetTypeArg] = evalAll(dslArgs)
+    const targetType = targetTypeArg ?? context.command.targetType
+    return `${getTargetText(
+        targetType,
+        context.characterMeta
+    )} gains <b>${startCase(id)
+        .replace('Debuff', '')
+        .replace('Buff', '')}</b>&nbsp;(${increase})`
 }
 
 export const execute: Executors['effect'] = ({
@@ -25,18 +35,30 @@ export const execute: Executors['effect'] = ({
     const [id, increase] = evalAll(dslArgs)
     const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
 
-    // logger.info(`adding effect ${id}`)
-
     applyEffect(scene, targetUids, id, increase)
 }
 
 export function applyEffect(
     scene: BattleCursor,
     targetUids: CharacterUid[],
-    id: EffectId,
+    idPartial: EffectId,
     increase: number
 ) {
+    const id: EffectId = effectIds.includes(idPartial)
+        ? idPartial
+        : effectIds[
+              effectIds
+                  .map(id => id.replace('Debuff', '').replace('Buff', ''))
+                  .indexOf(idPartial)
+          ]
+
+    if (!id) {
+        logger.warn(`tried to apply invalid effect ${id}`)
+        return
+    }
+
     const ac = scene.select('allCharacters')
+
     for (const uid of targetUids) {
         ac.select(uid, 'effects').apply(effects => {
             const i = effects.findIndex(e => e.id === id)
@@ -56,26 +78,11 @@ function getTargetUids(
     scene: BattleCursor
 ) {
     let targetType = evalAll(dslArgs)[2]
-    let targetUids
 
-    if (targetType == null) {
-        targetUids = givenUids
-        if (givenUids.length === 0 && typeof command.targetType === 'string')
-            targetType = command.targetType as BasicTargetType
-    }
-    if (targetType == null) {
-        targetUids = givenUids
-    } else if (['allFriends', 'allEnemies'].includes(targetType)) {
-        const ac = scene.get('allCharacters')
-        const isPcSource = ac[command.characterUid].isPc
-        const shouldBePc = isPcSource === (targetType === 'allFriends') // NOR
-        targetUids = Object.values(ac)
-            .filter(x => x.isPc === shouldBePc)
-            .map(x => x.uid)
-    } else if (['self'].includes(targetType)) {
-        targetUids = [command.characterUid]
-    } else {
-        targetUids = givenUids
-    }
-    return targetUids
+    return getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids,
+    })
 }

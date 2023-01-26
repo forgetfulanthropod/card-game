@@ -168,7 +168,7 @@ function EnemyIntentArrow(
             Sprite({
                 src,
                 scale,
-                width: distance,
+                width: distance - 10,
                 anchor: [1, 0.5],
                 pivot: [1, 0.5],
                 rotation,

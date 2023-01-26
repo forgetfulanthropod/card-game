@@ -1,7 +1,7 @@
 import {
     AuthUserDBActionProps,
     ServerActions,
-    Gamestate,
+    GameState,
     Scene,
     BattleScene,
 } from 'shared'
@@ -51,7 +51,7 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
         UPDATE
             kaiju.user_run
         SET
-            run_status = ${restart ? 'abandoned' : state },
+            run_status = ${restart ? 'abandoned' : state},
             end_ts = now(),
             run_duration_in_sec = ${runDuration},
             run_score = ${totalScore},
@@ -64,7 +64,7 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
 }
 
 const validateRun = async (
-    props: AuthUserDBActionProps & { gameState: Gamestate }
+    props: AuthUserDBActionProps & { gameState: GameState }
 ): Promise<Boolean> => {
     // TODO
     return true

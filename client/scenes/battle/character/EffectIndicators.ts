@@ -6,7 +6,7 @@ import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { glowFilter, If, PixiContainer } from '@/elementsUtil'
 import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
-import { TermExplanationIf, Explanation } from '@sharedElements'
+import { TermExplanationIf, Explanation, KeyTerm } from '@sharedElements'
 
 export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
@@ -80,7 +80,9 @@ function InteractiveEffectCounter(
         }),
         TermExplanationIf({
             isShown: isHovered,
-            term: effect.id,
+            term: effect.id
+                .replace('Debuff', '')
+                .replace('Buff', '') as KeyTerm,
             xOffset: width,
         })
     )

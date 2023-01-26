@@ -3,13 +3,14 @@
  */
 
 import type { SCursor } from 'sbaobab'
-import type { SceneId } from './misc'
+import type { Scene, SceneId } from './misc'
 
 import type {
+    BattleScene,
     CardUid,
     CharacterStats,
     CharacterUid,
-    Gamestate,
+    GameState,
     Orb,
     OwnedCharacterStats,
     Rulebook,
@@ -45,7 +46,7 @@ export interface BareServerActionsMeta {
         res: Promise<{ runId: RunID }>
     }
     endRun: {
-        args: { userId: UserID, restart?: true }
+        args: { userId: UserID; restart?: true }
         res: Promise<{ runId: RunID | null }>
     }
     getNumKaijuInGoodEarth: {
@@ -81,8 +82,9 @@ interface BareGameActionArgs {
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     rulebookAction: RulebookArgs
+    setBattleScene: { scene: BattleScene }
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
-    setRunId: { userId: UserID, runId: RunID }
+    setRunId: { userId: UserID; runId: RunID }
 }
 
 // NOTE: below is not as complicated as it looks.
@@ -150,7 +152,7 @@ export type CallReturn =
     | { status: 'success' }
     | { status: 'error'; message: string }
 
-export type Gamecursor = SCursor<Gamestate>
+export type Gamecursor = SCursor<GameState>
 
 // ======= Little types for specific actions =======
 

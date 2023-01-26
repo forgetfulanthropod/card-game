@@ -69,4 +69,20 @@ export const characterIdToAbilitiesMap: Partial<
             name: 'Water Slide',
         },
     ],
+    snacky: [
+        {
+            name: 'a',
+        },
+        {
+            name: 'b',
+        },
+    ],
+    notoriousBean: [
+        {
+            name: 'a',
+        },
+        {
+            name: 'b',
+        },
+    ],
 }

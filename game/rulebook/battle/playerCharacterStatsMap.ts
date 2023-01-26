@@ -124,8 +124,8 @@ export const playerCharacterStatsMap: Record<
         class: 'wizard',
 
         constitution: 86,
-        strength: 19,
-        magic: 8 + 1,
+        strength: 999,
+        magic: 14,
         defense: 5 + 1,
     },
     lichLord: {
@@ -161,15 +161,15 @@ export const playerCharacterStatsMap: Record<
         magic: 9,
         defense: 6,
     },
-    notoriousBEAN: {
-        id: 'notoriousBEAN',
+    notoriousBean: {
+        id: 'notoriousBean',
         displayName: 'Notorious B.E.A.N',
         isPc: true,
-        class: 'knight',
+        class: 'bard',
 
         constitution: 75,
-        strength: 14,
-        magic: 5,
+        strength: 12,
+        magic: 7,
         defense: 5,
     },
     orcWarrior: {
@@ -209,7 +209,7 @@ export const playerCharacterStatsMap: Record<
         id: 'snacky',
         displayName: 'Snacky',
         isPc: true,
-        class: 'knight',
+        class: 'bard',
 
         constitution: 67,
         strength: 16,

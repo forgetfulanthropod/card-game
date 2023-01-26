@@ -48,13 +48,40 @@ function localsFromCommand(
         (scene as BattleCursor).get('allCharacters', command.characterUid) ??
         (scene as EntryCursor)
             .get('selectedCharacters')
-            .find(c => c?.uid === command.characterUid)
+            ?.find(c => c?.uid === command.characterUid)
+
     const targetHealth =
         targetUids.length === 1
             ? (scene as BattleCursor).get('allCharacters', targetUids[0])
                   ?.health
             : undefined
-    return { ...calculateStats(cardOwner), targetHealth }
+
+    const incomingDamageIntended =
+        (scene as BattleCursor)
+            .get('nextNpcCommands')
+            ?.reduce(
+                (sum, command) => sum + command.outcome.damages[targetUids[0]],
+                0
+            ) ?? 0
+
+    const handSize = Object.keys(
+        (scene as BattleCursor).get('cards', 'hand') ?? {}
+    ).length
+    const drawPileSize = Object.keys(
+        (scene as BattleCursor).get('cards', 'draw') ?? {}
+    ).length
+    const discardPileSize = Object.keys(
+        (scene as BattleCursor).get('cards', 'discard') ?? {}
+    ).length
+
+    return {
+        ...calculateStats(cardOwner),
+        targetHealth,
+        incomingDamageIntended,
+        handSize,
+        drawPileSize,
+        discardPileSize,
+    }
 }
 
 export function explainCommand(
@@ -79,7 +106,7 @@ export function explainCommand(
         logger.error(['non-string result:', res])
         return 'error!'
     }
-    return res
+    return `${res}.`
 }
 
 export function explainActions(

@@ -5,7 +5,7 @@ import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['discard'] = dslArgs => {
     const [numCards] = evalAllAsHtml(dslArgs)
-    return `discard ${numCards}`
+    return `Discard ${numCards}`
 }
 
 export const execute: Executors['discard'] = ({ dslArgs, scene }) => {

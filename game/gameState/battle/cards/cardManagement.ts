@@ -9,22 +9,36 @@ import type {
     Pile,
     OwnedCharacterStats,
     CharacterId,
+    CharacterMeta,
 } from 'shared'
 
-import { keys, vals } from 'shared/code'
+import { keys, mapToObj, vals } from 'shared/code'
 import { explainCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import { EntryCursor, srandInt } from '@/util'
-import { putAllCardsInDrawPile } from './putAllCardsInDrawPile'
 import { shufflePile } from './shufflePile'
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
-        const newHand = { ...hand }
-        keys(hand).forEach(
-            cardUid =>
-                (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
+        const newHand = {} as typeof hand
+
+        const characterUidsToYPositionMap: Record<CharacterUid, number> = {}
+        vals(scene.get('allCharacters')).forEach(
+            c => (characterUidsToYPositionMap[c.uid] = c.y)
         )
+        const yOf = (uid: CharacterUid) => characterUidsToYPositionMap[uid]
+
+        keys(hand)
+            .sort((cardAUid, cardBUid) => {
+                return yOf(hand[cardAUid].characterUid) <
+                    yOf(hand[cardBUid].characterUid)
+                    ? -1
+                    : 1
+            })
+            .forEach(
+                cardUid =>
+                    (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
+            )
         return newHand
     })
 }
@@ -68,7 +82,10 @@ function makeCards(scene: BattleCursor): Piles {
             // 'twistTheKnife',
             // 'flashbang'
         )
-        cardIds.push(getFirstCardIdForCharacterId(cm.id))
+
+        getFirstCardIdForCharacterId(cm.id) &&
+            cardIds.push(getFirstCardIdForCharacterId(cm.id))
+
         if (cm.class === 'wizard')
             cardIds.push(
                 ['orbOfLightning', 'orbOfFrost', 'zap'][
@@ -120,6 +137,7 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
     const characterIdToCardIdMap: Partial<Record<CharacterId, CardId>> = {
         frogKnight: 'charge',
         mushroomFarmer: 'helpingHand',
+        notoriousBean: 'beanNeverMisses',
         penguinKnight: 'parry',
         skeletonWarrior: 'swordSlash',
         matchaGelatinCube: 'shieldOfLight',
@@ -135,10 +153,11 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
 /**
  * random but not a basic starter...
  */
-export function getRandomCardIdOfClass(characterClass: CharacterClass): CardId {
+export function getRandomCardIdForCharacter(cm: CharacterMeta): CardId {
     const idPool = keys(cardDefinitionsMap).filter(
         cardId =>
-            getCardClass(cardId) === characterClass &&
+            (getCardClass(cardId) === cm.class ||
+                getCardClass(cardId) === cm.id) &&
             !~cardId.indexOf('basicAttack') &&
             !~cardId.indexOf('strike') &&
             !~cardId.indexOf('block')
@@ -155,7 +174,9 @@ export function getFullDeckForCharacter(
     scene: EntryCursor
 ): Pile {
     const idPool = keys(cardDefinitionsMap).filter(
-        cardId => getCardClass(cardId) === character.class
+        cardId =>
+            getCardClass(cardId) === character.class ||
+            getCardClass(cardId) === character.id
     )
 
     const pile: Pile = {}
@@ -192,6 +213,6 @@ function makeRandId() {
     return srandom().toString().slice(2)
 }
 
-function getCardClass(id: keyof typeof cardDefinitionsMap): CharacterClass {
+function getCardClass(id: keyof typeof cardDefinitionsMap) {
     return cardDefinitionsMap[id].characterClass
 }

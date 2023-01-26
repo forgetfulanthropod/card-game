@@ -12,7 +12,11 @@ import { turnEndClearEffects } from 'shared'
 import produce from 'immer'
 import { getRulebook } from '@/rulebook'
 
-const turnStartEffectIds = ['bleed', 'poisoned', 'passiveBlock'] as const
+const turnStartEffectIds = [
+    'bleedDebuff',
+    'poisonedDebuff',
+    'passiveBlockBuff',
+] as const
 type TurnStartEffectId = typeof turnStartEffectIds[number]
 type StaticEffectId = Exclude<EffectId, TurnStartEffectId>
 
@@ -20,50 +24,56 @@ const staticEffectFuncs: Record<
     StaticEffectId,
     (stats: CalculatedCharacterStats, counter: number) => void
 > = {
-    berserk(stats) {
+    berserkBuff(stats) {
         if (stats.stance !== 'aggressive') return
 
         stats.strength += Math.ceil(stats.strength * 0.5)
-        stats.damageTakeMultiplicand *= 2
+        stats.damageTakeMultiplicand += 1
     },
-    brave(stats) {
-        stats.damageDealMultiplicand *= 1.15
+    braveBuff(stats) {
+        stats.damageDealMultiplicand += 0.15
     },
-    courageous(stats) {
-        stats.damageDealMultiplicand *= 1.25
+    courageousBuff(stats) {
+        stats.damageDealMultiplicand += 0.25
     },
-    debilitated(stats) {
-        stats.damageDealMultiplicand *= 0.5
+    debilitatedDebuff(stats) {
+        stats.damageDealMultiplicand -= 0.5
     },
-    doubleDamage(stats) {
+    doubleDamageBuff(stats) {
         stats.strength *= 2
     },
-    entranced(stats, counter) {
+    entrancedBuff(stats, counter) {
         stats.magic += counter
     },
-    fatigued(stats) {
-        stats.damageDealMultiplicand *= 0.75
+    fatiguedDebuff(stats) {
+        stats.damageDealMultiplicand -= 0.25
     },
-    smallDamageIncrease(stats) {
+    guardedBuff(stats) {
+        stats.damageTakeMultiplicand -= 0.25
+    },
+    smallDamageIncreaseBuff(stats) {
         stats.damageTakeAddend += 4
     },
-    strongblock(stats) {
-        stats.blockMultiplier *= 1.5
+    strongblockBuff(stats) {
+        stats.blockMultiplier += 0.5
     },
-    stunned(stats) {
+    stunnedDebuff(stats) {
         stats.isSkipped = true
     },
-    tired(stats) {
-        stats.damageDealMultiplicand *= 0.88
+    targetedDebuff(stats) {
+        stats.damageTakeAddend += 5
     },
-    unguarded(stats) {
-        stats.damageTakeMultiplicand *= 1.25
+    tiredDebuff(stats) {
+        stats.damageDealMultiplicand -= 0.12
     },
-    unready(stats) {
-        stats.damageTakeMultiplicand *= 1.12
+    unguardedDebuff(stats) {
+        stats.damageTakeMultiplicand += 0.25
     },
-    vulnerable(stats) {
-        stats.damageTakeMultiplicand *= 1.5
+    unreadyDebuff(stats) {
+        stats.damageTakeMultiplicand += 0.12
+    },
+    vulnerableDebuff(stats) {
+        stats.damageTakeMultiplicand += 0.5
     },
 }
 
@@ -71,13 +81,13 @@ const turnStartEffectFuncs: Record<
     TurnStartEffectId,
     (cm: CharacterMeta, counter: number) => void
 > = {
-    bleed(cm) {
+    bleedDebuff(cm) {
         cm.health -= Math.ceil(cm.constitution * 0.05)
     },
-    poisoned(cm, counter) {
+    poisonedDebuff(cm, counter) {
         cm.health -= counter
     },
-    passiveBlock(cm, counter) {
+    passiveBlockBuff(cm, counter) {
         cm.block += counter
     },
 } as const
@@ -93,7 +103,7 @@ export function calculateStats(
     const stance = cm.stance ?? 'neutral'
 
     const stats: CalculatedCharacterStats = {
-        block: cm.block,
+        block: cm.block ?? 0,
         blockMultiplier: 1,
         constitution:
             cm.constitution + getStatModifierAddend(cm, 'constitution'),
@@ -122,9 +132,9 @@ function getStatModifierAddend(
     stat: ModifiableStatName
 ): number {
     return (
-        (cm.statModifiersMap?.turn[stat] ?? 0) +
-        (cm.statModifiersMap?.room[stat] ?? 0) +
-        (cm.statModifiersMap?.run[stat] ?? 0)
+        (cm.statModifiersMap?.turn?.[stat] ?? 0) +
+        (cm.statModifiersMap?.room?.[stat] ?? 0) +
+        (cm.statModifiersMap?.run?.[stat] ?? 0)
     )
 }
 

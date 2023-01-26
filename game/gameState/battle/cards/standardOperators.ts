@@ -5,7 +5,7 @@ type ANum = VAngu<number>
 
 function process(av: ANum, bv: ANum) {
     const [a, b] = [av.eval(), bv.eval()]
-    assertFinite({ a, b })
+    // assertFinite({ a, b })
     return [a, b]
 }
 

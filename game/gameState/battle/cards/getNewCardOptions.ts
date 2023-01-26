@@ -5,7 +5,11 @@ import {
     Pile,
 } from 'shared'
 import { getAllPcs, getLivingPcs } from '../characters/characterGetters'
-import { getCardInstance, getRandomCardIdOfClass, updateExplanation } from '.'
+import {
+    getCardInstance,
+    getRandomCardIdForCharacter,
+    updateExplanation,
+} from '.'
 import { toCursor } from '@/util'
 
 export const NUM_KAIJUS_IN_PARTY = 3
@@ -29,7 +33,7 @@ function newCard(characters: CharacterMeta[], i: number) {
             : characters[Math.floor(srandom() * characters.length)]
 
     return getCardInstance(
-        getRandomCardIdOfClass(character.class),
+        getRandomCardIdForCharacter(character),
         character.uid
     )
 }

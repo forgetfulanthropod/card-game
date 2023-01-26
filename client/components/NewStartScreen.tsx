@@ -86,6 +86,16 @@ export function NewStartScreen(props: {
         }
         if (!userDoc) {
             console.warn('No User Doc')
+
+            if (!WALLET_GATED) {
+                const walletAddress = Math.random().toString().slice(2)
+                setUserDoc({
+                    walletAddress,
+                    numKaijusOwned: 1,
+                    userId: `${walletAddress}`,
+                })
+            }
+
             return
         }
         if (WALLET_GATED) {

@@ -16,27 +16,38 @@ addCounter(targetUid, counterId)
 
 /** Effects are applied in the order of this array */
 export const effectIds = [
-    'berserk',
-    'bleed',
-    'brave',
-    'courageous',
-    'debilitated',
-    'doubleDamage',
-    'entranced',
-    'fatigued',
-    'passiveBlock',
-    'poisoned',
-    'smallDamageIncrease',
-    'strongblock',
-    'stunned',
-    'tired',
-    'unguarded',
-    'unready',
-    'vulnerable',
+    'stunnedDebuff',
+
+    'bleedDebuff',
+    'poisonedDebuff',
+
+    'tiredDebuff',
+    'fatiguedDebuff',
+    'debilitatedDebuff',
+
+    'unreadyDebuff',
+    'unguardedDebuff',
+    'vulnerableDebuff',
+
+    'targetedDebuff',
+
+    'passiveBlockBuff',
+    'strongblockBuff',
+
+    'braveBuff',
+    'courageousBuff',
+    'guardedBuff',
+
+    'entrancedBuff',
+
+    'berserkBuff',
+
+    'smallDamageIncreaseBuff',
+    'doubleDamageBuff',
 ] as const
 
 /** Effects which are cleared on turn end */
-export const turnEndClearEffects: EffectId[] = ['smallDamageIncrease']
+export const turnEndClearEffects: EffectId[] = ['smallDamageIncreaseBuff']
 
 export type EffectId = typeof effectIds[number]
 

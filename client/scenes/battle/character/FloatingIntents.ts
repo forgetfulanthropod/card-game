@@ -30,7 +30,6 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { startCase } from 'lodash'
-import { IntentArrows } from './NpcIntentArrow'
 
 const INTENT_ICON_WIDTH = 66
 
@@ -49,7 +48,7 @@ export function FloatingIntents(cuid: CharacterUid): PixiContainer {
                       }))
         ),
         nextCmd => FloatingIntent(nextCmd, cuid),
-        index => ({ x: index * INTENT_ICON_WIDTH })
+        index => ({ x: index * INTENT_ICON_WIDTH * 1.1 })
     )
 }
 
@@ -102,54 +101,230 @@ function FloatingIntent(
     }
 }
 
-const commandIdToMetaMap: Partial<
-    Record<
-        (NpcCommandId & KeyTerm) | NpcCommandId,
-        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
-    >
+const commandIdToMetaMap: Record<
+    NpcCommandId,
+    { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
 > = {
+    ancientStrike: {
+        id: 'ancientStrike',
+        explanation: [],
+    },
+    basicAttack: {
+        id: 'basicAttack',
+        explanation: [],
+    },
+    bigBelly: {
+        id: 'bigBelly',
+        explanation: [],
+    },
     bigBomb1: {
         id: 'bigBomb1',
         src: 'intentBigBomb1',
-        explanation: ['Gnome Big Bomber is charging his Big Bomb'],
+        explanation: [
+            'Gnome Big Bomber is charging his Big Bomb',
+            'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
+        ],
     },
     bigBomb2: {
         id: 'bigBomb2',
         src: 'intentBigBomb2',
-        explanation: ['Gnome Big Bomber has charged his Big Bomb'],
+        explanation: [
+            'Gnome Big Bomber has charged his Big Bomb',
+            'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
+        ],
+    },
+    block: {
+        id: 'block',
+        explanation: [],
+    },
+    bucketOfBangSnaps: {
+        id: 'bucketOfBangSnaps',
+        explanation: [
+            'Applies <b>Unready</b> (2) if any damage goes unblocked',
+        ],
+    },
+    chomp: {
+        id: 'chomp',
+        explanation: [],
+    },
+    demolitionCharge: {
+        id: 'demolitionCharge',
+        explanation: [
+            'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
+        ],
+    },
+    evisceratingSweep: {
+        id: 'evisceratingSweep',
+        explanation: [],
+    },
+    fireCracker: {
+        id: 'fireCracker',
+        explanation: ['Applies <b>Unguarded</b> (2)'],
+    },
+    gnomeBomb: {
+        id: 'gnomeBomb',
+        explanation: ['Applies <b>Tired</b> (1) if any damage goes unblocked'],
     },
     grudge: {
         id: 'grudge',
         src: 'intentGrudge',
     },
+    hansBuffBlock: {
+        id: 'hansBuffBlock',
+        explanation: [],
+    },
+    hansCurse: {
+        id: 'hansCurse',
+        explanation: [],
+    },
+    hansGuards: {
+        id: 'hansGuards',
+        explanation: [],
+    },
+    hansMagicMissile: {
+        id: 'hansMagicMissile',
+        explanation: [],
+    },
+    hypnosis: {
+        id: 'hypnosis',
+        explanation: [],
+    },
+    itchyOozeSpecial: {
+        id: 'itchyOozeSpecial',
+        explanation: [],
+    },
+    jab: {
+        id: 'jab',
+        explanation: [],
+    },
     jurgenBellyFlop: {
         id: 'jurgenBellyFlop',
         src: 'intentBellyFlop',
         explanation: [
-            'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes.',
+            'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes',
         ],
     },
     jurgenRollAround: {
         id: 'jurgenRollAround',
         src: 'intentRollAround',
         explanation: [
-            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 20 damage each, but will deal 1 point less for every point of damage he takes.',
+            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 20 damage each, but will deal 1 point less for every point of damage he takes',
         ],
     },
     jurgenSitUpon: {
         id: 'jurgenSitUpon',
         explanation: [
-            'Jürgen sits on one of your characters.  This attack does 60 damage and gives Stun (1) to the target.',
+            'Jürgen sits on one of your characters.  This attack does 60 damage and gives Stun (1) to the target',
         ],
     },
     jurgenStampSnort: {
         id: 'jurgenStampSnort',
-        explanation: ['Bosshog Jürgen will do double damage next turn.'],
+        explanation: ['Bosshog Jürgen will do double damage next turn'],
+    },
+    matchaMadness: {
+        id: 'matchaMadness',
+        explanation: [],
+    },
+    matchaMash: {
+        id: 'matchaMash',
+        explanation: [],
+    },
+    matchaMeld: {
+        id: 'matchaMeld',
+        explanation: [],
     },
     mimicAttack: {
         id: 'mimicAttack',
         src: 'intentMimic',
         explanation: ['copies last hit this turn or deals 999'],
+    },
+    parasiticNibble: {
+        id: 'parasiticNibble',
+        explanation: [],
+    },
+    passiveBlockCmd: {
+        id: 'passiveBlockCmd',
+        explanation: [],
+    },
+    psychicBolt: {
+        id: 'psychicBolt',
+        explanation: [],
+    },
+    quickNap: {
+        id: 'quickNap',
+        explanation: [],
+    },
+    rest: {
+        id: 'rest',
+        explanation: [],
+    },
+    rustyPokeHigh: {
+        id: 'rustyPokeHigh',
+        explanation: [],
+    },
+    rustyPokeLow: {
+        id: 'rustyPokeLow',
+        explanation: [],
+    },
+    slash: {
+        id: 'slash',
+        explanation: [],
+    },
+    snortinTime: {
+        id: 'snortinTime',
+        explanation: [],
+    },
+    spiritQuest: {
+        id: 'spiritQuest',
+        explanation: [],
+    },
+    strike: {
+        id: 'strike',
+        explanation: [],
+    },
+    surpriseAllergy: {
+        id: 'surpriseAllergy',
+        explanation: [],
+    },
+    swordWack: {
+        id: 'swordWack',
+        explanation: [],
+    },
+    tummySlam: {
+        id: 'tummySlam',
+        explanation: [],
+    },
+    violentSneeze: {
+        id: 'violentSneeze',
+        explanation: [],
+    },
+    yodel: {
+        id: 'yodel',
+        explanation: [
+            'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
+        ],
+    },
+
+    //matcha
+    'itchyOoze(3)': {
+        id: 'itchyOoze(3)',
+        explanation: ['Applies 3 <b>Poisoned</b>'],
+    },
+    'itchyOoze(4)': {
+        id: 'itchyOoze(4)',
+        explanation: ['Applies 4 <b>Poisoned</b>'],
+    },
+    'surpriseAllergy(2,1)': {
+        id: 'surpriseAllergy(2,1)',
+        explanation: [
+            `Applies <b>Poisoned</b> (2) and <b>Fatigued</b> (1) if any damage goes unblocked`,
+        ],
+    },
+    'surpriseAllergy(3,2)': {
+        id: 'surpriseAllergy(3,2)',
+        explanation: [
+            'Applies <b>Poisoned</b> (3) and <b>Fatigued</b> (2) if any damage goes unblocked',
+        ],
     },
 }
 
@@ -166,15 +341,14 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
                     INTENT_ICON_WIDTH /
                     getTexture(commandMeta?.src ?? 'intentAttack').width,
                 src: getTexture(commandMeta?.src ?? 'intentAttack'),
-                anchor: commandMeta?.src ? [0.8, 0.4] : 0.4,
+                anchor: commandMeta?.src ? [0.1, 0.4] : 0.4,
                 events,
             }),
             ...(amount
                 ? [
                       Text({
                           text: `${amount}`,
-                          anchor: 0.5,
-                          x: commandMeta.src ? -50 : 0,
+                          anchor: commandMeta?.src ? [0.2, 0.5] : 0.5,
                           events,
                           style: {
                               fill: 'white',

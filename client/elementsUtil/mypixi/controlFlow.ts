@@ -9,6 +9,7 @@ import type { ContainerArgs, DisplayObjectArgs } from './_types'
 import { onDestroyed } from './convenience'
 import { Container } from './core'
 import { getPixiApp } from './application'
+import { nextTick } from '@/util'
 
 type DestroyOptions = IDestroyOptions | boolean | undefined
 
@@ -38,8 +39,8 @@ export function If<T = unknown>(
     if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
     return root
     function handleChange(val: T) {
-        ;[...root.children].forEach(c => c.destroy(destroyOptions))
-        root.removeChildren()
+        const children = root.removeChildren()
+        nextTick().then(() => children.forEach(c => c.destroy(destroyOptions)))
         //@ts-expect-error
         if (val != null && val !== false) {
             // @ts-expect-error

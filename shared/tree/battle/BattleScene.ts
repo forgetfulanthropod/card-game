@@ -1,13 +1,24 @@
 import type { RequiredAction } from '@actions'
 import type { SceneHas } from '@misc'
-import type { DungeonRoom, DungeonRoomMap, DungeonRoomMaps } from '../Dungeon'
+import type {
+    DungeonRoom,
+    DungeonRoomMap,
+    DungeonRoomMaps,
+    RoomUid,
+} from '../Dungeon'
 
 import type { CharacterUid } from './Character'
 import type { Piles, Pile, Card, Command } from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { Characters, StanceId } from './Characters'
 import type { CommandQueue } from './CommandQueue'
-import type { ClaimableLoot, ClaimedLoot, TreasureChest, RunScore } from '.'
+import type {
+    ClaimableLoot,
+    ClaimedLoot,
+    TreasureChest,
+    RunScore,
+    RunScoreUpdate,
+} from '.'
 import { RunID } from '../User'
 
 export interface BattleScene extends SceneHas {
@@ -26,6 +37,7 @@ export interface BattleScene extends SceneHas {
     isDeluxeLoaded: boolean
     turnCount: number
     rooms: DungeonRoomMap
+    roomUidsVisited: RoomUid[]
     numRoomsPassed: number
     currentRoom: DungeonRoom
     nextNpcCommands: NextCommand[]
@@ -47,6 +59,7 @@ export interface BattleScene extends SceneHas {
     endScreenHasOpened: boolean
     treasureChest: TreasureChest
     runScore: RunScore
+    runScoreUpdate: RunScoreUpdate | null
     runDuration: {
         startTime: number
         endTime: number | null

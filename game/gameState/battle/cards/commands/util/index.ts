@@ -19,6 +19,7 @@ import type {
     Card,
     ModifiableStatName,
     StatModifierExpiration,
+    TargetType,
 } from 'shared'
 
 export type { Value as VAngu } from 'angu'
@@ -39,10 +40,10 @@ export function s(n: number) {
 export interface ActionArgs {
     chain: any[]
     choice: any[]
+    explain: any[]
     killIf: [condition: boolean]
 
-    addBlock: [block: number]
-    addBlockToSelf: [block: number]
+    addBlock: [block: number, targetType?: BasicTargetType]
     addEnergy: [energy: number]
     addEnergyPerRound: [energy: number]
     modifyStats: [
@@ -52,11 +53,9 @@ export interface ActionArgs {
         targetType?: BasicTargetType
     ]
 
-    deal: [damage: number, times?: number]
+    deal: [damage: number, modifier?: 'piercing']
     dealFromStance: [stance: StanceId, damage: number, times?: number]
-    dwindle: []
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
-    effectAll: [id: EffectId, increase: number, targetType?: BasicTargetType]
     heal: [amount: number]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifDamageDealtApplyEffect: [
@@ -64,15 +63,27 @@ export interface ActionArgs {
         effectId: EffectId,
         counter: number
     ]
+    ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
-    ifStance: [stanceId: StanceId, conditionalMove: any]
+    ifStance: [
+        stanceId: StanceId,
+        conditionalTrueMove: any,
+        conditionalFalseMove?: any
+    ]
+
+    brittle: [count: number]
+    dwindle: []
     momentary: []
+
     orb: [type: OrbType, count: number]
     queue: [numTurns: number, move: any]
+    removeAllDebuffs: [targetType?: TargetType]
+    setStance: [stance: StanceId, targetType?: TargetType]
     smite: [damage: number, block: number]
     text: [str: string]
 
     discard: [numCards: number]
+    discardRandom: [numCards: number]
     doubleEnchantmentOrToken: []
     draw: [numCards: number]
     orbOfHolyLight: []
@@ -86,6 +97,10 @@ export interface ActionArgs {
 export type Locals = CalculatedCharacterStats & {
     /** only defined when there is exactly 1 target and it is a character */
     targetHealth: number | undefined
+    incomingDamageIntended: number
+    handSize: number
+    drawPileSize: number
+    discardPileSize: number
 }
 
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }

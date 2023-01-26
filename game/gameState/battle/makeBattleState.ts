@@ -44,6 +44,7 @@ export function makeBattleState(args: {
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         rooms: getRulebook().dungeonRooms['Hooligans Bluff'],
+        roomUidsVisited: [],
         numRoomsPassed: -1,
         currentRoom: getRulebook().dungeonRooms['Hooligans Bluff'].root,
         nextNpcCommands: [], // set later
@@ -63,8 +64,9 @@ export function makeBattleState(args: {
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
+        runScoreUpdate: null,
         runDuration: getInitialRunDuration(),
-        runId: null
+        runId: null,
     }
     return bs
 }

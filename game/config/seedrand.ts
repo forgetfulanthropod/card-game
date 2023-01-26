@@ -5,9 +5,11 @@ declare global {
     var srandom: () => number
 }
 // let seed = Math.random().toString()
-let seed = 'seedOne'
+let seed = 'seedThree'
 logger.info(`setting random seed: ${seed}`)
 global.srandom = seedrandom(seed)
+
+export const srandom = global.srandom
 
 export function setGlobalRandomSeed(seed: string): void {
     global.srandom = seedrandom(seed)

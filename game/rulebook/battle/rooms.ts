@@ -8,7 +8,6 @@ import type {
     RoomEnemies,
 } from 'shared'
 import { keys, throwNull } from 'shared/code'
-import { npcStatsMapByLevel } from '@/rulebook'
 import { srandInt } from '@/util'
 // - Room 1:  Two level 1 Skeletons, One level 1 Matcha
 // - Room 2: Two level 1 Matchas, One level 2 Skeleton
@@ -293,40 +292,13 @@ export function getDungeonRooms(): DungeonRoomMaps {
             },
             '1_1': {
                 uid: '1_1',
-                enemies: [
-                    // {
-                    //     id: 'gnomeBigBomber',
-                    //     level: 1,
-                    // },
-                    // {
-                    //     id: 'gnomeProspector',
-                    //     level: 1,
-                    // },
-                    // {
-                    //     id: 'gnomeBandit',
-                    //     level: 1,
-                    // },
-                ],
+                enemies: [],
                 category: 'tierOne',
-                // category: 'tierOne',
                 edges: ['1_3', '', '2_0', ''],
             },
             '1_3': {
                 uid: '1_3',
-                enemies: [
-                    // {
-                    //     id: 'plaguehog',
-                    //     level: 1,
-                    // },
-                    // {
-                    //     id: 'warhogRaider',
-                    //     level: 1,
-                    // },
-                    // {
-                    //     id: 'groghog',
-                    //     level: 1,
-                    // },
-                ],
+                enemies: [],
                 category: 'tierOne',
                 edges: ['', '2_4', '', ''],
             },

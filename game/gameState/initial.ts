@@ -1,4 +1,4 @@
-import type { CharacterUid, Gamestate, OwnedCharacterStatsMap } from 'shared'
+import type { CharacterUid, GameState, OwnedCharacterStatsMap } from 'shared'
 import { keys, vals } from 'shared/code'
 import { getInitialEntryState } from './entryState'
 import { getRulebook } from '@/rulebook'
@@ -9,7 +9,7 @@ const config = {
     includeRulebook: true,
 }
 function initialOwnedCharacters(): OwnedCharacterStatsMap {
-    const { characters: statsMap } = getRulebook()
+    const { playerCharacterStatsMap: statsMap } = getRulebook()
 
     let oc = {} as OwnedCharacterStatsMap
     const characterIds = keys(statsMap)
@@ -21,8 +21,8 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
                 [uid]: {
                     ...c,
                     uid,
-                    tokenId: j.toString(),
-                    nftName: uid,
+                    // tokenId: j.toString(),
+                    // nftName: uid,
                     isPc: true,
                 },
             }
@@ -32,7 +32,7 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
     return oc as OwnedCharacterStatsMap
 }
 
-export function getInitialGameState(username: string): Gamestate {
+export function getInitialGameState(username: string): GameState {
     return {
         scene: getInitialEntryState(),
         ownedCharacters: initialOwnedCharacters(),

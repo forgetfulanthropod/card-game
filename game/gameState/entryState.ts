@@ -5,17 +5,19 @@ import { getCharacterMeta } from './battle'
 
 const allCharacterOptionsIds: PlayerCharacterId[] = [
     'frogKnight',
-    'mushroomFarmer',
+    'gnomeHooligan',
+    'warhog',
+    'notoriousBean',
     'penguinKnight',
     'skeletonWarrior',
     'matchaGelatinCube',
-    'warhog',
-    'gnomeHooligan',
+    'mushroomFarmer',
+    'snacky',
     'jerry',
 ]
 
 export function getInitialEntryState(): EntryScene {
-    const { characters: statsMap } = getRulebook()
+    const { playerCharacterStatsMap: statsMap } = getRulebook()
 
     return {
         id: 'entry',

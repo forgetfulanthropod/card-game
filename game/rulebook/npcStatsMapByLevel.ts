@@ -1,6 +1,10 @@
-import type { NonPlayerCharacterId, NpcCommandId } from 'shared'
-type Level = string
-export const npcStatsMapByLevel: Record<NonPlayerCharacterId, Record<Level, EnemyDefinition>> = {
+import type {
+    NonPlayerCharacterId,
+    NpcCommandId,
+    NpcStatsMapByLevel,
+} from 'shared'
+
+export const npcStatsMapByLevel: NpcStatsMapByLevel = {
     skeletonWarrior: {
         // 1: { level: '1', wisdom: 0, constitution: 18, strength: 4, defense: 7, moves: ['swordWack', null, null, 'block', null] },
         1: { level: '1', magic: 0, constitution: 19, strength: 10, defense: 7, moves: ['swordWack', 'rustyPokeLow', 'jab', 'strike', 'jab'] },
@@ -16,16 +20,16 @@ export const npcStatsMapByLevel: Record<NonPlayerCharacterId, Record<Level, Enem
     },
     matchaGelatinCube: {
         // 1: { level: '1', wisdom: 0, constitution: 1, strength: 3, defense: 10, moves: ['strike', 'block', 'strike', 'block', 'strike'] },
-        1: { level: '1', magic: 0, constitution: 22, strength: 8, defense: 10, moves: ['itchyOoze(2)', 'block', 'strike', 'block', 'strike'] },
-        2: { level: '2', magic: 0, constitution: 36, strength: 14, defense: 14, moves: ['strike', 'surpriseAllergy(2,1)', 'block', 'strike', 'block'] },
-        3: { level: '3', magic: 0, constitution: 55, strength: 20, defense: 17, moves: ['strike', 'surpriseAllergy(2,1)', 'itchyOoze(3)', 'block', 'surpriseAllergy(3,2)'] },
-        4: { level: '4', magic: 0, constitution: 72, strength: 22, defense: 22, moves: ['strike', 'surpriseAllergy(3,2)', 'itchyOoze(4)', 'block', 'surpriseAllergy(3,2)'] },
-        5: { level: '5', magic: 0, constitution: 80, strength: 32, defense: 26, moves: ['strike', 'surpriseAllergy(3,2)', 'itchyOozeSpecial', 'block', 'surpriseAllergy(3,2)'] },
-        6: { level: '6', magic: 0, constitution: 105, strength: 38, defense: 31, moves: ['strike', 'surpriseAllergy(3,2)', 'itchyOoze(5)', 'block', 'engulf(50)'] },
-        7: { level: '7', magic: 0, constitution: 130, strength: 44, defense: 36, moves: ['strike', 'surpriseAllergy(3,2)', 'itchyOoze(6)', 'block', 'engulf(50)'] },
-        8: { level: '8', magic: 0, constitution: 160, strength: 50, defense: 41, moves: ['strike', 'surpriseAllergy(4,2)', 'itchyOoze(7)', 'block', 'engulf(75)'] },
-        9: { level: '9', magic: 0, constitution: 175, strength: 56, defense: 48, moves: ['strike', 'surpriseAllergy(4,2)', 'itchyOoze(8)', 'block', 'engulf(75)'] },
-        10: { level: '10', magic: 0, constitution: 200, strength: 62, defense: 56, moves: ['strike', 'surpriseAllergy(5,2)', 'itchyOoze(9)', 'block', 'engulf(75)'] },
+        1: { level: '1', magic: 0, constitution: 22, strength: 8, defense: 10, moves: ['itchyOoze(2)', 'block', 'basicAttack', 'block', 'basicAttack'] },
+        2: { level: '2', magic: 0, constitution: 36, strength: 14, defense: 14, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'block', 'basicAttack', 'block'] },
+        3: { level: '3', magic: 0, constitution: 55, strength: 20, defense: 17, moves: ['basicAttack', 'surpriseAllergy(2,1)', 'itchyOoze(3)', 'block', 'surpriseAllergy(3,2)'] },
+        4: { level: '4', magic: 0, constitution: 72, strength: 22, defense: 22, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(4)', 'block', 'surpriseAllergy(3,2)'] },
+        5: { level: '5', magic: 0, constitution: 80, strength: 32, defense: 26, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOozeSpecial', 'block', 'surpriseAllergy(3,2)'] },
+        6: { level: '6', magic: 0, constitution: 105, strength: 38, defense: 31, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(5)', 'block', 'engulf(50)'] },
+        7: { level: '7', magic: 0, constitution: 130, strength: 44, defense: 36, moves: ['basicAttack', 'surpriseAllergy(3,2)', 'itchyOoze(6)', 'block', 'engulf(50)'] },
+        8: { level: '8', magic: 0, constitution: 160, strength: 50, defense: 41, moves: ['basicAttack', 'surpriseAllergy(4,2)', 'itchyOoze(7)', 'block', 'engulf(75)'] },
+        9: { level: '9', magic: 0, constitution: 175, strength: 56, defense: 48, moves: ['basicAttack', 'surpriseAllergy(4,2)', 'itchyOoze(8)', 'block', 'engulf(75)'] },
+        10: { level: '10', magic: 0, constitution: 200, strength: 62, defense: 56, moves: ['basicAttack', 'surpriseAllergy(5,2)', 'itchyOoze(9)', 'block', 'engulf(75)'] },
         large: { level: 'large', magic: 0, constitution: '200-100', strength: 68, defense: 20, moves: ['matchaMash', 'matchaMadness', 'matchaMeld', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)'] },
         medium: { level: 'medium', magic: 0, constitution: '99-30', strength: 74, defense: 10, moves: ['matchaMash', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)'] },
         small: { level: 'small', magic: 0, constitution: '>29', strength: 80, defense: 5, moves: ['matchaMash', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)', 'surpriseAllergy(2,1)'] },
@@ -156,17 +160,3 @@ export const npcStatsMapByLevel: Record<NonPlayerCharacterId, Record<Level, Enem
         10: { level: 10, strength: 40, magic: 0, defense: 90, constitution: 200, moves: ['violentSneeze', 'surpriseAllergy', 'strike', 'parasiticNibble', 'block'],},
     },
 } as const // prettier-ignore
-
-export type BaseHealth = number | `${number}-${number}` | `>${number}`
-export type EnemyDefinition = {
-    // displayName: string
-    // level: number | string | null
-    // id: string
-    constitution: BaseHealth
-    strength: number
-    defense: number
-    magic: number
-    level: number | string
-    // TODO: rename to commands
-    moves: readonly (NpcCommandId | null)[]
-}
