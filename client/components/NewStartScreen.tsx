@@ -19,8 +19,9 @@ import { collectData, initAnalytics } from '@/analytics/collectData'
 import { ClosedGameModal } from './StartScreen/ClosedGameModal'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
-export const WALLET_GATED = process.env.WALLET_GATED === 'true'
-export const GAME_IS_LIVE = process.env.GAME_IS_LIVE === 'true'
+export const WALLET_GATED = process.env.WALLET_GATED
+export const GAME_IS_LIVE = process.env.GAME_IS_LIVE
+
 console.log({ WALLET_GATED, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
