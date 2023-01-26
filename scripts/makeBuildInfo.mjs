@@ -9,8 +9,8 @@ export function makeBuildInfo(prefix) {
     }).output[1].trim()
 
     return {
-        [`process.env.${prefix}BUILD_TIME`]: `"${new Date()}"`,
-        [`process.env.${prefix}GIT_BRANCH`]: `"${gitBranch}"`,
-        [`process.env.${prefix}GIT_COMMIT`]: `"${gitCommit}"`,
+        [`process.env.${prefix}BUILD_TIME`]: `${JSON.stringify(new Date())}`,
+        [`process.env.${prefix}GIT_BRANCH`]: `${JSON.stringify(gitBranch)}`,
+        [`process.env.${prefix}GIT_COMMIT`]: `${JSON.stringify(gitCommit)}`,
     }
 }
