@@ -41,7 +41,10 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
             *
         FROM
             (   SELECT
-                    false as is_self,
+                    CASE
+                        WHEN user_id = ${userId} THEN true
+                        ELSE false
+                    END as is_self,
                     wallet_address,
                     highest_score,
                     start_ts,
@@ -55,6 +58,8 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 LIMIT
                     ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS max_run_all
 
+        WHERE
+            max_run_all.is_self is false
         UNION
 
         SELECT
@@ -87,7 +92,10 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
             *
         FROM
             (   SELECT
-                    false as is_self,
+                    CASE
+                        WHEN user_id = ${userId} THEN true
+                        ELSE false
+                    END as is_self,
                     wallet_address,
                     highest_score,
                     start_ts,
@@ -103,6 +111,8 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 LIMIT
                     ${LEADERBOARD_ENTRIES_TO_DISPLAY}
         ) AS max_run_all
+        WHERE
+            max_run_all.is_self is false
 
         UNION
 
@@ -136,7 +146,10 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
         *
     FROM
         (   SELECT
-                false as is_self,
+                CASE
+                    WHEN user_id = ${userId} THEN true
+                    ELSE false
+                END as is_self,
                 wallet_address,
                 highest_score,
                 start_ts,
@@ -153,6 +166,8 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 ${LEADERBOARD_ENTRIES_TO_DISPLAY}
     ) AS max_run_all
 
+    WHERE
+            max_run_all.is_self is false
     UNION
 
     SELECT
