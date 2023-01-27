@@ -27,6 +27,7 @@ import {
 import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import {
+    CharacterId,
     Leaderboard,
     LeaderboardTimeToggle,
     LEADERBOARD_ENTRIES_PER_PAGE,
@@ -297,7 +298,8 @@ export function EndOfRunScreen(): PixiContainer {
                         entry.end_ts,
                         inScreenIdx - 1,
                         idx + 1,
-                        false
+                        false,
+                        entry.teamComp ?? []
                     )
                 )
             }
@@ -313,7 +315,8 @@ export function EndOfRunScreen(): PixiContainer {
                         entry.end_ts,
                         inScreenIdx - 1,
                         idx + 1,
-                        true
+                        true,
+                        entry.teamComp ?? []
                     )
                 )
             }
@@ -446,12 +449,12 @@ export function EndOfRunScreen(): PixiContainer {
         radius: 50,
         gradientArgs: {
             x0: 0,
-            x1: 500,
+            x1: 0,
             y0: 0,
-            y1: 500,
+            y1: 700,
             colorStops: [
-                { color: 'black', offset: 0 },
-                { color: 'white', offset: 1 },
+                { color: 0x0B0B09, offset: 0 },
+                { color: 0x3F4338, offset: 1 },
             ],
         },
     })
@@ -464,7 +467,7 @@ export function EndOfRunScreen(): PixiContainer {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
                 width: 450,
-                height: 75,
+                height: 85,
                 anchor: [0, 0],
                 alpha: 0.8,
             },
@@ -474,7 +477,7 @@ export function EndOfRunScreen(): PixiContainer {
                 y0: 0,
                 x1: 0,
                 y1: 50,
-                colorStops: [{ color: active ? 'white' : 0x404040, offset: 0 }],
+                colorStops: [{ color: active ? 0xF4F5F6 : 0x545A64, offset: 0 }],
             },
         })
 
@@ -493,7 +496,7 @@ export function EndOfRunScreen(): PixiContainer {
         return Container(
             {
                 name: `${text}_Container`,
-                y: BASE_HEIGHT / 2 - 325,
+                y: BASE_HEIGHT / 2 - 335,
                 onClick: () => activeTimeToggle.set(id),
             },
             Background,
@@ -616,7 +619,8 @@ export function EndOfRunScreen(): PixiContainer {
         endTime: number,
         inScreenIdx: number,
         rank: number,
-        isSelf: boolean
+        isSelf: boolean,
+        teamComp: CharacterId[]
     ) => {
         const y = isSelf
             ? BASE_HEIGHT / 2 + 375
@@ -625,7 +629,7 @@ export function EndOfRunScreen(): PixiContainer {
         const date = new Date(endTime)
 
         // TODO: CHANGE TO ACTUAL CHARACTER TEXTURE
-        const renderTeamCompUnit = (idx: number) => {
+        const renderTeamCompUnit = (idx: number, characterId: CharacterId) => {
             return Container(
                 {
                     y: y - 35,
@@ -633,13 +637,7 @@ export function EndOfRunScreen(): PixiContainer {
                 },
                 RoundedBordered(
                     Sprite({
-                        src: getTexture(
-                            idx === 1
-                                ? 'penguinKnightProfile'
-                                : idx === 2
-                                ? 'warhogProfile'
-                                : 'gnomeHooliganProfile'
-                        ),
+                        src: getTexture(`${characterId}Profile` as AssetKey),
                         scale: 0.2,
                     }),
                     {
@@ -719,9 +717,9 @@ export function EndOfRunScreen(): PixiContainer {
                     fontSize: 14,
                 },
             }),
-            renderTeamCompUnit(0),
-            renderTeamCompUnit(1),
-            renderTeamCompUnit(2),
+            ...teamComp.map((char, idx) => {
+                return renderTeamCompUnit(idx, char)
+            }),
             Text({
                 text: `${
                     date.getMonth() + 1
@@ -766,7 +764,7 @@ export function EndOfRunScreen(): PixiContainer {
                 y0: 0,
                 x1: 0,
                 y1: 500,
-                colorStops: [{ color: 0x11151c, offset: 0 }],
+                colorStops: [{ color: 0x141612, offset: 0 }],
             },
         }),
         LeaderboardContextMenu,
