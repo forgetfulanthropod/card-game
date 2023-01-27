@@ -123,10 +123,9 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
 git clone git@github.com:kaijucards/kaiju.git
 cd kaiju
 
-# install pnpm:
-# curl -fsSL https://get.pnpm.io/install.sh | sh -
+# install yarn
 
-pnpm i -r
+yarn install
 # can just hit cmd-shift-b in vscode, or
 bash run client:build
 bash run server:build
@@ -167,7 +166,7 @@ We're using a decent number of libraries and tools but the big ones are
 -   `.prettierrc.json`: prettier formatting settings
 -   `arkit.json`: config for arkit, which makes a graph of imports/exports in the package
 -   `package.json`: js dependencies
--   `pnpm-lock.yaml`: automatically generated more-precise dependency list. **We use pnpm for everything!**
+-   `yarn.yaml`: automatically generated more-precise dependency list. **We use pnpm for everything!**
 -   `README.md`: this file
 
 ## Structure
