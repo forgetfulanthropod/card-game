@@ -77,8 +77,8 @@ interface BareGameActionArgs {
     endTurn: Empty
     exitDungeon: Empty
     finishCard: { cardUids: CardUid[] }
-    openLootCollector: Empty
-    openEndScreen: Empty
+    openEndOfRoom: Empty
+    openEndOfRun: Empty
     nextRoom: { choice: 0 | 1 | 2 | 3 }
     notifyRunScore: { event: RunScoreEvent; count: number }
     choosePlushy: { index: number }

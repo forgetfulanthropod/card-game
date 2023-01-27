@@ -189,7 +189,7 @@ const ScoreAttributeItem = (
     return ScoreItemContainer
 }
 
-export function EndOfRunScreen(): PixiContainer {
+export function EndOfRun(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'End of Run Screen' })
 
     const scene = getBattleScene()
@@ -853,7 +853,7 @@ export function EndOfRunScreen(): PixiContainer {
 
             if (isVictory) {
                 depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
-                callApi('openEndScreen', {})
+                callApi('openEndOfRun', {})
             }
 
             const { runId } = await callServerApi('endRun', {
@@ -884,7 +884,7 @@ export function EndOfRunScreen(): PixiContainer {
             scene.select('runScore').get('totalScore'),
             'normal'
         )
-        callApi('openEndScreen', {})
+        callApi('openEndOfRun', {})
     })()
 
     const TogglableMainContainer = Container({})

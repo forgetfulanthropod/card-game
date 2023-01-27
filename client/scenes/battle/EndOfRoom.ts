@@ -72,7 +72,7 @@ const getDisplayName = (name: LootFromGame) => {
     }
 }
 
-export function LootCollector(): PixiContainer {
+export function EndOfRoom(): PixiContainer {
     const scene = getBattleScene()
     collectData('level_end', {
         room_number: scene.get('numRoomsPassed') + 1,
@@ -150,7 +150,7 @@ export function LootCollector(): PixiContainer {
         setTimeout(() => {
             animateTo(roomClearedSign, ROOM_CLEARED_FINAL_POS)
             animateTo(lootItemsContainer, LOOT_ITEMS_FINAL_POS)
-            callApi('openLootCollector', {})
+            callApi('openEndOfRoom', {})
         }, 2000)
     }
 
@@ -380,14 +380,14 @@ export function LootCollector(): PixiContainer {
         el.on('pointerdown', onClick)
     }
 
-    const LootCollectorContainer = Container(
-        { x: 0, y: 0, scale: 0.5, name: 'LootCollector' },
+    const EndOfRoomContainer = Container(
+        { x: 0, y: 0, scale: 0.5, name: 'EndOfRoom' },
         ModalBackdrop(),
         lootItemsContainer,
         roomClearedSign
     )
 
-    return LootCollectorContainer
+    return EndOfRoomContainer
 }
 
 function TreasureChest(args: { x: number; onClick: () => void; idx: number }) {

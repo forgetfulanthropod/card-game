@@ -19,7 +19,7 @@ import { Characters } from './character'
 import { Energy } from './Energy'
 import { BattleRoomInfo } from './BattleRoomInfo'
 import { HexMapOverlay } from './HexMapOverlay'
-import { LootCollector } from './LootCollector'
+import { EndOfRoom } from './EndOfRoom'
 import { RestSiteOverlay } from './RestSiteOverlayPicnic'
 import { Background } from '@/scenes'
 import {
@@ -34,7 +34,7 @@ import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
 import { callApi } from '@/callApi'
-import { EndOfRunScreen } from './EndOfRunScreen'
+import { EndOfRun } from './EndOfRun'
 import { ROCursor } from 'sbaobab'
 import { SpineBackground } from '../background'
 import { collectData } from '@/analytics/collectData'
@@ -140,11 +140,11 @@ function CoreScene(
             ),
             sceneState =>
                 sceneState === 'collecting loot'
-                    ? LootCollector()
+                    ? EndOfRoom()
                     : sceneState === 'choosing cards'
                     ? CardAdder()
                     : sceneState === 'won' || sceneState === 'lost'
-                    ? EndOfRunScreen()
+                    ? EndOfRun()
                     : Container({})
         )
     )
