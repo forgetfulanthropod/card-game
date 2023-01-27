@@ -82,11 +82,11 @@ export const writeMetric = (
         let point = new Point(name)
         fields.forEach(field => {
             const finalField = metricField(field)
-            if (field.type == FieldType.int)
-                point.intField(finalField.name, field.value)
-            else if (field.type == FieldType.float)
-                point.floatField(finalField.name, field.value)
-            else point.stringField(finalField.name, field.value)
+            if (finalField.type == FieldType.int)
+                point.intField(finalField.name, finalField.value)
+            else if (finalField.type == FieldType.float)
+                point.floatField(finalField.name, finalField.value)
+            else point.stringField(finalField.name, finalField.value)
         })
         for (const [tagKey, tagValue] of Object.entries(tags)) {
             try {
@@ -110,15 +110,25 @@ export const writeMetric = (
         // right now writeApi closes (flushes) on every point; will probably not scale
         const writeApi = db.getWriteApi(influxOrg, influxBucket)
         writeApi.writePoint(point)
-        writeApi.close().then(() => {
-            logger.debug(
-                `metric written: ${name}: ${fields
-                    .map(f => `${f.name}: ${f.value}`)
-                    .join(', ')}; ${JSON.stringify(tags)}`
-            )
-        })
+        writeApi
+            .close()
+            .then(() => {
+                // TODO: just use point.toString()?
+                const fieldMsg = JSON.stringify(point.fields)
+                // @ts-expect-error
+                const tagMsg = JSON.stringify(point.tags)
+                logger.debug(`metric written ${name}: ${fieldMsg}, ${tagMsg}`)
+            })
+            .catch(e => {
+                const err = e as Error
+                logger.error(
+                    `writeApi writing metric failed ${name}: ${err.message}: ${err.stack}`
+                )
+            })
     } catch (e) {
         const err = e as Error
-        logger.error(`writing metric failed ${err.message}: ${err.stack}`)
+        logger.error(
+            `writing metric failed ${name}: ${err.message}: ${err.stack}`
+        )
     }
 }

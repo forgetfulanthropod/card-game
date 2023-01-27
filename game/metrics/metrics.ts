@@ -124,7 +124,7 @@ export const endTurn: GameMetrics['endTurn'] = args => {
         turn_damage_dealt: damages.reduce((n, { amount }) => n + amount, 0),
         turn_block_added: blocks.reduce((n, { amount }) => n + amount, 0),
         run_id: scene.get('runId'),
-        username: scene.get('username'),
+        user_name: scene.get('username'),
     }
     writeMetric('turn_end', tags)
 }
