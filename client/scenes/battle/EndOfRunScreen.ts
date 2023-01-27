@@ -28,15 +28,18 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import {
     Leaderboard,
+    LeaderboardTimeToggle,
     LEADERBOARD_ENTRIES_PER_PAGE,
+    MappedLeaderboards,
     MAX_LEADERBOARD_PAGE,
     RunScoreAttributeName,
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
+    Timeframe,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
-import { round, sortBy } from 'lodash'
+import { keys, round, sortBy } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { compose, Datum, datum } from 'datums'
 import { getShortWalletAddress } from '@/components/util'
@@ -191,17 +194,61 @@ export function EndOfRunScreen(): PixiContainer {
     const battleState = scene.get('state')
     const showLeaderboard = datum(true)
     const currLeaderboardPage = datum(0)
+    const activeTimeToggle = datum<LeaderboardTimeToggle>('daily')
     const userId = scene.get('username')
-    const leaderboard = callServerApi('getLeaderboard', {
-        userId,
-    }).then(leaderboard => {
-        const sortedLeaderboards = sortBy(
-            leaderboard,
-            entry => entry.highest_score
-        ).reverse()
 
-        renderLeaderboardsPage(sortedLeaderboards, 0)
-        return sortedLeaderboards as Leaderboard
+    callServerApi('getLeaderboard', {
+        userId,
+    }).then(allLeaderboards => {
+
+        // sort leaderboards in place
+        keys(allLeaderboards).forEach(_timeframe => {
+            const timeframe = _timeframe as Timeframe
+            const currBoard = allLeaderboards[timeframe]
+            const sortedBoard = sortBy(
+                currBoard,
+                entry => entry.highest_score
+            ).reverse()
+            allLeaderboards[timeframe] = sortedBoard
+        })
+
+        // refreshes leaderboard entries and nav arrows when user toggles timeframe
+        activeTimeToggle.onChange(newVal => {
+            LeaderboardEntries.removeChildren()
+            LeaderboardSelfEntry.removeChildren()
+
+            // change twice to force trigger a refresh on nav arrows if prev page was 0
+            currLeaderboardPage.set(1)
+            currLeaderboardPage.set(0)
+            renderLeaderboardsPage(allLeaderboards[newVal], currLeaderboardPage.val)
+
+            LeaderboardContextMenu.removeChildren()
+            LeaderboardContextMenu.addChild(
+                createTimeToggle('daily'),
+                createTimeToggle('weekly'),
+                createTimeToggle('allTime')
+            )
+        }, true)
+
+        // checks number of total entries vs currently displayed to display or hide nav arrows
+        currLeaderboardPage.onChange(newPage => {
+            LeaderboardNavArrows.removeChildren()
+
+            const currLeaderboards = allLeaderboards[activeTimeToggle.val]
+            const currMaxEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE + LEADERBOARD_ENTRIES_PER_PAGE
+            const currMinEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE
+
+            // currLeaderboards is of length === 101 when currUser is not in top 100
+            if (currMaxEntryDisplayed < currLeaderboards.length - 1) {
+                LeaderboardNavArrows.addChild(PageDownArrow)
+            }
+
+            if (currMinEntryDisplayed > 0) {
+                LeaderboardNavArrows.addChild(PageUpArrow)
+            }
+
+            renderLeaderboardsPage(currLeaderboards, newPage)
+        }, true)
     })
 
     const changeLeaderboardPage = (direction: 'next' | 'prev') => {
@@ -213,22 +260,6 @@ export function EndOfRunScreen(): PixiContainer {
                 currLeaderboardPage.set(currLeaderboardPage.val + 1)
         }
     }
-
-    currLeaderboardPage.onChange(newPage => {
-        leaderboard.then(board => {
-            renderLeaderboardsPage(board, newPage)
-            LeaderboardPageButtons.removeChildren()
-            if (newPage > 0 && newPage < MAX_LEADERBOARD_PAGE - 1) {
-                LeaderboardPageButtons.addChild(PageUpArrow)
-                LeaderboardPageButtons.addChild(PageDownArrow)
-            } else if (newPage === 0) {
-                LeaderboardPageButtons.addChild(PageDownArrow)
-            } else if (newPage === MAX_LEADERBOARD_PAGE - 1) {
-                LeaderboardPageButtons.addChild(PageUpArrow)
-            }
-        })
-        console.log(newPage)
-    })
 
     const renderLeaderboardsPage = (
         sortedLeaderboard: Leaderboard,
@@ -427,10 +458,7 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    type LeaderboardTimeToggle = 0 | 1 | 2
-    const activeTimeOption = datum<LeaderboardTimeToggle>(0)
-
-    const LeaderboardTimeOption = (
+    const LeaderboardTimeToggle = (
         text: string = 'default',
         active: boolean = false,
         id: LeaderboardTimeToggle
@@ -452,7 +480,7 @@ export function EndOfRunScreen(): PixiContainer {
             },
         })
 
-        const TimeOptionText = Text({
+        const TimeToggleText = Text({
             text,
             anchor: [0, 0],
             x: Background.width / 2,
@@ -468,31 +496,40 @@ export function EndOfRunScreen(): PixiContainer {
             {
                 name: `${text}_Container`,
                 y: BASE_HEIGHT / 2 - 325,
-                onClick: () => activeTimeOption.set(id),
+                onClick: () => activeTimeToggle.set(id),
             },
             Background,
-            Adjust(TimeOptionText, {
-                x: Background.width / 2 - TimeOptionText.width / 2,
-                y: Background.height / 2 - TimeOptionText.height / 2,
+            Adjust(TimeToggleText, {
+                x: Background.width / 2 - TimeToggleText.width / 2,
+                y: Background.height / 2 - TimeToggleText.height / 2,
             })
         )
     }
 
-    const createTimeOption = (index: LeaderboardTimeToggle) => {
-        const isActive = activeTimeOption.val === index
-        switch (index) {
-            case 0:
-                return Adjust(LeaderboardTimeOption('TODAY', isActive, 0), {
-                    x: BASE_WIDTH / 2 - 750,
-                })
-            case 1:
-                return Adjust(LeaderboardTimeOption('THIS WEEK', isActive, 1), {
-                    x: BASE_WIDTH / 2 - 225,
-                })
-            case 2:
-                return Adjust(LeaderboardTimeOption('ALL TIME', isActive, 2), {
-                    x: BASE_WIDTH / 2 + 300,
-                })
+    const createTimeToggle = (toggledValue: LeaderboardTimeToggle) => {
+        const isActive = activeTimeToggle.val === toggledValue
+        switch (toggledValue) {
+            case 'daily':
+                return Adjust(
+                    LeaderboardTimeToggle('TODAY', isActive, 'daily'),
+                    {
+                        x: BASE_WIDTH / 2 - 750,
+                    }
+                )
+            case 'weekly':
+                return Adjust(
+                    LeaderboardTimeToggle('THIS WEEK', isActive, 'weekly'),
+                    {
+                        x: BASE_WIDTH / 2 - 225,
+                    }
+                )
+            case 'allTime':
+                return Adjust(
+                    LeaderboardTimeToggle('ALL TIME', isActive, 'allTime'),
+                    {
+                        x: BASE_WIDTH / 2 + 300,
+                    }
+                )
         }
     }
 
@@ -523,14 +560,14 @@ export function EndOfRunScreen(): PixiContainer {
         onClick: () => changeLeaderboardPage('next'),
     })
 
-    const LeaderboardPageButtons = Container({}, PageDownArrow)
+    const LeaderboardNavArrows = Container({})
 
     const y = BASE_HEIGHT / 2 - 200
     const LeaderboardContextMenu = Container(
         {},
-        createTimeOption(0),
-        createTimeOption(1),
-        createTimeOption(2)
+        createTimeToggle('daily'),
+        createTimeToggle('weekly'),
+        createTimeToggle('allTime')
         // Text({
         //     text: 'RANK',
         //     y,
@@ -563,15 +600,15 @@ export function EndOfRunScreen(): PixiContainer {
         // })
     )
 
-    activeTimeOption.onChange(() => {
+    activeTimeToggle.onChange(() => {
         LeaderboardContextMenu.children.forEach(child => {
             child.destroy()
         })
         LeaderboardContextMenu.removeChildren()
         LeaderboardContextMenu.addChild(
-            createTimeOption(0),
-            createTimeOption(1),
-            createTimeOption(2)
+            createTimeToggle('daily'),
+            createTimeToggle('weekly'),
+            createTimeToggle('allTime')
         )
     })
 
@@ -735,7 +772,7 @@ export function EndOfRunScreen(): PixiContainer {
             },
         }),
         LeaderboardContextMenu,
-        LeaderboardPageButtons,
+        LeaderboardNavArrows,
         LeaderboardEntries,
         LeaderboardSelfEntry,
         LeaderboardSign

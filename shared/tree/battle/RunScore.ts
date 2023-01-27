@@ -249,6 +249,14 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
 
 export const RUN_TIME_THRESHOLD_MINS = 15
 
+export type LeaderboardTimeToggle = 'daily' | 'weekly' | 'allTime'
+
+export type MappedLeaderboards = {
+    [key in LeaderboardTimeToggle]: Leaderboard
+}
+
+export type Timeframe = keyof MappedLeaderboards
+
 export type Leaderboard = readonly LeaderboardEntry[]
 
 export type LeaderboardEntry = {

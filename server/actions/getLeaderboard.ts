@@ -5,6 +5,7 @@ import {
     Characters,
     Leaderboard,
     LEADERBOARD_ENTRIES_TO_DISPLAY,
+    MappedLeaderboards,
     PlayerCharacterId,
     RunID,
     ServerActions,
@@ -20,9 +21,9 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     logger.info(`Getting leaderboards for ${userId}`)
 
     //TODO add rank to sql return
-    const leaderboard: Leaderboard = await connection.many(sql`
+    const allTimeLeaderboard: Leaderboard = await connection.many(sql`
         WITH
-            top_self_run AS
+            max_run_self AS
             (   SELECT
                     true as is_self,
                     wallet_address,
@@ -52,33 +53,142 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 ORDER BY
                     highest_score DESC
                 LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS top_100_runs
+                    ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS max_run_all
 
         UNION
 
         SELECT
             *
         FROM
-            top_self_run
+            max_run_self
         ORDER BY
             highest_score DESC;
     `)
 
-    const leaderboardWithTeamComp = leaderboard.map(entry => {
-        const { all_characters } = entry
-        if (!all_characters) {
-            return entry
-        }
+    const weeklyLeaderboard: Leaderboard = await connection.many(sql`
+        WITH
+            max_run_self AS
+            (   SELECT
+                    true as is_self,
+                    wallet_address,
+                    highest_score,
+                    start_ts,
+                    end_ts,
+                    run_id,
+                    all_characters
+                FROM
+                    user_run_leaderboard
+                WHERE
+                    user_id = ${userId}
+                AND
+                    end_ts > now() - interval '7 days'
+            )
+        SELECT
+            *
+        FROM
+            (   SELECT
+                    false as is_self,
+                    wallet_address,
+                    highest_score,
+                    start_ts,
+                    end_ts,
+                    run_id,
+                    all_characters
+                FROM
+                    user_run_leaderboard
+                WHERE
+                    end_ts > now() - interval '7 days'
+                ORDER BY
+                    highest_score DESC
+                LIMIT
+                    ${LEADERBOARD_ENTRIES_TO_DISPLAY}
+        ) AS max_run_all
 
-        let teamComp: CharacterId[] = []
-        const chars = JSON.parse(all_characters) as Characters
-        keys(chars).forEach(key => {
-            if (chars[key].isPc) {
-                teamComp.push(chars[key].id)
+        UNION
+
+        SELECT
+            *
+        FROM
+            max_run_self
+        ORDER BY
+            highest_score DESC;
+    `)
+
+    const dailyLeaderboard: Leaderboard = await connection.many(sql`
+    WITH
+        max_run_self AS
+        (   SELECT
+                true as is_self,
+                wallet_address,
+                highest_score,
+                start_ts,
+                end_ts,
+                run_id,
+                all_characters
+            FROM
+                user_run_leaderboard
+            WHERE
+                user_id = ${userId}
+            AND
+                end_ts > now() - interval '1 day'
+        )
+    SELECT
+        *
+    FROM
+        (   SELECT
+                false as is_self,
+                wallet_address,
+                highest_score,
+                start_ts,
+                end_ts,
+                run_id,
+                all_characters
+            FROM
+                user_run_leaderboard
+            WHERE
+                end_ts > now() - interval '1 day'
+            ORDER BY
+                highest_score DESC
+            LIMIT
+                ${LEADERBOARD_ENTRIES_TO_DISPLAY}
+    ) AS max_run_all
+
+    UNION
+
+    SELECT
+        *
+    FROM
+        max_run_self
+    ORDER BY
+        highest_score DESC;
+    `)
+
+    const allLeaderboards = await Promise.all([
+        allTimeLeaderboard,
+        weeklyLeaderboard,
+        dailyLeaderboard,
+    ]) // idx is important
+    const allLeaderboardsWithTeam = allLeaderboards.map(leaderboard => {
+        return leaderboard.map(entry => {
+            const { all_characters } = entry
+            if (!all_characters) {
+                return entry
             }
-        })
-        return { ...entry, teamComp }
-    }) as Leaderboard
 
-    return leaderboardWithTeamComp
+            let teamComp: CharacterId[] = []
+            const chars = JSON.parse(all_characters) as Characters
+            keys(chars).forEach(key => {
+                if (chars[key].isPc) {
+                    teamComp.push(chars[key].id)
+                }
+            })
+            return { ...entry, teamComp }
+        }) as Leaderboard
+    })
+
+    return {
+        allTime: allLeaderboardsWithTeam[0],
+        weekly: allLeaderboardsWithTeam[1],
+        daily: allLeaderboardsWithTeam[2],
+    } as MappedLeaderboards
 }

@@ -17,6 +17,7 @@ import type {
     RunScoreEvent,
     StanceId,
     UserID,
+    MappedLeaderboards,
 } from './tree'
 
 export interface BareServerActionsMeta {
@@ -54,7 +55,7 @@ export interface BareServerActionsMeta {
     }
     getLeaderboard: {
         args: { userId: UserID }
-        res: Promise<Leaderboard>
+        res: Promise<MappedLeaderboards>
     }
 }
 
