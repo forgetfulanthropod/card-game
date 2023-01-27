@@ -14,6 +14,7 @@ import {
 import { getBattleSceneIn } from '@/util'
 import { getRulebook } from '@/rulebook'
 import { setAllCharactersToUnmoved } from '@/gameState/battle/characters/setAllCharactersToUnmoved'
+import { trackMetric } from 'server/metrics'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -28,6 +29,8 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.apply('roomUidsVisited', uids => [...uids, chosenRoom.uid])
     scene.set('currentRoom', chosenRoom)
 
+    let runId = scene.get('runId') || 0
+    trackMetric('nextRoom', { choice: args.choice, chosenRoom, scene })
     scene
         .select('runScore')
         .select('attributes')

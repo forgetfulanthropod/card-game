@@ -14,11 +14,20 @@ export function mountIo(server: Server, prefix: string): void {
     fullMountIo(server, buildInfo, prefix)
 }
 
+loadDotEnv()
+
 declare global {
     // eslint-disable-next-line no-var
     var logger: Logger
 }
 global.logger = getLogger()
+
+if (process.env.LOG_LEVEL) {
+    logger.transports.forEach(transport => {
+        transport.level = process.env.LOG_LEVEL
+    })
+    console.log(`log level is ${process.env.LOG_LEVEL}`)
+}
 
 if (process.env.FIXED_SEED === 'yes') {
     logger.info('NOTE: USING FIXED SEED')

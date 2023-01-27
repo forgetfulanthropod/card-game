@@ -2,6 +2,7 @@ import type { StanceId, GameActions } from 'shared'
 
 import { getBattleSceneIn } from '@/util'
 import { updateNpcMoves, updateHand } from '@/gameState'
+import { trackMetric } from 'server/metrics'
 
 export const chooseStance: GameActions['chooseStance'] = args => {
     const { characterUid, stanceId } = args
@@ -18,9 +19,16 @@ export const chooseStance: GameActions['chooseStance'] = args => {
     )
         return
 
-    logger.info(`setting stance to ${stanceId}`)
+    logger.debug(`${character.id} setting stance to ${stanceId}`)
 
     characterCursor.select('stance').set(stanceId)
+
+	// TODO: disable until all metrics write are async;
+	// otherwise delay in changing stance doesn't feel good
+	// discussion: possibly don't even need this since stance is included
+	// with play card
+
+    // trackMetric('chooseStance', { character, stanceId, scene })
 
     updateNpcMoves(scene)
 

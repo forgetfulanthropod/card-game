@@ -2,10 +2,13 @@ import { AuthUserDBActionProps, BUILD_VER, RunID, ServerActions } from 'shared'
 import { getDbClient, sql as sqlTag } from '../db/client'
 // import { } from 'game'
 
-export const getCurrentRun: ServerActions['getCurrentRun'] = async ({ userId }) => {
+export const getCurrentRun: ServerActions['getCurrentRun'] = async ({
+    userId,
+}) => {
     logger.info(`Getting current run for: ${userId}`)
 
     const connection = await getDbClient()
+    if (connection === null) return null
     const runId = await getCurrentRunId({ connection, userId })
 
     logger.info(`${userId} current runId: ${runId}`)

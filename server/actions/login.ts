@@ -1,6 +1,6 @@
 import type { ServerActions, AuthUserDBActionProps } from 'shared'
 import { getDbClient, sql as sqlTag } from '@/db/client'
-import { getLogger } from '@/../game'
+import { getLogger } from 'game'
 import { getUserId } from './internal'
 
 export const login: ServerActions['login'] = async ({ walletAddress }) => {
