@@ -192,7 +192,7 @@ export function EndOfRunScreen(): PixiContainer {
 
     const scene = getBattleScene()
     const battleState = scene.get('state')
-    const showLeaderboard = datum(true)
+    const showLeaderboard = datum(false)
     const currLeaderboardPage = datum(0)
     const activeTimeToggle = datum<LeaderboardTimeToggle>('daily')
     const userId = scene.get('username')
@@ -400,7 +400,7 @@ export function EndOfRunScreen(): PixiContainer {
     })
 
     const showLeaderboardButton = Sprite({
-        src: getTexture('endTurnButton'),
+        src: getTexture('leaderboardButton'),
         anchor: 0,
         y: BASE_HEIGHT / 2 + 380,
         x: BASE_WIDTH / 2 + 75,
@@ -410,14 +410,12 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    const closeModalButton = Text({
-        text: '❎',
-        // anchor: 0,
+    const closeModalButton = Sprite({
+        src: getTexture('closeButton'),
+        // anchor: [0.5, 0.5],
         y: BASE_HEIGHT / 2 - 500,
-        x: BASE_WIDTH / 2 + 800,
-        style: {
-            fontSize: 64,
-        },
+        x: BASE_WIDTH / 2 + 700,
+        scale: 0.4,
         onClick: () => {
             showLeaderboard.set(!showLeaderboard.val)
         },
@@ -698,7 +696,7 @@ export function EndOfRunScreen(): PixiContainer {
                 style,
             }),
             Sprite({
-                src: `userAvatar${Math.ceil(10 * Math.random())}` as AssetKey,
+                src: isSelf ? `userAvatar1` : `userAvatar${Math.ceil(10 * Math.random())}` as AssetKey,
                 y: y - 20,
                 x: x - 460,
                 scale: 0.5,
@@ -844,8 +842,8 @@ export function EndOfRunScreen(): PixiContainer {
         TogglableButtonsContainer.removeChildren()
 
         if (showLeaderboard) {
-            TogglableMainContainer.addChild(Leaderboard)
             TogglableButtonsContainer.addChild(closeModalButton)
+            TogglableMainContainer.addChild(Leaderboard)
             // Adjust(backToScoreButton, {
             //     x: BASE_WIDTH / 2 - backToScoreButton.width / 2,
             // })

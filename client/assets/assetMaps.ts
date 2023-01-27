@@ -21,6 +21,8 @@ export const rootAssets = {
     endTurnButton: 'core-ui/newEndTurn.png',
     confirmButton: 'core-ui/newConfirm.png',
     skipButton: 'core-ui/newSkip.png',
+    closeButton: 'core-ui/closeButton.png',
+    leaderboardButton: 'core-ui/leaderboard.png',
     tryAgainButton: 'core-ui/newTryAgain.png',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
