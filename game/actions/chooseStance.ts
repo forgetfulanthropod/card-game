@@ -22,7 +22,13 @@ export const chooseStance: GameActions['chooseStance'] = args => {
     logger.debug(`${character.id} setting stance to ${stanceId}`)
 
     characterCursor.select('stance').set(stanceId)
-    trackMetric('chooseStance', { character, stanceId, scene })
+
+	// TODO: disable until all metrics write are async;
+	// otherwise delay in changing stance doesn't feel good
+	// discussion: possibly don't even need this since stance is included
+	// with play card
+
+    // trackMetric('chooseStance', { character, stanceId, scene })
 
     updateNpcMoves(scene)
 
