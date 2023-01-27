@@ -1,4 +1,5 @@
 import { AuthUserDBActionProps, BUILD_VER, RunID, ServerActions } from 'shared'
+import { trackMetric } from '@/metrics'
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { getGamestate } from '@/db'
 
@@ -9,6 +10,7 @@ export const startRun: ServerActions['startRun'] = async ({ userId }) => {
     await cleanUpPreviousRuns({ connection, userId })
     const runId = await createNewRun({ connection, userId })
 
+    trackMetric('startRun', { runId, username: userId })
     logger.info(`${userId} started runId: ${runId}`)
     return { runId }
 }
@@ -20,15 +22,18 @@ const createNewRun = async (props: AuthUserDBActionProps): Promise<RunID> => {
     const gameState = await getGamestate(userId)
     const runStatus = gameState ? 'in_progress' : 'initializing'
 
-    return await connection.oneFirst(sql`
+    const runId = await connection.oneFirst(sql`
         INSERT INTO kaiju.user_run (
             user_id, run_status, build_version, game_state
         )
         VALUES
-            (${userId}, ${runStatus}, ${BUILD_VER}, ${JSON.stringify(gameState)})
+            (${userId}, ${runStatus}, ${BUILD_VER}, ${JSON.stringify(
+        gameState
+    )})
         RETURNING
-            run_id
-    `)
+        run_id
+        `)
+    return runId
 }
 
 const cleanUpPreviousRuns = async (

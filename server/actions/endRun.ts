@@ -8,6 +8,7 @@ import {
 import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
+import { trackMetric } from '@/metrics'
 
 export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     logger.info(`Ending run for: ${userId}`)
@@ -32,9 +33,12 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     let runDuration = 0
     if (endTime) {
         runDuration = getRunDurationInSec(startTime, endTime)
+    } else {
+        let newEndTime = Date.now()
+        runDuration = getRunDurationInSec(startTime, newEndTime)
     }
 
-    logger.info({ runId, totalScore, state })
+    logger.info({ userId, runId, totalScore, state, runDuration })
 
     if (!restart && state !== 'won' && state !== 'lost') {
         logger.warn('Not in battle end state') // only ok when restarting
@@ -46,7 +50,6 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
         logger.error('Run is not valid')
         return { runId: null }
     }
-
     await connection.query(sql`
         UPDATE
             kaiju.user_run
@@ -57,8 +60,14 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
             run_score = ${totalScore},
             game_state = ${JSON.stringify(gameState)}
         WHERE
-            run_id = ${runId};
+           run_id = ${runId};
     `)
+
+    trackMetric('endRun', {
+        scene: gameState.scene,
+        runDuration,
+        restart: restart || false,
+    })
 
     return { runId }
 }

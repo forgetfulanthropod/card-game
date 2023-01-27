@@ -1,4 +1,4 @@
-import { getLogger } from '@/../game'
+import { getLogger } from 'game'
 import { readFileSync } from 'fs'
 import path from 'path'
 import {
