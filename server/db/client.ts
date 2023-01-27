@@ -63,6 +63,7 @@ export const sql = createSqlTag({
             start_ts: z.number(),
             end_ts: z.number(),
             run_id: z.number(),
+            is_self: z.boolean()
         }),
     },
 })

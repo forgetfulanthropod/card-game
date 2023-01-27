@@ -258,6 +258,7 @@ export type LeaderboardEntry = {
     start_ts: number // unix ts
     end_ts: number // unix ts
     run_id: RunID
+    is_self: boolean
     all_characters?: string // in reality is of Characters type, before parsing
     teamComp?: CharacterId[]
 }

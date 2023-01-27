@@ -253,7 +253,7 @@ export function EndOfRunScreen(): PixiContainer {
 
         let inScreenIdx = 0
         sortedLeaderboard.forEach((entry, idx) => {
-            const entryIsCurrentUser = entry.user_id === userId
+            const entryIsCurrentUser = entry.is_self
             if (!entryIsInRange(idx) && !entryIsCurrentUser) {
                 return
             }
@@ -271,8 +271,11 @@ export function EndOfRunScreen(): PixiContainer {
                 )
             }
 
-            if (entryIsCurrentUser) {
-                LeaderboardEntries.addChild(
+            if (
+                entryIsCurrentUser &&
+                LeaderboardSelfEntry.children.length === 0
+            ) {
+                LeaderboardSelfEntry.addChild(
                     LeaderboardEntry(
                         entry.wallet_address,
                         entry.highest_score,
@@ -591,13 +594,18 @@ export function EndOfRunScreen(): PixiContainer {
             return Container(
                 {
                     y: y - 35,
-                    x: x + 50 + (idx * 100),
+                    x: x + 100 + idx * 100,
                 },
                 RoundedBordered(
                     Sprite({
-                        src: getTexture(idx === 1 ? 'penguinKnightProfile' : idx === 2 ? 'warhogProfile' : 'gnomeHooliganProfile'),
+                        src: getTexture(
+                            idx === 1
+                                ? 'penguinKnightProfile'
+                                : idx === 2
+                                ? 'warhogProfile'
+                                : 'gnomeHooliganProfile'
+                        ),
                         scale: 0.2,
-
                     }),
                     {
                         radius: 20,
@@ -656,13 +664,25 @@ export function EndOfRunScreen(): PixiContainer {
                 src: `userAvatar${Math.ceil(10 * Math.random())}` as AssetKey,
                 y: y - 20,
                 x: x - 460,
-                scale: 0.5
+                scale: 0.5,
             }),
             Text({
                 text: highScore,
                 y: y - 10,
-                x: x - 100,
-                style,
+                x: x - 80 - 10 * highScore.toString().length,
+                style: {
+                    ...style,
+                    align: 'right',
+                },
+            }),
+            Text({
+                text: 'points',
+                y: y - 2,
+                x: x - 55,
+                style: {
+                    fill: 0xd8dad3,
+                    fontSize: 14,
+                },
             }),
             renderTeamCompUnit(0),
             renderTeamCompUnit(1),
@@ -679,6 +699,7 @@ export function EndOfRunScreen(): PixiContainer {
     }
 
     const LeaderboardEntries = Container({})
+    const LeaderboardSelfEntry = Container({})
 
     const LeaderboardSign = TweenableContainer(
         {
@@ -716,6 +737,7 @@ export function EndOfRunScreen(): PixiContainer {
         LeaderboardContextMenu,
         LeaderboardPageButtons,
         LeaderboardEntries,
+        LeaderboardSelfEntry,
         LeaderboardSign
     )
 

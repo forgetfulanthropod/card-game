@@ -22,9 +22,15 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     //TODO add rank to sql return
     const leaderboard: Leaderboard = await connection.many(sql`
         WITH
-            tmp AS
+            top_self_run AS
             (   SELECT
-                    *
+                    true as is_self,
+                    wallet_address,
+                    highest_score,
+                    start_ts,
+                    end_ts,
+                    run_id,
+                    all_characters
                 FROM
                     user_run_leaderboard
                 WHERE
@@ -33,18 +39,29 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
         SELECT
             *
         FROM
-            user_run_leaderboard
+            (   SELECT
+                    false as is_self,
+                    wallet_address,
+                    highest_score,
+                    start_ts,
+                    end_ts,
+                    run_id,
+                    all_characters
+                FROM
+                    user_run_leaderboard
+                ORDER BY
+                    highest_score DESC
+                LIMIT
+                    ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS top_100_runs
 
         UNION
 
         SELECT
             *
         FROM
-            tmp
+            top_self_run
         ORDER BY
-            highest_score DESC
-        LIMIT
-            ${LEADERBOARD_ENTRIES_TO_DISPLAY};
+            highest_score DESC;
     `)
 
     const leaderboardWithTeamComp = leaderboard.map(entry => {
