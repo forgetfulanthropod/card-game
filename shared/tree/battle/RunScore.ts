@@ -270,3 +270,8 @@ export type LeaderboardEntry = {
     all_characters?: string // in reality is of Characters type, before parsing
     teamComp?: CharacterId[]
 }
+
+export type ScoreTags = {
+    isNewHighScore: boolean
+    topPercentile: number
+}

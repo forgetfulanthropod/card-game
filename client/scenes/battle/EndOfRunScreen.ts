@@ -36,6 +36,7 @@ import {
     RunScoreAttributeName,
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
+    ScoreTags,
     Timeframe,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
@@ -201,7 +202,6 @@ export function EndOfRunScreen(): PixiContainer {
     callServerApi('getLeaderboard', {
         userId,
     }).then(allLeaderboards => {
-
         // sort leaderboards in place
         keys(allLeaderboards).forEach(_timeframe => {
             const timeframe = _timeframe as Timeframe
@@ -221,7 +221,10 @@ export function EndOfRunScreen(): PixiContainer {
             // change twice to force trigger a refresh on nav arrows if prev page was 0
             currLeaderboardPage.set(1)
             currLeaderboardPage.set(0)
-            renderLeaderboardsPage(allLeaderboards[newVal], currLeaderboardPage.val)
+            renderLeaderboardsPage(
+                allLeaderboards[newVal],
+                currLeaderboardPage.val
+            )
 
             LeaderboardContextMenu.removeChildren()
             LeaderboardContextMenu.addChild(
@@ -236,7 +239,9 @@ export function EndOfRunScreen(): PixiContainer {
             LeaderboardNavArrows.removeChildren()
 
             const currLeaderboards = allLeaderboards[activeTimeToggle.val]
-            const currMaxEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE + LEADERBOARD_ENTRIES_PER_PAGE
+            const currMaxEntryDisplayed =
+                newPage * LEADERBOARD_ENTRIES_PER_PAGE +
+                LEADERBOARD_ENTRIES_PER_PAGE
             const currMinEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE
 
             // currLeaderboards is of length === 101 when currUser is not in top 100
@@ -348,7 +353,7 @@ export function EndOfRunScreen(): PixiContainer {
         text: `Total Score`,
         anchor: [0, 0.5],
         x: BASE_WIDTH / 2 - 500,
-        y: BASE_HEIGHT / 2 + 265,
+        y: BASE_HEIGHT / 2 + 262,
         style: {
             fontSize: 64,
             fill: 'white',
@@ -375,6 +380,92 @@ export function EndOfRunScreen(): PixiContainer {
         },
         name: 'TotalScore',
     })
+
+    const NewHighScoreTag = () => {
+        const Background = RoundedRectangleGradientSprite({
+            spriteArgs: {
+                width: 160,
+                height: 50,
+                anchor: [0, 0],
+            },
+            radius: 50,
+            gradientArgs: {
+                x0: 0,
+                y0: 0,
+                x1: 0,
+                y1: 50,
+                colorStops: [{ color: 0x184777, offset: 0 }],
+            },
+        })
+
+        const HighScoreText = Text({
+            text: 'HIGH SCORE',
+            anchor: [0, 0],
+            x: Background.width / 2,
+            style: {
+                fill: 0xccdff5,
+                fontFamily: 'sansFont',
+                fontWeight: '300',
+                fontSize: 20,
+            },
+        })
+
+        return Container(
+            {
+                name: `HighScoreTag_Container`,
+                x: BASE_WIDTH / 2 - 110,
+                y: BASE_HEIGHT / 2 + 240,
+            },
+            Background,
+            Adjust(HighScoreText, {
+                x: Background.width / 2 - HighScoreText.width / 2,
+                y: Background.height / 2 - HighScoreText.height / 2,
+            })
+        )
+    }
+
+    const TopPercentileTag = () => {
+        const Background = RoundedRectangleGradientSprite({
+            spriteArgs: {
+                width: 110,
+                height: 50,
+                anchor: [0, 0],
+            },
+            radius: 30,
+            gradientArgs: {
+                x0: 0,
+                y0: 0,
+                x1: 0,
+                y1: 50,
+                colorStops: [{ color: 0x084a35, offset: 0 }],
+            },
+        })
+
+        const HighScoreText = Text({
+            text: 'TOP 3%',
+            anchor: [0, 0],
+            x: Background.width / 2,
+            style: {
+                fill: 0xa1e3ce,
+                fontFamily: 'sansFont',
+                fontWeight: '100',
+                fontSize: 20,
+            },
+        })
+
+        return Container(
+            {
+                name: `TopPercentileTag_Container`,
+                x: BASE_WIDTH / 2 + 80,
+                y: BASE_HEIGHT / 2 + 240,
+            },
+            Background,
+            Adjust(HighScoreText, {
+                x: Background.width / 2 - HighScoreText.width / 2,
+                y: Background.height / 2 - HighScoreText.height / 2,
+            })
+        )
+    }
 
     const TopBorder = Sprite({
         src: Texture.WHITE,
@@ -424,17 +515,6 @@ export function EndOfRunScreen(): PixiContainer {
         },
     })
 
-    // const backToScoreButton = Sprite({
-    //     src: getTexture('skipButton'),
-    //     anchor: 0,
-    //     y: BASE_HEIGHT / 2 + 400,
-    //     // x: BASE_WIDTH / 2,
-    //     scale: 0.6,
-    //     onClick: () => {
-    //         showLeaderboard.set(!showLeaderboard.val)
-    //     },
-    // })
-
     const RoundedBlackRectBackground = RoundedRectangleGradientSprite({
         spriteArgs: {
             width: 1100,
@@ -453,8 +533,8 @@ export function EndOfRunScreen(): PixiContainer {
             y0: 0,
             y1: 700,
             colorStops: [
-                { color: 0x0B0B09, offset: 0 },
-                { color: 0x3F4338, offset: 1 },
+                { color: 0x0b0b09, offset: 0 },
+                { color: 0x3f4338, offset: 1 },
             ],
         },
     })
@@ -477,7 +557,9 @@ export function EndOfRunScreen(): PixiContainer {
                 y0: 0,
                 x1: 0,
                 y1: 50,
-                colorStops: [{ color: active ? 0xF4F5F6 : 0x545A64, offset: 0 }],
+                colorStops: [
+                    { color: active ? 0xf4f5f6 : 0x545a64, offset: 0 },
+                ],
             },
         })
 
@@ -569,36 +651,6 @@ export function EndOfRunScreen(): PixiContainer {
         createTimeToggle('daily'),
         createTimeToggle('weekly'),
         createTimeToggle('allTime')
-        // Text({
-        //     text: 'RANK',
-        //     y,
-        //     x: BASE_WIDTH / 2 - 700,
-        //     style,
-        // }),
-        // Text({
-        //     text: 'USER',
-        //     y,
-        //     x: BASE_WIDTH / 2 - 400,
-        //     style,
-        // }),
-        // Text({
-        //     text: 'SCORE',
-        //     y,
-        //     x: BASE_WIDTH / 2 - 100,
-        //     style,
-        // }),
-        // Text({
-        //     text: 'TEAM',
-        //     y,
-        //     x: BASE_WIDTH / 2 + 250,
-        //     style,
-        // }),
-        // Text({
-        //     text: 'DATE',
-        //     y,
-        //     x: BASE_WIDTH / 2 + 600,
-        //     style,
-        // })
     )
 
     activeTimeToggle.onChange(() => {
@@ -694,7 +746,11 @@ export function EndOfRunScreen(): PixiContainer {
                 style,
             }),
             Sprite({
-                src: isSelf ? `userAvatar1` : `userAvatar${Math.ceil(10 * Math.random())}` as AssetKey,
+                src: isSelf
+                    ? `userAvatar1`
+                    : (`userAvatar${Math.ceil(
+                          10 * Math.random()
+                      )}` as AssetKey),
                 y: y - 20,
                 x: x - 460,
                 scale: 0.5,
