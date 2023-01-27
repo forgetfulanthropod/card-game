@@ -46,7 +46,7 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING')
     loadDotEnv();
-    console.log(process.env)
+
     const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
