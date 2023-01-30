@@ -21,7 +21,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     logger.info(`Getting leaderboards for ${userId}`)
 
     //TODO add rank to sql return
-    const allTimeLeaderboard: Leaderboard = await connection.many(sql`
+    const allTimeLeaderboard: Leaderboard = await connection.any(sql`
         WITH
             max_run_self AS
             (   SELECT
@@ -70,7 +70,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
             highest_score DESC;
     `)
 
-    const weeklyLeaderboard: Leaderboard = await connection.many(sql`
+    const weeklyLeaderboard: Leaderboard = await connection.any(sql`
         WITH
             max_run_self AS
             (   SELECT
@@ -124,7 +124,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
             highest_score DESC;
     `)
 
-    const dailyLeaderboard: Leaderboard = await connection.many(sql`
+    const dailyLeaderboard: Leaderboard = await connection.any(sql`
     WITH
         max_run_self AS
         (   SELECT
