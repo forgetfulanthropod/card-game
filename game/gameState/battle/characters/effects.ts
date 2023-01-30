@@ -51,6 +51,9 @@ const staticEffectFuncs: Record<
     guardedBuff(stats) {
         stats.damageTakeMultiplicand -= 0.25
     },
+    reflectBuff(stats, count) {
+        stats.reflect = count
+    },
     smallDamageIncreaseBuff(stats) {
         stats.damageTakeAddend += 4
     },

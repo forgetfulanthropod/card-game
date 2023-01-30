@@ -30,11 +30,20 @@ export function applyDamage(args: {
         checkServerScoringEvent('HIGHEST_DAMAGE', scene, args)
     }
 
+    //@ts-expect-error
+    const attackerMeta = attacker ?? scene.get('allCharacters', attackerUid)
+
     const calcedDamage = getDamage({
-        //@ts-expect-error
-        attacker: attacker ?? scene.get('allCharacters', attackerUid),
+        attacker: attackerMeta,
         target: scene.get('allCharacters', targetUid),
         damage,
+    })
+
+    manageSideEffectsOfCalcedDamage({
+        scene,
+        targetUid,
+        attackerUid: attackerMeta.uid,
+        calcedDamage,
     })
 
     const unblockedDamage = applyCalcedDamage({
@@ -44,7 +53,7 @@ export function applyDamage(args: {
         piercing,
     })
 
-    manageSideEffectsOfNewDamage(scene, targetUid, calcedDamage)
+    manageSideEffectsOfUnblockedDamage(scene, targetUid, unblockedDamage)
 
     if (unblockedDamage === Number.NEGATIVE_INFINITY)
         throw new Error("unblocked damage wasn't calculated")
@@ -84,10 +93,47 @@ function applyCalcedDamage({
     return unblockedDamage
 }
 
-function manageSideEffectsOfNewDamage(
+function manageSideEffectsOfCalcedDamage({
+    scene,
+    targetUid,
+    attackerUid,
+    calcedDamage,
+}: {
+    scene: BattleCursor
+    targetUid: CharacterUid
+    attackerUid: CharacterUid
+    calcedDamage: number
+}) {
+    manageReflect(calcedDamage, targetUid, attackerUid, scene)
+
+    recordDamage(scene, calcedDamage, targetUid)
+}
+
+function manageReflect(
+    calcedDamage: number,
+    targetUid: CharacterUid,
+    attackerUid: CharacterUid,
+    scene: BattleCursor
+) {
+    const reflectBuff = scene
+        .get('allCharacters', targetUid, 'effects')
+        .find(e => e.id === 'reflectBuff')
+
+    if (!reflectBuff) return
+
+    const reflectedDamage = Math.min(reflectBuff.counter, calcedDamage)
+
+    applyCalcedDamage({
+        scene,
+        targetUid: attackerUid,
+        calcedDamage: reflectedDamage,
+    })
+}
+
+function manageSideEffectsOfUnblockedDamage(
     scene: BattleCursor,
     targetUid: CharacterUid,
-    calcedDamage: number
+    unblockedDamage: number
 ) {
     if (didTargetDie(scene, targetUid)) {
         clearDead(scene)
@@ -95,14 +141,12 @@ function manageSideEffectsOfNewDamage(
         applyKillScores(scene, targetUid)
     }
 
-    maybeApplyDamageThresholdDebuffs(scene, targetUid, calcedDamage)
+    maybeApplyDamageThresholdDebuffs(scene, targetUid, unblockedDamage)
 
     if (damageChangesEnemyIntent(scene)) {
         logger.info('updating the NPC moves due to enemy damage')
         updateNpcMoves(scene)
     }
-
-    recordDamage(scene, calcedDamage, targetUid)
 }
 
 function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
