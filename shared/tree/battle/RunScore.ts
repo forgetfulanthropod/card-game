@@ -262,13 +262,14 @@ export type Leaderboard = readonly LeaderboardEntry[]
 export type LeaderboardEntry = {
     user_id: UserID
     wallet_address: string
-    highest_score: number
+    max_score: number
     start_ts: number // unix ts
     end_ts: number // unix ts
     run_id: RunID
     is_self: boolean
-    leaderboard_rank: number
-    all_characters?: string // in reality is of Characters type, before parsing
+    leaderboard_rank: number // use for self entry
+    adjusted_rank: number // use for top 100
+    all_characters?: string // in reality is of Characters type, after parsing
     teamComp?: CharacterId[]
 }
 

@@ -70,8 +70,8 @@ export const LeaderboardContainer = () => {
             const currBoard = allLeaderboards[timeframe]
             const sortedBoard = sortBy(
                 currBoard,
-                entry => entry.highest_score
-            ).reverse()
+                entry => entry.leaderboard_rank
+            )
             allLeaderboards[timeframe] = sortedBoard
         })
 
@@ -273,7 +273,7 @@ export const LeaderboardContainer = () => {
                 LeaderboardEntries.addChild(
                     LeaderboardEntry(
                         entry.wallet_address,
-                        entry.highest_score,
+                        entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
                         entry.leaderboard_rank,
@@ -290,7 +290,7 @@ export const LeaderboardContainer = () => {
                 LeaderboardSelfEntry.addChild(
                     LeaderboardEntry(
                         entry.wallet_address,
-                        entry.highest_score,
+                        entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
                         entry.leaderboard_rank,

@@ -13,7 +13,8 @@ import {
 } from 'shared'
 import { getDbClient, sql as sqlTag } from '../db/client'
 
-/** Currently fetches either 100 or 101 rows depending on user being in top 100 */
+/** Currently fetches either 100 or 101 rows depending on user being in top 100
+ */
 export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     const connection = await getDbClient()
     const { userId } = args
@@ -27,7 +28,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
         const whereFragment =
             timeframe === 'daily'
                 ? sqlTag.fragment`WHERE
-                end_ts > now() - interval '1 days'`
+                extract(day from end_ts) = extract(day from now())`
                 : timeframe === 'weekly'
                 ? sqlTag.fragment`WHERE
                 end_ts > now() - interval '7 days'`
@@ -44,7 +45,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                             ELSE false
                         END AS is_self,
                         i.wallet_address,
-                        MAX(u.run_score) AS highest_score,
+                        s.max_score,
                         u.start_ts,
                         u.end_ts,
                         u.run_id,
@@ -74,9 +75,23 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                         u.user_id,
                         u.end_ts,
                         u.run_id,
+                        s.max_score,
                         i.wallet_address
-                    ORDER BY
-                        highest_score DESC
+                )
+                ,
+                user_run_leaderboards_unique AS
+                (   SELECT
+                    ROW_NUMBER() over(ORDER BY max_score DESC) AS adjusted_rank, --- adjusted rank is to recalc top 100 after removing dups, leaderboard rank is for self
+                    *
+                    FROM
+                        (   SELECT
+                                DISTINCT
+                            ON
+                                (
+                                    wallet_address)
+                                *
+                            FROM
+                                user_run_leaderboards ) AS unique_rows
                 )
             SELECT
                 *
@@ -84,7 +99,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 (   SELECT
                         *
                     FROM
-                        user_run_leaderboards
+                        user_run_leaderboards_unique
                     LIMIT
                         ${LEADERBOARD_ENTRIES_TO_DISPLAY}) AS all_leaderboard
 
@@ -92,7 +107,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 (   SELECT
                         *
                     FROM
-                        user_run_leaderboards
+                        user_run_leaderboards_unique
                     WHERE
                         is_self = true);
         `)
