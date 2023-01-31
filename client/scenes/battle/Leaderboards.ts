@@ -397,37 +397,30 @@ export const LeaderboardContainer = () => {
         }
     }
 
-    // const PageUpArrow = Sprite({
-    //     src: getTexture('upArrowSimple'),
-    //     tint: 0x000000,
-    //     name: 'PageUpArrow',
-    //     scale: 0.2,
-    //     x: BASE_WIDTH / 2 + 780,
-    //     y: BASE_HEIGHT / 2 - 215,
-    //     onClick: () => changeLeaderboardPage('prev'),
-    // })
-
-    // const invertFilter = new filters.ColorMatrixFilter()
-    // PageUpArrow.filters = [invertFilter]
-    // invertFilter.negative(true)
-
     const PageUpArrow = Sprite({
-        src: getTexture('upArrow'),
+        src: getTexture('upArrowSimple'),
         name: 'PageUpArrow',
-        scale: 0.8,
-        x: BASE_WIDTH / 2 + 780,
-        y: BASE_HEIGHT / 2 - 215,
+        scale: 0.05,
+        x: BASE_WIDTH / 2 + 785,
+        y: BASE_HEIGHT / 2 - 185,
         onClick: () => changeLeaderboardPage('prev'),
     })
 
     const PageDownArrow = Sprite({
+        src: getTexture('upArrowSimple'),
+        tint: 0xFFFFFF,
         name: 'PageDownArrow',
-        src: getTexture('downArrow'),
-        scale: 0.8,
-        x: BASE_WIDTH / 2 + 780,
-        y: BASE_HEIGHT / 2 + 185,
+        rotation: 3.14,
+        scale: 0.05,
+        x: BASE_WIDTH / 2 + 835,
+        y: BASE_HEIGHT / 2 + 265,
         onClick: () => changeLeaderboardPage('next'),
     })
+
+    const invertFilter = new filters.ColorMatrixFilter()
+    PageUpArrow.filters = [invertFilter]
+    PageDownArrow.filters = [invertFilter]
+    invertFilter.negative(true)
 
     const LeaderboardNavArrows = Container({})
 
@@ -472,8 +465,8 @@ export const LeaderboardContainer = () => {
             },
         }),
         LeaderboardContextMenu,
-        LeaderboardNavArrows,
         LeaderboardEntries,
+        LeaderboardNavArrows,
         LeaderboardSelfEntry,
         LeaderboardSign
     )
