@@ -463,8 +463,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'testudoFormation',
         targetNum: 1,
         targetType: 'friends',
-        // TODO: "You may only play this card if this character is in an avoidant stance."
-        actions: 'chain(addBlock(defense), effect("strongblock", 1))',
+        actions:
+            'ifStance("avoidant", chain(addBlock(defense), effect("strongblock", 1)))',
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1039,7 +1039,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy = 0.25 * strength;
             chain(
                 deal(strengthy),
-                effect("fatigue",1),
+                effect("fatigued",1),
                 effect("tired",1),
                 discard(1)
             )

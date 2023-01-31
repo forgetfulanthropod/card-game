@@ -38,13 +38,18 @@ export function beginTargetSelection(
     app.stage.on('pointermove', updateDestination)
     app.stage.once('pointerout', cleanup)
 
-    window.addEventListener(
-        'keydown',
-        e => {
-            if (e.key === 'Escape') cleanup()
-        },
-        false
-    )
+    const rightClickListener = (e: Event) => {
+        e.preventDefault()
+        cleanup()
+    }
+    window.addEventListener('contextmenu', rightClickListener)
+
+    const keydownListener = (e: KeyboardEvent) => {
+        e.preventDefault()
+        cleanup()
+        if (e.key === 'Escape') cleanup()
+    }
+    window.addEventListener('keydown', keydownListener, false)
 
     const arrow = TargetSelectGraphic(origin, destination)
     cardEl.addChild(arrow)
@@ -77,6 +82,10 @@ export function beginTargetSelection(
 
     function cleanup() {
         unsub()
+
+        removeEventListener('contextmenu', rightClickListener)
+        removeEventListener('keydown', keydownListener)
+
         selectedTargetsCursor.set([])
         app.stage.off('pointermove', updateDestination)
         cardEl.removeChild(arrow)
