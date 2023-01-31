@@ -42,6 +42,7 @@ import {
     RUN_SCORE_EVENT_META,
     ScoreTags,
     LeaderboardTimeframe,
+    LEADERBOARD_ENTRIES_TO_DISPLAY,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture, filters } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
@@ -56,8 +57,8 @@ const style = {
 }
 
 export const LeaderboardContainer = () => {
-    const currLeaderboardPage = datum(2)
-    const activeTimeToggle = datum<LeaderboardTimeToggle>('weekly')
+    const currLeaderboardPage = datum(0)
+    const activeTimeToggle = datum<LeaderboardTimeToggle>('daily')
     const scene = getBattleScene()
     const userId = scene.get('username')
 
@@ -68,10 +69,7 @@ export const LeaderboardContainer = () => {
         keys(allLeaderboards).forEach(_timeframe => {
             const timeframe = _timeframe as LeaderboardTimeframe
             const currBoard = allLeaderboards[timeframe]
-            const sortedBoard = sortBy(
-                currBoard,
-                entry => entry.leaderboard_rank
-            )
+            const sortedBoard = sortBy(currBoard, entry => entry.adjusted_rank)
             allLeaderboards[timeframe] = sortedBoard
         })
 
@@ -119,6 +117,18 @@ export const LeaderboardContainer = () => {
         }, true)
     })
 
+    const entryIsInRange = (idx: number, page: number): boolean => {
+        const lowerBound = page * LEADERBOARD_ENTRIES_PER_PAGE - 1
+        const upperBound =
+            LEADERBOARD_ENTRIES_PER_PAGE +
+            page * LEADERBOARD_ENTRIES_PER_PAGE
+
+        if (idx > lowerBound && idx < upperBound) {
+            return true
+        }
+        return false
+    }
+
     const LeaderboardEntries = Container({})
     const LeaderboardSelfEntry = Container({})
 
@@ -158,8 +168,22 @@ export const LeaderboardContainer = () => {
             )
         }
 
+        const goToPageWithEntry = (rank: number) => {
+            const pageWithEntry =
+                rank % LEADERBOARD_ENTRIES_PER_PAGE === 0
+                    ? Math.floor(rank / LEADERBOARD_ENTRIES_PER_PAGE) - 1
+                    : Math.floor(rank / LEADERBOARD_ENTRIES_PER_PAGE)
+            if (rank > LEADERBOARD_ENTRIES_TO_DISPLAY) {
+                return
+            } else {
+                currLeaderboardPage.set(pageWithEntry)
+            }
+        }
+
         return Container(
-            {},
+            {
+                onClick: isSelf && rank < LEADERBOARD_ENTRIES_TO_DISPLAY ? () => goToPageWithEntry(rank) : void 0,
+            },
             RoundedRectangleGradientSprite({
                 spriteArgs: {
                     width: 1550,
@@ -187,7 +211,7 @@ export const LeaderboardContainer = () => {
                         },
                         {
                             color: isSelf
-                                ? 0x2B8D63
+                                ? 0x2b8d63
                                 : rank % 2 > 0
                                 ? 0x212d40
                                 : 0x364156,
@@ -258,25 +282,14 @@ export const LeaderboardContainer = () => {
     ) => {
         clearContainer(LeaderboardEntries)
 
-        const entryIsInRange = (idx: number): boolean => {
-            const lowerBound = page * LEADERBOARD_ENTRIES_PER_PAGE - 1
-            const upperBound =
-                LEADERBOARD_ENTRIES_PER_PAGE +
-                page * LEADERBOARD_ENTRIES_PER_PAGE
-
-            if (idx > lowerBound && idx < upperBound) {
-                return true
-            }
-            return false
-        }
 
         let inScreenIdx = 0
         sortedLeaderboard.forEach((entry, idx) => {
             const entryIsCurrentUser = entry.is_self
-            if (!entryIsInRange(idx) && !entryIsCurrentUser) {
+            if (!entryIsInRange(idx, page) && !entryIsCurrentUser) {
                 return
             }
-            if (entryIsInRange(idx)) {
+            if (entryIsInRange(idx, page)) {
                 inScreenIdx++
                 LeaderboardEntries.addChild(
                     LeaderboardEntry(
@@ -284,7 +297,7 @@ export const LeaderboardContainer = () => {
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        entry.leaderboard_rank,
+                        entry.adjusted_rank,
                         false,
                         entry.teamComp ?? []
                     )
@@ -301,7 +314,7 @@ export const LeaderboardContainer = () => {
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        entry.leaderboard_rank,
+                        entry.adjusted_rank,
                         true,
                         entry.teamComp ?? []
                     )
@@ -408,7 +421,7 @@ export const LeaderboardContainer = () => {
 
     const PageDownArrow = Sprite({
         src: getTexture('upArrowSimple'),
-        tint: 0xFFFFFF,
+        tint: 0xffffff,
         name: 'PageDownArrow',
         rotation: 3.14,
         scale: 0.05,

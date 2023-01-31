@@ -267,8 +267,8 @@ export type LeaderboardEntry = {
     end_ts: number // unix ts
     run_id: RunID
     is_self: boolean
-    leaderboard_rank: number // use for self entry
-    adjusted_rank: number // use for top 100
+    leaderboard_rank: number // do not use
+    adjusted_rank: number // use for both top 100 and self entry
     all_characters?: string // in reality is of Characters type, after parsing
     teamComp?: CharacterId[]
 }
