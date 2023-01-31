@@ -211,7 +211,7 @@ export function EndOfRun(): PixiContainer {
     const NewHighScoreTag = () => {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 160,
+                width: 220,
                 height: 50,
                 anchor: [0, 0],
             },
@@ -219,18 +219,21 @@ export function EndOfRun(): PixiContainer {
             gradientArgs: {
                 x0: 0,
                 y0: 0,
-                x1: 0,
-                y1: 50,
-                colorStops: [{ color: 0x184777, offset: 0 }],
+                x1: 300,
+                y1: 20,
+                colorStops: [
+                    { color: 0x184777, offset: 0 },
+                    { color: 0x3BA1BA, offset: 1 }
+                ],
             },
         })
 
         const HighScoreText = Text({
-            text: 'HIGH SCORE',
+            text: '🎉  New High Score!',
             anchor: [0, 0],
             x: Background.width / 2,
             style: {
-                fill: 0xccdff5,
+                fill: 0xFFFFFF,
                 fontFamily: 'sansFont',
                 fontWeight: '300',
                 fontSize: 20,
@@ -240,8 +243,8 @@ export function EndOfRun(): PixiContainer {
         return Container(
             {
                 name: `HighScoreTag_Container`,
-                x: BASE_WIDTH / 2 - 110,
-                y: BASE_HEIGHT / 2 + 240,
+                x: BASE_WIDTH / 2 + 280,
+                y: BASE_HEIGHT / 2 + 242,
             },
             Background,
             Adjust(HighScoreText, {
@@ -254,7 +257,7 @@ export function EndOfRun(): PixiContainer {
     const TopPercentileTag = () => {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 110,
+                width: 150,
                 height: 50,
                 anchor: [0, 0],
             },
@@ -262,18 +265,21 @@ export function EndOfRun(): PixiContainer {
             gradientArgs: {
                 x0: 0,
                 y0: 0,
-                x1: 0,
-                y1: 50,
-                colorStops: [{ color: 0x084a35, offset: 0 }],
+                x1: 110,
+                y1: 20,
+                colorStops: [
+                    { color: 0x4FA003, offset: 0 },
+                    { color: 0x3A762E, offset: 1 }
+                ],
             },
         })
 
         const HighScoreText = Text({
-            text: 'TOP 3%',
+            text: '🚀  Top 1%',
             anchor: [0, 0],
             x: Background.width / 2,
             style: {
-                fill: 0xa1e3ce,
+                fill: 0xFFFFFF,
                 fontFamily: 'sansFont',
                 fontWeight: '100',
                 fontSize: 20,
@@ -283,8 +289,8 @@ export function EndOfRun(): PixiContainer {
         return Container(
             {
                 name: `TopPercentileTag_Container`,
-                x: BASE_WIDTH / 2 + 80,
-                y: BASE_HEIGHT / 2 + 240,
+                x: BASE_WIDTH / 2 + 280,
+                y: BASE_HEIGHT / 2 + 242,
             },
             Background,
             Adjust(HighScoreText, {
@@ -367,7 +373,7 @@ export function EndOfRun(): PixiContainer {
         TotalScoreTitle,
         TotalScore
     )
-
+    const Leaderboard = LeaderboardContainer()
 
     const handleLeaderboardToggle = (showLeaderboard: boolean) => {
         TogglableMainContainer.removeChildren()
@@ -375,7 +381,7 @@ export function EndOfRun(): PixiContainer {
 
         if (showLeaderboard) {
             TogglableButtonsContainer.addChild(CloseModalButton)
-            TogglableMainContainer.addChild(LeaderboardContainer())
+            TogglableMainContainer.addChild(Leaderboard)
         } else {
             TogglableMainContainer.addChild(ScoreElements)
             TogglableMainContainer.addChild(TotalScoreContainer)
