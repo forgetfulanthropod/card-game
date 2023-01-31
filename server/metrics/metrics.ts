@@ -18,7 +18,7 @@ export const startRun: ServerMetrics['startRun'] = args => {
     const { runId, username } = args
     let tags = {
         run_id: runId,
-        user_name: username,
+        user_id: username,
     }
     writeMetric('run_start', tags)
 }
@@ -34,7 +34,7 @@ export const endRun: ServerMetrics['endRun'] = args => {
         state: stateName,
         current_room: currentRoom,
         run_id: scene.runId,
-        user_name: scene.username,
+        user_id: scene.username,
     }
 
     const totalScore = scene.runScore.totalScore
