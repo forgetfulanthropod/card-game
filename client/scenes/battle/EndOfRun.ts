@@ -327,9 +327,8 @@ export function EndOfRun(): PixiContainer {
     const CloseModalButton = Sprite({
         src: getTexture('closeButton'),
         // anchor: [0.5, 0.5],
-        y: BASE_HEIGHT / 2 - 500,
-        x: BASE_WIDTH / 2 + 700,
-        scale: 0.4,
+        y: BASE_HEIGHT / 2 - 445,
+        x: BASE_WIDTH / 2 + 755,
         onClick: () => {
             showLeaderboard.set(!showLeaderboard.val)
         },

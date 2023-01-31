@@ -21,11 +21,16 @@ export const rootAssets = {
     endTurnButton: 'core-ui/newEndTurn.png',
     confirmButton: 'core-ui/newConfirm.png',
     skipButton: 'core-ui/newSkip.png',
-    closeButton: 'core-ui/closeButton.png',
+    closeButton: 'core-ui/xButton.png',
     leaderboardButton: 'core-ui/leaderboard.png',
     tryAgainButton: 'core-ui/newTryAgain.png',
     abilityButton: 'core-ui/ability pill.svg',
     goButton: 'core-ui/go.webp',
+    leftArrow: 'core-ui/leftArrow.png',
+    rightArrow: 'core-ui/rightArrow.png',
+    upArrow: 'core-ui/upArrow.png',
+    upArrowSimple: 'core-ui/upArrowSimple.png',
+    downArrow: 'core-ui/downArrow.png'
 }
 
 export const fontAssets = {

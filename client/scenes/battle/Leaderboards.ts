@@ -43,7 +43,7 @@ import {
     ScoreTags,
     LeaderboardTimeframe,
 } from 'shared'
-import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
+import { DisplayObject, ITextStyle, Texture, filters } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
 import { keys, round, sortBy } from 'lodash'
 import { collectData } from '@/analytics/collectData'
@@ -56,8 +56,8 @@ const style = {
 }
 
 export const LeaderboardContainer = () => {
-    const currLeaderboardPage = datum(0)
-    const activeTimeToggle = datum<LeaderboardTimeToggle>('daily')
+    const currLeaderboardPage = datum(2)
+    const activeTimeToggle = datum<LeaderboardTimeToggle>('weekly')
     const scene = getBattleScene()
     const userId = scene.get('username')
 
@@ -172,18 +172,26 @@ export const LeaderboardContainer = () => {
                 },
                 radius: 30,
                 gradientArgs: {
-                    x0: 0,
+                    x0: 100,
                     y0: 0,
-                    x1: 0,
-                    y1: 100,
+                    x1: 1400,
+                    y1: 50,
                     colorStops: [
                         {
                             color: isSelf
-                                ? 0x7d4e57
+                                ? 0x126936
                                 : rank % 2 > 0
                                 ? 0x212d40
                                 : 0x364156,
                             offset: 0,
+                        },
+                        {
+                            color: isSelf
+                                ? 0x2B8D63
+                                : rank % 2 > 0
+                                ? 0x212d40
+                                : 0x364156,
+                            offset: 1,
                         },
                     ],
                 },
@@ -389,25 +397,35 @@ export const LeaderboardContainer = () => {
         }
     }
 
-    const PageUpArrow = Text({
+    // const PageUpArrow = Sprite({
+    //     src: getTexture('upArrowSimple'),
+    //     tint: 0x000000,
+    //     name: 'PageUpArrow',
+    //     scale: 0.2,
+    //     x: BASE_WIDTH / 2 + 780,
+    //     y: BASE_HEIGHT / 2 - 215,
+    //     onClick: () => changeLeaderboardPage('prev'),
+    // })
+
+    // const invertFilter = new filters.ColorMatrixFilter()
+    // PageUpArrow.filters = [invertFilter]
+    // invertFilter.negative(true)
+
+    const PageUpArrow = Sprite({
+        src: getTexture('upArrow'),
         name: 'PageUpArrow',
-        text: '⬆️',
-        x: BASE_WIDTH / 2 + 785,
-        y: BASE_HEIGHT / 2 - 250,
-        style: {
-            fontSize: 42,
-        },
+        scale: 0.8,
+        x: BASE_WIDTH / 2 + 780,
+        y: BASE_HEIGHT / 2 - 215,
         onClick: () => changeLeaderboardPage('prev'),
     })
 
-    const PageDownArrow = Text({
+    const PageDownArrow = Sprite({
         name: 'PageDownArrow',
-        text: '⬇️',
-        x: BASE_WIDTH / 2 + 785,
-        y: BASE_HEIGHT / 2 + 215,
-        style: {
-            fontSize: 42,
-        },
+        src: getTexture('downArrow'),
+        scale: 0.8,
+        x: BASE_WIDTH / 2 + 780,
+        y: BASE_HEIGHT / 2 + 185,
         onClick: () => changeLeaderboardPage('next'),
     })
 
