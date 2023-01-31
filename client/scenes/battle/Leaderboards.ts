@@ -41,7 +41,7 @@ import {
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
     ScoreTags,
-    Timeframe,
+    LeaderboardTimeframe,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
@@ -66,7 +66,7 @@ export const LeaderboardContainer = () => {
     }).then(allLeaderboards => {
         // sort leaderboards in place
         keys(allLeaderboards).forEach(_timeframe => {
-            const timeframe = _timeframe as Timeframe
+            const timeframe = _timeframe as LeaderboardTimeframe
             const currBoard = allLeaderboards[timeframe]
             const sortedBoard = sortBy(
                 currBoard,
@@ -276,7 +276,7 @@ export const LeaderboardContainer = () => {
                         entry.highest_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        idx + 1,
+                        entry.leaderboard_rank,
                         false,
                         entry.teamComp ?? []
                     )
@@ -293,7 +293,7 @@ export const LeaderboardContainer = () => {
                         entry.highest_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        idx + 1,
+                        entry.leaderboard_rank,
                         true,
                         entry.teamComp ?? []
                     )

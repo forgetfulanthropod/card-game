@@ -255,7 +255,7 @@ export type MappedLeaderboards = {
     [key in LeaderboardTimeToggle]: Leaderboard
 }
 
-export type Timeframe = keyof MappedLeaderboards
+export type LeaderboardTimeframe = keyof MappedLeaderboards
 
 export type Leaderboard = readonly LeaderboardEntry[]
 
@@ -267,6 +267,7 @@ export type LeaderboardEntry = {
     end_ts: number // unix ts
     run_id: RunID
     is_self: boolean
+    leaderboard_rank: number
     all_characters?: string // in reality is of Characters type, before parsing
     teamComp?: CharacterId[]
 }

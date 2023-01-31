@@ -9,6 +9,7 @@ import {
     PlayerCharacterId,
     RunID,
     ServerActions,
+    LeaderboardTimeframe,
 } from 'shared'
 import { getDbClient, sql as sqlTag } from '../db/client'
 
@@ -20,163 +21,86 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
 
     logger.info(`Getting leaderboards for ${userId}`)
 
-    //TODO add rank to sql return
-    const allTimeLeaderboard: Leaderboard = await connection.any(sql`
-        WITH
-            max_run_self AS
-            (   SELECT
-                    true as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    user_id = ${userId}
-            )
-        SELECT
-            *
-        FROM
-            (   SELECT
-                    CASE
-                        WHEN user_id = ${userId} THEN true
-                        ELSE false
-                    END as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                ORDER BY
-                    highest_score DESC
-                LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS max_run_all
+    const getLeaderboardByTimeframe = async (
+        timeframe: LeaderboardTimeframe
+    ): Promise<Leaderboard> => {
+        const whereFragment =
+            timeframe === 'daily'
+                ? sqlTag.fragment`WHERE
+                end_ts > now() - interval '1 days'`
+                : timeframe === 'weekly'
+                ? sqlTag.fragment`WHERE
+                end_ts > now() - interval '7 days'`
+                : sqlTag.fragment``
 
-        WHERE
-            max_run_all.is_self is false
-        UNION
-
-        SELECT
-            *
-        FROM
-            max_run_self
-        ORDER BY
-            highest_score DESC;
-    `)
-
-    const weeklyLeaderboard: Leaderboard = await connection.any(sql`
-        WITH
-            max_run_self AS
-            (   SELECT
-                    true as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    user_id = ${userId}
-                AND
-                    end_ts > now() - interval '7 days'
-            )
-        SELECT
-            *
-        FROM
-            (   SELECT
-                    CASE
-                        WHEN user_id = ${userId} THEN true
-                        ELSE false
-                    END as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    end_ts > now() - interval '7 days'
-                ORDER BY
-                    highest_score DESC
-                LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY}
-        ) AS max_run_all
-        WHERE
-            max_run_all.is_self is false
-
-        UNION
-
-        SELECT
-            *
-        FROM
-            max_run_self
-        ORDER BY
-            highest_score DESC;
-    `)
-
-    const dailyLeaderboard: Leaderboard = await connection.any(sql`
-    WITH
-        max_run_self AS
-        (   SELECT
-                true as is_self,
-                wallet_address,
-                highest_score,
-                start_ts,
-                end_ts,
-                run_id,
-                all_characters
+        return await connection.any(sql`
+            WITH
+                user_run_leaderboards AS
+                (   SELECT
+                        ROW_NUMBER() over(ORDER BY u.run_score DESC) AS leaderboard_rank,
+                        CASE
+                            WHEN u.user_id = ${userId}
+                            THEN true
+                            ELSE false
+                        END AS is_self,
+                        i.wallet_address,
+                        MAX(u.run_score) AS highest_score,
+                        u.start_ts,
+                        u.end_ts,
+                        u.run_id,
+                        u.game_state -> 'scene' ->> 'allCharacters' AS all_characters
+                    FROM
+                        user_run u
+                    JOIN
+                        (   SELECT
+                                user_id,
+                                MAX(run_score) AS max_score
+                            FROM
+                                user_run
+                            ${whereFragment}
+                            GROUP BY
+                                user_id ) s
+                    ON
+                        u.user_id = s.user_id
+                    AND u.run_score = s.max_score
+                    JOIN
+                        user_info i
+                    ON
+                        u.user_id = i.user_id
+                    WHERE
+                        run_status = 'won'
+                    OR  run_status = 'lost'
+                    GROUP BY
+                        u.user_id,
+                        u.end_ts,
+                        u.run_id,
+                        i.wallet_address
+                    ORDER BY
+                        highest_score DESC
+                )
+            SELECT
+                *
             FROM
-                user_run_leaderboard
-            WHERE
-                user_id = ${userId}
-            AND
-                end_ts > now() - interval '1 day'
-        )
-    SELECT
-        *
-    FROM
-        (   SELECT
-                CASE
-                    WHEN user_id = ${userId} THEN true
-                    ELSE false
-                END as is_self,
-                wallet_address,
-                highest_score,
-                start_ts,
-                end_ts,
-                run_id,
-                all_characters
-            FROM
-                user_run_leaderboard
-            WHERE
-                end_ts > now() - interval '1 day'
-            ORDER BY
-                highest_score DESC
-            LIMIT
-                ${LEADERBOARD_ENTRIES_TO_DISPLAY}
-    ) AS max_run_all
+                (   SELECT
+                        *
+                    FROM
+                        user_run_leaderboards
+                    LIMIT
+                        ${LEADERBOARD_ENTRIES_TO_DISPLAY}) AS all_leaderboard
 
-    WHERE
-            max_run_all.is_self is false
-    UNION
+            UNION
+                (   SELECT
+                        *
+                    FROM
+                        user_run_leaderboards
+                    WHERE
+                        is_self = true);
+        `)
+    }
 
-    SELECT
-        *
-    FROM
-        max_run_self
-    ORDER BY
-        highest_score DESC;
-    `)
+    const allTimeLeaderboard = getLeaderboardByTimeframe('allTime')
+    const weeklyLeaderboard = getLeaderboardByTimeframe('weekly')
+    const dailyLeaderboard = getLeaderboardByTimeframe('daily')
 
     const allLeaderboards = await Promise.all([
         allTimeLeaderboard,
