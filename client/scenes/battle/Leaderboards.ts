@@ -155,7 +155,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 radius: 30,
                 gradientArgs: {
                     x0: -800,
-                    x1: 400,
+                    x1: 1000,
                     y0: 0,
                     y1: -65,
                     colorStops: [
@@ -168,7 +168,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                                     : rank === 3
                                     ? 0x9d6758
                                     : isSelf
-                                    ? 0x126936
+                                    ? 0x2b8d63
                                     : rank % 2 > 0
                                     ? 0x212d40
                                     : 0x364156,
@@ -176,7 +176,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                         },
                         {
                             color: isSelf
-                                ? 0x2b8d63
+                                ? 0x126936
                                 : rank % 2 > 0
                                 ? 0x212d40
                                 : 0x364156,

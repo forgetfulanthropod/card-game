@@ -38,14 +38,13 @@ import { LeaderboardContainer } from './Leaderboards'
 import { Easing, Tweener } from 'pixi-tweener'
 
 const slamAnimateElIntoScreen = async (
-    el: TweenablePixiContainer,
-    result: 'won' | 'lost'
+    el: TweenablePixiContainer
 ) => {
     await Tweener.add(
         {
             target: el,
             duration: 1,
-            ease: result === 'won' ? Easing.bouncePast : Easing.bounce,
+            ease: Easing.bouncePast,
         },
         {
             alpha: 1,
@@ -88,17 +87,17 @@ const expandOut = async (el: TweenablePixiContainer) => {
 
 const slideAndFadeOut = async (
     el: TweenablePixiContainer,
-    result: 'won' | 'lost'
+    result: BattleWinState
 ) => {
     await Tweener.add(
         {
             target: el,
             duration: 1,
-            ease: result === 'lost' ? Easing.bounce : Easing.bounce,
+            ease: result === 'lost' ? Easing.bounce : Easing.easeFromTo,
         },
         {
             alpha: 0,
-            y: BASE_HEIGHT / 2,
+            y: result === 'lost' ? BASE_HEIGHT / 2 : 0,
         }
     )
 }
@@ -581,13 +580,12 @@ export function EndOfRun(): PixiContainer {
         TogglableMainContainer.addChild(ScoreElementsBackground)
         TogglableMainContainer.addChild(RunResultBanner)
         TogglableMainContainer.addChild(TotalScoreContainer)
-        await slamAnimateElIntoScreen(RunResultBanner, 'lost')
+        await slamAnimateElIntoScreen(RunResultBanner)
         await new Promise(resolve => setTimeout(() => resolve(void 0), 500))
-        await slideAndFadeOut(RunResultBanner, 'lost')
+        await slideAndFadeOut(RunResultBanner, battleState)
         Adjust(RunResultBanner, {
-            y: -25,
-            x: BASE_WIDTH / 2 - (RunResultBanner.width / 2) * 0.25 - 70,
-            scale: 0.25,
+            x: BASE_WIDTH / 2 - (RunResultBanner.width / 2) * 0.2 - 50,
+            scale: 0.2,
         })
         await expandOut(ScoreElementsBackground)
         await fadeElementIn(RunResultBanner, 'slow')
