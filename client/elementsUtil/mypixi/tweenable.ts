@@ -10,6 +10,22 @@ export class TweenablePixiContainer extends PixiContainer {
     get tweenableScale() {
         return this.scale.x
     }
+
+    set tweenableScaleX(scale: number) {
+        this.scale.set(scale, this.scale.y)
+    }
+
+    get tweenableScaleX() {
+        return this.scale.x
+    }
+
+    set tweenableScaleY(scale: number) {
+        this.scale.set(this.scale.x, scale)
+    }
+
+    get tweenableScaleY() {
+        return this.scale.y
+    }
 }
 export function TweenableContainer(
     args: ContainerArgs,

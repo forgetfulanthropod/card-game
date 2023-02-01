@@ -62,6 +62,7 @@ export const LeaderboardContainer = () => {
     const scene = getBattleScene()
     const userId = scene.get('username')
 
+    /** @BUG client is calling this before endRun so the current run won't show up in the leaderboards (unless you refresh) */
     callServerApi('getLeaderboard', {
         userId,
     }).then(allLeaderboards => {
