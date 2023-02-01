@@ -121,8 +121,7 @@ export const LeaderboardContainer = () => {
     const entryIsInRange = (idx: number, page: number): boolean => {
         const lowerBound = page * LEADERBOARD_ENTRIES_PER_PAGE - 1
         const upperBound =
-            LEADERBOARD_ENTRIES_PER_PAGE +
-            page * LEADERBOARD_ENTRIES_PER_PAGE
+            LEADERBOARD_ENTRIES_PER_PAGE + page * LEADERBOARD_ENTRIES_PER_PAGE
 
         if (idx > lowerBound && idx < upperBound) {
             return true
@@ -183,7 +182,10 @@ export const LeaderboardContainer = () => {
 
         return Container(
             {
-                onClick: isSelf && rank < LEADERBOARD_ENTRIES_TO_DISPLAY ? () => goToPageWithEntry(rank) : void 0,
+                onClick:
+                    isSelf && rank < LEADERBOARD_ENTRIES_TO_DISPLAY
+                        ? () => goToPageWithEntry(rank)
+                        : void 0,
             },
             RoundedRectangleGradientSprite({
                 spriteArgs: {
@@ -282,7 +284,6 @@ export const LeaderboardContainer = () => {
         page: number
     ) => {
         clearContainer(LeaderboardEntries)
-
 
         let inScreenIdx = 0
         sortedLeaderboard.forEach((entry, idx) => {
@@ -440,12 +441,12 @@ export const LeaderboardContainer = () => {
 
     const LeaderboardSign = TweenableContainer(
         {
-            x: 290,
-            y: -275,
-            scale: 0.35,
+            x: 679.5,
+            y: 30,
+            scale: 0.3,
         },
         Sprite({
-            src: getTexture('roomClearedSign'),
+            src: getTexture('leaderboardBanner'),
         })
     )
 

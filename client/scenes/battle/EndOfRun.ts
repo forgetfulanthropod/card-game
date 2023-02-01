@@ -60,7 +60,7 @@ const expandOut = async (el: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: el,
-            duration: 0.6,
+            duration: 0.5,
             ease: Easing.swingFromTo,
         },
         {
@@ -74,7 +74,7 @@ const expandOut = async (el: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: el,
-            duration: 0.6,
+            duration: 0.5,
             ease: Easing.swingFromTo,
         },
         {
@@ -575,8 +575,6 @@ export function EndOfRun(): PixiContainer {
 
         // All initial addChild are done manually instead of auto-run on datum change, as otherwise score explanations appear on hover while Defeat Banner is animating
         TogglableMainContainer.addChild(ScoreElementsBackground)
-        TogglableButtonsContainer.addChild(TryAgainButton)
-        TogglableButtonsContainer.addChild(ShowLeaderboardButton)
         TogglableMainContainer.addChild(RunResultBanner)
         TogglableMainContainer.addChild(TotalScoreContainer)
         await slamAnimateElIntoScreen(RunResultBanner, 'lost')
@@ -592,6 +590,8 @@ export function EndOfRun(): PixiContainer {
         TogglableMainContainer.addChild(ScoreElements)
         await fadeChildrenIn(ScoreElements, 'sync', 'fast')
         await fadeChildrenIn(TotalScoreContainer, 'async', 'slow')
+        TogglableButtonsContainer.addChild(TryAgainButton)
+        TogglableButtonsContainer.addChild(ShowLeaderboardButton)
         await fadeChildrenIn(TogglableButtonsContainer, 'async', 'slow')
         await animateNumberInElement(
             TotalScore,
