@@ -28,11 +28,11 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
         const whereFragment =
             timeframe === 'daily'
                 ? sqlTag.fragment`WHERE
-                extract(day from end_ts) = extract(day from now())`
+                extract(day from end_ts) = extract(day from now()) AND (run_status = 'won' OR run_status = 'lost')`
                 : timeframe === 'weekly'
                 ? sqlTag.fragment`WHERE
-                end_ts > now() - interval '7 days'`
-                : sqlTag.fragment``
+                end_ts > now() - interval '7 days' AND (run_status = 'won' OR run_status = 'lost')`
+                : sqlTag.fragment`WHERE run_status = 'won' OR run_status = 'lost'`
 
         return await connection.any(sql`
             WITH

@@ -98,6 +98,9 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             : BASE_HEIGHT / 2 - 165 + 105 * inScreenIdx
         const x = BASE_WIDTH / 2
         const date = new Date(endTime)
+        const displayedRank =
+            rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ``
+        const isTopScore = [1, 2, 3].includes(rank)
 
         // TODO: CHANGE TO ACTUAL CHARACTER TEXTURE
         const renderTeamCompUnit = (idx: number, characterId: CharacterId) => {
@@ -151,17 +154,24 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 },
                 radius: 30,
                 gradientArgs: {
-                    x0: 100,
+                    x0: -800,
+                    x1: 400,
                     y0: 0,
-                    x1: 1400,
-                    y1: 50,
+                    y1: -65,
                     colorStops: [
                         {
-                            color: isSelf
-                                ? 0x126936
-                                : rank % 2 > 0
-                                ? 0x212d40
-                                : 0x364156,
+                            color:
+                                rank === 1
+                                    ? 0xc99e50
+                                    : rank === 2
+                                    ? 0xaaa9ad
+                                    : rank === 3
+                                    ? 0x9d6758
+                                    : isSelf
+                                    ? 0x126936
+                                    : rank % 2 > 0
+                                    ? 0x212d40
+                                    : 0x364156,
                             offset: 0,
                         },
                         {
@@ -175,12 +185,19 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                     ],
                 },
             }),
-            Text({
-                text: `${rank}.`,
-                y: y - 10,
-                x: x - 700,
-                style,
-            }),
+            isTopScore
+                ? Text({
+                      text: `${displayedRank}`,
+                      y: y - 30,
+                      x: x - 718,
+                      style: { ...style, fontSize: 60 },
+                  })
+                : Text({
+                      text: `${rank}.`,
+                      y: y - 10,
+                      x: x - 700,
+                      style,
+                  }),
             Text({
                 text:
                     getShortWalletAddress(walletAddress) +
