@@ -1,18 +1,6 @@
-import { sample, sampleSize } from 'lodash'
-import type {
-    DungeonRoom,
-    DungeonRoomMap,
-    DungeonRoomMaps,
-    NonPlayerCharacterId,
-    RoomCategoryId,
-    RoomEnemies,
-} from 'shared'
-import { keys, throwNull } from 'shared/code'
+import type { DungeonRoomMaps, RoomCategoryId, RoomEnemies } from 'shared'
+import { keys } from 'shared/code'
 import { srandInt } from '@/util'
-// - Room 1:  Two level 1 Skeletons, One level 1 Matcha
-// - Room 2: Two level 1 Matchas, One level 2 Skeleton
-// - Room 3: Two Level 2 Skeletons, One Level 2 Matcha
-// - Room 4: Boss (maybe warhog)
 
 const config = { randomDungeon: false }
 
