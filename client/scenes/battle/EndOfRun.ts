@@ -503,13 +503,13 @@ export function EndOfRun(): PixiContainer {
         TotalScoreTitle,
         TotalScore
     )
-    const Leaderboard = LeaderboardContainer()
+
+    let Leaderboard: PixiContainer<DisplayObject> | null = null
 
     const handleLeaderboardToggle = (showLeaderboard: boolean) => {
         TogglableMainContainer.removeChildren()
         TogglableButtonsContainer.removeChildren()
-
-        if (showLeaderboard) {
+        if (showLeaderboard && Leaderboard) {
             TogglableButtonsContainer.addChild(CloseModalButton)
             TogglableMainContainer.addChild(Leaderboard)
         } else {
@@ -560,6 +560,10 @@ export function EndOfRun(): PixiContainer {
             }
         }
 
+        const mappedLeaderboard = await callServerApi('getLeaderboard', {
+            userId,
+        })
+        Leaderboard = LeaderboardContainer(mappedLeaderboard)
         const runScoreAttributes = scene.get('runScore').attributes
 
         for (let attribute in runScoreAttributes) {

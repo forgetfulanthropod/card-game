@@ -56,66 +56,21 @@ const style = {
     fontFamily: 'monoFont',
 }
 
-export const LeaderboardContainer = () => {
+export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
     const currLeaderboardPage = datum(0)
-    const activeTimeToggle = datum<LeaderboardTimeToggle>('daily')
+    const activeTimeframe = datum<LeaderboardTimeframe>('daily')
     const scene = getBattleScene()
     const userId = scene.get('username')
 
-    /** @BUG client is calling this before endRun so the current run won't show up in the leaderboards (unless you refresh) */
-    callServerApi('getLeaderboard', {
-        userId,
-    }).then(allLeaderboards => {
-        // sort leaderboards in place
-        keys(allLeaderboards).forEach(_timeframe => {
-            const timeframe = _timeframe as LeaderboardTimeframe
-            const currBoard = allLeaderboards[timeframe]
-            const sortedBoard = sortBy(currBoard, entry => entry.adjusted_rank)
-            allLeaderboards[timeframe] = sortedBoard
-        })
+    const LeaderboardEntries = Container({})
+    const LeaderboardSelfEntry = Container({})
 
-        // refreshes leaderboard entries and nav arrows when user toggles timeframe
-        activeTimeToggle.onChange(newVal => {
-            clearContainer(LeaderboardEntries)
-            clearContainer(LeaderboardSelfEntry)
-
-            // change twice to force trigger a refresh on nav arrows if prev page was 0
-            currLeaderboardPage.set(1)
-            currLeaderboardPage.set(0)
-            renderLeaderboardsPage(
-                allLeaderboards[newVal],
-                currLeaderboardPage.val
-            )
-
-            clearContainer(LeaderboardContextMenu)
-            LeaderboardContextMenu.addChild(
-                createTimeToggle('daily'),
-                createTimeToggle('weekly'),
-                createTimeToggle('allTime')
-            )
-        }, true)
-
-        // checks number of total entries vs currently displayed to display or hide nav arrows
-        currLeaderboardPage.onChange(newPage => {
-            LeaderboardNavArrows.removeChildren()
-
-            const currLeaderboards = allLeaderboards[activeTimeToggle.val]
-            const currMaxEntryDisplayed =
-                newPage * LEADERBOARD_ENTRIES_PER_PAGE +
-                LEADERBOARD_ENTRIES_PER_PAGE
-            const currMinEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE
-
-            // currLeaderboards is of length === 101 when currUser is not in top 100
-            if (currMaxEntryDisplayed < currLeaderboards.length - 1) {
-                LeaderboardNavArrows.addChild(PageDownArrow)
-            }
-
-            if (currMinEntryDisplayed > 0) {
-                LeaderboardNavArrows.addChild(PageUpArrow)
-            }
-
-            renderLeaderboardsPage(currLeaderboards, newPage)
-        }, true)
+    // sort leaderboards in place
+    keys(allLeaderboards).forEach(_timeframe => {
+        const timeframe = _timeframe as LeaderboardTimeframe
+        const currBoard = allLeaderboards[timeframe]
+        const sortedBoard = sortBy(currBoard, entry => entry.adjusted_rank)
+        allLeaderboards[timeframe] = sortedBoard
     })
 
     const entryIsInRange = (idx: number, page: number): boolean => {
@@ -128,9 +83,6 @@ export const LeaderboardContainer = () => {
         }
         return false
     }
-
-    const LeaderboardEntries = Container({})
-    const LeaderboardSelfEntry = Container({})
 
     const LeaderboardEntry = (
         walletAddress: string,
@@ -365,7 +317,7 @@ export const LeaderboardContainer = () => {
             {
                 name: `${text}_Container`,
                 y: BASE_HEIGHT / 2 - 335,
-                onClick: () => activeTimeToggle.set(id),
+                onClick: () => activeTimeframe.set(id),
             },
             Background,
             Adjust(TimeToggleText, {
@@ -376,7 +328,7 @@ export const LeaderboardContainer = () => {
     }
 
     const createTimeToggle = (toggledValue: LeaderboardTimeToggle) => {
-        const isActive = activeTimeToggle.val === toggledValue
+        const isActive = activeTimeframe.val === toggledValue
         switch (toggledValue) {
             case 'daily':
                 return Adjust(
@@ -485,6 +437,46 @@ export const LeaderboardContainer = () => {
         LeaderboardSelfEntry,
         LeaderboardSign
     )
+
+    // refreshes leaderboard entries and nav arrows when user toggles timeframe
+    activeTimeframe.onChange(newVal => {
+        clearContainer(LeaderboardEntries)
+        clearContainer(LeaderboardSelfEntry)
+
+        // change twice to force trigger a refresh on nav arrows if prev page was 0
+        currLeaderboardPage.set(1)
+        currLeaderboardPage.set(0)
+        renderLeaderboardsPage(allLeaderboards[newVal], currLeaderboardPage.val)
+
+        clearContainer(LeaderboardContextMenu)
+        LeaderboardContextMenu.addChild(
+            createTimeToggle('daily'),
+            createTimeToggle('weekly'),
+            createTimeToggle('allTime')
+        )
+    }, true)
+
+    // checks number of total entries vs currently displayed to display or hide nav arrows
+    currLeaderboardPage.onChange(newPage => {
+        LeaderboardNavArrows.removeChildren()
+
+        const currLeaderboards = allLeaderboards[activeTimeframe.val]
+        const currMaxEntryDisplayed =
+            newPage * LEADERBOARD_ENTRIES_PER_PAGE +
+            LEADERBOARD_ENTRIES_PER_PAGE
+        const currMinEntryDisplayed = newPage * LEADERBOARD_ENTRIES_PER_PAGE
+
+        // currLeaderboards is of length === 101 when currUser is not in top 100
+        if (currMaxEntryDisplayed < currLeaderboards.length - 1) {
+            LeaderboardNavArrows.addChild(PageDownArrow)
+        }
+
+        if (currMinEntryDisplayed > 0) {
+            LeaderboardNavArrows.addChild(PageUpArrow)
+        }
+
+        renderLeaderboardsPage(currLeaderboards, newPage)
+    }, true)
 
     return LeaderboardContainer
 }
