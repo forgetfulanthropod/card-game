@@ -83,16 +83,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'bard',
     },
-    strike: {
-        name: 'Attack',
-        energy: 1,
-        id: 'strike',
-        targetNum: 1,
-        targetType: 'enemies',
-        actions: 'deal(strength)',
-        type: 'attack',
-        characterClass: 'knight',
-    },
     zap: {
         name: 'Zap!',
         energy: 2,

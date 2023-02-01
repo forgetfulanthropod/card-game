@@ -117,6 +117,32 @@ const interpretCommandSuite = {
                 originalScene.allCharacters[pc1].strength
         )
     },
+    heal() {
+        const scene = freshBattleScene()
+        interpretCommand({
+            command: makeCmd(npc1, 'deal(10)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(5)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].health - 5
+        )
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(999)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].constitution
+        )
+    },
     // effect() {},
     ifDamageDealt() {
         const scene = freshBattleScene()
@@ -217,18 +243,6 @@ const interpretCommandSuite = {
     // orb() {},
     // queue() {},
     // text() {},
-} as const
-
-const _effectsSuite = {
-    bleed() {},
-    debilitated() {},
-    fatigue() {},
-    poison() {},
-    stunned() {},
-    unguarded() {},
-    vulnerable() {},
-    strongblock() {},
-    smallDamageIncrease() {},
 } as const
 
 const explainSuite = {
