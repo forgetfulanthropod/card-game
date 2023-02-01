@@ -30,9 +30,9 @@ export const keyTermsMap = {
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 
-    grudge: 'intentGrudge',
-    infectiousBite: 'unblocked damage becomes Poison',
-    mimicAttack: 'deal 999 or copies the last hit taken this turn',
+    // grudge: 'intentGrudge',
+    // infectiousBite: 'unblocked damage becomes Poison',
+    // mimicAttack: 'deal 999 or copies the last hit taken this turn',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
@@ -40,12 +40,13 @@ export const keyTermsMap = {
     brave: 'deals 15% more damage',
     courageous: 'deals 25% more damage',
     debilitated: 'deals 50% less damage',
-    entranced: 'increases Magic by 1 per stack',
+    entranced: 'increases Magic by (N)',
     fatigued: 'deals 25% less damage',
     fortified: 'receives 50% more block',
     guarded: 'receives 25% less damage',
-    poisoned: '(unblockable) receives 1 damage per stack',
+    poisoned: '(unblockable) receives (N) damage',
     piercing: 'ignores block',
+    reflect: 'reflects up to (N) to attacker',
     strongblock: 'receives 50% more block',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 5 extra damage',

@@ -18,14 +18,13 @@ const ButtonGroup = styled.div`
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 0.3;
     & * {
-        background-color: #04aa6d; /* Green background */
-        border: 1px solid green; /* Green border */
+        background: none; /* no background */
         color: white; /* White text */
-        padding: 6px 12px; /* Some padding */
+        padding: 6px 20px; /* Some padding */
         cursor: pointer; /* Pointer/hand icon */
         float: left; /* Float the buttons side by side */
+        opacity: 0.3;
     }
 
     & *:not(:last-child) {
@@ -41,6 +40,7 @@ const ButtonGroup = styled.div`
 
     /* Add a background color on hover */
     & *:hover {
+        border-radius: 0 0 12px 12px;
         opacity: 1;
         background-color: #3e8e41;
     }

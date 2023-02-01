@@ -2,6 +2,7 @@ import type {
     CharacterId,
     CharacterPlaceIndex,
     CharacterStats,
+    CharacterUid,
     OwnedCharacterStats,
     SelectedCharacters,
 } from 'shared'
@@ -17,7 +18,11 @@ import {
     Adjust,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
-import { hoveredCharacterUid, onUpdate } from '@/util'
+import {
+    hoveredCharacterStatsOverride,
+    hoveredCharacterUid,
+    onUpdate,
+} from '@/util'
 import { getEntryScene } from '@/data'
 import { AdjustmentFilter } from 'pixi-filters'
 
@@ -30,6 +35,7 @@ export function CharacterOptions() {
     })
     const allCharacterOptions = getEntryScene().get('allCharacterOptions')
 
+    let lastHoveredCharacterUid: CharacterUid | null = null
     const options = allCharacterOptions.map((c, index) => {
         const width = 115
         const margin = width * 0.2
@@ -47,6 +53,12 @@ export function CharacterOptions() {
                 x: 78 + (index % 2) * (width + margin),
                 y: 54 + Math.floor(index / 2) * (width + margin),
                 events: {
+                    pointerover() {
+                        hoveredCharacterStatsOverride.set(c)
+                    },
+                    pointerout() {
+                        hoveredCharacterStatsOverride.set(null)
+                    },
                     pointerup() {
                         chooseOwnedCharacterAt(
                             index,

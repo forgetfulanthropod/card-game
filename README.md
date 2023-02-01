@@ -1,6 +1,7 @@
 # kaiju
 
-This [repo](https://github.com/kaijucards/kaiju) is the primary repository for the Kaiju Cards NFT game.
+This is the primary repository for Kaiju Cards.
+It is a monorepo with a local build delineated in `.vscode/tasks.json` or `cmd+shift+b` in vscode.
 
 ## Pattern language
 

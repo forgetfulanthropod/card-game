@@ -461,10 +461,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Testudo Formation',
         energy: 1,
         id: 'testudoFormation',
-        targetNum: 1,
-        targetType: 'friends',
-        actions:
-            'ifStance("avoidant", chain(addBlock(defense), effect("strongblock", 1)))',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: `
+            defensey = defense;
+            ifStance(
+                "avoidant",
+                chain(
+                    addBlock(defensey),
+                    effect("strongblock", 1, "allFriends")
+                )
+            )`,
         type: 'utility',
         characterClass: 'knight',
     },

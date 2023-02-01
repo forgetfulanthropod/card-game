@@ -45,9 +45,14 @@ function isPlayable({
 }): boolean {
     if (getEnergy(card) > scene.get('energy')) return false
 
+    const requiredStance = card.actions.match(
+        /ifStance[^(]*\([^"]*"([^"]+)/
+    )?.[1]
+
     if (
-        card.id === 'patientAmbush' &&
-        scene.get('allCharacters', card.characterUid, 'stance') !== 'avoidant'
+        requiredStance &&
+        scene.get('allCharacters', card.characterUid, 'stance') !==
+            requiredStance
     )
         return false
 
