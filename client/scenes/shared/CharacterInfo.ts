@@ -162,11 +162,6 @@ export function CharacterInfo(cm: CharacterMeta) {
 
     if (abilities == null) throw new Error('PCs need abilities!')
 
-    // TODO: figure out why IfHideShow is breaking in entry scene after adding this to battle scene..
-    // return IfHideShow(
-    //     compose(([uid]) => uid === cm?.uid, hoveredCharacterUid),
-    //     FullInfoBox({ cm, abilities })
-    // )
     return FullInfoBox({ cm, abilities })
 }
 
@@ -199,7 +194,6 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
     const whiteOutlineFilter = new OutlineFilter(5, 0xbbbbbb)
     const mainPadding = 40
 
-    console.log('trying to show full info box with cm', { cm: props.cm })
     return InfoBox(
         Container(
             {},

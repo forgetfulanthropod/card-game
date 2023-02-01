@@ -54,7 +54,7 @@ export const entrySceneBackgrounds = {
 export const cardArtAssets = {
     cardArtPlaceholder: 'cards/Card PNG Breakdown/Card Art/placeholder.webp',
     cardAttack: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
-    cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.webp',
     cardChainLightning: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
     cardDivineIntervention:
         'cards/Card PNG Breakdown/Card Art/divine intervention.png',
