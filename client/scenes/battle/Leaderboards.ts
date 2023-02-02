@@ -385,8 +385,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         src: getTexture('upArrowSimple'),
         name: 'PageUpArrow',
         scale: 0.05,
-        x: BASE_WIDTH / 2 + 785,
-        y: BASE_HEIGHT / 2 - 185,
+        x: BASE_WIDTH / 2 + 773,
+        y: BASE_HEIGHT / 2 - 215,
         onClick: () => changeLeaderboardPage('prev'),
     })
 
@@ -396,8 +396,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         name: 'PageDownArrow',
         rotation: 3.14,
         scale: 0.05,
-        x: BASE_WIDTH / 2 + 835,
-        y: BASE_HEIGHT / 2 + 265,
+        x: BASE_WIDTH / 2 + 823,
+        y: BASE_HEIGHT / 2 + 215,
         onClick: () => changeLeaderboardPage('next'),
     })
 
