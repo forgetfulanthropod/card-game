@@ -19,10 +19,10 @@ import { playCard } from '@/actions'
 const exampleBattleScene = exampleBattleScene_ as unknown as GameState
 const originalScene = exampleBattleScene_.scene
 
-const pc1 = 'pc-1'
-const pc2 = 'pc-2'
-const npc1 = 'npc-1'
-const npc2 = 'npc-2'
+export const pc1 = 'pc-1'
+export const pc2 = 'pc-2'
+export const npc1 = 'npc-1'
+export const npc2 = 'npc-2'
 
 const interpretCommandSuite = {
     addBlock() {
@@ -117,6 +117,32 @@ const interpretCommandSuite = {
                 originalScene.allCharacters[pc1].strength
         )
     },
+    heal() {
+        const scene = freshBattleScene()
+        interpretCommand({
+            command: makeCmd(npc1, 'deal(10)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(5)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].health - 5
+        )
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(999)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].constitution
+        )
+    },
     // effect() {},
     ifDamageDealt() {
         const scene = freshBattleScene()
@@ -149,6 +175,26 @@ const interpretCommandSuite = {
         equals(
             scene.get('allCharacters', npc1, 'health'),
             originalScene.allCharacters[npc1].health - 1
+        )
+    },
+    setStance() {
+        const scene = freshBattleScene()
+        scene
+            .select('allCharacters', pc1)
+            .merge({ stance: 'avoidant', hasMoved: true })
+        // should not give block to pc1
+        interpretCommand({
+            command: makeCmd(pc1, 'setStance("aggressive")', 'self'),
+            scene,
+            targetUids: [pc1],
+        })
+        truthy(
+            scene.get('allCharacters', pc1, 'stance') === 'aggressive',
+            'stance not set'
+        )
+        truthy(
+            scene.get('allCharacters', pc1, 'hasMoved') === true,
+            'hasMoved should stay true'
         )
     },
     smite() {
@@ -199,18 +245,6 @@ const interpretCommandSuite = {
     // text() {},
 } as const
 
-const _effectsSuite = {
-    bleed() {},
-    debilitated() {},
-    fatigue() {},
-    poison() {},
-    stunned() {},
-    unguarded() {},
-    vulnerable() {},
-    strongblock() {},
-    smallDamageIncrease() {},
-} as const
-
 const explainSuite = {
     scatterBrained() {
         const scene = freshBattleScene()
@@ -259,7 +293,7 @@ function makeCard(
     }
 }
 
-function makeCmd(
+export function makeCmd(
     owner: CharacterUid,
     actions: string,
     targetType: TargetType = 'enemies',
@@ -288,7 +322,7 @@ function freshBattleScene(game?: SCursor<GameState>) {
     return scene
 }
 
-function freshGameAndBattleScene() {
+export function freshGameAndBattleScene() {
     const game = freshGame()
     const scene = freshBattleScene(game)
     return { game, scene }

@@ -83,6 +83,14 @@ function makeCards(scene: BattleCursor): Piles {
             // 'flashbang'
         )
 
+        // DEBUG: give them all cards at once
+        // getCardIdsForCharacterId(cm.id).forEach(cardId => cardIds.push(cardId))
+
+        // getCardIdsForCharacterClass(cm.class).forEach(cardId =>
+        //     cardIds.push(cardId)
+        // )
+        // END DEBUG
+
         getFirstCardIdForCharacterId(cm.id) &&
             cardIds.push(getFirstCardIdForCharacterId(cm.id))
 
@@ -130,6 +138,18 @@ function makeCards(scene: BattleCursor): Piles {
         removedRoom: {},
         removedRun: {},
     }
+}
+
+function getCardIdsForCharacterClass(characterClass: CharacterClass): CardId[] {
+    return keys(cardDefinitionsMap).filter(
+        cardId => cardDefinitionsMap[cardId].characterClass === characterClass
+    )
+}
+
+function getCardIdsForCharacterId(characterId: CharacterId): CardId[] {
+    return keys(cardDefinitionsMap).filter(
+        cardId => cardDefinitionsMap[cardId].characterClass === characterId
+    )
 }
 
 function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {

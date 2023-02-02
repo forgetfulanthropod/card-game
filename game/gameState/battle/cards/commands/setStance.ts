@@ -28,8 +28,10 @@ export const execute: Executors['setStance'] = ({
         givenUids,
     })
 
+    console.log({ targetUids })
+
     targetUids.forEach(uid =>
-        scene.select('allCharacters', 'targetUid').apply(cm => ({
+        scene.select('allCharacters', uid).apply(cm => ({
             ...cm,
             stance,
         }))

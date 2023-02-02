@@ -298,7 +298,10 @@ function getEnergyContainer(card: Card): PixiContainer {
             anchor: 0.5,
         }),
         Sprite({
-            src: `cardEnergy${card.energy}` as AssetKey,
+            src:
+                card.energy > -1
+                    ? (`cardEnergy${card.energy}` as AssetKey)
+                    : Texture.EMPTY,
             anchor: 0.5,
         })
     )

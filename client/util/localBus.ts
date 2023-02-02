@@ -1,9 +1,12 @@
 import { datum } from 'datums'
 
-import type { CharacterUid, StatChangesMap } from 'shared'
+import type { CharacterUid, PlayerCharacterStats, StatChangesMap } from 'shared'
 import { Channel } from './channel'
 
 export const hoveredCharacterUid = datum<CharacterUid | null>(null)
+export const hoveredCharacterStatsOverride = datum<PlayerCharacterStats | null>(
+    null
+)
 export const highlightIntentFrom = datum<CharacterUid | null>(null)
 export const targetUidsWaitingForImpact = datum<CharacterUid[]>([])
 export const playDamageAnimation = datum<boolean>(false)

@@ -44,7 +44,7 @@ export interface BareServerActionsMeta {
     }
     getCurrentRun: {
         args: { userId: UserID }
-        res: Promise<{ runId: RunID }>
+        res: Promise<{ runId: RunID } | null>
     }
     endRun: {
         args: { userId: UserID; restart?: true }

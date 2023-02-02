@@ -83,16 +83,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'bard',
     },
-    strike: {
-        name: 'Attack',
-        energy: 1,
-        id: 'strike',
-        targetNum: 1,
-        targetType: 'enemies',
-        actions: 'deal(strength)',
-        type: 'attack',
-        characterClass: 'knight',
-    },
     zap: {
         name: 'Zap!',
         energy: 2,
@@ -461,10 +451,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Testudo Formation',
         energy: 1,
         id: 'testudoFormation',
-        targetNum: 1,
-        targetType: 'friends',
-        // TODO: "You may only play this card if this character is in an avoidant stance."
-        actions: 'chain(addBlock(defense), effect("strongblock", 1))',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: `
+            defensey = defense;
+            ifStance(
+                "avoidant",
+                chain(
+                    addBlock(defensey),
+                    effect("strongblock", 1, "allFriends")
+                )
+            )`,
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1039,7 +1036,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy = 0.25 * strength;
             chain(
                 deal(strengthy),
-                effect("fatigue",1),
+                effect("fatigued",1),
                 effect("tired",1),
                 discard(1)
             )

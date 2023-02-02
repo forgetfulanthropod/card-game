@@ -59,7 +59,7 @@ export const entrySceneBackgrounds = {
 export const cardArtAssets = {
     cardArtPlaceholder: 'cards/Card PNG Breakdown/Card Art/placeholder.webp',
     cardAttack: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
-    cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.png',
+    cardBlock: 'cards/Card PNG Breakdown/Card Art/Basic Block.webp',
     cardChainLightning: 'cards/Card PNG Breakdown/Card Art/basicAttack.webp',
     cardDivineIntervention:
         'cards/Card PNG Breakdown/Card Art/divine intervention.png',
@@ -175,6 +175,7 @@ export const effectAssets: {
     effectEntrancedBuff: 'effects/magicalStorm.webp',
     effectGuardedBuff: 'effects/strongblock.webp',
     effectPoisonedDebuff: 'effects/poison_skull.webp',
+    effectReflectBuff: 'effects/strongblock.webp',
     effectStunnedDebuff: 'effects/stunned.webp',
     effectTiredDebuff: 'effects/tired.webp',
     //TODO: placeholder icon
@@ -355,5 +356,5 @@ export const userAvatarAssets = {
     userAvatar7: 'user/profilePic/pixelated7.svg',
     userAvatar8: 'user/profilePic/pixelated8.svg',
     userAvatar9: 'user/profilePic/pixelated9.svg',
-    userAvatar10: 'user/profilePic/pixelated10.svg'
+    userAvatar10: 'user/profilePic/pixelated10.svg',
 }

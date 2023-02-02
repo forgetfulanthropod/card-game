@@ -24,9 +24,16 @@ export const execute: Executors['heal'] = ({
 }) => {
     const [amount] = evalAll(dslArgs)
 
-    targetUids.forEach(uid =>
-        scene
-            .select('allCharacters', uid, 'health')
-            .apply(h => h + Math.ceil(amount))
-    )
+    targetUids.forEach(uid => {
+        const characterCursor = scene.select('allCharacters', uid)
+
+        characterCursor
+            .select('health')
+            .apply(h =>
+                Math.min(
+                    h + Math.ceil(amount),
+                    characterCursor.get('constitution')
+                )
+            )
+    })
 }

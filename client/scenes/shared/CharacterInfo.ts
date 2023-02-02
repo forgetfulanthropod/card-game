@@ -2,6 +2,7 @@ import type {
     Card,
     CharacterClass,
     CharacterMeta,
+    CharacterStats,
     OwnedCharacterStats,
 } from 'shared'
 import { compose, datum } from 'datums'
@@ -22,7 +23,11 @@ import {
     getTexture,
     Adjust,
 } from '@/elementsUtil'
-import { hoveredCharacterUid, toDatum } from '@/util'
+import {
+    hoveredCharacterStatsOverride,
+    hoveredCharacterUid,
+    toDatum,
+} from '@/util'
 import { Ability, getTree } from '@/data'
 import {
     getBattleScene,
@@ -49,11 +54,17 @@ const _classColorMap: Record<CharacterClass, [number, number]> = {
 export function EntrySceneCharacterInfo() {
     return If(
         compose(
-            ([hoveredCharacterUid, selectedCharacters]) => {
-                return selectedCharacters.find(
-                    c => hoveredCharacterUid === c?.uid
+            ([
+                hoveredCharacterStatsOverride,
+                hoveredCharacterUid,
+                selectedCharacters,
+            ]) => {
+                return (
+                    hoveredCharacterStatsOverride ??
+                    selectedCharacters.find(c => hoveredCharacterUid === c?.uid)
                 )
             },
+            hoveredCharacterStatsOverride,
             hoveredCharacterUid,
             toDatum(getEntryScene().select('selectedCharacters'), sc => sc)
         ),
@@ -134,7 +145,7 @@ export function BattleSceneCharacterInfo() {
 }
 
 function RootCharacterInfo(
-    cm: OwnedCharacterStats | CharacterMeta,
+    cm: CharacterStats | CharacterMeta,
     x = BASE_WIDTH * 0.67,
     y = 78
 ): PixiContainer {
@@ -151,23 +162,27 @@ export function CharacterInfo(cm: CharacterMeta) {
 
     if (abilities == null) throw new Error('PCs need abilities!')
 
-    // TODO: figure out why IfHideShow is breaking in entry scene after adding this to battle scene..
-    return IfHideShow(
-        compose(([uid]) => uid === cm?.uid, hoveredCharacterUid),
-        FullInfoBox({ cm, abilities })
-    )
+    return FullInfoBox({ cm, abilities })
 }
 
 function getAllPossibleCardsForCharacter(cm: CharacterMeta): Card[] {
-    return vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
+    return cm.uid
+        ? vals(getEntryScene().get('fullSelectedCharacterDecks', cm.uid))
+        : []
 }
 
 function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
     const contentWidth = BASE_WIDTH * 0.23
+    let cards
+
+    //todo:
+    //const startingCards =
+
     const allCharCards =
-        getTree().get('scene', 'id') === 'entry'
+        getTree().get('scene', 'id') === 'entry' &&
+        (cards = getAllPossibleCardsForCharacter(props.cm)).length
             ? CardsTiltedInLine({
-                  cards: getAllPossibleCardsForCharacter(props.cm),
+                  cards,
                   parentWidth: contentWidth * 0.8,
               })
             : Container({})
@@ -210,15 +225,6 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             //     },
             //     anchor: [1, 1],
             //     contentWidth * 0.5,
-            // }),
-            // Sprite({
-            //     src: `${cm.class}ClassIcon`,
-            //     anchor: [1, 1],
-            //     contentWidth * 0.5,
-            //     scale:
-            //         150 /
-            //         (getTexture(`${cm.class}ClassIcon`)?.height ??
-            //             1),
             // }),
             ...stats.map((stat, i) => {
                 return Container(
@@ -273,7 +279,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
         // ...AbilityButtons(props.abilities),
         ...AbilityButtons([]),
         Adjust(allCharCards, {
-            y: 220,
+            y: 200,
             x: -allCharCards.width + contentWidth / 2 + mainPadding,
             filters: [classOutlineFilter2],
         })

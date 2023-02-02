@@ -21,7 +21,7 @@ export function GameManager(props: { username: string }): JSXElement {
         </div> */}
         <Toaster />
         <ResetButton username={username} />
-        {/* <Sidebar /> */}$
+        {/* <Sidebar /> */}
         {isProduction ? (
             <></>
         ) : (

@@ -32,6 +32,7 @@ export const effectIds = [
     'targetedDebuff',
 
     'passiveBlockBuff',
+    'reflectBuff',
     'strongblockBuff',
 
     'braveBuff',
