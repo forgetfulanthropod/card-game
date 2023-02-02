@@ -4,10 +4,29 @@
     "compilerOptions": {
         "paths": {
             // just makes the good import come first in list
-            "shared": ["../shared"],
-            "shared/code": ["../shared/code"],
-            "@/*": ["./*"]
+            "shared": [
+                "../shared"
+            ],
+            "shared/code": [
+                "../shared/code"
+            ],
+            "server": [
+                "../server"
+            ],
+            "server/metrics": [
+                "../server/metrics"
+            ],
+            "@/*": [
+                "./*"
+            ]
         }
     },
-    "references": [{ "path": "../shared" }]
+    "references": [
+        {
+            "path": "../shared"
+        },
+        {
+            "path": "../server"
+        }
+    ]
 }

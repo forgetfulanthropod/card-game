@@ -103,7 +103,7 @@ interface BareGameActionArgs {
 /** Map from game action name to function signature */
 export type GameActions = {
     [K in keyof BareGameActionArgs]: (
-        args: BareGameActionArgs[K] & { game: Gamecursor }
+        args: BareGameActionArgs[K] & { game: Gamecursor; username?: string }
     ) => void
 }
 /** Map from server action name to function signature */

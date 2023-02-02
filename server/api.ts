@@ -15,6 +15,7 @@ export async function api(req: Request, res: Response): Promise<void> {
     if (typeof method !== 'string') return err(res, 'no method')
 
     try {
+        logger.debug(`api called: ${JSON.stringify(req.body)}`)
         if (method in serverActions) {
             const m = method as keyof typeof serverActions
             const response = await serverActions[m](req.body)
