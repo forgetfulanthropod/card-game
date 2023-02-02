@@ -459,7 +459,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 "avoidant",
                 chain(
                     addBlock(defensey),
-                    effect("strongblock", 1, "allFriends")
+                    effect("strongblock", 1)
                 )
             )`,
         type: 'utility',

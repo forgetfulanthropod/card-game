@@ -28,6 +28,10 @@ export const execute: Executors['removeAllDebuffs'] = ({
         givenUids,
     })
 
+    logger.debug(
+        'removing all debuffs from uids: ' + targetUids + ' given ' + givenUids
+    )
+
     targetUids.forEach(uid =>
         scene.select('allCharacters', uid).apply(cm => ({
             ...cm,
