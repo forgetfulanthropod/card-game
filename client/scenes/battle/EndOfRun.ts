@@ -456,7 +456,7 @@ export function EndOfRun(): PixiContainer {
     const CloseModalButton = Sprite({
         src: getTexture('closeButton'),
         scale: 0.75,
-        y: BASE_HEIGHT / 2 - 445,
+        y: BASE_HEIGHT / 2 - 495,
         x: BASE_WIDTH / 2 + 755,
         onClick: () => {
             showLeaderboard.set(!showLeaderboard.val)
@@ -584,6 +584,7 @@ export function EndOfRun(): PixiContainer {
         await new Promise(resolve => setTimeout(() => resolve(void 0), 500))
         await slideAndFadeOut(RunResultBanner, battleState)
         Adjust(RunResultBanner, {
+            y: 0,
             x: BASE_WIDTH / 2 - (RunResultBanner.width / 2) * 0.2 - 50,
             scale: 0.2,
         })

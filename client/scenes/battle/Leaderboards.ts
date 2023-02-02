@@ -94,8 +94,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         teamComp: CharacterId[]
     ) => {
         const y = isSelf
-            ? BASE_HEIGHT / 2 + 375
-            : BASE_HEIGHT / 2 - 165 + 105 * inScreenIdx
+            ? BASE_HEIGHT / 2 + 325
+            : BASE_HEIGHT / 2 - 215 + 105 * inScreenIdx
         const x = BASE_WIDTH / 2
         const date = new Date(endTime)
         const displayedRank =
@@ -144,7 +144,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             },
             RoundedRectangleGradientSprite({
                 spriteArgs: {
-                    width: 1550,
+                    width: 1500,
                     height: 100,
                     x,
                     y,
@@ -189,13 +189,13 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 ? Text({
                       text: `${displayedRank}`,
                       y: y - 30,
-                      x: x - 718,
+                      x: x - 700,
                       style: { ...style, fontSize: 60 },
                   })
                 : Text({
                       text: `${rank}.`,
                       y: y - 10,
-                      x: x - 700,
+                      x: x - 680,
                       style,
                   }),
             Text({
@@ -333,7 +333,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         return Container(
             {
                 name: `${text}_Container`,
-                y: BASE_HEIGHT / 2 - 335,
+                y: BASE_HEIGHT / 2 - 385,
                 onClick: () => activeTimeframe.set(id),
             },
             Background,
@@ -433,7 +433,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 width: 1700,
                 height: 900,
                 x: BASE_WIDTH / 2,
-                y: BASE_HEIGHT / 2 + 50,
+                y: BASE_HEIGHT / 2,
                 name: 'LeaderboardBackground',
                 anchor: [0.5, 0.5],
                 alpha: 0.9,
@@ -452,7 +452,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         LeaderboardEntries,
         LeaderboardNavArrows,
         LeaderboardSelfEntry,
-        LeaderboardSign
+        // LeaderboardSign
     )
 
     // refreshes leaderboard entries and nav arrows when user toggles timeframe
