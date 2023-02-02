@@ -37,9 +37,7 @@ import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
 import { Easing, Tweener } from 'pixi-tweener'
 
-const slamAnimateElIntoScreen = async (
-    el: TweenablePixiContainer
-) => {
+const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: el,
@@ -102,10 +100,11 @@ const slideAndFadeOut = async (
     )
 }
 
-const fadeChildrenIn = async (
+const transitionFadeChildren = async (
     el: PixiContainer,
     mode: 'sync' | 'async',
-    velocity: 'fast' | 'slow'
+    velocity: 'fast' | 'slow',
+    direction: 'in' | 'out'
 ) => {
     const { children } = el
     const addTweener = async (child: DisplayObject) => {
@@ -113,10 +112,10 @@ const fadeChildrenIn = async (
             {
                 target: child,
                 duration: velocity === 'fast' ? 0.1 : 0.6,
-                ease: Easing.easeFrom,
+                ease: Easing.easeFromTo,
             },
             {
-                alpha: 1,
+                alpha: direction === 'in' ? 1 : 0,
             }
         )
     }
@@ -131,7 +130,11 @@ const fadeChildrenIn = async (
     }
 }
 
-const fadeElementIn = async (el: PixiContainer, velocity: 'fast' | 'slow') => {
+const transitionFadeElement = async (
+    el: PixiContainer,
+    velocity: 'fast' | 'slow',
+    direction: 'in' | 'out'
+) => {
     return await Tweener.add(
         {
             target: el,
@@ -142,6 +145,32 @@ const fadeElementIn = async (el: PixiContainer, velocity: 'fast' | 'slow') => {
             alpha: 1,
         }
     )
+}
+
+const transitionToScreen = async (
+    mode: 'in' | 'out',
+    ...elements: PixiContainer[]
+) => {
+    const duration = 0.4
+
+    elements.forEach(async el => {
+        await Tweener.add(
+            {
+                target: el,
+                duration,
+                ease: Easing.easeInOutCirc,
+            },
+            {
+                alpha: mode === 'out' ? 0 : 1,
+                y: mode === 'out' ? el.y - 50 : el.y + 50,
+            }
+        )
+    })
+
+    await new Promise(resolve =>
+        setTimeout(() => resolve(void 0), duration * 1000)
+    )
+    return
 }
 
 const getScoreItemPositionClosure = () => {
@@ -505,7 +534,13 @@ export function EndOfRun(): PixiContainer {
 
     let Leaderboard: PixiContainer<DisplayObject> | null = null
 
-    const handleLeaderboardToggle = (showLeaderboard: boolean) => {
+    const handleLeaderboardToggle = async (showLeaderboard: boolean) => {
+        await transitionToScreen(
+            'out',
+            TogglableButtonsContainer,
+            TogglableMainContainer
+        )
+
         TogglableMainContainer.removeChildren()
         TogglableButtonsContainer.removeChildren()
         if (showLeaderboard && Leaderboard) {
@@ -519,10 +554,16 @@ export function EndOfRun(): PixiContainer {
             TogglableMainContainer.addChild(TotalScoreContainer)
             TogglableMainContainer.addChild(RunResultBanner)
         }
+
+        await transitionToScreen(
+            'in',
+            TogglableMainContainer,
+            TogglableButtonsContainer
+        )
     }
 
-    showLeaderboard.onChange(showLeaderboard => {
-        handleLeaderboardToggle(showLeaderboard)
+    showLeaderboard.onChange(async showLeaderboard => {
+        await handleLeaderboardToggle(showLeaderboard)
     })
 
     // Runs text animations synchronously
@@ -558,7 +599,6 @@ export function EndOfRun(): PixiContainer {
                 console.warn('Tried to end run but runId was null')
             }
         }
-
         const mappedLeaderboard = await callServerApi('getLeaderboard', {
             userId,
         })
@@ -589,13 +629,18 @@ export function EndOfRun(): PixiContainer {
             scale: 0.2,
         })
         await expandOut(ScoreElementsBackground)
-        await fadeElementIn(RunResultBanner, 'slow')
+        await transitionFadeElement(RunResultBanner, 'slow', 'in')
         TogglableMainContainer.addChild(ScoreElements)
-        await fadeChildrenIn(ScoreElements, 'sync', 'fast')
-        await fadeChildrenIn(TotalScoreContainer, 'async', 'slow')
+        await transitionFadeChildren(ScoreElements, 'sync', 'fast', 'in')
+        await transitionFadeChildren(TotalScoreContainer, 'async', 'slow', 'in')
         TogglableButtonsContainer.addChild(TryAgainButton)
         TogglableButtonsContainer.addChild(ShowLeaderboardButton)
-        await fadeChildrenIn(TogglableButtonsContainer, 'async', 'slow')
+        await transitionFadeChildren(
+            TogglableButtonsContainer,
+            'async',
+            'slow',
+            'in'
+        )
         await animateNumberInElement(
             TotalScore,
             'points',
