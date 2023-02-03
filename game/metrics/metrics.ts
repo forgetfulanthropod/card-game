@@ -34,6 +34,7 @@ export const playCard: GameMetrics['playCard'] = args => {
     interface tagInfo {
         card_name: string
         card_energy: number
+        card_type: string
         character_name: string
         character_stance: string
         character_class: string
@@ -52,6 +53,7 @@ export const playCard: GameMetrics['playCard'] = args => {
     Object.assign(tags, {
         card_name: card.id,
         card_energy: card.energy,
+        card_type: card.type,
         character_name: character.id,
         character_stance: character.stance,
         character_class: character.class,
