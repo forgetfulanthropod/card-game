@@ -12,7 +12,8 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { config as loadDotEnv } from 'dotenv'
 
-const password = 'dailyship'
+loadDotEnv()
+const password = process.env.CLIENT_PASSWORD ?? 'dailyship'
 const buildDir = 'public/'
 const entryPoint = 'client/index.tsx'
 const outFile = `${buildDir}/${password}.js`
