@@ -623,6 +623,9 @@ export function EndOfRun(): PixiContainer {
     const runInitialAnimations = async () => {
         const screenHasNotOpened = scene.get('endScreenHasOpened') === false
         const isVictory = scene.get('state') === 'won'
+        TogglableMainContainer.addChild(ScoreElementsBackground)
+        TogglableMainContainer.addChild(RunResultBanner)
+        await slamAnimateElIntoScreen(RunResultBanner)
 
         // below condition will only be met once (even after refresh)
         if (screenHasNotOpened) {
@@ -665,10 +668,7 @@ export function EndOfRun(): PixiContainer {
         }
 
         // All initial addChild are done manually instead of auto-run on datum change, as otherwise score explanations appear on hover while Defeat Banner is animating
-        TogglableMainContainer.addChild(ScoreElementsBackground)
-        TogglableMainContainer.addChild(RunResultBanner)
         TogglableMainContainer.addChild(TotalScoreContainer)
-        await slamAnimateElIntoScreen(RunResultBanner)
         const mappedLeaderboard = await callServerApi('getLeaderboard', {
             userId,
         })

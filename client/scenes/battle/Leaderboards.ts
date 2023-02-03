@@ -217,8 +217,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             }),
             Text({
                 text: `${
-                    date.getMonth() + 1
-                }/${date.getDate()}/${date.getFullYear()}`,
+                    date.getUTCMonth() + 1
+                }/${date.getUTCDate()}/${date.getUTCFullYear()}`,
                 y: y - 10,
                 x: x + 500,
                 style,
