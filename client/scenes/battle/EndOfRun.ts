@@ -25,17 +25,23 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import {
     BattleWinState,
+    Leaderboard,
+    RunID,
     RunScoreAttributeName,
     RUN_SCORE_EVENT_MAPPING,
     RUN_SCORE_EVENT_META,
+    ScoreTags,
+    TOP_PERCENTILE_CUTOFF,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
 import { callServerApi } from '@/callServerApi'
-import { round } from 'lodash'
+import { random, round } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
 import { Easing, Tweener } from 'pixi-tweener'
+
+// Note: this file needs further refactoring
 
 const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
     await Tweener.add(
@@ -49,6 +55,22 @@ const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
             tweenableScale: 0.7,
             x: BASE_WIDTH / 2 - 670,
             y: BASE_HEIGHT / 2 - 450,
+        }
+    )
+}
+
+const slamAnimateElIntoScreenStatic = async (el: TweenablePixiContainer) => {
+    await Tweener.add(
+        {
+            target: el,
+            duration: 1,
+            ease: Easing.bouncePast,
+        },
+        {
+            alpha: 1,
+            tweenableScale: 1,
+            x: el.x + el.width / 4,
+            y: el.y,
         }
     )
 }
@@ -171,6 +193,36 @@ const transitionToScreen = async (
         setTimeout(() => resolve(void 0), duration * 1000)
     )
     return
+}
+
+const getScoreTags = async ({
+    runId,
+    allTimeLeaderboards,
+}: {
+    runId: RunID
+    allTimeLeaderboards: Leaderboard
+}): Promise<ScoreTags> => {
+    /** 0.01 === top 1% */
+    let topPercentile: number = 1
+    let isNewHighScore: boolean = false
+    const leaderboardEntryCount = await callServerApi(
+        'getLeaderboardEntryCount',
+        {}
+    )
+
+    for (let entry of allTimeLeaderboards) {
+        if (!entry.is_self) {
+            continue
+        }
+
+        isNewHighScore = entry.run_id === runId ? true : false
+        topPercentile = entry.adjusted_rank / leaderboardEntryCount.count
+    }
+
+    return {
+        isNewHighScore,
+        topPercentile,
+    }
 }
 
 const getScoreItemPositionClosure = () => {
@@ -297,12 +349,14 @@ export function EndOfRun(): PixiContainer {
     const battleState = scene.get('state')
     const showLeaderboard = datum(false)
     const userId = scene.get('username')
+    const runId = scene.get('runId')
 
     battleState === 'won'
         ? loopSong('runVictoryMusicHooligansBluff')
         : loopSong('defeatMusicHooligansBluff')
 
     // --- Pixi Elements ---
+    let Leaderboard: PixiContainer<DisplayObject> | null = null
     const getRunResultBanner = () => {
         const src = getTexture(
             `${battleState === 'won' ? 'victory' : 'defeat'}`
@@ -351,7 +405,7 @@ export function EndOfRun(): PixiContainer {
         alpha: 0,
     })
 
-    const TotalScore = Text({
+    const TotalScorePoints = Text({
         text: ``,
         anchor: [1, 0.5],
         x: BASE_WIDTH / 2 + 650,
@@ -400,11 +454,13 @@ export function EndOfRun(): PixiContainer {
             },
         })
 
-        return Container(
+        return TweenableContainer(
             {
                 name: `HighScoreTag_Container`,
-                x: BASE_WIDTH / 2 + 280,
-                y: BASE_HEIGHT / 2 + 212,
+                x: BASE_WIDTH / 2 - 370,
+                y: BASE_HEIGHT / 2 + 230,
+                alpha: 0,
+                scale: 2,
             },
             Background,
             Adjust(HighScoreText, {
@@ -414,10 +470,10 @@ export function EndOfRun(): PixiContainer {
         )
     }
 
-    const TopPercentileTag = () => {
+    const TopPercentileTag = (percentile: number) => {
         const Background = RoundedRectangleGradientSprite({
             spriteArgs: {
-                width: 150,
+                width: 140,
                 height: 50,
                 anchor: [0, 0],
             },
@@ -428,14 +484,14 @@ export function EndOfRun(): PixiContainer {
                 x1: 110,
                 y1: 20,
                 colorStops: [
-                    { color: 0x3a762e, offset: 0 },
-                    { color: 0x4fa003, offset: 1 },
+                    { color: 0xb64d2b, offset: 0 },
+                    { color: 0xcb6616, offset: 1 },
                 ],
             },
         })
 
         const HighScoreText = Text({
-            text: '🚀  Top 1%',
+            text: `🚀  Top ${(percentile * 100).toFixed(0)}%`,
             anchor: [0, 0],
             x: Background.width / 2,
             style: {
@@ -446,11 +502,13 @@ export function EndOfRun(): PixiContainer {
             },
         })
 
-        return Container(
+        return TweenableContainer(
             {
                 name: `TopPercentileTag_Container`,
-                x: BASE_WIDTH / 2 + 280,
-                y: BASE_HEIGHT / 2 + 212,
+                x: BASE_WIDTH / 2 - 90,
+                y: BASE_HEIGHT / 2 + 230,
+                alpha: 0,
+                scale: 2,
             },
             Background,
             Adjust(HighScoreText, {
@@ -529,10 +587,8 @@ export function EndOfRun(): PixiContainer {
         {},
         TopBorder,
         TotalScoreTitle,
-        TotalScore
+        TotalScorePoints
     )
-
-    let Leaderboard: PixiContainer<DisplayObject> | null = null
 
     const handleLeaderboardToggle = async (showLeaderboard: boolean) => {
         await transitionToScreen(
@@ -599,10 +655,6 @@ export function EndOfRun(): PixiContainer {
                 console.warn('Tried to end run but runId was null')
             }
         }
-        const mappedLeaderboard = await callServerApi('getLeaderboard', {
-            userId,
-        })
-        Leaderboard = LeaderboardContainer(mappedLeaderboard)
         const runScoreAttributes = scene.get('runScore').attributes
 
         for (let attribute in runScoreAttributes) {
@@ -621,7 +673,15 @@ export function EndOfRun(): PixiContainer {
         TogglableMainContainer.addChild(RunResultBanner)
         TogglableMainContainer.addChild(TotalScoreContainer)
         await slamAnimateElIntoScreen(RunResultBanner)
-        await new Promise(resolve => setTimeout(() => resolve(void 0), 500))
+        const mappedLeaderboard = await callServerApi('getLeaderboard', {
+            userId,
+        })
+        Leaderboard = LeaderboardContainer(mappedLeaderboard)
+        if (!runId) return
+        const { isNewHighScore, topPercentile } = await getScoreTags({
+            runId,
+            allTimeLeaderboards: mappedLeaderboard.allTime,
+        })
         await slideAndFadeOut(RunResultBanner, battleState)
         Adjust(RunResultBanner, {
             y: 0,
@@ -642,11 +702,25 @@ export function EndOfRun(): PixiContainer {
             'in'
         )
         await animateNumberInElement(
-            TotalScore,
+            TotalScorePoints,
             'points',
             scene.select('runScore').get('totalScore'),
             'normal'
         )
+
+        const HighScoreTag = NewHighScoreTag()
+        const PercentileTag = TopPercentileTag(topPercentile)
+        if (isNewHighScore) {
+            TotalScoreContainer.addChild(HighScoreTag)
+        }
+        if (topPercentile < TOP_PERCENTILE_CUTOFF) {
+            TotalScoreContainer.addChild(PercentileTag)
+            if (!isNewHighScore) {
+                Adjust(PercentileTag, {x: BASE_WIDTH / 2 - 330})
+            }
+        }
+        await slamAnimateElIntoScreenStatic(HighScoreTag)
+        await slamAnimateElIntoScreenStatic(PercentileTag)
         callApi('openEndOfRun', {})
     }
 

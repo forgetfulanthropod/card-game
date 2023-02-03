@@ -9,5 +9,5 @@ export { endRun } from './endRun'
 export { getNumKaijuInGoodEarth } from './getNumKaijuInGoodEarth'
 export { getSchema } from './getSchema'
 export { getLeaderboard } from './getLeaderboard'
-export { getScoreTags } from './getScoreTags'
+export { getLeaderboardEntryCount } from './getLeaderboardEntryCount'
 // @endindex

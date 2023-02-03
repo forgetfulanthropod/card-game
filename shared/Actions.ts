@@ -58,9 +58,9 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<MappedLeaderboards>
     }
-    getScoreTags: {
-        args: { userId: UserID, runId: RunID }
-        res: Promise<ScoreTags>
+    getLeaderboardEntryCount: {
+        args: Empty
+        res: Promise<{count: number}>
     }
 }
 
