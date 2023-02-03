@@ -67,6 +67,11 @@ export function getAnimationsFrom(
 
     if (changes == null) return animations
 
+    if ((changes.block ?? 0) < 0) {
+        if (characterMeta.block > 0)
+            animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
+        else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))
+    }
     if ((changes?.health ?? 0) < 0)
         animations.push(AttackOverlayAnimation(characterMeta.isPc))
     if ((changes?.health ?? 0) > 0)
@@ -77,11 +82,6 @@ export function getAnimationsFrom(
         animations.push(PoisonOverlayAnimation(characterMeta.isPc))
     if ((changes.block ?? 0) > 0) {
         animations.push(GainBlockOverlayAnimation(characterMeta.isPc))
-    }
-    if ((changes.block ?? 0) < 0) {
-        if (characterMeta.block > 0)
-            animations.push(LoseBlockOverlayAnimation(characterMeta.isPc))
-        else animations.push(BreakBlockOverlayAnimation(characterMeta.isPc))
     }
 
     return animations

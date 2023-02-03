@@ -1129,7 +1129,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            explain("If this card is discarded, deal ", strength, " to all enemies")
+            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies")
         `,
         //TODO: implement
         on: {
@@ -1251,7 +1251,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         on: {
             discard: 'addEnergy(1)',
         },
-        actions: `"if this card is discarded, gain 1 energy"`,
+        actions: `"if this card is discarded before the end of your turn, gain 1 energy"`,
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -1334,7 +1334,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'whirlingBladesOfDeath',
         targetNum: 1,
         targetType: 'self',
-        // TODO: REFLECT
         actions: `
             strengthy = 0.4 * strength;
             chain(

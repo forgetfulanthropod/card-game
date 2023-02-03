@@ -201,14 +201,14 @@ const commandIdToMetaMap: Record<
         id: 'jurgenBellyFlop',
         src: 'intentBellyFlop',
         explanation: [
-            'Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes',
+            'Bosshog Jürgen will attempt to attack for 55 damage, but will deal 1 point less for every point of damage he takes.',
         ],
     },
     jurgenRollAround: {
         id: 'jurgenRollAround',
         src: 'intentRollAround',
         explanation: [
-            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 20 damage each, but will deal 1 point less for every point of damage he takes',
+            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 30 damage each, but will deal 1 point less for every point of damage he takes',
         ],
     },
     jurgenSitUpon: {
