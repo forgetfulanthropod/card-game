@@ -30,7 +30,7 @@ export const rootAssets = {
     rightArrow: 'core-ui/rightArrow.png',
     upArrow: 'core-ui/upArrow.png',
     upArrowSimple: 'core-ui/upArrowSimple.png',
-    downArrow: 'core-ui/downArrow.png'
+    downArrow: 'core-ui/downArrow.png',
 }
 
 export const fontAssets = {
@@ -344,6 +344,7 @@ export const mapTileAssets = {
     mapTile6: 'hex map/hooligans bluff/base tile.webp',
     mapTile7: 'hex map/hooligans bluff/base tile.webp',
     mapTile8: 'hex map/hooligans bluff/base tile.webp',
+    mapTile9: 'hex map/hooligans bluff/base tile.webp',
 }
 
 export const userAvatarAssets = {
