@@ -1,8 +1,4 @@
-import {
-    depricatedScoreUpdateFromClient,
-    InfoBox,
-    ModalBackdrop,
-} from '@sharedElements'
+import { InfoBox, ModalBackdrop } from '@sharedElements'
 import {
     Adjust,
     animateNumberInElement,
@@ -37,9 +33,7 @@ import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
 import { Easing, Tweener } from 'pixi-tweener'
 
-const slamAnimateElIntoScreen = async (
-    el: TweenablePixiContainer
-) => {
+const slamAnimateElIntoScreen = async (el: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: el,
@@ -546,7 +540,6 @@ export function EndOfRun(): PixiContainer {
             })
 
             if (isVictory) {
-                depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
                 callApi('openEndOfRun', {})
             }
 

@@ -12,8 +12,6 @@ import {
 } from '.'
 import { toCursor } from '@/util'
 
-export const NUM_KAIJUS_IN_PARTY = 3
-
 export function getNewCardOptions(scene: BattleScene): Pile {
     const newPile: Pile = {}
     const livingPcs = getLivingPcs(scene)

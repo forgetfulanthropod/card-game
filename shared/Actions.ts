@@ -59,7 +59,7 @@ export interface BareServerActionsMeta {
         res: Promise<MappedLeaderboards>
     }
     getScoreTags: {
-        args: { userId: UserID, runId: RunID }
+        args: { userId: UserID; runId: RunID }
         res: Promise<ScoreTags>
     }
 }
@@ -80,7 +80,6 @@ interface BareGameActionArgs {
     openEndOfRoom: Empty
     openEndOfRun: Empty
     nextRoom: { choice: 0 | 1 | 2 | 3 }
-    notifyRunScore: { event: RunScoreEvent; count: number }
     choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {

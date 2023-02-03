@@ -1,8 +1,4 @@
-import {
-    depricatedScoreUpdateFromClient,
-    InfoBox,
-    ModalBackdrop,
-} from '@sharedElements'
+import { InfoBox, ModalBackdrop } from '@sharedElements'
 import {
     Adjust,
     animateNumberInElement,
@@ -451,7 +447,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         LeaderboardContextMenu,
         LeaderboardEntries,
         LeaderboardNavArrows,
-        LeaderboardSelfEntry,
+        LeaderboardSelfEntry
         // LeaderboardSign
     )
 

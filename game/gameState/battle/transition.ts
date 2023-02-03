@@ -22,6 +22,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
 
     if (winner === 'PC') {
         if (gameIsOver) {
+            checkServerScoringEvent('ROOM_CLEARED', scene, {})
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             scene.set('state', 'won')
             scene.select('runDuration').set('endTime', new Date().getTime())
@@ -32,6 +33,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             clearRoomCardModifiers(scene)
 
             scene.set('state', 'collecting loot')
+            checkServerScoringEvent('ROOM_CLEARED', scene, {})
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
         }

@@ -4,9 +4,10 @@ import type { ROCursor } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import type { GameState } from 'shared'
+import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
+import { showScoreUpdateNotification } from '@/scenes/shared'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -39,6 +40,10 @@ export function prepareSocket(): void {
         log('received server data', data)
         // getTree().set(data)
         updateBoabab(data)
+    })
+
+    socket.on('notifyScore', ({ data }: { data: RunScoreUpdate }) => {
+        showScoreUpdateNotification(data)
     })
 }
 

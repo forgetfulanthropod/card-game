@@ -10,8 +10,6 @@ import type { PixiContainer } from '@/elementsUtil'
 import { For } from '@/elementsUtil'
 import { localTree } from '@/data'
 import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
-import { callApi } from '@/callApi'
-import { depricatedScoreUpdateFromClient } from '@/scenes/shared'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
@@ -110,38 +108,6 @@ export function Characters(scene: ROBattleScene): PixiContainer {
         removedCharacterUids.map(i => {
             waiting[i] = true
         })
-
-        const removedEnemyCharacters = Object.values(allCharsC.get()).filter(
-            char =>
-                char.isPc === false && removedCharacterUids.includes(char.uid)
-        )
-
-        if (removedEnemyCharacters) {
-            setTimeout(() => {
-                depricatedScoreUpdateFromClient(
-                    'ENEMY_KILLED',
-                    removedEnemyCharacters.length,
-                    scene,
-                    removedEnemyCharacters
-                )
-                // for (let char of removedEnemyCharacters) {
-                //     if (char.health < 0) {
-                //         depricatedScoreUpdateFromClient(
-                //             'OVERKILL',
-                //             -char.health,
-                //             scene
-                //         )
-                //     } else if (char.health === 0) {
-                //         depricatedScoreUpdateFromClient(
-                //             'PERFECT_KILL',
-                //             1,
-                //             scene,
-                //             char
-                //         )
-                //     }
-                // }
-            }, 1000) // imperfect timing, but good enough for now
-        }
 
         waitForDeathAnimationsDatum.set(waiting)
 
