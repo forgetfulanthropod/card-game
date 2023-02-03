@@ -169,12 +169,11 @@ const transitionFadeElement = async (
     )
 }
 
-const transitionToScreen = async (
+export const transitionToScreen = async (
     mode: 'in' | 'out',
     ...elements: PixiContainer[]
 ) => {
-    const duration = 0.4
-
+    const duration = 0.3
     elements.forEach(async el => {
         await Tweener.add(
             {
@@ -229,7 +228,6 @@ const getScoreItemPositionClosure = () => {
     let itemsOnScreen = 0
     return () => {
         itemsOnScreen++
-        console.log({ itemsOnScreen })
         const ITEMS_PER_COLUMN = 10
 
         const leftColumnX = BASE_WIDTH / 2 - 680
@@ -348,6 +346,7 @@ export function EndOfRun(): PixiContainer {
     const scene = getBattleScene()
     const battleState = scene.get('state')
     const showLeaderboard = datum(false)
+    const mainContainerIsAnimating = datum(false)
     const userId = scene.get('username')
     const runId = scene.get('runId')
 
@@ -536,7 +535,7 @@ export function EndOfRun(): PixiContainer {
         scale: 0.6,
         alpha: 0,
         onClick: () => {
-            showLeaderboard.set(!showLeaderboard.val)
+            !mainContainerIsAnimating.val && showLeaderboard.set(!showLeaderboard.val)
         },
     })
 
@@ -546,7 +545,7 @@ export function EndOfRun(): PixiContainer {
         y: BASE_HEIGHT / 2 - 495,
         x: BASE_WIDTH / 2 + 755,
         onClick: () => {
-            showLeaderboard.set(!showLeaderboard.val)
+            !mainContainerIsAnimating.val && showLeaderboard.set(!showLeaderboard.val)
         },
     })
 
@@ -619,7 +618,9 @@ export function EndOfRun(): PixiContainer {
     }
 
     showLeaderboard.onChange(async showLeaderboard => {
+        mainContainerIsAnimating.set(true)
         await handleLeaderboardToggle(showLeaderboard)
+        mainContainerIsAnimating.set(false)
     })
 
     // Runs text animations synchronously

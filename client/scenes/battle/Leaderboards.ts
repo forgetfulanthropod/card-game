@@ -1,23 +1,9 @@
 import {
-    depricatedScoreUpdateFromClient,
-    InfoBox,
-    ModalBackdrop,
-} from '@sharedElements'
-import {
     Adjust,
-    animateNumberInElement,
     AssetKey,
     clearContainer,
-    getShowOnHoverFns,
-    getStage,
-    loopSong,
-    PixiContainer,
-    PixiText,
-    PixiTexture,
-    playSongOnce,
     RoundedBordered,
     RoundedRectangleGradientSprite,
-    TweenablePixiContainer,
 } from '@/elementsUtil'
 import {
     getTexture,
@@ -29,7 +15,6 @@ import {
     Sprite,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { callApi } from '@/callApi'
 import {
     CharacterId,
     Leaderboard,
@@ -37,19 +22,14 @@ import {
     LEADERBOARD_ENTRIES_PER_PAGE,
     MappedLeaderboards,
     MAX_LEADERBOARD_PAGE,
-    RunScoreAttributeName,
-    RUN_SCORE_EVENT_MAPPING,
-    RUN_SCORE_EVENT_META,
-    ScoreTags,
     LeaderboardTimeframe,
     LEADERBOARD_ENTRIES_TO_DISPLAY,
 } from 'shared'
-import { DisplayObject, ITextStyle, Texture, filters } from 'pixi.js'
-import { callServerApi } from '@/callServerApi'
-import { keys, round, sortBy } from 'lodash'
-import { collectData } from '@/analytics/collectData'
-import { compose, Datum, datum } from 'datums'
+import {  filters } from 'pixi.js'
+import { keys, sortBy } from 'lodash'
+import { datum } from 'datums'
 import { getShortWalletAddress } from '@/components/util'
+import { transitionToScreen } from './EndOfRun'
 
 const style = {
     fill: 'white',
@@ -59,8 +39,7 @@ const style = {
 export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
     const currLeaderboardPage = datum(0)
     const activeTimeframe = datum<LeaderboardTimeframe>('daily')
-    const scene = getBattleScene()
-    const userId = scene.get('username')
+    const isAnimating = datum(false)
 
     const LeaderboardEntries = Container({})
     const LeaderboardSelfEntry = Container({})
@@ -102,7 +81,6 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : ``
         const isTopScore = [1, 2, 3].includes(rank)
 
-        // TODO: CHANGE TO ACTUAL CHARACTER TEXTURE
         const renderTeamCompUnit = (idx: number, characterId: CharacterId) => {
             return Container(
                 {
@@ -334,7 +312,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             {
                 name: `${text}_Container`,
                 y: BASE_HEIGHT / 2 - 385,
-                onClick: () => activeTimeframe.set(id),
+                onClick: () => {
+                    !isAnimating.val && activeTimeframe.set(id)},
             },
             Background,
             Adjust(TimeToggleText, {
@@ -408,17 +387,6 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
 
     const LeaderboardNavArrows = Container({})
 
-    const LeaderboardSign = TweenableContainer(
-        {
-            x: 679.5,
-            y: 30,
-            scale: 0.3,
-        },
-        Sprite({
-            src: getTexture('leaderboardBanner'),
-        })
-    )
-
     const LeaderboardContextMenu = Container(
         {},
         createTimeToggle('daily'),
@@ -437,7 +405,6 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 name: 'LeaderboardBackground',
                 anchor: [0.5, 0.5],
                 alpha: 0.9,
-                // tint: 1,
             },
             radius: 50,
             gradientArgs: {
@@ -451,12 +418,17 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         LeaderboardContextMenu,
         LeaderboardEntries,
         LeaderboardNavArrows,
-        LeaderboardSelfEntry,
-        // LeaderboardSign
+        LeaderboardSelfEntry
     )
 
     // refreshes leaderboard entries and nav arrows when user toggles timeframe
-    activeTimeframe.onChange(newVal => {
+    activeTimeframe.onChange(async newVal => {
+        isAnimating.set(true)
+        await transitionToScreen(
+            'out',
+            LeaderboardEntries,
+            LeaderboardSelfEntry
+        )
         clearContainer(LeaderboardEntries)
         clearContainer(LeaderboardSelfEntry)
 
@@ -471,6 +443,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             createTimeToggle('weekly'),
             createTimeToggle('allTime')
         )
+        await transitionToScreen('in', LeaderboardEntries, LeaderboardSelfEntry)
+        isAnimating.set(false)
     }, true)
 
     // checks number of total entries vs currently displayed to display or hide nav arrows
