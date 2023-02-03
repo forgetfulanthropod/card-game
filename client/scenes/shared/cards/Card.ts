@@ -478,7 +478,6 @@ function getEvents(
                     cardEl.parent,
                     card
                 )
-            else callApi('playCard', { cardUid: card.uid, targetUids: [] })
         } else {
             flashTo(
                 getStage(),
@@ -500,7 +499,9 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         if (
-            (['self', 'allEnemies'] as TargetType[]).includes(card.targetType)
+            (['self', 'allEnemies', 'allFriends'] as TargetType[]).includes(
+                card.targetType
+            )
         ) {
             // console.log('Card.ts: playing card')
 

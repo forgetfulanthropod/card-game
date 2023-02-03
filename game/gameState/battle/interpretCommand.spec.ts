@@ -276,19 +276,14 @@ const interpretCommandSuite = {
         )
 
         interpretCommand({
-            command: makeCmd(pc1, 'removeAllDebuffs()'),
+            command: makeCmd(pc1, 'removeAllDebuffs()', 'self'),
             scene,
-            targetUids: [npc1],
+            targetUids: [pc1],
         })
 
-        console.log(
-            'effects: ',
-            JSON.stringify(scene.get('allCharacters', pc1).effects)
-        )
-
-        truthy(
-            JSON.stringify(scene.get('allCharacters', pc1).effects) ===
-                '[{"id":"braveBuff","counter":11}]'
+        equals(
+            JSON.stringify(scene.get('allCharacters', pc1).effects),
+            '[{"id":"braveBuff","counter":11}]'
         )
     },
     // orb() {},

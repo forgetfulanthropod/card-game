@@ -59,7 +59,6 @@ export interface BattleScene extends SceneHas {
     endScreenHasOpened: boolean
     treasureChest: TreasureChest
     runScore: RunScore
-    runScoreUpdate: RunScoreUpdate | null
     runDuration: {
         startTime: number
         endTime: number | null

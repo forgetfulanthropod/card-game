@@ -1,5 +1,5 @@
 import type { Card, CharacterUid, BattleCursor } from 'shared'
-import { getLivingNpcs } from '../characters/characterGetters'
+import { getLivingNpcs, getLivingPcs } from '../characters/characterGetters'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 
 import { interpretCommand } from './interpretCommand'
@@ -52,6 +52,9 @@ function getTargetUids({
 }) {
     if (card.targetType === 'allEnemies')
         return getLivingNpcs(scene.get()).map(npc => npc.uid)
+    if (card.targetType === 'allFriends')
+        return getLivingPcs(scene.get()).map(npc => npc.uid)
+    if (card.targetType === 'self') return [card.characterUid]
 
     return targetUids
 }

@@ -4,10 +4,12 @@ import {
     CharacterMeta,
     RunScoreAttributeName,
     RUN_TIME_THRESHOLD_MINS,
-    NonNotifiableEvent,
+    RunScoreEvent,
 } from 'shared'
 import { vals } from 'shared/code'
 import { trackStanceChanges } from '../characters/trackStanceChanges'
+import { updateScore } from './updateScore'
+import { NUM_KAIJUS_IN_PARTY } from 'shared'
 
 type applyDamageArgs = {
     damage: number
@@ -18,11 +20,22 @@ type applyDamageArgs = {
 }
 
 const checkServerScoringEvent = (
-    event: NonNotifiableEvent,
+    event: RunScoreEvent,
     scene: BattleCursor,
     data?: any
 ) => {
     switch (event) {
+        case 'ROOM_CLEARED':
+            updateScore({
+                scene,
+                event: 'ROOM_CLEARED',
+                count: 1,
+                notify: true,
+            })
+            checkCharsInFullHealth(scene)
+            checkBossRoomCleared(scene)
+            checkNoEnergyUsed(scene)
+            break
         case 'HIGHEST_DAMAGE':
             checkHighestDamageHit(scene, data as applyDamageArgs)
             break
@@ -45,6 +58,88 @@ const checkServerScoringEvent = (
         case 'CARDS_OVER_THRESHOLD':
             checkCardsOverThreshold(scene)
     }
+}
+const checkCharsInFullHealth = (scene: BattleCursor) => {
+    const userCharsInFullHealth = vals(scene.get('allCharacters')).filter(
+        meta => meta.isPc && meta.constitution === meta.health
+    )
+
+    const partyInFullHealth =
+        userCharsInFullHealth.length === NUM_KAIJUS_IN_PARTY
+
+    const roomHadBoss = roomContainsBoss(scene)
+
+    if (partyInFullHealth) {
+        const roomTypeEvent: RunScoreEvent = roomHadBoss
+            ? 'EXIT_BOSS_FULL_HEALTH'
+            : 'EXIT_ROOM_FULL_HEALTH'
+
+        updateScore({ scene, event: roomTypeEvent, count: 1, notify: true })
+    } else if (roomHadBoss) {
+        checkHealthLostInBossRoom(scene)
+    } else {
+        checkHealthLostInRoom(scene)
+    }
+}
+
+const checkBossRoomCleared = (scene: BattleCursor): void => {
+    if (roomContainsBoss(scene)) {
+        updateScore({ scene, event: 'BOSS_KILLED', count: 1, notify: true })
+    }
+}
+
+const checkHealthLostInBossRoom = (scene: BattleCursor) => {
+    const totalHealthLost = getTotalHealthLost(scene)
+
+    if (totalHealthLost < 15) {
+        updateScore({
+            scene,
+            event: 'EXIT_BOSS_LOW_DAMAGE',
+            count: 1,
+            notify: true,
+        })
+    }
+}
+
+const checkHealthLostInRoom = (scene: BattleCursor) => {
+    const totalHealthLost = getTotalHealthLost(scene)
+    if (totalHealthLost === 0) {
+        updateScore({
+            scene,
+            event: 'ROOM_WIN_ZERO_DAMAGE',
+            count: 1,
+            notify: true,
+        })
+    }
+}
+const roomContainsBoss = (scene: BattleCursor): boolean => {
+    const numRoomsPassed = scene
+        .select('runScore')
+        .select('attributes')
+        .get('roomsCleared')
+    const currentRoom = scene.get('currentRoom')
+    const boss = currentRoom.enemies.filter(enemyChar => enemyChar.boss)
+    return boss.length > 0
+}
+const checkNoEnergyUsed = (scene: BattleCursor) => {
+    const noEnergyUsed = scene.get('energy') === scene.get('roundEnergy')
+    if (noEnergyUsed) {
+        updateScore({
+            scene,
+            event: 'ROOM_WIN_NO_ENERGY_USED',
+            count: 1,
+            notify: true,
+        })
+    }
+}
+
+const getTotalHealthLost = (scene: BattleCursor): number => {
+    return scene.get('damagesDealtThisRoom').reduce((prev, curr) => {
+        if (curr.targetUid.includes('pc')) {
+            return curr.amount + prev
+        }
+        return prev + 0
+    }, 0)
 }
 
 const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
@@ -96,7 +191,7 @@ const checkSurvivingKaiju = (scene: BattleCursor) => {
     updateRunScoreAttribute(scene, 'survivingKaiju', survivingKaiju.length)
 
     const healthRemaining = survivingKaiju.reduce((prev, curr) => {
-        return prev + curr.health
+        return Math.round(prev + (curr.health / curr.constitution) * 100)
     }, 0)
 
     updateRunScoreAttribute(scene, 'finalUserHealthRemaining', healthRemaining)

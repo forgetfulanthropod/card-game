@@ -13,5 +13,4 @@ export * from './ModalBackdrop'
 export * from './Notification'
 export * from './PlainButton'
 export * from './handleScoringEvent'
-export * from './checkOtherScoringEvents'
 // @endindex

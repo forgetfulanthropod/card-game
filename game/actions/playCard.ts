@@ -43,7 +43,8 @@ function isPlayable({
     card: Card
     scene: BattleCursor
 }): boolean {
-    if (getEnergy(card) > scene.get('energy')) return false
+    if (getEnergy(card) < 0 || getEnergy(card) > scene.get('energy'))
+        return false
 
     const requiredStance = card.actions.match(
         /ifStance[^(]*\([^"]*"([^"]+)/

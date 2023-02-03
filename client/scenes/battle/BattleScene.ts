@@ -53,9 +53,6 @@ export function BattleSceneEl(): PixiContainer {
                     immediatelyTakeRequiredAction,
                     true
                 ),
-                onUpdate(scene.select('runScoreUpdate'), update => {
-                    update && showScoreUpdateNotification(update)
-                }),
             ],
         },
         If(

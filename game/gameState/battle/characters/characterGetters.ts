@@ -152,6 +152,8 @@ export function getCommandTargets(
             .filter(uid => uid != null)
     } else if (command.targetType === 'allEnemies') {
         return getLivingPcs(scene).map(c => c.uid)
+    } else if (command.targetType === 'allFriends') {
+        return getLivingNpcs(scene).map(c => c.uid)
     } else if (command.targetType === 'self') {
         return [command.characterUid]
     }

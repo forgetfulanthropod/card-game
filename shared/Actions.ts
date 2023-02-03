@@ -80,7 +80,6 @@ interface BareGameActionArgs {
     openEndOfRoom: Empty
     openEndOfRun: Empty
     nextRoom: { choice: 0 | 1 | 2 | 3 }
-    notifyRunScore: { event: RunScoreEvent; count: number }
     choosePlushy: { index: number }
     placeSelectedCharacters: {
         characters: {

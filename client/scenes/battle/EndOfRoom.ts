@@ -1,6 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { depricatedScoreUpdateFromClient, ModalBackdrop } from '@sharedElements'
+import { ModalBackdrop } from '@sharedElements'
 import {
     AssetKey,
     getTexture,
@@ -144,7 +144,6 @@ export function EndOfRoom(): PixiContainer {
     )
 
     if (lootScreenHasOpened === false) {
-        depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
         slamAnimateElIntoScreen(roomClearedSign)
 
         setTimeout(() => {

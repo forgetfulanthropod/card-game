@@ -1,8 +1,4 @@
-import {
-    depricatedScoreUpdateFromClient,
-    InfoBox,
-    ModalBackdrop,
-} from '@sharedElements'
+import { InfoBox, ModalBackdrop } from '@sharedElements'
 import {
     Adjust,
     animateNumberInElement,
@@ -644,7 +640,6 @@ export function EndOfRun(): PixiContainer {
             })
 
             if (isVictory) {
-                depricatedScoreUpdateFromClient('ROOM_CLEARED', 1, scene)
                 callApi('openEndOfRun', {})
             }
 

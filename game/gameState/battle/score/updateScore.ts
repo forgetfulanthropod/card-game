@@ -4,19 +4,21 @@ import {
     RunScoreEvent,
     RUN_SCORE_EVENT_META,
 } from 'shared'
-import { getBattleSceneIn } from '@/util'
+import type { RunScoreUpdate } from 'shared'
+import { emit } from '@/util'
 import { calculateChestProgress, calculateNewRunScore } from '@/gameState'
-
 export function updateScore({
     scene,
     event,
     count,
     notify,
+    data,
 }: {
     scene: BattleCursor
     event: RunScoreEvent
     count: number
     notify?: boolean
+    data?: any
 }) {
     const attributeNameInTree = RUN_SCORE_EVENT_META[event].attributeName
     const attributeCount = scene
@@ -29,11 +31,20 @@ export function updateScore({
 
     attributeCount.set(newCount)
 
-    if (notify)
-        scene.set('runScoreUpdate', {
+    if (notify) {
+        const eventData: RunScoreUpdate = {
             event: event as NotifiableEvent,
             count,
+            data,
+        }
+        emit({
+            username: scene.get('username'),
+            event: {
+                type: 'notifyScore',
+                data: eventData,
+            },
         })
+    }
 
     // 2 calls below might be unnecessary
     calculateNewRunScore(scene)

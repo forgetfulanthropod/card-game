@@ -11,7 +11,7 @@ import type {
 import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
-import { checkOtherScoringEvents, MainCharacterAnimation } from '../shared'
+import { MainCharacterAnimation } from '../shared'
 import {
     AssetKey,
     loopSong,
