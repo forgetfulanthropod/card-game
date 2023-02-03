@@ -29,7 +29,7 @@ export const execute: Executors['removeAllDebuffs'] = ({
     })
 
     targetUids.forEach(uid =>
-        scene.select('allCharacters', 'targetUid').apply(cm => ({
+        scene.select('allCharacters', uid).apply(cm => ({
             ...cm,
             effects: cm.effects.filter(effect => !effect.id.includes('Debuff')),
         }))

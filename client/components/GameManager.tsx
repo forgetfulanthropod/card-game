@@ -13,6 +13,8 @@ export function GameManager(props: { username: string }): JSXElement {
 
     const isProduction = !!process.env.IS_PRODUCTION
 
+    console.log({ isProduction })
+
     return <AppWrap>
         {/* <div>
             On branch {"'"}

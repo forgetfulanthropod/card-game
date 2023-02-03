@@ -208,7 +208,6 @@ export type CardId =
     | 'songOfWizadry'
     | 'spellBook'
     | 'stab'
-    | 'strike'
     | 'sweepTheLeg'
     | 'swissArmyWand'
     | 'swordSlash'
