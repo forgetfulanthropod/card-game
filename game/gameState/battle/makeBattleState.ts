@@ -61,6 +61,7 @@ export function makeBattleState(args: {
         lootEarned: getInitialLoot(),
         lootClaimed: [],
         lootScreenHasOpened: false,
+        numRequiredToDiscard: 0,
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
