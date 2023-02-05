@@ -1196,22 +1196,23 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'cleric',
     },
-    prayerOfGoodFortune: {
-        name: 'Prayer of Good Fortune',
-        energy: 2,
-        id: 'prayerOfGoodFortune',
-        targetNum: 1,
-        targetType: 'friends',
-        actions: `
-            addBlock("incomingDamageIntended");
-            chain(
-                "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
-                brittle(1)
-            )
-        `,
-        type: 'defense',
-        characterClass: 'cleric',
-    },
+    // TODO
+    // prayerOfGoodFortune: {
+    //     name: 'Prayer of Good Fortune',
+    //     energy: 2,
+    //     id: 'prayerOfGoodFortune',
+    //     targetNum: 1,
+    //     targetType: 'friends',
+    //     actions: `
+    //         addBlock("incomingDamageIntended");
+    //         chain(
+    //             "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
+    //             brittle(1)
+    //         )
+    //     `,
+    //     type: 'defense',
+    //     characterClass: 'cleric',
+    // },
     prayerOfGoodHealth: {
         name: 'Prayer of Good Health',
         energy: 0,
