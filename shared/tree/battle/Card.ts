@@ -185,7 +185,7 @@ export type CardId =
     | 'parry'
     | 'patientAmbush'
     | 'poisonedBlade'
-    | 'prayerOfGoodFortune'
+    // | 'prayerOfGoodFortune'
     | 'prayerOfGoodHealth'
     | 'psychicWarfare'
     | 'rapidFireBolts'
