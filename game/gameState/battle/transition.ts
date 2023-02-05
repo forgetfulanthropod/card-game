@@ -18,6 +18,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         checkServerScoringEvent('STANCE_CHANGES_OVER', scene, {})
         calculateNewRunScore(scene)
         calculateChestProgress(scene)
+        scene.set('numRequiredToDiscard', 0)
     }
 
     if (winner === 'PC') {
