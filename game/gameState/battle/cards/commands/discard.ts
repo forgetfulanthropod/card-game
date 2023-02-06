@@ -1,6 +1,7 @@
+import { activeOnDiscardActions } from '@/actions/discard'
 import produce from 'immer'
 import { shuffle } from 'lodash'
-import { keys } from 'shared/code'
+import { keys, vals } from 'shared/code'
 import { discardAllCards } from '../discardAllCards'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
@@ -18,7 +19,12 @@ export const execute: Executors['discard'] = ({ dslArgs, scene }) => {
 
     if (numCards > 0 && handHasMoreCardsThanThis)
         scene.set('numRequiredToDiscard', numCards)
-    else discardAllCards(scene)
+    else {
+        vals(scene.get('cards', 'hand')).forEach(card => {
+            activeOnDiscardActions(card, scene)
+        })
+        discardAllCards(scene)
+    }
 
     // scene.select('cards').apply(
     //     produce(cards => {
