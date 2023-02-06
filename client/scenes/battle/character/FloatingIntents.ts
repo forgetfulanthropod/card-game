@@ -296,7 +296,7 @@ const commandIdToMetaMap: Record<
     },
     violentSneeze: {
         id: 'violentSneeze',
-        explanation: [],
+        explanation: ['Applies <b>Vulnerable</b> (3)'],
     },
     yodel: {
         id: 'yodel',
