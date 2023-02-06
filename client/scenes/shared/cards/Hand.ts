@@ -351,8 +351,11 @@ function getXYRotationForCard(
     const numCharacterGaps =
         uniq(keys(pile).map(pileKey => pile[pileKey].characterUid)).length - 1
     xGapPortion =
-        (xGapPortion * (handWidth - numCharacterGaps * (CARD_WIDTH - xGap))) /
-        handWidth
+        handWidth > 0
+            ? (xGapPortion *
+                  (handWidth - numCharacterGaps * (CARD_WIDTH - xGap))) /
+              handWidth
+            : 0
     xGap = xGapPortion * handWidth * 0.5
 
     let xPlacementPortion =
@@ -365,6 +368,8 @@ function getXYRotationForCard(
             : accumulatedGap
 
     lastCardOwnerUidDealt = card.characterUid
+
+    console.log({ handWidth, xPlacementPortion, owningCharacterSwitchGap })
 
     return assertFinite({
         x:
