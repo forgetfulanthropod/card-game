@@ -55,6 +55,7 @@ export interface ActionArgs {
 
     deal: [damage: number, modifier?: 'piercing']
     dealFromStance: [stance: StanceId, damage: number, times?: number]
+    drawSizeChange: [amount: number]
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     heal: [amount: number]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
@@ -91,7 +92,8 @@ export interface ActionArgs {
     require: [type: RequiredActionName, least: number, most: number]
 
     mimicAttack: []
-    bellyFlop: [damage: number]
+    bellyFlop: [damage: number, times: number]
+    infectiousBite: [damage: number]
 }
 
 export type Locals = CalculatedCharacterStats & {

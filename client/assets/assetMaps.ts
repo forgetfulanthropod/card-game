@@ -178,6 +178,7 @@ export const effectAssets: {
     effectReflectBuff: 'effects/strongblock.webp',
     effectStunnedDebuff: 'effects/stunned.webp',
     effectTiredDebuff: 'effects/tired.webp',
+    effectStampBuff: 'effects/stamp_and_snort.webp',
     //TODO: placeholder icon
     effectTargetedDebuff: 'effects/tired.webp',
     effectUnguardedDebuff: 'effects/unguarded.webp',
@@ -203,7 +204,8 @@ export const intentAssets = {
     enemyIntentArrowTail: 'intents/arrow_4_tail_bright.webp',
     intentAttack: 'intents/floating intent amount.webp',
     intentBellyFlop: 'intents/belly button.webp',
-    intentRollAround: 'intents/belly button.webp',
+    intentRollAround: 'intents/big_belly.webp',
+    intentBucketOfBangSnaps: 'intents/bucket_of_bang_snaps.webp',
     intentMimic: 'intents/Mimic.webp',
     intentInfectiousBite: 'intents/Infectious Bite.webp',
     intentGrudge: 'intents/Grudge.webp',
@@ -212,6 +214,13 @@ export const intentAssets = {
     intentDebuff: 'intents/debuff.webp',
     intentBigBomb1: 'intents/gnomeBomb1.webp',
     intentBigBomb2: 'intents/gnomeBomb2.webp',
+    intentRoadClosure: 'intents/road_closure.webp',
+    intentSnowFort: 'intents/snow_fort.webp',
+    intentCommonCold: 'intents/common_cold.webp',
+    intentFireCracker: 'intents/fire_cracker.webp',
+    intentSnortinTime: 'intents/snortin_time.webp',
+    intentYodel: 'intents/yodel.webp',
+    intentSnout: 'intents/snout.webp',
 }
 
 export const orbAssets = {
@@ -277,6 +286,8 @@ export const spineAssets = {
     bosshogJurgenSpine: 'SKIN: warhogSkinsSpine -> 2',
     groghogSpine: 'SKIN: warhogSkinsSpine -> 3',
     warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
+    //TODO: change when frosthog skin is added
+    frostHogSpine: 'SKIN: warhogSkinsSpine -> 4',
 
     mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
 

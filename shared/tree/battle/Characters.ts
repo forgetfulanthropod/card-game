@@ -89,5 +89,6 @@ export type NonPlayerCharacterId =
     | 'toadmaw'
     | 'warhog'
     | 'warhogRaider'
+    | 'frostHog'
 
 export type CharacterId = PlayerCharacterId | NonPlayerCharacterId

@@ -152,6 +152,20 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
         ],
+        //[
+        //    {
+        //        id: 'frostHog',
+        //        level: 1,
+        //    },
+        //    {
+        //        id: 'mimic',
+        //        level: 1,
+        //    },
+        //    {
+        //        id: 'bosshogJurgen',
+        //        level: 'default',
+        //    },
+        //],
         [
             {
                 id: 'plaguehog',

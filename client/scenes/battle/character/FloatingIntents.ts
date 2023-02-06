@@ -139,6 +139,7 @@ const commandIdToMetaMap: Record<
     },
     bucketOfBangSnaps: {
         id: 'bucketOfBangSnaps',
+        src: 'intentBucketOfBangSnaps',
         explanation: [
             'Applies <b>Unready</b> (2) if any damage goes unblocked',
         ],
@@ -159,6 +160,7 @@ const commandIdToMetaMap: Record<
     },
     fireCracker: {
         id: 'fireCracker',
+        src: 'intentFireCracker',
         explanation: ['Applies <b>Unguarded</b> (2)'],
     },
     gnomeBomb: {
@@ -168,6 +170,7 @@ const commandIdToMetaMap: Record<
     grudge: {
         id: 'grudge',
         src: 'intentGrudge',
+        explanation: ['Mimic attacks for 25% of the health he has lost.'],
     },
     hansBuffBlock: {
         id: 'hansBuffBlock',
@@ -201,25 +204,48 @@ const commandIdToMetaMap: Record<
         id: 'jurgenBellyFlop',
         src: 'intentBellyFlop',
         explanation: [
-            'Bosshog Jürgen will attempt to attack for 55 damage, but will deal 1 point less for every point of damage he takes.',
+            'Bosshog Jürgen deals 1 point less for every point of damage he takes.',
         ],
     },
     jurgenRollAround: {
         id: 'jurgenRollAround',
         src: 'intentRollAround',
         explanation: [
-            'Bosshog Jürgen will attempt to attack 2 friendly kaiju for 30 damage each, but will deal 1 point less for every point of damage he takes',
+            'Bosshog Jürgen will attack twice but deals 1 point less for every point of damage he takes',
         ],
     },
     jurgenSitUpon: {
         id: 'jurgenSitUpon',
         explanation: [
-            'Jürgen sits on one of your characters.  This attack does 60 damage and gives Stun (1) to the target',
+            'Jürgen sits on and <b>debiliates</b> (2) one of your characters.',
         ],
     },
     jurgenStampSnort: {
         id: 'jurgenStampSnort',
-        explanation: ['Bosshog Jürgen will do double damage next turn'],
+        explanation: [
+            'Jürgen gets very angry and stamps around in place.',
+            'He does nothing this turn but increases his base attack by 25 the following turn.',
+        ],
+    },
+    roadClosure: {
+        id: 'roadClosure',
+        src: 'intentRoadClosure',
+        explanation: [
+            'At the start of your next turn, draw 2 fewer cards than normal.',
+        ],
+    },
+    snowFort: {
+        id: 'snowFort',
+        src: 'intentSnowFort',
+        explanation: ['All enemies recieve 100% block'],
+    },
+    commonCold: {
+        id: 'commonCold',
+        src: 'intentCommonCold',
+        explanation: [
+            'All friendly Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
+            'At the start of your next turn, draw 1 fewer card than normal.',
+        ],
     },
     matchaMadness: {
         id: 'matchaMadness',
@@ -236,7 +262,10 @@ const commandIdToMetaMap: Record<
     mimicAttack: {
         id: 'mimicAttack',
         src: 'intentMimic',
-        explanation: ['copies last hit this turn or deals 999'],
+        explanation: [
+            'Mimic attacks for the last amount of damage done to him.',
+            'If Mimic is not attacked this turn, he will attack for 999 instead.',
+        ],
     },
     parasiticNibble: {
         id: 'parasiticNibble',
@@ -272,6 +301,7 @@ const commandIdToMetaMap: Record<
     },
     snortinTime: {
         id: 'snortinTime',
+        src: 'intentSnortinTime',
         explanation: [],
     },
     spiritQuest: {
@@ -300,6 +330,7 @@ const commandIdToMetaMap: Record<
     },
     yodel: {
         id: 'yodel',
+        src: 'intentYodel',
         explanation: [
             'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
         ],
@@ -324,6 +355,14 @@ const commandIdToMetaMap: Record<
         id: 'surpriseAllergy(3,2)',
         explanation: [
             'Applies <b>Poisoned</b> (3) and <b>Fatigued</b> (2) if any damage goes unblocked',
+        ],
+    },
+    mimicInfectiousBite: {
+        id: 'mimicInfectiousBite',
+        src: 'intentInfectiousBite',
+        explanation: [
+            'Mimic attacks for 100%.',
+            'Apply <b>Poisoned</b> equal to the amount of unblocked damage.',
         ],
     },
 }

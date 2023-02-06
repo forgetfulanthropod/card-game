@@ -31,6 +31,8 @@ export interface BattleScene extends SceneHas {
     allCharacters: Characters
     cards: Piles
     newCardOptions: Pile
+    handSize: number
+    baseHandSize: number
     energy: number
     roundEnergy: number
     isBasicLoaded: boolean
