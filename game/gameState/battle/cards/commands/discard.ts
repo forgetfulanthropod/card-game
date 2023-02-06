@@ -14,6 +14,8 @@ export const explain: Explainers['discard'] = dslArgs => {
 export const execute: Executors['discard'] = ({ dslArgs, scene }) => {
     const [numCards] = evalAll(dslArgs)
 
+    logger.info('hand: ' + keys(scene.get('cards', 'hand')))
+
     const handHasMoreCardsThanThis =
         keys(scene.get('cards', 'hand')).length > numCards
 
