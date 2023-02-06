@@ -95,7 +95,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions:
-            'chain(effect("fatigued", 1, "enemies"), effect("unguarded", 1, "enemies"), drawSizeChange(-1))',
+            'effect("fatigued", 1, "enemies"); effect("unguarded", 1, "enemies"); drawSizeChange(-1)',
     },
     mimicAttack: {
         //@ts-expect-error

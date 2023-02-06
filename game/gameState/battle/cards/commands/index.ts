@@ -79,7 +79,7 @@ export const explainers: Explainers = {
     setStance: explainSetStance,
     smite: explainSmite,
     text: explainText,
-    // @end-index
+    // @endindex
 }
 
 export const executors: Executors = {
