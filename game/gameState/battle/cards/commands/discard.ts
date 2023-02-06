@@ -11,18 +11,19 @@ export const explain: Explainers['discard'] = dslArgs => {
     return `Discard ${numCards}`
 }
 
-export const execute: Executors['discard'] = ({ dslArgs, scene }) => {
+export const execute: Executors['discard'] = ({ cardUid, dslArgs, scene }) => {
     const [numCards] = evalAll(dslArgs)
 
-    logger.info('hand: ' + keys(scene.get('cards', 'hand')))
+    const remainingCardsInHand = vals(scene.get('cards', 'hand')).filter(
+        card => card.uid !== cardUid
+    )
 
-    const handHasMoreCardsThanThis =
-        keys(scene.get('cards', 'hand')).length > numCards
+    const handHasMoreCardsThanThis = remainingCardsInHand.length > numCards
 
     if (numCards > 0 && handHasMoreCardsThanThis)
         scene.set('numRequiredToDiscard', numCards)
     else {
-        vals(scene.get('cards', 'hand')).forEach(card => {
+        remainingCardsInHand.forEach(card => {
             activeOnDiscardActions(card, scene)
         })
         discardAllCards(scene)
