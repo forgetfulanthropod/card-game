@@ -1,9 +1,4 @@
-import type {
-    CharacterUid,
-    NextCommand,
-    NpcCommandId,
-    TargetType,
-} from 'shared'
+import type { CharacterUid, NextCommand, NpcCommandId } from 'shared'
 import { datum, RODatum } from 'datums'
 import {
     ExplanationIf,
@@ -11,7 +6,7 @@ import {
     keyTermsMap,
     TermExplanationIf,
 } from '@sharedElements'
-import { TermExplanation } from '@sharedElements'
+
 import { highlightIntentFrom, toDatum } from '@/util'
 import {
     Adjust,
@@ -306,7 +301,7 @@ const commandIdToMetaMap: Record<
     },
     spiritQuest: {
         id: 'spiritQuest',
-        explanation: [],
+        explanation: ['All enemies receive <b>Brave</b> (2)'],
     },
     strike: {
         id: 'strike',

@@ -285,8 +285,8 @@ function TileContents(node: DungeonRoom | null) {
     if (!isPlayerCharacterRoom && node.category?.includes('tier'))
         return Sprite({
             src: `${node.category}Icon` as AssetKey,
-            scale: 0.7,
-            anchor: 0.5,
+            scale: 1,
+            anchor: [0.5, 0.65],
         })
 
     return TileCharacters(node)
