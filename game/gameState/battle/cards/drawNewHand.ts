@@ -69,11 +69,7 @@ function drawUpToNCards({
 
     const numInHand = keys(hand).length
     const numToDraw = n - numInHand
-
-    if (numToDraw < 0)
-        throw new Error(`already have ${numInHand} cards, drawing up to ${n}`)
-
-    if (numToDraw === 0) return { newDrawPile: drawPile, newHand: hand }
+    if (numToDraw <= 0) return { newDrawPile: drawPile, newHand: hand }
 
     keys(drawPile)
         .slice(0, numToDraw)
