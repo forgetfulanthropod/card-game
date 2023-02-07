@@ -290,7 +290,6 @@ export function Explanation({
                 ? { colorStops: [{ color, offset: 0 }] }
                 : { colorStops: [{ color: 0x364259, offset: 0 }] }),
             padding: 15,
-            // borderColor: 0xFFFFFF,
             borderThickness: 0,
             alpha: 0.96,
             filters: [outlineFilter]

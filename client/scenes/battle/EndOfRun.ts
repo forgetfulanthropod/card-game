@@ -36,6 +36,7 @@ import { collectData } from '@/analytics/collectData'
 import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
 import { Easing, Tweener } from 'pixi-tweener'
+import { OutlineFilter } from 'pixi-filters'
 
 // Note: this file needs further refactoring
 
@@ -148,7 +149,7 @@ const transitionFadeChildren = async (
     }
 }
 
-const transitionFadeElement = async (
+export const transitionFadeElement = async (
     el: PixiContainer,
     velocity: 'fast' | 'slow',
     direction: 'in' | 'out'
@@ -170,6 +171,7 @@ export const transitionToScreen = async (
     ...elements: PixiContainer[]
 ) => {
     const duration = 0.3
+    // the elements all transition at the same time on purpose
     elements.forEach(async el => {
         await Tweener.add(
             {
@@ -296,7 +298,7 @@ const ScoreAttributeItem = (
         y: 10,
         style: {
             ...baseStyle,
-            fill: '#c5e0ef',
+            fill: 'white',
         },
     })
     const ExplanationSubtitle = Text({
@@ -305,11 +307,14 @@ const ScoreAttributeItem = (
         y: 40,
         style: {
             ...baseStyle,
+            fill: 0xdddddd,
             fontSize: 20,
             fontFamily: 'sansFont',
             fontStyle: 'italic',
         },
     })
+
+    const outlineFilter = new OutlineFilter(3, 0x1F2633)
 
     const ExplanationInfoBox = InfoBox(
         Container({}, ExplanationTitle, ExplanationSubtitle),
@@ -318,10 +323,10 @@ const ScoreAttributeItem = (
             y: y - 24,
             name: `${keyword} Explanation`,
             zIndex: 999,
-            padding: 8,
-            borderColor: 0x44403c,
-            colorStops: [{ color: 0x57534e, offset: 0 }],
+            padding: 15,
+            colorStops: [{ color: 0x364259, offset: 0 }],
             alpha: 0.95,
+            filters: [outlineFilter]
         }
     )
 
