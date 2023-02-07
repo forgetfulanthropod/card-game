@@ -46,7 +46,7 @@ export const discard: GameActions['discard'] = args => {
     scene.set('numRequiredToDiscard', 0)
 }
 
-function activeOnDiscardActions(card: Card, scene: BattleCursor) {
+export function activeOnDiscardActions(card: Card, scene: BattleCursor) {
     if (!card.on?.discard) return
 
     interpretCommand({

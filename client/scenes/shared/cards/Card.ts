@@ -52,6 +52,7 @@ import { getBattleScene, getEntryScene } from '@/data'
 import { callApi } from '@/callApi'
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { toDiscardUids } from '@/scenes/battle/BattleScene'
+import { CARD_WIDTH } from './CardAdder'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -342,7 +343,7 @@ function getTexts(
 ): DisplayObject[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
-    const cardFrameScale = cardFrameTexture.width / 791
+    const cardFrameScale = cardFrameTexture.width / 791 // legacy sizing adjustment
     const explanationFontSize = getExplanationFontSize(
         cardFrameScale,
         card.explanation
@@ -364,6 +365,7 @@ function getTexts(
                     },
                 }),
                 radius: cardFrameTexture.height * 0.5,
+                maxWidth: CARD_WIDTH * 0.9,
             }),
             {
                 y: cardFrameTexture.width * 0.15,
