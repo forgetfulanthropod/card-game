@@ -2,9 +2,9 @@ import { applyDamage } from '../../util'
 import { evalAll, evalAllAsHtml, Executors, Explainers } from './util'
 
 export const explain: Explainers['bellyFlop'] = dslArgs => {
-    const [damageHtml] = evalAllAsHtml(dslArgs)
-
-    return `Bosshog Jürgen will attempt to attack for ${damageHtml} damage, but will deal 1 point less for every point of damage he takes.`
+    const [damageHtml, times] = evalAllAsHtml(dslArgs)
+    const timesString = Number(times) > 1 ? ` ${times} times` : ``
+    return `Bosshog Jürgen will attempt to attack for ${damageHtml} damage${timesString}, but will deal 1 point less for every point of damage he takes.`
 }
 
 export const execute: Executors['bellyFlop'] = ({
@@ -13,7 +13,7 @@ export const execute: Executors['bellyFlop'] = ({
     targetUids,
     dslArgs,
 }) => {
-    const [damageBase] = evalAll(dslArgs)
+    const [damageBase, times] = evalAll(dslArgs)
     const damageDealtThisTurn = scene
         .get('damagesDealtThisTurn')
         .filter(damage => damage.targetUid === command.characterUid)
@@ -21,12 +21,24 @@ export const execute: Executors['bellyFlop'] = ({
 
     const damage = Math.max(1, damageBase - damageDealtThisTurn)
 
-    targetUids.map(targetUid =>
-        applyDamage({
-            damage,
-            targetUid,
-            attackerUid: command.characterUid,
-            scene,
-        })
-    )
+    // attack same target multiple times; bad logic but works for now.
+    if (targetUids.length == times) {
+        targetUids.map(targetUid =>
+            applyDamage({
+                damage,
+                targetUid,
+                attackerUid: command.characterUid,
+                scene,
+            })
+        )
+    } else {
+        for (let i = 0; i < times; i++) {
+            applyDamage({
+                damage,
+                targetUid: targetUids[0],
+                attackerUid: command.characterUid,
+                scene,
+            })
+        }
+    }
 }

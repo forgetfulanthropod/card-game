@@ -88,20 +88,20 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 8,
             },
         ],
-        [
-            // {
-            //     id: 'frosthog',
-            //     level: 3,
-            // },
-            // {
-            //     id: 'frosthog',
-            //     level: 3,
-            // },
-            // {
-            //     id: 'frosthog',
-            //     level: 3,
-            // },
-        ],
+        // [
+        //     {
+        //         id: 'frosthog',
+        //         level: 3,
+        //     },
+        //     {
+        //         id: 'frosthog',
+        //         level: 3,
+        //     },
+        //     {
+        //         id: 'frosthog',
+        //         level: 3,
+        //     },
+        // ],
         [
             {
                 id: 'skeletonWarrior',
@@ -152,6 +152,20 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
         ],
+        //[
+        //    {
+        //        id: 'frostHog',
+        //        level: 1,
+        //    },
+        //    {
+        //        id: 'mimic',
+        //        level: 1,
+        //    },
+        //    {
+        //        id: 'bosshogJurgen',
+        //        level: 'default',
+        //    },
+        //],
         [
             {
                 id: 'plaguehog',
@@ -304,16 +318,16 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 4,
             },
         ],
-        [
-            // {
-            //     id: 'frosthog',
-            //     level: 6,
-            // },
-            // {
-            //     id: 'frosthog',
-            //     level: 6,
-            // },
-        ],
+        // [
+        //     {
+        //         id: 'frosthog',
+        //         level: 6,
+        //     },
+        //     {
+        //         id: 'frosthog',
+        //         level:6,
+        //     },
+        // ],
         [
             {
                 id: 'plaguehog',
@@ -376,18 +390,6 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [],
                 edges: ['', '1_1', '', ''],
             },
-            '0_4': {
-                uid: '0_4',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['0_6', '', '', ''],
-            },
-            '0_6': {
-                uid: '0_6',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['', '1_7', '', ''],
-            },
             '1_1': {
                 uid: '1_1',
                 enemies: [],
@@ -398,13 +400,19 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '1_3',
                 enemies: [],
                 category: 'tierOne',
-                edges: ['0_4', '2_4', '', ''],
+                edges: ['1_5', '2_4', '', ''],
+            },
+            '1_5': {
+                uid: '1_5',
+                enemies: [],
+                category: 'events',
+                edges: ['1_7', '', '', ''],
             },
             '1_7': {
                 uid: '1_7',
                 enemies: [],
-                category: 'tierOne',
-                edges: ['', '', '2_6', ''],
+                category: 'tierTwo',
+                edges: ['', '2_8', '', ''],
             },
             '2_0': {
                 uid: '2_0',
@@ -416,19 +424,19 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '2_4',
                 enemies: [],
                 category: 'tierOne',
-                edges: ['', '', '3_5', ''],
+                edges: ['', '3_5', '', ''],
             },
-            '2_6': {
-                uid: '2_6',
+            '2_8': {
+                uid: '2_8',
                 enemies: [],
                 category: 'tierTwo',
-                edges: ['', '3_7', '', ''],
+                edges: ['', '', '3_7', ''],
             },
             '3_1': {
                 uid: '3_1',
                 enemies: [],
                 category: 'events',
-                edges: ['', '', '4_2', ''],
+                edges: ['', '4_2', '', ''],
             },
             '3_5': {
                 uid: '3_5',
@@ -440,13 +448,13 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '3_7',
                 enemies: [],
                 category: 'events',
-                edges: ['', '', '4_8', ''],
+                edges: ['', '4_8', '', ''],
             },
             '4_2': {
                 uid: '4_2',
                 enemies: [],
                 category: 'tierTwo',
-                edges: ['', '4_4', '', ''],
+                edges: ['4_4', '', '', ''],
             },
             '4_4': {
                 uid: '4_4',
@@ -462,7 +470,12 @@ export function getDungeonRooms(): DungeonRoomMaps {
             },
             '4_8': {
                 uid: '4_8',
-                enemies: [],
+                enemies: [
+                    {
+                        id: 'mimic',
+                        level: 1,
+                    },
+                ],
                 category: 'bosses',
                 edges: ['4_10', '5_9', '', ''],
             },
@@ -500,7 +513,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '6_10',
                 enemies: [],
                 category: 'events',
-                edges: ['', '7_7', '', ''],
+                edges: ['', '7_11', '', ''],
             },
             '6_14': {
                 uid: '6_14',
@@ -512,7 +525,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '7_7',
                 enemies: [],
                 category: 'events',
-                edges: ['', '8-8', '', ''],
+                edges: ['', '8_8', '', ''],
             },
             '7_11': {
                 uid: '7_11',
@@ -530,7 +543,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '8_8',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['', '', '9_9', ''],
+                edges: ['8_10', '', '9_9', ''],
             },
             '8_10': {
                 uid: '8_10',

@@ -35,6 +35,8 @@ import {explain as explainRequire, execute as executeRequire} from './require'
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
+import {explain as explainDrawSizeChange, execute as executeDrawSizeChange} from './drawSizeChange'
+import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
 // @endindex
 export type { Locals } from './util'
 
@@ -53,10 +55,12 @@ export const explainers: Explainers = {
     discardRandom: explainDiscardRandom,
     doubleEnchantmentOrToken: explainDoubleEnchantmentOrToken,
     draw: explainDraw,
+    drawSizeChange: explainDrawSizeChange,
     dwindle: explainDwindle,
     effect: explainEffect,
     explain: explainExplain,
     heal: explainHeal,
+    infectiousBite: explainInfectiousBite,
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
@@ -93,10 +97,12 @@ export const executors: Executors = {
     discardRandom: executeDiscardRandom,
     doubleEnchantmentOrToken: executeDoubleEnchantmentOrToken,
     draw: executeDraw,
+    drawSizeChange: executeDrawSizeChange,
     dwindle: executeDwindle,
     effect: executeEffect,
     explain: executeExplain,
     heal: executeHeal,
+    infectiousBite: executeInfectiousBite,
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,

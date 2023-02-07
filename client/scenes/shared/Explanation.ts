@@ -31,10 +31,6 @@ export const keyTermsMap = {
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
 
-    // grudge: 'intentGrudge',
-    // infectiousBite: 'unblocked damage becomes Poison',
-    // mimicAttack: 'deal 999 or copies the last hit taken this turn',
-
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
     bleed: '(unblockable) receives damage equal to 5% of max Health at start of turn',
@@ -55,6 +51,7 @@ export const keyTermsMap = {
     unguarded: 'receives 25% more damage',
     unready: 'receives 12% more damage',
     vulnerable: 'receives 50% more damage',
+    stamp: 'strength increased by 25',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap

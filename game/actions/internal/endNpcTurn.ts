@@ -26,9 +26,9 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
 
     clearBlock(scene, 'pc')
 
-    drawNewHand(scene)
     popAndRunQueue(scene, 'pc')
 
+    drawNewHand(scene)
     decrementEffects(scene, 'npc')
 
     checkServerScoringEvent('HIT_VULGAR_THRESHOLD', scene)
