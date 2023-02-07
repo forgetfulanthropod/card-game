@@ -369,8 +369,6 @@ function getXYRotationForCard(
 
     lastCardOwnerUidDealt = card.characterUid
 
-    console.log({ handWidth, xPlacementPortion, owningCharacterSwitchGap })
-
     return assertFinite({
         x:
             handWidth * 0.5 * xPlacementPortion -

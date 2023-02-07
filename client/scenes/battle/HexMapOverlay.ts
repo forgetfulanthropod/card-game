@@ -68,10 +68,10 @@ export function HexMapOverlay(): PixiContainer {
         // }),
         Container(
             {
-                x: BASE_WIDTH * 0.05,
-                y: BASE_HEIGHT * 0.88,
+                x: BASE_WIDTH * 0.15,
+                y: BASE_HEIGHT * 0.91,
                 // TODO: zoomed panning?
-                scale: 0.7,
+                scale: 0.67,
             },
             ...AllTiles()
         )
@@ -188,6 +188,7 @@ function sortNodes(allTiles: PixiContainer[]) {
 //     enemies: RoomEnemies
 //     edges: [string, string]
 // }
+const darkenFilter = new AdjustmentFilter({ brightness: 0.5 })
 
 function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
     const texture = getTexture(`mapTileBase`)
@@ -199,13 +200,11 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
-    const filters =
-        !~choice && !isPlayerCharacterRoom
-            ? [new AdjustmentFilter({ brightness: 0.5 })]
-            : []
+    const filters = !~choice && !isPlayerCharacterRoom ? [darkenFilter] : []
 
     const root = Container(
         {
+            name: node.uid,
             x: depth * displayWidth * 0.78,
             y: displayWidth * 0.34 * yOffset,
             filters,
@@ -215,9 +214,23 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                 },
                 pointerover() {
                     if (~choice) root.filters = [glowFilter]
+
+                    //DEBUG
+                    if (!isPlayerCharacterRoom)
+                        node.edges.forEach(
+                            edgeKey =>
+                                edgeKey && glowTileById(root.parent, edgeKey)
+                        )
                 },
                 pointerout() {
                     if (~choice) root.filters = filters
+
+                    //DEBUG
+                    if (!isPlayerCharacterRoom)
+                        node.edges.forEach(
+                            edgeKey =>
+                                edgeKey && darkenTileById(root.parent, edgeKey)
+                        )
                 },
             },
         },
@@ -233,12 +246,22 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
     return root
 }
 
+function glowTileById(parent: PixiContainer, nodeUid: string) {
+    const tile = parent.getChildByName(nodeUid)
+    tile && (tile.filters = [glowFilter])
+}
+
+function darkenTileById(parent: PixiContainer, nodeUid: string) {
+    const tile = parent.getChildByName(nodeUid)
+    tile && (tile.filters = [darkenFilter])
+}
+
 function TileContents(node: DungeonRoom | null) {
     if (node == null) return Container({})
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
+    const { currentRoom } = getCurrentRoomAndChoiceFromNode(node)
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
@@ -272,11 +295,9 @@ function TileContents(node: DungeonRoom | null) {
 function RestSiteContents(node: DungeonRoom): PixiSprite {
     const src = getTexture('mapRestSite')
 
-    const { choice } = getCurrentRoomAndChoiceFromNode(node)
-
     const root = Sprite({
-        scale: 100 / src.width,
-        src: 'mapRestSite',
+        scale: 180 / src.width,
+        src,
         anchor: 0.5,
         events: {},
     })

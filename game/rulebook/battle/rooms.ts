@@ -88,20 +88,20 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 8,
             },
         ],
-        // [
-        //     {
-        //         id: 'frosthog',
-        //         level: 3,
-        //     },
-        //     {
-        //         id: 'frosthog',
-        //         level: 3,
-        //     },
-        //     {
-        //         id: 'frosthog',
-        //         level: 3,
-        //     },
-        // ],
+        [
+            {
+                id: 'frostHog',
+                level: 3,
+            },
+            {
+                id: 'frostHog',
+                level: 3,
+            },
+            {
+                id: 'frostHog',
+                level: 3,
+            },
+        ],
         [
             {
                 id: 'skeletonWarrior',
@@ -152,20 +152,20 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 2,
             },
         ],
-        //[
-        //    {
-        //        id: 'frostHog',
-        //        level: 1,
-        //    },
-        //    {
-        //        id: 'mimic',
-        //        level: 1,
-        //    },
-        //    {
-        //        id: 'bosshogJurgen',
-        //        level: 'default',
-        //    },
-        //],
+        [
+            {
+                id: 'frostHog',
+                level: 1,
+            },
+            {
+                id: 'mimic',
+                level: 1,
+            },
+            {
+                id: 'bosshogJurgen',
+                level: 'default',
+            },
+        ],
         [
             {
                 id: 'plaguehog',
@@ -309,25 +309,25 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 id: 'gnomeProspector',
                 level: 4,
             },
-            // {
-            //     id: 'frosthog',
-            //     level: 4,
-            // },
+            {
+                id: 'frostHog',
+                level: 4,
+            },
             {
                 id: 'plaguehog',
                 level: 4,
             },
         ],
-        // [
-        //     {
-        //         id: 'frosthog',
-        //         level: 6,
-        //     },
-        //     {
-        //         id: 'frosthog',
-        //         level:6,
-        //     },
-        // ],
+        [
+            {
+                id: 'frostHog',
+                level: 6,
+            },
+            {
+                id: 'frostHog',
+                level: 6,
+            },
+        ],
         [
             {
                 id: 'plaguehog',
@@ -365,10 +365,10 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 id: 'gnomeProspector',
                 level: 4,
             },
-            // {
-            //     id: 'frosthog',
-            //     level: 3,
-            // },
+            {
+                id: 'frostHog',
+                level: 3,
+            },
         ],
     ],
     bosses: [
@@ -489,7 +489,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '4_12',
                 enemies: [],
                 category: 'tierTwo',
-                edges: ['', '5,13', '', ''],
+                edges: ['', '5_13', '', ''],
             },
             '5_9': {
                 uid: '5_9',
@@ -507,7 +507,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '6_8',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['', '', '7,7', ''],
+                edges: ['', '', '7_7', ''],
             },
             '6_10': {
                 uid: '6_10',
@@ -543,7 +543,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '8_8',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['8_10', '', '9_9', ''],
+                edges: ['8_10', '9_9', '', ''],
             },
             '8_10': {
                 uid: '8_10',
@@ -595,7 +595,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                         boss: true,
                     },
                 ],
-                category: 'tierThree',
+                category: 'bosses',
                 edges: ['', '', '', ''],
             },
         },

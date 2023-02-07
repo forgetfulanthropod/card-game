@@ -10,11 +10,18 @@ import { PixiContainer } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid, toDatum } from '@/util'
 import { getBattleScene } from '@/data'
+import { compose } from 'datums'
 
 export function EndTurnButton(): PixiContainer {
     const buttonTexture = getTexture('endTurnButton')
     return If(
-        toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+        compose(
+            ([isPlayerTurn, isInBattle]) => isPlayerTurn && isInBattle,
+            toDatum(getBattleScene().select('isPlayerTurn'), is => is),
+            toDatum(getBattleScene().select('state'), state => {
+                return state === 'in battle'
+            })
+        ),
         // toDatum(getBattleScene().select('isPlayerTurn'), () => true), // TEMP!! IMPROPER isPlayerTurn state BUG!!!!
         () =>
             Container(
