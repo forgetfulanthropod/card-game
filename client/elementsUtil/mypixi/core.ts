@@ -105,7 +105,10 @@ export function Text(args: TextArgs): PixiText {
             return textEl as PixiText
         }
     }
-    const textEl = new TextInstantiator(String(text), args.style)
+    const textEl = new TextInstantiator(
+        String(text),
+        args.style
+    )
     applyShownArgs(textEl, args)
     startChecking(textEl)
     return textEl as PixiText

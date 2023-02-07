@@ -35,6 +35,7 @@ import {
     characterIdToAbilitiesMap,
 } from '@/data'
 import { CardsTiltedInLine } from './cards'
+import { upperFirst } from 'lodash'
 
 const stats = [
     { key: 'strength', displayName: 'Strength', color: 0xd44c47 },
@@ -212,6 +213,19 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                 },
                 anchor: [0, 1],
                 x: -contentWidth * 0.5,
+            }),
+            Text({
+                text: upperFirst(props.cm.class),
+                style: {
+                    fontFamily: 'sansFont',
+                    fontSize: 20,
+                    fill: 0x708090,
+                    fontStyle: 'italic',
+                    padding: 2
+                },
+                anchor: [0, 1],
+                x: -contentWidth * 0.5 + 3,
+                y: 28
             }),
             // Text({
             //     text: cm.class,

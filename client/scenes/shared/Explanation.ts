@@ -1,5 +1,5 @@
 import { DisplayObject, Texture } from 'pixi.js'
-import { startCase } from 'lodash'
+import { startCase, upperFirst } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
 import {
@@ -19,6 +19,7 @@ import {
 import { keys } from 'shared/code'
 import { Datum } from 'datums'
 import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
+import { OutlineFilter } from 'pixi-filters'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
@@ -112,7 +113,7 @@ export function TermExplanations({
     boxes.forEach((box, i) => {
         if (i > 0) {
             const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 5
+            box.y = lastBox.y + lastBox.height + 10
         }
 
         return box
@@ -239,14 +240,21 @@ export function Explanation({
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
         return Text({
-            text,
+            text: upperFirst(text),
             isHtml,
             style: {
-                fill: 'white',
+                fill: index === 0 ? 'white' : 0xdddddd,
                 wordWrapWidth: BASE_WIDTH * 0.18,
                 wordWrap: true,
+                /** @TODO upgrade pixijs to ^7.1.0 so we can use custom fonts with PixiHTMLText */
+                fontFamily: 'Tahoma',
+                // fontFamily:
+                //     index === 0
+                //         ? 'bigFont'
+                //         : 'sansFont',
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
-                fontSize: displayObjectArgs?.fontSize ?? 20,
+                fontSize: index === 0 ? 22 : 18,
+                fontStyle: 'normal',
             },
         })
     })
@@ -260,7 +268,7 @@ export function Explanation({
         }
     })
 
-    // console.log({ textEls, texts })
+    const outlineFilter = new OutlineFilter(3, displayObjectArgs?.borderColor ?? 0x1F2633)
 
     return InfoBox(
         Container(
@@ -276,9 +284,14 @@ export function Explanation({
             ...textEls
         ),
         {
-            padding: 25,
             ...(displayObjectArgs ?? {}),
-            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+            ...(color
+                ? { colorStops: [{ color, offset: 0 }] }
+                : { colorStops: [{ color: 0x364259, offset: 0 }] }),
+            padding: 15,
+            borderThickness: 0,
+            alpha: 0.96,
+            filters: [outlineFilter]
         }
     )
 }

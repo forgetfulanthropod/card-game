@@ -509,8 +509,9 @@ function getEvents(
                             x: BASE_WIDTH / 2,
                             y: BASE_HEIGHT * 0.6,
                             borderThickness: 2,
+                            borderColor: 0x642193
                         },
-                        color: 0xa240e8,
+                        color: 0xAF5BEC,
                     }),
                 { durationMs: 1200 }
             )
