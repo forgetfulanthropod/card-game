@@ -243,7 +243,7 @@ const commandIdToMetaMap: Record<
         id: 'commonCold',
         src: 'intentCommonCold',
         explanation: [
-            'All friendly Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
+            'All targeted Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
             'At the start of your next turn, draw 1 fewer card than normal.',
         ],
     },

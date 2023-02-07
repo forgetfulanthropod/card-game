@@ -286,8 +286,7 @@ export const spineAssets = {
     bosshogJurgenSpine: 'SKIN: warhogSkinsSpine -> 2',
     groghogSpine: 'SKIN: warhogSkinsSpine -> 3',
     warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
-    //TODO: change when frosthog skin is added
-    frostHogSpine: 'SKIN: warhogSkinsSpine -> 4',
+    frostHogSpine: 'SKIN: warhogSkinsSpine -> 5',
 
     mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
 
