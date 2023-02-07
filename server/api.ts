@@ -10,41 +10,43 @@ import { doActionAndTakeSteps } from './sleepLoop'
 
 satisfies<ServerActions>(serverActions)
 
-export async function api(req: Request, res: Response): Promise<void> {
-    const method = req.body.method
-    if (typeof method !== 'string') return err(res, 'no method')
-
+export async function api(args: {
+    username?: string | undefined
+    method: string
+    data: any
+}) {
+    const { username, method, data } = args
     try {
-        logger.debug(`api called: ${JSON.stringify(req.body)}`)
         if (method in serverActions) {
             const m = method as keyof typeof serverActions
-            const response = await serverActions[m](req.body)
-            res.send(response)
+            logger.debug(
+                `server api call: ${JSON.stringify({ method, ...data })}`
+            )
+            const response = await serverActions[m]({ method, ...data })
+            logger.debug(`server api response: ${JSON.stringify(response)}`)
+            return response
         } else if (isGameAction(method)) {
-            const username = req.body.username
-            if (typeof username !== 'string') return err(res, 'no username')
-
+            if (typeof username !== 'string') return err('no username')
             const gamestate = await getGamestate(username)
-            if (gamestate == null) return err(res, 'no gamestate for this user')
+            if (gamestate == null) return err('no gamestate for this user')
             const game = new SBaobab(gamestate).select()
-            await doActionAndTakeSteps({ ...req.body, game })
-            res.send({ status: 'success' })
+            const actionArgs = { username, method, ...data }
+            logger.debug(`api call: ${JSON.stringify(actionArgs)}`)
+            await doActionAndTakeSteps({ ...actionArgs, game })
+            return { status: 'success' }
         } else {
-            return err(res, 'invalid method')
+            return err('invalid method')
         }
-        return undefined
     } catch (e) {
-        const err = e as unknown as Error
-        const msg = err.message
+        const error = e as unknown as Error
+        const msg = error.message
         logger.error(
-            `exception occured in client call to ${method}: ${msg} ${err.stack}`
+            `exception occured in client call to ${method}: ${msg} ${error.stack}`
         )
-        res.send({ status: 'error', message: msg })
-        return undefined
+        return err(msg)
     }
 }
 
-function err(response: Response, message: string): void {
-    logger.error(message)
-    response.send({ status: 'error', message })
+const err = (message: string) => {
+    return { status: 'error', message: message }
 }

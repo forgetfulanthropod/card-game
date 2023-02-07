@@ -52,6 +52,22 @@ export function emitUsername(username: string): void {
     socket.emit('username', { username, socketId: socket.id })
 }
 
+export async function emitCallApi(args: {
+    method: string
+    data: any
+    username?: string
+}) {
+    if (socket == null) throw Error('socket is null')
+    console.log('api call:', args)
+    const response = await new Promise(resolve => {
+        socket.emit('api', args, (response: any) => {
+            resolve(response)
+        })
+    })
+    // console.log('api response:', response)
+    return response
+}
+
 type Unsub = Callback
 export function socketOn(
     event: string,

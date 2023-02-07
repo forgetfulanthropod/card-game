@@ -6,7 +6,6 @@ import type { Logger } from 'winston'
 import { config as loadDotEnv } from 'dotenv'
 import cors from 'cors'
 
-import { api } from './api'
 import { mountIo as fullMountIo } from './IO'
 
 /** Required for kaiju-router */
@@ -55,8 +54,6 @@ const app: Application = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-app.post(`${isStagingServer ? '/server' : ''}/api`, api)
 
 // express static server, ovverides maxAge for png files:
 if (isStagingServer) {
