@@ -249,10 +249,12 @@ export function Explanation({
                 fill: index === 0 ? 'white' : 0xdddddd,
                 wordWrapWidth: BASE_WIDTH * 0.18,
                 wordWrap: true,
-                fontFamily:
-                    index === 0
-                        ? 'bigFont'
-                        : 'sansFont',
+                /** @TODO upgrade pixijs to ^7.1.0 so we can use custom fonts with PixiHTMLText */
+                fontFamily: 'Tahoma',
+                // fontFamily:
+                //     index === 0
+                //         ? 'bigFont'
+                //         : 'sansFont',
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
                 fontSize: index === 0 ? 22 : 18,
                 fontStyle: 'normal',

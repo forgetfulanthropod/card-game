@@ -104,7 +104,7 @@ export function Text(args: TextArgs): PixiText {
     }
     const textEl = new TextInstantiator(
         String(text),
-        args.isHtml ? { ...args.style, fontFamily: 'Arial' } : args.style
+        args.style
     )
     applyShownArgs(textEl, args)
     startChecking(textEl)
