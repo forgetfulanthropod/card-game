@@ -333,18 +333,14 @@ export const characterProfileAssets = {
 export const mapAssets = {
     mapRestSite: 'hex map/rest site2.webp',
     mapEventSite: 'hex map/event site.webp',
+    tierOneIcon: 'hex map/tierOneIcon.webp',
+    tierTwoIcon: 'hex map/tierTwoIcon.webp',
+    tierThreeIcon: 'hex map/tierThreeIcon.webp',
+    tierFourIcon: 'hex map/tierFourIcon.webp',
 }
 
 export const mapTileAssets = {
-    mapTile1: 'hex map/hooligans bluff/base tile.webp',
-    mapTile2: 'hex map/hooligans bluff/base tile.webp',
-    mapTile3: 'hex map/hooligans bluff/base tile.webp',
-    mapTile4: 'hex map/hooligans bluff/base tile.webp',
-    mapTile5: 'hex map/hooligans bluff/base tile.webp',
-    mapTile6: 'hex map/hooligans bluff/base tile.webp',
-    mapTile7: 'hex map/hooligans bluff/base tile.webp',
-    mapTile8: 'hex map/hooligans bluff/base tile.webp',
-    mapTile9: 'hex map/hooligans bluff/base tile.webp',
+    mapTileBase: 'hex map/hooligans bluff/base tile.webp',
 }
 
 export const userAvatarAssets = {

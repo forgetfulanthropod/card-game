@@ -69,9 +69,9 @@ export function HexMapOverlay(): PixiContainer {
         Container(
             {
                 x: BASE_WIDTH * 0.05,
-                y: BASE_HEIGHT * 0.75,
-                // TODO: zoomed panning
-                scale: 1.05,
+                y: BASE_HEIGHT * 0.88,
+                // TODO: zoomed panning?
+                scale: 0.7,
             },
             ...AllTiles()
         )
@@ -190,7 +190,7 @@ function sortNodes(allTiles: PixiContainer[]) {
 // }
 
 function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
-    const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}` as AssetKey)
+    const texture = getTexture(`mapTileBase`)
     const displayWidth = BASE_WIDTH * 0.12
 
     if (node == null) return Container({})
@@ -238,9 +238,35 @@ function TileContents(node: DungeonRoom | null) {
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    return Adjust(TileCharacters(node), {
-        scale: node.category === 'bosses' ? 0.6 : 0.45,
-    })
+    const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
+
+    const isPlayerCharacterRoom = currentRoom.uid === node.uid
+
+    const wasRoomVisited = scene
+        .get('roomUidsVisited')
+        .slice(0, -1)
+        ?.includes(node.uid)
+
+    if (wasRoomVisited) return Container({})
+
+    if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
+        return RestSiteContents(node)
+
+    if (!isPlayerCharacterRoom && node.category === 'events')
+        return Sprite({
+            src: 'mapEventSite',
+            anchor: [0.5, 0.8],
+            scale: 0.7,
+        })
+
+    if (!isPlayerCharacterRoom && node.category?.includes('tier'))
+        return Sprite({
+            src: `${node.category}Icon` as AssetKey,
+            scale: 0.7,
+            anchor: 0.5,
+        })
+
+    return TileCharacters(node)
 }
 
 function RestSiteContents(node: DungeonRoom): PixiSprite {
@@ -260,33 +286,17 @@ function RestSiteContents(node: DungeonRoom): PixiSprite {
 
 function TileCharacters(node: DungeonRoom): PixiContainer {
     const scene = getBattleScene()
-    const numRoomsPassed = scene.get('numRoomsPassed')
 
     const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
-    // const isCurrentRoomPastThisDepth =
-    //     parseInt(currentRoom.uid.split('_')[0]) >
-    //     parseInt(node.uid.split('_')[0])
-    const wasRoomVisited = scene
-        .get('roomUidsVisited')
-        .slice(0, -1)
-        ?.includes(node.uid)
-
-    if (wasRoomVisited) return Container({})
-
-    if (!isPlayerCharacterRoom && node.enemies[0]?.id === 'REST_SITE')
-        return RestSiteContents(node)
-
-    if (!isPlayerCharacterRoom && node.category === 'events')
-        return Sprite({
-            src: 'mapEventSite',
-            anchor: [0.5, 0.8],
-            scale: 0.7,
-        })
-
-    return AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice)
+    return Adjust(
+        AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice),
+        {
+            scale: node.category === 'bosses' ? 0.6 : 0.45,
+        }
+    )
 }
 
 function AnimatedCharacters(
