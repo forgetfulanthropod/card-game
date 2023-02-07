@@ -45,6 +45,7 @@ export const effectIds = [
 
     'smallDamageIncreaseBuff',
     'doubleDamageBuff',
+    'stampBuff',
 ] as const
 
 /** Effects which are cleared on turn end */

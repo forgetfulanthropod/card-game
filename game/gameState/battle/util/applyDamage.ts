@@ -143,11 +143,6 @@ function manageSideEffectsOfUnblockedDamage(
     }
 
     maybeApplyDamageThresholdDebuffs(scene, targetUid, unblockedDamage)
-
-    if (damageChangesEnemyIntent(scene)) {
-        logger.info('updating the NPC moves due to enemy damage')
-        updateNpcMoves(scene)
-    }
 }
 
 function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
@@ -211,14 +206,6 @@ export function getDamage({
     const multiplicand = damageDealMultiplicand * damageTakeMultiplicand
     const calcedDamage = Math.ceil(damage * multiplicand)
     return calcedDamage
-}
-
-function damageChangesEnemyIntent(scene: BattleCursor): boolean {
-    const specialCommanIds: CommandId[] = ['mimicAttack']
-
-    return !!~scene.get('nextNpcCommands').findIndex(command => {
-        return specialCommanIds.includes(command.command.id)
-    })
 }
 
 function maybeApplyDamageThresholdDebuffs(

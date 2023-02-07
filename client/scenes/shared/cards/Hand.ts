@@ -353,8 +353,9 @@ function getXYRotationForCard(
     xGapPortion =
         (xGapPortion * (handWidth - numCharacterGaps * (CARD_WIDTH - xGap))) /
         handWidth
+    // TODO: fix logic; this is just a workaround for now
+    if (isNaN(xGapPortion)) xGapPortion = 0
     xGap = xGapPortion * handWidth * 0.5
-
     let xPlacementPortion =
         RIGHT_TO_LEFT - RIGHT_TO_LEFT * (n - 1) * xGapPortion // -1 -> 1
 
