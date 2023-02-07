@@ -22,6 +22,12 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
         ],
         [
             {
+                id: 'matchaGelatinCube',
+                level: 1,
+            },
+        ],
+        [
+            {
                 id: 'skeletonWarrior',
                 level: 2,
             },
@@ -80,6 +86,30 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             {
                 id: 'skeletonWarrior',
                 level: 8,
+            },
+        ],
+        [
+            // {
+            //     id: 'frosthog',
+            //     level: 3,
+            // },
+            // {
+            //     id: 'frosthog',
+            //     level: 3,
+            // },
+            // {
+            //     id: 'frosthog',
+            //     level: 3,
+            // },
+        ],
+        [
+            {
+                id: 'skeletonWarrior',
+                level: 4,
+            },
+            {
+                id: 'orcWarrior',
+                level: 4,
             },
         ],
     ],
@@ -259,6 +289,74 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             },
         ],
     ],
+    tierFour: [
+        [
+            {
+                id: 'gnomeProspector',
+                level: 4,
+            },
+            // {
+            //     id: 'frosthog',
+            //     level: 4,
+            // },
+            {
+                id: 'plaguehog',
+                level: 4,
+            },
+        ],
+        [
+            // {
+            //     id: 'frosthog',
+            //     level: 6,
+            // },
+            // {
+            //     id: 'frosthog',
+            //     level: 6,
+            // },
+        ],
+        [
+            {
+                id: 'plaguehog',
+                level: 4,
+            },
+            {
+                id: 'plaguehog',
+                level: 4,
+            },
+            {
+                id: 'plaguehog',
+                level: 4,
+            },
+        ],
+        [
+            {
+                id: 'gnomeProspector',
+                level: 5,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 5,
+            },
+            {
+                id: 'gnomeBigBomber',
+                level: 3,
+            },
+        ],
+        [
+            {
+                id: 'skeletonWarrior',
+                level: 5,
+            },
+            {
+                id: 'gnomeProspector',
+                level: 4,
+            },
+            // {
+            //     id: 'frosthog',
+            //     level: 3,
+            // },
+        ],
+    ],
     bosses: [
         [
             {
@@ -278,6 +376,18 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [],
                 edges: ['', '1_1', '', ''],
             },
+            '0_4': {
+                uid: '0_4',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['0_6', '', '', ''],
+            },
+            '0_6': {
+                uid: '0_6',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['', '1_7', '', ''],
+            },
             '1_1': {
                 uid: '1_1',
                 enemies: [],
@@ -288,7 +398,13 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '1_3',
                 enemies: [],
                 category: 'tierOne',
-                edges: ['', '2_4', '', ''],
+                edges: ['0_4', '2_4', '', ''],
+            },
+            '1_7': {
+                uid: '1_7',
+                enemies: [],
+                category: 'tierOne',
+                edges: ['', '', '2_6', ''],
             },
             '2_0': {
                 uid: '2_0',
@@ -300,7 +416,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '2_4',
                 enemies: [],
                 category: 'tierOne',
-                edges: ['2_6', '', '3_3', ''],
+                edges: ['', '', '3_5', ''],
             },
             '2_6': {
                 uid: '2_6',
@@ -311,75 +427,154 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '3_1': {
                 uid: '3_1',
                 enemies: [],
-                category: 'tierOne',
-                edges: ['3_3', '', '4_0', ''],
-            },
-            '3_3': {
-                uid: '3_3',
-                enemies: [],
                 category: 'events',
-                edges: ['', '4_4', '', ''],
+                edges: ['', '', '4_2', ''],
+            },
+            '3_5': {
+                uid: '3_5',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['3_7', '4_6', '', ''],
             },
             '3_7': {
                 uid: '3_7',
                 enemies: [],
-                category: 'tierTwo',
+                category: 'events',
                 edges: ['', '', '4_8', ''],
             },
-            '4_0': {
-                uid: '4_0',
+            '4_2': {
+                uid: '4_2',
                 enemies: [],
                 category: 'tierTwo',
-                edges: ['', '5_1', '', ''],
+                edges: ['', '4_4', '', ''],
             },
             '4_4': {
                 uid: '4_4',
                 enemies: [],
-                category: 'tierThree',
-                edges: ['4_8', '', '5_3', ''],
+                category: 'tierTwo',
+                edges: ['4_6', '', '', ''],
+            },
+            '4_6': {
+                uid: '4_6',
+                enemies: [],
+                category: 'events',
+                edges: ['4_8', '', '', ''],
             },
             '4_8': {
                 uid: '4_8',
                 enemies: [],
-                category: 'events',
-                edges: ['', '5_7', '', ''],
+                category: 'bosses',
+                edges: ['4_10', '5_9', '', ''],
             },
-            '5_1': {
-                uid: '5_1',
+            '4_10': {
+                uid: '4_10',
                 enemies: [],
                 category: 'tierTwo',
-                edges: ['5_3', '', '', ''],
+                edges: ['4_12', '', '', ''],
             },
-            '5_3': {
-                uid: '5_3',
+            '4_12': {
+                uid: '4_12',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['', '5,13', '', ''],
+            },
+            '5_9': {
+                uid: '5_9',
+                enemies: [],
+                category: 'tierTwo',
+                edges: ['', '6_10', '6_8', ''],
+            },
+            '5_13': {
+                uid: '5_13',
                 enemies: [],
                 category: 'events',
-                edges: ['', '6_4', '', ''],
+                edges: ['', '6_14', '', ''],
             },
-            '5_7': {
-                uid: '5_7',
+            '6_8': {
+                uid: '6_8',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['', '', '6_6', ''],
+                edges: ['', '', '7,7', ''],
             },
-            '6_4': {
-                uid: '6_4',
+            '6_10': {
+                uid: '6_10',
+                enemies: [],
+                category: 'events',
+                edges: ['', '7_7', '', ''],
+            },
+            '6_14': {
+                uid: '6_14',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['6_6', '', '', ''],
+                edges: ['', '', '7_13', ''],
             },
-            '6_6': {
-                uid: '6_6',
+            '7_7': {
+                uid: '7_7',
+                enemies: [],
+                category: 'events',
+                edges: ['', '8-8', '', ''],
+            },
+            '7_11': {
+                uid: '7_11',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['7_13', '', '8_10', ''],
+            },
+            '7_13': {
+                uid: '7_13',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['', '8_14', '', ''],
+            },
+            '8_8': {
+                uid: '8_8',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['', '', '9_9', ''],
+            },
+            '8_10': {
+                uid: '8_10',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['', '9_11', '', ''],
+            },
+            '8_14': {
+                uid: '8_14',
+                enemies: [],
+                category: 'tierFour',
+                edges: ['', '9_15', '', ''],
+            },
+            '9_9': {
+                uid: '9_9',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['9_11', '', '', ''],
+            },
+            '9_11': {
+                uid: '9_11',
+                enemies: [],
+                category: 'tierThree',
+                edges: ['9_13', '', '', ''],
+            },
+            '9_13': {
+                uid: '9_13',
+                enemies: [],
+                category: 'tierFour',
+                edges: ['9_15', '', '', ''],
+            },
+            '9_15': {
+                uid: '9_15',
                 enemies: [
                     {
                         id: 'REST_SITE',
                         level: 1,
                     },
                 ],
-                edges: ['', '7_7', '', ''],
+                category: 'tierThree',
+                edges: ['9_17', '', '', ''],
             },
-            '7_7': {
-                uid: '7_7',
+            '9_17': {
+                uid: '9_17',
                 enemies: [
                     {
                         id: 'bosshogJurgen',
@@ -387,8 +582,8 @@ export function getDungeonRooms(): DungeonRoomMaps {
                         boss: true,
                     },
                 ],
-                category: 'bosses',
-                edges: ['', '', '6-b', ''],
+                category: 'tierThree',
+                edges: ['', '', '', ''],
             },
         },
         'Fort Skeleton': {},
@@ -405,6 +600,7 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
         tierOne: [],
         tierTwo: [],
         tierThree: [],
+        tierFour: [],
         bosses: [],
     }
 

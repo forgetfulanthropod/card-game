@@ -213,7 +213,7 @@ const getScoreTags = async ({
         }
 
         isNewHighScore = entry.run_id === runId ? true : false
-        topPercentile = entry.adjusted_rank / leaderboardEntryCount.count
+        topPercentile = entry.run_id === runId ? entry.adjusted_rank / leaderboardEntryCount.count : 1
     }
 
     return {

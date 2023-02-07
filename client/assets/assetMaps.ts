@@ -30,7 +30,7 @@ export const rootAssets = {
     rightArrow: 'core-ui/rightArrow.png',
     upArrow: 'core-ui/upArrow.png',
     upArrowSimple: 'core-ui/upArrowSimple.png',
-    downArrow: 'core-ui/downArrow.png'
+    downArrow: 'core-ui/downArrow.png',
 }
 
 export const fontAssets = {
@@ -173,9 +173,9 @@ export const effectAssets: {
     effectFatiguedDebuff: 'effects/fatigue.webp',
     effectStrongblockBuff: 'effects/strongblock.webp',
     effectEntrancedBuff: 'effects/magicalStorm.webp',
-    effectGuardedBuff: 'effects/strongblock.webp',
+    effectGuardedBuff: 'effects/guarded.webp',
     effectPoisonedDebuff: 'effects/poison_skull.webp',
-    effectReflectBuff: 'effects/strongblock.webp',
+    effectReflectBuff: 'effects/reflect.webp',
     effectStunnedDebuff: 'effects/stunned.webp',
     effectTiredDebuff: 'effects/tired.webp',
     //TODO: placeholder icon
@@ -344,6 +344,7 @@ export const mapTileAssets = {
     mapTile6: 'hex map/hooligans bluff/base tile.webp',
     mapTile7: 'hex map/hooligans bluff/base tile.webp',
     mapTile8: 'hex map/hooligans bluff/base tile.webp',
+    mapTile9: 'hex map/hooligans bluff/base tile.webp',
 }
 
 export const userAvatarAssets = {

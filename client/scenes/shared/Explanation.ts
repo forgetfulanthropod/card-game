@@ -61,7 +61,7 @@ export type KeyTerm = keyof typeof keyTermsMap
 
 export function getTermIndex(term: string, explanation: string): number {
     const lowerCaseTerm = startCase(term).toLowerCase()
-    var re = new RegExp(`${lowerCaseTerm}`, 'g')
+    var re = new RegExp(`>${lowerCaseTerm}`, 'g')
 
     return explanation.toLowerCase().search(re)
 }

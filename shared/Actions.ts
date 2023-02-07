@@ -60,7 +60,7 @@ export interface BareServerActionsMeta {
     }
     getLeaderboardEntryCount: {
         args: Empty
-        res: Promise<{count: number}>
+        res: Promise<{ count: number }>
     }
 }
 
@@ -74,6 +74,7 @@ interface BareGameActionArgs {
     collectLoot: Empty
     changeDungeon: { direction: -1 | 1 }
     changeScene: { newSceneName: SceneId }
+    discard: { cardUids: CardUid[] }
     endTurn: Empty
     exitDungeon: Empty
     finishCard: { cardUids: CardUid[] }

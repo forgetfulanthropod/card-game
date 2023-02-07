@@ -1,18 +1,12 @@
 import { datum, compose, Datum } from 'datums'
-import type {
-    BattleCursor,
-    BattleScene,
-    CardUid,
-    CharacterUid,
-    PileId,
-    RequiredAction,
-} from 'shared'
+import type { BattleScene, CardUid, PileId, RequiredAction } from 'shared'
 import { sampleSize } from 'lodash'
 import {
     Cards,
     CardAdder,
+    EndTurnButton,
     BattleSceneCharacterInfo,
-    showScoreUpdateNotification,
+    ConfirmButton,
 } from '@sharedElements'
 import { keys } from 'shared/code'
 import { Characters } from './character'
@@ -23,12 +17,17 @@ import { EndOfRoom } from './EndOfRoom'
 import { RestSiteOverlay } from './RestSiteOverlayPicnic'
 import { Background } from '@/scenes'
 import {
+    Adjust,
     AssetKey,
+    BASE_HEIGHT,
+    BASE_WIDTH,
     Container,
     DisplayObject,
     If,
     loopSong,
     SpineAsset,
+    Sprite,
+    Text,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
@@ -38,6 +37,7 @@ import { EndOfRun } from './EndOfRun'
 import { ROCursor } from 'sbaobab'
 import { SpineBackground } from '../background'
 import { collectData } from '@/analytics/collectData'
+import { BaseTexture, Texture } from 'pixi.js'
 
 export function BattleSceneEl(): PixiContainer {
     const hoveredCardUid = datum<CardUid | null>(null)
@@ -56,7 +56,13 @@ export function BattleSceneEl(): PixiContainer {
             ],
         },
         If(
-            toDatum(scene.select('isInMap'), is => !is),
+            compose(
+                ([isInRestSite, isInMap]) => {
+                    return !isInRestSite && !isInMap
+                },
+                toDatum(scene.select('isInRestSite'), is => is),
+                toDatum(scene.select('isInMap'), is => is)
+            ),
             () => CoreScene(scene, hoveredCardUid)
         ),
         If(
@@ -98,6 +104,8 @@ const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg3_0'],
 ]
 
+export const toDiscardUids = datum([] as CardUid[])
+
 function CoreScene(
     scene: ROCursor<BattleScene>,
     hoveredCardUid: Datum<CardUid | null>
@@ -118,9 +126,55 @@ function CoreScene(
         SpineBackground({ srcs: allSrcs[sceneIndex] }),
         Container({ name: 'NpcIntentArrowContainer' }),
         Characters(scene),
-        Cards({ scene, hoveredCardUid }),
         Energy({ scene }),
+        EndTurnButton(),
         BattleSceneCharacterInfo(),
+        If(
+            toDatum(scene.select('numRequiredToDiscard'), num => num, {
+                allowUndefined: true, // edge case for graceful fail with old gamestate..
+            }),
+            numRequiredToDiscard => {
+                if (numRequiredToDiscard === 0) return Container({})
+
+                return Container(
+                    {},
+                    Sprite({
+                        src: Texture.WHITE,
+                        tint: 0,
+                        width: BASE_WIDTH,
+                        height: BASE_HEIGHT,
+                        alpha: 0.7,
+                        events: { pointerover() {} },
+                        defaultCursor: true,
+                    }),
+                    Text({
+                        text: `must choose ${numRequiredToDiscard} cards to discard`,
+                        x: BASE_WIDTH / 2,
+                        y: BASE_HEIGHT * 0.125,
+                        anchor: 0.5,
+                        style: {
+                            fontFamily: 'bigFont',
+                            fontSize: 50,
+                            fill: 0xffffff,
+                        },
+                    }),
+                    If(
+                        compose(
+                            ([uids]) => uids.length === numRequiredToDiscard,
+                            toDiscardUids
+                        ),
+                        () => {
+                            return ConfirmButton(() =>
+                                callApi('discard', {
+                                    cardUids: toDiscardUids.val,
+                                })
+                            )
+                        }
+                    )
+                )
+            }
+        ),
+        Cards({ scene, hoveredCardUid, toDiscardUids }),
         If(
             compose(
                 ([waitForDeathAnimations, sceneState]) =>
