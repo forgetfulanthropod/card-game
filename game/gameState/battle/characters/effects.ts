@@ -42,6 +42,9 @@ const staticEffectFuncs: Record<
     doubleDamageBuff(stats) {
         stats.strength *= 2
     },
+    stampBuff(stats) {
+        stats.strength += 25
+    },
     entrancedBuff(stats, counter) {
         stats.magic += counter
     },

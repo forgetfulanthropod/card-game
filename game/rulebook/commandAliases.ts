@@ -27,24 +27,6 @@ export const itchyOoze = (x: number): NpcCommandDefinition => ({
     targetNum: 1,
     targetType: 'enemies',
 })
-/** deal strength */
-// export const chomp = (): NpcCommandDefinition => ({
-//     actions: `deal(strength)`,
-//     // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
-//     id: `chomp`,
-//     name: `Chomp`,
-//     targetNum: 1,
-//     targetType: 'enemies',
-// })
-/**Infectious Bite (DOT1, applies poison (X) if 5 or more damage goes unblocked) */
-export const infectiousBite = (x: number): NpcCommandDefinition => ({
-    actions: `ifDamageDealt(deal(strength), effect("poisoned", ${x})`,
-    // actions: `ifDamageDealtExceeds(dot(1), 5, effect("poisoned",${x}))`,
-    id: `infectiousBite(${x})`,
-    name: `Infectious Bite ${x}`,
-    targetNum: 1,
-    targetType: 'enemies',
-})
 /**Engulf (deal X% of attack damage, applies Stun if any damage goes unblocked) */
 export const engulf = (x: number): NpcCommandDefinition => ({
     actions: `ifDamageDealt(deal(strength*0.${x}), effect("stunned",1))`,

@@ -39,6 +39,8 @@ export function makeBattleState(args: {
         allCharacters,
         cards: getNullCards(),
         newCardOptions: {},
+        handSize: 5,
+        baseHandSize: 5,
         energy: 3,
         roundEnergy: 3,
         isBasicLoaded: false,
