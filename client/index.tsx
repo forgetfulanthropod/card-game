@@ -20,11 +20,20 @@ const clientBuildInfo = {
 console.log('client build info:', JSON.stringify(clientBuildInfo))
 
 const preactRoot = document.getElementById('preact-root') as HTMLDivElement
+const IS_PRODUCTION = process.env.IS_PRODUCTION
 
 function main() {
     if (GAME_IS_LIVE) {
         startLoadingAssets()
     }
+
+    if (IS_PRODUCTION) {
+        // disable right clicks
+        window.addEventListener('contextmenu', e => {
+            e.preventDefault()
+        })
+    }
+    
     prepareSocket()
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)
