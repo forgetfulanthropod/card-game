@@ -308,15 +308,15 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     //hogs end
 
     bigBomb1: {
-        actions: `""`,
+        actions: `effect("chargedBomb", 2)`,
         //@ts-expect-error
         id: `bigBomb1`,
         name: `Big Bomb`,
         targetNum: 1,
-        targetType: 'enemies',
+        targetType: 'self',
     },
     bigBomb2: {
-        actions: `deal(strength * 3)`,
+        actions: `deal(strength)`,
         //@ts-expect-error
         id: `bigBomb2`,
         name: `Big Bomb`,

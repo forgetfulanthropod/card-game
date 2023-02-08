@@ -52,6 +52,7 @@ export const keyTermsMap = {
     unready: 'receives 12% more damage',
     vulnerable: 'receives 50% more damage',
     stamp: 'strength increased by 25',
+    chargedBomb: 'Gnome Big Bomber has charged his bomb!',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap
@@ -268,7 +269,10 @@ export function Explanation({
         }
     })
 
-    const outlineFilter = new OutlineFilter(3, displayObjectArgs?.borderColor ?? 0x1F2633)
+    const outlineFilter = new OutlineFilter(
+        3,
+        displayObjectArgs?.borderColor ?? 0x1f2633
+    )
 
     return InfoBox(
         Container(
@@ -291,7 +295,7 @@ export function Explanation({
             padding: 15,
             borderThickness: 0,
             alpha: 0.96,
-            filters: [outlineFilter]
+            filters: [outlineFilter],
         }
     )
 }

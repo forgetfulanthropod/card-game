@@ -180,6 +180,7 @@ export const effectAssets: {
     effectTiredDebuff: 'effects/tired.webp',
     effectStampBuff: 'effects/stamp_and_snort.webp',
     //TODO: placeholder icon
+    effectChargedBombBuff: 'intents/gnomeBomb1.webp',
     effectTargetedDebuff: 'effects/tired.webp',
     effectUnguardedDebuff: 'effects/unguarded.webp',
     effectUnreadyDebuff: 'effects/unready.webp',

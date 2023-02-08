@@ -124,7 +124,7 @@ const commandIdToMetaMap: Record<
         id: 'bigBomb2',
         src: 'intentBigBomb2',
         explanation: [
-            'Gnome Big Bomber has charged his Big Bomb',
+            'Gnome Big Bomber will throw his Big Bomb',
             'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
         ],
     },
