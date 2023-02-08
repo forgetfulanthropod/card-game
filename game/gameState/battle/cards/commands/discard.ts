@@ -1,8 +1,5 @@
-import { activeOnDiscardActions } from '@/actions/discard'
-import produce from 'immer'
-import { shuffle } from 'lodash'
-import { keys, vals } from 'shared/code'
-import { discardAllCards } from '../discardAllCards'
+import { vals } from 'shared/code'
+import { discardBeforeTurnEnd } from '../discardBeforeTurnEnd'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 
@@ -23,21 +20,9 @@ export const execute: Executors['discard'] = ({ cardUid, dslArgs, scene }) => {
     if (numCards > 0 && handHasMoreCardsThanThis)
         scene.set('numRequiredToDiscard', numCards)
     else {
-        remainingCardsInHand.forEach(card => {
-            activeOnDiscardActions(card, scene)
+        discardBeforeTurnEnd({
+            cardUids: remainingCardsInHand.map(c => c.uid),
+            scene,
         })
-        discardAllCards(scene)
     }
-
-    // scene.select('cards').apply(
-    //     produce(cards => {
-    //         const uids = shuffle(Object.keys(cards.hand))
-    //         const n = Math.min(numCards, uids.length)
-    //         for (let i = 0; i < n; i++) {
-    //             const uid = uids[i]
-    //             cards.discard[uid] = cards.hand[uid]
-    //             delete cards.hand[uid]
-    //         }
-    //     })
-    // )
 }
