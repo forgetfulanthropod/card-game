@@ -10,11 +10,18 @@ export function discardBeforeTurnEnd({
     cardUids: CardUid[]
     scene: BattleCursor
 }): void {
+    const hand = scene.get('cards', 'hand')
+
+    for (const uid of cardUids) {
+        activeOnDiscardActions(hand[uid], scene)
+    }
+
     scene.apply(
         'cards',
         produce(cards => {
             for (const uid of cardUids) {
                 const card = cards.hand[uid]
+
                 if (card == null) {
                     throw Error('card not in hand: ' + uid)
                 }
