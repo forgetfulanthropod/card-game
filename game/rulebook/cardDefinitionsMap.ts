@@ -652,14 +652,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strengthymagicy = 0.5 * strength + 0.5 * magic;
-            magicy = 0.35 * magic;
+            strengthmagic1 = (0.5 * strength) + (0.5 * magic);
+            magic1 = 0.4 * magic;
             chain(
-                addBlock(strengthymagicy),
-                heal(magicy),
-                brittle(5)
+                addBlock(strengthmagic1),
+                heal(magic1),
+                brittle(4)
             )`,
-        type: 'utility',
+        type: 'defense',
         characterClass: 'bard',
     },
     songOfTheWarrior: {
