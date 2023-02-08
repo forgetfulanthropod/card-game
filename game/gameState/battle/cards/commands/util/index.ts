@@ -64,6 +64,7 @@ export interface ActionArgs {
         effectId: EffectId,
         counter: number
     ]
+    ifHealthUnder: [health: StanceId, isUnderMove: any, defaultMove: any]
     ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
     ifStance: [
