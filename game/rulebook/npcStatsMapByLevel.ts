@@ -62,7 +62,7 @@ export const npcStatsMapByLevel: NpcStatsMapByLevel = {
         1: { level: '1', magic: 0, constitution: 135, strength: 42, defense: 31, moves: ['swordWack', 'rustyPokeHigh', 'slash', 'block', 'startlingSpook(3,3)'] },
     },
     bosshogJurgen: {
-        default: { level: 'default', magic: 0, constitution: 225, strength: 55, defense: 45, moves: ['jurgenBellyFlop', 'jurgenRollAround', 'block', 'jurgenSitUpon', 'jurgenStampSnort'] },
+        default: { level: 'default', magic: 0, constitution: 300, strength: 60, defense: 50, moves: ['jurgenBellyFlop', 'jurgenRollAround', 'block', 'jurgenSitUpon', 'jurgenStampSnort'] },
     },
     mimic: {
         1: { level: '1', magic: 0, constitution: 40, strength: 9, defense: 8, moves: ['mimicAttack', 'chomp', 'mimicInfectiousBite', 'block', 'grudge'] },

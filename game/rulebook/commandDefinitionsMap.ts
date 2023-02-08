@@ -31,10 +31,10 @@ const singleOpponentTargetCommands = {
         'Itchy Ooze Special',
         'ifDamageDealt(dot(2), effect("poisoned", 1))',
     ],
-    /**Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes. */
+    /**Belly Flop: Bosshog Jürgen will attempt to attack for 100% damage, but will deal 1 point less for every point of damage he takes. */
     jurgenBellyFlop: ['Belly Flop', 'bellyFlop(strength, 1)'],
-    /**Sit Upon: Jürgen sits on one of your characters. This attack does 8/11 of his attack damage and gives debilitated (2) to the target. */
-    jurgenSitUpon: ['Sit Upon', 'deal(strength*8/11); effect("debilitated",2)'],
+    /**Sit Upon: Jürgen sits on one of your characters. This attack does 2/3 of his attack damage and gives debilitated (2) to the target. */
+    jurgenSitUpon: ['Sit Upon', 'deal(strength*2/3); effect("debilitated",2)'],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
@@ -204,7 +204,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         id: 'jurgenRollAround',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'bellyFlop(strength * 6 / 11, 2)',
+        actions: 'bellyFlop(strength / 2, 2)',
     },
 
     //hogs start
