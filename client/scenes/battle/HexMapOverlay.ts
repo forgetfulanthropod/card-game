@@ -239,6 +239,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     // }
 
                     //DEBUG
+                    unfilterTileById(root.parent, node.uid)
                     if (!isPlayerCharacterRoom)
                         node.edges.forEach(
                             edgeKey =>
@@ -263,6 +264,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     // }
 
                     //DEBUG
+                    if (!~choice) darkenTileById(root.parent, node.uid)
                     if (!isPlayerCharacterRoom)
                         node.edges.forEach(
                             edgeKey =>
@@ -271,6 +273,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                 },
             },
             // alpha: node == null ? 0.4 : 1,
+            onDestroy: [() => Tweener.killTweensOf(root)],
         }),
         Sprite({
             src: decorationTexture,
