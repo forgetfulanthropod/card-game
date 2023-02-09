@@ -40,6 +40,7 @@ import { intersection, mean, sample } from 'lodash'
 import { ROCursor } from 'sbaobab'
 import { collectData } from '@/analytics/collectData'
 import { Easing, Tweener } from 'pixi-tweener'
+import { DisplayObject } from '@pixi/animate'
 
 export function HexMapOverlay(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Hex Map' })
@@ -84,8 +85,8 @@ export function HexMapOverlay(): PixiContainer {
 
 function AllTiles(): PixiContainer[] {
     const tileGraphMap = getTileGraphMap()
-    const rootNode = tileGraphMap['root']
     const allTiles: PixiContainer[] = []
+    const rootNode = tileGraphMap['root']
     let depthsAndYOffsets: [number, number][] = []
 
     addNodeAboveRight(rootNode, 1, 0)
@@ -241,11 +242,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     //DEBUG
                     unfilterTileById(root.parent, node.uid)
                     if (!isPlayerCharacterRoom)
-                        node.edges.forEach(
-                            edgeKey =>
-                                edgeKey &&
-                                unfilterTileById(root.parent, edgeKey)
-                        )
+                        highlightPossiblePaths(root, node)
                 },
                 pointerout() {
                     Tweener.add(
@@ -266,11 +263,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     //DEBUG
                     if (!~choice && !isPlayerCharacterRoom)
                         darkenTileById(root.parent, node.uid)
-                    if (!isPlayerCharacterRoom)
-                        node.edges.forEach(
-                            edgeKey =>
-                                edgeKey && darkenTileById(root.parent, edgeKey)
-                        )
+                    if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
                 },
             },
             // alpha: node == null ? 0.4 : 1,
@@ -337,6 +330,24 @@ function getRandomBottomDecorationSprite(layer: number) {
         .map(option => Sprite({ src: option }))
 
     return Container({}, ...sprites)
+}
+
+function darkenPossiblePaths(root: PixiContainer, node: DungeonRoom) {
+    node.edges.forEach(edgeKey => {
+        if (!edgeKey) return
+        darkenTileById(root.parent, edgeKey)
+
+        darkenPossiblePaths(root, getTileGraphMap()[edgeKey])
+    })
+}
+
+function highlightPossiblePaths(root: PixiContainer, node: DungeonRoom) {
+    node.edges.forEach(edgeKey => {
+        if (!edgeKey) return
+        unfilterTileById(root.parent, edgeKey)
+
+        highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
+    })
 }
 
 function unfilterTileById(parent: PixiContainer, nodeUid: string) {
