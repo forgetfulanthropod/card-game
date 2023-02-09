@@ -264,7 +264,8 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                     // }
 
                     //DEBUG
-                    if (!~choice) darkenTileById(root.parent, node.uid)
+                    if (!~choice && !isPlayerCharacterRoom)
+                        darkenTileById(root.parent, node.uid)
                     if (!isPlayerCharacterRoom)
                         node.edges.forEach(
                             edgeKey =>
