@@ -297,7 +297,7 @@ const commandIdToMetaMap: Record<
     snortinTime: {
         id: 'snortinTime',
         src: 'intentSnortinTime',
-        explanation: [],
+        explanation: ['Apply <b>Unguarded</b> (2) to all player Kaiju'],
     },
     spiritQuest: {
         id: 'spiritQuest',
