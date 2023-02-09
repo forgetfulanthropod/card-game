@@ -184,6 +184,26 @@ const interpretCommandSuite = {
         )
         // ifDamageDealt(deal(strength/2)
     },
+    // ifHealthUnder() {
+    //     const scene = freshBattleScene()
+
+    //     // should not give block to pc1
+    //     const healthBefore = scene.get('allCharacters', npc1, 'health')
+
+    //     interpretCommand({
+    //         command: makeCmd(pc1, 'twistTheKnife(50, deal(1), deal(2))'),
+    //         scene,
+    //         targetUids: [npc1],
+    //     })
+    //     // should give block to pc2
+    //     interpretCommand({
+    //         command: makeCmd(pc2, 'smite()'),
+    //         scene,
+    //         targetUids: [npc2],
+    //     })
+    //     truthy(scene.get('allCharacters', pc1, 'block') <= 0)
+    //     truthy(scene.get('allCharacters', pc2, 'block') > 0)
+    // },
     ifFirstPlay() {
         const scene = freshBattleScene()
         const card: Card = makeCard(pc1, 'ifFirstPlay(deal(1))')

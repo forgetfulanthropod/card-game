@@ -1138,17 +1138,21 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
+
+    // Deal 125% to target enemy.  If that enemy has 50% or less than their starting health, deal 200% instead.  Give that enemy Bleed (1)."
     twistTheKnife: {
         name: 'Twist The Knife',
         energy: 1,
         id: 'twistTheKnife',
         targetNum: 1,
         targetType: 'enemies',
-        //TODO
         actions: `
-            strengthy = 1.25 * strength;
-            strengthx = 1.5 * strength;
-            ifHealth("=<", targetHealth * 0.5, deal(strengthx), deal(strengthy))
+            strengthx = 1.25 * strength;
+            strengthy = 2 * strength;
+            chain(
+                ifHealthUnder(50, deal(strengthy), deal(strengthx)),
+                effect("bleed", 1)
+            )
         `,
         type: 'attack',
         characterClass: 'rogue',
