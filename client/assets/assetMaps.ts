@@ -342,6 +342,7 @@ export const characterProfileAssets = {
 }
 
 export const mapAssets = {
+    hooligansBluffLogo: 'hex map/hooligans bluff/hooligansBluffLogo.png',
     mapRestSite: 'hex map/rest site2.webp',
     mapEventSite: 'hex map/event site.webp',
     tierOneIcon: 'hex map/tierOneIcon.webp',

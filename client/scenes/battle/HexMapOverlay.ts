@@ -71,6 +71,12 @@ export function HexMapOverlay(): PixiContainer {
         //     src: 'mapBg',
         //     scale: 1,
         // }),
+        Sprite({
+            src: getTexture('hooligansBluffLogo'),
+            scale: 0.3,
+            x: 50,
+            y: 50,
+        }),
         Container(
             {
                 x: BASE_WIDTH * 0.15,
