@@ -4,9 +4,16 @@ import { isMobile } from 'mobile-device-detect'
 import { registerPixiInspector } from './pixiInspector'
 import type { PixiContainer, PixiSprite } from './aliases'
 import { PixiApplication } from './aliases'
+import { toString } from 'lodash'
 
 // export const ROOT_SCALE = isMobile ? 1 : 2
 export const ROOT_SCALE = isMobile ? 1 : 1
+export let isHighResolution = !!(localStorage.getItem('isHighResolution') === 'true')
+export const toggleHighResolution = () => {
+    isHighResolution = !isHighResolution
+    localStorage.setItem('isHighResolution', toString(isHighResolution))
+    window.location.reload()
+}
 
 let app: null | PixiApplication = null
 export function Application(args: {
@@ -18,7 +25,7 @@ export function Application(args: {
 
     app = new PixiApplication({
         view: args.canvas,
-        // resolution: window.devicePixelRatio || 1,
+        resolution: isHighResolution ? 2 : 1,
         // backgroundColor: 0x6495ed,
         width: resW,
         height: resH,

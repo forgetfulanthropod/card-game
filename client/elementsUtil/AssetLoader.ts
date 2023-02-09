@@ -1,6 +1,6 @@
 import { Loader, Resource } from 'pixi.js'
 import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
-import { uniqBy, upperFirst } from 'lodash'
+import { toString, uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
 // import { loadAllAnimateFiles } from './myanimate'
 import { AssetKey, AssetMaps, assetMaps, deluxeAssetMaps } from '@/assets'
@@ -24,12 +24,12 @@ localStorage.setItem('muteSFX', muteSFX ? 'true' : 'false')
 
 export const toggleMuteSFX = () => {
     muteSFX = !muteSFX
-    localStorage.setItem('muteSFX', muteSFX ? 'true' : 'false')
+    localStorage.setItem('muteSFX', toString(muteSFX))
 }
 
 export const toggleMuteMusic = () => {
     muteMusic = !muteMusic
-    localStorage.setItem('muteMusic', muteMusic ? 'true' : 'false')
+    localStorage.setItem('muteMusic', toString(muteMusic))
     if (muteMusic) {
         //@ts-expect-error
         latestLoopingSong?.pause()
