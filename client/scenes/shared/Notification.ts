@@ -57,8 +57,8 @@ class NotificationSpawner {
             ) as TweenablePixiContainer
             const targetY = this.getTargetY(idx)
             if (el.isFadingIn) {
-                 // this adjusts the starting position in case other notifications are displayed concurrently.
-                 // otherwise, all the concurrent notifications would first fade into the same y-position (before being adjusted to their correct one).
+                // this adjusts the starting position in case other notifications are displayed concurrently.
+                // otherwise, all the concurrent notifications would first fade into the same y-position (before being adjusted to their correct one).
                 Tweener.killTweensOf(pixiEl)
                 pixiEl.position.set(pixiEl.position.x, targetY)
                 this.slamAnimateElIntoScreen(pixiEl, targetY)
@@ -154,7 +154,7 @@ function Notification(
     try {
         textureSrc = getTexture(assetSrc)
     } catch (e) {
-        console.warn(e)
+        console.warn(`asset ${assetSrc} is missing`)
     }
 
     const NotificationIcon = Container(

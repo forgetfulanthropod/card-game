@@ -11,13 +11,16 @@ import type {
 import { keys, vals } from 'shared/code'
 
 import { AdjustmentFilter } from 'pixi-filters'
-import { checkOtherScoringEvents, MainCharacterAnimation } from '../shared'
+import { animateTo, MainCharacterAnimation } from '../shared'
 import {
     AssetKey,
+    getRenderer,
     loopSong,
+    mapTileAssets,
     PixiContainer,
     PixiSprite,
     Spine,
+    TweenableContainer,
 } from '@/elementsUtil'
 import {
     glowFilter,
@@ -33,9 +36,11 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
-import { intersection, mean } from 'lodash'
+import { intersection, mean, sample } from 'lodash'
 import { ROCursor } from 'sbaobab'
 import { collectData } from '@/analytics/collectData'
+import { Easing, Tweener } from 'pixi-tweener'
+import { DisplayObject } from '@pixi/animate'
 
 export function HexMapOverlay(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Hex Map' })
@@ -66,12 +71,18 @@ export function HexMapOverlay(): PixiContainer {
         //     src: 'mapBg',
         //     scale: 1,
         // }),
+        Sprite({
+            src: getTexture('hooligansBluffLogo'),
+            scale: 0.3,
+            x: 50,
+            y: 50,
+        }),
         Container(
             {
-                x: BASE_WIDTH * 0.05,
-                y: BASE_HEIGHT * 0.75,
-                // TODO: zoomed panning
-                scale: 1.05,
+                x: BASE_WIDTH * 0.15,
+                y: BASE_HEIGHT * 0.91,
+                // TODO: zoomed panning?
+                scale: 0.67,
             },
             ...AllTiles()
         )
@@ -80,8 +91,8 @@ export function HexMapOverlay(): PixiContainer {
 
 function AllTiles(): PixiContainer[] {
     const tileGraphMap = getTileGraphMap()
-    const rootNode = tileGraphMap['root']
     const allTiles: PixiContainer[] = []
+    const rootNode = tileGraphMap['root']
     let depthsAndYOffsets: [number, number][] = []
 
     addNodeAboveRight(rootNode, 1, 0)
@@ -188,9 +199,11 @@ function sortNodes(allTiles: PixiContainer[]) {
 //     enemies: RoomEnemies
 //     edges: [string, string]
 // }
+const darkenFilter = new AdjustmentFilter({ brightness: 0.5 })
 
 function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
-    const texture = getTexture(`mapTile${depth !== 4 ? depth : 1}` as AssetKey)
+    const baseTexture = getTexture(`mapTileBase`)
+    const decorationTexture = getGenerativeTileTexture(node.uid)
     const displayWidth = BASE_WIDTH * 0.12
 
     if (node == null) return Container({})
@@ -199,38 +212,158 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
-    const filters =
-        !~choice && !isPlayerCharacterRoom
-            ? [new AdjustmentFilter({ brightness: 0.5 })]
-            : []
+    const filters = !~choice && !isPlayerCharacterRoom ? [darkenFilter] : []
 
-    const root = Container(
+    const root = TweenableContainer(
         {
+            name: node.uid,
             x: depth * displayWidth * 0.78,
             y: displayWidth * 0.34 * yOffset,
             filters,
+        },
+        Sprite({
+            src: baseTexture,
+            scale: displayWidth / baseTexture.width,
+            anchor: [0.5, 0.42],
             events: {
                 pointerdown() {
                     if (~choice) void callApi('nextRoom', { choice })
                 },
                 pointerover() {
-                    if (~choice) root.filters = [glowFilter]
+                    Tweener.add(
+                        {
+                            target: root,
+                            duration: 0.3,
+                            ease: Easing.bouncePast,
+                        },
+                        {
+                            y: rootYPlacement - 33,
+                        }
+                    )
+                    // if (~choice) {
+                    //     // root.filters = [glowFilter]
+
+                    // }
+
+                    //DEBUG
+                    unfilterTileById(root.parent, node.uid)
+                    if (!isPlayerCharacterRoom)
+                        highlightPossiblePaths(root, node)
                 },
                 pointerout() {
-                    if (~choice) root.filters = filters
+                    Tweener.add(
+                        {
+                            target: root,
+                            duration: 0.3,
+                            ease: Easing.bouncePast,
+                        },
+                        {
+                            y: rootYPlacement,
+                        }
+                    )
+                    // if (~choice) {
+                    //     // root.filters = filters
+
+                    // }
+
+                    //DEBUG
+                    if (!~choice && !isPlayerCharacterRoom)
+                        darkenTileById(root.parent, node.uid)
+                    if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
                 },
             },
-        },
-        Sprite({
-            src: texture,
-            scale: displayWidth / texture.width,
-            anchor: [0.5, 0.42],
             // alpha: node == null ? 0.4 : 1,
+            onDestroy: [() => Tweener.killTweensOf(root)],
+        }),
+        Sprite({
+            src: decorationTexture,
+            scale: displayWidth / decorationTexture.width,
+            anchor: [0.5, 0.42],
         }),
         TileContents(node)
     )
 
+    const rootYPlacement = root.y
+
     return root
+}
+
+function getGenerativeTileTexture(seed: string) {
+    const layers = Container(
+        {},
+        Sprite({ src: getTexture(`mapTileTopG_1`) }),
+        getRandomTopDecorationSprite(1),
+        getRandomTopDecorationSprite(2),
+        getRandomTopDecorationSprite(3),
+        getRandomTopDecorationSprite(4),
+        getRandomTopDecorationSprite(5),
+        getRandomTopDecorationSprite(6),
+        getRandomBottomDecorationSprite(1),
+        getRandomBottomDecorationSprite(2),
+        getRandomBottomDecorationSprite(3),
+        getRandomBottomDecorationSprite(4)
+    )
+
+    const texture = getRenderer().generateTexture(layers)
+
+    setTimeout(() => layers.destroy(), 0)
+
+    return texture
+}
+
+// top decorations have one choice per slot
+function getRandomTopDecorationSprite(slot: number) {
+    const options = keys(mapTileAssets).filter(k =>
+        k.includes(`mapTileTop${slot}`)
+    )
+
+    if (!options.length) throw new Error('tile generation bug.. missing slot?')
+
+    return Sprite({ src: sample(options)! })
+}
+
+// bottom decorations can pull multiple by layer
+function getRandomBottomDecorationSprite(layer: number) {
+    const options = keys(mapTileAssets).filter(k =>
+        k.includes(`mapTileBottom${layer}`)
+    )
+
+    if (!options.length) throw new Error('tile generation bug.. missing layer?')
+
+    // percent chance of choosing is based on number at the end..
+    const sprites = options
+        .filter(o => Number(o.split('__')[1]) / 100 > Math.random())
+        .map(option => Sprite({ src: option }))
+
+    return Container({}, ...sprites)
+}
+
+function darkenPossiblePaths(root: PixiContainer, node: DungeonRoom) {
+    node.edges.forEach(edgeKey => {
+        if (!edgeKey) return
+        darkenTileById(root.parent, edgeKey)
+
+        darkenPossiblePaths(root, getTileGraphMap()[edgeKey])
+    })
+}
+
+function highlightPossiblePaths(root: PixiContainer, node: DungeonRoom) {
+    node.edges.forEach(edgeKey => {
+        if (!edgeKey) return
+        unfilterTileById(root.parent, edgeKey)
+
+        highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
+    })
+}
+
+function unfilterTileById(parent: PixiContainer, nodeUid: string) {
+    const tile = parent.getChildByName(nodeUid)
+    tile && (tile.filters = [])
+}
+
+function darkenTileById(parent: PixiContainer, nodeUid: string) {
+    const tile = parent.getChildByName(nodeUid)
+    tile && (tile.filters = [darkenFilter])
 }
 
 function TileContents(node: DungeonRoom | null) {
@@ -238,37 +371,10 @@ function TileContents(node: DungeonRoom | null) {
     const scene = getBattleScene()
     const passed = scene.get('numRoomsPassed')
 
-    return Adjust(TileCharacters(node), {
-        scale: node.category === 'bosses' ? 0.6 : 0.45,
-    })
-}
-
-function RestSiteContents(node: DungeonRoom): PixiSprite {
-    const src = getTexture('mapRestSite')
-
-    const { choice } = getCurrentRoomAndChoiceFromNode(node)
-
-    const root = Sprite({
-        scale: 100 / src.width,
-        src: 'mapRestSite',
-        anchor: 0.5,
-        events: {},
-    })
-
-    return root
-}
-
-function TileCharacters(node: DungeonRoom): PixiContainer {
-    const scene = getBattleScene()
-    const numRoomsPassed = scene.get('numRoomsPassed')
-
-    const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
+    const { currentRoom } = getCurrentRoomAndChoiceFromNode(node)
 
     const isPlayerCharacterRoom = currentRoom.uid === node.uid
 
-    // const isCurrentRoomPastThisDepth =
-    //     parseInt(currentRoom.uid.split('_')[0]) >
-    //     parseInt(node.uid.split('_')[0])
     const wasRoomVisited = scene
         .get('roomUidsVisited')
         .slice(0, -1)
@@ -282,11 +388,46 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
     if (!isPlayerCharacterRoom && node.category === 'events')
         return Sprite({
             src: 'mapEventSite',
-            anchor: [0.5, 0.8],
+            anchor: [0.5, 0.65],
             scale: 0.7,
         })
 
-    return AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice)
+    if (!isPlayerCharacterRoom && node.category?.includes('tier'))
+        return Sprite({
+            src: `${node.category}Icon` as AssetKey,
+            scale: 1,
+            anchor: [0.5, 0.65],
+        })
+
+    return TileCharacters(node)
+}
+
+function RestSiteContents(node: DungeonRoom): PixiSprite {
+    const src = getTexture('mapRestSite')
+
+    const root = Sprite({
+        scale: 180 / src.width,
+        src,
+        anchor: 0.5,
+        events: {},
+    })
+
+    return root
+}
+
+function TileCharacters(node: DungeonRoom): PixiContainer {
+    const scene = getBattleScene()
+
+    const { currentRoom, choice } = getCurrentRoomAndChoiceFromNode(node)
+
+    const isPlayerCharacterRoom = currentRoom.uid === node.uid
+
+    return Adjust(
+        AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice),
+        {
+            scale: node.category === 'bosses' ? 0.6 : 0.45,
+        }
+    )
 }
 
 function AnimatedCharacters(
@@ -316,6 +457,8 @@ function AnimatedCharacters(
             })
 
             if (anim == null) throw new Error('missing a spine broken')
+
+            anim.interactive = false
 
             // freezes animation..
             // if (!~choice && !isPlayerCharacterRoom)

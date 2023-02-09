@@ -18,8 +18,6 @@ type CommandDefinitionsMap = Record<NpcCommandId, NpcCommandDefinition>
  **/
 const singleOpponentTargetCommands = {
     swordWack: ['Sword Wack', 'deal(strength)'],
-    /** Mimic (Whenever a mimic loses 10% or more of its base health from a single attack, it deal the same amount of damage back to the player).*/
-    mimicAttack: ['Mimic Attack', 'mimicAttack'],
     /**Rusty Poke (DOT 2, also applies Fatigue 1) */
     rustyPokeHigh: ['Rusty Poke High', 'deal(strength); effect("fatigued", 1)'],
     /**Rusty Poke (DOT 2) */
@@ -33,13 +31,10 @@ const singleOpponentTargetCommands = {
         'Itchy Ooze Special',
         'ifDamageDealt(dot(2), effect("poisoned", 1))',
     ],
-    /**Belly Flop: Bosshog Jürgen will attempt to attack for 30 damage, but will deal 1 point less for every point of damage he takes. */
-    jurgenBellyFlop: ['Jurgen Belly Flop', 'bellyFlop(strength)'],
-    /**Sit Upon: Jürgen sits on one of your characters. This attack does 50% of his attack damage and gives Stun (1) to the target. */
-    jurgenSitUpon: [
-        'Jurgen Sit Upon',
-        'deal(strength*3/4); effect("stunned",1)',
-    ],
+    /**Belly Flop: Bosshog Jürgen will attempt to attack for 100% damage, but will deal 1 point less for every point of damage he takes. */
+    jurgenBellyFlop: ['Belly Flop', 'bellyFlop(strength, 1)'],
+    /**Sit Upon: Jürgen sits on one of your characters. This attack does 2/3 of his attack damage and gives debilitated (2) to the target. */
+    jurgenSitUpon: ['Sit Upon', 'deal(strength*2/3); effect("debilitated",2)'],
     /**Matcha Mash: Matcha will deal damage equal to ATK. */
     matchaMash: ['Matcha Mash', 'deal(strength)'],
     /**Matcha Madness: Apply poison 3 to ALL characters. */
@@ -69,7 +64,59 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
         actions: 'chain(deal(strength), effect("vulnerable", 3))',
     },
-
+    // "Road Closure: At the start of your next turn, draw 2 fewer cards than normal."
+    roadClosure: {
+        name: 'Road Closure',
+        explanation:
+            'At the start of your next turn, draw 2 fewer cards than normal.',
+        //@ts-expect-error
+        id: 'roadClosure',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: 'drawSizeChange(-2)',
+    },
+    snowFort: {
+        name: 'Snow Fort',
+        explanation: 'All enemies receive 100% block',
+        //@ts-expect-error
+        id: 'snowFort',
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: 'addBlock(defense)',
+    },
+    commonCold: {
+        name: 'Common Cold',
+        explanation: [
+            'All targeted Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
+            'At the start of your next turn, draw 1 fewer card than normal.',
+        ],
+        //@ts-expect-error
+        id: 'commonCold',
+        targetNum: -1,
+        targetType: 'allEnemies',
+        actions:
+            'effect("fatigued", 1, "enemies"); effect("unguarded", 1, "enemies"); drawSizeChange(-1)',
+    },
+    mimicAttack: {
+        //@ts-expect-error
+        id: 'mimicAttack',
+        name: 'Mimic Attack',
+        actions: 'mimicAttack()',
+        targetNum: 1,
+        targetType: 'enemies',
+    },
+    mimicInfectiousBite: {
+        //@ts-expect-error
+        id: 'mimicInfectiousBite',
+        name: 'Infectious Bite',
+        explanation: [
+            'Mimic attacks for 100%.',
+            'Apply <b>Poisoned</b> equal to the amount of unblocked damage.',
+        ],
+        actions: 'infectiousBite(strength)',
+        targetNum: 1,
+        targetType: 'enemies',
+    },
     /**Blood Moon Curse (all player characters receive fatigue (2), unguarded (2)) */
     hansCurse: {
         name: 'Hans Curse',
@@ -91,14 +138,14 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: 'summon("cultistGuard"); summon("cultistGuard")',
     },
 
-    /**Stamp and Snort: Jürgen gets very angry and stamps around in place. He does nothing this turn but doubles his attack damage the following turn. */
+    /** Stamp and Snort: Jürgen gets very angry and stamps around in place.  He does nothing this turn but increases his base attack by 25 the following turn. **/
     jurgenStampSnort: {
-        name: 'Jurgen Stamp Snort',
+        name: 'Stamp and Snort',
         //@ts-expect-error
         id: 'jurgenStampSnort',
         targetNum: 1,
         targetType: 'self',
-        actions: 'effect("doubleDamage", 2); addBlock(defense)',
+        actions: 'effect("stamp", 2)',
     },
 
     /**Passive block (every time Halfdan rests, generate 20 block). If he is ever stunned or skips his turn for any reason, generate 20 block. */
@@ -157,7 +204,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         id: 'jurgenRollAround',
         targetNum: 2,
         targetType: 'enemies',
-        actions: 'bellyFlop(strength / 2)',
+        actions: 'bellyFlop(strength / 2, 2)',
     },
 
     //hogs start
@@ -261,15 +308,15 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     //hogs end
 
     bigBomb1: {
-        actions: `""`,
+        actions: `effect("chargedBomb", 2)`,
         //@ts-expect-error
         id: `bigBomb1`,
         name: `Big Bomb`,
         targetNum: 1,
-        targetType: 'enemies',
+        targetType: 'self',
     },
     bigBomb2: {
-        actions: `deal(strength * 3)`,
+        actions: `deal(strength)`,
         //@ts-expect-error
         id: `bigBomb2`,
         name: `Big Bomb`,
@@ -314,12 +361,12 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
     },
     grudge: {
-        actions: `chain(deal(strength * 1.1), effect("unguarded", 2))`,
+        actions: `deal((constitution-health)*0.25)`,
         //@ts-expect-error
         id: `grudge`,
-        name: `Fire Cracker`,
+        name: `grudge`,
         targetNum: 1,
-        targetType: 'allEnemies',
+        targetType: 'enemies',
     },
 
     gnomeBomb: {

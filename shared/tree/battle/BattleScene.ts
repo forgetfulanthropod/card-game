@@ -31,6 +31,8 @@ export interface BattleScene extends SceneHas {
     allCharacters: Characters
     cards: Piles
     newCardOptions: Pile
+    handSize: number
+    baseHandSize: number
     energy: number
     roundEnergy: number
     isBasicLoaded: boolean
@@ -56,10 +58,10 @@ export interface BattleScene extends SceneHas {
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
     lootScreenHasOpened: boolean
+    numRequiredToDiscard: number
     endScreenHasOpened: boolean
     treasureChest: TreasureChest
     runScore: RunScore
-    runScoreUpdate: RunScoreUpdate | null
     runDuration: {
         startTime: number
         endTime: number | null

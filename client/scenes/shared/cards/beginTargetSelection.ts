@@ -75,7 +75,7 @@ export function beginTargetSelection(
 
                 cleanup()
             } else {
-                console.error()
+                console.log('TODO: check targeting unsub')
             }
         }, 10)
     )

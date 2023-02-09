@@ -4,9 +4,10 @@ import type { ROCursor } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import type { GameState } from 'shared'
+import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
+import { showScoreUpdateNotification } from '@/scenes/shared'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -40,11 +41,31 @@ export function prepareSocket(): void {
         // getTree().set(data)
         updateBoabab(data)
     })
+
+    socket.on('notifyScore', ({ data }: { data: RunScoreUpdate }) => {
+        showScoreUpdateNotification(data)
+    })
 }
 
 export function emitUsername(username: string): void {
     if (socket == null) throw Error('socket is null')
     socket.emit('username', { username, socketId: socket.id })
+}
+
+export async function emitCallApi(args: {
+    method: string
+    data: any
+    username?: string
+}) {
+    if (socket == null) throw Error('socket is null')
+    console.log('api call:', args)
+    const response = await new Promise(resolve => {
+        socket.emit('api', args, (response: any) => {
+            resolve(response)
+        })
+    })
+    // console.log('api response:', response)
+    return response
 }
 
 type Unsub = Callback

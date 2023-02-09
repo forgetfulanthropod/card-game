@@ -1,6 +1,6 @@
 import type { Card, CharacterUid, BattleCursor } from 'shared'
-import { getLivingNpcs } from '../characters/characterGetters'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
+import { getTargetUids } from './getTargetUids'
 
 import { interpretCommand } from './interpretCommand'
 
@@ -39,19 +39,4 @@ export function play({
     ])
 
     checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
-}
-
-function getTargetUids({
-    card,
-    targetUids,
-    scene,
-}: {
-    card: Card
-    targetUids: CharacterUid[]
-    scene: BattleCursor
-}) {
-    if (card.targetType === 'allEnemies')
-        return getLivingNpcs(scene.get()).map(npc => npc.uid)
-
-    return targetUids
 }

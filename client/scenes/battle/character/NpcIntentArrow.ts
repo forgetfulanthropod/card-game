@@ -115,7 +115,7 @@ export function IntentArrows(
 }
 
 function commandHasIntentArrow(cmd: NextCommand | undefined) {
-    return cmd?.command.targetType !== 'self'
+    return !['self', 'allFriends'].includes(cmd?.command.targetType ?? '')
 }
 
 function bottomLeftCornerOf(uid: CharacterUid) {

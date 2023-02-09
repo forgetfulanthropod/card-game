@@ -13,7 +13,7 @@ import type {
 } from 'shared'
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-import { startCase, upperFirst } from 'lodash'
+import { omit, omitBy, startCase, upperFirst } from 'lodash'
 import { keys } from 'shared/code'
 import {
     Explanation,
@@ -51,6 +51,8 @@ import {
 import { getBattleScene, getEntryScene } from '@/data'
 import { callApi } from '@/callApi'
 import type { AssetKey, CardTypeAssetId } from '@/assets'
+import { toDiscardUids } from '@/scenes/battle/BattleScene'
+import { CARD_WIDTH } from './CardAdder'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -341,7 +343,7 @@ function getTexts(
 ): DisplayObject[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
-    const cardFrameScale = cardFrameTexture.width / 791
+    const cardFrameScale = cardFrameTexture.width / 791 // legacy sizing adjustment
     const explanationFontSize = getExplanationFontSize(
         cardFrameScale,
         card.explanation
@@ -363,6 +365,7 @@ function getTexts(
                     },
                 }),
                 radius: cardFrameTexture.height * 0.5,
+                maxWidth: CARD_WIDTH * 0.9,
             }),
             {
                 y: cardFrameTexture.width * 0.15,
@@ -468,6 +471,24 @@ function getEvents(
 
         clearLastTargetSelection()
 
+        const numRequiredToDiscard = getBattleScene().get().numRequiredToDiscard
+        if (numRequiredToDiscard > 0) {
+            const indexInExisting = toDiscardUids.val.indexOf(card.uid)
+            if (indexInExisting === -1)
+                toDiscardUids.set(
+                    [...toDiscardUids.val, card.uid].slice(
+                        -numRequiredToDiscard
+                    )
+                )
+            else
+                toDiscardUids.set([
+                    ...toDiscardUids.val.slice(0, indexInExisting),
+                    ...toDiscardUids.val.slice(indexInExisting + 1),
+                ])
+
+            return
+        }
+
         if (getBattleScene().get().energy >= card.energy) {
             if (
                 !(
@@ -478,7 +499,6 @@ function getEvents(
                     cardEl.parent,
                     card
                 )
-            else callApi('playCard', { cardUid: card.uid, targetUids: [] })
         } else {
             flashTo(
                 getStage(),
@@ -489,8 +509,9 @@ function getEvents(
                             x: BASE_WIDTH / 2,
                             y: BASE_HEIGHT * 0.6,
                             borderThickness: 2,
+                            borderColor: 0x642193
                         },
-                        color: 0xa240e8,
+                        color: 0xAF5BEC,
                     }),
                 { durationMs: 1200 }
             )
@@ -500,7 +521,9 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         if (
-            (['self', 'allEnemies'] as TargetType[]).includes(card.targetType)
+            (['self', 'allEnemies', 'allFriends'] as TargetType[]).includes(
+                card.targetType
+            )
         ) {
             // console.log('Card.ts: playing card')
 

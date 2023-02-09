@@ -2,6 +2,7 @@ import type {
     CharacterUid,
     BattleCursor,
     CharacterMeta,
+    EnemyCharacterMeta,
     CommandId,
     Effect,
     CharacterId,
@@ -142,15 +143,26 @@ function manageSideEffectsOfUnblockedDamage(
     }
 
     maybeApplyDamageThresholdDebuffs(scene, targetUid, unblockedDamage)
-
-    if (damageChangesEnemyIntent(scene)) {
-        logger.info('updating the NPC moves due to enemy damage')
-        updateNpcMoves(scene)
-    }
 }
 
 function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
-    const remainingHealth = scene.select('allCharacters').get(targetUid).health
+    const character = scene.select('allCharacters').get(targetUid)
+    // only score on non-playable characters
+    if (character.isPc === true) return
+    //@ts-expect-error
+    const enemy = character as EnemyCharacterMeta
+    const remainingHealth = enemy.health
+    // 1 point per enemy level
+    const enemyLevel = Number(enemy.level)
+    if (enemyLevel) {
+        updateScore({
+            scene,
+            event: 'ENEMY_KILLED',
+            count: enemyLevel,
+            notify: true,
+            data: enemy,
+        })
+    }
     if (remainingHealth === 0) {
         updateScore({
             scene,
@@ -162,7 +174,7 @@ function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
         updateScore({
             scene,
             event: 'OVERKILL',
-            count: -remainingHealth,
+            count: Math.min(-remainingHealth, 40),
             notify: true,
         })
     }
@@ -194,14 +206,6 @@ export function getDamage({
     const multiplicand = damageDealMultiplicand * damageTakeMultiplicand
     const calcedDamage = Math.ceil(damage * multiplicand)
     return calcedDamage
-}
-
-function damageChangesEnemyIntent(scene: BattleCursor): boolean {
-    const specialCommanIds: CommandId[] = ['mimicAttack']
-
-    return !!~scene.get('nextNpcCommands').findIndex(command => {
-        return specialCommanIds.includes(command.command.id)
-    })
 }
 
 function maybeApplyDamageThresholdDebuffs(

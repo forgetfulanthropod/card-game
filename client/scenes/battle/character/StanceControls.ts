@@ -115,7 +115,7 @@ function StanceBadge(
                     isHovered
                 ) as unknown as Datum<boolean>,
                 texts: [
-                    `(locked) ${STANCE_TEXTS[stance][0]}`,
+                    `${STANCE_TEXTS[stance][0]} (locked)`,
                     STANCE_TEXTS[stance][1],
                 ],
                 xOffset: badgeWidth * 3,
@@ -298,7 +298,6 @@ function StanceBullets(
                         displayObjectArgs: {
                             x: root.getGlobalPosition().x + width * 1.5,
                             y: root.getGlobalPosition().y + -0.6 * width,
-                            borderColor: 0xffffff,
                             padding: 15,
                             borderThickness: 2,
                         },

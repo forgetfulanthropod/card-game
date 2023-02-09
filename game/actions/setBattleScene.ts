@@ -11,5 +11,7 @@ export const setBattleScene: GameActions['setBattleScene'] = ({
 
     const cursor = getBattleSceneIn(game)
 
+    scene.username = cursor.get('username')
+
     cursor.set(scene)
 }

@@ -29,7 +29,7 @@ export const playCard: GameActions['playCard'] = args => {
 
         updateNpcMoves(scene)
     } else {
-        logger.error('tried to play unplayable card: ' + args.cardUid)
+        logger.warn('tried to play unplayable card: ' + args.cardUid)
     }
 
     updateCharacters(scene)
@@ -43,7 +43,10 @@ function isPlayable({
     card: Card
     scene: BattleCursor
 }): boolean {
-    if (getEnergy(card) > scene.get('energy')) return false
+    if (scene.get('numRequiredToDiscard') > 0) return false
+
+    if (getEnergy(card) < 0 || getEnergy(card) > scene.get('energy'))
+        return false
 
     const requiredStance = card.actions.match(
         /ifStance[^(]*\([^"]*"([^"]+)/

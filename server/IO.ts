@@ -4,6 +4,7 @@ import { has } from 'lodash'
 import type { GameState, NetworkEvent } from 'shared'
 import { Server as SocketServer } from 'socket.io'
 import { maybeMakeUser } from './actions'
+import { api } from './api'
 
 const usernameToSocketId: Record<string, string> = {}
 const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
@@ -54,6 +55,30 @@ export function mountIo(
                 // logger.info(['username associated:', { username, socketId }])
                 usernameToSocketId[username] = socketId
                 void maybeMakeUser({ username })
+            }
+        )
+        socket.on(
+            'api',
+            async (
+                {
+                    username,
+                    method,
+                    data,
+                }: {
+                    username: string
+                    method: string
+                    data: any
+                },
+                callback
+            ) => {
+                /*logger.debug(
+                    `api called from ${username} for ${method}: ${JSON.stringify(
+                        data
+                    )}`
+                )*/
+                const response = await api({ username, method, data })
+                callback(response)
+                //socket.emit('api', response)
             }
         )
     })

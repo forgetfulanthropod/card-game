@@ -83,16 +83,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'bard',
     },
-    strike: {
-        name: 'Attack',
-        energy: 1,
-        id: 'strike',
-        targetNum: 1,
-        targetType: 'enemies',
-        actions: 'deal(strength)',
-        type: 'attack',
-        characterClass: 'knight',
-    },
     zap: {
         name: 'Zap!',
         energy: 2,
@@ -469,7 +459,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 "avoidant",
                 chain(
                     addBlock(defensey),
-                    effect("strongblock", 1, "allFriends")
+                    effect("strongblock", 1)
                 )
             )`,
         type: 'utility',
@@ -662,14 +652,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strengthymagicy = 0.5 * strength + 0.5 * magic;
-            magicy = 0.35 * magic;
+            strengthmagic1 = (0.5 * strength) + (0.5 * magic);
+            magic1 = 0.4 * magic;
             chain(
-                addBlock(strengthymagicy),
-                heal(magicy),
-                brittle(5)
+                addBlock(strengthmagic1),
+                heal(magic1),
+                brittle(4)
             )`,
-        type: 'utility',
+        type: 'defense',
         characterClass: 'bard',
     },
     songOfTheWarrior: {
@@ -1139,7 +1129,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            explain("If this card is discarded, deal ", strength, " to all enemies")
+            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies")
         `,
         //TODO: implement
         on: {
@@ -1148,17 +1138,21 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
+
+    // Deal 125% to target enemy.  If that enemy has 50% or less than their starting health, deal 200% instead.  Give that enemy Bleed (1)."
     twistTheKnife: {
         name: 'Twist The Knife',
         energy: 1,
         id: 'twistTheKnife',
         targetNum: 1,
         targetType: 'enemies',
-        //TODO
         actions: `
-            strengthy = 1.25 * strength;
-            strengthx = 1.5 * strength;
-            ifHealth("=<", targetHealth * 0.5, deal(strengthx), deal(strengthy))
+            strengthx = 1.25 * strength;
+            strengthy = 2 * strength;
+            chain(
+                ifHealthUnder(50, deal(strengthy), deal(strengthx)),
+                effect("bleed", 1)
+            )
         `,
         type: 'attack',
         characterClass: 'rogue',
@@ -1206,22 +1200,23 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'cleric',
     },
-    prayerOfGoodFortune: {
-        name: 'Prayer of Good Fortune',
-        energy: 2,
-        id: 'prayerOfGoodFortune',
-        targetNum: 1,
-        targetType: 'friends',
-        actions: `
-            addBlock("incomingDamageIntended");
-            chain(
-                "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
-                brittle(1)
-            )
-        `,
-        type: 'defense',
-        characterClass: 'cleric',
-    },
+    // TODO
+    // prayerOfGoodFortune: {
+    //     name: 'Prayer of Good Fortune',
+    //     energy: 2,
+    //     id: 'prayerOfGoodFortune',
+    //     targetNum: 1,
+    //     targetType: 'friends',
+    //     actions: `
+    //         addBlock("incomingDamageIntended");
+    //         chain(
+    //             "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
+    //             brittle(1)
+    //         )
+    //     `,
+    //     type: 'defense',
+    //     characterClass: 'cleric',
+    // },
     prayerOfGoodHealth: {
         name: 'Prayer of Good Health',
         energy: 0,
@@ -1261,7 +1256,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         on: {
             discard: 'addEnergy(1)',
         },
-        actions: `"if this card is discarded, gain 1 energy"`,
+        actions: `"if this card is discarded before the end of your turn, gain 1 energy"`,
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -1344,7 +1339,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'whirlingBladesOfDeath',
         targetNum: 1,
         targetType: 'self',
-        // TODO: REFLECT
         actions: `
             strengthy = 0.4 * strength;
             chain(

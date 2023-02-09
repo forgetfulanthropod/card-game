@@ -18,7 +18,6 @@ type AliasedCommandId =
     | `startlingSpook(${number},${number})`
     | `surpriseAllergy(${number},${number})`
     | `itchyOoze(${number})`
-    | `infectiousBite(${number})`
     | `engulf(${number})`
     // | `gnomeBomb(${number})`
     | `bucketOfBangSnaps(${number})`
@@ -88,6 +87,9 @@ export type NpcCommandId =
     | 'matchaMash'
     | 'matchaMeld'
     | 'mimicAttack'
+    | 'roadClosure'
+    | 'snowFort'
+    | 'commonCold'
     | 'parasiticNibble'
     | 'passiveBlockCmd'
     | 'psychicBolt'
@@ -104,6 +106,7 @@ export type NpcCommandId =
     | 'tummySlam'
     | 'violentSneeze'
     | 'yodel'
+    | 'mimicInfectiousBite'
     | AliasedCommandId
 export type CommandId =
     | NpcCommandId
@@ -185,7 +188,7 @@ export type CardId =
     | 'parry'
     | 'patientAmbush'
     | 'poisonedBlade'
-    | 'prayerOfGoodFortune'
+    // | 'prayerOfGoodFortune'
     | 'prayerOfGoodHealth'
     | 'psychicWarfare'
     | 'rapidFireBolts'
@@ -208,7 +211,6 @@ export type CardId =
     | 'songOfWizadry'
     | 'spellBook'
     | 'stab'
-    | 'strike'
     | 'sweepTheLeg'
     | 'swissArmyWand'
     | 'swordSlash'

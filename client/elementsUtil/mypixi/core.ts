@@ -53,13 +53,16 @@ export function Container(
 export function CurvedText({
     text,
     radius,
+    maxWidth,
 }: {
     text: PixiText
     radius: number
+    maxWidth: number
 }) {
     const numPointsInHalfCircle = 200
 
     text.updateText(true) // necessary!
+    if (text.width > maxWidth) text.scale.set(maxWidth / text.width)
     const textTexture = getRenderer().generateTexture(text)
     text.destroy(true)
 
@@ -102,7 +105,10 @@ export function Text(args: TextArgs): PixiText {
             return textEl as PixiText
         }
     }
-    const textEl = new TextInstantiator(String(text), args.style)
+    const textEl = new TextInstantiator(
+        String(text),
+        args.style
+    )
     applyShownArgs(textEl, args)
     startChecking(textEl)
     return textEl as PixiText

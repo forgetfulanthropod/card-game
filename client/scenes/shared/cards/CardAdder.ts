@@ -3,7 +3,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import type { CardUid } from 'shared'
 import { NUM_DRAFT_CARD_OPTIONS } from 'shared'
-import { ModalBackdrop } from '@sharedElements'
+import { ConfirmButton, ModalBackdrop } from '@sharedElements'
 import { AdjustmentFilter } from 'pixi-filters'
 import { CardEl } from './Card'
 import { animateTo } from './Hand'
@@ -24,7 +24,7 @@ import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { callApi } from '@/callApi'
 
-const CARD_WIDTH = 240
+export const CARD_WIDTH = 240
 
 export function CardAdder(): PixiContainer {
     // const w = 400
@@ -60,7 +60,12 @@ function NewCardOptions(): PixiContainer {
         ModalBackdrop(),
         ScreenHeading(),
         ...CardOptions,
-        ConfirmButton(selectedCardUid)
+        If(selectedCardUid, cardUid =>
+            ConfirmButton(() => {
+                void callApi('addCardToDeck', { cardUid })
+                selectedCardUid.set(null)
+            })
+        )
     )
 }
 
@@ -129,36 +134,4 @@ function Options(
     })
 
     return cardEls.reverse()
-}
-
-function ConfirmButton(selectedCardUid: Datum<CardUid | null>): PixiContainer {
-    const texture = getTexture('confirmButton')
-
-    return If(selectedCardUid, cardUid =>
-        Container(
-            {
-                x: BASE_WIDTH * 0.9,
-                y: BASE_HEIGHT * 0.78,
-                onClick: () => {
-                    void callApi('addCardToDeck', { cardUid })
-                    selectedCardUid.set(null)
-                },
-            },
-            Sprite({
-                src: texture,
-                anchor: [0.5, 0.5],
-                width: BASE_WIDTH * 0.15,
-                height: (BASE_WIDTH * 0.15 * texture.height) / texture.width,
-            })
-            // Text({
-            //     text: 'Confirm',
-            //     anchor: [0.5, 0.5],
-            //     style: {
-            //         fill: 0xffffff,
-            //         fontSize: 44,
-            //         fontFamily: 'bigFont',
-            //     },
-            // }),
-        )
-    )
 }

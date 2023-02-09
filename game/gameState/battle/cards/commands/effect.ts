@@ -44,6 +44,7 @@ export function applyEffect(
     idPartial: EffectId,
     increase: number
 ) {
+    let increaseInt = Math.round(increase)
     const id: EffectId = effectIds.includes(idPartial)
         ? idPartial
         : effectIds[
@@ -62,10 +63,10 @@ export function applyEffect(
     for (const uid of targetUids) {
         ac.select(uid, 'effects').apply(effects => {
             const i = effects.findIndex(e => e.id === id)
-            if (i === -1) return [...effects, { id, counter: increase }]
+            if (i === -1) return [...effects, { id, counter: increaseInt }]
             return setAt(effects, i, {
                 ...effects[i],
-                counter: effects[i].counter + increase,
+                counter: effects[i].counter + increaseInt,
             })
         })
     }

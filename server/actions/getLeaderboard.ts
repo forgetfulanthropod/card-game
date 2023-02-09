@@ -9,10 +9,12 @@ import {
     PlayerCharacterId,
     RunID,
     ServerActions,
+    LeaderboardTimeframe,
 } from 'shared'
 import { getDbClient, sql as sqlTag } from '../db/client'
 
-/** Currently fetches either 100 or 101 rows depending on user being in top 100 */
+/** Currently fetches either 100 or 101 rows depending on user being in top 100
+ */
 export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     const connection = await getDbClient()
     const { userId } = args
@@ -20,148 +22,100 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
 
     logger.info(`Getting leaderboards for ${userId}`)
 
-    //TODO add rank to sql return
-    const allTimeLeaderboard: Leaderboard = await connection.many(sql`
-        WITH
-            max_run_self AS
-            (   SELECT
-                    true as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    user_id = ${userId}
-            )
-        SELECT
-            *
-        FROM
-            (   SELECT
-                    false as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                ORDER BY
-                    highest_score DESC
-                LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY} ) AS max_run_all
+    const getLeaderboardByTimeframe = async (
+        timeframe: LeaderboardTimeframe
+    ): Promise<Leaderboard> => {
+        const whereFragment =
+            timeframe === 'daily'
+                ? sqlTag.fragment`WHERE
+                extract(day from end_ts) = extract(day from now()) AND (run_status = 'won' OR run_status = 'lost')`
+                : timeframe === 'weekly'
+                ? sqlTag.fragment`WHERE
+                end_ts > now() - interval '7 days' AND (run_status = 'won' OR run_status = 'lost')`
+                : sqlTag.fragment`WHERE run_status = 'won' OR run_status = 'lost'`
 
-        UNION
-
-        SELECT
-            *
-        FROM
-            max_run_self
-        ORDER BY
-            highest_score DESC;
-    `)
-
-    const weeklyLeaderboard: Leaderboard = await connection.many(sql`
-        WITH
-            max_run_self AS
-            (   SELECT
-                    true as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    user_id = ${userId}
-                AND
-                    end_ts > now() - interval '7 days'
-            )
-        SELECT
-            *
-        FROM
-            (   SELECT
-                    false as is_self,
-                    wallet_address,
-                    highest_score,
-                    start_ts,
-                    end_ts,
-                    run_id,
-                    all_characters
-                FROM
-                    user_run_leaderboard
-                WHERE
-                    end_ts > now() - interval '7 days'
-                ORDER BY
-                    highest_score DESC
-                LIMIT
-                    ${LEADERBOARD_ENTRIES_TO_DISPLAY}
-        ) AS max_run_all
-
-        UNION
-
-        SELECT
-            *
-        FROM
-            max_run_self
-        ORDER BY
-            highest_score DESC;
-    `)
-
-    const dailyLeaderboard: Leaderboard = await connection.many(sql`
-    WITH
-        max_run_self AS
-        (   SELECT
-                true as is_self,
-                wallet_address,
-                highest_score,
-                start_ts,
-                end_ts,
-                run_id,
-                all_characters
+        return await connection.any(sql`
+            WITH
+                user_run_leaderboards AS
+                (   SELECT
+                        ROW_NUMBER() over(ORDER BY u.run_score DESC) AS leaderboard_rank,
+                        CASE
+                            WHEN u.user_id = ${userId}
+                            THEN true
+                            ELSE false
+                        END AS is_self,
+                        i.wallet_address,
+                        s.max_score,
+                        u.start_ts,
+                        u.end_ts,
+                        u.run_id,
+                        u.game_state -> 'scene' ->> 'allCharacters' AS all_characters
+                    FROM
+                        user_run u
+                    JOIN
+                        (   SELECT
+                                user_id,
+                                MAX(run_score) AS max_score
+                            FROM
+                                user_run
+                            ${whereFragment}
+                            GROUP BY
+                                user_id ) s
+                    ON
+                        u.user_id = s.user_id
+                    AND u.run_score = s.max_score
+                    JOIN
+                        user_info i
+                    ON
+                        u.user_id = i.user_id
+                    WHERE
+                        run_status = 'won'
+                    OR  run_status = 'lost'
+                    GROUP BY
+                        u.user_id,
+                        u.end_ts,
+                        u.run_id,
+                        s.max_score,
+                        i.wallet_address
+                )
+                ,
+                user_run_leaderboards_unique AS
+                (   SELECT
+                    ROW_NUMBER() over(ORDER BY max_score DESC) AS adjusted_rank, --- adjusted rank is to recalc top 100 after removing dups, leaderboard rank is for self
+                    *
+                    FROM
+                        (   SELECT
+                                DISTINCT
+                            ON
+                                (
+                                    wallet_address)
+                                *
+                            FROM
+                                user_run_leaderboards ) AS unique_rows
+                )
+            SELECT
+                *
             FROM
-                user_run_leaderboard
-            WHERE
-                user_id = ${userId}
-            AND
-                end_ts > now() - interval '1 day'
-        )
-    SELECT
-        *
-    FROM
-        (   SELECT
-                false as is_self,
-                wallet_address,
-                highest_score,
-                start_ts,
-                end_ts,
-                run_id,
-                all_characters
-            FROM
-                user_run_leaderboard
-            WHERE
-                end_ts > now() - interval '1 day'
-            ORDER BY
-                highest_score DESC
-            LIMIT
-                ${LEADERBOARD_ENTRIES_TO_DISPLAY}
-    ) AS max_run_all
+                (   SELECT
+                        *
+                    FROM
+                        user_run_leaderboards_unique
+                    LIMIT
+                        ${LEADERBOARD_ENTRIES_TO_DISPLAY}) AS all_leaderboard
 
-    UNION
+            UNION
+                (   SELECT
+                        *
+                    FROM
+                        user_run_leaderboards_unique
+                    WHERE
+                        is_self = true);
+        `)
+    }
 
-    SELECT
-        *
-    FROM
-        max_run_self
-    ORDER BY
-        highest_score DESC;
-    `)
+    const allTimeLeaderboard = getLeaderboardByTimeframe('allTime')
+    const weeklyLeaderboard = getLeaderboardByTimeframe('weekly')
+    const dailyLeaderboard = getLeaderboardByTimeframe('daily')
 
     const allLeaderboards = await Promise.all([
         allTimeLeaderboard,

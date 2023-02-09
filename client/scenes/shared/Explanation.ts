@@ -1,5 +1,5 @@
 import { DisplayObject, Texture } from 'pixi.js'
-import { startCase } from 'lodash'
+import { startCase, upperFirst } from 'lodash'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
 import {
@@ -19,6 +19,7 @@ import {
 import { keys } from 'shared/code'
 import { Datum } from 'datums'
 import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
+import { OutlineFilter } from 'pixi-filters'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',
@@ -29,10 +30,6 @@ export const keyTermsMap = {
     orbsOfLightning: 'deal 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
     orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
-
-    // grudge: 'intentGrudge',
-    // infectiousBite: 'unblocked damage becomes Poison',
-    // mimicAttack: 'deal 999 or copies the last hit taken this turn',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
@@ -54,13 +51,15 @@ export const keyTermsMap = {
     unguarded: 'receives 25% more damage',
     unready: 'receives 12% more damage',
     vulnerable: 'receives 50% more damage',
+    stamp: 'strength increased by 25',
+    chargedBomb: 'Gnome Big Bomber has charged his bomb!',
 }
 
 export type KeyTerm = keyof typeof keyTermsMap
 
 export function getTermIndex(term: string, explanation: string): number {
     const lowerCaseTerm = startCase(term).toLowerCase()
-    var re = new RegExp(`${lowerCaseTerm}`, 'g')
+    var re = new RegExp(`>${lowerCaseTerm}`, 'g')
 
     return explanation.toLowerCase().search(re)
 }
@@ -85,7 +84,8 @@ export function TermExplanationsIf({
                     x: xOffset,
                     y: yOffset,
                 },
-            })
+            }),
+            xOffset
         )
     )
 }
@@ -115,7 +115,7 @@ export function TermExplanations({
     boxes.forEach((box, i) => {
         if (i > 0) {
             const lastBox = boxes[i - 1]
-            box.y = lastBox.y + lastBox.height + 5
+            box.y = lastBox.y + lastBox.height + 10
         }
 
         return box
@@ -136,18 +136,23 @@ export function TermExplanationIf({
     yOffset?: number
 }): PixiContainer {
     return If(isShown, () => {
-        return portalizeExplanations(Container({}), [
-            TermExplanation({
-                term,
-                displayObjectArgs: { x: xOffset, y: yOffset },
-            }),
-        ])
+        return portalizeExplanations(
+            Container({}),
+            [
+                TermExplanation({
+                    term,
+                    displayObjectArgs: { x: xOffset, y: yOffset },
+                }),
+            ],
+            xOffset
+        )
     })
 }
 
 function portalizeExplanations(
     root: PixiContainer<DisplayObject>,
-    content: PixiContainer[]
+    content: PixiContainer[],
+    xOffset: number
 ) {
     nextFrame().then(() => {
         nextFrame().then(() => {
@@ -155,12 +160,19 @@ function portalizeExplanations(
 
             if (targetUidsWaitingForImpact.val.length) return
 
+            let { x, y } = root.getGlobalPosition()
+            content.forEach(item => {
+                if (item.width + x + xOffset > BASE_WIDTH) {
+                    x -= item.width + xOffset + 25
+                }
+            })
+
             portalize({
                 from: root,
                 content: Container(
                     {
-                        x: root.getGlobalPosition().x,
-                        y: root.getGlobalPosition().y,
+                        x,
+                        y,
                     },
                     ...content
                 ),
@@ -214,18 +226,22 @@ export function ExplanationIf({
     isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
-        return portalizeExplanations(Container({}), [
-            Explanation({
-                texts,
-                isHtml,
-                displayObjectArgs: {
-                    borderThickness: 2,
-                    padding: 10,
-                    x: xOffset,
-                    y: yOffset,
-                },
-            }),
-        ])
+        return portalizeExplanations(
+            Container({}),
+            [
+                Explanation({
+                    texts,
+                    isHtml,
+                    displayObjectArgs: {
+                        borderThickness: 2,
+                        padding: 10,
+                        x: xOffset,
+                        y: yOffset,
+                    },
+                }),
+            ],
+            xOffset
+        )
     })
 }
 
@@ -242,14 +258,21 @@ export function Explanation({
 }): PixiContainer {
     const textEls = texts.map((text, index) => {
         return Text({
-            text,
+            text: upperFirst(text),
             isHtml,
             style: {
-                fill: 'white',
+                fill: index === 0 ? 'white' : 0xdddddd,
                 wordWrapWidth: BASE_WIDTH * 0.18,
                 wordWrap: true,
+                /** @TODO upgrade pixijs to ^7.1.0 so we can use custom fonts with PixiHTMLText */
+                fontFamily: 'Tahoma',
+                // fontFamily:
+                //     index === 0
+                //         ? 'bigFont'
+                //         : 'sansFont',
                 fontWeight: texts.length > 1 && index === 0 ? 'bold' : '400',
-                fontSize: displayObjectArgs?.fontSize ?? 20,
+                fontSize: index === 0 ? 22 : 18,
+                fontStyle: 'normal',
             },
         })
     })
@@ -263,7 +286,10 @@ export function Explanation({
         }
     })
 
-    // console.log({ textEls, texts })
+    const outlineFilter = new OutlineFilter(
+        3,
+        displayObjectArgs?.borderColor ?? 0x1f2633
+    )
 
     return InfoBox(
         Container(
@@ -279,9 +305,14 @@ export function Explanation({
             ...textEls
         ),
         {
-            padding: 25,
             ...(displayObjectArgs ?? {}),
-            ...(color ? { colorStops: [{ color, offset: 0 }] } : {}),
+            ...(color
+                ? { colorStops: [{ color, offset: 0 }] }
+                : { colorStops: [{ color: 0x364259, offset: 0 }] }),
+            padding: 15,
+            borderThickness: 0,
+            alpha: 0.96,
+            filters: [outlineFilter],
         }
     )
 }

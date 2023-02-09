@@ -1,29 +1,20 @@
-import type {
-    ServerActions,
-    BareServerActionsMeta,
-} from 'shared'
+import type { ServerActions, BareServerActionsMeta } from 'shared'
+import { emitCallApi } from './socket'
 
 export async function callServerApi<K extends keyof ServerActions>(
     method: K,
     args: BareServerActionsMeta[K]['args']
     //@ts-expect-error
 ): BareServerActionsMeta[K]['res'] {
-    const fullArgs = { ...(args ?? {}), method: method }
-    console.log('Calling Server API: ', { args, method })
-
     try {
-        const res = await fetch(`server/api`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(fullArgs),
-        })
-        const json = (await res.json()) as BareServerActionsMeta[K]['res']
-        console.log('Server API Response: ', json)
-        return json
+        const res = (await emitCallApi({
+            method,
+            data: args,
+        })) as BareServerActionsMeta[K]['res']
+        console.log('server api response', res)
+        return res
     } catch (e) {
-        console.error(e)
+        const err = e as Error
+        console.error(`server api error: ${err.message}`)
     }
 }

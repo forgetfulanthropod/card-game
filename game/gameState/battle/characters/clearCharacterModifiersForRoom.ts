@@ -11,4 +11,5 @@ export function clearCharacterModifiersForRoom(scene: BattleCursor): void {
     setAllCharactersToUnmoved(scene)
     clearAllEffects(scene)
     clearCharacterStatModifiers(scene, 'room')
+    clearCharacterStatModifiers(scene, 'turn')
 }

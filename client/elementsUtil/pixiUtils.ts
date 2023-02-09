@@ -1,7 +1,7 @@
 import type { DisplayObject, Graphics as PixiGraphics } from 'pixi.js'
 import { utils } from 'pixi.js'
 
-import type { PixiContainer, PixiSprite } from '@/elementsUtil'
+import { getStage, PixiContainer, PixiSprite, PixiText } from '@/elementsUtil'
 
 export function drawCircle(
     g: PixiGraphics,
@@ -66,4 +66,34 @@ export function bringToTop(o: DisplayObject): void {
 
     parent.removeChild(o)
     parent.addChild(o)
+}
+
+export const getShowOnHoverFns = (el: PixiContainer) => ({
+    onMouseover: () => getStage().addChild(el),
+    onMouseout: () => getStage().removeChild(el),
+})
+
+export const animateNumberInElement = async (
+    element: PixiText,
+    text: string,
+    finalNumber: number,
+    speed: 'slow' | 'normal' | 'fast' = 'normal'
+): Promise<void> => {
+    let initialNumber = 0
+    const numberIncrement = speed === 'slow' ? 1 : speed === 'normal' ? 2 : 3
+    const intervalSpeed =
+        speed === 'slow' ? 100 : speed === 'normal' ? 25 : 10
+
+    return await new Promise(resolve => {
+        const tempInterval = setInterval(() => {
+            element.text = `${initialNumber} ${text}`
+            initialNumber += numberIncrement
+
+            if (initialNumber >= finalNumber) {
+                element.text = `${finalNumber.toFixed(0)} ${text}`
+                clearInterval(tempInterval)
+                resolve(void 0)
+            }
+        }, intervalSpeed)
+    })
 }

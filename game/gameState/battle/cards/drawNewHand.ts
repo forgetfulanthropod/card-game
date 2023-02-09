@@ -4,30 +4,35 @@ import { keys } from 'shared/code'
 import { updateHand } from './cardManagement'
 import { shufflePile } from './shufflePile'
 
-const BASE_HAND_SIZE = 5
-
 export function drawNewHand(scene: BattleCursor): void {
-    scene.set('cards', discardAndDrawAndGetPiles(scene.get('cards')))
+    scene.set(
+        'cards',
+        discardAndDrawAndGetPiles(scene.get('cards'), scene.get('handSize'))
+    )
     updateHand(scene)
+    scene.set('handSize', scene.get('baseHandSize'))
 }
 
-function discardAndDrawAndGetPiles({
-    draw: drawPile,
-    hand,
-    discard: discardPile,
-    removedRoom,
-    removedRun,
-}: Piles): Piles {
+function discardAndDrawAndGetPiles(
+    {
+        draw: drawPile,
+        hand,
+        discard: discardPile,
+        removedRoom,
+        removedRun,
+    }: Piles,
+    handSize: number
+): Piles {
     let newDrawPile = drawPile
     let newHand = {}
     let newDiscardPile = { ...discardPile, ...hand }
     ;({ newDrawPile, newHand } = drawUpToNCards({
         drawPile,
         hand: newHand,
-        n: BASE_HAND_SIZE,
+        n: handSize,
     }))
 
-    if (keys(newHand).length < BASE_HAND_SIZE) {
+    if (keys(newHand).length < handSize) {
         if (keys(newDrawPile).length !== 0)
             throw new Error(
                 "the draw pile isn't empty but hand size wasn't achieved"
@@ -35,7 +40,7 @@ function discardAndDrawAndGetPiles({
         ;({ newDrawPile, newHand } = drawUpToNCards({
             drawPile: shufflePile(newDiscardPile),
             hand: newHand,
-            n: BASE_HAND_SIZE,
+            n: handSize,
         }))
 
         newDiscardPile = {}
@@ -64,11 +69,7 @@ function drawUpToNCards({
 
     const numInHand = keys(hand).length
     const numToDraw = n - numInHand
-
-    if (numToDraw < 0)
-        throw new Error(`already have ${numInHand} cards, drawing up to ${n}`)
-
-    if (numToDraw === 0) return { newDrawPile: drawPile, newHand: hand }
+    if (numToDraw <= 0) return { newDrawPile: drawPile, newHand: hand }
 
     keys(drawPile)
         .slice(0, numToDraw)

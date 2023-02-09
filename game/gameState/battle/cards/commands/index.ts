@@ -13,6 +13,7 @@ import {explain as explainDiscard, execute as executeDiscard} from './discard'
 import {explain as explainDiscardRandom, execute as executeDiscardRandom} from './discardRandom'
 import {explain as explainDoubleEnchantmentOrToken, execute as executeDoubleEnchantmentOrToken} from './doubleEnchantmentOrToken'
 import {explain as explainDraw, execute as executeDraw} from './draw'
+import {explain as explainDrawSizeChange, execute as executeDrawSizeChange} from './drawSizeChange'
 import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainExplain, execute as executeExplain} from './explain'
@@ -20,8 +21,10 @@ import {explain as explainHeal, execute as executeHeal} from './heal'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfDamageDealtApplyEffect, execute as executeIfDamageDealtApplyEffect} from './ifDamageDealtApplyEffect'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
+import {explain as explainIfHealthUnder, execute as executeIfHealthUnder} from './ifHealthUnder'
 import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
+import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
 import {explain as explainModifyStats, execute as executeModifyStats} from './modifyStats'
@@ -53,6 +56,7 @@ export const explainers: Explainers = {
     discardRandom: explainDiscardRandom,
     doubleEnchantmentOrToken: explainDoubleEnchantmentOrToken,
     draw: explainDraw,
+    drawSizeChange: explainDrawSizeChange,
     dwindle: explainDwindle,
     effect: explainEffect,
     explain: explainExplain,
@@ -60,8 +64,10 @@ export const explainers: Explainers = {
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
+    ifHealthUnder: explainIfHealthUnder,
     ifKilled: explainIfKilled,
     ifStance: explainIfStance,
+    infectiousBite: explainInfectiousBite,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
     modifyStats: explainModifyStats,
@@ -93,6 +99,7 @@ export const executors: Executors = {
     discardRandom: executeDiscardRandom,
     doubleEnchantmentOrToken: executeDoubleEnchantmentOrToken,
     draw: executeDraw,
+    drawSizeChange: executeDrawSizeChange,
     dwindle: executeDwindle,
     effect: executeEffect,
     explain: executeExplain,
@@ -100,8 +107,10 @@ export const executors: Executors = {
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
+    ifHealthUnder: executeIfHealthUnder,
     ifKilled: executeIfKilled,
     ifStance: executeIfStance,
+    infectiousBite: executeInfectiousBite,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
     modifyStats: executeModifyStats,

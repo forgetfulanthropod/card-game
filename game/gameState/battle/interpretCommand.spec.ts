@@ -21,12 +21,13 @@ const originalScene = exampleBattleScene_.scene
 
 export const pc1 = 'pc-1'
 export const pc2 = 'pc-2'
+export const pc3 = 'pc-3'
 export const npc1 = 'npc-1'
 export const npc2 = 'npc-2'
 
 const interpretCommandSuite = {
     addBlock() {
-        const scene = freshBattleScene()
+        let scene = freshBattleScene()
         interpretCommand({
             command: makeCmd(pc1, 'addBlock(defense)', 'self'),
             scene,
@@ -35,6 +36,23 @@ const interpretCommandSuite = {
         equals(
             scene.get('allCharacters', pc1, 'block'),
             exampleBattleScene_.scene.allCharacters[pc1].defense
+        )
+
+        scene = freshBattleScene()
+        interpretCommand({
+            command: makeCmd(pc1, 'addBlock(defense)', 'allFriends'),
+            scene,
+            targetUids: [pc1, pc2, pc3],
+        })
+        truthy(
+            scene.get('allCharacters', pc1, 'block') ===
+                exampleBattleScene_.scene.allCharacters[pc1].defense &&
+                scene.get('allCharacters', pc2, 'block') ===
+                    exampleBattleScene_.scene.allCharacters[pc1].defense &&
+                scene.get('allCharacters', pc3, 'block') ===
+                    exampleBattleScene_.scene.allCharacters[pc1].defense,
+
+            'adding block for all friends broken'
         )
     },
     addEnergy() {
@@ -117,6 +135,32 @@ const interpretCommandSuite = {
                 originalScene.allCharacters[pc1].strength
         )
     },
+    heal() {
+        const scene = freshBattleScene()
+        interpretCommand({
+            command: makeCmd(npc1, 'deal(10)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(5)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].health - 5
+        )
+        interpretCommand({
+            command: makeCmd(pc1, 'heal(999)', 'friends'),
+            scene,
+            targetUids: [pc1],
+        })
+        equals(
+            scene.get('allCharacters', pc1, 'health'),
+            originalScene.allCharacters[pc1].constitution
+        )
+    },
     // effect() {},
     ifDamageDealt() {
         const scene = freshBattleScene()
@@ -140,6 +184,26 @@ const interpretCommandSuite = {
         )
         // ifDamageDealt(deal(strength/2)
     },
+    // ifHealthUnder() {
+    //     const scene = freshBattleScene()
+
+    //     // should not give block to pc1
+    //     const healthBefore = scene.get('allCharacters', npc1, 'health')
+
+    //     interpretCommand({
+    //         command: makeCmd(pc1, 'twistTheKnife(50, deal(1), deal(2))'),
+    //         scene,
+    //         targetUids: [npc1],
+    //     })
+    //     // should give block to pc2
+    //     interpretCommand({
+    //         command: makeCmd(pc2, 'smite()'),
+    //         scene,
+    //         targetUids: [npc2],
+    //     })
+    //     truthy(scene.get('allCharacters', pc1, 'block') <= 0)
+    //     truthy(scene.get('allCharacters', pc2, 'block') > 0)
+    // },
     ifFirstPlay() {
         const scene = freshBattleScene()
         const card: Card = makeCard(pc1, 'ifFirstPlay(deal(1))')
@@ -214,21 +278,37 @@ const interpretCommandSuite = {
         truthy(scene.select('cards', 'hand').get(card.uid) == null)
         truthy(scene.select('cards', 'discard').get(card.uid) == null)
     },
+    removeAllDebuffs() {
+        const scene = freshBattleScene()
+
+        interpretCommand({
+            command: makeCmd(
+                npc1,
+                'chain(effect("vulnerableDebuff", 11), effect("poisonedDebuff", 11), effect("braveBuff", 11))'
+            ),
+            scene,
+            targetUids: [pc1],
+        })
+
+        truthy(
+            JSON.stringify(scene.get('allCharacters', pc1).effects) ===
+                '[{"id":"vulnerableDebuff","counter":11},{"id":"poisonedDebuff","counter":11},{"id":"braveBuff","counter":11}]'
+        )
+
+        interpretCommand({
+            command: makeCmd(pc1, 'removeAllDebuffs()', 'self'),
+            scene,
+            targetUids: [pc1],
+        })
+
+        equals(
+            JSON.stringify(scene.get('allCharacters', pc1).effects),
+            '[{"id":"braveBuff","counter":11}]'
+        )
+    },
     // orb() {},
     // queue() {},
     // text() {},
-} as const
-
-const _effectsSuite = {
-    bleed() {},
-    debilitated() {},
-    fatigue() {},
-    poison() {},
-    stunned() {},
-    unguarded() {},
-    vulnerable() {},
-    strongblock() {},
-    smallDamageIncrease() {},
 } as const
 
 const explainSuite = {

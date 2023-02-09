@@ -59,11 +59,13 @@ export const sql = createSqlTag({
         leaderboard: z.object({
             user_id: z.string(),
             wallet_address: z.string(),
-            highest_score: z.number(),
+            max_score: z.number(),
             start_ts: z.number(),
             end_ts: z.number(),
             run_id: z.number(),
-            is_self: z.boolean()
+            is_self: z.boolean(),
+            leaderboard_rank: z.number(),
+            adjusted_rank: z.number(),
         }),
     },
 })

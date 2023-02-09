@@ -129,7 +129,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description: 'Exit Boss Battle without losing more than 15 health',
         shortDescription: 'Boss Battles Lost <15 Health',
         pointValue: 15,
-        attributeName: 'bossRoomsExitedFullHealth',
+        attributeName: 'bossRoomsExitedLowDamage',
         keyword: 'Just a Fleshwound',
     },
     BOSS_KILLED: {
@@ -164,7 +164,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description:
             'Final hit against enemy exacly equal to its remaining health',
         shortDescription: 'Perfect Kills',
-        pointValue: 4,
+        pointValue: 3,
         attributeName: 'perfectKills',
         keyword: 'Perfect Kill',
     },
@@ -192,7 +192,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     FINAL_USER_HEALTH_REMAINING: {
         description: 'Amount of health remaining at end of run',
         shortDescription: 'Total Health Remaining',
-        pointValue: 0.15,
+        pointValue: 1,
         attributeName: 'finalUserHealthRemaining',
         keyword: 'For Your Health',
     },
@@ -255,18 +255,25 @@ export type MappedLeaderboards = {
     [key in LeaderboardTimeToggle]: Leaderboard
 }
 
-export type Timeframe = keyof MappedLeaderboards
+export type LeaderboardTimeframe = keyof MappedLeaderboards
 
 export type Leaderboard = readonly LeaderboardEntry[]
 
 export type LeaderboardEntry = {
     user_id: UserID
     wallet_address: string
-    highest_score: number
+    max_score: number
     start_ts: number // unix ts
     end_ts: number // unix ts
     run_id: RunID
     is_self: boolean
-    all_characters?: string // in reality is of Characters type, before parsing
+    leaderboard_rank: number // do not use
+    adjusted_rank: number // use for both top 100 and self entry
+    all_characters?: string // in reality is of Characters type, after parsing
     teamComp?: CharacterId[]
+}
+
+export type ScoreTags = {
+    isNewHighScore: boolean
+    topPercentile: number
 }
