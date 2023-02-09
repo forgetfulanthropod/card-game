@@ -84,7 +84,8 @@ export function TermExplanationsIf({
                     x: xOffset,
                     y: yOffset,
                 },
-            })
+            }),
+            xOffset
         )
     )
 }
@@ -135,18 +136,23 @@ export function TermExplanationIf({
     yOffset?: number
 }): PixiContainer {
     return If(isShown, () => {
-        return portalizeExplanations(Container({}), [
-            TermExplanation({
-                term,
-                displayObjectArgs: { x: xOffset, y: yOffset },
-            }),
-        ])
+        return portalizeExplanations(
+            Container({}),
+            [
+                TermExplanation({
+                    term,
+                    displayObjectArgs: { x: xOffset, y: yOffset },
+                }),
+            ],
+            xOffset
+        )
     })
 }
 
 function portalizeExplanations(
     root: PixiContainer<DisplayObject>,
-    content: PixiContainer[]
+    content: PixiContainer[],
+    xOffset: number
 ) {
     nextFrame().then(() => {
         nextFrame().then(() => {
@@ -154,12 +160,19 @@ function portalizeExplanations(
 
             if (targetUidsWaitingForImpact.val.length) return
 
+            let { x, y } = root.getGlobalPosition()
+            content.forEach(item => {
+                if (item.width + x + xOffset > BASE_WIDTH) {
+                    x -= item.width + xOffset + 25
+                }
+            })
+
             portalize({
                 from: root,
                 content: Container(
                     {
-                        x: root.getGlobalPosition().x,
-                        y: root.getGlobalPosition().y,
+                        x,
+                        y,
                     },
                     ...content
                 ),
@@ -213,18 +226,22 @@ export function ExplanationIf({
     isHtml?: boolean
 }): PixiContainer {
     return If(isShown, () => {
-        return portalizeExplanations(Container({}), [
-            Explanation({
-                texts,
-                isHtml,
-                displayObjectArgs: {
-                    borderThickness: 2,
-                    padding: 10,
-                    x: xOffset,
-                    y: yOffset,
-                },
-            }),
-        ])
+        return portalizeExplanations(
+            Container({}),
+            [
+                Explanation({
+                    texts,
+                    isHtml,
+                    displayObjectArgs: {
+                        borderThickness: 2,
+                        padding: 10,
+                        x: xOffset,
+                        y: yOffset,
+                    },
+                }),
+            ],
+            xOffset
+        )
     })
 }
 
