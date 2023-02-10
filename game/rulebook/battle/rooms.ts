@@ -371,6 +371,14 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             },
         ],
     ],
+    restSite: [
+        [
+            {
+                id: 'REST_SITE',
+                level: 1,
+            },
+        ],
+    ],
     bosses: [
         [
             {
@@ -577,13 +585,8 @@ export function getDungeonRooms(): DungeonRoomMaps {
             },
             '9_15': {
                 uid: '9_15',
-                enemies: [
-                    {
-                        id: 'REST_SITE',
-                        level: 1,
-                    },
-                ],
-                category: 'tierThree',
+                enemies: [],
+                category: 'restSite',
                 edges: ['9_17', '', '', ''],
             },
             '9_17': {
@@ -614,6 +617,7 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
         tierTwo: [],
         tierThree: [],
         tierFour: [],
+        restSite: [],
         bosses: [],
     }
 

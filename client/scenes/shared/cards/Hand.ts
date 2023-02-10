@@ -19,7 +19,7 @@ import type {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
-import { toDiscardUids } from '@/scenes/battle/BattleScene'
+import { toDiscardUids } from '@/scenes/run/BattleScene'
 
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 const CARD_WIDTH = 260

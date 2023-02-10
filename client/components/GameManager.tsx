@@ -2,14 +2,12 @@ import { Toaster } from 'react-hot-toast'
 
 import { AppWrap } from './AppWrap'
 import { ResetButton } from './ResetButton'
-import { AwaitGameState } from './AwaitGameState'
+import { AwaitTree } from './AwaitTree'
 import { RulebookEditor } from './RulebookEditor'
 import { SceneEditor } from './SceneEditor'
 
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
-
-    console.log('process.env.IS_PRODUCTION', process.env.IS_PRODUCTION)
 
     const isProduction = !!process.env.IS_PRODUCTION
 
@@ -27,10 +25,10 @@ export function GameManager(props: { username: string }): JSXElement {
         {isProduction ? (
             <></>
         ) : (
-            <AwaitGameState>
+            <AwaitTree>
                 <RulebookEditor username={username} />
                 <SceneEditor />
-            </AwaitGameState>
+            </AwaitTree>
         )}
         {/* <TestCounter /> */}
         {/* <WalletAddress /> */}

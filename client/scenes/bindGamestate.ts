@@ -2,7 +2,7 @@ import type { SceneId } from 'shared'
 
 import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
-import { BattleScene } from './battle'
+import { RunSceneManager } from './run'
 import { DungeonEntryScene } from './entry'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
@@ -36,7 +36,7 @@ function bindScene(app: PixiApplication): Unbind {
         }
 
         if (sceneType === 'battle') {
-            lastScene = BattleScene()
+            lastScene = RunSceneManager()
             // bindBattleState(app)
         } else if (sceneType === 'entry') {
             lastScene = DungeonEntryScene()

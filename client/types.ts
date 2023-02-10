@@ -31,5 +31,7 @@ declare global {
     // @ts-expect-error
     var process: { env: { [key: string]: string } }
     var gtag: Gtag.Gtag
-    interface Window { dataLayer: any}
+    interface Window {
+        dataLayer: any
+    }
 }

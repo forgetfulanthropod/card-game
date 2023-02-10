@@ -1,24 +1,7 @@
-import { datum, compose, Datum } from 'datums'
-import type { BattleScene, CardUid, PileId, RequiredAction } from 'shared'
-import { sampleSize } from 'lodash'
+import { collectData } from '@/analytics/collectData'
+import { callApi } from '@/callApi'
+import { getBattleScene } from '@/data'
 import {
-    Cards,
-    CardAdder,
-    EndTurnButton,
-    BattleSceneCharacterInfo,
-    ConfirmButton,
-} from '@sharedElements'
-import { keys } from 'shared/code'
-import { Characters } from './character'
-import { Energy } from './Energy'
-import { BattleRoomInfo } from './BattleRoomInfo'
-import { HexMapOverlay } from './HexMapOverlay'
-import { EndOfRoom } from './EndOfRoom'
-import { RestSiteOverlay } from './RestSiteOverlayPicnic'
-import { Background } from '@/scenes'
-import {
-    Adjust,
-    AssetKey,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
@@ -29,74 +12,25 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import type { PixiContainer } from '@/elementsUtil'
-import { getBattleScene } from '@/data'
-import { onUpdate, toDatum, waitForDeathAnimationsDatum } from '@/util'
-import { callApi } from '@/callApi'
-import { EndOfRun } from './EndOfRun'
+import { toDatum, waitForDeathAnimationsDatum } from '@/util'
+import {
+    BattleSceneCharacterInfo,
+    CardAdder,
+    Cards,
+    ConfirmButton,
+    EndTurnButton,
+} from '@sharedElements'
+import { compose, datum, Datum } from 'datums'
+import { sampleSize } from 'lodash'
+import { Texture } from 'pixi.js'
 import { ROCursor } from 'sbaobab'
+import { BattleScene, CardUid, PileId, RequiredAction } from 'shared'
+import { keys } from 'shared/code'
 import { SpineBackground } from '../background'
-import { collectData } from '@/analytics/collectData'
-import { BaseTexture, Texture } from 'pixi.js'
-
-export function BattleSceneEl(): PixiContainer {
-    const hoveredCardUid = datum<CardUid | null>(null)
-
-    const scene = getBattleScene()
-
-    const root = Container(
-        {
-            name: 'BattleScene',
-            onDestroy: [
-                onUpdate(
-                    scene.select('requireAction'),
-                    immediatelyTakeRequiredAction,
-                    true
-                ),
-            ],
-        },
-        If(
-            compose(
-                ([isInRestSite, isInMap]) => {
-                    return !isInRestSite && !isInMap
-                },
-                toDatum(scene.select('isInRestSite'), is => is),
-                toDatum(scene.select('isInMap'), is => is)
-            ),
-            () => CoreScene(scene, hoveredCardUid)
-        ),
-        If(
-            toDatum(scene.select('isInMap'), is => is),
-            () => HexMapOverlay()
-        ),
-        If(
-            toDatum(scene.select('isInRestSite'), is => is),
-            () => RestSiteOverlay()
-        )
-    )
-
-    let battleRoomInfo: null | PixiContainer
-    // root.on(
-    //     'destroyed',
-    //     onUpdate(
-    //         scene.select('numRoomsPassed'),
-    //         num => {
-    //             if (battleRoomInfo) root.removeChild(battleRoomInfo)
-    //             battleRoomInfo = BattleRoomInfo({
-    //                 info: [
-    //                     num == null || num === -1
-    //                         ? ''
-    //                         : `${num} room${num === 1 ? '' : 's'} cleared`,
-    //                 ],
-    //             })
-    //             root.addChild(battleRoomInfo)
-    //         },
-    //         true
-    //     )
-    // )
-
-    return root
-}
+import { Characters } from './character'
+import { EndOfRoom } from './EndOfRoom'
+import { EndOfRun } from './EndOfRun'
+import { Energy } from './Energy'
 
 const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
@@ -105,15 +39,14 @@ const allSrcs: SpineAsset[][] = [
 ]
 
 export const toDiscardUids = datum([] as CardUid[])
-
-function CoreScene(
+export function BattleScene(
     scene: ROCursor<BattleScene>,
     hoveredCardUid: Datum<CardUid | null>
 ): DisplayObject {
     playLoopingMusic(scene)
     collectData('ui_ux_view', { page_title: 'Battle Scene' })
     collectData('level_start', {
-        room_number: scene.get('numRoomsPassed') + 1, //1-indexed
+        room_number: scene.get('numRoomsPassed') + 1,
         room_id: scene.get('currentRoom').uid,
         room_tier: scene.get('currentRoom').category,
         run_id: scene.get('runId'),
@@ -200,7 +133,6 @@ function CoreScene(
         )
     )
 }
-
 function playLoopingMusic(scene: ROCursor<BattleScene>) {
     const category = scene.get('currentRoom', 'category')
     if (category === 'tierOne' || 'events')
@@ -208,11 +140,12 @@ function playLoopingMusic(scene: ROCursor<BattleScene>) {
     else if (category === 'tierTwo')
         loopSong('battleMusicHooligansBluffTierTwo')
     else if (category === 'tierThree')
-        loopSong('battleMusicHooligansBluffTierThree')
+        loopSong('battleMusicHooligansBluffTierThreeAndFour')
+    else if (category === 'tierFour')
+        loopSong('battleMusicHooligansBluffTierThreeAndFour')
     else if (category === 'bosses') loopSong('bossBattleMusicHooligansBluff')
 }
-
-function immediatelyTakeRequiredAction(req: RequiredAction | null) {
+export function immediatelyTakeRequiredAction(req: RequiredAction | null) {
     if (req == null) return
     const { type, least } = req
     const toPile = {
