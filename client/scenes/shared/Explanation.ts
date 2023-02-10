@@ -1,25 +1,22 @@
-import { DisplayObject, Texture } from 'pixi.js'
-import { startCase, upperFirst } from 'lodash'
-import type { InfoBoxDisplayArgs } from '.'
-import { InfoBox } from '.'
 import {
+    BASE_WIDTH,
+    Container,
     DisplayObjectArgs,
-    getStage,
+    getRenderer,
     If,
     PixiContainer,
     portalize,
-} from '@/elementsUtil'
-import {
-    getRenderer,
     Sprite,
     Text,
-    BASE_WIDTH,
-    Container,
 } from '@/elementsUtil'
-import { keys } from 'shared/code'
+import { nextFrame, targetUidsWaitingForImpact } from '@/util'
 import { Datum } from 'datums'
-import { nextFrame, nextTick, targetUidsWaitingForImpact } from '@/util'
+import { startCase, upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
+import { DisplayObject, Texture } from 'pixi.js'
+import { keys } from 'shared/code'
+import type { InfoBoxDisplayArgs } from '.'
+import { InfoBox } from '.'
 
 export const keyTermsMap = {
     momentary: 'removed until end of room',

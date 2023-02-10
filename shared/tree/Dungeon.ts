@@ -20,6 +20,7 @@ export type RoomCategoryId =
     | 'tierTwo'
     | 'tierThree'
     | 'tierFour'
+    | 'restSite'
     | 'bosses'
 
 export type DungeonRoom = {
