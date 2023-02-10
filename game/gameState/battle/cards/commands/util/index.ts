@@ -67,10 +67,11 @@ export interface ActionArgs {
     ifHealthUnder: [health: StanceId, isUnderMove: any, defaultMove: any]
     ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
-    ifStance: [
+    ifStance: [stanceId: StanceId, conditionalTrueMove: any]
+    ifStanceElse: [
         stanceId: StanceId,
         conditionalTrueMove: any,
-        conditionalFalseMove?: any
+        conditionalFalseMove: any
     ]
 
     brittle: [count: number]

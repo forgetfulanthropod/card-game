@@ -626,7 +626,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy1 = magic * .5;
             strengthy2 = strength * .35;
             magicy2 = magic * .35;
-            ifStance(
+            ifStanceElse(
                 "aggressive",
                 modifyStats(
                     "strength|magic",

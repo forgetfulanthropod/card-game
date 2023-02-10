@@ -24,6 +24,7 @@ import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './if
 import {explain as explainIfHealthUnder, execute as executeIfHealthUnder} from './ifHealthUnder'
 import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
+import {explain as explainIfStanceElse, execute as executeIfStanceElse} from './ifStanceElse'
 import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
@@ -67,6 +68,7 @@ export const explainers: Explainers = {
     ifHealthUnder: explainIfHealthUnder,
     ifKilled: explainIfKilled,
     ifStance: explainIfStance,
+    ifStanceElse: explainIfStanceElse,
     infectiousBite: explainInfectiousBite,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
@@ -110,6 +112,7 @@ export const executors: Executors = {
     ifHealthUnder: executeIfHealthUnder,
     ifKilled: executeIfKilled,
     ifStance: executeIfStance,
+    ifStanceElse: executeIfStanceElse,
     infectiousBite: executeInfectiousBite,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
