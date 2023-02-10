@@ -62,7 +62,7 @@ export function applyDamage(args: {
     return unblockedDamage
 }
 
-function applyCalcedDamage({
+export function applyCalcedDamage({
     scene,
     targetUid,
     calcedDamage,
@@ -131,7 +131,7 @@ function manageReflect(
     })
 }
 
-function manageSideEffectsOfUnblockedDamage(
+export function manageSideEffectsOfUnblockedDamage(
     scene: BattleCursor,
     targetUid: CharacterUid,
     unblockedDamage: number
@@ -152,6 +152,7 @@ function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
     //@ts-expect-error
     const enemy = character as EnemyCharacterMeta
     const remainingHealth = enemy.health
+    if (remainingHealth > 0) return
     // 1 point per enemy level
     const enemyLevel = Number(enemy.level)
     if (enemyLevel) {
@@ -260,7 +261,7 @@ function maybeApplyDamageThresholdDebuffs(
     }
 }
 
-function recordDamage(
+export function recordDamage(
     scene: BattleCursor,
     calcedDamage: number,
     targetUid: CharacterUid
