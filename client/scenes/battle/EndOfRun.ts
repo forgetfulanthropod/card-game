@@ -518,11 +518,12 @@ export function EndOfRun(): PixiContainer {
         )
     }
 
+    const buttonsY = BASE_HEIGHT / 2 + 390
     const TryAgainButton = Sprite({
         src: getTexture('tryAgainButton'),
         anchor: 0,
         x: BASE_WIDTH / 2 - 445,
-        y: BASE_HEIGHT / 2 + 380,
+        y: buttonsY,
         scale: 0.6,
         alpha: 0,
         onClick: handleTryAgain,
@@ -532,7 +533,7 @@ export function EndOfRun(): PixiContainer {
         src: getTexture('leaderboardButton'),
         anchor: 0,
         x: BASE_WIDTH / 2 + 90,
-        y: BASE_HEIGHT / 2 + 380,
+        y: buttonsY,
         scale: 0.6,
         alpha: 0,
         onClick: () => {
@@ -590,6 +591,7 @@ export function EndOfRun(): PixiContainer {
         TotalScorePoints
     )
 
+    // can use If datum utilty fn, but need to adapt to using animations
     const handleLeaderboardToggle = async (showLeaderboard: boolean) => {
         await transitionToScreen(
             'out',
