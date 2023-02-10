@@ -213,7 +213,10 @@ const getScoreTags = async ({
         }
 
         isNewHighScore = entry.run_id === runId ? true : false
-        topPercentile = entry.run_id === runId ? entry.adjusted_rank / leaderboardEntryCount.count : 1
+        topPercentile =
+            entry.run_id === runId
+                ? entry.adjusted_rank / leaderboardEntryCount.count
+                : 1
     }
 
     return {
@@ -314,7 +317,7 @@ const ScoreAttributeItem = (
         },
     })
 
-    const outlineFilter = new OutlineFilter(3, 0x1F2633)
+    const outlineFilter = new OutlineFilter(3, 0x1f2633)
 
     const ExplanationInfoBox = InfoBox(
         Container({}, ExplanationTitle, ExplanationSubtitle),
@@ -326,7 +329,7 @@ const ScoreAttributeItem = (
             padding: 15,
             colorStops: [{ color: 0x364259, offset: 0 }],
             alpha: 0.95,
-            filters: [outlineFilter]
+            filters: [outlineFilter],
         }
     )
 
@@ -537,7 +540,8 @@ export function EndOfRun(): PixiContainer {
         scale: 0.6,
         alpha: 0,
         onClick: () => {
-            !mainContainerIsAnimating.val && showLeaderboard.set(!showLeaderboard.val)
+            !mainContainerIsAnimating.val &&
+                showLeaderboard.set(!showLeaderboard.val)
         },
     })
 
@@ -547,7 +551,8 @@ export function EndOfRun(): PixiContainer {
         y: BASE_HEIGHT / 2 - 495,
         x: BASE_WIDTH / 2 + 755,
         onClick: () => {
-            !mainContainerIsAnimating.val && showLeaderboard.set(!showLeaderboard.val)
+            !mainContainerIsAnimating.val &&
+                showLeaderboard.set(!showLeaderboard.val)
         },
     })
 
@@ -693,7 +698,7 @@ export function EndOfRun(): PixiContainer {
         })
         await expandOut(ScoreElementsBackground)
         await transitionFadeElement(RunResultBanner, 'slow', 'in')
-        TogglableMainContainer.addChild(ScoreElements)
+        TogglableMainContainer.addChild(Adjust(ScoreElements, { x: 0, y: 0 }))
         await transitionFadeChildren(ScoreElements, 'sync', 'fast', 'in')
         await transitionFadeChildren(TotalScoreContainer, 'async', 'slow', 'in')
         TogglableButtonsContainer.addChild(TryAgainButton)
@@ -719,7 +724,7 @@ export function EndOfRun(): PixiContainer {
         if (topPercentile < TOP_PERCENTILE_CUTOFF) {
             TotalScoreContainer.addChild(PercentileTag)
             if (!isNewHighScore) {
-                Adjust(PercentileTag, {x: BASE_WIDTH / 2 - 330})
+                Adjust(PercentileTag, { x: BASE_WIDTH / 2 - 330 })
             }
         }
         await slamAnimateElIntoScreenStatic(HighScoreTag)
