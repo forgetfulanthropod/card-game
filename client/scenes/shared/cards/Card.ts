@@ -51,7 +51,7 @@ import {
 import { getBattleScene, getEntryScene } from '@/data'
 import { callApi } from '@/callApi'
 import type { AssetKey, CardTypeAssetId } from '@/assets'
-import { toDiscardUids } from '@/scenes/battle/BattleScene'
+import { toDiscardUids } from '@/scenes/run/BattleScene'
 import { CARD_WIDTH } from './CardAdder'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
@@ -509,9 +509,9 @@ function getEvents(
                             x: BASE_WIDTH / 2,
                             y: BASE_HEIGHT * 0.6,
                             borderThickness: 2,
-                            borderColor: 0x642193
+                            borderColor: 0x642193,
                         },
-                        color: 0xAF5BEC,
+                        color: 0xaf5bec,
                     }),
                 { durationMs: 1200 }
             )

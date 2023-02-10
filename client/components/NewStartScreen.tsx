@@ -33,7 +33,8 @@ export function NewStartScreen(props: {
     onEnter: (userId: string) => void
 }): JSXElement {
     const { connection } = useConnection()
-    const encodedPublicKey = useWallet().publicKey
+    const wallet = useWallet();
+    const encodedPublicKey = wallet.publicKey
     const [publicKey, setPublicKey] = useState('')
     useEffect(() => {
         if (connection && encodedPublicKey) {
@@ -97,6 +98,10 @@ export function NewStartScreen(props: {
                     userId,
                 })
             }
+
+            const connectWalletButton = document.getElementsByClassName('WalletMultiButton')
+            //@ts-expect-error
+            connectWalletButton[0].click() // opens wallet modal
 
             return
         }
@@ -166,7 +171,8 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont' />
+                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont WalletMultiButton'
+                    />
                 </div>
             </div>
 

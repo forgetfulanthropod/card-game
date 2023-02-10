@@ -14,10 +14,20 @@ const state = {
     gamestate: null as ROBaobab<GameState> | null,
 }
 
+let callbackWhenTreeInitialized: () => void
+let onTreeInitialized = new Promise(
+    resolve => (callbackWhenTreeInitialized = resolve as () => void)
+)
+
 export function initializeBoababTree(gamestate: GameState): void {
     state.gamestate = new SBaobab(gamestate)
     // @ts-expect-error
     window.tree = state.gamestate
+    callbackWhenTreeInitialized()
+}
+
+export function getPromiseForTreeInitialized() {
+    return onTreeInitialized
 }
 
 export function isTreeInitialized(): boolean {
