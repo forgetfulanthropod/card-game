@@ -20,7 +20,7 @@ import { startChecking } from './_util'
 import { onUpdate } from '@/util'
 import { Point, SimpleRope } from 'pixi.js'
 import { DisplayObject } from '@pixi/animate'
-import { getRenderer } from './application'
+import { getRenderer, isHighResolution } from './application'
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
@@ -109,6 +109,7 @@ export function Text(args: TextArgs): PixiText {
         String(text),
         args.style
     )
+    textEl.resolution = isHighResolution ? 2 : 1
     applyShownArgs(textEl, args)
     startChecking(textEl)
     return textEl as PixiText
