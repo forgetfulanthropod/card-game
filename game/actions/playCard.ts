@@ -48,9 +48,7 @@ function isPlayable({
     if (getEnergy(card) < 0 || getEnergy(card) > scene.get('energy'))
         return false
 
-    const requiredStance = card.actions.match(
-        /ifStance[^(]*\([^"]*"([^"]+)/
-    )?.[1]
+    const requiredStance = card.actions.match(/ifStance\([^"]*"([^"]+)/)?.[1]
 
     if (
         requiredStance &&

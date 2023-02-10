@@ -317,7 +317,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * 2; ifStance("avoidant", queue(1, dealFromStance("avoidant", strengthy)))',
+            'ifStance("avoidant", queue(1, strengthy = strength * 2; dealFromStance("avoidant", strengthy)))',
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -626,7 +626,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy1 = magic * .5;
             strengthy2 = strength * .35;
             magicy2 = magic * .35;
-            ifStance(
+            ifStanceElse(
                 "aggressive",
                 modifyStats(
                     "strength|magic",
