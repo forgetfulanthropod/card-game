@@ -81,7 +81,7 @@ export function BattleScene(
                         defaultCursor: true,
                     }),
                     Text({
-                        text: `must choose ${numRequiredToDiscard} cards to discard`,
+                        text: `Choose ${numRequiredToDiscard} cards to discard`,
                         x: BASE_WIDTH / 2,
                         y: BASE_HEIGHT * 0.125,
                         anchor: 0.5,

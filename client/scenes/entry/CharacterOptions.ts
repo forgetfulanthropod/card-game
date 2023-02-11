@@ -60,6 +60,9 @@ export function CharacterOptions() {
                         hoveredCharacterStatsOverride.set(null)
                     },
                     pointerup() {
+                        if (!isValidOption) {
+                            return
+                        } 
                         chooseOwnedCharacterAt(
                             index,
                             selectedCharacterPlaceIndex.val

@@ -54,6 +54,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         await callApi('makeNewUser', {
             username: props.username,
         })
+        window.location.reload();
         setShowActions(false)
     }
 
