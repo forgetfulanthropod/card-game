@@ -685,8 +685,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            magicy1 = strength;
-            magicy2 = 0.75 * strength;
+            magicy1 = magic;
+            magicy2 = 0.75 * magic;
             chain(
                 modifyStats("magic", magicy1, "turn"),
                 addBlock(magicy2)
