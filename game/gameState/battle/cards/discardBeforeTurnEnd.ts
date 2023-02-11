@@ -2,6 +2,7 @@ import produce from 'immer'
 import type { CardUid, BattleCursor, Card } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
+import { trackMetric } from 'server/metrics'
 
 export function discardBeforeTurnEnd({
     cardUids,
@@ -27,6 +28,7 @@ export function discardBeforeTurnEnd({
                 }
                 delete cards.hand[uid]
                 cards.discard[uid] = card
+                trackMetric('discardCard', { card, scene })
             }
         })
     )
