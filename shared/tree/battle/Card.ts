@@ -208,7 +208,7 @@ export type CardId =
     | 'songOfTheBrazen'
     | 'songOfTheHuntsman'
     | 'songOfTheWarrior'
-    | 'songOfWizadry'
+    | 'songOfWizardry'
     | 'spellBook'
     | 'stab'
     | 'sweepTheLeg'

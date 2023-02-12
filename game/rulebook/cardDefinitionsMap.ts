@@ -626,20 +626,24 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy1 = magic * .5;
             strengthy2 = strength * .35;
             magicy2 = magic * .35;
-            ifStanceElse(
-                "aggressive",
-                modifyStats(
-                    "strength|magic",
-                    "" + strengthy1 + "|" + magicy1,
-                    "turn",
-                    "friends"
+            chain(
+                ifStanceElse(
+                    "aggressive",
+                    modifyStats(
+                        "strength|magic",
+                        "" + strengthy1 + "|" + magicy1,
+                        "turn",
+                        "friends"
+                    ),
+                    modifyStats(
+                        "strength|magic",
+                        "" + strengthy2 + "|" + magicy2,
+                        "turn",
+                        "friends"
+                    )
                 ),
-                modifyStats(
-                    "strength|magic",
-                    "" + strengthy2 + "|" + magicy2,
-                    "turn",
-                    "friends"
-                )
+                draw(1),
+                momentary()
             )
         `,
         type: 'utility',
@@ -652,10 +656,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strengthmagic1 = (0.5 * strength) + (0.5 * magic);
+            strengthmagicdefense1 = (0.5 * strength) + (0.5 * magic) + (0.25 * defense);
             magic1 = 0.4 * magic;
             chain(
-                addBlock(strengthmagic1),
+                addBlock(strengthmagicdefense1),
                 heal(magic1),
                 brittle(4)
             )`,
@@ -673,15 +677,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthy2 = 0.75 * strength;
             chain(
                 modifyStats("strength", strengthy1, "turn"),
-                addBlock(strengthy2)
+                addBlock(strengthy2),
+                momentary()
             )`,
         type: 'utility',
         characterClass: 'bard',
     },
-    songOfWizadry: {
-        name: 'Song of Wizadry',
+    songOfWizardry: {
+        name: 'Song of Wizardry',
         energy: 1,
-        id: 'songOfWizadry',
+        id: 'songOfWizardry',
         targetNum: 1,
         targetType: 'friends',
         actions: `
@@ -689,7 +694,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             magicy2 = 0.75 * magic;
             chain(
                 modifyStats("magic", magicy1, "turn"),
-                addBlock(magicy2)
+                addBlock(magicy2),
+                momentary()
             )`,
         type: 'utility',
         characterClass: 'bard',
@@ -721,7 +727,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 addBlock(defenseymagicy),
                 effect("guarded",2),
-                effect("tired",1,"allEnemies")
+                effect("fatigued",1,"allEnemies"),
+                momentary()
             )
         `,
         type: 'defense',
@@ -1033,12 +1040,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.25 * strength;
+            strengthy = 0.5 * strength;
             chain(
                 deal(strengthy),
-                effect("fatigued",1),
-                effect("tired",1),
-                discard(1)
+                discardRandom(1)
             )
             `,
         type: 'attack',
@@ -1066,7 +1071,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 effect("vulnerable",2),
-                effect("bleed",3),
+                effect("bleed",4),
                 momentary()
             )
         `,
@@ -1114,7 +1119,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 removeAllDebuffs(),
                 heal(magicky),
-                effect("courageous",1),
+                effect("brave",1),
                 effect("guarded",1),
                 momentary()
             )

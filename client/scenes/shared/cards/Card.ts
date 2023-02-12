@@ -388,8 +388,12 @@ function getTexts(
                 lineHeight: explanationFontSize * 1.1,
             },
         }),
+        // quick fix for Bean to B.E.A.N. on cards
         Text({
-            text: upperFirst(card.characterClass),
+            text:
+                card.characterClass === 'notoriousBean'
+                    ? 'Notorious B.E.A.N.'
+                    : upperFirst(card.characterClass),
             y: cardFrameTexture.height * 0.4,
             anchor: 0.5,
             style: {

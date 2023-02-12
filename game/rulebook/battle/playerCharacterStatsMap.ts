@@ -163,7 +163,7 @@ export const playerCharacterStatsMap: Record<
     },
     notoriousBean: {
         id: 'notoriousBean',
-        displayName: 'Notorious B.E.A.N',
+        displayName: 'Notorious B.E.A.N.',
         isPc: true,
         class: 'bard',
 

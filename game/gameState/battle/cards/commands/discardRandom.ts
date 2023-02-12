@@ -1,24 +1,24 @@
 import produce from 'immer'
 import { shuffle } from 'lodash'
+import { discardBeforeTurnEnd } from '../discardBeforeTurnEnd'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['discardRandom'] = dslArgs => {
     const [numCards] = evalAllAsHtml(dslArgs)
-    return `Discard ${numCards}`
+    return `Discard ${numCards} card${
+        Number(numCards) > 1 ? 's' : ''
+    } at random.`
 }
 
 export const execute: Executors['discardRandom'] = ({ dslArgs, scene }) => {
     const [numCards] = evalAll(dslArgs)
-    scene.select('cards').apply(
-        produce(cards => {
-            const uids = shuffle(Object.keys(cards.hand))
-            const n = Math.min(numCards, uids.length)
-            for (let i = 0; i < n; i++) {
-                const uid = uids[i]
-                cards.discard[uid] = cards.hand[uid]
-                delete cards.hand[uid]
-            }
-        })
-    )
+    // TODO shuffle should be part of random seed
+    const cardUids = shuffle(Object.keys(scene.get('cards', 'hand')))
+    const numDiscard = Math.min(numCards, cardUids.length)
+    const cardsDiscard = cardUids.slice(0, numDiscard)
+    discardBeforeTurnEnd({
+        cardUids: cardsDiscard,
+        scene,
+    })
 }
