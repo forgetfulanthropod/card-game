@@ -328,8 +328,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'stab',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strengthy = strength + 1; chain(deal(strengthy), effect("bleed", 2), effect("vulnerable", 1))',
+        actions: `
+            strengthy = strength + 1;
+            chain(deal(strengthy), effect("bleed", 2))
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -380,8 +382,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'poisonedBlade',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strengthy = strength * .6; chain(deal(strengthy), effect("poisoned", 5))',
+        actions: `
+            strengthmagic1 = (strength * 0.25) + (magic * 0.25);
+            chain(deal(strengthmagic1), effect("poisoned", 5))
+        `,
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -393,17 +397,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     //     targetType: 'self',
     //     actions: 'exponentialIllness(3)', //todo
     //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
-    // twistTheKnife: {
-    //     name: 'Twist The Knife',
-    //     energy: 1,
-    //     id: 'twistTheKnife',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions:
-    //         'strengthy1 = 1.25 * strength; strengthy2 = .75; chain(deal(strengthy1), ifHealth("less than", .5, deal(strengthy2)))', //todo
-    //     type: 'attack',
     //     characterClass: 'rogue',
     // },
     // flashbang: {
@@ -1140,11 +1133,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies")
+            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies. <b>Momentary</b>")
         `,
-        //TODO: implement
         on: {
-            discard: 'deal(strength)',
+            discard: 'deal(strength); momentary()',
         },
         type: 'attack',
         characterClass: 'rogue',
@@ -1175,11 +1167,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'self',
         actions: `
-            setStance("avoidant")
+            chain(
+                setStance("avoidant"),
+                momentary()
+            )
         `,
         type: 'utility',
         characterClass: 'rogue',
     },
+    // TODO fix explanation damage number
     crimeAlwaysPays: {
         name: 'Crime Always Pays',
         energy: 1,
