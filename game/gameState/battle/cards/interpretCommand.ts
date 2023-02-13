@@ -50,6 +50,12 @@ function localsFromCommand(
             .get('selectedCharacters')
             ?.find(c => c?.uid === command.characterUid)
 
+    const targetConstitution =
+        targetUids.length === 1
+            ? (scene as BattleCursor).get('allCharacters', targetUids[0])
+                  ?.constitution
+            : undefined
+
     const targetHealth =
         targetUids.length === 1
             ? (scene as BattleCursor).get('allCharacters', targetUids[0])
@@ -76,6 +82,7 @@ function localsFromCommand(
 
     return {
         ...calculateStats(cardOwner),
+        targetConstitution,
         targetHealth,
         incomingDamageIntended,
         handSize,

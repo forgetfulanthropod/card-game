@@ -85,12 +85,12 @@ const orbActivators: Record<
     },
     holyLight(character: CharacterMeta, scene: BattleCursor) {
         scene.apply(['allCharacters', character.uid], cm => {
-            if (cm.health + 2 > cm.constitution)
-                return { ...cm, health: cm.constitution }
-            else return { ...cm, health: cm.health + 2 }
+            const addHealth = Math.ceil(cm.magic * 0.15)
+            const newHealth = Math.min(cm.constitution, cm.health + addHealth)
+            return { ...cm, health: newHealth }
         })
 
-        applyBlock(character, scene, character.defense * 0.5)
+        applyBlock(character, scene, character.defense + character.magic * 0.5)
 
         updateHand(scene)
 

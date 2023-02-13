@@ -100,6 +100,7 @@ export interface ActionArgs {
 
 export type Locals = CalculatedCharacterStats & {
     /** only defined when there is exactly 1 target and it is a character */
+    targetConstitution: number | undefined
     targetHealth: number | undefined
     incomingDamageIntended: number
     handSize: number

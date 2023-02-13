@@ -41,14 +41,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
-    shieldOfLight: {
-        name: 'Shield of Light',
+    shieldOfHolyLight: {
+        name: 'Shield of Holy Light',
         energy: 1,
-        id: 'shieldOfLight',
+        id: 'shieldOfHolyLight',
         targetNum: 1,
         targetType: 'friends',
-        actions:
-            'magicaldefensey = magic * 0.5 + defense; addBlock(magicaldefensey)',
+        actions: `magicaldefensey = magic * 0.5 + defense; addBlock(magicaldefensey)`,
         type: 'defense',
         characterClass: 'cleric',
     },
@@ -554,7 +553,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(draw(1), queue(1, addEnergy(2)), momentary())',
+        actions: 'chain(draw(2), queue(1, addEnergy(2)), momentary())',
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -574,13 +573,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
     ancientVerse: {
         name: 'Ancient Verse',
-        energy: 1,
+        energy: 0,
         id: 'ancientVerse',
         targetNum: -1,
         targetType: 'allFriends',
         actions: `
             chain(
-                modifyStats("strength|magic", "2|2", "room", "allFriends")
+                modifyStats("strength|magic", "2|2", "room", "allFriends"),
+                draw(1),
+                dwindle()
             )`,
         type: 'utility',
         characterClass: 'cleric',
@@ -791,7 +792,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.5 * strength;
+            strengthy = 0.4 * strength;
             chain(
                 deal(strengthy),
                 effect("tired",1)
@@ -1024,10 +1025,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            defensey = 0.65 * defense;
+            defense1 = 0.5 * defense;
             chain(
                 deal(defense),
-                addBlock(defensey, "self")
+                addBlock(defense1, "self")
             )
         `,
         type: 'attack',
@@ -1229,10 +1230,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            magicy = 0.2 * magic;
-            heal(magicy)
+            magic1 = 0.2 * magic;
+            chain(
+                heal(magic1),
+                brittle(3)
+            )
         `,
-        // brittle(3)
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -1243,14 +1246,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = strength * 4;
+            constitution1 = targetConstitution / 2;
             chain(
-                deal(strengthy),
+                deal(constitution1),
                 brittle(1)
-            )
-            `,
+            );
+            "Deal 50% of the target's max HP.\n<b>Brittle (1)</b>"`,
         type: 'attack',
-        characterClass: 'rogue',
+        characterClass: 'cleric',
     },
     burnIncense: {
         name: 'Burn Incense',
@@ -1261,7 +1264,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         on: {
             discard: 'addEnergy(1)',
         },
-        actions: `"if this card is discarded before the end of your turn, gain 1 energy"`,
+        actions: `"This card cannot be played. If this card is discarded before the end of your turn, gain 1 energy"`,
         type: 'utility',
         characterClass: 'cleric',
     },

@@ -196,7 +196,7 @@ export type CardId =
     | 'retreatToTheShadows'
     | 'scatterBrained'
     | 'screechOfTheBean'
-    | 'shieldOfLight'
+    | 'shieldOfHolyLight'
     | 'sleepyTimeSpores'
     | 'slipperyLittleGuy'
     | 'smallButStoic'

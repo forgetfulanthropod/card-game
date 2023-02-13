@@ -26,7 +26,8 @@ export const keyTermsMap = {
     orbsOfProtection: 'blocks for 50% of Magic',
     orbsOfLightning: 'deal 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
-    orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
+    orbsOfHolyLight:
+        'heals for 15% of Magic\nblocks for 100% of Defense and 50% of Magic',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
