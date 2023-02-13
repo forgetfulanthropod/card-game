@@ -51,14 +51,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'defense',
         characterClass: 'cleric',
     },
+    // TODO: if target is boss
     sweepTheLeg: {
         name: 'Sweep The Leg',
-        energy: 2,
+        energy: 1,
         id: 'sweepTheLeg',
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * 1.2; chain(deal(strengthy), effect("debilitated",2), effect("unguarded",2))',
+            'strength1 = strength * 0.5; chain(deal(strength1), effect("debilitated",1))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -289,11 +290,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = 0.75 * strength;
-            defensey = defense * 0.5;
+            strengthy = 0.7 * strength;
+            defensey = defense * 0.25;
             chain(
                 deal(strengthy),
-                addBlock(defensey, "self")
+                addBlock(defensey, "self"),
+                effect("guarded", 1, "self")
             )
         `,
         type: 'attack',
@@ -326,8 +328,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'stab',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strengthy = strength + 1; chain(deal(strengthy), effect("bleed", 2), effect("vulnerable", 1))',
+        actions: `
+            strengthy = strength + 1;
+            chain(deal(strengthy), effect("bleed", 2))
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -378,8 +382,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'poisonedBlade',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strengthy = strength * .6; chain(deal(strengthy), effect("poisoned", 5))',
+        actions: `
+            strengthmagic1 = (strength * 0.25) + (magic * 0.25);
+            chain(deal(strengthmagic1), effect("poisoned", 5))
+        `,
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -391,17 +397,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     //     targetType: 'self',
     //     actions: 'exponentialIllness(3)', //todo
     //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
-    // twistTheKnife: {
-    //     name: 'Twist The Knife',
-    //     energy: 1,
-    //     id: 'twistTheKnife',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions:
-    //         'strengthy1 = 1.25 * strength; strengthy2 = .75; chain(deal(strengthy1), ifHealth("less than", .5, deal(strengthy2)))', //todo
-    //     type: 'attack',
     //     characterClass: 'rogue',
     // },
     // flashbang: {
@@ -442,7 +437,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'strengthy = strength * 1.6; chain(deal(strengthy), effect("vulnerable", 2))',
+            'strength1 = strength * 2; chain(deal(strength1), effect("vulnerable", 2))',
         type: 'attack',
         characterClass: 'knight',
     },
@@ -453,15 +448,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions: `
-            defensey = defense;
+            defense1 = 0.75 * defense;
             ifStance(
                 "avoidant",
                 chain(
-                    addBlock(defensey),
-                    effect("strongblock", 1)
+                    addBlock(defense1),
+                    effect("strongblock", 2)
                 )
             )`,
-        type: 'utility',
+        type: 'defense',
         characterClass: 'knight',
     },
     guidingBolt: {
@@ -983,15 +978,18 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 deal(strength),
-                setStance("neutral", "self")
+                setStance("neutral", "self"),
+                dwindle(1)
             )
             `,
         type: 'attack',
         characterClass: 'frogKnight',
     },
+    // TODO: check if broken
+    // with defense being calculated before removing debuffs
     smallButStoic: {
         name: 'Small But Stoic',
-        energy: 1,
+        energy: 0,
         id: 'smallButStoic',
         targetNum: 1,
         targetType: 'self',
@@ -1135,11 +1133,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies")
+            explain("If this card is discarded before the end of your turn, deal ", strength, " to all enemies. <b>Momentary</b>")
         `,
-        //TODO: implement
         on: {
-            discard: 'deal(strength)',
+            discard: 'deal(strength); momentary()',
         },
         type: 'attack',
         characterClass: 'rogue',
@@ -1170,11 +1167,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'self',
         actions: `
-            setStance("avoidant")
+            chain(
+                setStance("avoidant"),
+                momentary()
+            )
         `,
         type: 'utility',
         characterClass: 'rogue',
     },
+    // TODO fix explanation damage number
     crimeAlwaysPays: {
         name: 'Crime Always Pays',
         energy: 1,
@@ -1272,12 +1273,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Retreat',
         energy: 1,
         id: 'retreat',
-        targetNum: 1,
-        targetType: 'self',
+        targetNum: -1,
+        targetType: 'allFriends',
         actions: `
+            defense1 = 0.5 * defense;
             chain(
-                addBlock(defense),
-                setStance("avoidant")
+                addBlock(defense1),
+                setStance("avoidant", "self"),
+                discard(1)
             )`,
         type: 'defense',
         characterClass: 'knight',
@@ -1289,10 +1292,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = 1.5 * strength;
+            strengthy = 1.6 * strength;
             chain(
                 deal(strengthy),
-                setStance("aggressive", "self"),
+                effect("fatigued", 2),
                 discard(1)
             )`,
         type: 'attack',
@@ -1307,7 +1310,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 effect("stunned",1),
-                discard(1),
                 brittle(2)
             )`,
         type: 'utility',
@@ -1315,7 +1317,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     },
     killingBlow: {
         name: 'Killing Blow',
-        energy: 3,
+        energy: 2,
         id: 'killingBlow',
         targetNum: 1,
         targetType: 'enemies',
@@ -1336,7 +1338,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'allEnemies',
         actions: `
             strengthy = 0.6 * strength;
-            ifStance("aggressive", deal(strengthy))
+            chain(
+                ifStance("aggressive", deal(strengthy)),
+                dwindle(1)
+            )
             `,
         type: 'attack',
         characterClass: 'knight',

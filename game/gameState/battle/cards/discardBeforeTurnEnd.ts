@@ -13,10 +13,6 @@ export function discardBeforeTurnEnd({
 }): void {
     const hand = scene.get('cards', 'hand')
 
-    for (const uid of cardUids) {
-        activeOnDiscardActions(hand[uid], scene)
-    }
-
     scene.apply(
         'cards',
         produce(cards => {
@@ -32,6 +28,13 @@ export function discardBeforeTurnEnd({
             }
         })
     )
+    // TODO: check if this logic is okay for
+    // OnDiscardActions after discard
+    const discard = scene.get('cards', 'discard')
+
+    for (const uid of cardUids) {
+        activeOnDiscardActions(discard[uid], scene)
+    }
 }
 
 export function activeOnDiscardActions(card: Card, scene: BattleCursor) {
@@ -43,6 +46,7 @@ export function activeOnDiscardActions(card: Card, scene: BattleCursor) {
 
             id: card.id,
             name: card.name,
+            uid: card.uid,
             actions: card.on.discard,
             targetNum: card.targetNum,
             targetType: card.targetType,
