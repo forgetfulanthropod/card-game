@@ -388,7 +388,6 @@ export const mapTileAssets = {
     mapTileTop3_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/6.webp',
     mapTileTop3_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/7.webp',
     mapTileTop3_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/8.webp',
-    mapTileTop3_9: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/9.webp',
     mapTileTop4_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/1.webp',
     mapTileTop4_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/2.webp',
     mapTileTop4_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/3.webp',
