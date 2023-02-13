@@ -21,8 +21,9 @@ let onTreeInitialized = new Promise(
 
 export function initializeBoababTree(gamestate: GameState): void {
     state.gamestate = new SBaobab(gamestate)
-    // @ts-expect-error
-    window.tree = state.gamestate
+    if (!process.env.IS_PRODUCTION)
+        // @ts-expect-error
+        window.tree = state.gamestate // no global tree for prod
     callbackWhenTreeInitialized()
 }
 

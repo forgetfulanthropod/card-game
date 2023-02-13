@@ -460,6 +460,18 @@ export const mapTileAssets = {
     mapTileBottom4_10__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_10_(7).webp',
 }
 
+export type EventAssetKey = keyof typeof eventAssets
+
+export const eventAssets = {
+    eventGradient: 'events/event overlay.webp',
+    eventFrogCarriageMainGraphic: 'events/Frog Carriage/main.webp',
+    eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage Prompt 1.webp',
+    eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage Prompt 2.webp',
+    eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Chooice 1.webp',
+    eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Chooice 2.webp',
+    eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Chooice 3.webp',
+}
+
 export const userAvatarAssets = {
     userAvatar1: 'user/profilePic/pixelated1.svg',
     userAvatar2: 'user/profilePic/pixelated2.svg',
