@@ -258,7 +258,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     // TODO: if no other enemies, add 100% defense block
     bigBelly: {
-        actions: `chain(addBlock(defense * .5)`,
+        actions: `addBlock(defense * .5)`,
         //@ts-expect-error
         id: `bigBelly`,
         explanation: 'Applies 50% block to all Enemies.',
