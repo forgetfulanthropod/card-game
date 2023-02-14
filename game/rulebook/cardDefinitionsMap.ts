@@ -54,12 +54,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     // TODO: if target is boss
     sweepTheLeg: {
         name: 'Sweep The Leg',
-        energy: 1,
+        energy: 2,
         id: 'sweepTheLeg',
         targetNum: 1,
         targetType: 'enemies',
-        actions:
-            'strength1 = strength * 0.5; chain(deal(strength1), effect("debilitated",1))',
+        actions: `strength1 = strength * 1.6;
+            chain(
+                deal(strength1),
+                effect("debilitated",3),
+                effect("unguarded", 1)
+            )`,
         type: 'attack',
         characterClass: 'knight',
     },
@@ -466,7 +470,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions:
-            'magical = magic * 2; chain(deal(magical), effect("unguarded", 3))',
+            'magical = magic * 2.25; chain(deal(magical), effect("unguarded", 4))',
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -498,7 +502,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions: `chain(
-            effect("courageous", 1, "allFriends"),
+            effect("courageous", 2, "allFriends"),
             effect("strongblock", 2, "allFriends")
         )`,
         type: 'defense',
@@ -548,7 +552,17 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'mantraOfPatience',
         targetNum: 1,
         targetType: 'self',
-        actions: 'chain(draw(2), queue(1, addEnergy(2)), momentary())',
+        actions: `chain(
+            draw(1),
+            queue(
+                1,
+                chain(
+                    addEnergy(2),
+                    draw(2)
+                )
+            ),
+            momentary()
+        )`,
         type: 'utility',
         characterClass: 'cleric',
     },
@@ -561,7 +575,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 addBlock(defense),
-                modifyStats("strength|magic", "2|2", "room")
+                modifyStats("strength|magic", "3|3", "room")
             )`,
         type: 'utility',
         characterClass: 'cleric',
@@ -605,9 +619,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthymagicy = 0.65 * magic + 0.6 * strength;
-            deal(strengthymagicy)
-        `,
+            magicy1 = 0.75 * magic;
+            strengthymagicy = 0.75 * magic + 0.6 * strength;
+            chain(
+                deal(strengthymagicy),
+                modifyStats("magic", magicy1, "turn")
+            )`,
         type: 'attack',
         characterClass: 'cleric',
     },
@@ -618,10 +635,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            strengthy1 = strength * .5;
-            magicy1 = magic * .5;
-            strengthy2 = strength * .35;
-            magicy2 = magic * .35;
+            strengthy1 = strength * .45;
+            magicy1 = magic * .45;
+            strengthy2 = strength * .3;
+            magicy2 = magic * .3;
             chain(
                 ifStanceElse(
                     "aggressive",
@@ -670,7 +687,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
             strengthy1 = strength;
-            strengthy2 = 0.75 * strength;
+            strengthy2 = 0.65 * strength;
             chain(
                 modifyStats("strength", strengthy1, "turn"),
                 addBlock(strengthy2),
@@ -787,7 +804,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
         actions: `
-            strengthy = 0.4 * strength;
+            strengthy = 0.5 * strength;
             chain(
                 deal(strengthy),
                 effect("tired",1)
@@ -1023,7 +1040,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            defense1 = 0.5 * defense;
+            defense1 = 0.6 * defense;
             chain(
                 deal(defense),
                 addBlock(defense1, "self")
@@ -1084,7 +1101,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = 1.25 * strength;
+            strengthy = 1.2 * strength;
             deal(strengthy, "piercing")
         `,
         type: 'attack',
@@ -1114,7 +1131,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            magicky = 0.2 * magic;
+            magicky = 0.3 * magic;
             chain(
                 removeAllDebuffs(),
                 heal(magicky),
@@ -1150,7 +1167,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthx = 1.25 * strength;
+            strengthx = 1.2 * strength;
             strengthy = 2 * strength;
             chain(
                 ifHealthUnder(50, deal(strengthy), deal(strengthx)),
@@ -1231,7 +1248,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            magic1 = 0.2 * magic;
+            magic1 = 0.9 * magic;
             chain(
                 heal(magic1),
                 brittle(3)
@@ -1292,10 +1309,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = 1.6 * strength;
+            strengthy = 1.8 * strength;
             chain(
                 deal(strengthy),
-                effect("fatigued", 2),
+                effect("tired", 1, "self"),
+                effect("unguarded", 1, "self"),
+                setStance("aggressive", "self"),
                 discard(1)
             )`,
         type: 'attack',
@@ -1368,10 +1387,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthymagicy = 0.65 * magic + 0.65 * strength;
+            strengthymagicy = 0.65 * magic + 0.75 * strength;
             chain(
                 deal(strengthymagicy),
-                brittle(2)
+                brittle(3)
             )
             `,
         type: 'attack',
