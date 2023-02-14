@@ -19,6 +19,7 @@ import type {
     UserID,
     MappedLeaderboards,
     ScoreTags,
+    UserInfo,
 } from './tree'
 
 export interface BareServerActionsMeta {
@@ -36,7 +37,7 @@ export interface BareServerActionsMeta {
     }
     login: {
         args: { walletAddress: string }
-        res: Promise<{ userId: UserID }>
+        res: Promise<UserInfo>
     }
     startRun: {
         args: { userId: UserID }

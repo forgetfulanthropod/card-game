@@ -7,9 +7,9 @@ export const login: ServerActions['login'] = async ({ walletAddress }) => {
     logger.info(`Handling login for: ${walletAddress}`)
 
     const connection = await getDbClient()
-    const userId = await getUserId({ connection, walletAddress })
+    const {userId, username} = await getUserId({ connection, walletAddress })
     await trackNewLogin({ connection, userId })
-    return { userId }
+    return { userId, username }
 }
 
 const trackNewLogin = async (props: AuthUserDBActionProps): Promise<void> => {
@@ -21,7 +21,7 @@ const trackNewLogin = async (props: AuthUserDBActionProps): Promise<void> => {
           kaiju.user_info
         SET
           last_login_ts = now(),
-          last_auth_method = 'connect_wallet'
+          last_auth_method = 'connect_wallet' -- TODO: pass in arg when OAuth implemented
         WHERE
           user_id = ${userId}
     `)

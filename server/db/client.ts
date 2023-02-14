@@ -48,6 +48,10 @@ export const sql = createSqlTag({
         userId: z.object({
             userId: z.string(),
         }),
+        userInfo: z.object({
+            user_id: z.string(),
+            username: z.nullable(z.string())
+        }),
         id: z.object({
             id: z.number(),
         }),
