@@ -4,7 +4,6 @@ import { shufflePile } from './shufflePile'
 
 export function putAllCardsInDrawPile(scene: BattleCursor): void {
     scene.apply('cards', cards => {
-        //TODO: remove impermanents?
         return {
             draw: shufflePile({
                 ...cards.draw,
@@ -13,8 +12,8 @@ export function putAllCardsInDrawPile(scene: BattleCursor): void {
             }),
             hand: {},
             discard: {},
-            removedRoom: {},
-            removedRun: {},
+            removedRoom: cards.removedRoom,
+            removedRun: cards.removedRun,
         }
     })
 }
