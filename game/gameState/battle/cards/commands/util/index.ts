@@ -78,6 +78,7 @@ export interface ActionArgs {
     dwindle: []
     momentary: []
 
+    hypnotize: [count: number]
     orb: [type: OrbType, count: number]
     queue: [numTurns: number, move: any]
     removeAllDebuffs: [targetType?: TargetType]

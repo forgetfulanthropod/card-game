@@ -210,7 +210,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     //hogs start
 
     hypnosis: {
-        actions: `chain(deal(strength / 2), effect("debilitated", 1))`,
+        actions: `chain(deal(strength / 2), effect("debilitated", 1), hypnotize(1))`,
         //@ts-expect-error
         id: `hypnosis`,
         name: `Hypnosis`,
@@ -219,8 +219,8 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     psychicBolt: {
         explanation:
-            'Attacks for 50%. Target character receives Unguarded and Fatigued (1)',
-        actions: `chain(deal(strength * .5), effect("unguarded", 1), effect("fatigued", 1))`,
+            'Attacks for 50%. Target character receives Unguarded and Fatigued (1). Adds a <b>hypnotized</b> card to your deck for this room',
+        actions: `chain(deal(strength * .5), effect("unguarded", 1), effect("fatigued", 1), hypnotize(1))`,
         //@ts-expect-error
         id: `psychicBolt`,
         name: `Psychic Bolt`,
@@ -256,8 +256,9 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: 2,
         targetType: 'enemies',
     },
+    // TODO: if no other enemies, add 100% defense block
     bigBelly: {
-        actions: `chain(addBlock(defense * .5), addBlockToSelf(defense * .5))`,
+        actions: `chain(addBlock(defense * .5)`,
         //@ts-expect-error
         id: `bigBelly`,
         explanation: 'Applies 50% block to all Enemies.',

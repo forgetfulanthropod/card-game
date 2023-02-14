@@ -185,7 +185,10 @@ const commandIdToMetaMap: Record<
     },
     hypnosis: {
         id: 'hypnosis',
-        explanation: [],
+        explanation: [
+            'Deals 50% strength and applies <b>debilitated<b> (1)',
+            'Adds a <b>hypnotized</b> card to your deck for this room.',
+        ],
     },
     itchyOozeSpecial: {
         id: 'itchyOozeSpecial',
@@ -272,7 +275,11 @@ const commandIdToMetaMap: Record<
     },
     psychicBolt: {
         id: 'psychicBolt',
-        explanation: [],
+        explanation: [
+            'Attacks for 50% strength',
+            'Applies <b>ungarded</b> (1) and <b>fatigued</b> (1)',
+            'Adds a <b>hypnotized</b> card to your deck for this room.',
+        ],
     },
     quickNap: {
         id: 'quickNap',

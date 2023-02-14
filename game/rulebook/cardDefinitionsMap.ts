@@ -1273,6 +1273,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'cleric',
     },
+    hypnotized: {
+        name: 'Hypnotized',
+        energy: -1,
+        id: 'hypnotized',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `"You have been hypnotized!\nThis card cannot be played"`,
+        type: 'utility',
+        characterClass: 'groghog',
+    },
     burnIncense: {
         name: 'Burn Incense',
         energy: -1,
