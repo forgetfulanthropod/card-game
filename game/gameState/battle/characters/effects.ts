@@ -33,7 +33,7 @@ const staticEffectFuncs: Record<
     berserkBuff(stats) {
         if (stats.stance !== 'aggressive') return
 
-        stats.strength += Math.ceil(stats.strength * 0.5)
+        stats.damageDealMultiplicand += 0.5
         stats.damageTakeMultiplicand += 1
     },
     braveBuff(stats) {

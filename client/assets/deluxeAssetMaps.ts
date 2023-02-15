@@ -16,6 +16,10 @@ export const soundEffectAssets = {
     soundFrogKnightTakingDamage: 'sfx/Frog Knight Taking Damage.mp3',
     soundMushroomFarmerAttack: 'sfx/Mushroom Farmer Attack.mp3',
     soundMushroomFarmerTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
+    soundNotoriousBeanAttack1: 'sfx/BEAN attack_01b.mp3',
+    soundNotoriousBeanTakingDamage1: 'sfx/BEAN_damage_01.mp3',
+    soundNotoriousBeanAttack2: 'sfx/BEAN attack_02b.mp3',
+    soundNotoriousBeanTakingDamage2: 'sfx/BEAN_damage_02.mp3',
     soundPenguinKnightAttack: 'sfx/Penguin Knight Attack.mp3',
     soundPenguinKnightTakingDamage: 'sfx/Penguin Knight Taking Damage.mp3',
     soundSkeletonWarriorAttack: 'sfx/Skeleton Warrior Attack.mp3',
@@ -46,7 +50,7 @@ export const musicAssets = {
         'music/Main Theme Variants/hooligans_bluff_combat->tierTwo.mp3',
     battleMusicHooligansBluffTierThreeAndFour:
         'music/Main Theme Variants/hooligans_bluff_combat->tierThreeAndFour.mp3',
-    bossBattleMusicHooligansBluff: 'music/Main Theme Variants/boss_battle.mp3',
+    bossBattleMusicHooligansBluff: 'music/Main Theme Variants/boss_battle_.mp3',
     roomVictoryMusicHooligansBluff: 'music/Room_Victory.mp3',
     defeatMusicHooligansBluff: 'music/defeat song_v1.mp3',
     runVictoryMusicHooligansBluff: 'music/entire_run_victory_song_v1.mp3',
@@ -54,110 +58,58 @@ export const musicAssets = {
 
 export const sequences = {
     // @index(['../../public/assets/fx sequences/**/*.webp'], f => `${f.name}: '${f.path.replace('../../public/assets/', '')}.webp',`)
-    // KC_FX_AdvAttack_121222_0001:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0001.webp',
-    // KC_FX_AdvAttack_121222_0002:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0002.webp',
-    // KC_FX_AdvAttack_121222_0003:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0003.webp',
-    // KC_FX_AdvAttack_121222_0004:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0004.webp',
-    // KC_FX_AdvAttack_121222_0005:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0005.webp',
-    // KC_FX_AdvAttack_121222_0006:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0006.webp',
-    // KC_FX_AdvAttack_121222_0007:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0007.webp',
-    // KC_FX_AdvAttack_121222_0008:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0008.webp',
-    // KC_FX_AdvAttack_121222_0009:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0009.webp',
-    // KC_FX_AdvAttack_121222_0010:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0010.webp',
-    // KC_FX_AdvAttack_121222_0011:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0011.webp',
-    // KC_FX_AdvAttack_121222_0012:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0012.webp',
-    // KC_FX_AdvAttack_121222_0013:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0013.webp',
-    // KC_FX_AdvAttack_121222_0014:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0014.webp',
-    // KC_FX_AdvAttack_121222_0015:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0015.webp',
-    // KC_FX_AdvAttack_121222_0016:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0016.webp',
-    // KC_FX_AdvAttack_121222_0017:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0017.webp',
-    // KC_FX_AdvAttack_121222_0018:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0018.webp',
-    // KC_FX_AdvAttack_121222_0019:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0019.webp',
-    // KC_FX_AdvAttack_121222_0020:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0020.webp',
-    // KC_FX_AdvAttack_121222_0021:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0021.webp',
-    // KC_FX_AdvAttack_121222_0022:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0022.webp',
-    // KC_FX_AdvAttack_121222_0023:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0023.webp',
-    // KC_FX_AdvAttack_121222_0024:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0024.webp',
-    // KC_FX_AdvAttack_121222_0025:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0025.webp',
-    // KC_FX_AdvAttack_121222_0026:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0026.webp',
-    // KC_FX_AdvAttack_121222_0027:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0027.webp',
-    // KC_FX_AdvAttack_121222_0028:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0028.webp',
-    // KC_FX_AdvAttack_121222_0029:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0029.webp',
-    // KC_FX_AdvAttack_121222_0030:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0030.webp',
-    // KC_FX_AdvAttack_121222_0031:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0031.webp',
-    // KC_FX_AdvAttack_121222_0032:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0032.webp',
-    // KC_FX_AdvAttack_121222_0033:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0033.webp',
-    // KC_FX_AdvAttack_121222_0034:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0034.webp',
-    // KC_FX_AdvAttack_121222_0035:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0035.webp',
-    // KC_FX_AdvAttack_121222_0036:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0036.webp',
-    // KC_FX_AdvAttack_121222_0037:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0037.webp',
-    // KC_FX_AdvAttack_121222_0038:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0038.webp',
-    // KC_FX_AdvAttack_121222_0039:
-    //     'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0039.webp',
-    KC_FX_BasicAttack_121222_0001:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0001.webp',
-    KC_FX_BasicAttack_121222_0002:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0002.webp',
-    KC_FX_BasicAttack_121222_0003:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0003.webp',
-    KC_FX_BasicAttack_121222_0004:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0004.webp',
-    KC_FX_BasicAttack_121222_0005:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0005.webp',
-    KC_FX_BasicAttack_121222_0006:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0006.webp',
-    KC_FX_BasicAttack_121222_0007:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0007.webp',
-    KC_FX_BasicAttack_121222_0008:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0008.webp',
-    KC_FX_BasicAttack_121222_0009:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0009.webp',
-    KC_FX_BasicAttack_121222_0010:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0010.webp',
-    KC_FX_BasicAttack_121222_0011:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0011.webp',
-    KC_FX_BasicAttack_121222_0012:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0012.webp',
-    KC_FX_BasicAttack_121222_0013:
-        'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0013.webp',
+    KC_FX_AdvAttack_121222_0001: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0001.webp',
+    KC_FX_AdvAttack_121222_0002: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0002.webp',
+    KC_FX_AdvAttack_121222_0003: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0003.webp',
+    KC_FX_AdvAttack_121222_0004: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0004.webp',
+    KC_FX_AdvAttack_121222_0005: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0005.webp',
+    KC_FX_AdvAttack_121222_0006: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0006.webp',
+    KC_FX_AdvAttack_121222_0007: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0007.webp',
+    KC_FX_AdvAttack_121222_0008: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0008.webp',
+    KC_FX_AdvAttack_121222_0009: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0009.webp',
+    KC_FX_AdvAttack_121222_0010: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0010.webp',
+    KC_FX_AdvAttack_121222_0011: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0011.webp',
+    KC_FX_AdvAttack_121222_0012: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0012.webp',
+    KC_FX_AdvAttack_121222_0013: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0013.webp',
+    KC_FX_AdvAttack_121222_0014: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0014.webp',
+    KC_FX_AdvAttack_121222_0015: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0015.webp',
+    KC_FX_AdvAttack_121222_0016: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0016.webp',
+    KC_FX_AdvAttack_121222_0017: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0017.webp',
+    KC_FX_AdvAttack_121222_0018: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0018.webp',
+    KC_FX_AdvAttack_121222_0019: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0019.webp',
+    KC_FX_AdvAttack_121222_0020: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0020.webp',
+    KC_FX_AdvAttack_121222_0021: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0021.webp',
+    KC_FX_AdvAttack_121222_0022: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0022.webp',
+    KC_FX_AdvAttack_121222_0023: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0023.webp',
+    KC_FX_AdvAttack_121222_0024: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0024.webp',
+    KC_FX_AdvAttack_121222_0025: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0025.webp',
+    KC_FX_AdvAttack_121222_0026: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0026.webp',
+    KC_FX_AdvAttack_121222_0027: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0027.webp',
+    KC_FX_AdvAttack_121222_0028: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0028.webp',
+    KC_FX_AdvAttack_121222_0029: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0029.webp',
+    KC_FX_AdvAttack_121222_0030: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0030.webp',
+    KC_FX_AdvAttack_121222_0031: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0031.webp',
+    KC_FX_AdvAttack_121222_0032: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0032.webp',
+    KC_FX_AdvAttack_121222_0033: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0033.webp',
+    KC_FX_AdvAttack_121222_0034: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0034.webp',
+    KC_FX_AdvAttack_121222_0035: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0035.webp',
+    KC_FX_AdvAttack_121222_0036: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0036.webp',
+    KC_FX_AdvAttack_121222_0037: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0037.webp',
+    KC_FX_AdvAttack_121222_0038: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0038.webp',
+    KC_FX_AdvAttack_121222_0039: 'fx sequences/AdvAttack/KC_FX_AdvAttack_121222_0039.webp',
+    KC_FX_BasicAttack_121222_0001: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0001.webp',
+    KC_FX_BasicAttack_121222_0002: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0002.webp',
+    KC_FX_BasicAttack_121222_0003: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0003.webp',
+    KC_FX_BasicAttack_121222_0004: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0004.webp',
+    KC_FX_BasicAttack_121222_0005: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0005.webp',
+    KC_FX_BasicAttack_121222_0006: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0006.webp',
+    KC_FX_BasicAttack_121222_0007: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0007.webp',
+    KC_FX_BasicAttack_121222_0008: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0008.webp',
+    KC_FX_BasicAttack_121222_0009: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0009.webp',
+    KC_FX_BasicAttack_121222_0010: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0010.webp',
+    KC_FX_BasicAttack_121222_0011: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0011.webp',
+    KC_FX_BasicAttack_121222_0012: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0012.webp',
+    KC_FX_BasicAttack_121222_0013: 'fx sequences/BasicAttack/KC_FX_BasicAttack_121222_0013.webp',
     KC_FX_Bleed_121222_0001: 'fx sequences/Bleed/KC_FX_Bleed_121222_0001.webp',
     KC_FX_Bleed_121222_0002: 'fx sequences/Bleed/KC_FX_Bleed_121222_0002.webp',
     KC_FX_Bleed_121222_0003: 'fx sequences/Bleed/KC_FX_Bleed_121222_0003.webp',
@@ -180,403 +132,204 @@ export const sequences = {
     KC_FX_Bleed_121222_0020: 'fx sequences/Bleed/KC_FX_Bleed_121222_0020.webp',
     KC_FX_Bleed_121222_0021: 'fx sequences/Bleed/KC_FX_Bleed_121222_0021.webp',
     KC_FX_Bleed_121222_0022: 'fx sequences/Bleed/KC_FX_Bleed_121222_0022.webp',
-    KC_FX_BlockBreak_121222_0001:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0001.webp',
-    KC_FX_BlockBreak_121222_0002:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0002.webp',
-    KC_FX_BlockBreak_121222_0003:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0003.webp',
-    KC_FX_BlockBreak_121222_0004:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0004.webp',
-    KC_FX_BlockBreak_121222_0005:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0005.webp',
-    KC_FX_BlockBreak_121222_0006:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0006.webp',
-    KC_FX_BlockBreak_121222_0007:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0007.webp',
-    KC_FX_BlockBreak_121222_0008:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0008.webp',
-    KC_FX_BlockBreak_121222_0009:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0009.webp',
-    KC_FX_BlockBreak_121222_0010:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0010.webp',
-    KC_FX_BlockBreak_121222_0011:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0011.webp',
-    KC_FX_BlockBreak_121222_0012:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0012.webp',
-    KC_FX_BlockBreak_121222_0013:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0013.webp',
-    KC_FX_BlockBreak_121222_0014:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0014.webp',
-    KC_FX_BlockBreak_121222_0015:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0015.webp',
-    KC_FX_BlockBreak_121222_0016:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0016.webp',
-    KC_FX_BlockBreak_121222_0017:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0017.webp',
-    KC_FX_BlockBreak_121222_0018:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0018.webp',
-    KC_FX_BlockBreak_121222_0019:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0019.webp',
-    KC_FX_BlockBreak_121222_0020:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0020.webp',
-    KC_FX_BlockBreak_121222_0021:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0021.webp',
-    KC_FX_BlockBreak_121222_0022:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0022.webp',
-    KC_FX_BlockBreak_121222_0023:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0023.webp',
-    KC_FX_BlockBreak_121222_0024:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0024.webp',
-    KC_FX_BlockBreak_121222_0025:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0025.webp',
-    KC_FX_BlockBreak_121222_0026:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0026.webp',
-    KC_FX_BlockBreak_121222_0027:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0027.webp',
-    KC_FX_BlockBreak_121222_0028:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0028.webp',
-    KC_FX_BlockBreak_121222_0029:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0029.webp',
-    KC_FX_BlockBreak_121222_0030:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0030.webp',
-    KC_FX_BlockBreak_121222_0031:
-        'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0031.webp',
-    // KC_FX_BlockBreakShort_121222_0001:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0001.webp',
-    // KC_FX_BlockBreakShort_121222_0002:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0002.webp',
-    // KC_FX_BlockBreakShort_121222_0003:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0003.webp',
-    // KC_FX_BlockBreakShort_121222_0004:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0004.webp',
-    // KC_FX_BlockBreakShort_121222_0005:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0005.webp',
-    // KC_FX_BlockBreakShort_121222_0006:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0006.webp',
-    // KC_FX_BlockBreakShort_121222_0007:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0007.webp',
-    // KC_FX_BlockBreakShort_121222_0008:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0008.webp',
-    // KC_FX_BlockBreakShort_121222_0009:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0009.webp',
-    // KC_FX_BlockBreakShort_121222_0010:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0010.webp',
-    // KC_FX_BlockBreakShort_121222_0011:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0011.webp',
-    // KC_FX_BlockBreakShort_121222_0012:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0012.webp',
-    // KC_FX_BlockBreakShort_121222_0013:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0013.webp',
-    // KC_FX_BlockBreakShort_121222_0014:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0014.webp',
-    // KC_FX_BlockBreakShort_121222_0015:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0015.webp',
-    // KC_FX_BlockBreakShort_121222_0016:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0016.webp',
-    // KC_FX_BlockBreakShort_121222_0017:
-    //     'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0017.webp',
-    // KC_FX_GainEnergy_121222_0001:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0001.webp',
-    // KC_FX_GainEnergy_121222_0002:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0002.webp',
-    // KC_FX_GainEnergy_121222_0003:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0003.webp',
-    // KC_FX_GainEnergy_121222_0004:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0004.webp',
-    // KC_FX_GainEnergy_121222_0005:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0005.webp',
-    // KC_FX_GainEnergy_121222_0006:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0006.webp',
-    // KC_FX_GainEnergy_121222_0007:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0007.webp',
-    // KC_FX_GainEnergy_121222_0008:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0008.webp',
-    // KC_FX_GainEnergy_121222_0009:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0009.webp',
-    // KC_FX_GainEnergy_121222_0010:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0010.webp',
-    // KC_FX_GainEnergy_121222_0011:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0011.webp',
-    // KC_FX_GainEnergy_121222_0012:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0012.webp',
-    // KC_FX_GainEnergy_121222_0013:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0013.webp',
-    // KC_FX_GainEnergy_121222_0014:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0014.webp',
-    // KC_FX_GainEnergy_121222_0015:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0015.webp',
-    // KC_FX_GainEnergy_121222_0016:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0016.webp',
-    // KC_FX_GainEnergy_121222_0017:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0017.webp',
-    // KC_FX_GainEnergy_121222_0018:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0018.webp',
-    // KC_FX_GainEnergy_121222_0019:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0019.webp',
-    // KC_FX_GainEnergy_121222_0020:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0020.webp',
-    // KC_FX_GainEnergy_121222_0021:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0021.webp',
-    // KC_FX_GainEnergy_121222_0022:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0022.webp',
-    // KC_FX_GainEnergy_121222_0023:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0023.webp',
-    // KC_FX_GainEnergy_121222_0024:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0024.webp',
-    // KC_FX_GainEnergy_121222_0025:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0025.webp',
-    // KC_FX_GainEnergy_121222_0026:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0026.webp',
-    // KC_FX_GainEnergy_121222_0027:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0027.webp',
-    // KC_FX_GainEnergy_121222_0028:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0028.webp',
-    // KC_FX_GainEnergy_121222_0029:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0029.webp',
-    // KC_FX_GainEnergy_121222_0030:
-    //     'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0030.webp',
-    KC_FX_GainHealth_121222_0001:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0001.webp',
-    KC_FX_GainHealth_121222_0002:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0002.webp',
-    KC_FX_GainHealth_121222_0003:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0003.webp',
-    KC_FX_GainHealth_121222_0004:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0004.webp',
-    KC_FX_GainHealth_121222_0005:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0005.webp',
-    KC_FX_GainHealth_121222_0006:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0006.webp',
-    KC_FX_GainHealth_121222_0007:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0007.webp',
-    KC_FX_GainHealth_121222_0008:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0008.webp',
-    KC_FX_GainHealth_121222_0009:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0009.webp',
-    KC_FX_GainHealth_121222_0010:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0010.webp',
-    KC_FX_GainHealth_121222_0011:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0011.webp',
-    KC_FX_GainHealth_121222_0012:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0012.webp',
-    KC_FX_GainHealth_121222_0013:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0013.webp',
-    KC_FX_GainHealth_121222_0014:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0014.webp',
-    KC_FX_GainHealth_121222_0015:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0015.webp',
-    KC_FX_GainHealth_121222_0016:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0016.webp',
-    KC_FX_GainHealth_121222_0017:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0017.webp',
-    KC_FX_GainHealth_121222_0018:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0018.webp',
-    KC_FX_GainHealth_121222_0019:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0019.webp',
-    KC_FX_GainHealth_121222_0020:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0020.webp',
-    KC_FX_GainHealth_121222_0021:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0021.webp',
-    KC_FX_GainHealth_121222_0022:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0022.webp',
-    KC_FX_GainHealth_121222_0023:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0023.webp',
-    KC_FX_GainHealth_121222_0024:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0024.webp',
-    KC_FX_GainHealth_121222_0025:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0025.webp',
-    KC_FX_GainHealth_121222_0026:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0026.webp',
-    KC_FX_GainHealth_121222_0027:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0027.webp',
-    KC_FX_GainHealth_121222_0028:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0028.webp',
-    KC_FX_GainHealth_121222_0029:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0029.webp',
-    KC_FX_GainHealth_121222_0030:
-        'fx sequences/GainHealth/KC_FX_GainHealth_121222_0030.webp',
-    KC_FX_Poison_121222_0001:
-        'fx sequences/Poison/KC_FX_Poison_121222_0001.webp',
-    KC_FX_Poison_121222_0002:
-        'fx sequences/Poison/KC_FX_Poison_121222_0002.webp',
-    KC_FX_Poison_121222_0003:
-        'fx sequences/Poison/KC_FX_Poison_121222_0003.webp',
-    KC_FX_Poison_121222_0004:
-        'fx sequences/Poison/KC_FX_Poison_121222_0004.webp',
-    KC_FX_Poison_121222_0005:
-        'fx sequences/Poison/KC_FX_Poison_121222_0005.webp',
-    KC_FX_Poison_121222_0006:
-        'fx sequences/Poison/KC_FX_Poison_121222_0006.webp',
-    KC_FX_Poison_121222_0007:
-        'fx sequences/Poison/KC_FX_Poison_121222_0007.webp',
-    KC_FX_Poison_121222_0008:
-        'fx sequences/Poison/KC_FX_Poison_121222_0008.webp',
-    KC_FX_Poison_121222_0009:
-        'fx sequences/Poison/KC_FX_Poison_121222_0009.webp',
-    KC_FX_Poison_121222_0010:
-        'fx sequences/Poison/KC_FX_Poison_121222_0010.webp',
-    KC_FX_Poison_121222_0011:
-        'fx sequences/Poison/KC_FX_Poison_121222_0011.webp',
-    KC_FX_Poison_121222_0012:
-        'fx sequences/Poison/KC_FX_Poison_121222_0012.webp',
-    KC_FX_Poison_121222_0013:
-        'fx sequences/Poison/KC_FX_Poison_121222_0013.webp',
-    KC_FX_Poison_121222_0014:
-        'fx sequences/Poison/KC_FX_Poison_121222_0014.webp',
-    KC_FX_Poison_121222_0015:
-        'fx sequences/Poison/KC_FX_Poison_121222_0015.webp',
-    KC_FX_Poison_121222_0016:
-        'fx sequences/Poison/KC_FX_Poison_121222_0016.webp',
-    KC_FX_Poison_121222_0017:
-        'fx sequences/Poison/KC_FX_Poison_121222_0017.webp',
-    KC_FX_Poison_121222_0018:
-        'fx sequences/Poison/KC_FX_Poison_121222_0018.webp',
-    KC_FX_Poison_121222_0019:
-        'fx sequences/Poison/KC_FX_Poison_121222_0019.webp',
-    KC_FX_Poison_121222_0020:
-        'fx sequences/Poison/KC_FX_Poison_121222_0020.webp',
-    KC_FX_Poison_121222_0021:
-        'fx sequences/Poison/KC_FX_Poison_121222_0021.webp',
-    KC_FX_Poison_121222_0022:
-        'fx sequences/Poison/KC_FX_Poison_121222_0022.webp',
-    KC_FX_Poison_121222_0023:
-        'fx sequences/Poison/KC_FX_Poison_121222_0023.webp',
-    KC_FX_Poison_121222_0024:
-        'fx sequences/Poison/KC_FX_Poison_121222_0024.webp',
-    KC_FX_Poison_121222_0025:
-        'fx sequences/Poison/KC_FX_Poison_121222_0025.webp',
-    KC_FX_Poison_121222_0026:
-        'fx sequences/Poison/KC_FX_Poison_121222_0026.webp',
-    KC_FX_Poison_121222_0027:
-        'fx sequences/Poison/KC_FX_Poison_121222_0027.webp',
-    KC_FX_Poison_121222_0028:
-        'fx sequences/Poison/KC_FX_Poison_121222_0028.webp',
-    KC_FX_Poison_121222_0029:
-        'fx sequences/Poison/KC_FX_Poison_121222_0029.webp',
-    KC_FX_Poison_121222_0030:
-        'fx sequences/Poison/KC_FX_Poison_121222_0030.webp',
-    KC_FX_Poison_121222_0031:
-        'fx sequences/Poison/KC_FX_Poison_121222_0031.webp',
-    KC_FX_Poison_121222_0032:
-        'fx sequences/Poison/KC_FX_Poison_121222_0032.webp',
-    // KC_FX_PsychicAttack_121222_0001:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0001.webp',
-    // KC_FX_PsychicAttack_121222_0002:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0002.webp',
-    // KC_FX_PsychicAttack_121222_0003:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0003.webp',
-    // KC_FX_PsychicAttack_121222_0004:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0004.webp',
-    // KC_FX_PsychicAttack_121222_0005:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0005.webp',
-    // KC_FX_PsychicAttack_121222_0006:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0006.webp',
-    // KC_FX_PsychicAttack_121222_0007:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0007.webp',
-    // KC_FX_PsychicAttack_121222_0008:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0008.webp',
-    // KC_FX_PsychicAttack_121222_0009:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0009.webp',
-    // KC_FX_PsychicAttack_121222_0010:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0010.webp',
-    // KC_FX_PsychicAttack_121222_0011:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0011.webp',
-    // KC_FX_PsychicAttack_121222_0012:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0012.webp',
-    // KC_FX_PsychicAttack_121222_0013:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0013.webp',
-    // KC_FX_PsychicAttack_121222_0014:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0014.webp',
-    // KC_FX_PsychicAttack_121222_0015:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0015.webp',
-    // KC_FX_PsychicAttack_121222_0016:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0016.webp',
-    // KC_FX_PsychicAttack_121222_0017:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0017.webp',
-    // KC_FX_PsychicAttack_121222_0018:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0018.webp',
-    // KC_FX_PsychicAttack_121222_0019:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0019.webp',
-    // KC_FX_PsychicAttack_121222_0020:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0020.webp',
-    // KC_FX_PsychicAttack_121222_0021:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0021.webp',
-    // KC_FX_PsychicAttack_121222_0022:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0022.webp',
-    // KC_FX_PsychicAttack_121222_0023:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0023.webp',
-    // KC_FX_PsychicAttack_121222_0024:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0024.webp',
-    // KC_FX_PsychicAttack_121222_0025:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0025.webp',
-    // KC_FX_PsychicAttack_121222_0026:
-    //     'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0026.webp',
-    KC_FX_Shield_121222_0001:
-        'fx sequences/Shield/KC_FX_Shield_121222_0001.webp',
-    KC_FX_Shield_121222_0002:
-        'fx sequences/Shield/KC_FX_Shield_121222_0002.webp',
-    KC_FX_Shield_121222_0003:
-        'fx sequences/Shield/KC_FX_Shield_121222_0003.webp',
-    KC_FX_Shield_121222_0004:
-        'fx sequences/Shield/KC_FX_Shield_121222_0004.webp',
-    KC_FX_Shield_121222_0005:
-        'fx sequences/Shield/KC_FX_Shield_121222_0005.webp',
-    KC_FX_Shield_121222_0006:
-        'fx sequences/Shield/KC_FX_Shield_121222_0006.webp',
-    KC_FX_Shield_121222_0007:
-        'fx sequences/Shield/KC_FX_Shield_121222_0007.webp',
-    KC_FX_Shield_121222_0008:
-        'fx sequences/Shield/KC_FX_Shield_121222_0008.webp',
-    KC_FX_Shield_121222_0009:
-        'fx sequences/Shield/KC_FX_Shield_121222_0009.webp',
-    KC_FX_Shield_121222_0010:
-        'fx sequences/Shield/KC_FX_Shield_121222_0010.webp',
-    KC_FX_Shield_121222_0011:
-        'fx sequences/Shield/KC_FX_Shield_121222_0011.webp',
-    KC_FX_Shield_121222_0012:
-        'fx sequences/Shield/KC_FX_Shield_121222_0012.webp',
-    KC_FX_Shield_121222_0013:
-        'fx sequences/Shield/KC_FX_Shield_121222_0013.webp',
-    KC_FX_Shield_121222_0014:
-        'fx sequences/Shield/KC_FX_Shield_121222_0014.webp',
-    KC_FX_Shield_121222_0015:
-        'fx sequences/Shield/KC_FX_Shield_121222_0015.webp',
-    KC_FX_Shield_121222_0016:
-        'fx sequences/Shield/KC_FX_Shield_121222_0016.webp',
-    KC_FX_Shield_121222_0017:
-        'fx sequences/Shield/KC_FX_Shield_121222_0017.webp',
-    KC_FX_Shield_121222_0018:
-        'fx sequences/Shield/KC_FX_Shield_121222_0018.webp',
-    KC_FX_Shield_121222_0019:
-        'fx sequences/Shield/KC_FX_Shield_121222_0019.webp',
-    KC_FX_Shield_121222_0020:
-        'fx sequences/Shield/KC_FX_Shield_121222_0020.webp',
-    KC_FX_Shield_121222_0021:
-        'fx sequences/Shield/KC_FX_Shield_121222_0021.webp',
-    KC_FX_Shield_121222_0022:
-        'fx sequences/Shield/KC_FX_Shield_121222_0022.webp',
-    KC_FX_Shield_121222_0023:
-        'fx sequences/Shield/KC_FX_Shield_121222_0023.webp',
-    KC_FX_Shield_121222_0024:
-        'fx sequences/Shield/KC_FX_Shield_121222_0024.webp',
-    KC_FX_Shield_121222_0025:
-        'fx sequences/Shield/KC_FX_Shield_121222_0025.webp',
-    KC_FX_Shield_121222_0026:
-        'fx sequences/Shield/KC_FX_Shield_121222_0026.webp',
-    KC_FX_Shield_121222_0027:
-        'fx sequences/Shield/KC_FX_Shield_121222_0027.webp',
-    KC_FX_Shield_121222_0028:
-        'fx sequences/Shield/KC_FX_Shield_121222_0028.webp',
-    KC_FX_Shield_121222_0029:
-        'fx sequences/Shield/KC_FX_Shield_121222_0029.webp',
-    KC_FX_Shield_121222_0030:
-        'fx sequences/Shield/KC_FX_Shield_121222_0030.webp',
-    KC_FX_Shield_121222_0031:
-        'fx sequences/Shield/KC_FX_Shield_121222_0031.webp',
-    KC_FX_Shield_121222_0032:
-        'fx sequences/Shield/KC_FX_Shield_121222_0032.webp',
-    KC_FX_Shield_121222_0033:
-        'fx sequences/Shield/KC_FX_Shield_121222_0033.webp',
+    KC_FX_BlockBreak_121222_0001: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0001.webp',
+    KC_FX_BlockBreak_121222_0002: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0002.webp',
+    KC_FX_BlockBreak_121222_0003: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0003.webp',
+    KC_FX_BlockBreak_121222_0004: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0004.webp',
+    KC_FX_BlockBreak_121222_0005: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0005.webp',
+    KC_FX_BlockBreak_121222_0006: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0006.webp',
+    KC_FX_BlockBreak_121222_0007: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0007.webp',
+    KC_FX_BlockBreak_121222_0008: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0008.webp',
+    KC_FX_BlockBreak_121222_0009: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0009.webp',
+    KC_FX_BlockBreak_121222_0010: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0010.webp',
+    KC_FX_BlockBreak_121222_0011: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0011.webp',
+    KC_FX_BlockBreak_121222_0012: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0012.webp',
+    KC_FX_BlockBreak_121222_0013: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0013.webp',
+    KC_FX_BlockBreak_121222_0014: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0014.webp',
+    KC_FX_BlockBreak_121222_0015: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0015.webp',
+    KC_FX_BlockBreak_121222_0016: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0016.webp',
+    KC_FX_BlockBreak_121222_0017: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0017.webp',
+    KC_FX_BlockBreak_121222_0018: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0018.webp',
+    KC_FX_BlockBreak_121222_0019: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0019.webp',
+    KC_FX_BlockBreak_121222_0020: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0020.webp',
+    KC_FX_BlockBreak_121222_0021: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0021.webp',
+    KC_FX_BlockBreak_121222_0022: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0022.webp',
+    KC_FX_BlockBreak_121222_0023: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0023.webp',
+    KC_FX_BlockBreak_121222_0024: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0024.webp',
+    KC_FX_BlockBreak_121222_0025: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0025.webp',
+    KC_FX_BlockBreak_121222_0026: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0026.webp',
+    KC_FX_BlockBreak_121222_0027: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0027.webp',
+    KC_FX_BlockBreak_121222_0028: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0028.webp',
+    KC_FX_BlockBreak_121222_0029: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0029.webp',
+    KC_FX_BlockBreak_121222_0030: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0030.webp',
+    KC_FX_BlockBreak_121222_0031: 'fx sequences/BlockBreak/KC_FX_BlockBreak_121222_0031.webp',
+    KC_FX_BlockBreakShort_121222_0001: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0001.webp',
+    KC_FX_BlockBreakShort_121222_0002: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0002.webp',
+    KC_FX_BlockBreakShort_121222_0003: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0003.webp',
+    KC_FX_BlockBreakShort_121222_0004: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0004.webp',
+    KC_FX_BlockBreakShort_121222_0005: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0005.webp',
+    KC_FX_BlockBreakShort_121222_0006: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0006.webp',
+    KC_FX_BlockBreakShort_121222_0007: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0007.webp',
+    KC_FX_BlockBreakShort_121222_0008: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0008.webp',
+    KC_FX_BlockBreakShort_121222_0009: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0009.webp',
+    KC_FX_BlockBreakShort_121222_0010: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0010.webp',
+    KC_FX_BlockBreakShort_121222_0011: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0011.webp',
+    KC_FX_BlockBreakShort_121222_0012: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0012.webp',
+    KC_FX_BlockBreakShort_121222_0013: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0013.webp',
+    KC_FX_BlockBreakShort_121222_0014: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0014.webp',
+    KC_FX_BlockBreakShort_121222_0015: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0015.webp',
+    KC_FX_BlockBreakShort_121222_0016: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0016.webp',
+    KC_FX_BlockBreakShort_121222_0017: 'fx sequences/BlockBreakShort/KC_FX_BlockBreakShort_121222_0017.webp',
+    KC_FX_GainEnergy_121222_0001: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0001.webp',
+    KC_FX_GainEnergy_121222_0002: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0002.webp',
+    KC_FX_GainEnergy_121222_0003: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0003.webp',
+    KC_FX_GainEnergy_121222_0004: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0004.webp',
+    KC_FX_GainEnergy_121222_0005: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0005.webp',
+    KC_FX_GainEnergy_121222_0006: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0006.webp',
+    KC_FX_GainEnergy_121222_0007: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0007.webp',
+    KC_FX_GainEnergy_121222_0008: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0008.webp',
+    KC_FX_GainEnergy_121222_0009: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0009.webp',
+    KC_FX_GainEnergy_121222_0010: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0010.webp',
+    KC_FX_GainEnergy_121222_0011: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0011.webp',
+    KC_FX_GainEnergy_121222_0012: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0012.webp',
+    KC_FX_GainEnergy_121222_0013: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0013.webp',
+    KC_FX_GainEnergy_121222_0014: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0014.webp',
+    KC_FX_GainEnergy_121222_0015: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0015.webp',
+    KC_FX_GainEnergy_121222_0016: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0016.webp',
+    KC_FX_GainEnergy_121222_0017: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0017.webp',
+    KC_FX_GainEnergy_121222_0018: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0018.webp',
+    KC_FX_GainEnergy_121222_0019: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0019.webp',
+    KC_FX_GainEnergy_121222_0020: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0020.webp',
+    KC_FX_GainEnergy_121222_0021: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0021.webp',
+    KC_FX_GainEnergy_121222_0022: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0022.webp',
+    KC_FX_GainEnergy_121222_0023: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0023.webp',
+    KC_FX_GainEnergy_121222_0024: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0024.webp',
+    KC_FX_GainEnergy_121222_0025: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0025.webp',
+    KC_FX_GainEnergy_121222_0026: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0026.webp',
+    KC_FX_GainEnergy_121222_0027: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0027.webp',
+    KC_FX_GainEnergy_121222_0028: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0028.webp',
+    KC_FX_GainEnergy_121222_0029: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0029.webp',
+    KC_FX_GainEnergy_121222_0030: 'fx sequences/GainEnergy/KC_FX_GainEnergy_121222_0030.webp',
+    KC_FX_GainHealth_121222_0001: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0001.webp',
+    KC_FX_GainHealth_121222_0002: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0002.webp',
+    KC_FX_GainHealth_121222_0003: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0003.webp',
+    KC_FX_GainHealth_121222_0004: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0004.webp',
+    KC_FX_GainHealth_121222_0005: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0005.webp',
+    KC_FX_GainHealth_121222_0006: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0006.webp',
+    KC_FX_GainHealth_121222_0007: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0007.webp',
+    KC_FX_GainHealth_121222_0008: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0008.webp',
+    KC_FX_GainHealth_121222_0009: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0009.webp',
+    KC_FX_GainHealth_121222_0010: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0010.webp',
+    KC_FX_GainHealth_121222_0011: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0011.webp',
+    KC_FX_GainHealth_121222_0012: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0012.webp',
+    KC_FX_GainHealth_121222_0013: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0013.webp',
+    KC_FX_GainHealth_121222_0014: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0014.webp',
+    KC_FX_GainHealth_121222_0015: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0015.webp',
+    KC_FX_GainHealth_121222_0016: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0016.webp',
+    KC_FX_GainHealth_121222_0017: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0017.webp',
+    KC_FX_GainHealth_121222_0018: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0018.webp',
+    KC_FX_GainHealth_121222_0019: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0019.webp',
+    KC_FX_GainHealth_121222_0020: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0020.webp',
+    KC_FX_GainHealth_121222_0021: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0021.webp',
+    KC_FX_GainHealth_121222_0022: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0022.webp',
+    KC_FX_GainHealth_121222_0023: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0023.webp',
+    KC_FX_GainHealth_121222_0024: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0024.webp',
+    KC_FX_GainHealth_121222_0025: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0025.webp',
+    KC_FX_GainHealth_121222_0026: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0026.webp',
+    KC_FX_GainHealth_121222_0027: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0027.webp',
+    KC_FX_GainHealth_121222_0028: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0028.webp',
+    KC_FX_GainHealth_121222_0029: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0029.webp',
+    KC_FX_GainHealth_121222_0030: 'fx sequences/GainHealth/KC_FX_GainHealth_121222_0030.webp',
+    KC_FX_Poison_121222_0001: 'fx sequences/Poison/KC_FX_Poison_121222_0001.webp',
+    KC_FX_Poison_121222_0002: 'fx sequences/Poison/KC_FX_Poison_121222_0002.webp',
+    KC_FX_Poison_121222_0003: 'fx sequences/Poison/KC_FX_Poison_121222_0003.webp',
+    KC_FX_Poison_121222_0004: 'fx sequences/Poison/KC_FX_Poison_121222_0004.webp',
+    KC_FX_Poison_121222_0005: 'fx sequences/Poison/KC_FX_Poison_121222_0005.webp',
+    KC_FX_Poison_121222_0006: 'fx sequences/Poison/KC_FX_Poison_121222_0006.webp',
+    KC_FX_Poison_121222_0007: 'fx sequences/Poison/KC_FX_Poison_121222_0007.webp',
+    KC_FX_Poison_121222_0008: 'fx sequences/Poison/KC_FX_Poison_121222_0008.webp',
+    KC_FX_Poison_121222_0009: 'fx sequences/Poison/KC_FX_Poison_121222_0009.webp',
+    KC_FX_Poison_121222_0010: 'fx sequences/Poison/KC_FX_Poison_121222_0010.webp',
+    KC_FX_Poison_121222_0011: 'fx sequences/Poison/KC_FX_Poison_121222_0011.webp',
+    KC_FX_Poison_121222_0012: 'fx sequences/Poison/KC_FX_Poison_121222_0012.webp',
+    KC_FX_Poison_121222_0013: 'fx sequences/Poison/KC_FX_Poison_121222_0013.webp',
+    KC_FX_Poison_121222_0014: 'fx sequences/Poison/KC_FX_Poison_121222_0014.webp',
+    KC_FX_Poison_121222_0015: 'fx sequences/Poison/KC_FX_Poison_121222_0015.webp',
+    KC_FX_Poison_121222_0016: 'fx sequences/Poison/KC_FX_Poison_121222_0016.webp',
+    KC_FX_Poison_121222_0017: 'fx sequences/Poison/KC_FX_Poison_121222_0017.webp',
+    KC_FX_Poison_121222_0018: 'fx sequences/Poison/KC_FX_Poison_121222_0018.webp',
+    KC_FX_Poison_121222_0019: 'fx sequences/Poison/KC_FX_Poison_121222_0019.webp',
+    KC_FX_Poison_121222_0020: 'fx sequences/Poison/KC_FX_Poison_121222_0020.webp',
+    KC_FX_Poison_121222_0021: 'fx sequences/Poison/KC_FX_Poison_121222_0021.webp',
+    KC_FX_Poison_121222_0022: 'fx sequences/Poison/KC_FX_Poison_121222_0022.webp',
+    KC_FX_Poison_121222_0023: 'fx sequences/Poison/KC_FX_Poison_121222_0023.webp',
+    KC_FX_Poison_121222_0024: 'fx sequences/Poison/KC_FX_Poison_121222_0024.webp',
+    KC_FX_Poison_121222_0025: 'fx sequences/Poison/KC_FX_Poison_121222_0025.webp',
+    KC_FX_Poison_121222_0026: 'fx sequences/Poison/KC_FX_Poison_121222_0026.webp',
+    KC_FX_Poison_121222_0027: 'fx sequences/Poison/KC_FX_Poison_121222_0027.webp',
+    KC_FX_Poison_121222_0028: 'fx sequences/Poison/KC_FX_Poison_121222_0028.webp',
+    KC_FX_Poison_121222_0029: 'fx sequences/Poison/KC_FX_Poison_121222_0029.webp',
+    KC_FX_Poison_121222_0030: 'fx sequences/Poison/KC_FX_Poison_121222_0030.webp',
+    KC_FX_Poison_121222_0031: 'fx sequences/Poison/KC_FX_Poison_121222_0031.webp',
+    KC_FX_Poison_121222_0032: 'fx sequences/Poison/KC_FX_Poison_121222_0032.webp',
+    KC_FX_PsychicAttack_121222_0001: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0001.webp',
+    KC_FX_PsychicAttack_121222_0002: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0002.webp',
+    KC_FX_PsychicAttack_121222_0003: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0003.webp',
+    KC_FX_PsychicAttack_121222_0004: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0004.webp',
+    KC_FX_PsychicAttack_121222_0005: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0005.webp',
+    KC_FX_PsychicAttack_121222_0006: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0006.webp',
+    KC_FX_PsychicAttack_121222_0007: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0007.webp',
+    KC_FX_PsychicAttack_121222_0008: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0008.webp',
+    KC_FX_PsychicAttack_121222_0009: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0009.webp',
+    KC_FX_PsychicAttack_121222_0010: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0010.webp',
+    KC_FX_PsychicAttack_121222_0011: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0011.webp',
+    KC_FX_PsychicAttack_121222_0012: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0012.webp',
+    KC_FX_PsychicAttack_121222_0013: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0013.webp',
+    KC_FX_PsychicAttack_121222_0014: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0014.webp',
+    KC_FX_PsychicAttack_121222_0015: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0015.webp',
+    KC_FX_PsychicAttack_121222_0016: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0016.webp',
+    KC_FX_PsychicAttack_121222_0017: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0017.webp',
+    KC_FX_PsychicAttack_121222_0018: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0018.webp',
+    KC_FX_PsychicAttack_121222_0019: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0019.webp',
+    KC_FX_PsychicAttack_121222_0020: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0020.webp',
+    KC_FX_PsychicAttack_121222_0021: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0021.webp',
+    KC_FX_PsychicAttack_121222_0022: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0022.webp',
+    KC_FX_PsychicAttack_121222_0023: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0023.webp',
+    KC_FX_PsychicAttack_121222_0024: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0024.webp',
+    KC_FX_PsychicAttack_121222_0025: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0025.webp',
+    KC_FX_PsychicAttack_121222_0026: 'fx sequences/PsychicAttack/KC_FX_PsychicAttack_121222_0026.webp',
+    KC_FX_Shield_121222_0001: 'fx sequences/Shield/KC_FX_Shield_121222_0001.webp',
+    KC_FX_Shield_121222_0002: 'fx sequences/Shield/KC_FX_Shield_121222_0002.webp',
+    KC_FX_Shield_121222_0003: 'fx sequences/Shield/KC_FX_Shield_121222_0003.webp',
+    KC_FX_Shield_121222_0004: 'fx sequences/Shield/KC_FX_Shield_121222_0004.webp',
+    KC_FX_Shield_121222_0005: 'fx sequences/Shield/KC_FX_Shield_121222_0005.webp',
+    KC_FX_Shield_121222_0006: 'fx sequences/Shield/KC_FX_Shield_121222_0006.webp',
+    KC_FX_Shield_121222_0007: 'fx sequences/Shield/KC_FX_Shield_121222_0007.webp',
+    KC_FX_Shield_121222_0008: 'fx sequences/Shield/KC_FX_Shield_121222_0008.webp',
+    KC_FX_Shield_121222_0009: 'fx sequences/Shield/KC_FX_Shield_121222_0009.webp',
+    KC_FX_Shield_121222_0010: 'fx sequences/Shield/KC_FX_Shield_121222_0010.webp',
+    KC_FX_Shield_121222_0011: 'fx sequences/Shield/KC_FX_Shield_121222_0011.webp',
+    KC_FX_Shield_121222_0012: 'fx sequences/Shield/KC_FX_Shield_121222_0012.webp',
+    KC_FX_Shield_121222_0013: 'fx sequences/Shield/KC_FX_Shield_121222_0013.webp',
+    KC_FX_Shield_121222_0014: 'fx sequences/Shield/KC_FX_Shield_121222_0014.webp',
+    KC_FX_Shield_121222_0015: 'fx sequences/Shield/KC_FX_Shield_121222_0015.webp',
+    KC_FX_Shield_121222_0016: 'fx sequences/Shield/KC_FX_Shield_121222_0016.webp',
+    KC_FX_Shield_121222_0017: 'fx sequences/Shield/KC_FX_Shield_121222_0017.webp',
+    KC_FX_Shield_121222_0018: 'fx sequences/Shield/KC_FX_Shield_121222_0018.webp',
+    KC_FX_Shield_121222_0019: 'fx sequences/Shield/KC_FX_Shield_121222_0019.webp',
+    KC_FX_Shield_121222_0020: 'fx sequences/Shield/KC_FX_Shield_121222_0020.webp',
+    KC_FX_Shield_121222_0021: 'fx sequences/Shield/KC_FX_Shield_121222_0021.webp',
+    KC_FX_Shield_121222_0022: 'fx sequences/Shield/KC_FX_Shield_121222_0022.webp',
+    KC_FX_Shield_121222_0023: 'fx sequences/Shield/KC_FX_Shield_121222_0023.webp',
+    KC_FX_Shield_121222_0024: 'fx sequences/Shield/KC_FX_Shield_121222_0024.webp',
+    KC_FX_Shield_121222_0025: 'fx sequences/Shield/KC_FX_Shield_121222_0025.webp',
+    KC_FX_Shield_121222_0026: 'fx sequences/Shield/KC_FX_Shield_121222_0026.webp',
+    KC_FX_Shield_121222_0027: 'fx sequences/Shield/KC_FX_Shield_121222_0027.webp',
+    KC_FX_Shield_121222_0028: 'fx sequences/Shield/KC_FX_Shield_121222_0028.webp',
+    KC_FX_Shield_121222_0029: 'fx sequences/Shield/KC_FX_Shield_121222_0029.webp',
+    KC_FX_Shield_121222_0030: 'fx sequences/Shield/KC_FX_Shield_121222_0030.webp',
+    KC_FX_Shield_121222_0031: 'fx sequences/Shield/KC_FX_Shield_121222_0031.webp',
+    KC_FX_Shield_121222_0032: 'fx sequences/Shield/KC_FX_Shield_121222_0032.webp',
+    KC_FX_Shield_121222_0033: 'fx sequences/Shield/KC_FX_Shield_121222_0033.webp',
     // @endindex
 }

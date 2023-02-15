@@ -68,7 +68,7 @@ export const playerCharacterStatsMap: Record<
         isPc: true,
         class: 'knight',
 
-        constitution: 80,
+        constitution: 82,
         strength: 10,
         magic: 5,
         defense: 11,
@@ -90,7 +90,7 @@ export const playerCharacterStatsMap: Record<
         isPc: true,
         class: 'rogue',
 
-        constitution: 40,
+        constitution: 45,
         strength: 12 + 1,
         magic: 14,
         defense: 5,
@@ -163,11 +163,11 @@ export const playerCharacterStatsMap: Record<
     },
     notoriousBean: {
         id: 'notoriousBean',
-        displayName: 'Notorious B.E.A.N',
+        displayName: 'Notorious B.E.A.N.',
         isPc: true,
         class: 'bard',
 
-        constitution: 75,
+        constitution: 70,
         strength: 12,
         magic: 7,
         defense: 5,
@@ -247,7 +247,7 @@ export const playerCharacterStatsMap: Record<
         constitution: 84 + 40,
         strength: 6,
         magic: 7,
-        defense: 5 + 3,
+        defense: 5 + 4,
     },
     wimpyGuard: {
         id: 'wimpyGuard',

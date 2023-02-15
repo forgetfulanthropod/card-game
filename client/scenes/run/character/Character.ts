@@ -1,9 +1,13 @@
 import type { Datum } from 'datums'
 import { datum } from 'datums'
 // import { sound } from '@pixi/sound'
+import type { TrackEntry } from '@pixi-spine/all-4.1'
+import { MainCharacterAnimation } from '@sharedElements'
+import { diff } from 'deep-diff'
 import type { Listener, ROCursor } from 'sbaobab'
 import type {
     CardHit,
+    CharacterId,
     CharacterMeta,
     CharacterUid,
     NetworkDOTData,
@@ -12,16 +16,21 @@ import type {
     TargetType,
 } from 'shared'
 import { keys } from 'shared/code'
-import { MainCharacterAnimation } from '@sharedElements'
-import type { TrackEntry } from '@pixi-spine/all-4.1'
-import { diff } from 'deep-diff'
+import { FloatingIntents } from './FloatingIntents'
 import { HealthBar, HEALTH_BAR_WIDTH } from './HealthBar'
 import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
-import { FloatingIntents } from './FloatingIntents'
 
-import { EffectOverlayManager } from './EffectOverlayManager'
 import { getCharTexture, SoundEffectAssetKey } from '@/assets'
+import type { PixiContainer, PixiSpine } from '@/elementsUtil'
+import {
+    Adjust,
+    Container,
+    flashTo,
+    If,
+    playSound,
+    Sprite,
+} from '@/elementsUtil'
 import {
     hoveredCharacterUid,
     nextTick,
@@ -30,22 +39,13 @@ import {
     targetUidsWaitingForImpact,
     toDatum,
 } from '@/util'
-import {
-    Adjust,
-    Container,
-    flashTo,
-    getSound,
-    If,
-    playSound,
-    Sprite,
-    SoundAssetKey,
-} from '@/elementsUtil'
-import type { PixiContainer, PixiSpine } from '@/elementsUtil'
+import { EffectOverlayManager } from './EffectOverlayManager'
 
-import { socketOn } from '@/socket'
 import { getBattleScene } from '@/data'
-import { OrbManager } from './OrbManager'
+import { socketOn } from '@/socket'
 import { upperFirst } from 'lodash'
+import { Loader } from 'pixi.js'
+import { OrbManager } from './OrbManager'
 
 const SHOW_HIT_TIME = 1000
 
@@ -397,16 +397,30 @@ function flashDamageTo(
 }
 
 function playAttackSound(characterMeta: CharacterMeta) {
-    playSound(
-        `sound${upperFirst(characterMeta.id)}Attack` as SoundEffectAssetKey
-    )
+    playSoundEffect(characterMeta.id, 'Attack')
 }
 
 function playTakingDamageSound(characterMeta: CharacterMeta) {
     playSound(`soundGenericTakingDamage`)
-    playSound(
-        `sound${upperFirst(
-            characterMeta.id
-        )}TakingDamage` as SoundEffectAssetKey
+
+    playSoundEffect(characterMeta.id, 'TakingDamage')
+}
+
+function playSoundEffect(
+    characterId: CharacterId,
+    action: 'Attack' | 'TakingDamage'
+) {
+    const key = `sound${upperFirst(
+        characterId
+    )}${action}` as SoundEffectAssetKey
+
+    if (Loader.shared.resources[key]) playSound(key)
+    else if (
+        // support for two sounds randomly chosen
+        Loader.shared.resources[`${key}1`] &&
+        Loader.shared.resources[`${key}2`]
     )
+        playSound(
+            `${key}${Math.ceil(Math.random() * 2)}` as SoundEffectAssetKey
+        )
 }

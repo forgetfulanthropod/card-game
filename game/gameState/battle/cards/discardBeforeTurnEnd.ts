@@ -2,6 +2,7 @@ import produce from 'immer'
 import type { CardUid, BattleCursor, Card } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
+import { trackMetric } from 'server/metrics'
 
 export function discardBeforeTurnEnd({
     cardUids,
@@ -11,10 +12,6 @@ export function discardBeforeTurnEnd({
     scene: BattleCursor
 }): void {
     const hand = scene.get('cards', 'hand')
-
-    for (const uid of cardUids) {
-        activeOnDiscardActions(hand[uid], scene)
-    }
 
     scene.apply(
         'cards',
@@ -27,9 +24,17 @@ export function discardBeforeTurnEnd({
                 }
                 delete cards.hand[uid]
                 cards.discard[uid] = card
+                trackMetric('discardCard', { card, scene })
             }
         })
     )
+    // TODO: check if this logic is okay for
+    // OnDiscardActions after discard
+    const discard = scene.get('cards', 'discard')
+
+    for (const uid of cardUids) {
+        activeOnDiscardActions(discard[uid], scene)
+    }
 }
 
 export function activeOnDiscardActions(card: Card, scene: BattleCursor) {
@@ -41,6 +46,7 @@ export function activeOnDiscardActions(card: Card, scene: BattleCursor) {
 
             id: card.id,
             name: card.name,
+            uid: card.uid,
             actions: card.on.discard,
             targetNum: card.targetNum,
             targetType: card.targetType,

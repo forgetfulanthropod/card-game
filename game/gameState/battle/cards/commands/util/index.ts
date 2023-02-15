@@ -67,16 +67,18 @@ export interface ActionArgs {
     ifHealthUnder: [health: StanceId, isUnderMove: any, defaultMove: any]
     ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
-    ifStance: [
+    ifStance: [stanceId: StanceId, conditionalTrueMove: any]
+    ifStanceElse: [
         stanceId: StanceId,
         conditionalTrueMove: any,
-        conditionalFalseMove?: any
+        conditionalFalseMove: any
     ]
 
     brittle: [count: number]
     dwindle: []
     momentary: []
 
+    hypnotize: [count: number]
     orb: [type: OrbType, count: number]
     queue: [numTurns: number, move: any]
     removeAllDebuffs: [targetType?: TargetType]
@@ -99,6 +101,7 @@ export interface ActionArgs {
 
 export type Locals = CalculatedCharacterStats & {
     /** only defined when there is exactly 1 target and it is a character */
+    targetConstitution: number | undefined
     targetHealth: number | undefined
     incomingDamageIntended: number
     handSize: number

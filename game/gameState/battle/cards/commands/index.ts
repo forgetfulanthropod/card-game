@@ -24,6 +24,7 @@ import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './if
 import {explain as explainIfHealthUnder, execute as executeIfHealthUnder} from './ifHealthUnder'
 import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
+import {explain as explainIfStanceElse, execute as executeIfStanceElse} from './ifStanceElse'
 import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
@@ -37,6 +38,7 @@ import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} 
 import {explain as explainRequire, execute as executeRequire} from './require'
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
+import {explain as explainHypnotize, execute as executeHypnotize} from './hypnotize'
 import {explain as explainText, execute as executeText} from './text'
 // @endindex
 export type { Locals } from './util'
@@ -61,12 +63,14 @@ export const explainers: Explainers = {
     effect: explainEffect,
     explain: explainExplain,
     heal: explainHeal,
+    hypnotize: explainHypnotize,
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
     ifHealthUnder: explainIfHealthUnder,
     ifKilled: explainIfKilled,
     ifStance: explainIfStance,
+    ifStanceElse: explainIfStanceElse,
     infectiousBite: explainInfectiousBite,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
@@ -104,12 +108,14 @@ export const executors: Executors = {
     effect: executeEffect,
     explain: executeExplain,
     heal: executeHeal,
+    hypnotize: executeHypnotize,
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
     ifHealthUnder: executeIfHealthUnder,
     ifKilled: executeIfKilled,
     ifStance: executeIfStance,
+    ifStanceElse: executeIfStanceElse,
     infectiousBite: executeInfectiousBite,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,

@@ -100,7 +100,7 @@ function makeCards(scene: BattleCursor): Piles {
                     srandInt(0, 2)
                 ] as CardId
             )
-        if (cm.class === 'cleric') cardIds.push('shieldOfLight')
+        if (cm.class === 'cleric') cardIds.push('shieldOfHolyLight')
         if (cm.class === 'knight') cardIds.push('dutifulStab')
         if (cm.class === 'rogue') cardIds.push('patientAmbush')
     })
@@ -160,7 +160,7 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
         notoriousBean: 'beanNeverMisses',
         penguinKnight: 'parry',
         skeletonWarrior: 'swordSlash',
-        matchaGelatinCube: 'shieldOfLight',
+        matchaGelatinCube: 'shieldOfHolyLight',
         warhog: 'bodySlam',
         gnomeHooligan: 'gnomeBomb',
         jerry: 'psychicWarfare',

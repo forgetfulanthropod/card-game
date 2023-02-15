@@ -14,6 +14,7 @@ export interface BareGameMetricsArgs {
     chooseStance: { character: CharacterMeta; stanceId: string }
     nextRoom: { choice: number; chosenRoom: DungeonRoom }
     addCardToDeck: { card: Card }
+    discardCard: { card: Card }
     endTurn: {}
 }
 
@@ -35,9 +36,9 @@ export const playCard: GameMetrics['playCard'] = args => {
         card_name: string
         card_energy: number
         card_type: string
+        card_class: string
         character_name: string
         character_stance: string
-        character_class: string
         turn_count: number
         play_order: number
         target_id: string
@@ -48,15 +49,15 @@ export const playCard: GameMetrics['playCard'] = args => {
     }
     let tags = {} as tagInfo
 
-    let character = scene.get('allCharacters', card.characterUid)
+    const character = scene.get('allCharacters', card.characterUid)
 
     Object.assign(tags, {
         card_name: card.id,
         card_energy: card.energy,
         card_type: card.type,
+        card_class: card.characterClass,
         character_name: character.id,
         character_stance: character.stance,
-        character_class: character.class,
         turn_count: scene.get('turnCount'),
         play_order: scene.get('cardsPlayedThisTurn').length,
         target_type: card.targetType,
@@ -75,7 +76,7 @@ export const playCard: GameMetrics['playCard'] = args => {
 
 export const chooseStance: GameMetrics['chooseStance'] = args => {
     const { character, stanceId, scene } = args
-    let tags = {
+    const tags = {
         character_name: character.id,
         character_class: character.class,
         character_hp: character.health,
@@ -89,19 +90,19 @@ export const chooseStance: GameMetrics['chooseStance'] = args => {
 
 export const nextRoom: GameMetrics['nextRoom'] = args => {
     const { choice, chosenRoom, scene } = args
-    let tags = {
+    const tags = {
         room_choice: chosenRoom.uid,
         room_category: chosenRoom.category,
         run_id: scene.get('runId'),
         user_id: scene.get('username'),
     }
-    let fields = [metricField({ value: choice })]
+    const fields = [metricField({ value: choice })]
     writeMetric('next_room', tags, fields)
 }
 
 export const addCardToDeck: GameMetrics['addCardToDeck'] = args => {
     const { card, scene } = args
-    let tags = {
+    const tags = {
         card_name: card.id,
         card_type: card.type,
         card_energy: card.energy,
@@ -113,11 +114,11 @@ export const addCardToDeck: GameMetrics['addCardToDeck'] = args => {
 }
 
 export const endTurn: GameMetrics['endTurn'] = args => {
-    let { scene } = args
-    let cards = scene.get('cardsPlayedThisTurn')
-    let damages = scene.get('damagesDealtThisTurn')
-    let blocks = scene.get('blocksAppliedThisTurn')
-    let tags = {
+    const { scene } = args
+    const cards = scene.get('cardsPlayedThisTurn')
+    const damages = scene.get('damagesDealtThisTurn')
+    const blocks = scene.get('blocksAppliedThisTurn')
+    const tags = {
         turn_count: scene.get('turnCount'),
         num_cards_played: cards.length,
         num_damage_cards: damages.length,
@@ -129,4 +130,19 @@ export const endTurn: GameMetrics['endTurn'] = args => {
         user_id: scene.get('username'),
     }
     writeMetric('turn_end', tags)
+}
+
+// TODO: process Card[] instead of each Card
+export const discardCard: GameMetrics['discardCard'] = args => {
+    const { card, scene } = args
+    const tags = {
+        card_name: card.name,
+        card_energy: card.energy,
+        card_type: card.type,
+        card_class: card.characterClass,
+        turn_count: scene.get('turnCount'),
+        run_id: scene.get('runId'),
+        user_id: scene.get('username'),
+    }
+    writeMetric('card_discard', tags)
 }

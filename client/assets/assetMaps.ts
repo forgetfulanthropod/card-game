@@ -353,112 +353,228 @@ export const mapAssets = {
 
 export const mapTileAssets = {
     mapTileBase: 'hex map/hooligans bluff/base tile.webp',
-    mapTileTopG_1: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_1.webp',
-    mapTileTopG_2: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_2.webp',
-    mapTileTopG_3: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_3.webp',
-    mapTileTopG_4: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_4.webp',
-    mapTileTopG_5: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_5.webp',
-    mapTileTopG_6: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_6.webp',
-    mapTileTopG_7: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_7.webp',
-    mapTileTopG_8: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_8.webp',
-    mapTileTopG_9: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_9.webp',
-    mapTileTopG_10: 'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_10.webp',
-    mapTileTop1_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/1.webp',
-    mapTileTop1_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/2.webp',
-    mapTileTop1_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/3.webp',
-    mapTileTop1_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/4.webp',
-    mapTileTop1_5: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/5.webp',
-    mapTileTop1_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/6.webp',
-    mapTileTop1_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/7.webp',
-    mapTileTop1_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/8.webp',
-    mapTileTop1_9: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/9.webp',
-    mapTileTop2_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/1.webp',
-    mapTileTop2_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/2.webp',
-    mapTileTop2_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/3.webp',
-    mapTileTop2_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/4.webp',
-    mapTileTop2_5: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/5.webp',
-    mapTileTop2_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/6.webp',
-    mapTileTop2_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/7.webp',
-    mapTileTop2_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/8.webp',
-    mapTileTop3_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/1.webp',
-    mapTileTop3_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/2.webp',
-    mapTileTop3_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/3.webp',
-    mapTileTop3_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/4.webp',
-    mapTileTop3_5: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/5.webp',
-    mapTileTop3_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/6.webp',
-    mapTileTop3_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/7.webp',
-    mapTileTop3_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/8.webp',
-    mapTileTop3_9: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/9.webp',
-    mapTileTop4_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/1.webp',
-    mapTileTop4_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/2.webp',
-    mapTileTop4_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/3.webp',
-    mapTileTop4_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/4.webp',
-    mapTileTop5_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/1.webp',
-    mapTileTop5_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/2.webp',
-    mapTileTop5_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/3.webp',
-    mapTileTop5_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/4.webp',
-    mapTileTop5_5: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/5.webp',
-    mapTileTop5_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/6.webp',
-    mapTileTop5_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/7.webp',
-    mapTileTop5_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/8.webp',
-    mapTileTop6_1: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/1.webp',
-    mapTileTop6_2: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/2.webp',
-    mapTileTop6_3: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/3.webp',
-    mapTileTop6_4: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/4.webp',
-    mapTileTop6_5: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/5.webp',
-    mapTileTop6_6: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/6.webp',
-    mapTileTop6_7: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/7.webp',
-    mapTileTop6_8: 'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/8.webp',
-    mapTileBottom1_1__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_1_(5).webp',
-    mapTileBottom1_2__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_2_(5).webp',
-    mapTileBottom1_3__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_3_(5).webp',
-    mapTileBottom1_4__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_4_(5).webp',
-    mapTileBottom1_5__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_5_(5).webp',
-    mapTileBottom1_6__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_6_(5).webp',
-    mapTileBottom1_7__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_7_(5).webp',
-    mapTileBottom1_8__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_8_(5).webp',
-    mapTileBottom1_9__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_9_(5).webp',
-    mapTileBottom1_10__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_10_(5).webp',
-    mapTileBottom1_11__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_11_(5).webp',
-    mapTileBottom1_12__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_12_(5).webp',
-    mapTileBottom1_13__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_13_(5).webp',
-    mapTileBottom1_14__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_14_(5).webp',
-    mapTileBottom1_15__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_15_(5).webp',
-    mapTileBottom1_16__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_16_(5).webp',
-    mapTileBottom1_17__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_17_(5).webp',
-    mapTileBottom1_18__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_18_(5).webp',
-    mapTileBottom1_19__5: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_19_(5).webp',
-    mapTileBottom2_1__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_1_(7).webp',
-    mapTileBottom2_2__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_2_(7).webp',
-    mapTileBottom2_3__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_3_(7).webp',
-    mapTileBottom2_4__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_4_(7).webp',
-    mapTileBottom2_5__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_5_(7).webp',
-    mapTileBottom2_6__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_6_(7).webp',
-    mapTileBottom2_7__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_7_(7).webp',
-    mapTileBottom2_8__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_8_(7).webp',
-    mapTileBottom2_9__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_9_(7).webp',
-    mapTileBottom3_1_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_1_(10).webp',
-    mapTileBottom3_2_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_2_(10).webp',
-    mapTileBottom3_3_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_3_(10).webp',
-    mapTileBottom3_4_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_4_(10).webp',
-    mapTileBottom3_5_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_5_(10).webp',
-    mapTileBottom3_6_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_6_(10).webp',
-    mapTileBottom3_7_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_7_(10).webp',
-    mapTileBottom3_8_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_8_(10).webp',
-    mapTileBottom3_9_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_9_(10).webp',
-    mapTileBottom3_10_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_10_(10).webp',
-    mapTileBottom3_11_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_11_(10).webp',
-    mapTileBottom3_12_1_0: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_12_(10).webp',
-    mapTileBottom4_1__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_1_(7).webp',
-    mapTileBottom4_2__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_2_(7).webp',
-    mapTileBottom4_3__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_3_(7).webp',
-    mapTileBottom4_4__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_4_(7).webp',
-    mapTileBottom4_5__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_5_(7).webp',
-    mapTileBottom4_6__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_6_(7).webp',
-    mapTileBottom4_7__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_7_(7).webp',
-    mapTileBottom4_8__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_8_(7).webp',
-    mapTileBottom4_9__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_9_(7).webp',
-    mapTileBottom4_10__7: 'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_10_(7).webp',
+    mapTileTopG_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_1.webp',
+    mapTileTopG_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_2.webp',
+    mapTileTopG_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_3.webp',
+    mapTileTopG_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_4.webp',
+    mapTileTopG_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_5.webp',
+    mapTileTopG_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_6.webp',
+    mapTileTopG_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_7.webp',
+    mapTileTopG_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_8.webp',
+    mapTileTopG_9:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_9.webp',
+    mapTileTopG_10:
+        'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_10.webp',
+    mapTileTop1_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/1.webp',
+    mapTileTop1_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/2.webp',
+    mapTileTop1_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/3.webp',
+    mapTileTop1_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/4.webp',
+    mapTileTop1_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/5.webp',
+    mapTileTop1_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/6.webp',
+    mapTileTop1_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/7.webp',
+    mapTileTop1_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/8.webp',
+    mapTileTop1_9:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 1/9.webp',
+    mapTileTop2_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/1.webp',
+    mapTileTop2_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/2.webp',
+    mapTileTop2_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/3.webp',
+    mapTileTop2_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/4.webp',
+    mapTileTop2_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/5.webp',
+    mapTileTop2_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/6.webp',
+    mapTileTop2_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/7.webp',
+    mapTileTop2_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/8.webp',
+    mapTileTop3_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/1.webp',
+    mapTileTop3_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/2.webp',
+    mapTileTop3_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/3.webp',
+    mapTileTop3_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/4.webp',
+    mapTileTop3_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/5.webp',
+    mapTileTop3_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/6.webp',
+    mapTileTop3_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/7.webp',
+    mapTileTop3_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 2/8.webp',
+    mapTileTop4_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/1.webp',
+    mapTileTop4_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/2.webp',
+    mapTileTop4_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/3.webp',
+    mapTileTop4_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 4/4.webp',
+    mapTileTop5_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/1.webp',
+    mapTileTop5_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/2.webp',
+    mapTileTop5_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/3.webp',
+    mapTileTop5_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/4.webp',
+    mapTileTop5_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/5.webp',
+    mapTileTop5_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/6.webp',
+    mapTileTop5_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/7.webp',
+    mapTileTop5_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 5/8.webp',
+    mapTileTop6_1:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/1.webp',
+    mapTileTop6_2:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/2.webp',
+    mapTileTop6_3:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/3.webp',
+    mapTileTop6_4:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/4.webp',
+    mapTileTop6_5:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/5.webp',
+    mapTileTop6_6:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/6.webp',
+    mapTileTop6_7:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/7.webp',
+    mapTileTop6_8:
+        'hex map/hooligans bluff/Top of Tile Decorations/Doodad Slot 6/8.webp',
+    mapTileBottom1_1__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_1_(5).webp',
+    mapTileBottom1_2__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_2_(5).webp',
+    mapTileBottom1_3__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_3_(5).webp',
+    mapTileBottom1_4__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_4_(5).webp',
+    mapTileBottom1_5__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_5_(5).webp',
+    mapTileBottom1_6__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_6_(5).webp',
+    mapTileBottom1_7__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_7_(5).webp',
+    mapTileBottom1_8__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_8_(5).webp',
+    mapTileBottom1_9__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_9_(5).webp',
+    mapTileBottom1_10__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_10_(5).webp',
+    mapTileBottom1_11__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_11_(5).webp',
+    mapTileBottom1_12__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_12_(5).webp',
+    mapTileBottom1_13__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_13_(5).webp',
+    mapTileBottom1_14__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_14_(5).webp',
+    mapTileBottom1_15__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_15_(5).webp',
+    mapTileBottom1_16__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_16_(5).webp',
+    mapTileBottom1_17__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_17_(5).webp',
+    mapTileBottom1_18__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_18_(5).webp',
+    mapTileBottom1_19__5:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 01) Cracks/Crack_19_(5).webp',
+    mapTileBottom2_1__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_1_(7).webp',
+    mapTileBottom2_2__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_2_(7).webp',
+    mapTileBottom2_3__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_3_(7).webp',
+    mapTileBottom2_4__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_4_(7).webp',
+    mapTileBottom2_5__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_5_(7).webp',
+    mapTileBottom2_6__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_6_(7).webp',
+    mapTileBottom2_7__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_7_(7).webp',
+    mapTileBottom2_8__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_8_(7).webp',
+    mapTileBottom2_9__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 02) Flat Rocks/Flat_Rocks_9_(7).webp',
+    mapTileBottom3_1_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_1_(10).webp',
+    mapTileBottom3_2_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_2_(10).webp',
+    mapTileBottom3_3_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_3_(10).webp',
+    mapTileBottom3_4_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_4_(10).webp',
+    mapTileBottom3_5_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_5_(10).webp',
+    mapTileBottom3_6_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_6_(10).webp',
+    mapTileBottom3_7_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_7_(10).webp',
+    mapTileBottom3_8_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_8_(10).webp',
+    mapTileBottom3_9_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_9_(10).webp',
+    mapTileBottom3_10_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_10_(10).webp',
+    mapTileBottom3_11_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_11_(10).webp',
+    mapTileBottom3_12_1_0:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 03) Little Rocks/Little_Rocks_12_(10).webp',
+    mapTileBottom4_1__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_1_(7).webp',
+    mapTileBottom4_2__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_2_(7).webp',
+    mapTileBottom4_3__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_3_(7).webp',
+    mapTileBottom4_4__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_4_(7).webp',
+    mapTileBottom4_5__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_5_(7).webp',
+    mapTileBottom4_6__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_6_(7).webp',
+    mapTileBottom4_7__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_7_(7).webp',
+    mapTileBottom4_8__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_8_(7).webp',
+    mapTileBottom4_9__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_9_(7).webp',
+    mapTileBottom4_10__7:
+        'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_10_(7).webp',
+}
+
+export type EventAssetKey = keyof typeof eventAssets
+
+export const eventAssets = {
+    eventGradient: 'events/event overlay.webp',
+    eventFrogCarriageMainGraphic: 'events/Frog Carriage/main.webp',
+    eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage Prompt 1.webp',
+    eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage Prompt 2.webp',
+    eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
+    eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Choice 2.webp',
+    eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Choice 3.webp',
 }
 
 export const userAvatarAssets = {

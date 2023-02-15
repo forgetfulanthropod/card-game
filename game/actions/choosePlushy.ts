@@ -17,13 +17,14 @@ function healAllPartyMembers(scene: BattleCursor) {
     scene.apply(
         'allCharacters',
         produce(ac => {
-            for (const char of Object.values(ac)) {
-                if (!char.isPc || char.health < 0) continue
-                char.health = Math.min(
-                    char.constitution,
-                    Math.ceil(char.health + char.constitution * 0.25)
-                )
-            }
+            Object.values(ac)
+                .filter(cm => cm.isPc && cm.health > 0)
+                .forEach(cm => {
+                    cm.health = Math.min(
+                        cm.constitution,
+                        Math.ceil(cm.health + cm.constitution * 0.25)
+                    )
+                })
         })
     )
     logger.info('healed all characters!')

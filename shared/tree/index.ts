@@ -7,8 +7,10 @@
 export * from './battle'
 export * from './Dungeon'
 export * from './entryTypes'
+export * from './EventScene'
 export * from './Gamestate'
 export * from './Rulebook'
+export * from './Souvenir'
 export * from './User'
-export * from './battle/Loot'
 // @endindex
+export * from './battle/Loot'

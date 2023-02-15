@@ -22,5 +22,10 @@ export const execute: Executors['infectiousBite'] = ({
         scene,
     })
     if (unblockedDamage > 0)
-        applyEffect(scene, targetUids, 'poisonedDebuff', unblockedDamage)
+        applyEffect(
+            scene,
+            targetUids,
+            'poisonedDebuff',
+            Math.ceil(unblockedDamage / 5)
+        )
 }

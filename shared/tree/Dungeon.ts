@@ -1,5 +1,6 @@
 import type { Brandify } from '@misc'
 import type { DungeonName, NonPlayerCharacterId } from './battle'
+import { EventScene } from './EventScene'
 
 export type DungeonLevel = Readonly<DungeonLevelI> & Brandify
 interface DungeonLevelI {
@@ -26,6 +27,7 @@ export type RoomCategoryId =
 export type DungeonRoom = {
     uid: RoomUid
     enemies: RoomEnemies
+    event?: EventScene
     edges: [RoomUid, RoomUid, RoomUid, RoomUid]
     category?: RoomCategoryId
 }
@@ -35,3 +37,5 @@ export type RoomEnemies = {
     level: string | number
     boss?: true
 }[]
+
+export type RoomArchetype = { enemies: RoomEnemies; event?: Event }

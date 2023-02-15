@@ -18,15 +18,19 @@ import { keys } from 'shared/code'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
 
+// TODO calculate numbers live
 export const keyTermsMap = {
-    momentary: 'removed until end of room',
-    brittle: 'breaks after (X) uses',
+    momentary:
+        'After this card is played, remove it from your deck until the end of the room.',
+    brittle:
+        'Every time this card is played, remove a Brittle counter.\nIf this card has 0 Brittle counters, remove it from your deck permanently.',
     dwindle: 'costs +1 energy each use in room',
 
     orbsOfProtection: 'blocks for 50% of Magic',
     orbsOfLightning: 'deal 35% of Magic to all enemies',
     orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies',
-    orbsOfHolyLight: 'heals for 12% of Magic\nblocks for 50% of Defense',
+    orbsOfHolyLight:
+        'Heals for 15% of Magic\nBlocks for 100% of Defense and 50% of Magic',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage',
@@ -41,7 +45,7 @@ export const keyTermsMap = {
     poisoned: '(unblockable) receives (N) damage',
     piercing: 'ignores block',
     reflect: 'reflects up to (N) to attacker',
-    strongblock: 'receives 50% more block',
+    strongblock: 'Block this character gains is increased by 50%',
     stunned: 'cannot take an action this turn',
     targeted: 'receives 5 extra damage',
     tired: 'deals 12% less damage',

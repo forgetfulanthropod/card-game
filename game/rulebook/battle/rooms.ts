@@ -1,118 +1,132 @@
-import type { DungeonRoomMaps, RoomCategoryId, RoomEnemies } from 'shared'
-import { keys } from 'shared/code'
 import { srandInt } from '@/util'
+import {
+    DungeonRoomMaps,
+    RoomArchetype,
+    RoomCategoryId,
+    RoomEnemies,
+} from 'shared'
+import { keys, vals } from 'shared/code'
+import { eventScenes } from '../eventScenes'
 
 const config = { randomDungeon: false }
 
-const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
-    events: [
-        [
-            {
-                id: 'gnomeBandit',
-                level: 1,
-            },
-            {
-                id: 'orcWarrior',
-                level: 3,
-            },
-            {
-                id: 'gnomeBandit',
-                level: 2,
-            },
-        ],
-        [
-            {
-                id: 'matchaGelatinCube',
-                level: 1,
-            },
-        ],
-        [
-            {
-                id: 'skeletonWarrior',
-                level: 2,
-            },
-            {
-                id: 'matchaGelatinCube',
-                level: 3,
-            },
-            {
-                id: 'skeletonWarrior',
-                level: 2,
-            },
-        ],
-        [
-            {
-                id: 'matchaGelatinCube',
-                level: 2,
-            },
-            {
-                id: 'skeletonWarrior',
-                level: 3,
-            },
-            {
-                id: 'matchaGelatinCube',
-                level: 1,
-            },
-        ],
-        [
-            {
-                id: 'matchaGelatinCube',
-                level: 2,
-            },
-            {
-                id: 'matchaGelatinCube',
-                level: 2,
-            },
-            {
-                id: 'matchaGelatinCube',
-                level: 2,
-            },
-        ],
-        [
-            {
-                id: 'orcWarrior',
-                level: 2,
-            },
-            {
-                id: 'gnomeProspector',
-                level: 3,
-            },
-            {
-                id: 'orcWarrior',
-                level: 2,
-            },
-        ],
-        [
-            {
-                id: 'skeletonWarrior',
-                level: 8,
-            },
-        ],
-        [
-            {
-                id: 'frostHog',
-                level: 3,
-            },
-            {
-                id: 'frostHog',
-                level: 3,
-            },
-            {
-                id: 'frostHog',
-                level: 3,
-            },
-        ],
-        [
-            {
-                id: 'skeletonWarrior',
-                level: 4,
-            },
-            {
-                id: 'orcWarrior',
-                level: 4,
-            },
-        ],
+const eventEnemies: RoomEnemies[] = [
+    [
+        {
+            id: 'gnomeBandit',
+            level: 1,
+        },
+        {
+            id: 'orcWarrior',
+            level: 3,
+        },
+        {
+            id: 'gnomeBandit',
+            level: 2,
+        },
     ],
+    [
+        {
+            id: 'matchaGelatinCube',
+            level: 6,
+        },
+    ],
+    [
+        {
+            id: 'skeletonWarrior',
+            level: 2,
+        },
+        {
+            id: 'matchaGelatinCube',
+            level: 3,
+        },
+        {
+            id: 'skeletonWarrior',
+            level: 2,
+        },
+    ],
+    [
+        {
+            id: 'matchaGelatinCube',
+            level: 2,
+        },
+        {
+            id: 'skeletonWarrior',
+            level: 3,
+        },
+        {
+            id: 'matchaGelatinCube',
+            level: 1,
+        },
+    ],
+    [
+        {
+            id: 'matchaGelatinCube',
+            level: 2,
+        },
+        {
+            id: 'matchaGelatinCube',
+            level: 2,
+        },
+        {
+            id: 'matchaGelatinCube',
+            level: 2,
+        },
+    ],
+    [
+        {
+            id: 'orcWarrior',
+            level: 2,
+        },
+        {
+            id: 'gnomeProspector',
+            level: 3,
+        },
+        {
+            id: 'orcWarrior',
+            level: 2,
+        },
+    ],
+    [
+        {
+            id: 'skeletonWarrior',
+            level: 8,
+        },
+    ],
+    [
+        {
+            id: 'warhogRaider',
+            level: 3,
+        },
+        {
+            id: 'plaguehog',
+            level: 3,
+        },
+        {
+            id: 'groghog',
+            level: 3,
+        },
+    ],
+    [
+        {
+            id: 'skeletonWarrior',
+            level: 4,
+        },
+        {
+            id: 'orcWarrior',
+            level: 4,
+        },
+    ],
+]
+
+const roomOptions: Record<
+    RoomCategoryId,
+    RoomEnemies[] | { enemies: RoomEnemies; event: Event }[]
+> = {
+    events: vals(eventScenes).map((event, index) => ({
+        enemies: eventEnemies[index % eventEnemies.length]!,
+        event,
+    })),
     tierOne: [
         [
             {
@@ -154,12 +168,12 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
         ],
         [
             {
-                id: 'frostHog',
+                id: 'plaguehog',
                 level: 1,
             },
             {
                 id: 'mimic',
-                level: 1,
+                level: 4,
             },
             {
                 id: 'bosshogJurgen',
@@ -310,7 +324,7 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 4,
             },
             {
-                id: 'frostHog',
+                id: 'warhogRaider',
                 level: 4,
             },
             {
@@ -320,11 +334,11 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
         ],
         [
             {
-                id: 'frostHog',
+                id: 'groghog',
                 level: 6,
             },
             {
-                id: 'frostHog',
+                id: 'warhogRaider',
                 level: 6,
             },
         ],
@@ -334,11 +348,11 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 4,
             },
             {
-                id: 'plaguehog',
+                id: 'warhogRaider',
                 level: 4,
             },
             {
-                id: 'plaguehog',
+                id: 'groghog',
                 level: 4,
             },
         ],
@@ -349,7 +363,7 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
             },
             {
                 id: 'gnomeProspector',
-                level: 5,
+                level: 4,
             },
             {
                 id: 'gnomeBigBomber',
@@ -366,7 +380,7 @@ const roomOptions: Record<RoomCategoryId, RoomEnemies[]> = {
                 level: 4,
             },
             {
-                id: 'frostHog',
+                id: 'groghog',
                 level: 3,
             },
         ],
@@ -481,7 +495,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [
                     {
                         id: 'mimic',
-                        level: 1,
+                        level: 5,
                     },
                 ],
                 category: 'bosses',
@@ -629,9 +643,9 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
             const takenRoomIndicesOfCategory =
                 takenRoomIndicesByCategory[room.category]
 
-            room.enemies = randomRoomOfCategory(
-                room.category,
-                takenRoomIndicesOfCategory
+            Object.assign(
+                room,
+                randomRoomOfCategory(room.category, takenRoomIndicesOfCategory)
             )
         })
     })
@@ -642,7 +656,7 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
 function randomRoomOfCategory(
     category: keyof typeof roomOptions,
     takenRoomIndicesOfCategory: number[]
-): RoomEnemies {
+): RoomArchetype {
     const roomsOfCategory = roomOptions[category]
     const randomRoomIndex = srandInt(0, roomsOfCategory.length)
 
@@ -654,7 +668,12 @@ function randomRoomOfCategory(
 
     takenRoomIndicesOfCategory.push(randomRoomIndex)
 
-    return roomsOfCategory[randomRoomIndex]
+    const room = roomsOfCategory[randomRoomIndex]
+
+    //@ts-expect-error
+    if (!room.enemies) return { enemies: room as RoomEnemies }
+
+    return room as RoomArchetype
 }
 
 // if (config.randomDungeon)

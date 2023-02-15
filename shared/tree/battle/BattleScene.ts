@@ -20,6 +20,7 @@ import type {
     RunScoreUpdate,
 } from '.'
 import { RunID } from '../User'
+import { EventScene } from '../EventScene'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -42,6 +43,7 @@ export interface BattleScene extends SceneHas {
     roomUidsVisited: RoomUid[]
     numRoomsPassed: number
     currentRoom: DungeonRoom
+    currentEvent?: EventScene
     nextNpcCommands: NextCommand[]
     cardsPlayedThisRoom: (Card & { timestamp: string })[]
     cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {
