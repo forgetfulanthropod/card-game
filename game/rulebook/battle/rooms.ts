@@ -95,7 +95,7 @@ const eventEnemies: RoomEnemies[] = [
     ],
     [
         {
-            id: 'warhog',
+            id: 'warhogRaider',
             level: 3,
         },
         {
@@ -324,7 +324,7 @@ const roomOptions: Record<
                 level: 4,
             },
             {
-                id: 'warhog',
+                id: 'warhogRaider',
                 level: 4,
             },
             {
@@ -338,7 +338,7 @@ const roomOptions: Record<
                 level: 6,
             },
             {
-                id: 'warhog',
+                id: 'warhogRaider',
                 level: 6,
             },
         ],
@@ -348,7 +348,7 @@ const roomOptions: Record<
                 level: 4,
             },
             {
-                id: 'warhog',
+                id: 'warhogRaider',
                 level: 4,
             },
             {
