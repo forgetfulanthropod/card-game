@@ -171,6 +171,7 @@ export type CardId =
     | 'helpingHand'
     | 'hope'
     | 'huntedByTheBean'
+    | 'hypnotized'
     | 'itIsWeakToJerry'
     | 'jab'
     | 'jerryIsEternal'

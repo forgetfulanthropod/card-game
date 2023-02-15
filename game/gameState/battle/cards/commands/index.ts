@@ -38,6 +38,7 @@ import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} 
 import {explain as explainRequire, execute as executeRequire} from './require'
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
+import {explain as explainHypnotize, execute as executeHypnotize} from './hypnotize'
 import {explain as explainText, execute as executeText} from './text'
 // @endindex
 export type { Locals } from './util'
@@ -62,6 +63,7 @@ export const explainers: Explainers = {
     effect: explainEffect,
     explain: explainExplain,
     heal: explainHeal,
+    hypnotize: explainHypnotize,
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
@@ -106,6 +108,7 @@ export const executors: Executors = {
     effect: executeEffect,
     explain: executeExplain,
     heal: executeHeal,
+    hypnotize: executeHypnotize,
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,

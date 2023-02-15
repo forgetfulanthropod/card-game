@@ -3,8 +3,10 @@ import { evalAll, evalAllAsHtml } from './util'
 
 export const explain: Explainers['drawSizeChange'] = dslArgs => {
     const [amount] = evalAllAsHtml(dslArgs)
-    if (Number(amount) < 0) return `draw ${amount} fewer cards next round`
-    else return `draw ${amount} extra cards next round`
+    const count = Number(amount)
+    return `next turn, draw ${amount} ${count < 0 ? 'fewer' : 'extra'} card${
+        Math.abs(count) > 1 ? 's' : ''
+    }`
 }
 
 export const execute: Executors['drawSizeChange'] = ({ dslArgs, scene }) => {

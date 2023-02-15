@@ -495,7 +495,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 enemies: [
                     {
                         id: 'mimic',
-                        level: 1,
+                        level: 5,
                     },
                 ],
                 category: 'bosses',

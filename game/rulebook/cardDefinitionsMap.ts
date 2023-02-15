@@ -554,13 +554,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         actions: `chain(
             draw(1),
-            queue(
-                1,
-                chain(
-                    addEnergy(2),
-                    draw(2)
-                )
-            ),
+            queue(1, addEnergy(1)),
+            drawSizeChange(2),
             momentary()
         )`,
         type: 'utility',
@@ -1272,6 +1267,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             "Deal 50% of the target's max HP.\n<b>Brittle (1)</b>"`,
         type: 'attack',
         characterClass: 'cleric',
+    },
+    hypnotized: {
+        name: 'Hypnotized',
+        energy: -1,
+        id: 'hypnotized',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `"You have been hypnotized!\nThis card cannot be played"`,
+        type: 'utility',
+        characterClass: 'groghog',
     },
     burnIncense: {
         name: 'Burn Incense',
