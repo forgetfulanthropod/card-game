@@ -270,8 +270,10 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         actions: `chain(effect("doubleDamage", 2), heal(health * .1))`,
         //@ts-expect-error
         id: `quickNap`,
-        explanation:
-            'Naps.  Doubles Warhog Raider’s damage the following turn.  Heal Warhog Raider for 10% of its base health.',
+        explanation: [
+            `Warhog Raider naps.`,
+            `Warhog Raider's heals for 10% of its health and will deal double damage next turn.`,
+        ],
         name: ``,
         targetNum: 1,
         targetType: 'self',
@@ -297,7 +299,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
     },
     parasiticNibble: {
-        actions: `chain(deal(strength * .75), heal(health * .05))`,
+        actions: `chain(deal(strength * .75), heal(constitution * .05, "self"))`,
         //@ts-expect-error
         id: `parasiticNibble`,
         explanation: 'Deal 75%.  Heal for 5% of base health.',
@@ -343,9 +345,10 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
     },
-    /**Bucket of Bang Snaps*/
+    // TODO: berserk?
+    // actions: `ifDamageDealt(deal(strength), chain(queue(1, effect("berserk", 1, "self")), effect("unguarded", 1)))`,
     demolitionCharge: {
-        actions: `ifDamageDealt(deal(strength), chain(queue(effect("courageous", 1, "self"), 1), effect("tired", 1)))`,
+        actions: `ifDamageDealt(deal(strength), effect("unguarded", 1))`,
         //@ts-expect-error
         id: `demolitionCharge`,
         name: `Demolition Charge`,

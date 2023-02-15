@@ -96,277 +96,404 @@ function FloatingIntent(
     }
 }
 
+//TODO: clean these up; should be part of attack definition and not seperately created
+const startlingSpookIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    for (let i = 1; i < 5; i++) {
+        for (let j = 1; j < 5; j++) {
+            const id = `startlingSpook(${i},${j})` as NpcCommandId
+            intents[id] = {
+                id: id,
+                explanation: [
+                    `Applies <b>Unguarded</b> (${i}) and <b>Fatigued</b> (${j}) if any damage goes unblocked`,
+                ],
+            }
+        }
+    }
+    return intents
+}
+const itchyOozeIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    for (let i = 1; i < 10; i++) {
+        const id = `itchyOoze(${i})` as NpcCommandId
+        intents[id] = {
+            id: id,
+            explanation: [`Applies <b>Poisoned</b> (${i})`],
+        }
+    }
+    return intents
+}
+
+const surpriseAllergyIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    for (let i = 1; i < 6; i++) {
+        for (let j = 1; j < 3; j++) {
+            const id = `surpriseAllergy(${i},${j})` as NpcCommandId
+            intents[id] = {
+                id: id,
+                explanation: [
+                    `Applies <b>Poisoned</b> (${i}) and <b>Fatigued</b> (${j}) if any damage goes unblocked`,
+                ],
+            }
+        }
+    }
+    return intents
+}
+
+const meatyChargeIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    for (let i = 1; i < 3; i++) {
+        const id = `meatyCharge(${i})` as NpcCommandId
+        intents[id] = {
+            id: id,
+            explanation: [
+                `Applies <b>Bleed</b> (${i}) if any damage goes unblocked`,
+            ],
+        }
+    }
+    return intents
+}
+
+const bellowAndSingIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    for (let i = 1; i < 6; i++) {
+        for (let j = 1; j < 3; j++) {
+            const id = `bellowAndSing(${i},${j})` as NpcCommandId
+            intents[id] = {
+                id: id,
+                explanation: [
+                    `Applies <b>Fatigued</b> (${i})`,
+                    `Additionally applies <b>Debilitated</b> (${j}) if any damage goes unblocked`,
+                ],
+            }
+        }
+    }
+    return intents
+}
+
+const screamAndChargeIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    let screamAmounts = [100, 125, 150]
+    screamAmounts.forEach(i => {
+        for (let j = 1; j < 3; j++) {
+            const id = `screamAndCharge(${i},${j})` as NpcCommandId
+            intents[id] = {
+                id: id,
+                explanation: [`Applies <b>Unguarded</b> (${j})`],
+            }
+        }
+    })
+    return intents
+}
+
+const engulfIntents = () => {
+    //@ts-expect-error
+    let intents: Record<
+        NpcCommandId,
+        { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
+    > = {}
+    let engulfAmounts = [25, 50, 75, 100, 125, 150]
+    engulfAmounts.forEach(i => {
+        const id = `engulf(${i})` as NpcCommandId
+        intents[id] = {
+            id: id,
+            explanation: [`Applies <b>Stunned</b> (1)`],
+        }
+    })
+    return intents
+}
+
 const commandIdToMetaMap: Record<
     NpcCommandId,
     { id: NpcCommandId; src?: IntentAssetKey; explanation?: string[] }
 > = {
-    ancientStrike: {
-        id: 'ancientStrike',
-        explanation: [],
+    ...{
+        ancientStrike: {
+            id: 'ancientStrike',
+            explanation: [],
+        },
+        basicAttack: {
+            id: 'basicAttack',
+            explanation: [],
+        },
+        bigBelly: {
+            id: 'bigBelly',
+            explanation: [],
+        },
+        bigBomb1: {
+            id: 'bigBomb1',
+            src: 'intentBigBomb1',
+            explanation: [
+                'Gnome Big Bomber is charging his Big Bomb',
+                'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
+            ],
+        },
+        bigBomb2: {
+            id: 'bigBomb2',
+            src: 'intentBigBomb2',
+            explanation: [
+                'Gnome Big Bomber will throw his Big Bomb',
+                'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
+            ],
+        },
+        block: {
+            id: 'block',
+            explanation: [],
+        },
+        bucketOfBangSnaps: {
+            id: 'bucketOfBangSnaps',
+            src: 'intentBucketOfBangSnaps',
+            explanation: [
+                'Applies <b>Unready</b> (2) if any damage goes unblocked',
+            ],
+        },
+        chomp: {
+            id: 'chomp',
+            explanation: [],
+        },
+        demolitionCharge: {
+            id: 'demolitionCharge',
+            explanation: [
+                //'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
+                'Applies <b>Unguarded</b> (1) if any damage goes unblocked',
+            ],
+        },
+        evisceratingSweep: {
+            id: 'evisceratingSweep',
+            explanation: [],
+        },
+        fireCracker: {
+            id: 'fireCracker',
+            src: 'intentFireCracker',
+            explanation: ['Applies <b>Unguarded</b> (2)'],
+        },
+        gnomeBomb: {
+            id: 'gnomeBomb',
+            explanation: [
+                'Applies <b>Tired</b> (1) if any damage goes unblocked',
+            ],
+        },
+        grudge: {
+            id: 'grudge',
+            src: 'intentGrudge',
+            explanation: ['Mimic attacks for 25% of the health he has lost.'],
+        },
+        hansBuffBlock: {
+            id: 'hansBuffBlock',
+            explanation: [],
+        },
+        hansCurse: {
+            id: 'hansCurse',
+            explanation: [],
+        },
+        hansGuards: {
+            id: 'hansGuards',
+            explanation: [],
+        },
+        hansMagicMissile: {
+            id: 'hansMagicMissile',
+            explanation: [],
+        },
+        hypnosis: {
+            id: 'hypnosis',
+            explanation: [
+                'Applies <b>Debilitated<b> (1)',
+                'Adds a <b>Hypnotized</b> card to your deck for this room.',
+            ],
+        },
+        itchyOozeSpecial: {
+            id: 'itchyOozeSpecial',
+            explanation: [],
+        },
+        jab: {
+            id: 'jab',
+            explanation: [],
+        },
+        jurgenBellyFlop: {
+            id: 'jurgenBellyFlop',
+            src: 'intentBellyFlop',
+            explanation: [
+                'Bosshog Jürgen deals 1 point less for every point of damage he takes.',
+            ],
+        },
+        jurgenRollAround: {
+            id: 'jurgenRollAround',
+            src: 'intentRollAround',
+            explanation: [
+                'Bosshog Jürgen will attack twice but deals 1 point less for every point of damage he takes',
+            ],
+        },
+        jurgenSitUpon: {
+            id: 'jurgenSitUpon',
+            explanation: [
+                'Jürgen sits on and <b>debiliates</b> (2) one of your characters.',
+            ],
+        },
+        jurgenStampSnort: {
+            id: 'jurgenStampSnort',
+            explanation: [
+                'Jürgen gets very angry and stamps around in place.',
+                'He does nothing this turn but increases his base attack by 25 the following turn.',
+            ],
+        },
+        roadClosure: {
+            id: 'roadClosure',
+            src: 'intentRoadClosure',
+            explanation: [
+                'At the start of your next turn, draw 2 fewer cards than normal.',
+            ],
+        },
+        snowFort: {
+            id: 'snowFort',
+            src: 'intentSnowFort',
+            explanation: ['All enemies recieve 100% block'],
+        },
+        commonCold: {
+            id: 'commonCold',
+            src: 'intentCommonCold',
+            explanation: [
+                'All targeted Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
+                'At the start of your next turn, draw 1 fewer card than normal.',
+            ],
+        },
+        matchaMadness: {
+            id: 'matchaMadness',
+            explanation: [],
+        },
+        matchaMash: {
+            id: 'matchaMash',
+            explanation: [],
+        },
+        matchaMeld: {
+            id: 'matchaMeld',
+            explanation: [],
+        },
+        mimicAttack: {
+            id: 'mimicAttack',
+            src: 'intentMimic',
+            explanation: [
+                'Mimic attacks for the last amount of damage done to him.',
+                'If Mimic is not attacked this turn, he will attack for 999 instead.',
+            ],
+        },
+        parasiticNibble: {
+            id: 'parasiticNibble',
+            explanation: [`Heals for 5% of max health`],
+        },
+        passiveBlockCmd: {
+            id: 'passiveBlockCmd',
+            explanation: [],
+        },
+        psychicBolt: {
+            id: 'psychicBolt',
+            explanation: [
+                'Applies <b>Ungarded</b> (1) and <b>Fatigued</b> (1)',
+                'Adds a <b>Hypnotized</b> card to your deck for this room.',
+            ],
+        },
+        quickNap: {
+            id: 'quickNap',
+            explanation: [
+                `Warhog Raider naps.`,
+                `Warhog Raider's heals for 10% of its health and will deal double damage next turn.`,
+            ],
+        },
+        rest: {
+            id: 'rest',
+            explanation: [],
+        },
+        rustyPokeHigh: {
+            id: 'rustyPokeHigh',
+            explanation: [],
+        },
+        rustyPokeLow: {
+            id: 'rustyPokeLow',
+            explanation: [],
+        },
+        slash: {
+            id: 'slash',
+            explanation: [],
+        },
+        snortinTime: {
+            id: 'snortinTime',
+            src: 'intentSnortinTime',
+            explanation: ['Apply <b>Unguarded</b> (2) to all player Kaiju'],
+        },
+        spiritQuest: {
+            id: 'spiritQuest',
+            explanation: ['All enemies receive <b>Brave</b> (2)'],
+        },
+        strike: {
+            id: 'strike',
+            explanation: [],
+        },
+        surpriseAllergy: {
+            id: 'surpriseAllergy',
+            explanation: [
+                `Applies <b>Poisoned</b> (5) if any damage goes unblocked`,
+            ],
+        },
+        swordWack: {
+            id: 'swordWack',
+            explanation: [],
+        },
+        tummySlam: {
+            id: 'tummySlam',
+            explanation: [
+                'Applies <b>Tired</b> (1) if any damage goes unblocked',
+            ],
+        },
+        violentSneeze: {
+            id: 'violentSneeze',
+            explanation: ['Applies <b>Vulnerable</b> (3)'],
+        },
+        yodel: {
+            id: 'yodel',
+            src: 'intentYodel',
+            explanation: [
+                'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
+            ],
+        },
+        mimicInfectiousBite: {
+            id: 'mimicInfectiousBite',
+            src: 'intentInfectiousBite',
+            explanation: [
+                'Mimic attacks for 100%.',
+                'Apply <b>Poisoned</b> equal to 20% of unblocked damage.',
+            ],
+        },
     },
-    basicAttack: {
-        id: 'basicAttack',
-        explanation: [],
-    },
-    bigBelly: {
-        id: 'bigBelly',
-        explanation: [],
-    },
-    bigBomb1: {
-        id: 'bigBomb1',
-        src: 'intentBigBomb1',
-        explanation: [
-            'Gnome Big Bomber is charging his Big Bomb',
-            'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
-        ],
-    },
-    bigBomb2: {
-        id: 'bigBomb2',
-        src: 'intentBigBomb2',
-        explanation: [
-            'Gnome Big Bomber will throw his Big Bomb',
-            'If Gnome Big Bomber loses 40% of their starting health, they gain <b>Debilitated</b> (2).  If they lose 75% or more health, they gain <b>Stun</b> (1)',
-        ],
-    },
-    block: {
-        id: 'block',
-        explanation: [],
-    },
-    bucketOfBangSnaps: {
-        id: 'bucketOfBangSnaps',
-        src: 'intentBucketOfBangSnaps',
-        explanation: [
-            'Applies <b>Unready</b> (2) if any damage goes unblocked',
-        ],
-    },
-    chomp: {
-        id: 'chomp',
-        explanation: [],
-    },
-    demolitionCharge: {
-        id: 'demolitionCharge',
-        explanation: [
-            'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
-        ],
-    },
-    evisceratingSweep: {
-        id: 'evisceratingSweep',
-        explanation: [],
-    },
-    fireCracker: {
-        id: 'fireCracker',
-        src: 'intentFireCracker',
-        explanation: ['Applies <b>Unguarded</b> (2)'],
-    },
-    gnomeBomb: {
-        id: 'gnomeBomb',
-        explanation: ['Applies <b>Tired</b> (1) if any damage goes unblocked'],
-    },
-    grudge: {
-        id: 'grudge',
-        src: 'intentGrudge',
-        explanation: ['Mimic attacks for 25% of the health he has lost.'],
-    },
-    hansBuffBlock: {
-        id: 'hansBuffBlock',
-        explanation: [],
-    },
-    hansCurse: {
-        id: 'hansCurse',
-        explanation: [],
-    },
-    hansGuards: {
-        id: 'hansGuards',
-        explanation: [],
-    },
-    hansMagicMissile: {
-        id: 'hansMagicMissile',
-        explanation: [],
-    },
-    hypnosis: {
-        id: 'hypnosis',
-        explanation: [
-            'Deals 50% strength and applies <b>debilitated<b> (1)',
-            'Adds a <b>hypnotized</b> card to your deck for this room.',
-        ],
-    },
-    itchyOozeSpecial: {
-        id: 'itchyOozeSpecial',
-        explanation: [],
-    },
-    jab: {
-        id: 'jab',
-        explanation: [],
-    },
-    jurgenBellyFlop: {
-        id: 'jurgenBellyFlop',
-        src: 'intentBellyFlop',
-        explanation: [
-            'Bosshog Jürgen deals 1 point less for every point of damage he takes.',
-        ],
-    },
-    jurgenRollAround: {
-        id: 'jurgenRollAround',
-        src: 'intentRollAround',
-        explanation: [
-            'Bosshog Jürgen will attack twice but deals 1 point less for every point of damage he takes',
-        ],
-    },
-    jurgenSitUpon: {
-        id: 'jurgenSitUpon',
-        explanation: [
-            'Jürgen sits on and <b>debiliates</b> (2) one of your characters.',
-        ],
-    },
-    jurgenStampSnort: {
-        id: 'jurgenStampSnort',
-        explanation: [
-            'Jürgen gets very angry and stamps around in place.',
-            'He does nothing this turn but increases his base attack by 25 the following turn.',
-        ],
-    },
-    roadClosure: {
-        id: 'roadClosure',
-        src: 'intentRoadClosure',
-        explanation: [
-            'At the start of your next turn, draw 2 fewer cards than normal.',
-        ],
-    },
-    snowFort: {
-        id: 'snowFort',
-        src: 'intentSnowFort',
-        explanation: ['All enemies recieve 100% block'],
-    },
-    commonCold: {
-        id: 'commonCold',
-        src: 'intentCommonCold',
-        explanation: [
-            'All targeted Kaiju receive <b>Fatigued</b> (1) and <b>Unguarded</b> (1).',
-            'At the start of your next turn, draw 1 fewer card than normal.',
-        ],
-    },
-    matchaMadness: {
-        id: 'matchaMadness',
-        explanation: [],
-    },
-    matchaMash: {
-        id: 'matchaMash',
-        explanation: [],
-    },
-    matchaMeld: {
-        id: 'matchaMeld',
-        explanation: [],
-    },
-    mimicAttack: {
-        id: 'mimicAttack',
-        src: 'intentMimic',
-        explanation: [
-            'Mimic attacks for the last amount of damage done to him.',
-            'If Mimic is not attacked this turn, he will attack for 999 instead.',
-        ],
-    },
-    parasiticNibble: {
-        id: 'parasiticNibble',
-        explanation: [],
-    },
-    passiveBlockCmd: {
-        id: 'passiveBlockCmd',
-        explanation: [],
-    },
-    psychicBolt: {
-        id: 'psychicBolt',
-        explanation: [
-            'Attacks for 50% strength',
-            'Applies <b>ungarded</b> (1) and <b>fatigued</b> (1)',
-            'Adds a <b>hypnotized</b> card to your deck for this room.',
-        ],
-    },
-    quickNap: {
-        id: 'quickNap',
-        explanation: [],
-    },
-    rest: {
-        id: 'rest',
-        explanation: [],
-    },
-    rustyPokeHigh: {
-        id: 'rustyPokeHigh',
-        explanation: [],
-    },
-    rustyPokeLow: {
-        id: 'rustyPokeLow',
-        explanation: [],
-    },
-    slash: {
-        id: 'slash',
-        explanation: [],
-    },
-    snortinTime: {
-        id: 'snortinTime',
-        src: 'intentSnortinTime',
-        explanation: ['Apply <b>Unguarded</b> (2) to all player Kaiju'],
-    },
-    spiritQuest: {
-        id: 'spiritQuest',
-        explanation: ['All enemies receive <b>Brave</b> (2)'],
-    },
-    strike: {
-        id: 'strike',
-        explanation: [],
-    },
-    surpriseAllergy: {
-        id: 'surpriseAllergy',
-        explanation: [],
-    },
-    swordWack: {
-        id: 'swordWack',
-        explanation: [],
-    },
-    tummySlam: {
-        id: 'tummySlam',
-        explanation: [],
-    },
-    violentSneeze: {
-        id: 'violentSneeze',
-        explanation: ['Applies <b>Vulnerable</b> (3)'],
-    },
-    yodel: {
-        id: 'yodel',
-        src: 'intentYodel',
-        explanation: [
-            'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
-        ],
-    },
-
-    //matcha
-    'itchyOoze(3)': {
-        id: 'itchyOoze(3)',
-        explanation: ['Applies 3 <b>Poisoned</b>'],
-    },
-    'itchyOoze(4)': {
-        id: 'itchyOoze(4)',
-        explanation: ['Applies 4 <b>Poisoned</b>'],
-    },
-    'surpriseAllergy(2,1)': {
-        id: 'surpriseAllergy(2,1)',
-        explanation: [
-            `Applies <b>Poisoned</b> (2) and <b>Fatigued</b> (1) if any damage goes unblocked`,
-        ],
-    },
-    'surpriseAllergy(3,2)': {
-        id: 'surpriseAllergy(3,2)',
-        explanation: [
-            'Applies <b>Poisoned</b> (3) and <b>Fatigued</b> (2) if any damage goes unblocked',
-        ],
-    },
-    mimicInfectiousBite: {
-        id: 'mimicInfectiousBite',
-        src: 'intentInfectiousBite',
-        explanation: [
-            'Mimic attacks for 100%.',
-            'Apply <b>Poisoned</b> equal to 20% of unblocked damage.',
-        ],
-    },
+    ...startlingSpookIntents(),
+    ...itchyOozeIntents(),
+    ...surpriseAllergyIntents(),
+    ...meatyChargeIntents(),
+    ...bellowAndSingIntents(),
+    ...screamAndChargeIntents(),
+    ...engulfIntents(),
 }
 
 function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
@@ -408,7 +535,9 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
 
 function DebuffIntended(command: NextCommand) {
     const { commandMeta, events, infoBox } = getCommandObjects(command)
-
+    if (commandMeta.src) {
+        return []
+    }
     return [
         Container(
             {
