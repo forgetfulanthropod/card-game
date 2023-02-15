@@ -85,9 +85,11 @@ export function NewStartScreen(props: {
     }
 
     const handlePlayButtonClick = async () => {
+        console.log('Handling Play button click')
         if (!GAME_IS_LIVE) {
             return setShowClosedGameModal(true)
         }
+        console.log('Game is live')
         if (!userDoc) {
             console.warn('No User Doc')
 
@@ -109,12 +111,14 @@ export function NewStartScreen(props: {
 
             return
         }
+        console.log({userDoc})
         if (WALLET_GATED) {
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
         }
         if (userDoc.username === null && userDoc.userId) {
             return setShowUsernameModal(true)
         }
+        console.log({username: userDoc.username})
 
         props.onEnter(userDoc.userId)
         collectData('enter_game', {})

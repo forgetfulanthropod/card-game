@@ -50,6 +50,8 @@ const usernameIsValid = (username: string): boolean => {
         return false
     } else if (filter.isProfane(username)) {
         return false
+    } else if (username.indexOf(' ') >= 0 ) {
+        return false
     }
 
     return true
