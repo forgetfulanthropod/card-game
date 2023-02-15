@@ -7,7 +7,7 @@ import { evalAllAsHtml, evalAll } from './util'
 export const explain: Explainers['orb'] = args => {
     const [orbType, count] = evalAllAsHtml(args)
 
-    return `create ${count} Orbs of ${startCase(orbType)}`
+    return `create ${count} <b>Orbs of ${startCase(orbType)}</b>`
 }
 
 export const execute: Executors['orb'] = ({ dslArgs, command, scene }) => {
