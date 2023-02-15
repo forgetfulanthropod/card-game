@@ -104,11 +104,11 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
 //TODO: Adjust point values to remove decimals
 export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     ENEMY_KILLED: {
-        description: 'Number of enemies defeated',
-        shortDescription: 'Enemies Defeated',
+        description: 'Aggregate enemy level of all enemies defeated',
+        shortDescription: 'Combat Score',
         pointValue: 1,
         attributeName: 'enemiesKilled',
-        keyword: 'Enemies Defeated',
+        keyword: 'Combat Score',
     },
     EXIT_ROOM_FULL_HEALTH: {
         description:
