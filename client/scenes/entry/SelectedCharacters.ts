@@ -133,10 +133,12 @@ function Characters(charactersData: SelectedCharacters) {
                         MainCharacterAnimation({
                             characterMeta: c,
                             events: {
+                                pointerover() {},
                                 pointerout() {
                                     // only un-hover on bg click...
                                 },
                                 pointerup() {
+                                    hoveredCharacterUid.set(c.uid)
                                     selectedCharacterPlaceIndex.set(
                                         i as CharacterPlaceIndex
                                     )
