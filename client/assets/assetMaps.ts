@@ -294,7 +294,8 @@ export const spineAssets = {
     warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
     frostHogSpine: 'SKIN: warhogSkinsSpine -> 5',
 
-    mimicNPCSpine: 'spines/characters/mimicNPC/Mimic.json',
+    mimicSkinsSpine: 'spines/characters/mimicNPC/Mimic.json',
+    mimicNPCSpine: 'SKIN: mimicSkinsSpine -> 1',
 
     gnomeSkinsSpine: 'spines/characters/gnomeHooligan/Gnome_Hooligan.json',
     gnomeHooliganSpine: 'SKIN: gnomeSkinsSpine -> 3',
@@ -573,13 +574,36 @@ export const mapTileAssets = {
 export type EventAssetKey = keyof typeof eventAssets
 
 export const eventAssets = {
-    eventGradient: 'events/event overlay.webp',
-    eventFrogCarriageMainGraphic: 'events/Frog Carriage/main.webp',
+    eventGradient: 'events/Event Overlay_.webp',
+    eventFrogCarriageMainGraphic: 'events/Frog Carriage/Layer 47.webp',
     eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage Prompt 1.webp',
     eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage Prompt 2.webp',
     eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
     eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Choice 2.webp',
     eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Choice 3.webp',
+
+    eventCursedStatueMainGraphic: 'events/Cursed Statue/Cursed Statue.webp',
+    eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
+    eventCursedStatueChoice1:
+        'events/Cursed Statue/Cursed Statue Choice 1.webp',
+    eventCursedStatueChoice2:
+        'events/Cursed Statue/Cursed Statue Choice 2.webp',
+    eventCursedStatueChoice3:
+        'events/Cursed Statue/Cursed Statue Choice 3.webp',
+    eventCursedStatuePostChoice1:
+        'events/Cursed Statue/Cursed Statue Post Choice 1.webp',
+    eventCursedStatuePostChoice2:
+        'events/Cursed Statue/Cursed Statue Post Choice 2.webp',
+    eventCursedStatuePostChoice3:
+        'events/Cursed Statue/Cursed Statue Post Choice 3.webp',
+    // eventCursedStatueGuide: 'events/Cursed Statue/Cursed Statue Guide.webp',
+    // eventCursedStatue: 'events/Cursed Statue/Cursed Statue.webp',
+    // Leave without touching the statue.webp',
+    // eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
+    // eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue Prompt 2.webp',
+    // eventCursedStatueChoice1: 'events/Cursed Statue/CursedStatue Choice 1.webp',
+    // eventCursedStatueChoice2: 'events/Cursed Statue/CursedStatue Choice 2.webp',
+    // eventCursedStatueChoice3: 'events/Cursed Statue/CursedStatue Choice 3.webp',
 }
 
 export const userAvatarAssets = {

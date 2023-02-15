@@ -226,7 +226,7 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
             scale: displayWidth / baseTexture.width,
             anchor: [0.5, 0.42],
             events: {
-                pointerdown() {
+                pointerup() {
                     if (~choice) void callApi('nextRoom', { choice })
                 },
                 pointerover() {

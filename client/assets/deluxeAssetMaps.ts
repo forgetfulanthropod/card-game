@@ -49,10 +49,11 @@ export const musicAssets = {
     battleMusicHooligansBluffTierTwo:
         'music/Main Theme Variants/hooligans_bluff_combat->tierTwo.mp3',
     battleMusicHooligansBluffTierThreeAndFour:
-        'music/Main Theme Variants/hooligans_bluff_combat->tierThreeAndFour.mp3',
+        'music/Main Theme Variants/hooligans_bluff_combat->tierThreeAndFour_.mp3',
     bossBattleMusicHooligansBluff: 'music/Main Theme Variants/boss_battle_.mp3',
     roomVictoryMusicHooligansBluff: 'music/Room_Victory.mp3',
     defeatMusicHooligansBluff: 'music/defeat song_v1.mp3',
+    restSiteMusicHooligansBluff: 'music/rest_site.mp3',
     runVictoryMusicHooligansBluff: 'music/entire_run_victory_song_v1.mp3',
 }
 

@@ -1,7 +1,9 @@
 import { collectData } from '@/analytics/collectData'
 import { callApi } from '@/callApi'
+import { getBattleScene } from '@/data'
 import {
     Adjust,
+    AssetKey,
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
@@ -22,8 +24,14 @@ import { SpineBackground } from '../background'
 export function EventScene(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Event Scene' })
     const eventPromptIndexDatum = datum(0)
+    const eventId = getBattleScene().get('currentRoom', 'event')?.id
+
+    if (eventId == null)
+        throw new Error('trying to render event scene without event ID')
+
+    const eventIdUpperFirst = upperFirst(eventId)
     const eventPromptKeys = keys(eventAssets).filter(k =>
-        k.includes('FrogCarriagePrompt')
+        k.includes(`${eventIdUpperFirst}Prompt`)
     )
 
     const eventGradient = Sprite({
@@ -53,10 +61,11 @@ export function EventScene(): PixiContainer {
         ),
         eventGradient,
         Sprite({
-            src: 'eventFrogCarriageMainGraphic',
+            src: `event${eventIdUpperFirst}MainGraphic` as AssetKey,
             scale:
                 (BASE_HEIGHT * 0.5) /
-                getTexture('eventFrogCarriageMainGraphic').height,
+                getTexture(`event${eventIdUpperFirst}MainGraphic` as AssetKey)
+                    .height,
             anchor: [0.5, 1],
             x: BASE_WIDTH / 2,
             y: BASE_HEIGHT * 0.65,
@@ -65,7 +74,7 @@ export function EventScene(): PixiContainer {
             const eventPromptKey = eventPromptKeys[eventPromptIndex]
 
             if (eventPromptKey) return PromptSprite(eventPromptKey)
-            else return Choices('frogCarriage')
+            else return Choices(eventId)
         })
     )
 }

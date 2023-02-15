@@ -1,7 +1,7 @@
 import { Texture } from 'pixi.js'
 import { datum } from 'datums'
 import { Explanation } from '@sharedElements'
-import { glowFilter, PixiContainer } from '@/elementsUtil'
+import { glowFilter, loopSong, PixiContainer } from '@/elementsUtil'
 import {
     If,
     BASE_WIDTH,
@@ -26,6 +26,8 @@ export const plushyChoiceDescriptions = [
 export function RestSiteOverlay(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Rest Site' })
     const animations: AnimationId[] = ['Position 3', 'Position 2', 'Position 1']
+
+    loopSong('restSiteMusicHooligansBluff')
 
     const xya = {
         x: BASE_WIDTH * 0.5,

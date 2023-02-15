@@ -540,13 +540,13 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '6_14': {
                 uid: '6_14',
                 enemies: [],
-                category: 'tierThree',
+                category: 'tierTwo',
                 edges: ['', '', '7_13', ''],
             },
             '7_7': {
                 uid: '7_7',
                 enemies: [],
-                category: 'events',
+                category: 'restSite',
                 edges: ['', '8_8', '', ''],
             },
             '7_11': {
