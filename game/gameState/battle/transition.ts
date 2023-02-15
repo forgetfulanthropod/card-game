@@ -15,8 +15,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const gameIsOver = !!scene.get('currentRoom').enemies.find(e => e.boss)
 
     if (winner) {
-        // remove quick-footed for now
-        // checkServerScoringEvent('STANCE_CHANGES_OVER', scene, {})
+        checkServerScoringEvent('STANCE_CHANGES_UNDER', scene, {})
         calculateNewRunScore(scene)
         calculateChestProgress(scene)
         scene.set('numRequiredToDiscard', 0)

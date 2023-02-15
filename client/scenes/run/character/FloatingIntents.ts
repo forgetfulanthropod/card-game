@@ -162,6 +162,7 @@ const meatyChargeIntents = () => {
         const id = `meatyCharge(${i})` as NpcCommandId
         intents[id] = {
             id: id,
+            src: 'intentMeatyCharge',
             explanation: [
                 `Applies <b>Bleed</b> (${i}) if any damage goes unblocked`,
             ],
@@ -181,6 +182,7 @@ const bellowAndSingIntents = () => {
             const id = `bellowAndSing(${i},${j})` as NpcCommandId
             intents[id] = {
                 id: id,
+                src: 'intentBellowAndSing',
                 explanation: [
                     `Applies <b>Fatigued</b> (${i})`,
                     `Additionally applies <b>Debilitated</b> (${j}) if any damage goes unblocked`,
@@ -203,6 +205,7 @@ const screamAndChargeIntents = () => {
             const id = `screamAndCharge(${i},${j})` as NpcCommandId
             intents[id] = {
                 id: id,
+                src: 'intentScreamAndStomp',
                 explanation: [`Applies <b>Unguarded</b> (${j})`],
             }
         }
@@ -277,6 +280,7 @@ const commandIdToMetaMap: Record<
         },
         demolitionCharge: {
             id: 'demolitionCharge',
+            src: 'intentDemolitionCharge',
             explanation: [
                 //'If any damage goes unblocked, Gnome Prospector gains <b>Berserk</b> (1) and the target gains <b>Unguarded</b> (1)',
                 'Applies <b>Unguarded</b> (1) if any damage goes unblocked',
@@ -320,6 +324,7 @@ const commandIdToMetaMap: Record<
         },
         hypnosis: {
             id: 'hypnosis',
+            src: 'intentHypnosis',
             explanation: [
                 'Applies <b>Debilitated<b> (1)',
                 'Adds a <b>Hypnotized</b> card to your deck for this room.',

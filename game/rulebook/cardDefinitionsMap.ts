@@ -618,7 +618,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthymagicy = 0.75 * magic + 0.6 * strength;
             chain(
                 deal(strengthymagicy),
-                modifyStats("magic", magicy1, "turn")
+                modifyStats("magic", magicy1, "turn", "self")
             )`,
         type: 'attack',
         characterClass: 'cleric',

@@ -89,5 +89,13 @@ export const showScoreUpdateNotification = ({
                 'swordShield',
                 scorePointsToAdd
             )
+            break
+        case 'STANCE_CHANGES_UNDER':
+        default:
+            displayScoreNotification(
+                RUN_SCORE_EVENT_META[event].keyword,
+                'swordShield',
+                scorePointsToAdd
+            )
     }
 }
