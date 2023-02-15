@@ -554,13 +554,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         actions: `chain(
             draw(1),
-            queue(
-                1,
-                chain(
-                    addEnergy(2),
-                    draw(2)
-                )
-            ),
+            queue(1, addEnergy(1)),
+            drawSizeChange(2),
             momentary()
         )`,
         type: 'utility',

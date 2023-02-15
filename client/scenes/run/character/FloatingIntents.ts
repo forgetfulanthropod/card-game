@@ -364,7 +364,7 @@ const commandIdToMetaMap: Record<
         src: 'intentInfectiousBite',
         explanation: [
             'Mimic attacks for 100%.',
-            'Apply <b>Poisoned</b> equal to the amount of unblocked damage.',
+            'Apply <b>Poisoned</b> equal to 20% of unblocked damage.',
         ],
     },
 }
