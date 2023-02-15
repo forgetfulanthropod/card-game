@@ -95,7 +95,7 @@ const eventEnemies: RoomEnemies[] = [
     ],
     [
         {
-            id: 'frostHog',
+            id: 'warhog',
             level: 3,
         },
         {
@@ -103,7 +103,7 @@ const eventEnemies: RoomEnemies[] = [
             level: 3,
         },
         {
-            id: 'frostHog',
+            id: 'groghog',
             level: 3,
         },
     ],
@@ -168,7 +168,7 @@ const roomOptions: Record<
         ],
         [
             {
-                id: 'frostHog',
+                id: 'plaguehog',
                 level: 1,
             },
             {
@@ -324,7 +324,7 @@ const roomOptions: Record<
                 level: 4,
             },
             {
-                id: 'frostHog',
+                id: 'warhog',
                 level: 4,
             },
             {
@@ -334,11 +334,11 @@ const roomOptions: Record<
         ],
         [
             {
-                id: 'frostHog',
+                id: 'groghog',
                 level: 6,
             },
             {
-                id: 'frostHog',
+                id: 'warhog',
                 level: 6,
             },
         ],
@@ -348,11 +348,11 @@ const roomOptions: Record<
                 level: 4,
             },
             {
-                id: 'plaguehog',
+                id: 'warhog',
                 level: 4,
             },
             {
-                id: 'plaguehog',
+                id: 'groghog',
                 level: 4,
             },
         ],
@@ -380,7 +380,7 @@ const roomOptions: Record<
                 level: 4,
             },
             {
-                id: 'frostHog',
+                id: 'groghog',
                 level: 3,
             },
         ],
