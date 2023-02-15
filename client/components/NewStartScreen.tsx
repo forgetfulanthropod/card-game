@@ -11,12 +11,13 @@ import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
 import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
-import { UserID } from 'shared'
+import { BUILD_VER, UserID } from 'shared'
 import { TutorialModal } from './StartScreen/TutorialModal'
 import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { collectData, initAnalytics } from '@/analytics/collectData'
 import { ClosedGameModal } from './StartScreen/ClosedGameModal'
+import { UsernameModal } from './StartScreen/UsernameModal'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
 export const WALLET_GATED = process.env.WALLET_GATED
@@ -27,6 +28,7 @@ export type UserDoc = {
     walletAddress: string
     numKaijusOwned: number
     userId: UserID
+    username: string | null
 } | null
 
 export function NewStartScreen(props: {
@@ -54,6 +56,7 @@ export function NewStartScreen(props: {
     const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
     const [showClosedGameModal, setShowClosedGameModal] = useState(false)
+    const [showUsernameModal, setShowUsernameModal] = useState(false)
 
     useEffect(() => {
         collectData('ui_ux_view', {
@@ -63,15 +66,15 @@ export function NewStartScreen(props: {
 
     const initUserDoc = async (solanaRPC: SolanaRPC) => {
         const walletAddress = solanaRPC.publicKey
-        const userIdRes = await callServerApi('login', { walletAddress })
-        if (!userIdRes) {
+        const { userId, username } = await callServerApi('login', { walletAddress })
+        if (!userId) {
             return window.alert(
                 'Something went wrong. Please logging in try again.'
             )
         }
-        const { userId } = userIdRes
+        console.log({userId, username})
         const numKaijusOwned = await solanaRPC.getKaijusOwnedByUser()
-        setUserDoc({ walletAddress, numKaijusOwned, userId })
+        setUserDoc({ walletAddress, numKaijusOwned, userId, username })
         setIsLoggedIn(true)
         console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
 
@@ -90,23 +93,27 @@ export function NewStartScreen(props: {
 
             if (!WALLET_GATED) {
                 const walletAddress = Math.random().toString().slice(2)
-                const {userId} = await callServerApi('login', { walletAddress })
+                const {userId, username} = await callServerApi('login', { walletAddress })
 
                 setUserDoc({
                     walletAddress,
                     numKaijusOwned: 1,
                     userId,
+                    username
                 })
             }
-
             const connectWalletButton = document.getElementsByClassName('WalletMultiButton')
             //@ts-expect-error
             connectWalletButton[0].click() // opens wallet modal
+
 
             return
         }
         if (WALLET_GATED) {
             if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
+        }
+        if (userDoc.username === null && userDoc.userId) {
+            return setShowUsernameModal(true)
         }
 
         props.onEnter(userDoc.userId)
@@ -118,6 +125,7 @@ export function NewStartScreen(props: {
         collectData('tutorial_begin', {})
     }
 
+    // TODO: refactor modals into HOC
     return <>
         {showGateModal && <WalletGateModal
             setShowGateModal={setShowGateModal}
@@ -126,6 +134,12 @@ export function NewStartScreen(props: {
         {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
         {showClosedGameModal && <ClosedGameModal
             setShowModal={setShowClosedGameModal}
+        />}
+        {showUsernameModal && <UsernameModal
+            setShowModal={setShowUsernameModal}
+            userDoc={userDoc}
+            setUserDoc={setUserDoc}
+            onSuccess={props.onEnter}
         />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
@@ -144,7 +158,7 @@ export function NewStartScreen(props: {
                 <div className='flex flex-col items-center w-1/6 cursor-pointer hover:scale-105 transition text-white '>
                     <img src='./logos/KaijuCards.png' />
                     <p className='uppercase pt-4 font-bigFont text-sm md:text-base tracking-widest text-stone-300 text-center opacity-50'>
-                        closed alpha
+                        closed alpha {BUILD_VER}
                     </p>
                 </div>
                 <div className='navRight flex justify-between sm:pl-12 xs:pl-6 items-start w-full pt-4 md:pt-6'>

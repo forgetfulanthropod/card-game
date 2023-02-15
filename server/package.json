@@ -2,8 +2,9 @@
     "name": "server",
     "version": "1.0.0",
     "dependencies": {
-        "classic-level": "^1.2.0",
         "@influxdata/influxdb-client": "^1.33.0",
+        "bad-words": "^3.0.4",
+        "classic-level": "^1.2.0",
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "game": "1.0.0",
@@ -12,5 +13,8 @@
         "shared": "1.0.0",
         "slonik": "33",
         "socket.io": "^4.5.1"
+    },
+    "devDependencies": {
+        "@types/bad-words": "^3.0.1"
     }
 }

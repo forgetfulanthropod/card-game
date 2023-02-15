@@ -24,6 +24,7 @@ import {
     MAX_LEADERBOARD_PAGE,
     LeaderboardTimeframe,
     LEADERBOARD_ENTRIES_TO_DISPLAY,
+    Username,
 } from 'shared'
 import {  filters } from 'pixi.js'
 import { keys, sortBy } from 'lodash'
@@ -65,6 +66,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
 
     const LeaderboardEntry = (
         walletAddress: string,
+        username: Username | null,
         highScore: number,
         endTime: number,
         inScreenIdx: number,
@@ -178,11 +180,11 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                   }),
             Text({
                 text:
-                    getShortWalletAddress(walletAddress) +
+                    (username ?? getShortWalletAddress(walletAddress)) +
                     (isSelf ? ' (YOU)' : ''),
-                y: y - 10,
-                x: x - 400,
-                style,
+                y: y - 8,
+                x: x - 450,
+                style: { ...style, fontSize: 20},
             }),
             Sprite({
                 src: isSelf
@@ -191,7 +193,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                           10 * Math.random()
                       )}` as AssetKey),
                 y: y - 20,
-                x: x - 460,
+                x: x - 520,
                 scale: 0.5,
             }),
             Text({
@@ -243,6 +245,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 LeaderboardEntries.addChild(
                     LeaderboardEntry(
                         entry.wallet_address,
+                        entry.username,
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
@@ -260,6 +263,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 LeaderboardSelfEntry.addChild(
                     LeaderboardEntry(
                         entry.wallet_address,
+                        entry.username,
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,

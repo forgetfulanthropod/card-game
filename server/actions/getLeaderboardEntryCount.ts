@@ -13,6 +13,6 @@ export const getLeaderboardEntryCount: ServerActions['getLeaderboardEntryCount']
         FROM
             user_run
     `)
-    logger.info(`Total leaderboard entry count: ${0}`)
+    logger.info(`Total leaderboard entry count: ${count}`)
     return {count}
 }

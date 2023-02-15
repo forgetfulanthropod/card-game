@@ -50,7 +50,7 @@ export const sql = createSqlTag({
         }),
         userInfo: z.object({
             user_id: z.string(),
-            username: z.nullable(z.string())
+            username: z.nullable(z.string()),
         }),
         id: z.object({
             id: z.number(),
@@ -63,6 +63,7 @@ export const sql = createSqlTag({
         leaderboard: z.object({
             user_id: z.string(),
             wallet_address: z.string(),
+            username: z.nullable(z.string()),
             max_score: z.number(),
             start_ts: z.number(),
             end_ts: z.number(),
@@ -70,6 +71,9 @@ export const sql = createSqlTag({
             is_self: z.boolean(),
             leaderboard_rank: z.number(),
             adjusted_rank: z.number(),
+        }),
+        count: z.object({
+            count: z.number(),
         }),
     },
 })

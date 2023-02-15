@@ -1,11 +1,13 @@
 type buttonType = 'primary' | 'secondary' | 'default' | 'white'
 type buttonSize = 'small' | 'medium' | 'large'
+import { TailSpin } from 'react-loading-icons'
 
 export const PrimaryButton = (props: {
     text: string
     type: buttonType
     size: buttonSize
     onClick?: (...args: any) => unknown
+    isLoading?: boolean
 }) => {
     const colorClass =
         props.type === 'primary'
@@ -24,13 +26,17 @@ export const PrimaryButton = (props: {
             : props.size === 'medium'
             ? 'px-3 text-sm sm:py-1 sm:px-5 sm:text-xl xl:py-3 xl:px-10 xl:text-3xl 2xl:text-5xl'
             : props.size === 'small'
-            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-base sm:py-3 sm:px-3 sm:text-md xl:py-5 xl:text-2xl 2xl:py-6 2xl:text-5xl'
+            ? 'py-1 px-2 text-xs 2xs:py-2 2xs:px-4 2xs:text-base sm:py-3 sm:px-3 sm:text-md  xl:text-xl  2xl:text-4xl'
             : ''
 
     return <button
         onClick={props.onClick}
-        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl whitespace-nowrap ${colorClass} ${sizeClass} filter hover:brightness-95`}
+        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl whitespace-nowrap ${colorClass} ${sizeClass} filter hover:brightness-95 flex justify-center`}
     >
-        <p className='uppercase'>{props.text}</p>
+        {props.isLoading ? (
+            <TailSpin speed={2} strokeWidth={2.5} />
+        ) : (
+            <p className='uppercase'>{props.text}</p>
+        )}
     </button>
 }

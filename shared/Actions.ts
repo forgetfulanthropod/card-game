@@ -20,6 +20,7 @@ import type {
     MappedLeaderboards,
     ScoreTags,
     UserInfo,
+    Username,
 } from './tree'
 
 export interface BareServerActionsMeta {
@@ -62,6 +63,10 @@ export interface BareServerActionsMeta {
     getLeaderboardEntryCount: {
         args: Empty
         res: Promise<{ count: number }>
+    }
+    setUsername: {
+        args: { userId: UserID; username: Username }
+        res: Promise<{ result: 'success' | 'failure' }>
     }
 }
 

@@ -45,6 +45,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                             ELSE false
                         END AS is_self,
                         i.wallet_address,
+                        i.username,
                         s.max_score,
                         u.start_ts,
                         u.end_ts,
@@ -76,7 +77,8 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                         u.end_ts,
                         u.run_id,
                         s.max_score,
-                        i.wallet_address
+                        i.wallet_address,
+                        i.username
                 )
                 ,
                 user_run_leaderboards_unique AS
