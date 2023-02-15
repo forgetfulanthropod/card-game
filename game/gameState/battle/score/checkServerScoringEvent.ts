@@ -230,18 +230,25 @@ const checkDamageDealtInTurn = (scene: BattleCursor) => {
 
 const checkStanceChanges = (scene: BattleCursor) => {
     trackStanceChanges(scene) // used for final turn update
-    const STANCE_CHANGES_THRESHOLD = 5
+    // const STANCE_CHANGES_THRESHOLD = 5
     const stanceChanges = scene.get('stanceChangesThisRoom')
     if (stanceChanges.length === 0) {
-        incrementRunScoreAttribute(scene, 'roomsZeroStanceChanges')
-    } else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
-        updateRunScoreAttribute(
+        updateScore({
             scene,
-            'stanceChangesOverThreshold',
-            stanceChanges.length - STANCE_CHANGES_THRESHOLD,
-            true
-        )
+            event: 'STANCE_CHANGES_UNDER',
+            count: 1,
+            notify: true,
+        })
     }
+    // currently removed quicked-footed
+    // else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
+    //     updateRunScoreAttribute(
+    //         scene,
+    //         'stanceChangesOverThreshold',
+    //         stanceChanges.length - STANCE_CHANGES_THRESHOLD,
+    //         true
+    //     )
+    // }
 }
 
 const checkCardsOverThreshold = (scene: BattleCursor) => {

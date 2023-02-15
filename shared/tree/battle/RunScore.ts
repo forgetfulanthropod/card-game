@@ -55,6 +55,7 @@ export type NotifiableEvent =
     | 'BOSS_KILLED'
     | 'OVERKILL'
     | 'PERFECT_KILL'
+    | 'STANCE_CHANGES_UNDER'
     | 'EXIT_ROOM_FULL_HEALTH'
     | 'EXIT_BOSS_FULL_HEALTH'
     | 'EXIT_BOSS_LOW_DAMAGE'
@@ -70,7 +71,6 @@ export type NonNotifiableEvent =
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
     | 'STANCE_CHANGES_OVER'
-    | 'STANCE_CHANGES_UNDER'
     | 'CARDS_OVER_THRESHOLD'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
