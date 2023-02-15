@@ -82,6 +82,7 @@ interface BareGameActionArgs {
     openEndOfRun: Empty
     nextRoom: { choice: 0 | 1 | 2 | 3 }
     choosePlushy: { index: number }
+    chooseEventResponse: { index: number }
     placeSelectedCharacters: {
         characters: {
             allCharacterOptionsIndex: number

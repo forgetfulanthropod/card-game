@@ -1,4 +1,5 @@
 import { collectData } from '@/analytics/collectData'
+import { callApi } from '@/callApi'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -12,6 +13,7 @@ import {
     Sprite,
 } from '@/elementsUtil'
 import { datum } from 'datums'
+import { upperFirst } from 'lodash'
 import { KawaseBlurFilter } from 'pixi-filters'
 import { EventId } from 'shared'
 import { keys } from 'shared/code'
@@ -24,6 +26,21 @@ export function EventScene(): PixiContainer {
         k.includes('FrogCarriagePrompt')
     )
 
+    const eventGradient = Sprite({
+        src: 'eventGradient',
+        height: BASE_HEIGHT,
+        width: BASE_WIDTH,
+        events: {
+            pointerup() {
+                if (eventPromptIndexDatum.val < eventPromptKeys.length)
+                    eventPromptIndexDatum.set(eventPromptIndexDatum.val + 1)
+
+                if (eventPromptIndexDatum.val >= eventPromptKeys.length)
+                    eventGradient.interactive = false
+            },
+        },
+    })
+
     return Container(
         {},
         Adjust(
@@ -34,17 +51,7 @@ export function EventScene(): PixiContainer {
                 filters: [new KawaseBlurFilter(1)],
             }
         ),
-        Sprite({
-            src: 'eventGradient',
-            height: BASE_HEIGHT,
-            width: BASE_WIDTH,
-            events: {
-                pointerup() {
-                    if (eventPromptIndexDatum.val < eventPromptKeys.length)
-                        eventPromptIndexDatum.set(eventPromptIndexDatum.val + 1)
-                },
-            },
-        }),
+        eventGradient,
         Sprite({
             src: 'eventFrogCarriageMainGraphic',
             scale:
@@ -75,19 +82,27 @@ function PromptSprite(eventPromptKey: EventAssetKey) {
 
 function Choices(eventId: EventId) {
     const choiceAssetKeys = keys(eventAssets).filter(k =>
-        k.includes(`${eventId}Choice`)
+        k.includes(`${upperFirst(eventId)}Choice`)
     )
     console.log({ choiceAssetKeys })
 
     return Container(
         {},
-        ...choiceAssetKeys.map(choiceAssetKey =>
+        ...choiceAssetKeys.map((choiceAssetKey, index) =>
             Sprite({
                 src: choiceAssetKey,
                 anchor: [0.5, 1],
-                scale: (BASE_WIDTH * 0.6) / getTexture(choiceAssetKey).width,
-                x: BASE_WIDTH / 2,
+                scale:
+                    (BASE_WIDTH * 0.8) /
+                    choiceAssetKeys.length /
+                    getTexture(choiceAssetKey).width,
+                x: (BASE_WIDTH * (1 + index * 2)) / choiceAssetKeys.length / 2,
                 y: BASE_HEIGHT * 0.9,
+                events: {
+                    pointerup() {
+                        callApi('chooseEventResponse', { index })
+                    },
+                },
             })
         )
     )

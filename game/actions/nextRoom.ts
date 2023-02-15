@@ -6,10 +6,13 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
-import type { BattleCursor, DungeonRoom, GameActions } from 'shared'
+import {
+    BattleCursor,
+    disableEventScene,
+    DungeonRoom,
+    GameActions,
+} from 'shared'
 import { objFilter } from 'shared/code'
-
-const disableEventScene = true
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -35,11 +38,12 @@ export const nextRoom: GameActions['nextRoom'] = args => {
             scene.get('currentRoom', 'category') === 'restSite'
         )
 
-        if (!disableEventScene)
+        if (!disableEventScene) {
             scene.set(
                 'isInEventScene',
                 scene.get('currentRoom', 'category') === 'events'
             )
+        }
     }
 
     scene.set('isInMap', false)

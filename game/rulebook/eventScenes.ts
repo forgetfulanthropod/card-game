@@ -1,24 +1,6 @@
-import { SouvenirId } from './Souvenir'
+import { EventId, EventScene } from 'shared/tree/EventScene'
 
-export type EventSceneMap = Record<EventId, Event>
-
-export type EventId =
-    | 'frogCarriage'
-    | 'cursedStatue'
-    | 'gnomeStory'
-    | 'gnomeTooth'
-    | 'hogCoveredInClowns'
-
-export type Event = {
-    id: EventId
-    choices: EventChoice[]
-}
-
-export type EventChoice = {
-    souvenirId: SouvenirId | null
-}
-
-export const eventScenes: Record<EventId, Event> = {
+export const eventScenes: Record<EventId, EventScene> = {
     frogCarriage: {
         id: 'frogCarriage',
         choices: [
@@ -47,17 +29,17 @@ export const eventScenes: Record<EventId, Event> = {
             },
         ],
     },
-    gnomeStory: {
-        id: 'gnomeStory',
-        choices: [
-            // {
-            //     souvenirId: 'nightmareBiscuit',
-            // },
-            // {
-            //     souvenirId: 'glassOfWarmMilk',
-            // },
-        ],
-    },
+    // gnomeStory: {
+    //     id: 'gnomeStory',
+    //     choices: [
+    //         {
+    //             souvenirId: 'nightmareBiscuit',
+    //         },
+    //         {
+    //             souvenirId: 'glassOfWarmMilk',
+    //         },
+    //     ],
+    // },
     gnomeTooth: {
         id: 'gnomeTooth',
         choices: [
