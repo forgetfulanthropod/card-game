@@ -280,7 +280,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Sword Slash',
         energy: 1,
         id: 'swordSlash',
-        targetNum: 1,
+        targetNum: -1,
         targetType: 'allEnemies',
         actions: `
             strengthy = 0.4 * strength;
