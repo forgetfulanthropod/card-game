@@ -716,7 +716,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                effect("stun",1),
+                effect("stunned",1),
                 effect("vulnerable",2),
                 discardRandom(2),
                 momentary()
