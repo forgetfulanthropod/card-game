@@ -245,11 +245,12 @@ export function EndOfRoom(): PixiContainer {
                 x: 0,
                 y: lootItemTextY,
                 style: {
-                    fontSize: 60 * scale,
+                    fontSize: 50 * scale,
                     fill: 'white',
                     padding: 4,
                     align: 'center',
                     fontWeight: 'bold',
+                    fontFamily: 'bigFont'
                 },
                 name: 'LootItemText',
             })

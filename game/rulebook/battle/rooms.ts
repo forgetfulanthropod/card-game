@@ -496,6 +496,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                     {
                         id: 'mimic',
                         level: 5,
+                        boss: true
                     },
                 ],
                 category: 'bosses',

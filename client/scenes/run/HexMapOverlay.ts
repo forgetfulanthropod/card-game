@@ -36,7 +36,7 @@ import { getBattleScene } from '@/data'
 import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
 import { Background } from '../background'
-import { intersection, mean, sample } from 'lodash'
+import { intersection, mean, sample, union } from 'lodash'
 import { ROCursor } from 'sbaobab'
 import { collectData } from '@/analytics/collectData'
 import { Easing, Tweener } from 'pixi-tweener'
@@ -73,7 +73,7 @@ export function HexMapOverlay(): PixiContainer {
         // }),
         Sprite({
             src: getTexture('hooligansBluffLogo'),
-            scale: 0.3,
+            scale: 0.6,
             x: 50,
             y: 50,
         }),
@@ -174,7 +174,9 @@ function AllTiles(): PixiContainer[] {
             depthsAndYOffsets.push([depth, yOffset])
         else return
 
-        allTiles.push(TileForNode(node, depth, yOffset))
+        const allEdges = getAllEdges(node)
+
+        allTiles.push(TileForNode(node, depth, yOffset, allEdges))
     }
 }
 
@@ -201,8 +203,15 @@ function sortNodes(allTiles: PixiContainer[]) {
 // }
 const darkenFilter = new AdjustmentFilter({ brightness: 0.5 })
 
-function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
-    const baseTexture = getTexture(`mapTileBase`)
+function TileForNode(
+    node: DungeonRoom,
+    depth: number,
+    yOffset: number,
+    allEdges: string
+) {
+    const baseTexture = getTexture(
+        roomContainsBoss(node) ? 'mapTileBoss' : 'mapTileBase'
+    )
     const decorationTexture = getGenerativeTileTexture(node.uid)
     const displayWidth = BASE_WIDTH * 0.12
 
@@ -240,15 +249,15 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                             y: rootYPlacement - 33,
                         }
                     )
-                    // if (~choice) {
-                    //     // root.filters = [glowFilter]
+                    if (~choice) {
+                        root.filters = [glowFilter]
 
-                    // }
+                    }
+                    // unfilterTileById(root.parent, node.uid)
 
                     //DEBUG
-                    unfilterTileById(root.parent, node.uid)
-                    if (!isPlayerCharacterRoom)
-                        highlightPossiblePaths(root, node)
+                    // if (!isPlayerCharacterRoom)
+                        // highlightPossiblePaths(root, node)
                 },
                 pointerout() {
                     Tweener.add(
@@ -261,15 +270,14 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
                             y: rootYPlacement,
                         }
                     )
-                    // if (~choice) {
-                    //     // root.filters = filters
+                    if (~choice) {
+                        root.filters = []
+                    }
 
-                    // }
-
-                    //DEBUG
-                    if (!~choice && !isPlayerCharacterRoom)
-                        darkenTileById(root.parent, node.uid)
-                    if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
+                    // //DEBUG
+                    // if (!~choice && !isPlayerCharacterRoom)
+                    //     darkenTileById(root.parent, node.uid)
+                    // if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
                 },
             },
             // alpha: node == null ? 0.4 : 1,
@@ -279,6 +287,11 @@ function TileForNode(node: DungeonRoom, depth: number, yOffset: number) {
             src: decorationTexture,
             scale: displayWidth / decorationTexture.width,
             anchor: [0.5, 0.42],
+        }),
+        Sprite({
+            src: `mapTilePath${allEdges}` as AssetKey,
+            scale: 1.7,
+            anchor: [0.5, 0.4],
         }),
         TileContents(node)
     )
@@ -352,7 +365,7 @@ function highlightPossiblePaths(root: PixiContainer, node: DungeonRoom) {
         if (!edgeKey) return
         unfilterTileById(root.parent, edgeKey)
 
-        highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
+        // highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
     })
 }
 
@@ -388,15 +401,15 @@ function TileContents(node: DungeonRoom | null) {
     if (!isPlayerCharacterRoom && node.category === 'events')
         return Sprite({
             src: 'mapEventSite',
-            anchor: [0.5, 0.65],
-            scale: 0.7,
+            anchor: [0.5, 0.6],
+            scale: 0.5,
         })
 
     if (!isPlayerCharacterRoom && node.category?.includes('tier'))
         return Sprite({
             src: `${node.category}Icon` as AssetKey,
-            scale: 1,
-            anchor: [0.5, 0.65],
+            scale: 0.75,
+            anchor: [0.5, 0.6],
         })
 
     return TileCharacters(node)
@@ -425,7 +438,7 @@ function TileCharacters(node: DungeonRoom): PixiContainer {
     return Adjust(
         AnimatedCharacters(node, isPlayerCharacterRoom, scene, choice),
         {
-            scale: node.category === 'bosses' ? 0.6 : 0.45,
+            scale: node.category === 'bosses' ? 0.55 : 0.4,
         }
     )
 }
@@ -444,8 +457,8 @@ function AnimatedCharacters(
 
     const root = Container(
         {
-            y: -60,
-            x: characters?.[0]?.isPc ? -60 : 0,
+            y: characters?.[0]?.isPc ? -60 : -65,
+            x: characters?.[0]?.isPc ? -40 : 0,
         },
         ...characters.map((characterMeta, i) => {
             const anim = MainCharacterAnimation({
@@ -500,4 +513,55 @@ function getTileGraphMap(): DungeonRoomMap {
 
 function getNodeId(i: number): RoomUid {
     return `${i}-${i % 2 ? 'a' : 'b'}`
+}
+
+function roomContainsBoss(node: DungeonRoom): boolean {
+    let containsBoss = false
+    for (let enemy of node.enemies) {
+        if (enemy.boss === true) {
+            containsBoss = true
+        }
+    }
+    return containsBoss
+}
+
+function getAllEdges(node: DungeonRoom) {
+    const tileGraphMap = getTileGraphMap()
+    const backwardEdges: string[] = []
+    keys(tileGraphMap).forEach(tile => {
+        tileGraphMap[tile].edges.forEach(edge => {
+            if (edge === node.uid) {
+                backwardEdges.push(tile)
+            }
+        })
+    })
+    const allEdges = union(backwardEdges, node.edges).filter(edge => !!edge)
+    const currNodeWidth = parseInt(node.uid.split('_')[0])
+    const currNodeHeight = parseInt(node.uid.split('_')[1])
+    const allEdgesNumerical: any[] = []
+    allEdges.forEach(edge => {
+        let sideNumber: number | null = null
+        if (node.uid === 'root') {
+            allEdgesNumerical.push('root')
+            return
+        }
+        const edgeWidth = parseInt(edge.split('_')[0])
+        const edgeHeight = parseInt(edge.split('_')[1])
+        if (edge === 'root') {
+            allEdgesNumerical.push(4)
+        }
+
+        if (edgeWidth < currNodeWidth) {
+            sideNumber = edgeHeight > currNodeHeight ? 5 : 4
+        } else if (edgeWidth > currNodeWidth) {
+            sideNumber = edgeHeight > currNodeHeight ? 1 : 2
+        } else if (edgeWidth === currNodeWidth) {
+            sideNumber = edgeHeight > currNodeHeight ? 0 : 3
+        }
+
+        if (sideNumber !== null) {
+            allEdgesNumerical.push(sideNumber)
+        }
+    })
+    return allEdgesNumerical.sort().join('')
 }

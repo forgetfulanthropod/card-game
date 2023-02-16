@@ -359,6 +359,7 @@ export const mapAssets = {
 
 export const mapTileAssets = {
     mapTileBase: 'hex map/hooligans bluff/base tile.webp',
+    mapTileBoss: 'hex map/hooligans bluff/bossTile.png',
     mapTileTopG_1:
         'hex map/hooligans bluff/Top of Tile Decorations/(Layer 01) Grass/Grass_1.webp',
     mapTileTopG_2:
@@ -569,6 +570,38 @@ export const mapTileAssets = {
         'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_9_(7).webp',
     mapTileBottom4_10__7:
         'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_10_(7).webp',
+    mapTilePathroot:
+        'hex map/hooligans bluff/paths/root.png',
+    mapTilePath3:
+        'hex map/hooligans bluff/paths/3.png',
+    mapTilePath13:
+        'hex map/hooligans bluff/paths/13.png',
+    mapTilePath03:
+        'hex map/hooligans bluff/paths/03.png',
+    mapTilePath04:
+        'hex map/hooligans bluff/paths/04.png',
+    mapTilePath013:
+        'hex map/hooligans bluff/paths/013.png',
+    mapTilePath14:
+        'hex map/hooligans bluff/paths/14.png',
+    mapTilePath014:
+        'hex map/hooligans bluff/paths/014.png',
+    mapTilePath15:
+        'hex map/hooligans bluff/paths/15.png',
+    mapTilePath24:
+        'hex map/hooligans bluff/paths/24.png',
+    mapTilePath024:
+        'hex map/hooligans bluff/paths/024.png',
+    mapTilePath25:
+        'hex map/hooligans bluff/paths/25.png',
+    mapTilePath034:
+        'hex map/hooligans bluff/paths/034.png',
+    mapTilePath124:
+        'hex map/hooligans bluff/paths/124.png',
+    mapTilePath0134:
+        'hex map/hooligans bluff/paths/0134.png',
+    mapTilePath135:
+        'hex map/hooligans bluff/paths/135.png',
 }
 
 export type EventAssetKey = keyof typeof eventAssets
