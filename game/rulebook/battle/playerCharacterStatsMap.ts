@@ -71,7 +71,7 @@ export const playerCharacterStatsMap: Record<
         constitution: 82,
         strength: 10,
         magic: 5,
-        defense: 11,
+        defense: 12,
     },
     frogWizard: {
         id: 'frogWizard',
@@ -90,10 +90,10 @@ export const playerCharacterStatsMap: Record<
         isPc: true,
         class: 'rogue',
 
-        constitution: 45,
+        constitution: 42,
         strength: 12 + 1,
         magic: 14,
-        defense: 5,
+        defense: 7,
     },
     goblinDragon: {
         id: 'goblinDragon',
@@ -170,7 +170,7 @@ export const playerCharacterStatsMap: Record<
         constitution: 70,
         strength: 12,
         magic: 7,
-        defense: 5,
+        defense: 6,
     },
     orcWarrior: {
         id: 'orcWarrior',
@@ -247,7 +247,7 @@ export const playerCharacterStatsMap: Record<
         constitution: 84 + 40,
         strength: 6,
         magic: 7,
-        defense: 5 + 4,
+        defense: 5 + 5,
     },
     wimpyGuard: {
         id: 'wimpyGuard',

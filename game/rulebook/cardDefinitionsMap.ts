@@ -281,9 +281,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         energy: 1,
         id: 'swordSlash',
         targetNum: 1,
-        targetType: 'enemies',
-        actions:
-            'strengthy = 0.5 * strength; chain(deal(strengthy), effect("bleed", 2))',
+        targetType: 'allEnemies',
+        actions: `
+            strengthy = 0.4 * strength;
+            defensey = defense * 0.25;
+            chain(
+                deal(strengthy),
+                effect("bleed", 3),
+                addBlock(defensey, "self")
+            )
+        `,
         type: 'attack',
         characterClass: 'knight',
     },
@@ -294,12 +301,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthy = 0.7 * strength;
-            defensey = defense * 0.25;
+            strengthy = 0.75 * strength;
+            defensey = defense * 0.55;
             chain(
                 deal(strengthy),
                 addBlock(defensey, "self"),
-                effect("guarded", 1, "self")
+                effect("guarded", 2, "self")
             )
         `,
         type: 'attack',
@@ -1333,9 +1340,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
+                deal(strength),
                 effect("stunned",1),
                 brittle(2)
-            )`,
+            )
+        `,
         type: 'utility',
         characterClass: 'knight',
     },
