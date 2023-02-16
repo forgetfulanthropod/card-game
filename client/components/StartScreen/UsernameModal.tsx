@@ -1,7 +1,7 @@
 import { callServerApi } from '@/callServerApi'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import React, { useRef, useState } from 'react'
-import { UserID } from 'shared'
+import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH, UserID } from 'shared'
 import { UserDoc } from '../NewStartScreen'
 import { PrimaryButton } from './PrimaryButton'
 
@@ -9,7 +9,7 @@ export const UsernameModal = ({
     setShowModal,
     userDoc,
     setUserDoc,
-    onSuccess
+    onSuccess,
 }: {
     setShowModal: (value: React.SetStateAction<boolean>) => void
     userDoc: UserDoc
@@ -91,17 +91,26 @@ export const UsernameModal = ({
                                         placeholder='Choose a username...'
                                         value={typedUsername}
                                         onChange={e => {
-                                            setTypedUsername(e.target.value)
+                                            if (
+                                                e.target.value.length >
+                                                MAX_USERNAME_LENGTH
+                                            ) {
+                                                return
+                                            }
+                                            setTypedUsername(
+                                                e.target.value.trim()
+                                            )
                                         }}
                                         onKeyDown={e => {
-                                            if (e.key === 'Enter'){
+                                            if (e.key === 'Enter') {
                                                 handleSetUsername()
                                             }
                                         }}
                                     />
                                     <p className='text-gray-400 font-light font-sans text-sm mt-1'>
-                                        Your username can be between 3 and 15
-                                        characters long.
+                                        Your username can be between{' '}
+                                        {MIN_USERNAME_LENGTH} and{' '}
+                                        {MAX_USERNAME_LENGTH}{' '}characters long.
                                     </p>
                                 </div>
                             </div>
