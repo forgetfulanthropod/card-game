@@ -249,15 +249,15 @@ function TileForNode(
                             y: rootYPlacement - 33,
                         }
                     )
-                    // if (~choice) {
-                    //     // root.filters = [glowFilter]
+                    if (~choice) {
+                        root.filters = [glowFilter]
 
-                    // }
+                    }
+                    // unfilterTileById(root.parent, node.uid)
 
                     //DEBUG
-                    unfilterTileById(root.parent, node.uid)
-                    if (!isPlayerCharacterRoom)
-                        highlightPossiblePaths(root, node)
+                    // if (!isPlayerCharacterRoom)
+                        // highlightPossiblePaths(root, node)
                 },
                 pointerout() {
                     Tweener.add(
@@ -270,15 +270,14 @@ function TileForNode(
                             y: rootYPlacement,
                         }
                     )
-                    // if (~choice) {
-                    //     // root.filters = filters
+                    if (~choice) {
+                        root.filters = []
+                    }
 
-                    // }
-
-                    //DEBUG
-                    if (!~choice && !isPlayerCharacterRoom)
-                        darkenTileById(root.parent, node.uid)
-                    if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
+                    // //DEBUG
+                    // if (!~choice && !isPlayerCharacterRoom)
+                    //     darkenTileById(root.parent, node.uid)
+                    // if (!isPlayerCharacterRoom) darkenPossiblePaths(root, node)
                 },
             },
             // alpha: node == null ? 0.4 : 1,
@@ -366,7 +365,7 @@ function highlightPossiblePaths(root: PixiContainer, node: DungeonRoom) {
         if (!edgeKey) return
         unfilterTileById(root.parent, edgeKey)
 
-        highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
+        // highlightPossiblePaths(root, getTileGraphMap()[edgeKey])
     })
 }
 
