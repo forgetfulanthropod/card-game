@@ -496,7 +496,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                     {
                         id: 'mimic',
                         level: 5,
-                        boss: true
+                        // boss: true
                     },
                 ],
                 category: 'bosses',
@@ -554,7 +554,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '7_11',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['7_13', '', '8_10', ''],
+                edges: ['7_13', '', '', ''],
             },
             '7_13': {
                 uid: '7_13',
@@ -566,14 +566,14 @@ export function getDungeonRooms(): DungeonRoomMaps {
                 uid: '8_8',
                 enemies: [],
                 category: 'tierThree',
-                edges: ['8_10', '9_9', '', ''],
+                edges: ['', '9_9', '', ''],
             },
-            '8_10': {
-                uid: '8_10',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['', '9_11', '', ''],
-            },
+            // '8_10': {
+            //     uid: '8_10',
+            //     enemies: [],
+            //     category: 'tierThree',
+            //     edges: ['', '9_11', '', ''],
+            // },
             '8_14': {
                 uid: '8_14',
                 enemies: [],

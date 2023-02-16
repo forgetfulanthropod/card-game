@@ -105,7 +105,7 @@ export function CharacterOptions() {
                     isNewCharacter && Adjust(
                         NewCharacterIcon(),
                         {
-                            x: 33,
+                            x: 31,
                             y: 105
                         }
                     )
@@ -187,7 +187,7 @@ export function NewCharacterIcon() {
         Container(
             {},
             Text({
-                text: '   NEW   ',
+                text: '    NEW    ',
                 style: {
                     fill: 'white',
                     fontFamily: 'bigFont',
@@ -196,7 +196,7 @@ export function NewCharacterIcon() {
             })
         ),
         {
-            padding: 4,
+            padding: 3,
             colorStops: [
                 { color: 0xFE2027, offset: 0 },
                 { color: 0xCB0108, offset: 1 },
