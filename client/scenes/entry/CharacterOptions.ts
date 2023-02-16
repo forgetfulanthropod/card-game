@@ -16,6 +16,7 @@ import {
     glowFilter,
     AssetKey,
     Adjust,
+    Text,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import {
@@ -24,7 +25,8 @@ import {
     onUpdate,
 } from '@/util'
 import { getEntryScene } from '@/data'
-import { AdjustmentFilter } from 'pixi-filters'
+import { AdjustmentFilter, OutlineFilter } from 'pixi-filters'
+import { InfoBox } from '../shared'
 
 export const selectedCharacterId = datum<null | CharacterId>(null)
 export const selectedCharacterPlaceIndex = datum<CharacterPlaceIndex>(2)
@@ -48,6 +50,10 @@ export function CharacterOptions() {
             'notoriousBean',
         ].includes(c.id)
 
+        const isNewCharacter = [
+            'notoriousBean'
+        ].includes(c.id)
+
         return Container(
             {
                 x: 78 + (index % 2) * (width + margin),
@@ -62,7 +68,7 @@ export function CharacterOptions() {
                     pointerup() {
                         if (!isValidOption) {
                             return
-                        } 
+                        }
                         chooseOwnedCharacterAt(
                             index,
                             selectedCharacterPlaceIndex.val
@@ -83,16 +89,26 @@ export function CharacterOptions() {
                 },
             },
             Adjust(
-                RoundedBordered(
-                    Sprite({
-                        src,
-                        scale: width / src.width,
-                    }),
-                    {
-                        radius: 20,
-                        borderThickness: 6,
-                        borderColor: 0,
-                    }
+                Container(
+                    {},
+                    RoundedBordered(
+                        Sprite({
+                            src,
+                            scale: width / src.width,
+                        }),
+                        {
+                            radius: 20,
+                            borderThickness: 6,
+                            borderColor: 0,
+                        }
+                    ),
+                    isNewCharacter && Adjust(
+                        NewCharacterIcon(),
+                        {
+                            x: 33,
+                            y: 105
+                        }
+                    )
                 ),
                 {
                     filters: isValidOption ? [] : [grayScaleFilter],
@@ -164,4 +180,30 @@ export async function composeDefaultParty() {
             placeIndex: placeIndex as CharacterPlaceIndex,
         })),
     })
+}
+
+export function NewCharacterIcon() {
+    return InfoBox(
+        Container(
+            {},
+            Text({
+                text: '   NEW   ',
+                style: {
+                    fill: 'white',
+                    fontFamily: 'bigFont',
+                    fontSize: 16
+                },
+            })
+        ),
+        {
+            padding: 4,
+            colorStops: [
+                { color: 0xFE2027, offset: 0 },
+                { color: 0xCB0108, offset: 1 },
+            ],
+            alpha: 1,
+            borderRadius: 12,
+            filters: [new OutlineFilter(2, 0xFFEBEB)],
+        }
+    )
 }
