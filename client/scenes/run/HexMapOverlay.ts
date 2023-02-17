@@ -291,7 +291,7 @@ function TileForNode(
         Sprite({
             src: `mapTilePath${allEdges}` as AssetKey,
             scale: 1.7,
-            anchor: [0.5, 0.4],
+            anchor: [0.5, 0.425],
         }),
         TileContents(node)
     )
