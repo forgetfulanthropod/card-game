@@ -1,3 +1,4 @@
+import { getClientEnv } from '@/util/getClientEnv'
 import type { ROBaobab, ROCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
 import type {
@@ -21,7 +22,7 @@ let onTreeInitialized = new Promise(
 
 export function initializeBoababTree(gamestate: GameState): void {
     state.gamestate = new SBaobab(gamestate)
-    if (!process.env.IS_PRODUCTION)
+    if (!getClientEnv('IS_PRODUCTION'))
         // @ts-expect-error
         window.tree = state.gamestate // no global tree for prod
     callbackWhenTreeInitialized()

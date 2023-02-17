@@ -7,6 +7,7 @@ import autoprefixerPlugin from 'autoprefixer'
 import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
+
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
@@ -25,9 +26,28 @@ console.log('process.env.PWD:', process.env.PWD)
 
 console.log('substitutions:', makeSubstitutions())
 
+const REQUIRED_CLIENT_ENV_KEYS =
+    ['WALLET_GATED',
+     'RPC_URL',
+     'GAME_IS_LIVE',
+     'IS_PRODUCTION',
+     'CLIENT_PASSWORD'
+    ]
+
+export const checkEnv = (envKeys) => {
+    console.log('Checking ENV...')
+    for (let key of envKeys) {
+        const value = process.env[key]
+        if (value === undefined) {
+            console.error(key, 'IS MISSING IN .ENV')
+            process.exit(1)
+        }
+    }
+    console.log('.env contains all keys: ', envKeys)
+}
 
 function makeSubstitutions() {
-    loadDotEnv();
+    // loadDotEnv();
     const walletGated = process.env.WALLET_GATED === 'true'
     const gameIsLive = process.env.GAME_IS_LIVE === 'true'
     const isProduction = process.env.IS_PRODUCTION === 'true'
@@ -45,9 +65,10 @@ function makeSubstitutions() {
 if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
-    console.log('BUILDING')
+    console.log('BUILDING CLIENT')
     loadDotEnv();
 
+    checkEnv(REQUIRED_CLIENT_ENV_KEYS)
     const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
