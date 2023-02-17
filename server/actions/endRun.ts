@@ -60,7 +60,10 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
             run_score = ${totalScore},
             game_state = ${JSON.stringify(gameState)}
         WHERE
-           run_id = ${runId};
+            run_id = ${runId}
+        AND
+            run_status not in ('won', 'lost')
+        ;
     `)
 
     trackMetric('endRun', {

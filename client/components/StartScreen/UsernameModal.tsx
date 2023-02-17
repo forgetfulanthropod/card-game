@@ -48,7 +48,7 @@ export const UsernameModal = ({
     return <div className='bg-black/40 w-full h-full absolute z-50 text-white font-bigFont pointer-events-auto'>
         <div className='flex h-full w-full justify-center items-center'>
             <div
-                className='w-2/3 2xl:w-5/12 bg-stone-900/90 rounded-xl border border-black flex flex-col items-center
+                className='w-1/2 2xl:w-5/12 bg-stone-900/95 rounded-xl border border-black flex flex-col items-center
                 p-2 sm:p-4 md:p-6 lg:p-8 xl:p-10 relative shadow-3xl text-left'
                 ref={modalBoxRef}
             >
