@@ -1,21 +1,23 @@
 import { metricField, writeMetric } from 'server/metrics'
 import type {
-    Card,
     BattleCursor,
+    Card,
     CharacterUid,
     CharacterMeta,
     DungeonRoom,
+    Orb,
 } from 'shared'
 
 // TODO: discussion: put these meta interfaces/types in another file along
 // with the server metric args?
 export interface BareGameMetricsArgs {
-    playCard: { card: Card; targetUids: CharacterUid[] }
-    chooseStance: { character: CharacterMeta; stanceId: string }
-    nextRoom: { choice: number; chosenRoom: DungeonRoom }
+    activateOrb: { orb: Orb; character: CharacterMeta }
     addCardToDeck: { card: Card }
+    chooseStance: { character: CharacterMeta; stanceId: string }
     discardCard: { card: Card }
     endTurn: {}
+    nextRoom: { choice: number; chosenRoom: DungeonRoom }
+    playCard: { card: Card; targetUids: CharacterUid[] }
 }
 
 export type GameMetricsArgs = {
@@ -39,11 +41,14 @@ export const playCard: GameMetrics['playCard'] = args => {
         card_class: string
         character_name: string
         character_stance: string
+        character_hp: number
+        character_block: number
         turn_count: number
         play_order: number
         target_id: string
         target_type: string
         target_hp?: number
+        target_block?: number
         user_id?: string
         run_id: number
     }
@@ -58,6 +63,8 @@ export const playCard: GameMetrics['playCard'] = args => {
         card_class: card.characterClass,
         character_name: character.id,
         character_stance: character.stance,
+        character_hp: character.health,
+        character_block: character.block,
         turn_count: scene.get('turnCount'),
         play_order: scene.get('cardsPlayedThisTurn').length,
         target_type: card.targetType,
@@ -68,6 +75,7 @@ export const playCard: GameMetrics['playCard'] = args => {
         let target = scene.get('allCharacters', targetUids[0])
         tags.target_id = target.id
         tags.target_hp = target.health
+        tags.target_block = target.block
     } else {
         tags.target_id = 'multiple'
     }
@@ -80,6 +88,7 @@ export const chooseStance: GameMetrics['chooseStance'] = args => {
         character_name: character.id,
         character_class: character.class,
         character_hp: character.health,
+        character_block: character.block,
         turn_count: scene.get('turnCount'),
         stance_name: stanceId,
         run_id: scene.get('runId'),
@@ -145,4 +154,19 @@ export const discardCard: GameMetrics['discardCard'] = args => {
         user_id: scene.get('username'),
     }
     writeMetric('card_discard', tags)
+}
+
+export const activateOrb: GameMetrics['activateOrb'] = args => {
+    const { orb, character, scene } = args
+    const tags = {
+        orb_name: orb.type,
+        orb_remaining: orb.remainingCount,
+        character_name: character.id,
+        character_hp: character.health,
+        character_block: character.block,
+        turn_count: scene.get('turnCount'),
+        run_id: scene.get('runId'),
+        user_id: scene.get('username'),
+    }
+    writeMetric('orb_activate', tags)
 }

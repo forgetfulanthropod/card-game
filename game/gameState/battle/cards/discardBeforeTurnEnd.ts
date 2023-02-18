@@ -11,8 +11,6 @@ export function discardBeforeTurnEnd({
     cardUids: CardUid[]
     scene: BattleCursor
 }): void {
-    const hand = scene.get('cards', 'hand')
-
     scene.apply(
         'cards',
         produce(cards => {
@@ -24,7 +22,6 @@ export function discardBeforeTurnEnd({
                 }
                 delete cards.hand[uid]
                 cards.discard[uid] = card
-                trackMetric('discardCard', { card, scene })
             }
         })
     )

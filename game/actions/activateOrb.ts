@@ -21,6 +21,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { applyEffect } from '@/gameState/battle/cards/commands/effect'
+import { trackMetric } from 'server/metrics'
 
 const orbActivators: Record<
     OrbType,
@@ -115,6 +116,7 @@ export const activateOrb: GameActions['activateOrb'] = ({
     validate(character, orb)
 
     activate(orb, character, scene)
+    trackMetric('activateOrb', { orb, character, scene })
 
     updateHand(scene)
     maybeTransitionBattleState(scene)
