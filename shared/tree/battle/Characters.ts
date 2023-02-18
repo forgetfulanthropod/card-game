@@ -74,6 +74,7 @@ export type PlayerCharacterId =
  */
 export type NonPlayerCharacterId =
     | 'bosshogJurgen'
+    | 'brimboneSkeleton'
     | 'cultist'
     | 'gnomeBandit'
     | 'gnomeBigBomber'

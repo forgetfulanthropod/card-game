@@ -373,6 +373,29 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetType: 'enemies',
     },
 
+    //brimboneSkeleton start
+    //TODO: queue not working
+    fire: {
+        actions: `queue(effect("vulnerable", 2), 1)`,
+        //@ts-expect-error
+        id: `fire`,
+        name: `Fire`,
+        targetNum: -1,
+        targetType: 'allEnemies',
+    },
+    // 'Targets two adjacent kaiju for 50%.',
+    // 'If any damage goes unblocked, that',
+    // 'character receives Vulnerable (1).',
+    brimbone: {
+        actions: `strengthy = strength * .5; ifDamageDealtApplyEffect(strengthy, "vulnerable", 1)`,
+        //@ts-expect-error
+        id: `brimbone`,
+        name: `Brimbone`,
+        targetNum: 2,
+        targetType: 'enemies',
+    },
+    //brimboneSkeleton end
+
     gnomeBomb: {
         actions: `ifDamageDealtApplyEffect(strength * .3, 'tired', 1)`,
         //@ts-expect-error

@@ -491,6 +491,24 @@ const commandIdToMetaMap: Record<
                 'Apply <b>Poisoned</b> equal to 20% of unblocked damage.',
             ],
         },
+        fire: {
+            id: 'fire',
+            src: 'intentFire',
+            explanation: [
+                //TODO : 'At the start of the next player turn, ',
+                'All player characters receive',
+                'Vulnerable (2).',
+            ],
+        },
+        brimbone: {
+            id: 'brimbone',
+            src: 'intentBrimbone',
+            explanation: [
+                'Targets two adjacent kaiju for 50%.',
+                'If any damage goes unblocked, that',
+                'character receives Vulnerable (1).',
+            ],
+        },
     },
     ...startlingSpookIntents(),
     ...itchyOozeIntents(),

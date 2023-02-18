@@ -209,7 +209,9 @@ export const intentAssets = {
     intentRollAround: 'intents/big_belly.webp',
     intentBellowAndSing: 'intents/bellow_and_sing.webp',
     intentBucketOfBangSnaps: 'intents/bucket_of_bang_snaps.webp',
+    intentBrimbone: 'intents/brimbone.webp',
     intentDemolitionCharge: 'intents/demolition_charge.webp',
+    intentFire: 'intents/fire.webp',
     intentMimic: 'intents/mimic.webp',
     intentInfectiousBite: 'intents/infectious_bite.webp',
     intentGrudge: 'intents/grudge.webp',
@@ -273,10 +275,11 @@ export const spineAssets = {
     mushroomFarmerSpine:
         'spines/characters/mushroomFarmer/Mushroom_Farmer_MJ_Rig_Prep_v01.json',
     penguinKnightSpine: 'spines/characters/penguinKnight/imported.json',
-    skeletonWarriorSpine:
-        'spines/characters/skeletonWarrior/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
-    skeletonWarriorNPCSpine:
-        'spines/characters/skeletonWarriorNPC/Skeleton_Warrior_MJ_Rig_Prep_v02.json',
+    skeletonWarriorSkinsSpine:
+        'spines/characters/skeletonWarrior/Skeleton Warrior.json',
+    skeletonWarriorSpine: 'SKIN: skeletonWarriorSkinsSpine -> 0',
+    skeletonWarriorNPCSpine: 'SKIN: skeletonWarriorSkinsSpine -> 1',
+    brimboneSkeletonSpine: 'SKIN: skeletonWarriorSkinsSpine -> 2',
     matchaGelatinCubeSpine:
         'spines/characters/matchaGelatinCube/Matcha_MJ_Rig_Prep_v04.json',
     matchaGelatinCubeNPCSpine:
@@ -660,7 +663,8 @@ export const souvenirAssets: {
     [K in SouvenirId as `souvenir${Capitalize<K>}`]: string
 } = {
     souvenirBigStinkyTooth: 'souvenirs/Stinky Tooth.webp',
-    souvenirBrokenCarriageWheel: 'souvenirs/Broken Carriage Wheel.webp',
+    //TODO: broken carriage wheel
+    souvenirBrokenCarriageWheel: 'souvenirs/Enchanted snowball.webp',
     souvenirBundleOfFrogWine: 'souvenirs/Bundle Of frog Wine.webp',
     souvenirClownInfestation: 'souvenirs/Clown Infestation.webp',
     souvenirCowardsCrown: 'souvenirs/Cowards Crown.webp',
@@ -669,6 +673,7 @@ export const souvenirAssets: {
     souvenirDentistryForDummies: 'souvenirs/Dentistry for dummies.webp',
     souvenirFrogWine: 'souvenirs/barrel of frog wine.webp',
     souvenirGlassOfWarmMilk: 'souvenirs/Glass of Warm Milk.webp',
+    //TODO: nightmare biscuit
     souvenirNightmareBiscuit: 'souvenirs/Enchanted snowball.webp',
     souvenirSqueakyClownShoes: 'souvenirs/Squeaky clown shoes.webp',
 }
