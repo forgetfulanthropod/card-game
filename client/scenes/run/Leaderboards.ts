@@ -49,7 +49,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
     keys(allLeaderboards).forEach(_timeframe => {
         const timeframe = _timeframe as LeaderboardTimeframe
         const currBoard = allLeaderboards[timeframe]
-        const sortedBoard = sortBy(currBoard, entry => entry.adjusted_rank)
+        const sortedBoard = sortBy(currBoard, entry => entry.leaderboard_rank)
         allLeaderboards[timeframe] = sortedBoard
     })
 
@@ -249,7 +249,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        entry.adjusted_rank,
+                        entry.leaderboard_rank,
                         false,
                         entry.teamComp ?? []
                     )
@@ -267,7 +267,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                         entry.max_score,
                         entry.end_ts,
                         inScreenIdx - 1,
-                        entry.adjusted_rank,
+                        entry.leaderboard_rank,
                         true,
                         entry.teamComp ?? []
                     )

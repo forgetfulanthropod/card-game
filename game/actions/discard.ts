@@ -1,4 +1,5 @@
 import type { GameActions } from 'shared'
+import { trackMetric } from 'server/metrics'
 
 import { getBattleSceneIn } from '@/util'
 import { discardBeforeTurnEnd } from '@/gameState/battle/cards/discardBeforeTurnEnd'
@@ -20,6 +21,16 @@ export const discard: GameActions['discard'] = args => {
         return
     }
 
+    const hand = scene.get('cards', 'hand')
+    args.cardUids.forEach(uid => {
+        try {
+            const card = hand[uid]
+            trackMetric('discardCard', { card, scene })
+        } catch (err) {
+            const error = err as unknown as Error
+            logger.error(`error tracking card discard aciton: ${error.message}`)
+        }
+    })
     discardBeforeTurnEnd({ cardUids: args.cardUids, scene })
 
     scene.set('numRequiredToDiscard', 0)

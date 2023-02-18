@@ -27,12 +27,11 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     ): Promise<Leaderboard> => {
         const whereFragment =
             timeframe === 'daily'
-                ? sqlTag.fragment`WHERE
-                extract(day from end_ts) = extract(day from now()) AND (run_status = 'won' OR run_status = 'lost')`
+                ? sqlTag.fragment`WHERE extract(day from end_ts) = extract(day from now()) AND run_status in ('won', 'lost', 'abandoned')`
                 : timeframe === 'weekly'
                 ? sqlTag.fragment`WHERE
-                end_ts > now() - interval '7 days' AND (run_status = 'won' OR run_status = 'lost')`
-                : sqlTag.fragment`WHERE run_status = 'won' OR run_status = 'lost'`
+                end_ts > now() - interval '7 days' AND run_status in ('won', 'lost', 'abandoned')`
+                : sqlTag.fragment`WHERE run_status in ('won', 'lost', 'abandoned')`
 
         return await connection.any(sql`
             WITH
@@ -46,7 +45,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                         END AS is_self,
                         i.wallet_address,
                         i.username,
-                        s.max_score,
+                        u.run_score as max_score,
                         u.start_ts,
                         u.end_ts,
                         u.run_id,
@@ -54,46 +53,17 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                     FROM
                         user_run u
                     JOIN
-                        (   SELECT
-                                user_id,
-                                MAX(run_score) AS max_score
-                            FROM
-                                user_run
-                            ${whereFragment}
-                            GROUP BY
-                                user_id ) s
-                    ON
-                        u.user_id = s.user_id
-                    AND u.run_score = s.max_score
-                    JOIN
                         user_info i
                     ON
                         u.user_id = i.user_id
-                    WHERE
-                        run_status = 'won'
-                    OR  run_status = 'lost'
+                    ${whereFragment}
+                    AND run_score IS NOT NULL
                     GROUP BY
                         u.user_id,
                         u.end_ts,
                         u.run_id,
-                        s.max_score,
                         i.wallet_address,
                         i.username
-                )
-                ,
-                user_run_leaderboards_unique AS
-                (   SELECT
-                    ROW_NUMBER() over(ORDER BY max_score DESC) AS adjusted_rank, --- adjusted rank is to recalc top 100 after removing dups, leaderboard rank is for self
-                    *
-                    FROM
-                        (   SELECT
-                                DISTINCT
-                            ON
-                                (
-                                    wallet_address)
-                                *
-                            FROM
-                                user_run_leaderboards ) AS unique_rows
                 )
             SELECT
                 *
@@ -101,7 +71,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 (   SELECT
                         *
                     FROM
-                        user_run_leaderboards_unique
+                        user_run_leaderboards
                     LIMIT
                         ${LEADERBOARD_ENTRIES_TO_DISPLAY}) AS all_leaderboard
 
@@ -109,9 +79,11 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                 (   SELECT
                         *
                     FROM
-                        user_run_leaderboards_unique
+                        user_run_leaderboards
                     WHERE
-                        is_self = true);
+                        is_self = true )
+            ORDER BY
+                leaderboard_rank;
         `)
     }
 

@@ -11,6 +11,7 @@ import {
     toggleHighResolution
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
+import { getBattleScene } from '@/data'
 
 const Root = styled.button`
     position: absolute;
@@ -47,10 +48,13 @@ export function ResetButton(props: { username: string }): JSXElement {
     }
 
     const handleRestartRun = async () => {
-        await callServerApi('endRun', {
-            userId: props.username,
-            restart: true,
-        })
+        const runState = getBattleScene().get('state')
+        if (runState !== 'lost' && runState !== 'won') {
+            await callServerApi('endRun', {
+                userId: props.username,
+                restart: true,
+            })
+        }
         await callApi('makeNewUser', {
             username: props.username,
         })
