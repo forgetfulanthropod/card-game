@@ -58,6 +58,8 @@ export const keyTermsMap = {
 
 export type KeyTerm = keyof typeof keyTermsMap
 
+export const TEXT_WIDTH = BASE_WIDTH * 0.18
+
 export function getTermIndex(term: string, explanation: string): number {
     const lowerCaseTerm = startCase(term).toLowerCase()
     var re = new RegExp(`>${lowerCaseTerm}`, 'g')
@@ -263,7 +265,7 @@ export function Explanation({
             isHtml,
             style: {
                 fill: index === 0 ? 'white' : 0xdddddd,
-                wordWrapWidth: BASE_WIDTH * 0.18,
+                wordWrapWidth: TEXT_WIDTH,
                 wordWrap: true,
                 /** @TODO upgrade pixijs to ^7.1.0 so we can use custom fonts with PixiHTMLText */
                 fontFamily: 'Tahoma',

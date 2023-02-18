@@ -1,12 +1,11 @@
 import type { SceneId } from 'shared'
 
-import { AdjustmentFilter } from 'pixi-filters'
-import { Easing, Tweener } from 'pixi-tweener'
 import { RunSceneManager } from './run'
 import { DungeonEntryScene } from './entry'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { nextFrame, onUpdate } from '@/util'
+import { transitionScene } from './shared/transitionScene'
 
 const pointerFullPath = 'assets/root/mouse.webp'
 let lastScene: PixiContainer
@@ -48,50 +47,3 @@ function bindScene(app: PixiApplication): Unbind {
         await transitionScene(lastScene, 'in')
     }
 }
-
-export const TRANSITION_SECONDS = 0.25
-
-async function transitionScene(
-    sceneEl: PixiContainer,
-    direction: 'out' | 'in'
-): Promise<void> {
-    const brightnessFrom = direction === 'out' ? 1 : 0
-    const brightnessTo = direction === 'out' ? 0 : 1
-
-    const filter = new AdjustmentFilter({
-        brightness: brightnessFrom,
-    })
-    sceneEl.filters = [filter]
-    await Tweener.add(
-        {
-            target: filter,
-            duration: TRANSITION_SECONDS,
-            ease: Easing.easeInExpo,
-        },
-        {
-            brightness: brightnessTo,
-        }
-    ).then(() => {
-        sceneEl.filters = null
-        Tweener.killTweensOf(filter)
-        setTimeout(() => filter.destroy(), 1000) // next frame destruction no bueno...
-        // filter.destroy()
-    })
-}
-
-// function bindBattleState(app: PixiApplication) {
-//     const stateCursor = getBattleScene().select('state')
-//     let chest: PixiContainer | null = null
-//     stateCursor.on('update', () => {
-//         if (stateCursor.get() === 'won') {
-//             chest = Chest({
-//                 size: { width: app.stage.width, height: app.stage.height },
-//             })
-//             app.stage.addChild(chest)
-//         } else if (chest != null) {
-//             app.stage.removeChild(chest)
-//             chest.destroy()
-//             chest = null
-//         }
-//     })
-// }

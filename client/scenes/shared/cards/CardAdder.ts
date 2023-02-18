@@ -34,8 +34,10 @@ export function CardAdder(): PixiContainer {
         winState => winState === 'choosing cards'
     )
     return If(notInBattle, () => NewCardOptions(), undefined, {
-        onDestroy: [notInBattle.destroy],
-        name: CardAdder.name,
+        displayArgs: {
+            onDestroy: [notInBattle.destroy],
+            name: CardAdder.name,
+        },
     })
 }
 

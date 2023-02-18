@@ -17,7 +17,9 @@ export function Energy({ scene }: { scene: ROBattleScene }): PixiContainer {
         return scene.state === 'in battle'
     })
     return If(showEnergy, () => EnergyEl(scene), undefined, {
-        onDestroy: [showEnergy.destroy],
+        displayArgs: {
+            onDestroy: [showEnergy.destroy],
+        },
     })
 }
 

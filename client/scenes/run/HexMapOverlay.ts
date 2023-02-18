@@ -19,6 +19,7 @@ import {
     mapTileAssets,
     PixiContainer,
     PixiSprite,
+    PixiTexture,
     Spine,
     TweenableContainer,
 } from '@/elementsUtil'
@@ -251,13 +252,12 @@ function TileForNode(
                     )
                     if (~choice) {
                         root.filters = [glowFilter]
-
                     }
                     // unfilterTileById(root.parent, node.uid)
 
                     //DEBUG
                     // if (!isPlayerCharacterRoom)
-                        // highlightPossiblePaths(root, node)
+                    // highlightPossiblePaths(root, node)
                 },
                 pointerout() {
                     Tweener.add(
@@ -301,7 +301,11 @@ function TileForNode(
     return root
 }
 
+const generativeTextureCache: Record<string, PixiTexture> = {}
+
 function getGenerativeTileTexture(seed: string) {
+    if (generativeTextureCache[seed]) return generativeTextureCache[seed]
+
     const layers = Container(
         {},
         Sprite({ src: getTexture(`mapTileTopG_1`) }),
@@ -321,7 +325,7 @@ function getGenerativeTileTexture(seed: string) {
 
     setTimeout(() => layers.destroy(), 0)
 
-    return texture
+    return (generativeTextureCache[seed] = texture)
 }
 
 // top decorations have one choice per slot

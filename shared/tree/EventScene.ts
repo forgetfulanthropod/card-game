@@ -1,6 +1,6 @@
 import { SouvenirId } from './Souvenir'
 
-export const disableEventScene = true
+export const disableEventScene = process.env.IS_PRODUCTION !== 'false'
 
 export type EventSceneMap = Record<EventId, EventScene>
 
@@ -16,6 +16,6 @@ export type EventChoice = {
 export type EventId =
     | 'frogCarriage'
     | 'cursedStatue'
-    // | 'gnomeStory'
+    | 'gnomeStory'
     | 'gnomeTooth'
-    | 'hogCoveredInClowns'
+    | 'hogClown'

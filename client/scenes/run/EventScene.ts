@@ -17,17 +17,20 @@ import {
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { KawaseBlurFilter } from 'pixi-filters'
-import { EventId } from 'shared'
+import { EventScene, souvenirMap } from 'shared'
 import { keys } from 'shared/code'
 import { SpineBackground } from '../background'
+import { ExplanationIf, TEXT_WIDTH } from '../shared'
 
 export function EventScene(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Event Scene' })
     const eventPromptIndexDatum = datum(0)
-    const eventId = getBattleScene().get('currentRoom', 'event')?.id
+    const event = getBattleScene().get('currentRoom', 'event')
 
-    if (eventId == null)
+    if (event == null)
         throw new Error('trying to render event scene without event ID')
+
+    const eventId = event?.id
 
     const eventIdUpperFirst = upperFirst(eventId)
     const eventPromptKeys = keys(eventAssets).filter(k =>
@@ -74,7 +77,7 @@ export function EventScene(): PixiContainer {
             const eventPromptKey = eventPromptKeys[eventPromptIndex]
 
             if (eventPromptKey) return PromptSprite(eventPromptKey)
-            else return Choices(eventId)
+            else return Choices(event)
         })
     )
 }
@@ -89,30 +92,61 @@ function PromptSprite(eventPromptKey: EventAssetKey) {
     })
 }
 
-function Choices(eventId: EventId) {
+function Choices(eventScene: EventScene) {
     const choiceAssetKeys = keys(eventAssets).filter(k =>
-        k.includes(`${upperFirst(eventId)}Choice`)
+        k.includes(`${upperFirst(eventScene.id)}Choice`)
     )
     console.log({ choiceAssetKeys })
 
     return Container(
         {},
-        ...choiceAssetKeys.map((choiceAssetKey, index) =>
-            Sprite({
-                src: choiceAssetKey,
-                anchor: [0.5, 1],
-                scale:
-                    (BASE_WIDTH * 0.8) /
-                    choiceAssetKeys.length /
-                    getTexture(choiceAssetKey).width,
-                x: (BASE_WIDTH * (1 + index * 2)) / choiceAssetKeys.length / 2,
-                y: BASE_HEIGHT * 0.9,
-                events: {
-                    pointerup() {
-                        callApi('chooseEventResponse', { index })
-                    },
+        ...choiceAssetKeys.map((choiceAssetKey, index) => {
+            const isHovered = datum(false)
+
+            const souvenirId = eventScene.choices[index]?.souvenirId
+            const souvenir = souvenirId && souvenirMap[souvenirId]
+
+            console.log({ souvenir })
+
+            return Container(
+                {
+                    x:
+                        (BASE_WIDTH * (1 + index * 2)) /
+                        choiceAssetKeys.length /
+                        2,
+                    y: BASE_HEIGHT * 0.9,
                 },
-            })
-        )
+                Sprite({
+                    src: choiceAssetKey,
+                    anchor: [0.5, 1],
+                    scale:
+                        (BASE_WIDTH * 0.8) /
+                        choiceAssetKeys.length /
+                        getTexture(choiceAssetKey).width,
+                    events: {
+                        pointerover() {
+                            isHovered.set(true)
+                        },
+                        pointerout() {
+                            isHovered.set(false)
+                        },
+                        pointerup() {
+                            callApi('chooseEventResponse', { index })
+                        },
+                    },
+                }),
+                ...(souvenir
+                    ? [
+                          ExplanationIf({
+                              isShown: isHovered,
+                              texts: [souvenir.name, souvenir.description],
+                              xOffset: -TEXT_WIDTH / 2,
+                              yOffset: -BASE_HEIGHT * 0.5,
+                              isHtml: true,
+                          }),
+                      ]
+                    : [])
+            )
+        })
     )
 }

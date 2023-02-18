@@ -1,3 +1,4 @@
+import { SouvenirId } from 'shared'
 import type { VisibleEffect } from './assetTypes'
 
 export const rootAssets = {
@@ -570,38 +571,22 @@ export const mapTileAssets = {
         'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_9_(7).webp',
     mapTileBottom4_10__7:
         'hex map/hooligans bluff/Bottom of Tile Decorations/(Layer 04) Crystals/Crystals_10_(7).webp',
-    mapTilePathroot:
-        'hex map/hooligans bluff/paths/root.png',
-    mapTilePath3:
-        'hex map/hooligans bluff/paths/3.png',
-    mapTilePath13:
-        'hex map/hooligans bluff/paths/13.png',
-    mapTilePath03:
-        'hex map/hooligans bluff/paths/03.png',
-    mapTilePath04:
-        'hex map/hooligans bluff/paths/04.png',
-    mapTilePath013:
-        'hex map/hooligans bluff/paths/013.png',
-    mapTilePath14:
-        'hex map/hooligans bluff/paths/14.png',
-    mapTilePath014:
-        'hex map/hooligans bluff/paths/014.png',
-    mapTilePath15:
-        'hex map/hooligans bluff/paths/15.png',
-    mapTilePath24:
-        'hex map/hooligans bluff/paths/24.png',
-    mapTilePath024:
-        'hex map/hooligans bluff/paths/024.png',
-    mapTilePath25:
-        'hex map/hooligans bluff/paths/25.png',
-    mapTilePath034:
-        'hex map/hooligans bluff/paths/034.png',
-    mapTilePath124:
-        'hex map/hooligans bluff/paths/124.png',
-    mapTilePath0134:
-        'hex map/hooligans bluff/paths/0134.png',
-    mapTilePath135:
-        'hex map/hooligans bluff/paths/135.png',
+    mapTilePathroot: 'hex map/hooligans bluff/paths/root.png',
+    mapTilePath3: 'hex map/hooligans bluff/paths/3.png',
+    mapTilePath13: 'hex map/hooligans bluff/paths/13.png',
+    mapTilePath03: 'hex map/hooligans bluff/paths/03.png',
+    mapTilePath04: 'hex map/hooligans bluff/paths/04.png',
+    mapTilePath013: 'hex map/hooligans bluff/paths/013.png',
+    mapTilePath14: 'hex map/hooligans bluff/paths/14.png',
+    mapTilePath014: 'hex map/hooligans bluff/paths/014.png',
+    mapTilePath15: 'hex map/hooligans bluff/paths/15.png',
+    mapTilePath24: 'hex map/hooligans bluff/paths/24.png',
+    mapTilePath024: 'hex map/hooligans bluff/paths/024.png',
+    mapTilePath25: 'hex map/hooligans bluff/paths/25.png',
+    mapTilePath034: 'hex map/hooligans bluff/paths/034.png',
+    mapTilePath124: 'hex map/hooligans bluff/paths/124.png',
+    mapTilePath0134: 'hex map/hooligans bluff/paths/0134.png',
+    mapTilePath135: 'hex map/hooligans bluff/paths/135.png',
 }
 
 export type EventAssetKey = keyof typeof eventAssets
@@ -629,6 +614,38 @@ export const eventAssets = {
         'events/Cursed Statue/Cursed Statue Post Choice 2.webp',
     eventCursedStatuePostChoice3:
         'events/Cursed Statue/Cursed Statue Post Choice 3.webp',
+
+    eventGnomeStoryMainGraphic: 'events/Gnome Story/Gnome Story.webp',
+    eventGnomeStoryPrompt1: 'events/Gnome Story/GnomeStory Prompt 1.webp',
+    eventGnomeStoryPrompt2: 'events/Gnome Story/GnomeStory Prompt 2.webp',
+    eventGnomeStoryChoice1: 'events/Gnome Story/Gnome Story Choice 1.webp',
+    eventGnomeStoryChoice2: 'events/Gnome Story/Gnome Story Choice 2.webp',
+    eventGnomeStoryPostChoice1:
+        'events/Gnome Story/Gnome Story Post Choice 1.webp',
+    eventGnomeStoryPostChoice2:
+        'events/Gnome Story/Gnome Story Post Choice 2.webp',
+
+    eventGnomeToothMainGraphic: 'events/Gnome Tooth/GnomeTooth.webp',
+    eventGnomeToothPrompt1: 'events/Gnome Tooth/GnomeTooth Prompt 1.webp',
+    eventGnomeToothPrompt2: 'events/Gnome Tooth/GnomeTooth Prompt 2.webp',
+    eventGnomeToothChoice1: 'events/Gnome Tooth/GnomeTooth Choice 1.webp',
+    eventGnomeToothChoice2: 'events/Gnome Tooth/GnomeTooth Choice 2.webp',
+    eventGnomeToothPostChoice1:
+        'events/Gnome Tooth/Gnome Tooth Post Choice 1.webp',
+    eventGnomeToothPostChoice2:
+        'events/Gnome Tooth/Gnome Tooth Post Choice 2.webp',
+
+    eventHogClownMainGraphic:
+        'events/Hog Covered in Clowns/Hog Covered in Clowns.webp',
+    eventHogClownPrompt1: 'events/Hog Covered in Clowns/HogClown Prompt 1.webp',
+    eventHogClownPrompt2: 'events/Hog Covered in Clowns/HogClown Prompt 2.webp',
+    eventHogClownChoice1: 'events/Hog Covered in Clowns/HogClown Choice 1.webp',
+    eventHogClownChoice2: 'events/Hog Covered in Clowns/HogClown Choice 2.webp',
+    eventHogClownPostChoice1:
+        'events/Hog Covered in Clowns/Hog Clown Post Choice 1.webp',
+    eventHogClownPostChoice2:
+        'events/Hog Covered in Clowns/Hog Clown Post Choice 2.webp',
+
     // eventCursedStatueGuide: 'events/Cursed Statue/Cursed Statue Guide.webp',
     // eventCursedStatue: 'events/Cursed Statue/Cursed Statue.webp',
     // Leave without touching the statue.webp',
@@ -637,6 +654,23 @@ export const eventAssets = {
     // eventCursedStatueChoice1: 'events/Cursed Statue/CursedStatue Choice 1.webp',
     // eventCursedStatueChoice2: 'events/Cursed Statue/CursedStatue Choice 2.webp',
     // eventCursedStatueChoice3: 'events/Cursed Statue/CursedStatue Choice 3.webp',
+}
+
+export const souvenirAssets: {
+    [K in SouvenirId as `souvenir${Capitalize<K>}`]: string
+} = {
+    souvenirBigStinkyTooth: 'souvenirs/Stinky Tooth.webp',
+    souvenirBrokenCarriageWheel: 'souvenirs/Broken Carriage Wheel.webp',
+    souvenirBundleOfFrogWine: 'souvenirs/Bundle Of frog Wine.webp',
+    souvenirClownInfestation: 'souvenirs/Clown Infestation.webp',
+    souvenirCowardsCrown: 'souvenirs/Cowards Crown.webp',
+    souvenirDemonsLeftHand: "souvenirs/Demon's Left Hand.webp",
+    souvenirDemonsRightHand: "souvenirs/Demon's Right Hand.webp",
+    souvenirDentistryForDummies: 'souvenirs/Dentistry for dummies.webp',
+    souvenirFrogWine: 'souvenirs/barrel of frog wine.webp',
+    souvenirGlassOfWarmMilk: 'souvenirs/Glass of Warm Milk.webp',
+    souvenirNightmareBiscuit: 'souvenirs/Enchanted snowball.webp',
+    souvenirSqueakyClownShoes: 'souvenirs/Squeaky clown shoes.webp',
 }
 
 export const userAvatarAssets = {

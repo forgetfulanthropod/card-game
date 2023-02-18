@@ -6,7 +6,7 @@ import {
     RoomEnemies,
 } from 'shared'
 import { keys, vals } from 'shared/code'
-import { eventScenes } from '../eventScenes'
+import { eventSceneMap } from '../eventSceneMap'
 
 const config = { randomDungeon: false }
 
@@ -123,7 +123,7 @@ const roomOptions: Record<
     RoomCategoryId,
     RoomEnemies[] | { enemies: RoomEnemies; event: Event }[]
 > = {
-    events: vals(eventScenes).map((event, index) => ({
+    events: vals(eventSceneMap).map((event, index) => ({
         enemies: eventEnemies[index % eventEnemies.length]!,
         event,
     })),

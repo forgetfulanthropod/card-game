@@ -21,6 +21,7 @@ import type {
 } from '.'
 import { RunID } from '../User'
 import { EventScene } from '../EventScene'
+import { Souvenir } from '../Souvenir'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -70,6 +71,7 @@ export interface BattleScene extends SceneHas {
         endTime: number | null
     }
     runId: RunID | null
+    souvenirs: Souvenir[]
 }
 
 /** May later have e.g. DOT effects */

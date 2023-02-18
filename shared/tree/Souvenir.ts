@@ -1,26 +1,32 @@
+import { CardAction } from './battle'
+
 export type SouvenirMap = Record<SouvenirId, Souvenir>
 
 export type SouvenirId =
     | 'bigStinkyTooth'
-    | 'dentistryForDummies'
-    | 'frogWine'
     | 'brokenCarriageWheel'
     | 'bundleOfFrogWine'
-    | 'squeakyClownShoes'
-    | 'cowardsCrown'
     | 'clownInfestation'
+    | 'cowardsCrown'
     | 'demonsLeftHand'
     | 'demonsRightHand'
+    | 'dentistryForDummies'
+    | 'frogWine'
+    | 'glassOfWarmMilk'
+    | 'nightmareBiscuit'
+    | 'squeakyClownShoes'
 
 export type Souvenir = {
     id: SouvenirId
     name: string
     equippable: boolean
     description: string
-    actions: {
-        onAcquire?: string
-        onBattleEnd?: string
-        onBattleStart?: string
+    on: {
+        acquire?: CardAction
+        battleStart?: CardAction
+        battleEnd?: CardAction
+        turnStart?: CardAction
+        turnEnd?: CardAction
     }
 }
 
@@ -31,9 +37,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: true,
         description:
             'Equipped Kaiju gains +5 defense,<br/>-2 strength, and -2 magic.',
-        actions: {
-            onAcquire:
-                'modifyStats("defense|strength|magic", "5|-2|-2", "run")',
+        on: {
+            acquire: 'modifyStats("defense|strength|magic", "5|-2|-2", "run")',
         },
     },
     dentistryForDummies: {
@@ -41,9 +46,9 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Dentistry for Dummies',
         equippable: true,
         description:
-            'Equipped Kaiju gains: “Give this Kaiju<br/> +2 Magic at the end of every battle.”',
-        actions: {
-            onBattleEnd: 'modifyStats("magic", "2", "run")',
+            'Equipped Kaiju receives +1 Magic after completing each room.',
+        on: {
+            battleEnd: 'modifyStats("magic", "1", "run")',
         },
     },
     frogWine: {
@@ -51,18 +56,18 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Frog Wine',
         equippable: false,
         description: 'All Kaiju gain +1 Strength, +1 Magic, and +1 Defense.',
-        actions: {
-            onAcquire: 'modifyStats("strength|magic|defense", "1|1|1", "run")',
+        on: {
+            acquire: 'modifyStats("strength|magic|defense", "1|1|1", "run")',
         },
     },
     brokenCarriageWheel: {
         id: 'brokenCarriageWheel',
         name: 'Broken Carriage Wheel',
-        equippable: false,
+        equippable: true,
         description:
-            'Equipped Kaiju gains: “Gain Berserk (3) and take 2 damage when entering a new encounter."',
-        actions: {
-            onBattleStart: 'chain(deal(2), effect("berserk", 3))',
+            'At the start of each room, apply Berserk (3) to equpped Kaiju.',
+        on: {
+            battleStart: 'chain(deal(2), effect("berserk", 3))',
         },
     },
     bundleOfFrogWine: {
@@ -71,8 +76,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: false,
         description:
             'All Kaiju take 7 Damage.<br/>All Kaiju gain +3 Strength, +3 Magic, and +3 Defense.',
-        actions: {
-            onAcquire:
+        on: {
+            acquire:
                 'chain(deal(7), modifyStats("strength|magic|defense", 3|3|3, "run"))',
         },
     },
@@ -82,29 +87,29 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: true,
         description:
             'Equipped Kaiju Ignores the effects of being in<br/>Aggressive stance.',
-        actions: {
-            onBattleStart: 'effectPermanent("ignoreAggressive")',
+        on: {
+            // battleStart: 'effectPermanent("ignoreAggressive")',
+            turnStart: 'effect("ignoreAggressive", 1)',
         },
     },
     cowardsCrown: {
         id: 'cowardsCrown',
         name: 'Cowards Crown',
         equippable: false,
-        description: 'All Kaiju deal 10% more damage when in avoidant stance',
-        actions: {
-            //TODO
-            onBattleStart: 'effectPermanent("cowardsCrown")',
+        description: 'All Kaiju deal 15% more damage in avoidant stance',
+        on: {
+            turnStart: 'effect("cowardsCrown", 1)',
         },
     },
     clownInfestation: {
         id: 'clownInfestation',
-        name: 'Clown Infestation',
+        name: 'Infestation of Clowns',
         equippable: true,
         description:
-            'When entering a new Encounter, add a random “Gnome Prank” card you your hand.',
-        actions: {
-            //TODO
-            onBattleStart: 'addCard("gnomePrank*", "hand")',
+            'At the start of a new Encounter, apply Vulnerable (1) to all friendly characters.  Apply Vulnerable (2) to all enemy characters. ',
+        on: {
+            battleStart:
+                'chain(effect("vulnerable", 1, "allFriends"), effect("vulnerable", 2, "allEnemies"))',
         },
     },
     demonsLeftHand: {
@@ -113,8 +118,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: true,
         description:
             'Equipped Kaiju gets<br/>+2 Strength, +2 Magic, and<br/>-10 max Health',
-        actions: {
-            onBattleStart:
+        on: {
+            battleStart:
                 'modifyStats("strength|magic|constitution", "2|2|-10", "run")',
         },
     },
@@ -124,8 +129,30 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: false,
         description:
             'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
-        actions: {
-            onBattleStart:
+        on: {
+            battleStart:
+                'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
+        },
+    },
+    nightmareBiscuit: {
+        id: 'nightmareBiscuit',
+        name: 'Nightmare Biscuit',
+        equippable: false,
+        description:
+            'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
+        on: {
+            battleStart:
+                'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
+        },
+    },
+    glassOfWarmMilk: {
+        id: 'glassOfWarmMilk',
+        name: 'Glass of Warm Milk',
+        equippable: false,
+        description:
+            'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
+        on: {
+            battleStart:
                 'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
         },
     },

@@ -70,6 +70,7 @@ export function makeBattleState(args: {
         runScore: getInitialRunScore(),
         runDuration: getInitialRunDuration(),
         runId: null,
+        souvenirs: [],
     }
     return bs
 }

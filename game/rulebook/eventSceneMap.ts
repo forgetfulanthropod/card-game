@@ -1,6 +1,6 @@
 import { EventId, EventScene } from 'shared/tree/EventScene'
 
-export const eventScenes: Record<EventId, EventScene> = {
+export const eventSceneMap: Record<EventId, EventScene> = {
     frogCarriage: {
         id: 'frogCarriage',
         choices: [
@@ -29,17 +29,17 @@ export const eventScenes: Record<EventId, EventScene> = {
             },
         ],
     },
-    // gnomeStory: {
-    //     id: 'gnomeStory',
-    //     choices: [
-    //         {
-    //             souvenirId: 'nightmareBiscuit',
-    //         },
-    //         {
-    //             souvenirId: 'glassOfWarmMilk',
-    //         },
-    //     ],
-    // },
+    gnomeStory: {
+        id: 'gnomeStory',
+        choices: [
+            {
+                souvenirId: 'nightmareBiscuit',
+            },
+            {
+                souvenirId: 'glassOfWarmMilk',
+            },
+        ],
+    },
     gnomeTooth: {
         id: 'gnomeTooth',
         choices: [
@@ -51,8 +51,8 @@ export const eventScenes: Record<EventId, EventScene> = {
             },
         ],
     },
-    hogCoveredInClowns: {
-        id: 'hogCoveredInClowns',
+    hogClown: {
+        id: 'hogClown',
         choices: [
             {
                 souvenirId: 'clownInfestation',

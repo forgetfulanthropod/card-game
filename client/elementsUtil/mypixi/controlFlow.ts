@@ -10,6 +10,8 @@ import { onDestroyed } from './convenience'
 import { Container } from './core'
 import { getPixiApp } from './application'
 import { nextTick } from '@/util'
+import { transitionFadeElement } from '@/scenes/run/EndOfRun'
+import { transitionScene } from '@/scenes/shared/transitionScene'
 
 type DestroyOptions = IDestroyOptions | boolean | undefined
 
@@ -27,28 +29,44 @@ export function If<T = unknown>(
     condition: RODatum<T> & { destroy?: Callback },
     ifRender: (x: Exclude<T, Falsy>) => DisplayObject,
     elseRender?: () => DisplayObject,
-    displayArgs?: DisplayObjectArgs,
-    destroyOptions: DestroyOptions = { children: true }
+    options?: {
+        displayArgs?: DisplayObjectArgs
+        destroyOptions?: DestroyOptions
+        transition?: boolean
+    }
 ): PixiContainer {
     const root = Container({})
+    let lastRender: DisplayObject | null
     onDestroyed(
         root,
         condition.onChange(handleChange, true),
         () => condition?.destroy?.(),
     ) // prettier-ignore
-    if (displayArgs != null) applyDisplayObjectArgs(root, displayArgs)
+    if (options?.displayArgs != null)
+        applyDisplayObjectArgs(root, options.displayArgs)
     return root
-    function handleChange(val: T) {
+    async function handleChange(val: T) {
+        if (options?.transition && lastRender)
+            await transitionScene(lastRender as PixiContainer, 'out')
+
         const children = root.removeChildren()
-        nextTick().then(() => children.forEach(c => c.destroy(destroyOptions)))
+        nextTick().then(() =>
+            children.forEach(c =>
+                c.destroy(options?.destroyOptions ?? { children: true })
+            )
+        )
+
         //@ts-expect-error
         if (val != null && val !== false) {
             // @ts-expect-error
-            root.addChild(ifRender(val))
+            root.addChild((lastRender = ifRender(val)))
         } else if (elseRender != null) {
             // @ts-expect-error
-            root.addChild(elseRender(val))
-        }
+            root.addChild((lastRender = elseRender(val)))
+        } else lastRender = null
+
+        if (options?.transition && lastRender)
+            transitionScene(lastRender as PixiContainer, 'in')
     }
 }
 

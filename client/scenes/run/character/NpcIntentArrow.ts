@@ -86,7 +86,7 @@ export function IntentArrows(
             hasIntentArrow,
             () => For(targets, key => IntentArrow(key)),
             undefined,
-            { name: 'intentArrows' }
+            { displayArgs: { name: 'intentArrows' } }
         ),
         orig.destroy,
         highlightIntentFrom.onChange(_uid => {
