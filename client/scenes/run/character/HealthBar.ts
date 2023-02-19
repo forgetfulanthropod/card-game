@@ -1,12 +1,13 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid } from 'shared'
+import type { Pile, CharacterMeta, CharacterUid } from 'shared'
 
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { getBattleScene } from '@/data'
 import type { AssetKey, PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
+    Adjust,
     If,
     onDestroyed,
     getTexture,
@@ -15,7 +16,13 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { onUpdate, statChangesDatum, toDatum } from '@/util'
+import {
+    hoveredSelectedCardUid,
+    isAttacking,
+    onUpdate,
+    statChangesDatum,
+    toDatum,
+} from '@/util'
 import { Explanation } from '@/scenes/shared'
 import { difference, omit, upperFirst } from 'lodash'
 import { StanceControls } from './StanceControls'
@@ -29,6 +36,7 @@ export const HEALTH_BAR_WIDTH = 300
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
+    const handCursor = getBattleScene().select('cards', 'hand')
     // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
     const unsub = onUpdate(characterCursor, char => {
         if (char == null) {
@@ -45,7 +53,8 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
         },
         BlockIndicator(characterCursor),
         HealthIndicator(characterCursor),
-        EffectIndicators(characterCursor)
+        EffectIndicators(characterCursor),
+        DamageIndicator(characterCursor, handCursor)
     )
     return root
 }
@@ -93,6 +102,123 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                       }),
                   ])
         )
+    )
+}
+
+function DamageContainer(
+    isPc: boolean,
+    health: number,
+    healthChange: number,
+    block: number,
+    blockChange: number
+) {
+    const healthColor = healthChange > 0 ? 'red' : 'green'
+    const healthText =
+        healthChange === 0
+            ? ''
+            : healthChange >= health
+            ? 'WASTED'
+            : healthChange > 0
+            ? `${-healthChange}`
+            : `+${healthChange}`
+    const blockText =
+        blockChange === 0 || healthText === 'WASTED'
+            ? ''
+            : -blockChange >= block
+            ? 'SMASHED'
+            : blockChange > 0
+            ? `+${blockChange}`
+            : `${blockChange}`
+    const blockAdjustment =
+        healthText === 'WASTED' || blockText === 'SMASHED'
+            ? {
+                  x: 50,
+                  y: 25,
+              }
+            : { x: 50 }
+    return Container(
+        {
+            y: 0,
+            x: isPc ? 315 : -175,
+        },
+        ...[
+            Text({
+                text: healthText,
+                anchor: [0, 0.5],
+                style: {
+                    // fontFamily: ['bigFont', 'monospace'],
+                    fontFamily: ['sansFont'],
+                    fontSize: 30,
+                    fill: healthColor,
+                    stroke: 'black',
+                    strokeThickness: 1,
+                },
+            }),
+            Adjust(
+                Text({
+                    text: blockText,
+                    anchor: [0, 0.5],
+                    style: {
+                        // fontFamily: ['bigFont', 'monospace'],
+                        fontFamily: ['sansFont'],
+                        fontSize: 30,
+                        fill: 'blue',
+                        stroke: 'white',
+                        strokeThickness: 1,
+                    },
+                }),
+                blockAdjustment
+            ),
+        ]
+    )
+}
+
+function DamageIndicator(
+    characterCursor: ROCursor<CharacterMeta>,
+    handCursor: ROCursor<Pile>
+) {
+    const characterUid = characterCursor.get('uid')
+    const isPc = characterCursor.get('isPc')
+    const showDamageContainer = datum(false)
+    const damageValue = datum(0)
+    const blockValue = datum(0)
+    return onDestroyed(
+        If(showDamageContainer, () => {
+            return DamageContainer(
+                isPc,
+                characterCursor.get('health'),
+                damageValue.val,
+                characterCursor.get('block'),
+                blockValue.val
+            )
+        }),
+        hoveredSelectedCardUid.onChange(cardUid => {
+            // console.debug('hovered selected card:', cardUid)
+            showDamageContainer.set(false)
+            if (!cardUid) {
+                if (isAttacking.val) return
+                showDamageContainer.set(false)
+                damageValue.set(0)
+                blockValue.set(0)
+                return
+            }
+            const card = handCursor.get(cardUid)
+            if (!card.outcomes) {
+                showDamageContainer.set(false)
+                return
+            }
+            let outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            const damage = outcome.damages[characterUid] || 0
+            const block = outcome.blocks[characterUid] || 0
+            damageValue.set(damage)
+            blockValue.set(block)
+            showDamageContainer.set(true)
+            return
+        }),
+        isAttacking.onChange(attacking => {
+            if (!hoveredSelectedCardUid.val && !attacking)
+                showDamageContainer.set(false)
+        })
     )
 }
 

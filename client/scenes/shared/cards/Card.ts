@@ -23,7 +23,13 @@ import {
 } from '../Explanation'
 import { beginTargetSelection } from './beginTargetSelection'
 import { getCardTypeTexture } from './getCardTypeSrc'
-import { hoveredCharacterUid, nextFrame, nextTick } from '@/util'
+import {
+    hoveredCharacterUid,
+    hoveredSelectedCardUid,
+    isAttacking,
+    nextFrame,
+    nextTick,
+} from '@/util'
 import {
     InteractionEventHandler,
     InteractionEvents,
@@ -453,12 +459,18 @@ function getEvents(
     const pointerover: InteractionEventHandler = () => {
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
+        if (card.outcomes?.outcome && isAttacking.val === false) {
+            hoveredSelectedCardUid.set(card.uid)
+        }
     }
     const pointerout: InteractionEventHandler = () => {
         setTimeout(() => {
             if (hoveredCardUid.val === card.uid) {
                 hoveredCardUid.set(null)
                 hoveredCharacterUid.set(null)
+                if (card.outcomes?.outcome && isAttacking.val === false) {
+                    hoveredSelectedCardUid.set(null)
+                }
             }
         }, 0)
     }
