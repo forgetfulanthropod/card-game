@@ -7,8 +7,6 @@ import {
     SystemProgram,
     Transaction,
 } from '@solana/web3.js'
-import { CustomChainConfig, SafeEventEmitterProvider } from '@web3auth/base'
-import { SolanaWallet } from '@web3auth/solana-provider'
 import kaijuNFTIds from '../data/validNftIds.json'
 
 const TOKEN_PROGRAM = 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'

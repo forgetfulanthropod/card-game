@@ -187,7 +187,7 @@ export function NewCharacterIcon() {
         Container(
             {},
             Text({
-                text: '    NEW    ',
+                text: '     NEW    ',
                 style: {
                     fill: 'white',
                     fontFamily: 'bigFont',
@@ -199,7 +199,7 @@ export function NewCharacterIcon() {
             padding: 3,
             colorStops: [
                 { color: 0xFE2027, offset: 0 },
-                { color: 0xCB0108, offset: 1 },
+                { color: 0xFF4D00, offset: 1 },
             ],
             alpha: 1,
             borderRadius: 12,

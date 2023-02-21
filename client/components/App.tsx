@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { GameManager } from './GameManager'
 // import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
-import { GAME_IS_LIVE, NewStartScreen } from './NewStartScreen'
 import {
     ConnectionProvider,
     WalletProvider,
@@ -18,13 +17,15 @@ import {
     LedgerWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import { getClientEnv } from '@/util/getClientEnv'
+import { NewStartScreen } from './NewStartScreen'
 
 export function App(): JSXElement {
     const [username, setUsername] = useState(
         localStorage.getItem('username') ?? ''
     )
     const [ready, setReady] = useState(false)
-    // console.log({ username })
+    const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
 
     useEffect(() => {
         if (username.length > 0) {
@@ -33,7 +34,7 @@ export function App(): JSXElement {
         }
     }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    const endpoint = process.env.RPC_URL ?? 'https://api.metaplex.solana.com/'
+    const endpoint = getClientEnv('RPC_URL') ?? 'https://api.metaplex.solana.com/'
 
     const wallets = [
         new PhantomWalletAdapter(),
@@ -42,8 +43,6 @@ export function App(): JSXElement {
         new GlowWalletAdapter(),
         new LedgerWalletAdapter(),
     ]
-
-    console.log({ endpoint })
 
     const handleStartGame = async (userId: string) => {
         localStorage.setItem('username', userId)

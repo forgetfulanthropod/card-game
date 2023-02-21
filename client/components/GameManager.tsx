@@ -5,18 +5,17 @@ import { ResetButton } from './ResetButton'
 import { AwaitTree } from './AwaitTree'
 import { RulebookEditor } from './RulebookEditor'
 import { SceneEditor } from './SceneEditor'
+import { getClientEnv } from '@/util/getClientEnv'
 
 export function GameManager(props: { username: string }): JSXElement {
     const { username } = props
 
-    const isProduction = !!process.env.IS_PRODUCTION
+    const isProduction = getClientEnv('IS_PRODUCTION')
 
-    console.log({ isProduction })
 
     return <AppWrap>
         {/* <div>
             On branch {"'"}
-            {process.env.CLIENT_GIT_BRANCH}
             {"'"}
         </div> */}
         <Toaster />

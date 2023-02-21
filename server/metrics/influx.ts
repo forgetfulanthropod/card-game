@@ -1,3 +1,4 @@
+import { getServerEnv } from '@/../shared/code'
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
 
 import { getLogger } from 'game'
@@ -11,8 +12,8 @@ let influxBucket: string
 
 const getInfluxDb = (): InfluxDB | undefined => {
     if (_db) return _db
-    const influxUrl = process.env.INFLUX_URL
-    const influxApiToken = process.env.INFLUX_TOKEN
+    const influxUrl = getServerEnv('INFLUX_URL')
+    const influxApiToken = getServerEnv('INFLUX_TOKEN')
     if (!influxUrl || !influxApiToken) {
         logger.error(
             'no influx url or token defined. check your INFLUX_URL and INFLUX_TOKEN variable in env'
@@ -21,8 +22,8 @@ const getInfluxDb = (): InfluxDB | undefined => {
         enableMetrics = false
         return
     }
-    influxOrg = process.env.INFLUX_ORG || ''
-    influxBucket = process.env.INFLUX_BUCKET || ''
+    influxOrg = getServerEnv('INFLUX_ORG')
+    influxBucket = getServerEnv('INFLUX_BUCKET')
     if (!influxOrg || !influxBucket) {
         logger.error(
             'no influx organization or bucket defined. check your INFLUX_ORG and INFLUX_BUCKET variables in env'
@@ -103,7 +104,7 @@ export const writeMetric = (
         }
         let db = getInfluxDb()
         if (!db) {
-            logger.error('could not get db connection')
+            logger.error('could not get influxDB connection')
             return
         }
         // TODO: use a single/shared writeApi and make all writes async

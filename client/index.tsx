@@ -7,20 +7,15 @@ import { render } from 'react-dom'
 import { App } from './components'
 import { startLoadingAssets } from './elementsUtil'
 import { prepareSocket } from './socket'
-import { GAME_IS_LIVE } from './components/NewStartScreen'
+import { BUILD_VER } from 'shared'
+import { getClientEnv } from './util/getClientEnv'
 
 // @ts-expect-error
 window.loadedJs = true // for the password logic in index.html
 
-const clientBuildInfo = {
-    gitBranch: process.env.CLIENT_GIT_BRANCH ?? '',
-    gitCommit: process.env.CLIENT_GIT_COMMIT ?? '',
-    buildTime: process.env.CLIENT_BUILD_TIME ?? '',
-}
-console.log('client build info:', JSON.stringify(clientBuildInfo))
-
 const preactRoot = document.getElementById('preact-root') as HTMLDivElement
-const IS_PRODUCTION = process.env.IS_PRODUCTION
+const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
+const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
 
 function main() {
     if (GAME_IS_LIVE) {
@@ -33,7 +28,7 @@ function main() {
             e.preventDefault()
         })
     }
-    
+    document.title = `Kaiju Cards ${BUILD_VER}`
     prepareSocket()
     preactRoot.innerHTML = '' // remove the default warning
     render(<App />, preactRoot)

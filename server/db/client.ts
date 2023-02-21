@@ -10,6 +10,7 @@ import {
     stringifyDsn,
 } from 'slonik'
 import * as z from 'zod'
+import { getServerEnv } from '@/../shared/code'
 
 export type DbClient =
     | DatabasePool
@@ -22,17 +23,17 @@ export const getDbClient = async () => {
     if (pool) return pool
     const logger = getLogger()
     const url = stringifyDsn({
-        username: process.env.PGUSER,
-        password: process.env.PGPASSWORD,
-        host: process.env.PGHOST,
-        port: Number(process.env.PGPORT),
-        databaseName: process.env.PGDATABASE,
+        username: getServerEnv('PGUSER'),
+        password: getServerEnv('PGPASSWORD'),
+        host: getServerEnv('PGHOST'),
+        port: Number(getServerEnv('PGPORT')),
+        databaseName: getServerEnv('PGDATABASE'),
     })
 
-    const isLocalhost = process.env.PGHOST === 'localhost' ? true : false
+    const isLocalhost = getServerEnv('PGHOST') === 'localhost' ? true : false
 
     const ssl = { ca: readFileSync(path.resolve('CA_CERT.crt')) }
-    const maximumPoolSize = parseInt(process.env.MAX_POOL_SIZE ?? '20')
+    const maximumPoolSize = parseInt(getServerEnv('MAX_POOL_SIZE') ?? '20')
 
     pool = await createPool(url, {
         ssl: isLocalhost ? undefined : ssl,

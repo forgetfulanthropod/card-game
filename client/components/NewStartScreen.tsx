@@ -3,9 +3,6 @@ import { useState, useEffect } from 'react'
 import { PrimaryButton } from './StartScreen'
 import { GameModeContainer } from './StartScreen'
 import { NavIconWrapper } from './StartScreen'
-import { Web3Auth } from '@web3auth/modal'
-import { CHAIN_NAMESPACES, SafeEventEmitterProvider } from '@web3auth/base'
-import { useWeb3Auth } from '@/hooks/useWeb3Auth'
 import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
 import { WalletGateModal } from './StartScreen/WalletGateModal'
@@ -18,11 +15,8 @@ import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { collectData, initAnalytics } from '@/analytics/collectData'
 import { ClosedGameModal } from './StartScreen/ClosedGameModal'
 import { UsernameModal } from './StartScreen/UsernameModal'
+import { getClientEnv } from '@/util/getClientEnv'
 require('@solana/wallet-adapter-react-ui/styles.css')
-
-export const WALLET_GATED = process.env.WALLET_GATED
-export const GAME_IS_LIVE = process.env.GAME_IS_LIVE
-console.log({ WALLET_GATED, GAME_IS_LIVE, RPC_URL: process.env.RPC_URL })
 
 export type UserDoc = {
     walletAddress: string
@@ -38,6 +32,8 @@ export function NewStartScreen(props: {
     const wallet = useWallet();
     const encodedPublicKey = wallet.publicKey
     const [publicKey, setPublicKey] = useState('')
+    const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
+    const WALLET_GATED = getClientEnv('WALLET_GATED')
     useEffect(() => {
         if (connection && encodedPublicKey) {
             const publicKey = encodedPublicKey?.toBase58()
