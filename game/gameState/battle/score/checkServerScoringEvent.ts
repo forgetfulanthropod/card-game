@@ -39,8 +39,7 @@ const checkServerScoringEvent = (
         case 'HIGHEST_DAMAGE':
             checkHighestDamageHit(scene, data as applyDamageArgs)
             break
-        case 'RUN_COMPLETED':
-            checkMinsUnderRunThreshold(scene)
+        case 'SURVIVING_KAIJU':
             checkSurvivingKaiju(scene)
             break
         case 'BLOCK_OVER_THRESHOLD':
@@ -48,12 +47,6 @@ const checkServerScoringEvent = (
             break
         case 'HIT_VULGAR_THRESHOLD':
             checkDamageDealtInTurn(scene)
-            break
-        case 'STANCE_CHANGES_OVER':
-            checkStanceChanges(scene)
-            break
-        case 'STANCE_CHANGES_UNDER':
-            checkStanceChanges(scene)
             break
         case 'CARDS_OVER_THRESHOLD':
             checkCardsOverThreshold(scene)
@@ -160,30 +153,6 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
     }
 }
 
-const checkMinsUnderRunThreshold = (scene: BattleCursor) => {
-    const sceneState = scene.get('state')
-    if (sceneState !== 'won') {
-        return
-    }
-
-    const startTime = scene.select('runDuration').get('startTime')
-    const endTime = scene.select('runDuration').get('endTime')
-
-    if (endTime) {
-        const totalTimeInSeconds = (endTime - startTime) / 1000
-        const minutes = ~~((totalTimeInSeconds % 3600) / 60)
-        const hours = ~~(totalTimeInSeconds / 3600)
-
-        if (hours <= 0 && minutes < RUN_TIME_THRESHOLD_MINS) {
-            updateRunScoreAttribute(
-                scene,
-                'minsUnderRunThreshold',
-                RUN_TIME_THRESHOLD_MINS - minutes
-            )
-        }
-    }
-}
-
 const checkSurvivingKaiju = (scene: BattleCursor) => {
     const survivingKaiju = vals(scene.get('allCharacters')).filter(
         char => char.isPc && char.health > 0
@@ -232,14 +201,6 @@ const checkStanceChanges = (scene: BattleCursor) => {
     trackStanceChanges(scene) // used for final turn update
     // const STANCE_CHANGES_THRESHOLD = 5
     const stanceChanges = scene.get('stanceChangesThisRoom')
-    if (stanceChanges.length === 0) {
-        updateScore({
-            scene,
-            event: 'STANCE_CHANGES_UNDER',
-            count: 1,
-            notify: true,
-        })
-    }
     // currently removed quicked-footed
     // else if (stanceChanges.length > STANCE_CHANGES_THRESHOLD) {
     //     updateRunScoreAttribute(

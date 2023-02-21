@@ -15,7 +15,6 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const gameIsOver = !!scene.get('currentRoom').enemies.find(e => e.boss)
 
     if (winner) {
-        checkServerScoringEvent('STANCE_CHANGES_UNDER', scene, {})
         calculateNewRunScore(scene)
         calculateChestProgress(scene)
         scene.set('numRequiredToDiscard', 0)
@@ -27,7 +26,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
             scene.set('state', 'won')
             scene.select('runDuration').set('endTime', new Date().getTime())
-            checkServerScoringEvent('RUN_COMPLETED', scene, {})
+            checkServerScoringEvent('SURVIVING_KAIJU', scene, {})
         } else {
             clearCharacterModifiersForRoom(scene)
 

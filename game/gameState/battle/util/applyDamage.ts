@@ -171,13 +171,6 @@ function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
             count: 1,
             notify: true,
         })
-    } else {
-        updateScore({
-            scene,
-            event: 'OVERKILL',
-            count: Math.min(-remainingHealth, 40),
-            notify: true,
-        })
     }
 }
 
