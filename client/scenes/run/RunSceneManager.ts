@@ -1,19 +1,8 @@
 import { getBattleScene } from '@/data'
-import {
-    AssetKey,
-    BASE_HEIGHT,
-    BASE_WIDTH,
-    For,
-    getTexture,
-    PixiContainer,
-    Sprite,
-} from '@/elementsUtil'
-import { Container, If } from '@/elementsUtil'
+import { Container, If, PixiContainer } from '@/elementsUtil'
 import { onUpdate, toDatum } from '@/util'
 import { compose, datum } from 'datums'
-import { upperFirst } from 'lodash'
 import type { CardUid } from 'shared'
-import { ExplanationIf, TEXT_WIDTH } from '../shared'
 import { BattleScene, immediatelyTakeRequiredAction } from './BattleScene'
 import { EventScene } from './EventScene'
 import { HexMapOverlay } from './HexMapOverlay'
@@ -55,47 +44,6 @@ export function RunSceneManager(): PixiContainer {
             },
             () => BattleScene(scene, hoveredCardUid),
             { transition: true }
-        ),
-        For(
-            toDatum(scene.select('souvenirs'), souvenirs =>
-                souvenirs.map((s, index) => ({ ...s, key: s.id, index }))
-            ),
-            souvenir => {
-                const isHovered = datum(false)
-                const souvenirWidth = 120
-                return Container(
-                    {
-                        x:
-                            BASE_WIDTH -
-                            100 -
-                            souvenir.index * souvenirWidth * 1.2,
-                        y: 40,
-                    },
-                    Sprite({
-                        src: `souvenir${upperFirst(souvenir.id)}` as AssetKey,
-                        scale:
-                            souvenirWidth /
-                            getTexture(
-                                `souvenir${upperFirst(souvenir.id)}` as AssetKey
-                            ).width,
-                        anchor: [1, 0],
-                        events: {
-                            pointerover() {
-                                isHovered.set(true)
-                            },
-                            pointerout() {
-                                isHovered.set(false)
-                            },
-                        },
-                    }),
-                    ExplanationIf({
-                        isShown: isHovered,
-                        texts: [souvenir.name, souvenir.description],
-                        isHtml: true,
-                        xOffset: -TEXT_WIDTH * 1.1 - souvenirWidth,
-                    })
-                )
-            }
         )
     )
 

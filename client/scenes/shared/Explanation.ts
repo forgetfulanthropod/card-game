@@ -176,6 +176,7 @@ function portalizeExplanations(
                     {
                         x,
                         y,
+                        name: 'explanation box',
                     },
                     ...content
                 ),

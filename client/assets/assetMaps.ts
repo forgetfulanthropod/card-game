@@ -664,7 +664,7 @@ export const souvenirAssets: {
 } = {
     souvenirBigStinkyTooth: 'souvenirs/Stinky Tooth.webp',
     //TODO: broken carriage wheel
-    souvenirBrokenCarriageWheel: 'souvenirs/Enchanted snowball.webp',
+    souvenirBrokenCarriageWheel: 'souvenirs/Broken Carriage Wheel.webp',
     souvenirBundleOfFrogWine: 'souvenirs/Bundle Of frog Wine.webp',
     souvenirClownInfestation: 'souvenirs/Clown Infestation.webp',
     souvenirCowardsCrown: 'souvenirs/Cowards Crown.webp',
@@ -673,8 +673,7 @@ export const souvenirAssets: {
     souvenirDentistryForDummies: 'souvenirs/Dentistry for dummies.webp',
     souvenirFrogWine: 'souvenirs/barrel of frog wine.webp',
     souvenirGlassOfWarmMilk: 'souvenirs/Glass of Warm Milk.webp',
-    //TODO: nightmare biscuit
-    souvenirNightmareBiscuit: 'souvenirs/Enchanted snowball.webp',
+    souvenirNightmareBiscuit: 'souvenirs/Nightmare Biscuit.webp',
     souvenirSqueakyClownShoes: 'souvenirs/Squeaky clown shoes.webp',
 }
 

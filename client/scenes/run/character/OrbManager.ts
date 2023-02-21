@@ -1,27 +1,18 @@
 import { getOrbTexture } from '@/assets'
-import { nextTick, onUpdate, toDatum } from '@/util'
+import { callApi } from '@/callApi'
 import {
     Container,
     For,
-    getStage,
     glowFilter,
-    If,
-    portalize,
-    SCALE_UNIVERSAL,
+    PixiContainer,
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { PixiContainer } from '@/elementsUtil'
-import { callApi } from '@/callApi'
-import { CharacterCursor } from './Character'
+import { KeyTerm, TermExplanationIf } from '@/scenes/shared'
+import { toDatum } from '@/util'
 import { datum } from 'datums'
-import {
-    Explanation,
-    KeyTerm,
-    TermExplanation,
-    TermExplanationIf,
-} from '@/scenes/shared'
 import { omit, upperFirst } from 'lodash'
+import { CharacterCursor } from './Character'
 
 export function OrbManager(
     characterCursor: CharacterCursor,

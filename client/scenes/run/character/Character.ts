@@ -22,7 +22,7 @@ import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 
 import { getCharTexture, SoundEffectAssetKey } from '@/assets'
-import type { PixiContainer, PixiSpine } from '@/elementsUtil'
+import { getStage, PixiContainer, PixiSpine } from '@/elementsUtil'
 import {
     Adjust,
     Container,
@@ -98,15 +98,16 @@ export function Character(props: CharacterProps): PixiContainer {
         )
     )
 
-    setTimeout(
-        () =>
-            mainContainer.addChild(
-                Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
-                    y: 22,
-                })
-            ),
-        0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
-    )
+    if (getStage().getChildByName('NpcIntentArrowContainer'))
+        setTimeout(
+            () =>
+                mainContainer.addChild(
+                    Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
+                        y: 22,
+                    })
+                ),
+            0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
+        )
 
     const hitContainer = Container({
         x: characterMeta.isPc ? 30 : 50,

@@ -1,4 +1,32 @@
+import type { AssetKey, CardTypeAssetId } from '@/assets'
+import { callApi } from '@/callApi'
+import { getBattleScene, getEntryScene } from '@/data'
+import {
+    Adjust,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
+    CurvedText,
+    flashTo,
+    getRenderer,
+    getStage,
+    getTexture,
+    InteractionEventHandler,
+    InteractionEvents,
+    PixiContainer,
+    PixiSprite,
+    PixiTexture,
+    Sprite,
+    Text,
+    TweenableContainer,
+    TweenablePixiContainer,
+} from '@/elementsUtil'
+import { toDiscardUids } from '@/scenes/run/BattleScene'
+import { hoveredCharacterUid, nextTick } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
+import type { Datum } from 'datums'
+import { datum } from 'datums'
+import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { DisplayObject, InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
@@ -6,14 +34,10 @@ import type {
     Card,
     CardType,
     CardUid,
-    CharacterMeta,
     CharacterUid,
     OwnedCharacterStats,
     TargetType,
 } from 'shared'
-import type { Datum } from 'datums'
-import { datum } from 'datums'
-import { omit, omitBy, startCase, upperFirst } from 'lodash'
 import { keys } from 'shared/code'
 import {
     Explanation,
@@ -22,37 +46,8 @@ import {
     TermExplanationsIf,
 } from '../Explanation'
 import { beginTargetSelection } from './beginTargetSelection'
-import { getCardTypeTexture } from './getCardTypeSrc'
-import { hoveredCharacterUid, nextFrame, nextTick } from '@/util'
-import {
-    InteractionEventHandler,
-    InteractionEvents,
-    PixiText,
-    PixiTexture,
-    PixiSprite,
-    TweenablePixiContainer,
-    CurvedText,
-    Adjust,
-} from '@/elementsUtil'
-import {
-    portalize,
-    BASE_WIDTH,
-    BASE_HEIGHT,
-    flashTo,
-    getStage,
-    getTexture,
-    Container,
-    getRenderer,
-    PixiContainer,
-    Sprite,
-    Text,
-    TweenableContainer,
-} from '@/elementsUtil'
-import { getBattleScene, getEntryScene } from '@/data'
-import { callApi } from '@/callApi'
-import type { AssetKey, CardTypeAssetId } from '@/assets'
-import { toDiscardUids } from '@/scenes/run/BattleScene'
 import { CARD_WIDTH } from './CardAdder'
+import { getCardTypeTexture } from './getCardTypeSrc'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],

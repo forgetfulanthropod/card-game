@@ -21,6 +21,7 @@ import { EventScene, souvenirMap } from 'shared'
 import { keys } from 'shared/code'
 import { SpineBackground } from '../background'
 import { ExplanationIf, TEXT_WIDTH } from '../shared'
+import { Souvenirs } from './Souvenirs'
 
 export function EventScene(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Event Scene' })
@@ -78,7 +79,8 @@ export function EventScene(): PixiContainer {
 
             if (eventPromptKey) return PromptSprite(eventPromptKey)
             else return Choices(event)
-        })
+        }),
+        Souvenirs()
     )
 }
 
