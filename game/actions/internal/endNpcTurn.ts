@@ -19,6 +19,7 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     const scene = getBattleSceneIn(game)
     if (DEBUG) logger.info('ending NPC turn')
 
+    scene.apply('turnCount', c => c + 1)
     setRoundEnergy(scene)
     clearHasMoved(scene)
 
