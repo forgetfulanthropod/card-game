@@ -1,20 +1,17 @@
 import { build as esbuild } from 'esbuild'
 import { makeBuildInfo } from './makeBuildInfo.mjs'
 import { fileURLToPath } from 'url'
+import { checkEnv  } from './makeBuildInfo.mjs'
 const args = process.argv.slice(2)
 const shouldWatchArgv = args.length === 1 && args[0] === 'watch'
-console.log({ shouldWatchArgv })
 const envObj = makeBuildInfo('SERVER_')
 console.log('build environment:', envObj)
-
-// const parentDir = process.env.PWD.split('/').at(-1)
-// if (parentDir !== 'server') throw Error("must be run from directory 'server'")
-// const isProduction = process.env.production === 'yes'
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) buildServer()
 
 export function buildServer(shouldWatch = shouldWatchArgv) {
     console.log('building server!!')
+    checkEnv('server')
     esbuild({
         entryPoints: ['server/index.ts'],
         bundle: true,

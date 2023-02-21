@@ -8,12 +8,11 @@ import alias from 'esbuild-plugin-alias'
 import { rmSync } from 'fs'
 import { fileURLToPath } from 'url'
 
-import { makeBuildInfo } from './makeBuildInfo.mjs'
+import { checkEnv, makeBuildInfo } from './makeBuildInfo.mjs'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { config as loadDotEnv } from 'dotenv'
 
-loadDotEnv()
 const password = process.env.CLIENT_PASSWORD ?? 'dailyship'
 const buildDir = 'public/'
 const entryPoint = 'client/index.tsx'
@@ -22,32 +21,7 @@ const outFile = `${buildDir}/${password}.js`
 const args = process.argv.slice(2)
 const shouldWatchArgv = args[0] === 'watch'
 
-console.log('process.env.PWD:', process.env.PWD)
-
-console.log('substitutions:', makeSubstitutions())
-
-const REQUIRED_CLIENT_ENV_KEYS =
-    ['WALLET_GATED',
-     'RPC_URL',
-     'GAME_IS_LIVE',
-     'IS_PRODUCTION',
-     'CLIENT_PASSWORD'
-    ]
-
-export const checkEnv = (envKeys) => {
-    console.log('Checking ENV...')
-    for (let key of envKeys) {
-        const value = process.env[key]
-        if (value === undefined) {
-            console.error(key, 'IS MISSING IN .ENV')
-            process.exit(1)
-        }
-    }
-    console.log('.env contains all keys: ', envKeys)
-}
-
 function makeSubstitutions() {
-    // loadDotEnv();
     const walletGated = process.env.WALLET_GATED === 'true'
     const gameIsLive = process.env.GAME_IS_LIVE === 'true'
     const isProduction = process.env.IS_PRODUCTION === 'true'
@@ -66,9 +40,8 @@ if (fileURLToPath(import.meta.url) === process.argv[1]) buildClient()
 
 export function buildClient(shouldWatch = shouldWatchArgv) {
     console.log('BUILDING CLIENT')
-    loadDotEnv();
-
-    checkEnv(REQUIRED_CLIENT_ENV_KEYS)
+    loadDotEnv()
+    checkEnv('client')
     const isProduction = process.env.IS_PRODUCTION === 'true'
     rmSync(outFile, { recursive: true, force: true })
     rmSync(outFile + '.map', { recursive: true, force: true })
@@ -77,12 +50,6 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
         sourcemap: !isProduction, //isDevelopment,
         keepNames: !isProduction,
         entryPoints: [entryPoint],
-        // external: ['@solana/wallet-adapter-react-ui/styles.css'],
-        // inject: ['client/config/preact-shim.js'],
-        // jsxFactory: 'h',
-        // jsxFragment: 'Fragment',
-        // jsxImportSource: 'preact',
-        // jsx: 'transform',
         keepNames: true,
         bundle: true,
         outfile: outFile,
@@ -125,10 +92,6 @@ export function buildClient(shouldWatch = shouldWatchArgv) {
             postCssPlugin({ postcss: {
                 plugins: [tailwindPlugin, autoprefixerPlugin]
             }}),
-            // alias({
-            //     'react': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-            //     'react-dom': `${process.env.PWD}/node_modules/preact/compat/dist/compat.js`,
-            // }),
         ],
         logLevel: 'error',
     })

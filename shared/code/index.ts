@@ -8,4 +8,5 @@ export * from './notnull'
 export * from './objectHelpers'
 export * from './rulebookVersion'
 export * from './timezones'
+export * from './getServerEnv'
 // @endindex

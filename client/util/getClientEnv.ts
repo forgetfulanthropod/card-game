@@ -17,8 +17,3 @@ export const getClientEnv = (key: ClientEnvKey): string => {
     }
     return value
 }
-
-export const checkClientEnv = () => {
-    console.log('*** Checking Client .ENV ***')
-    console.log(CLIENT_ENV_KEYS)
-}
