@@ -27,7 +27,7 @@ export function Souvenirs(): ContainerChild {
             return Container(
                 {
                     x: BASE_WIDTH - 100 - souvenir.index * souvenirWidth,
-                    y: 0,
+                    y: 40,
                 },
                 Sprite({
                     src: `souvenir${upperFirst(souvenir.id)}` as AssetKey,
@@ -36,7 +36,7 @@ export function Souvenirs(): ContainerChild {
                         getTexture(
                             `souvenir${upperFirst(souvenir.id)}` as AssetKey
                         ).width,
-                    anchor: [1, 0],
+                    anchor: [1, 0.5],
                     events: {
                         pointerover() {
                             isHovered.set(true)
@@ -51,6 +51,7 @@ export function Souvenirs(): ContainerChild {
                     texts: [souvenir.name, souvenir.description],
                     isHtml: true,
                     xOffset: -TEXT_WIDTH * 1.1 - souvenirWidth,
+                    yOffset: 30,
                 })
             )
         }
