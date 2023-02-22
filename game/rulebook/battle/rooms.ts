@@ -130,30 +130,30 @@ export const roomOptions: RoomOptions = {
     tierOne: [
         [
             {
-                id: 'gnomeBandit',
+                id: 'orcWarrior',
                 level: 1,
             },
             {
-                id: 'warhogRaider',
+                id: 'brimboneSkeleton',
                 level: 2,
             },
             {
-                id: 'gnomeBandit',
+                id: 'orcWarrior',
                 level: 1,
             },
         ],
         [
             {
-                id: 'gnomeBandit',
+                id: 'plaguehog',
                 level: 1,
             },
             {
-                id: 'gnomeBigBomber',
+                id: 'gnomeProspector',
                 level: 2,
             },
             {
-                id: 'gnomeBandit',
-                level: 1,
+                id: 'frostHog',
+                level: 2,
             },
         ],
         [
@@ -162,13 +162,13 @@ export const roomOptions: RoomOptions = {
                 level: 2,
             },
             {
-                id: 'gnomeProspector',
+                id: 'frostHog',
                 level: 2,
             },
         ],
         // [
         //     {
-        //         id: 'plaguehog',
+        //         id: 'frostHog',
         //         level: 1,
         //     },
         //     {
@@ -192,14 +192,14 @@ export const roomOptions: RoomOptions = {
         ],
         [
             {
-                id: 'warhogRaider',
+                id: 'plaguehog',
                 level: 4,
             },
         ],
         [
             {
-                id: 'gnomeBigBomber',
-                level: 4,
+                id: 'brimboneSkeleton',
+                level: 5,
             },
         ],
     ],
@@ -210,7 +210,7 @@ export const roomOptions: RoomOptions = {
                 level: 2,
             },
             {
-                id: 'gnomeProspector',
+                id: 'frostHog',
                 level: 3,
             },
             {
@@ -224,12 +224,12 @@ export const roomOptions: RoomOptions = {
                 level: 2,
             },
             {
-                id: 'groghog',
-                level: 2,
+                id: 'gnomeBandit',
+                level: 3,
             },
             {
-                id: 'gnomeBigBomber',
-                level: 3,
+                id: 'groghog',
+                level: 2,
             },
         ],
         [
@@ -248,15 +248,15 @@ export const roomOptions: RoomOptions = {
         ],
         [
             {
-                id: 'gnomeProspector',
-                level: 3,
-            },
-            {
-                id: 'groghog',
+                id: 'matchaGelatinCube',
                 level: 2,
             },
             {
-                id: 'warhogRaider',
+                id: 'frostHog',
+                level: 3,
+            },
+            {
+                id: 'matchaGelatinCube',
                 level: 2,
             },
         ],
@@ -266,19 +266,19 @@ export const roomOptions: RoomOptions = {
                 level: 2,
             },
             {
-                id: 'gnomeBigBomber',
-                level: 2,
+                id: 'gnomeProspector',
+                level: 3,
             },
             {
                 id: 'gnomeBigBomber',
-                level: 3,
+                level: 2,
             },
         ],
     ],
     tierThree: [
         [
             {
-                id: 'gnomeBigBomber',
+                id: 'groghog',
                 level: 3,
             },
             {
@@ -286,13 +286,13 @@ export const roomOptions: RoomOptions = {
                 level: 3,
             },
             {
-                id: 'warhogRaider',
+                id: 'frostHog',
                 level: 3,
             },
         ],
         [
             {
-                id: 'plaguehog',
+                id: 'skeletonWarrior',
                 level: 9,
             },
         ],
@@ -320,11 +320,35 @@ export const roomOptions: RoomOptions = {
     tierFour: [
         [
             {
-                id: 'gnomeProspector',
+                id: 'orcWarrior',
                 level: 4,
             },
             {
-                id: 'warhogRaider',
+                id: 'plaguehog',
+                level: 4,
+            },
+            {
+                id: 'brimboneSkeleton',
+                level: 4,
+            },
+        ],
+        [
+            {
+                id: 'frostHog',
+                level: 6,
+            },
+            {
+                id: 'groghog',
+                level: 6,
+            },
+        ],
+        [
+            {
+                id: 'plaguehog',
+                level: 4,
+            },
+            {
+                id: 'frostHog',
                 level: 4,
             },
             {
@@ -334,53 +358,29 @@ export const roomOptions: RoomOptions = {
         ],
         [
             {
-                id: 'groghog',
-                level: 6,
-            },
-            {
-                id: 'warhogRaider',
-                level: 6,
-            },
-        ],
-        [
-            {
-                id: 'plaguehog',
-                level: 4,
-            },
-            {
-                id: 'warhogRaider',
-                level: 4,
-            },
-            {
-                id: 'groghog',
-                level: 4,
-            },
-        ],
-        [
-            {
                 id: 'gnomeProspector',
-                level: 5,
+                level: 4,
             },
             {
-                id: 'gnomeProspector',
+                id: 'gnomeBandit',
                 level: 4,
             },
             {
                 id: 'gnomeBigBomber',
-                level: 3,
+                level: 4,
             },
         ],
         [
             {
                 id: 'skeletonWarrior',
-                level: 5,
+                level: 3,
             },
             {
-                id: 'gnomeProspector',
-                level: 4,
+                id: 'warhogRaider',
+                level: 6,
             },
             {
-                id: 'groghog',
+                id: 'brimboneSkeleton',
                 level: 3,
             },
         ],
