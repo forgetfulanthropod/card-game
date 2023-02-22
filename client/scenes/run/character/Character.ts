@@ -98,16 +98,17 @@ export function Character(props: CharacterProps): PixiContainer {
         )
     )
 
-    if (getStage().getChildByName('NpcIntentArrowContainer'))
-        setTimeout(
-            () =>
+    setTimeout(
+        () => {
+            if (getStage().getChildByName('NpcIntentArrowContainer', true))
                 mainContainer.addChild(
                     Adjust(NpcIntentArrow(characterMeta.uid, isHovered), {
                         y: 22,
                     })
-                ),
-            0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
-        )
+                )
+        },
+        0 //todo: portalize looking for nonexistent container, nextTick and nextFrame broke
+    )
 
     const hitContainer = Container({
         x: characterMeta.isPc ? 30 : 50,

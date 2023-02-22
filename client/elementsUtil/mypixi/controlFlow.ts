@@ -224,8 +224,6 @@ export function portalize(args: {
 
     if (from == null) return
 
-    console.log({ content })
-
     const to_ = args.to ?? getStage ?? throwNull('app.stage and args.to')
 
     if (args.nextFrame) {

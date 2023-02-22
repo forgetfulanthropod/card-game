@@ -4,6 +4,7 @@ import {
     setRoundEnergy,
     updateNpcMoves,
 } from '@/gameState'
+import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import {
@@ -52,6 +53,8 @@ export const nextRoom: GameActions['nextRoom'] = args => {
 function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
     scene.set('turnCount', 1)
     scene.set('isPlayerTurn', true)
+
+    activateSouvenirs('battleStart', scene)
 
     scene
         .select('runScore')

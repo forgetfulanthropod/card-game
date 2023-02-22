@@ -166,20 +166,20 @@ const roomOptions: Record<
                 level: 2,
             },
         ],
-        [
-            {
-                id: 'plaguehog',
-                level: 1,
-            },
-            {
-                id: 'mimic',
-                level: 4,
-            },
-            {
-                id: 'bosshogJurgen',
-                level: 'default',
-            },
-        ],
+        // [
+        //     {
+        //         id: 'plaguehog',
+        //         level: 1,
+        //     },
+        //     {
+        //         id: 'mimic',
+        //         level: 4,
+        //     },
+        //     {
+        //         id: 'bosshogJurgen',
+        //         level: 'default',
+        //     },
+        // ],
         [
             {
                 id: 'plaguehog',
