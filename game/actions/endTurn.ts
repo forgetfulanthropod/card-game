@@ -11,12 +11,16 @@ import {
 } from '@/gameState'
 import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { checkServerScoringEvent } from '@/gameState/battle/score'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
     trackMetric('endTurn', { scene })
+
+    checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
+    checkServerScoringEvent('CARDS_WHOLE_PARTY', scene)
 
     endRound(scene)
     clearBlock(scene, 'npc')

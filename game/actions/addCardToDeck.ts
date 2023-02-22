@@ -1,6 +1,7 @@
 import type { GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
+import { checkServerScoringEvent } from '@/gameState/battle/score'
 
 export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -20,6 +21,9 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
             },
         }
     })
+
+    scene.apply('cardsDrafted', cards => [...cards, card])
+    checkServerScoringEvent('CARDS_DRAFT_BALANCED', scene)
 
     scene.set('lootEarned', scene.get('lootEarned').slice(1))
     if (scene.get('lootEarned').length > 0) {

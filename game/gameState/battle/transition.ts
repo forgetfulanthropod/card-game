@@ -16,27 +16,25 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const gameIsOver = !!scene.get('currentRoom').enemies.find(e => e.boss)
 
     if (winner) {
+        checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
+        checkServerScoringEvent('CARDS_WHOLE_PARTY', scene)
         calculateNewRunScore(scene)
         calculateChestProgress(scene)
         scene.set('numRequiredToDiscard', 0)
     }
 
     if (winner === 'PC') {
+        checkServerScoringEvent('ROOM_CLEARED', scene)
         if (gameIsOver) {
-            checkServerScoringEvent('ROOM_CLEARED', scene, {})
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+            checkServerScoringEvent('SURVIVING_KAIJU', scene)
             scene.set('state', 'won')
             scene.select('runDuration').set('endTime', new Date().getTime())
-            checkServerScoringEvent('SURVIVING_KAIJU', scene, {})
         } else {
             activateSouvenirs('battleEnd', scene)
-
             clearCharacterModifiersForRoom(scene)
-
             clearRoomCardModifiers(scene)
-
             scene.set('state', 'collecting loot')
-            checkServerScoringEvent('ROOM_CLEARED', scene, {})
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
         }

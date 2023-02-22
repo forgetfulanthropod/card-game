@@ -3,7 +3,6 @@ import {
     CharacterUid,
     CharacterMeta,
     RunScoreAttributeName,
-    RUN_TIME_THRESHOLD_MINS,
     RunScoreEvent,
 } from 'shared'
 import { vals } from 'shared/code'
@@ -19,11 +18,20 @@ type applyDamageArgs = {
     attacker?: CharacterMeta
 }
 
-const checkServerScoringEvent = (
+const roundWinPointMap: Record<number, number> = {
+    1: 4,
+    2: 3,
+    3: 2,
+    4: 2,
+    5: 1,
+}
+
+export const checkServerScoringEvent = (
     event: RunScoreEvent,
     scene: BattleCursor,
     data?: any
 ) => {
+    if (data === undefined) data = {}
     switch (event) {
         case 'ROOM_CLEARED':
             updateScore({
@@ -32,6 +40,8 @@ const checkServerScoringEvent = (
                 count: 1,
                 notify: true,
             })
+            checkRoomClearSpeed(scene)
+            checkRoomDifficulty(scene)
             checkCharsInFullHealth(scene)
             checkBossRoomCleared(scene)
             checkNoEnergyUsed(scene)
@@ -50,8 +60,43 @@ const checkServerScoringEvent = (
             break
         case 'CARDS_OVER_THRESHOLD':
             checkCardsOverThreshold(scene)
+        case 'CARDS_WHOLE_PARTY':
+            checkCardsWholeParty(scene)
+        case 'CARDS_DRAFT_BALANCED':
+            checkCardsDraftBalanced(scene)
+        case 'ROOM_TAKE_100_DAMAGE':
+            checkRoomTake100Damage(scene)
     }
 }
+
+const checkRoomClearSpeed = (scene: BattleCursor) => {
+    const turnCount = scene.get('turnCount')
+    if (!(turnCount in roundWinPointMap)) return
+    updateScore({
+        scene,
+        event: 'ROOM_CLEAR_SPEED',
+        count: roundWinPointMap[turnCount],
+        notify: true,
+    })
+}
+
+const checkRoomDifficulty = (scene: BattleCursor) => {
+    const roomCategory = scene.get('currentRoom', 'category')
+    let points
+    if (roomCategory === 'tierThree') {
+        points = 2
+    } else if (roomCategory === 'tierFour') {
+        points = 3
+    } else {
+        return
+    }
+    updateScore({
+        scene,
+        event: 'ROOM_CLEAR_DIFFICULTY',
+        count: points,
+    })
+}
+
 const checkCharsInFullHealth = (scene: BattleCursor) => {
     const userCharsInFullHealth = vals(scene.get('allCharacters')).filter(
         meta => meta.isPc && meta.constitution === meta.health
@@ -68,7 +113,8 @@ const checkCharsInFullHealth = (scene: BattleCursor) => {
             : 'EXIT_ROOM_FULL_HEALTH'
 
         updateScore({ scene, event: roomTypeEvent, count: 1, notify: true })
-    } else if (roomHadBoss) {
+    }
+    if (roomHadBoss) {
         checkHealthLostInBossRoom(scene)
     } else {
         checkHealthLostInRoom(scene)
@@ -103,17 +149,39 @@ const checkHealthLostInRoom = (scene: BattleCursor) => {
             count: 1,
             notify: true,
         })
+    } else if (totalHealthLost < 5) {
+        updateScore({
+            scene,
+            event: 'ROOM_WIN_FIVE_DAMAGE',
+            count: 1,
+            notify: true,
+        })
     }
 }
+
+const checkRoomTake100Damage = (scene: BattleCursor) => {
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'roomsTake100Damage'
+    )
+    if (roomScoreEventCount >= 1) return
+    const totalHealthLost = getTotalHealthLost(scene)
+    if (totalHealthLost > 100) {
+        updateScore({
+            scene,
+            event: 'ROOM_TAKE_100_DAMAGE',
+            count: 1,
+            notify: true,
+        })
+    }
+}
+
 const roomContainsBoss = (scene: BattleCursor): boolean => {
-    const numRoomsPassed = scene
-        .select('runScore')
-        .select('attributes')
-        .get('roomsCleared')
     const currentRoom = scene.get('currentRoom')
     const boss = currentRoom.enemies.filter(enemyChar => enemyChar.boss)
     return boss.length > 0
 }
+
 const checkNoEnergyUsed = (scene: BattleCursor) => {
     const noEnergyUsed = scene.get('energy') === scene.get('roundEnergy')
     if (noEnergyUsed) {
@@ -127,7 +195,7 @@ const checkNoEnergyUsed = (scene: BattleCursor) => {
 }
 
 const getTotalHealthLost = (scene: BattleCursor): number => {
-    return scene.get('damagesDealtThisRoom').reduce((prev, curr) => {
+    return scene.get('damagesUnblockedThisRoom').reduce((prev, curr) => {
         if (curr.targetUid.includes('pc')) {
             return curr.amount + prev
         }
@@ -144,11 +212,11 @@ const checkHighestDamageHit = (scene: BattleCursor, data: applyDamageArgs) => {
     if (userIsAttacker) {
         const prevHighest = scene.get('runScore').attributes.highestDamageHit
         if (damage > prevHighest) {
-            updateRunScoreAttribute(
+            updateScore({
                 scene,
-                'highestDamageHit',
-                parseInt(damage.toFixed(0))
-            )
+                event: 'HIGHEST_DAMAGE',
+                count: parseInt(damage.toFixed(0)),
+            })
         }
     }
 }
@@ -157,17 +225,36 @@ const checkSurvivingKaiju = (scene: BattleCursor) => {
     const survivingKaiju = vals(scene.get('allCharacters')).filter(
         char => char.isPc && char.health > 0
     )
-    updateRunScoreAttribute(scene, 'survivingKaiju', survivingKaiju.length)
+    updateScore({
+        scene,
+        event: 'SURVIVING_KAIJU',
+        count: survivingKaiju.length,
+    })
 
-    const healthRemaining = survivingKaiju.reduce((prev, curr) => {
-        return Math.round(prev + (curr.health / curr.constitution) * 100)
-    }, 0)
+    const healthRemaining = Math.round(
+        survivingKaiju.reduce((prev, curr) => {
+            return prev + (curr.health / curr.constitution) * 30
+        }, 0)
+    )
 
-    updateRunScoreAttribute(scene, 'finalUserHealthRemaining', healthRemaining)
+    updateScore({
+        scene,
+        event: 'FINAL_USER_HEALTH_REMAINING',
+        count: healthRemaining,
+    })
 }
 
 const checkBlocksAppliedInTurn = (scene: BattleCursor) => {
     const BLOCK_THRESHOLD = 40
+    const turnScoreEventCount = scene.get(
+        'scoreEventsThisTurn',
+        'blocksOverThreshold'
+    )
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'blocksOverThreshold'
+    )
+    if (turnScoreEventCount >= 1 || roomScoreEventCount >= 3) return
     const totalBlockApplied = scene
         .get('blocksAppliedThisTurn')
         .reduce((prev, curr) => {
@@ -177,12 +264,25 @@ const checkBlocksAppliedInTurn = (scene: BattleCursor) => {
             return prev + 0
         }, 0)
     if (totalBlockApplied > BLOCK_THRESHOLD) {
-        incrementRunScoreAttribute(scene, 'blocksOverThreshold')
+        updateScore({
+            scene,
+            event: 'BLOCK_OVER_THRESHOLD',
+            count: 1,
+        })
     }
 }
 
 const checkDamageDealtInTurn = (scene: BattleCursor) => {
     const VULGAR_DAMAGE_THRESHOLD = 20
+    const turnScoreEventCount = scene.get(
+        'scoreEventsThisTurn',
+        'hitsOverVulgarThreshold'
+    )
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'hitsOverVulgarThreshold'
+    )
+    if (turnScoreEventCount >= 1 || roomScoreEventCount >= 3) return
     const totalDamageApplied = scene
         .get('damagesDealtThisTurn')
         .reduce((prev, curr) => {
@@ -193,7 +293,11 @@ const checkDamageDealtInTurn = (scene: BattleCursor) => {
         }, 0)
 
     if (totalDamageApplied > VULGAR_DAMAGE_THRESHOLD) {
-        incrementRunScoreAttribute(scene, 'hitsOverVulgarThreshold')
+        updateScore({
+            scene,
+            event: 'HIT_VULGAR_THRESHOLD',
+            count: 1,
+        })
     }
 }
 
@@ -214,33 +318,62 @@ const checkStanceChanges = (scene: BattleCursor) => {
 
 const checkCardsOverThreshold = (scene: BattleCursor) => {
     const CARDS_PLAYED_THRESHOLD = 5
+    const turnScoreEventCount = scene.get(
+        'scoreEventsThisTurn',
+        'cardsPlayedOverThreshold'
+    )
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'cardsPlayedOverThreshold'
+    )
+    if (turnScoreEventCount >= 1 || roomScoreEventCount >= 3) return
+
     const cardsPlayed = scene.get('cardsPlayedThisTurn')
-    if (cardsPlayed.length > CARDS_PLAYED_THRESHOLD) {
-        incrementRunScoreAttribute(scene, 'cardsPlayedOverThreshold')
+    // equals comparison to only check once per turn
+    if (cardsPlayed.length === CARDS_PLAYED_THRESHOLD) {
+        updateScore({
+            scene,
+            event: 'CARDS_OVER_THRESHOLD',
+            count: 1,
+        })
     }
 }
 
-const updateRunScoreAttribute = (
-    scene: BattleCursor,
-    attribute: RunScoreAttributeName,
-    count: number,
-    increment?: true
-): void => {
-    const attributes = scene.select('runScore').select('attributes')
-    if (increment) {
-        attributes.apply(attribute, prev => prev + count)
-    } else {
-        attributes.set(attribute, count)
+const checkCardsWholeParty = (scene: BattleCursor) => {
+    const CARDS_PLAYED_THRESHOLD = 5
+    const turnScoreEventCount = scene.get(
+        'scoreEventsThisTurn',
+        'cardsWholeParty'
+    )
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'cardsWholeParty'
+    )
+    if (turnScoreEventCount >= 1 || roomScoreEventCount >= 1) return
+
+    const cardsPlayed = scene.get('cardsPlayedThisTurn')
+    // equals comparison to only check once per turn
+    const charsPlayedSet = new Set(cardsPlayed.map(card => card.characterUid))
+    if (charsPlayedSet.size === 3) {
+        updateScore({
+            scene,
+            event: 'CARDS_WHOLE_PARTY',
+            count: 1,
+        })
     }
 }
 
-export const incrementRunScoreAttribute = (
-    scene: BattleCursor,
-    attribute: RunScoreAttributeName
-): void => {
-    const attributes = scene.select('runScore').select('attributes')
-    const prevValue = attributes.get(attribute)
-    attributes.set(attribute, prevValue + 1)
+const checkCardsDraftBalanced = (scene: BattleCursor) => {
+    const cardsDrafted = scene.get('cardsDrafted')
+    if (cardsDrafted.length < 3) return
+    const lastDraftTypes = cardsDrafted
+        .slice(cardsDrafted.length - 3)
+        .map(card => card.type)
+    if (!lastDraftTypes.slice(0, 2).includes(lastDraftTypes[2])) {
+        updateScore({
+            scene,
+            event: 'CARDS_DRAFT_BALANCED',
+            count: 1,
+        })
+    }
 }
-
-export { checkServerScoringEvent }

@@ -7,29 +7,42 @@ import {
 import type { RunScoreUpdate } from 'shared'
 import { emit } from '@/util'
 import { calculateChestProgress, calculateNewRunScore } from '@/gameState'
-export function updateScore({
+export const updateScore = ({
     scene,
     event,
     count,
     notify,
     data,
+    increment,
 }: {
     scene: BattleCursor
     event: RunScoreEvent
     count: number
     notify?: boolean
     data?: any
-}) {
-    const attributeNameInTree = RUN_SCORE_EVENT_META[event].attributeName
+    increment?: boolean
+}) => {
+    const eventMeta = RUN_SCORE_EVENT_META[event]
+    const attributeNameInTree = eventMeta.attributeName
+    if (increment === undefined) increment = eventMeta.increment
     const attributeCount = scene
         .select('runScore')
         .select('attributes')
         .select(attributeNameInTree)
 
     const currCount = attributeCount.get()
-    const newCount = currCount + count
+    const newCount = increment ? currCount + count : count
 
     attributeCount.set(newCount)
+
+    const scoreEventsThisRoom = scene
+        .select('scoreEventsThisRoom')
+        .select(attributeNameInTree)
+    scoreEventsThisRoom.set(scoreEventsThisRoom.get() + 1)
+    const scoreEventsThisTurn = scene
+        .select('scoreEventsThisTurn')
+        .select(attributeNameInTree)
+    scoreEventsThisTurn.set(scoreEventsThisTurn.get() + 1)
 
     if (notify) {
         const eventData: RunScoreUpdate = {

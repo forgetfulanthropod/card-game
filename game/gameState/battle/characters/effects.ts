@@ -12,7 +12,6 @@ import { turnEndClearEffects } from 'shared'
 import {
     manageSideEffectsOfUnblockedDamage,
     applyCalcedDamage,
-    recordDamage,
 } from '../util/applyDamage'
 
 import produce from 'immer'
@@ -123,7 +122,6 @@ const turnStartEffectFuncs = (
             targetUid,
             piercing: true,
         })
-        recordDamage(scene, calcedDamage, targetUid)
         manageSideEffectsOfUnblockedDamage(
             scene,
             character.uid,

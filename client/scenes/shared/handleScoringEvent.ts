@@ -79,5 +79,12 @@ export const showScoreUpdateNotification = ({
                 scorePointsToAdd
             )
             break
+        default:
+            displayScoreNotification(
+                RUN_SCORE_EVENT_META[event].keyword,
+                'swordShield',
+                scorePointsToAdd
+            )
+            break
     }
 }

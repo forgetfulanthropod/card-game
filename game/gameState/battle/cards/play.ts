@@ -37,6 +37,7 @@ export function play({
             timestamp: new Date().toISOString(),
         },
     ])
-
-    checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
+    // TODO: put check here or end turn end room?
+    /*checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
+    checkServerScoringEvent('CARDS_WHOLE_PARTY', scene)*/
 }

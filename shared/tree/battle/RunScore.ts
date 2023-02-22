@@ -21,8 +21,10 @@ export type RunScoreAttribute = {
 export type RunScoreAttributeName =
     | 'enemiesKilled'
     | 'roomsCleared' // exists as a sort of redundant data field (eg. it's also present at the top-level tree) mostly for convenience when updating and calculating score
+    | 'roomClearSpeed'
     | 'bossesKilled'
     | 'perfectKills'
+    | 'overkills'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
     | 'bossRoomsExitedLowDamage'
@@ -32,8 +34,13 @@ export type RunScoreAttributeName =
     | 'survivingKaiju'
     | 'finalUserHealthRemaining'
     | 'roomsWonZeroDamage'
+    | 'roomsWonFiveDamage'
+    | 'roomsTake100Damage'
     | 'blocksOverThreshold'
     | 'cardsPlayedOverThreshold'
+    | 'cardsWholeParty'
+    | 'cardsDraftBalanced'
+    | 'roomClearDifficulty'
     | 'null' // used for derived and/or server side score events
 
 export type RunScoreEventMeta = {
@@ -42,6 +49,7 @@ export type RunScoreEventMeta = {
     attributeName: RunScoreAttributeName
     shortDescription: string
     keyword: string
+    increment: boolean
     asset?: string
 }
 
@@ -50,11 +58,17 @@ export type NotifiableEvent =
     | 'ROOM_CLEARED'
     | 'BOSS_KILLED'
     | 'PERFECT_KILL'
+    | 'OVERKILL'
     | 'EXIT_ROOM_FULL_HEALTH'
     | 'EXIT_BOSS_FULL_HEALTH'
     | 'EXIT_BOSS_LOW_DAMAGE'
     | 'ROOM_WIN_NO_ENERGY_USED'
     | 'ROOM_WIN_ZERO_DAMAGE'
+    | 'ROOM_WIN_FIVE_DAMAGE'
+    | 'ROOM_TAKE_100_DAMAGE'
+    | 'ROOM_CLEAR_SPEED'
+    | 'ROOM_CLEAR_DIFFICULTY'
+    | 'CARDS_WHOLE_PARTY'
 
 export type NonNotifiableEvent =
     | 'HIGHEST_DAMAGE'
@@ -64,6 +78,7 @@ export type NonNotifiableEvent =
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
     | 'CARDS_OVER_THRESHOLD'
+    | 'CARDS_DRAFT_BALANCED'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
@@ -73,7 +88,10 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
 > = {
     enemiesKilled: 'ENEMY_KILLED',
     roomsCleared: 'ROOM_CLEARED',
+    roomClearDifficulty: 'ROOM_CLEAR_DIFFICULTY',
+    roomClearSpeed: 'ROOM_CLEAR_SPEED',
     perfectKills: 'PERFECT_KILL',
+    overkills: 'OVERKILL',
     bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
     bossRoomsExitedFullHealth: 'EXIT_BOSS_FULL_HEALTH',
@@ -84,8 +102,12 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     finalUserHealthRemaining: 'FINAL_USER_HEALTH_REMAINING',
     survivingKaiju: 'SURVIVING_KAIJU',
     roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
+    roomsWonFiveDamage: 'ROOM_WIN_FIVE_DAMAGE',
+    roomsTake100Damage: 'ROOM_TAKE_100_DAMAGE',
     blocksOverThreshold: 'BLOCK_OVER_THRESHOLD',
     cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
+    cardsWholeParty: 'CARDS_WHOLE_PARTY',
+    cardsDraftBalanced: 'CARDS_DRAFT_BALANCED',
     null: 'NULL',
 }
 
@@ -97,6 +119,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 1,
         attributeName: 'enemiesKilled',
         keyword: 'Combat Score',
+        increment: true,
     },
     EXIT_ROOM_FULL_HEALTH: {
         description:
@@ -105,6 +128,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         shortDescription: 'Battles Completed with Full Health',
         attributeName: 'roomsExitedFullHealth',
         keyword: 'Mint Condition',
+        increment: true,
     },
     EXIT_BOSS_FULL_HEALTH: {
         description: 'Number of boss battles completed with full party health',
@@ -112,6 +136,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 20,
         attributeName: 'bossRoomsExitedFullHealth',
         keyword: 'Was That A Boss?',
+        increment: true,
     },
     EXIT_BOSS_LOW_DAMAGE: {
         description:
@@ -120,6 +145,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 15,
         attributeName: 'bossRoomsExitedLowDamage',
         keyword: 'Just a Fleshwound (Near Mint)',
+        increment: true,
     },
     BOSS_KILLED: {
         description: 'Number of bosses defeated',
@@ -127,6 +153,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 10,
         attributeName: 'bossesKilled',
         keyword: 'Bosses Defeated',
+        increment: true,
     },
     ROOM_CLEARED: {
         description: 'Number of rooms cleared',
@@ -134,6 +161,25 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 5,
         attributeName: 'roomsCleared',
         keyword: 'Rooms Cleared',
+        increment: true,
+    },
+    ROOM_CLEAR_DIFFICULTY: {
+        description:
+            '3 bonus points for every difficulty level 4 room defeated, 2 bonus points for every difficulty level 3 room defeated.',
+        shortDescription: 'Rooms Cleared Difficulty',
+        pointValue: 1,
+        attributeName: 'roomClearDifficulty',
+        keyword: 'The Hard Way',
+        increment: true,
+    },
+    ROOM_CLEAR_SPEED: {
+        description: 'Room clear speed',
+        shortDescription:
+            'bonus points based on finishing a room by a turn count',
+        pointValue: 1,
+        attributeName: 'roomClearSpeed',
+        keyword: "Mustn't Tarry",
+        increment: true,
     },
     ROOM_WIN_NO_ENERGY_USED: {
         description:
@@ -142,6 +188,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 3,
         attributeName: 'winsNoEnergyUsedLastTurn',
         keyword: 'Walk Away',
+        increment: true,
     },
     PERFECT_KILL: {
         description:
@@ -150,6 +197,15 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 2,
         attributeName: 'perfectKills',
         keyword: 'Perfect Kill',
+        increment: true,
+    },
+    OVERKILL: {
+        description: 'Overkill an enemy by 20 or more health',
+        shortDescription: 'No Mercy',
+        pointValue: 1,
+        attributeName: 'overkills',
+        keyword: 'No Mercy',
+        increment: true,
     },
     HIGHEST_DAMAGE: {
         description: 'Highest damage from a single hit',
@@ -157,6 +213,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 0.25,
         attributeName: 'highestDamageHit',
         keyword: 'Number Go Up',
+        increment: false,
     },
     SURVIVING_KAIJU: {
         description: 'Number of party members alive at the end of run',
@@ -164,13 +221,16 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 12,
         attributeName: 'survivingKaiju',
         keyword: 'Present and Accounted For',
+        increment: false,
     },
     FINAL_USER_HEALTH_REMAINING: {
-        description: 'Amount of health remaining at the end of your run',
+        description:
+            'Amount of health remaining at the end of your run: 3 points per 10% of max HP per character (max 90 points)',
         shortDescription: 'Total Health Remaining',
         pointValue: 1,
         attributeName: 'finalUserHealthRemaining',
         keyword: 'For Your Health',
+        increment: false,
     },
     HIT_VULGAR_THRESHOLD: {
         description: 'Deal over 55 damage in a single turn',
@@ -178,6 +238,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 1,
         attributeName: 'hitsOverVulgarThreshold',
         keyword: 'A Vulgar Display of Power',
+        increment: true,
     },
     ROOM_WIN_ZERO_DAMAGE: {
         description: 'Lose 0 health during a room',
@@ -185,6 +246,23 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 4,
         attributeName: 'roomsWonZeroDamage',
         keyword: `Feelin' Fine`,
+        increment: true,
+    },
+    ROOM_WIN_FIVE_DAMAGE: {
+        description: 'Lose fewer than 5 health points during a room',
+        shortDescription: 'Rooms Beat losing a little health',
+        pointValue: 3,
+        attributeName: 'roomsWonFiveDamage',
+        keyword: `A-`,
+        increment: true,
+    },
+    ROOM_TAKE_100_DAMAGE: {
+        description: 'Lose over 100 health in one room',
+        shortDescription: 'Lose over 100 health in one room',
+        pointValue: 5,
+        attributeName: 'roomsTake100Damage',
+        keyword: `Sorry That Happened To You`,
+        increment: true,
     },
     BLOCK_OVER_THRESHOLD: {
         description: 'Generate over 40 block in a single turn',
@@ -192,6 +270,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 2,
         attributeName: 'blocksOverThreshold',
         keyword: `Fortified`,
+        increment: true,
     },
     CARDS_OVER_THRESHOLD: {
         description: 'Play 5 or more cards in a single turn',
@@ -199,6 +278,24 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 1,
         attributeName: 'cardsPlayedOverThreshold',
         keyword: `Long Combo`,
+        increment: true,
+    },
+    CARDS_WHOLE_PARTY: {
+        description: 'Have each of your 3 Kaiju play a card in a single turn',
+        shortDescription:
+            'Play a card by every character in your party in a single turn (max 1 point per room, only scorable if all 3 characters are alive)',
+        pointValue: 1,
+        attributeName: 'cardsWholeParty',
+        keyword: `Taking Turns, Playing Nice`,
+        increment: true,
+    },
+    CARDS_DRAFT_BALANCED: {
+        description: `Draft a card type that's different than the last two types of cards you've drafted`,
+        shortDescription: 'Draw cards of different types',
+        pointValue: 1,
+        attributeName: 'cardsDraftBalanced',
+        keyword: `A Balanced Portfolio`,
+        increment: true,
     },
     NULL: {
         description: 'Can be optionally used for derived events',
@@ -206,6 +303,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         pointValue: 0,
         attributeName: 'null',
         keyword: `Null`,
+        increment: true,
     },
 }
 
