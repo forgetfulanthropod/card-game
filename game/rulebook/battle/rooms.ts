@@ -1,4 +1,4 @@
-import { srandInt } from '@/util'
+import { randInt } from '@/util'
 import {
     DungeonRoomMaps,
     RoomArchetype,
@@ -659,7 +659,9 @@ function randomRoomOfCategory(
     takenRoomIndicesOfCategory: number[]
 ): RoomArchetype {
     const roomsOfCategory = roomOptions[category]
-    const randomRoomIndex = srandInt(0, roomsOfCategory.length)
+
+    // const randomRoomIndex = category === 'events' ? randInt(0,roomsOfCategory.length) : srandInt(0, roomsOfCategory.length)
+    const randomRoomIndex = randInt(0, roomsOfCategory.length)
 
     if (
         takenRoomIndicesOfCategory.includes(randomRoomIndex) &&
