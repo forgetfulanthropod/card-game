@@ -1,15 +1,15 @@
 import type { BattleScene, DungeonName, OwnedCharacterStats } from 'shared'
 
-import { getNullCards } from './cards'
-import { makeCharacters } from './util'
+import { getDungeonRooms } from '@/rulebook/battle'
 import {
     getInitialLoot,
-    getInitialTreasureChest,
-    getInitialRunScore,
     getInitialRunDuration,
+    getInitialRunScore,
+    getInitialTreasureChest,
 } from '.'
-import { getRulebook } from '@/rulebook'
+import { getNullCards } from './cards'
 import { getRoomScoreCounter } from './score'
+import { makeCharacters } from './util'
 
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
@@ -28,6 +28,7 @@ export function makeBattleState(args: {
 
     // const playerStarts = srandom() < 0.5
     const playerStarts = true
+    const rooms = getDungeonRooms()['Hooligans Bluff']
 
     const bs: BattleScene = {
         username: args.game.get('username'),
@@ -46,10 +47,10 @@ export function makeBattleState(args: {
         roundEnergy: 3,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
-        rooms: getRulebook().dungeonRooms['Hooligans Bluff'],
+        rooms,
         roomUidsVisited: [],
         numRoomsPassed: -1,
-        currentRoom: getRulebook().dungeonRooms['Hooligans Bluff'].root,
+        currentRoom: rooms.root,
         nextNpcCommands: [], // set later
         cardsPlayedThisRoom: [],
         cardsPlayedThisTurn: [],

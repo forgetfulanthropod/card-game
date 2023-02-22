@@ -5,6 +5,8 @@ import {
     getDungeonRooms,
     stanceTypeMetaMap,
     playerCharacterStatsMap,
+    dungeonTemplates,
+    roomOptions,
 } from './battle'
 import { npcStatsMapByLevel } from './npcStatsMapByLevel'
 
@@ -27,7 +29,9 @@ const defaultRulebook: Rulebook = {
     playerCharacterStatsMap: playerCharacterStatsMap,
     dungeonLevels,
     stanceTypeMetaMap,
-    dungeonRooms: getDungeonRooms(),
+    // dungeonRooms: getDungeonRooms(),
+    dungeonTemplates: dungeonTemplates,
+    roomOptions: roomOptions,
     // npcNames,
 }
 let rulebook = defaultRulebook

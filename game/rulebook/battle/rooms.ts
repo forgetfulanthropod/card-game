@@ -1,12 +1,15 @@
 import { randInt } from '@/util'
+import { clone, cloneDeep } from 'lodash'
 import {
     DungeonRoomMaps,
     RoomArchetype,
     RoomCategoryId,
     RoomEnemies,
+    RoomOptions,
 } from 'shared'
 import { keys, vals } from 'shared/code'
 import { eventSceneMap } from '../eventSceneMap'
+import { getRulebook } from '../rulebook'
 
 const config = { randomDungeon: false }
 
@@ -119,10 +122,7 @@ const eventEnemies: RoomEnemies[] = [
     ],
 ]
 
-const roomOptions: Record<
-    RoomCategoryId,
-    RoomEnemies[] | { enemies: RoomEnemies; event: Event }[]
-> = {
+export const roomOptions: RoomOptions = {
     events: vals(eventSceneMap).map((event, index) => ({
         enemies: eventEnemies[index % eventEnemies.length]!,
         event,
@@ -403,226 +403,226 @@ const roomOptions: Record<
     ],
 }
 
-export function getDungeonRooms(): DungeonRoomMaps {
-    const roomSkeletons: DungeonRoomMaps = {
-        'Skelepit Dungeon': {},
-        'Hooligans Bluff': {
-            root: {
-                uid: 'root',
-                enemies: [],
-                edges: ['', '1_1', '', ''],
-            },
-            '1_1': {
-                uid: '1_1',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['1_3', '', '2_0', ''],
-            },
-            '1_3': {
-                uid: '1_3',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['1_5', '2_4', '', ''],
-            },
-            '1_5': {
-                uid: '1_5',
-                enemies: [],
-                category: 'events',
-                edges: ['1_7', '', '', ''],
-            },
-            '1_7': {
-                uid: '1_7',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['', '2_8', '', ''],
-            },
-            '2_0': {
-                uid: '2_0',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['', '3_1', '', ''],
-            },
-            '2_4': {
-                uid: '2_4',
-                enemies: [],
-                category: 'tierOne',
-                edges: ['', '3_5', '', ''],
-            },
-            '2_8': {
-                uid: '2_8',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['', '', '3_7', ''],
-            },
-            '3_1': {
-                uid: '3_1',
-                enemies: [],
-                category: 'events',
-                edges: ['', '4_2', '', ''],
-            },
-            '3_5': {
-                uid: '3_5',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['3_7', '4_6', '', ''],
-            },
-            '3_7': {
-                uid: '3_7',
-                enemies: [],
-                category: 'events',
-                edges: ['', '4_8', '', ''],
-            },
-            '4_2': {
-                uid: '4_2',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['4_4', '', '', ''],
-            },
-            '4_4': {
-                uid: '4_4',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['4_6', '', '', ''],
-            },
-            '4_6': {
-                uid: '4_6',
-                enemies: [],
-                category: 'events',
-                edges: ['4_8', '', '', ''],
-            },
-            '4_8': {
-                uid: '4_8',
-                enemies: [
-                    {
-                        id: 'mimic',
-                        level: 5,
-                        // boss: true
-                    },
-                ],
-                category: 'bosses',
-                edges: ['4_10', '5_9', '', ''],
-            },
-            '4_10': {
-                uid: '4_10',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['4_12', '', '', ''],
-            },
-            '4_12': {
-                uid: '4_12',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['', '5_13', '', ''],
-            },
-            '5_9': {
-                uid: '5_9',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['', '6_10', '6_8', ''],
-            },
-            '5_13': {
-                uid: '5_13',
-                enemies: [],
-                category: 'events',
-                edges: ['', '6_14', '', ''],
-            },
-            '6_8': {
-                uid: '6_8',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['', '', '7_7', ''],
-            },
-            '6_10': {
-                uid: '6_10',
-                enemies: [],
-                category: 'events',
-                edges: ['', '7_11', '', ''],
-            },
-            '6_14': {
-                uid: '6_14',
-                enemies: [],
-                category: 'tierTwo',
-                edges: ['', '', '7_13', ''],
-            },
-            '7_7': {
-                uid: '7_7',
-                enemies: [],
-                category: 'restSite',
-                edges: ['', '8_8', '', ''],
-            },
-            '7_11': {
-                uid: '7_11',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['7_13', '', '', ''],
-            },
-            '7_13': {
-                uid: '7_13',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['', '8_14', '', ''],
-            },
-            '8_8': {
-                uid: '8_8',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['', '9_9', '', ''],
-            },
-            // '8_10': {
-            //     uid: '8_10',
-            //     enemies: [],
-            //     category: 'tierThree',
-            //     edges: ['', '9_11', '', ''],
-            // },
-            '8_14': {
-                uid: '8_14',
-                enemies: [],
-                category: 'tierFour',
-                edges: ['', '9_15', '', ''],
-            },
-            '9_9': {
-                uid: '9_9',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['9_11', '', '', ''],
-            },
-            '9_11': {
-                uid: '9_11',
-                enemies: [],
-                category: 'tierThree',
-                edges: ['9_13', '', '', ''],
-            },
-            '9_13': {
-                uid: '9_13',
-                enemies: [],
-                category: 'tierFour',
-                edges: ['9_15', '', '', ''],
-            },
-            '9_15': {
-                uid: '9_15',
-                enemies: [],
-                category: 'restSite',
-                edges: ['9_17', '', '', ''],
-            },
-            '9_17': {
-                uid: '9_17',
-                enemies: [
-                    {
-                        id: 'bosshogJurgen',
-                        level: 'default',
-                        boss: true,
-                    },
-                ],
-                category: 'bosses',
-                edges: ['', '', '', ''],
-            },
+export const dungeonTemplates: DungeonRoomMaps = {
+    'Skelepit Dungeon': {},
+    'Hooligans Bluff': {
+        root: {
+            uid: 'root',
+            enemies: [],
+            edges: ['', '1_1', '', ''],
         },
-        'Fort Skeleton': {},
-        'The Ninth Trash Hole of Hell': {},
-        'The Matcha Caves': {},
-    }
+        '1_1': {
+            uid: '1_1',
+            enemies: [],
+            category: 'tierOne',
+            edges: ['1_3', '', '2_0', ''],
+        },
+        '1_3': {
+            uid: '1_3',
+            enemies: [],
+            category: 'tierOne',
+            edges: ['1_5', '2_4', '', ''],
+        },
+        '1_5': {
+            uid: '1_5',
+            enemies: [],
+            category: 'events',
+            edges: ['1_7', '', '', ''],
+        },
+        '1_7': {
+            uid: '1_7',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['', '2_8', '', ''],
+        },
+        '2_0': {
+            uid: '2_0',
+            enemies: [],
+            category: 'tierOne',
+            edges: ['', '3_1', '', ''],
+        },
+        '2_4': {
+            uid: '2_4',
+            enemies: [],
+            category: 'tierOne',
+            edges: ['', '3_5', '', ''],
+        },
+        '2_8': {
+            uid: '2_8',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['', '', '3_7', ''],
+        },
+        '3_1': {
+            uid: '3_1',
+            enemies: [],
+            category: 'events',
+            edges: ['', '4_2', '', ''],
+        },
+        '3_5': {
+            uid: '3_5',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['3_7', '4_6', '', ''],
+        },
+        '3_7': {
+            uid: '3_7',
+            enemies: [],
+            category: 'events',
+            edges: ['', '4_8', '', ''],
+        },
+        '4_2': {
+            uid: '4_2',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['4_4', '', '', ''],
+        },
+        '4_4': {
+            uid: '4_4',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['4_6', '', '', ''],
+        },
+        '4_6': {
+            uid: '4_6',
+            enemies: [],
+            category: 'events',
+            edges: ['4_8', '', '', ''],
+        },
+        '4_8': {
+            uid: '4_8',
+            enemies: [
+                {
+                    id: 'mimic',
+                    level: 5,
+                    // boss: true
+                },
+            ],
+            category: 'bosses',
+            edges: ['4_10', '5_9', '', ''],
+        },
+        '4_10': {
+            uid: '4_10',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['4_12', '', '', ''],
+        },
+        '4_12': {
+            uid: '4_12',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['', '5_13', '', ''],
+        },
+        '5_9': {
+            uid: '5_9',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['', '6_10', '6_8', ''],
+        },
+        '5_13': {
+            uid: '5_13',
+            enemies: [],
+            category: 'events',
+            edges: ['', '6_14', '', ''],
+        },
+        '6_8': {
+            uid: '6_8',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['', '', '7_7', ''],
+        },
+        '6_10': {
+            uid: '6_10',
+            enemies: [],
+            category: 'events',
+            edges: ['', '7_11', '', ''],
+        },
+        '6_14': {
+            uid: '6_14',
+            enemies: [],
+            category: 'tierTwo',
+            edges: ['', '', '7_13', ''],
+        },
+        '7_7': {
+            uid: '7_7',
+            enemies: [],
+            category: 'restSite',
+            edges: ['', '8_8', '', ''],
+        },
+        '7_11': {
+            uid: '7_11',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['7_13', '', '', ''],
+        },
+        '7_13': {
+            uid: '7_13',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['', '8_14', '', ''],
+        },
+        '8_8': {
+            uid: '8_8',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['', '9_9', '', ''],
+        },
+        // '8_10': {
+        //     uid: '8_10',
+        //     enemies: [],
+        //     category: 'tierThree',
+        //     edges: ['', '9_11', '', ''],
+        // },
+        '8_14': {
+            uid: '8_14',
+            enemies: [],
+            category: 'tierFour',
+            edges: ['', '9_15', '', ''],
+        },
+        '9_9': {
+            uid: '9_9',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['9_11', '', '', ''],
+        },
+        '9_11': {
+            uid: '9_11',
+            enemies: [],
+            category: 'tierThree',
+            edges: ['9_13', '', '', ''],
+        },
+        '9_13': {
+            uid: '9_13',
+            enemies: [],
+            category: 'tierFour',
+            edges: ['9_15', '', '', ''],
+        },
+        '9_15': {
+            uid: '9_15',
+            enemies: [],
+            category: 'restSite',
+            edges: ['9_17', '', '', ''],
+        },
+        '9_17': {
+            uid: '9_17',
+            enemies: [
+                {
+                    id: 'bosshogJurgen',
+                    level: 'default',
+                    boss: true,
+                },
+            ],
+            category: 'bosses',
+            edges: ['', '', '', ''],
+        },
+    },
+    'Fort Skeleton': {},
+    'The Ninth Trash Hole of Hell': {},
+    'The Matcha Caves': {},
+}
 
-    return fillRooms(roomSkeletons)
+export function getDungeonRooms(): DungeonRoomMaps {
+    return fillRooms(cloneDeep(getRulebook().dungeonTemplates))
 }
 
 function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
@@ -636,6 +636,8 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
         bosses: [],
     }
 
+    const roomOptions = getRulebook().roomOptions
+
     keys(roomSkeletons).forEach(roomSkeletonKey => {
         keys(roomSkeletons[roomSkeletonKey]).forEach(roomUid => {
             const room = roomSkeletons[roomSkeletonKey][roomUid]
@@ -646,7 +648,11 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
 
             Object.assign(
                 room,
-                randomRoomOfCategory(room.category, takenRoomIndicesOfCategory)
+                randomRoomOfCategory(
+                    room.category,
+                    takenRoomIndicesOfCategory,
+                    roomOptions
+                )
             )
         })
     })
@@ -656,7 +662,8 @@ function fillRooms(roomSkeletons: DungeonRoomMaps): DungeonRoomMaps {
 
 function randomRoomOfCategory(
     category: keyof typeof roomOptions,
-    takenRoomIndicesOfCategory: number[]
+    takenRoomIndicesOfCategory: number[],
+    roomOptions: RoomOptions
 ): RoomArchetype {
     const roomsOfCategory = roomOptions[category]
 
@@ -667,7 +674,11 @@ function randomRoomOfCategory(
         takenRoomIndicesOfCategory.includes(randomRoomIndex) &&
         takenRoomIndicesOfCategory.length < roomsOfCategory.length
     )
-        return randomRoomOfCategory(category, takenRoomIndicesOfCategory)
+        return randomRoomOfCategory(
+            category,
+            takenRoomIndicesOfCategory,
+            roomOptions
+        )
 
     takenRoomIndicesOfCategory.push(randomRoomIndex)
 
