@@ -9,6 +9,7 @@ import { clearRoomCardModifiers, putAllCardsInDrawPile } from './cards'
 import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 import { clearCharacterModifiersForRoom } from './characters/clearCharacterModifiersForRoom'
 import { getNewCardOptions } from './cards/getNewCardOptions'
+import { activateSouvenir, activateSouvenirs } from './activateSouvenirs'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     const winner = checkWinner(vals(scene.get('allCharacters')))
@@ -28,6 +29,8 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.select('runDuration').set('endTime', new Date().getTime())
             checkServerScoringEvent('SURVIVING_KAIJU', scene, {})
         } else {
+            activateSouvenirs('battleEnd', scene)
+
             clearCharacterModifiersForRoom(scene)
 
             clearRoomCardModifiers(scene)

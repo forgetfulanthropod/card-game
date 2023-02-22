@@ -25,7 +25,12 @@ import { Texture } from 'pixi.js'
 import { CharacterUid, EventScene, Souvenir, souvenirMap } from 'shared'
 import { keys, vals } from 'shared/code'
 import { SpineBackground } from '../background'
-import { ExplanationIf, MainCharacterAnimation, TEXT_WIDTH } from '../shared'
+import {
+    BattleSceneCharacterInfo,
+    ExplanationIf,
+    MainCharacterAnimation,
+    TEXT_WIDTH,
+} from '../shared'
 import { SouvenirEl, SouvenirsEls } from './Souvenirs'
 
 type EventResponse = { index: number; characterUid?: CharacterUid }
@@ -117,7 +122,8 @@ export function EventScene(): PixiContainer {
                 return Container({})
             } else throw new Error('BAD BAD NO CLEAR CHOICE!!')
         }),
-        SouvenirsEls()
+        SouvenirsEls(),
+        BattleSceneCharacterInfo()
     )
 }
 
