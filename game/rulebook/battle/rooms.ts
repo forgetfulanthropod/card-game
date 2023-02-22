@@ -439,7 +439,7 @@ export function getDungeonRooms(): DungeonRoomMaps {
             '2_0': {
                 uid: '2_0',
                 enemies: [],
-                category: 'events',
+                category: 'tierOne',
                 edges: ['', '3_1', '', ''],
             },
             '2_4': {
