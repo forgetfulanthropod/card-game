@@ -597,9 +597,9 @@ export type EventAssetKey = keyof typeof eventAssets
 export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
     eventFrogCarriageMainGraphic: 'events/Frog Carriage/Layer 47.webp',
-    eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage prompt 1.webp',
-    eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage prompt 2.webp',
-    eventFrogCarriagePrompt3: 'events/Frog Carriage/FrogCarriage prompt 3.webp',
+    eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage Prompt 1.webp',
+    eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage Prompt 2.webp',
+    eventFrogCarriagePrompt3: 'events/Frog Carriage/FrogCarriage Prompt 3.webp',
     eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
     eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Choice 2.webp',
     eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Choice 3.webp',
@@ -619,7 +619,7 @@ export const eventAssets = {
         'events/Frog Carriage/FrogCarriage option 3_2.webp',
 
     eventCursedStatueMainGraphic: 'events/Cursed Statue/Cursed Statue.webp',
-    eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue prompt 1.webp',
+    eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
     eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue prompt 2.webp',
     eventCursedStatueChoice1:
         'events/Cursed Statue/Cursed Statue Choice 1.webp',
@@ -643,10 +643,10 @@ export const eventAssets = {
         'events/Cursed Statue/CursedStatue option 3_1.webp',
 
     eventGnomeStoryMainGraphic: 'events/Gnome Story/Gnome Story.webp',
-    eventGnomeStoryPrompt1: 'events/Gnome Story/GnomeStory prompt 1.webp',
-    eventGnomeStoryPrompt2: 'events/Gnome Story/GnomeStory prompt 2.webp',
-    eventGnomeStoryPrompt3: 'events/Gnome Story/GnomeStory prompt 3.webp',
-    eventGnomeStoryPrompt4: 'events/Gnome Story/GnomeStory prompt 4.webp',
+    eventGnomeStoryPrompt1: 'events/Gnome Story/GnomeStory prompt 1_.webp',
+    eventGnomeStoryPrompt2: 'events/Gnome Story/GnomeStory prompt 2_.webp',
+    eventGnomeStoryPrompt3: 'events/Gnome Story/GnomeStory prompt 3_.webp',
+    eventGnomeStoryPrompt4: 'events/Gnome Story/GnomeStory prompt 4_.webp',
     eventGnomeStoryChoice1: 'events/Gnome Story/Gnome Story Choice 1.webp',
     eventGnomeStoryChoice2: 'events/Gnome Story/Gnome Story Choice 2.webp',
     eventGnomeStoryPostChoice1_1:
@@ -655,8 +655,9 @@ export const eventAssets = {
         'events/Gnome Story/GnomeStory option 2_1.webp',
 
     eventGnomeToothMainGraphic: 'events/Gnome Tooth/GnomeTooth.webp',
-    eventGnomeToothPrompt1: 'events/Gnome Tooth/GnomeTooth prompt 1.webp',
-    eventGnomeToothPrompt2: 'events/Gnome Tooth/GnomeTooth prompt 2.webp',
+    eventGnomeToothPrompt1: 'events/Gnome Tooth/GnomeTooth prompt 1_.webp',
+    eventGnomeToothPrompt2: 'events/Gnome Tooth/GnomeTooth prompt 2_.webp',
+    eventGnomeToothPrompt3: 'events/Gnome Tooth/GnomeTooth prompt 3_.webp',
     eventGnomeToothChoice1: 'events/Gnome Tooth/GnomeTooth Choice 1.webp',
     eventGnomeToothChoice2: 'events/Gnome Tooth/GnomeTooth Choice 2.webp',
     eventGnomeToothPostChoice1_1:
@@ -673,11 +674,11 @@ export const eventAssets = {
         'events/Gnome Tooth/GnomeTooth option 2_3.webp',
 
     eventHogClownMainGraphic:
-        'events/Hog Covered in Clowns/Hog Covered in Clowns.webp',
-    eventHogClownPrompt1: 'events/Hog Covered in Clowns/HogClown prompt 1.webp',
-    eventHogClownPrompt2: 'events/Hog Covered in Clowns/HogClown prompt 2.webp',
-    eventHogClownChoice1: 'events/Hog Covered in Clowns/HogClown Choice 1.webp',
-    eventHogClownChoice2: 'events/Hog Covered in Clowns/HogClown Choice 2.webp',
+        'events/Hog Covered In Clowns/Hog Covered in Clowns.webp',
+    eventHogClownPrompt1: 'events/Hog Covered In Clowns/HogClown prompt 1.webp',
+    eventHogClownPrompt2: 'events/Hog Covered In Clowns/HogClown prompt 2.webp',
+    eventHogClownChoice1: 'events/Hog Covered In Clowns/HogClown Choice 1.webp',
+    eventHogClownChoice2: 'events/Hog Covered In Clowns/HogClown Choice 2.webp',
     eventHogClownPostChoice1_1:
         'events/Hog Covered In Clowns/HogClown option 1_1.webp',
     eventHogClownPostChoice2_1:
@@ -690,8 +691,8 @@ export const eventAssets = {
     // eventCursedStatueGuide: 'events/Cursed Statue/Cursed Statue Guide.webp',
     // eventCursedStatue: 'events/Cursed Statue/Cursed Statue.webp',
     // Leave without touching the statue.webp',
-    // eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue prompt 1.webp',
-    // eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue prompt 2.webp',
+    // eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
+    // eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue Prompt 2.webp',
     // eventCursedStatueChoice1: 'events/Cursed Statue/CursedStatue Choice 1.webp',
     // eventCursedStatueChoice2: 'events/Cursed Statue/CursedStatue Choice 2.webp',
     // eventCursedStatueChoice3: 'events/Cursed Statue/CursedStatue Choice 3.webp',
