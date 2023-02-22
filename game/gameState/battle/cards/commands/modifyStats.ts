@@ -3,19 +3,24 @@ import {
     BasicTargetType,
     BattleCursor,
     CharacterStats,
-    CharacterUid, ModifiableStatName,
-    StatModifierExpiration, StatModifiersMap
+    CharacterUid,
+    ModifiableStatName,
+    StatModifierExpiration,
+    StatModifiersMap,
 } from 'shared'
 import { keys } from 'shared/code'
 import {
     getLivingNpcUids,
-    getLivingPcUids
+    getLivingPcUids,
 } from '../../characters/characterGetters'
+import { updateCharacters } from '../../characters/updateCharacters'
 import {
     ActionArgs,
     Anguify,
-    applyStatHtml, evalAll, Executors,
-    Explainers
+    applyStatHtml,
+    evalAll,
+    Executors,
+    Explainers,
 } from './util'
 import { getTargetText } from './util/getTargetText'
 
@@ -101,6 +106,8 @@ function applyStatModifiers({
             return getUpdatedModifiers(modifiers, stats, expiration)
         })
     )
+
+    updateCharacters(scene)
 }
 
 function getUpdatedModifiers(

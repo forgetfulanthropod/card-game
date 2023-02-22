@@ -9,12 +9,11 @@ import {
     Sprite,
 } from '@/elementsUtil'
 import { ContainerChild, DisplayObjectArgs } from '@/elementsUtil/mypixi/_types'
-import { toDatum } from '@/util'
+import { hoveredCharacterUid, toDatum } from '@/util'
 import { ExplanationIf, TEXT_WIDTH } from '@sharedElements'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
-import { ROCursor } from 'sbaobab'
-import { BattleScene, Souvenir, SouvenirId } from 'shared'
+import { Souvenir } from 'shared'
 
 export function SouvenirsEls(): ContainerChild {
     const scene = getBattleScene()
@@ -60,9 +59,12 @@ export function SouvenirEl({
             events: {
                 pointerover() {
                     isHovered.set(true)
+                    if (souvenir.characterUid)
+                        hoveredCharacterUid.set(souvenir.characterUid)
                 },
                 pointerout() {
                     isHovered.set(false)
+                    if (souvenir.characterUid) hoveredCharacterUid.set(null)
                 },
             },
             ...(displayArgs || {}),
