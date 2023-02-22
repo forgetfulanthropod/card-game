@@ -2,13 +2,14 @@ import {
     BattleCursor,
     CharacterUid,
     CharacterMeta,
-    RunScoreAttributeName,
     RunScoreEvent,
+    CardId,
 } from 'shared'
 import { vals } from 'shared/code'
 import { trackStanceChanges } from '../characters/trackStanceChanges'
 import { updateScore } from './updateScore'
 import { NUM_KAIJUS_IN_PARTY } from 'shared'
+import { makeCards } from '@/gameState'
 
 type applyDamageArgs = {
     damage: number
@@ -49,8 +50,16 @@ export const checkServerScoringEvent = (
         case 'HIGHEST_DAMAGE':
             checkHighestDamageHit(scene, data as applyDamageArgs)
             break
-        case 'SURVIVING_KAIJU':
+        case 'RUN_COMPLETED':
             checkSurvivingKaiju(scene)
+            checkSouvenirs(scene)
+            checkBalancedTeam(scene)
+            checkSpecialBoy(scene)
+            break
+        case 'RUN_DEFEATED':
+            checkSouvenirs(scene)
+            checkBalancedTeam(scene)
+            checkSpecialBoy(scene)
             break
         case 'BLOCK_OVER_THRESHOLD':
             checkBlocksAppliedInTurn(scene)
@@ -66,6 +75,75 @@ export const checkServerScoringEvent = (
             checkCardsDraftBalanced(scene)
         case 'ROOM_TAKE_100_DAMAGE':
             checkRoomTake100Damage(scene)
+    }
+}
+
+const checkSouvenirs = (scene: BattleCursor) => {
+    const numSouvenirs = scene.get('souvenirs').length
+    updateScore({
+        scene,
+        event: 'NUM_SOUVENIRS',
+        count: numSouvenirs,
+    })
+}
+
+const checkBalancedTeam = (scene: BattleCursor) => {
+    const team = new Set(
+        Object.entries(scene.get('allCharacters'))
+            .filter(([key, char]) => char.isPc)
+            .map(([key, char]) => char.id)
+    )
+    if (team.size === 3) {
+        updateScore({
+            scene,
+            event: 'BALANCED_TEAM',
+            count: 1,
+        })
+    }
+}
+
+const checkSpecialBoy = (scene: BattleCursor) => {
+    const allCards = scene.get('cards')
+    const startDeck = Object.values(makeCards(scene).draw)
+        .filter(card => card.id)
+        .map(card => card.id)
+    let countStartDeck: Partial<Record<CardId, number>> = {}
+    startDeck.forEach(
+        cardId => (countStartDeck[cardId] = (countStartDeck[cardId] || 0) + 1)
+    )
+    const fullDeck = Object.values({
+        ...allCards.discard,
+        ...allCards.draw,
+        ...allCards.hand,
+        ...allCards.removedRoom,
+        // TODO sepearte manually removed vs dead char removed
+        ...allCards.removedRun,
+    }).map(card => card.id)
+    let countFullDeck: Partial<Record<CardId, number>> = {}
+    fullDeck.forEach(cardId => {
+        let start =
+            countFullDeck[cardId] !== undefined
+                ? countFullDeck[cardId]
+                : countStartDeck[cardId] !== undefined
+                ? // @ts-expect-error
+                  -countStartDeck[cardId]
+                : 0
+        // @ts-expect-error
+        countFullDeck[cardId] = start + 1
+    })
+    let foundBadDuplicate = false
+    for (let [cardId, count] of Object.entries(countFullDeck)) {
+        if (count > 1) {
+            foundBadDuplicate = true
+            break
+        }
+    }
+    if (foundBadDuplicate === false) {
+        updateScore({
+            scene,
+            event: 'SPECIAL_BOY',
+            count: 1,
+        })
     }
 }
 

@@ -27,7 +27,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         checkServerScoringEvent('ROOM_CLEARED', scene)
         if (gameIsOver) {
             scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
-            checkServerScoringEvent('SURVIVING_KAIJU', scene)
+            checkServerScoringEvent('RUN_COMPLETED', scene)
             scene.set('state', 'won')
             scene.select('runDuration').set('endTime', new Date().getTime())
         } else {
@@ -40,6 +40,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         }
         return true
     } else if (winner === 'NPC') {
+        checkServerScoringEvent('RUN_DEFEATED', scene)
         scene.set('state', 'lost')
         return true
     }

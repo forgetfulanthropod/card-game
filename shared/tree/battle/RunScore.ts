@@ -31,7 +31,10 @@ export type RunScoreAttributeName =
     | 'winsNoEnergyUsedLastTurn'
     | 'highestDamageHit'
     | 'hitsOverVulgarThreshold'
+    | 'numSouvenirs'
     | 'survivingKaiju'
+    | 'balancedTeam'
+    | 'specialBoy'
     | 'finalUserHealthRemaining'
     | 'roomsWonZeroDamage'
     | 'roomsWonFiveDamage'
@@ -41,6 +44,8 @@ export type RunScoreAttributeName =
     | 'cardsWholeParty'
     | 'cardsDraftBalanced'
     | 'roomClearDifficulty'
+    | 'runCompleted'
+    | 'runDefeated'
     | 'null' // used for derived and/or server side score events
 
 export type RunScoreEventMeta = {
@@ -73,12 +78,17 @@ export type NotifiableEvent =
 export type NonNotifiableEvent =
     | 'HIGHEST_DAMAGE'
     | 'SURVIVING_KAIJU'
+    | 'BALANCED_TEAM'
+    | 'SPECIAL_BOY'
     | 'FINAL_USER_HEALTH_REMAINING'
     | 'HIT_VULGAR_THRESHOLD'
     | 'BLOCK_OVER_THRESHOLD'
     | 'NULL'
     | 'CARDS_OVER_THRESHOLD'
     | 'CARDS_DRAFT_BALANCED'
+    | 'RUN_COMPLETED'
+    | 'RUN_DEFEATED'
+    | 'NUM_SOUVENIRS'
 
 export type RunScoreEvent = NotifiableEvent | NonNotifiableEvent
 
@@ -101,6 +111,9 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     winsNoEnergyUsedLastTurn: 'ROOM_WIN_NO_ENERGY_USED',
     finalUserHealthRemaining: 'FINAL_USER_HEALTH_REMAINING',
     survivingKaiju: 'SURVIVING_KAIJU',
+    numSouvenirs: 'NUM_SOUVENIRS',
+    balancedTeam: 'BALANCED_TEAM',
+    specialBoy: 'SPECIAL_BOY',
     roomsWonZeroDamage: 'ROOM_WIN_ZERO_DAMAGE',
     roomsWonFiveDamage: 'ROOM_WIN_FIVE_DAMAGE',
     roomsTake100Damage: 'ROOM_TAKE_100_DAMAGE',
@@ -108,6 +121,8 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     cardsPlayedOverThreshold: 'CARDS_OVER_THRESHOLD',
     cardsWholeParty: 'CARDS_WHOLE_PARTY',
     cardsDraftBalanced: 'CARDS_DRAFT_BALANCED',
+    runCompleted: 'RUN_COMPLETED',
+    runDefeated: 'RUN_DEFEATED',
     null: 'NULL',
 }
 
@@ -215,12 +230,53 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         keyword: 'Number Go Up',
         increment: false,
     },
+    RUN_COMPLETED: {
+        description: 'Successfully completed a run',
+        shortDescription: 'You won!',
+        pointValue: 5,
+        attributeName: 'runCompleted',
+        keyword: 'Winner!',
+        increment: false,
+    },
+    RUN_DEFEATED: {
+        description: 'Why would I give you points?',
+        shortDescription: 'You lost!',
+        pointValue: 0,
+        attributeName: 'runDefeated',
+        keyword: 'Loser!',
+        increment: false,
+    },
     SURVIVING_KAIJU: {
         description: 'Number of party members alive at the end of run',
         shortDescription: 'Surviving Party Members',
         pointValue: 12,
         attributeName: 'survivingKaiju',
         keyword: 'Present and Accounted For',
+        increment: false,
+    },
+    BALANCED_TEAM: {
+        description: 'Have 3 different characters in your party',
+        shortDescription: 'All different characters in your team',
+        pointValue: 5,
+        attributeName: 'balancedTeam',
+        keyword: 'Fellowship of The Balanced Team',
+        increment: false,
+    },
+    SPECIAL_BOY: {
+        description:
+            'Your deck contains no duplicates outside of basic attacks, starter cards and blocks at the end of a run',
+        shortDescription: 'No added duplicates to your deck',
+        pointValue: 10,
+        attributeName: 'specialBoy',
+        keyword: 'A Very Special Boy',
+        increment: false,
+    },
+    NUM_SOUVENIRS: {
+        description: 'Number of souvenirs held at the end',
+        shortDescription: 'Number of souvenirs held at the end',
+        pointValue: 1,
+        attributeName: 'numSouvenirs',
+        keyword: 'Tourist',
         increment: false,
     },
     FINAL_USER_HEALTH_REMAINING: {
