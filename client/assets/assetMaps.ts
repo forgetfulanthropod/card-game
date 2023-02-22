@@ -597,9 +597,12 @@ export type EventAssetKey = keyof typeof eventAssets
 export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
     eventFrogCarriageMainGraphic: 'events/Frog Carriage/Layer 47.webp',
-    eventFrogCarriagePrompt1: 'events/Frog Carriage/FrogCarriage Prompt 1.webp',
-    eventFrogCarriagePrompt2: 'events/Frog Carriage/FrogCarriage Prompt 2.webp',
-    eventFrogCarriagePrompt3: 'events/Frog Carriage/FrogCarriage Prompt 3.webp',
+    eventFrogCarriagePrompt1:
+        'events/Frog Carriage/FrogCarriage Prompt 1_.webp',
+    eventFrogCarriagePrompt2:
+        'events/Frog Carriage/FrogCarriage Prompt 2_.webp',
+    eventFrogCarriagePrompt3:
+        'events/Frog Carriage/FrogCarriage prompt 3_.webp',
     eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
     eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Choice 2.webp',
     eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Choice 3.webp',
@@ -675,8 +678,10 @@ export const eventAssets = {
 
     eventHogClownMainGraphic:
         'events/Hog Covered In Clowns/Hog Covered in Clowns.webp',
-    eventHogClownPrompt1: 'events/Hog Covered In Clowns/HogClown prompt 1.webp',
-    eventHogClownPrompt2: 'events/Hog Covered In Clowns/HogClown prompt 2.webp',
+    eventHogClownPrompt1:
+        'events/Hog Covered In Clowns/HogClown prompt 1_.webp',
+    eventHogClownPrompt2:
+        'events/Hog Covered In Clowns/HogClown prompt 2_.webp',
     eventHogClownChoice1: 'events/Hog Covered In Clowns/HogClown Choice 1.webp',
     eventHogClownChoice2: 'events/Hog Covered In Clowns/HogClown Choice 2.webp',
     eventHogClownPostChoice1_1:
