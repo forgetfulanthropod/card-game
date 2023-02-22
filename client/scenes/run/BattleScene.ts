@@ -31,6 +31,7 @@ import { Characters } from './character'
 import { EndOfRoom } from './EndOfRoom'
 import { EndOfRun } from './EndOfRun'
 import { Energy } from './Energy'
+import { SouvenirsEls } from './Souvenirs'
 
 const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
@@ -130,9 +131,11 @@ export function BattleScene(
                     : sceneState === 'won' || sceneState === 'lost'
                     ? EndOfRun()
                     : Container({})
-        )
+        ),
+        SouvenirsEls()
     )
 }
+
 function playLoopingMusic(scene: ROCursor<BattleScene>) {
     const category = scene.get('currentRoom', 'category')
     if (category === 'tierOne' || 'events')

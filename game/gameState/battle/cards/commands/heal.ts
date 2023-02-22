@@ -15,9 +15,14 @@ export const execute: Executors['heal'] = ({
     scene,
     command,
 }) => {
-    const [amount] = evalAll(dslArgs)
-    const targetUids = getTargetUidsHeal(dslArgs, givenUids, command, scene)
-    targetUids.forEach(uid => {
+    const [amount, targetType] = evalAll(dslArgs)
+
+    getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids,
+    }).forEach(uid => {
         const characterCursor = scene.select('allCharacters', uid)
 
         characterCursor
@@ -28,21 +33,5 @@ export const execute: Executors['heal'] = ({
                     characterCursor.get('constitution')
                 )
             )
-    })
-}
-
-function getTargetUidsHeal(
-    dslArgs: VAngu[],
-    givenUids: CharacterUid[],
-    command: Command,
-    scene: BattleCursor
-) {
-    let targetType = evalAll(dslArgs)[1]
-
-    return getTargetUidsOverride({
-        targetTypeOverride: targetType,
-        scene,
-        command,
-        givenUids,
     })
 }

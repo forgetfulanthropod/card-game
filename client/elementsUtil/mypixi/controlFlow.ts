@@ -8,7 +8,7 @@ import { applyDisplayObjectArgs } from './_applyArgs'
 import type { ContainerArgs, DisplayObjectArgs } from './_types'
 import { onDestroyed } from './convenience'
 import { Container } from './core'
-import { getPixiApp } from './application'
+import { getPixiApp, getStage } from './application'
 import { nextTick } from '@/util'
 import { transitionFadeElement } from '@/scenes/run/EndOfRun'
 import { transitionScene } from '@/scenes/shared/transitionScene'
@@ -224,10 +224,25 @@ export function portalize(args: {
 
     if (from == null) return
 
-    const to_ =
-        args.to ?? getPixiApp()?.stage ?? throwNull('app.stage and args.to')
+    const to_ = args.to ?? getStage ?? throwNull('app.stage and args.to')
+
+    if (args.nextFrame) {
+        console.log('adding next tick attach heres the stack trace..')
+        console.trace()
+        Ticker.shared.addOnce(() => attach())
+        // setTimeout(attach, 0)
+    } else {
+        attach()
+    }
+
     function attach() {
         const to = typeof to_ === 'function' ? to_() : to_
+
+        if (to == null) {
+            console.trace()
+            throw new Error('trying to portalize to null element')
+        }
+
         if (before != null) {
             const i = to.children.findIndex(c => c.name === before)
             const j = i === -1 ? to.children.length : i
@@ -239,11 +254,5 @@ export function portalize(args: {
             to.removeChild(content)
             content.destroy({ children: true })
         })
-    }
-    if (args.nextFrame) {
-        Ticker.shared.addOnce(() => attach())
-        // setTimeout(attach, 0)
-    } else {
-        attach()
     }
 }

@@ -3,8 +3,6 @@ export type SoundAssetKey = SoundEffectAssetKey | MusicAssetKey
 export type SoundEffectAssetKey = keyof typeof soundEffectAssets
 
 export const soundEffectAssets = {
-    musicDefeat: 'sfx/Defeat.mp3',
-
     soundNotEnoughEnergy: 'sfx/not enough energy.mp3',
     soundBlock: 'sfx/block.mp3',
     soundDraw: 'sfx/Card_draw_2.mp3',
@@ -14,6 +12,8 @@ export const soundEffectAssets = {
 
     soundFrogKnightAttack: 'sfx/Frog Knight Attack.mp3',
     soundFrogKnightTakingDamage: 'sfx/Frog Knight Taking Damage.mp3',
+    soundMimicNPCAttack: 'sfx/Mimic Attack.mp3',
+    soundMimicNPCTakingDamage: 'sfx/Mimic Taking Damage.mp3',
     soundMushroomFarmerAttack: 'sfx/Mushroom Farmer Attack.mp3',
     soundMushroomFarmerTakingDamage: 'sfx/Mushroom Farmer Taking Damage.mp3',
     soundNotoriousBeanAttack1: 'sfx/BEAN attack_01b.mp3',
@@ -55,6 +55,8 @@ export const musicAssets = {
     defeatMusicHooligansBluff: 'music/defeat song_v1.mp3',
     restSiteMusicHooligansBluff: 'music/rest_site.mp3',
     runVictoryMusicHooligansBluff: 'music/entire_run_victory_song_v1.mp3',
+    eventSceneMusicHooligansBluff: 'music/event scene.mp3',
+    musicDefeat: 'sfx/Defeat.mp3',
 }
 
 export const sequences = {

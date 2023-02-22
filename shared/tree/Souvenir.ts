@@ -1,4 +1,4 @@
-import { CardAction } from './battle'
+import { CardAction, CharacterUid } from './battle'
 
 export type SouvenirMap = Record<SouvenirId, Souvenir>
 
@@ -16,18 +16,27 @@ export type SouvenirId =
     | 'nightmareBiscuit'
     | 'squeakyClownShoes'
 
+export type SouvenirActivationKey =
+    | 'acquire'
+    | 'battleStart'
+    | 'battleEnd'
+    | 'turnStart'
+    | 'turnEnd'
+
 export type Souvenir = {
     id: SouvenirId
     name: string
     equippable: boolean
     description: string
-    on: {
-        acquire?: CardAction
-        battleStart?: CardAction
-        battleEnd?: CardAction
-        turnStart?: CardAction
-        turnEnd?: CardAction
-    }
+    characterUid?: CharacterUid
+    on: Partial<Record<SouvenirActivationKey, CardAction>>
+    // {
+    //     acquire?: CardAction
+    //     battleStart?: CardAction
+    //     battleEnd?: CardAction
+    //     turnStart?: CardAction
+    //     turnEnd?: CardAction
+    // }
 }
 
 export const souvenirMap: Record<SouvenirId, Souvenir> = {
@@ -104,7 +113,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     clownInfestation: {
         id: 'clownInfestation',
         name: 'Infestation of Clowns',
-        equippable: true,
+        equippable: false,
         description:
             'At the start of a new Encounter, apply Vulnerable (1) to all friendly characters.  Apply Vulnerable (2) to all enemy characters. ',
         on: {
@@ -126,7 +135,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     demonsRightHand: {
         id: 'demonsRightHand',
         name: "Demon's Right Hand",
-        equippable: false,
+        equippable: true,
         description:
             'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
         on: {
@@ -137,23 +146,21 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     nightmareBiscuit: {
         id: 'nightmareBiscuit',
         name: 'Nightmare Biscuit',
-        equippable: false,
+        equippable: true,
         description:
-            'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
+            'Equipped Kaiju receives +4 Strength, +4 Magic, and a permanent stack of Unguarded.',
         on: {
-            battleStart:
-                'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
+            acquire: 'modifyStats("strength|magic", "4|4", "run")',
+            turnEnd: 'effect("unguarded", 1)',
         },
     },
     glassOfWarmMilk: {
         id: 'glassOfWarmMilk',
         name: 'Glass of Warm Milk',
         equippable: false,
-        description:
-            'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
+        description: 'Heal all Kaiju for 12.',
         on: {
-            battleStart:
-                'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
+            acquire: 'heal(12)',
         },
     },
 }

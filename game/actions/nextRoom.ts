@@ -4,6 +4,8 @@ import {
     setRoundEnergy,
     updateNpcMoves,
 } from '@/gameState'
+import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import {
@@ -58,24 +60,31 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
         .select('attributes')
         .set('roomsCleared', scene.get('numRoomsPassed')) // handles rest site updating of this field
 
+    scene.set('cardsPlayedThisRoom', [])
+    scene.set('cardsPlayedThisTurn', [])
+    scene.set('damagesDealtThisRoom', [])
+    scene.set('damagesDealtThisTurn', [])
+    scene.set('damagesUnblockedThisTurn', [])
+    scene.set('damagesUnblockedThisRoom', [])
+    scene.set('scoreEventsThisTurn', getRoomScoreCounter())
+    scene.set('scoreEventsThisRoom', getRoomScoreCounter())
+
+    scene.select('treasureChest').set('upgraded', false)
+    scene.select('treasureChest').set('state', 'pending')
+
     const newNpcs = makeNpcsForRoom(chosenRoom.enemies)
     scene.apply('allCharacters', ac => ({
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
     }))
+    activateSouvenirs('battleStart', scene)
+
     scene.set('state', 'in battle')
     scene.set('lootScreenHasOpened', false)
 
     updateNpcMoves(scene)
     setRoundEnergy(scene)
-
-    scene.set('cardsPlayedThisRoom', [])
-    scene.set('cardsPlayedThisTurn', [])
     drawNewHand(scene)
-    scene.set('damagesDealtThisRoom', [])
-
-    scene.select('treasureChest').set('upgraded', false)
-    scene.select('treasureChest').set('state', 'pending')
 }
 
 function getChosenRoom(scene: BattleCursor, choice: 0 | 1 | 2 | 3) {

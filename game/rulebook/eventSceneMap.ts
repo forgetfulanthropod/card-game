@@ -33,10 +33,10 @@ export const eventSceneMap: Record<EventId, EventScene> = {
         id: 'gnomeStory',
         choices: [
             {
-                souvenirId: 'nightmareBiscuit',
+                souvenirId: 'glassOfWarmMilk',
             },
             {
-                souvenirId: 'glassOfWarmMilk',
+                souvenirId: 'nightmareBiscuit',
             },
         ],
     },

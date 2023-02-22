@@ -1,15 +1,8 @@
 import { AssetKey } from '@/assets'
-import { callApi } from '@/callApi'
-import { ROCursor } from 'sbaobab'
-import {
-    RUN_SCORE_EVENT_META,
-    CharacterMeta,
-    BattleScene,
-    NotifiableEvent,
-    RunScoreUpdate,
-} from 'shared'
+import { RUN_SCORE_EVENT_META, CharacterMeta, RunScoreUpdate } from 'shared'
 import { displayScoreNotification } from './Notification'
 
+// TODO: include asset and display string in RunScoreEvent interface?
 export const showScoreUpdateNotification = ({
     event,
     count,
@@ -36,7 +29,6 @@ export const showScoreUpdateNotification = ({
                 'swordPiercing',
                 scorePointsToAdd
             )
-            // checkOtherScoringEvents(event, scene)
             break
         case 'ROOM_WIN_NO_ENERGY_USED':
             displayScoreNotification(
@@ -44,9 +36,6 @@ export const showScoreUpdateNotification = ({
                 'remainingEnergy',
                 scorePointsToAdd
             )
-            break
-        case 'OVERKILL':
-            displayScoreNotification('Overkill', 'overkill', scorePointsToAdd)
             break
         case 'PERFECT_KILL':
             displayScoreNotification(
@@ -90,12 +79,12 @@ export const showScoreUpdateNotification = ({
                 scorePointsToAdd
             )
             break
-        case 'STANCE_CHANGES_UNDER':
         default:
             displayScoreNotification(
                 RUN_SCORE_EVENT_META[event].keyword,
                 'swordShield',
                 scorePointsToAdd
             )
+            break
     }
 }

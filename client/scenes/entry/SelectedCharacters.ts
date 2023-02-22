@@ -112,53 +112,51 @@ function SelectedCharacterText() {
 }
 
 function Characters(charactersData: SelectedCharacters) {
-    return (
-        charactersData
-            .map((c, i) => {
-                const characterHeight = 260
+    return charactersData
+        .map((c, i) => {
+            const characterHeight = 260
 
-                if (c == null) return null
+            if (c == null) return null
 
-                const props = {
-                    ...getXYAtIndex(i),
-                    scale: i === 2 ? 1.1 : 1,
-                } as const
-                return [
-                    Container(
-                        {
-                            zIndex: i,
-                            ...props,
+            const props = {
+                ...getXYAtIndex(i),
+                // scale: i === 1 ? 1.1 : 1,
+            } as const
+            return Container(
+                {
+                    ...props,
+                },
+
+                MainCharacterAnimation({
+                    characterMeta: c,
+                    events: {
+                        pointerover() {},
+                        pointerout() {
+                            // only un-hover on bg click...
                         },
-
-                        MainCharacterAnimation({
-                            characterMeta: c,
-                            events: {
-                                pointerover() {},
-                                pointerout() {
-                                    // only un-hover on bg click...
-                                },
-                                pointerup() {
-                                    hoveredCharacterUid.set(c.uid)
-                                    selectedCharacterPlaceIndex.set(
-                                        i as CharacterPlaceIndex
-                                    )
-                                    selectedCharacterId.set(c.id)
-                                },
-                            },
-                            _height: characterHeight,
-                        }) ??
-                            Sprite({
-                                anchor: 0.5,
-                                src: isTextureKey(c.id)
-                                    ? getTexture(c.id)
-                                    : PixiTexture.WHITE,
-                                scale: 1,
-                            })
-                    ),
-                ]
-            })
-            .flat() ?? []
-    )
+                        pointerup() {
+                            hoveredCharacterUid.set(c.uid)
+                            selectedCharacterPlaceIndex.set(
+                                i as CharacterPlaceIndex
+                            )
+                            selectedCharacterId.set(c.id)
+                        },
+                    },
+                    _height: characterHeight,
+                }) ??
+                    Sprite({
+                        anchor: 0.5,
+                        src: isTextureKey(c.id)
+                            ? getTexture(c.id)
+                            : PixiTexture.WHITE,
+                        scale: 1,
+                    })
+            )
+        })
+        .filter(el => el != null)
+        .sort((elA, elB) => {
+            return elA!.y - elB!.y || elA!.x - elB!.x
+        })
 }
 
 function PedestalRays(characters: (PixiContainer | null)[]) {
@@ -227,8 +225,8 @@ function getXYAtIndex(i: number) {
     const x = 0.5 * BASE_WIDTH
     const y = 0.818 * BASE_HEIGHT
     return {
-        x: x + (i === 0 ? -240 : i === 2 ? 0 : 240),
-        y: y + (i === 2 ? 33 : 0),
+        x: x + (i === 2 ? -240 : i === 1 ? 0 : 240),
+        y: y + (i === 1 ? 33 : 0),
     }
 }
 
