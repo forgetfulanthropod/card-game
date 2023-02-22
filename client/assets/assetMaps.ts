@@ -598,9 +598,9 @@ export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
     eventFrogCarriageMainGraphic: 'events/Frog Carriage/Layer 47.webp',
     eventFrogCarriagePrompt1:
-        'events/Frog Carriage/FrogCarriage Prompt 1_.webp',
+        'events/Frog Carriage/FrogCarriage prompt 1__.webp',
     eventFrogCarriagePrompt2:
-        'events/Frog Carriage/FrogCarriage Prompt 2_.webp',
+        'events/Frog Carriage/FrogCarriage prompt 2__.webp',
     eventFrogCarriagePrompt3:
         'events/Frog Carriage/FrogCarriage prompt 3_.webp',
     eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
