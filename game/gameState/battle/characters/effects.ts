@@ -121,7 +121,9 @@ const turnStartEffectFuncs = (
         let calcedDamage = 0
         const targetUid = character.uid
         if (effectId === 'bleedDebuff')
-            calcedDamage = Math.ceil(character.constitution * 0.05)
+            calcedDamage = Math.ceil(
+                character.calculatedStats.constitution * 0.05
+            )
         else if (effectId === 'poisonedDebuff') calcedDamage = effect.counter
         else return
         const unblockedDamage = applyCalcedDamage({

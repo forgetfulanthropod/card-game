@@ -3,6 +3,7 @@ import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
+import { calculateStats } from '../../characters/effects'
 
 export const explain: Explainers['heal'] = dslArgs => {
     const [amount] = evalAllAsHtml(dslArgs)
@@ -30,7 +31,7 @@ export const execute: Executors['heal'] = ({
             .apply(h =>
                 Math.min(
                     h + Math.ceil(amount),
-                    characterCursor.get('constitution')
+                    calculateStats(characterCursor.get()).constitution
                 )
             )
     })

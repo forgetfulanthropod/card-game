@@ -99,15 +99,9 @@ function applyStatModifiers({
 }) {
     uids.forEach(uid =>
         scene.apply(['allCharacters', uid, 'statModifiersMap'], modifiers => {
-            // logger.info(
-            //     'should be applying these modifierss..' +
-            //         JSON.stringify({ uid, stats, expiration, modifiers })
-            // )
             return getUpdatedModifiers(modifiers, stats, expiration)
         })
     )
-
-    updateCharacters(scene)
 }
 
 function getUpdatedModifiers(
