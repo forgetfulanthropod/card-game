@@ -224,8 +224,6 @@ export function portalize(args: {
 
     if (from == null) return
 
-    console.log({ content })
-
     const to_ = args.to ?? getStage ?? throwNull('app.stage and args.to')
 
     if (args.nextFrame) {
@@ -240,9 +238,11 @@ export function portalize(args: {
     function attach() {
         const to = typeof to_ === 'function' ? to_() : to_
 
-        console.log("typeof to_ === 'function'", typeof to_ === 'function', {
-            to_,
-        })
+        if (to == null) {
+            console.trace()
+            throw new Error('trying to portalize to null element')
+        }
+
         if (before != null) {
             const i = to.children.findIndex(c => c.name === before)
             const j = i === -1 ? to.children.length : i
