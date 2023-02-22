@@ -78,6 +78,7 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
         ...newNpcs,
     }))
     activateSouvenirs('battleStart', scene)
+    activateSouvenirs('turnStart', scene)
 
     scene.set('state', 'in battle')
     scene.set('lootScreenHasOpened', false)
