@@ -57,7 +57,7 @@ export interface ActionArgs {
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     drawSizeChange: [amount: number]
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
-    heal: [amount: number]
+    heal: [amount: number, targetType?: BasicTargetType]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifDamageDealtApplyEffect: [
         damage: number,

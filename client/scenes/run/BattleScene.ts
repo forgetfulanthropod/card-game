@@ -31,7 +31,7 @@ import { Characters } from './character'
 import { EndOfRoom } from './EndOfRoom'
 import { EndOfRun } from './EndOfRun'
 import { Energy } from './Energy'
-import { Souvenirs } from './Souvenirs'
+import { SouvenirsEls } from './Souvenirs'
 
 const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
@@ -132,7 +132,7 @@ export function BattleScene(
                     ? EndOfRun()
                     : Container({})
         ),
-        Souvenirs()
+        SouvenirsEls()
     )
 }
 

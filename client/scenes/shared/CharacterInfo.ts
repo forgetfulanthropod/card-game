@@ -51,6 +51,7 @@ const _classColorMap: Record<CharacterClass, [number, number]> = {
     bard: [0x44ff82, 0x016622],
     rogue: [0xaa44ff, 0x370561],
 }
+const CONTENT_WIDTH = BASE_WIDTH * 0.23
 
 export function EntrySceneCharacterInfo() {
     return If(
@@ -101,7 +102,7 @@ export function BattleSceneCharacterInfo() {
         ),
         //@ts-expect-error
         (cm: CharacterMeta) => {
-            const root = RootCharacterInfo(cm, 0, 78)
+            const root = RootCharacterInfo(cm, 40, 78)
 
             root.alpha = 0
 
@@ -153,7 +154,7 @@ function RootCharacterInfo(
     const characterInfo = CharacterInfo(cm as CharacterMeta)
 
     return Adjust(characterInfo, {
-        x: characterInfo.width * 0.5 + x,
+        x: CONTENT_WIDTH * 0.6 + x,
         y: y + characterInfo.width * 0.1,
     })
 }
@@ -173,7 +174,6 @@ function getAllPossibleCardsForCharacter(cm: CharacterMeta): Card[] {
 }
 
 function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
-    const contentWidth = BASE_WIDTH * 0.23
     let cards
 
     //todo:
@@ -184,7 +184,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
         (cards = getAllPossibleCardsForCharacter(props.cm)).length
             ? CardsTiltedInLine({
                   cards,
-                  parentWidth: contentWidth * 0.8,
+                  parentWidth: CONTENT_WIDTH * 0.8,
               })
             : Container({})
 
@@ -200,7 +200,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             {},
             Sprite({
                 src: Texture.WHITE,
-                width: contentWidth,
+                width: CONTENT_WIDTH,
                 alpha: 0,
                 anchor: 0.5,
             }),
@@ -212,7 +212,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                     fill: 0xdddddd,
                 },
                 anchor: [0, 1],
-                x: -contentWidth * 0.5,
+                x: -CONTENT_WIDTH * 0.5,
             }),
             Text({
                 text: upperFirst(props.cm.class),
@@ -221,11 +221,11 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                     fontSize: 20,
                     fill: 0x708090,
                     fontStyle: 'italic',
-                    padding: 2
+                    padding: 2,
                 },
                 anchor: [0, 1],
-                x: -contentWidth * 0.5 + 3,
-                y: 28
+                x: -CONTENT_WIDTH * 0.5 + 3,
+                y: 28,
             }),
             // Text({
             //     text: cm.class,
@@ -244,7 +244,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                 return Container(
                     {
                         y: 50,
-                        x: ((i - 1.5) * contentWidth) / 4,
+                        x: ((i - 1.5) * CONTENT_WIDTH) / 4,
                     },
 
                     Text({
@@ -286,7 +286,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
         Sprite({
             src: `${props.cm.class}ClassIcon`,
             anchor: [0.5, 0.8],
-            x: contentWidth * 0.5,
+            x: CONTENT_WIDTH * 0.5,
             scale:
                 150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
         }),
@@ -294,7 +294,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
         ...AbilityButtons([]),
         Adjust(allCharCards, {
             y: 200,
-            x: -allCharCards.width + contentWidth / 2 + mainPadding,
+            x: -allCharCards.width + CONTENT_WIDTH / 2 + mainPadding,
             filters: [classOutlineFilter2],
         })
     ).parent

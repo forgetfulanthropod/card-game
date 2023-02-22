@@ -222,31 +222,38 @@ export function ExplanationIf({
     xOffset = 0,
     yOffset = 0,
     isHtml = false,
+    displayArgs,
 }: {
     isShown: Datum<boolean>
     texts: string[]
     xOffset?: number
     yOffset?: number
     isHtml?: boolean
+    displayArgs?: DisplayObjectArgs
 }): PixiContainer {
-    return If(isShown, () => {
-        return portalizeExplanations(
-            Container({}),
-            [
-                Explanation({
-                    texts,
-                    isHtml,
-                    displayObjectArgs: {
-                        borderThickness: 2,
-                        padding: 10,
-                        x: xOffset,
-                        y: yOffset,
-                    },
-                }),
-            ],
-            xOffset
-        )
-    })
+    return If(
+        isShown,
+        () => {
+            return portalizeExplanations(
+                Container({}),
+                [
+                    Explanation({
+                        texts,
+                        isHtml,
+                        displayObjectArgs: {
+                            borderThickness: 2,
+                            padding: 10,
+                            x: xOffset,
+                            y: yOffset,
+                            ...(displayArgs ? { ...displayArgs } : {}),
+                        },
+                    }),
+                ],
+                xOffset
+            )
+        },
+        undefined
+    )
 }
 
 export function Explanation({
