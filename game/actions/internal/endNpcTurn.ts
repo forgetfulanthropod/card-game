@@ -11,6 +11,7 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { checkServerScoringEvent } from '@/gameState/battle/score/checkServerScoringEvent'
+import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
@@ -39,4 +40,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     scene.set('blocksAppliedThisTurn', [])
 
     updateNpcMoves(scene)
+
+    activateSouvenirs('turnStart', scene)
 }

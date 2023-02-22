@@ -1,4 +1,4 @@
-import { CardAction } from './battle'
+import { CardAction, CharacterUid } from './battle'
 
 export type SouvenirMap = Record<SouvenirId, Souvenir>
 
@@ -28,6 +28,7 @@ export type Souvenir = {
     name: string
     equippable: boolean
     description: string
+    characterUid?: CharacterUid
     on: Partial<Record<SouvenirActivationKey, CardAction>>
     // {
     //     acquire?: CardAction

@@ -8,6 +8,7 @@ import {
 } from 'shared'
 import produce from 'immer'
 import { getBattleSceneIn } from '@/util'
+import { activateSouvenir } from '@/gameState/battle/activateSouvenirs'
 
 export const chooseEventResponse: GameActions['chooseEventResponse'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -40,5 +41,9 @@ function collectSouvenir(
     characterUid: CharacterUid | undefined,
     scene: BattleCursor
 ) {
-    scene.apply('souvenirs', souvenirs => [...souvenirs, souvenirMap[id]])
+    const newSouvenir = { ...souvenirMap[id], characterUid }
+
+    scene.apply('souvenirs', souvenirs => [...souvenirs, newSouvenir])
+
+    activateSouvenir(newSouvenir, 'acquire', scene)
 }
