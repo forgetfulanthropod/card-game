@@ -1,31 +1,23 @@
-import { cloneDeep, upperFirst } from 'lodash'
+import { upperFirst } from 'lodash'
 import {
     BasicTargetType,
     BattleCursor,
     CharacterStats,
-    CharacterUid,
-    DSLString,
-    ModifiableStatName,
-    StatModifierExpiration,
-    StatModifiers,
-    StatModifiersMap,
-    TargetType,
+    CharacterUid, ModifiableStatName,
+    StatModifierExpiration, StatModifiersMap
 } from 'shared'
-import { keys, mapToObj } from 'shared/code'
-import { Writable } from 'stream'
+import { keys } from 'shared/code'
 import {
     getLivingNpcUids,
-    getLivingPcUids,
+    getLivingPcUids
 } from '../../characters/characterGetters'
-import { getTargetText } from './util/getTargetText'
 import {
     ActionArgs,
     Anguify,
-    applyStatHtml,
-    Executors,
-    Explainers,
+    applyStatHtml, evalAll, Executors,
+    Explainers
 } from './util'
-import { evalAllAsHtml, evalAll } from './util'
+import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)

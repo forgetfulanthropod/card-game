@@ -495,7 +495,7 @@ const commandIdToMetaMap: Record<
             id: 'fire',
             src: 'intentFire',
             explanation: [
-                //TODO : 'At the start of the next player turn, ',
+                'At the start of the next player turn, ',
                 'All player characters receive',
                 'Vulnerable (2).',
             ],

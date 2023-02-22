@@ -122,8 +122,7 @@ export function EventScene(): PixiContainer {
                 return Container({})
             } else throw new Error('BAD BAD NO CLEAR CHOICE!!')
         }),
-        SouvenirsEls(),
-        BattleSceneCharacterInfo()
+        SouvenirsEls()
     )
 }
 
@@ -280,7 +279,8 @@ function EquipSouvenirInterface(
                 y: BASE_HEIGHT * 0.2,
             }
         ),
-        ...CharacterChoices(choiceDatum, eventPromptIndexDatum)
+        ...CharacterChoices(choiceDatum, eventPromptIndexDatum),
+        BattleSceneCharacterInfo()
     )
 }
 

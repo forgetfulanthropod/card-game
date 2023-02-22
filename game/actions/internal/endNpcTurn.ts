@@ -8,6 +8,7 @@ import {
     popAndRunQueue,
     updateNpcMoves,
     decrementEffects,
+    applyTurnStartEffects,
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { checkServerScoringEvent } from '@/gameState/battle/score/checkServerScoringEvent'
@@ -28,11 +29,12 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     scene.set('isPlayerTurn', true)
 
     clearBlock(scene, 'pc')
+    decrementEffects(scene, 'pc')
+    decrementEffects(scene, 'npc')
 
     popAndRunQueue(scene, 'pc')
 
     drawNewHand(scene)
-    decrementEffects(scene, 'npc')
 
     checkServerScoringEvent('HIT_VULGAR_THRESHOLD', scene)
     checkServerScoringEvent('BLOCK_OVER_THRESHOLD', scene)
@@ -45,4 +47,5 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     updateNpcMoves(scene)
 
     activateSouvenirs('turnStart', scene)
+    applyTurnStartEffects(scene, 'npc')
 }
