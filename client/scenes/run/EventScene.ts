@@ -13,6 +13,7 @@ import {
     getTexture,
     glowFilter,
     If,
+    loopSong,
     PixiContainer,
     Sprite,
     Text,
@@ -33,6 +34,9 @@ const explanationScale = 1.5
 
 export function EventScene(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Event Scene' })
+
+    loopSong('eventSceneMusicHooligansBluff')
+
     const eventPromptIndexDatum = datum(0)
     const choiceDatum = datum<null | EventResponse>(null)
     const event = getBattleScene().get('currentRoom', 'event')
