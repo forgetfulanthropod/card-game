@@ -18,6 +18,7 @@ import type {
     TreasureChest,
     RunScore,
     RunScoreUpdate,
+    RunScoreAttributeName,
 } from '.'
 import { RunID } from '../User'
 import { EventScene } from '../EventScene'
@@ -54,6 +55,11 @@ export interface BattleScene extends SceneHas {
     stanceChangesThisRoom: { newStance: StanceId; targetUid: CharacterUid }[]
     damagesDealtThisTurn: { amount: number; targetUid: CharacterUid }[]
     damagesDealtThisRoom: { amount: number; targetUid: CharacterUid }[]
+    damagesUnblockedThisTurn: { amount: number; targetUid: CharacterUid }[]
+    damagesUnblockedThisRoom: { amount: number; targetUid: CharacterUid }[]
+    scoreEventsThisTurn: Record<RunScoreAttributeName, number>
+    scoreEventsThisRoom: Record<RunScoreAttributeName, number>
+    cardsDrafted: Card[]
     requireAction: RequiredAction | null
     queue: CommandQueue
     isInMap: boolean

@@ -9,6 +9,7 @@ import {
     getInitialRunDuration,
 } from '.'
 import { getRulebook } from '@/rulebook'
+import { getRoomScoreCounter } from './score'
 
 export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
@@ -56,6 +57,11 @@ export function makeBattleState(args: {
         stanceChangesThisRoom: [],
         damagesDealtThisTurn: [],
         damagesDealtThisRoom: [],
+        damagesUnblockedThisTurn: [],
+        damagesUnblockedThisRoom: [],
+        cardsDrafted: [],
+        scoreEventsThisTurn: getRoomScoreCounter(),
+        scoreEventsThisRoom: getRoomScoreCounter(),
         queue: [],
         requireAction: null,
         isInMap: true,

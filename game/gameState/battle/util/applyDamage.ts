@@ -27,10 +27,6 @@ export function applyDamage(args: {
         throw new Error('must provide attacker or attackerUid')
     }
 
-    if (attackerUid?.includes('pc')) {
-        checkServerScoringEvent('HIGHEST_DAMAGE', scene, args)
-    }
-
     //@ts-expect-error
     const attackerMeta = attacker ?? scene.get('allCharacters', attackerUid)
 
@@ -39,6 +35,13 @@ export function applyDamage(args: {
         target: scene.get('allCharacters', targetUid),
         damage,
     })
+
+    if (attackerUid?.includes('pc')) {
+        checkServerScoringEvent('HIGHEST_DAMAGE', scene, {
+            ...args,
+            damage: calcedDamage,
+        })
+    }
 
     manageSideEffectsOfCalcedDamage({
         scene,
@@ -105,9 +108,8 @@ function manageSideEffectsOfCalcedDamage({
     attackerUid: CharacterUid
     calcedDamage: number
 }) {
+    recordDamage(scene, calcedDamage, targetUid, 'raw')
     manageReflect(calcedDamage, targetUid, attackerUid, scene)
-
-    recordDamage(scene, calcedDamage, targetUid)
 }
 
 function manageReflect(
@@ -136,6 +138,8 @@ export function manageSideEffectsOfUnblockedDamage(
     targetUid: CharacterUid,
     unblockedDamage: number
 ) {
+    recordDamage(scene, unblockedDamage, targetUid, 'unblocked')
+    checkServerScoringEvent('ROOM_TAKE_100_DAMAGE', scene)
     if (didTargetDie(scene, targetUid)) {
         clearDead(scene)
 
@@ -171,11 +175,11 @@ function applyKillScores(scene: BattleCursor, targetUid: CharacterUid) {
             count: 1,
             notify: true,
         })
-    } else {
+    } else if (remainingHealth <= -20) {
         updateScore({
             scene,
             event: 'OVERKILL',
-            count: Math.min(-remainingHealth, 40),
+            count: 1,
             notify: true,
         })
     }
@@ -263,16 +267,30 @@ function maybeApplyDamageThresholdDebuffs(
 
 export function recordDamage(
     scene: BattleCursor,
-    calcedDamage: number,
-    targetUid: CharacterUid
+    amount: number,
+    targetUid: CharacterUid,
+    type: 'raw' | 'unblocked'
 ) {
-    scene.apply('damagesDealtThisTurn', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+    if (amount <= 0) return
+    if (type === 'unblocked') {
+        scene.apply('damagesUnblockedThisTurn', damages => [
+            ...damages,
+            { amount, targetUid },
+        ])
 
-    scene.apply('damagesDealtThisRoom', damages => [
-        ...damages,
-        { amount: calcedDamage, targetUid },
-    ])
+        scene.apply('damagesUnblockedThisRoom', damages => [
+            ...damages,
+            { amount, targetUid },
+        ])
+    } else {
+        scene.apply('damagesDealtThisTurn', damages => [
+            ...damages,
+            { amount, targetUid },
+        ])
+
+        scene.apply('damagesDealtThisRoom', damages => [
+            ...damages,
+            { amount, targetUid },
+        ])
+    }
 }

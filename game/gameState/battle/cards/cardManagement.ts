@@ -51,7 +51,7 @@ export function getNullCards(): Piles {
     return { draw: {}, hand: {}, discard: {}, removedRoom: {}, removedRun: {} }
 }
 
-function makeCards(scene: BattleCursor): Piles {
+export function makeCards(scene: BattleCursor): Piles {
     const allCharacters = vals(scene.get('allCharacters'))
 
     const characterUidToCardIdMap: Record<CharacterUid, CardId[]> = {}
