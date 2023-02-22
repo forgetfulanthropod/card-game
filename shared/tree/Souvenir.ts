@@ -153,7 +153,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
             'Equipped Kaiju receives +4 Strength, +4 Magic, and a permanent stack of Unguarded.',
         on: {
             acquire: 'modifyStats("strength|magic", "4|4", "run")',
-            turnEnd: 'effect("unguarded", 1)',
+            turnStart: 'effect("unguarded", 1)',
         },
     },
     glassOfWarmMilk: {

@@ -193,10 +193,7 @@ function ChooseOptionInterface(
                 Sprite({
                     src: choiceAssetKey,
                     anchor: [0.5, 0],
-                    scale:
-                        (BASE_WIDTH * 0.8) /
-                        3 /
-                        getTexture(choiceAssetKey).width,
+                    scale: 0.5,
                     events: {
                         pointerover() {
                             isHovered.set(true)
