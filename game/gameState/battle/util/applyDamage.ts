@@ -57,6 +57,12 @@ export function applyDamage(args: {
         piercing,
     })
 
+    if (!attackerUid?.includes('pc')) {
+        if (calcedDamage > 0 && unblockedDamage === 0) {
+            checkServerScoringEvent('PERFECT_BLOCK', scene)
+        }
+    }
+
     manageSideEffectsOfUnblockedDamage(scene, targetUid, unblockedDamage)
 
     if (unblockedDamage === Number.NEGATIVE_INFINITY)
