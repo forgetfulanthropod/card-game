@@ -111,9 +111,13 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-const StatChangeText = (stat: 'health' | 'block', text: string) => {
+const StatChangeText = (
+    stat: 'health' | 'block',
+    text: string,
+    add?: boolean
+) => {
     const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
-    const fill = stat === 'health' ? 0xc23c1e : 0xbbbdc9
+    const fill = stat === 'health' ? (add ? 0x69b223 : 0xc23c1e) : 0xbbbdc9
 
     return Text({
         text,
@@ -131,12 +135,12 @@ const StatChangeText = (stat: 'health' | 'block', text: string) => {
 
 function AttackSimulation(isPc: boolean, health: number, healthChange: number) {
     const attackIsKill = healthChange >= health
-
+    healthChange *= -1
     const healthChangeText =
         healthChange === 0
             ? ''
-            : healthChange > 0
-            ? `${-healthChange}`
+            : healthChange < 0
+            ? `${healthChange}`
             : `+${healthChange}`
 
     const DeathSkull = Sprite({
@@ -156,7 +160,7 @@ function AttackSimulation(isPc: boolean, health: number, healthChange: number) {
         attackIsKill
             ? DeathSkull
             : Adjust(
-                  StatChangeText('health', healthChangeText),
+                  StatChangeText('health', healthChangeText, healthChange > 0),
                   { y: 120 }
               )
     )

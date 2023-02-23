@@ -8,7 +8,7 @@ export function extractDamages(
 ): StatChangeMap {
     const damages: StatChangeMap = {}
     for (const [uid, { health }] of Object.entries(prev.allCharacters)) {
-        if (next.allCharacters[uid].health < health) {
+        if (next.allCharacters[uid].health !== health) {
             damages[uid] = health - next.allCharacters[uid].health
         }
     }
