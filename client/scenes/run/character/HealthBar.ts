@@ -111,13 +111,25 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-function DamageContainer(
-    isPc: boolean,
-    health: number,
-    healthChange: number,
-    block: number,
-    blockChange: number
-) {
+const StatChangeText = (stat: 'health' | 'block', text: string) => {
+    const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
+    const fill = stat === 'health' ? 0xc23c1e : 0xbbbdc9
+
+    return Text({
+        text,
+        anchor: [0.5, 0],
+        filters: [customGlowFilter(glowColor)],
+        style: {
+            fontFamily: 'bigFont',
+            fontSize: text === 'SMASHED' ? 48 : 64,
+            fill,
+            stroke: 'black',
+            strokeThickness: 8,
+        },
+    })
+}
+
+function AttackSimulation(isPc: boolean, health: number, healthChange: number) {
     const attackIsKill = healthChange >= health
 
     const healthChangeText =
@@ -127,6 +139,30 @@ function DamageContainer(
             ? `${-healthChange}`
             : `+${healthChange}`
 
+    const DeathSkull = Sprite({
+        src: getTexture('killConfirmed'),
+        scale: 0.75,
+        x: -250,
+        y: 35,
+        anchor: 0,
+        filters: [customGlowFilter(0xc23c1e)],
+    })
+
+    return Container(
+        {
+            y: -110,
+            x: 85,
+        },
+        attackIsKill
+            ? DeathSkull
+            : Adjust(
+                  StatChangeText('health', healthChangeText),
+                  { y: 120 }
+              )
+    )
+}
+
+function BlockSimulation(isPc: boolean, block: number, blockChange: number) {
     const blockText =
         blockChange === 0
             ? ''
@@ -139,51 +175,16 @@ function DamageContainer(
     const blockAdjustment = isPc
         ? {
               x: 235,
-              y: 40,
+              y: 30,
           }
         : { x: -190, y: 40 }
-
-    const attackAdjustment = { y: 120 }
-
-    const DeathSkull = Sprite({
-        src: getTexture('overkill'),
-        scale: 0.4,
-        x: -200,
-        y: 35,
-        anchor: 0,
-        filters: [customGlowFilter(0xc23c1e)],
-    })
-
-    const StatChangeText = (stat: 'health' | 'block', text: string) => {
-        const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
-        const fill = stat === 'health' ? 0xc23c1e : 0xbbbdc9
-
-        return Text({
-            text,
-            anchor: [0.5, 0],
-            filters: [customGlowFilter(glowColor)],
-            style: {
-                fontFamily: 'bigFont',
-                fontSize: text === 'SMASHED' ? 48 : 64,
-                fill,
-                stroke: 'black',
-                strokeThickness: 8,
-            },
-        })
-    }
 
     return Container(
         {
             y: -110,
             x: 85,
         },
-        Adjust(StatChangeText('block', blockText), blockAdjustment),
-        attackIsKill
-            ? DeathSkull
-            : Adjust(
-                  StatChangeText('health', healthChangeText),
-                  attackAdjustment
-              ),
+        Adjust(StatChangeText('block', blockText), blockAdjustment)
     )
 }
 
@@ -193,55 +194,93 @@ function DamageIndicator(
 ) {
     const characterUid = characterCursor.get('uid')
     const isPc = characterCursor.get('isPc')
-    const showDamageContainer = datum(false)
+    const showAttackSimulation = datum(false)
+    const showBlockSimulation = datum(false)
     const damageValue = datum(0)
     const blockValue = datum(0)
+
     return onDestroyed(
-        If(showDamageContainer, () => {
-            return DamageContainer(
-                isPc,
-                characterCursor.get('health'),
-                damageValue.val,
-                characterCursor.get('block'),
-                blockValue.val
-            )
-        }),
+        Container(
+            {},
+            If(showAttackSimulation, () => {
+                return AttackSimulation(
+                    isPc,
+                    characterCursor.get('health'),
+                    damageValue.val
+                )
+            }),
+            If(showBlockSimulation, () => {
+                return BlockSimulation(
+                    isPc,
+                    characterCursor.get('block'),
+                    blockValue.val
+                )
+            })
+        ),
         hoveredSelectedCardUid.onChange(cardUid => {
-            showDamageContainer.set(false)
-            if (!cardUid) {
-                if (isAttacking.val) return
-                showDamageContainer.set(false)
-                damageValue.set(0)
-                blockValue.set(0)
-                return
-            }
+            showAttackSimulation.set(false)
+            showBlockSimulation.set(false)
+            if (!cardUid) return
             const card = handCursor.get(cardUid)
-            if (!card.outcomes) {
-                showDamageContainer.set(false)
-                return
-            }
-            let outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            if (!card.outcomes) return
+            const outcome = card.outcomes.outcome || card.outcomes[characterUid]
             const damage = outcome.damages[characterUid] || 0
             const block = outcome.blocks[characterUid] || 0
             damageValue.set(damage)
             blockValue.set(block)
-            if (keys(outcome.damages).length > 1) {
+
+            if (card.targetType === 'allEnemies') {
                 for (let char of keys(outcome.damages)) {
-                    if (char === characterUid) {
-                        showDamageContainer.set(true)
-                    }
+                    if (char === characterUid) showAttackSimulation.set(true)
+                }
+                for (let char of keys(outcome.blocks)) {
+                    if (char === characterUid) showBlockSimulation.set(true)
                 }
             }
+
+            if (card.targetType === 'allFriends') {
+                for (let char of keys(outcome.damages)) {
+                    if (char === characterUid) showAttackSimulation.set(true)
+                }
+                for (let char of keys(outcome.blocks)) {
+                    if (char === characterUid) showBlockSimulation.set(true)
+                }
+            }
+
+            // console.log(outcome.blocks, card.characterUid, hoveredCharacterUid.val, cardUid)
             return
         }),
         isAttacking.onChange(attacking => {
             if (!hoveredSelectedCardUid.val && !attacking)
-                showDamageContainer.set(false)
+                showAttackSimulation.set(false)
         }),
         hoveredCharacterUid.onChange(targetChar => {
-            showDamageContainer.set(false)
+            showAttackSimulation.set(false)
+            showBlockSimulation.set(false)
+            if (!hoveredSelectedCardUid.val) return
+            const card = handCursor.get(hoveredSelectedCardUid.val)
+
+            if (!card.outcomes) return
+            const outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            const damage = outcome.damages[characterUid] || 0
+            const block = outcome.blocks[characterUid] || 0
+            damageValue.set(damage)
+            blockValue.set(block)
+
+            if (!targetChar) return
+            if (!card) return
+            if (!card.outcomes) return
+
+            // base case
             if (isAttacking.val && targetChar === characterUid) {
-                showDamageContainer.set(true)
+                showAttackSimulation.set(true)
+                showBlockSimulation.set(true)
+                return
+            }
+
+            // for cards that deal damage and give block to self
+            if (card.outcomes[targetChar]?.blocks[characterUid]) {
+                showBlockSimulation.set(true)
             }
         })
     )
