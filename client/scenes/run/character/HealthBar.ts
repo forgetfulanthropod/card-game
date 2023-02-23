@@ -221,37 +221,29 @@ function DamageIndicator(
                 )
             })
         ),
+        // TODO combine/cleanup
         hoveredSelectedCardUid.onChange(cardUid => {
             showAttackSimulation.set(false)
             showBlockSimulation.set(false)
             if (!cardUid) return
             const card = handCursor.get(cardUid)
-            if (!card.outcomes) return
+            if (!card?.outcomes) return
             const outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            if (!outcome) return
+
             const damage = outcome.damages[characterUid] || 0
             const block = outcome.blocks[characterUid] || 0
             damageValue.set(damage)
             blockValue.set(block)
 
-            if (card.targetType === 'allEnemies') {
-                for (let char of keys(outcome.damages)) {
-                    if (char === characterUid) showAttackSimulation.set(true)
+            if (card.outcomes.outcome) {
+                if (outcome.damages[characterUid]) {
+                    showAttackSimulation.set(true)
                 }
-                for (let char of keys(outcome.blocks)) {
-                    if (char === characterUid) showBlockSimulation.set(true)
-                }
-            }
-
-            if (card.targetType === 'allFriends') {
-                for (let char of keys(outcome.damages)) {
-                    if (char === characterUid) showAttackSimulation.set(true)
-                }
-                for (let char of keys(outcome.blocks)) {
-                    if (char === characterUid) showBlockSimulation.set(true)
+                if (outcome.blocks[characterUid]) {
+                    showBlockSimulation.set(true)
                 }
             }
-
-            // console.log(outcome.blocks, card.characterUid, hoveredCharacterUid.val, cardUid)
             return
         }),
         isAttacking.onChange(attacking => {
@@ -261,29 +253,23 @@ function DamageIndicator(
         hoveredCharacterUid.onChange(targetChar => {
             showAttackSimulation.set(false)
             showBlockSimulation.set(false)
+            if (!targetChar) return
             if (!hoveredSelectedCardUid.val) return
             const card = handCursor.get(hoveredSelectedCardUid.val)
+            if (!card?.outcomes) return
+            const outcome = card.outcomes.outcome || card.outcomes[targetChar]
+            if (!outcome) return
 
-            if (!card.outcomes) return
-            const outcome = card.outcomes.outcome || card.outcomes[characterUid]
             const damage = outcome.damages[characterUid] || 0
             const block = outcome.blocks[characterUid] || 0
             damageValue.set(damage)
             blockValue.set(block)
 
-            if (!targetChar) return
-            if (!card) return
-            if (!card.outcomes) return
-
-            // base case
-            if (isAttacking.val && targetChar === characterUid) {
+            if (outcome.damages[characterUid]) {
                 showAttackSimulation.set(true)
-                showBlockSimulation.set(true)
-                return
             }
 
-            // for cards that deal damage and give block to self
-            if (card.outcomes[targetChar]?.blocks[characterUid]) {
+            if (outcome.blocks[characterUid]) {
                 showBlockSimulation.set(true)
             }
         })
