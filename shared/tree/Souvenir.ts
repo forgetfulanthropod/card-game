@@ -74,9 +74,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Broken Carriage Wheel',
         equippable: true,
         description:
-            'At the start of each room, apply Berserk (3) to equpped Kaiju.',
+            'Equipped Kaiju takes 2 damage and gains 1 Strength on equip.<br/>At the start of each room, apply Berserk (5) to equpped Kaiju.',
         on: {
-            battleStart: 'chain(deal(2), effect("berserk", 3))',
+            acquire: 'deal(2); modifyStats("strength", "1", "run")',
+            battleStart: 'effect("berserk", 5)',
         },
     },
     bundleOfFrogWine: {
@@ -84,10 +85,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Bundle of Frog Wine',
         equippable: false,
         description:
-            'All Kaiju take 7 Damage.<br/>All Kaiju gain +3 Strength, +3 Magic, and +3 Defense.',
+            'All Kaiju take 10 Damage.<br/>All Kaiju gain +2 Strength, +2 Magic, and +2 Defense.',
         on: {
             acquire:
-                'chain(deal(7), modifyStats("strength|magic|defense", 3|3|3, "run"))',
+                'chain(deal(10), modifyStats("strength|magic|defense", 2|2|2, "run"))',
         },
     },
     squeakyClownShoes: {
@@ -126,10 +127,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: "Demon's Left Hand",
         equippable: true,
         description:
-            'Equipped Kaiju gets<br/>+2 Strength, +2 Magic, and<br/>-10 max Health',
+            'Equipped Kaiju gets<br/>+2 Strength, +2 Magic, and<br/>-12 max Health',
         on: {
             acquire:
-                'modifyStats("strength|magic|constitution", "2|2|-10", "run")',
+                'modifyStats("strength|magic|constitution", "2|2|-12", "run")',
         },
     },
     demonsRightHand: {
@@ -137,10 +138,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: "Demon's Right Hand",
         equippable: true,
         description:
-            'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
+            'Equipped Kaiju gets<br/>+35 max Health, -1 Strength,<br/>and -1 Magic',
         on: {
             acquire: `chain(
-                    modifyStats("strength|magic|constitution", "-2|-2|30", "run"),
+                    modifyStats("strength|magic|constitution", "-1|-1|35", "run"),
                     heal(30)
                 )`,
         },
@@ -150,9 +151,9 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Nightmare Biscuit',
         equippable: true,
         description:
-            'Equipped Kaiju receives +4 Strength, +4 Magic, and a permanent stack of Unguarded.',
+            'Equipped Kaiju receives +3 Strength, +3 Magic, and a permanent stack of Unguarded.',
         on: {
-            acquire: 'modifyStats("strength|magic", "4|4", "run")',
+            acquire: 'modifyStats("strength|magic", "3|3", "run")',
             turnStart: 'effect("unguarded", 1)',
         },
     },
