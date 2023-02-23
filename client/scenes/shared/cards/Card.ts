@@ -460,12 +460,15 @@ function getEvents(
     }
     const pointerout: InteractionEventHandler = () => {
         setTimeout(() => {
+            if (
+                hoveredSelectedCardUid.val === card.uid &&
+                isAttacking.val === false
+            ) {
+                hoveredSelectedCardUid.set(null)
+            }
             if (hoveredCardUid.val === card.uid) {
                 hoveredCardUid.set(null)
                 hoveredCharacterUid.set(null)
-                if (card.outcomes?.outcome && isAttacking.val === false) {
-                    hoveredSelectedCardUid.set(null)
-                }
             }
         }, 0)
     }
