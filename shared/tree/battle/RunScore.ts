@@ -24,6 +24,7 @@ export type RunScoreAttributeName =
     | 'roomClearSpeed'
     | 'bossesKilled'
     | 'perfectKills'
+    | 'perfectBlocks'
     | 'overkills'
     | 'roomsExitedFullHealth'
     | 'bossRoomsExitedFullHealth'
@@ -63,6 +64,7 @@ export type NotifiableEvent =
     | 'ROOM_CLEARED'
     | 'BOSS_KILLED'
     | 'PERFECT_KILL'
+    | 'PERFECT_BLOCK'
     | 'OVERKILL'
     | 'EXIT_ROOM_FULL_HEALTH'
     | 'EXIT_BOSS_FULL_HEALTH'
@@ -101,6 +103,7 @@ export const RUN_SCORE_EVENT_MAPPING: Record<
     roomClearDifficulty: 'ROOM_CLEAR_DIFFICULTY',
     roomClearSpeed: 'ROOM_CLEAR_SPEED',
     perfectKills: 'PERFECT_KILL',
+    perfectBlocks: 'PERFECT_BLOCK',
     overkills: 'OVERKILL',
     bossesKilled: 'BOSS_KILLED',
     roomsExitedFullHealth: 'EXIT_ROOM_FULL_HEALTH',
@@ -209,9 +212,18 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
         description:
             'Score a final hit against enemy exacly equal to its remaining health',
         shortDescription: 'Perfect Kills',
-        pointValue: 2,
+        pointValue: 1,
         attributeName: 'perfectKills',
         keyword: 'Perfect Kill',
+        increment: true,
+    },
+    PERFECT_BLOCK: {
+        description:
+            'Generate block equal to the exact value of an enemy attack',
+        shortDescription: 'Perfect Blocks',
+        pointValue: 1,
+        attributeName: 'perfectBlocks',
+        keyword: 'Block Block Revolution',
         increment: true,
     },
     OVERKILL: {

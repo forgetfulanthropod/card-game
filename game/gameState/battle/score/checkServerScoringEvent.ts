@@ -79,6 +79,9 @@ export const checkServerScoringEvent = (
         case 'ROOM_TAKE_100_DAMAGE':
             checkRoomTake100Damage(scene)
             break
+        case 'PERFECT_BLOCK':
+            checkPerfectBlock(scene)
+            break
     }
 }
 
@@ -458,4 +461,18 @@ const checkCardsDraftBalanced = (scene: BattleCursor) => {
             count: 1,
         })
     }
+}
+
+const checkPerfectBlock = (scene: BattleCursor) => {
+    const roomScoreEventCount = scene.get(
+        'scoreEventsThisRoom',
+        'perfectBlocks'
+    )
+    if (roomScoreEventCount >= 3) return
+    updateScore({
+        scene,
+        event: 'PERFECT_BLOCK',
+        count: 1,
+        notify: true,
+    })
 }
