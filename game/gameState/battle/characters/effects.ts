@@ -66,9 +66,13 @@ const staticEffectFuncs: Record<
         stats.damageTakeMultiplicand -= 0.25
     },
     ignoreAggressive(stats) {
-        if (stats.stance === 'aggressive')
-            stats.damageTakeMultiplicand -=
-                getDamageTakeMulitplicandForStance('aggressive') - 1
+        if (stats.stance !== 'aggressive') return
+
+        stats.damageTakeMultiplicand -=
+            getDamageTakeMulitplicandForStance('aggressive') - 1
+
+        stats.damageDealMultiplicand -=
+            getDamageDealMulitplicandForStance('aggressive') - 1
     },
     reflectBuff(_) {},
     smallDamageIncreaseBuff(stats) {
