@@ -10,6 +10,7 @@ import {
     RunID,
     ServerActions,
     LeaderboardTimeframe,
+    BUILD_VER,
 } from 'shared'
 import { getDbClient, sql as sqlTag } from '../db/client'
 
@@ -27,10 +28,10 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
     ): Promise<Leaderboard> => {
         const whereFragment =
             timeframe === 'daily'
-                ? sqlTag.fragment`WHERE extract(day from end_ts) = extract(day from now()) AND run_status in ('won', 'lost', 'abandoned')`
+                ? sqlTag.fragment`WHERE date(end_ts) = date(now()) AND run_status in ('won', 'lost', 'abandoned') AND build_version = ${BUILD_VER}`
                 : timeframe === 'weekly'
                 ? sqlTag.fragment`WHERE
-                end_ts > now() - interval '7 days' AND run_status in ('won', 'lost', 'abandoned')`
+                end_ts > now() - interval '7 days' AND run_status in ('won', 'lost', 'abandoned') AND build_version = ${BUILD_VER}`
                 : sqlTag.fragment`WHERE run_status in ('won', 'lost', 'abandoned')`
 
         return await connection.any(sql`

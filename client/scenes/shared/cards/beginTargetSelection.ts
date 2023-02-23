@@ -8,13 +8,15 @@ import { callApi } from '@/callApi'
 import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { getPixiApp } from '@/elementsUtil'
-import { onUpdate } from '@/util'
+import { hoveredSelectedCardUid, isAttacking, onUpdate } from '@/util'
 
 export function beginTargetSelection(
     cardEl: PixiContainer,
     cardMeta: Card
 ): () => void {
     const numTargets = cardMeta.targetNum
+    hoveredSelectedCardUid.set(cardMeta.uid)
+    isAttacking.set(true)
 
     const app = getPixiApp()
 
@@ -82,7 +84,8 @@ export function beginTargetSelection(
 
     function cleanup() {
         unsub()
-
+        isAttacking.set(false)
+        hoveredSelectedCardUid.set(null)
         removeEventListener('contextmenu', rightClickListener)
         removeEventListener('keydown', keydownListener)
 
