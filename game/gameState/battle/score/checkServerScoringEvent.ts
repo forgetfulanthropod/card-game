@@ -69,12 +69,16 @@ export const checkServerScoringEvent = (
             break
         case 'CARDS_OVER_THRESHOLD':
             checkCardsOverThreshold(scene)
+            break
         case 'CARDS_WHOLE_PARTY':
             checkCardsWholeParty(scene)
+            break
         case 'CARDS_DRAFT_BALANCED':
             checkCardsDraftBalanced(scene)
+            break
         case 'ROOM_TAKE_100_DAMAGE':
             checkRoomTake100Damage(scene)
+            break
     }
 }
 
