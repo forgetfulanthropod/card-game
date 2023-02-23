@@ -2,6 +2,10 @@ export function srandInt(min: number, under: number): number {
     return (srandom() * (under - min) + min) | 0
 }
 
+export function randInt(min: number, under: number): number {
+    return (Math.random() * (under - min) + min) | 0
+}
+
 export function ssample<T>(arr: T[]): T {
     return arr[srandInt(0, arr.length)]
 }

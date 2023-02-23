@@ -4,5 +4,7 @@ export const invisibleEffects_ = [
     'smallDamageIncreaseBuff',
     'doubleDamageBuff',
     'passiveBlockBuff',
+    'cowardsCrown',
+    'ignoreAggressive',
 ] as const
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_

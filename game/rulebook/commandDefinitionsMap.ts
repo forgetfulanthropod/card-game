@@ -338,7 +338,13 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
     /**yodel attacks for 50%.  After this turn, the enemy party will gain Emboldened (2).*/
     yodel: {
-        actions: `chain(deal(strength * .5), queue(effect("courageous", 2, "allFriends"), 1))`,
+        actions: `chain(
+            deal(strength * .5),
+            queue(
+                1,
+                effect("courageous", 2, "allFriends")
+            )
+        )`,
         //@ts-expect-error
         id: `yodel`,
         name: `Bucket of Bang Snaps`,
@@ -374,9 +380,8 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
     },
 
     //brimboneSkeleton start
-    //TODO: queue not working
     fire: {
-        actions: `queue(effect("vulnerable", 2), 1)`,
+        actions: `queue(1, effect("vulnerable", 2))`,
         //@ts-expect-error
         id: `fire`,
         name: `Fire`,

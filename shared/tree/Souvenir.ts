@@ -128,7 +128,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'Equipped Kaiju gets<br/>+2 Strength, +2 Magic, and<br/>-10 max Health',
         on: {
-            battleStart:
+            acquire:
                 'modifyStats("strength|magic|constitution", "2|2|-10", "run")',
         },
     },
@@ -139,8 +139,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'Equipped Kaiju gets<br/>+30 max Health, -2 Strength,<br/>and -2 Magic',
         on: {
-            battleStart:
-                'modifyStats("strength|magic|constitution", "-2|-2|30", "run")',
+            acquire: `chain(
+                    modifyStats("strength|magic|constitution", "-2|-2|30", "run"),
+                    heal(30)
+                )`,
         },
     },
     nightmareBiscuit: {
@@ -151,7 +153,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
             'Equipped Kaiju receives +4 Strength, +4 Magic, and a permanent stack of Unguarded.',
         on: {
             acquire: 'modifyStats("strength|magic", "4|4", "run")',
-            turnEnd: 'effect("unguarded", 1)',
+            turnStart: 'effect("unguarded", 1)',
         },
     },
     glassOfWarmMilk: {

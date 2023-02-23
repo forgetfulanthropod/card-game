@@ -8,7 +8,12 @@ export function updateCharacters(sceneCursor: BattleCursor) {
 
         keys(ac).map(characterUid => {
             const cm = newAc[characterUid]
-            newAc[characterUid] = { ...cm, calculatedStats: calculateStats(cm) }
+            const calculatedStats = calculateStats(cm)
+            newAc[characterUid] = {
+                ...cm,
+                health: calculatedStats.health,
+                calculatedStats,
+            }
         })
 
         return newAc

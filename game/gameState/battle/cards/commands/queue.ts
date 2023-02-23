@@ -18,9 +18,10 @@ export const execute: Executors['queue'] = ({
     const turnsAway = dslArgs[0].eval()
     const nextAction = dslArgs[1].toString()
 
-    const side = scene.get('allCharacters', command.characterUid, 'isPc')
-        ? 'pc'
-        : 'npc'
+    // const side = scene.get('allCharacters', command.characterUid, 'isPc')
+    //     ? 'pc'
+    //     : 'npc'
+    const side = 'pc' //always apply queue at start of player turn
     enqueueAction(
         {
             actions: nextAction,

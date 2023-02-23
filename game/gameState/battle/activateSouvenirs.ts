@@ -6,6 +6,7 @@ import {
 } from 'shared'
 import { interpretCommand } from './cards'
 import { getLivingPcs } from './characters/characterGetters'
+import { updateCharacters } from './characters/updateCharacters'
 
 export function activateSouvenirs(
     activationKey: SouvenirActivationKey,
@@ -41,4 +42,6 @@ export function activateSouvenir(
             : livingPcs.map(cm => cm.uid),
         scene,
     })
+
+    updateCharacters(scene)
 }

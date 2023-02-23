@@ -11,6 +11,11 @@ interface DungeonLevelI {
 
 export type RoomUid = string
 
+export type RoomOptions = Record<
+    RoomCategoryId,
+    RoomEnemies[] | { enemies: RoomEnemies; event: Event }[]
+>
+
 export type DungeonRoomMaps = Record<DungeonName, DungeonRoomMap>
 
 export type DungeonRoomMap = Record<RoomUid, DungeonRoom>

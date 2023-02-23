@@ -47,6 +47,9 @@ const staticEffectFuncs: Record<
     doubleDamageBuff(stats) {
         stats.strength *= 2
     },
+    cowardsCrown(stats) {
+        if (stats.stance === 'avoidant') stats.damageDealMultiplicand += 0.15
+    },
     chargedBombBuff(stats) {
         stats.strength *= 3
     },
@@ -61,6 +64,11 @@ const staticEffectFuncs: Record<
     },
     guardedBuff(stats) {
         stats.damageTakeMultiplicand -= 0.25
+    },
+    ignoreAggressive(stats) {
+        if (stats.stance === 'aggressive')
+            stats.damageTakeMultiplicand -=
+                getDamageTakeMulitplicandForStance('aggressive') - 1
     },
     reflectBuff(_) {},
     smallDamageIncreaseBuff(stats) {
@@ -113,7 +121,9 @@ const turnStartEffectFuncs = (
         let calcedDamage = 0
         const targetUid = character.uid
         if (effectId === 'bleedDebuff')
-            calcedDamage = Math.ceil(character.constitution * 0.05)
+            calcedDamage = Math.ceil(
+                character.calculatedStats.constitution * 0.05
+            )
         else if (effectId === 'poisonedDebuff') calcedDamage = effect.counter
         else return
         const unblockedDamage = applyCalcedDamage({
@@ -140,11 +150,13 @@ export function calculateStats(
     //@ts-expect-error
     const stance = cm.stance ?? 'neutral'
 
+    const constitution =
+        cm.constitution + getStatModifierAddend(cm, 'constitution')
+
     const stats: CalculatedCharacterStats = {
         block: cm.block ?? 0,
         blockMultiplier: 1,
-        constitution:
-            cm.constitution + getStatModifierAddend(cm, 'constitution'),
+        constitution,
         defense: cm.defense + getStatModifierAddend(cm, 'defense'),
         magic: cm.magic + getStatModifierAddend(cm, 'magic'),
         strength: cm.strength + getStatModifierAddend(cm, 'strength'),
@@ -153,7 +165,7 @@ export function calculateStats(
         damageDealAddend: 0,
         damageTakeMultiplicand: getDamageTakeMulitplicandForStance(stance),
         damageTakeAddend: 0,
-        health: cm.health,
+        health: Math.min(cm.health, constitution),
         stance,
     }
 
@@ -202,15 +214,32 @@ export function applyTurnStartEffects(
             }
         })
     )
+    decrementTurnStartEffects(scene, whichSide)
 }
 
-export function decrementEffects(scene: BattleCursor, finished: 'pc' | 'npc') {
+export function decrementTurnStartEffects(
+    scene: BattleCursor,
+    finished: 'pc' | 'npc'
+) {
+    decrementEffects(scene, finished, true)
+}
+
+export function decrementEffects(
+    scene: BattleCursor,
+    finished: 'pc' | 'npc',
+    turnStart = false
+) {
     const isPcStart = finished === 'pc'
     scene.select('allCharacters').apply(
         produce(ac => {
             for (const cm of Object.values(ac)) {
                 if (cm.isPc !== isPcStart) continue
-                cm.effects.forEach(e => (e.counter -= 1))
+                cm.effects.forEach(e => {
+                    //@ts-expect-error
+                    if (turnStart === turnStartEffectIds.includes(e.id))
+                        //
+                        e.counter -= 1
+                })
                 cm.effects = cm.effects.filter(
                     e => e.counter > 0 && !turnEndClearEffects.includes(e.id)
                 )

@@ -1,41 +1,40 @@
-import type {
-    Card,
-    CharacterClass,
-    CharacterMeta,
-    CharacterStats,
-    OwnedCharacterStats,
-} from 'shared'
-import { compose, datum } from 'datums'
-import { sleep, vals } from 'shared/code'
-import { OutlineFilter } from 'pixi-filters'
-import { Texture } from 'pixi.js'
-import { Tweener } from 'pixi-tweener'
-import { AbilityButtons } from './AbilityButtons'
-import { InfoBox } from './InfoBox'
+import {
+    Ability,
+    characterIdToAbilitiesMap,
+    getBattleScene,
+    getEntryScene,
+    getTree,
+} from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import {
-    IfHideShow,
-    If,
-    Text,
-    Container,
-    BASE_WIDTH,
-    Sprite,
-    getTexture,
     Adjust,
+    BASE_WIDTH,
+    Container,
+    getTexture,
+    If,
+    Sprite,
+    Text,
 } from '@/elementsUtil'
 import {
     hoveredCharacterStatsOverride,
     hoveredCharacterUid,
     toDatum,
 } from '@/util'
-import { Ability, getTree } from '@/data'
-import {
-    getBattleScene,
-    getEntryScene,
-    characterIdToAbilitiesMap,
-} from '@/data'
-import { CardsTiltedInLine } from './cards'
+import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
+import { OutlineFilter } from 'pixi-filters'
+import { Tweener } from 'pixi-tweener'
+import { Texture } from 'pixi.js'
+import type {
+    Card,
+    CharacterClass,
+    CharacterMeta,
+    CharacterStats,
+} from 'shared'
+import { sleep, vals } from 'shared/code'
+import { AbilityButtons } from './AbilityButtons'
+import { CardsTiltedInLine } from './cards'
+import { InfoBox } from './InfoBox'
 
 const stats = [
     { key: 'strength', displayName: 'Strength', color: 0xd44c47 },

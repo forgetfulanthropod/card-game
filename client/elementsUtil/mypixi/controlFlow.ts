@@ -227,8 +227,6 @@ export function portalize(args: {
     const to_ = args.to ?? getStage ?? throwNull('app.stage and args.to')
 
     if (args.nextFrame) {
-        console.log('adding next tick attach heres the stack trace..')
-        console.trace()
         Ticker.shared.addOnce(() => attach())
         // setTimeout(attach, 0)
     } else {

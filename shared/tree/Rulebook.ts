@@ -10,7 +10,12 @@ import type {
     NonPlayerCharacterStats,
     NpcStatsMapByLevel,
 } from './battle'
-import type { DungeonLevel, DungeonRoomMap, DungeonRoomMaps } from './Dungeon'
+import type {
+    DungeonLevel,
+    DungeonRoomMap,
+    DungeonRoomMaps,
+    RoomOptions,
+} from './Dungeon'
 
 export type Rulebook = Readonly<{
     version: string
@@ -19,7 +24,9 @@ export type Rulebook = Readonly<{
     npcStatsMapByLevel: NpcStatsMapByLevel
     playerCharacterStatsMap: Record<PlayerCharacterId, PlayerCharacterStats>
     dungeonLevels: DungeonLevel[]
-    dungeonRooms: DungeonRoomMaps
+    // dungeonRooms: DungeonRoomMaps
+    dungeonTemplates: DungeonRoomMaps
+    roomOptions: RoomOptions
     stanceTypeMetaMap: Record<StanceId, StanceStats>
 }> &
     Brandify

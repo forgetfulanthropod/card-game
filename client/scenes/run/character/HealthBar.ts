@@ -196,7 +196,7 @@ function BaseHealth(characterCursor: ROCursor<CharacterMeta>) {
 
     function updateNoWait(cm: CharacterMeta) {
         if (cm == null) return
-        const portion = cm.health / cm.constitution
+        const portion = cm.health / cm.calculatedStats.constitution
 
         if (cm.health !== lastHealth) updateFrame(texture, 0, portion)
 

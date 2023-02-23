@@ -1,31 +1,28 @@
-import { cloneDeep, upperFirst } from 'lodash'
+import { upperFirst } from 'lodash'
 import {
     BasicTargetType,
     BattleCursor,
     CharacterStats,
     CharacterUid,
-    DSLString,
     ModifiableStatName,
     StatModifierExpiration,
-    StatModifiers,
     StatModifiersMap,
-    TargetType,
 } from 'shared'
-import { keys, mapToObj } from 'shared/code'
-import { Writable } from 'stream'
+import { keys } from 'shared/code'
 import {
     getLivingNpcUids,
     getLivingPcUids,
 } from '../../characters/characterGetters'
-import { getTargetText } from './util/getTargetText'
+import { updateCharacters } from '../../characters/updateCharacters'
 import {
     ActionArgs,
     Anguify,
     applyStatHtml,
+    evalAll,
     Executors,
     Explainers,
 } from './util'
-import { evalAllAsHtml, evalAll } from './util'
+import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
@@ -102,10 +99,6 @@ function applyStatModifiers({
 }) {
     uids.forEach(uid =>
         scene.apply(['allCharacters', uid, 'statModifiersMap'], modifiers => {
-            // logger.info(
-            //     'should be applying these modifierss..' +
-            //         JSON.stringify({ uid, stats, expiration, modifiers })
-            // )
             return getUpdatedModifiers(modifiers, stats, expiration)
         })
     )

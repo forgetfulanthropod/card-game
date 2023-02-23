@@ -306,7 +306,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             chain(
                 deal(strengthy),
                 addBlock(defensey, "self"),
-                effect("guarded", 2, "self")
+                effect("guarded", 1, "self")
             )
         `,
         type: 'attack',
@@ -741,7 +741,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             defenseymagicy = 0.5 * defense + 0.5 * magic;
             chain(
                 addBlock(defenseymagicy),
-                effect("guarded",2),
+                effect("guarded",1),
                 effect("fatigued",1,"allEnemies"),
                 momentary()
             )
