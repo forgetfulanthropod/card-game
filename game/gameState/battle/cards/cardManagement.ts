@@ -10,13 +10,51 @@ import type {
     OwnedCharacterStats,
     CharacterId,
     CharacterMeta,
+    CommandOutcome,
 } from 'shared'
 
 import { keys, mapToObj, vals } from 'shared/code'
-import { explainCommand } from './interpretCommand'
+import { explainCommand, simulateCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import { EntryCursor, srandInt } from '@/util'
 import { shufflePile } from './shufflePile'
+import { getTargetUids } from './getTargetUids'
+
+function getCardOutcomes(
+    scene: BattleCursor,
+    card: Card
+): Record<string, CommandOutcome> | undefined {
+    const targetUids = getTargetUids({
+        card,
+        targetUids: [],
+        scene,
+    })
+    let ac = scene.get('allCharacters')
+    let commandOutcomes
+    if (targetUids.length) {
+        const commandDetail = {
+            command: card,
+            targetUids,
+            scene,
+        }
+        const commandOutcome = simulateCommand(commandDetail)
+        return { outcome: commandOutcome }
+    }
+    if (card.targetNum == 1) {
+        commandOutcomes = Object.fromEntries(
+            Object.entries(ac).map(([cuid, cm]) => {
+                const commandDetail = {
+                    command: card,
+                    targetUids: [cuid],
+                    scene,
+                }
+                const commandOutcome = simulateCommand(commandDetail)
+                return [cuid, commandOutcome]
+            })
+        )
+    }
+    return commandOutcomes
+}
 
 export function updateHand(scene: BattleCursor) {
     scene.apply(['cards', 'hand'], hand => {
@@ -35,10 +73,15 @@ export function updateHand(scene: BattleCursor) {
                     ? -1
                     : 1
             })
-            .forEach(
-                cardUid =>
-                    (newHand[cardUid] = updateExplanation(hand[cardUid], scene))
-            )
+            .forEach(cardUid => {
+                const card = hand[cardUid]
+                let commandOutcomes = getCardOutcomes(scene, card)
+                newHand[cardUid] = {
+                    ...updateExplanation(hand[cardUid], scene),
+                    outcomes: commandOutcomes,
+                }
+                return newHand[cardUid]
+            })
         return newHand
     })
 }

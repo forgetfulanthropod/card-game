@@ -1,12 +1,18 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid } from 'shared'
+import type { Pile, CharacterMeta, CharacterUid } from 'shared'
 
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { getBattleScene } from '@/data'
-import type { AssetKey, PixiContainer, PixiTexture } from '@/elementsUtil'
 import {
+    AssetKey,
+    customGlowFilter,
+    PixiContainer,
+    PixiTexture,
+} from '@/elementsUtil'
+import {
+    Adjust,
     If,
     onDestroyed,
     getTexture,
@@ -15,9 +21,16 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { onUpdate, statChangesDatum, toDatum } from '@/util'
+import {
+    hoveredCharacterUid,
+    hoveredSelectedCardUid,
+    isAttacking,
+    onUpdate,
+    statChangesDatum,
+    toDatum,
+} from '@/util'
 import { Explanation } from '@/scenes/shared'
-import { difference, omit, upperFirst } from 'lodash'
+import { difference, keys, omit, upperFirst } from 'lodash'
 import { StanceControls } from './StanceControls'
 import { EffectIndicators } from './EffectIndicators'
 
@@ -29,6 +42,7 @@ export const HEALTH_BAR_WIDTH = 300
 
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
+    const handCursor = getBattleScene().select('cards', 'hand')
     // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
     const unsub = onUpdate(characterCursor, char => {
         if (char == null) {
@@ -45,7 +59,8 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
         },
         BlockIndicator(characterCursor),
         HealthIndicator(characterCursor),
-        EffectIndicators(characterCursor)
+        EffectIndicators(characterCursor),
+        DamageIndicator(characterCursor, handCursor)
     )
     return root
 }
@@ -93,6 +108,142 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                       }),
                   ])
         )
+    )
+}
+
+function DamageContainer(
+    isPc: boolean,
+    health: number,
+    healthChange: number,
+    block: number,
+    blockChange: number
+) {
+    const attackIsKill = healthChange >= health
+
+    const healthChangeText =
+        healthChange === 0
+            ? ''
+            : healthChange > 0
+            ? `${-healthChange}`
+            : `+${healthChange}`
+
+    const blockText =
+        blockChange === 0
+            ? ''
+            : -blockChange >= block
+            ? 'SMASHED'
+            : blockChange > 0
+            ? `+${blockChange}`
+            : `${blockChange}`
+
+    const blockAdjustment = isPc
+        ? {
+              x: 235,
+              y: 40,
+          }
+        : { x: -190, y: 40 }
+
+    const attackAdjustment = { y: 120 }
+
+    const DeathSkull = Sprite({
+        src: getTexture('overkill'),
+        scale: 0.4,
+        x: -200,
+        y: 35,
+        anchor: 0,
+        filters: [customGlowFilter(0xc23c1e)],
+    })
+
+    const StatChangeText = (stat: 'health' | 'block', text: string) => {
+        const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
+        const fill = stat === 'health' ? 0xc23c1e : 0xbbbdc9
+
+        return Text({
+            text,
+            anchor: [0.5, 0],
+            filters: [customGlowFilter(glowColor)],
+            style: {
+                fontFamily: 'bigFont',
+                fontSize: text === 'SMASHED' ? 48 : 64,
+                fill,
+                stroke: 'black',
+                strokeThickness: 8,
+            },
+        })
+    }
+
+    return Container(
+        {
+            y: -110,
+            x: 85,
+        },
+        Adjust(StatChangeText('block', blockText), blockAdjustment),
+        attackIsKill
+            ? DeathSkull
+            : Adjust(
+                  StatChangeText('health', healthChangeText),
+                  attackAdjustment
+              ),
+    )
+}
+
+function DamageIndicator(
+    characterCursor: ROCursor<CharacterMeta>,
+    handCursor: ROCursor<Pile>
+) {
+    const characterUid = characterCursor.get('uid')
+    const isPc = characterCursor.get('isPc')
+    const showDamageContainer = datum(false)
+    const damageValue = datum(0)
+    const blockValue = datum(0)
+    return onDestroyed(
+        If(showDamageContainer, () => {
+            return DamageContainer(
+                isPc,
+                characterCursor.get('health'),
+                damageValue.val,
+                characterCursor.get('block'),
+                blockValue.val
+            )
+        }),
+        hoveredSelectedCardUid.onChange(cardUid => {
+            showDamageContainer.set(false)
+            if (!cardUid) {
+                if (isAttacking.val) return
+                showDamageContainer.set(false)
+                damageValue.set(0)
+                blockValue.set(0)
+                return
+            }
+            const card = handCursor.get(cardUid)
+            if (!card.outcomes) {
+                showDamageContainer.set(false)
+                return
+            }
+            let outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            const damage = outcome.damages[characterUid] || 0
+            const block = outcome.blocks[characterUid] || 0
+            damageValue.set(damage)
+            blockValue.set(block)
+            if (keys(outcome.damages).length > 1) {
+                for (let char of keys(outcome.damages)) {
+                    if (char === characterUid) {
+                        showDamageContainer.set(true)
+                    }
+                }
+            }
+            return
+        }),
+        isAttacking.onChange(attacking => {
+            if (!hoveredSelectedCardUid.val && !attacking)
+                showDamageContainer.set(false)
+        }),
+        hoveredCharacterUid.onChange(targetChar => {
+            showDamageContainer.set(false)
+            if (isAttacking.val && targetChar === characterUid) {
+                showDamageContainer.set(true)
+            }
+        })
     )
 }
 

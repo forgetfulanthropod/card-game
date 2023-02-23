@@ -29,8 +29,6 @@ export const execute: Executors['addBlock'] = ({
         givenUids,
     })
 
-    logger.debug('targetUids: ' + targetUids + ', givenUids: ' + givenUids)
-
     targetUids.forEach(targetUid => {
         scene.apply(['allCharacters', targetUid, 'block'], b =>
             Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))
