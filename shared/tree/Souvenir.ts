@@ -95,7 +95,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Squeaky Clown Shoes',
         equippable: true,
         description:
-            'Equipped Kaiju Ignores the damage modifiers of Aggressive&nbspstance.',
+            'Equipped Kaiju ignores stance damage modifiers while in Aggressive&nbspStance',
         on: {
             // battleStart: 'effectPermanent("ignoreAggressive")',
             turnStart: 'effect("ignoreAggressive", 1)',
