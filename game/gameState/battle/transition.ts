@@ -12,6 +12,8 @@ import { getNewCardOptions } from './cards/getNewCardOptions'
 import { activateSouvenir, activateSouvenirs } from './activateSouvenirs'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
+    if (scene.get('state') !== 'in battle') return false
+
     const winner = checkWinner(vals(scene.get('allCharacters')))
     const gameIsOver = !!scene.get('currentRoom').enemies.find(e => e.boss)
 
@@ -31,12 +33,12 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('state', 'won')
             scene.select('runDuration').set('endTime', new Date().getTime())
         } else {
-            activateSouvenirs('battleEnd', scene)
             clearCharacterModifiersForRoom(scene)
             clearRoomCardModifiers(scene)
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
+            activateSouvenirs('battleEnd', scene)
         }
         return true
     } else if (winner === 'NPC') {
