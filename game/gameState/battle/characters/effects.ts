@@ -202,12 +202,12 @@ export function applyTurnStartEffects(
     scene: BattleCursor,
     whichSide: 'pc' | 'npc'
 ) {
-    const isPcSide = whichSide === 'pc'
     scene.select('allCharacters').apply(
         produce(allCharacters => {
             for (const character of Object.values(allCharacters)) {
-                if (character.isPc !== isPcSide || character.health <= 0)
-                    continue
+                if (character.isPc && whichSide === 'npc') continue
+                if (!character.isPc && whichSide === 'pc') continue
+                if (character.health <= 0) continue
                 character.effects.forEach(effect => {
                     turnStartEffectFuncs(effect, character, scene)
                 })
@@ -219,21 +219,21 @@ export function applyTurnStartEffects(
 
 export function decrementTurnStartEffects(
     scene: BattleCursor,
-    finished: 'pc' | 'npc'
+    whichSide: 'pc' | 'npc'
 ) {
-    decrementEffects(scene, finished, true)
+    decrementEffects(scene, whichSide, true)
 }
 
 export function decrementEffects(
     scene: BattleCursor,
-    finished: 'pc' | 'npc',
+    whichSide: 'pc' | 'npc',
     turnStart = false
 ) {
-    const isPcStart = finished === 'pc'
     scene.select('allCharacters').apply(
         produce(ac => {
             for (const cm of Object.values(ac)) {
-                if (cm.isPc !== isPcStart) continue
+                if (cm.isPc && whichSide === 'npc') continue
+                if (!cm.isPc && whichSide === 'pc') continue
                 cm.effects.forEach(e => {
                     //@ts-expect-error
                     if (turnStart === turnStartEffectIds.includes(e.id))

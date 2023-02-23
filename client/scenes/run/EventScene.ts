@@ -91,10 +91,11 @@ export function EventScene(): PixiContainer {
         eventGradient,
         Sprite({
             src: `event${eventIdUpperFirst}MainGraphic` as AssetKey,
-            scale:
-                (BASE_HEIGHT * 0.5) /
-                getTexture(`event${eventIdUpperFirst}MainGraphic` as AssetKey)
-                    .height,
+            scale: 0.4,
+            // scale:
+            //     (BASE_HEIGHT * 0.5) /
+            //     getTexture(`event${eventIdUpperFirst}MainGraphic` as AssetKey)
+            //         .height,
             anchor: [0.5, 1],
             x: BASE_WIDTH / 2,
             y: BASE_HEIGHT * 0.65,

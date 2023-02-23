@@ -597,7 +597,8 @@ export type EventAssetKey = keyof typeof eventAssets
 
 export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
-    eventFrogCarriageMainGraphic: 'events/Frog Carriage/Layer 47.webp',
+    eventFrogCarriageMainGraphic:
+        'events/Frog Carriage/FrogCarriage Image.webp',
     eventFrogCarriagePrompt1:
         'events/Frog Carriage/FrogCarriage prompt 1__.webp',
     eventFrogCarriagePrompt2:

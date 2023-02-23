@@ -334,7 +334,12 @@ function bindStatChanges(characterCursor: CharacterCursor) {
             const key = c.path?.[0]
 
             if (c.path?.[0] === 'effects') {
-                statChanges.effects = currentData.effects
+                statChanges.effects = previousData.effects.filter(
+                    prevEffect =>
+                        prevEffect.counter >
+                        (currentData.effects.find(e => e.id === prevEffect.id)
+                            ?.counter ?? 0)
+                )
             } else if (c.kind === 'E') {
                 //@ts-ignore
                 statChanges[key] = c.rhs - c.lhs

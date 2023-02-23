@@ -47,5 +47,5 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     updateNpcMoves(scene)
 
     activateSouvenirs('turnStart', scene)
-    applyTurnStartEffects(scene, 'npc')
+    applyTurnStartEffects(scene, 'pc')
 }
