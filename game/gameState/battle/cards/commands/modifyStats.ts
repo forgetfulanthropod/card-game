@@ -14,6 +14,7 @@ import {
     getLivingPcUids,
 } from '../../characters/characterGetters'
 import { updateCharacters } from '../../characters/updateCharacters'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 import {
     ActionArgs,
     Anguify,
@@ -42,26 +43,23 @@ function getStatModHtml(statName: ModifiableStatName, addend: number) {
 
 export const execute: Executors['modifyStats'] = ({
     dslArgs,
-    targetUids,
+    targetUids: givenUids,
     scene,
+    command,
 }) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
-    let uids = targetUids
-    switch (targetType) {
-        case 'allFriends':
-            uids = getLivingPcUids(scene.get())
-            break
-        case 'allEnemies':
-            uids = getLivingNpcUids(scene.get())
-            break
-    }
+    const uids = getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids,
+    })
 
     applyStatModifiers({
         scene,
         uids,
         stats: statNames.reduce((stats, name, i) => {
             stats[name] = addends[i]
-
             return stats
         }, {} as Record<ModifiableStatName, number>),
         expiration,
