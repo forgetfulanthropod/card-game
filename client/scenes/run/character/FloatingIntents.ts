@@ -109,7 +109,7 @@ const startlingSpookIntents = () => {
             intents[id] = {
                 id: id,
                 explanation: [
-                    `Applies <b>Unguarded</b> (${i}) and <b>Fatigued</b> (${j}) if any damage goes unblocked`,
+                    `Applies <b>Unguarded</b> (${i}) and <b>Fatigued</b> (${j})`,
                 ],
             }
         }
@@ -433,7 +433,7 @@ const commandIdToMetaMap: Record<
         },
         rustyPokeHigh: {
             id: 'rustyPokeHigh',
-            explanation: [],
+            explanation: ['Applies <b>Fatigued</b> (1)'],
         },
         rustyPokeLow: {
             id: 'rustyPokeLow',
