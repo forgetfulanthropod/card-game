@@ -5,7 +5,12 @@ import type { Pile, CharacterMeta, CharacterUid } from 'shared'
 import type { Datum } from 'datums'
 import { compose, datum } from 'datums'
 import { getBattleScene } from '@/data'
-import type { AssetKey, PixiContainer, PixiTexture } from '@/elementsUtil'
+import {
+    AssetKey,
+    customGlowFilter,
+    PixiContainer,
+    PixiTexture,
+} from '@/elementsUtil'
 import {
     Adjust,
     If,
@@ -17,6 +22,7 @@ import {
     Text,
 } from '@/elementsUtil'
 import {
+    hoveredCharacterUid,
     hoveredSelectedCardUid,
     isAttacking,
     onUpdate,
@@ -24,7 +30,7 @@ import {
     toDatum,
 } from '@/util'
 import { Explanation } from '@/scenes/shared'
-import { difference, omit, upperFirst } from 'lodash'
+import { difference, keys, omit, upperFirst } from 'lodash'
 import { StanceControls } from './StanceControls'
 import { EffectIndicators } from './EffectIndicators'
 
@@ -112,64 +118,72 @@ function DamageContainer(
     block: number,
     blockChange: number
 ) {
-    const healthColor = healthChange > 0 ? 'red' : 'green'
-    const healthText =
+    const attackIsKill = healthChange >= health
+
+    const healthChangeText =
         healthChange === 0
             ? ''
-            : healthChange >= health
-            ? 'WASTED'
             : healthChange > 0
             ? `${-healthChange}`
             : `+${healthChange}`
+
     const blockText =
-        blockChange === 0 || healthText === 'WASTED'
+        blockChange === 0
             ? ''
             : -blockChange >= block
             ? 'SMASHED'
             : blockChange > 0
             ? `+${blockChange}`
             : `${blockChange}`
-    const blockAdjustment =
-        healthText === 'WASTED' || blockText === 'SMASHED'
-            ? {
-                  x: 50,
-                  y: 25,
-              }
-            : { x: 50 }
+
+    const blockAdjustment = isPc
+        ? {
+              x: 235,
+              y: 40,
+          }
+        : { x: -190, y: 40 }
+
+    const attackAdjustment = { y: 120 }
+
+    const DeathSkull = Sprite({
+        src: getTexture('overkill'),
+        scale: 0.4,
+        x: -200,
+        y: 35,
+        anchor: 0,
+        filters: [customGlowFilter(0xc23c1e)],
+    })
+
+    const StatChangeText = (stat: 'health' | 'block', text: string) => {
+        const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
+        const fill = stat === 'health' ? 0xc23c1e : 0xbbbdc9
+
+        return Text({
+            text,
+            anchor: [0.5, 0],
+            filters: [customGlowFilter(glowColor)],
+            style: {
+                fontFamily: 'bigFont',
+                fontSize: text === 'SMASHED' ? 48 : 64,
+                fill,
+                stroke: 'black',
+                strokeThickness: 8,
+            },
+        })
+    }
+
     return Container(
         {
-            y: 0,
-            x: isPc ? 315 : -175,
+            y: -110,
+            x: 85,
         },
-        ...[
-            Text({
-                text: healthText,
-                anchor: [0, 0.5],
-                style: {
-                    // fontFamily: ['bigFont', 'monospace'],
-                    fontFamily: ['sansFont'],
-                    fontSize: 30,
-                    fill: healthColor,
-                    stroke: 'black',
-                    strokeThickness: 1,
-                },
-            }),
-            Adjust(
-                Text({
-                    text: blockText,
-                    anchor: [0, 0.5],
-                    style: {
-                        // fontFamily: ['bigFont', 'monospace'],
-                        fontFamily: ['sansFont'],
-                        fontSize: 30,
-                        fill: 'blue',
-                        stroke: 'white',
-                        strokeThickness: 1,
-                    },
-                }),
-                blockAdjustment
-            ),
-        ]
+        Adjust(StatChangeText('block', blockText), blockAdjustment),
+        attackIsKill
+            ? DeathSkull
+            : Adjust(
+                  StatChangeText('health', healthChangeText),
+                  attackAdjustment
+              ),
     )
 }
 
@@ -193,7 +207,6 @@ function DamageIndicator(
             )
         }),
         hoveredSelectedCardUid.onChange(cardUid => {
-            // console.debug('hovered selected card:', cardUid)
             showDamageContainer.set(false)
             if (!cardUid) {
                 if (isAttacking.val) return
@@ -212,12 +225,24 @@ function DamageIndicator(
             const block = outcome.blocks[characterUid] || 0
             damageValue.set(damage)
             blockValue.set(block)
-            showDamageContainer.set(true)
+            if (keys(outcome.damages).length > 1) {
+                for (let char of keys(outcome.damages)) {
+                    if (char === characterUid) {
+                        showDamageContainer.set(true)
+                    }
+                }
+            }
             return
         }),
         isAttacking.onChange(attacking => {
             if (!hoveredSelectedCardUid.val && !attacking)
                 showDamageContainer.set(false)
+        }),
+        hoveredCharacterUid.onChange(targetChar => {
+            showDamageContainer.set(false)
+            if (isAttacking.val && targetChar === characterUid) {
+                showDamageContainer.set(true)
+            }
         })
     )
 }
