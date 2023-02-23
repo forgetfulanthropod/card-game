@@ -679,13 +679,14 @@ export const eventAssets = {
         'events/Gnome Tooth/GnomeTooth option 2_3.webp',
 
     eventHogClownMainGraphic:
-        'events/Hog Covered In Clowns/Hog Covered in Clowns.webp',
+        'events/Hog Covered In Clowns/Hog Covered in Clowns_.webp',
     eventHogClownPrompt1:
         'events/Hog Covered In Clowns/HogClown prompt 1_.webp',
     eventHogClownPrompt2:
         'events/Hog Covered In Clowns/HogClown prompt 2_.webp',
     eventHogClownChoice1: 'events/Hog Covered In Clowns/HogClown Choice 1.webp',
     eventHogClownChoice2: 'events/Hog Covered In Clowns/HogClown Choice 2.webp',
+    eventHogClownChoice3: 'events/Hog Covered In Clowns/HogClown Choice 3.webp',
     eventHogClownPostChoice1_1:
         'events/Hog Covered In Clowns/HogClown option 1_1.webp',
     eventHogClownPostChoice2_1:

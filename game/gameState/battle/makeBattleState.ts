@@ -66,8 +66,6 @@ export function makeBattleState(args: {
         queue: [],
         requireAction: null,
         isInMap: true,
-        isInRestSite: false,
-        isInEventScene: false,
         lootEarned: getInitialLoot(),
         lootClaimed: [],
         lootScreenHasOpened: false,

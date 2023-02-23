@@ -44,10 +44,10 @@ export const eventSceneMap: Record<EventId, EventScene> = {
         id: 'gnomeTooth',
         choices: [
             {
-                souvenirId: 'bigStinkyTooth',
+                souvenirId: 'dentistryForDummies',
             },
             {
-                souvenirId: 'dentistryForDummies',
+                souvenirId: 'bigStinkyTooth',
             },
         ],
     },
@@ -55,10 +55,10 @@ export const eventSceneMap: Record<EventId, EventScene> = {
         id: 'hogClown',
         choices: [
             {
-                souvenirId: 'clownInfestation',
+                souvenirId: 'squeakyClownShoes',
             },
             {
-                souvenirId: null,
+                souvenirId: 'clownInfestation',
             },
             {
                 souvenirId: 'cowardsCrown',

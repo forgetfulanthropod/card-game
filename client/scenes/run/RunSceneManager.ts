@@ -26,23 +26,30 @@ export function RunSceneManager(): PixiContainer {
         },
         If(
             compose(
-                ([isInRestSite, isInMap, isInEventScene]) => {
+                ([{ isInRestSite, isInMap, isInEventScene }]) => {
                     return isInRestSite || isInMap || isInEventScene
                         ? { isInRestSite, isInMap, isInEventScene }
                         : false
                 },
-                toDatum(scene.select('isInRestSite'), is => is),
-                toDatum(scene.select('isInMap'), is => is),
-                toDatum(scene.select('isInEventScene'), is => is)
+                toDatum(scene.select('isInMap'), isInMap => ({
+                    isInMap,
+                    isInRestSite:
+                        scene.get('currentRoom', 'category') === 'restSite',
+                    isInEventScene:
+                        scene.get('currentRoom', 'category') === 'events',
+                }))
             ),
             ({ isInRestSite, isInMap, isInEventScene }) => {
-                if (isInEventScene) return EventScene()
                 if (isInMap) return HexMapOverlay()
                 if (isInRestSite) return RestSiteOverlay()
+                if (isInEventScene) return EventScene()
 
                 throw new Error('unclear scene choice')
             },
-            () => BattleScene(scene, hoveredCardUid),
+            () => {
+                console.log('decided to render battle scene.. datums: ')
+                return BattleScene(scene, hoveredCardUid)
+            },
             { transition: true }
         )
     )

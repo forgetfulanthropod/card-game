@@ -10,7 +10,6 @@ import {
     DisplayObject,
     EventAssetKey,
     eventAssets,
-    getTexture,
     glowFilter,
     If,
     loopSong,
@@ -18,7 +17,7 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { compose, Datum, datum } from 'datums'
+import { Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { KawaseBlurFilter } from 'pixi-filters'
 import { Texture } from 'pixi.js'
@@ -181,7 +180,7 @@ function ChooseOptionInterface(
             const isHovered = datum(false)
 
             const souvenirId = eventScene.choices[index]?.souvenirId
-            const souvenir = souvenirId && souvenirMap[souvenirId]
+            const souvenir = souvenirId ? souvenirMap[souvenirId] : null
 
             return Container(
                 {
@@ -215,18 +214,16 @@ function ChooseOptionInterface(
                         },
                     },
                 }),
-                ...(souvenir
-                    ? [
-                          ExplanationIf({
-                              isShown: isHovered,
-                              texts: [souvenir.name, souvenir.description],
-                              xOffset: (-TEXT_WIDTH * explanationScale) / 2,
-                              yOffset: -BASE_HEIGHT * 0.3,
-                              isHtml: true,
-                              displayArgs: { scale: explanationScale },
-                          }),
-                      ]
-                    : [])
+                ExplanationIf({
+                    isShown: isHovered,
+                    texts: souvenir
+                        ? [souvenir.name, souvenir.description]
+                        : ["(You don't gain any souvenirs)"],
+                    xOffset: (-TEXT_WIDTH * explanationScale) / 2,
+                    yOffset: -BASE_HEIGHT * 0.3,
+                    isHtml: true,
+                    displayArgs: { scale: explanationScale },
+                })
             )
         })
     )

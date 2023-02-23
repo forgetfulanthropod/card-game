@@ -1,47 +1,40 @@
 import { Texture } from 'pixi.js'
 import type {
-    BattleCursor,
     BattleScene,
     CharacterMeta,
     DungeonRoom,
     DungeonRoomMap,
-    RoomEnemies,
     RoomUid,
 } from 'shared'
 import { keys, vals } from 'shared/code'
 
-import { AdjustmentFilter } from 'pixi-filters'
-import { animateTo, MainCharacterAnimation } from '../shared'
+import { collectData } from '@/analytics/collectData'
+import { callApi } from '@/callApi'
+import { getBattleScene } from '@/data'
 import {
+    Adjust,
     AssetKey,
+    BASE_HEIGHT,
+    BASE_WIDTH,
+    Container,
     getRenderer,
+    getTexture,
+    glowFilter,
     loopSong,
     mapTileAssets,
     PixiContainer,
     PixiSprite,
     PixiTexture,
     Spine,
+    Sprite,
     TweenableContainer,
 } from '@/elementsUtil'
-import {
-    glowFilter,
-    Adjust,
-    getTexture,
-    BASE_HEIGHT,
-    BASE_WIDTH,
-    Container,
-    Sprite,
-    VideoBackground,
-} from '@/elementsUtil'
-import { getBattleScene } from '@/data'
-import { callApi } from '@/callApi'
 import { hoveredCharacterUid } from '@/util'
-import { Background } from '../background'
-import { intersection, mean, sample, union } from 'lodash'
-import { ROCursor } from 'sbaobab'
-import { collectData } from '@/analytics/collectData'
+import { mean, sample, union } from 'lodash'
+import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
-import { DisplayObject } from '@pixi/animate'
+import { ROCursor } from 'sbaobab'
+import { MainCharacterAnimation } from '../shared'
 
 export function HexMapOverlay(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Hex Map' })
@@ -230,6 +223,7 @@ function TileForNode(
             x: depth * displayWidth * 0.78,
             y: displayWidth * 0.34 * yOffset,
             filters,
+            onDestroy: [() => Tweener.killTweensOf(root)],
         },
         Sprite({
             src: baseTexture,
@@ -281,7 +275,7 @@ function TileForNode(
                 },
             },
             // alpha: node == null ? 0.4 : 1,
-            onDestroy: [() => Tweener.killTweensOf(root)],
+            // onDestroy: [() => Tweener.killTweensOf(root)],
         }),
         Sprite({
             src: decorationTexture,

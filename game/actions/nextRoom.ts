@@ -31,21 +31,9 @@ export const nextRoom: GameActions['nextRoom'] = args => {
 
     if (
         currentRoomCategory !== 'restSite' &&
-        (disableEventScene || currentRoomCategory !== 'events')
+        currentRoomCategory !== 'events'
     ) {
         prepareBattleScene(scene, chosenRoom)
-    } else {
-        scene.set(
-            'isInRestSite',
-            scene.get('currentRoom', 'category') === 'restSite'
-        )
-
-        if (!disableEventScene) {
-            scene.set(
-                'isInEventScene',
-                scene.get('currentRoom', 'category') === 'events'
-            )
-        }
     }
 
     scene.set('isInMap', false)

@@ -87,8 +87,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'All Kaiju take 10 Damage.<br/>All Kaiju gain +2 Strength, +2 Magic, and +2 Defense.',
         on: {
-            acquire:
-                'chain(deal(10), modifyStats("strength|magic|defense", 2|2|2, "run"))',
+            acquire: `deal(10); modifyStats("strength|magic|defense", "2|2|2", "run")`,
         },
     },
     squeakyClownShoes: {
@@ -96,7 +95,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Squeaky Clown Shoes',
         equippable: true,
         description:
-            'Equipped Kaiju Ignores the effects of being in<br/>Aggressive stance.',
+            'Equipped Kaiju Ignores the effects of being in Aggressive&nbspstance.',
         on: {
             // battleStart: 'effectPermanent("ignoreAggressive")',
             turnStart: 'effect("ignoreAggressive", 1)',

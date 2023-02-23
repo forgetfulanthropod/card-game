@@ -63,8 +63,6 @@ export interface BattleScene extends SceneHas {
     requireAction: RequiredAction | null
     queue: CommandQueue
     isInMap: boolean
-    isInRestSite: boolean
-    isInEventScene: boolean
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
     lootScreenHasOpened: boolean
