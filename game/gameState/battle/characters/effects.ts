@@ -108,11 +108,16 @@ const turnStartEffectFuncs = (
     character: CharacterMeta,
     scene: BattleCursor
 ) => {
+    if (character.health <= 0) {
+        return
+    }
     const effectId = effect.id as TurnStartEffectId
+    const counter = effect.counter
     if (effectId == 'passiveBlockBuff') {
         const block = Math.ceil(
-            effect.counter * character.calculatedStats.blockMultiplier
+            counter * character.calculatedStats.blockMultiplier
         )
+        // TODO: might not work
         character.block = Math.ceil(character.block + block)
         scene.apply('blocksAppliedThisTurn', blocks => [
             ...blocks,
@@ -128,7 +133,7 @@ const turnStartEffectFuncs = (
             calcedDamage = Math.ceil(
                 character.calculatedStats.constitution * 0.05
             )
-        else if (effectId === 'poisonedDebuff') calcedDamage = effect.counter
+        else if (effectId === 'poisonedDebuff') calcedDamage = counter
         else return
         const unblockedDamage = applyCalcedDamage({
             scene,
@@ -136,6 +141,8 @@ const turnStartEffectFuncs = (
             targetUid,
             piercing: true,
         })
+        // work around for calling this function in a scene apply
+        character.health -= unblockedDamage
         manageSideEffectsOfUnblockedDamage(
             scene,
             character.uid,
@@ -241,7 +248,6 @@ export function decrementEffects(
                 cm.effects.forEach(e => {
                     //@ts-expect-error
                     if (turnStart === turnStartEffectIds.includes(e.id))
-                        //
                         e.counter -= 1
                 })
                 cm.effects = cm.effects.filter(
