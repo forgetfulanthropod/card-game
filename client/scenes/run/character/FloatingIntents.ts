@@ -480,7 +480,7 @@ const commandIdToMetaMap: Record<
             id: 'yodel',
             src: 'intentYodel',
             explanation: [
-                'After this turn, the enemy party will gain <b>Emboldened</b> (2)',
+                'After this turn, the enemy party will gain <b>Brave</b> (2)',
             ],
         },
         mimicInfectiousBite: {

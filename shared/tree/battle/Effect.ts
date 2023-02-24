@@ -18,8 +18,12 @@ addCounter(targetUid, counterId)
 export const effectIds = [
     'stunnedDebuff',
 
+    //turn start effects begin
     'bleedDebuff',
     'poisonedDebuff',
+    'fireDebuff',
+    'yodelBuff',
+    //turn start effects end
 
     'tiredDebuff',
     'fatiguedDebuff',

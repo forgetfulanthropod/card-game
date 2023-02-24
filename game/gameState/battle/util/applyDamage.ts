@@ -23,12 +23,10 @@ export function applyDamage(args: {
     piercing?: boolean
 }): number {
     const { damage, targetUid, scene, attackerUid, attacker, piercing } = args
-    if (attacker == null && attackerUid == null) {
-        throw new Error('must provide attacker or attackerUid')
-    }
 
-    //@ts-expect-error
-    const attackerMeta = attacker ?? scene.get('allCharacters', attackerUid)
+    let attackerMeta: CharacterMeta | null = null
+    if (attacker) attackerMeta = attacker
+    else if (attackerUid) attackerMeta = scene.get('allCharacters', attackerUid)
 
     const calcedDamage = getDamage({
         attacker: attackerMeta,
@@ -43,12 +41,13 @@ export function applyDamage(args: {
         })
     }
 
-    manageSideEffectsOfCalcedDamage({
-        scene,
-        targetUid,
-        attackerUid: attackerMeta.uid,
-        calcedDamage,
-    })
+    attackerMeta &&
+        manageSideEffectsOfCalcedDamage({
+            scene,
+            targetUid,
+            attackerUid: attackerMeta.uid,
+            calcedDamage,
+        })
 
     const unblockedDamage = applyCalcedDamage({
         scene,
@@ -200,12 +199,13 @@ export function getDamage({
     target,
     damage,
 }: {
-    attacker: CharacterMeta
+    attacker: CharacterMeta | null
     target: CharacterMeta | null
     damage: number
 }) {
-    const damageDealMultiplicand =
-        calculateStats(attacker).damageDealMultiplicand
+    const damageDealMultiplicand = attacker
+        ? calculateStats(attacker).damageDealMultiplicand
+        : 1
     const damageTakeMultiplicand = target
         ? calculateStats(target).damageTakeMultiplicand
         : 1

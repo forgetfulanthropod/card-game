@@ -6,5 +6,6 @@ export const invisibleEffects_ = [
     'passiveBlockBuff',
     'cowardsCrown',
     'ignoreAggressive',
+    'yodelBuff',
 ] as const
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_

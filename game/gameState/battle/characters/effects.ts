@@ -2,25 +2,27 @@ import type {
     BattleCursor,
     CalculatedCharacterStats,
     CharacterMeta,
-    EffectId,
     Effect,
+    EffectId,
     EnemyCharacterMeta,
     ModifiableStatName,
     StanceId,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
-import {
-    manageSideEffectsOfUnblockedDamage,
-    applyCalcedDamage,
-} from '../util/applyDamage'
+import { applyDamage } from '../util/applyDamage'
 
-import produce from 'immer'
 import { getRulebook } from '@/rulebook'
+import produce from 'immer'
+import { applyBlocks } from '../cards/commands/addBlock'
+import { applyEffect } from '../cards/commands/effect'
+import { getLivingNpcUids, getLivingPcUids } from './characterGetters'
 
 const turnStartEffectIds = [
     'bleedDebuff',
     'poisonedDebuff',
     'passiveBlockBuff',
+    'fireDebuff',
+    'yodelBuff',
 ] as const
 type TurnStartEffectId = typeof turnStartEffectIds[number]
 type StaticEffectId = Exclude<EffectId, TurnStartEffectId>
@@ -101,54 +103,71 @@ const staticEffectFuncs: Record<
     },
 }
 
-// TODO standardize addBlock and applyDamage functions to be able to use here
-// and cleanup this function
-const turnStartEffectFuncs = (
+const turnStartEffectFuncs: Record<
+    TurnStartEffectId,
+    ({
+        effect,
+        character,
+        scene,
+    }: {
+        effect: Effect
+        character: CharacterMeta
+        scene: BattleCursor
+    }) => void
+> = {
+    passiveBlockBuff({ effect, character, scene }) {
+        const block = Math.ceil(
+            effect.counter * character.calculatedStats.blockMultiplier
+        )
+
+        applyBlocks({ targetUids: [character.uid], block, scene })
+    },
+    bleedDebuff({ character, scene }) {
+        applyDamage({
+            damage: Math.ceil(character.calculatedStats.constitution * 0.05),
+            targetUid: character.uid,
+            scene,
+            piercing: true,
+        })
+    },
+    poisonedDebuff({ effect, character, scene }) {
+        applyDamage({
+            damage: effect.counter,
+            targetUid: character.uid,
+            scene,
+            piercing: true,
+        })
+    },
+    fireDebuff({ character, scene }) {
+        applyEffect(scene, [character.uid], 'vulnerableDebuff', 2)
+    },
+    yodelBuff({ character, scene }) {
+        applyEffect(
+            scene,
+            !character.isPc // weird thing.. invisible on player side..
+                ? getLivingPcUids(scene.get())
+                : getLivingNpcUids(scene.get()),
+            'braveBuff',
+            1
+        )
+    },
+}
+
+const activateTurnStartEffect = (
     effect: Effect,
     character: CharacterMeta,
     scene: BattleCursor
 ) => {
-    if (character.health <= 0) {
+    const effectFunc = turnStartEffectFuncs?.[effect.id as TurnStartEffectId]
+    if (!effectFunc || character.health <= 0) {
         return
     }
-    const effectId = effect.id as TurnStartEffectId
-    const counter = effect.counter
-    if (effectId == 'passiveBlockBuff') {
-        const block = Math.ceil(
-            counter * character.calculatedStats.blockMultiplier
-        )
-        // TODO: might not work
-        character.block = Math.ceil(character.block + block)
-        scene.apply('blocksAppliedThisTurn', blocks => [
-            ...blocks,
-            { amount: block, targetUid: character.uid },
-        ])
-    } else if (effectId === 'bleedDebuff' || effectId === 'poisonedDebuff') {
-        // TODO: just use applyDamage function but avoid reflect calls
-        // and attacker/attackerUid arguments. Currently does not check
-        // highest damage hit scoring event.
-        let calcedDamage = 0
-        const targetUid = character.uid
-        if (effectId === 'bleedDebuff')
-            calcedDamage = Math.ceil(
-                character.calculatedStats.constitution * 0.05
-            )
-        else if (effectId === 'poisonedDebuff') calcedDamage = counter
-        else return
-        const unblockedDamage = applyCalcedDamage({
-            scene,
-            calcedDamage,
-            targetUid,
-            piercing: true,
-        })
-        // work around for calling this function in a scene apply
-        character.health -= unblockedDamage
-        manageSideEffectsOfUnblockedDamage(
-            scene,
-            character.uid,
-            unblockedDamage
-        )
-    }
+
+    effectFunc({
+        effect,
+        character,
+        scene,
+    })
 }
 
 type CharacterMetaForCalculatingStats =
@@ -220,7 +239,7 @@ export function applyTurnStartEffects(
                 if (!character.isPc && whichSide === 'pc') continue
                 if (character.health <= 0) continue
                 character.effects.forEach(effect => {
-                    turnStartEffectFuncs(effect, character, scene)
+                    activateTurnStartEffect(effect, character, scene)
                 })
             }
         })

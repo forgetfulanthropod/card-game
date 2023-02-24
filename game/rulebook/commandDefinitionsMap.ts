@@ -333,14 +333,11 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
         targetNum: -1,
         targetType: 'allEnemies',
     },
-    /**yodel attacks for 50%.  After this turn, the enemy party will gain Emboldened (2).*/
+    /**yodel attacks for 50%.  After this turn, the enemy party will gain Brave (2).*/
     yodel: {
         actions: `chain(
             deal(strength * .5),
-            queue(
-                1,
-                effect("courageous", 2, "allFriends")
-            )
+            effect("yodel", 1)
         )`,
         //@ts-expect-error
         id: `yodel`,
@@ -378,7 +375,7 @@ export const commandDefinitionsMap: CommandDefinitionsMap = {
 
     //brimboneSkeleton start
     fire: {
-        actions: `queue(1, effect("vulnerable", 2))`,
+        actions: `effect("fire", 1)`,
         //@ts-expect-error
         id: `fire`,
         name: `Fire`,

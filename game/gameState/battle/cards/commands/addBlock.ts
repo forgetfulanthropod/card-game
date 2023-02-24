@@ -29,6 +29,18 @@ export const execute: Executors['addBlock'] = ({
         givenUids,
     })
 
+    applyBlocks({ targetUids, scene, block })
+}
+
+export function applyBlocks({
+    targetUids,
+    scene,
+    block,
+}: {
+    targetUids: CharacterUid[]
+    scene: BattleCursor
+    block: number
+}) {
     targetUids.forEach(targetUid => {
         scene.apply(['allCharacters', targetUid, 'block'], b =>
             Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))

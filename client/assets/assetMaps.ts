@@ -187,6 +187,7 @@ export const effectAssets: {
     effectUnguardedDebuff: 'effects/unguarded.webp',
     effectUnreadyDebuff: 'effects/unready.webp',
     effectVulnerableDebuff: 'effects/vulnerable.webp',
+    effectFireDebuff: 'intents/fire.webp',
 }
 
 export const healthBarAssets = {
