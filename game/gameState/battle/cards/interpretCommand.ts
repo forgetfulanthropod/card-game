@@ -145,9 +145,12 @@ interface CommandDetail {
 }
 
 /** Does not modify game state (or shouldn't) */
-export function simulateCommand(args: CommandDetail): CommandOutcome {
+export function simulateCommand(
+    args: CommandDetail
+): [CommandOutcome, BattleCursor] {
     const locals = localsFromCommand(args)
-    if (locals.isSkipped) return { damages: {}, blocks: {}, effects: {} }
+    if (locals.isSkipped)
+        return [{ damages: {}, blocks: {}, effects: {} }, args.scene]
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
     const username = args.scene.get('username')
     const happened = getHappened(username)
@@ -159,7 +162,7 @@ export function simulateCommand(args: CommandDetail): CommandOutcome {
     const damages = extractDamages(args.scene.get(), sceneCopy.get())
     const blocks = extractBlocks(args.scene.get(), sceneCopy.get())
     const effects = extractEffects(args.scene.get(), sceneCopy.get())
-    return { damages, blocks, effects }
+    return [{ damages, blocks, effects }, sceneCopy]
 }
 
 function executeCommand({

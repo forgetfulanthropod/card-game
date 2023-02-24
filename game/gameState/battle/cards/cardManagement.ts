@@ -37,7 +37,7 @@ function getCardOutcomes(
             targetUids,
             scene,
         }
-        const commandOutcome = simulateCommand(commandDetail)
+        const [commandOutcome] = simulateCommand(commandDetail)
         return { outcome: commandOutcome }
     }
     if (card.targetNum == 1) {
@@ -48,7 +48,7 @@ function getCardOutcomes(
                     targetUids: [cuid],
                     scene,
                 }
-                const commandOutcome = simulateCommand(commandDetail)
+                const [commandOutcome] = simulateCommand(commandDetail)
                 return [cuid, commandOutcome]
             })
         )

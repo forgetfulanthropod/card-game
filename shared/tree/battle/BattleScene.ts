@@ -1,28 +1,22 @@
 import type { RequiredAction } from '@actions'
 import type { SceneHas } from '@misc'
-import type {
-    DungeonRoom,
-    DungeonRoomMap,
-    DungeonRoomMaps,
-    RoomUid,
-} from '../Dungeon'
+import type { DungeonRoom, DungeonRoomMap, RoomUid } from '../Dungeon'
 
-import type { CharacterUid } from './Character'
-import type { Piles, Pile, Card, Command } from './Card'
-import type { StatChangeMap } from './CardHit'
-import type { Characters, StanceId } from './Characters'
-import type { CommandQueue } from './CommandQueue'
 import type {
     ClaimableLoot,
     ClaimedLoot,
-    TreasureChest,
     RunScore,
-    RunScoreUpdate,
     RunScoreAttributeName,
+    TreasureChest,
 } from '.'
-import { RunID } from '../User'
 import { EventScene } from '../EventScene'
 import { Souvenir } from '../Souvenir'
+import { RunID } from '../User'
+import type { Card, Command, Pile, Piles } from './Card'
+import type { StatChangeMap } from './CardHit'
+import type { CharacterUid } from './Character'
+import type { Characters, StanceId } from './Characters'
+import type { CommandQueue } from './CommandQueue'
 
 export interface BattleScene extends SceneHas {
     username: string

@@ -1,6 +1,8 @@
-import type { BattleCursor, NextCommand } from 'shared'
+import { SBaobab } from 'sbaobab'
+import type { BattleCursor, CommandOutcome, NextCommand } from 'shared'
 import { nonNulls } from 'shared/code'
 import { simulateCommand } from '../cards'
+import { popAndRunQueue } from '../queueUtil'
 import { getLivingNpcs, getCommandTargets } from './characterGetters'
 import { getNpcMove } from './getNpcMove'
 
@@ -11,9 +13,16 @@ export function getNpcMoves(scene: BattleCursor): NextCommand[] {
 
     // logger.info(JSON.stringify({ cmds }))
 
+    let simulatedScene = new SBaobab(scene.deepClone()).select()
+
     return cmds.map(command => {
         const targetUids = getCommandTargets(scene.get(), command)
-        const outcome = simulateCommand({ command, scene, targetUids })
+        let outcome: CommandOutcome
+        ;[outcome, simulatedScene] = simulateCommand({
+            command,
+            scene: simulatedScene,
+            targetUids,
+        })
 
         return {
             command,

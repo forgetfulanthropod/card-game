@@ -14,9 +14,9 @@ type CardsArgs = {
 }
 
 export function Cards(args: CardsArgs) {
-    const cardsDatum = toDatum(args.scene, scene => {
-        if (scene.state !== 'in battle') return false
-        return scene.cards
+    const cardsDatum = toDatum(args.scene.select('cards'), cards => {
+        if (args.scene.get('state') !== 'in battle') return false
+        return cards
     })
     return If(cardsDatum, cards =>
         Container(
