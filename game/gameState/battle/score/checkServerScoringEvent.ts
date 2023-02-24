@@ -234,7 +234,7 @@ const checkHealthLostInRoom = (scene: BattleCursor) => {
             count: 1,
             notify: true,
         })
-    } else if (totalHealthLost < 5) {
+    } else if (totalHealthLost <= 5) {
         updateScore({
             scene,
             event: 'ROOM_WIN_FIVE_DAMAGE',
@@ -251,7 +251,7 @@ const checkRoomTake100Damage = (scene: BattleCursor) => {
     )
     if (roomScoreEventCount >= 1) return
     const totalHealthLost = getTotalHealthLost(scene)
-    if (totalHealthLost > 100) {
+    if (totalHealthLost >= 100) {
         updateScore({
             scene,
             event: 'ROOM_TAKE_100_DAMAGE',
