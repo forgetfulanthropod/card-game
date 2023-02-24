@@ -1,4 +1,4 @@
-export const BUILD_VER = '1.1.1.0'
+export const BUILD_VER = '1.2.1.0'
 export const LEADERBOARD_ENTRIES_PER_PAGE = 5
 export const LEADERBOARD_ENTRIES_TO_DISPLAY = 100
 export const MAX_LEADERBOARD_PAGE =
