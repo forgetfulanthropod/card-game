@@ -32,6 +32,9 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     decrementEffects(scene, 'pc')
     decrementEffects(scene, 'npc')
 
+    activateSouvenirs('turnStart', scene) // buffs/debuffs for calcs
+    applyTurnStartEffects(scene, 'pc')
+
     popAndRunQueue(scene, 'pc')
 
     drawNewHand(scene)
@@ -43,9 +46,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     scene.set('damagesUnblockedThisTurn', [])
     scene.set('damagesDealtThisTurn', [])
     scene.set('blocksAppliedThisTurn', [])
-
-    activateSouvenirs('turnStart', scene)
-    applyTurnStartEffects(scene, 'pc')
 
     updateNpcMoves(scene)
 }
