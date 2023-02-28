@@ -1,28 +1,15 @@
+import { callApi } from '@/callApi'
+import { AssetKey, Container, getTexture, If, Sprite } from '@/elementsUtil'
+import { getNullAnimation } from '@/scenes/shared/cards/Card'
+import { nextFrame, onUpdate, toDatum } from '@/util'
+import { ExplanationIf } from '@sharedElements'
+import { compose, Datum, datum } from 'datums'
+import { upperFirst } from 'lodash'
+import { isMobileOnly } from 'mobile-device-detect'
+import { Tweener } from 'pixi-tweener'
 import { ROCursor } from 'sbaobab'
 import { CharacterMeta, StanceId } from 'shared'
-import { compose, Datum, datum } from 'datums'
-import { isMobileOnly } from 'mobile-device-detect'
-import { callApi } from '@/callApi'
-import {
-    If,
-    getTexture,
-    Container,
-    Sprite,
-    portalize,
-    getStage,
-    AssetKey,
-} from '@/elementsUtil'
-import { nextTick, onUpdate, toDatum } from '@/util'
-import { last, upperFirst } from 'lodash'
-import { HEALTH_BAR_WIDTH, spriteAnchor } from './HealthBar'
-import { getNullAnimation } from '@/scenes/shared/cards/Card'
-import { Tweener } from 'pixi-tweener'
-import {
-    Explanation,
-    ExplanationIf,
-    TermExplanation,
-    TermExplanationIf,
-} from '@sharedElements'
+import { HEALTH_BAR_WIDTH } from './HealthBar'
 
 const STANCE_TEXTS: Record<StanceId, string[]> = {
     avoidant: ['Avoidant', 'take 25% less damage', 'deal 25% less damage'],
@@ -130,16 +117,6 @@ function StanceChambers(
 ) {
     if (characterCursor.get('isPc') === false) return Container({})
 
-    const data = compose(
-        ([stanceData]) => {
-            return stanceData
-        },
-        toDatum(characterCursor, ({ isPc, stance, uid }) => {
-            if (!isPc) return false
-            return { stance, uid }
-        })
-    )
-
     const angleBetween = (Math.PI * 2) / 3
     let barrelAnim = getNullAnimation()
     let lastStance: StanceId = characterCursor.get('stance')
@@ -147,12 +124,20 @@ function StanceChambers(
         angleBetween - angleBetween * stanceIds.indexOf(lastStance)
     const stanceBullets = StanceBullets(characterCursor, -rotationForStance)
 
+    let pointerMovedAway = true
+    setTimeout(() => {
+        if (pointerMovedAway) isHovered.set(false)
+    }, 100)
+
     const root = Container(
         {
             x: getXOffset(),
             y: 50,
             rotation: rotationForStance,
             events: {
+                pointerover() {
+                    pointerMovedAway = false
+                },
                 pointerdown() {
                     if (isMobileOnly) {
                         setTimeout(() => isHovered.set(false), 500)
@@ -246,15 +231,18 @@ function StanceBullets(
             rotation,
             events: {
                 pointerover() {
+                    hoveredStanceId.set(null)
                     hoveredStanceId.set(stanceId)
                 },
                 pointerdown() {
+                    hoveredStanceId.set(null)
                     hoveredStanceId.set(stanceId)
                 },
                 pointerup() {
+                    const selectedStanceId = hoveredStanceId.val!
+
                     hoveredStanceId.set(null)
 
-                    const selectedStanceId = characterCursor.get('stance')
                     const stanceIndex = stanceIds.indexOf(selectedStanceId)
 
                     // console.log(
@@ -265,7 +253,7 @@ function StanceBullets(
                     void callApi('chooseStance', {
                         characterUid: characterCursor.get('uid'),
                         stanceId:
-                            selectedStanceId === stanceId
+                            selectedStanceId === characterCursor.get('stance')
                                 ? stanceIds[
                                       stanceIndex > 0
                                           ? stanceIndex - 1
@@ -278,36 +266,13 @@ function StanceBullets(
         })
     )
 
-    const explanation = If(
-        compose(([stanceId]) => {
-            if (!stanceId) return false
-
-            return STANCE_TEXTS[stanceId]
-        }, hoveredStanceId),
-        (texts: string[]) => {
-            const root = Container({})
-
-            nextTick().then(() => {
-                if (root == null) return
-
-                portalize({
-                    from: root,
-                    to: () => getStage(),
-                    content: Explanation({
-                        texts,
-                        displayObjectArgs: {
-                            x: root.getGlobalPosition().x + width * 1.5,
-                            y: root.getGlobalPosition().y + -0.6 * width,
-                            padding: 15,
-                            borderThickness: 2,
-                        },
-                    }),
-                })
-            })
-
-            return root
-        }
-    )
+    const explanation = ExplanationIf({
+        //@ts-expect-error
+        isShown: compose(([id]) => id != null, hoveredStanceId),
+        texts: () => STANCE_TEXTS[hoveredStanceId.val ?? 'neutral'],
+        xOffset: width * 1.5,
+        yOffset: -0.6 * width,
+    })
 
     explanation.rotation = rotation
 
