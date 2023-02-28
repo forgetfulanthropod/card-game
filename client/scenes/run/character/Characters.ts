@@ -1,15 +1,16 @@
-import { omit } from 'lodash'
+import { localTree } from '@/data'
+import type { PixiContainer, SpineAsset } from '@/elementsUtil'
+import { For } from '@/elementsUtil'
+import { statChangesDatum, toDatum, waitForDeathAnimationsDatum } from '@/util'
+import { Spine } from '@pixi-spine/all-4.1'
 import { compose } from 'datums'
-import { Characters, CharacterUid, RUN_SCORE_EVENT_META } from 'shared'
-import { keys, sleep } from 'shared/code'
-import type { DisplayObject } from 'pixi.js'
+import { omit } from 'lodash'
 import { ColorOverlayFilter } from 'pixi-filters'
 import { Tweener } from 'pixi-tweener'
+import type { DisplayObject } from 'pixi.js'
+import { Characters, CharacterUid } from 'shared'
+import { keys, sleep } from 'shared/code'
 import { Character } from './Character'
-import type { PixiContainer } from '@/elementsUtil'
-import { For } from '@/elementsUtil'
-import { localTree } from '@/data'
-import { waitForDeathAnimationsDatum, statChangesDatum, toDatum } from '@/util'
 
 export function Characters(scene: ROBattleScene): PixiContainer {
     const allCharsC = scene.select('allCharacters')
@@ -113,7 +114,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
 
         // console.log('animating out ', removedCharacterUids)
         void animateOut(
-            root.children,
+            root.children as PixiContainer[],
             removedIndices,
             removedCharacterUids
         ).then(() => {
@@ -132,7 +133,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
 }
 
 async function animateOut(
-    els: DisplayObject[],
+    els: PixiContainer[],
     indices: number[],
     uids: CharacterUid[]
 ) {
@@ -145,7 +146,7 @@ async function animateOut(
     )
 }
 
-async function animateOutOne(el: DisplayObject, uid: CharacterUid) {
+async function animateOutOne(el: PixiContainer, uid: CharacterUid) {
     // console.log('animateOutOneHere', { el, uid })
     return new Promise<void>(resolve => {
         statChangesDatum.onChange(async (statChanges, _, unsub) => {
@@ -168,53 +169,48 @@ async function animateOutOne(el: DisplayObject, uid: CharacterUid) {
 
 let colorOverlayFilter: ColorOverlayFilter | null = null
 
-async function animateDeath(el: DisplayObject) {
+async function animateDeath(el: PixiContainer) {
     // console.log('got to animateDeath even...')
     await sleep(200)
-    await Tweener.add(
-        {
-            target: el,
-            duration: 0.3,
-        },
-        {
-            alpha: 0,
-        }
-    )
+    const filter = getColorOverlayFilter()
+    el.filters = [filter]
+
+    return await toFilterAlpha(0, 0.3)
+        .then(async () => await toFilterAlpha(0.2, 0.033))
+        .then(async () => await toFilterAlpha(0, 0.033))
+        .then(async () => await toFilterAlpha(0.4, 0.033))
+        .then(async () => await toFilterAlpha(0, 0.033))
+        .then(async () => await toFilterAlpha(0.6, 0.033))
+        .then(async () => await toFilterAlpha(0, 0.033))
         .then(async () => {
-            el.alpha = 0.2
-            await sleep(33)
+            await toFilterAlpha(1, 0.033)
+            console.log({ children: el.children })
+            const anim = (el.children?.[0] as PixiContainer)
+                ?.children?.[0] as Spine
+            //freezes animation
+            anim?.state && (anim.state.timeScale = 0)
+            await Tweener.add(
+                {
+                    target: el,
+                    duration: 0.3,
+                },
+                {
+                    alpha: 0,
+                }
+            )
         })
-        .then(async () => {
-            el.alpha = 0
-            await sleep(33)
-        })
-        .then(async () => {
-            el.alpha = 0.2
-            await sleep(33)
-        })
-        .then(async () => {
-            el.alpha = 0
-            await sleep(33)
-        })
-        .then(async () => {
-            el.filters = [getColorOverlayFilter()]
-            el.alpha = 1
-            await sleep(33)
-        })
-        .then(async () => {
-            el.alpha = 0
-            await sleep(33)
-        })
-        .then(async () => {
-            el.filters = [getColorOverlayFilter()]
-            el.alpha = 1
-            await sleep(33)
-            await sleep(33)
-        })
-        .then(async () => {
-            el.alpha = 0
-            await sleep(200)
-        })
+
+    async function toFilterAlpha(alpha: number, duration: number) {
+        return await Tweener.add(
+            {
+                target: filter,
+                duration,
+            },
+            {
+                alpha,
+            }
+        )
+    }
 }
 
 function getColorOverlayFilter() {
