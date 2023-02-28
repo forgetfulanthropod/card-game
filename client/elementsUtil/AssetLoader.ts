@@ -11,16 +11,17 @@ import {
     SoundAssetKey,
     SoundEffectAssetKey,
 } from '@/assets/deluxeAssetMaps'
+import {
+    getBooleanFromLocalStorage,
+} from './userSettings'
 
 Loader.registerPlugin(WebfontLoaderPlugin)
 
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
 
-export let muteMusic = !!(localStorage.getItem('muteMusic') === 'true')
-export let muteSFX = !!(localStorage.getItem('muteSFX') === 'true')
-localStorage.setItem('muteMusic', muteMusic ? 'true' : 'false')
-localStorage.setItem('muteSFX', muteSFX ? 'true' : 'false')
+export let muteMusic = getBooleanFromLocalStorage('muteMusic')
+export let muteSFX = getBooleanFromLocalStorage('muteSFX')
 
 export const toggleMuteSFX = () => {
     muteSFX = !muteSFX
