@@ -10,5 +10,6 @@ export * from './overlay'
 export * from './pixiUtils'
 export * from './startPixi'
 export * from '../assets'
+export * from './userSettings'
 
 // @endindex

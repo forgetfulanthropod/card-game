@@ -2,7 +2,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 // import { sound } from '@pixi/sound'
 import type { TrackEntry } from '@pixi-spine/all-4.1'
-import { MainCharacterAnimation } from '@sharedElements'
+import { flashDamageOverlayTo, MainCharacterAnimation, shakeScreen } from '@sharedElements'
 import { diff } from 'deep-diff'
 import type { Listener, ROCursor } from 'sbaobab'
 import type {
@@ -182,14 +182,17 @@ function bindMoves(
                 uid === characterMeta.uid &&
                 targetUidsWaitingForImpact.val.includes(characterMeta.uid)
             ) {
-                if (mainAnimation) {
-                    triggerDamageAnimation(mainAnimation, characterMeta)
-                }
-                if (changes[uid].health)
-                    flashDamageTo(
+                if (!mainAnimation) return
+
+                triggerDamageAnimation(mainAnimation, characterMeta)
+                if (changes[uid].health) {
+                    shakeScreen(1)
+                    flashDamageOverlayTo(mainAnimation)
+                    flashDamageNumberTo(
                         aboveCharacterContainer,
                         changes[uid].health ?? 0
                     )
+                }
             }
         })
     })
@@ -394,7 +397,7 @@ function flashPoisonTo(
     )
 }
 
-function flashDamageTo(
+function flashDamageNumberTo(
     aboveCharacterContainer: PixiContainer,
     damage: number
 ): void {

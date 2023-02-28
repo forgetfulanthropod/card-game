@@ -118,11 +118,12 @@ const StatChangeText = (
 ) => {
     const glowColor = stat === 'health' ? 0x47160b : 0xe1e9f4
     const fill = stat === 'health' ? (add ? 0x69b223 : 0xc23c1e) : 0xbbbdc9
+    const customFilter = customGlowFilter(glowColor)
 
     return Text({
         text,
         anchor: [0.5, 0],
-        filters: [customGlowFilter(glowColor)],
+        filters: [customFilter],
         style: {
             fontFamily: 'bigFont',
             fontSize: text === 'SMASHED' ? 48 : 64,
@@ -130,6 +131,9 @@ const StatChangeText = (
             stroke: 'black',
             strokeThickness: 8,
         },
+        onDestroy: [() => {
+            customFilter.destroy()
+        }]
     })
 }
 

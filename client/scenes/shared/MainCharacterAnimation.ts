@@ -1,7 +1,7 @@
 import type { CharacterId, CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
-import type { InteractionEvents, PixiSpine } from '@/elementsUtil'
+import { addFilterTo, InteractionEvents, PixiSpine, removeFilterFrom } from '@/elementsUtil'
 import { onDestroyed, glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation({
@@ -107,9 +107,9 @@ export function MainCharacterAnimation({
     function updateGlow(hoveredCharacterUid: CharacterUid | null) {
         if (root == null) return
         if (hoveredCharacterUid === characterMeta.uid) {
-            root.filters = [glowFilter]
+            addFilterTo(root, glowFilter)
         } else {
-            root.filters = null
+            removeFilterFrom(root, glowFilter)
         }
     }
 }

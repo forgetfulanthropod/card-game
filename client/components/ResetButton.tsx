@@ -8,10 +8,12 @@ import {
     toggleMuteMusic,
     toggleMuteSFX,
     isHighResolution,
-    toggleHighResolution
+    toggleHighResolution,
+    toggleBooleanInLocalStorage
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
+import { enableMotionFX } from '@/scenes/shared'
 
 const Root = styled.button`
     position: absolute;
@@ -32,6 +34,7 @@ export function ResetButton(props: { username: string }): JSXElement {
     const [sfxIsMuted, setSfxIsMuted] = useState(muteSFX)
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
+    const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
 
     const handleClick = () => {
         setShowActions(actions => !actions)
@@ -39,6 +42,7 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleMuteSFX = () => {
         toggleMuteSFX()
+        toggleBooleanInLocalStorage('muteSFX')
         setSfxIsMuted(muted => !muted)
     }
 
@@ -75,6 +79,11 @@ export function ResetButton(props: { username: string }): JSXElement {
         setHighResEnabled(enabled => !enabled)
     }
 
+    const handleMotionFX = async () => {
+        toggleBooleanInLocalStorage('enableMotionFX')
+        setMotionFXEnabled(enabled => !enabled)
+    }
+
     return <div className='flex flex-col items-end text-white' ref={actionsRef}>
         <Root onClick={() => handleClick()}>⚙</Root>
         <div
@@ -99,6 +108,12 @@ export function ResetButton(props: { username: string }): JSXElement {
                 text={'Enable High-Res'}
                 isEnabled={highResEnabled}
                 textIfEnabled={'Disable High-Res'}
+            />
+            <MenuButton
+                handler={handleMotionFX}
+                text={'Enable Motion FX (TEST)'}
+                isEnabled={motionFXEnabled}
+                textIfEnabled={'Disable Motion FX (TEST)'}
             />
             <MenuButton
                 handler={handleRestartRun}

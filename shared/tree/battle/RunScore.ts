@@ -276,7 +276,7 @@ export const RUN_SCORE_EVENT_META: Record<RunScoreEvent, RunScoreEventMeta> = {
     },
     SPECIAL_BOY: {
         description:
-            'Your deck contains no duplicates outside of basic attacks, starter cards and blocks at the end of a run',
+            'No duplicates in final deck outside of basic attack, block and starter cards',
         shortDescription: 'No added duplicates to your deck',
         pointValue: 10,
         attributeName: 'specialBoy',

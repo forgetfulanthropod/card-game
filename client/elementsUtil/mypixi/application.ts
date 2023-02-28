@@ -5,13 +5,14 @@ import { registerPixiInspector } from './pixiInspector'
 import type { PixiContainer, PixiSprite } from './aliases'
 import { PixiApplication } from './aliases'
 import { toString } from 'lodash'
+import { getBooleanFromLocalStorage, toggleBooleanInLocalStorage } from '../userSettings'
 
-// export const ROOT_SCALE = isMobile ? 1 : 2
 export const ROOT_SCALE = isMobile ? 1 : 1
-export let isHighResolution = !!(localStorage.getItem('isHighResolution') === 'true')
+/**TODO: returns undefined for a brief time in certain files importing it, Workaround: use local storage directly in those files */
+export const isHighResolution = getBooleanFromLocalStorage('isHighResolution')
+export const resolution = isHighResolution ? 2 : 1
 export const toggleHighResolution = () => {
-    isHighResolution = !isHighResolution
-    localStorage.setItem('isHighResolution', toString(isHighResolution))
+    toggleBooleanInLocalStorage('isHighResolution')
     window.location.reload()
 }
 
@@ -25,7 +26,7 @@ export function Application(args: {
 
     app = new PixiApplication({
         view: args.canvas,
-        resolution: isHighResolution ? 2 : 1,
+        resolution,
         // backgroundColor: 0x6495ed,
         width: resW,
         height: resH,
