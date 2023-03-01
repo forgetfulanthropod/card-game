@@ -21,7 +21,7 @@ const allAnimationKeys = keys(allAnimations)
 // }
 
 export function AttackOverlayAnimation(isPc: boolean) {
-    return SequenceAnimation('KC_FX_BasicAttack_121222_', isPc)
+    return SequenceAnimation('KC_FX_BasicAttack_121222_', isPc, true)
     // return Animation(getOneOf(['BasicAttack001'], isPc), isPc)
 }
 

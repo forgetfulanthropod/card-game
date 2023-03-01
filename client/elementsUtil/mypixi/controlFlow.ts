@@ -56,7 +56,7 @@ export function If<T = unknown>(
             )
         )
 
-        //@ts-expect-error
+        //@ts-ignore
         if (val != null && val !== false) {
             // @ts-expect-error
             root.addChild((lastRender = ifRender(val)))

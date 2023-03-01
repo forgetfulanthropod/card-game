@@ -5,7 +5,8 @@ import { sequenceMap } from '@/assets/sequenceMap'
 
 export function SequenceAnimation(
     sequenceKey: keyof typeof sequenceMap,
-    isPc: boolean
+    isPc: boolean,
+    flipOnPc?: boolean
 ) {
     const animation = new AnimatedSprite(
         sequenceMap[sequenceKey]?.map(assetKey => getTexture(assetKey))
@@ -14,6 +15,9 @@ export function SequenceAnimation(
     animation.loop = false
     animation.anchor.set(isPc ? 0.5 : 0, 0.5)
     animation.animationSpeed = 0.5
+    if (isPc && flipOnPc) {
+        animation.scale.x = -1
+    }
 
     setTimeout(() => {
         animation.gotoAndPlay(0)

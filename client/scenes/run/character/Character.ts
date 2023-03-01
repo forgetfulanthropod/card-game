@@ -186,7 +186,7 @@ function bindMoves(
 
                 triggerDamageAnimation(mainAnimation, characterMeta)
                 if (changes[uid].health) {
-                    shakeScreen(1)
+                    shakeScreen(1, characterMeta.isPc)
                     flashDamageOverlayTo(mainAnimation)
                     flashDamageNumberTo(
                         aboveCharacterContainer,

@@ -2,7 +2,7 @@
 
 import './config/nullUtil' // eslint-disable-line import/no-internal-modules
 import './util/misc' // eslint-disable-line import/no-internal-modules
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 
 import { App } from './components'
 import { startLoadingAssets } from './elementsUtil'
@@ -30,7 +30,8 @@ function main() {
     }
     document.title = `Kaiju Cards ${BUILD_VER}`
     prepareSocket()
+    const root = createRoot(preactRoot)
     preactRoot.innerHTML = '' // remove the default warning
-    render(<App />, preactRoot)
+    root.render(<App />)
 }
 void main()

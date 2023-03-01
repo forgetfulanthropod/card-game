@@ -13,7 +13,7 @@ import {
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
-import { enableMotionFX } from '@/scenes/shared'
+import { enableMotionFX, shakeScreen, shakeSetting, toggleShakeSetting } from '@/scenes/shared'
 
 const Root = styled.button`
     position: absolute;
@@ -111,9 +111,17 @@ export function ResetButton(props: { username: string }): JSXElement {
             />
             <MenuButton
                 handler={handleMotionFX}
-                text={'Enable Motion FX (TEST)'}
+                text={'Enable Motion FX'}
                 isEnabled={motionFXEnabled}
-                textIfEnabled={'Disable Motion FX (TEST)'}
+                textIfEnabled={'Disable Motion FX'}
+                />
+            <MenuButton
+                handler={toggleShakeSetting}
+                text={`[TEMP] Toggle shake version`}
+            />
+            <MenuButton
+                handler={() => shakeScreen(1, true)}
+                text={`[TEMP] Trigger Screen Shake`}
             />
             <MenuButton
                 handler={handleRestartRun}

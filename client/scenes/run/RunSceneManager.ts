@@ -15,7 +15,7 @@ export function RunSceneManager(): PixiContainer {
 
     const root = Container(
         {
-            name: 'BattleScene',
+            name: 'RunSceneManager',
             onDestroy: [
                 onUpdate(
                     scene.select('requireAction'),
