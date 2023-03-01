@@ -36,16 +36,16 @@ export const shakeScreen = (intensity: 1 | 2 | 3 | 4 | 5, isPc: boolean) => {
         y3: number = 0
 
     if (isPc) {
-        x1 = random(10, 30)
-        y1 = random(-5, 5)
-
-        x2 = random(-10, -20)
-        y2 = random(-5, 5)
-    } else {
         x1 = random(-10, -30)
         y1 = random(-5, 5)
 
         x2 = random(10, 20)
+        y2 = random(-5, 5)
+    } else {
+        x1 = random(10, 30)
+        y1 = random(-5, 5)
+
+        x2 = random(-10, -20)
         y2 = random(-5, 5)
     }
 
