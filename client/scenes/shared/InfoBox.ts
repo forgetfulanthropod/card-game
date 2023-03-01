@@ -28,7 +28,7 @@ export function InfoBox(
     return Container(
         {
             x: padding,
-            ...omit(displayArgs, 'filters', 'colorStops', 'padding'),
+            ...omit(displayArgs, 'filters', 'colorStops', 'padding', 'width'),
         },
         Container(
             {},
@@ -114,8 +114,8 @@ function Box(
             ],
         },
         spriteArgs: {
-            width: localBounds.width + padding * 2,
-            height: localBounds.height + padding * 2,
+            width: displayArgs.width ?? localBounds.width + padding * 2,
+            height: displayArgs.height ?? localBounds.height + padding * 2,
             x: localBounds.left - padding,
             y: localBounds.top - padding,
             filters,

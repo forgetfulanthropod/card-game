@@ -229,11 +229,11 @@ export function ExplanationIf({
     displayArgs,
 }: {
     isShown: Datum<boolean>
-    texts: string[]
+    texts: string[] | (() => string[])
     xOffset?: number
     yOffset?: number
     isHtml?: boolean
-    displayArgs?: DisplayObjectArgs
+    displayArgs?: DisplayObjectArgs | (() => DisplayObjectArgs)
 }): PixiContainer {
     return If(
         isShown,
@@ -242,14 +242,18 @@ export function ExplanationIf({
                 Container({}),
                 [
                     Explanation({
-                        texts,
+                        texts: typeof texts === 'function' ? texts() : texts,
                         isHtml,
                         displayObjectArgs: {
                             borderThickness: 2,
                             padding: 10,
                             x: xOffset,
                             y: yOffset,
-                            ...(displayArgs ? { ...displayArgs } : {}),
+                            ...(displayArgs
+                                ? typeof displayArgs === 'function'
+                                    ? { ...displayArgs() }
+                                    : { ...displayArgs }
+                                : {}),
                         },
                     }),
                 ],

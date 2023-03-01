@@ -14,19 +14,21 @@ import {
     If,
     loopSong,
     PixiContainer,
+    RoundedRectangleGradientSprite,
     Sprite,
     Text,
 } from '@/elementsUtil'
 import { Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { KawaseBlurFilter } from 'pixi-filters'
-import { Texture } from 'pixi.js'
+import { TextStyle, Texture } from 'pixi.js'
 import { CharacterUid, EventScene, Souvenir, souvenirMap } from 'shared'
 import { keys, vals } from 'shared/code'
 import { SpineBackground } from '../background'
 import {
     BattleSceneCharacterInfo,
     ExplanationIf,
+    InfoBox,
     MainCharacterAnimation,
     TEXT_WIDTH,
 } from '../shared'
@@ -51,9 +53,9 @@ export function EventScene(): PixiContainer {
     const eventId = event?.id
 
     const eventIdUpperFirst = upperFirst(eventId)
-    const eventPromptKeys = keys(eventAssets).filter(k =>
-        k.includes(`${eventIdUpperFirst}Prompt`)
-    )
+    // const eventPromptKeys = keys(eventAssets).filter(k =>
+    //     k.includes(`${eventIdUpperFirst}Prompt`)
+    // )
 
     const eventGradient = Sprite({
         src: 'eventGradient',
@@ -71,10 +73,10 @@ export function EventScene(): PixiContainer {
         {
             onDestroy: [
                 eventPromptIndexDatum.onChange(index => {
-                    if (index === eventPromptKeys.length)
+                    if (index === event.prompts.length)
                         eventGradient.interactive = false
 
-                    if (index > eventPromptKeys.length)
+                    if (index > event.prompts.length)
                         eventGradient.interactive = true
                 }),
             ],
@@ -100,22 +102,15 @@ export function EventScene(): PixiContainer {
             y: BASE_HEIGHT * 0.65,
         }),
         If(eventPromptIndexDatum, eventPromptIndex => {
-            const eventPromptKey = eventPromptKeys[eventPromptIndex]
-            const eventPostChoiceKeys = keys(eventAssets).filter(k =>
-                k.includes(
-                    `${eventIdUpperFirst}PostChoice${
-                        (choiceDatum.val?.index ?? 0) + 1
-                    }_`
-                )
-            )
-            const eventPostChoiceKey =
-                eventPostChoiceKeys[
-                    eventPromptIndex - eventPromptKeys.length - 1
+            const eventPromptText = event.prompts[eventPromptIndex]
+            const eventPostChoiceText =
+                event.choices[choiceDatum.val?.index ?? -1]?.postPrompts[
+                    eventPromptIndex - event.prompts.length - 1
                 ]
 
-            if (eventPromptKey || eventPostChoiceKey)
-                return PromptSprite(eventPromptKey || eventPostChoiceKey)
-            else if (eventPromptIndex === eventPromptKeys.length)
+            if (eventPromptText || eventPostChoiceText)
+                return Prompt(eventPromptText || eventPostChoiceText)
+            else if (eventPromptIndex === event.prompts.length)
                 return Choices(event, choiceDatum, eventPromptIndexDatum)
             else if (choiceDatum.val != null) {
                 callApi('chooseEventResponse', choiceDatum.val)
@@ -126,12 +121,21 @@ export function EventScene(): PixiContainer {
     )
 }
 
-function PromptSprite(eventPromptKey: EventAssetKey) {
-    return Sprite({
-        src: eventPromptKey,
+const style: Partial<TextStyle> = {
+    fontFamily: 'sansFont',
+    fontSize: 41,
+    fill: 'white',
+    wordWrap: true,
+    wordWrapWidth: BASE_WIDTH * 0.9,
+    align: 'center',
+    lineHeight: 65,
+}
+
+function Prompt(text: string) {
+    return Text({
+        text,
+        style,
         anchor: [0.5, 0],
-        scale: 0.5,
-        // scale: (BASE_WIDTH * 0.6) / getTexture(eventPromptKey).width,
         x: BASE_WIDTH / 2,
         y: BASE_HEIGHT * 0.75,
     })
@@ -170,50 +174,79 @@ function ChooseOptionInterface(
     eventPromptIndexDatum: Datum<number>,
     isChoosingCharacter: Datum<boolean>
 ) {
-    const choiceAssetKeys = keys(eventAssets).filter(k =>
-        k.includes(`${upperFirst(eventScene.id)}Choice`)
-    )
+    const choiceAssetTexts = eventScene.choices.map(c => c.text)
+    // const choiceAssetKeys = keys(eventAssets).filter(k =>
+    //     k.includes(`${upperFirst(eventScene.id)}Choice`)
+    // )
 
     return Container(
         {},
-        ...choiceAssetKeys.map((choiceAssetKey, index) => {
+        ...choiceAssetTexts.map((choiceAssetText, index) => {
             const isHovered = datum(false)
 
             const souvenirId = eventScene.choices[index]?.souvenirId
             const souvenir = souvenirId ? souvenirMap[souvenirId] : null
 
+            const text = Text({
+                text: choiceAssetText,
+                style: {
+                    ...style,
+                    fontSize: 34,
+                    lineHeight: 55,
+                    wordWrapWidth: (BASE_WIDTH / choiceAssetTexts.length) * 0.8,
+                },
+                anchor: [0.5, 0],
+                y: 40,
+                events: {
+                    pointerover() {
+                        isHovered.set(true)
+                    },
+                    pointerout() {
+                        isHovered.set(false)
+                    },
+                    pointerup() {
+                        choiceDatum.set({ index })
+
+                        if (!souvenir?.equippable) {
+                            eventPromptIndexDatum.set(
+                                eventPromptIndexDatum.val + 1
+                            )
+                        } else {
+                            isChoosingCharacter.set(true)
+                        }
+                    },
+                },
+            })
+
             return Container(
                 {
                     x:
                         (BASE_WIDTH * (1 + index * 2)) /
-                        choiceAssetKeys.length /
+                        choiceAssetTexts.length /
                         2,
-                    y: BASE_HEIGHT * 0.7,
+                    y: BASE_HEIGHT * 0.72,
                 },
-                Sprite({
-                    src: choiceAssetKey,
-                    anchor: [0.5, 0],
-                    scale: 0.5,
-                    events: {
-                        pointerover() {
-                            isHovered.set(true)
-                        },
-                        pointerout() {
-                            isHovered.set(false)
-                        },
-                        pointerup() {
-                            choiceDatum.set({ index })
-
-                            if (!souvenir?.equippable) {
-                                eventPromptIndexDatum.set(
-                                    eventPromptIndexDatum.val + 1
-                                )
-                            } else {
-                                isChoosingCharacter.set(true)
-                            }
-                        },
+                RoundedRectangleGradientSprite({
+                    radius: 50,
+                    gradientArgs: {
+                        x0: 0,
+                        y0: 0,
+                        x1: 0,
+                        y1: text.height * 1.2,
+                        colorStops: [
+                            { color: 0x3d3b35, offset: 0 },
+                            { color: 0x2b2b2b, offset: 1 },
+                        ],
+                    },
+                    spriteArgs: {
+                        width:
+                            (BASE_WIDTH / choiceAssetTexts.length) * 0.8 +
+                            30 * 2,
+                        height: text.height + 60,
+                        anchor: [0.5, 0],
                     },
                 }),
+                text,
                 ExplanationIf({
                     isShown: isHovered,
                     texts: souvenir
