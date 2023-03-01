@@ -1,7 +1,7 @@
 import { Fragment, Ref, RefObject } from 'react' // eslint-disable-line
 
 import { useEffect, useRef, useState } from 'react'
-import type { BattleScene, Rulebook } from 'shared'
+import type { BattleScene, CharacterUid, Rulebook } from 'shared'
 import toast from 'react-hot-toast'
 import { useCursor } from './util'
 import type { MonacoRef } from './Monaco'
@@ -10,6 +10,7 @@ import { getTree } from '@/data'
 import { callApi } from '@/callApi'
 import { styled } from '@/config'
 import { ROCursor } from 'sbaobab'
+import { keys } from 'lodash'
 
 const ButtonGroup = styled.div`
     // z-index: 11;
@@ -78,6 +79,43 @@ export function SceneEditor(): JSXElement {
                     Overwrite
                 </button>
             </>}
+            <button
+                onClick={async () => {
+                    const newScene = JSON.parse(JSON.stringify(scene)) as BattleScene
+                    for (let char of keys(newScene.allCharacters)) {
+                        const { isPc } =
+                            newScene.allCharacters[char as CharacterUid]
+                        if (isPc) continue
+
+                        newScene.allCharacters[char as CharacterUid].health = 0
+                    }
+
+                    await callApi('setBattleScene', {
+                        scene: newScene,
+                    })
+                    await callApi('endTurn', {})
+                }}
+            >
+                kill all enemies
+            </button>
+            <button
+                onClick={async () => {
+                    const newScene = JSON.parse(JSON.stringify(scene)) as BattleScene
+                    for (let char of keys(newScene.allCharacters)) {
+                        const { isPc } =
+                            newScene.allCharacters[char as CharacterUid]
+                        if (!isPc) continue
+
+                        newScene.allCharacters[char as CharacterUid].health = newScene.allCharacters[char as CharacterUid].constitution
+                    }
+
+                    await callApi('setBattleScene', {
+                        scene: newScene,
+                    })
+                }}
+            >
+                heal my kaijus
+            </button>
         </ButtonGroup>
     </>
 }
