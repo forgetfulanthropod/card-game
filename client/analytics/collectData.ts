@@ -10,7 +10,7 @@ export const collectData = <T extends keyof AnalyticsEventMeta>(
         console.log('Init analytics with no currUserId')
         const localUserId = localStorage.getItem('username')
         if (localUserId === null) {
-            console.error(
+            console.warn(
                 'No username in localstorage or initialized. UserID analytics disabled.'
             )
             return
