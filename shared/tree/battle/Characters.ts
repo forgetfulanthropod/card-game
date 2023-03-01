@@ -2,7 +2,6 @@ import type {
     CalculatedCharacterStats,
     CharacterStats,
     CharacterUid,
-    StatModifiers,
     StatModifiersMap,
 } from './Character'
 import type { Effect } from './Effect'

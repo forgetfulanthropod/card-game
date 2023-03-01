@@ -598,113 +598,18 @@ export type EventAssetKey = keyof typeof eventAssets
 
 export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
+
     eventFrogCarriageMainGraphic:
         'events/Frog Carriage/FrogCarriage Image.webp',
-    eventFrogCarriagePrompt1:
-        'events/Frog Carriage/FrogCarriage prompt 1__.webp',
-    eventFrogCarriagePrompt2:
-        'events/Frog Carriage/FrogCarriage prompt 2__.webp',
-    eventFrogCarriagePrompt3:
-        'events/Frog Carriage/FrogCarriage prompt 3_.webp',
-    eventFrogCarriageChoice1: 'events/Frog Carriage/FrogCarriage Choice 1.webp',
-    eventFrogCarriageChoice2: 'events/Frog Carriage/FrogCarriage Choice 2.webp',
-    eventFrogCarriageChoice3: 'events/Frog Carriage/FrogCarriage Choice 3.webp',
-    eventFrogCarriagePostChoice1_1:
-        'events/Frog Carriage/FrogCarriage option 1_1.webp',
-    eventFrogCarriagePostChoice1_2:
-        'events/Frog Carriage/FrogCarriage option 1_2.webp',
-    eventFrogCarriagePostChoice2_1:
-        'events/Frog Carriage/FrogCarriage option 2_1.webp',
-    eventFrogCarriagePostChoice2_2:
-        'events/Frog Carriage/FrogCarriage option 2_2.webp',
-    eventFrogCarriagePostChoice2_3:
-        'events/Frog Carriage/FrogCarriage option 2_3.webp',
-    eventFrogCarriagePostChoice3_1:
-        'events/Frog Carriage/FrogCarriage option 3_1.webp',
-    eventFrogCarriagePostChoice3_2:
-        'events/Frog Carriage/FrogCarriage option 3_2.webp',
 
     eventCursedStatueMainGraphic: 'events/Cursed Statue/Cursed Statue.webp',
-    eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
-    eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue prompt 2.webp',
-    eventCursedStatueChoice1:
-        'events/Cursed Statue/Cursed Statue Choice 1.webp',
-    eventCursedStatueChoice2:
-        'events/Cursed Statue/Cursed Statue Choice 2.webp',
-    eventCursedStatueChoice3:
-        'events/Cursed Statue/Cursed Statue Choice 3.webp',
-    eventCursedStatuePostChoice1_1:
-        'events/Cursed Statue/CursedStatue option 1_1.webp',
-    eventCursedStatuePostChoice1_2:
-        'events/Cursed Statue/CursedStatue option 1_2.webp',
-    eventCursedStatuePostChoice1_3:
-        'events/Cursed Statue/CursedStatue option 1_3.webp',
-    eventCursedStatuePostChoice2_1:
-        'events/Cursed Statue/CursedStatue option 2_1.webp',
-    eventCursedStatuePostChoice2_2:
-        'events/Cursed Statue/CursedStatue option 2_2.webp',
-    eventCursedStatuePostChoice2_3:
-        'events/Cursed Statue/CursedStatue option 2_3.webp',
-    eventCursedStatuePostChoice3_1:
-        'events/Cursed Statue/CursedStatue option 3_1.webp',
 
     eventGnomeStoryMainGraphic: 'events/Gnome Story/Gnome Story.webp',
-    eventGnomeStoryPrompt1: 'events/Gnome Story/GnomeStory prompt 1_.webp',
-    eventGnomeStoryPrompt2: 'events/Gnome Story/GnomeStory prompt 2_.webp',
-    eventGnomeStoryPrompt3: 'events/Gnome Story/GnomeStory prompt 3_.webp',
-    eventGnomeStoryPrompt4: 'events/Gnome Story/GnomeStory prompt 4_.webp',
-    eventGnomeStoryChoice1: 'events/Gnome Story/Gnome Story Choice 1.webp',
-    eventGnomeStoryChoice2: 'events/Gnome Story/Gnome Story Choice 2.webp',
-    eventGnomeStoryPostChoice1_1:
-        'events/Gnome Story/GnomeStory option 1_1.webp',
-    eventGnomeStoryPostChoice2_1:
-        'events/Gnome Story/GnomeStory option 2_1.webp',
 
     eventGnomeToothMainGraphic: 'events/Gnome Tooth/GnomeTooth.webp',
-    eventGnomeToothPrompt1: 'events/Gnome Tooth/GnomeTooth prompt 1_.webp',
-    eventGnomeToothPrompt2: 'events/Gnome Tooth/GnomeTooth prompt 2_.webp',
-    eventGnomeToothPrompt3: 'events/Gnome Tooth/GnomeTooth prompt 3_.webp',
-    eventGnomeToothChoice1: 'events/Gnome Tooth/GnomeTooth Choice 1.webp',
-    eventGnomeToothChoice2: 'events/Gnome Tooth/GnomeTooth Choice 2.webp',
-    eventGnomeToothPostChoice1_1:
-        'events/Gnome Tooth/GnomeTooth option 1_1.webp',
-    eventGnomeToothPostChoice1_3:
-        'events/Gnome Tooth/GnomeTooth option 1_2.webp',
-    eventGnomeToothPostChoice1_4:
-        'events/Gnome Tooth/GnomeTooth option 1_3.webp',
-    eventGnomeToothPostChoice2_1:
-        'events/Gnome Tooth/GnomeTooth option 2_1.webp',
-    eventGnomeToothPostChoice2_2:
-        'events/Gnome Tooth/GnomeTooth option 2_2.webp',
-    eventGnomeToothPostChoice2_3:
-        'events/Gnome Tooth/GnomeTooth option 2_3.webp',
 
     eventHogClownMainGraphic:
         'events/Hog Covered In Clowns/Hog Covered in Clowns_.webp',
-    eventHogClownPrompt1:
-        'events/Hog Covered In Clowns/HogClown prompt 1_.webp',
-    eventHogClownPrompt2:
-        'events/Hog Covered In Clowns/HogClown prompt 2_.webp',
-    eventHogClownChoice1: 'events/Hog Covered In Clowns/HogClown Choice 1.webp',
-    eventHogClownChoice2: 'events/Hog Covered In Clowns/HogClown Choice 2.webp',
-    eventHogClownChoice3: 'events/Hog Covered In Clowns/HogClown Choice 3.webp',
-    eventHogClownPostChoice1_1:
-        'events/Hog Covered In Clowns/HogClown option 1_1.webp',
-    eventHogClownPostChoice2_1:
-        'events/Hog Covered In Clowns/HogClown option 2_1.webp',
-    eventHogClownPostChoice2_2:
-        'events/Hog Covered In Clowns/HogClown option 2_2.webp',
-    eventHogClownPostChoice3_1:
-        'events/Hog Covered In Clowns/HogClown option 3_1.webp',
-
-    // eventCursedStatueGuide: 'events/Cursed Statue/Cursed Statue Guide.webp',
-    // eventCursedStatue: 'events/Cursed Statue/Cursed Statue.webp',
-    // Leave without touching the statue.webp',
-    // eventCursedStatuePrompt1: 'events/Cursed Statue/CursedStatue Prompt 1.webp',
-    // eventCursedStatuePrompt2: 'events/Cursed Statue/CursedStatue Prompt 2.webp',
-    // eventCursedStatueChoice1: 'events/Cursed Statue/CursedStatue Choice 1.webp',
-    // eventCursedStatueChoice2: 'events/Cursed Statue/CursedStatue Choice 2.webp',
-    // eventCursedStatueChoice3: 'events/Cursed Statue/CursedStatue Choice 3.webp',
 }
 
 export const souvenirAssets: {
