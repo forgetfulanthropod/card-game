@@ -56,10 +56,13 @@ export function BattleScene(
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
     return Container(
-        {},
-        SpineBackground({ srcs: allSrcs[sceneIndex] }),
-        Container({ name: 'NpcIntentArrowContainer' }),
-        Characters(scene),
+        { name: 'BattleScene'},
+        Container(
+            { name: 'CharactersAndBg' },
+            SpineBackground({ srcs: allSrcs[sceneIndex] }),
+            Container({ name: 'NpcIntentArrowContainer' }),
+            Characters(scene)
+        ),
         Energy({ scene }),
         EndTurnButton(),
         BattleSceneCharacterInfo(),
