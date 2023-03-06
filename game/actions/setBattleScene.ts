@@ -9,9 +9,7 @@ export const setBattleScene: GameActions['setBattleScene'] = ({
     if (isProduction)
         return logger.info('tried to update battle scene in production!')
 
-    const cursor = getBattleSceneIn(game)
+    scene.username = game.get('username')
 
-    scene.username = cursor.get('username')
-
-    cursor.set(scene)
+    game.set('scene', scene)
 }
