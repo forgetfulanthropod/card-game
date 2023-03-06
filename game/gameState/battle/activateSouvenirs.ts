@@ -32,7 +32,7 @@ export function activateSouvenir(
         command: {
             id: '' as CommandId,
             name: '',
-            targetNum: souvenir.equippable ? 1 : -1,
+            targetNum: souvenir.targetNum ?? (souvenir.equippable ? 1 : -1),
             actions: commandDSLString,
             targetType: souvenir.equippable ? 'self' : 'allFriends',
             characterUid,

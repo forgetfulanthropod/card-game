@@ -10,6 +10,7 @@ import {
     DisplayObject,
     EventAssetKey,
     eventAssets,
+    getTexture,
     glowFilter,
     If,
     loopSong,
@@ -69,6 +70,8 @@ export function EventScene(): PixiContainer {
         },
     })
 
+    const src = getTexture(`event${eventIdUpperFirst}MainGraphic` as AssetKey)
+
     return Container(
         {
             onDestroy: [
@@ -91,15 +94,15 @@ export function EventScene(): PixiContainer {
         ),
         eventGradient,
         Sprite({
-            src: `event${eventIdUpperFirst}MainGraphic` as AssetKey,
-            scale: 0.4,
+            src,
+            scale: src.height > 1080 ? 0.4 : 1,
             // scale:
             //     (BASE_HEIGHT * 0.5) /
             //     getTexture(`event${eventIdUpperFirst}MainGraphic` as AssetKey)
             //         .height,
-            anchor: [0.5, 1],
+            anchor: [0.5, src.height > 1080 ? 1 : 0],
             x: BASE_WIDTH / 2,
-            y: BASE_HEIGHT * 0.65,
+            y: src.height > 1080 ? BASE_HEIGHT * 0.65 : 0,
         }),
         If(eventPromptIndexDatum, eventPromptIndex => {
             const eventPromptText = event.prompts[eventPromptIndex]
@@ -197,25 +200,6 @@ function ChooseOptionInterface(
                 },
                 anchor: [0.5, 0],
                 y: 40,
-                events: {
-                    pointerover() {
-                        isHovered.set(true)
-                    },
-                    pointerout() {
-                        isHovered.set(false)
-                    },
-                    pointerup() {
-                        choiceDatum.set({ index })
-
-                        if (!souvenir?.equippable) {
-                            eventPromptIndexDatum.set(
-                                eventPromptIndexDatum.val + 1
-                            )
-                        } else {
-                            isChoosingCharacter.set(true)
-                        }
-                    },
-                },
             })
 
             return Container(
@@ -244,6 +228,25 @@ function ChooseOptionInterface(
                             30 * 2,
                         height: text.height + 60,
                         anchor: [0.5, 0],
+                        events: {
+                            pointerover() {
+                                isHovered.set(true)
+                            },
+                            pointerout() {
+                                isHovered.set(false)
+                            },
+                            pointerup() {
+                                choiceDatum.set({ index })
+
+                                if (!souvenir?.equippable) {
+                                    eventPromptIndexDatum.set(
+                                        eventPromptIndexDatum.val + 1
+                                    )
+                                } else {
+                                    isChoosingCharacter.set(true)
+                                }
+                            },
+                        },
                     },
                 }),
                 text,

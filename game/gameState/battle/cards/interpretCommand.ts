@@ -80,6 +80,19 @@ function localsFromCommand(
         (scene as BattleCursor).get('cards', 'discard') ?? {}
     ).length
 
+    const cardsPlayedThisRoom =
+        (scene as BattleCursor).get('cardsPlayedThisRoom') ?? []
+
+    const lastCardPlayed = cardsPlayedThisRoom[cardsPlayedThisRoom.length - 1]
+    const lastCardPlayedType = lastCardPlayed?.type
+
+    const currentRoomCategory = (
+        (scene as BattleCursor).get('currentRoom') ?? {}
+    )?.category
+
+    const wasLastCardPlayedFromThisCharacter =
+        command.characterUid === lastCardPlayed?.characterUid
+
     return {
         ...calculateStats(cardOwner),
         targetConstitution,
@@ -88,6 +101,9 @@ function localsFromCommand(
         handSize,
         drawPileSize,
         discardPileSize,
+        lastCardPlayedType,
+        currentRoomCategory,
+        wasLastCardPlayedFromThisCharacter,
     }
 }
 
@@ -227,6 +243,9 @@ function generateAnguContext(actionsMap: object): angu.Context {
             ['/', '*'],
             ['-', '+'],
             ['pow', 'log10'],
+            ['<', '<=', '>', '>=', '===', '!==', '==', '!='],
+            ['&&'],
+            ['||'],
             { ops: ['='], associativity: 'right' },
             [';'],
         ],

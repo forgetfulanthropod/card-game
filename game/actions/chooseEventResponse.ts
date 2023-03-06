@@ -26,19 +26,22 @@ export const chooseEventResponse: GameActions['chooseEventResponse'] = args => {
         return logger.warn('invalid character UID')
 
     if (souvenirId != null)
-        collectSouvenir(souvenirId, args.characterUid, scene)
+        acquireSouvenir(souvenirId, args.characterUid, scene)
 
     scene.set('isInMap', true)
 }
 
-function collectSouvenir(
+export function acquireSouvenir(
     id: SouvenirId,
     characterUid: CharacterUid | undefined,
     scene: BattleCursor
 ) {
-    const newSouvenir = { ...souvenirMap[id], characterUid }
+    const newSouvenir = {
+        ...souvenirMap[id],
+        characterUid: souvenirMap[id].equippable ? characterUid : undefined,
+    }
 
-    scene.apply('souvenirs', souvenirs => [...souvenirs, newSouvenir])
+    scene.apply('souvenirs', souvenirs => [...(souvenirs ?? []), newSouvenir])
 
     activateSouvenir(newSouvenir, 'acquire', scene)
 }

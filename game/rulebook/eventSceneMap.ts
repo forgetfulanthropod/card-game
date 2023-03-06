@@ -1,6 +1,40 @@
 import { EventId, EventScene } from 'shared/tree/EventScene'
 
 export const eventSceneMap: Record<EventId, EventScene> = {
+    cursedStatue: {
+        id: 'cursedStatue',
+        prompts: [
+            'A large statue of a demon with gems for eyes stands before you.\nYou hear a faint whisper echo as you lock eyes with the demon. The whisper feels like it coming within your own head.',
+            '"Closer", says the demon.\n"Choose a hand,"\n"Gifts, Closer."',
+        ],
+        choices: [
+            {
+                souvenirId: 'demonsLeftHand',
+                text: "Touch the demon's left hand.",
+                postPrompts: [
+                    "One of your Kaiju steps forward and touches the Demon's left hand. They let out a shriek as their body is wrapped in a red mist.",
+                    'After the mist settles you can tell that your Kaiju is 5% shorter\n but its head and arms are 5 % larger.',
+                    '"Gifts of power, at the cost of Vitality." the statue whispered.',
+                ],
+            },
+            {
+                souvenirId: 'demonsRightHand',
+                text: "Touch the demon's right hand.",
+                postPrompts: [
+                    "One of your Kaiju steps forward and touches the Demon's right hand. They let out a shriek as their body is wrapped in a yellow mist.",
+                    'After the mist has settled you can tell that your Kaiju is 5% taller\nbut its head and arms are 5 % smaller.',
+                    '"Gifts of Vitality, at the cost of Power" the statue hisses.',
+                ],
+            },
+            {
+                souvenirId: null,
+                text: '"Aaaaaaaaah!", you scream "AaaaaAaah!".',
+                postPrompts: [
+                    "AAAAAAAAaaaaaHHHhh! aaaAAAHHHhh!\nThe statue was too scary so you had to run away.\nYou leave without accepting the Demon's gifts.",
+                ],
+            },
+        ],
+    },
     frogCarriage: {
         id: 'frogCarriage',
         prompts: [
@@ -32,40 +66,6 @@ export const eventSceneMap: Record<EventId, EventScene> = {
                 postPrompts: [
                     'You look over the old man and determine that he is very old and frail, and his beard is very big.',
                     'You decide to rob him of his cargo and grab all of the frog wine you can carry. The old frog doesn"t put up a fight because he is worried about damaging his very big beard.',
-                ],
-            },
-        ],
-    },
-    cursedStatue: {
-        id: 'cursedStatue',
-        prompts: [
-            'A large statue of a demon with gems for eyes stands before you.\nYou hear a faint whisper echo as you lock eyes with the demon. The whisper feels like it coming within your own head.',
-            '"Closer", says the demon.\n"Choose a hand,"\n"Gifts, Closer."',
-        ],
-        choices: [
-            {
-                souvenirId: 'demonsLeftHand',
-                text: "Touch the demon's left hand.",
-                postPrompts: [
-                    "One of your Kaiju steps forward and touches the Demon's left hand. They let out a shriek as their body is wrapped in a red mist.",
-                    'After the mist settles you can tell that your Kaiju is 5% shorter\n but its head and arms are 5 % larger.',
-                    '"Gifts of power, at the cost of Vitality." the statue whispered.',
-                ],
-            },
-            {
-                souvenirId: 'demonsRightHand',
-                text: "Touch the demon's right hand.",
-                postPrompts: [
-                    "One of your Kaiju steps forward and touches the Demon's right hand. They let out a shriek as their body is wrapped in a yellow mist.",
-                    'After the mist has settled you can tell that your Kaiju is 5% taller\nbut its head and arms are 5 % smaller.',
-                    '"Gifts of Vitality, at the cost of Power" the statue hisses.',
-                ],
-            },
-            {
-                souvenirId: null,
-                text: '"Aaaaaaaaah!", you scream "AaaaaAaah!".',
-                postPrompts: [
-                    "AAAAAAAAaaaaaHHHhh! aaaAAAHHHhh!\nThe statue was too scary so you had to run away.\nYou leave without accepting the Demon's gifts.",
                 ],
             },
         ],
@@ -152,6 +152,25 @@ export const eventSceneMap: Record<EventId, EventScene> = {
                 postPrompts: [
                     '"That is extremely reasonable. It is unfortunate for me that you are too scared of clowns to help me. I have a lot of clowns on my back and I do not want them there but I understand. Pleae take this, It will hopefully help you with your fear of clowns."',
                 ],
+            },
+        ],
+    },
+    tooManyHats: {
+        id: 'tooManyHats',
+        prompts: [
+            `"Hats!  Hats for sale!  I am selling hats oh god is there anyone here please please help me sell these hats I am desperate to sell my hats".`,
+            '“Through a series of events I am legally not allowed to disclose, I have been cursed with the burden of 1000 hats. I must sell them all or go to jail.  Buy a hat please?”',
+        ],
+        choices: [
+            {
+                souvenirId: 'questionableHat',
+                text: 'Acquire Questionable Hat',
+                postPrompts: [],
+            },
+            {
+                souvenirId: null,
+                text: 'This man and his terrible hats must suffer for their unspoken crimes.  Leave without purchasing one.',
+                postPrompts: [],
             },
         ],
     },

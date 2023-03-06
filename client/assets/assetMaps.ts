@@ -600,16 +600,13 @@ export const eventAssets = {
     eventGradient: 'events/Event Overlay.webp',
 
     eventFrogCarriageMainGraphic:
-        'events/Frog Carriage/FrogCarriage Image.webp',
-
-    eventCursedStatueMainGraphic: 'events/Cursed Statue/Cursed Statue.webp',
-
-    eventGnomeStoryMainGraphic: 'events/Gnome Story/Gnome Story.webp',
-
-    eventGnomeToothMainGraphic: 'events/Gnome Tooth/GnomeTooth.webp',
-
+        'events/main graphics/FrogCarriage Image.webp',
+    eventCursedStatueMainGraphic: 'events/main graphics/Cursed Statue.webp',
+    eventGnomeStoryMainGraphic: 'events/main graphics/Gnome Story.webp',
+    eventGnomeToothMainGraphic: 'events/main graphics/GnomeTooth.webp',
     eventHogClownMainGraphic:
-        'events/Hog Covered In Clowns/Hog Covered in Clowns_.webp',
+        'events/main graphics/Hog Covered in Clowns_.webp',
+    eventTooManyHatsMainGraphic: 'events/main graphics/Too Many Hats.webp',
 }
 
 export const souvenirAssets: {
@@ -627,6 +624,44 @@ export const souvenirAssets: {
     souvenirGlassOfWarmMilk: 'souvenirs/Glass of Warm Milk.webp',
     souvenirNightmareBiscuit: 'souvenirs/Nightmare Biscuit.webp',
     souvenirSqueakyClownShoes: 'souvenirs/Squeaky clown shoes.webp',
+
+    souvenirYummyRice: 'souvenirs/Yummy rice.webp',
+    souvenirAdvilPM: 'souvenirs/Advil PM.webp',
+    souvenirAllPurposeKnob: 'souvenirs/Silver Doorknob.webp',
+    // souvenir: |souvenirs/ | 'beanInAJar.webp',
+    souvenirBigSniff: 'souvenirs/Big Sniffa.webp',
+    souvenirBootlegExplosive: 'souvenirs/bootlegExplosive.webp', //todo
+    souvenirConcreteShoes: 'souvenirs/concreteShoes.webp', //todo
+    souvenirContaminatedRag: 'souvenirs/contaminated rag.webp',
+    souvenirDearestDiary: 'souvenirs/dearestDiary.webp', //todo
+    souvenirDemonCookie: 'souvenirs/demonCookie.webp',
+    souvenirDietaryYogurt: 'souvenirs/Dietary Yogurt.webp',
+    souvenirEmptyDiaper: 'souvenirs/emptyDiaper.webp', //todo
+    souvenirEnchantedSnowball: 'souvenirs/Enchanted snowball.webp',
+    souvenirFamilyBeetle: 'souvenirs/familyBeetle.webp', //todo
+    souvenirFilledDiaper: 'souvenirs/filledDiaper.webp', //todo
+    souvenirGamerBathwater: 'souvenirs/Gamer bathwater.webp',
+    souvenirLacedBathSalts: 'souvenirs/Laced Bath Salts.webp',
+    souvenirLavenderTea: 'souvenirs/Lavender tea.webp',
+    souvenirLilFella: 'souvenirs/lilFella.webp', //todo
+    souvenirLilTaste: "souvenirs/Lil' Taste.webp",
+    // souvenir: |souvenirs/ | 'mommysCreditCard.webp',
+    souvenirOrganicBathSalts: 'souvenirs/Organic Bath Salts.webp',
+    souvenirPenguinEgg: 'souvenirs/Penguin egg.webp',
+    souvenirPetRock: 'souvenirs/Pet Rock.webp',
+    souvenirPulledRug: 'souvenirs/Pulled rug.webp',
+    souvenirQuestionableHat: 'souvenirs/questionable hat.webp',
+    souvenirRestrainingOrder: 'souvenirs/Restraining order.webp',
+    souvenirRustedGear: 'souvenirs/rustedGear.webp', //todo
+    souvenirGrandmasHandbag: "souvenirs/Grandma's Handbag.webp",
+    souvenirShinyMarble: 'souvenirs/shinyMarble.webp', //todo
+    souvenirSilkGloves: 'souvenirs/Silk Gloves.webp',
+    souvenirSquireEmblem: 'souvenirs/Squire Emblem.webp',
+    souvenirStinkEgg: 'souvenirs/Stinky Egg!.webp',
+    souvenirStinkyMeat: 'souvenirs/Stinky meat.webp',
+    souvenirStinkySandwich: 'souvenirs/stinkySandwich.webp', //todo
+    souvenirStrangeHat: 'souvenirs/Strange hat.webp',
+    souvenirWoolBandana: 'souvenirs/woolBandana.webp', //todo
 }
 
 export const userAvatarAssets = {

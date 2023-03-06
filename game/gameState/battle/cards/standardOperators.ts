@@ -30,6 +30,43 @@ export const standardOperators = {
         const [a, b] = process(av, bv)
         return a < b
     },
+    '<=': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a <= b
+    },
+    '>': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a > b
+    },
+    '>=': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a >= b
+    },
+    '===': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a === b
+    },
+    '!==': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a !== b
+    },
+    '==': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a == b
+    },
+    '!=': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a != b
+    },
+
+    '||': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a || b
+    },
+    '&&': (av: ANum, bv: ANum) => {
+        const [a, b] = process(av, bv)
+        return a && b
+    },
 
     ';': (a: VAngu, b: VAngu) => {
         a.eval()

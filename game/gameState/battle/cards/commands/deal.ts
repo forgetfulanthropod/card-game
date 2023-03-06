@@ -5,10 +5,11 @@ import type { Executors, Explainers } from './util'
 import { applyDamage } from '@/gameState'
 import { upperFirst } from 'lodash'
 import { getTargetText } from './util/getTargetText'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
-    const [damageHtml, modifier] = evalAllAsHtml(dslArgs)
-    const [damage] = evalAll(dslArgs)
+    const [damageHtml] = evalAllAsHtml(dslArgs)
+    const [damage, modifier, targetType] = evalAll(dslArgs)
 
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
@@ -20,7 +21,10 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
 
     explication +=
         ' to ' +
-        getTargetText(context.command.targetType, context.characterMeta)
+        getTargetText(
+            targetType ?? context.command.targetType,
+            context.characterMeta
+        )
 
     if (modifier) explication += ` <b>${upperFirst(modifier)}</b>`
 
@@ -33,7 +37,7 @@ export const execute: Executors['deal'] = ({
     command,
     targetUids,
 }) => {
-    const [damage, modifier] = evalAll(dslArgs)
+    const [damage, modifier, targetType] = evalAll(dslArgs)
     const expectedNumTargets = command.targetNum
     if (expectedNumTargets > -1 && expectedNumTargets !== targetUids.length) {
         logger.error(
@@ -42,7 +46,12 @@ export const execute: Executors['deal'] = ({
         return
     }
 
-    targetUids.forEach(targetUid =>
+    getTargetUidsOverride({
+        targetTypeOverride: targetType,
+        scene,
+        command,
+        givenUids: targetUids,
+    }).forEach(targetUid =>
         applyDamage({
             damage,
             targetUid,

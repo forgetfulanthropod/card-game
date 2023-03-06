@@ -1,5 +1,6 @@
 import type { Executors, Explainers } from './util'
 // @index(['./*.ts'], (f, _) => `import {explain as explain${pascalCase(f.name)}, execute as execute${pascalCase(f.name)}} from '${f.path}'`)
+import {explain as explainAcquireSouvenir, execute as executeAcquireSouvenir} from './acquireSouvenir'
 import {explain as explainAddBlock, execute as executeAddBlock} from './addBlock'
 import {explain as explainAddEnergy, execute as executeAddEnergy} from './addEnergy'
 import {explain as explainAddEnergyPerRound, execute as executeAddEnergyPerRound} from './addEnergyPerRound'
@@ -18,6 +19,8 @@ import {explain as explainDwindle, execute as executeDwindle} from './dwindle'
 import {explain as explainEffect, execute as executeEffect} from './effect'
 import {explain as explainExplain, execute as executeExplain} from './explain'
 import {explain as explainHeal, execute as executeHeal} from './heal'
+import {explain as explainHypnotize, execute as executeHypnotize} from './hypnotize'
+import {explain as explainIf, execute as executeIf} from './if'
 import {explain as explainIfDamageDealt, execute as executeIfDamageDealt} from './ifDamageDealt'
 import {explain as explainIfDamageDealtApplyEffect, execute as executeIfDamageDealtApplyEffect} from './ifDamageDealtApplyEffect'
 import {explain as explainIfFirstPlay, execute as executeIfFirstPlay} from './ifFirstPlay'
@@ -35,16 +38,17 @@ import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from
 import {explain as explainPsychicWarfare, execute as executePsychicWarfare} from './psychicWarfare'
 import {explain as explainQueue, execute as executeQueue} from './queue'
 import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} from './removeAllDebuffs'
+import {explain as explainRemoveSouvenir, execute as executeRemoveSouvenir} from './removeSouvenir'
 import {explain as explainRequire, execute as executeRequire} from './require'
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
-import {explain as explainHypnotize, execute as executeHypnotize} from './hypnotize'
 import {explain as explainText, execute as executeText} from './text'
 // @endindex
 export type { Locals } from './util'
 
 export const explainers: Explainers = {
     // @index(['./*.ts'], (f, _) => `${f.name}: explain${_.pascalCase(f.name)},`)
+    acquireSouvenir: explainAcquireSouvenir,
     addBlock: explainAddBlock,
     addEnergy: explainAddEnergy,
     addEnergyPerRound: explainAddEnergyPerRound,
@@ -64,6 +68,7 @@ export const explainers: Explainers = {
     explain: explainExplain,
     heal: explainHeal,
     hypnotize: explainHypnotize,
+    if: explainIf,
     ifDamageDealt: explainIfDamageDealt,
     ifDamageDealtApplyEffect: explainIfDamageDealtApplyEffect,
     ifFirstPlay: explainIfFirstPlay,
@@ -81,6 +86,7 @@ export const explainers: Explainers = {
     psychicWarfare: explainPsychicWarfare,
     queue: explainQueue,
     removeAllDebuffs: explainRemoveAllDebuffs,
+    removeSouvenir: explainRemoveSouvenir,
     require: explainRequire,
     setStance: explainSetStance,
     smite: explainSmite,
@@ -90,6 +96,7 @@ export const explainers: Explainers = {
 
 export const executors: Executors = {
     // @index(['./*.ts'], (f, _) => `${f.name}: execute${_.pascalCase(f.name)},`)
+    acquireSouvenir: executeAcquireSouvenir,
     addBlock: executeAddBlock,
     addEnergy: executeAddEnergy,
     addEnergyPerRound: executeAddEnergyPerRound,
@@ -109,6 +116,7 @@ export const executors: Executors = {
     explain: executeExplain,
     heal: executeHeal,
     hypnotize: executeHypnotize,
+    if: executeIf,
     ifDamageDealt: executeIfDamageDealt,
     ifDamageDealtApplyEffect: executeIfDamageDealtApplyEffect,
     ifFirstPlay: executeIfFirstPlay,
@@ -126,6 +134,7 @@ export const executors: Executors = {
     psychicWarfare: executePsychicWarfare,
     queue: executeQueue,
     removeAllDebuffs: executeRemoveAllDebuffs,
+    removeSouvenir: executeRemoveSouvenir,
     require: executeRequire,
     setStance: executeSetStance,
     smite: executeSmite,

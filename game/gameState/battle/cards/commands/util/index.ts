@@ -1,26 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Value as VAngu } from 'angu'
 
-//@ts-expect-error
-import simpleColorConverter from 'simple-color-converter'
 import type {
-    Command,
-    CharacterUid,
+    BasicTargetType,
     BattleCursor,
     CalculatedCharacterStats,
+    Card,
+    CardType,
     CardUid,
+    CharacterMeta,
+    CharacterStats,
+    CharacterUid,
+    Command,
     EffectId,
     OrbType,
     RequiredActionName,
-    BasicTargetType,
-    CharacterStats,
+    RoomCategoryId,
+    SouvenirId,
     StanceId,
-    CharacterMeta,
-    Card,
-    ModifiableStatName,
     StatModifierExpiration,
     TargetType,
 } from 'shared'
+//@ts-expect-error
+import simpleColorConverter from 'simple-color-converter'
 
 export type { Value as VAngu } from 'angu'
 
@@ -53,11 +55,13 @@ export interface ActionArgs {
         targetType?: BasicTargetType
     ]
 
-    deal: [damage: number, modifier?: 'piercing']
+    deal: [damage: number, modifier?: 'piercing', targetType?: BasicTargetType]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     drawSizeChange: [amount: number]
     effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
     heal: [amount: number, targetType?: BasicTargetType]
+
+    if: [condition: boolean, ifMove: any, elseMove?: any]
     ifDamageDealt: [mainMove: any, conditionalMove: any]
     ifDamageDealtApplyEffect: [
         damage: number,
@@ -73,6 +77,9 @@ export interface ActionArgs {
         conditionalTrueMove: any,
         conditionalFalseMove: any
     ]
+
+    acquireSouvenir: [souvenirId: SouvenirId]
+    removeSouvenir: [souvenirId: SouvenirId]
 
     brittle: [count: number]
     dwindle: []
@@ -107,6 +114,9 @@ export type Locals = CalculatedCharacterStats & {
     handSize: number
     drawPileSize: number
     discardPileSize: number
+    lastCardPlayedType: CardType | undefined
+    wasLastCardPlayedFromThisCharacter: boolean
+    currentRoomCategory: RoomCategoryId | undefined
 }
 
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }

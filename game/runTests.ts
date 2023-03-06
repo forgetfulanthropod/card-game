@@ -11,9 +11,11 @@ type TestName = string
 const allSuites: Record<SuiteName, Record<TestName, () => void>> = {}
 // @index(['./**/*.spec.ts'], f => `import { suites as ${f.name.split('.')[0]} } from '${f.path}'\nObject.assign(allSuites, ${f.name.split('.')[0]})`)
 import { suites as effects } from './gameState/battle/effects.spec'
-Object.assign(allSuites, effects)
 import { suites as interpretCommand } from './gameState/battle/interpretCommand.spec'
+import { suites as souvenirs } from './gameState/battle/souvenirs.spec'
+Object.assign(allSuites, effects)
 Object.assign(allSuites, interpretCommand)
+Object.assign(allSuites, souvenirs)
 // @endindex
 
 function main() {
