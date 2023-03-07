@@ -14,16 +14,17 @@ type CardsArgs = {
 }
 
 export function Cards(args: CardsArgs) {
-    const cardsDatum = toDatum(args.scene.select('cards'), cards => {
-        if (args.scene.get('state') !== 'in battle') return false
-        return cards
-    })
-    return If(cardsDatum, cards =>
-        Container(
-            {},
-            DrawPile(cards['draw']),
-            DiscardPile(cards['discard']),
-            Hand(cards['hand'], args.hoveredCardUid, args.toDiscardUids)
+    const handDatum = toDatum(
+        args.scene.select('cards').select('hand'),
+        hand => hand
+    )
+
+    return Container(
+        {},
+        DrawPile(),
+        DiscardPile(),
+        If(handDatum, handPile =>
+            Hand(handPile, args.hoveredCardUid, args.toDiscardUids)
         )
     )
 }
