@@ -319,8 +319,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Draw two less cards at the start of each turn.  Gain an additional energy at the start of each turn`,
         equippable: false,
         on: {
-            battleStart: `drawSizeChange(-2)`,
-            turnStart: `addEnergy(1)`,
+            turnStart: `addEnergy(1); drawSizeChange(-2)`,
         },
     },
     restrainingOrder: {

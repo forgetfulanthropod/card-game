@@ -65,6 +65,8 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
         ...objFilter(ac, (_, c) => c.isPc),
         ...newNpcs,
     }))
+
+    setRoundEnergy(scene)
     activateSouvenirs('battleStart', scene)
     activateSouvenirs('turnStart', scene)
 
@@ -72,7 +74,6 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
     scene.set('lootScreenHasOpened', false)
 
     updateNpcMoves(scene)
-    setRoundEnergy(scene)
     drawNewHand(scene)
 }
 
