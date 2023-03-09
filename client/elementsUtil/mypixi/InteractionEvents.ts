@@ -1,4 +1,5 @@
-import type { DisplayObject } from 'pixi.js'
+import type { DisplayObject, DisplayObjectEvents } from 'pixi.js'
+import type { Spine } from '@pixi-spine/all-4.1'
 
 import type { InteractionEventHandler } from './_types'
 
@@ -12,12 +13,12 @@ export interface InteractionEvents {
 
 export function bindEvents(
     events: InteractionEvents | undefined,
-    el: DisplayObject
+    el: DisplayObject | Spine
 ) {
     if (events == null || Object.keys(events).length === 0) return
     el.interactive = true
     el.cursor = `url('assets/root/hand.webp'), pointer`
     Object.entries(events).forEach(([eventName, handler]) =>
-        el.on(eventName, handler)
+        el.on(eventName as keyof DisplayObjectEvents, handler)
     )
 }

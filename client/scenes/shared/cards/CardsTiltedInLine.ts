@@ -5,7 +5,6 @@ import {
     RoundedRectangleGradientSprite,
     TweenablePixiContainer,
 } from '@/elementsUtil'
-import 'pixi-projection'
 import type { Card, CharacterClass } from 'shared'
 import { CardEl, CardSprite } from './Card'
 

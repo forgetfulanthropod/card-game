@@ -1,10 +1,11 @@
 import type { Datum, RODatum } from 'datums'
 import type {
     DisplayObject,
+    FederatedEvent,
     Filter as PixiFilter,
-    InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
+import type { InteractionEvent } from '@pixi/interaction'
 import type { ROCursor } from 'sbaobab'
 import type {
     PixiContainer,
@@ -85,5 +86,7 @@ export type ContainerChild =
 
 export type ContainerChildren = ContainerChild[]
 
-export type InteractionEventHandler = (e: InteractionEvent) => void
+export type InteractionEventHandler = (
+    e: InteractionEvent | FederatedEvent
+) => void
 export type Pair = [x: number, y: number]

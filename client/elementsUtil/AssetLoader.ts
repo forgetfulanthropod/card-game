@@ -1,5 +1,4 @@
-import { Loader, Resource } from 'pixi.js'
-import { WebfontLoaderPlugin } from 'pixi-webfont-loader'
+import { Assets } from 'pixi.js'
 import { toString, uniqBy } from 'lodash'
 import type { PixiTexture } from './mypixi'
 // import { loadAllAnimateFiles } from './myanimate'
@@ -11,11 +10,7 @@ import {
     SoundAssetKey,
     SoundEffectAssetKey,
 } from '@/assets/deluxeAssetMaps'
-import {
-    getBooleanFromLocalStorage,
-} from './userSettings'
-
-Loader.registerPlugin(WebfontLoaderPlugin)
+import { getBooleanFromLocalStorage } from './userSettings'
 
 let resolveLoaderPromise = null as unknown as (_: unknown) => void
 const promise = new Promise(res => (resolveLoaderPromise = res))
@@ -44,18 +39,16 @@ export function assetsLoadedPromise() {
     return promise
 }
 
-export function startLoadingAssets() {
-    loadAssetMaps(assetMaps)
-
-    Loader.shared.onComplete.once(() => {
-        resolveLoaderPromise(null)
-
-        // loadAllAnimateFiles()
-        loadAssetMaps(deluxeAssetMaps)
-    })
+export async function startLoadingAssets() {
+    console.log('loading initial assets start')
+    await loadAssetMaps(assetMaps)
+    resolveLoaderPromise(null)
+    console.log('loading initial assets finish')
+    loadAssetMaps(deluxeAssetMaps)
+    return true
 }
 
-function loadAssetMaps(assetMaps: AssetMaps) {
+async function loadAssetMaps(assetMaps: AssetMaps) {
     const flatAssets: Record<string, string> = {}
 
     for (const map of Object.values(assetMaps)) {
@@ -63,12 +56,21 @@ function loadAssetMaps(assetMaps: AssetMaps) {
     }
 
     const unique = uniqBy(Object.entries(flatAssets), ([name, _]) => name)
+        .filter(([_, url]) => url.indexOf('SKIN') !== 0)
+        .map(([name, url]) => {
+            Assets.add(name, 'assets/' + url)
+            return name
+        })
 
-    for (const [name, url] of unique) {
-        if (url.indexOf('SKIN') !== 0) Loader.shared.add(name, 'assets/' + url)
-    }
-
-    Loader.shared.load()
+    await Promise.all(
+        unique.map(async name => {
+            await Assets.load(name).catch(() => false)
+        })
+    )
+    return true
+    //const uniqueNames = unique.map((data: [string, string]) => data[0])
+    //const assetsPromise = Assets.load(uniqueNames)
+    //return assetsPromise
 }
 
 let latestLoopingSong: object | null = null
@@ -120,6 +122,7 @@ export function playSound(soundEffectId: SoundEffectAssetKey): void {
         return
     }
     const sound = getSound(soundEffectId)
+
     //@ts-expect-error
     if (sound?.sound == null) return
 
@@ -131,17 +134,14 @@ export function playSound(soundEffectId: SoundEffectAssetKey): void {
 }
 
 export function getSound(assetId: SoundAssetKey): object {
-    return Loader.shared.resources?.[assetId]
+    return Assets.get(assetId)
 }
 
 export function getTexture(assetId: AssetKey): PixiTexture {
-    return (
-        Loader.shared.resources?.[assetId]?.texture ??
-        throwNull(`texture '${assetId}'`)
-    )
+    return Assets.get(assetId) ?? throwNull(`texture '${assetId}'`)
 }
 export function hasTexture(assetId: AssetKey): boolean {
-    return Loader.shared.resources?.[assetId] != null
+    return Assets.cache.has(assetId)
 }
 
 export function isTextureKey(key: string): key is AssetKey {

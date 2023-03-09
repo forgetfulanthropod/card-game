@@ -131,7 +131,7 @@ function getInitialDisplayVals(
     const initialDisplayVals: InitialDisplayVals = {}
 
     vals(pile).forEach((card: Card, zIndex: number) => {
-        const c = rootEl.getChildByName(card.uid) as PixiContainer
+        const c = rootEl.getChildByName(card.uid) as unknown as PixiContainer
 
         initialDisplayVals[card.uid] = {
             x: c.x,

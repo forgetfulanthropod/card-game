@@ -185,8 +185,8 @@ async function animateDeath(el: PixiContainer) {
         .then(async () => {
             await toFilterAlpha(1, 0.033)
 
-            const anim = (el.children?.[0] as PixiContainer)
-                ?.children?.[0] as Spine
+            const anim = (el.children?.[0] as unknown as PixiContainer)
+                ?.children?.[0] as unknown as Spine
             //freezes animation
             anim?.state && (anim.state.timeScale = 0)
             await Tweener.add(

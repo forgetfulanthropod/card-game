@@ -2,7 +2,11 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 // import { sound } from '@pixi/sound'
 import type { TrackEntry } from '@pixi-spine/all-4.1'
-import { flashDamageOverlayTo, MainCharacterAnimation, shakeScreen } from '@sharedElements'
+import {
+    flashDamageOverlayTo,
+    MainCharacterAnimation,
+    shakeScreen,
+} from '@sharedElements'
 import { diff } from 'deep-diff'
 import type { Listener, ROCursor } from 'sbaobab'
 import type {
@@ -44,7 +48,7 @@ import { EffectOverlayManager } from './EffectOverlayManager'
 import { getBattleScene } from '@/data'
 import { socketOn } from '@/socket'
 import { upperFirst } from 'lodash'
-import { Loader } from 'pixi.js'
+import { Assets } from 'pixi.js'
 import { OrbManager } from './OrbManager'
 
 const SHOW_HIT_TIME = 1000
@@ -424,11 +428,11 @@ function playSoundEffect(
         characterId
     )}${action}` as SoundEffectAssetKey
 
-    if (Loader.shared.resources[key]) playSound(key)
+    if (Assets.get(key)) playSound(key)
     else if (
         // support for two sounds randomly chosen
-        Loader.shared.resources[`${key}1`] &&
-        Loader.shared.resources[`${key}2`]
+        Assets.cache.has(`${key}1`) &&
+        Assets.cache.has(`${key}2`)
     )
         playSound(
             `${key}${Math.ceil(Math.random() * 2)}` as SoundEffectAssetKey

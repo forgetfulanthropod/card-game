@@ -3,13 +3,12 @@ export {
     Container as PixiContainer,
     DisplayObject,
     Graphics as PixiGraphics,
-    Loader as PixiLoader,
     Sprite as PixiSprite,
     Text as PixiText,
     Texture as PixiTexture,
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
-import 'pixi-sound'
+import '@pixi/sound'
 
 export { HTMLText as PixiHTMLText } from '@pixi/text-html'

@@ -1,5 +1,4 @@
 import { datum } from 'datums'
-import type { InteractionEvent } from 'pixi.js'
 import type { Card } from 'shared'
 
 import { debounce } from 'lodash'
@@ -9,6 +8,7 @@ import { localTree } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
 import { getPixiApp } from '@/elementsUtil'
 import { hoveredSelectedCardUid, isAttacking, onUpdate } from '@/util'
+import { FederatedPointerEvent } from 'pixi.js'
 
 export function beginTargetSelection(
     cardEl: PixiContainer,
@@ -25,12 +25,11 @@ export function beginTargetSelection(
     const destination = datum({ x: origin.val.x, y: origin.val.y })
 
     // TODO: this should not fire when dead
-    const updateDestination = (e: InteractionEvent) => {
+    const updateDestination = (e: FederatedPointerEvent) => {
         const cardBounds = cardEl?.children?.[0]?.getBounds()
         if (cardBounds == null) return
         const x0 = (cardBounds.left + cardBounds.right) / 2
         const y0 = cardBounds.top
-
         destination.set({
             x: e.data.global.x - x0,
             y: e.data.global.y - y0,

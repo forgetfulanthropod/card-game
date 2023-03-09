@@ -50,9 +50,7 @@ export function CharacterOptions() {
             'notoriousBean',
         ].includes(c.id)
 
-        const isNewCharacter = [
-            'notoriousBean'
-        ].includes(c.id)
+        const isNewCharacter = ['notoriousBean'].includes(c.id)
 
         return Container(
             {
@@ -102,13 +100,11 @@ export function CharacterOptions() {
                             borderColor: 0,
                         }
                     ),
-                    isNewCharacter && Adjust(
-                        NewCharacterIcon(),
-                        {
+                    isNewCharacter &&
+                        Adjust(NewCharacterIcon(), {
                             x: 31,
-                            y: 105
-                        }
-                    )
+                            y: 105,
+                        })
                 ),
                 {
                     filters: isValidOption ? [] : [grayScaleFilter],
@@ -191,19 +187,19 @@ export function NewCharacterIcon() {
                 style: {
                     fill: 'white',
                     fontFamily: 'bigFont',
-                    fontSize: 16
+                    fontSize: 16,
                 },
             })
         ),
         {
             padding: 3,
             colorStops: [
-                { color: 0xFE2027, offset: 0 },
-                { color: 0xFF4D00, offset: 1 },
+                { color: 0xfe2027, offset: 0 },
+                { color: 0xff4d00, offset: 1 },
             ],
             alpha: 1,
             borderRadius: 12,
-            filters: [new OutlineFilter(2, 0xFFEBEB)],
+            filters: [new OutlineFilter(2, 0xffebeb)],
         }
     )
 }

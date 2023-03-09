@@ -34,7 +34,8 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { DisplayObject, InteractionEvent } from 'pixi.js'
+import type { DisplayObject } from 'pixi.js'
+import type { InteractionEvent } from '@pixi/interaction'
 import { Texture } from 'pixi.js'
 import type {
     Card,
