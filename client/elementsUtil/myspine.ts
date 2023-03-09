@@ -102,9 +102,8 @@ function spineData(name: SpineAsset): SkeletonData {
 
     if (usesSkinDSL(name)) ({ resourceName } = getSkinInfo(name))
 
-    Assets.load(resourceName)
     return (
-        Assets.cache.get(resourceName)?.spineData ??
+        Assets.get(resourceName)?.spineData ??
         // Loader.shared.resources[resourceName].spineData ??
         throwNull(`spineData '${resourceName}'`)
     )
