@@ -15,4 +15,5 @@ export * from './ModalBackdrop'
 export * from './Notification'
 export * from './PlainButton'
 export * from './effectAnimations'
+export * from './tweenerAnimations'
 // @endindex

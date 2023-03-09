@@ -1,10 +1,10 @@
-import { pick, uniq } from 'lodash'
-import { Tweener } from 'pixi-tweener'
+import { isEmpty, pick, uniq } from 'lodash'
+import { Easing, Tweener } from 'pixi-tweener'
 import type { Card, CardUid, CharacterUid, Pile } from 'shared'
-import { assertFinite, keys, vals } from 'shared/code'
+import { assertFinite, keys, sleep, vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { CardEl } from './Card'
-import { hoveredCharacterUid } from '@/util'
+import { hoveredCharacterUid, toDatum } from '@/util'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -13,7 +13,7 @@ import {
     glowFilter,
     onDestroyed,
 } from '@/elementsUtil'
-import type {
+import {
     PixiContainer,
     PixiContainerWithTweenableChildren,
     TweenablePixiContainer,
@@ -26,52 +26,234 @@ const CARD_WIDTH = 260
 const CARD_WIDTH_FULL = 400
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
+const INITIAL_CARDS_X = -1000
+const INITIAL_CARDS_Y = -150
+const INITIAL_CARDS_SCALE = 0.4
 
 export function Hand(
-    pile: Pile,
     hoveredCardUid: Datum<CharacterUid | null>,
     toDiscardUids: Datum<CharacterUid[]>
-): PixiContainer {
-    const characters = getBattleScene().get('allCharacters')
-    const children = vals(pile)
-        .sort(
-            (cardA, cardB) =>
-                characters[cardA.characterUid].y -
-                characters[cardB.characterUid].y
-        )
-        .map((card, index) => {
-            const { x, y, rotation } = getXYRotationForCard(
-                card,
-                pile,
-                index + 1
-            )
-            return Adjust(
-                CardEl({
-                    rotation,
-                    width: CARD_WIDTH,
-                    card,
-                    hoveredCardUid,
-                    omitPointerAreaExtender: true,
-                }),
-                { x, y }
-            )
-        })
+) {
+    const handDatum = toDatum(
+        getBattleScene().select('cards').select('hand'),
+        hand => hand
+    )
 
-    lastCardOwnerUidDealt = null
-    accumulatedGap = 0
-
-    const root = Container(
-        {
-            name: 'Player Hand Container',
+    // this container exists to clean up subscriptions, it is destroyed and rerendered imperatively
+    const createDestroyableContainer = () =>
+        Container({
+            name: 'DestroyablePlayerHandContainer',
             x: BASE_WIDTH * 0.5,
             y: BASE_HEIGHT * 1,
+        }) as PixiContainerWithTweenableChildren
+
+    // this will only ever have 1 child
+    const staticRoot = Container(
+        {
+            name: 'PlayerHandContainer',
         },
-        ...children
-    ) as PixiContainerWithTweenableChildren
+        createDestroyableContainer()
+    )
 
-    bindHandAnimations(root, hoveredCardUid, toDiscardUids, pile)
+    const unsub = handDatum.onChange(async (newHand, prevHand) => {
+        let root: PixiContainerWithTweenableChildren // DestroyablePlayerHandContainer
+        if (staticRoot.children.length > 0) {
+            root = staticRoot.getChildAt(
+                0
+            ) as PixiContainerWithTweenableChildren
+        } else {
+            root = staticRoot.addChild(createDestroyableContainer())
+        }
 
-    return root
+        lastCardOwnerUidDealt = null
+        accumulatedGap = 0
+
+        const currHandEmpty = isEmpty(newHand)
+        const prevHandEmpty = isEmpty(prevHand)
+
+        if (!currHandEmpty && prevHandEmpty) {
+            // console.log('animate cards into hand')
+            root.removeChildren()
+            const NewCardsInHand = renderCardsInHand(newHand, hoveredCardUid)
+            root.addChild(...NewCardsInHand)
+            animateCardsIntoHand(NewCardsInHand, newHand).then(() => {
+                bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
+            })
+            return
+        } else if (currHandEmpty && !prevHandEmpty) {
+            // console.log('animate discarding all cards!')
+            await animateAllCardsToCenter(root.children)
+            const discardAnimations = root.children.map(async card => {
+                await animateCardToDiscardPile(card as TweenablePixiContainer)
+            })
+            await Promise.all(discardAnimations)
+            root.removeChildren()
+            root.destroy()
+            hoveredCharacterUid.set(null) // tmp fix for character hover persisting
+            return
+        } else if (keys(newHand).length !== keys(prevHand).length) {
+            // console.log('one card was played')
+            const cardsRemoved = keys(prevHand).filter(
+                card => !keys(newHand).includes(card)
+            )
+            if (cardsRemoved && cardsRemoved.length === 1) {
+                const CardToAnimateOut = root.getChildByName(
+                    cardsRemoved[0]
+                ) as TweenablePixiContainer
+                await animateCardToDiscardPile(CardToAnimateOut)
+            }
+            root.removeChildren()
+            root.destroy()
+            root = staticRoot.addChild(createDestroyableContainer())
+            const NewCardsInHand = renderCardsInHand(
+                newHand,
+                hoveredCardUid,
+                'final'
+            )
+            root.addChild(...NewCardsInHand)
+            bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
+            hoveredCharacterUid.set(null)
+            return
+        } else if (newHand) {
+            // console.log('refresh was triggered?')
+            const CardsInHand = renderCardsInHand(newHand, hoveredCardUid)
+            root.addChild(...CardsInHand)
+            animateCardsIntoHand(CardsInHand, newHand).then(() => {
+                bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
+            })
+        }
+    }, true)
+
+    onDestroyed(staticRoot, unsub)
+
+    return staticRoot
+}
+
+function renderCardsInHand(
+    handPile: Pile,
+    hoveredCardUid: Datum<CharacterUid | null>,
+    position: 'initial' | 'final' = 'initial'
+): TweenablePixiContainer[] {
+    const sortedCards = getSortedCards(handPile)
+
+    return sortedCards.map((card, index) => {
+        const { x, y, scale, alpha } =
+            position === 'final'
+                ? {
+                      ...getFinalXYRotationForCard(card, handPile, index + 1),
+                      scale: 1,
+                      alpha: 1,
+                  }
+                : {
+                      x: INITIAL_CARDS_X,
+                      y: INITIAL_CARDS_Y,
+                      scale: INITIAL_CARDS_SCALE,
+                      alpha: 0.6,
+                  }
+
+        const Card = CardEl({
+            width: CARD_WIDTH,
+            card,
+            hoveredCardUid,
+            omitPointerAreaExtender: true,
+        })
+
+        return Adjust(Card, {
+            x,
+            y,
+            scale,
+            alpha,
+        })
+    })
+}
+
+function getSortedCards(pile: Pile): Card[] {
+    const characters = getBattleScene().get('allCharacters')
+
+    return vals(pile).sort(
+        (cardA, cardB) =>
+            characters[cardA.characterUid].y - characters[cardB.characterUid].y
+    )
+}
+
+const animateCardsIntoHand = (
+    CardsInHand: TweenablePixiContainer[],
+    pile: Pile
+): Promise<void[]> => {
+    const INTERVAL_BETWEEN_CARD = 225 // ms
+    const sortedCards = getSortedCards(pile)
+    const animations = sortedCards.map((card, index) => {
+        const { x, y } = getFinalXYRotationForCard(card, pile, index + 1)
+        const Card = CardsInHand[index]
+        return new Promise(resolve => {
+            setTimeout(async () => {
+                Tweener.add(
+                    {
+                        target: Card,
+                        duration: 0.5,
+                        ease: Easing.bouncePast,
+                    },
+                    { tweenableScale: 1 }
+                )
+                await Tweener.add(
+                    {
+                        target: Card,
+                        duration: 0.4,
+                        ease: Easing.easeTo,
+                    },
+                    { x, y, alpha: 1 }
+                )
+                resolve(void(0))
+            }, index * INTERVAL_BETWEEN_CARD)
+        }) as Promise<void>
+    })
+    return Promise.all([...animations])
+}
+
+const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
+    CardEl.getChildAt(0).removeAllListeners()
+    Tweener.add(
+        {
+            target: CardEl,
+            duration: 0.3,
+            ease: Easing.easeTo,
+        },
+        { tweenableScale: 1.05, y: -600 }
+    )
+    await new Promise(res => setTimeout(() => res(void(0)), 250))
+
+    await Tweener.add(
+        {
+            target: CardEl,
+            duration: 0.25,
+            ease: Easing.easeOutSine,
+        },
+        { tweenableScale: 0.4, y: -500, rotation: 2.3 }
+    )
+
+    await Tweener.add(
+        {
+            target: CardEl,
+            duration: 0.2,
+            ease: Easing.easeFrom,
+        },
+        { tweenableScale: 0.1, x: 900, y: -70, alpha: 0 }
+    )
+    CardEl.destroy()
+}
+
+const animateAllCardsToCenter = async (CardEls: TweenablePixiContainer[]) => {
+    const animations = CardEls.map(async (CardEl) => {
+        return await Tweener.add(
+            {
+                target: CardEl,
+                duration: 0.2,
+                ease: Easing.easeFrom,
+            },
+            { x: 0, y: -400 }
+        )
+    })
+    return Promise.all(animations)
 }
 
 function bindHandAnimations(
@@ -248,14 +430,6 @@ const ADJUST_HOVERED_CARD_DISTANCE = 20
 //     rootEl.sortChildren()
 // }
 
-// const glowFilter = new GlowFilter({
-//     innerStrength: 0,
-//     outerStrength: 3,
-//     distance: 40,
-//     color: 0xffffff,
-//     knockout: false,
-// })
-
 function updateGlowFilters(
     handEl: PixiContainerWithTweenableChildren,
     hoveredCardUid: Datum<CardUid | null>
@@ -300,6 +474,7 @@ export function animateTo(
         {
             target: cardEl,
             duration: 0.2,
+            ease: Easing.easeTo,
         },
         {
             ...pick(displayVal, 'x', 'y'),
@@ -321,12 +496,10 @@ type XYRotation = { x: number; y: number; rotation: number }
 let lastCardOwnerUidDealt: CharacterUid | null
 let accumulatedGap: number = 0
 
-function getXYRotationForCard(
+function getFinalXYRotationForCard(
     card: Card,
     pile: Pile,
-    n: number
-    // n: number,
-    // numCardsInHand: number
+    cardIdx: number
 ): XYRotation {
     const RIGHT_TO_LEFT = 1
     const MAX_HAND_WIDTH = BASE_WIDTH * 0.5
@@ -338,8 +511,10 @@ function getXYRotationForCard(
 
     const numCardsInHand = keys(pile).length
 
-    if (n < 1 || n > numCardsInHand)
-        throw new Error(`n must be between 1 and numCardsInHand, value: ${n}`)
+    if (cardIdx < 1 || cardIdx > numCardsInHand)
+        throw new Error(
+            `cardIdx must be between 1 and numCardsInHand, value: ${cardIdx}`
+        )
 
     const handWidth = Math.min(
         (numCardsInHand - 1) * CARD_WIDTH * 0.77,
@@ -359,7 +534,7 @@ function getXYRotationForCard(
     xGap = xGapPortion * handWidth * 0.5
 
     let xPlacementPortion =
-        RIGHT_TO_LEFT - RIGHT_TO_LEFT * (n - 1) * xGapPortion // -1 -> 1
+        RIGHT_TO_LEFT - RIGHT_TO_LEFT * (cardIdx - 1) * xGapPortion // -1 -> 1
 
     const owningCharacterSwitchGap =
         lastCardOwnerUidDealt != null &&
