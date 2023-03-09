@@ -203,7 +203,7 @@ const animateCardsIntoHand = (
                     },
                     { x, y, alpha: 1 }
                 )
-                resolve(void(0))
+                resolve(void 0)
             }, index * INTERVAL_BETWEEN_CARD)
         }) as Promise<void>
     })
@@ -220,7 +220,7 @@ const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
         },
         { tweenableScale: 1.05, y: -600 }
     )
-    await new Promise(res => setTimeout(() => res(void(0)), 250))
+    await new Promise(res => setTimeout(() => res(void 0), 250))
 
     await Tweener.add(
         {
@@ -243,7 +243,7 @@ const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
 }
 
 const animateAllCardsToCenter = async (CardEls: TweenablePixiContainer[]) => {
-    const animations = CardEls.map(async (CardEl) => {
+    const animations = CardEls.map(async CardEl => {
         return await Tweener.add(
             {
                 target: CardEl,

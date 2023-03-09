@@ -13,6 +13,7 @@ import {
 import { toDatum } from '@/util'
 import { getBattleScene } from '@/data'
 import { animateBounceScale } from '..'
+import { Tweener } from 'pixi-tweener'
 
 export function DiscardPile(): PixiContainer {
     const src = getTexture('discardPile')
@@ -78,7 +79,9 @@ export function DiscardPile(): PixiContainer {
         PileSize
     )
 
-    onDestroyed(root, discardPileDatum.destroy)
+    onDestroyed(root, discardPileDatum.destroy, () =>
+        Tweener.killTweensOf(PileIcon)
+    )
 
     return root
 }

@@ -85,7 +85,9 @@ export function DrawPile(): PixiContainer {
         PileSize
     )
 
-    onDestroyed(root, drawPileDatum.destroy)
+    onDestroyed(root, drawPileDatum.destroy, () =>
+        Tweener.killTweensOf(PileIcon)
+    )
 
     return root
 }
