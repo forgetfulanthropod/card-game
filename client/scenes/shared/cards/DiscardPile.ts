@@ -22,8 +22,10 @@ export function DiscardPile(): PixiContainer {
     )
 
     discardPileDatum.onChange((newPile, oldPile) => {
-        animateBounceScale(PileIcon)
-        PileSize.text = `${vals(newPile).length}`
+        setTimeout(() => {
+            animateBounceScale(PileIcon)
+            PileSize.text = `${vals(newPile).length}`
+        }, 700) // discard animation length is around this length
     })
 
     const x = -src.width

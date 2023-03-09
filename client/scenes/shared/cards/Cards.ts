@@ -23,8 +23,6 @@ export function Cards(args: CardsArgs) {
         {},
         DrawPile(),
         DiscardPile(),
-        If(handDatum, handPile =>
-            Hand(handPile, args.hoveredCardUid, args.toDiscardUids)
-        )
+        Hand(args.hoveredCardUid, args.toDiscardUids)
     )
 }
