@@ -6,6 +6,9 @@ import * as PIXI from 'pixi.js'
 function registerPixiInspector(): void {
     ;(window as any).__PIXI_INSPECTOR_GLOBAL_HOOK__ &&
         (window as any).__PIXI_INSPECTOR_GLOBAL_HOOK__.register({ PIXI: PIXI })
+
+    //@ts-expect-error
+    globalThis.__PIXI_APP__ = app;
 }
 
 //@ts-ignore
