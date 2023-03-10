@@ -32,6 +32,7 @@ const INITIAL_CARDS_Y = -80
 const INITIAL_CARDS_SCALE = 0.1
 const INITIAL_CARDS_ALPHA = 1
 const INITIAL_CARDS_ROTATION = -1.55
+const CARD_ANIMATION_INTERVAL = 250 // ms
 
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
@@ -85,10 +86,9 @@ export function Hand(
             return
         } else if (currHandEmpty && !prevHandEmpty) {
             // console.log('animate discarding all cards!')
-            await animateAllCardsToCenter(root.children)
-            const discardAnimations = root.children.map(async card => {
-                await animateCardToDiscardPile(card as TweenablePixiContainer)
-            })
+            const discardAnimations = await animateAllCardsToDiscardPile(
+                root.children
+            )
             await Promise.all(discardAnimations)
             root.removeChildren()
             root.destroy()
@@ -103,7 +103,7 @@ export function Hand(
                 const CardToAnimateOut = root.getChildByName(
                     cardsRemoved[0]
                 ) as TweenablePixiContainer
-                await animateCardToDiscardPile(CardToAnimateOut)
+                await animatePlayCard(CardToAnimateOut)
             }
             root.removeChildren()
             root.destroy()
@@ -146,14 +146,14 @@ function renderCardsInHand(
                       ...getFinalXYRotationForCard(card, handPile, index + 1),
                       scale: 1,
                       alpha: 1,
-                      rotation: 0
+                      rotation: 0,
                   }
                 : {
                       x: INITIAL_CARDS_X,
                       y: INITIAL_CARDS_Y,
                       scale: INITIAL_CARDS_SCALE,
                       alpha: INITIAL_CARDS_ALPHA,
-                      rotation: INITIAL_CARDS_ROTATION
+                      rotation: INITIAL_CARDS_ROTATION,
                   }
 
         const Card = CardEl({
@@ -186,40 +186,42 @@ const animateCardsIntoHand = (
     CardsInHand: TweenablePixiContainer[],
     pile: Pile
 ): Promise<void[]> => {
-    const INTERVAL_BETWEEN_CARD = 250 // ms
     const sortedCards = getSortedCards(pile)
     const animations = sortedCards.map((card, index) => {
         const { x, y } = getFinalXYRotationForCard(card, pile, index + 1)
         const Card = CardsInHand[index]
+        const animationDuration = 0.5
         return new Promise(resolve => {
             setTimeout(async () => {
-                await runKeyframeAnimations(
-                    Card,
-                    0.75,
-                    [
-                        {
-                            keyframes: 10,
-                            tweenableScale: 1,
-                        },
-                        {
-                            keyframes: 25,
-                            rotation: 0,
-                        },
-                        {
-                            keyframes: 25,
-                            x,
-                            y,
-                        },
-                    ],
-                )
+                await runKeyframeAnimations(Card, animationDuration, [
+                    {
+                        keyframes: Math.max((keys(pile).length - index) * 5, 10),
+                        tweenableScale: 1,
+                    },
+                    {
+                        keyframes: 25,
+                        x,
+                        // ease: Easing.easeFromTo
+                    },
+                    {
+                        keyframes: 25,
+                        y,
+                        ease: Easing.easeTo
+                    },
+                    {
+                        keyframes: 20,
+                        rotation: 0,
+                        // ease: Easing.easeFromTo,
+                    },
+                ])
                 resolve(void 0)
-            }, index * INTERVAL_BETWEEN_CARD)
+            }, index * CARD_ANIMATION_INTERVAL)
         }) as Promise<void>
     })
     return Promise.all([...animations])
 }
 
-const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
+const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
     CardEl.getChildAt(0).removeAllListeners()
     Tweener.add(
         {
@@ -227,7 +229,7 @@ const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
             duration: 0.3,
             ease: Easing.easeTo,
         },
-        { tweenableScale: 1.05, y: -600 }
+        { tweenableScale: 1.05, y: -500 }
     )
     await new Promise(res => setTimeout(() => res(void 0), 250))
 
@@ -237,7 +239,7 @@ const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
             duration: 0.25,
             ease: Easing.easeOutSine,
         },
-        { tweenableScale: 0.4, y: -500, rotation: 2.3 }
+        { tweenableScale: 0.4, y: -400, rotation: 2.3 }
     )
 
     await Tweener.add(
@@ -251,18 +253,42 @@ const animateCardToDiscardPile = async (CardEl: TweenablePixiContainer) => {
     CardEl.destroy()
 }
 
-const animateAllCardsToCenter = async (CardEls: TweenablePixiContainer[]) => {
-    const animations = CardEls.map(async CardEl => {
-        return await Tweener.add(
-            {
-                target: CardEl,
-                duration: 0.2,
-                ease: Easing.easeFrom,
-            },
-            { x: 0, y: -400 }
-        )
+const animateAllCardsToDiscardPile = async (
+    CardEls: TweenablePixiContainer[]
+) => {
+    return CardEls.map(async (CardEl, idx) => {
+        return new Promise(res => {
+            setTimeout(async () => {
+                await runKeyframeAnimations(
+                    CardEl,
+                    0.55,
+                    {
+                        keyframes: 20,
+                        tweenableScale: 0.95,
+                        y: -300,
+                    },
+                    {
+                        keyframes: 10,
+                        tweenableScale: 1.05,
+                    },
+                    [
+                        {
+                            keyframes: 10,
+                            rotation: -INITIAL_CARDS_ROTATION,
+                            y: INITIAL_CARDS_Y,
+                        },
+                        {
+                            keyframes: 20,
+                            x: 900,
+                            tweenableScale: INITIAL_CARDS_SCALE,
+                            // ease: Easing
+                        },
+                    ]
+                )
+                res(void 0)
+            }, (idx * CARD_ANIMATION_INTERVAL) / 2)
+        })
     })
-    return Promise.all(animations)
 }
 
 function bindHandAnimations(
