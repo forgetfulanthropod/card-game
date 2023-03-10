@@ -9,6 +9,8 @@ export function endRound(scene: BattleCursor) {
 
     // applyDOTDamages(scene)
     scene.set('cardsPlayedThisTurn', [])
+    scene.set('numAllowedToKeep', 0)
+
     trackStanceChanges(scene)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)

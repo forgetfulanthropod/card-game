@@ -60,6 +60,7 @@ export interface BattleScene extends SceneHas {
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
     lootScreenHasOpened: boolean
+    numAllowedToKeep: number
     numRequiredToDiscard: number
     endScreenHasOpened: boolean
     treasureChest: TreasureChest

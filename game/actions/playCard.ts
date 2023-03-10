@@ -11,6 +11,7 @@ import {
 import { getBattleSceneIn } from '@/util'
 import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
 import { trackMetric } from 'server/metrics'
+import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -26,6 +27,8 @@ export const playCard: GameActions['playCard'] = args => {
         play({ card, targetUids: args.targetUids, scene })
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
+
+        activateSouvenirs('playCard', scene, card.characterUid)
 
         updateNpcMoves(scene)
     } else {

@@ -35,7 +35,7 @@ export type SouvenirId =
     | 'lacedBathSalts'
     | 'lavenderTea'
     | 'lilFella'
-    | 'lilTaste'
+    // | 'lilTaste'
     // | 'mommysCreditCard'
     | 'organicBathSalts'
     | 'penguinEgg'
@@ -60,11 +60,11 @@ export type SouvenirActivationKey =
     | 'battleEnd'
     | 'turnStart'
     | 'turnEnd'
-    //todo
     | 'enterRestSite'
     | 'lethalDamageInterrupt'
     | 'takeDamage'
     | 'dealDamage'
+    //todo
     | 'playCard'
     | 'activate'
 
@@ -277,15 +277,15 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
             takeDamage: 'draw(1); discard(1)',
         },
     },
-    lilTaste: {
-        id: 'lilTaste',
-        name: `Lil' Taste`,
-        description: `Consecutive attacks against the same enemy deal an additional 10% damage`,
-        equippable: false,
-        on: {
-            turnStart: 'effect("lilTaste", 1)',
-        },
-    },
+    // lilTaste: {
+    //     id: 'lilTaste',
+    //     name: `Lil' Taste`,
+    //     description: `Consecutive attacks against the same enemy deal an additional 10% damage`,
+    //     equippable: false,
+    //     on: {
+    //         turnStart: 'effect("lilTaste", 1)',
+    //     },
+    // },
     // mommysCreditCard: {
     //     id: 'mommysCreditCard',
     //     name: `Mommy's Credit Card`,
@@ -378,7 +378,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: true,
         on: {
             //todo
-            turnStart: 'effect("woolBandana", 1)',
+            turnEnd: 'ifStance(turnStartStance, null, orb("lightning", 1))',
         },
     },
     contaminatedRag: {
@@ -388,7 +388,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: true,
         on: {
             //todo
-            turnStart: 'effect("contaminatedRag", 1)',
+            turnStart: 'effect("immuneToPoison", 1)',
         },
     },
     rustedGear: {
@@ -408,14 +408,14 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         equippable: false,
         on: {
             //todo
-            turnEnd: 'ifStanceNotChanged(orb("frost", 1))',
+            turnEnd: 'ifStance(turnStartStance, orb("frost", 1))',
         },
     },
     lavenderTea: {
         id: 'lavenderTea',
         name: `Lavender Tea`,
         description: `Set equipped Kaiju's stance to neutral after you end your turn.  Heal that character for 2.`,
-        equippable: false,
+        equippable: true,
         on: {
             turnEnd: 'setStance("neutral"); heal(2)',
         },
@@ -553,8 +553,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju takes 2 less damage from attacks.`,
         equippable: true,
         on: {
-            //todo
-            turnStart: `effect("organicBathSalts", 1)`,
+            battleStart: `effect("damageTakeSubtractorBuff", 1)`,
+            turnStart: `effect("damageTakeSubtractorBuff", 1)`,
         },
     },
     lacedBathSalts: {
@@ -563,8 +563,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju takes 2 extra damage from all attacks.  It gains a permanent stack of Brave.`,
         equippable: false,
         on: {
-            //todo
-            turnStart: `effect("lacedBathSalts", 1); effect("brave", 1)`,
+            battleStart: `effect("damageTakeAddendDebuff", 1)`,
+            turnStart: `effect("damageTakeAddendDebuff", 1); effect("brave", 1)`,
         },
     },
     concreteShoes: {

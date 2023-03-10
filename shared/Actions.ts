@@ -3,22 +3,20 @@
  */
 
 import type { SCursor } from 'sbaobab'
-import type { Scene, SceneId } from './misc'
+import type { SceneId } from './misc'
 
 import type {
     BattleScene,
     CardUid,
     CharacterUid,
-    Leaderboard,
     GameState,
+    MappedLeaderboards,
     Orb,
     Rulebook,
     RunID,
-    RunScoreEvent,
+    SouvenirId,
     StanceId,
     UserID,
-    MappedLeaderboards,
-    ScoreTags,
     UserInfo,
     Username,
 } from './tree'
@@ -89,6 +87,7 @@ interface BareGameActionArgs {
     nextRoom: { choice: 0 | 1 | 2 | 3 }
     choosePlushy: { index: number }
     chooseEventResponse: { index: number; characterUid?: CharacterUid }
+    getFreeSouvenir: { souvenirId: SouvenirId; characterUid?: CharacterUid }
     placeSelectedCharacters: {
         characters: {
             allCharacterOptionsIndex: number

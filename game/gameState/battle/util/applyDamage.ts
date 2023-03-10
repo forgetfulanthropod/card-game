@@ -13,6 +13,7 @@ import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
 import { applyEffect } from '../cards/commands/effect'
 import { updateScore } from '@/gameState'
+import { activateSouvenirs } from '../activateSouvenirs'
 
 export function applyDamage(args: {
     damage: number
@@ -49,12 +50,28 @@ export function applyDamage(args: {
             calcedDamage,
         })
 
+    if (
+        wouldDamageKillTarget({
+            scene,
+            targetUid,
+            calcedDamage,
+            piercing,
+        }) &&
+        activateSouvenirs('lethalDamageInterrupt', scene, targetUid)
+    )
+        return 0
+
     const unblockedDamage = applyCalcedDamage({
         scene,
         targetUid,
         calcedDamage,
         piercing,
     })
+
+    if (unblockedDamage > 0) {
+        activateSouvenirs('takeDamage', scene, targetUid)
+        activateSouvenirs('dealDamage', scene, attackerUid)
+    }
 
     if (!attackerUid?.includes('pc')) {
         if (calcedDamage > 0 && unblockedDamage === 0) {
@@ -100,6 +117,35 @@ export function applyCalcedDamage({
     })
 
     return unblockedDamage
+}
+
+export function wouldDamageKillTarget({
+    scene,
+    targetUid,
+    calcedDamage,
+    piercing = false,
+}: {
+    scene: BattleCursor
+    targetUid: CharacterUid
+    calcedDamage: number
+    piercing?: boolean
+}) {
+    let unblockedDamage = Number.NEGATIVE_INFINITY
+
+    const c = scene.get('allCharacters', targetUid)
+    let health = c.health
+    let block = piercing ? 0 : c.block
+
+    unblockedDamage = calcedDamage - block
+
+    if (unblockedDamage > 0) {
+        block = 0
+        health -= unblockedDamage
+    } else {
+        block -= calcedDamage
+    }
+
+    return health <= 0
 }
 
 function manageSideEffectsOfCalcedDamage({

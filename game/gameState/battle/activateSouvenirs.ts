@@ -1,5 +1,6 @@
 import {
     BattleCursor,
+    CharacterUid,
     CommandId,
     Souvenir,
     SouvenirActivationKey,
@@ -10,11 +11,25 @@ import { updateCharacters } from './characters/updateCharacters'
 
 export function activateSouvenirs(
     activationKey: SouvenirActivationKey,
-    scene: BattleCursor
+    scene: BattleCursor,
+    characterUid?: CharacterUid
 ) {
+    let wasSouvenirActivated = false
+    logger.info(`checking if ${activationKey} is triggered for ${characterUid}`)
     scene.get('souvenirs').forEach(souvenir => {
-        activateSouvenir(souvenir, activationKey, scene)
+        if (
+            !characterUid ||
+            !souvenir.equippable ||
+            characterUid === souvenir.characterUid
+        )
+            wasSouvenirActivated = activateSouvenir(
+                souvenir,
+                activationKey,
+                scene
+            )
     })
+
+    return wasSouvenirActivated
 }
 
 export function activateSouvenir(
@@ -24,9 +39,14 @@ export function activateSouvenir(
 ) {
     const livingPcs = getLivingPcs(scene.get())
     const commandDSLString = souvenir.on[activationKey]
-    if (!commandDSLString) return
+    if (!commandDSLString) return false
 
-    const characterUid = souvenir.characterUid || livingPcs[0].uid
+    let characterUid = souvenir.characterUid
+    if (!characterUid && souvenir.equippable)
+        throw new Error(
+            'equippable souvenirs must have characterUid assigned...'
+        )
+    if (!characterUid) characterUid = livingPcs[0].uid
 
     interpretCommand({
         command: {
@@ -38,10 +58,12 @@ export function activateSouvenir(
             characterUid,
         },
         targetUids: souvenir.equippable
-            ? [characterUid]
+            ? [characterUid!]
             : livingPcs.map(cm => cm.uid),
         scene,
     })
 
     updateCharacters(scene)
+
+    return true
 }

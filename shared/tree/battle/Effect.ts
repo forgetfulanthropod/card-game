@@ -54,6 +54,12 @@ export const effectIds = [
 
     'cowardsCrown',
     'ignoreAggressive',
+
+    // 'lilTasteDebuff',
+    'immuneToPoisonBuff',
+    'damageTakeSubtractorBuff',
+    'damageTakeAddendDebuff',
+    'lockStanceDebuff',
 ] as const
 
 /** Effects which are cleared on turn end */

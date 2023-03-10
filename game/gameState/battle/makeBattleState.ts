@@ -70,6 +70,7 @@ export function makeBattleState(args: {
         lootClaimed: [],
         lootScreenHasOpened: false,
         numRequiredToDiscard: 0,
+        numAllowedToKeep: 0,
         endScreenHasOpened: false,
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),

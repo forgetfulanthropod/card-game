@@ -32,6 +32,7 @@ export function If<T = unknown>(
     options?: {
         displayArgs?: DisplayObjectArgs
         destroyOptions?: DestroyOptions
+        onDestroy?: Callback
         transition?: boolean
     }
 ): PixiContainer {
@@ -40,7 +41,10 @@ export function If<T = unknown>(
     onDestroyed(
         root,
         condition.onChange(handleChange, true),
-        () => condition?.destroy?.(),
+        () => {
+            condition?.destroy?.()
+            options?.onDestroy?.()
+        },
     ) // prettier-ignore
     if (options?.displayArgs != null)
         applyDisplayObjectArgs(root, options.displayArgs)

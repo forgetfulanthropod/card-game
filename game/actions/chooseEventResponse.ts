@@ -36,6 +36,9 @@ export function acquireSouvenir(
     characterUid: CharacterUid | undefined,
     scene: BattleCursor
 ) {
+    if (!characterUid && souvenirMap[id].equippable)
+        throw new Error('cannot equip to character without characterUid...')
+
     const newSouvenir = {
         ...souvenirMap[id],
         characterUid: souvenirMap[id].equippable ? characterUid : undefined,

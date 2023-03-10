@@ -592,6 +592,8 @@ export const mapTileAssets = {
     mapTilePath124: 'hex map/hooligans bluff/paths/124.png',
     mapTilePath0134: 'hex map/hooligans bluff/paths/0134.png',
     mapTilePath135: 'hex map/hooligans bluff/paths/135.png',
+
+    mapBargainBin: 'souvenirs/temp bargain bin.webp',
 }
 
 export type EventAssetKey = keyof typeof eventAssets
@@ -630,21 +632,21 @@ export const souvenirAssets: {
     souvenirAllPurposeKnob: 'souvenirs/Silver Doorknob.webp',
     // souvenir: |souvenirs/ | 'beanInAJar.webp',
     souvenirBigSniff: 'souvenirs/Big Sniffa.webp',
-    souvenirBootlegExplosive: 'souvenirs/bootlegExplosive.webp', //todo
-    souvenirConcreteShoes: 'souvenirs/concreteShoes.webp', //todo
+    souvenirBootlegExplosive: 'souvenirs/Bootleg Explosive.webp',
+    souvenirConcreteShoes: 'souvenirs/Concrete Shoes.webp',
     souvenirContaminatedRag: 'souvenirs/contaminated rag.webp',
-    souvenirDearestDiary: 'souvenirs/dearestDiary.webp', //todo
-    souvenirDemonCookie: 'souvenirs/demonCookie.webp',
+    souvenirDearestDiary: 'souvenirs/Dearest Diary.webp',
+    souvenirDemonCookie: 'souvenirs/Nightmare Biscuit.webp',
     souvenirDietaryYogurt: 'souvenirs/Dietary Yogurt.webp',
-    souvenirEmptyDiaper: 'souvenirs/emptyDiaper.webp', //todo
+    souvenirEmptyDiaper: 'souvenirs/Empty Daip.webp',
     souvenirEnchantedSnowball: 'souvenirs/Enchanted snowball.webp',
-    souvenirFamilyBeetle: 'souvenirs/familyBeetle.webp', //todo
-    souvenirFilledDiaper: 'souvenirs/filledDiaper.webp', //todo
+    souvenirFamilyBeetle: 'souvenirs/Family Beetle.webp',
+    souvenirFilledDiaper: 'souvenirs/Filled Diaper.webp',
     souvenirGamerBathwater: 'souvenirs/Gamer bathwater.webp',
     souvenirLacedBathSalts: 'souvenirs/Laced Bath Salts.webp',
     souvenirLavenderTea: 'souvenirs/Lavender tea.webp',
-    souvenirLilFella: 'souvenirs/lilFella.webp', //todo
-    souvenirLilTaste: "souvenirs/Lil' Taste.webp",
+    souvenirLilFella: 'souvenirs/Lil Fella.webp',
+    // souvenirLilTaste: "souvenirs/Lil' Taste.webp",
     // souvenir: |souvenirs/ | 'mommysCreditCard.webp',
     souvenirOrganicBathSalts: 'souvenirs/Organic Bath Salts.webp',
     souvenirPenguinEgg: 'souvenirs/Penguin egg.webp',
@@ -652,16 +654,16 @@ export const souvenirAssets: {
     souvenirPulledRug: 'souvenirs/Pulled rug.webp',
     souvenirQuestionableHat: 'souvenirs/questionable hat.webp',
     souvenirRestrainingOrder: 'souvenirs/Restraining order.webp',
-    souvenirRustedGear: 'souvenirs/rustedGear.webp', //todo
+    souvenirRustedGear: 'souvenirs/Rusted Gear.webp',
     souvenirGrandmasHandbag: "souvenirs/Grandma's Handbag.webp",
-    souvenirShinyMarble: 'souvenirs/shinyMarble.webp', //todo
+    souvenirShinyMarble: 'souvenirs/Shiny Marble.webp',
     souvenirSilkGloves: 'souvenirs/Silk Gloves.webp',
     souvenirSquireEmblem: 'souvenirs/Squire Emblem.webp',
     souvenirStinkEgg: 'souvenirs/Stinky Egg!.webp',
     souvenirStinkyMeat: 'souvenirs/Stinky meat.webp',
-    souvenirStinkySandwich: 'souvenirs/stinkySandwich.webp', //todo
+    souvenirStinkySandwich: 'souvenirs/Stinky Sandwich.webp',
     souvenirStrangeHat: 'souvenirs/Strange hat.webp',
-    souvenirWoolBandana: 'souvenirs/woolBandana.webp', //todo
+    souvenirWoolBandana: 'souvenirs/Wool Bandana.webp',
 }
 
 export const userAvatarAssets = {

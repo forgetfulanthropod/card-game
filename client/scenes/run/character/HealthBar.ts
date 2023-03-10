@@ -1,23 +1,18 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { Pile, CharacterMeta, CharacterUid } from 'shared'
+import type { CharacterMeta, CharacterUid, Pile } from 'shared'
 
-import type { Datum } from 'datums'
-import { compose, datum } from 'datums'
 import { getBattleScene } from '@/data'
 import {
-    AssetKey,
-    customGlowFilter,
-    PixiContainer,
-    PixiTexture,
-} from '@/elementsUtil'
-import {
     Adjust,
+    AssetKey,
+    Container,
+    customGlowFilter,
+    getTexture,
     If,
     onDestroyed,
-    getTexture,
-    SCALE_UNIVERSAL,
-    Container,
+    PixiContainer,
+    PixiTexture,
     Sprite,
     Text,
 } from '@/elementsUtil'
@@ -29,10 +24,10 @@ import {
     statChangesDatum,
     toDatum,
 } from '@/util'
-import { Explanation } from '@/scenes/shared'
-import { difference, keys, omit, upperFirst } from 'lodash'
-import { StanceControls } from './StanceControls'
+import { compose, datum } from 'datums'
+import { upperFirst } from 'lodash'
 import { EffectIndicators } from './EffectIndicators'
+import { StanceControls } from './StanceControls'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -131,9 +126,11 @@ const StatChangeText = (
             stroke: 'black',
             strokeThickness: 8,
         },
-        onDestroy: [() => {
-            customFilter.destroy()
-        }]
+        onDestroy: [
+            () => {
+                customFilter.destroy()
+            },
+        ],
     })
 }
 

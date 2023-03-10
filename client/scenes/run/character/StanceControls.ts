@@ -66,8 +66,10 @@ function StanceBadge(
         }
 
         const hasMovedDatum = toDatum(
-            characterCursor.select('hasMoved'),
-            has => has
+            characterCursor,
+            character =>
+                character.hasMoved ||
+                !!character.effects.find(e => e.id === 'lockStanceDebuff')
         )
         return Container(
             {},

@@ -35,6 +35,7 @@ import { AdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import { ROCursor } from 'sbaobab'
 import { MainCharacterAnimation } from '../shared'
+import { BargainBin } from './BargainBin'
 
 export function HexMapOverlay(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Hex Map' })
@@ -79,7 +80,8 @@ export function HexMapOverlay(): PixiContainer {
                 scale: 0.67,
             },
             ...AllTiles()
-        )
+        ),
+        BargainBin()
     )
 }
 
