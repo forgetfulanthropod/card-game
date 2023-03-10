@@ -20,15 +20,18 @@ import {
 } from '@/elementsUtil'
 import { getBattleScene } from '@/data'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
+import { runKeyframeAnimations } from '../tweenerAnimations'
 
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 const CARD_WIDTH = 260
 const CARD_WIDTH_FULL = 400
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
-const INITIAL_CARDS_X = -1000
-const INITIAL_CARDS_Y = -150
-const INITIAL_CARDS_SCALE = 0.4
+const INITIAL_CARDS_X = -900
+const INITIAL_CARDS_Y = -80
+const INITIAL_CARDS_SCALE = 0.1
+const INITIAL_CARDS_ALPHA = 1
+const INITIAL_CARDS_ROTATION = -1.55
 
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
@@ -114,8 +117,8 @@ export function Hand(
             bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
             hoveredCharacterUid.set(null)
             return
-        } else if (newHand) {
-            // console.log('refresh was triggered?')
+        } else if (newHand && root.children.length === 0) {
+            // console.log('refresh was triggered and cards are in original position')
             const CardsInHand = renderCardsInHand(newHand, hoveredCardUid)
             root.addChild(...CardsInHand)
             animateCardsIntoHand(CardsInHand, newHand).then(() => {
@@ -137,18 +140,20 @@ function renderCardsInHand(
     const sortedCards = getSortedCards(handPile)
 
     return sortedCards.map((card, index) => {
-        const { x, y, scale, alpha } =
+        const { x, y, scale, alpha, rotation } =
             position === 'final'
                 ? {
                       ...getFinalXYRotationForCard(card, handPile, index + 1),
                       scale: 1,
                       alpha: 1,
+                      rotation: 0
                   }
                 : {
                       x: INITIAL_CARDS_X,
                       y: INITIAL_CARDS_Y,
                       scale: INITIAL_CARDS_SCALE,
-                      alpha: 0.6,
+                      alpha: INITIAL_CARDS_ALPHA,
+                      rotation: INITIAL_CARDS_ROTATION
                   }
 
         const Card = CardEl({
@@ -163,6 +168,7 @@ function renderCardsInHand(
             y,
             scale,
             alpha,
+            rotation,
         })
     })
 }
@@ -180,28 +186,31 @@ const animateCardsIntoHand = (
     CardsInHand: TweenablePixiContainer[],
     pile: Pile
 ): Promise<void[]> => {
-    const INTERVAL_BETWEEN_CARD = 225 // ms
+    const INTERVAL_BETWEEN_CARD = 250 // ms
     const sortedCards = getSortedCards(pile)
     const animations = sortedCards.map((card, index) => {
         const { x, y } = getFinalXYRotationForCard(card, pile, index + 1)
         const Card = CardsInHand[index]
         return new Promise(resolve => {
             setTimeout(async () => {
-                Tweener.add(
-                    {
-                        target: Card,
-                        duration: 0.5,
-                        ease: Easing.bouncePast,
-                    },
-                    { tweenableScale: 1 }
-                )
-                await Tweener.add(
-                    {
-                        target: Card,
-                        duration: 0.4,
-                        ease: Easing.easeTo,
-                    },
-                    { x, y, alpha: 1 }
+                await runKeyframeAnimations(
+                    Card,
+                    0.75,
+                    [
+                        {
+                            keyframes: 10,
+                            tweenableScale: 1,
+                        },
+                        {
+                            keyframes: 25,
+                            rotation: 0,
+                        },
+                        {
+                            keyframes: 25,
+                            x,
+                            y,
+                        },
+                    ],
                 )
                 resolve(void 0)
             }, index * INTERVAL_BETWEEN_CARD)
