@@ -111,7 +111,7 @@ const runAnimation = async (
 }
 
 /**
- * @tutorial This animation lasts 2 seconds and has a total of 30 keyframes, so each keyframe lasts roughly 0.067 seconds
+ * @tutorial This animation lasts 2 seconds and has a total of 50 keyframes, so each keyframe lasts roughly 0.04 seconds
  */
 const keyframeExample = () =>
     runKeyframeAnimations(
@@ -131,7 +131,7 @@ const keyframeExample = () =>
             { keyframes: 10, x: 25 },
         ],
         {
-            keyframes: 5,
+            keyframes: 10,
             x: 3,
             y: 4,
         }
