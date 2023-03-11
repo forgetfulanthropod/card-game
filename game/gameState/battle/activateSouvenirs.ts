@@ -1,12 +1,15 @@
+import { randomEl } from '@/util'
+import { range } from 'lodash'
 import {
     BattleCursor,
+    CharacterMeta,
     CharacterUid,
     CommandId,
     Souvenir,
     SouvenirActivationKey,
 } from 'shared'
 import { interpretCommand } from './cards'
-import { getLivingPcs } from './characters/characterGetters'
+import { getLivingNpcs, getLivingPcs } from './characters/characterGetters'
 import { updateCharacters } from './characters/updateCharacters'
 
 export function activateSouvenirs(
@@ -36,6 +39,7 @@ export function activateSouvenir(
     scene: BattleCursor
 ) {
     const livingPcs = getLivingPcs(scene.get())
+    const livingNpcs = getLivingNpcs(scene.get())
     const commandDSLString = souvenir.on[activationKey]
     if (!commandDSLString) return false
 
@@ -46,6 +50,21 @@ export function activateSouvenir(
         )
     if (!characterUid) characterUid = livingPcs[0].uid
 
+    const targetUids = souvenir.equippable
+        ? [characterUid!]
+        : souvenir.targetNum && souvenir.targetType
+        ? range(0, souvenir.targetNum).map(
+              () =>
+                  randomEl(
+                      souvenir.targetType?.includes('friend')
+                          ? livingPcs
+                          : (livingNpcs as unknown as CharacterMeta[])
+                  ).uid
+          )
+        : souvenir.targetType === 'allEnemies'
+        ? livingNpcs.map(cm => cm.uid)
+        : livingPcs.map(cm => cm.uid)
+
     interpretCommand({
         command: {
             id: '' as CommandId,
@@ -55,9 +74,7 @@ export function activateSouvenir(
             targetType: souvenir.equippable ? 'self' : 'allFriends',
             characterUid,
         },
-        targetUids: souvenir.equippable
-            ? [characterUid!]
-            : livingPcs.map(cm => cm.uid),
+        targetUids,
         scene,
     })
 
