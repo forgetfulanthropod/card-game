@@ -4,7 +4,7 @@ import type { Datum } from 'datums'
 import { DiscardPile } from './DiscardPile'
 import { DrawPile } from './DrawPile'
 import { Hand } from './Hand'
-import { Container, If } from '@/elementsUtil'
+import { Container } from '@/elementsUtil'
 import { toDatum } from '@/util'
 
 type CardsArgs = {
@@ -21,8 +21,8 @@ export function Cards(args: CardsArgs) {
 
     return Container(
         {},
+        Hand(args.hoveredCardUid, args.toDiscardUids),
         DrawPile(),
-        DiscardPile(),
-        Hand(args.hoveredCardUid, args.toDiscardUids)
+        DiscardPile()
     )
 }

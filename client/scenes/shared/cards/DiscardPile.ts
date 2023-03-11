@@ -26,7 +26,7 @@ export function DiscardPile(): PixiContainer {
         setTimeout(() => {
             animateBounceScale(PileIcon)
             PileSize.text = `${vals(newPile).length}`
-        }, 700) // discard animation length is around this length
+        }, 300) // discard animation length is around this length
     })
 
     const x = -src.width
