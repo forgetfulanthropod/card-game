@@ -22,14 +22,10 @@ export function activateSouvenirs(
             !souvenir.equippable ||
             characterUid === souvenir.characterUid
         )
-            wasSouvenirActivated = activateSouvenir(
-                souvenir,
-                activationKey,
-                scene
-            )
+            wasSouvenirActivated =
+                activateSouvenir(souvenir, activationKey, scene) ||
+                wasSouvenirActivated
     })
-
-    if (wasSouvenirActivated) logger.info(`lethal damage interrupt happening!`)
 
     return wasSouvenirActivated
 }

@@ -375,7 +375,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever equipped Kaiju ends its turn in a new stance, it gains 1 Orb of Lightning`,
         equippable: true,
         on: {
-            turnEnd: 'ifStance(turnStartStance, null, orb("lightning", 1))',
+            turnEnd: 'ifStanceElse(turnStartStance, null, orb("lightning", 1))',
         },
     },
     contaminatedRag: {
