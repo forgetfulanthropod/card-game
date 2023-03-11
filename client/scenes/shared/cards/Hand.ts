@@ -190,7 +190,7 @@ const animateCardsIntoHand = (
     const animations = sortedCards.map((card, index) => {
         const { x, y } = getFinalXYRotationForCard(card, pile, index + 1)
         const Card = CardsInHand[index]
-        const animationDuration = 0.5
+        const animationDuration = 0.25
         return new Promise(resolve => {
             setTimeout(async () => {
                 await runKeyframeAnimations(Card, animationDuration, [
@@ -215,7 +215,7 @@ const animateCardsIntoHand = (
                     },
                 ])
                 resolve(void 0)
-            }, index * CARD_ANIMATION_INTERVAL)
+            }, index * CARD_ANIMATION_INTERVAL / 2)
         }) as Promise<void>
     })
     return Promise.all([...animations])
@@ -226,17 +226,17 @@ const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
     Tweener.add(
         {
             target: CardEl,
-            duration: 0.3,
+            duration: 0.1,
             ease: Easing.easeTo,
         },
         { tweenableScale: 1.05, y: -500 }
     )
-    await new Promise(res => setTimeout(() => res(void 0), 250))
+    await new Promise(res => setTimeout(() => res(void 0), 90))
 
     await Tweener.add(
         {
             target: CardEl,
-            duration: 0.25,
+            duration: 0.15,
             ease: Easing.easeOutSine,
         },
         { tweenableScale: 0.4, y: -400, rotation: 2.3 }
@@ -245,7 +245,7 @@ const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
     await Tweener.add(
         {
             target: CardEl,
-            duration: 0.2,
+            duration: 0.15,
             ease: Easing.easeFrom,
         },
         { tweenableScale: 0.1, x: 900, y: -70, alpha: 0 }
@@ -257,11 +257,12 @@ const animateAllCardsToDiscardPile = async (
     CardEls: TweenablePixiContainer[]
 ) => {
     return CardEls.map(async (CardEl, idx) => {
+        CardEl.removeAllListeners()
         return new Promise(res => {
             setTimeout(async () => {
                 await runKeyframeAnimations(
                     CardEl,
-                    0.55,
+                    0.25,
                     {
                         keyframes: 20,
                         tweenableScale: 0.95,
