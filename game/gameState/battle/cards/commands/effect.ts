@@ -54,7 +54,7 @@ export function applyEffect(
           ]
 
     if (!id) {
-        logger.warn(`tried to apply invalid effect ${id}`)
+        logger.warn(`couldn't find effect from partial ${idPartial}`)
         return
     }
 

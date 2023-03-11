@@ -97,6 +97,8 @@ export interface ActionArgs {
     discardRandom: [numCards: number]
     doubleEnchantmentOrToken: []
     draw: [numCards: number]
+    keep: [numCards: number]
+
     orbOfHolyLight: []
     psychicWarfare: [damage: number, sameTargetAddend: number]
     require: [type: RequiredActionName, least: number, most: number]
@@ -104,6 +106,8 @@ export interface ActionArgs {
     mimicAttack: []
     bellyFlop: [damage: number, times: number]
     infectiousBite: [damage: number]
+
+    openMap: []
 }
 
 export type Locals = CalculatedCharacterStats & {
@@ -117,6 +121,7 @@ export type Locals = CalculatedCharacterStats & {
     lastCardPlayedType: CardType | undefined
     wasLastCardPlayedFromThisCharacter: boolean
     currentRoomCategory: RoomCategoryId | undefined
+    turnStartStance: StanceId
 }
 
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }

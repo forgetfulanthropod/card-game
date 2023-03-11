@@ -101,6 +101,18 @@ const staticEffectFuncs: Record<
     vulnerableDebuff(stats) {
         stats.damageTakeMultiplicand += 0.5
     },
+    immuneToPoisonBuff(_) {
+        // in poison implementation
+    },
+    damageTakeSubtractorBuff(stats, counter) {
+        stats.damageTakeAddend -= counter
+    },
+    damageTakeAddendDebuff(stats, counter) {
+        stats.damageTakeAddend += counter
+    },
+    lockStanceDebuff(_) {
+        // in stance implementation
+    },
 }
 
 const turnStartEffectFuncs: Record<
@@ -131,6 +143,8 @@ const turnStartEffectFuncs: Record<
         })
     },
     poisonedDebuff({ effect, character, scene }) {
+        if (character.effects.find(e => e.id === 'immuneToPoisonBuff')) return
+
         applyDamage({
             damage: effect.counter,
             targetUid: character.uid,
@@ -148,7 +162,7 @@ const turnStartEffectFuncs: Record<
                 ? getLivingPcUids(scene.get())
                 : getLivingNpcUids(scene.get()),
             'braveBuff',
-            1
+            2
         )
     },
 }

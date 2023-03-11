@@ -1,13 +1,11 @@
-import type { GameActions } from 'shared'
+import type { BattleCursor, GameActions } from 'shared'
 
-import {
-    applyTurnStartEffects,
-    clearBlock,
-    endRound,
-    popAndRunQueue,
-} from '@/gameState'
+import { applyTurnStartEffects, clearBlock, popAndRunQueue } from '@/gameState'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { discardAllCards } from '@/gameState/battle/cards/discardAllCards'
 import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
+import { setAllCharactersToUnmoved } from '@/gameState/battle/characters/setAllCharactersToUnmoved'
+import { trackStanceChanges } from '@/gameState/battle/characters/trackStanceChanges'
 import { checkServerScoringEvent } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
@@ -16,19 +14,16 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
-    trackMetric('endTurn', { scene })
 
-    checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
-    checkServerScoringEvent('CARDS_WHOLE_PARTY', scene)
+    updateMetricsAndScoring(scene)
 
-    endRound(scene)
-    clearBlock(scene, 'npc')
+    setDefaultEndPlayerTurnState(scene)
 
     applyTurnStartEffects(scene, 'npc')
 
-    clearCharacterStatModifiers(scene, 'turn')
-
     activateSouvenirs('turnEnd', scene)
+
+    trackStateChanges(scene)
 
     popAndRunQueue(scene, 'npc')
 
@@ -37,4 +32,28 @@ export const endTurn: GameActions['endTurn'] = args => {
         method: 'doNpcTurn',
         delay: TIME_AFTER_PLAYER_MOVE,
     })
+}
+
+function updateMetricsAndScoring(scene: BattleCursor) {
+    trackMetric('endTurn', { scene })
+
+    checkServerScoringEvent('CARDS_OVER_THRESHOLD', scene)
+    checkServerScoringEvent('CARDS_WHOLE_PARTY', scene)
+}
+
+function setDefaultEndPlayerTurnState(scene: BattleCursor) {
+    clearBlock(scene, 'npc')
+
+    clearCharacterStatModifiers(scene, 'turn')
+
+    scene.set('cardsPlayedThisTurn', [])
+    scene.set('numAllowedToKeep', 0)
+    setAllCharactersToUnmoved(scene)
+    discardAllCards(scene)
+
+    scene.set('isPlayerTurn', false)
+}
+
+function trackStateChanges(scene: BattleCursor) {
+    trackStanceChanges(scene)
 }

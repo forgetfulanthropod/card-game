@@ -93,6 +93,8 @@ function localsFromCommand(
     const wasLastCardPlayedFromThisCharacter =
         command.characterUid === lastCardPlayed?.characterUid
 
+    const turnStartStance = cardOwner.stanceInPrevTurn ?? 'neutral'
+
     return {
         ...calculateStats(cardOwner),
         targetConstitution,
@@ -104,6 +106,7 @@ function localsFromCommand(
         lastCardPlayedType,
         currentRoomCategory,
         wasLastCardPlayedFromThisCharacter,
+        turnStartStance,
     }
 }
 

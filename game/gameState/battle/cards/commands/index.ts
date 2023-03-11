@@ -29,10 +29,12 @@ import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainIfStanceElse, execute as executeIfStanceElse} from './ifStanceElse'
 import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
+import {explain as explainKeep, execute as executeKeep} from './keep'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
 import {explain as explainModifyStats, execute as executeModifyStats} from './modifyStats'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
+import {explain as explainOpenMap, execute as executeOpenMap} from './openMap'
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
 import {explain as explainPsychicWarfare, execute as executePsychicWarfare} from './psychicWarfare'
@@ -77,10 +79,12 @@ export const explainers: Explainers = {
     ifStance: explainIfStance,
     ifStanceElse: explainIfStanceElse,
     infectiousBite: explainInfectiousBite,
+    keep: explainKeep,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
     modifyStats: explainModifyStats,
     momentary: explainMomentary,
+    openMap: explainOpenMap,
     orb: explainOrb,
     orbOfHolyLight: explainOrbOfHolyLight,
     psychicWarfare: explainPsychicWarfare,
@@ -125,10 +129,12 @@ export const executors: Executors = {
     ifStance: executeIfStance,
     ifStanceElse: executeIfStanceElse,
     infectiousBite: executeInfectiousBite,
+    keep: executeKeep,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
     modifyStats: executeModifyStats,
     momentary: executeMomentary,
+    openMap: executeOpenMap,
     orb: executeOrb,
     orbOfHolyLight: executeOrbOfHolyLight,
     psychicWarfare: executePsychicWarfare,

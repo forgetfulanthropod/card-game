@@ -7,5 +7,11 @@ export const invisibleEffects_ = [
     'cowardsCrown',
     'ignoreAggressive',
     'yodelBuff',
+    // 'lilTasteDebuff',
+    'immuneToPoisonBuff',
+    'damageTakeSubtractorBuff',
+    'damageTakeAddendDebuff',
+    'lockStanceDebuff',
 ] as const
+
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_

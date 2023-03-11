@@ -22,6 +22,8 @@ function summonOrbs(
     characterUid: CharacterUid,
     scene: BattleCursor
 ) {
+    logger.info(`adding orb of ${orbType}`)
+
     scene.select('allCharacters').apply(characterUid, character => {
         let orbs = character.orbs
 

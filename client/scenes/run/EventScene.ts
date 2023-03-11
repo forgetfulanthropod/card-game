@@ -35,7 +35,7 @@ import {
 } from '../shared'
 import { SouvenirEl, SouvenirsEls } from './Souvenirs'
 
-type EventResponse = { index: number; characterUid?: CharacterUid }
+export type EventResponse = { index: number; characterUid?: CharacterUid }
 
 const explanationScale = 1.5
 
@@ -265,10 +265,10 @@ function ChooseOptionInterface(
     )
 }
 
-function EquipSouvenirInterface(
+export function EquipSouvenirInterface(
     souvenir: Souvenir,
     choiceDatum: Datum<null | EventResponse>,
-    eventPromptIndexDatum: Datum<number>
+    eventPromptIndexDatum?: Datum<number>
 ): DisplayObject {
     const souvenirWidth = 300
 
@@ -317,7 +317,7 @@ function EquipSouvenirInterface(
 
 function CharacterChoices(
     choiceDatum: Datum<null | EventResponse>,
-    eventPromptIndexDatum: Datum<number>
+    eventPromptIndexDatum?: Datum<number>
 ) {
     return vals(getBattleScene().get('allCharacters'))
         .filter(cm => cm.isPc && cm.health > 0)
@@ -331,9 +331,10 @@ function CharacterChoices(
                                 index: choiceDatum.val?.index!,
                                 characterUid: characterMeta.uid,
                             })
-                            eventPromptIndexDatum.set(
-                                eventPromptIndexDatum.val + 1
-                            )
+                            eventPromptIndexDatum &&
+                                eventPromptIndexDatum.set(
+                                    eventPromptIndexDatum.val + 1
+                                )
                         },
                     },
                 })!,

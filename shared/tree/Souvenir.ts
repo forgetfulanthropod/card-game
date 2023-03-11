@@ -35,7 +35,7 @@ export type SouvenirId =
     | 'lacedBathSalts'
     | 'lavenderTea'
     | 'lilFella'
-    | 'lilTaste'
+    // | 'lilTaste'
     // | 'mommysCreditCard'
     | 'organicBathSalts'
     | 'penguinEgg'
@@ -60,7 +60,6 @@ export type SouvenirActivationKey =
     | 'battleEnd'
     | 'turnStart'
     | 'turnEnd'
-    //todo
     | 'enterRestSite'
     | 'lethalDamageInterrupt'
     | 'takeDamage'
@@ -216,7 +215,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'yummyRice',
         name: 'Yummy Rice',
         description:
-            'Heal all party members for 8.  In addition, characters heal for an additional 8 HP whenever you enter a rest site.',
+            'Heal all party members for 8.\n In addition, characters heal for an additional 8 HP whenever you enter a rest site.',
         equippable: false,
         on: {
             acquire: 'heal(8)',
@@ -277,15 +276,15 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
             takeDamage: 'draw(1); discard(1)',
         },
     },
-    lilTaste: {
-        id: 'lilTaste',
-        name: `Lil' Taste`,
-        description: `Consecutive attacks against the same enemy deal an additional 10% damage`,
-        equippable: false,
-        on: {
-            turnStart: 'effect("lilTaste", 1)',
-        },
-    },
+    // lilTaste: {
+    //     id: 'lilTaste',
+    //     name: `Lil' Taste`,
+    //     description: `Consecutive attacks against the same enemy deal an additional 10% damage`,
+    //     equippable: false,
+    //     on: {
+    //         turnStart: 'effect("lilTaste", 1)',
+    //     },
+    // },
     // mommysCreditCard: {
     //     id: 'mommysCreditCard',
     //     name: `Mommy's Credit Card`,
@@ -367,7 +366,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever equipped kaiju plays a card, they gain 4 block.`,
         equippable: true,
         on: {
-            //todo
             playCard: 'if(wasLastCardPlayedFromThisCharacter, addBlock(4))',
         },
     },
@@ -377,8 +375,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever equipped Kaiju ends its turn in a new stance, it gains 1 Orb of Lightning`,
         equippable: true,
         on: {
-            //todo
-            turnStart: 'effect("woolBandana", 1)',
+            turnEnd: 'ifStanceElse(turnStartStance, null, orb("lightning", 1))',
         },
     },
     contaminatedRag: {
@@ -387,8 +384,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju is immune to Poison Damage`,
         equippable: true,
         on: {
-            //todo
-            turnStart: 'effect("contaminatedRag", 1)',
+            turnStart: 'effect("immuneToPoison", 1)',
         },
     },
     rustedGear: {
@@ -407,15 +403,14 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever equipped Kaiju ends their turn in the same stance they started their turn in, they gains 1 Orb of Frost`,
         equippable: false,
         on: {
-            //todo
-            turnEnd: 'ifStanceNotChanged(orb("frost", 1))',
+            turnEnd: 'ifStance(turnStartStance, orb("frost", 1))',
         },
     },
     lavenderTea: {
         id: 'lavenderTea',
         name: `Lavender Tea`,
         description: `Set equipped Kaiju's stance to neutral after you end your turn.  Heal that character for 2.`,
-        equippable: false,
+        equippable: true,
         on: {
             turnEnd: 'setStance("neutral"); heal(2)',
         },
@@ -425,7 +420,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: `Pet Rock`,
         description: `Equipped Kaiju gains 1 block whenever a card is played.`,
         equippable: true,
-        //todo
         on: {
             playCard: 'addBlock(1)',
         },
@@ -445,7 +439,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Gain a charge when you play a utility card, When you play 3 attacks in 1 turn deal damage to all enemies equal to the number of charges on Bootleg Explosive, then remove all charges. Charges are retained between encounters`,
         equippable: false,
         on: {
-            //todo
             playCard: `
                 if(lastCardPlayedType === "utility", souvenirCounter("bootlegExplosiveCharge", 1));
                 if(lastCardPlayedType === "attack", souvenirCounter("bootlegAttackStack", 1))
@@ -458,7 +451,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Gain Sticky 1 (Keep up to X cards in your hand that don't get discarded at the end of your turn)`,
         equippable: false,
         on: {
-            //todo
             turnEnd: 'keep(1)',
         },
     },
@@ -468,7 +460,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Deal 5 damage to a random enemy at the start of your turn.`,
         equippable: false,
         on: {
-            //todo
             turnStart: `deal(5, null, "enemies")`,
         },
     },
@@ -478,17 +469,15 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju gains +2 magic until end of turn whenever you play a card.`,
         equippable: true,
         on: {
-            //todo
             playCard: 'modifyStats("magic", "2", "turn")',
         },
     },
     allPurposeKnob: {
         id: 'allPurposeKnob',
         name: `All Purpose Knob.`,
-        description: `Activate this object to finish a room without gaining room rewards, and go to next room.(clickable!) <br/>Remove after use.`,
+        description: `Activate this object to finish a room without gaining room rewards, and go to next room. (clickable!) <br/>Remove after use.`,
         equippable: false,
         on: {
-            //todo
             activate: `openMap(); removeSouvenir("allPurposeKnob")`,
         },
     },
@@ -504,10 +493,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     gamerBathwater: {
         id: 'gamerBathwater',
         name: `Gamer Bathwater`,
-        description: `Activate to deal 25 damage to all enemies. This souvenir is destroyed after use.`,
+        description: `Activate to deal 25 damage to all enemies. (clickable!)\nThis souvenir is destroyed after use. `,
         equippable: false,
         on: {
-            activate: `deal(25, null, "allEnemies")`,
+            activate: `deal(25, null, "allEnemies"); removeSouvenir("gamerBathwater")`,
         },
     },
     demonCookie: {
@@ -553,8 +542,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju takes 2 less damage from attacks.`,
         equippable: true,
         on: {
-            //todo
-            turnStart: `effect("organicBathSalts", 1)`,
+            battleStart: `effect("damageTakeSubtractorBuff", 1)`,
+            turnStart: `effect("damageTakeSubtractorBuff", 1)`,
         },
     },
     lacedBathSalts: {
@@ -563,8 +552,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju takes 2 extra damage from all attacks.  It gains a permanent stack of Brave.`,
         equippable: false,
         on: {
-            //todo
-            turnStart: `effect("lacedBathSalts", 1); effect("brave", 1)`,
+            battleStart: `effect("damageTakeAddendDebuff", 1)`,
+            turnStart: `effect("damageTakeAddendDebuff", 1); effect("brave", 1)`,
         },
     },
     concreteShoes: {
@@ -573,7 +562,6 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju gets +8 defense and +35 health but can't change stances outside of cards and abilities that force them to do so.`,
         equippable: false,
         on: {
-            //todo
             acquire: `modifyStats("defense", "5", "run"); modifyStats("constitution", "35", "run")`,
             turnStart: `effect("lockStance", 1)`,
         },

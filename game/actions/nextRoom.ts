@@ -25,6 +25,10 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     const chosenRoom = getChosenRoom(scene, args.choice)
     scene.apply('roomUidsVisited', uids => [...uids, chosenRoom.uid])
     scene.set('currentRoom', chosenRoom)
+
+    if (chosenRoom.category === 'restSite')
+        activateSouvenirs('enterRestSite', scene)
+
     trackMetric('nextRoom', { choice: args.choice, chosenRoom, scene })
 
     const currentRoomCategory = scene.get('currentRoom', 'category')

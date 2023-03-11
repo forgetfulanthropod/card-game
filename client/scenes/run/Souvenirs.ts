@@ -1,3 +1,4 @@
+import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import {
     Adjust,
@@ -12,14 +13,18 @@ import { ContainerChild, DisplayObjectArgs } from '@/elementsUtil/mypixi/_types'
 import { hoveredCharacterUid, toDatum } from '@/util'
 import { ExplanationIf, TEXT_WIDTH } from '@sharedElements'
 import { datum } from 'datums'
-import { upperFirst } from 'lodash'
+import { omit, upperFirst } from 'lodash'
 import { Souvenir } from 'shared'
 
 export function SouvenirsEls(): ContainerChild {
     const scene = getBattleScene()
     return For(
         toDatum(scene.select('souvenirs'), souvenirs =>
-            souvenirs.map((s, index) => ({ ...s, key: s.id, index }))
+            souvenirs.map((s, index) => ({
+                ...s,
+                key: `${s.id}-${index}`,
+                index,
+            }))
         ),
         souvenir => {
             const souvenirWidth = 80
@@ -46,9 +51,27 @@ export function SouvenirEl({
     explanationDisplayArgs?: DisplayObjectArgs
 }) {
     const isHovered = datum(false)
+    const events = {
+        pointerover() {
+            isHovered.set(true)
+            if (souvenir.characterUid)
+                hoveredCharacterUid.set(souvenir.characterUid)
+        },
+        pointerout() {
+            isHovered.set(false)
+            if (souvenir.characterUid) hoveredCharacterUid.set(null)
+        },
+        pointerup() {
+            if (souvenir.on.activate)
+                callApi('activateSouvenir', { souvenirId: souvenir.id })
+        },
+        ...(displayArgs?.events ?? {}),
+    }
 
     return Container(
-        {},
+        {
+            name: `souvenir${upperFirst(souvenir.id)}`,
+        },
         Sprite({
             src: `souvenir${upperFirst(souvenir.id)}` as AssetKey,
             scale:
@@ -56,18 +79,8 @@ export function SouvenirEl({
                 getTexture(`souvenir${upperFirst(souvenir.id)}` as AssetKey)
                     .width,
             anchor: [1, 0.5],
-            events: {
-                pointerover() {
-                    isHovered.set(true)
-                    if (souvenir.characterUid)
-                        hoveredCharacterUid.set(souvenir.characterUid)
-                },
-                pointerout() {
-                    isHovered.set(false)
-                    if (souvenir.characterUid) hoveredCharacterUid.set(null)
-                },
-            },
-            ...(displayArgs || {}),
+            events,
+            ...(displayArgs ? omit(displayArgs, 'events') : {}),
         }),
         ExplanationIf({
             isShown: isHovered,

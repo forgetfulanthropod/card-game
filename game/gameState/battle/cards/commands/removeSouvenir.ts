@@ -29,9 +29,15 @@ function removeSouvenir(
             s =>
                 !hasNotBeenRemoved ||
                 (hasNotBeenRemoved =
-                    s.id !== id || s.characterUid !== characterUid)
+                    s.id !== id ||
+                    (s.equippable && s.characterUid != characterUid))
         )
     )
 
-    if (hasNotBeenRemoved) logger.error('the souvenir has not been removed...')
+    if (hasNotBeenRemoved)
+        logger.error(
+            `the souvenir ${id} for cUid ${characterUid} has not been removed... available were ${scene
+                .get('souvenirs')
+                .map(s => `id: ${s.id} characterUid: ${s.characterUid}`)}`
+        )
 }

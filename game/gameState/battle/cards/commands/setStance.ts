@@ -28,12 +28,17 @@ export const execute: Executors['setStance'] = ({
         givenUids,
     })
 
-    console.log({ targetUids })
-
-    targetUids.forEach(uid =>
-        scene.select('allCharacters', uid).apply(cm => ({
-            ...cm,
-            stance,
-        }))
-    )
+    targetUids
+        .filter(
+            uid =>
+                !scene
+                    .get('allCharacters', uid, 'effects')
+                    .find(e => e.id === 'lockStanceDebuff')
+        )
+        .forEach(uid =>
+            scene.select('allCharacters', uid).apply(cm => ({
+                ...cm,
+                stance,
+            }))
+        )
 }
