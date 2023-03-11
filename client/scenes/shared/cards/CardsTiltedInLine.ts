@@ -124,15 +124,13 @@ export function CardsTiltedInLine({
             },
             sprite
         )
+        //const m = new Matrix(1, (cardWidth * 1.4) /2, -cardWidth * 3, 1)
+        const x = -cardWidth * 3
+        const y = (cardWidth * 1.4) / 2
+        const d = Math.sqrt(x * x + y * y)
 
-        //@ts-expect-error
-        c.convertTo2d()
-
-        //@ts-expect-error
-        c.convertSubtreeTo2d()
-
-        //@ts-expect-error
-        c.proj.setAxisX({ x: -cardWidth * 3, y: (cardWidth * 1.4) / 2 }, 1)
+        c.scale.x = x / d
+        c.skew.set(1 / d, y / d)
 
         return c
     })

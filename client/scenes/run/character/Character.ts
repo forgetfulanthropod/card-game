@@ -1,6 +1,5 @@
 import type { Datum } from 'datums'
 import { datum } from 'datums'
-// import { sound } from '@pixi/sound'
 import type { TrackEntry } from '@pixi-spine/all-4.1'
 import {
     flashDamageOverlayTo,
@@ -32,6 +31,7 @@ import {
     Container,
     flashTo,
     If,
+    hasSound,
     playSound,
     Sprite,
 } from '@/elementsUtil'
@@ -428,11 +428,13 @@ function playSoundEffect(
         characterId
     )}${action}` as SoundEffectAssetKey
 
-    if (Assets.get(key)) playSound(key)
+    if (hasSound(key)) playSound(key)
     else if (
         // support for two sounds randomly chosen
-        Assets.cache.has(`${key}1`) &&
-        Assets.cache.has(`${key}2`)
+        // @ts-expect-error
+        hasSound(`${key}1`) &&
+        // @ts-expect-error
+        hasSound(`${key}2`)
     )
         playSound(
             `${key}${Math.ceil(Math.random() * 2)}` as SoundEffectAssetKey

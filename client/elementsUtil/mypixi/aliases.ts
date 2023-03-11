@@ -9,6 +9,5 @@ export {
     Ticker as PixiTicker,
     VideoResource as PixiVideoResource,
 } from 'pixi.js'
-import '@pixi/sound'
 
 export { HTMLText as PixiHTMLText } from '@pixi/text-html'

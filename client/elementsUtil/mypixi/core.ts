@@ -19,7 +19,6 @@ import type {
 import { startChecking } from './_util'
 import { onUpdate } from '@/util'
 import { Point, SimpleRope } from 'pixi.js'
-import { DisplayObject } from '@pixi/animate'
 import { getRenderer, isHighResolution } from './application'
 
 export const BASE_HEIGHT = 1080
