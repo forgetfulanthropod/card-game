@@ -15,8 +15,8 @@ export function activateSouvenirs(
     characterUid?: CharacterUid
 ) {
     let wasSouvenirActivated = false
-    logger.info(`checking if ${activationKey} is triggered for ${characterUid}`)
-    scene.get('souvenirs').forEach(souvenir => {
+
+    ;(scene.get('souvenirs') ?? []).forEach(souvenir => {
         if (
             !characterUid ||
             !souvenir.equippable ||
@@ -28,6 +28,8 @@ export function activateSouvenirs(
                 scene
             )
     })
+
+    if (wasSouvenirActivated) logger.info(`lethal damage interrupt happening!`)
 
     return wasSouvenirActivated
 }
@@ -44,7 +46,7 @@ export function activateSouvenir(
     let characterUid = souvenir.characterUid
     if (!characterUid && souvenir.equippable)
         throw new Error(
-            'equippable souvenirs must have characterUid assigned...'
+            `equippable souvenirs must have characterUid assigned... ${souvenir.id}`
         )
     if (!characterUid) characterUid = livingPcs[0].uid
 

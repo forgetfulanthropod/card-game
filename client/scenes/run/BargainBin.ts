@@ -56,6 +56,7 @@ export function BargainBin() {
                         Adjust(
                             SouvenirEl({
                                 souvenir,
+                                width: 140,
                                 displayArgs: {
                                     events: {
                                         pointerup() {
@@ -73,11 +74,11 @@ export function BargainBin() {
                             }),
                             {
                                 x:
-                                    BASE_HEIGHT * 0.1 +
-                                    100 * (souvenir.index % 12),
+                                    BASE_HEIGHT * 0.2 +
+                                    140 * (souvenir.index % 12),
                                 y:
-                                    BASE_HEIGHT * 0.1 +
-                                    100 * Math.floor(souvenir.index / 12),
+                                    BASE_HEIGHT * 0.2 +
+                                    140 * Math.floor(souvenir.index / 12),
                             }
                         )
                 ),

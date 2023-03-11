@@ -88,6 +88,7 @@ interface BareGameActionArgs {
     choosePlushy: { index: number }
     chooseEventResponse: { index: number; characterUid?: CharacterUid }
     getFreeSouvenir: { souvenirId: SouvenirId; characterUid?: CharacterUid }
+    activateSouvenir: { souvenirId: SouvenirId }
     placeSelectedCharacters: {
         characters: {
             allCharacterOptionsIndex: number

@@ -1,3 +1,4 @@
+import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import {
     Adjust,
@@ -59,6 +60,10 @@ export function SouvenirEl({
         pointerout() {
             isHovered.set(false)
             if (souvenir.characterUid) hoveredCharacterUid.set(null)
+        },
+        pointerup() {
+            if (souvenir.on.activate)
+                callApi('activateSouvenir', { souvenirId: souvenir.id })
         },
         ...(displayArgs?.events ?? {}),
     }

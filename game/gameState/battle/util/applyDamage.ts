@@ -252,16 +252,24 @@ export function getDamage({
     const damageDealMultiplicand = attacker
         ? calculateStats(attacker).damageDealMultiplicand
         : 1
+    const damageDealAddend = attacker
+        ? calculateStats(attacker).damageDealAddend
+        : 0
     const damageTakeMultiplicand = target
         ? calculateStats(target).damageTakeMultiplicand
         : 1
+    const damageTakeAddend = target
+        ? calculateStats(target).damageTakeAddend
+        : 0
 
     // logger.info(
     //     JSON.stringify({ damageDealMultiplicand, damageTakeMultiplicand })
     // )
 
     const multiplicand = damageDealMultiplicand * damageTakeMultiplicand
-    const calcedDamage = Math.ceil(damage * multiplicand)
+    const calcedDamage = Math.ceil(
+        damage * multiplicand + damageTakeAddend + damageDealAddend
+    )
     return calcedDamage
 }
 
