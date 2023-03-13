@@ -77,9 +77,7 @@ export function Spine<Name extends SpineAsset>(props: {
         },
     })
 
-    spine.cursor = spine.interactive
-        ? `url('assets/root/hand.webp'), pointer`
-        : 'default'
+    spine.cursor = spine.interactive ? 'hover' : 'default'
 
     const destroy = spine.destroy
     spine.destroy = (...args) => {

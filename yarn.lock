@@ -841,11 +841,6 @@
   resolved "https://registry.yarnpkg.com/@pixi/graphics/-/graphics-7.1.4.tgz#f636b421338c9c176f2bfa5cc5b4da02bb80269b"
   integrity sha512-1mLvS01o9HffUG09ngp4DZGCz6jFzOpctXKZFosd/2rfVPVQWy/P5csgu8XqRk8ZrxJE6tgUK/asb7RiG+B9cQ==
 
-"@pixi/interaction@^6.5.9":
-  version "6.5.9"
-  resolved "https://registry.yarnpkg.com/@pixi/interaction/-/interaction-6.5.9.tgz#033ddfc8963a18c5384b4d01c032483651c7a27d"
-  integrity sha512-PXWPPpOBwZdf/VtrstYaKqtUfJcJR57oRGdSXZ0mtvN8jEhsWUe0GlmlHEp6PxTwtn5ECKDy8+i9V0CcqLKgug==
-
 "@pixi/math@7.1.4":
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/@pixi/math/-/math-7.1.4.tgz#d085ba416be6075718edeb0cf695fc960c4d6972"

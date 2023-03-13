@@ -34,8 +34,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { DisplayObject } from 'pixi.js'
-import type { InteractionEvent } from '@pixi/interaction'
+import type { DisplayObject, FederatedPointerEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type {
     Card,
@@ -479,7 +478,7 @@ function getEvents(
         //for mobile
         pointerover({
             currentTarget: cardEl,
-        } as InteractionEvent)
+        } as FederatedPointerEvent)
 
         if (!(cardEl instanceof PixiContainer))
             throw new Error('ERROR! should be bound to container')
@@ -551,7 +550,7 @@ function getEvents(
         else
             pointerout({
                 currentTarget: cardEl,
-            } as InteractionEvent)
+            } as FederatedPointerEvent)
     }
 
     // todo: detect pointermove for mobile to begin target selection..

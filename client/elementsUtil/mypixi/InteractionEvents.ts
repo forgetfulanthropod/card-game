@@ -9,6 +9,8 @@ export interface InteractionEvents {
     pointerover?: InteractionEventHandler
     pointerout?: InteractionEventHandler
     pointermove?: InteractionEventHandler
+    pointerleave?: InteractionEventHandler
+    pointerenter?: InteractionEventHandler
 }
 
 export function bindEvents(
@@ -17,7 +19,7 @@ export function bindEvents(
 ) {
     if (events == null || Object.keys(events).length === 0) return
     el.interactive = true
-    el.cursor = `url('assets/root/hand.webp'), pointer`
+    el.cursor = 'hover'
     Object.entries(events).forEach(([eventName, handler]) =>
         el.on(eventName as keyof DisplayObjectEvents, handler)
     )

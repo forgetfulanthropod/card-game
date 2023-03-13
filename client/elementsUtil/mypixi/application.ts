@@ -38,7 +38,6 @@ export function Application(args: {
     })
 
     app.stage.scale.set(ROOT_SCALE)
-    app.ticker.maxFPS = 30
 
     // const delay = 10_000
     // let frames = 0
