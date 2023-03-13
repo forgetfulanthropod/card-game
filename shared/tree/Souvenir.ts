@@ -1,4 +1,4 @@
-import { CardAction, CharacterUid } from './battle'
+import { BasicTargetType, CardAction, CharacterUid } from './battle'
 
 export type SouvenirMap = Record<SouvenirId, Souvenir>
 
@@ -74,6 +74,7 @@ export type Souvenir = {
     description: string
     characterUid?: CharacterUid
     targetNum?: number
+    targetType?: BasicTargetType
     on: Partial<Record<SouvenirActivationKey, CardAction>>
     // {
     //     acquire?: CardAction
@@ -459,8 +460,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: `Shiny Marble`,
         description: `Deal 5 damage to a random enemy at the start of your turn.`,
         equippable: false,
+        targetNum: 1,
+        targetType: 'enemies',
         on: {
-            turnStart: `deal(5, null, "enemies")`,
+            turnStart: `deal(5)`,
         },
     },
     silkGloves: {
@@ -532,8 +535,9 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `At the start of a new encounter, apply vulnerable 1 to a random enemy.`,
         equippable: false,
         targetNum: 1,
+        targetType: 'enemies',
         on: {
-            battleStart: `effect("vulnerable", 1, "enemies")`,
+            battleStart: `effect("vulnerable", 1)`,
         },
     },
     organicBathSalts: {
