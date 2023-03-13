@@ -117,13 +117,14 @@ export function Hand(
             bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
             hoveredCharacterUid.set(null)
             return
-        } else if (newHand && root.children.length === 0) {
+        } else if (newHand) {
             // console.log('refresh was triggered and cards are in original position')
-            const CardsInHand = renderCardsInHand(newHand, hoveredCardUid)
+            root.removeChildren()
+            root.destroy()
+            root = staticRoot.addChild(createDestroyableContainer())
+            const CardsInHand = renderCardsInHand(newHand, hoveredCardUid, 'final')
             root.addChild(...CardsInHand)
-            animateCardsIntoHand(CardsInHand, newHand).then(() => {
-                bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
-            })
+            bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
         }
     }, true)
 
