@@ -517,7 +517,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Draw +1 card at the start of every turn.`,
         equippable: false,
         on: {
-            turnStart: `draw(1)`,
+            turnStart: `drawSizeChange(1)`,
         },
     },
     stinkySandwich: {
