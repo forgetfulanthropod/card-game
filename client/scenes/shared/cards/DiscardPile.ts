@@ -12,7 +12,7 @@ import {
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { getBattleScene } from '@/data'
-import { animateBounceScale } from '..'
+import { animateBounceScale, animateFastBounceScale } from '..'
 import { Tweener } from 'pixi-tweener'
 
 export function DiscardPile(): PixiContainer {
@@ -23,10 +23,26 @@ export function DiscardPile(): PixiContainer {
     )
 
     discardPileDatum.onChange((newPile, oldPile) => {
-        setTimeout(() => {
-            animateBounceScale(PileIcon)
-            PileSize.text = `${vals(newPile).length}`
-        }, 300) // discard animation length is around this length
+        const [newLength, oldLength] = [vals(newPile).length, vals(oldPile).length]
+        if (newLength - oldLength > 1) {
+            // all cards were discarded
+            let tempLength = oldLength
+            const animate = animateFastBounceScale(PileIcon)
+            const discardInterval = setInterval(() => {
+                animate()
+                PileSize.text = `${tempLength}`
+                if (tempLength === newLength) {
+                    clearInterval(discardInterval)
+                }
+                tempLength++
+            }, 100)
+        } else {
+            // one card was played
+            setTimeout(() => {
+                animateBounceScale(PileIcon)
+                PileSize.text = `${vals(newPile).length}`
+            }, 300) // play card animation length is around this length
+        }
     })
 
     const x = -src.width

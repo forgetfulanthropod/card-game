@@ -12,7 +12,12 @@ type TweenerKeyframe = Omit<ContainerArgs, 'scale'> & {
     tweenableScale?: number
 }
 
-export const animateBounceScale = async (el: TweenablePixiContainer) => {
+/**
+ *
+ * @param el
+ * @param originalScale: pass this whenever there's overlapping animations; the Tweener will likely not return the element to its original state otherwise
+ */
+export const animateBounceScale = async (el: TweenablePixiContainer, originalScale?: number) => {
     const { tweenableScale } = el
 
     await Tweener.add(
@@ -32,9 +37,14 @@ export const animateBounceScale = async (el: TweenablePixiContainer) => {
             ease: Easing.easeTo,
         },
         {
-            tweenableScale: tweenableScale,
+            tweenableScale: originalScale ?? tweenableScale,
         }
     )
+}
+
+export const animateFastBounceScale = (el: TweenablePixiContainer) => {
+    const scale = el.tweenableScale
+    return async () => await animateBounceScale(el, scale)
 }
 
 /**
