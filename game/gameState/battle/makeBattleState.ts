@@ -15,6 +15,7 @@ export function makeBattleState(args: {
     chosen?: OwnedCharacterStats[]
     dungeonName?: DungeonName
     game: Gamecursor
+    runId?: number
 }): BattleScene {
     const allCharacters = makeCharacters(args?.chosen)
 
@@ -74,7 +75,7 @@ export function makeBattleState(args: {
         treasureChest: getInitialTreasureChest(),
         runScore: getInitialRunScore(),
         runDuration: getInitialRunDuration(),
-        runId: null,
+        runId: args.runId || null,
         souvenirs: [],
     }
     return bs

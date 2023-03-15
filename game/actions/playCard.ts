@@ -1,4 +1,4 @@
-import type { Card, BattleCursor, GameActions } from 'shared'
+import type { Card, BattleCursor, GameActions, CharacterUid } from 'shared'
 
 import { throwNull } from 'shared/code'
 import {
@@ -10,16 +10,26 @@ import {
 } from '@/gameState'
 import { getBattleSceneIn } from '@/util'
 import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
+import { getTargetUids } from '@/gameState/battle/cards/getTargetUids'
 import { trackMetric } from 'server/metrics'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
+    if (scene.get('state') !== 'in battle') {
+        logger.warn('tried to play card while not in battle')
+        return
+    }
+    logger.info(`checking play ${args.cardUid}`)
     const card =
         scene.get('cards', 'hand', args.cardUid) ??
         throwNull(`cardUid ${args.cardUid}`)
-
     // logger.info(`playing card ${card.uid}`)
-    if (isPlayable({ card, scene })) {
+    const targetUids = getTargetUids({
+        card,
+        targetUids: args.targetUids,
+        scene,
+    })
+    if (isPlayable({ card, scene, targetUids })) {
         scene.select('allCharacters', card.characterUid).set('hasMoved', true)
         // get target hp before card play for metric
         trackMetric('playCard', { card, scene, targetUids: args.targetUids })
@@ -39,14 +49,22 @@ export const playCard: GameActions['playCard'] = args => {
 function isPlayable({
     card,
     scene,
+    targetUids,
 }: {
     card: Card
     scene: BattleCursor
+    targetUids?: CharacterUid[]
 }): boolean {
     if (scene.get('numRequiredToDiscard') > 0) return false
 
     if (getEnergy(card) < 0 || getEnergy(card) > scene.get('energy'))
         return false
+
+    const allCharacters = scene.get('allCharacters')
+    const livingTargets = Object.entries(allCharacters)
+        .filter(([k, v]) => targetUids?.includes(k) && v.health > 0)
+        .map(([k, _]) => k)
+    if (!livingTargets.length) return false
 
     const requiredStance = card.actions.match(/ifStance\([^"]*"([^"]+)/)?.[1]
 

@@ -6,7 +6,8 @@ import { satisfies } from 'shared/code'
 import * as serverActions from './actions'
 import { getGamestate } from './db'
 
-import { doActionAndTakeSteps } from './sleepLoop'
+import { processActionQueue } from './sleepLoop'
+import { processingQueue } from './sleepLoop'
 
 satisfies<ServerActions>(serverActions)
 
@@ -32,7 +33,10 @@ export async function api(args: {
             const game = new SBaobab(gamestate).select()
             const actionArgs = { username, method, ...data }
             logger.debug(`api call: ${JSON.stringify(actionArgs)}`)
-            await doActionAndTakeSteps({ ...actionArgs, game })
+
+            if (!processingQueue[username]) processingQueue[username] = []
+            processingQueue[username].push({ ...actionArgs, game })
+            await processActionQueue(game)
             return { status: 'success' }
         } else {
             return err('invalid method')
