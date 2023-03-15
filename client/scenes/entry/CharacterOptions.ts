@@ -57,10 +57,10 @@ export function CharacterOptions() {
                 x: 78 + (index % 2) * (width + margin),
                 y: 54 + Math.floor(index / 2) * (width + margin),
                 events: {
-                    pointerover() {
+                    pointerenter() {
                         hoveredCharacterStatsOverride.set(c)
                     },
-                    pointerout() {
+                    pointerleave() {
                         hoveredCharacterStatsOverride.set(null)
                     },
                     pointerup() {
