@@ -12,12 +12,12 @@ export function bindIsHovered(
     isHoveredDatum: Datum<boolean>
 ) {
     el.interactive = true
-    el.on('pointerover', () => isHoveredDatum.set(true))
+    el.on('pointerenter', () => isHoveredDatum.set(true))
     const setFalse = () => isHoveredDatum.set(false)
-    el.on('pointerout', setFalse)
-    getPixiApp().stage.on('pointerout', setFalse)
+    el.on('pointerleave', setFalse)
+    getPixiApp().stage.on('pointerleave', setFalse)
     el.on('destroyed', () => {
         isHoveredDatum.set(false)
-        getPixiApp().stage.off('pointerout', setFalse)
+        getPixiApp().stage.off('pointerleave', setFalse)
     })
 }

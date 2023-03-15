@@ -40,7 +40,7 @@ export function OrbManager(
                         pointerdown() {
                             isHovered.set(true)
                         },
-                        pointerover() {
+                        pointerenter() {
                             isHovered.set(true)
                         },
                         pointerup() {
@@ -51,7 +51,7 @@ export function OrbManager(
                             })
                             isHovered.set(false)
                         },
-                        pointerout() {
+                        pointerleave() {
                             isHovered.set(false)
                         },
                     },

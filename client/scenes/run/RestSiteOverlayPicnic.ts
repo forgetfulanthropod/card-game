@@ -61,7 +61,7 @@ export function RestSiteOverlay(): PixiContainer {
             height: h * BASE_HEIGHT,
             alpha: 0.0,
             events: {
-                pointerover() {
+                pointerenter() {
                     choices[i].filters = [glowFilter]
                     hoveredBoxIndex.set(i)
                 },
@@ -70,7 +70,7 @@ export function RestSiteOverlay(): PixiContainer {
                         index: i,
                     })
                 },
-                pointerout() {
+                pointerleave() {
                     choices[i].filters = []
                     hoveredBoxIndex.set(null)
                 },
@@ -82,7 +82,7 @@ export function RestSiteOverlay(): PixiContainer {
     const bg = Sprite({
         src: 'restSiteBg',
         events: {
-            pointerover() {},
+            pointerenter() {},
         },
         ...xya,
     })

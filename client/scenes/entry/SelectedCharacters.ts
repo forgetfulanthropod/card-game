@@ -130,8 +130,8 @@ function Characters(charactersData: SelectedCharacters) {
                 MainCharacterAnimation({
                     characterMeta: c,
                     events: {
-                        pointerover() {},
-                        pointerout() {
+                        pointerenter() {},
+                        pointerleave() {
                             // only un-hover on bg click...
                         },
                         pointerup() {

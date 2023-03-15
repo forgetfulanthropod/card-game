@@ -131,9 +131,11 @@ const StatChangeText = (
             stroke: 'black',
             strokeThickness: 8,
         },
-        onDestroy: [() => {
-            customFilter.destroy()
-        }]
+        onDestroy: [
+            () => {
+                customFilter.destroy()
+            },
+        ],
     })
 }
 
@@ -301,13 +303,13 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             src: 'healthBarHighlight',
             anchor: spriteAnchor,
             events: {
-                pointerover() {
+                pointerenter() {
                     isHovered.set(true)
                 },
                 pointerdown() {
                     isHovered.set(true)
                 },
-                pointerout() {
+                pointerleave() {
                     setTimeout(() => isHovered.set(false), 50)
                 },
             },

@@ -9,8 +9,8 @@ export function AbilityButtons(abilities: Ability[]): PixiContainer[] {
                 x: (275 / 2) * (i ? 1 : -1) + (i ? 15 : -15),
                 y: 150,
                 events: {
-                    pointerover() {},
-                    pointerout() {},
+                    pointerenter() {},
+                    pointerleave() {},
                     pointerup() {},
                 },
             },

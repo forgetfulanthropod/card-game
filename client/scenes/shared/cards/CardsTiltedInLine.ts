@@ -78,7 +78,7 @@ export function CardsTiltedInLine({
                 x: (cards.length - 1 - index) * spaceBetween + leftMargin,
                 y: parentWidth * bgPaddingPortion,
                 events: {
-                    pointerover: () => {
+                    pointerenter: () => {
                         clearOldFullSizeCard()
 
                         const cardWidth = 400
@@ -113,7 +113,7 @@ export function CardsTiltedInLine({
 
                         root.addChild(fullSizeCard)
                     },
-                    pointerout: async () => {
+                    pointerleave: async () => {
                         // await nextTick()
 
                         // if (hoveringCardDetails) return

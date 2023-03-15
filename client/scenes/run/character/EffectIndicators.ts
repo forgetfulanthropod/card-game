@@ -41,18 +41,18 @@ function InteractiveEffectCounter(
     effect: Effect & { id: VisibleEffectId }
 ): PixiContainer {
     const isHovered = datum(false)
-    const pointerover = () => isHovered.set(true)
-    const pointerout = () => isHovered.set(false)
+    const pointerenter = () => isHovered.set(true)
+    const pointerleave = () => isHovered.set(false)
     const width = 60
 
     const root = Container(
         {
             name: `Effect-${effect.id}`,
             events: {
-                pointerover,
-                pointerdown: pointerover,
-                pointerout,
-                pointerup: pointerout,
+                pointerenter,
+                pointerdown: pointerenter,
+                pointerleave,
+                pointerup: pointerleave,
             },
             onDestroy: [
                 isHovered.onChange(

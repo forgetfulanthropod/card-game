@@ -40,7 +40,7 @@ export interface DisplayObjectArgs {
     angle?: number
     rotation?: number
     onDestroy?: Callback[]
-    /** will be bound to pointerover and pointerout */
+    /** will be bound to pointerenter and pointerleave */
     isHoveredDatum?: Datum<boolean>
 }
 // text and sprite but not graphics

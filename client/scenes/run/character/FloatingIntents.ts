@@ -74,10 +74,10 @@ function FloatingIntent(
     const root = Container(
         {
             events: {
-                pointerover: interact,
+                pointerenter: interact,
                 pointerdown: interact,
                 pointerup: stopInteracting,
-                pointerout: stopInteracting,
+                pointerleave: stopInteracting,
             },
         },
         ...children
@@ -611,13 +611,13 @@ function BlockIntended(amount: number, command: NextCommand) {
                 src: 'intentBlock',
                 anchor: 0.2,
                 events: {
-                    pointerover() {
+                    pointerenter() {
                         isHoveringIntent.set(true)
                     },
                     pointerdown() {
                         isHoveringIntent.set(true)
                     },
-                    pointerout() {
+                    pointerleave() {
                         isHoveringIntent.set(false)
                     },
                 },
@@ -678,13 +678,13 @@ function getCommandObjects(command: NextCommand) {
     })
 
     const events: InteractionEvents = {
-        pointerover() {
+        pointerenter() {
             isHoveringIntent.set(true)
         },
         pointerdown() {
             isHoveringIntent.set(true)
         },
-        pointerout() {
+        pointerleave() {
             isHoveringIntent.set(false)
         },
     }

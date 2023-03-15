@@ -57,12 +57,12 @@ export function SouvenirEl({
                     .width,
             anchor: [1, 0.5],
             events: {
-                pointerover() {
+                pointerenter() {
                     isHovered.set(true)
                     if (souvenir.characterUid)
                         hoveredCharacterUid.set(souvenir.characterUid)
                 },
-                pointerout() {
+                pointerleave() {
                     isHovered.set(false)
                     if (souvenir.characterUid) hoveredCharacterUid.set(null)
                 },

@@ -30,12 +30,12 @@ export function applyDisplayObjectArgs(
     if (args.onMouseover != null) {
         el.interactive = true
         el.cursor = 'hover'
-        el.on('pointerover', args.onMouseover)
+        el.on('pointerenter', args.onMouseover)
     }
     if (args.onMouseout != null) {
         el.interactive = true
         el.cursor = 'hover'
-        el.on('pointerout', args.onMouseout)
+        el.on('pointerleave', args.onMouseout)
     }
 
     if (args.position != null) {

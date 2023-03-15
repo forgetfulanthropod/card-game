@@ -56,7 +56,7 @@ export function BattleScene(
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
     return Container(
-        { name: 'BattleScene'},
+        { name: 'BattleScene' },
         Container(
             { name: 'CharactersAndBg' },
             SpineBackground({ srcs: allSrcs[sceneIndex] }),
@@ -81,7 +81,7 @@ export function BattleScene(
                         width: BASE_WIDTH,
                         height: BASE_HEIGHT,
                         alpha: 0.7,
-                        events: { pointerover() {} },
+                        events: { pointerenter() {} },
                         defaultCursor: true,
                     }),
                     Text({

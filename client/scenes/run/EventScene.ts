@@ -229,10 +229,10 @@ function ChooseOptionInterface(
                         height: text.height + 60,
                         anchor: [0.5, 0],
                         events: {
-                            pointerover() {
+                            pointerenter() {
                                 isHovered.set(true)
                             },
-                            pointerout() {
+                            pointerleave() {
                                 isHovered.set(false)
                             },
                             pointerup() {

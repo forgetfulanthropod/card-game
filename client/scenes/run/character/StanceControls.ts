@@ -58,10 +58,10 @@ function StanceBadge(
     )
 
     return If(characterDatum, ({ hasMoved, stance }) => {
-        const pointerover = () => {
+        const pointerenter = () => {
             isHovered.set(true)
         }
-        const pointerout = () => {
+        const pointerleave = () => {
             if (hasMoved) isHovered.set(false)
         }
 
@@ -87,10 +87,10 @@ function StanceBadge(
                 anchor: 0.5,
                 // alpha: 0.5,
                 events: {
-                    pointerover,
-                    pointerdown: pointerover,
-                    pointerout,
-                    pointerup: pointerout,
+                    pointerenter,
+                    pointerdown: pointerenter,
+                    pointerleave,
+                    pointerup: pointerleave,
                 },
             }),
             ExplanationIf({

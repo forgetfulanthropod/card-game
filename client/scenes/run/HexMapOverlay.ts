@@ -233,7 +233,7 @@ function TileForNode(
                 pointerup() {
                     if (~choice) void callApi('nextRoom', { choice })
                 },
-                pointerover() {
+                pointerenter() {
                     Tweener.add(
                         {
                             target: root,
@@ -253,7 +253,7 @@ function TileForNode(
                     // if (!isPlayerCharacterRoom)
                     // highlightPossiblePaths(root, node)
                 },
-                pointerout() {
+                pointerleave() {
                     Tweener.add(
                         {
                             target: root,
@@ -462,8 +462,8 @@ function AnimatedCharacters(
             const anim = MainCharacterAnimation({
                 characterMeta,
                 events: {
-                    pointerover() {},
-                    pointerdown() {},
+                    pointerenter() {},
+                    pointerleave() {},
                 },
             })
 
