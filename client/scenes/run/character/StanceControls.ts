@@ -135,7 +135,7 @@ function StanceChambers(
             y: 50,
             rotation: rotationForStance,
             events: {
-                pointerover() {
+                pointerenter() {
                     pointerMovedAway = false
                 },
                 pointerdown() {
@@ -143,7 +143,7 @@ function StanceChambers(
                         setTimeout(() => isHovered.set(false), 500)
                     }
                 },
-                pointerout() {
+                pointerleave() {
                     isHovered.set(false)
                 },
             },
@@ -230,13 +230,14 @@ function StanceBullets(
                     : cylinderMidRadius * Math.sin(bottomChamberAngle),
             rotation,
             events: {
-                pointerover() {
-                    hoveredStanceId.set(null)
+                pointerenter() {
                     hoveredStanceId.set(stanceId)
                 },
                 pointerdown() {
-                    hoveredStanceId.set(null)
                     hoveredStanceId.set(stanceId)
+                },
+                pointerleave() {
+                    hoveredStanceId.set(null)
                 },
                 pointerup() {
                     const selectedStanceId = hoveredStanceId.val!

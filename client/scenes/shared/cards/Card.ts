@@ -204,8 +204,8 @@ function getDecoratedEvents({
 
     const decoratedEvents: InteractionEvents = {
         ...dynamicEvents,
-        pointerover(e) {
-            dynamicEvents?.pointerover?.(e)
+        pointerenter(e) {
+            dynamicEvents?.pointerenter?.(e)
 
             isHovering.set(true)
             setTimeout(() => {
@@ -220,8 +220,8 @@ function getDecoratedEvents({
                 if (isHovering.val) isLongHovered.set(true)
             }, 800)
         },
-        pointerout(e) {
-            dynamicEvents?.pointerout?.(e)
+        pointerleave(e) {
+            dynamicEvents?.pointerleave?.(e)
 
             isHovering.set(false)
             isLongHovered.set(false)
@@ -451,14 +451,14 @@ function getEvents(
     card: Card,
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
-    const pointerover: InteractionEventHandler = () => {
+    const pointerenter: InteractionEventHandler = () => {
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
         if (card.outcomes?.outcome && isAttacking.val === false) {
             hoveredSelectedCardUid.set(card.uid)
         }
     }
-    const pointerout: InteractionEventHandler = () => {
+    const pointerleave: InteractionEventHandler = () => {
         setTimeout(() => {
             if (
                 hoveredSelectedCardUid.val === card.uid &&
@@ -476,7 +476,7 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         //for mobile
-        pointerover({
+        pointerenter({
             currentTarget: cardEl,
         } as FederatedPointerEvent)
 
@@ -548,7 +548,7 @@ function getEvents(
         }
         //for mobile
         else
-            pointerout({
+            pointerleave({
                 currentTarget: cardEl,
             } as FederatedPointerEvent)
     }
@@ -560,8 +560,8 @@ function getEvents(
     // }
 
     return {
-        pointerover,
-        pointerout,
+        pointerenter,
+        pointerleave,
         pointerdown,
         pointerup,
         // pointermove,

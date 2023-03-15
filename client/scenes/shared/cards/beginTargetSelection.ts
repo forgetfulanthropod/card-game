@@ -22,7 +22,8 @@ export function beginTargetSelection(
     let origin: Point = { x: 0, y: 0 }
     let offset: Point = { x: 0, y: 0 }
     const arrow = TargetSelectGraphic()
-    // TODO: this should not fire when dead
+    // TODO: only update on card animating or pointer move
+    // currently updates on every frame
     const updateDestination = (e: FederatedPointerEvent) => {
         const cardBounds = cardEl?.children?.[0]?.getBounds()
         if (cardBounds == null) return
@@ -35,11 +36,14 @@ export function beginTargetSelection(
         }
         drawCurve(arrow, origin, destination)
     }
+    const tickerArrow = (_: number) => {
+        updateDestination((app.renderer.events as any).rootPointerEvent)
+    }
     app.stage.interactive = true
+    app.ticker.add(tickerArrow)
+    // updateDestination((app.renderer.events as any).rootPointerEvent)
 
-    updateDestination((app.renderer.events as any).rootPointerEvent)
-
-    app.stage.on('pointermove', updateDestination)
+    // app.stage.on('pointermove', updateDestination)
     app.stage.once('pointerleave', cleanup)
 
     const rightClickListener = (e: Event) => {
@@ -82,7 +86,8 @@ export function beginTargetSelection(
         removeEventListener('keydown', keydownListener)
 
         selectedTargetsCursor.set([])
-        app.stage.off('pointermove', updateDestination)
+        // app.stage.off('pointermove', updateDestination)
+        app.ticker.remove(tickerArrow)
         cardEl.removeChild(arrow)
         if (!arrow.destroyed) arrow.destroy({ children: true })
         app.stage.interactive = false
