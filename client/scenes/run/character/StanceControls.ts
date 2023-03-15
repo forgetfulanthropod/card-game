@@ -44,9 +44,10 @@ export function StanceControls(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-function StanceBadge(
+export function StanceBadge(
     characterCursor: ROCursor<CharacterMeta>,
-    isHovered: Datum<boolean>
+    isHovered: Datum<boolean>,
+    xOffset = getXOffset()
 ) {
     const badgeWidth = 100
     const characterDatum = toDatum(
@@ -78,14 +79,14 @@ function StanceBadge(
                     src: `stance${upperFirst(stance)}Confirmed` as AssetKey,
                     scale:
                         badgeWidth / getTexture('stanceNeutralConfirmed').width,
-                    x: getXOffset(),
+                    x: xOffset,
                     anchor: 0.5,
                 })
             ),
             Sprite({
                 src: `stance${upperFirst(stance)}` as AssetKey,
                 scale: 90 / getTexture('stanceNeutral').width,
-                x: getXOffset(),
+                x: xOffset,
                 anchor: 0.5,
                 // alpha: 0.5,
                 events: {

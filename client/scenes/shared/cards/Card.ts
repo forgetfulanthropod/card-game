@@ -11,6 +11,7 @@ import {
     getRenderer,
     getStage,
     getTexture,
+    If,
     InteractionEventHandler,
     InteractionEvents,
     PixiContainer,
@@ -26,7 +27,6 @@ import {
     hoveredCharacterUid,
     hoveredSelectedCardUid,
     isAttacking,
-    nextFrame,
     nextTick,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
@@ -54,6 +54,7 @@ import {
 import { beginTargetSelection } from './beginTargetSelection'
 import { CARD_WIDTH } from './CardAdder'
 import { getCardTypeTexture } from './getCardTypeSrc'
+import { HoverableStances } from './HoverableStances'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -172,7 +173,9 @@ export function CardEl({
                           cardFrameTexture.width,
                           cardFrameTexture.height
                       ),
-                  ])
+                  ]),
+            Adjust(HoverableStances(card), { y: 0 })
+            // If(isLongHovered, () => )
         ),
         Adjust(termExplanationsForCard, {
             x:
@@ -210,7 +213,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 800)
+            }, 400)
         },
         pointerdown(e) {
             dynamicEvents?.pointerdown?.(e)
@@ -218,7 +221,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 800)
+            }, 400)
         },
         pointerout(e) {
             dynamicEvents?.pointerout?.(e)
@@ -286,9 +289,9 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
         Sprite({
             src: Texture.WHITE,
             width,
-            height,
+            height: height * 1.2,
             alpha: 0,
-            anchor: [0.5, 0],
+            anchor: [0.5, 0.5],
         })
     )
 }

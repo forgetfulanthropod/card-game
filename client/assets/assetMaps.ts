@@ -33,6 +33,9 @@ export const rootAssets = {
     upArrow: 'core-ui/upArrow.png',
     upArrowSimple: 'core-ui/upArrowSimple.png',
     downArrow: 'core-ui/downArrow.png',
+
+    targetingArrow: 'core-ui/targetingArrow.webp',
+    targetingBead: 'core-ui/targetingBead.webp',
 }
 
 export const fontAssets = {
