@@ -60,7 +60,7 @@ export function DrawPile(): PixiContainer {
         style: {
             fill: 0xffffff,
             fontSize: 48 * 0.7,
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
         },
     })
 
