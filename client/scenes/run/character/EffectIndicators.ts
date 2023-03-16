@@ -4,7 +4,14 @@ import { compose, datum } from 'datums'
 import { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { glowFilter, If, PixiContainer } from '@/elementsUtil'
-import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
+import {
+    For,
+    fontMap,
+    SCALE_UNIVERSAL,
+    Container,
+    Sprite,
+    Text,
+} from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
 import { TermExplanationIf, Explanation, KeyTerm } from '@sharedElements'
 
@@ -71,7 +78,7 @@ function InteractiveEffectCounter(
             text: `${effect.counter}`,
             anchor: [1, 1],
             style: {
-                fontFamily: ['bigFont', 'monospace'],
+                fontFamily: fontMap['bigFont'],
                 fontSize: 36,
                 fill: 'white',
                 stroke: 'black',

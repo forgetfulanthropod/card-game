@@ -11,6 +11,7 @@ import {
     SpineAsset,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { toDatum, waitForDeathAnimationsDatum } from '@/util'
 import {
@@ -90,7 +91,7 @@ export function BattleScene(
                         y: BASE_HEIGHT * 0.125,
                         anchor: 0.5,
                         style: {
-                            fontFamily: 'bigFont',
+                            fontFamily: fontMap['bigFont'],
                             fontSize: 50,
                             fill: 0xffffff,
                         },

@@ -7,6 +7,7 @@ import {
     PixiContainer,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { KeyTerm, TermExplanationIf } from '@/scenes/shared'
 import { toDatum } from '@/util'
@@ -69,7 +70,7 @@ export function OrbManager(
                 Text({
                     text: `${orb.remainingCount}`,
                     style: {
-                        fontFamily: 'bigFont',
+                        fontFamily: fontMap['bigFont'],
                         // fontSize: 30,
                         fill: ['#fff', '#eee'],
 

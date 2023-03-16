@@ -1,5 +1,5 @@
 import type { PixiContainer } from '@/elementsUtil'
-import { BASE_WIDTH, Container, Text } from '@/elementsUtil'
+import { BASE_WIDTH, Container, Text, fontMap } from '@/elementsUtil'
 
 export function BattleRoomInfo(args: { info: string[] }): PixiContainer {
     return Container(
@@ -12,7 +12,7 @@ export function BattleRoomInfo(args: { info: string[] }): PixiContainer {
             text: args.info.join('\n'),
             anchor: [1, 0],
             style: {
-                fontFamily: 'sansFont',
+                fontFamily: fontMap['sansFont'],
                 fontSize: 30,
                 fill: ['#fff', '#eee'],
 

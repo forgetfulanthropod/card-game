@@ -17,6 +17,7 @@ import {
     AssetKey,
     Adjust,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { callApi } from '@/callApi'
 import {
@@ -186,7 +187,7 @@ export function NewCharacterIcon() {
                 text: '     NEW    ',
                 style: {
                     fill: 'white',
-                    fontFamily: 'bigFont',
+                    fontFamily: fontMap['bigFont'],
                     fontSize: 16,
                 },
             })

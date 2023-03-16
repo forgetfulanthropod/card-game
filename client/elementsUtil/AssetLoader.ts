@@ -69,15 +69,11 @@ async function loadAssetMaps(assetMaps: AssetMaps) {
                 sound.add(name, url)
                 return true
             } else {
-                await Assets.load(name).catch(() => false)
-                return true
+                return Assets.load(name).catch(() => false)
             }
         })
     )
     return true
-    //const uniqueNames = unique.map((data: [string, string]) => data[0])
-    //const assetsPromise = Assets.load(uniqueNames)
-    //return assetsPromise
 }
 
 let latestLoopingSong: object | null = null

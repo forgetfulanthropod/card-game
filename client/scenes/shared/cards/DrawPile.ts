@@ -9,6 +9,7 @@ import {
     Container,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 
 export function DrawPile(pile: Pile): PixiContainer {
@@ -40,7 +41,7 @@ export function DrawPile(pile: Pile): PixiContainer {
             style: {
                 fill: 0xffffff,
                 fontSize: 48 * 0.7,
-                fontFamily: 'bigFont',
+                fontFamily: fontMap['bigFont'],
             },
         })
     )

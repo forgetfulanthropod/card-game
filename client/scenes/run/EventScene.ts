@@ -10,6 +10,7 @@ import {
     DisplayObject,
     EventAssetKey,
     eventAssets,
+    fontMap,
     getTexture,
     glowFilter,
     If,
@@ -125,7 +126,7 @@ export function EventScene(): PixiContainer {
 }
 
 const style: Partial<TextStyle> = {
-    fontFamily: 'sansFont',
+    fontFamily: fontMap['sansFont'],
     fontSize: 41,
     fill: 'white',
     wordWrap: true,
@@ -285,7 +286,7 @@ function EquipSouvenirInterface(
             text: 'Choose a Kaiju to Receive:',
             style: {
                 fontSize: 40,
-                fontFamily: 'sansFont',
+                fontFamily: fontMap['sansFont'],
                 fill: 'white',
             },
             anchor: 0.5,

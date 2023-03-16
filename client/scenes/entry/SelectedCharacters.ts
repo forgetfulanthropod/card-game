@@ -20,6 +20,7 @@ import {
     getTexture,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { hoveredCharacterUid, onUpdate } from '@/util'
 
@@ -102,7 +103,7 @@ function SelectedCharacterText() {
         y: BASE_HEIGHT * 0.565,
         anchor: 0.5,
         style: {
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
             fontSize: 50,
             fill: 0xdddddd,
             strokeThickness: 22,
