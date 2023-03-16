@@ -7,6 +7,7 @@ import {
     Text,
     TweenableContainer,
     TweenablePixiContainer,
+    fontMap,
 } from '@/elementsUtil'
 import { Container, Sprite } from '@/elementsUtil'
 import { uid } from '@pixi/utils'
@@ -189,7 +190,7 @@ function Notification(
             padding: 4,
             fontWeight: '100',
             align: 'center',
-            fontFamily: 'sansFont',
+            fontFamily: fontMap['sansFont'],
         },
         name: `${textToDisplay}`,
     })
@@ -203,7 +204,7 @@ function Notification(
             fill: 'white',
             padding: 4,
             align: 'center',
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
         },
         name: `${count}`,
     })

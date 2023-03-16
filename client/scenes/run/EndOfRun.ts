@@ -6,8 +6,7 @@ import {
     loopSong,
     PixiContainer,
     RoundedRectangleGradientSprite,
-} from '@/elementsUtil'
-import {
+    fontMap,
     getTexture,
     Text,
     TweenableContainer,
@@ -269,7 +268,7 @@ const ScoreAttributeItem = (
         padding: 4,
         align: 'center',
         fontWeight: 'lighter',
-        fontFamily: 'bigFont',
+        fontFamily: fontMap['bigFont'],
     }
 
     const Title = Text({
@@ -290,7 +289,7 @@ const ScoreAttributeItem = (
         y,
         style: {
             ...baseStyle,
-            fontFamily: 'sansFont',
+            fontFamily: fontMap['sansFont'],
         },
         name: `${attribute}_score`,
     })
@@ -312,7 +311,7 @@ const ScoreAttributeItem = (
             ...baseStyle,
             fill: 0xdddddd,
             fontSize: 20,
-            fontFamily: 'sansFont',
+            fontFamily: fontMap['sansFont'],
             fontStyle: 'italic',
         },
     })
@@ -402,7 +401,7 @@ export function EndOfRun(): PixiContainer {
             padding: 4,
             align: 'center',
             fontWeight: 'bold',
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
         },
         name: 'TotalScoreTitle',
         alpha: 0,
@@ -419,7 +418,7 @@ export function EndOfRun(): PixiContainer {
             padding: 4,
             align: 'center',
             fontWeight: 'lighter',
-            fontFamily: 'sansFont',
+            fontFamily: fontMap['sansFont'],
         },
         name: 'TotalScore',
         alpha: 0,
@@ -451,7 +450,7 @@ export function EndOfRun(): PixiContainer {
             x: Background.width / 2,
             style: {
                 fill: 0xffffff,
-                fontFamily: 'sansFont',
+                fontFamily: fontMap['sansFont'],
                 fontWeight: '300',
                 fontSize: 20,
             },
@@ -499,7 +498,7 @@ export function EndOfRun(): PixiContainer {
             x: Background.width / 2,
             style: {
                 fill: 0xffffff,
-                fontFamily: 'sansFont',
+                fontFamily: fontMap['sansFont'],
                 fontWeight: '100',
                 fontSize: 20,
             },

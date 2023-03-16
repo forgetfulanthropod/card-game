@@ -1,6 +1,7 @@
 import type { SkeletonData } from '@pixi-spine/all-4.1'
 import { Spine as PixiSpine } from '@pixi-spine/all-4.1'
-import { Loader } from 'pixi.js'
+import { Assets } from 'pixi.js'
+
 import type { ROCursor } from 'sbaobab'
 
 import type { CharacterId } from 'shared'
@@ -9,7 +10,6 @@ import { bindEvents, startChecking } from './mypixi'
 import { AnimationId, SpineAsset, spineAssets } from '@/assets'
 import { haveEvilSkins } from '@/assets'
 import { onUpdate } from '@/util'
-
 export { PixiSpine }
 
 export function Spine<Name extends SpineAsset>(props: {
@@ -77,9 +77,7 @@ export function Spine<Name extends SpineAsset>(props: {
         },
     })
 
-    spine.cursor = spine.interactive
-        ? `url('assets/root/hand.webp'), pointer`
-        : 'default'
+    spine.cursor = spine.interactive ? 'hover' : 'default'
 
     const destroy = spine.destroy
     spine.destroy = (...args) => {
@@ -103,7 +101,8 @@ function spineData(name: SpineAsset): SkeletonData {
     if (usesSkinDSL(name)) ({ resourceName } = getSkinInfo(name))
 
     return (
-        Loader.shared.resources[resourceName].spineData ??
+        Assets.get(resourceName)?.spineData ??
+        // Loader.shared.resources[resourceName].spineData ??
         throwNull(`spineData '${resourceName}'`)
     )
 }

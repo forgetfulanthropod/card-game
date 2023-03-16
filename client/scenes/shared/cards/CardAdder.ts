@@ -90,7 +90,7 @@ function Options(
     const lessImportantFilter = new AdjustmentFilter({ saturation: 0.5 })
 
     const cardEls = vals(cardPile).map((card, i) => {
-        const pointerover = () => {
+        const pointerenter = () => {
             if (selectedCardUid.val == null)
                 cardEls.forEach(el => (el.filters = null))
 
@@ -112,9 +112,9 @@ function Options(
 
                         selectedCardUid.set(card.uid)
                     },
-                    pointerdown: pointerover,
-                    pointerover,
-                    pointerout() {
+                    pointerdown: pointerenter,
+                    pointerenter,
+                    pointerleave() {
                         if (cardEl.filters == null) return
 
                         cardEl.filters = cardEl.filters.filter(

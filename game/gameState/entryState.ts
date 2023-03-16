@@ -25,5 +25,6 @@ export function getInitialEntryState(): EntryScene {
         fullSelectedCharacterDecks: {},
         allCharacterOptions: allCharacterOptionsIds.map(id => statsMap[id]),
         selectedLevel: getRulebook().dungeonLevels[0],
+        runId: -1,
     }
 }

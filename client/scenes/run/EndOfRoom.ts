@@ -11,6 +11,7 @@ import {
     Text,
     TweenableContainer,
     TweenablePixiContainer,
+    fontMap,
 } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
@@ -250,7 +251,7 @@ export function EndOfRoom(): PixiContainer {
                     padding: 4,
                     align: 'center',
                     fontWeight: 'bold',
-                    fontFamily: 'bigFont'
+                    fontFamily: fontMap['bigFont'],
                 },
                 name: 'LootItemText',
             })

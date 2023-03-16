@@ -10,7 +10,7 @@ export const changeScene: GameActions['changeScene'] = args => {
     // logger.info('changing scene to ' + args.newSceneName)
     if (args.newSceneName === 'battle') {
         const entrySceneData = getEntrySceneIn(args.game).get()
-        const { selectedCharacters, selectedLevel } = entrySceneData
+        const { selectedCharacters, selectedLevel, runId } = entrySceneData
         const dungeonName = getRulebook().dungeonLevels[selectedLevel.num].name
         game.set(
             'scene',
@@ -20,6 +20,7 @@ export const changeScene: GameActions['changeScene'] = args => {
                     .map(c => c as OwnedCharacterStats),
                 dungeonName,
                 game: args.game,
+                runId,
             })
         )
         const scene = getBattleSceneIn(args.game)

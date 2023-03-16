@@ -14,6 +14,7 @@ import {
     If,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import {
     hoveredCharacterStatsOverride,
@@ -206,7 +207,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             Text({
                 text: props.cm.displayName,
                 style: {
-                    fontFamily: 'bigFont',
+                    fontFamily: fontMap['bigFont'],
                     fontSize: 40,
                     fill: 0xdddddd,
                 },
@@ -216,7 +217,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             Text({
                 text: upperFirst(props.cm.class),
                 style: {
-                    fontFamily: 'sansFont',
+                    fontFamily: fontMap['sansFont'],
                     fontSize: 20,
                     fill: 0x708090,
                     fontStyle: 'italic',
@@ -229,7 +230,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             // Text({
             //     text: cm.class,
             //     style: {
-            //         fontFamily: 'bigFont',
+            //         fontFamily: 'Aesthet Nova',
             //         fontSize: 40,
             //         fill: classColorMap[cm.class],
             //         // stroke: 0xdddddd,
@@ -249,7 +250,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                     Text({
                         text: `${stat.displayName}`,
                         style: {
-                            fontFamily: 'sansFont',
+                            fontFamily: fontMap['sansFont'],
                             fontSize: 20,
                             fill: stat.color,
                             align: 'center',
@@ -262,7 +263,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                             props.cm[stat.key]
                         }`,
                         style: {
-                            fontFamily: 'bigFont',
+                            fontFamily: fontMap['bigFont'],
                             fontSize: 32,
                             fill: stat.color,
                             align: 'center',

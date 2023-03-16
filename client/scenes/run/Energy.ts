@@ -8,6 +8,7 @@ import {
     If,
     For,
     RoundedRectangleGradientSprite,
+    fontMap,
 } from '@/elementsUtil'
 import type { PixiContainer } from '@/elementsUtil'
 import { onUpdate, toDatum } from '@/util'
@@ -37,7 +38,7 @@ function EnergyEl(scene: ROBattleScene): PixiContainer {
             stroke: 'black',
             strokeThickness: 10,
             fontSize: 76,
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
             letterSpacing: -6,
         },
         anchor: [0.5, 0],

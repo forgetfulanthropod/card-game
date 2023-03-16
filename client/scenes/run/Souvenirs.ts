@@ -52,12 +52,12 @@ export function SouvenirEl({
 }) {
     const isHovered = datum(false)
     const events = {
-        pointerover() {
+        pointerenter() {
             isHovered.set(true)
             if (souvenir.characterUid)
                 hoveredCharacterUid.set(souvenir.characterUid)
         },
-        pointerout() {
+        pointerleave() {
             isHovered.set(false)
             if (souvenir.characterUid) hoveredCharacterUid.set(null)
         },
@@ -67,17 +67,22 @@ export function SouvenirEl({
         },
         ...(displayArgs?.events ?? {}),
     }
-
+    // TODO better/auto fallback
+    let textureKey = `souvenir${upperFirst(souvenir.id)}` as AssetKey
+    let texture
+    try {
+        texture = getTexture(textureKey)
+    } catch (e) {
+        textureKey = 'souvenirPlaceholder' as AssetKey
+        texture = getTexture(textureKey)
+    }
     return Container(
         {
-            name: `souvenir${upperFirst(souvenir.id)}`,
+            name: textureKey,
         },
         Sprite({
-            src: `souvenir${upperFirst(souvenir.id)}` as AssetKey,
-            scale:
-                width /
-                getTexture(`souvenir${upperFirst(souvenir.id)}` as AssetKey)
-                    .width,
+            src: textureKey,
+            scale: width / texture.width,
             anchor: [1, 0.5],
             events,
             ...(displayArgs ? omit(displayArgs, 'events') : {}),

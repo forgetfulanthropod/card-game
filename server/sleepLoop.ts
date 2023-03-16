@@ -4,6 +4,30 @@ import { sleep } from 'shared/code'
 import { setGamestate } from './db'
 import { emitNetworkEvent, emitNewGamestate } from './IO'
 
+export type ApiCall = GameActionCall & { username: string }
+export const processingQueue: Record<string, ApiCall[]> = {}
+export const isProcessing = new Set<string>()
+
+export const processActionQueue = async (game: Gamecursor) => {
+    const username = game.get('username')
+    let actionQueue = processingQueue[username]
+    if (!actionQueue || isProcessing.has(username)) return
+    isProcessing.add(username)
+    let action
+    while ((action = processingQueue[username].shift())) {
+        try {
+            await doActionAndTakeSteps({ ...action, game })
+        } catch (e) {
+            const err = e as unknown as Error
+            logger.error(
+                `error doing game action: ${err.message}\n${err.stack}`
+            )
+        }
+    }
+    isProcessing.delete(username)
+    return
+}
+
 export async function doActionAndTakeSteps(
     args: GameActionCall & { username: string }
 ) {

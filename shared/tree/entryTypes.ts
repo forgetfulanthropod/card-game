@@ -23,4 +23,5 @@ export interface EntryScene extends SceneHas {
         name: string
         num: number
     }
+    runId: number
 }

@@ -1,7 +1,9 @@
 import { AuthUserDBActionProps, BUILD_VER, RunID, ServerActions } from 'shared'
 import { trackMetric } from '@/metrics'
 import { getDbClient, sql as sqlTag } from '@/db/client'
-import { getGamestate } from '@/db'
+import { getGamestate, setGamestate } from '@/db'
+
+import { produce } from 'immer'
 
 export const startRun: ServerActions['startRun'] = async ({ userId }) => {
     logger.info(`Starting run for: ${userId}`)
@@ -19,7 +21,7 @@ const createNewRun = async (props: AuthUserDBActionProps): Promise<RunID> => {
     const { connection, userId } = props
     let sql = sqlTag.typeAlias('id')
 
-    const gameState = await getGamestate(userId)
+    let gameState = await getGamestate(userId)
     const runStatus = gameState ? 'in_progress' : 'initializing'
 
     const runId = await connection.oneFirst(sql`
