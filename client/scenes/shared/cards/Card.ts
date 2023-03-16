@@ -36,12 +36,13 @@ import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import type { DisplayObject, InteractionEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type {
+import {
     Card,
     CardType,
     CardUid,
     CharacterUid,
     OwnedCharacterStats,
+    StanceId,
     TargetType,
 } from 'shared'
 import { keys } from 'shared/code'
@@ -124,6 +125,7 @@ export function CardEl({
         width,
         isLongHovered
     )
+    const hoveredStanceDatum = datum<StanceId | null>(null)
 
     const root = TweenableContainer(
         {
@@ -165,7 +167,7 @@ export function CardEl({
             }),
             getEnergyContainer(card),
             getCardOwnerToken(card),
-            ...getTexts(card, cardFrameTexture, colorStops),
+            ...getTexts(card, cardFrameTexture, colorStops, hoveredStanceDatum),
             ...(omitPointerAreaExtender
                 ? []
                 : [
@@ -174,7 +176,7 @@ export function CardEl({
                           cardFrameTexture.height
                       ),
                   ]),
-            Adjust(HoverableStances(card), { y: 0 })
+            Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
             // If(isLongHovered, () => )
         ),
         Adjust(termExplanationsForCard, {
@@ -343,7 +345,8 @@ function getCardOwnerToken(card: Card): PixiContainer {
 function getTexts(
     card: Card,
     cardFrameTexture: PixiTexture,
-    colorStops: ColorStop[]
+    colorStops: ColorStop[],
+    hoveredStanceDatum: Datum<StanceId | null>
 ): DisplayObject[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
@@ -351,6 +354,31 @@ function getTexts(
     const explanationFontSize = getExplanationFontSize(
         cardFrameScale,
         card.explanation
+    )
+
+    const explanationText = Container(
+        {
+            name: 'ExplanationText',
+            onDestroy: [
+                hoveredStanceDatum.onChange(id => {
+                    explanationText.addChild(
+                        ExplanationText(
+                            id ? card.stanceExplanations[id] : card.explanation,
+                            cardFrameTexture,
+                            marginH,
+                            explanationFontSize
+                        )
+                    )
+                    explanationText.removeChildAt(0)
+                }),
+            ],
+        },
+        ExplanationText(
+            card.explanation,
+            cardFrameTexture,
+            marginH,
+            explanationFontSize
+        )
     )
 
     return [
@@ -375,23 +403,7 @@ function getTexts(
                 y: cardFrameTexture.width * 0.15,
             }
         ),
-        Text({
-            text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
-                card.explanation
-            )}</div>`,
-            isHtml: true,
-            y: cardFrameTexture.height * 0.15,
-            anchor: [0.5, 0],
-            style: {
-                wordWrap: true,
-                wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: explanationFontSize,
-                align: 'center',
-                fontFamily: 'monoFont',
-                fill: 'black',
-                lineHeight: explanationFontSize * 1.1,
-            },
-        }),
+        explanationText,
         // quick fix for Bean to B.E.A.N. on cards
         Text({
             text:
@@ -410,6 +422,31 @@ function getTexts(
             },
         }),
     ]
+}
+
+function ExplanationText(
+    explanation: string,
+    cardFrameTexture: PixiTexture,
+    marginH: number,
+    explanationFontSize: number
+): DisplayObject {
+    return Text({
+        text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
+            explanation
+        )}</div>`,
+        isHtml: true,
+        y: cardFrameTexture.height * 0.15,
+        anchor: [0.5, 0],
+        style: {
+            wordWrap: true,
+            wordWrapWidth: cardFrameTexture.width - marginH * 2,
+            fontSize: explanationFontSize,
+            align: 'center',
+            fontFamily: 'monoFont',
+            fill: 'black',
+            lineHeight: explanationFontSize * 1.1,
+        },
+    })
 }
 
 function getExplanationFontSize(cardFrameScale: number, explanation: string) {

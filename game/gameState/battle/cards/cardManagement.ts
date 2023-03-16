@@ -77,7 +77,7 @@ export function updateHand(scene: BattleCursor) {
                 const card = hand[cardUid]
                 let commandOutcomes = getCardOutcomes(scene, card)
                 newHand[cardUid] = {
-                    ...updateExplanation(hand[cardUid], scene),
+                    ...updateExplanations(hand[cardUid], scene),
                     outcomes: commandOutcomes,
                 }
                 return newHand[cardUid]
@@ -154,7 +154,7 @@ export function makeCards(scene: BattleCursor): Piles {
         const cardIds = characterUidToCardIdMap[characterUid]
 
         cardIds.forEach(id => {
-            const card = updateExplanation(
+            const card = updateExplanations(
                 getCardInstance(id, characterUid),
                 scene
             )
@@ -245,7 +245,7 @@ export function getFullDeckForCharacter(
     const pile: Pile = {}
 
     idPool.forEach(cardId => {
-        const card = updateExplanation(
+        const card = updateExplanations(
             getCardInstance(cardId, character.uid),
             scene
         )
@@ -256,11 +256,19 @@ export function getFullDeckForCharacter(
     return pile
 }
 
-export function updateExplanation(
+export function updateExplanations(
     card: Card,
     scene: BattleCursor | EntryCursor
 ): Card {
-    return { ...card, explanation: explainCommand(card, scene) }
+    return {
+        ...card,
+        explanation: explainCommand(card, scene),
+        stanceExplanations: {
+            avoidant: explainCommand(card, scene, 'avoidant'),
+            neutral: explainCommand(card, scene, 'neutral'),
+            aggressive: explainCommand(card, scene, 'aggressive'),
+        },
+    }
 }
 
 export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
@@ -269,6 +277,11 @@ export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
         uid: `${id}-${makeRandId()}`,
         characterUid,
         explanation: 'error!',
+        stanceExplanations: {
+            avoidant: 'error!',
+            neutral: 'error!',
+            aggressive: 'error!',
+        },
     }
 }
 

@@ -1,7 +1,7 @@
 import type { Brandify } from '@misc'
 import { CommandOutcome } from './BattleScene'
 import type { CharacterUid } from './Character'
-import type { CharacterClass, CharacterId } from './Characters'
+import type { CharacterClass, CharacterId, StanceId } from './Characters'
 
 export type CardUid = string & Brandify
 
@@ -43,6 +43,7 @@ export interface Card extends CardDefinition {
     characterUid: CharacterUid
     uid: CardUid
     explanation: string
+    stanceExplanations: Record<StanceId, string>
     outcomes?: Record<string, CommandOutcome>
 }
 

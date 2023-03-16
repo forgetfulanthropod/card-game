@@ -72,6 +72,11 @@ const interpretCommandSuite = {
                 characterUid: pc1,
                 uid: 'a',
                 explanation: '',
+                stanceExplanations: {
+                    avoidant: '',
+                    neutral: '',
+                    aggressive: '',
+                },
 
                 name: 'Song of Good Health',
                 energy: 1,
@@ -93,6 +98,11 @@ const interpretCommandSuite = {
                 characterUid: pc1,
                 uid: 'b',
                 explanation: '',
+                stanceExplanations: {
+                    avoidant: '',
+                    neutral: '',
+                    aggressive: '',
+                },
 
                 name: 'Song of Good Health',
                 energy: 1,

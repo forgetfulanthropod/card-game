@@ -8,7 +8,7 @@ import { getAllPcs, getLivingPcs } from '../characters/characterGetters'
 import {
     getCardInstance,
     getRandomCardIdForCharacter,
-    updateExplanation,
+    updateExplanations,
 } from '.'
 import { toCursor } from '@/util'
 
@@ -17,7 +17,7 @@ export function getNewCardOptions(scene: BattleScene): Pile {
     const livingPcs = getLivingPcs(scene)
 
     for (let i = 0; i < livingPcs.length; i++) {
-        const card = updateExplanation(newCard(livingPcs, i), toCursor(scene))
+        const card = updateExplanations(newCard(livingPcs, i), toCursor(scene))
         newPile[card.uid] = card
     }
 
