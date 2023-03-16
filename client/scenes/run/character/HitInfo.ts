@@ -1,7 +1,7 @@
 import { range } from 'lodash'
 import { Rectangle, Texture } from 'pixi.js'
 import type { PixiSpine } from '@/elementsUtil'
-import { getRenderer, Spine, Text } from '@/elementsUtil'
+import { getRenderer, Spine, Text, fontMap } from '@/elementsUtil'
 
 let lastRandomIndex = 1
 export function HitInfo(args: {
@@ -25,7 +25,7 @@ export function HitInfo(args: {
     const text = Text({
         text: args.damage,
         style: {
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
             fontSize: 150,
             stroke: 0,
             strokeThickness: 10,
@@ -62,7 +62,7 @@ export function HitInfo(args: {
     //     text: `${args.damage}`,
     //     anchor: [0, 1],
     //     style: {
-    //         fontFamily: ['bigFont', 'monospace'],
+    //         fontFamily: ['Aesthet Nova', 'monospace'],
     //         fontSize: 60,
     //         fill: args.isPoison
     //             ? ['rgb(143,253,49)', 'rgb(43,148,52)']

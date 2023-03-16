@@ -8,6 +8,7 @@ import {
     AssetKey,
     Container,
     customGlowFilter,
+    fontMap,
     getTexture,
     If,
     onDestroyed,
@@ -93,8 +94,7 @@ function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {
                           text: `${block}`,
                           anchor: [0.5, 0.5],
                           style: {
-                              // fontFamily: ['bigFont', 'monospace'],
-                              fontFamily: ['sansFont'],
+                              fontFamily: fontMap['sansFont'],
                               fontSize: 30,
                               fill: 'white',
                               stroke: 'black',
@@ -120,7 +120,7 @@ const StatChangeText = (
         anchor: [0.5, 0],
         filters: [customFilter],
         style: {
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
             fontSize: text === 'SMASHED' ? 48 : 64,
             fill,
             stroke: 'black',
@@ -298,13 +298,13 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             src: 'healthBarHighlight',
             anchor: spriteAnchor,
             events: {
-                pointerover() {
+                pointerenter() {
                     isHovered.set(true)
                 },
                 pointerdown() {
                     isHovered.set(true)
                 },
-                pointerout() {
+                pointerleave() {
                     setTimeout(() => isHovered.set(false), 50)
                 },
             },
@@ -346,7 +346,7 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             anchor: [0.5, 0.6],
             x: HEALTH_BAR_WIDTH / 2,
             style: {
-                fontFamily: 'bigFont',
+                fontFamily: fontMap['bigFont'],
                 fontSize: 30,
                 fill: 'white',
                 stroke: '#111',

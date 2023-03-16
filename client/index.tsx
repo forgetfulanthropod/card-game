@@ -18,20 +18,27 @@ const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
 const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
 
 function main() {
-    if (GAME_IS_LIVE) {
-        startLoadingAssets()
-    }
-
     if (IS_PRODUCTION) {
         // disable right clicks
         window.addEventListener('contextmenu', e => {
             e.preventDefault()
         })
     }
-    document.title = `Kaiju Cards ${BUILD_VER}`
-    prepareSocket()
-    const root = createRoot(preactRoot)
-    preactRoot.innerHTML = '' // remove the default warning
-    root.render(<App />)
+
+    if (GAME_IS_LIVE) {
+        startLoadingAssets().then(() => {
+            document.title = `Kaiju Cards ${BUILD_VER}`
+            prepareSocket()
+            const root = createRoot(preactRoot)
+            preactRoot.innerHTML = '' // remove the default warning
+            root.render(<App />)
+        })
+    } else {
+        document.title = `Kaiju Cards ${BUILD_VER}`
+        prepareSocket()
+        const root = createRoot(preactRoot)
+        preactRoot.innerHTML = '' // remove the default warning
+        root.render(<App />)
+    }
 }
 void main()

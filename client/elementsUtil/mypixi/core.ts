@@ -19,12 +19,18 @@ import type {
 import { startChecking } from './_util'
 import { onUpdate } from '@/util'
 import { Point, SimpleRope } from 'pixi.js'
-import { DisplayObject } from '@pixi/animate'
 import { getRenderer, isHighResolution } from './application'
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
 export const SCALE_UNIVERSAL = BASE_WIDTH / 1920
+
+export const fontMap = {
+    bigFont: ['Aesthet Nova W05 Black', 'sans-serif'],
+    monoFont: ['Spacemono Bold', 'monospace'],
+    sansFont: ['Spacegrotesk Variablefont Wght', 'sans-serif'],
+}
+
 // export type Sprite = PixiSprite
 export function Sprite(args: SpriteArgs): PixiSprite {
     if (args.src == null) {
@@ -105,10 +111,7 @@ export function Text(args: TextArgs): PixiText {
             return textEl as PixiText
         }
     }
-    const textEl = new TextInstantiator(
-        String(text),
-        args.style
-    )
+    const textEl = new TextInstantiator(String(text), args.style)
     textEl.resolution = isHighResolution ? 2 : 1
     applyShownArgs(textEl, args)
     startChecking(textEl)

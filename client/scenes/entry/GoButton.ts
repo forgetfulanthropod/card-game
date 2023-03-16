@@ -35,10 +35,10 @@ export function GoButton(): PixiContainer {
             startRun()
         },
         events: {
-            pointerover() {
+            pointerenter() {
                 bg.filters = [glowFilter]
             },
-            pointerout() {
+            pointerleave() {
                 bg.filters = null
             },
         },

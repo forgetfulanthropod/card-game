@@ -1,7 +1,12 @@
 import type { CharacterId, CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
-import { addFilterTo, InteractionEvents, PixiSpine, removeFilterFrom } from '@/elementsUtil'
+import {
+    addFilterTo,
+    InteractionEvents,
+    PixiSpine,
+    removeFilterFrom,
+} from '@/elementsUtil'
 import { onDestroyed, glowFilter, Spine } from '@/elementsUtil'
 
 export function MainCharacterAnimation({
@@ -29,14 +34,14 @@ export function MainCharacterAnimation({
 
     if (!spineAssetName) return null
 
-    const pointerover = () => hoveredCharacterUid.set(characterMeta.uid)
-    const pointerout = () => hoveredCharacterUid.set(null)
+    const pointerenter = () => hoveredCharacterUid.set(characterMeta.uid)
+    const pointerleave = () => {
+        if (characterMeta.uid == hoveredCharacterUid.val)
+            hoveredCharacterUid.set(null)
+    }
     const basicEvents = {
-        pointerover,
-        pointerdown: pointerover,
-        pointerout,
-        pointerup() {},
-        pointermove() {},
+        pointerenter,
+        pointerleave,
     }
 
     const root = Spine({

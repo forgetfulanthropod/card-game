@@ -18,7 +18,7 @@ export function ModalBackdrop(): PixiSprite {
         width: BASE_WIDTH * 2,
         height: BASE_HEIGHT * 2,
         events: {
-            pointerover: () => void(0)
+            pointerenter: () => void 0,
         },
     })
 

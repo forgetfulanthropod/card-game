@@ -59,10 +59,10 @@ export function StanceBadge(
     )
 
     return If(characterDatum, ({ hasMoved, stance }) => {
-        const pointerover = () => {
+        const pointerenter = () => {
             isHovered.set(true)
         }
-        const pointerout = () => {
+        const pointerleave = () => {
             if (hasMoved) isHovered.set(false)
         }
 
@@ -90,10 +90,10 @@ export function StanceBadge(
                 anchor: 0.5,
                 // alpha: 0.5,
                 events: {
-                    pointerover,
-                    pointerdown: pointerover,
-                    pointerout,
-                    pointerup: pointerout,
+                    pointerenter,
+                    pointerdown: pointerenter,
+                    pointerleave,
+                    pointerup: pointerleave,
                 },
             }),
             ExplanationIf({
@@ -138,7 +138,7 @@ function StanceChambers(
             y: 50,
             rotation: rotationForStance,
             events: {
-                pointerover() {
+                pointerenter() {
                     pointerMovedAway = false
                 },
                 pointerdown() {
@@ -146,7 +146,7 @@ function StanceChambers(
                         setTimeout(() => isHovered.set(false), 500)
                     }
                 },
-                pointerout() {
+                pointerleave() {
                     isHovered.set(false)
                 },
             },
@@ -233,13 +233,14 @@ function StanceBullets(
                     : cylinderMidRadius * Math.sin(bottomChamberAngle),
             rotation,
             events: {
-                pointerover() {
-                    hoveredStanceId.set(null)
+                pointerenter() {
                     hoveredStanceId.set(stanceId)
                 },
                 pointerdown() {
-                    hoveredStanceId.set(null)
                     hoveredStanceId.set(stanceId)
+                },
+                pointerleave() {
+                    hoveredStanceId.set(null)
                 },
                 pointerup() {
                     const selectedStanceId = hoveredStanceId.val!

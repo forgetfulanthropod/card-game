@@ -7,6 +7,7 @@ import {
     PixiContainer,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { KeyTerm, TermExplanationIf } from '@/scenes/shared'
 import { toDatum } from '@/util'
@@ -40,7 +41,7 @@ export function OrbManager(
                         pointerdown() {
                             isHovered.set(true)
                         },
-                        pointerover() {
+                        pointerenter() {
                             isHovered.set(true)
                         },
                         pointerup() {
@@ -51,7 +52,7 @@ export function OrbManager(
                             })
                             isHovered.set(false)
                         },
-                        pointerout() {
+                        pointerleave() {
                             isHovered.set(false)
                         },
                     },
@@ -69,7 +70,7 @@ export function OrbManager(
                 Text({
                     text: `${orb.remainingCount}`,
                     style: {
-                        fontFamily: 'bigFont',
+                        fontFamily: fontMap['bigFont'],
                         // fontSize: 30,
                         fill: ['#fff', '#eee'],
 

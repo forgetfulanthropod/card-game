@@ -9,6 +9,7 @@ import {
     Container,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { getBattleScene } from '@/data'
@@ -53,7 +54,7 @@ export function DiscardPile(): PixiContainer {
         style: {
             fill: 0xffffff,
             fontSize: 48 * 0.7,
-            fontFamily: 'bigFont',
+            fontFamily: fontMap['bigFont'],
         },
     })
 

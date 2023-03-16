@@ -81,7 +81,9 @@ export function SceneEditor(): JSXElement {
             </>}
             <button
                 onClick={async () => {
-                    const newScene = JSON.parse(JSON.stringify(scene)) as BattleScene
+                    const newScene = JSON.parse(
+                        JSON.stringify(scene)
+                    ) as BattleScene
                     for (let char of keys(newScene.allCharacters)) {
                         const { isPc } =
                             newScene.allCharacters[char as CharacterUid]
@@ -93,20 +95,24 @@ export function SceneEditor(): JSXElement {
                     await callApi('setBattleScene', {
                         scene: newScene,
                     })
-                    await callApi('endTurn', {})
                 }}
             >
                 kill all enemies
             </button>
             <button
                 onClick={async () => {
-                    const newScene = JSON.parse(JSON.stringify(scene)) as BattleScene
+                    const newScene = JSON.parse(
+                        JSON.stringify(scene)
+                    ) as BattleScene
                     for (let char of keys(newScene.allCharacters)) {
                         const { isPc } =
                             newScene.allCharacters[char as CharacterUid]
                         if (!isPc) continue
 
-                        newScene.allCharacters[char as CharacterUid].health = newScene.allCharacters[char as CharacterUid].constitution
+                        newScene.allCharacters[char as CharacterUid].health =
+                            newScene.allCharacters[
+                                char as CharacterUid
+                            ].constitution
                     }
 
                     await callApi('setBattleScene', {

@@ -617,6 +617,8 @@ export const eventAssets = {
 export const souvenirAssets: {
     [K in SouvenirId as `souvenir${Capitalize<K>}`]: string
 } = {
+    //@ts-expect-error
+    souvenirPlaceholder: 'souvenirs/souvenirPlaceholder.webp',
     souvenirBigStinkyTooth: 'souvenirs/Stinky Tooth.webp',
     souvenirBrokenCarriageWheel: 'souvenirs/Broken Carriage Wheel.webp',
     souvenirBundleOfFrogWine: 'souvenirs/Bundle Of frog Wine.webp',
