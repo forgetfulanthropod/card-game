@@ -15,6 +15,17 @@ const TIME_AFTER_PLAYER_MOVE = 1000
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
 
+    if (
+        scene.get('isPlayerTurn') !== true ||
+        scene.get('state') !== 'in battle' ||
+        scene.get('isInMap') === true
+    ) {
+        logger.warn(
+            `${scene.get('username')} tried to end turn when not allowed`
+        )
+        return
+    }
+
     updateMetricsAndScoring(scene)
 
     setDefaultEndPlayerTurnState(scene)

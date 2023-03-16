@@ -16,7 +16,7 @@ import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
-    if (scene.get('state') !== 'in battle') {
+    if (scene.get('state') !== 'in battle' || scene.get('isInMap') === true) {
         logger.warn('tried to play card while not in battle')
         return
     }

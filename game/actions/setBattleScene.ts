@@ -1,6 +1,7 @@
 import type { GameActions } from 'shared'
 
 import { getBattleSceneIn, isProduction } from '@/util'
+import { maybeTransitionBattleState } from '@/gameState'
 
 export const setBattleScene: GameActions['setBattleScene'] = ({
     game,
@@ -12,4 +13,6 @@ export const setBattleScene: GameActions['setBattleScene'] = ({
     scene.username = game.get('username')
 
     game.set('scene', scene)
+    // @ts-expect-error
+    maybeTransitionBattleState(game.select('scene'))
 }

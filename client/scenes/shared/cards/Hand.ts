@@ -122,7 +122,11 @@ export function Hand(
             root.removeChildren()
             root.destroy()
             root = staticRoot.addChild(createDestroyableContainer())
-            const CardsInHand = renderCardsInHand(newHand, hoveredCardUid, 'final')
+            const CardsInHand = renderCardsInHand(
+                newHand,
+                hoveredCardUid,
+                'final'
+            )
             root.addChild(...CardsInHand)
             bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
         }
@@ -196,7 +200,10 @@ const animateCardsIntoHand = (
             setTimeout(async () => {
                 await runKeyframeAnimations(Card, animationDuration, [
                     {
-                        keyframes: Math.max((keys(pile).length - index) * 5, 10),
+                        keyframes: Math.max(
+                            (keys(pile).length - index) * 5,
+                            10
+                        ),
                         tweenableScale: 1,
                     },
                     {
@@ -207,7 +214,7 @@ const animateCardsIntoHand = (
                     {
                         keyframes: 25,
                         y,
-                        ease: Easing.easeTo
+                        ease: Easing.easeTo,
                     },
                     {
                         keyframes: 20,
@@ -216,7 +223,7 @@ const animateCardsIntoHand = (
                     },
                 ])
                 resolve(void 0)
-            }, index * CARD_ANIMATION_INTERVAL / 2)
+            }, (index * CARD_ANIMATION_INTERVAL) / 2)
         }) as Promise<void>
     })
     return Promise.all([...animations])
@@ -484,10 +491,10 @@ function updateGlowFilters(
                 .select('cards', 'hand')
                 .select(el.name as CardUid)
                 .get()
-            if (hoveredCharacterUid.val === card.characterUid) {
-                filteredEl.filters = [glowFilter]
-            } else {
+            if (!card || hoveredCharacterUid.val !== card.characterUid) {
                 filteredEl.filters = null
+            } else {
+                filteredEl.filters = [glowFilter]
             }
         } else {
             filteredEl.filters = null
