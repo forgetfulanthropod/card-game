@@ -4,7 +4,7 @@ import type { Card, CardUid, CharacterUid, Pile } from 'shared'
 import { assertFinite, keys, sleep, vals } from 'shared/code'
 import type { Datum } from 'datums'
 import { CardEl } from './Card'
-import { hoveredCharacterUid, toDatum } from '@/util'
+import { hoveredCharacterUid, hoveredSelectedCardUid, toDatum } from '@/util'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -43,6 +43,51 @@ export function Hand(
         hand => hand
     )
 
+    let initialDisplayVals: InitialDisplayVals
+
+    hoveredSelectedCardUid.onChange((cardUid, prevCardUid) => {
+        const destroyableRoot = staticRoot.getChildAt(
+            0
+        ) as PixiContainerWithTweenableChildren
+        if (!destroyableRoot) return
+
+        if (cardUid) centerTargetingCardEl(destroyableRoot, cardUid)
+        if (prevCardUid) uncenterCardEl(destroyableRoot, prevCardUid)
+    })
+
+    const centerTargetingCardEl = async (
+        destroyableRoot: PixiContainerWithTweenableChildren,
+        cardUid: CardUid
+    ) => {
+        const CardEl = destroyableRoot.getChildByName(
+            cardUid ?? ''
+        ) as TweenablePixiContainer
+        if (!CardEl) return new Error(`no pixi element for ${cardUid}`)
+        destroyableRoot.setChildIndex(
+            CardEl,
+            destroyableRoot.children.length - 1
+        )
+        await Tweener.add(
+            { target: CardEl, duration: 0.25, ease: Easing.easeFromTo },
+            { x: 0 }
+        )
+    }
+
+    const uncenterCardEl = async (
+        destroyableRoot: PixiContainerWithTweenableChildren,
+        cardUid: CardUid
+    ) => {
+        const CardEl = destroyableRoot.getChildByName(
+            cardUid ?? ''
+        ) as TweenablePixiContainer
+        if (!CardEl) return new Error(`no pixi element for ${cardUid}`)
+
+        const targetDisplayVals = initialDisplayVals[cardUid]
+        if (!targetDisplayVals) return new Error('dafuk no display vals')
+
+        animateTo(CardEl, targetDisplayVals)
+    }
+
     // this container exists to clean up subscriptions, it is destroyed and rerendered imperatively
     const createDestroyableContainer = () =>
         Container({
@@ -76,13 +121,12 @@ export function Hand(
         const prevHandEmpty = isEmpty(prevHand)
 
         if (!currHandEmpty && prevHandEmpty) {
-            // console.log('animate cards into hand')
+            // Animate all cards into hand
             root.removeChildren()
             const NewCardsInHand = renderCardsInHand(newHand, hoveredCardUid)
             root.addChild(...NewCardsInHand)
-            animateCardsIntoHand(NewCardsInHand, newHand).then(() => {
-                bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
-            })
+            await animateCardsIntoHand(NewCardsInHand, newHand)
+            bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
             return
         } else if (currHandEmpty && !prevHandEmpty) {
             // console.log('animate discarding all cards!')
@@ -95,7 +139,7 @@ export function Hand(
             hoveredCharacterUid.set(null) // tmp fix for character hover persisting
             return
         } else if (keys(newHand).length !== keys(prevHand).length) {
-            // console.log('one card was played')
+            // One card was played - animate out
             const cardsRemoved = keys(prevHand).filter(
                 card => !keys(newHand).includes(card)
             )
@@ -118,7 +162,7 @@ export function Hand(
             hoveredCharacterUid.set(null)
             return
         } else if (newHand) {
-            // console.log('refresh was triggered and cards are in original position')
+            // Datum changed - render cards in final position
             root.removeChildren()
             root.destroy()
             root = staticRoot.addChild(createDestroyableContainer())
@@ -130,6 +174,8 @@ export function Hand(
             root.addChild(...CardsInHand)
             bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
         }
+
+        initialDisplayVals = getInitialDisplayVals(root, newHand)
     }, true)
 
     onDestroyed(staticRoot, unsub)
@@ -378,6 +424,8 @@ function getUnfocus(
     return (selectedCardUids: CardUid[]) => {
         rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
             if (selectedCardUids.includes(cardEl.name)) return
+            if (hoveredSelectedCardUid.val === cardEl.name)
+                return
 
             const initialDisplayVal = initialDisplayVals[cardEl.name]
 
