@@ -5,7 +5,10 @@ import { registerPixiInspector } from './pixiInspector'
 import type { PixiContainer, PixiSprite } from './aliases'
 import { PixiApplication } from './aliases'
 import { toString } from 'lodash'
-import { getBooleanFromLocalStorage, toggleBooleanInLocalStorage } from '../userSettings'
+import {
+    getBooleanFromLocalStorage,
+    toggleBooleanInLocalStorage,
+} from '../userSettings'
 
 export const ROOT_SCALE = isMobile ? 1 : 1
 /**TODO: returns undefined for a brief time in certain files importing it, Workaround: use local storage directly in those files */
@@ -35,7 +38,6 @@ export function Application(args: {
     })
 
     app.stage.scale.set(ROOT_SCALE)
-    app.ticker.maxFPS = 30
 
     // const delay = 10_000
     // let frames = 0

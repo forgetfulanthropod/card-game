@@ -58,8 +58,6 @@ export function VideoBackground(args: {
             // too square
             sprite.scale.set(BASE_WIDTH / sprite.width)
         }
-
-        sprite.on('animationEnd', () => {})
     })
     // sprite.width = BASE_WIDTH * args.scale
     // sprite.height = BASE_HEIGHT * args.scale

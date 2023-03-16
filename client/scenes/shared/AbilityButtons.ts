@@ -1,6 +1,6 @@
 import type { Ability } from '@/data'
 import type { PixiContainer } from '@/elementsUtil'
-import { Container, getTexture, Sprite, Text } from '@/elementsUtil'
+import { Container, getTexture, Sprite, Text, fontMap } from '@/elementsUtil'
 
 export function AbilityButtons(abilities: Ability[]): PixiContainer[] {
     return abilities.map((ability, i) => {
@@ -9,8 +9,8 @@ export function AbilityButtons(abilities: Ability[]): PixiContainer[] {
                 x: (275 / 2) * (i ? 1 : -1) + (i ? 15 : -15),
                 y: 150,
                 events: {
-                    pointerover() {},
-                    pointerout() {},
+                    pointerenter() {},
+                    pointerleave() {},
                     pointerup() {},
                 },
             },
@@ -22,7 +22,7 @@ export function AbilityButtons(abilities: Ability[]): PixiContainer[] {
             Text({
                 text: ability.name,
                 style: {
-                    fontFamily: 'sansFont',
+                    fontFamily: fontMap['sansFont'],
                     fontSize: 20,
                     fill: 0xdddddd,
                 },

@@ -7,6 +7,7 @@ import {
     BASE_WIDTH,
     Container,
     CurvedText,
+    fontMap,
     flashTo,
     getRenderer,
     getStage,
@@ -34,7 +35,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { DisplayObject, InteractionEvent } from 'pixi.js'
+import type { DisplayObject, FederatedPointerEvent } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type {
     Card,
@@ -204,8 +205,8 @@ function getDecoratedEvents({
 
     const decoratedEvents: InteractionEvents = {
         ...dynamicEvents,
-        pointerover(e) {
-            dynamicEvents?.pointerover?.(e)
+        pointerenter(e) {
+            dynamicEvents?.pointerenter?.(e)
 
             isHovering.set(true)
             setTimeout(() => {
@@ -220,8 +221,8 @@ function getDecoratedEvents({
                 if (isHovering.val) isLongHovered.set(true)
             }, 800)
         },
-        pointerout(e) {
-            dynamicEvents?.pointerout?.(e)
+        pointerleave(e) {
+            dynamicEvents?.pointerleave?.(e)
 
             isHovering.set(false)
             isLongHovered.set(false)
@@ -358,7 +359,7 @@ function getTexts(
                     anchor: [0.5, 0.2],
                     style: {
                         fontSize: 54 * cardFrameScale,
-                        fontFamily: 'bigFont',
+                        fontFamily: fontMap['bigFont'],
                         fill: 'white',
                         stroke: 'black',
                         strokeThickness: 6 * cardFrameScale,
@@ -384,7 +385,7 @@ function getTexts(
                 wordWrapWidth: cardFrameTexture.width - marginH * 2,
                 fontSize: explanationFontSize,
                 align: 'center',
-                fontFamily: 'monoFont',
+                fontFamily: fontMap['monoFont'],
                 fill: 'black',
                 lineHeight: explanationFontSize * 1.1,
             },
@@ -399,7 +400,7 @@ function getTexts(
             anchor: 0.5,
             style: {
                 fontSize: 40 * cardFrameScale,
-                fontFamily: 'sansFont',
+                fontFamily: fontMap['sansFont'],
                 fill: colorStops[0].color,
                 stroke: 'black',
                 strokeThickness: 3,
@@ -451,14 +452,14 @@ function getEvents(
     card: Card,
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
-    const pointerover: InteractionEventHandler = () => {
+    const pointerenter: InteractionEventHandler = () => {
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
         if (card.outcomes?.outcome && isAttacking.val === false) {
             hoveredSelectedCardUid.set(card.uid)
         }
     }
-    const pointerout: InteractionEventHandler = () => {
+    const pointerleave: InteractionEventHandler = () => {
         setTimeout(() => {
             if (
                 hoveredSelectedCardUid.val === card.uid &&
@@ -476,9 +477,9 @@ function getEvents(
         currentTarget: cardEl,
     }) {
         //for mobile
-        pointerover({
+        pointerenter({
             currentTarget: cardEl,
-        } as InteractionEvent)
+        } as FederatedPointerEvent)
 
         if (!(cardEl instanceof PixiContainer))
             throw new Error('ERROR! should be bound to container')
@@ -548,9 +549,9 @@ function getEvents(
         }
         //for mobile
         else
-            pointerout({
+            pointerleave({
                 currentTarget: cardEl,
-            } as InteractionEvent)
+            } as FederatedPointerEvent)
     }
 
     // todo: detect pointermove for mobile to begin target selection..
@@ -560,8 +561,8 @@ function getEvents(
     // }
 
     return {
-        pointerover,
-        pointerout,
+        pointerenter,
+        pointerleave,
         pointerdown,
         pointerup,
         // pointermove,

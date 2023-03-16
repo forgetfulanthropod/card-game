@@ -49,8 +49,7 @@ export function StanceChambers(characterCursor: ROCursor<CharacterMeta>) {
                 x: -40 + 80 * i,
                 y: 55,
                 events: {
-                    pointerover() {
-                        console.log('pointerover')
+                    pointerenter() {
                         isHovered.set(true)
                     },
                     pointerdown() {
@@ -69,7 +68,7 @@ export function StanceChambers(characterCursor: ROCursor<CharacterMeta>) {
                             isHovered.set(false)
                         }
                     },
-                    pointerout() {
+                    pointerleave() {
                         isHovered.set(false)
                     },
                 },

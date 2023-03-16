@@ -4,7 +4,14 @@ import { compose, datum } from 'datums'
 import { VisibleEffect as VisibleEffectId } from '@/assets'
 import { getEffectIconSrc, invisibleEffects } from '@/assets'
 import { glowFilter, If, PixiContainer } from '@/elementsUtil'
-import { For, SCALE_UNIVERSAL, Container, Sprite, Text } from '@/elementsUtil'
+import {
+    For,
+    fontMap,
+    SCALE_UNIVERSAL,
+    Container,
+    Sprite,
+    Text,
+} from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
 import { TermExplanationIf, Explanation, KeyTerm } from '@sharedElements'
 
@@ -41,18 +48,18 @@ function InteractiveEffectCounter(
     effect: Effect & { id: VisibleEffectId }
 ): PixiContainer {
     const isHovered = datum(false)
-    const pointerover = () => isHovered.set(true)
-    const pointerout = () => isHovered.set(false)
+    const pointerenter = () => isHovered.set(true)
+    const pointerleave = () => isHovered.set(false)
     const width = 60
 
     const root = Container(
         {
             name: `Effect-${effect.id}`,
             events: {
-                pointerover,
-                pointerdown: pointerover,
-                pointerout,
-                pointerup: pointerout,
+                pointerenter,
+                pointerdown: pointerenter,
+                pointerleave,
+                pointerup: pointerleave,
             },
             onDestroy: [
                 isHovered.onChange(
@@ -71,7 +78,7 @@ function InteractiveEffectCounter(
             text: `${effect.counter}`,
             anchor: [1, 1],
             style: {
-                fontFamily: ['bigFont', 'monospace'],
+                fontFamily: fontMap['bigFont'],
                 fontSize: 36,
                 fill: 'white',
                 stroke: 'black',

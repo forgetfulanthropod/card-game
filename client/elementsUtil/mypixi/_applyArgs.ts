@@ -19,7 +19,7 @@ export function applyDisplayObjectArgs(
 
     if (args.onClick != null) {
         el.interactive = true
-        el.cursor = `url('assets/root/hand.webp'), pointer`
+        el.cursor = 'hover'
         el.on('pointerdown', args.onClick)
     }
 
@@ -29,13 +29,13 @@ export function applyDisplayObjectArgs(
 
     if (args.onMouseover != null) {
         el.interactive = true
-        el.cursor = `url('assets/root/hand.webp'), pointer`
-        el.on('pointerover', args.onMouseover)
+        el.cursor = 'hover'
+        el.on('pointerenter', args.onMouseover)
     }
     if (args.onMouseout != null) {
         el.interactive = true
-        el.cursor = `url('assets/root/hand.webp'), pointer`
-        el.on('pointerout', args.onMouseout)
+        el.cursor = 'hover'
+        el.on('pointerleave', args.onMouseout)
     }
 
     if (args.position != null) {

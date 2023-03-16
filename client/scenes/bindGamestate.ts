@@ -7,17 +7,24 @@ import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { nextFrame, onUpdate } from '@/util'
 import { transitionScene } from './shared/transitionScene'
 
-const pointerFullPath = 'assets/root/mouse.webp'
+const defaultPointerFullPath = 'assets/root/mouse.webp'
+const hoverPointerFullPath = 'assets/root/hand.webp'
 let lastScene: PixiContainer
 
 export function bindGamestate(app: PixiApplication): void {
-    setBodyStyles()
+    setBodyStyles(app)
 
     bindScene(app)
 }
 
-function setBodyStyles() {
-    document.body.style.cursor = `url('${pointerFullPath}'), default`
+function setBodyStyles(app: PixiApplication) {
+    const defaultIcon = `url('${defaultPointerFullPath}'),default`
+    const hoverIcon = `url('${hoverPointerFullPath}'),pointer`
+
+    app.renderer.events.cursorStyles.default = defaultIcon
+    app.renderer.events.cursorStyles.hover = hoverIcon
+
+    // document.body.style.cursor = `url('${defaultPointerFullPath}'),default`
 }
 
 function bindScene(app: PixiApplication): Unbind {

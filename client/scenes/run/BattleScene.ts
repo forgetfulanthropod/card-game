@@ -11,6 +11,7 @@ import {
     SpineAsset,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { toDatum, waitForDeathAnimationsDatum } from '@/util'
 import {
@@ -56,7 +57,7 @@ export function BattleScene(
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
     return Container(
-        { name: 'BattleScene'},
+        { name: 'BattleScene' },
         Container(
             { name: 'CharactersAndBg' },
             SpineBackground({ srcs: allSrcs[sceneIndex] }),
@@ -81,7 +82,7 @@ export function BattleScene(
                         width: BASE_WIDTH,
                         height: BASE_HEIGHT,
                         alpha: 0.7,
-                        events: { pointerover() {} },
+                        events: { pointerenter() {} },
                         defaultCursor: true,
                     }),
                     Text({
@@ -90,7 +91,7 @@ export function BattleScene(
                         y: BASE_HEIGHT * 0.125,
                         anchor: 0.5,
                         style: {
-                            fontFamily: 'bigFont',
+                            fontFamily: fontMap['bigFont'],
                             fontSize: 50,
                             fill: 0xffffff,
                         },

@@ -4,8 +4,7 @@ import {
     clearContainer,
     RoundedBordered,
     RoundedRectangleGradientSprite,
-} from '@/elementsUtil'
-import {
+    fontMap,
     getTexture,
     Text,
     TweenableContainer,
@@ -26,7 +25,7 @@ import {
     LEADERBOARD_ENTRIES_TO_DISPLAY,
     Username,
 } from 'shared'
-import {  filters } from 'pixi.js'
+import { ColorMatrixFilter } from 'pixi.js'
 import { keys, sortBy } from 'lodash'
 import { datum } from 'datums'
 import { getShortWalletAddress } from '@/components/util'
@@ -34,7 +33,7 @@ import { transitionToScreen } from './EndOfRun'
 
 const style = {
     fill: 'white',
-    fontFamily: 'monoFont',
+    fontFamily: fontMap['monoFont'],
 }
 
 export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
@@ -184,7 +183,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                     (isSelf ? ' (YOU)' : ''),
                 y: y - 8,
                 x: x - 450,
-                style: { ...style, fontSize: 20},
+                style: { ...style, fontSize: 20 },
             }),
             Sprite({
                 src: isSelf
@@ -306,7 +305,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             x: Background.width / 2,
             style: {
                 fill: active ? 'black' : 'white',
-                fontFamily: 'bigFont',
+                fontFamily: fontMap['bigFont'],
                 fontWeight: '100',
                 fontSize: 30,
             },
@@ -317,7 +316,8 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 name: `${text}_Container`,
                 y: BASE_HEIGHT / 2 - 385,
                 onClick: () => {
-                    !isAnimating.val && activeTimeframe.set(id)},
+                    !isAnimating.val && activeTimeframe.set(id)
+                },
             },
             Background,
             Adjust(TimeToggleText, {
@@ -384,7 +384,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
         onClick: () => changeLeaderboardPage('next'),
     })
 
-    const invertFilter = new filters.ColorMatrixFilter()
+    const invertFilter = new ColorMatrixFilter()
     PageUpArrow.filters = [invertFilter]
     PageDownArrow.filters = [invertFilter]
     invertFilter.negative(true)

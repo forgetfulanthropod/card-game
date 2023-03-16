@@ -1,3 +1,4 @@
+import { Spine } from '@pixi-spine/all-4.1'
 import type { DisplayObject } from 'pixi.js'
 
 const config = { shouldCheck: false }
@@ -8,7 +9,7 @@ const INTERVAL = 5000
 const warnCount: Record<number, number> = {}
 
 /** Periodically checks if element has a parent, and gives warning if not */
-export function startChecking(el: DisplayObject) {
+export function startChecking(el: DisplayObject | Spine) {
     if (!config.shouldCheck) return
     const stack = getStackTrace()
     const id = window.setInterval(() => {

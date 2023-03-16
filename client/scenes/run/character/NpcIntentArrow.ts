@@ -15,6 +15,7 @@ import {
     Text,
     Sprite,
     getTexture,
+    fontMap,
 } from '@/elementsUtil'
 import { highlightIntentFrom, toDatum } from '@/util'
 
@@ -46,7 +47,7 @@ function IntentText(
         style: {
             fontSize: 24,
             fill: 'white',
-            fontFamily: 'sansFont',
+            fontFamily: fontMap['sansFont'],
         },
         anchor: 0.5,
     })

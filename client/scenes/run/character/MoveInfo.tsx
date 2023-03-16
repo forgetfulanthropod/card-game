@@ -1,5 +1,5 @@
 import type { PixiText } from '@/elementsUtil'
-import { Text } from '@/elementsUtil'
+import { Text, fontMap } from '@/elementsUtil'
 
 export function MoveInfo(args: { moveName: string; offset: number }): PixiText {
     return Text({
@@ -7,7 +7,7 @@ export function MoveInfo(args: { moveName: string; offset: number }): PixiText {
         text: args.moveName,
         anchor: [0, 1],
         style: {
-            fontFamily: ['bigFont', 'monospace'],
+            fontFamily: fontMap['bigFont'],
             fontSize: 40,
             fontWeight: '900',
             fill: ['#333', '#000'], // gradient

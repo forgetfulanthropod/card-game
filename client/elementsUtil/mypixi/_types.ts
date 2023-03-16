@@ -1,8 +1,8 @@
 import type { Datum, RODatum } from 'datums'
 import type {
     DisplayObject,
+    FederatedPointerEvent,
     Filter as PixiFilter,
-    InteractionEvent,
     ITextStyle,
 } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
@@ -40,7 +40,7 @@ export interface DisplayObjectArgs {
     angle?: number
     rotation?: number
     onDestroy?: Callback[]
-    /** will be bound to pointerover and pointerout */
+    /** will be bound to pointerenter and pointerleave */
     isHoveredDatum?: Datum<boolean>
 }
 // text and sprite but not graphics
@@ -85,5 +85,5 @@ export type ContainerChild =
 
 export type ContainerChildren = ContainerChild[]
 
-export type InteractionEventHandler = (e: InteractionEvent) => void
+export type InteractionEventHandler = (e: FederatedPointerEvent) => void
 export type Pair = [x: number, y: number]

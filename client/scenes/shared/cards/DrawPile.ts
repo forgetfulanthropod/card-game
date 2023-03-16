@@ -16,6 +16,7 @@ import {
     Container,
     Sprite,
     Text,
+    fontMap,
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { getBattleScene } from '@/data'
