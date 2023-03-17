@@ -1,6 +1,6 @@
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { callApi } from '@/callApi'
-import { getBattleScene, getEntryScene } from '@/data'
+import { getBattleScene, getEntryScene, getScene } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -31,7 +31,7 @@ import {
     nextTick,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
-import type { Datum } from 'datums'
+import { compose, Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
@@ -177,8 +177,28 @@ export function CardEl({
                           cardFrameTexture.height
                       ),
                   ]),
-            Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
-            // If(isLongHovered, () => )
+            If(
+                compose(
+                    ([
+                        isLongHovered,
+                        hoveredCardUid,
+                        hoveredSelectedCardUid,
+                    ]) => {
+                        if (getScene().get('id') !== 'battle') return false
+
+                        return (
+                            (isLongHovered && hoveredCardUid === card.uid) ||
+                            hoveredSelectedCardUid === card.uid
+                        )
+                    },
+                    isLongHovered,
+                    //@ts-expect-error //???? todo mystery noble TSC thinks it's any but why
+                    hoveredCardUid,
+                    hoveredSelectedCardUid
+                ),
+                () =>
+                    Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
+            )
         ),
         Adjust(termExplanationsForCard, {
             x:

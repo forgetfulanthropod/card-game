@@ -66,15 +66,10 @@ export function StanceBadge(
             if (hasMoved) isHovered.set(false)
         }
 
-        const hasMovedDatum = toDatum(
-            characterCursor,
-            character =>
-                character.hasMoved ||
-                !!character.effects.find(e => e.id === 'lockStanceDebuff')
-        )
+        const isStanceLockedDatum = getIsStanceLockedDatum(characterCursor)
         return Container(
             {},
-            If(hasMovedDatum, () =>
+            If(isStanceLockedDatum, () =>
                 Sprite({
                     src: `stance${upperFirst(stance)}Confirmed` as AssetKey,
                     scale:
@@ -101,7 +96,7 @@ export function StanceBadge(
                     ([hasMoved, isHovered]) => {
                         return hasMoved && isHovered
                     },
-                    hasMovedDatum,
+                    isStanceLockedDatum,
                     isHovered
                 ) as unknown as Datum<boolean>,
                 texts: [
@@ -112,6 +107,17 @@ export function StanceBadge(
             })
         )
     })
+}
+
+export function getIsStanceLockedDatum(
+    characterCursor: ROCursor<CharacterMeta>
+) {
+    return toDatum(
+        characterCursor,
+        character =>
+            character.hasMoved ||
+            !!character.effects.find(e => e.id === 'lockStanceDebuff')
+    )
 }
 
 function StanceChambers(

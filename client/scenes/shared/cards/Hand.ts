@@ -33,6 +33,7 @@ const INITIAL_CARDS_SCALE = 0.1
 const INITIAL_CARDS_ALPHA = 1
 const INITIAL_CARDS_ROTATION = -1.55
 const CARD_ANIMATION_INTERVAL = 250 // ms
+const CARD_FOCUS_Y_OFFSET = CARD_HEIGHT_FULL * 0.45
 
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
@@ -45,16 +46,6 @@ export function Hand(
 
     let initialDisplayVals: InitialDisplayVals
 
-    hoveredSelectedCardUid.onChange((cardUid, prevCardUid) => {
-        const destroyableRoot = staticRoot.getChildAt(
-            0
-        ) as PixiContainerWithTweenableChildren
-        if (!destroyableRoot) return
-
-        if (cardUid) centerTargetingCardEl(destroyableRoot, cardUid)
-        if (prevCardUid) uncenterCardEl(destroyableRoot, prevCardUid)
-    })
-
     const centerTargetingCardEl = async (
         destroyableRoot: PixiContainerWithTweenableChildren,
         cardUid: CardUid
@@ -63,10 +54,19 @@ export function Hand(
             cardUid ?? ''
         ) as TweenablePixiContainer
         if (!CardEl) return new Error(`no pixi element for ${cardUid}`)
+
         destroyableRoot.setChildIndex(
             CardEl,
             destroyableRoot.children.length - 1
         )
+        await Tweener.killTweensOf(CardEl)
+
+        if (!initialDisplayVals[cardUid]) {
+            throw new Error(`initial display val for ${cardUid} not set`)
+        }
+
+        getFocus(destroyableRoot, initialDisplayVals, _ => {})(cardUid)
+
         await Tweener.add(
             { target: CardEl, duration: 0.25, ease: Easing.easeFromTo },
             { x: 0 }
@@ -88,21 +88,22 @@ export function Hand(
         animateTo(CardEl, targetDisplayVals)
     }
 
-    // this container exists to clean up subscriptions, it is destroyed and rerendered imperatively
-    const createDestroyableContainer = () =>
-        Container({
-            name: 'DestroyablePlayerHandContainer',
-            x: BASE_WIDTH * 0.5,
-            y: BASE_HEIGHT * 1,
-        }) as PixiContainerWithTweenableChildren
-
     // this will only ever have 1 child
     const staticRoot = Container(
         {
             name: 'PlayerHandContainer',
         },
-        createDestroyableContainer()
+        createDestructibleContainer()
     )
+
+    hoveredSelectedCardUid.onChange((cardUid, prevCardUid) => {
+        const destructibleRoot = getDestructibleRoot()
+
+        if (!destructibleRoot) return
+
+        if (cardUid) centerTargetingCardEl(destructibleRoot, cardUid)
+        if (prevCardUid) uncenterCardEl(destructibleRoot, prevCardUid)
+    })
 
     const unsub = handDatum.onChange(async (newHand, prevHand) => {
         let root: PixiContainerWithTweenableChildren // DestroyablePlayerHandContainer
@@ -111,7 +112,7 @@ export function Hand(
                 0
             ) as PixiContainerWithTweenableChildren
         } else {
-            root = staticRoot.addChild(createDestroyableContainer())
+            root = staticRoot.addChild(createDestructibleContainer())
         }
 
         lastCardOwnerUidDealt = null
@@ -151,7 +152,7 @@ export function Hand(
             }
             root.removeChildren()
             root.destroy()
-            root = staticRoot.addChild(createDestroyableContainer())
+            root = staticRoot.addChild(createDestructibleContainer())
             const NewCardsInHand = renderCardsInHand(
                 newHand,
                 hoveredCardUid,
@@ -165,7 +166,7 @@ export function Hand(
             // Datum changed - render cards in final position
             root.removeChildren()
             root.destroy()
-            root = staticRoot.addChild(createDestroyableContainer())
+            root = staticRoot.addChild(createDestructibleContainer())
             const CardsInHand = renderCardsInHand(
                 newHand,
                 hoveredCardUid,
@@ -176,11 +177,31 @@ export function Hand(
         }
 
         initialDisplayVals = getInitialDisplayVals(root, newHand)
+
+        if (hoveredSelectedCardUid.val) {
+            centerTargetingCardEl(
+                getDestructibleRoot(),
+                hoveredSelectedCardUid.val
+            )
+        }
     }, true)
 
     onDestroyed(staticRoot, unsub)
 
     return staticRoot
+
+    function getDestructibleRoot() {
+        return staticRoot.getChildAt(0) as PixiContainerWithTweenableChildren
+    }
+}
+
+// this container exists to clean up subscriptions, it is destroyed and rerendered imperatively
+function createDestructibleContainer() {
+    return Container({
+        name: 'DestructiblePlayerHandContainer',
+        x: BASE_WIDTH * 0.5,
+        y: BASE_HEIGHT * 1,
+    }) as PixiContainerWithTweenableChildren
 }
 
 function renderCardsInHand(
@@ -424,8 +445,7 @@ function getUnfocus(
     return (selectedCardUids: CardUid[]) => {
         rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
             if (selectedCardUids.includes(cardEl.name)) return
-            if (hoveredSelectedCardUid.val === cardEl.name)
-                return
+            if (hoveredSelectedCardUid.val === cardEl.name) return
 
             const initialDisplayVal = initialDisplayVals[cardEl.name]
 
@@ -455,7 +475,7 @@ function getFocus(
         animateTo(cardEl, {
             rotation: 0,
             x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.45,
+            y: initialDisplayVal.y - CARD_FOCUS_Y_OFFSET,
             scale: (CARD_WIDTH_FULL / CARD_WIDTH) * initialDisplayVal.scale,
         })
     }

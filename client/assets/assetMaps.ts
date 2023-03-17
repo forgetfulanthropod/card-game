@@ -34,8 +34,16 @@ export const rootAssets = {
     upArrowSimple: 'core-ui/upArrowSimple.png',
     downArrow: 'core-ui/downArrow.png',
 
-    targetingArrow: 'core-ui/targetingArrow.webp',
-    targetingBead: 'core-ui/targetingBead.webp',
+    // targetingArrow: 'core-ui/targetingArrow.webp',
+    targetingArrowAttack: 'core-ui/targetingArrowAttack.webp',
+    targetingArrowDefense: 'core-ui/targetingArrowDefense.webp',
+    targetingArrowUtility: 'core-ui/targetingArrowUtility.webp',
+    targetingArrowEnchantment: 'core-ui/targetingArrowEnchantment.webp',
+    // targetingBead: 'core-ui/targetingBead.webp',
+    targetingBeadAttack: 'core-ui/targetingBeadAttack.webp',
+    targetingBeadDefense: 'core-ui/targetingBeadDefense.webp',
+    targetingBeadUtility: 'core-ui/targetingBeadUtility.webp',
+    targetingBeadEnchantment: 'core-ui/targetingBeadEnchantment.webp',
 }
 
 export const fontAssets = {
