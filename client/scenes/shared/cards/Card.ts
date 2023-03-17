@@ -493,11 +493,9 @@ function getEvents(
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
     const pointerenter: InteractionEventHandler = () => {
+        if (hoveredSelectedCardUid.val === card.uid) return
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
-        if (card.outcomes?.outcome && isAttacking.val === false) {
-            hoveredSelectedCardUid.set(card.uid)
-        }
     }
     const pointerleave: InteractionEventHandler = () => {
         setTimeout(() => {
