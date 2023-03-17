@@ -106,14 +106,7 @@ export function Hand(
     })
 
     const unsub = handDatum.onChange(async (newHand, prevHand) => {
-        let root: PixiContainerWithTweenableChildren // DestroyablePlayerHandContainer
-        if (staticRoot.children.length > 0) {
-            root = staticRoot.getChildAt(
-                0
-            ) as PixiContainerWithTweenableChildren
-        } else {
-            root = staticRoot.addChild(createDestructibleContainer())
-        }
+        let root = getDestructibleRoot()
 
         lastCardOwnerUidDealt = null
         accumulatedGap = 0
@@ -152,7 +145,7 @@ export function Hand(
             }
             root.removeChildren()
             root.destroy()
-            root = staticRoot.addChild(createDestructibleContainer())
+            root = getDestructibleRoot()
             const NewCardsInHand = renderCardsInHand(
                 newHand,
                 hoveredCardUid,
@@ -166,7 +159,7 @@ export function Hand(
             // Datum changed - render cards in final position
             root.removeChildren()
             root.destroy()
-            root = staticRoot.addChild(createDestructibleContainer())
+            root = getDestructibleRoot()
             const CardsInHand = renderCardsInHand(
                 newHand,
                 hoveredCardUid,
@@ -191,7 +184,13 @@ export function Hand(
     return staticRoot
 
     function getDestructibleRoot() {
-        return staticRoot.getChildAt(0) as PixiContainerWithTweenableChildren
+        if (staticRoot.children.length > 0) {
+            return staticRoot.getChildAt(
+                0
+            ) as PixiContainerWithTweenableChildren
+        } else {
+            return staticRoot.addChild(createDestructibleContainer())
+        }
     }
 }
 
