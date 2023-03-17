@@ -3,9 +3,10 @@ import {
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
+    getRenderer,
     getStage,
     PixiContainer,
-    Sprite,
+    Sprite
 } from '@/elementsUtil'
 import { range, upperFirst } from 'lodash'
 import { Card } from 'shared'
@@ -19,6 +20,13 @@ export function TargetingArrow(
     const numBeadsOmittedFromEnd = 1
     const stage = getStage()
 
+    const defaultCursor = getRenderer().events.cursorStyles.default
+    const hoverCursor = getRenderer().events.cursorStyles.hover
+
+    getRenderer().events.cursorStyles.default = 'none'
+    getRenderer().events.cursorStyles.hover = 'none'
+
+
     const root = Container(
         {
             onDestroy: [
@@ -26,6 +34,10 @@ export function TargetingArrow(
                     stage.interactive = false
 
                     stage.off('pointermove', onPointerMove)
+
+
+                    getRenderer().events.cursorStyles.default = defaultCursor
+                    getRenderer().events.cursorStyles.hover = hoverCursor
                 },
             ],
         },
