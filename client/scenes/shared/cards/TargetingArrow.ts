@@ -57,7 +57,7 @@ export function TargetingArrow(
     function onPointerMove(e: any) {
         const pos = e.data.global
 
-        if (pos.y > BASE_HEIGHT * 0.8) {
+        if (pos.y > BASE_HEIGHT * 0.83) {
             if (cursorWentIntoPlayArea) cancelTargeting()
 
             return
