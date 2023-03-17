@@ -37,7 +37,7 @@
         },
 
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "name": "chrome client",
             "request": "launch",
             "url": "http://localhost:3000"

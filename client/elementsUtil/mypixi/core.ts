@@ -20,6 +20,7 @@ import { startChecking } from './_util'
 import { onUpdate } from '@/util'
 import { Point, SimpleRope } from 'pixi.js'
 import { getRenderer, isHighResolution } from './application'
+import { getTexture } from '../AssetLoader'
 
 export const BASE_HEIGHT = 1080
 export const BASE_WIDTH = 1920
@@ -38,7 +39,9 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         console.trace()
         return PixiSprite.from(PixiTexture.WHITE)
     }
-    const s = PixiSprite.from(args.src)
+    const s = PixiSprite.from(
+        typeof args.src === 'string' ? getTexture(args.src) : args.src
+    )
 
     applyShownArgs(s, args)
     startChecking(s)

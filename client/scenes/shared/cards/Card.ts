@@ -1,6 +1,6 @@
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { callApi } from '@/callApi'
-import { getBattleScene, getEntryScene } from '@/data'
+import { getBattleScene, getEntryScene, getScene } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -12,6 +12,7 @@ import {
     getRenderer,
     getStage,
     getTexture,
+    If,
     InteractionEventHandler,
     InteractionEvents,
     PixiContainer,
@@ -28,22 +29,22 @@ import {
     hoveredCharacterUid,
     hoveredSelectedCardUid,
     isAttacking,
-    nextFrame,
     nextTick,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
-import type { Datum } from 'datums'
+import { compose, Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import { DisplayObject, FederatedPointerEvent, Rectangle } from 'pixi.js'
 import { Texture } from 'pixi.js'
-import type {
+import {
     Card,
     CardType,
     CardUid,
     CharacterUid,
     OwnedCharacterStats,
+    StanceId,
     TargetType,
 } from 'shared'
 import { keys } from 'shared/code'
@@ -56,6 +57,7 @@ import {
 import { beginTargetSelection } from './beginTargetSelection'
 import { CARD_WIDTH } from './CardAdder'
 import { getCardTypeTexture } from './getCardTypeSrc'
+import { HoverableStances } from './HoverableStances'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -127,6 +129,7 @@ export function CardEl({
         width,
         isLongHovered
     )
+    const hoveredStanceDatum = datum<StanceId | null>(null)
 
     const unsubs: Callback[] = []
 
@@ -170,7 +173,7 @@ export function CardEl({
             }),
             getEnergyContainer(card),
             getCardOwnerToken(card),
-            ...getTexts(card, cardFrameTexture, colorStops),
+            ...getTexts(card, cardFrameTexture, colorStops, hoveredStanceDatum),
             ...(omitPointerAreaExtender
                 ? []
                 : [
@@ -178,7 +181,29 @@ export function CardEl({
                           cardFrameTexture.width,
                           cardFrameTexture.height
                       ),
-                  ])
+                  ]),
+            If(
+                compose(
+                    ([
+                        isLongHovered,
+                        hoveredCardUid,
+                        hoveredSelectedCardUid,
+                    ]) => {
+                        if (getScene().get('id') !== 'battle') return false
+
+                        return (
+                            (isLongHovered && hoveredCardUid === card.uid) ||
+                            hoveredSelectedCardUid === card.uid
+                        )
+                    },
+                    isLongHovered,
+                    //@ts-expect-error //???? todo mystery noble TSC thinks it's any but why
+                    hoveredCardUid,
+                    hoveredSelectedCardUid
+                ),
+                () =>
+                    Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
+            )
         ),
         Adjust(termExplanationsForCard, {
             x:
@@ -244,7 +269,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 800)
+            }, 400)
         },
         pointerdown(e) {
             dynamicEvents?.pointerdown?.(e)
@@ -252,7 +277,7 @@ function getDecoratedEvents({
             isHovering.set(true)
             setTimeout(() => {
                 if (isHovering.val) isLongHovered.set(true)
-            }, 800)
+            }, 400)
         },
         pointerleave(e) {
             dynamicEvents?.pointerleave?.(e)
@@ -320,9 +345,9 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
         Sprite({
             src: Texture.WHITE,
             width,
-            height,
+            height: height * 1.2,
             alpha: 0,
-            anchor: [0.5, 0],
+            anchor: [0.5, 0.5],
         })
     )
 }
@@ -374,7 +399,8 @@ function getCardOwnerToken(card: Card): PixiContainer {
 function getTexts(
     card: Card,
     cardFrameTexture: PixiTexture,
-    colorStops: ColorStop[]
+    colorStops: ColorStop[],
+    hoveredStanceDatum: Datum<StanceId | null>
 ): DisplayObject[] {
     const { marginH, marginV } = getMargins(cardFrameTexture)
 
@@ -382,6 +408,31 @@ function getTexts(
     const explanationFontSize = getExplanationFontSize(
         cardFrameScale,
         card.explanation
+    )
+
+    const explanationText = Container(
+        {
+            name: 'ExplanationText',
+            onDestroy: [
+                hoveredStanceDatum.onChange(id => {
+                    explanationText.addChild(
+                        ExplanationText(
+                            id ? card.stanceExplanations[id] : card.explanation,
+                            cardFrameTexture,
+                            marginH,
+                            explanationFontSize
+                        )
+                    )
+                    explanationText.removeChildAt(0)
+                }),
+            ],
+        },
+        ExplanationText(
+            card.explanation,
+            cardFrameTexture,
+            marginH,
+            explanationFontSize
+        )
     )
 
     return [
@@ -406,23 +457,7 @@ function getTexts(
                 y: cardFrameTexture.width * 0.15,
             }
         ),
-        Text({
-            text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
-                card.explanation
-            )}</div>`,
-            isHtml: true,
-            y: cardFrameTexture.height * 0.15,
-            anchor: [0.5, 0],
-            style: {
-                wordWrap: true,
-                wordWrapWidth: cardFrameTexture.width - marginH * 2,
-                fontSize: explanationFontSize,
-                align: 'center',
-                fontFamily: fontMap['monoFont'],
-                fill: 'black',
-                lineHeight: explanationFontSize * 1.1,
-            },
-        }),
+        explanationText,
         // quick fix for Bean to B.E.A.N. on cards
         Text({
             text:
@@ -441,6 +476,31 @@ function getTexts(
             },
         }),
     ]
+}
+
+function ExplanationText(
+    explanation: string,
+    cardFrameTexture: PixiTexture,
+    marginH: number,
+    explanationFontSize: number
+): DisplayObject {
+    return Text({
+        text: `<div style="font-family: sans-serif; padding: 4px">${upperFirst(
+            explanation
+        )}</div>`,
+        isHtml: true,
+        y: cardFrameTexture.height * 0.15,
+        anchor: [0.5, 0],
+        style: {
+            wordWrap: true,
+            wordWrapWidth: cardFrameTexture.width - marginH * 2,
+            fontSize: explanationFontSize,
+            align: 'center',
+            fontFamily: fontMap['monoFont'],
+            fill: 'black',
+            lineHeight: explanationFontSize * 1.1,
+        },
+    })
 }
 
 function getExplanationFontSize(cardFrameScale: number, explanation: string) {

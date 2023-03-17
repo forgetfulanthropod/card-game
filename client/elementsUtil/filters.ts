@@ -13,10 +13,10 @@ export const glowFilter = new GlowFilter({
 
 glowFilter.resolution = isHighResolution ? 2 : 1
 
-export const customGlowFilter = (color: number) => {
+export const customGlowFilter = (color: number, outerStrength?: number) => {
     const filter = new GlowFilter({
         innerStrength: 0,
-        outerStrength: 1,
+        outerStrength: outerStrength ?? 1,
         distance: 22,
         color,
         knockout: false,
@@ -31,16 +31,15 @@ export const removeFilterFrom = <T extends Filter>(
     filterToRemove: T
 ) => {
     if (root.filters) {
-        root.filters = root.filters.filter(existingFilter => existingFilter !== filterToRemove)
+        root.filters = root.filters.filter(
+            existingFilter => existingFilter !== filterToRemove
+        )
     } else {
         root.filters = null
     }
 }
 
-export const addFilterTo = <T extends Filter>(
-    root: PixiSpine,
-    filter: T
-) => {
+export const addFilterTo = <T extends Filter>(root: PixiSpine, filter: T) => {
     if (!root.filters) {
         root.filters = [filter]
     } else {

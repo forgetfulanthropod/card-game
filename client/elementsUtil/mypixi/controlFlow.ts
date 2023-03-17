@@ -217,16 +217,16 @@ function isKeyedArray(
  * placing within another Container.
  */
 export function portalize(args: {
-    from?: DisplayObject
+    from: DisplayObject
     content: DisplayObject
     to?: () => PixiContainer | PixiContainer
     /** Name of child of `to` to insert child before */
     before?: string
     nextFrame?: boolean
-}): void {
+}) {
     const { from, content, before } = args
 
-    if (from == null) return
+    if (from == null) throw new Error('portalized from null')
 
     const to_ = args.to ?? getStage ?? throwNull('app.stage and args.to')
 
@@ -236,6 +236,8 @@ export function portalize(args: {
     } else {
         attach()
     }
+
+    return from
 
     function attach() {
         const to = typeof to_ === 'function' ? to_() : to_

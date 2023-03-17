@@ -1,5 +1,5 @@
 import { Card, CardUid } from 'shared'
-import { getCardInstance, updateExplanation } from '../cardManagement'
+import { getCardInstance, updateExplanations } from '../cardManagement'
 import { shufflePile } from '../shufflePile'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
@@ -18,7 +18,7 @@ export const execute: Executors['hypnotize'] = ({
     let hypnoCards: Record<CardUid, Card> = {}
     for (let i = 0; i < count; i++) {
         let newCard = getCardInstance('hypnotized', targetUids[0])
-        newCard = updateExplanation(newCard, scene)
+        newCard = updateExplanations(newCard, scene)
         hypnoCards[newCard.uid] = newCard
     }
     scene.select('cards', 'draw').apply(draw => {

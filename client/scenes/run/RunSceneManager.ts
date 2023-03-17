@@ -47,7 +47,6 @@ export function RunSceneManager(): PixiContainer {
                 throw new Error('unclear scene choice')
             },
             () => {
-                console.log('decided to render battle scene.. datums: ')
                 return BattleScene(scene, hoveredCardUid)
             },
             { transition: true }

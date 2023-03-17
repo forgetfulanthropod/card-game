@@ -44,9 +44,10 @@ export function StanceControls(characterCursor: ROCursor<CharacterMeta>) {
     )
 }
 
-function StanceBadge(
+export function StanceBadge(
     characterCursor: ROCursor<CharacterMeta>,
-    isHovered: Datum<boolean>
+    isHovered: Datum<boolean>,
+    xOffset = getXOffset()
 ) {
     const badgeWidth = 100
     const characterDatum = toDatum(
@@ -65,27 +66,22 @@ function StanceBadge(
             if (hasMoved) isHovered.set(false)
         }
 
-        const hasMovedDatum = toDatum(
-            characterCursor,
-            character =>
-                character.hasMoved ||
-                !!character.effects.find(e => e.id === 'lockStanceDebuff')
-        )
+        const isStanceLockedDatum = getIsStanceLockedDatum(characterCursor)
         return Container(
             {},
-            If(hasMovedDatum, () =>
+            If(isStanceLockedDatum, () =>
                 Sprite({
                     src: `stance${upperFirst(stance)}Confirmed` as AssetKey,
                     scale:
                         badgeWidth / getTexture('stanceNeutralConfirmed').width,
-                    x: getXOffset(),
+                    x: xOffset,
                     anchor: 0.5,
                 })
             ),
             Sprite({
                 src: `stance${upperFirst(stance)}` as AssetKey,
                 scale: 90 / getTexture('stanceNeutral').width,
-                x: getXOffset(),
+                x: xOffset,
                 anchor: 0.5,
                 // alpha: 0.5,
                 events: {
@@ -100,7 +96,7 @@ function StanceBadge(
                     ([hasMoved, isHovered]) => {
                         return hasMoved && isHovered
                     },
-                    hasMovedDatum,
+                    isStanceLockedDatum,
                     isHovered
                 ) as unknown as Datum<boolean>,
                 texts: [
@@ -111,6 +107,17 @@ function StanceBadge(
             })
         )
     })
+}
+
+export function getIsStanceLockedDatum(
+    characterCursor: ROCursor<CharacterMeta>
+) {
+    return toDatum(
+        characterCursor,
+        character =>
+            character.hasMoved ||
+            !!character.effects.find(e => e.id === 'lockStanceDebuff')
+    )
 }
 
 function StanceChambers(

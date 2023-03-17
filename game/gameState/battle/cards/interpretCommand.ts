@@ -7,6 +7,7 @@ import type {
     CharacterUid,
     Command,
     CommandOutcome,
+    StanceId,
 } from 'shared'
 import { entryMap } from 'shared/code'
 import type { Locals } from './commands'
@@ -112,7 +113,8 @@ function localsFromCommand(
 
 export function explainCommand(
     command: Command | Card,
-    scene: BattleCursor | EntryCursor
+    scene: BattleCursor | EntryCursor,
+    stance?: StanceId
 ): string {
     const context: ExplainerContext = {
         scene:
@@ -120,7 +122,10 @@ export function explainCommand(
                 ? (scene as BattleCursor)
                 : undefined,
         command,
-        characterMeta: getCharacterMeta(scene, command.characterUid),
+        characterMeta: {
+            ...getCharacterMeta(scene, command.characterUid),
+            ...(stance ? { stance } : {}),
+        },
     }
 
     const res = explainActions(
