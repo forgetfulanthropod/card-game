@@ -186,8 +186,8 @@ export function CardEl({
                 compose(
                     ([
                         isLongHovered,
-                        hoveredCardUid,
                         hoveredSelectedCardUid,
+                        hoveredCardUid,
                     ]) => {
                         if (getScene().get('id') !== 'battle') return false
 
@@ -197,9 +197,8 @@ export function CardEl({
                         )
                     },
                     isLongHovered,
-                    //@ts-expect-error //???? todo mystery noble TSC thinks it's any but why
-                    hoveredCardUid,
-                    hoveredSelectedCardUid
+                    hoveredSelectedCardUid,
+                    ...(hoveredCardUid ? [hoveredCardUid] : [])
                 ),
                 () =>
                     Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
@@ -237,7 +236,9 @@ export function CardEl({
             }
         }
 
-        const hoveredCardUidSub = hoveredCardUid.onChange(handleHoveredCardChange)
+        const hoveredCardUidSub = hoveredCardUid.onChange(
+            handleHoveredCardChange
+        )
         unsubs.push(hoveredCardUidSub)
     }
 
