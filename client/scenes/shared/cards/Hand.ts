@@ -60,6 +60,7 @@ export function Hand(
         await Tweener.killTweensOf(CardEl)
 
         if (!initialDisplayVals[cardUid]) {
+            console.log({ initialDisplayVals })
             throw new Error(`initial display val for ${cardUid} not set`)
         }
 
@@ -119,6 +120,9 @@ export function Hand(
             root.addChild(...NewCardsInHand)
             await animateCardsIntoHand(NewCardsInHand, newHand)
             bindHandAnimations(root, hoveredCardUid, toDiscardUids, newHand)
+
+            initialDisplayVals = getInitialDisplayVals(root, newHand)
+
             return
         } else if (currHandEmpty && !prevHandEmpty) {
             // console.log('animate discarding all cards!')
