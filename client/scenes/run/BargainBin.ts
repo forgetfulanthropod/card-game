@@ -21,9 +21,20 @@ import { SouvenirEl } from './Souvenirs'
 export function BargainBin() {
     const isBargainBinOpen = datum(false)
     const souvenirNeedingCharacterSelect = datum<Souvenir | null>(null)
-    return If(
-        isBargainBinOpen,
-        () => {
+    return Container(
+        {},
+        Sprite({
+            src: 'mapBargainBin',
+            x: BASE_WIDTH,
+            y: BASE_HEIGHT,
+            anchor: [1, 1],
+            events: {
+                pointerdown() {
+                    isBargainBinOpen.set(true)
+                },
+            },
+        }),
+        If(isBargainBinOpen, () => {
             const souvenirsCursor = getBattleScene().select('souvenirs')
             const allSouvenirs = vals(souvenirMap)
 
@@ -40,6 +51,11 @@ export function BargainBin() {
                     alpha: 0.5,
                     width: BASE_WIDTH,
                     height: BASE_HEIGHT,
+                    events: {
+                        pointerdown() {
+                            isBargainBinOpen.set(false)
+                        },
+                    },
                 }),
                 For(
                     toDatum(souvenirsCursor, collectedSouvenirs =>
@@ -101,34 +117,8 @@ export function BargainBin() {
                                 souvenirNeedingCharacterSelect.set(null)
                             }))(),
                     }
-                ),
-                Text({
-                    text: 'close bargain bin',
-                    x: BASE_WIDTH,
-                    y: BASE_HEIGHT,
-                    anchor: [1.5, 2],
-                    style: {
-                        fill: 'white',
-                    },
-                    events: {
-                        pointerdown() {
-                            isBargainBinOpen.set(false)
-                        },
-                    },
-                })
+                )
             )
-        },
-        () =>
-            Sprite({
-                src: 'mapBargainBin',
-                x: BASE_WIDTH,
-                y: BASE_HEIGHT,
-                anchor: [1, 1],
-                events: {
-                    pointerdown() {
-                        isBargainBinOpen.set(true)
-                    },
-                },
-            })
+        })
     )
 }

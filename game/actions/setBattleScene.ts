@@ -1,7 +1,7 @@
 import type { GameActions } from 'shared'
 
-import { getBattleSceneIn, isProduction } from '@/util'
 import { maybeTransitionBattleState } from '@/gameState'
+import { isProduction } from '@/util'
 
 export const setBattleScene: GameActions['setBattleScene'] = ({
     game,

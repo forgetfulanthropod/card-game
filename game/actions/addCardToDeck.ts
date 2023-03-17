@@ -29,6 +29,7 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     if (scene.get('lootEarned').length > 0) {
         scene.set('state', 'collecting loot')
     } else {
+        scene.set('state', 'map')
         scene.set('isInMap', true)
     }
 }

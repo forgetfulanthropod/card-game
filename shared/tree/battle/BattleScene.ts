@@ -93,6 +93,7 @@ export type BattleWinState =
     | 'lost'
     | 'collecting loot'
     | 'choosing cards'
+    | 'map'
 
 export type DungeonName =
     | 'Skelepit Dungeon'

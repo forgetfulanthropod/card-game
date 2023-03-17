@@ -431,7 +431,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Yummy`,
         equippable: false,
         on: {
-            acquire: 'heal(20)',
+            acquire: 'heal(2)',
         },
     },
     bootlegExplosive: {
@@ -554,7 +554,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'lacedBathSalts',
         name: `Laced Bath Salts`,
         description: `Equipped Kaiju takes 2 extra damage from all attacks.  It gains a permanent stack of Brave.`,
-        equippable: false,
+        equippable: true,
         on: {
             battleStart: `effect("damageTakeAddendDebuff", 1)`,
             turnStart: `effect("damageTakeAddendDebuff", 1); effect("brave", 1)`,
