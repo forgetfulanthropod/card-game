@@ -86,8 +86,6 @@ export function playSongOnce(songId: MusicAssetKey) {
 }
 
 export function loopSong(songId: MusicAssetKey, loop = true) {
-    console.log(`loading song ${songId}`)
-
     const song = sound.find(songId)
     latestSongId = songId
 

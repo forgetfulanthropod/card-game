@@ -76,8 +76,16 @@ export function mountIo(
                         data
                     )}`
                 )*/
-                const response = await api({ username, method, data })
-                callback(response)
+                // calling the api incorrectly shouldn't crash the server
+                try {
+                    const response = await api({ username, method, data })
+                    callback(response)
+                } catch (e) {
+                    const err = e as unknown as Error
+                    logger.error(
+                        `error in calling api: ${err.message}. ${err.stack}`
+                    )
+                }
                 //socket.emit('api', response)
             }
         )

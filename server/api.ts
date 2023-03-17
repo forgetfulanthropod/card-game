@@ -30,13 +30,12 @@ export async function api(args: {
             if (typeof username !== 'string') return err('no username')
             const gamestate = await getGamestate(username)
             if (gamestate == null) return err('no gamestate for this user')
-            const game = new SBaobab(gamestate).select()
             const actionArgs = { username, method, ...data }
             logger.debug(`api call: ${JSON.stringify(actionArgs)}`)
 
             if (!processingQueue[username]) processingQueue[username] = []
-            processingQueue[username].push({ ...actionArgs, game })
-            await processActionQueue(game)
+            processingQueue[username].push(actionArgs)
+            await processActionQueue(username)
             return { status: 'success' }
         } else {
             return err('invalid method')

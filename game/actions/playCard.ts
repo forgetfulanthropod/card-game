@@ -20,11 +20,9 @@ export const playCard: GameActions['playCard'] = args => {
         logger.warn('tried to play card while not in battle')
         return
     }
-    logger.info(`checking play ${args.cardUid}`)
     const card =
         scene.get('cards', 'hand', args.cardUid) ??
         throwNull(`cardUid ${args.cardUid}`)
-    // logger.info(`playing card ${card.uid}`)
     const targetUids = getTargetUids({
         card,
         targetUids: args.targetUids,
@@ -41,12 +39,11 @@ export const playCard: GameActions['playCard'] = args => {
         activateSouvenirs('playCard', scene, card.characterUid)
 
         updateNpcMoves(scene)
+        updateCharacters(scene)
+        updateHand(scene)
     } else {
         logger.warn('tried to play unplayable card: ' + args.cardUid)
     }
-
-    updateCharacters(scene)
-    updateHand(scene)
 }
 
 function isPlayable({
@@ -64,10 +61,12 @@ function isPlayable({
         return false
 
     const allCharacters = scene.get('allCharacters')
-    const livingTargets = Object.entries(allCharacters)
-        .filter(([k, v]) => targetUids?.includes(k) && v.health > 0)
-        .map(([k, _]) => k)
-    if (!livingTargets.length) return false
+    if (targetUids?.length) {
+        const livingTargets = Object.entries(allCharacters)
+            .filter(([k, v]) => targetUids?.includes(k) && v.health > 0)
+            .map(([k, _]) => k)
+        if (!livingTargets.length) return false
+    }
 
     const requiredStance = card.actions.match(/ifStance\([^"]*"([^"]+)/)?.[1]
 

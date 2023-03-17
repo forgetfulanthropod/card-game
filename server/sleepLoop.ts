@@ -3,19 +3,23 @@ import type { GameActionCall, Gamecursor } from 'shared'
 import { sleep } from 'shared/code'
 import { setGamestate } from './db'
 import { emitNetworkEvent, emitNewGamestate } from './IO'
+import { SBaobab } from 'sbaobab'
+import { getGamestate } from './db'
 
 export type ApiCall = GameActionCall & { username: string }
 export const processingQueue: Record<string, ApiCall[]> = {}
 export const isProcessing = new Set<string>()
 
-export const processActionQueue = async (game: Gamecursor) => {
-    const username = game.get('username')
+export const processActionQueue = async (username: string) => {
     let actionQueue = processingQueue[username]
     if (!actionQueue || isProcessing.has(username)) return
     isProcessing.add(username)
     let action
     while ((action = processingQueue[username].shift())) {
         try {
+            const gamestate = await getGamestate(username)
+            if (gamestate == null) throw Error('no gamestate for this user')
+            const game = new SBaobab(gamestate).select()
             await doActionAndTakeSteps({ ...action, game })
         } catch (e) {
             const err = e as unknown as Error
@@ -25,6 +29,8 @@ export const processActionQueue = async (game: Gamecursor) => {
         }
     }
     isProcessing.delete(username)
+    // TODO: discuss: should delete empty queues?
+    if (!processingQueue[username].length) delete processingQueue[username]
     return
 }
 

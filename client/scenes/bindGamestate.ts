@@ -25,6 +25,10 @@ function setBodyStyles(app: PixiApplication) {
     app.renderer.events.cursorStyles.hover = hoverIcon
 
     // document.body.style.cursor = `url('${defaultPointerFullPath}'),default`
+
+    window.addEventListener('contextmenu', e => {
+        e.preventDefault()
+    })
 }
 
 function bindScene(app: PixiApplication): Unbind {
