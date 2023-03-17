@@ -212,6 +212,7 @@ function renderCardsInHand(
             card,
             hoveredCardUid,
             omitPointerAreaExtender: true,
+            dynamicHitbox: true,
         })
 
         return Adjust(Card, {
@@ -423,8 +424,10 @@ function getUnfocus(
 ) {
     return (selectedCardUids: CardUid[]) => {
         rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
-            if (selectedCardUids.includes(cardEl.name)) return
-            if (hoveredSelectedCardUid.val === cardEl.name)
+            if (
+                hoveredSelectedCardUid.val === cardEl.name ||
+                selectedCardUids.includes(cardEl.name)
+            )
                 return
 
             const initialDisplayVal = initialDisplayVals[cardEl.name]
@@ -443,21 +446,24 @@ function getFocus(
 ) {
     return (uid: CardUid) => {
         const cardEl = rootEl.getChildByName(uid) as TweenablePixiContainer
-
         unfocus([...toDiscardUids.val, uid])
-        // spreadOthers(rootEl, cardEl, initialDisplayVals)
+        spreadOthers(rootEl, cardEl, initialDisplayVals)
 
         const initialDisplayVal = initialDisplayVals[uid]
 
         cardEl.zIndex = 99
         cardEl.parent.sortChildren()
 
-        animateTo(cardEl, {
-            rotation: 0,
-            x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
-            y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.45,
-            scale: (CARD_WIDTH_FULL / CARD_WIDTH) * initialDisplayVal.scale,
-        })
+        animateTo(
+            cardEl,
+            {
+                rotation: 0,
+                x: initialDisplayVal.x + ADJUST_HOVERED_CARD_DISTANCE,
+                y: initialDisplayVal.y - CARD_HEIGHT_FULL * 0.38,
+                scale: 0.9,
+            },
+            0.001
+        )
     }
 }
 
@@ -492,35 +498,35 @@ function getSelect(
 const HAND_SPREAD_DISTANCE = 60
 const ADJUST_HOVERED_CARD_DISTANCE = 20
 
-// function spreadOthers(
-//     rootEl: PixiContainerWithTweenableChildren,
-//     cardEl: TweenablePixiContainer,
-//     initialDisplayVals: InitialDisplayVals
-// ) {
-//     const selectedCardIndex = rootEl.getChildIndex(cardEl)
+function spreadOthers(
+    rootEl: PixiContainerWithTweenableChildren,
+    cardEl: TweenablePixiContainer,
+    initialDisplayVals: InitialDisplayVals
+) {
+    const selectedCardIndex = rootEl.getChildIndex(cardEl)
 
-//     rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
-//         if (i === selectedCardIndex) return
-//         if (toDiscardUids.val.includes(cardEl.name)) return
+    rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
+        if (i === selectedCardIndex) return
+        if (toDiscardUids.val.includes(cardEl.name)) return
 
-//         cardEl.zIndex = initialDisplayVals[cardEl.name].zIndex
+        cardEl.zIndex = initialDisplayVals[cardEl.name].zIndex
 
-//         const leftOrRight = i > selectedCardIndex ? 'left' : 'right' //cards laid right to left for energy corner
+        const leftOrRight = i > selectedCardIndex ? 'left' : 'right' //cards laid right to left for energy corner
 
-//         animateTo(cardEl, {
-//             x:
-//                 initialDisplayVals[cardEl.name].x +
-//                 (leftOrRight === 'left'
-//                     ? -HAND_SPREAD_DISTANCE
-//                     : HAND_SPREAD_DISTANCE),
-//             y: initialDisplayVals[cardEl.name].y,
-//             rotation: initialDisplayVals[cardEl.name].rotation,
-//             scale: initialDisplayVals[cardEl.name].scale,
-//         })
-//     })
+        animateTo(cardEl, {
+            x:
+                initialDisplayVals[cardEl.name].x +
+                (leftOrRight === 'left'
+                    ? -HAND_SPREAD_DISTANCE
+                    : HAND_SPREAD_DISTANCE),
+            y: initialDisplayVals[cardEl.name].y,
+            rotation: initialDisplayVals[cardEl.name].rotation,
+            scale: initialDisplayVals[cardEl.name].scale,
+        })
+    })
 
-//     rootEl.sortChildren()
-// }
+    rootEl.sortChildren()
+}
 
 function updateGlowFilters(
     handEl: PixiContainerWithTweenableChildren,
@@ -552,7 +558,8 @@ function updateGlowFilters(
 
 export function animateTo(
     cardEl: TweenablePixiContainer,
-    displayVal: Omit<InitialDisplayVal, 'zIndex'>
+    displayVal: Omit<InitialDisplayVal, 'zIndex'>,
+    duration?: number
 ) {
     if (cardEl == null) return
 
@@ -565,7 +572,7 @@ export function animateTo(
     void Tweener.add(
         {
             target: cardEl,
-            duration: 0.2,
+            duration: duration ?? 0.2,
             ease: Easing.easeTo,
         },
         {
@@ -575,7 +582,7 @@ export function animateTo(
     void Tweener.add(
         {
             target: cardEl.children[0] as TweenablePixiContainer,
-            duration: 0.1,
+            duration: duration ? duration / 2 : 0.1,
         },
         {
             ...pick(displayVal, 'rotation'),

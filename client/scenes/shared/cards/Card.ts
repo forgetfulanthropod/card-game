@@ -21,6 +21,7 @@ import {
     Text,
     TweenableContainer,
     TweenablePixiContainer,
+    onDestroyed,
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
@@ -35,7 +36,7 @@ import type { Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import type { DisplayObject, FederatedPointerEvent } from 'pixi.js'
+import { DisplayObject, FederatedPointerEvent, Rectangle } from 'pixi.js'
 import { Texture } from 'pixi.js'
 import type {
     Card,
@@ -74,6 +75,7 @@ export function CardEl({
     explanationsOnLeft,
     explanationsAdjustX,
     explanationsAdjustY,
+    dynamicHitbox,
 }: {
     rotation?: number
     width: number
@@ -85,6 +87,7 @@ export function CardEl({
     explanationsOnLeft?: boolean
     explanationsAdjustX?: number
     explanationsAdjustY?: number
+    dynamicHitbox?: boolean
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -124,6 +127,8 @@ export function CardEl({
         width,
         isLongHovered
     )
+
+    const unsubs: Callback[] = []
 
     const root = TweenableContainer(
         {
@@ -184,6 +189,34 @@ export function CardEl({
         })
     )
 
+    if (hoveredCardUid && dynamicHitbox) {
+        const originalBounds = getOriginalHitboxBounds(root)
+        root.hitArea = originalBounds
+
+        const handleHoveredCardChange = (
+            newCardUid: CardUid | null,
+            oldCardUid: CardUid | null
+        ) => {
+            if (newCardUid && newCardUid === card.uid) {
+                const newBounds = new Rectangle(
+                    originalBounds.x - 45,
+                    originalBounds.y - 60,
+                    originalBounds.width + 89,
+                    originalBounds.height + 200
+                )
+                root.hitArea = newBounds
+            }
+
+            if (oldCardUid && oldCardUid === card.uid) {
+                root.hitArea = originalBounds
+            }
+        }
+
+        const hoveredCardUidSub = hoveredCardUid.onChange(handleHoveredCardChange)
+        unsubs.push(hoveredCardUidSub)
+    }
+
+    onDestroyed(root, ...unsubs)
     return root
 }
 
@@ -569,4 +602,14 @@ function getEvents(
 
 export function getNullAnimation() {
     return Tweener.add({ target: {}, duration: 0 }, {})
+}
+
+const getOriginalHitboxBounds = (root: TweenablePixiContainer) => {
+    const rootBounds = root.getBounds()
+    return new Rectangle(
+        rootBounds.x + 15,
+        rootBounds.y + 20,
+        rootBounds.width - 30,
+        rootBounds.height - 20
+    )
 }
