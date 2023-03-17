@@ -46,7 +46,8 @@ export function Hand(
 
     const centerTargetingCardEl = async (
         destroyableRoot: PixiContainerWithTweenableChildren,
-        cardUid: CardUid
+        cardUid: CardUid,
+        duration = 0.25
     ) => {
         const CardEl = destroyableRoot.getChildByName(
             cardUid ?? ''
@@ -67,7 +68,7 @@ export function Hand(
         getFocus(destroyableRoot, initialDisplayVals, _ => {})(cardUid)
 
         await Tweener.add(
-            { target: CardEl, duration: 0.25, ease: Easing.easeFromTo },
+            { target: CardEl, duration, ease: Easing.easeFromTo },
             { x: 0 }
         )
     }
@@ -176,7 +177,8 @@ export function Hand(
         if (hoveredSelectedCardUid.val) {
             centerTargetingCardEl(
                 getDestructibleRoot(),
-                hoveredSelectedCardUid.val
+                hoveredSelectedCardUid.val,
+                0
             )
         }
     }, true)

@@ -6,7 +6,7 @@ import {
     getRenderer,
     getStage,
     PixiContainer,
-    Sprite
+    Sprite,
 } from '@/elementsUtil'
 import { range, upperFirst } from 'lodash'
 import { Card } from 'shared'
@@ -26,7 +26,6 @@ export function TargetingArrow(
     getRenderer().events.cursorStyles.default = 'none'
     getRenderer().events.cursorStyles.hover = 'none'
 
-
     const root = Container(
         {
             onDestroy: [
@@ -34,7 +33,7 @@ export function TargetingArrow(
                     stage.interactive = false
 
                     stage.off('pointermove', onPointerMove)
-
+                    stage.off('pointerup', onPointerUp)
 
                     getRenderer().events.cursorStyles.default = defaultCursor
                     getRenderer().events.cursorStyles.hover = hoverCursor
@@ -61,10 +60,15 @@ export function TargetingArrow(
     )
 
     stage.interactive = true
-    stage.on('pointermove', onPointerMove)
     let cursorWentIntoPlayArea = false
+    stage.on('pointermove', onPointerMove)
+    stage.on('pointerup', onPointerUp)
 
     return root
+
+    function onPointerUp() {
+        cursorWentIntoPlayArea && cancelTargeting()
+    }
 
     function onPointerMove(e: any) {
         const pos = e.data.global
