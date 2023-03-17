@@ -8,6 +8,7 @@ import {
     PixiContainer,
     Sprite,
 } from '@/elementsUtil'
+import { nextFrame } from '@/util'
 import { range, upperFirst } from 'lodash'
 import { Card } from 'shared'
 
@@ -67,7 +68,7 @@ export function TargetingArrow(
     return root
 
     function onPointerUp() {
-        cursorWentIntoPlayArea && cancelTargeting()
+        nextFrame().then(() => cursorWentIntoPlayArea && cancelTargeting())
     }
 
     function onPointerMove(e: any) {
