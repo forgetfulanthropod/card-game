@@ -542,7 +542,7 @@ function getColorStopsFromCardType(cardType: CardType): ColorStop[] {
 }
 
 let clearLastTargetSelection = () => {}
-function getEvents(
+export function getEvents(
     card: Card,
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
@@ -552,31 +552,28 @@ function getEvents(
         hoveredCardUid.set(card.uid)
     }
     const pointerleave: InteractionEventHandler = () => {
-        setTimeout(() => {
-            if (
-                hoveredSelectedCardUid.val === card.uid &&
-                isAttacking.val === false
-            ) {
-                hoveredSelectedCardUid.set(null)
-            }
-            if (hoveredCardUid.val === card.uid) {
-                hoveredCardUid.set(null)
-                hoveredCharacterUid.set(null)
-            }
-        }, 0)
+        if (
+            hoveredSelectedCardUid.val === card.uid &&
+            isAttacking.val === false
+        ) {
+            hoveredSelectedCardUid.set(null)
+        }
+        if (hoveredCardUid.val === card.uid) {
+            hoveredCardUid.set(null)
+            hoveredCharacterUid.set(null)
+        }
     }
-    const pointerdown: InteractionEventHandler = function ({
+    const pointerdown: InteractionEventHandler = ({
         currentTarget: cardEl,
-    }) {
+    }) => {
         //for mobile
-        pointerenter({
-            currentTarget: cardEl,
-        } as FederatedPointerEvent)
-
-        if (!(cardEl instanceof PixiContainer))
-            throw new Error('ERROR! should be bound to container')
-
-        clearLastTargetSelection()
+        if (cardEl instanceof PixiContainer) {
+            // @ts-expect-error
+            pointerenter({
+                currentTarget: cardEl,
+            } as FederatedPointerEvent)
+            clearLastTargetSelection()
+        }
 
         const numRequiredToDiscard = getBattleScene().get().numRequiredToDiscard
         if (numRequiredToDiscard > 0) {
@@ -602,10 +599,12 @@ function getEvents(
                     ['self', 'allEnemies', 'allFriends'] as TargetType[]
                 ).includes(card.targetType)
             )
-                clearLastTargetSelection = beginTargetSelection(
-                    cardEl.parent,
-                    card
-                )
+                if (cardEl instanceof PixiContainer) {
+                    clearLastTargetSelection = beginTargetSelection(
+                        cardEl.parent,
+                        card
+                    )
+                }
         } else {
             flashTo(
                 getStage(),
@@ -624,9 +623,7 @@ function getEvents(
             )
         }
     }
-    const pointerup: InteractionEventHandler = function ({
-        currentTarget: cardEl,
-    }) {
+    const pointerup: InteractionEventHandler = ({ currentTarget: cardEl }) => {
         if (
             (['self', 'allEnemies', 'allFriends'] as TargetType[]).includes(
                 card.targetType
@@ -640,10 +637,12 @@ function getEvents(
             })
         }
         //for mobile
-        else
+        else if (cardEl instanceof PixiContainer) {
+            // @ts-expect-error
             pointerleave({
                 currentTarget: cardEl,
             } as FederatedPointerEvent)
+        }
     }
 
     // todo: detect pointermove for mobile to begin target selection..

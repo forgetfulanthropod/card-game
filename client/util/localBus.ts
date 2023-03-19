@@ -21,5 +21,6 @@ export const statChangesDatum = datum({} as StatChangesMap)
 export const waitForDeathAnimationsDatum = datum<Record<CharacterUid, boolean>>(
     {}
 )
+export const globalShowSims = datum<boolean>(false)
 
 export const animation$ = new Channel<'scene exit done'>('animation')
