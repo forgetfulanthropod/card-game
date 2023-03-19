@@ -3,7 +3,13 @@ import type { ROCursor } from 'sbaobab'
 import type { BattleScene, CardUid, StanceId } from 'shared'
 
 import { callApi } from '@/callApi'
-import { globalShowSims, hoveredSelectedCardUid, isAttacking } from '@/util'
+import {
+    globalShowSims,
+    hoveredSelectedCardUid,
+    isAttacking,
+    ruleBookEditorIsShown,
+    sceneEditorIsShown,
+} from '@/util'
 import { getEvents } from '@/scenes/shared/cards/Card'
 import { FederatedPointerEvent } from 'pixi.js'
 
@@ -144,7 +150,11 @@ export const battleKeybinds = (
         ...otherKeys,
     ]
     const keybinds = (e: KeyboardEvent) => {
-        if (!allKeys.includes(e.key) || e.ctrlKey || e.altKey || e.shiftKey)
+        if (
+            ruleBookEditorIsShown.val === true ||
+            sceneEditorIsShown.val === true ||
+            !allKeys.includes(e.key)
+        )
             return
         e.preventDefault()
         if (Object.keys(stanceKeybindMap).includes(e.key)) {
