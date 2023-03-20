@@ -7,9 +7,13 @@ import { freshGameAndBattleScene, pc1 } from './interpretCommand.spec'
 export const suites = {
     souvenirs: {
         allActions() {
-            vals(souvenirMap).forEach(souvenir => {
+            vals(souvenirMap).forEach(souvenirTemplate => {
                 const { scene } = freshGameAndBattleScene()
-                acquireSouvenir(souvenir.id, pc1, scene)
+                const souvenir = acquireSouvenir(
+                    souvenirTemplate.id,
+                    pc1,
+                    scene
+                )
                 //@ts-expect-error
                 keys(souvenir.on)
                     //

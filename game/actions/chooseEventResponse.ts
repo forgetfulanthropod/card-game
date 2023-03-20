@@ -47,4 +47,6 @@ export function acquireSouvenir(
     scene.apply('souvenirs', souvenirs => [...(souvenirs ?? []), newSouvenir])
 
     activateSouvenir(newSouvenir, 'acquire', scene)
+
+    return newSouvenir
 }
