@@ -1452,7 +1452,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             magicydefensey = magic * .5 + defense * .5;
             chain(
-                modifyStats("damageTakeAddend", magicydefensey, "turn"),
+                modifyStats("damageTakeAddend", "-" + magicydefensey, "turn"),
                 dwindle()
             );
             join("All attacks that target this character deal", magicydefensey, "less damage until the end of the turn.  <b>Dwindle</b>")

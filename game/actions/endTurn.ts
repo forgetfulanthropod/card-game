@@ -55,8 +55,6 @@ function updateMetricsAndScoring(scene: BattleCursor) {
 function setDefaultEndPlayerTurnState(scene: BattleCursor) {
     clearBlock(scene, 'npc')
 
-    clearCharacterStatModifiers(scene, 'turn')
-
     scene.set('cardsPlayedThisTurn', [])
     scene.set('numAllowedToKeep', 0)
     setAllCharactersToUnmoved(scene)
