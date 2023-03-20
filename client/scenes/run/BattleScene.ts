@@ -33,6 +33,7 @@ import { EndOfRoom } from './EndOfRoom'
 import { EndOfRun } from './EndOfRun'
 import { Energy } from './Energy'
 import { SouvenirsEls } from './Souvenirs'
+import { battleKeybinds } from '@/hooks/BattleSceneBinds'
 
 const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
@@ -56,7 +57,13 @@ export function BattleScene(
 
     const sceneIndex = Math.abs(scene.get('numRoomsPassed') % allSrcs.length)
 
-    return Container(
+    window.addEventListener(
+        'keydown',
+        battleKeybinds(scene, hoveredCardUid),
+        false
+    )
+
+    const container = Container(
         { name: 'BattleScene' },
         Container(
             { name: 'CharactersAndBg' },
@@ -138,6 +145,15 @@ export function BattleScene(
         ),
         SouvenirsEls()
     )
+    container.on('destroyed', () =>
+        window.removeEventListener(
+            'keydown',
+            battleKeybinds(scene, hoveredCardUid),
+            false
+        )
+    )
+
+    return container
 }
 
 function playLoopingMusic(scene: ROCursor<BattleScene>) {

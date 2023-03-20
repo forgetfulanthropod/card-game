@@ -11,6 +11,7 @@ import { callApi } from '@/callApi'
 import { styled } from '@/config'
 import { ROCursor } from 'sbaobab'
 import { keys } from 'lodash'
+import { sceneEditorIsShown } from '@/util'
 
 const ButtonGroup = styled.div`
     // z-index: 11;
@@ -65,7 +66,12 @@ export function SceneEditor(): JSXElement {
     return <>
         {shown && <Monaco mref={ref} defaultValue={getJSON(scene)} />}
         <ButtonGroup>
-            <button onClick={() => setShown(s => !s)}>
+            <button
+                onClick={() => {
+                    sceneEditorIsShown.set(!shown)
+                    setShown(s => !s)
+                }}
+            >
                 {!shown ? 'edit scene' : 'minimize editor'}
             </button>
             {shown && <>

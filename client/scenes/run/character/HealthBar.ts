@@ -18,6 +18,7 @@ import {
     Text,
 } from '@/elementsUtil'
 import {
+    globalShowSims,
     hoveredCharacterUid,
     hoveredSelectedCardUid,
     isAttacking,
@@ -224,8 +225,10 @@ function DamageIndicator(
         ),
         // TODO combine/cleanup
         hoveredSelectedCardUid.onChange(cardUid => {
-            showAttackSimulation.set(false)
-            showBlockSimulation.set(false)
+            if (globalShowSims.val === false) {
+                showAttackSimulation.set(false)
+                showBlockSimulation.set(false)
+            }
             if (!cardUid) return
             const card = handCursor.get(cardUid)
             if (!card?.outcomes) return
@@ -252,8 +255,10 @@ function DamageIndicator(
                 showAttackSimulation.set(false)
         }),
         hoveredCharacterUid.onChange(targetChar => {
-            showAttackSimulation.set(false)
-            showBlockSimulation.set(false)
+            if (globalShowSims.val === false) {
+                showAttackSimulation.set(false)
+                showBlockSimulation.set(false)
+            }
             if (!targetChar) return
             if (!hoveredSelectedCardUid.val) return
             const card = handCursor.get(hoveredSelectedCardUid.val)
@@ -273,6 +278,23 @@ function DamageIndicator(
             if (outcome.blocks[characterUid]) {
                 showBlockSimulation.set(true)
             }
+        }),
+        globalShowSims.onChange(val => {
+            if (!val) return
+            if (!hoveredSelectedCardUid.val) return
+            const card = handCursor.get(hoveredSelectedCardUid.val)
+            if (!card?.outcomes) return
+            const outcome = card.outcomes.outcome || card.outcomes[characterUid]
+            if (!outcome) return
+
+            const damage = outcome.damages[characterUid] || 0
+            const block = outcome.blocks[characterUid] || 0
+            damageValue.set(damage)
+            blockValue.set(block)
+            showAttackSimulation.set(false)
+            showBlockSimulation.set(false)
+            showAttackSimulation.set(true)
+            showBlockSimulation.set(true)
         })
     )
 }

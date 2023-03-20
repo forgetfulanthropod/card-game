@@ -9,6 +9,7 @@ import { Monaco } from './Monaco'
 import { getTree } from '@/data'
 import { callApi } from '@/callApi'
 import { styled } from '@/config'
+import { ruleBookEditorIsShown } from '@/util'
 
 const ButtonGroup = styled.div`
     // z-index: 11;
@@ -71,7 +72,12 @@ export function RulebookEditor(props: { username: string }): JSXElement {
     return <>
         {shown && <Monaco mref={ref} defaultValue={curRulebook} />}
         <ButtonGroup>
-            <button onClick={() => setShown(s => !s)}>
+            <button
+                onClick={() => {
+                    ruleBookEditorIsShown.set(!shown)
+                    setShown(s => !s)
+                }}
+            >
                 {!shown ? 'edit rulebook' : 'minimize editor'}
             </button>
             <Selector
