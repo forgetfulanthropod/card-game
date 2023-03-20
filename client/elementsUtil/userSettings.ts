@@ -5,6 +5,7 @@ type UserSettingsInLocalStorage =
     | 'muteMusic'
     | 'isHighResolution'
     | 'enableMotionFX'
+    | 'isFrameRateCapped'
 
 export const getBooleanFromLocalStorage = (key: UserSettingsInLocalStorage) => {
     const value = !!(localStorage.getItem(key) === 'true')

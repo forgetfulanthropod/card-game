@@ -165,6 +165,7 @@ export type CardId =
     | 'dummyBomb'
     | 'dutifulStab'
     | 'enchantedStrike'
+    | 'emergencySnack'
     | 'featheredFortress'
     | 'fellTheMighty'
     | 'fireball'

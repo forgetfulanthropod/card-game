@@ -9,11 +9,18 @@ import {
     toggleMuteSFX,
     isHighResolution,
     toggleHighResolution,
-    toggleBooleanInLocalStorage
+    toggleBooleanInLocalStorage,
+    toggleIsFrameRateCapped,
+    isFrameRateCapped,
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
-import { enableMotionFX, shakeScreen, shakeSetting, toggleShakeSetting } from '@/scenes/shared'
+import {
+    enableMotionFX,
+    shakeScreen,
+    shakeSetting,
+    toggleShakeSetting,
+} from '@/scenes/shared'
 
 const Root = styled.button`
     position: absolute;
@@ -62,7 +69,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         await callApi('makeNewUser', {
             username: props.username,
         })
-        window.location.reload();
+        window.location.reload()
         setShowActions(false)
     }
 
@@ -76,6 +83,11 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleHighRes = async () => {
         toggleHighResolution()
+        setHighResEnabled(enabled => !enabled)
+    }
+
+    const handleFrameRateCap = async () => {
+        toggleIsFrameRateCapped()
         setHighResEnabled(enabled => !enabled)
     }
 
@@ -110,11 +122,17 @@ export function ResetButton(props: { username: string }): JSXElement {
                 textIfEnabled={'Disable High-Res'}
             />
             <MenuButton
+                handler={handleFrameRateCap}
+                text={'limit to 30 FPS'}
+                isEnabled={isFrameRateCapped}
+                textIfEnabled={'remove frame rate cap'}
+            />
+            <MenuButton
                 handler={handleMotionFX}
                 text={'Enable Motion FX'}
                 isEnabled={motionFXEnabled}
                 textIfEnabled={'Disable Motion FX'}
-                />
+            />
             <MenuButton
                 handler={toggleShakeSetting}
                 text={`[TEMP] Toggle shake version`}
@@ -123,14 +141,8 @@ export function ResetButton(props: { username: string }): JSXElement {
                 handler={() => shakeScreen(1, true)}
                 text={`[TEMP] Trigger Screen Shake`}
             />
-            <MenuButton
-                handler={handleRestartRun}
-                text={'Restart Run'}
-            />
-            <MenuButton
-                handler={handleBackToMenu}
-                text={'Back to Main Menu'}
-            />
+            <MenuButton handler={handleRestartRun} text={'Restart Run'} />
+            <MenuButton handler={handleBackToMenu} text={'Back to Main Menu'} />
         </div>
     </div>
 }
@@ -146,7 +158,7 @@ const MenuButton = ({
     handler,
     text,
     isEnabled = false,
-    textIfEnabled
+    textIfEnabled,
 }: IMenuButtonProps): JSXElement => {
     return <button
         className='px-8 py-2 hover:bg-stone-900 rounded-lg z-50'

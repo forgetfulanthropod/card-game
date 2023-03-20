@@ -81,7 +81,8 @@ export function HexMapOverlay(): PixiContainer {
             },
             ...AllTiles()
         ),
-        BargainBin()
+        //@ts-expect-error todo: env type jank from customs script for client
+        ...(process.env.IS_PRODUCTION === false ? [BargainBin()] : [])
     )
 }
 
