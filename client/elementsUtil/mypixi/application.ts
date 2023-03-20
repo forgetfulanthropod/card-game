@@ -19,6 +19,12 @@ export const toggleHighResolution = () => {
     window.location.reload()
 }
 
+export const isFrameRateCapped = getBooleanFromLocalStorage('isFrameRateCapped')
+export const toggleIsFrameRateCapped = () => {
+    toggleBooleanInLocalStorage('isFrameRateCapped')
+    window.location.reload()
+}
+
 let app: null | PixiApplication = null
 export function Application(args: {
     canvas: HTMLCanvasElement
@@ -36,6 +42,8 @@ export function Application(args: {
         antialias: true,
         powerPreference: 'high-performance',
     })
+
+    if (isFrameRateCapped) app.ticker.maxFPS = 30
 
     app.stage.scale.set(ROOT_SCALE)
 

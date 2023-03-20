@@ -1460,4 +1460,18 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'defense',
         characterClass: 'cleric',
     },
+    //Heal target Kaiju for 250%+100%.
+    emergencySnack: {
+        name: 'Emergency Snack',
+        energy: 1,
+        id: 'emergencySnack',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicydefensey = magic * 2.5 + defense;
+            chain(heal(magicydefensey), brittle(1))
+        `,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
 }
