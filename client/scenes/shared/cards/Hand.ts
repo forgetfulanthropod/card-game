@@ -11,7 +11,7 @@ import {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
-import { hoveredCharacterUid, hoveredSelectedCardUid, toDatum } from '@/util'
+import { hoveredCharacterUid, selectedForTargetingCardUid, toDatum } from '@/util'
 import type { Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
@@ -153,10 +153,10 @@ export function Hand(
             newHand
         )
         initialDisplayVals = getInitialDisplayVals(destructibleRoot, newHand)
-        if (hoveredSelectedCardUid.val) {
+        if (selectedForTargetingCardUid.val) {
             centerCardEl(
                 getDestructibleRoot(),
-                hoveredSelectedCardUid.val,
+                selectedForTargetingCardUid.val,
                 initialDisplayVals,
                 0
             )
@@ -165,7 +165,7 @@ export function Hand(
     }
 
     unsubs.push(
-        hoveredSelectedCardUid.onChange(handleTargetingCardChange),
+        selectedForTargetingCardUid.onChange(handleTargetingCardChange),
         handDatum.onChange(handleHandChange, true)
     )
 
@@ -466,7 +466,7 @@ function getUnfocus(
     return (selectedCardUids: CardUid[]) => {
         rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
             if (
-                hoveredSelectedCardUid.val === cardEl.name ||
+                selectedForTargetingCardUid.val === cardEl.name ||
                 selectedCardUids.includes(cardEl.name)
             )
                 return

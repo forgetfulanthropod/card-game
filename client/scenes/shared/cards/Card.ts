@@ -27,8 +27,8 @@ import {
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
     hoveredCharacterUid,
-    hoveredSelectedCardUid,
-    isAttacking,
+    selectedForTargetingCardUid,
+    isTargeting,
     nextTick,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
@@ -186,18 +186,18 @@ export function CardEl({
                 compose(
                     ([
                         isLongHovered,
-                        hoveredSelectedCardUid,
+                        selectedForTargetingCardUid,
                         hoveredCardUid,
                     ]) => {
                         if (getScene().get('id') !== 'battle') return false
 
                         return (
                             (isLongHovered && hoveredCardUid === card.uid) ||
-                            hoveredSelectedCardUid === card.uid
+                            selectedForTargetingCardUid === card.uid
                         )
                     },
                     isLongHovered,
-                    hoveredSelectedCardUid,
+                    selectedForTargetingCardUid,
                     ...(hoveredCardUid ? [hoveredCardUid] : [])
                 ),
                 () =>
@@ -547,16 +547,16 @@ export function getEvents(
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
     const pointerenter: InteractionEventHandler = () => {
-        if (hoveredSelectedCardUid.val === card.uid) return
+        if (selectedForTargetingCardUid.val === card.uid) return
         hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
     }
     const pointerleave: InteractionEventHandler = () => {
         if (
-            hoveredSelectedCardUid.val === card.uid &&
-            isAttacking.val === false
+            selectedForTargetingCardUid.val === card.uid &&
+            isTargeting.val === false
         ) {
-            hoveredSelectedCardUid.set(null)
+            selectedForTargetingCardUid.set(null)
         }
         if (hoveredCardUid.val === card.uid) {
             hoveredCardUid.set(null)
