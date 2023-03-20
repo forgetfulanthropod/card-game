@@ -6,15 +6,10 @@ import {
     CharacterUid,
     ModifiableStatName,
     StatModifierExpiration,
+    StatModifiers,
     StatModifiersMap,
 } from 'shared'
 import { keys } from 'shared/code'
-import {
-    getLivingNpcUids,
-    getLivingPcUids,
-} from '../../characters/characterGetters'
-import { updateCharacters } from '../../characters/updateCharacters'
-import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 import {
     ActionArgs,
     Anguify,
@@ -24,6 +19,7 @@ import {
     Explainers,
 } from './util'
 import { getTargetText } from './util/getTargetText'
+import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
@@ -92,7 +88,7 @@ function applyStatModifiers({
 }: {
     scene: BattleCursor
     uids: CharacterUid[]
-    stats: Partial<Pick<CharacterStats, ModifiableStatName>>
+    stats: StatModifiers
     expiration: StatModifierExpiration
 }) {
     uids.forEach(uid =>
@@ -104,7 +100,7 @@ function applyStatModifiers({
 
 function getUpdatedModifiers(
     modifiers: StatModifiersMap,
-    stats: Partial<Pick<CharacterStats, ModifiableStatName>>,
+    stats: StatModifiers,
     expiration: StatModifierExpiration
 ) {
     const updatedModifiers = {

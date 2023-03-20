@@ -43,6 +43,7 @@ export interface ActionArgs {
     chain: any[]
     choice: any[]
     explain: any[]
+    join: any[]
     killIf: [condition: boolean]
 
     addBlock: [block: number, targetType?: BasicTargetType]

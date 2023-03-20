@@ -21,8 +21,14 @@ export type ModifiableStatName =
     | 'magic'
     | 'defense'
     | 'constitution'
+    | 'damageDealMultiplicand'
+    | 'damageDealAddend'
+    | 'damageTakeMultiplicand'
+    | 'damageTakeAddend'
 
-export type StatModifiers = Partial<Pick<CharacterStats, ModifiableStatName>>
+export type StatModifiers = Partial<
+    Pick<CalculatedCharacterStats, ModifiableStatName>
+>
 
 export type StatModifierExpiration = 'turn' | 'room' | 'run'
 export type StatModifiersMap = Record<StatModifierExpiration, StatModifiers>

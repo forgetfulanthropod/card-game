@@ -270,7 +270,8 @@ export function getDamage({
     const calcedDamage = Math.ceil(
         damage * multiplicand + damageTakeAddend + damageDealAddend
     )
-    return calcedDamage
+
+    return Math.max(calcedDamage, 0)
 }
 
 function maybeApplyDamageThresholdDebuffs(

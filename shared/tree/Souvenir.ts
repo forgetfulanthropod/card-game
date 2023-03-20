@@ -301,12 +301,13 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         If a character equipped with this souvenir ends their turn in Neutral Stance, they take 2 damage and gain Brave (1)`,
         equippable: true,
         on: {
+            acquire: 'deal(7); modifyStats("defense", "3", "run")',
             battleStart: 'addBlock(7)',
             turnEnd: `
                 ifStance(
                     "neutral",
                     chain(
-                        deal(2, null, "self"),
+                        deal(2),
                         modifyStats("defense", "3", "run")
                     )
                 )
@@ -349,7 +350,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Equipped Kaiju's attacks apply poisoned 2.`,
         equippable: true,
         on: {
-            dealDamage: `if(lastCardPlayedType === "attack", effect("poisoned", 2))`,
+            playCard: `if(lastCardPlayedType === "attack", effect("poisoned", 2))`,
         },
     },
     strangeHat: {
@@ -410,10 +411,10 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     lavenderTea: {
         id: 'lavenderTea',
         name: `Lavender Tea`,
-        description: `Set equipped Kaiju's stance to neutral after you end your turn.  Heal that character for 2.`,
+        description: `Set equipped Kaiju's stance to neutral after you end your turn.`,
         equippable: true,
         on: {
-            turnEnd: 'setStance("neutral"); heal(2)',
+            turnEnd: 'setStance("neutral")',
         },
     },
     petRock: {
@@ -526,7 +527,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever equipped Kaiju takes damage from an attack, they get +2 defense until the end of the room.`,
         equippable: true,
         on: {
-            takeDamage: `modifyStats("defense", "2", "room")`,
+            takeDamage: `modifyStats("defense", "1", "room")`,
         },
     },
     bigSniff: {

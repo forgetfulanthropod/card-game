@@ -147,6 +147,7 @@ export type CardId =
     | 'berserk'
     | 'bigLunge'
     | 'bless'
+    | 'blindingLight'
     | 'blockBard'
     | 'blockCleric'
     | 'blockKnight'

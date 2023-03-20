@@ -205,10 +205,14 @@ export function calculateStats(
         magic: cm.magic + getStatModifierAddend(cm, 'magic'),
         strength: cm.strength + getStatModifierAddend(cm, 'strength'),
         isSkipped: false,
-        damageDealMultiplicand: getDamageDealMulitplicandForStance(stance),
-        damageDealAddend: 0,
-        damageTakeMultiplicand: getDamageTakeMulitplicandForStance(stance),
-        damageTakeAddend: 0,
+        damageDealMultiplicand:
+            getDamageDealMulitplicandForStance(stance) +
+            getStatModifierAddend(cm, 'damageDealMultiplicand'),
+        damageDealAddend: getStatModifierAddend(cm, 'damageDealAddend'),
+        damageTakeMultiplicand:
+            getDamageTakeMulitplicandForStance(stance) +
+            getStatModifierAddend(cm, 'damageTakeMultiplicand'),
+        damageTakeAddend: getStatModifierAddend(cm, 'damageTakeAddend'),
         health: Math.min(cm.health, constitution),
         stance,
     }

@@ -1442,4 +1442,22 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'wizard',
     },
+    //All attacks that target this character deal 50%+50% less damage until the end of the turn.  Dwindle
+    blindingLight: {
+        name: 'Blinding Light',
+        energy: 1,
+        id: 'blindingLight',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicydefensey = magic * .5 + defense * .5;
+            chain(
+                modifyStats("damageTakeAddend", magicydefensey, "turn"),
+                dwindle()
+            );
+            join("All attacks that target this character deal", magicydefensey, "less damage until the end of the turn.  <b>Dwindle</b>")
+        `,
+        type: 'defense',
+        characterClass: 'cleric',
+    },
 }

@@ -29,6 +29,7 @@ import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainIfStanceElse, execute as executeIfStanceElse} from './ifStanceElse'
 import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
+import {explain as explainJoin, execute as executeJoin} from './join'
 import {explain as explainKeep, execute as executeKeep} from './keep'
 import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
@@ -79,6 +80,7 @@ export const explainers: Explainers = {
     ifStance: explainIfStance,
     ifStanceElse: explainIfStanceElse,
     infectiousBite: explainInfectiousBite,
+    join: explainJoin,
     keep: explainKeep,
     killIf: explainKillIf,
     mimicAttack: explainMimicAttack,
@@ -129,6 +131,7 @@ export const executors: Executors = {
     ifStance: executeIfStance,
     ifStanceElse: executeIfStanceElse,
     infectiousBite: executeInfectiousBite,
+    join: executeJoin,
     keep: executeKeep,
     killIf: executeKillIf,
     mimicAttack: executeMimicAttack,
