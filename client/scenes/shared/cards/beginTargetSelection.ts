@@ -2,16 +2,26 @@ import type { Card } from 'shared'
 
 import { callApi } from '@/callApi'
 import { localTree } from '@/data'
-import { Container, getRenderer, getStage, PixiContainer, portalize } from '@/elementsUtil'
-import { hoveredSelectedCardUid, isAttacking, onUpdate } from '@/util'
+import {
+    Container,
+    getRenderer,
+    getStage,
+    PixiContainer,
+    portalize,
+} from '@/elementsUtil'
+import {
+    selectedForTargetingCardUid,
+    isTargeting,
+    onUpdate,
+} from '@/util'
 import { TargetingArrow } from './TargetingArrow'
 
 export function beginTargetSelection(
     root: PixiContainer,
     cardMeta: Card
 ): () => void {
-    hoveredSelectedCardUid.set(cardMeta.uid)
-    isAttacking.set(true)
+    selectedForTargetingCardUid.set(cardMeta.uid)
+    isTargeting.set(true)
     localTree.set('selectedTargets', [])
 
     const renderer = getRenderer()
@@ -24,8 +34,8 @@ export function beginTargetSelection(
 
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
-        isAttacking.set(false)
-        hoveredSelectedCardUid.set(null)
+        isTargeting.set(false)
+        selectedForTargetingCardUid.set(null)
         arrow?.destroy()
 
         renderer.events.setCursor('defaultFallback')

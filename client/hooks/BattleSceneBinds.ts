@@ -5,8 +5,8 @@ import type { BattleScene, CardUid, StanceId } from 'shared'
 import { callApi } from '@/callApi'
 import {
     globalShowSims,
-    hoveredSelectedCardUid,
-    isAttacking,
+    selectedForTargetingCardUid,
+    isTargeting,
     ruleBookEditorIsShown,
     sceneEditorIsShown,
 } from '@/util'
@@ -97,8 +97,8 @@ const selectCard = (
     const cards = Object.entries(scene.get('cards', 'hand')).reverse()
     const [cardUid, card] = cards[idx]
     hoveredCardUid.set(cardUid)
-    hoveredSelectedCardUid.set(cardUid)
-    isAttacking.set(true)
+    selectedForTargetingCardUid.set(cardUid)
+    isTargeting.set(true)
     const events = getEvents(card, hoveredCardUid)
     if (events.pointerdown && events.pointerup) {
         events.pointerdown({} as FederatedPointerEvent)
@@ -115,7 +115,7 @@ const playCard = (
         clearAttack(hoveredCardUid)
         return
     }
-    const cardUid = hoveredSelectedCardUid.val
+    const cardUid = selectedForTargetingCardUid.val
     if (!cardUid) {
         clearAttack(hoveredCardUid)
         return
@@ -136,8 +136,8 @@ const playCard = (
 const clearAttack = (hoveredCardUid: Datum<CardUid | null>) => {
     globalShowSims.set(false)
     hoveredCardUid.set(null)
-    hoveredSelectedCardUid.set(null)
-    isAttacking.set(false)
+    selectedForTargetingCardUid.set(null)
+    isTargeting.set(false)
 }
 
 export const battleKeybinds = (
@@ -162,7 +162,7 @@ export const battleKeybinds = (
         } else if (numbersArray.includes(e.key)) {
             const num = Number(e.key)
             const idx = num == 0 ? 9 : num - 1
-            if (!isAttacking.val) {
+            if (!isTargeting.val) {
                 selectCard(scene, hoveredCardUid, idx)
                 globalShowSims.set(true)
             } else {

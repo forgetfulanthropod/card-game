@@ -12,8 +12,8 @@ export const hoveredCharacterUid = datum<CharacterUid | null>(null)
 export const hoveredCharacterStatsOverride = datum<PlayerCharacterStats | null>(
     null
 )
-export const hoveredSelectedCardUid = datum<CardUid | null>(null)
-export const isAttacking = datum<boolean>(false)
+export const selectedForTargetingCardUid = datum<CardUid | null>(null)
+export const isTargeting = datum<boolean>(false)
 export const highlightIntentFrom = datum<CharacterUid | null>(null)
 export const targetUidsWaitingForImpact = datum<CharacterUid[]>([])
 export const playDamageAnimation = datum<boolean>(false)

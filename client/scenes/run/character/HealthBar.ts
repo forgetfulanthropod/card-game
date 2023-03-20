@@ -20,8 +20,8 @@ import {
 import {
     globalShowSims,
     hoveredCharacterUid,
-    hoveredSelectedCardUid,
-    isAttacking,
+    selectedForTargetingCardUid,
+    isTargeting,
     onUpdate,
     statChangesDatum,
     toDatum,
@@ -224,7 +224,7 @@ function DamageIndicator(
             })
         ),
         // TODO combine/cleanup
-        hoveredSelectedCardUid.onChange(cardUid => {
+        selectedForTargetingCardUid.onChange(cardUid => {
             if (globalShowSims.val === false) {
                 showAttackSimulation.set(false)
                 showBlockSimulation.set(false)
@@ -250,8 +250,8 @@ function DamageIndicator(
             }
             return
         }),
-        isAttacking.onChange(attacking => {
-            if (!hoveredSelectedCardUid.val && !attacking)
+        isTargeting.onChange(attacking => {
+            if (!selectedForTargetingCardUid.val && !attacking)
                 showAttackSimulation.set(false)
         }),
         hoveredCharacterUid.onChange(targetChar => {
@@ -260,8 +260,8 @@ function DamageIndicator(
                 showBlockSimulation.set(false)
             }
             if (!targetChar) return
-            if (!hoveredSelectedCardUid.val) return
-            const card = handCursor.get(hoveredSelectedCardUid.val)
+            if (!selectedForTargetingCardUid.val) return
+            const card = handCursor.get(selectedForTargetingCardUid.val)
             if (!card?.outcomes) return
             const outcome = card.outcomes.outcome || card.outcomes[targetChar]
             if (!outcome) return
@@ -281,8 +281,8 @@ function DamageIndicator(
         }),
         globalShowSims.onChange(val => {
             if (!val) return
-            if (!hoveredSelectedCardUid.val) return
-            const card = handCursor.get(hoveredSelectedCardUid.val)
+            if (!selectedForTargetingCardUid.val) return
+            const card = handCursor.get(selectedForTargetingCardUid.val)
             if (!card?.outcomes) return
             const outcome = card.outcomes.outcome || card.outcomes[characterUid]
             if (!outcome) return
