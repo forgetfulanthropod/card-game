@@ -117,9 +117,7 @@ function Options(
                     pointerleave() {
                         if (cardEl.filters == null) return
 
-                        cardEl.filters = cardEl.filters.filter(
-                            filter => filter !== glowFilter
-                        )
+                        cardEl.filters = null
                     },
                 },
                 omitPointerAreaExtender: true,

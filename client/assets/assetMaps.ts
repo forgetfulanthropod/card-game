@@ -77,6 +77,7 @@ export const cardArtAssets = {
     cardDivineIntervention:
         'cards/Card PNG Breakdown/Card Art/divine intervention.png',
     cardGuidingBolt: 'cards/Card PNG Breakdown/Card Art/Guiding Bolt.png',
+    cardPatientAmbush: 'cards/Card PNG Breakdown/Card Art/patient ambush.png',
     cardSpellbook: 'cards/Card PNG Breakdown/Card Art/Spellbook.png',
     cardTestudoFormation:
         'cards/Card PNG Breakdown/Card Art/tetsudo formation.png',
@@ -621,7 +622,7 @@ export const eventAssets = {
         'events/main graphics/Hog Covered in Clowns_.webp',
     eventTooManyHatsMainGraphic: 'events/main graphics/Too Many Hats.webp',
 }
-
+export type SouvenirAssetKey = keyof typeof souvenirAssets
 export const souvenirAssets: {
     [K in SouvenirId as `souvenir${Capitalize<K>}`]: string
 } = {
@@ -665,7 +666,7 @@ export const souvenirAssets: {
     souvenirPenguinEgg: 'souvenirs/Penguin egg.webp',
     souvenirPetRock: 'souvenirs/Pet Rock.webp',
     souvenirPulledRug: 'souvenirs/Pulled rug.webp',
-    souvenirQuestionableHat: 'souvenirs/questionable hat.webp',
+    souvenirQuestionableHat: 'souvenirs/Questionable Hat_.webp',
     souvenirRestrainingOrder: 'souvenirs/Restraining order.webp',
     souvenirRustedGear: 'souvenirs/Rusted Gear.webp',
     souvenirGrandmasHandbag: "souvenirs/Grandma's Handbag.webp",

@@ -7,13 +7,18 @@ import {
     Container,
     For,
     getTexture,
+    If,
+    PixiTexture,
+    SouvenirAssetKey,
+    souvenirAssets,
     Sprite,
 } from '@/elementsUtil'
 import { ContainerChild, DisplayObjectArgs } from '@/elementsUtil/mypixi/_types'
 import { hoveredCharacterUid, toDatum } from '@/util'
 import { ExplanationIf, TEXT_WIDTH } from '@sharedElements'
-import { datum } from 'datums'
+import { compose, Datum, datum } from 'datums'
 import { omit, upperFirst } from 'lodash'
+import { Assets } from 'pixi.js'
 import { Souvenir } from 'shared'
 
 export function SouvenirsEls(): ContainerChild {
@@ -43,12 +48,14 @@ export function SouvenirEl({
     explanationYOffset = 10,
     displayArgs,
     explanationDisplayArgs,
+    full = false,
 }: {
     souvenir: Souvenir
     width?: number
     explanationYOffset?: number
     displayArgs?: DisplayObjectArgs
     explanationDisplayArgs?: DisplayObjectArgs
+    full?: boolean
 }) {
     const isHovered = datum(false)
     const events = {
@@ -68,25 +75,38 @@ export function SouvenirEl({
         ...(displayArgs?.events ?? {}),
     }
     // TODO better/auto fallback
-    let textureKey = `souvenir${upperFirst(souvenir.id)}` as AssetKey
-    let texture
+    let textureKey = `souvenir${upperFirst(souvenir.id)}` as SouvenirAssetKey
+    const textureDatum = datum<null | PixiTexture>(null)
     try {
-        texture = getTexture(textureKey)
+        textureDatum.set(getTexture(textureKey))
+
+        if (width > (textureDatum.val?.width ?? 0)) {
+            textureDatum.set(null)
+            const path = souvenirAssets[textureKey]
+            Assets.load(
+                path.replace('souvenirs/', 'assets/souvenirs/_full/')
+            ).then(t => textureDatum.set(t))
+        }
     } catch (e) {
-        textureKey = 'souvenirPlaceholder' as AssetKey
-        texture = getTexture(textureKey)
+        textureKey = 'souvenirPlaceholder' as SouvenirAssetKey
+        textureDatum.set(getTexture(textureKey))
     }
+
     return Container(
         {
             name: textureKey,
         },
-        Sprite({
-            src: textureKey,
-            scale: width / texture.width,
-            anchor: [1, 0.5],
-            events,
-            ...(displayArgs ? omit(displayArgs, 'events') : {}),
-        }),
+        If(
+            compose(([texture]) => texture, textureDatum),
+            src =>
+                Sprite({
+                    src,
+                    scale: width / src.width,
+                    anchor: [1, 0.5],
+                    events,
+                    ...(displayArgs ? omit(displayArgs, 'events') : {}),
+                })
+        ),
         ExplanationIf({
             isShown: isHovered,
             texts: [souvenir.name, souvenir.description],
