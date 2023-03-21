@@ -19,16 +19,14 @@ export function bindGamestate(app: PixiApplication): void {
 
 function setBodyStyles(app: PixiApplication) {
     const defaultIcon = `url('${defaultPointerFullPath}'),default`
+    const defaultFallbackIcon = `url('${defaultPointerFullPath}'),default` // used when toggling cursor off
     const hoverIcon = `url('${hoverPointerFullPath}'),pointer`
+    const hiddenIcon = 'none'
 
     app.renderer.events.cursorStyles.default = defaultIcon
+    app.renderer.events.cursorStyles.defaultFallback = defaultFallbackIcon
     app.renderer.events.cursorStyles.hover = hoverIcon
-
-    // document.body.style.cursor = `url('${defaultPointerFullPath}'),default`
-
-    window.addEventListener('contextmenu', e => {
-        e.preventDefault()
-    })
+    app.renderer.events.cursorStyles.hidden = hiddenIcon
 }
 
 function bindScene(app: PixiApplication): Unbind {

@@ -20,13 +20,6 @@ export function TargetingArrow(
     const arrowEquivalentToNumBeads = 2
     const numBeadsOmittedFromEnd = 1
     const stage = getStage()
-
-    const defaultCursor = getRenderer().events.cursorStyles.default
-    const hoverCursor = getRenderer().events.cursorStyles.hover
-
-    getRenderer().events.cursorStyles.default = 'none'
-    getRenderer().events.cursorStyles.hover = 'none'
-
     const root = Container(
         {
             onDestroy: [
@@ -35,9 +28,6 @@ export function TargetingArrow(
 
                     stage.off('pointermove', onPointerMove)
                     stage.off('pointerup', onPointerUp)
-
-                    getRenderer().events.cursorStyles.default = defaultCursor
-                    getRenderer().events.cursorStyles.hover = hoverCursor
                 },
             ],
         },

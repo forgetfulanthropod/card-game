@@ -2,23 +2,45 @@ import type { Card } from 'shared'
 
 import { callApi } from '@/callApi'
 import { localTree } from '@/data'
-import { Container, getStage, PixiContainer, portalize } from '@/elementsUtil'
-import { hoveredSelectedCardUid, isAttacking, onUpdate } from '@/util'
+import {
+    Container,
+    getRenderer,
+    getStage,
+    PixiContainer,
+    portalize,
+} from '@/elementsUtil'
+import {
+    selectedForTargetingCardUid,
+    isTargeting,
+    onUpdate,
+} from '@/util'
 import { TargetingArrow } from './TargetingArrow'
 
 export function beginTargetSelection(
     root: PixiContainer,
     cardMeta: Card
 ): () => void {
-    hoveredSelectedCardUid.set(cardMeta.uid)
-    isAttacking.set(true)
+    selectedForTargetingCardUid.set(cardMeta.uid)
+    isTargeting.set(true)
     localTree.set('selectedTargets', [])
+
+    const renderer = getRenderer()
+    const defaultCursor = renderer.events.cursorStyles.default
+    const hoverCursor = renderer.events.cursorStyles.hover
+    const hiddenCursor = renderer.events.cursorStyles.hidden
+
+    getRenderer().events.cursorStyles.default = hiddenCursor
+    getRenderer().events.cursorStyles.hover = hiddenCursor
 
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
-        isAttacking.set(false)
-        hoveredSelectedCardUid.set(null)
+        isTargeting.set(false)
+        selectedForTargetingCardUid.set(null)
         arrow?.destroy()
+
+        renderer.events.setCursor('defaultFallback')
+        renderer.events.cursorStyles.default = defaultCursor
+        renderer.events.cursorStyles.hover = hoverCursor
     })
 
     const arrow = root.addChild(
