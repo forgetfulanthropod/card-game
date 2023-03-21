@@ -46,7 +46,7 @@ export function TargetingArrow(
                 src: `targetingBead${upperFirst(card.type)}` as AssetKey,
                 name: `targetingBead-${i}`,
                 anchor: 0.5,
-                scale: 0.6 - ((numBeads - i) * 0.1) / numBeads,
+                scale: 0.35 - ((numBeads - i) * 0.1) / numBeads,
                 x: -10000,
             })
         ),
@@ -54,7 +54,7 @@ export function TargetingArrow(
             // src: `targetingArrow${upperFirst(card.type)}` as AssetKey,
             src: `targetingArrow${upperFirst(card.type)}` as AssetKey,
             name: `targetingArrow${upperFirst(card.type)}`,
-            scale: 0.3,
+            scale: 0.2,
             anchor: [0.5, -0.1],
             x: -10000,
         })
@@ -144,6 +144,8 @@ export function TargetingArrow(
     }
 }
 
+const arrowCurveYOffset = 80
+
 // t is 0 -> 1
 function bezier({
     x0,
@@ -151,9 +153,9 @@ function bezier({
     x1,
     y1,
     xA = x0 * 0.7 + x1 * 0.3,
-    yA = y1 - 180,
+    yA = y1 - arrowCurveYOffset,
     xB = x0 * 0.3 + x1 * 0.7,
-    yB = y1 - 180,
+    yB = y1 - arrowCurveYOffset,
     t,
 }: {
     x0: number

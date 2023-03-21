@@ -88,7 +88,6 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleFrameRateCap = async () => {
         toggleIsFrameRateCapped()
-        setHighResEnabled(enabled => !enabled)
     }
 
     const handleMotionFX = async () => {
@@ -123,9 +122,9 @@ export function ResetButton(props: { username: string }): JSXElement {
             />
             <MenuButton
                 handler={handleFrameRateCap}
-                text={'limit to 30 FPS'}
+                text={'Limit to 30 FPS'}
                 isEnabled={isFrameRateCapped}
-                textIfEnabled={'remove frame rate cap'}
+                textIfEnabled={'Remove frame rate limit'}
             />
             <MenuButton
                 handler={handleMotionFX}
