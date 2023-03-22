@@ -32,7 +32,7 @@ export function SouvenirsEls(): ContainerChild {
             }))
         ),
         souvenir => {
-            const souvenirWidth = 80
+            const souvenirWidth = 90
 
             return Adjust(SouvenirEl({ souvenir, width: souvenirWidth }), {
                 x: BASE_WIDTH - 140 - souvenir.index * souvenirWidth,
@@ -48,14 +48,12 @@ export function SouvenirEl({
     explanationYOffset = 10,
     displayArgs,
     explanationDisplayArgs,
-    full = false,
 }: {
     souvenir: Souvenir
     width?: number
     explanationYOffset?: number
     displayArgs?: DisplayObjectArgs
     explanationDisplayArgs?: DisplayObjectArgs
-    full?: boolean
 }) {
     const isHovered = datum(false)
     const events = {

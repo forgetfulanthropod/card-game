@@ -42,6 +42,10 @@ export function makeBattleState(args: {
         allCharacters,
         cards: getNullCards(),
         newCardOptions: {},
+        fullSelectedCharacterDecks: args.game.get(
+            'scene',
+            'fullSelectedCharacterDecks'
+        ),
         handSize: 5,
         baseHandSize: 5,
         energy: 3,

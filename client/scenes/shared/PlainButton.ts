@@ -1,4 +1,4 @@
-import type { PixiContainer } from '@/elementsUtil'
+import { PixiContainer, RoundedRectangleGradientSprite } from '@/elementsUtil'
 import { Container, PixiTexture, Sprite, Text } from '@/elementsUtil'
 
 export function PlainButton(args: {
@@ -12,22 +12,46 @@ export function PlainButton(args: {
     const { fontSize = 30, x, y, width, onClick } = args
     const text = Text({
         text: args.text,
-        onClick,
-        style: { fontSize },
+        style: { fontSize, fill: 'white' },
         x,
         y,
         width,
     })
-    const bg = Sprite({
-        src: PixiTexture.WHITE,
-        width: text.width * 1.2,
-        height: text.height * 1.1,
-        x: text.x - text.width * 0.1,
-        y: text.y - text.height * 0.1,
+    const bgWidth = text.width + text.height
+    const bgHeight = text.height * 1.5
+    const bg = RoundedRectangleGradientSprite({
+        spriteArgs: {
+            width: bgWidth,
+            height: bgHeight,
+            x: text.x - (bgWidth - text.width) / 2,
+            y: text.y - (bgHeight - text.height) / 2,
+        },
+        radius: 20,
+        gradientArgs: {
+            x0: 0,
+            y0: 0,
+            x1: bgWidth,
+            y1: bgHeight,
+            colorStops: [
+                {
+                    color: 0xff0000,
+                    offset: 0,
+                },
+                {
+                    color: 0x00ff00,
+                    offset: 0.5,
+                },
+                {
+                    color: 0x0000ff,
+                    offset: 1,
+                },
+            ],
+        },
     })
     return Container(
         {
             name: 'PlainButton',
+            onClick,
         },
         bg,
         text

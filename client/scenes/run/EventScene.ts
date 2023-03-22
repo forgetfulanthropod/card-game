@@ -8,8 +8,6 @@ import {
     BASE_WIDTH,
     Container,
     DisplayObject,
-    EventAssetKey,
-    eventAssets,
     fontMap,
     getTexture,
     glowFilter,
@@ -25,12 +23,11 @@ import { upperFirst } from 'lodash'
 import { KawaseBlurFilter } from 'pixi-filters'
 import { TextStyle, Texture } from 'pixi.js'
 import { CharacterUid, EventScene, Souvenir, souvenirMap } from 'shared'
-import { keys, vals } from 'shared/code'
+import { vals } from 'shared/code'
 import { SpineBackground } from '../background'
 import {
     BattleSceneCharacterInfo,
     ExplanationIf,
-    InfoBox,
     MainCharacterAnimation,
     TEXT_WIDTH,
 } from '../shared'
@@ -190,13 +187,15 @@ function ChooseOptionInterface(
 
             const souvenirId = eventScene.choices[index]?.souvenirId
             const souvenir = souvenirId ? souvenirMap[souvenirId] : null
+            const fontSize = 34
+            const lineHeight = 55
 
             const text = Text({
                 text: choiceAssetText,
                 style: {
                     ...style,
-                    fontSize: 34,
-                    lineHeight: 55,
+                    fontSize,
+                    lineHeight,
                     wordWrapWidth: (BASE_WIDTH / choiceAssetTexts.length) * 0.8,
                 },
                 anchor: [0.5, 0],
@@ -227,7 +226,7 @@ function ChooseOptionInterface(
                         width:
                             (BASE_WIDTH / choiceAssetTexts.length) * 0.8 +
                             30 * 2,
-                        height: text.height + 60,
+                        height: text.height + lineHeight * 1.4,
                         anchor: [0.5, 0],
                         events: {
                             pointerenter() {

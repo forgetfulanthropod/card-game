@@ -9,7 +9,11 @@ import {
     SouvenirActivationKey,
 } from 'shared'
 import { interpretCommand } from './cards'
-import { getLivingNpcs, getLivingPcs } from './characters/characterGetters'
+import {
+    getLivingNpcs,
+    getLivingPcs,
+    isPc,
+} from './characters/characterGetters'
 import { updateCharacters } from './characters/updateCharacters'
 
 export function activateSouvenirs(
@@ -22,7 +26,11 @@ export function activateSouvenirs(
     ;(scene.get('souvenirs') ?? []).forEach(souvenir => {
         if (
             !characterUid ||
-            !souvenir.equippable ||
+            (!souvenir.equippable &&
+                souvenir.targetType == null &&
+                isPc(scene.get(), characterUid)) ||
+            ((souvenir.targetType ?? '').includes('nemies') &&
+                !isPc(scene.get(), characterUid)) ||
             characterUid === souvenir.characterUid
         )
             wasSouvenirActivated =

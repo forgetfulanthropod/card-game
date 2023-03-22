@@ -171,6 +171,8 @@ function portalizeExplanations(
             content.forEach(item => {
                 if (item.width + x + xOffset > BASE_WIDTH) {
                     x -= item.width + xOffset + 25
+                } else if (x + xOffset < 0) {
+                    x = -xOffset + 20
                 }
             })
 

@@ -11,7 +11,12 @@ import {
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
-import { hoveredCharacterUid, selectedForTargetingCardUid, toDatum } from '@/util'
+import {
+    hoveredCharacterUid,
+    nextFrame,
+    selectedForTargetingCardUid,
+    toDatum,
+} from '@/util'
 import type { Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
@@ -68,8 +73,7 @@ export function Hand(
         prevCardUid: CardUid | null
     ) {
         const destructibleRoot = getDestructibleRoot()
-        if (cardUid)
-            centerCardEl(destructibleRoot, cardUid, initialDisplayVals)
+        if (cardUid) centerCardEl(destructibleRoot, cardUid, initialDisplayVals)
         if (prevCardUid)
             uncenterCardEl(destructibleRoot, prevCardUid, initialDisplayVals)
     }
@@ -86,7 +90,8 @@ export function Hand(
         else if (currHandEmpty && !prevHandEmpty)
             return await animateDiscardAllCardsOut() // end turn
         else if (keys(newHand).length !== keys(prevHand).length)
-            return await animateCardOutAndRefresh(prevHand, newHand) // play a card
+            return await animateCardOutAndRefresh(prevHand, newHand)
+        // play a card
         else if (newHand)
             return await refreshCardsInHand(newHand, 'final') // refresh page
         else
@@ -145,6 +150,8 @@ export function Hand(
         destructibleRoot.addChild(...NewCardsInHand)
         if (position === 'initial')
             await animateCardsIntoHand(NewCardsInHand, newHand)
+
+        // await nextFrame() // may fix card in corner bug when user navigates away during card draw
 
         bindHandAnimations(
             destructibleRoot,

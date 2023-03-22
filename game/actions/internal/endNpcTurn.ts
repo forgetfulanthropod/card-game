@@ -36,11 +36,11 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     activateSouvenirs('turnStart', scene) // buffs/debuffs for calcs
     applyTurnStartEffects(scene, 'pc')
 
-    popAndRunQueue(scene, 'pc')
-
     clearCharacterStatModifiers(scene, 'turn')
 
     drawNewHand(scene)
+
+    popAndRunQueue(scene, 'pc')
 
     checkServerScoringEvent('HIT_VULGAR_THRESHOLD', scene)
     checkServerScoringEvent('BLOCK_OVER_THRESHOLD', scene)

@@ -1,11 +1,18 @@
+import { getBattleScene } from '@/data'
 import {
     Adjust,
     Container,
+    getStage,
+    If,
     PixiContainer,
+    portalize,
     RoundedRectangleGradientSprite,
     TweenablePixiContainer,
 } from '@/elementsUtil'
-import type { Card, CharacterClass } from 'shared'
+import { toDatum } from '@/util'
+import { compose } from 'datums'
+import type { Card, CharacterClass, CharacterMeta } from 'shared'
+import { vals } from 'shared/code'
 import { CardEl, CardSprite } from './Card'
 
 const characterClasses: CharacterClass[] = [
@@ -16,14 +23,36 @@ const characterClasses: CharacterClass[] = [
     'cleric',
 ]
 
+export function CardsTiltedInLineForCharacter(
+    cm: CharacterMeta,
+    deckOrPool: 'deck' | 'pool',
+    onClick?: (card: Card) => void
+) {
+    const scene = getBattleScene()
+
+    const cardsDatum =
+        deckOrPool === 'deck'
+            ? toDatum(scene.select('cards', 'draw'), pile =>
+                  vals(pile).filter(c => c.characterUid === cm.uid)
+              )
+            : toDatum(
+                  scene.select('fullSelectedCharacterDecks', cm.uid),
+                  pile => vals(pile)
+              )
+
+    return If(cardsDatum, cards => CardsTiltedInLine({ cards, onClick }))
+}
+
 export function CardsTiltedInLine({
     cards,
     cardWidth = 65,
     parentWidth = 500,
+    onClick,
 }: {
     cards: Card[]
     cardWidth?: number
     parentWidth?: number
+    onClick?: (card: Card) => void
 }): PixiContainer {
     const bgPaddingPortion = 0.08
     const tiltFactor = 0.7
@@ -65,7 +94,7 @@ export function CardsTiltedInLine({
         const clearOldFullSizeCard = () => {
             hoveringCardDetails = false
 
-            fullSizeCard && root.removeChild(fullSizeCard)
+            fullSizeCard && getStage().removeChild(fullSizeCard)
 
             fullSizeCard?.destroy()
             fullSizeCard?.children?.pop()?.destroy()
@@ -88,13 +117,24 @@ export function CardsTiltedInLine({
                                 width: cardWidth,
                                 showTermExplanations: true,
                                 explanationsOnLeft: true,
-                                explanationsAdjustX: -420,
+                                explanationsAdjustX:
+                                    root.getGlobalPosition().x > 420
+                                        ? -420
+                                        : 300,
                                 explanationsAdjustY: 200,
                             }),
                             {
                                 name: 'FULL SIZE CARD',
-                                x: c.x - cardWidth * 0.38,
-                                y: c.y - cardWidth * 0.2,
+                                x:
+                                    Math.max(
+                                        root.getGlobalPosition().x + c.x,
+                                        cardWidth
+                                    ) -
+                                    cardWidth * 0.38,
+                                y:
+                                    root.getGlobalPosition().y +
+                                    c.y -
+                                    cardWidth * 0.2,
                             }
                         )
 
@@ -102,29 +142,21 @@ export function CardsTiltedInLine({
                             c => (c.interactive = false)
                         )
 
-                        // fullSizeCard.interactive = true
-                        // fullSizeCard.on(
-                        //     'pointerover',
-                        //     () => (hoveringCardDetails = true)
-                        // )
-                        // fullSizeCard.on('pointerout', () =>
-                        //     clearOldFullSizeCard()
-                        // )
-
-                        root.addChild(fullSizeCard)
+                        portalize({
+                            from: root,
+                            content: fullSizeCard,
+                        })
                     },
                     pointerleave: async () => {
-                        // await nextTick()
-
-                        // if (hoveringCardDetails) return
-
                         clearOldFullSizeCard()
+                    },
+                    pointerup() {
+                        onClick && onClick(cardMeta)
                     },
                 },
             },
             sprite
         )
-        //const m = new Matrix(1, (cardWidth * 1.4) /2, -cardWidth * 3, 1)
         const x = -cardWidth * 3
         const y = (cardWidth * 1.4) / 2
         const d = Math.sqrt(x * x + y * y)

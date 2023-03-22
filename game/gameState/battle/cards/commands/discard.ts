@@ -11,14 +11,17 @@ export const explain: Explainers['discard'] = dslArgs => {
 export const execute: Executors['discard'] = ({ cardUid, dslArgs, scene }) => {
     const [numCards] = evalAll(dslArgs)
 
+    const numCardsBefore = scene.get('numRequiredToDiscard')
+
     const remainingCardsInHand = vals(scene.get('cards', 'hand')).filter(
         card => card.uid !== cardUid
     )
 
-    const handHasMoreCardsThanThis = remainingCardsInHand.length > numCards
+    const handHasMoreCardsThanThis =
+        remainingCardsInHand.length > numCards + numCardsBefore
 
     if (numCards > 0 && handHasMoreCardsThanThis)
-        scene.set('numRequiredToDiscard', numCards)
+        scene.set('numRequiredToDiscard', numCards + numCardsBefore)
     else {
         discardBeforeTurnEnd({
             cardUids: remainingCardsInHand.map(c => c.uid),

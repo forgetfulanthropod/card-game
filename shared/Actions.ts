@@ -7,6 +7,7 @@ import type { SceneId } from './misc'
 
 import type {
     BattleScene,
+    Card,
     CardUid,
     CharacterUid,
     GameState,
@@ -87,7 +88,7 @@ interface BareGameActionArgs {
     nextRoom: { choice: 0 | 1 | 2 | 3 }
     choosePlushy: { index: number }
     chooseEventResponse: { index: number; characterUid?: CharacterUid }
-    getFreeSouvenir: { souvenirId: SouvenirId; characterUid?: CharacterUid }
+
     activateSouvenir: { souvenirId: SouvenirId }
     placeSelectedCharacters: {
         characters: {
@@ -97,10 +98,17 @@ interface BareGameActionArgs {
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
-    rulebookAction: RulebookArgs
-    setBattleScene: { scene: BattleScene }
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
     setRunId: { userId: UserID; runId: RunID }
+
+    //test only start
+    getFreeSouvenir: { souvenirId: SouvenirId; characterUid?: CharacterUid }
+    getFreeCard: { card: Card }
+    removeCardForFree: { uid: CardUid }
+
+    rulebookAction: RulebookArgs
+    setBattleScene: { scene: BattleScene }
+    //test only end
 }
 
 // NOTE: below is not as complicated as it looks.

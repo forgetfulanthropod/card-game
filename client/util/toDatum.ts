@@ -6,7 +6,7 @@ import { onUpdate } from './onUpdate'
 /** NOTE: automatically unsubscribes if cursor gets value `undefined` */
 export function toDatum<T, S = T>(
     cursor: ROCursor<T> | SCursor<T>,
-    compute: (x: T) => S,
+    compute: (x: T) => S = x => x as unknown as S,
     options?: { allowUndefined: boolean }
 ): RODatum<S> & { destroy: Callback } {
     const d = datum(compute(cursor.get())) as Datum<S> & { destroy: Callback }
