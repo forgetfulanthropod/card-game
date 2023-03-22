@@ -552,12 +552,6 @@ export function getEvents(
         hoveredCardUid.set(card.uid)
     }
     const pointerleave: InteractionEventHandler = () => {
-        if (
-            selectedForTargetingCardUid.val === card.uid &&
-            isTargeting.val === false
-        ) {
-            selectedForTargetingCardUid.set(null)
-        }
         if (hoveredCardUid.val === card.uid) {
             hoveredCardUid.set(null)
             hoveredCharacterUid.set(null)

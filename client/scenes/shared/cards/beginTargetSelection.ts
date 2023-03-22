@@ -4,16 +4,13 @@ import { callApi } from '@/callApi'
 import { localTree } from '@/data'
 import {
     Container,
+    DisplayObject,
     getRenderer,
     getStage,
     PixiContainer,
     portalize,
 } from '@/elementsUtil'
-import {
-    selectedForTargetingCardUid,
-    isTargeting,
-    onUpdate,
-} from '@/util'
+import { selectedForTargetingCardUid, isTargeting, onUpdate } from '@/util'
 import { TargetingArrow } from './TargetingArrow'
 
 export function beginTargetSelection(
@@ -21,7 +18,6 @@ export function beginTargetSelection(
     cardMeta: Card
 ): () => void {
     selectedForTargetingCardUid.set(cardMeta.uid)
-    isTargeting.set(true)
     localTree.set('selectedTargets', [])
 
     const renderer = getRenderer()
@@ -34,6 +30,7 @@ export function beginTargetSelection(
 
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
+        unsubFromIsTargeting()
         isTargeting.set(false)
         selectedForTargetingCardUid.set(null)
         arrow?.destroy()
@@ -43,12 +40,18 @@ export function beginTargetSelection(
         renderer.events.cursorStyles.hover = hoverCursor
     })
 
-    const arrow = root.addChild(
-        portalize({
-            from: Container({}),
-            content: TargetingArrow(cardMeta, cleanup),
-        })
-    )
+    const unsubFromIsTargeting = isTargeting.onChange(isTargeting => {
+        if (isTargeting) {
+            arrow = root.addChild(
+                portalize({
+                    from: Container({}),
+                    content: TargetingArrow(cardMeta, cleanup),
+                })
+            )
+        }
+    })
+
+    let arrow: DisplayObject
 
     const unsubFromSelectedTargets = listenToSelectedTargets(cardMeta, cleanup)
 
