@@ -71,7 +71,7 @@ export function CurvedText({
     const numPointsInHalfCircle = 200
 
     text.updateText(true) // necessary!
-    if (text.width > maxWidth) text.scale.set(maxWidth / text.width)
+    if (text.width > maxWidth) text.scale.set(maxWidth / text.width) // stopped working in pixi 7
     const textTexture = getRenderer().generateTexture(text)
     text.destroy(true)
 

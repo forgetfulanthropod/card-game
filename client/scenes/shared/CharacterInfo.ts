@@ -197,15 +197,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
 
     return InfoBox(
         Container(
-            {
-                onDestroy: [
-                    () => {
-                        classOutlineFilter.destroy()
-                        classOutlineFilter2.destroy()
-                        whiteOutlineFilter.destroy()
-                    },
-                ],
-            },
+            {},
             Sprite({
                 src: Texture.WHITE,
                 width: CONTENT_WIDTH,
@@ -285,8 +277,11 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
         {
             filters: [classOutlineFilter],
             onDestroy: [
-                () => classOutlineFilter.destroy(),
-                () => whiteOutlineFilter.destroy(),
+                () => {
+                    classOutlineFilter.destroy()
+                    classOutlineFilter2.destroy()
+                    whiteOutlineFilter.destroy()
+                },
             ],
             padding: mainPadding,
         }

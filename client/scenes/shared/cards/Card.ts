@@ -36,7 +36,12 @@ import { compose, Datum } from 'datums'
 import { datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
-import { DisplayObject, FederatedPointerEvent, Rectangle } from 'pixi.js'
+import {
+    DisplayObject,
+    FederatedPointerEvent,
+    Rectangle,
+    TextStyle,
+} from 'pixi.js'
 import { Texture } from 'pixi.js'
 import {
     Card,
@@ -436,23 +441,42 @@ function getTexts(
         )
     )
 
+    const maxWidth = CARD_WIDTH * 0.9
+    let text = Text({
+        text: card.name,
+        anchor: [0.5, 0.2],
+        style: {
+            fontSize: 54 * cardFrameScale,
+            fontFamily: fontMap['bigFont'],
+            fill: 'white',
+            stroke: 'black',
+            strokeThickness: 6 * cardFrameScale,
+            lineHeight: 0,
+        },
+    })
+    if (text.width > maxWidth) {
+        const oldText = text
+        text = Text({
+            text: card.name,
+            anchor: [0.5, 0.2],
+            style: {
+                fontSize: (54 * cardFrameScale * maxWidth) / text.width,
+                fontFamily: fontMap['bigFont'],
+                fill: 'white',
+                stroke: 'black',
+                strokeThickness: 6 * cardFrameScale,
+                lineHeight: 0,
+            },
+        })
+        oldText.destroy()
+    }
+
     return [
         Adjust(
             CurvedText({
-                text: Text({
-                    text: card.name,
-                    anchor: [0.5, 0.2],
-                    style: {
-                        fontSize: 54 * cardFrameScale,
-                        fontFamily: fontMap['bigFont'],
-                        fill: 'white',
-                        stroke: 'black',
-                        strokeThickness: 6 * cardFrameScale,
-                        lineHeight: 0,
-                    },
-                }),
+                text,
                 radius: cardFrameTexture.height * 0.5,
-                maxWidth: CARD_WIDTH * 0.9,
+                maxWidth,
             }),
             {
                 y: cardFrameTexture.width * 0.15,

@@ -346,21 +346,21 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
+    //Every time target enemy attacks this turn, change the damage value of their attacks to 1.  Brittle (3).
     catchTheKnife: {
         name: 'Catch The Knife',
         energy: 1,
         id: 'catchTheKnife',
         targetNum: 1,
-        targetType: 'self',
-        actions: `chain(
-            modifyStats(
-              "damageDealAddend",
-              "-999",
-              "turn"
-            ),
-            brittle(3)
-          )`,
-        type: 'enchantment',
+        targetType: 'enemies',
+        actions: `
+            chain(
+                modifyStats("damageDealAddend", "-999", "turn"),
+                brittle(3)
+            );
+            "Every time target enemy attacks this turn, change the damage value of their attacks to 1.  <b>Brittle&nbsp(3)</b>."
+        `,
+        type: 'utility',
         characterClass: 'rogue',
     },
     // cowardlyTactics: {
@@ -1500,7 +1500,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                     3
                 )
             );
-            join("In 3 turns, deal", strengthy, "to target enemy.  If that enemy dies as a result of this attack, all friendly Kaiju gain <b>Emboldened&nbsp(1)</b>")
+            join("This card can only be played if this character is in <b>Avoidant Stance</b>.<br/>In 3 turns, deal", strengthy, "to target enemy.  If that enemy dies as a result of this attack, all friendly Kaiju gain <b>Emboldened&nbsp(1)</b>")
         `,
         type: 'attack',
         characterClass: 'rogue',
