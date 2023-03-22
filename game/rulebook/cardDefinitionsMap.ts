@@ -358,7 +358,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 modifyStats("damageDealAddend", "-999", "turn"),
                 brittle(3)
             );
-            "Every time target enemy attacks this turn, change the damage value of their attacks to 1.  <b>Brittle&nbsp(3)</b>."
+            "Every time target enemy attacks this turn, change the damage value of their attacks to 1.  <b>Brittle&nbsp(3)</b>"
         `,
         type: 'utility',
         characterClass: 'rogue',
@@ -1493,11 +1493,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             ifStance(
                 "avoidant",
                 queue(
+                    3,
+                    strengthy = strength * 4;
                     ifKilled(
                         dealFromStance("avoidant", strengthy),
                         effect("emboldened", 1, "allFriends")
-                    ),
-                    3
+                    )
                 )
             );
             join("This card can only be played if this character is in <b>Avoidant Stance</b>.<br/>In 3 turns, deal", strengthy, "to target enemy.  If that enemy dies as a result of this attack, all friendly Kaiju gain <b>Emboldened&nbsp(1)</b>")
