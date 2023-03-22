@@ -6,17 +6,13 @@ import {
     customGlowFilter,
     For,
     glowFilter,
-    If,
     Sprite,
 } from '@/elementsUtil'
 import { getIsStanceLockedDatum } from '@/scenes/run/character/StanceControls'
-import { nextFrame, toDatum } from '@/util'
-import { compose, Datum, datum } from 'datums'
-import { getCurrentScope } from 'immer/dist/internal'
+import { toDatum } from '@/util'
+import { compose, Datum } from 'datums'
 import { upperFirst } from 'lodash'
-import { isMobile } from 'mobile-device-detect'
 import { GrayscaleFilter } from 'pixi-filters'
-import { Filter } from 'pixi.js'
 import { Card, StanceId } from 'shared'
 
 export function HoverableStances(

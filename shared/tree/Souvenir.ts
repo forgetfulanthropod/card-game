@@ -564,8 +564,8 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     concreteShoes: {
         id: 'concreteShoes',
         name: `Concrete Shoes`,
-        description: `Equipped Kaiju gets +8 defense and +35 health but can't change stances outside of cards and abilities that force them to do so.`,
-        equippable: false,
+        description: `Equipped Kaiju gets +8 defense and +35 max health but can't change stances outside of cards and abilities that force them to do so.`,
+        equippable: true,
         on: {
             acquire: `modifyStats("defense", "5", "run"); modifyStats("constitution", "35", "run")`,
             turnStart: `effect("lockStance", 1)`,

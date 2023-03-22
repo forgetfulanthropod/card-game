@@ -189,19 +189,14 @@ export function CardEl({
                   ]),
             If(
                 compose(
-                    ([
-                        isLongHovered,
-                        selectedForTargetingCardUid,
-                        hoveredCardUid,
-                    ]) => {
+                    ([selectedForTargetingCardUid, hoveredCardUid]) => {
                         if (getScene().get('id') !== 'battle') return false
 
                         return (
-                            (isLongHovered && hoveredCardUid === card.uid) ||
+                            hoveredCardUid === card.uid ||
                             selectedForTargetingCardUid === card.uid
                         )
                     },
-                    isLongHovered,
                     selectedForTargetingCardUid,
                     ...(hoveredCardUid ? [hoveredCardUid] : [])
                 ),
