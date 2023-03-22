@@ -1,4 +1,4 @@
-import { getBattleScene } from '@/data'
+import { getBattleScene, getScene } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -80,9 +80,9 @@ export function Hand(
 
         if (cardUid) {
             const { x, y } =
-                getRenderer().plugins.interaction.rootPointerEvent.screen // cursor coords on screen
+                getRenderer().plugins.interaction.rootPointerEvent.screen
 
-            // TODO: fix below scenario
+            // TODO: fix below scenario (maybe not needed when we make hovered cards smaller)
             // if (y < TARGETABLE_AREA_Y_OFFSET)
             //     return handleCursorInsideTargetableArea(cardUid)
 
@@ -94,10 +94,16 @@ export function Hand(
                 y: y - BASE_HEIGHT - 275,
                 ease: Easing.easeFromTo,
             })
+            // console.debug(`adding listener for ${cardUid}`)
+            getStage().interactive = true
             getStage().on('pointermove', dragCardUntilTargeting)
         }
 
-        if (!cardUid) getStage().off('pointermove', dragCardUntilTargeting)
+        if (!cardUid) {
+            // console.debug(`removing listener for ${cardUid}`)
+            getStage().interactive = false
+            getStage().off('pointermove', dragCardUntilTargeting)
+        }
 
         if (prevCardUid)
             uncenterCardEl(destructibleRoot, prevCardUid, initialDisplayVals)
@@ -118,6 +124,9 @@ export function Hand(
         }
         if (!DraggableCardEl)
             DraggableCardEl = getCardElFromUid(selectedCardUid)
+        const card = getBattleScene().get('cards').hand[selectedCardUid]
+        if (!card) console.warn('no card')
+
         if (cursorInsideTargetableArea(e)) {
             handleCursorInsideTargetableArea(selectedCardUid)
             DraggableCardEl = null
@@ -129,7 +138,7 @@ export function Hand(
                 y - BASE_HEIGHT - 275,
             ]
             // used for smooth motion
-            runKeyframeAnimations(DraggableCardEl, 0.075, {
+            runKeyframeAnimations(DraggableCardEl, 0.06, {
                 keyframes: 10,
                 x: targetX,
                 y: targetY,
@@ -259,7 +268,7 @@ async function centerCardEl(
     destructibleRoot: PixiContainerWithTweenableChildren,
     cardUid: CardUid,
     initialDisplayVals: InitialDisplayVals,
-    duration = 0.25
+    duration = 0.4
 ) {
     const CardEl = destructibleRoot.getChildByName(
         cardUid
@@ -277,7 +286,7 @@ async function centerCardEl(
     getFocus(destructibleRoot, initialDisplayVals, _ => {})(cardUid)
 
     await Tweener.add(
-        { target: CardEl, duration, ease: Easing.easeTo },
+        { target: CardEl, duration, ease: Easing.easeInOutCubic },
         { x: 0, y: initialDisplayVals[cardUid].y - CARD_FOCUS_Y_OFFSET }
     )
 }

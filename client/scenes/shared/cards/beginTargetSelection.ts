@@ -25,9 +25,6 @@ export function beginTargetSelection(
     const hoverCursor = renderer.events.cursorStyles.hover
     const hiddenCursor = renderer.events.cursorStyles.hidden
 
-    getRenderer().events.cursorStyles.default = hiddenCursor
-    getRenderer().events.cursorStyles.hover = hiddenCursor
-
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
         unsubFromIsTargeting()
@@ -42,6 +39,9 @@ export function beginTargetSelection(
 
     const unsubFromIsTargeting = isTargeting.onChange(isTargeting => {
         if (isTargeting) {
+            getRenderer().events.cursorStyles.default = hiddenCursor
+            getRenderer().events.cursorStyles.hover = hiddenCursor
+
             arrow = root.addChild(
                 portalize({
                     from: Container({}),
