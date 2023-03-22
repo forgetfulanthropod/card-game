@@ -57,6 +57,13 @@ function isPlayable({
 }): boolean {
     if (scene.get('numRequiredToDiscard') > 0) return false
 
+    if (card.targetNum > 0 && targetUids?.length !== card.targetNum) {
+        logger.info(
+            `tried to play card ${card.id} but number of targets was off`
+        )
+        return false
+    }
+
     if (getEnergy(card) < 0 || getEnergy(card) > scene.get('energy'))
         return false
 

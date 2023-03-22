@@ -274,7 +274,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Whenever a friendly Kaiju takes unblocked damage, draw a card, then discard a card.`,
         equippable: false,
         on: {
-            takeDamage: 'queue(1, draw(1); discard(1))',
+            takeDamage: 'queue(1, chain(draw(1), discard(1)))',
         },
     },
     // lilTaste: {

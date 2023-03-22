@@ -63,9 +63,7 @@ export function Characters(scene: ROBattleScene): PixiContainer {
             Character({
                 cursor: allCharsC.select(uid),
                 onClick: () => {
-                    localTree
-                        .select('selectedTargets')
-                        .apply(arr => [...arr, uid])
+                    localTree.select('selectedTargets').apply(arr => [uid]) // todo: 2 target cards?
                 },
                 scale: 1,
             })

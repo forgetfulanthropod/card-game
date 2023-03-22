@@ -180,7 +180,8 @@ function BargainCards(): DisplayObject {
                     }
                 ),
                 Adjust(MainCharacterAnimation({ characterMeta: c })!, {
-                    y: 400,
+                    y: BASE_HEIGHT * 0.6,
+                    x: BASE_WIDTH * 0.15,
                 })
             )
         },
