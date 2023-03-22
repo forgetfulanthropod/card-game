@@ -271,7 +271,7 @@ export function getDamage({
         damage * multiplicand + damageTakeAddend + damageDealAddend
     )
 
-    return Math.max(calcedDamage, 0)
+    return Math.max(calcedDamage, 1) // damage minimum is 1
 }
 
 function maybeApplyDamageThresholdDebuffs(

@@ -197,7 +197,15 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
 
     return InfoBox(
         Container(
-            {},
+            {
+                onDestroy: [
+                    () => {
+                        classOutlineFilter.destroy()
+                        classOutlineFilter2.destroy()
+                        whiteOutlineFilter.destroy()
+                    },
+                ],
+            },
             Sprite({
                 src: Texture.WHITE,
                 width: CONTENT_WIDTH,

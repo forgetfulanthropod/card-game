@@ -346,16 +346,23 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'rogue',
     },
-    // catchTheKnife: {
-    //     name: 'Catch The Knife',
-    //     energy: 1,
-    //     id: 'catchTheKnife',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions: 'effect("knifeCatcher", 1)', //todo
-    //     type: 'enchantment',
-    //     characterClass: 'rogue',
-    // },
+    catchTheKnife: {
+        name: 'Catch The Knife',
+        energy: 1,
+        id: 'catchTheKnife',
+        targetNum: 1,
+        targetType: 'self',
+        actions: `chain(
+            modifyStats(
+              "damageDealAddend",
+              "-999",
+              "turn"
+            ),
+            brittle(3)
+          )`,
+        type: 'enchantment',
+        characterClass: 'rogue',
+    },
     // cowardlyTactics: {
     //     name: 'Cowardly Tactics',
     //     energy: 1,
@@ -1470,6 +1477,52 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             magicydefensey = magic * 2.5 + defense;
             chain(heal(magicydefensey), brittle(1))
+        `,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+    //In 3 turns, deal 400% to target enemy.  If that enemy dies as a result of this attack, all friendly Kaiju gain Emboldened (1).
+    aPlanYearsInTheMaking: {
+        name: 'A Plan Years in The Making',
+        energy: 1,
+        id: 'aPlanYearsInTheMaking',
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+            strengthy = strength * 4;
+            ifStance(
+                "avoidant",
+                queue(
+                    ifKilled(
+                        dealFromStance("avoidant", strengthy),
+                        effect("emboldened", 1, "allFriends")
+                    ),
+                    3
+                )
+            );
+            join("In 3 turns, deal", strengthy, "to target enemy.  If that enemy dies as a result of this attack, all friendly Kaiju gain <b>Emboldened&nbsp(1)</b>")
+        `,
+        type: 'attack',
+        characterClass: 'rogue',
+    },
+    //Target character heals for 50% and gains 125% block.  They also receive +2 Strength and +1 Magic until the end of the room.  Remove all debuffs from that character.  Momentary
+    thereThereLittleBuddy: {
+        name: 'There There, Little Buddy',
+        energy: 1,
+        id: 'thereThereLittleBuddy',
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+            magicy = magic * .5;
+            defensey = defense * 1.25;
+            chain(
+                heal(magicy),
+                addBlock(defensey),
+                modifyStats("strength|magic", "2|1", "room"),
+                removeAllDebuffs(),
+                momentary()
+            );
+            join("Target character heals for", magicy, "and gains", defensey, "block.  They also receive +2 Strength and +1 Magic until the end of the room.  Remove all debuffs from that character.  <b>Momentary</b>")
         `,
         type: 'utility',
         characterClass: 'cleric',

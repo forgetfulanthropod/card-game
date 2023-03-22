@@ -6,11 +6,13 @@ import {
     BASE_WIDTH,
     Container,
     For,
+    glowFilter,
     If,
     Sprite,
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { compose, Datum, datum } from 'datums'
+import { OutlineFilter } from 'pixi-filters'
 import { DisplayObject, Texture } from 'pixi.js'
 import { Souvenir, souvenirMap } from 'shared'
 import { vals } from 'shared/code'
@@ -56,21 +58,48 @@ export function BargainBin() {
                         },
                     },
                 }),
-                PlainButton({
-                    text: 'Souvenirs',
-                    x: BASE_WIDTH * 0.4,
-                    y: BASE_HEIGHT * 0.1,
-                    onClick() {
-                        souvenirsOrCards.set('souvenirs')
-                    },
-                }),
-                PlainButton({
-                    text: 'Cards',
-                    x: BASE_WIDTH * 0.55,
-                    y: BASE_HEIGHT * 0.1,
-                    onClick() {
-                        souvenirsOrCards.set('cards')
-                    },
+                If(souvenirsOrCards, sOrC => {
+                    const outlineFilter = new OutlineFilter(2, 0xffffff)
+
+                    return Container(
+                        {
+                            onDestroy: [() => outlineFilter.destroy()],
+                        },
+                        Adjust(
+                            PlainButton({
+                                text: 'Souvenirs',
+                                x: BASE_WIDTH * 0.4,
+                                y: BASE_HEIGHT * 0.1,
+                                onClick() {
+                                    souvenirsOrCards.set('souvenirs')
+                                },
+                            }),
+                            {
+                                filters: [
+                                    outlineFilter,
+                                    ...(sOrC === 'souvenirs'
+                                        ? [glowFilter]
+                                        : []),
+                                ],
+                            }
+                        ),
+                        Adjust(
+                            PlainButton({
+                                text: 'Cards',
+                                x: BASE_WIDTH * 0.55,
+                                y: BASE_HEIGHT * 0.1,
+                                onClick() {
+                                    souvenirsOrCards.set('cards')
+                                },
+                            }),
+                            {
+                                filters: [
+                                    outlineFilter,
+                                    ...(sOrC === 'cards' ? [glowFilter] : []),
+                                ],
+                            }
+                        )
+                    )
                 }),
                 If(
                     compose(

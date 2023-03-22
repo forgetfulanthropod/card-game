@@ -4,6 +4,7 @@ import {
     Container,
     getStage,
     If,
+    noDestroy,
     PixiContainer,
     portalize,
     RoundedRectangleGradientSprite,
@@ -11,6 +12,7 @@ import {
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { compose } from 'datums'
+import { OutlineFilter } from 'pixi-filters'
 import type { Card, CharacterClass, CharacterMeta } from 'shared'
 import { vals } from 'shared/code'
 import { CardEl, CardSprite } from './Card'
@@ -40,7 +42,15 @@ export function CardsTiltedInLineForCharacter(
                   pile => vals(pile)
               )
 
-    return If(cardsDatum, cards => CardsTiltedInLine({ cards, onClick }))
+    const outlineFilter = new OutlineFilter(3, 0)
+
+    const root = If(cardsDatum, cards => CardsTiltedInLine({ cards, onClick }))
+
+    root.filters = [outlineFilter]
+
+    root.on('destroyed', () => outlineFilter.destroy())
+
+    return root
 }
 
 export function CardsTiltedInLine({
