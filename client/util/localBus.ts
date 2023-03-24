@@ -14,6 +14,7 @@ export const hoveredCharacterStatsOverride = datum<PlayerCharacterStats | null>(
 )
 export const selectedForTargetingCardUid = datum<CardUid | null>(null)
 export const isTargeting = datum<boolean>(false)
+export const currAnimatingCardUid = datum<CardUid|null>(null)
 export const highlightIntentFrom = datum<CharacterUid | null>(null)
 export const targetUidsWaitingForImpact = datum<CharacterUid[]>([])
 export const playDamageAnimation = datum<boolean>(false)
