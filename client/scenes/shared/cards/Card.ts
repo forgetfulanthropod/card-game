@@ -548,13 +548,13 @@ export function getEvents(
 ): InteractionEvents {
     const pointerenter: InteractionEventHandler = () => {
         if (selectedForTargetingCardUid.val === card.uid) return
-        hoveredCharacterUid.set(card.characterUid)
+        // hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
     }
     const pointerleave: InteractionEventHandler = () => {
         if (hoveredCardUid.val === card.uid) {
             hoveredCardUid.set(null)
-            hoveredCharacterUid.set(null)
+            // hoveredCharacterUid.set(null)
         }
     }
     const pointerdown: InteractionEventHandler = ({
@@ -623,8 +623,6 @@ export function getEvents(
                 card.targetType
             )
         ) {
-            // console.log('Card.ts: playing card')
-
             void callApi('playCard', {
                 cardUid: card.uid,
                 targetUids: [],

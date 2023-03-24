@@ -10,7 +10,12 @@ import {
     PixiContainer,
     portalize,
 } from '@/elementsUtil'
-import { selectedForTargetingCardUid, isTargeting, onUpdate } from '@/util'
+import {
+    selectedForTargetingCardUid,
+    isTargeting,
+    onUpdate,
+    currAnimatingCardUid,
+} from '@/util'
 import { TargetingArrow } from './TargetingArrow'
 
 export function beginTargetSelection(
@@ -29,7 +34,9 @@ export function beginTargetSelection(
         unsubFromSelectedTargets()
         unsubFromIsTargeting()
         isTargeting.set(false)
-        selectedForTargetingCardUid.set(null)
+        if (currAnimatingCardUid.val !== selectedForTargetingCardUid.val) {
+            selectedForTargetingCardUid.set(null)
+        }
         arrow?.destroy()
 
         renderer.events.setCursor('defaultFallback')
@@ -64,12 +71,14 @@ function listenToSelectedTargets(cardMeta: Card, cleanup: () => void) {
         (targets: string[]) => {
             const numTargets = cardMeta.targetNum
             if (targets.length >= numTargets) {
+                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets,
                 })
                 cleanup()
             } else if (targets.length > numTargets) {
+                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets.slice(targets.length - numTargets),

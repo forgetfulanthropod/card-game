@@ -4,6 +4,7 @@ import {
     BASE_HEIGHT,
     BASE_WIDTH,
     Container,
+    flashGlowAndBrightnessTo,
     getRenderer,
     getStage,
     glowFilter,
@@ -14,12 +15,13 @@ import {
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
+    currAnimatingCardUid,
     hoveredCharacterUid,
     isTargeting,
     selectedForTargetingCardUid,
     toDatum,
 } from '@/util'
-import type { Datum } from 'datums'
+import { Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
 import { FederatedPointerEvent } from 'pixi.js'
@@ -73,12 +75,12 @@ export function Hand(
     }
 
     function handleTargetingCardChange(
-        cardUid: CardUid | null,
-        prevCardUid: CardUid | null
+        targetingCardUid: CardUid | null,
+        prevTargetingCardUid: CardUid | null
     ) {
         const destructibleRoot = getDestructibleRoot()
 
-        if (cardUid) {
+        if (targetingCardUid) {
             const { x, y } =
                 getRenderer().plugins.interaction.rootPointerEvent.screen
 
@@ -86,7 +88,8 @@ export function Hand(
             // if (y < TARGETABLE_AREA_Y_OFFSET)
             //     return handleCursorInsideTargetableArea(cardUid)
 
-            const CardEl = getCardElFromUid(cardUid)
+            const CardEl = getCardElFromUid(targetingCardUid)
+
             // animates card to base position of draggable state
             runKeyframeAnimations(CardEl, 0.25, {
                 keyframes: 10,
@@ -94,25 +97,25 @@ export function Hand(
                 y: y - BASE_HEIGHT - 275,
                 ease: Easing.easeFromTo,
             })
-            // console.debug(`adding listener for ${cardUid}`)
             getStage().interactive = true
             getStage().on('pointermove', dragCardUntilTargeting)
         }
 
-        if (!cardUid) {
-            // console.debug(`removing listener for ${cardUid}`)
+        if (!targetingCardUid) {
             getStage().interactive = false
             getStage().off('pointermove', dragCardUntilTargeting)
         }
 
-        if (prevCardUid)
-            uncenterCardEl(destructibleRoot, prevCardUid, initialDisplayVals)
-    }
-
-    function handleCursorInsideTargetableArea(selectedCardUid: CardUid) {
-        isTargeting.set(true)
-        getStage().off('pointermove', dragCardUntilTargeting)
-        centerCardEl(getDestructibleRoot(), selectedCardUid, initialDisplayVals)
+        if (
+            prevTargetingCardUid &&
+            prevTargetingCardUid !== currAnimatingCardUid.val
+        ) {
+            uncenterCardEl(
+                destructibleRoot,
+                prevTargetingCardUid,
+                initialDisplayVals
+            )
+        }
     }
 
     let DraggableCardEl: TweenablePixiContainer | null
@@ -124,8 +127,6 @@ export function Hand(
         }
         if (!DraggableCardEl)
             DraggableCardEl = getCardElFromUid(selectedCardUid)
-        const card = getBattleScene().get('cards').hand[selectedCardUid]
-        if (!card) console.warn('no card')
 
         if (cursorInsideTargetableArea(e)) {
             handleCursorInsideTargetableArea(selectedCardUid)
@@ -146,6 +147,14 @@ export function Hand(
         }
     }
 
+    function handleCursorInsideTargetableArea(selectedCardUid: CardUid) {
+        isTargeting.set(true)
+        getStage().off('pointermove', dragCardUntilTargeting)
+        const CardEl = getCardElFromUid(selectedCardUid)
+        flashGlowAndBrightnessTo(CardEl)
+        centerCardEl(getDestructibleRoot(), selectedCardUid, initialDisplayVals)
+    }
+
     function getCardElFromUid(cardUid: CardUid): TweenablePixiContainer {
         const destructibleRoot = getDestructibleRoot()
         return destructibleRoot.getChildByName(cardUid)
@@ -159,14 +168,17 @@ export function Hand(
         const prevHandEmpty = isEmpty(prevHand)
 
         if (!currHandEmpty && prevHandEmpty)
-            return await animateAllCardsIntoHand(newHand) // start turn
+            // start turn
+            return await animateAllCardsIntoHand(newHand)
         else if (currHandEmpty && !prevHandEmpty)
-            return await animateDiscardAllCardsOut() // end turn
+            // end turn
+            return await animateDiscardAllCardsOut()
         else if (keys(newHand).length !== keys(prevHand).length)
-            return await animateCardOutAndRefresh(prevHand, newHand)
-        // play a card
+            // play a card
+            return await animateCardOutAndRerenderHand(prevHand, newHand)
         else if (newHand)
-            return await refreshCardsInHand(newHand, 'final') // refresh page
+            // page was refreshed
+            return await rerenderCardsInHand(newHand, 'final')
         else
             return console.warn({
                 error: 'newHand was empty in Hand.ts',
@@ -176,7 +188,7 @@ export function Hand(
     }
 
     async function animateAllCardsIntoHand(newHand: Pile) {
-        await refreshCardsInHand(newHand, 'initial')
+        await rerenderCardsInHand(newHand, 'initial')
     }
 
     async function animateDiscardAllCardsOut() {
@@ -190,7 +202,7 @@ export function Hand(
         hoveredCharacterUid.set(null) // tmp fix for character hover persisting
     }
 
-    async function animateCardOutAndRefresh(prevHand: Pile, newHand: Pile) {
+    async function animateCardOutAndRerenderHand(prevHand: Pile, newHand: Pile) {
         const destructibleRoot = getDestructibleRoot()
         const cardsRemoved = keys(prevHand).filter(
             card => !keys(newHand).includes(card)
@@ -201,12 +213,13 @@ export function Hand(
             ) as TweenablePixiContainer
             await animatePlayCard(CardToAnimateOut)
         }
-        refreshCardsInHand(newHand, 'final')
+        rerenderCardsInHand(newHand, 'final')
         hoveredCharacterUid.set(null)
+        selectedForTargetingCardUid.set(null)
         return
     }
 
-    async function refreshCardsInHand(
+    async function rerenderCardsInHand(
         newHand: Pile,
         position: 'final' | 'initial'
     ) {
@@ -302,7 +315,7 @@ async function uncenterCardEl(
     if (!CardEl) return new Error(`no pixi element for ${cardUid}`)
 
     const targetDisplayVals = initialDisplayVals[cardUid]
-    if (!targetDisplayVals) return new Error('dafuk no display vals')
+    if (!targetDisplayVals) return new Error(`no display vals for ${cardUid}`)
 
     animateTo(CardEl, targetDisplayVals)
 }
@@ -402,32 +415,23 @@ const animateCardsIntoHand = (
 
 const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
     CardEl.getChildAt(0).removeAllListeners()
-    Tweener.add(
+    currAnimatingCardUid.set(CardEl.name)
+    flashGlowAndBrightnessTo(CardEl, 0.4)
+    const originalScale = CardEl.scale.x
+    await runKeyframeAnimations(
+        CardEl,
+        0.35,
+        { keyframes: 5, tweenableScale: originalScale * 0.8 },
+        { keyframes: 10, tweenableScale: originalScale, ease: Easing.easeTo },
+        { keyframes: 15 },
+        { keyframes: 15, tweenableScale: 0.4, x: 500, y: -200, rotation: 1.7 },
         {
-            target: CardEl,
-            duration: 0.1,
-            ease: Easing.easeTo,
-        },
-        { tweenableScale: 1.05, y: -500 }
-    )
-    await new Promise(res => setTimeout(() => res(void 0), 90))
-
-    await Tweener.add(
-        {
-            target: CardEl,
-            duration: 0.15,
-            ease: Easing.easeOutSine,
-        },
-        { tweenableScale: 0.4, y: -400, rotation: 2.3 }
-    )
-
-    await Tweener.add(
-        {
-            target: CardEl,
-            duration: 0.15,
-            ease: Easing.easeFrom,
-        },
-        { tweenableScale: 0.1, x: 900, y: -70, alpha: 0 }
+            keyframes: 15,
+            tweenableScale: 0.1,
+            x: 900,
+            y: -70,
+            rotation: 2.3,
+        }
     )
     CardEl.destroy()
 }
@@ -492,7 +496,7 @@ function bindHandAnimations(
 
     unsubs.push(
         hoveredCardUid.onChange(uid => {
-            updateGlowFilters(rootEl, hoveredCardUid)
+            // updateGlowFilters(rootEl, hoveredCardUid)
 
             if (uid == null) {
                 setTimeout(() => {
