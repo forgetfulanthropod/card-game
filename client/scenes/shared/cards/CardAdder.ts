@@ -91,8 +91,7 @@ function Options(
 
     const cardEls = vals(cardPile).map((card, i) => {
         const pointerenter = () => {
-            if (selectedCardUid.val == null)
-                cardEls.forEach(el => (el.filters = null))
+            cardEls.forEach(el => (el.filters = null))
 
             cardEl.filters = [...(cardEl.filters ?? []), glowFilter]
         }
@@ -120,7 +119,7 @@ function Options(
                         cardEl.filters = null
                     },
                 },
-                omitPointerAreaExtender: true,
+                // omitPointerAreaExtender: true,
             }),
             {
                 y: BASE_HEIGHT - CARD_WIDTH,

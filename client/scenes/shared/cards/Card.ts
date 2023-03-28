@@ -7,14 +7,15 @@ import {
     BASE_WIDTH,
     Container,
     CurvedText,
-    fontMap,
     flashTo,
+    fontMap,
     getRenderer,
     getStage,
     getTexture,
     If,
     InteractionEventHandler,
     InteractionEvents,
+    onDestroyed,
     PixiContainer,
     PixiSprite,
     PixiTexture,
@@ -22,27 +23,23 @@ import {
     Text,
     TweenableContainer,
     TweenablePixiContainer,
-    onDestroyed,
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
     hoveredCharacterUid,
-    selectedForTargetingCardUid,
-    isTargeting,
     nextTick,
+    selectedForTargetingCardUid,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { compose, Datum } from 'datums'
-import { datum } from 'datums'
+import { compose, Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import {
     DisplayObject,
     FederatedPointerEvent,
     Rectangle,
-    TextStyle,
+    Texture,
 } from 'pixi.js'
-import { Texture } from 'pixi.js'
 import {
     Card,
     CardType,
@@ -160,25 +157,7 @@ export function CardEl({
                 scale,
                 y: (cardFrameTexture.height / 2) * scale,
             },
-            // getGradientBackground(cardFrameTexture, colorStops),
-            Sprite({
-                src: cardArtTexture,
-                // tint: cardArtTexture ? undefined : 0,
-                width: getTexture('cardBlock').width,
-                height: getTexture('cardBlock').height,
-                anchor: [0.5, 0.85],
-            }),
-            Sprite({
-                src: 'cardBase',
-                anchor: 0.5,
-            }),
-            Sprite({
-                src: cardFrameTexture,
-                anchor: 0.5,
-            }),
-            getEnergyContainer(card),
-            getCardOwnerToken(card),
-            ...getTexts(card, cardFrameTexture, colorStops, hoveredStanceDatum),
+
             ...(omitPointerAreaExtender
                 ? []
                 : [
@@ -201,8 +180,19 @@ export function CardEl({
                     ...(hoveredCardUid ? [hoveredCardUid] : [])
                 ),
                 () =>
-                    Adjust(HoverableStances(card, hoveredStanceDatum), { y: 0 })
-            )
+                    Adjust(HoverableStances(card, hoveredStanceDatum), {
+                        y: -width * 1,
+                    }),
+                undefined,
+                {
+                    displayArgs: { events: {} },
+                }
+            ),
+
+            // getGradientBackground(cardFrameTexture, colorStops),
+            NonInteractiveElements(cardArtTexture, cardFrameTexture, card),
+
+            ...getTexts(card, cardFrameTexture, colorStops, hoveredStanceDatum)
         ),
         Adjust(termExplanationsForCard, {
             x:
@@ -213,37 +203,84 @@ export function CardEl({
         })
     )
 
-    if (hoveredCardUid && dynamicHitbox) {
-        const originalBounds = getOriginalHitboxBounds(root)
-        root.hitArea = originalBounds
-
-        const handleHoveredCardChange = (
-            newCardUid: CardUid | null,
-            oldCardUid: CardUid | null
-        ) => {
-            if (newCardUid && newCardUid === card.uid) {
-                const newBounds = new Rectangle(
-                    originalBounds.x - 45,
-                    originalBounds.y - 60,
-                    originalBounds.width + 89,
-                    originalBounds.height + 200
-                )
-                root.hitArea = newBounds
-            }
-
-            if (oldCardUid && oldCardUid === card.uid) {
-                root.hitArea = originalBounds
-            }
-        }
-
-        const hoveredCardUidSub = hoveredCardUid.onChange(
-            handleHoveredCardChange
-        )
-        unsubs.push(hoveredCardUidSub)
-    }
+    // if (hoveredCardUid && dynamicHitbox) {
+    //     changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
+    // }
 
     onDestroyed(root, ...unsubs)
     return root
+}
+
+function NonInteractiveElements(
+    cardArtTexture: PixiTexture,
+    cardFrameTexture: PixiTexture,
+    card: Card
+) {
+    const root = Container(
+        {},
+        Sprite({
+            src: cardArtTexture,
+            // tint: cardArtTexture ? undefined : 0,
+            width: getTexture('cardBlock').width,
+            height: getTexture('cardBlock').height,
+            anchor: [0.5, 0.85],
+        }),
+        Sprite({
+            src: 'cardBase',
+            anchor: 0.5,
+        }),
+        Sprite({
+            src: cardFrameTexture,
+            anchor: 0.5,
+        }),
+        getEnergyContainer(card),
+        getCardOwnerToken(card)
+    )
+
+    root.interactiveChildren = false
+
+    return root
+}
+
+function changeHitboxOnHover(
+    root: TweenablePixiContainer,
+    card: Card,
+    hoveredCardUid: Datum<CharacterUid | null>,
+    unsubs: Callback[]
+) {
+    // const eventBoundContainer = root.children[0] as TweenablePixiContainer
+    // // eventBoundContainer.hitArea = originalBounds
+    // let originalBounds = getOriginalHitboxBounds(eventBoundContainer)
+    // const newBounds = new Rectangle(
+    //     originalBounds.x - 45,
+    //     originalBounds.y - 60,
+    //     originalBounds.width + 90,
+    //     originalBounds.height + 120
+    // )
+    // console.log('setting new bounds', { newBounds })
+    // eventBoundContainer.hitArea = newBounds
+    // async function handleHoveredCardChange(
+    //     newCardUid: CardUid | null,
+    //     oldCardUid: CardUid | null
+    // ) {
+    //     if (newCardUid && newCardUid === card.uid) {
+    //         await nextFrame()
+    //         const hoveredBounds = getOriginalHitboxBounds(eventBoundContainer)
+    //         const newBounds = new Rectangle(
+    //             originalBounds.x - 45,
+    //             originalBounds.y - 60,
+    //             originalBounds.width + 89,
+    //             originalBounds.height + 200
+    //         )
+    //         console.log('setting new bounds', { newBounds })
+    //         eventBoundContainer.hitArea = newBounds
+    //     }
+    //     if (oldCardUid && oldCardUid === card.uid) {
+    //         eventBoundContainer.hitArea = originalBounds
+    //     }
+    // }
+    // const hoveredCardUidSub = hoveredCardUid.onChange(handleHoveredCardChange)
+    // unsubs.push(hoveredCardUidSub)
 }
 
 function getDecoratedEvents({
@@ -346,9 +383,12 @@ function PointerAreaExtender(width: number, height: number): PixiContainer {
         Sprite({
             src: Texture.WHITE,
             width,
-            height: height * 1.2,
+            height: height * 1.05,
             alpha: 0,
-            anchor: [0.5, 0.5],
+            //DEBUG
+            // alpha: 0.2,
+            anchor: [0.5, 1],
+            y: height * 0.5,
         })
     )
 }

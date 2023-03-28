@@ -329,7 +329,7 @@ function renderCardsInHand(
             width: CARD_WIDTH,
             card,
             hoveredCardUid,
-            omitPointerAreaExtender: true,
+            // omitPointerAreaExtender: true,
             dynamicHitbox: true,
         })
 
