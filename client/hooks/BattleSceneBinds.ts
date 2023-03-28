@@ -9,6 +9,7 @@ import {
     isTargeting,
     ruleBookEditorIsShown,
     sceneEditorIsShown,
+    currAnimatingCardUid,
 } from '@/util'
 import { getEvents } from '@/scenes/shared/cards/Card'
 import { FederatedPointerEvent } from 'pixi.js'
@@ -126,6 +127,7 @@ const playCard = (
         clearAttack(hoveredCardUid)
         return
     }
+    currAnimatingCardUid.set(cardUid)
     callApi('playCard', {
         cardUid: cardUid,
         targetUids: [target],

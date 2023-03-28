@@ -10,7 +10,12 @@ import {
     PixiContainer,
     portalize,
 } from '@/elementsUtil'
-import { selectedForTargetingCardUid, isTargeting, onUpdate } from '@/util'
+import {
+    selectedForTargetingCardUid,
+    isTargeting,
+    onUpdate,
+    currAnimatingCardUid,
+} from '@/util'
 import { TargetingArrow } from './TargetingArrow'
 
 export function beginTargetSelection(
@@ -25,14 +30,13 @@ export function beginTargetSelection(
     const hoverCursor = renderer.events.cursorStyles.hover
     const hiddenCursor = renderer.events.cursorStyles.hidden
 
-    getRenderer().events.cursorStyles.default = hiddenCursor
-    getRenderer().events.cursorStyles.hover = hiddenCursor
-
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
         unsubFromIsTargeting()
         isTargeting.set(false)
-        selectedForTargetingCardUid.set(null)
+        if (currAnimatingCardUid.val !== selectedForTargetingCardUid.val) {
+            selectedForTargetingCardUid.set(null)
+        }
         arrow?.destroy()
 
         renderer.events.setCursor('defaultFallback')
@@ -42,6 +46,9 @@ export function beginTargetSelection(
 
     const unsubFromIsTargeting = isTargeting.onChange(isTargeting => {
         if (isTargeting) {
+            getRenderer().events.cursorStyles.default = hiddenCursor
+            getRenderer().events.cursorStyles.hover = hiddenCursor
+
             arrow = root.addChild(
                 portalize({
                     from: Container({}),
@@ -64,12 +71,14 @@ function listenToSelectedTargets(cardMeta: Card, cleanup: () => void) {
         (targets: string[]) => {
             const numTargets = cardMeta.targetNum
             if (targets.length >= numTargets) {
+                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets,
                 })
                 cleanup()
             } else if (targets.length > numTargets) {
+                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets.slice(targets.length - numTargets),
