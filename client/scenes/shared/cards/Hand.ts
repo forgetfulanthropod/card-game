@@ -102,12 +102,12 @@ export function Hand(
                 ease: Easing.easeFromTo,
             })
             getStage().interactive = true
-            getStage().on('pointermove', dragCardUntilTargeting)
+            getStage().on('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (!targetingCardUid) {
             getStage().interactive = false
-            getStage().off('pointermove', dragCardUntilTargeting)
+            getStage().off('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (
@@ -122,46 +122,73 @@ export function Hand(
         }
     }
 
-    let DraggableCardEl: TweenablePixiContainer | null
-    function dragCardUntilTargeting(e: FederatedPointerEvent): void {
+    let SelectedCardEl: TweenablePixiContainer | null
+    let selectedCardMeta: Card | null
+    function handlePointerMoveWhileTargeting(e: FederatedPointerEvent) {
+        // console.log('handling pointermove...')
         const selectedCardUid = selectedForTargetingCardUid.val
         if (!selectedCardUid) {
-            getStage().off('pointermove', dragCardUntilTargeting)
+            getStage().off('pointermove', handlePointerMoveWhileTargeting)
             return
         }
-        if (!DraggableCardEl)
-            DraggableCardEl = getCardElFromUid(selectedCardUid)
 
-        if (cursorInsideTargetableArea(e)) {
-            handleCursorInsideTargetableArea(selectedCardUid)
-            DraggableCardEl = null
-            return
-        } else {
-            const { x, y } = e.screen
-            const [targetX, targetY] = [
-                x - BASE_WIDTH / 2,
-                y - BASE_HEIGHT - 275,
-            ]
-            // used for smooth motion
-            runKeyframeAnimations(DraggableCardEl, 0.06, {
-                keyframes: 10,
-                x: targetX,
-                y: targetY,
-            })
+        if (selectedCardMeta && selectedCardUid !== selectedCardMeta.uid) {
+            selectedCardMeta = getSelectedCardMeta(selectedCardUid)
+            SelectedCardEl = getCardElFromUid(selectedCardUid)
         }
+
+        if (!SelectedCardEl) {
+            SelectedCardEl = getCardElFromUid(selectedCardUid)
+        }
+        if (!selectedCardMeta) {
+            selectedCardMeta = getSelectedCardMeta(selectedCardUid)
+        }
+
+        dragCardWithCursor(e, SelectedCardEl)
+        if (cursorInsideTargetableArea(e)) {
+            // console.log('cursorInsideTargetableArea')
+            // if (!cardUsesArrowTargeting(selectedCardMeta)) {
+            //     // console.log('card doesnt use targeting AND insideTargetableArea')
+            //     return
+            // }
+
+            handleCursorInsideTargetableArea(selectedCardUid)
+            return
+        }
+    }
+
+    function dragCardWithCursor(
+        e: FederatedPointerEvent,
+        SelectedCardEl: TweenablePixiContainer
+    ) {
+        const { x, y } = e.screen
+        const [targetX, targetY] = [x - BASE_WIDTH / 2, y - BASE_HEIGHT - 275]
+        // used for smooth motion
+        runKeyframeAnimations(SelectedCardEl, 0.06, {
+            keyframes: 10,
+            x: targetX,
+            y: targetY,
+        })
     }
 
     function handleCursorInsideTargetableArea(selectedCardUid: CardUid) {
         isTargeting.set(true)
-        getStage().off('pointermove', dragCardUntilTargeting)
+        getStage().off('pointermove', handlePointerMoveWhileTargeting)
         const CardEl = getCardElFromUid(selectedCardUid)
         flashGlowAndBrightnessTo(CardEl)
-        centerCardEl(getDestructibleRoot(), selectedCardUid, initialDisplayVals)
+        centerCardEl(
+            getDestructibleRoot(),
+            selectedCardUid,
+            initialDisplayVals
+        )
     }
 
     function getCardElFromUid(cardUid: CardUid): TweenablePixiContainer {
-        const destructibleRoot = getDestructibleRoot()
-        return destructibleRoot.getChildByName(cardUid)
+        return getDestructibleRoot().getChildByName(cardUid)
+    }
+
+    function getSelectedCardMeta(cardUid: CardUid): Card {
+        return getBattleScene().select('cards').select('hand').get(cardUid)
     }
 
     async function handleHandChange(newHand: Pile, prevHand: Pile) {
@@ -272,7 +299,7 @@ export function Hand(
     unsubs.push(
         selectedForTargetingCardUid.onChange(handleTargetingCardChange),
         handDatum.onChange(handleHandChange, true),
-        () => getStage().off('pointermove', dragCardUntilTargeting)
+        () => getStage().off('pointermove', handlePointerMoveWhileTargeting)
     )
 
     return onDestroyed(staticRoot, ...unsubs)
@@ -642,7 +669,7 @@ function getSelect(
     }
 }
 
-const HAND_SPREAD_DISTANCE = 60
+const HAND_SPREAD_DISTANCE = 78
 const ADJUST_HOVERED_CARD_DISTANCE = 0
 
 function spreadOthers(
@@ -657,40 +684,42 @@ function spreadOthers(
     const hoveredCardMeta = hand[CardEl.name]
     const [leftEdgeIdx, rightEdgeIdx] = [RootEl.children.length - 1, 0]
 
-    for (let cardIdx = hoveredCardIdx + 1, i = 0; cardIdx <= leftEdgeIdx; cardIdx++, i++) {
-        const LeftCardEl = RootEl.getChildAt(
-            cardIdx
-        ) as TweenablePixiContainer
+    for (
+        let cardIdx = hoveredCardIdx + 1, i = 0;
+        cardIdx <= leftEdgeIdx;
+        cardIdx++, i++
+    ) {
+        const LeftCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
         const cardMeta = hand[LeftCardEl.name]
         if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
 
-        const targetX = Math.min(0, -78 + (40 * i))
+        const xShift = Math.min(0, -HAND_SPREAD_DISTANCE + 40 * i)
         runKeyframeAnimations(LeftCardEl, 0.35, {
             keyframes: 1,
-            x: initialDisplayVals[LeftCardEl.name].x + targetX,
+            x: initialDisplayVals[LeftCardEl.name].x + xShift,
             ease: Easing.easeTo,
         })
-
     }
 
-    for (let cardIdx = hoveredCardIdx - 1, i = 0; cardIdx >= 0; cardIdx--, i++) {
-        const RightCardEl = RootEl.getChildAt(
-            cardIdx
-        ) as TweenablePixiContainer
+    for (
+        let cardIdx = hoveredCardIdx - 1, i = 0;
+        cardIdx >= 0;
+        cardIdx--, i++
+    ) {
+        const RightCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
         const cardMeta = hand[RightCardEl.name]
         if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
-        const targetX = Math.max(0, 78 - (40 * i))
+        const xShift = Math.max(0, HAND_SPREAD_DISTANCE - 40 * i)
 
-        // ideal (but not implmemnnted) gaps below
+        // ideal (but not implemented) gaps below
         // 3 chars, 2 chars = 90px between cards when hovered
         // 1 char = 80px
         runKeyframeAnimations(RightCardEl, 0.35, {
             keyframes: 1,
-            x: initialDisplayVals[RightCardEl.name].x + targetX,
+            x: initialDisplayVals[RightCardEl.name].x + xShift,
             ease: Easing.easeTo,
         })
     }
-
 }
 
 function updateGlowFilters(
