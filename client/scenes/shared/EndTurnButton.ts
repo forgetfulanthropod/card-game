@@ -36,7 +36,7 @@ export function EndTurnButton(): PixiContainer {
                 fontSize: 40,
                 gradientFrom: 0xFF9534,
                 gradientTo: 0xEC4F0C,
-                borderColor: 0x330004,
+                outlineColor: 0x330004,
                 x: BASE_WIDTH * 0.90,
                 y: BASE_HEIGHT * 0.78,
             })

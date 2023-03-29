@@ -16,8 +16,9 @@ export function GradientButton(args: {
     fontSize?: number
     gradientFrom?: number
     gradientTo?: number
-    borderColor?: number
-    padding?: number
+    outlineColor?: number
+    xPadding?: number
+    yPadding?: number
     extraWide?: boolean
 }) {
     const {
@@ -28,9 +29,10 @@ export function GradientButton(args: {
         x,
         y,
         onClick,
-        borderColor,
+        outlineColor,
         extraWide,
-        padding,
+        xPadding,
+        yPadding,
     } = args
 
     const ButtonText = Text({
@@ -45,9 +47,8 @@ export function GradientButton(args: {
 
     const ButtonBg = RoundedRectangleGradientSprite({
         spriteArgs: {
-            // width: padding ? ButtonText.width + padding * 10 : ButtonText.width,
-            width: ButtonText.width + (extraWide ? 150 : 100),
-            height: ButtonText.height + 25,
+            width: ButtonText.width + (extraWide ? 150 : 100) + (xPadding ?? 0 * 10),
+            height: ButtonText.height + 25 + (yPadding ?? 0 * 10),
             x: 0,
             y: 0,
             name: 'ButtonGradientBg',
@@ -67,7 +68,7 @@ export function GradientButton(args: {
         },
     })
 
-    const outlineFilter = new OutlineFilter(5, borderColor ?? 0x002717)
+    const outlineFilter = new OutlineFilter(5, outlineColor ?? 0x002717)
     const hoverFilter = new HslAdjustmentFilter({ lightness: -0.2 })
 
     outlineFilter.resolution = 2
