@@ -5,7 +5,6 @@ import {
     Container,
     customGlowFilter,
     For,
-    glowFilter,
     Sprite,
 } from '@/elementsUtil'
 import { getIsStanceLockedDatum } from '@/scenes/run/character/StanceControls'
@@ -52,15 +51,20 @@ export function HoverableStances(
                 getIsStanceLockedDatum(characterCursor)
             ),
             stanceMeta => {
-                const xOffset = (stanceMeta.index - 1) * 90
-                const yOffset = stanceMeta.index === 1 ? 35 : 23
+                const xyrs = {
+                    x: (stanceMeta.index - 1) * 90,
+                    y: stanceMeta.index === 1 ? -18 : -8,
+                    rotation: (stanceMeta.index - 1) * 0.125 * Math.PI,
+                    scale: 0.6,
+                }
+
                 const characterIsInThisStance =
                     stanceMeta.id === characterCursor.get('stance')
                 const isLockedToThisStance =
                     characterIsInThisStance && stanceMeta.isLocked
                 const filters =
                     characterIsInThisStance && !isLockedToThisStance
-                        ? [glowFilter]
+                        ? [customGlowFilter(stanceToColorMap[stanceMeta.id], 6)]
                         : stanceMeta.isLocked && !characterIsInThisStance
                         ? [new GrayscaleFilter()]
                         : []
@@ -75,9 +79,7 @@ export function HoverableStances(
                                   )}Confirmed` as AssetKey,
                                   filters,
                                   anchor: 0.5,
-                                  scale: 0.55,
-                                  x: xOffset,
-                                  y: yOffset,
+                                  ...xyrs,
                               }),
                           ]
                         : []),
@@ -85,9 +87,7 @@ export function HoverableStances(
                         src: `stance${upperFirst(stanceMeta.id)}` as AssetKey,
                         filters,
                         anchor: 0.5,
-                        scale: 0.55,
-                        x: xOffset,
-                        y: yOffset,
+                        ...xyrs,
                         events: {
                             pointerdown() {
                                 //todo: mobile tap to preview, drag detect

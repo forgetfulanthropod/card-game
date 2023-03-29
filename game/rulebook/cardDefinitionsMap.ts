@@ -889,9 +889,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 deal(strength),
-                addEffect(unguarded,1),
-                ),
-            `,
+                addEffect(unguarded,1)
+            )
+        `,
         type: 'attack',
         characterClass: 'penguinKnight',
     },
