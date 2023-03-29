@@ -108,6 +108,7 @@ export function GradientButton(args: {
     )
 
     return onDestroyed(root, () => {
+        Tweener.killTweensOf(hoverFilter)
         outlineFilter.destroy()
         hoverFilter.destroy()
     })

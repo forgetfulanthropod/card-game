@@ -1,4 +1,4 @@
-import { InfoBox, ModalBackdrop } from '@sharedElements'
+import { GradientButton, InfoBox, ModalBackdrop } from '@sharedElements'
 import {
     Adjust,
     animateNumberInElement,
@@ -520,28 +520,33 @@ export function EndOfRun(): PixiContainer {
         )
     }
 
-    const buttonsY = BASE_HEIGHT / 2 + 390
-    const TryAgainButton = Sprite({
-        src: getTexture('tryAgainButton'),
-        anchor: 0,
-        x: BASE_WIDTH / 2 - 445,
-        y: buttonsY,
-        scale: 0.6,
-        alpha: 0,
+    const buttonsY = BASE_HEIGHT / 2 + 450
+
+    const TryAgainButton = GradientButton({
         onClick: handleTryAgain,
+        text: 'Try Again',
+        x: BASE_WIDTH / 2 - 280,
+        y: buttonsY,
+        fontSize: 35,
+        xPadding: 30,
+        yPadding: 11,
+        outlineColor: 0x002717,
     })
 
-    const ShowLeaderboardButton = Sprite({
-        src: getTexture('leaderboardButton'),
-        anchor: 0,
-        x: BASE_WIDTH / 2 + 90,
-        y: buttonsY,
-        scale: 0.6,
-        alpha: 0,
+    const ShowLeaderboardButton = GradientButton({
         onClick: () => {
             !mainContainerIsAnimating.val &&
                 showLeaderboard.set(!showLeaderboard.val)
         },
+        text: 'Leaderboard',
+        x: BASE_WIDTH / 2 + 255,
+        y: buttonsY,
+        fontSize: 35,
+        xPadding: 30,
+        yPadding: 11,
+        gradientFrom: 0xff9534,
+        gradientTo: 0xec4f0c,
+        outlineColor: 0x330004,
     })
 
     const CloseModalButton = Sprite({
