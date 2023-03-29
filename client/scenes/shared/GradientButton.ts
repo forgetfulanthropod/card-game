@@ -1,19 +1,11 @@
 import {
     addFilterTo,
-    customGlowFilter,
     fontMap,
     onDestroyed,
     removeFilterFrom,
 } from '@/elementsUtil'
-import {
-    Container,
-    Text,
-    RoundedRectangleGradientSprite,
-} from '@/elementsUtil'
-import {
-    OutlineFilter,
-    HslAdjustmentFilter,
-} from 'pixi-filters'
+import { Container, Text, RoundedRectangleGradientSprite } from '@/elementsUtil'
+import { OutlineFilter, HslAdjustmentFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 
 export function GradientButton(args: {
@@ -26,6 +18,7 @@ export function GradientButton(args: {
     gradientTo?: number
     borderColor?: number
     padding?: number
+    extraWide?: boolean
 }) {
     const {
         text,
@@ -36,6 +29,7 @@ export function GradientButton(args: {
         y,
         onClick,
         borderColor,
+        extraWide,
         padding,
     } = args
 
@@ -52,7 +46,7 @@ export function GradientButton(args: {
     const ButtonBg = RoundedRectangleGradientSprite({
         spriteArgs: {
             // width: padding ? ButtonText.width + padding * 10 : ButtonText.width,
-            width: ButtonText.width + 100,
+            width: ButtonText.width + (extraWide ? 150 : 100),
             height: ButtonText.height + 25,
             x: 0,
             y: 0,
@@ -94,8 +88,12 @@ export function GradientButton(args: {
                     hoverFilter.alpha = 0
                     addFilterTo(ButtonBg, hoverFilter)
                     Tweener.add(
-                        //@ts-ignore
-                        { target: hoverFilter, duration: 0.1, ease: Easing.easeTo },
+                        {
+                            //@ts-ignore
+                            target: hoverFilter,
+                            duration: 0.15,
+                            ease: Easing.easeTo,
+                        },
                         { alpha: 1 }
                     )
                 },

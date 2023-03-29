@@ -11,7 +11,7 @@ import { callApi } from '@/callApi'
 import { hoveredCharacterUid, toDatum } from '@/util'
 import { getBattleScene } from '@/data'
 import { compose } from 'datums'
-import { GradientButton } from './GradientButton'
+import { GradientButton } from '.'
 
 export function EndTurnButton(): PixiContainer {
     const onClick = async () => {
