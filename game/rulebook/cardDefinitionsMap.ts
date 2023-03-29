@@ -75,7 +75,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: 'chain(deal(block), "(equal to block)")', // , dwindle()
         type: 'attack',
-        characterClass: 'knight',
+        characterClass: 'cleric',
     },
     jab: {
         name: 'Jab',

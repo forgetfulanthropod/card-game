@@ -3,6 +3,7 @@ import { DungeonEntryBg } from './DungeonEntryBg'
 import { SelectedCharactersEl } from './SelectedCharacters'
 import { GoButton } from './GoButton'
 import { CharacterOptions } from './CharacterOptions'
+import { RollKaijuContainer } from './RollKaijuContainer'
 import { getEntryScene } from '@/data'
 import { loopSong, PixiContainer } from '@/elementsUtil'
 import { Container } from '@/elementsUtil'
@@ -43,6 +44,7 @@ export function DungeonEntryScene(): PixiContainer {
         SelectedCharactersEl(),
         startButton,
         CharacterOptions(),
+        RollKaijuContainer(),
         EntrySceneCharacterInfo()
         // DeckView()
         // GameMenu(), // PlayerCharacterMenu() | ItemsMenu | CraftingMenu
