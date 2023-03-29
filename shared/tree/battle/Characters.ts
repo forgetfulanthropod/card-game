@@ -40,6 +40,7 @@ export interface CharacterMeta extends CharacterStats {
     orbs: Orb[]
     statModifiersMap: StatModifiersMap
     calculatedStats: CalculatedCharacterStats
+    skin?: any
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
 
