@@ -96,6 +96,9 @@ interface BareGameActionArgs {
             placeIndex: CharacterPlaceIndex
         }[]
     }
+    rollKaiju: {
+        placeIndex: CharacterPlaceIndex
+    }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }

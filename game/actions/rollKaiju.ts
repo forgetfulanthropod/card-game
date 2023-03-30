@@ -1,0 +1,54 @@
+import produce from 'immer'
+import type {
+    CharacterUid,
+    GameActions,
+    Pile,
+    PlayerCharacterStats,
+} from 'shared'
+
+import { getEntrySceneIn } from '@/util'
+import { getFullDeckForCharacter } from '@/gameState'
+import { rollCharacter } from '@/characterGeneration/roll'
+import { StatName } from '@/characterGeneration/data/stats'
+
+export const rollKaiju: GameActions['rollKaiju'] = args => {
+    const scene = getEntrySceneIn(args.game)
+    scene.apply(
+        'selectedCharacters',
+        produce(selected => {
+            // TODO integrate hog roller
+            const rolledCharacter = rollCharacter()
+            const stats = Object.fromEntries(
+                Object.entries(rolledCharacter.calculatedStats).map(
+                    ([k, v]) => {
+                        return [k, Math.ceil(v as number)]
+                    }
+                )
+            ) as Record<StatName, number>
+            logger.debug(`rolled Character: ${JSON.stringify(rolledCharacter)}`)
+            const characterStats: PlayerCharacterStats = {
+                id: rolledCharacter.species,
+                displayName: `${rolledCharacter.species} Gen One`,
+                isPc: true,
+                class: rolledCharacter.class,
+                ...stats,
+                skin: rolledCharacter.skin,
+            }
+            logger.debug(characterStats)
+            selected[args.placeIndex] = {
+                ...characterStats,
+                uid: `pc-${characterStats.id}-${(Math.random() * 10000) | 0}`,
+                isPc: true,
+            }
+        })
+    )
+
+    const fullSelectedCharacterDecks: Record<CharacterUid, Pile> = {}
+
+    scene.get('selectedCharacters').forEach(c => {
+        if (c == null) return
+        fullSelectedCharacterDecks[c.uid] = getFullDeckForCharacter(c, scene)
+    })
+
+    scene.set('fullSelectedCharacterDecks', fullSelectedCharacterDecks)
+}

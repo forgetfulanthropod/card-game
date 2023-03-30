@@ -204,7 +204,6 @@ function getFirstCardIdForCharacterId(characterId: CharacterId): CardId {
         penguinKnight: 'parry',
         skeletonWarrior: 'swordSlash',
         matchaGelatinCube: 'shieldOfHolyLight',
-        warhog: 'bodySlam',
         gnomeHooligan: 'gnomeBomb',
         jerry: 'psychicWarfare',
     }

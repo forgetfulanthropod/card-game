@@ -1,3 +1,4 @@
+import { Assets } from 'pixi.js'
 import type { CharacterId, CharacterMeta, CharacterUid } from 'shared'
 import { getValidSpineAssetName } from '@/assets'
 import { hoveredCharacterUid } from '@/util'
@@ -8,6 +9,33 @@ import {
     removeFilterFrom,
 } from '@/elementsUtil'
 import { onDestroyed, glowFilter, Spine } from '@/elementsUtil'
+import { Skin } from '@pixi-spine/all-4.1'
+
+export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic'
+export type Item = {
+    rarity: Rarity
+    name: string
+}
+const rarityOrder: Array<Rarity> = ['common', 'uncommon', 'rare', 'epic']
+
+export const makeSkin = (character: PixiSpine, skinInfo: any): Skin => {
+    const newSkin = new Skin('combined-skin')
+    const skinName = skinInfo.base.name
+    newSkin.addSkin(character.spineData.findSkin(skinName))
+    const components = Object.entries(skinInfo).filter(
+        ([k, v]: [any, any]) => k !== 'path' && k !== 'base' && k != 'spine'
+    )
+    for (const [key, data] of components) {
+        const componentName = (data as Item).name
+        try {
+            newSkin.addSkin(character.spineData.findSkin(componentName))
+        } catch (e) {
+            const err = e as unknown as Error
+            console.error(`error: couldn't find skin ${componentName}`)
+        }
+    }
+    return newSkin
+}
 
 export function MainCharacterAnimation({
     characterMeta,
@@ -17,17 +45,18 @@ export function MainCharacterAnimation({
     onSpineEvent,
 }: {
     characterMeta: Pick<CharacterMeta, 'id' | 'isPc' | 'uid'>
-    // characterMeta: CharacterMeta
     events?: InteractionEvents
 
     onSpineEvent?: (e: string) => void
     _height?: number
     _centerX?: boolean
 }): PixiSpine | null {
-    const spineAssetName = getValidSpineAssetName(
-        characterMeta.id,
-        characterMeta.isPc
-    )
+    // @ts-expect-error
+    const assetKey = characterMeta.skin
+        ? // @ts-expect-error
+          characterMeta.skin.spine
+        : characterMeta.id
+    const spineAssetName = getValidSpineAssetName(assetKey, characterMeta.isPc)
 
     // debug
     // console.log({ spineAssetName })
@@ -49,22 +78,27 @@ export function MainCharacterAnimation({
         animation: 'Idle',
         events: {
             ...basicEvents,
-            // pointerup: pointerout,
-            ...events, // choosing not to extend base events on override..
-            // //@ts-expect-error
-            // ...keys(events).reduce((processedEvents, eventKey) => {
-            //     processedEvents[eventKey] = e => {
-            //         events?.[eventKey]?.(e)
-            //         basicEvents[eventKey]()
-            //     }
-
-            //     return processedEvents
-            // }, {} as InteractionEvents),
+            ...events,
         },
         onSpineEvent,
         onDestroy: [hoveredCharacterUid.onChange(updateGlow)],
         isPc: characterMeta.isPc,
     })
+    // @ts-expect-error
+    if (characterMeta.skin) {
+        // @ts-expect-error
+        const skin = makeSkin(root, characterMeta.skin)
+        // @ts-expect-error
+        root.skeleton.setSkin(null)
+        root.skeleton.setToSetupPose()
+        root.skeleton.setSkin(skin)
+    }
+
+    // }
+    // else {
+    //     const characterSpine = new Spine(resource[assets['genHog']].spineData)
+    //     root = new PixiSpine()
+    // }
 
     const timeoutId = setTimeout(() => {
         root.state.setAnimation(0, 'Idle', true).mixDuration = 0.2

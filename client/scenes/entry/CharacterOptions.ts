@@ -168,6 +168,12 @@ function chooseOwnedCharacterAt(
     })
 }
 
+export const rollKaijuAtPlace = () => {
+    void callApi('rollKaiju', {
+        placeIndex: selectedCharacterPlaceIndex.val,
+    })
+}
+
 export async function composeDefaultParty() {
     const defaultCharacterOptionsIndices = [3, 2, 0]
     void callApi('placeSelectedCharacters', {

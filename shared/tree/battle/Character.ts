@@ -52,7 +52,7 @@ export type CharacterStats = Readonly<{
     Brandify
 
 export type PlayerCharacterStats = Readonly<
-    CharacterStats & { id: PlayerCharacterId }
+    CharacterStats & { id: PlayerCharacterId; skin?: any }
 >
 
 export type NonPlayerCharacterStats = Readonly<
