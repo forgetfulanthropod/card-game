@@ -22,7 +22,7 @@ import {
     selectedForTargetingCardUid,
     toDatum,
 } from '@/util'
-import { Datum } from 'datums'
+import { datum, Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
 import { FederatedPointerEvent } from 'pixi.js'
@@ -48,12 +48,16 @@ const RIGHT_TO_LEFT = 1
 const MAX_HAND_WIDTH = BASE_WIDTH * 0.5
 const CARD_INITIAL_Y_OFFSET = BASE_HEIGHT * 0.21
 
+type HandAnimationState = 'notAnimating' | 'discardingAll' | 'discardingOne'
+
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
     toDiscardUids: Datum<CharacterUid[]>
 ) {
     const unsubs: Callback[] = []
     let initialDisplayVals: InitialDisplayVals
+
+    const handAnimationState = datum<HandAnimationState>('notAnimating')
 
     const handDatum = toDatum(
         getBattleScene().select('cards').select('hand'),
@@ -83,6 +87,7 @@ export function Hand(
         prevTargetingCardUid: CardUid | null
     ) {
         const destructibleRoot = getDestructibleRoot()
+        const stage = getStage()
 
         if (targetingCardUid) {
             const { x, y } =
@@ -101,13 +106,13 @@ export function Hand(
                 y: y - BASE_HEIGHT - 275,
                 ease: Easing.easeFromTo,
             })
-            getStage().interactive = true
-            getStage().on('pointermove', handlePointerMoveWhileTargeting)
+            stage.interactive = true
+            stage.on('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (!targetingCardUid) {
-            getStage().interactive = false
-            getStage().off('pointermove', handlePointerMoveWhileTargeting)
+            stage.interactive = false
+            stage.off('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (
@@ -192,6 +197,7 @@ export function Hand(
     }
 
     async function handleHandChange(newHand: Pile, prevHand: Pile) {
+        // console.log({newHand, prevHand})
         lastCardOwnerUidDealt = null
         accumulatedGap = 0
 
@@ -223,20 +229,23 @@ export function Hand(
     }
 
     async function animateDiscardAllCardsOut() {
+        handAnimationState.set('discardingAll')
         const destructibleRoot = getDestructibleRoot()
-        const discardAnimations = await animateAllCardsToDiscardPile(
+        const discardAnimations = getAnimationsForDiscardAllCards(
             destructibleRoot.children
         )
         await Promise.all(discardAnimations)
         destructibleRoot.removeChildren()
         destructibleRoot.destroy()
         hoveredCharacterUid.set(null) // tmp fix for character hover persisting
+        handAnimationState.set('notAnimating')
     }
 
     async function animateCardOutAndRerenderHand(
         prevHand: Pile,
         newHand: Pile
     ) {
+        handAnimationState.set('discardingOne')
         const destructibleRoot = getDestructibleRoot()
         const cardsRemoved = keys(prevHand).filter(
             card => !keys(newHand).includes(card)
@@ -247,9 +256,14 @@ export function Hand(
             ) as TweenablePixiContainer
             await animatePlayCard(CardToAnimateOut)
         }
-        rerenderCardsInHand(newHand, 'final')
         hoveredCharacterUid.set(null)
         selectedForTargetingCardUid.set(null)
+        if (handAnimationState.val !== 'discardingOne') {
+            // hand began handling elsewhere, exit
+            return
+        }
+        rerenderCardsInHand(newHand, 'final')
+        handAnimationState.set('notAnimating')
         return
     }
 
@@ -475,14 +489,20 @@ const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
         }
     )
     CardEl.destroy()
+    currAnimatingCardUid.set(null)
 }
 
-const animateAllCardsToDiscardPile = async (
+const getAnimationsForDiscardAllCards = (
     CardEls: TweenablePixiContainer[]
 ) => {
-    return CardEls.map(async (CardEl, idx) => {
-        CardEl.removeAllListeners()
-        return new Promise(res => {
+    return CardEls.map((CardEl, idx) => {
+        return new Promise<void>(res => {
+            if (currAnimatingCardUid.val === CardEl.name) {
+                // card is being played/discarded, dont create another animation for it
+                return res(void 0)
+            }
+            CardEl.getChildAt(0).removeAllListeners()
+            Tweener.killTweensOf(CardEl)
             setTimeout(async () => {
                 await runKeyframeAnimations(
                     CardEl,

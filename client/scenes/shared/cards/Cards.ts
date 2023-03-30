@@ -14,11 +14,6 @@ type CardsArgs = {
 }
 
 export function Cards(args: CardsArgs) {
-    const handDatum = toDatum(
-        args.scene.select('cards').select('hand'),
-        hand => hand
-    )
-
     return Container(
         {},
         Hand(args.hoveredCardUid, args.toDiscardUids),
