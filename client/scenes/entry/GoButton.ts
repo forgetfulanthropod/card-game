@@ -2,19 +2,15 @@ import { collectData } from '@/analytics/collectData'
 import { callApi } from '@/callApi'
 import { callServerApi } from '@/callServerApi'
 import { getTree } from '@/data'
-import type { PixiContainer } from '@/elementsUtil'
 import {
-    glowFilter,
     BASE_HEIGHT,
     BASE_WIDTH,
-    Container,
-    getTexture,
-    Sprite,
 } from '@/elementsUtil'
 
-export function GoButton(): PixiContainer {
-    const startRun = async () => {
-        root.visible = false
+import { GradientButton } from '@/scenes/shared/'
+
+export function GoButton() {
+    const onClick = async () => {
         const userId = getTree().get('username')
         const { runId } = await callServerApi('startRun', {
             userId,
@@ -26,33 +22,14 @@ export function GoButton(): PixiContainer {
             run_id: runId,
         })
     }
-
-    const bg = Sprite({
-        src: getTexture('goButton'),
-        anchor: 0.5,
-        scale: (1920 * 0.18) / getTexture('goButton').width,
-        async onClick() {
-            startRun()
-        },
-        events: {
-            pointerenter() {
-                bg.filters = [glowFilter]
-            },
-            pointerleave() {
-                bg.filters = null
-            },
-        },
+    return GradientButton({
+        onClick,
+        text: 'go!',
+        x: BASE_WIDTH * 0.85,
+        y: BASE_HEIGHT * 0.88,
+        gradientFrom: 0x109f10,
+        gradientTo: 0x36e736,
+        fontSize: 72,
+        extraWide: true
     })
-
-    bg.cursor = `url('assets/root/hand.webp'), pointer`
-
-    const root = Container(
-        {
-            x: BASE_WIDTH * 0.85,
-            y: BASE_HEIGHT * 0.88,
-        },
-        bg
-    )
-
-    return root
 }

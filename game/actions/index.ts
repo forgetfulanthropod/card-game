@@ -27,4 +27,5 @@ export { resetRandomSeed } from './resetRandomSeed'
 export { rulebookAction } from './rulebookAction'
 export { setBattleScene } from './setBattleScene'
 export { setRunId } from './setRunId'
+export { rollKaiju } from './rollKaiju'
 // @endindex

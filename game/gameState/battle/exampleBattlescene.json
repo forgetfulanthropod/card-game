@@ -267,7 +267,7 @@
                     "targetType": "enemies",
                     "actions": "chain(deal(block), \"(equal to block)\")",
                     "type": "attack",
-                    "characterClass": "knight",
+                    "characterClass": "cleric",
                     "uid": "bodySlam-4576805181930412",
                     "characterUid": "pc-2",
                     "explanation": "Deal 0 damage to enemy target.<br/>(equal to block)."

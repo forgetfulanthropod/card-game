@@ -59,6 +59,7 @@ import {
 import { beginTargetSelection } from './beginTargetSelection'
 import { CARD_WIDTH } from './CardAdder'
 import { getCardTypeTexture } from './getCardTypeSrc'
+import { cardUsesArrowTargeting } from './helpers'
 import { HoverableStances } from './HoverableStances'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
@@ -606,6 +607,7 @@ export function getEvents(
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
     const pointerenter: InteractionEventHandler = () => {
+        // console.log('pointerenter')
         if (selectedForTargetingCardUid.val === card.uid) return
         // hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
@@ -616,16 +618,20 @@ export function getEvents(
             // hoveredCharacterUid.set(null)
         }
     }
-    const pointerdown: InteractionEventHandler = ({
-        currentTarget: cardEl,
-    }) => {
+    const pointerdown: InteractionEventHandler = e => {
         //for mobile
+        const cardEl = e.currentTarget
+        // console.log(`pointerdown`)
+        // const clickType = e.button === 2 ? 'rightClick' : 'leftClick'
+        // console.log(clickType)
+        // if (clickType === 'rightClick') return
         if (cardEl instanceof PixiContainer) {
             // @ts-expect-error
             pointerenter({
                 currentTarget: cardEl,
             } as FederatedPointerEvent)
             clearLastTargetSelection()
+            // console.log('clearLastTargetSelection')
         }
 
         const numRequiredToDiscard = getBattleScene().get().numRequiredToDiscard
@@ -647,17 +653,12 @@ export function getEvents(
         }
 
         if (getBattleScene().get().energy >= card.energy) {
-            if (
-                !(
-                    ['self', 'allEnemies', 'allFriends'] as TargetType[]
-                ).includes(card.targetType)
-            )
-                if (cardEl instanceof PixiContainer) {
-                    clearLastTargetSelection = beginTargetSelection(
-                        cardEl.parent,
-                        card
-                    )
-                }
+            if (cardUsesArrowTargeting(card) && cardEl instanceof PixiContainer) {
+                clearLastTargetSelection = beginTargetSelection(
+                    cardEl.parent,
+                    card
+                )
+            }
         } else {
             flashTo(
                 getStage(),
@@ -677,11 +678,7 @@ export function getEvents(
         }
     }
     const pointerup: InteractionEventHandler = ({ currentTarget: cardEl }) => {
-        if (
-            (['self', 'allEnemies', 'allFriends'] as TargetType[]).includes(
-                card.targetType
-            )
-        ) {
+        if (!cardUsesArrowTargeting(card)) {
             void callApi('playCard', {
                 cardUid: card.uid,
                 targetUids: [],

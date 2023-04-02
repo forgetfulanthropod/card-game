@@ -1,6 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 
-import { ModalBackdrop } from '@sharedElements'
+import { GradientButton, ModalBackdrop } from '@sharedElements'
 import {
     AssetKey,
     getTexture,
@@ -12,6 +12,7 @@ import {
     TweenableContainer,
     TweenablePixiContainer,
     fontMap,
+    PixiSprite,
 } from '@/elementsUtil'
 import { BASE_HEIGHT, BASE_WIDTH, Container, Sprite } from '@/elementsUtil'
 import { callApi } from '@/callApi'
@@ -280,17 +281,17 @@ export function EndOfRoom(): PixiContainer {
                 },
             })
 
-            const confirmTexture = getTexture('confirmButton')
-
-            const ConfirmButton = Sprite({
-                // x: (-confirmTexture.width / 2) * 1.25,
+            const ConfirmButton = GradientButton({
+                onClick: () => {},
+                text: 'confirm',
                 x: 0,
                 y: BASE_HEIGHT / 2 + 200,
-                src: confirmTexture,
-                anchor: [0.5, 0.5],
-                scale: 1.25,
-                onClick: () => {},
+                fontSize: 50,
+                xPadding: 85,
+                yPadding: 20,
+                outlineColor: 0x002717
             })
+            ConfirmButton.scale.set(1.5)
 
             const skipTexture = getTexture('skipButton')
 
@@ -303,7 +304,7 @@ export function EndOfRoom(): PixiContainer {
                 onClick: () => {},
             })
 
-            const lootItemContainerChildren = [
+            const lootItemContainerChildren: PixiSprite|PixiContainer[] = [
                 RoundedBlackRectBackground,
                 LootItemSprite,
                 LootItemText,

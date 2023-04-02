@@ -120,6 +120,22 @@ const runAnimation = async (
     )
 }
 
+export const waitForAnimationsToFinish = () => {
+    const CHECK_EVERY_MS = 50
+    return new Promise<void>(resolve => {
+        if (!Tweener.tweening()) return resolve(void 0)
+        if (Tweener.tweening()) {
+            const checkAnimations = setInterval(() => {
+                if (!Tweener.tweening()) {
+                    clearInterval(checkAnimations)
+                    resolve(void 0)
+                    return
+                }
+            }, CHECK_EVERY_MS)
+        }
+    })
+}
+
 /**
  * @tutorial This animation lasts 2 seconds and has a total of 50 keyframes, so each keyframe lasts roughly 0.04 seconds
  */

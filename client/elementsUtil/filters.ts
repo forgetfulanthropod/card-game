@@ -99,7 +99,7 @@ export const flashGlowAndBrightnessTo = async (
 }
 
 export const removeFilterFrom = <T extends Filter>(
-    root: PixiSpine,
+    root: PixiSpine | PixiContainer,
     filterToRemove: T
 ) => {
     if (root.filters) {
@@ -111,7 +111,10 @@ export const removeFilterFrom = <T extends Filter>(
     }
 }
 
-export const addFilterTo = <T extends Filter>(root: PixiSpine, filter: T) => {
+export const addFilterTo = <T extends Filter>(
+    root: PixiSpine | PixiContainer,
+    filter: T
+) => {
     if (!root.filters) {
         root.filters = [filter]
     } else {

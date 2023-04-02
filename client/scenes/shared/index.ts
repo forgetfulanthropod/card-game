@@ -16,4 +16,5 @@ export * from './Notification'
 export * from './PlainButton'
 export * from './effectAnimations'
 export * from './tweenerAnimations'
+export * from './GradientButton'
 // @endindex

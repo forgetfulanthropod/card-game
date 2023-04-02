@@ -22,7 +22,7 @@ import {
     selectedForTargetingCardUid,
     toDatum,
 } from '@/util'
-import { Datum } from 'datums'
+import { datum, Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
 import { Easing, Tweener } from 'pixi-tweener'
 import { FederatedPointerEvent } from 'pixi.js'
@@ -44,6 +44,11 @@ const INITIAL_CARDS_ROTATION = -1.55
 const CARD_ANIMATION_INTERVAL = 250 // ms
 const CARD_FOCUS_Y_OFFSET = CARD_HEIGHT_FULL * 0.38
 const TARGETABLE_AREA_Y_OFFSET = 880
+const RIGHT_TO_LEFT = 1
+const MAX_HAND_WIDTH = BASE_WIDTH * 0.5
+const CARD_INITIAL_Y_OFFSET = BASE_HEIGHT * 0.21
+
+type HandAnimationState = 'notAnimating' | 'discardingAll' | 'discardingOne'
 
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
@@ -51,6 +56,8 @@ export function Hand(
 ) {
     const unsubs: Callback[] = []
     let initialDisplayVals: InitialDisplayVals
+
+    const handAnimationState = datum<HandAnimationState>('notAnimating')
 
     const handDatum = toDatum(
         getBattleScene().select('cards').select('hand'),
@@ -80,6 +87,7 @@ export function Hand(
         prevTargetingCardUid: CardUid | null
     ) {
         const destructibleRoot = getDestructibleRoot()
+        const stage = getStage()
 
         if (targetingCardUid) {
             const { x, y } =
@@ -98,13 +106,13 @@ export function Hand(
                 y: y - BASE_HEIGHT - 275,
                 ease: Easing.easeFromTo,
             })
-            getStage().interactive = true
-            getStage().on('pointermove', dragCardUntilTargeting)
+            stage.interactive = true
+            stage.on('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (!targetingCardUid) {
-            getStage().interactive = false
-            getStage().off('pointermove', dragCardUntilTargeting)
+            stage.interactive = false
+            stage.off('pointermove', handlePointerMoveWhileTargeting)
         }
 
         if (
@@ -119,49 +127,77 @@ export function Hand(
         }
     }
 
-    let DraggableCardEl: TweenablePixiContainer | null
-    function dragCardUntilTargeting(e: FederatedPointerEvent): void {
+    let SelectedCardEl: TweenablePixiContainer | null
+    let selectedCardMeta: Card | null
+    function handlePointerMoveWhileTargeting(e: FederatedPointerEvent) {
+        // console.log('handling pointermove...')
         const selectedCardUid = selectedForTargetingCardUid.val
         if (!selectedCardUid) {
-            getStage().off('pointermove', dragCardUntilTargeting)
+            getStage().off('pointermove', handlePointerMoveWhileTargeting)
             return
         }
-        if (!DraggableCardEl)
-            DraggableCardEl = getCardElFromUid(selectedCardUid)
 
-        if (cursorInsideTargetableArea(e)) {
-            handleCursorInsideTargetableArea(selectedCardUid)
-            DraggableCardEl = null
-            return
-        } else {
-            const { x, y } = e.screen
-            const [targetX, targetY] = [
-                x - BASE_WIDTH / 2,
-                y - BASE_HEIGHT - 275,
-            ]
-            // used for smooth motion
-            runKeyframeAnimations(DraggableCardEl, 0.06, {
-                keyframes: 10,
-                x: targetX,
-                y: targetY,
-            })
+        if (selectedCardMeta && selectedCardUid !== selectedCardMeta.uid) {
+            selectedCardMeta = getSelectedCardMeta(selectedCardUid)
+            SelectedCardEl = getCardElFromUid(selectedCardUid)
         }
+
+        if (!SelectedCardEl) {
+            SelectedCardEl = getCardElFromUid(selectedCardUid)
+        }
+        if (!selectedCardMeta) {
+            selectedCardMeta = getSelectedCardMeta(selectedCardUid)
+        }
+
+        dragCardWithCursor(e, SelectedCardEl)
+        if (cursorInsideTargetableArea(e)) {
+            // console.log('cursorInsideTargetableArea')
+            // if (!cardUsesArrowTargeting(selectedCardMeta)) {
+            //     // console.log('card doesnt use targeting AND insideTargetableArea')
+            //     return
+            // }
+
+            handleCursorInsideTargetableArea(selectedCardUid)
+            return
+        }
+    }
+
+    function dragCardWithCursor(
+        e: FederatedPointerEvent,
+        SelectedCardEl: TweenablePixiContainer
+    ) {
+        const { x, y } = e.screen
+        const [targetX, targetY] = [x - BASE_WIDTH / 2, y - BASE_HEIGHT - 275]
+        // used for smooth motion
+        runKeyframeAnimations(SelectedCardEl, 0.06, {
+            keyframes: 10,
+            x: targetX,
+            y: targetY,
+        })
     }
 
     function handleCursorInsideTargetableArea(selectedCardUid: CardUid) {
         isTargeting.set(true)
-        getStage().off('pointermove', dragCardUntilTargeting)
+        getStage().off('pointermove', handlePointerMoveWhileTargeting)
         const CardEl = getCardElFromUid(selectedCardUid)
         flashGlowAndBrightnessTo(CardEl)
-        centerCardEl(getDestructibleRoot(), selectedCardUid, initialDisplayVals)
+        centerCardEl(
+            getDestructibleRoot(),
+            selectedCardUid,
+            initialDisplayVals
+        )
     }
 
     function getCardElFromUid(cardUid: CardUid): TweenablePixiContainer {
-        const destructibleRoot = getDestructibleRoot()
-        return destructibleRoot.getChildByName(cardUid)
+        return getDestructibleRoot().getChildByName(cardUid)
+    }
+
+    function getSelectedCardMeta(cardUid: CardUid): Card {
+        return getBattleScene().select('cards').select('hand').get(cardUid)
     }
 
     async function handleHandChange(newHand: Pile, prevHand: Pile) {
+        // console.log({newHand, prevHand})
         lastCardOwnerUidDealt = null
         accumulatedGap = 0
 
@@ -193,17 +229,23 @@ export function Hand(
     }
 
     async function animateDiscardAllCardsOut() {
+        handAnimationState.set('discardingAll')
         const destructibleRoot = getDestructibleRoot()
-        const discardAnimations = await animateAllCardsToDiscardPile(
+        const discardAnimations = getAnimationsForDiscardAllCards(
             destructibleRoot.children
         )
         await Promise.all(discardAnimations)
         destructibleRoot.removeChildren()
         destructibleRoot.destroy()
         hoveredCharacterUid.set(null) // tmp fix for character hover persisting
+        handAnimationState.set('notAnimating')
     }
 
-    async function animateCardOutAndRerenderHand(prevHand: Pile, newHand: Pile) {
+    async function animateCardOutAndRerenderHand(
+        prevHand: Pile,
+        newHand: Pile
+    ) {
+        handAnimationState.set('discardingOne')
         const destructibleRoot = getDestructibleRoot()
         const cardsRemoved = keys(prevHand).filter(
             card => !keys(newHand).includes(card)
@@ -214,9 +256,14 @@ export function Hand(
             ) as TweenablePixiContainer
             await animatePlayCard(CardToAnimateOut)
         }
-        rerenderCardsInHand(newHand, 'final')
         hoveredCharacterUid.set(null)
         selectedForTargetingCardUid.set(null)
+        if (handAnimationState.val !== 'discardingOne') {
+            // hand began handling elsewhere, exit
+            return
+        }
+        rerenderCardsInHand(newHand, 'final')
+        handAnimationState.set('notAnimating')
         return
     }
 
@@ -255,13 +302,18 @@ export function Hand(
                 0
             )
         }
+
+        destructibleRoot.children.forEach(
+            CardEl => (CardEl.zIndex = initialDisplayVals[CardEl.name].zIndex)
+        )
+
         return NewCardsInHand
     }
 
     unsubs.push(
         selectedForTargetingCardUid.onChange(handleTargetingCardChange),
         handDatum.onChange(handleHandChange, true),
-        () => getStage().off('pointermove', dragCardUntilTargeting)
+        () => getStage().off('pointermove', handlePointerMoveWhileTargeting)
     )
 
     return onDestroyed(staticRoot, ...unsubs)
@@ -437,14 +489,20 @@ const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
         }
     )
     CardEl.destroy()
+    currAnimatingCardUid.set(null)
 }
 
-const animateAllCardsToDiscardPile = async (
+const getAnimationsForDiscardAllCards = (
     CardEls: TweenablePixiContainer[]
 ) => {
-    return CardEls.map(async (CardEl, idx) => {
-        CardEl.removeAllListeners()
-        return new Promise(res => {
+    return CardEls.map((CardEl, idx) => {
+        return new Promise<void>(res => {
+            if (currAnimatingCardUid.val === CardEl.name) {
+                // card is being played/discarded, dont create another animation for it
+                return res(void 0)
+            }
+            CardEl.getChildAt(0).removeAllListeners()
+            Tweener.killTweensOf(CardEl)
             setTimeout(async () => {
                 await runKeyframeAnimations(
                     CardEl,
@@ -534,15 +592,15 @@ function getInitialDisplayVals(
 ): InitialDisplayVals {
     const initialDisplayVals: InitialDisplayVals = {}
 
-    vals(pile).forEach((card: Card, zIndex: number) => {
-        const c = rootEl.getChildByName(card.uid) as unknown as PixiContainer
 
-        initialDisplayVals[card.uid] = {
-            x: c.x,
-            y: c.y,
-            rotation: c.children[0].rotation,
-            scale: c.children[0].scale.x,
-            zIndex,
+    rootEl.children.forEach((Card, idx) => {
+        const CardEl = Card as TweenablePixiContainer
+        initialDisplayVals[CardEl.name as CardUid] = {
+            x: CardEl.x,
+            y: CardEl.y,
+            rotation: CardEl.children[0].rotation,
+            scale: CardEl.children[0].scale.x,
+            zIndex: idx,
         }
     })
 
@@ -565,7 +623,7 @@ function getUnfocus(
 
             cardEl.zIndex = initialDisplayVal.zIndex
             cardEl.parent.sortChildren()
-            animateTo(cardEl, initialDisplayVal)
+            animateTo(cardEl, initialDisplayVal, 0.35)
         })
     }
 }
@@ -583,7 +641,7 @@ function getFocus(
             return
         const cardEl = rootEl.getChildByName(uid) as TweenablePixiContainer
         unfocus([...toDiscardUids.val, uid])
-        // spreadOthers(rootEl, cardEl, initialDisplayVals)
+        spreadOthers(rootEl, cardEl, initialDisplayVals)
 
         const initialDisplayVal = initialDisplayVals[uid]
 
@@ -631,37 +689,57 @@ function getSelect(
     }
 }
 
-const HAND_SPREAD_DISTANCE = 60
-const ADJUST_HOVERED_CARD_DISTANCE = 20
+const HAND_SPREAD_DISTANCE = 78
+const ADJUST_HOVERED_CARD_DISTANCE = 0
 
 function spreadOthers(
-    rootEl: PixiContainerWithTweenableChildren,
-    cardEl: TweenablePixiContainer,
+    RootEl: PixiContainerWithTweenableChildren,
+    CardEl: TweenablePixiContainer,
     initialDisplayVals: InitialDisplayVals
 ) {
-    const selectedCardIndex = rootEl.getChildIndex(cardEl)
+    RootEl.sortChildren()
+    const scene = getBattleScene()
+    const hand = scene.get('cards').hand
+    const hoveredCardIdx = initialDisplayVals[CardEl.name]?.zIndex
+    const hoveredCardMeta = hand[CardEl.name]
+    const [leftEdgeIdx, rightEdgeIdx] = [RootEl.children.length - 1, 0]
 
-    rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
-        if (i === selectedCardIndex) return
-        if (toDiscardUids.val.includes(cardEl.name)) return
+    for (
+        let cardIdx = hoveredCardIdx + 1, i = 0;
+        cardIdx <= leftEdgeIdx;
+        cardIdx++, i++
+    ) {
+        const LeftCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
+        const cardMeta = hand[LeftCardEl.name]
+        if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
 
-        cardEl.zIndex = initialDisplayVals[cardEl.name].zIndex
-
-        const leftOrRight = i > selectedCardIndex ? 'left' : 'right' //cards laid right to left for energy corner
-
-        animateTo(cardEl, {
-            x:
-                initialDisplayVals[cardEl.name].x +
-                (leftOrRight === 'left'
-                    ? -HAND_SPREAD_DISTANCE
-                    : HAND_SPREAD_DISTANCE),
-            y: initialDisplayVals[cardEl.name].y,
-            rotation: initialDisplayVals[cardEl.name].rotation,
-            scale: initialDisplayVals[cardEl.name].scale,
+        const xShift = Math.min(0, -HAND_SPREAD_DISTANCE + 40 * i)
+        runKeyframeAnimations(LeftCardEl, 0.35, {
+            keyframes: 1,
+            x: initialDisplayVals[LeftCardEl.name].x + xShift,
+            ease: Easing.easeTo,
         })
-    })
+    }
 
-    rootEl.sortChildren()
+    for (
+        let cardIdx = hoveredCardIdx - 1, i = 0;
+        cardIdx >= 0;
+        cardIdx--, i++
+    ) {
+        const RightCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
+        const cardMeta = hand[RightCardEl.name]
+        if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
+        const xShift = Math.max(0, HAND_SPREAD_DISTANCE - 40 * i)
+
+        // ideal (but not implemented) gaps below
+        // 3 chars, 2 chars = 90px between cards when hovered
+        // 1 char = 80px
+        runKeyframeAnimations(RightCardEl, 0.35, {
+            keyframes: 1,
+            x: initialDisplayVals[RightCardEl.name].x + xShift,
+            ease: Easing.easeTo,
+        })
+    }
 }
 
 function updateGlowFilters(
@@ -736,10 +814,6 @@ function getFinalXYRotationForCard(
     pile: Pile,
     cardIdx: number
 ): XYRotation {
-    const RIGHT_TO_LEFT = 1
-    const MAX_HAND_WIDTH = BASE_WIDTH * 0.5
-    const Y_OFFSET = BASE_HEIGHT * 0.21
-
     // const MAX_CARD_ROTATION = Math.PI * 0.1
     // const Y_MAX_OFFSET = BASE_HEIGHT * 0.22
     // const Y_MIN_OFFSET = BASE_HEIGHT * 0.2
@@ -784,7 +858,7 @@ function getFinalXYRotationForCard(
             handWidth * 0.5 * xPlacementPortion -
             RIGHT_TO_LEFT * owningCharacterSwitchGap +
             CARD_WIDTH * 0.1,
-        y: -Y_OFFSET,
+        y: -CARD_INITIAL_Y_OFFSET,
         // y:
         //     -Y_MIN_OFFSET -
         //     (Y_MAX_OFFSET - Y_MIN_OFFSET) * (1 - Math.abs(xPlacementPortion)),
