@@ -1,8 +1,7 @@
 import produce from 'immer'
-import type { CardUid, BattleCursor, Card } from 'shared'
+import type { BattleCursor, Card, CardUid } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
-import { trackMetric } from 'server/metrics'
 
 export function discardBeforeTurnEnd({
     cardUids,

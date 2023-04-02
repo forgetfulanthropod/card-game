@@ -103,6 +103,9 @@ const orbActivators: Record<
             scene,
         })
     },
+    crossedFingers(character: CharacterMeta, scene: BattleCursor) {
+        //todo
+    },
 }
 
 export const activateOrb: GameActions['activateOrb'] = ({

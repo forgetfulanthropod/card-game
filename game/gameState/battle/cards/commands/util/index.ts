@@ -12,6 +12,7 @@ import type {
     CharacterStats,
     CharacterUid,
     Command,
+    CommandHookId,
     EffectId,
     OrbType,
     RequiredActionName,
@@ -45,6 +46,8 @@ export interface ActionArgs {
     explain: any[]
     join: any[]
     killIf: [condition: boolean]
+    on: [cardHoookId: CommandHookId, move: any]
+    queue: [numTurns: number, move: any]
 
     addBlock: [block: number, targetType?: BasicTargetType]
     addEnergy: [energy: number]
@@ -59,7 +62,12 @@ export interface ActionArgs {
     deal: [damage: number, modifier?: 'piercing', targetType?: BasicTargetType]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     drawSizeChange: [amount: number]
-    effect: [id: EffectId, increase: number, targetType?: BasicTargetType]
+    effect: [
+        id: EffectId,
+        increase: number,
+        targetType?: BasicTargetType,
+        double?: boolean
+    ]
     heal: [amount: number, targetType?: BasicTargetType]
 
     if: [condition: boolean, ifMove: any, elseMove?: any]
@@ -78,6 +86,7 @@ export interface ActionArgs {
         conditionalTrueMove: any,
         conditionalFalseMove: any
     ]
+    ifTargetStance: [stanceId: StanceId, conditionalTrueMove: any]
 
     acquireSouvenir: [souvenirId: SouvenirId]
     removeSouvenir: [souvenirId: SouvenirId]
@@ -88,7 +97,6 @@ export interface ActionArgs {
 
     hypnotize: [count: number]
     orb: [type: OrbType, count: number]
-    queue: [numTurns: number, move: any]
     removeAllDebuffs: [targetType?: TargetType]
     setStance: [stance: StanceId, targetType?: TargetType]
     smite: [damage: number, block: number]
@@ -96,6 +104,7 @@ export interface ActionArgs {
 
     discard: [numCards: number]
     discardRandom: [numCards: number]
+    returnThisCardToHand: [uid: CardUid]
     doubleEnchantmentOrToken: []
     draw: [numCards: number]
     keep: [numCards: number]
@@ -123,6 +132,8 @@ export type Locals = CalculatedCharacterStats & {
     wasLastCardPlayedFromThisCharacter: boolean
     currentRoomCategory: RoomCategoryId | undefined
     turnStartStance: StanceId
+    allStancesDifferent: boolean
+    allStancesSame: boolean
 }
 
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }
