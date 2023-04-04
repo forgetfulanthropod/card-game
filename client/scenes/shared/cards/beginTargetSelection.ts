@@ -34,11 +34,9 @@ export function beginTargetSelection(
         unsubFromSelectedTargets()
         unsubFromIsTargeting()
         isTargeting.set(false)
-        if (currAnimatingCardUid.val !== selectedForTargetingCardUid.val) {
-            selectedForTargetingCardUid.set(null)
-        }
         arrow?.destroy()
-
+        if (localTree.get('selectedTargets').length === 0)
+            selectedForTargetingCardUid.set(null)
         renderer.events.setCursor('defaultFallback')
         renderer.events.cursorStyles.default = defaultCursor
         renderer.events.cursorStyles.hover = hoverCursor
@@ -71,14 +69,12 @@ function listenToSelectedTargets(cardMeta: Card, cleanup: () => void) {
         (targets: string[]) => {
             const numTargets = cardMeta.targetNum
             if (targets.length >= numTargets) {
-                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets,
                 })
                 cleanup()
             } else if (targets.length > numTargets) {
-                currAnimatingCardUid.set(cardMeta.uid)
                 void callApi('playCard', {
                     cardUid: cardMeta.uid,
                     targetUids: targets.slice(targets.length - numTargets),
@@ -102,6 +98,7 @@ function onCancelTargeting(externalCleanup: () => void) {
 
     const rightClickListener = (e: Event) => {
         e.preventDefault()
+        selectedForTargetingCardUid.set(null)
         cleanup()
     }
     window.addEventListener('contextmenu', rightClickListener)

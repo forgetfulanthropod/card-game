@@ -147,7 +147,7 @@ export function CardEl({
                               if (uid !== card.uid) isLongHovered.set(false)
                           }),
                       ]),
-                () => termExplanationsForCard.destroy(true),
+                () => termExplanationsForCard?.destroy(true),
             ],
             // cache: true, // doesn't update...
         },
