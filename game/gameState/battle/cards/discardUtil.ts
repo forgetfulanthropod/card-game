@@ -3,7 +3,19 @@ import type { BattleCursor, Card, CardUid } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
 
-export function discardBeforeTurnEnd({
+export function discardAllCards(scene: BattleCursor) {
+    scene.apply('cards', cards => {
+        const newCards = { ...cards }
+
+        newCards.discard = { ...newCards.discard, ...newCards.hand }
+
+        newCards.hand = {}
+
+        return newCards
+    })
+}
+
+export function discard({
     cardUids,
     scene,
 }: {
@@ -24,12 +36,23 @@ export function discardBeforeTurnEnd({
             }
         })
     )
+}
+
+export function discardBeforeTurnEnd({
+    cardUids,
+    scene,
+}: {
+    cardUids: CardUid[]
+    scene: BattleCursor
+}): void {
+    discard({ cardUids, scene })
+
     // TODO: check if this logic is okay for
     // OnDiscardActions after discard
-    const discard = scene.get('cards', 'discard')
+    const discardPile = scene.get('cards', 'discard')
 
     for (const uid of cardUids) {
-        activeOnDiscardActions(discard[uid], scene)
+        activeOnDiscardActions(discardPile[uid], scene)
     }
 }
 

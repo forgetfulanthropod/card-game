@@ -23,8 +23,18 @@ function bringCardToHand(scene: BattleCursor, cardUid: CardUid) {
             } else if ((card = cards.discard[cardUid])) {
                 delete cards.discard[cardUid]
             }
-            if (!card) logger.info('the card hasnt been discarded..')
-            else logger.info('card is here putting it in hand')
+            // if (!card) {
+            //     logger.info(`the card hasn't been discarded.. ${cardUid}`)
+            //     logger.info(
+            //         cards.hand[cardUid] ? `it's in hand` : `it's not in hand`
+            //     )
+            // } else
+            //     logger.info(
+            //         `card is here putting it in hand, ${cardUid}, ${JSON.stringify(
+            //             card
+            //         )}`
+            //     )
+
             if (card) cards.hand[cardUid] = card
         })
     )

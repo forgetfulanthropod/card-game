@@ -2,7 +2,7 @@ import type { GameActions } from 'shared'
 import { trackMetric } from 'server/metrics'
 
 import { getBattleSceneIn } from '@/util'
-import { discardBeforeTurnEnd } from '@/gameState/battle/cards/discardBeforeTurnEnd'
+import { discardBeforeTurnEnd } from '@/gameState/battle/cards/discardUtil'
 
 export const discard: GameActions['discard'] = args => {
     const scene = getBattleSceneIn(args.game)

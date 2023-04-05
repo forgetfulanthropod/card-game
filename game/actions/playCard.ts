@@ -13,6 +13,7 @@ import { updateCharacters } from '@/gameState/battle/characters/updateCharacters
 import { getTargetUids } from '@/gameState/battle/cards/getTargetUids'
 import { trackMetric } from 'server/metrics'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { triggerOnHook } from '@/gameState/battle/commandHookUtil'
 
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -35,6 +36,9 @@ export const playCard: GameActions['playCard'] = args => {
         play({ card, targetUids: args.targetUids, scene })
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
+
+        triggerOnHook(scene, 'playCard')
+        if (card.type === 'attack') triggerOnHook(scene, 'playAttackCard')
 
         activateSouvenirs('playCard', scene, card.characterUid)
 

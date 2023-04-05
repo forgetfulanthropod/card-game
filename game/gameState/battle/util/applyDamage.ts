@@ -14,6 +14,7 @@ import { clearDead } from './clearDead'
 import { applyEffect } from '../cards/commands/effect'
 import { updateScore } from '@/gameState'
 import { activateSouvenirs } from '../activateSouvenirs'
+import { triggerOnHook } from '../commandHookUtil'
 
 export function applyDamage(args: {
     damage: number
@@ -161,6 +162,7 @@ function manageSideEffectsOfCalcedDamage({
 }) {
     recordDamage(scene, calcedDamage, targetUid, 'raw')
     manageReflect(calcedDamage, targetUid, attackerUid, scene)
+    triggerOnHook(scene, 'damageTaken', targetUid)
 }
 
 function manageReflect(

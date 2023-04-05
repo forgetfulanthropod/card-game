@@ -69,6 +69,7 @@ export function makeBattleState(args: {
         scoreEventsThisTurn: getRoomScoreCounter(),
         scoreEventsThisRoom: getRoomScoreCounter(),
         queue: [],
+        on: {},
         requireAction: null,
         isInMap: true,
         lootEarned: getInitialLoot(),

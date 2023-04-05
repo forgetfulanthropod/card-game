@@ -2,6 +2,7 @@ import type { Brandify } from '@misc'
 import { CommandOutcome } from './BattleScene'
 import type { CharacterUid } from './Character'
 import type { CharacterClass, CharacterId, StanceId } from './Characters'
+import { CommandQueue } from './CommandQueue'
 
 export type CardUid = string & Brandify
 
@@ -122,13 +123,12 @@ export type CommandId =
     /** For test suites */
     | 'unknown'
 
+export type CommandHooks = Partial<Record<CommandHookId, CommandQueue>>
 export type CommandHookId =
+    | 'damageTaken'
     | 'beforeDamageTaken'
     | 'playCard'
-    | 'playCardOfTypeAttack'
-    | 'playCardOfTypeDefend'
-    | 'playCardOfTypeUtility'
-    | 'playCardOfTypeEnchantment'
+    | 'playAttackCard'
 
 export type CardId =
     // | 'arcanePower'
@@ -218,7 +218,7 @@ export type CardId =
     | 'mantraOfPatience'
     | 'momentOfClarity'
     | 'mutuallyAssuredDestruction'
-    | 'napTime'
+    // | 'napTime'
     // | 'orbofCrossedFingers'
     | 'orbOfFrost'
     | 'orbOfHolyLight'

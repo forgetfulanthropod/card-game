@@ -1522,18 +1522,18 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'cleric',
     },
-    napTime: {
-        id: 'napTime',
-        name: 'Nap Time',
-        energy: 0,
-        targetNum: 1,
-        targetType: 'friends',
-        actions: `
-                cost N where N is remaining energy?
-            `,
-        type: 'utility',
-        characterClass: 'cleric',
-    },
+    // napTime: {
+    //     id: 'napTime',
+    //     name: 'Nap Time',
+    //     energy: 0,
+    //     targetNum: 1,
+    //     targetType: 'friends',
+    //     actions: `
+    //             cost N where N is remaining energy?
+    //         `,
+    //     type: 'utility',
+    //     characterClass: 'cleric',
+    // },
     wishingWell: {
         id: 'wishingWell',
         name: 'Wishing Well',
@@ -1706,9 +1706,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 deal(strengthy),
                 on(
                     "playCard",
-                    returnThisCardToHand()
+                    returnThisCardToHand(),
+                    "once"
                 )
-            )
+            );
+            join("deal", strengthy, "damage to enemy target<br/>If target dies, then return this card to your hand.")
         `,
         type: 'attack',
         characterClass: 'rogue',

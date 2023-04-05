@@ -26,17 +26,18 @@ import {
 } from '@/gameState'
 import { uniq } from 'lodash'
 
-export function interpretCommand(args: CommandDetail): void {
+export function interpretCommand(args: CommandDetail, emit = true): void {
     const locals = localsFromCommand(args)
     if (locals.isSkipped) return
 
-    emitMove({
-        moveName: args.command.name,
-        characterUid: args.command.characterUid,
-        targetType: args.command.targetType,
-        targetUids: args.targetUids,
-        scene: args.scene,
-    })
+    if (emit)
+        emitMove({
+            moveName: args.command.name,
+            characterUid: args.command.characterUid,
+            targetType: args.command.targetType,
+            targetUids: args.targetUids,
+            scene: args.scene,
+        })
 
     executeCommand({ ...args, locals })
 }

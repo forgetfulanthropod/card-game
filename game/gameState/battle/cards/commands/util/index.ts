@@ -46,7 +46,7 @@ export interface ActionArgs {
     explain: any[]
     join: any[]
     killIf: [condition: boolean]
-    on: [cardHoookId: CommandHookId, move: any]
+    on: [cardHoookId: CommandHookId, move: any, once?: 'once']
     queue: [numTurns: number, move: any]
 
     addBlock: [block: number, targetType?: BasicTargetType]
