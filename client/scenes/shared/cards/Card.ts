@@ -147,7 +147,7 @@ export function CardEl({
                               if (uid !== card.uid) isLongHovered.set(false)
                           }),
                       ]),
-                () => termExplanationsForCard.destroy(true),
+                () => termExplanationsForCard?.destroy(true),
             ],
             // cache: true, // doesn't update...
         },
@@ -204,9 +204,9 @@ export function CardEl({
         })
     )
 
-    // if (hoveredCardUid && dynamicHitbox) {
-    //     changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
-    // }
+    if (hoveredCardUid && dynamicHitbox) {
+        changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
+    }
 
     onDestroyed(root, ...unsubs)
     return root
@@ -249,39 +249,27 @@ function changeHitboxOnHover(
     hoveredCardUid: Datum<CharacterUid | null>,
     unsubs: Callback[]
 ) {
-    // const eventBoundContainer = root.children[0] as TweenablePixiContainer
-    // // eventBoundContainer.hitArea = originalBounds
-    // let originalBounds = getOriginalHitboxBounds(eventBoundContainer)
-    // const newBounds = new Rectangle(
-    //     originalBounds.x - 45,
-    //     originalBounds.y - 60,
-    //     originalBounds.width + 90,
-    //     originalBounds.height + 120
-    // )
-    // console.log('setting new bounds', { newBounds })
-    // eventBoundContainer.hitArea = newBounds
-    // async function handleHoveredCardChange(
-    //     newCardUid: CardUid | null,
-    //     oldCardUid: CardUid | null
-    // ) {
-    //     if (newCardUid && newCardUid === card.uid) {
-    //         await nextFrame()
-    //         const hoveredBounds = getOriginalHitboxBounds(eventBoundContainer)
-    //         const newBounds = new Rectangle(
-    //             originalBounds.x - 45,
-    //             originalBounds.y - 60,
-    //             originalBounds.width + 89,
-    //             originalBounds.height + 200
-    //         )
-    //         console.log('setting new bounds', { newBounds })
-    //         eventBoundContainer.hitArea = newBounds
-    //     }
-    //     if (oldCardUid && oldCardUid === card.uid) {
-    //         eventBoundContainer.hitArea = originalBounds
-    //     }
-    // }
-    // const hoveredCardUidSub = hoveredCardUid.onChange(handleHoveredCardChange)
-    // unsubs.push(hoveredCardUidSub)
+    const unhoveredHitArea = getAdjustedHitAreaBounds(root)
+    root.hitArea = unhoveredHitArea
+
+    async function handleHoveredCardChange(
+        newCardUid: CardUid | null,
+        oldCardUid: CardUid | null
+    ) {
+        if (newCardUid && newCardUid === card.uid) {
+            const hoveredHitArea = new Rectangle(
+                unhoveredHitArea.x - 45,
+                unhoveredHitArea.y - 60,
+                unhoveredHitArea.width + 88,
+                unhoveredHitArea.height + 120
+            )
+            root.hitArea = hoveredHitArea
+        }
+        if (oldCardUid && oldCardUid === card.uid) {
+            root.hitArea = unhoveredHitArea
+        }
+    }
+    unsubs.push(hoveredCardUid.onChange(handleHoveredCardChange))
 }
 
 function getDecoratedEvents({
@@ -653,7 +641,10 @@ export function getEvents(
         }
 
         if (getBattleScene().get().energy >= card.energy) {
-            if (cardUsesArrowTargeting(card) && cardEl instanceof PixiContainer) {
+            if (
+                cardUsesArrowTargeting(card) &&
+                cardEl instanceof PixiContainer
+            ) {
                 clearLastTargetSelection = beginTargetSelection(
                     cardEl.parent,
                     card
@@ -712,7 +703,7 @@ export function getNullAnimation() {
     return Tweener.add({ target: {}, duration: 0 }, {})
 }
 
-const getOriginalHitboxBounds = (root: TweenablePixiContainer) => {
+const getAdjustedHitAreaBounds = (root: TweenablePixiContainer) => {
     const rootBounds = root.getBounds()
     return new Rectangle(
         rootBounds.x + 15,

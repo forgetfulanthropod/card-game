@@ -11,13 +11,6 @@ import { ColorOverlayFilter } from 'pixi-filters'
 import { random } from 'lodash'
 export let enableMotionFX = getBooleanFromLocalStorage('enableMotionFX')
 
-// PROBABLY TEMP ONLY
-export let shakeSetting: 'vertical' | 'horizontal' = 'horizontal'
-export const toggleShakeSetting = () => {
-    if (shakeSetting === 'vertical') return (shakeSetting = 'horizontal')
-    return (shakeSetting = 'vertical')
-}
-
 export const shakeScreen = (intensity: 1 | 2 | 3 | 4 | 5, isPc: boolean) => {
     enableMotionFX = getBooleanFromLocalStorage('enableMotionFX')
     if (!enableMotionFX) return
@@ -49,82 +42,41 @@ export const shakeScreen = (intensity: 1 | 2 | 3 | 4 | 5, isPc: boolean) => {
         y2 = random(-5, 5)
     }
 
-    if (shakeSetting === 'horizontal') {
-        const duration = 0.1
+    const duration = 0.1
 
-        Tweener.add(
-            {
-                target: mainContainer,
-                duration: duration,
-                ease: Easing.easeFrom,
-            },
-            {
-                x: x1,
-                y: y1,
-            }
+    Tweener.add(
+        {
+            target: mainContainer,
+            duration: duration,
+            ease: Easing.easeFrom,
+        },
+        {
+            x: x1,
+            y: y1,
+        }
+    )
+        .then(() =>
+            Tweener.add(
+                { target: mainContainer, duration: duration * 1.5 },
+                {
+                    x: x2,
+                    y: y2,
+                }
+            )
         )
-            .then(() =>
-                Tweener.add(
-                    { target: mainContainer, duration: duration * 1.5 },
-                    {
-                        x: x2,
-                        y: y2,
-                    }
-                )
+        .then(() =>
+            Tweener.add(
+                {
+                    target: mainContainer,
+                    duration: duration * 3,
+                    ease: Easing.easeTo,
+                },
+                {
+                    x: x3,
+                    y: y3,
+                }
             )
-            .then(() =>
-                Tweener.add(
-                    {
-                        target: mainContainer,
-                        duration: duration * 3,
-                        ease: Easing.easeTo,
-                    },
-                    {
-                        x: x3,
-                        y: y3,
-                    }
-                )
-            )
-    } else if (shakeSetting === 'vertical') {
-        // TEMP ONLY FOR TESTING OTHER MOTION VARIANTS
-        const duration = 0.05
-        Tweener.add(
-            { target: mainContainer, duration },
-            {
-                y: -7,
-            }
         )
-            .then(() =>
-                Tweener.add(
-                    { target: mainContainer, duration },
-                    {
-                        y: 0,
-                    }
-                )
-            )
-            .then(() =>
-                Tweener.add(
-                    {
-                        target: mainContainer,
-                        duration,
-                    },
-                    {
-                        y: -7,
-                    }
-                )
-            )
-            .then(() =>
-                Tweener.add(
-                    {
-                        target: mainContainer,
-                        duration,
-                    },
-                    {
-                        y: 0,
-                    }
-                )
-            )
-    }
 }
 
 export const flashDamageOverlayTo = (character: PixiSpine) => {

@@ -49,6 +49,7 @@ const MAX_HAND_WIDTH = BASE_WIDTH * 0.5
 const CARD_INITIAL_Y_OFFSET = BASE_HEIGHT * 0.21
 
 type HandAnimationState = 'notAnimating' | 'discardingAll' | 'discardingOne'
+const handAnimationState = datum<HandAnimationState>('notAnimating')
 
 export function Hand(
     hoveredCardUid: Datum<CharacterUid | null>,
@@ -56,8 +57,6 @@ export function Hand(
 ) {
     const unsubs: Callback[] = []
     let initialDisplayVals: InitialDisplayVals
-
-    const handAnimationState = datum<HandAnimationState>('notAnimating')
 
     const handDatum = toDatum(
         getBattleScene().select('cards').select('hand'),
@@ -207,9 +206,13 @@ export function Hand(
         if (!currHandEmpty && prevHandEmpty)
             // start turn
             return await animateAllCardsIntoHand(newHand)
-        else if (currHandEmpty && !prevHandEmpty)
+        else if (currHandEmpty && !prevHandEmpty) {
             // end turn
+            if (selectedForTargetingCardUid.val) {
+                animatePlayCard(getCardElFromUid(selectedForTargetingCardUid.val))
+            }
             return await animateDiscardAllCardsOut()
+        }
         else if (keys(newHand).length !== keys(prevHand).length)
             // play a card
             return await animateCardOutAndRerenderHand(prevHand, newHand)
@@ -235,8 +238,6 @@ export function Hand(
             destructibleRoot.children
         )
         await Promise.all(discardAnimations)
-        destructibleRoot.removeChildren()
-        destructibleRoot.destroy()
         hoveredCharacterUid.set(null) // tmp fix for character hover persisting
         handAnimationState.set('notAnimating')
     }
@@ -272,8 +273,9 @@ export function Hand(
         position: 'final' | 'initial'
     ) {
         let destructibleRoot = getDestructibleRoot()
-        destructibleRoot.removeChildren()
-        destructibleRoot.destroy()
+        destructibleRoot.destroy({children: true})
+        hoveredCardUid.set(null)
+        selectedForTargetingCardUid.set(null)
 
         destructibleRoot = getDestructibleRoot()
         const NewCardsInHand = renderCardsInHand(
