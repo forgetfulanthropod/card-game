@@ -152,6 +152,7 @@ export type ActionName = keyof BareGameActionArgs | keyof BareServerActionArgs
 /** A no-input game action */
 interface BareInternalActionArgs {
     doNpcTurn: { index: number }
+    activatePlayCardHooks: { card: Card }
     endNpcTurn: Empty
 }
 

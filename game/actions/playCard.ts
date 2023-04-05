@@ -15,6 +15,8 @@ import { trackMetric } from 'server/metrics'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 import { triggerOnHook } from '@/gameState/battle/commandHookUtil'
 
+const TIME_FOR_CARD_TO_PLAY = 1000
+
 export const playCard: GameActions['playCard'] = args => {
     const scene = getBattleSceneIn(args.game)
     if (scene.get('state') !== 'in battle' || scene.get('isInMap') === true) {
@@ -37,14 +39,11 @@ export const playCard: GameActions['playCard'] = args => {
         if (scene.get('cards', 'hand', card.uid) != null)
             discard({ cardUids: [args.cardUid], scene })
 
-        triggerOnHook(scene, 'playCard')
-        if (card.type === 'attack') triggerOnHook(scene, 'playAttackCard')
-
-        activateSouvenirs('playCard', scene, card.characterUid)
-
-        updateNpcMoves(scene)
-        updateCharacters(scene)
-        updateHand(scene)
+        args.game.set('nextAction', {
+            card,
+            method: 'activatePlayCardHooks',
+            delay: TIME_FOR_CARD_TO_PLAY,
+        })
     } else {
         logger.warn('tried to play unplayable card: ' + args.cardUid)
     }
