@@ -44,6 +44,10 @@ export const playCard: GameActions['playCard'] = args => {
             method: 'activatePlayCardHooks',
             delay: TIME_FOR_CARD_TO_PLAY,
         })
+
+        updateNpcMoves(scene)
+        updateCharacters(scene)
+        updateHand(scene)
     } else {
         logger.warn('tried to play unplayable card: ' + args.cardUid)
     }
