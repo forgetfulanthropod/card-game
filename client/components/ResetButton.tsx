@@ -18,8 +18,6 @@ import { getBattleScene } from '@/data'
 import {
     enableMotionFX,
     shakeScreen,
-    shakeSetting,
-    toggleShakeSetting,
 } from '@/scenes/shared'
 
 const Root = styled.button`
@@ -131,14 +129,6 @@ export function ResetButton(props: { username: string }): JSXElement {
                 text={'Enable Motion FX'}
                 isEnabled={motionFXEnabled}
                 textIfEnabled={'Disable Motion FX'}
-            />
-            <MenuButton
-                handler={toggleShakeSetting}
-                text={`[TEMP] Toggle shake version`}
-            />
-            <MenuButton
-                handler={() => shakeScreen(1, true)}
-                text={`[TEMP] Trigger Screen Shake`}
             />
             <MenuButton handler={handleRestartRun} text={'Restart Run'} />
             <MenuButton handler={handleBackToMenu} text={'Back to Main Menu'} />
