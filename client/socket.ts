@@ -8,7 +8,6 @@ import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
-import { globalShowSims } from '@/util'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -125,10 +124,6 @@ function updateBoabab(fromServer: GameState): void {
         } else {
             log('diff seems to be applied correctly:', differences)
         }
-    }
-    if (globalShowSims.val) {
-        globalShowSims.set(false)
-        globalShowSims.set(true)
     }
 }
 

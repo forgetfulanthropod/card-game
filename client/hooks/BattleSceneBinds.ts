@@ -6,13 +6,14 @@ import { callApi } from '@/callApi'
 import {
     globalShowSims,
     selectedForTargetingCardUid,
-    isTargeting,
     ruleBookEditorIsShown,
     sceneEditorIsShown,
     currAnimatingCardUid,
+    currTargetingType,
 } from '@/util'
 import { getEvents } from '@/scenes/shared/cards/Card'
 import { FederatedPointerEvent } from 'pixi.js'
+import { cardUsesArrowTargeting } from '@/scenes/shared/cards/helpers'
 
 type stanceChoose = { characterIndex: number[]; stanceId: StanceId }
 
@@ -99,7 +100,7 @@ const selectCard = (
     const [cardUid, card] = cards[idx]
     hoveredCardUid.set(cardUid)
     selectedForTargetingCardUid.set(cardUid)
-    isTargeting.set(true)
+    currTargetingType.set(cardUsesArrowTargeting(card) ? 'arrow' : 'drag') // might need to take this out
     const events = getEvents(card, hoveredCardUid)
     if (events.pointerdown && events.pointerup) {
         events.pointerdown({} as FederatedPointerEvent)
@@ -139,7 +140,7 @@ const clearAttack = (hoveredCardUid: Datum<CardUid | null>) => {
     globalShowSims.set(false)
     hoveredCardUid.set(null)
     selectedForTargetingCardUid.set(null)
-    isTargeting.set(false)
+    currTargetingType.set(null)
 }
 
 export const battleKeybinds = (
@@ -164,7 +165,7 @@ export const battleKeybinds = (
         } else if (numbersArray.includes(e.key)) {
             const num = Number(e.key)
             const idx = num == 0 ? 9 : num - 1
-            if (!isTargeting.val) {
+            if (!currTargetingType.val) {
                 selectCard(scene, hoveredCardUid, idx)
                 globalShowSims.set(true)
             } else {

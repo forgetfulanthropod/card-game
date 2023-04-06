@@ -38,7 +38,7 @@ export const flashGlowAndBrightnessTo = async (
 ) => {
     const tempGlowFilter = new GlowFilter({
         innerStrength: 0,
-        outerStrength: 6,
+        outerStrength: 8,
         distance: 22,
         color: 0xffffff,
         knockout: false,

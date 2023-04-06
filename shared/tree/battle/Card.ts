@@ -246,6 +246,7 @@ export type BasicTargetType =
     | 'cardEnchantment'
     | 'orb'
 export type TargetType = BasicTargetType
+export type CardTargetingType = 'arrow' | 'drag'
 // | Array<
 //       | BasicTargetType
 //       | {

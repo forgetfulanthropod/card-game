@@ -12,11 +12,11 @@ import {
 } from '@/elementsUtil'
 import {
     selectedForTargetingCardUid,
-    isTargeting,
     onUpdate,
-    currAnimatingCardUid,
+    currTargetingType,
 } from '@/util'
 import { TargetingArrow } from './TargetingArrow'
+import { cardUsesArrowTargeting } from './helpers'
 
 export function beginTargetSelection(
     root: PixiContainer,
@@ -32,8 +32,8 @@ export function beginTargetSelection(
 
     const cleanup = onCancelTargeting(() => {
         unsubFromSelectedTargets()
-        unsubFromIsTargeting()
-        isTargeting.set(false)
+        unsubFromTargetingType()
+        currTargetingType.set(null)
         arrow?.destroy()
         if (localTree.get('selectedTargets').length === 0)
             selectedForTargetingCardUid.set(null)
@@ -42,8 +42,8 @@ export function beginTargetSelection(
         renderer.events.cursorStyles.hover = hoverCursor
     })
 
-    const unsubFromIsTargeting = isTargeting.onChange(isTargeting => {
-        if (isTargeting) {
+    const unsubFromTargetingType = currTargetingType.onChange(targetingType => {
+        if (targetingType === 'arrow') {
             getRenderer().events.cursorStyles.default = hiddenCursor
             getRenderer().events.cursorStyles.hover = hiddenCursor
 
@@ -67,6 +67,7 @@ function listenToSelectedTargets(cardMeta: Card, cleanup: () => void) {
     return onUpdate(
         localTree.select('selectedTargets'),
         (targets: string[]) => {
+            if (!cardUsesArrowTargeting(cardMeta)) return
             const numTargets = cardMeta.targetNum
             if (targets.length >= numTargets) {
                 void callApi('playCard', {
@@ -99,6 +100,7 @@ function onCancelTargeting(externalCleanup: () => void) {
     const rightClickListener = (e: Event) => {
         e.preventDefault()
         selectedForTargetingCardUid.set(null)
+        currTargetingType.set(null)
         cleanup()
     }
     window.addEventListener('contextmenu', rightClickListener)
