@@ -41,14 +41,14 @@ export function assetsLoadedPromise() {
 
 export async function startLoadingAssets() {
     console.log('loading initial assets start')
-    await loadAssetMaps(assetMaps)
+    await loadAssetMaps(assetMaps, true)
     resolveLoaderPromise(null)
     console.log('loading initial assets finish')
-    loadAssetMaps(deluxeAssetMaps)
+    loadAssetMaps(deluxeAssetMaps, false)
     return true
 }
 
-async function loadAssetMaps(assetMaps: AssetMaps) {
+async function loadAssetMaps(assetMaps: AssetMaps, showBar: boolean) {
     const flatAssets: Record<string, string> = {}
 
     for (const map of Object.values(assetMaps)) {
@@ -63,16 +63,43 @@ async function loadAssetMaps(assetMaps: AssetMaps) {
             return [name, finalUrl]
         })
 
+    let total = unique.length
+    let loaded = 0
+    let progressBarWrap: HTMLDivElement
+    let progressBar: HTMLDivElement
+
+    if (showBar) {
+        progressBarWrap = document.createElement('div')
+        progressBar = document.createElement('div')
+        //@ts-expect-error
+        progressBarWrap.style =
+            'width:100%; height:20px; position:absolute; bottom:0; background-color: grey'
+        progressBarWrap.appendChild(progressBar)
+        //@ts-expect-error
+        progressBar.style = 'width: 0%; height:100%; background-color: green'
+        document.body.appendChild(progressBarWrap)
+    }
+
     await Promise.all(
         unique.map(async ([name, url]) => {
             if (url.endsWith('.mp3')) {
                 sound.add(name, url)
+                total -= 1
                 return true
             } else {
-                return Assets.load(name).catch(() => false)
+                return Assets.load(name)
+                    .catch(() => false)
+                    .finally(() => {
+                        loaded += 1
+                        const progress = loaded / total
+                        if (showBar)
+                            progressBar.style.width = `${progress * 100}%`
+                    })
             }
         })
-    )
+    ).finally(() => {
+        if (showBar) document.body.removeChild(progressBarWrap)
+    })
     return true
 }
 
