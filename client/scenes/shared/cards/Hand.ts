@@ -17,10 +17,9 @@ import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
     currAnimatingCardUid,
     hoveredCharacterUid,
-    nextFrame,
-    isTargeting,
     selectedForTargetingCardUid,
     toDatum,
+    currTargetingType,
 } from '@/util'
 import { datum, Datum } from 'datums'
 import { isEmpty, pick, uniq } from 'lodash'
@@ -30,6 +29,7 @@ import type { Card, CardUid, CharacterUid, Pile } from 'shared'
 import { assertFinite, keys, vals } from 'shared/code'
 import { runKeyframeAnimations } from '../tweenerAnimations'
 import { CardEl } from './Card'
+import { cardUsesArrowTargeting } from './helpers'
 
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 const CARD_WIDTH = 260
@@ -87,6 +87,7 @@ export function Hand(
     ) {
         const destructibleRoot = getDestructibleRoot()
         const stage = getStage()
+        stage.removeListener('pointermove')
 
         if (targetingCardUid) {
             const { x, y } =
@@ -94,7 +95,7 @@ export function Hand(
 
             // TODO: fix below scenario (maybe not needed when we make hovered cards smaller)
             // if (y < TARGETABLE_AREA_Y_OFFSET)
-            //     return handleCursorInsideTargetableArea(cardUid)
+            //     return handleCursorInsideTargetingArea(cardUid)
 
             const CardEl = getCardElFromUid(targetingCardUid)
 
@@ -127,9 +128,8 @@ export function Hand(
     }
 
     let SelectedCardEl: TweenablePixiContainer | null
-    let selectedCardMeta: Card | null
+    let selectedCardMeta: Card | null // used to differentiate SelectedCardEl's with the same name
     function handlePointerMoveWhileTargeting(e: FederatedPointerEvent) {
-        // console.log('handling pointermove...')
         const selectedCardUid = selectedForTargetingCardUid.val
         if (!selectedCardUid) {
             getStage().off('pointermove', handlePointerMoveWhileTargeting)
@@ -149,14 +149,8 @@ export function Hand(
         }
 
         dragCardWithCursor(e, SelectedCardEl)
-        if (cursorInsideTargetableArea(e)) {
-            // console.log('cursorInsideTargetableArea')
-            // if (!cardUsesArrowTargeting(selectedCardMeta)) {
-            //     // console.log('card doesnt use targeting AND insideTargetableArea')
-            //     return
-            // }
-
-            handleCursorInsideTargetableArea(selectedCardUid)
+        if (cursorInsideTargetingArea(e)) {
+            handleCursorInsideTargetingArea(selectedCardUid)
             return
         }
     }
@@ -175,16 +169,31 @@ export function Hand(
         })
     }
 
-    function handleCursorInsideTargetableArea(selectedCardUid: CardUid) {
-        isTargeting.set(true)
-        getStage().off('pointermove', handlePointerMoveWhileTargeting)
+    function handleCursorInsideTargetingArea(selectedCardUid: CardUid) {
+        const cardMeta = getSelectedCardMeta(selectedCardUid)
+        const stage = getStage()
         const CardEl = getCardElFromUid(selectedCardUid)
         flashGlowAndBrightnessTo(CardEl)
-        centerCardEl(
-            getDestructibleRoot(),
-            selectedCardUid,
-            initialDisplayVals
-        )
+        stage.off('pointermove', handlePointerMoveWhileTargeting)
+
+        if (!cardUsesArrowTargeting(cardMeta)) {
+            currTargetingType.set('drag')
+            stage.on('pointermove', dragToPlayCard)
+        } else {
+            currTargetingType.set('arrow')
+            centerCardEl(
+                getDestructibleRoot(),
+                selectedCardUid,
+                initialDisplayVals
+            )
+        }
+    }
+
+    function dragToPlayCard(e: FederatedPointerEvent) {
+        const selectedCardUid = selectedForTargetingCardUid.val
+        if (!selectedCardUid) return new Error('no cardEl')
+        const SelectedCardEl = getCardElFromUid(selectedCardUid)
+        dragCardWithCursor(e, SelectedCardEl)
     }
 
     function getCardElFromUid(cardUid: CardUid): TweenablePixiContainer {
@@ -209,11 +218,12 @@ export function Hand(
         else if (currHandEmpty && !prevHandEmpty) {
             // end turn
             if (selectedForTargetingCardUid.val) {
-                animatePlayCard(getCardElFromUid(selectedForTargetingCardUid.val))
+                animatePlayCard(
+                    getCardElFromUid(selectedForTargetingCardUid.val)
+                )
             }
             return await animateDiscardAllCardsOut()
-        }
-        else if (keys(newHand).length !== keys(prevHand).length)
+        } else if (keys(newHand).length !== keys(prevHand).length)
             // play a card
             return await animateCardOutAndRerenderHand(prevHand, newHand)
         else if (newHand)
@@ -273,7 +283,7 @@ export function Hand(
         position: 'final' | 'initial'
     ) {
         let destructibleRoot = getDestructibleRoot()
-        destructibleRoot.destroy({children: true})
+        destructibleRoot.destroy({ children: true })
         hoveredCardUid.set(null)
         selectedForTargetingCardUid.set(null)
 
@@ -330,7 +340,7 @@ function createDestructibleContainer() {
     }) as PixiContainerWithTweenableChildren
 }
 
-function cursorInsideTargetableArea(e: FederatedPointerEvent): boolean {
+function cursorInsideTargetingArea(e: FederatedPointerEvent): boolean {
     return e.screen.y < TARGETABLE_AREA_Y_OFFSET
 }
 
@@ -494,9 +504,7 @@ const animatePlayCard = async (CardEl: TweenablePixiContainer) => {
     currAnimatingCardUid.set(null)
 }
 
-const getAnimationsForDiscardAllCards = (
-    CardEls: TweenablePixiContainer[]
-) => {
+const getAnimationsForDiscardAllCards = (CardEls: TweenablePixiContainer[]) => {
     return CardEls.map((CardEl, idx) => {
         return new Promise<void>(res => {
             if (currAnimatingCardUid.val === CardEl.name) {

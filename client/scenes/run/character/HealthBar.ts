@@ -21,7 +21,6 @@ import {
     globalShowSims,
     hoveredCharacterUid,
     selectedForTargetingCardUid,
-    isTargeting,
     onUpdate,
     statChangesDatum,
     toDatum,
@@ -249,10 +248,6 @@ function DamageIndicator(
                 }
             }
             return
-        }),
-        isTargeting.onChange(attacking => {
-            if (!selectedForTargetingCardUid.val && !attacking)
-                showAttackSimulation.set(false)
         }),
         hoveredCharacterUid.onChange(targetChar => {
             if (globalShowSims.val === false) {

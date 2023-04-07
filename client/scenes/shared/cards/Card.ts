@@ -26,6 +26,8 @@ import {
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
+    currAnimatingCardUid,
+    currTargetingType,
     hoveredCharacterUid,
     nextTick,
     selectedForTargetingCardUid,
@@ -291,22 +293,25 @@ function getDecoratedEvents({
     const decoratedEvents: InteractionEvents = {
         ...dynamicEvents,
         pointerenter(e) {
+            if (selectedForTargetingCardUid.val) return
             dynamicEvents?.pointerenter?.(e)
 
             isHovering.set(true)
             setTimeout(() => {
-                if (isHovering.val) isLongHovered.set(true)
+                if (
+                    isHovering.val &&
+                    selectedForTargetingCardUid.val !== card.uid
+                )
+                    isLongHovered.set(true)
             }, 400)
         },
         pointerdown(e) {
             dynamicEvents?.pointerdown?.(e)
 
             isHovering.set(true)
-            setTimeout(() => {
-                if (isHovering.val) isLongHovered.set(true)
-            }, 400)
         },
         pointerleave(e) {
+            if (selectedForTargetingCardUid.val) return
             dynamicEvents?.pointerleave?.(e)
 
             isHovering.set(false)
@@ -595,8 +600,6 @@ export function getEvents(
     hoveredCardUid: Datum<CardUid | null>
 ): InteractionEvents {
     const pointerenter: InteractionEventHandler = () => {
-        // console.log('pointerenter')
-        if (selectedForTargetingCardUid.val === card.uid) return
         // hoveredCharacterUid.set(card.characterUid)
         hoveredCardUid.set(card.uid)
     }
@@ -607,19 +610,26 @@ export function getEvents(
         }
     }
     const pointerdown: InteractionEventHandler = e => {
+        const clickType = e.button === 2 ? 'rightClick' : 'leftClick'
+        if (selectedForTargetingCardUid.val === card.uid) {
+            if (currTargetingType.val === 'drag' && clickType === 'leftClick') {
+                currAnimatingCardUid.set(card.uid)
+                void callApi('playCard', {
+                    cardUid: card.uid,
+                    targetUids: [],
+                })
+                clearLastTargetSelection()
+            }
+            return
+        }
         //for mobile
         const cardEl = e.currentTarget
-        // console.log(`pointerdown`)
-        // const clickType = e.button === 2 ? 'rightClick' : 'leftClick'
-        // console.log(clickType)
-        // if (clickType === 'rightClick') return
         if (cardEl instanceof PixiContainer) {
             // @ts-expect-error
             pointerenter({
                 currentTarget: cardEl,
             } as FederatedPointerEvent)
             clearLastTargetSelection()
-            // console.log('clearLastTargetSelection')
         }
 
         const numRequiredToDiscard = getBattleScene().get().numRequiredToDiscard
@@ -641,15 +651,11 @@ export function getEvents(
         }
 
         if (getBattleScene().get().energy >= card.energy) {
-            if (
-                cardUsesArrowTargeting(card) &&
-                cardEl instanceof PixiContainer
-            ) {
+            if (cardEl instanceof PixiContainer)
                 clearLastTargetSelection = beginTargetSelection(
                     cardEl.parent,
                     card
                 )
-            }
         } else {
             flashTo(
                 getStage(),
@@ -669,14 +675,8 @@ export function getEvents(
         }
     }
     const pointerup: InteractionEventHandler = ({ currentTarget: cardEl }) => {
-        if (!cardUsesArrowTargeting(card)) {
-            void callApi('playCard', {
-                cardUid: card.uid,
-                targetUids: [],
-            })
-        }
         //for mobile
-        else if (cardEl instanceof PixiContainer) {
+        if (cardEl instanceof PixiContainer) {
             // @ts-expect-error
             pointerleave({
                 currentTarget: cardEl,

@@ -1,4 +1,4 @@
-import { GlowFilter, AdjustmentFilter } from 'pixi-filters'
+import { GlowFilter, AdjustmentFilter, OutlineFilter } from 'pixi-filters'
 import { Filter } from 'pixi.js'
 import {
     getBooleanFromLocalStorage,
@@ -38,7 +38,7 @@ export const flashGlowAndBrightnessTo = async (
 ) => {
     const tempGlowFilter = new GlowFilter({
         innerStrength: 0,
-        outerStrength: 6,
+        outerStrength: 8,
         distance: 22,
         color: 0xffffff,
         knockout: false,
@@ -92,14 +92,47 @@ export const flashGlowAndBrightnessTo = async (
         }
     )
 
-    bloomFilter.destroy()
-    tempGlowFilter.destroy()
     if (existingFilters) Element.filters = [...existingFilters]
     else Element.filters = []
+    bloomFilter.destroy()
+    tempGlowFilter.destroy()
+}
+
+export const flashGlowTo = async (
+    Element: TweenablePixiContainer | PixiContainer,
+    fadeOutDuration: number = 0.5
+) => {
+    const glowFilter = customGlowFilter(0xFFFFFF, 12)
+    //@ts-ignore
+    glowFilter.alpha = 0
+    addFilterTo(Element, glowFilter)
+
+    await Tweener.add(
+        //@ts-ignore
+        { target: glowFilter, duration: 0.05 },
+        {
+            alpha: 1,
+        }
+    )
+
+    await Tweener.add(
+        {
+            //@ts-ignore
+            target: glowFilter,
+            duration: fadeOutDuration,
+            ease: Easing.easeFromTo,
+        },
+        {
+            alpha: 0,
+        }
+    )
+
+    removeFilterFrom(Element, glowFilter)
+    glowFilter.destroy()
 }
 
 export const removeFilterFrom = <T extends Filter>(
-    root: PixiSpine | PixiContainer,
+    root: PixiSpine | PixiContainer | TweenablePixiContainer,
     filterToRemove: T
 ) => {
     if (root.filters) {
@@ -112,7 +145,7 @@ export const removeFilterFrom = <T extends Filter>(
 }
 
 export const addFilterTo = <T extends Filter>(
-    root: PixiSpine | PixiContainer,
+    root: PixiSpine | PixiContainer | TweenablePixiContainer,
     filter: T
 ) => {
     if (!root.filters) {
@@ -121,3 +154,5 @@ export const addFilterTo = <T extends Filter>(
         root.filters.push(filter)
     }
 }
+
+export const textOutlineFilter = new OutlineFilter(2, 0x000000)
