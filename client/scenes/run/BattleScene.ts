@@ -34,6 +34,7 @@ import { EndOfRun } from './EndOfRun'
 import { Energy } from './Energy'
 import { SouvenirsEls } from './Souvenirs'
 import { battleKeybinds } from '@/hooks/BattleSceneBinds'
+import { TurnAnnouncement } from '../shared/TurnAnnouncement'
 
 const allSrcs: SpineAsset[][] = [
     ['hooligansBluffBg1_0', 'hooligansBluffBg1_1'],
@@ -73,6 +74,7 @@ export function BattleScene(
         ),
         Energy({ scene }),
         EndTurnButton(),
+        TurnAnnouncement(),
         BattleSceneCharacterInfo(),
         If(
             toDatum(scene.select('numRequiredToDiscard'), num => num, {

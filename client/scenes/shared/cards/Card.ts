@@ -26,6 +26,7 @@ import {
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
+    currAnimatingCardUid,
     currTargetingType,
     hoveredCharacterUid,
     nextTick,
@@ -612,6 +613,7 @@ export function getEvents(
         const clickType = e.button === 2 ? 'rightClick' : 'leftClick'
         if (selectedForTargetingCardUid.val === card.uid) {
             if (currTargetingType.val === 'drag' && clickType === 'leftClick') {
+                currAnimatingCardUid.set(card.uid)
                 void callApi('playCard', {
                     cardUid: card.uid,
                     targetUids: [],

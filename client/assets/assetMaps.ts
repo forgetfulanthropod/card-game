@@ -15,6 +15,7 @@ export const rootAssets = {
     swordPiercing: 'effects/piercing.webp',
     overkill: 'misc-png/SKULL_25-0.webp',
     killConfirmed: 'misc-png/killConfirmed.png',
+    crossedSwords: 'misc-png/crossedSwordsAlpha.png',
 
     chestBody: 'misc-png/CHEST_BODY.webp',
     chestLid: 'misc-png/CHEST_LID.webp',

@@ -1,4 +1,4 @@
-import { GlowFilter, AdjustmentFilter } from 'pixi-filters'
+import { GlowFilter, AdjustmentFilter, OutlineFilter } from 'pixi-filters'
 import { Filter } from 'pixi.js'
 import {
     getBooleanFromLocalStorage,
@@ -154,3 +154,5 @@ export const addFilterTo = <T extends Filter>(
         root.filters.push(filter)
     }
 }
+
+export const textOutlineFilter = new OutlineFilter(2, 0x000000)
