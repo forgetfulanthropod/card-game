@@ -1,5 +1,5 @@
 import { vals } from 'shared/code'
-import { discardBeforeTurnEnd } from '../discardBeforeTurnEnd'
+import { discardBeforeTurnEnd } from '../discardUtil'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 

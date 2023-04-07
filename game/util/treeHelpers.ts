@@ -24,6 +24,7 @@ export function getEntrySceneIn(game: Gamecursor): EntryCursor {
 }
 
 type Username = string
+//todo: move this to a data store, redis, postgres whathaveyou
 const happenedThisTurn: Record<Username, NetworkEvent<string, unknown>[]> = {}
 export function emit(args: {
     username: string

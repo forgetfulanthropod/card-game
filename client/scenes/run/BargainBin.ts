@@ -152,7 +152,12 @@ function BargainSouvenirs(
     return For(
         toDatum(souvenirsCursor, collectedSouvenirs =>
             allSouvenirs
-                .filter(s => !collectedSouvenirs.map(s => s.id).includes(s.id))
+                .filter(
+                    s =>
+                        !(collectedSouvenirs ?? [])
+                            .map(s => s.id)
+                            .includes(s.id)
+                )
                 .map((s, index) => ({
                     key: s.id,
                     index,
