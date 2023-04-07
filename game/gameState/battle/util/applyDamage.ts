@@ -191,7 +191,11 @@ function manageReflect(
     applyCalcedDamage({
         scene,
         targetUid: attackerUid,
-        calcedDamage: reflectedDamage,
+        calcedDamage: getDamage({
+            attacker: scene.get('allCharacters', attackerUid),
+            target: scene.get('allCharacters', targetUid),
+            damage: reflectedDamage,
+        }),
     })
 }
 
@@ -209,9 +213,13 @@ function triggerCounterAttack(
     applyCalcedDamage({
         scene,
         targetUid: attackerUid,
-        calcedDamage: Math.ceil(
-            scene.get('allCharacters', targetUid, 'strength') * 0.75
-        ),
+        calcedDamage: getDamage({
+            attacker: scene.get('allCharacters', attackerUid),
+            target: scene.get('allCharacters', targetUid),
+            damage: Math.ceil(
+                scene.get('allCharacters', targetUid, 'strength') * 0.75
+            ),
+        }),
     })
 }
 
@@ -228,7 +236,11 @@ function manageMutuallyAssuredDestruction(
     applyCalcedDamage({
         scene,
         targetUid: attackerUid,
-        calcedDamage: unblockedDamage * 2,
+        calcedDamage: getDamage({
+            attacker: scene.get('allCharacters', attackerUid),
+            target: scene.get('allCharacters', targetUid),
+            damage: unblockedDamage * 2,
+        }),
     })
 }
 
