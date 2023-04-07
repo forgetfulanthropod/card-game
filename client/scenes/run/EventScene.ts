@@ -35,7 +35,7 @@ import { SouvenirEl, SouvenirsEls } from './Souvenirs'
 
 export type EventResponse = { index: number; characterUid?: CharacterUid }
 
-const explanationScale = 1.5
+const explanationScale = 1.2
 
 export function EventScene(): PixiContainer {
     collectData('ui_ux_view', { page_title: 'Event Scene' })
@@ -124,7 +124,7 @@ export function EventScene(): PixiContainer {
 
 const style: Partial<TextStyle> = {
     fontFamily: fontMap['sansFont'],
-    fontSize: 41,
+    fontSize: 32,
     fill: 'white',
     wordWrap: true,
     wordWrapWidth: BASE_WIDTH * 0.9,
@@ -187,7 +187,7 @@ function ChooseOptionInterface(
 
             const souvenirId = eventScene.choices[index]?.souvenirId
             const souvenir = souvenirId ? souvenirMap[souvenirId] : null
-            const fontSize = 34
+            const fontSize = 26
             const lineHeight = 55
 
             const text = Text({
