@@ -231,7 +231,9 @@ function manageMutuallyAssuredDestruction(
 ) {
     const count = scene
         .get('allCharacters', targetUid, 'effects')
-        .find(e => e.id === 'mutuallyAssuredDestructionBuff')
+        .find(e => e.id === 'mutuallyAssuredDestructionBuff')?.counter
+
+    if (!count) return
 
     applyCalcedDamage({
         scene,
