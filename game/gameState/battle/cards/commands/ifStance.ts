@@ -1,4 +1,3 @@
-import type { StanceId } from 'shared'
 import type { Executors, Explainers } from './util'
 import { evalAllAsHtml } from './util'
 
@@ -8,12 +7,16 @@ export const explain: Explainers['ifStance'] = dslArgs => {
 }
 
 export const execute: Executors['ifStance'] = ({ dslArgs, scene, command }) => {
-    const stance: StanceId = dslArgs[0].eval()
+    const stanceIdentifier = dslArgs[0].eval()
+    const allStances = ['avoidant', 'neutral', 'aggressive']
+
+    const stances = !allStances.includes(stanceIdentifier)
+        ? allStances.filter(s => stanceIdentifier.includes(s))
+        : [stanceIdentifier]
 
     const characterMeta = scene.get('allCharacters', command.characterUid)
-    logger.info(
-        `stance required is ${stance}, char stance is ${characterMeta.stance}`
-    )
 
-    if (characterMeta.stance === stance) dslArgs[1].eval()
+    stances.forEach(s => {
+        if (characterMeta.stance === s) dslArgs[1].eval()
+    })
 }

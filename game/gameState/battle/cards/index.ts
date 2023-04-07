@@ -1,4 +1,4 @@
-export { discardBeforeTurnEnd as discard } from './discardBeforeTurnEnd'
+export { discardBeforeTurnEnd, discard } from './discardUtil'
 export { drawNewHand } from './drawNewHand'
 export { interpretCommand, simulateCommand } from './interpretCommand'
 export { play } from './play'

@@ -21,20 +21,23 @@ import {
     calculateStats,
     emitMove,
     getCharacterMeta,
+    getLivingPcs,
     maybeTransitionBattleState,
 } from '@/gameState'
+import { uniq } from 'lodash'
 
-export function interpretCommand(args: CommandDetail): void {
+export function interpretCommand(args: CommandDetail, emit = true): void {
     const locals = localsFromCommand(args)
     if (locals.isSkipped) return
 
-    emitMove({
-        moveName: args.command.name,
-        characterUid: args.command.characterUid,
-        targetType: args.command.targetType,
-        targetUids: args.targetUids,
-        scene: args.scene,
-    })
+    if (emit)
+        emitMove({
+            moveName: args.command.name,
+            characterUid: args.command.characterUid,
+            targetType: args.command.targetType,
+            targetUids: args.targetUids,
+            scene: args.scene,
+        })
 
     executeCommand({ ...args, locals })
 }
@@ -45,69 +48,50 @@ function localsFromCommand(
         | (Omit<CommandDetail, 'scene'> & { scene: BattleCursor | EntryCursor })
 ): Locals {
     const { scene, command, targetUids } = args
+
+    const sceneData = (scene as BattleCursor).get()
     const cardOwner =
-        (scene as BattleCursor).get('allCharacters', command.characterUid) ??
+        sceneData.allCharacters?.[command.characterUid] ??
         (scene as EntryCursor)
             .get('selectedCharacters')
             ?.find(c => c?.uid === command.characterUid)
 
-    const targetConstitution =
-        targetUids.length === 1
-            ? (scene as BattleCursor).get('allCharacters', targetUids[0])
-                  ?.constitution
-            : undefined
-
-    const targetHealth =
-        targetUids.length === 1
-            ? (scene as BattleCursor).get('allCharacters', targetUids[0])
-                  ?.health
-            : undefined
-
-    const incomingDamageIntended =
-        (scene as BattleCursor)
-            .get('nextNpcCommands')
-            ?.reduce(
-                (sum, command) => sum + command.outcome.damages[targetUids[0]],
-                0
-            ) ?? 0
-
-    const handSize = Object.keys(
-        (scene as BattleCursor).get('cards', 'hand') ?? {}
-    ).length
-    const drawPileSize = Object.keys(
-        (scene as BattleCursor).get('cards', 'draw') ?? {}
-    ).length
-    const discardPileSize = Object.keys(
-        (scene as BattleCursor).get('cards', 'discard') ?? {}
-    ).length
-
-    const cardsPlayedThisRoom =
-        (scene as BattleCursor).get('cardsPlayedThisRoom') ?? []
-
+    const cardsPlayedThisRoom = sceneData.cardsPlayedThisRoom ?? []
     const lastCardPlayed = cardsPlayedThisRoom[cardsPlayedThisRoom.length - 1]
-    const lastCardPlayedType = lastCardPlayed?.type
-
-    const currentRoomCategory = (
-        (scene as BattleCursor).get('currentRoom') ?? {}
-    )?.category
-
-    const wasLastCardPlayedFromThisCharacter =
-        command.characterUid === lastCardPlayed?.characterUid
-
-    const turnStartStance = cardOwner.stanceInPrevTurn ?? 'neutral'
+    const stanceIds =
+        sceneData.id === 'battle'
+            ? getLivingPcs(sceneData).map(c => c.stance)
+            : []
 
     return {
         ...calculateStats(cardOwner),
-        targetConstitution,
-        targetHealth,
-        incomingDamageIntended,
-        handSize,
-        drawPileSize,
-        discardPileSize,
-        lastCardPlayedType,
-        currentRoomCategory,
-        wasLastCardPlayedFromThisCharacter,
-        turnStartStance,
+        targetConstitution:
+            targetUids.length === 1
+                ? sceneData.allCharacters[targetUids[0]]?.constitution
+                : undefined,
+        targetHealth:
+            targetUids.length === 1
+                ? sceneData.allCharacters[targetUids[0]]?.health
+                : undefined,
+        targetBlock:
+            targetUids.length === 1
+                ? sceneData.allCharacters[targetUids[0]]?.block
+                : undefined,
+        incomingDamageIntended:
+            sceneData.nextNpcCommands?.reduce(
+                (sum, command) => sum + command.outcome.damages[targetUids[0]],
+                0
+            ) ?? 0,
+        handSize: Object.keys(sceneData.cards?.hand ?? {}).length,
+        drawPileSize: Object.keys(sceneData.cards?.draw ?? {}).length,
+        discardPileSize: Object.keys(sceneData.cards?.discard ?? {}).length,
+        lastCardPlayedType: lastCardPlayed?.type,
+        currentRoomCategory: (sceneData.currentRoom ?? {})?.category,
+        wasLastCardPlayedFromThisCharacter:
+            command.characterUid === lastCardPlayed?.characterUid,
+        turnStartStance: cardOwner.stanceInPrevTurn ?? 'neutral',
+        allStancesDifferent: uniq(stanceIds).length === stanceIds.length,
+        allStancesSame: uniq(stanceIds).length === 1,
     }
 }
 
