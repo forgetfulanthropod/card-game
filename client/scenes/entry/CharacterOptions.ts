@@ -44,12 +44,23 @@ export function CharacterOptions() {
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile` as AssetKey)
 
-        const isValidOption = [
+        const validOptions: CharacterId[] = [
             'warhog',
             'frogKnight',
             'gnomeHooligan',
-            'notoriousBean',
-        ].includes(c.id)
+            'penguinKnight',
+            ...(process.env.IS_PRODUCTION
+                ? []
+                : ([
+                      'notoriousBean',
+                      'skeletonWarrior',
+                      'matchaGelatinCube',
+                      'mushroomFarmer',
+                      'snacky',
+                      'jerry',
+                  ] as const)),
+        ]
+        const isValidOption = validOptions.includes(c.id)
 
         const isNewCharacter = ['notoriousBean'].includes(c.id)
 
@@ -165,6 +176,12 @@ function chooseOwnedCharacterAt(
                 placeIndex: selectedCharacterPlaceIndex,
             },
         ],
+    })
+}
+
+export const rollKaijuAtPlace = () => {
+    void callApi('rollKaiju', {
+        placeIndex: selectedCharacterPlaceIndex.val,
     })
 }
 

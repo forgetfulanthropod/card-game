@@ -3,13 +3,14 @@ import type { BattleCursor } from 'shared'
 import { vals } from 'shared/code'
 import { checkWinner } from './checkWinner'
 
-import { calculateLoot, calculateChestProgress } from './loot'
-import { calculateNewRunScore } from './score'
-import { clearRoomCardModifiers, putAllCardsInDrawPile } from './cards'
-import { checkServerScoringEvent } from './score/checkServerScoringEvent'
-import { clearCharacterModifiersForRoom } from './characters/clearCharacterModifiersForRoom'
+import { activateSouvenirs } from './activateSouvenirs'
+import { clearRoomCardModifiers } from './cards'
 import { getNewCardOptions } from './cards/getNewCardOptions'
-import { activateSouvenir, activateSouvenirs } from './activateSouvenirs'
+import { clearCharacterModifiersForRoom } from './characters/clearCharacterModifiersForRoom'
+import { clearCommandHooks } from './commandHookUtil'
+import { calculateChestProgress, calculateLoot } from './loot'
+import { calculateNewRunScore } from './score'
+import { checkServerScoringEvent } from './score/checkServerScoringEvent'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     if (scene.get('state') !== 'in battle') return false
@@ -35,6 +36,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
         } else {
             clearCharacterModifiersForRoom(scene)
             clearRoomCardModifiers(scene)
+            clearCommandHooks(scene)
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))

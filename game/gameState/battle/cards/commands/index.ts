@@ -9,6 +9,7 @@ import {explain as explainBrittle, execute as executeBrittle} from './brittle'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
+import {explain as explainDealCounterTimes, execute as executeDealCounterTimes} from './dealCounterTimes'
 import {explain as explainDealFromStance, execute as executeDealFromStance} from './dealFromStance'
 import {explain as explainDiscard, execute as executeDiscard} from './discard'
 import {explain as explainDiscardRandom, execute as executeDiscardRandom} from './discardRandom'
@@ -28,6 +29,7 @@ import {explain as explainIfHealthUnder, execute as executeIfHealthUnder} from '
 import {explain as explainIfKilled, execute as executeIfKilled} from './ifKilled'
 import {explain as explainIfStance, execute as executeIfStance} from './ifStance'
 import {explain as explainIfStanceElse, execute as executeIfStanceElse} from './ifStanceElse'
+import {explain as explainIfTargetStance, execute as executeIfTargetStance} from './ifTargetStance'
 import {explain as explainInfectiousBite, execute as executeInfectiousBite} from './infectiousBite'
 import {explain as explainJoin, execute as executeJoin} from './join'
 import {explain as explainKeep, execute as executeKeep} from './keep'
@@ -35,6 +37,7 @@ import {explain as explainKillIf, execute as executeKillIf} from './killIf'
 import {explain as explainMimicAttack, execute as executeMimicAttack} from './mimicAttack'
 import {explain as explainModifyStats, execute as executeModifyStats} from './modifyStats'
 import {explain as explainMomentary, execute as executeMomentary} from './momentary'
+import {explain as explainOn, execute as executeOn} from './on'
 import {explain as explainOpenMap, execute as executeOpenMap} from './openMap'
 import {explain as explainOrb, execute as executeOrb} from './orb'
 import {explain as explainOrbOfHolyLight, execute as executeOrbOfHolyLight} from './orbOfHolyLight'
@@ -43,6 +46,7 @@ import {explain as explainQueue, execute as executeQueue} from './queue'
 import {explain as explainRemoveAllDebuffs, execute as executeRemoveAllDebuffs} from './removeAllDebuffs'
 import {explain as explainRemoveSouvenir, execute as executeRemoveSouvenir} from './removeSouvenir'
 import {explain as explainRequire, execute as executeRequire} from './require'
+import {explain as explainReturnThisCardToHand, execute as executeReturnThisCardToHand} from './returnThisCardToHand'
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
@@ -60,6 +64,7 @@ export const explainers: Explainers = {
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
+    dealCounterTimes: explainDealCounterTimes,
     dealFromStance: explainDealFromStance,
     discard: explainDiscard,
     discardRandom: explainDiscardRandom,
@@ -79,6 +84,7 @@ export const explainers: Explainers = {
     ifKilled: explainIfKilled,
     ifStance: explainIfStance,
     ifStanceElse: explainIfStanceElse,
+    ifTargetStance: explainIfTargetStance,
     infectiousBite: explainInfectiousBite,
     join: explainJoin,
     keep: explainKeep,
@@ -86,6 +92,7 @@ export const explainers: Explainers = {
     mimicAttack: explainMimicAttack,
     modifyStats: explainModifyStats,
     momentary: explainMomentary,
+    on: explainOn,
     openMap: explainOpenMap,
     orb: explainOrb,
     orbOfHolyLight: explainOrbOfHolyLight,
@@ -94,6 +101,7 @@ export const explainers: Explainers = {
     removeAllDebuffs: explainRemoveAllDebuffs,
     removeSouvenir: explainRemoveSouvenir,
     require: explainRequire,
+    returnThisCardToHand: explainReturnThisCardToHand,
     setStance: explainSetStance,
     smite: explainSmite,
     text: explainText,
@@ -111,6 +119,7 @@ export const executors: Executors = {
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
+    dealCounterTimes: executeDealCounterTimes,
     dealFromStance: executeDealFromStance,
     discard: executeDiscard,
     discardRandom: executeDiscardRandom,
@@ -130,6 +139,7 @@ export const executors: Executors = {
     ifKilled: executeIfKilled,
     ifStance: executeIfStance,
     ifStanceElse: executeIfStanceElse,
+    ifTargetStance: executeIfTargetStance,
     infectiousBite: executeInfectiousBite,
     join: executeJoin,
     keep: executeKeep,
@@ -137,6 +147,7 @@ export const executors: Executors = {
     mimicAttack: executeMimicAttack,
     modifyStats: executeModifyStats,
     momentary: executeMomentary,
+    on: executeOn,
     openMap: executeOpenMap,
     orb: executeOrb,
     orbOfHolyLight: executeOrbOfHolyLight,
@@ -145,6 +156,7 @@ export const executors: Executors = {
     removeAllDebuffs: executeRemoveAllDebuffs,
     removeSouvenir: executeRemoveSouvenir,
     require: executeRequire,
+    returnThisCardToHand: executeReturnThisCardToHand,
     setStance: executeSetStance,
     smite: executeSmite,
     text: executeText,

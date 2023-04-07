@@ -2,13 +2,12 @@ import type { BattleCursor, GameActions } from 'shared'
 
 import { applyTurnStartEffects, clearBlock, popAndRunQueue } from '@/gameState'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
-import { discardAllCards } from '@/gameState/battle/cards/discardAllCards'
-import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
 import { setAllCharactersToUnmoved } from '@/gameState/battle/characters/setAllCharactersToUnmoved'
 import { trackStanceChanges } from '@/gameState/battle/characters/trackStanceChanges'
 import { checkServerScoringEvent } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
+import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
 const TIME_AFTER_PLAYER_MOVE = 1000
 

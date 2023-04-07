@@ -15,6 +15,10 @@ import { checkServerScoringEvent } from '@/gameState/battle/score/checkServerSco
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
+import {
+    clearCommandHooks,
+    clearCommandHooksForTurn,
+} from '@/gameState/battle/commandHookUtil'
 
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
@@ -37,6 +41,7 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     applyTurnStartEffects(scene, 'pc')
 
     clearCharacterStatModifiers(scene, 'turn')
+    clearCommandHooksForTurn(scene)
 
     drawNewHand(scene)
 

@@ -14,6 +14,7 @@ import { clearDead } from './clearDead'
 import { applyEffect } from '../cards/commands/effect'
 import { updateScore } from '@/gameState'
 import { activateSouvenirs } from '../activateSouvenirs'
+import { triggerOnHook } from '../commandHookUtil'
 
 export function applyDamage(args: {
     damage: number
@@ -69,6 +70,14 @@ export function applyDamage(args: {
     })
 
     if (unblockedDamage > 0) {
+        if (attackerMeta?.uid)
+            manageMutuallyAssuredDestruction(
+                unblockedDamage,
+                targetUid,
+                attackerMeta?.uid,
+                scene
+            )
+
         activateSouvenirs('takeDamage', scene, targetUid)
         activateSouvenirs('dealDamage', scene, attackerUid)
     }
@@ -161,6 +170,8 @@ function manageSideEffectsOfCalcedDamage({
 }) {
     recordDamage(scene, calcedDamage, targetUid, 'raw')
     manageReflect(calcedDamage, targetUid, attackerUid, scene)
+    triggerCounterAttack(targetUid, attackerUid, scene)
+    triggerOnHook(scene, 'damageTaken', targetUid)
 }
 
 function manageReflect(
@@ -181,6 +192,43 @@ function manageReflect(
         scene,
         targetUid: attackerUid,
         calcedDamage: reflectedDamage,
+    })
+}
+
+function triggerCounterAttack(
+    targetUid: CharacterUid,
+    attackerUid: CharacterUid,
+    scene: BattleCursor
+) {
+    const hasCounterAttack = scene
+        .get('allCharacters', targetUid, 'effects')
+        .find(e => e.id === 'counterAttackBuff')
+
+    if (!hasCounterAttack) return
+
+    applyCalcedDamage({
+        scene,
+        targetUid: attackerUid,
+        calcedDamage: Math.ceil(
+            scene.get('allCharacters', targetUid, 'strength') * 0.75
+        ),
+    })
+}
+
+function manageMutuallyAssuredDestruction(
+    unblockedDamage: number,
+    targetUid: CharacterUid,
+    attackerUid: CharacterUid,
+    scene: BattleCursor
+) {
+    const count = scene
+        .get('allCharacters', targetUid, 'effects')
+        .find(e => e.id === 'mutuallyAssuredDestructionBuff')
+
+    applyCalcedDamage({
+        scene,
+        targetUid: attackerUid,
+        calcedDamage: unblockedDamage * 2,
     })
 }
 
