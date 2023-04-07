@@ -76,7 +76,9 @@ const staticEffectFuncs: Record<
         stats.damageDealMultiplicand -=
             getDamageDealMulitplicandForStance('aggressive') - 1
     },
-    reflectBuff(_) {},
+    reflectBuff(_) {}, // handled in applyDamage
+    counterAttackBuff(_) {}, // handled in applyDamage
+    mutuallyAssuredDestructionBuff(_) {}, // handled in applyDamage
     smallDamageIncreaseBuff(stats) {
         stats.damageTakeAddend += 4
     },

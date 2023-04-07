@@ -30,12 +30,15 @@ export function makeCharacters(chosen: OwnedCharacterStats[] = []): Characters {
     const all = [
         ...chosen.map((c, i) => {
             const [x, y] = playerCharacterPositions[i]
-            return newPCMeta({
-                uid: c.uid,
-                name: c.id as PlayerCharacterId,
-                x,
-                y,
-            })
+            return newPCMeta(
+                {
+                    uid: c.uid,
+                    name: c.id as PlayerCharacterId,
+                    x,
+                    y,
+                },
+                c as CharacterMeta
+            )
         }),
     ]
     const o: Characters = {}
@@ -110,17 +113,20 @@ function getThreePointGrid() {
     )
 }
 
-function newPCMeta(args: {
-    x: number
-    y: number
-    uid: string
-    name: PlayerCharacterId
-}): CharacterMeta {
+function newPCMeta(
+    args: {
+        x: number
+        y: number
+        uid: string
+        name: PlayerCharacterId
+    },
+    origCm: CharacterMeta
+): CharacterMeta {
     const { playerCharacterStatsMap: statsMap } = getRulebook()
     // const scale = window.innerWidth / BASE_WIDTH
     const scale = 1
     const stance: StanceId = 'neutral'
-    const stats = statsMap[args.name]
+    const stats = { ...statsMap[args.name], ...origCm }
     const characterMeta = {
         ...stats,
         uid: args.uid,

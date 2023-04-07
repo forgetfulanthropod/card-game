@@ -184,7 +184,7 @@ export function CardEl({
                 ),
                 () =>
                     Adjust(HoverableStances(card, hoveredStanceDatum), {
-                        y: -width * 1,
+                        y: -root.width * 0.58,
                     }),
                 undefined,
                 {

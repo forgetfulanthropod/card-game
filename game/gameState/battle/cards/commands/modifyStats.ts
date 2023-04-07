@@ -24,7 +24,10 @@ import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
 
-    return `Give ${getTargetText(targetType, context.characterMeta)} ${statNames
+    return `give ${getTargetText(
+        targetType || context.command.targetType,
+        context.characterMeta
+    )} ${statNames
         .map((_, i) => getStatModHtml(statNames[i], addends[i]))
         .join(' and ')}
     until end of ${expiration}`

@@ -16,14 +16,18 @@ import { getTargetText } from './util/getTargetText'
 
 export const explain: Explainers['effect'] = (dslArgs, context) => {
     const [id, increase, _] = evalAllAsHtml(dslArgs)
-    const [__, ___, targetTypeArg] = evalAll(dslArgs)
+    const [__, ___, targetTypeArg, double] = evalAll(dslArgs)
     const targetType = targetTypeArg ?? context.command.targetType
-    return `${getTargetText(
-        targetType,
-        context.characterMeta
-    )} gains <b>${startCase(id)
-        .replace('Debuff', '')
-        .replace('Buff', '')}</b>&nbsp;(${increase})`
+
+    const effectName = startCase(id).replace('Debuff', '').replace('Buff', '')
+    const targetText = getTargetText(targetType, context.characterMeta)
+
+    return double
+        ? `Double the amount of Poison counters on ${targetText}.  If no poison counters, it receives <b>${effectName}</b>&nbsp;(${increase}).${getTargetText(
+              targetType,
+              context.characterMeta
+          )} gains <b>${effectName}</b>&nbsp;(${increase})`
+        : `${targetText} gains <b>${effectName}</b>&nbsp;(${increase})`
 }
 
 export const execute: Executors['effect'] = ({
@@ -32,17 +36,24 @@ export const execute: Executors['effect'] = ({
     scene,
     command,
 }) => {
-    const [id, increase] = evalAll(dslArgs)
-    const targetUids = getTargetUids(dslArgs, givenUids, command, scene)
+    const [id, increase, targetTypeOverride, double] = evalAll(dslArgs)
 
-    applyEffect(scene, targetUids, id, increase)
+    const targetUids = getTargetUidsOverride({
+        targetTypeOverride,
+        scene,
+        command,
+        givenUids,
+    })
+
+    applyEffect(scene, targetUids, id, increase, double)
 }
 
 export function applyEffect(
     scene: BattleCursor,
     targetUids: CharacterUid[],
     idPartial: EffectId,
-    increase: number
+    increase: number,
+    double?: boolean
 ) {
     let increaseInt = Math.round(increase)
     const id: EffectId = effectIds.includes(idPartial)
@@ -66,24 +77,11 @@ export function applyEffect(
             if (i === -1) return [...effects, { id, counter: increaseInt }]
             return setAt(effects, i, {
                 ...effects[i],
-                counter: effects[i].counter + increaseInt,
+                counter:
+                    effects[i].counter > 0 && double
+                        ? effects[i].counter * 2
+                        : effects[i].counter + increaseInt,
             })
         })
     }
-}
-
-function getTargetUids(
-    dslArgs: VAngu[],
-    givenUids: CharacterUid[],
-    command: Command,
-    scene: BattleCursor
-) {
-    let targetType = evalAll(dslArgs)[2]
-
-    return getTargetUidsOverride({
-        targetTypeOverride: targetType,
-        scene,
-        command,
-        givenUids,
-    })
 }

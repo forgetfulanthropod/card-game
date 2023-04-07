@@ -96,6 +96,9 @@ interface BareGameActionArgs {
             placeIndex: CharacterPlaceIndex
         }[]
     }
+    rollKaiju: {
+        placeIndex: CharacterPlaceIndex
+    }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
     chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
@@ -149,6 +152,7 @@ export type ActionName = keyof BareGameActionArgs | keyof BareServerActionArgs
 /** A no-input game action */
 interface BareInternalActionArgs {
     doNpcTurn: { index: number }
+    activatePlayCardHooks: { card: Card }
     endNpcTurn: Empty
 }
 

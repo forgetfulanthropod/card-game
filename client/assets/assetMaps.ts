@@ -313,6 +313,8 @@ export const spineAssets = {
     warhogRaiderSpine: 'SKIN: warhogSkinsSpine -> 4',
     frostHogSpine: 'SKIN: warhogSkinsSpine -> 5',
 
+    warhogGenOneSpine: 'spines/characters/warhogGenOne/default.json',
+
     mimicSkinsSpine: 'spines/characters/mimicNPC/Mimic.json',
     mimicNPCSpine: 'SKIN: mimicSkinsSpine -> 1',
 

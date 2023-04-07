@@ -12,11 +12,18 @@ import type {
 import { EventScene } from '../EventScene'
 import { Souvenir } from '../Souvenir'
 import { RunID } from '../User'
-import type { Card, Command, Pile, Piles } from './Card'
+import type {
+    Card,
+    Command,
+    CommandHookId,
+    CommandHooks,
+    Pile,
+    Piles,
+} from './Card'
 import type { StatChangeMap } from './CardHit'
 import type { CharacterUid } from './Character'
 import type { Characters, StanceId } from './Characters'
-import type { CommandQueue } from './CommandQueue'
+import type { CommandQueue, QueuedCommand } from './CommandQueue'
 
 export interface BattleScene extends SceneHas {
     username: string
@@ -57,6 +64,7 @@ export interface BattleScene extends SceneHas {
     cardsDrafted: Card[]
     requireAction: RequiredAction | null
     queue: CommandQueue
+    on: CommandHooks
     isInMap: boolean
     lootEarned: ClaimableLoot
     lootClaimed: ClaimedLoot
