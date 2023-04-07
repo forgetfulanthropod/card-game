@@ -6,6 +6,7 @@ import {
     CommandHooks,
     QueuedCommand,
 } from 'shared'
+import { vals } from 'shared/code'
 import { interpretCommand } from './cards'
 
 export function triggerOnHook(
@@ -39,6 +40,21 @@ export function triggerOnHook(
             if (remainingCommands.length > 0) on[id] = remainingCommands
             else delete on[id]
         })(scene.get('on'))
+    )
+}
+
+export function clearCommandHooksForTurn(scene: BattleCursor) {
+    scene.apply(
+        'on',
+        produce(on =>
+            //@ts-expect-error
+            vals(on).forEach(
+                queue =>
+                    (queue = queue?.filter(
+                        commandDetail => commandDetail.turnsAway !== 1
+                    ))
+            )
+        )
     )
 }
 

@@ -200,7 +200,7 @@ export type CardId =
     | 'hammerThrow'
     | 'hedgedBet'
     | 'helpingHand'
-    | 'honorDuel'
+    // | 'honorDuel'
     | 'hope'
     | 'huntedByTheBean'
     | 'hypnotized'

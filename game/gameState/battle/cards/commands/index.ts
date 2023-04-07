@@ -9,6 +9,7 @@ import {explain as explainBrittle, execute as executeBrittle} from './brittle'
 import {explain as explainChain, execute as executeChain} from './chain'
 import {explain as explainChoice, execute as executeChoice} from './choice'
 import {explain as explainDeal, execute as executeDeal} from './deal'
+import {explain as explainDealCounterTimes, execute as executeDealCounterTimes} from './dealCounterTimes'
 import {explain as explainDealFromStance, execute as executeDealFromStance} from './dealFromStance'
 import {explain as explainDiscard, execute as executeDiscard} from './discard'
 import {explain as explainDiscardRandom, execute as executeDiscardRandom} from './discardRandom'
@@ -63,6 +64,7 @@ export const explainers: Explainers = {
     chain: explainChain,
     choice: explainChoice,
     deal: explainDeal,
+    dealCounterTimes: explainDealCounterTimes,
     dealFromStance: explainDealFromStance,
     discard: explainDiscard,
     discardRandom: explainDiscardRandom,
@@ -117,6 +119,7 @@ export const executors: Executors = {
     chain: executeChain,
     choice: executeChoice,
     deal: executeDeal,
+    dealCounterTimes: executeDealCounterTimes,
     dealFromStance: executeDealFromStance,
     discard: executeDiscard,
     discardRandom: executeDiscardRandom,

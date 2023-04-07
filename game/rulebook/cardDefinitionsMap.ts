@@ -182,15 +182,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'attack',
         characterClass: 'wizard',
     },
-    //     name: 'Arcane Power',
-    //     energy: 1,
-    //     id: 'arcanePower',
-    //     targetNum: 1,
-    //     targetType: ['orb', 'cardAttack', 'cardEnchantment'],
-    //     actions: 'doubleEnchantmentOrToken()',
-    //     type: 'utility',
-    //     characterClass: 'wizard',
-    // },
     scatterBrained: {
         name: 'Scatter Brained',
         energy: 1,
@@ -357,36 +348,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'rogue',
     },
-    //     name: 'Cowardly Tactics',
-    //     energy: 1,
-    //     id: 'cowardlyTactics',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions: 'effect("cowardlyTactics", 1)', //todo
-    //     type: 'enchantment',
-    //     characterClass: 'rogue',
-    // },
-    // throwingKnife: {
-    //     name: 'Throwing Knife',
-    //     energy: 1,
-    //     id: 'throwingKnife',
-    //     targetNum: 1,
-    //     targetType: 'enemies',
-    //     actions:
-    //         'strengthy = strength * .5; chain(deal(strengthy), ifKilled(returnCardToHand()))', //todo
-    //     type: 'attack',
-    //     characterClass: 'rogue',
-    // },
-    // retreatToTheShadows: {
-    //     name: 'Retreat To The Shadows',
-    //     energy: 1,
-    //     id: 'retreatToTheShadows',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions: 'toStance("avoidant")', //todo
-    //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
     poisonedBlade: {
         name: 'Poisoned Blade',
         energy: 1,
@@ -400,36 +361,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'rogue',
     },
-    //     name: 'Exponential Illness',
-    //     energy: 1,
-    //     id: 'exponentialIllness',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions: 'exponentialIllness(3)', //todo
-    //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
-    // flashbang: {
-    //     name: 'Flashbang',
-    //     energy: 2,
-    //     id: 'flashbang',
-    //     targetNum: 'all',
-    //     targetType: 'enemies',
-    //     actions:
-    //         'chain(effect("stunned", 1), effect("debilitated", 1), effect("unguarded", 1), momentary())', //todo
-    //     type: 'attack',
-    //     characterClass: 'rogue',
-    // },
-    // songOfCourage: {
-    //     name: 'Song Of Courage',
-    //     energy: 2,
-    //     id: 'songOfCourage',
-    //     targetNum: 1,
-    //     targetType: 'self',
-    //     actions: 'effect("melody", 2)', //todo
-    //     type: 'enchantment',
-    //     characterClass: 'bard',
-    // },
     dutifulStab: {
         name: 'Dutiful Stab',
         energy: 1,
@@ -514,22 +445,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'defense',
         characterClass: 'cleric',
     },
-    //     name: 'Prayer of Good Fortune',
-    //     energy: 0,
-    //     id: 'prayerOfGoodFortune',
-    //     targetNum: 1,
-    //     targetType: [
-    //         { type: 'friends' },
-    //         {
-    //             type: 'enemies',
-    //             constraint: { key: 'health', comparator: '<=', value: 3 },
-    //         },
-    //     ],
-    //     actions:
-    //         'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
-    //     type: 'utility',
-    //     characterClass: 'cleric',
-    // },
     psychicWarfare: {
         name: 'Psychic Warfare',
         energy: 0,
@@ -880,7 +795,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 deal(strength),
-                addEffect(unguarded,1)
+                effect("unguarded", 1)
             )
         `,
         type: 'attack',
@@ -890,15 +805,15 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Feathered Fortress',
         energy: 1,
         id: 'featheredFortress',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             chain(
                 addBlock(defense),
-                addEffect(strongBlock,2),
-                ifStance("neutral",addEffect(resistant,1)),
-                ),
-            `,
+                effect("strongBlock", 2),
+                ifStance("neutral", effect("guarded",1))
+            )
+        `,
         type: 'defense',
         characterClass: 'penguinKnight',
     },
@@ -909,14 +824,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthymagicy = 0.5 * strength + 0.5 * magic
+            strengthymagicy = 0.5 * strength + 0.5 * magic;
             chain(
                 deal(strengthymagicy),
                 addBlock(defense, "self"),
                 draw(1),
-                discard(1),
-                ),
-            `,
+                discard(1)
+            )
+        `,
         type: 'attack',
         characterClass: 'snacky',
     },
@@ -929,9 +844,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 draw(3),
-                discard(2),
-                ),
-            `,
+                discard(2)
+            )
+        `,
         type: 'utility',
         characterClass: 'snacky',
     },
@@ -962,8 +877,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         actions: `
             chain(
                 addBlock(magic),
-                addEffect("resistant",1),
-                addEffect("trance",2)
+                effect("guarded",1),
+                effect("trance",2)
             )
         `,
         type: 'defense',
@@ -977,12 +892,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'enemies',
         actions: `
             chain(
-                addEffect(debilitated,1),
-                addEffect(unguarded,1),
-                addEffect(tense,1),
-                dwindle(),
-                ),
-            `,
+                effect("debilitated",1),
+                effect("unguarded",1),
+                dwindle()
+            )
+        `,
         type: 'attack',
         characterClass: 'jerry',
     },
@@ -1219,22 +1133,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'cleric',
     },
-    // prayerOfGoodFortune: {
-    //     name: 'Prayer of Good Fortune',
-    //     energy: 2,
-    //     id: 'prayerOfGoodFortune',
-    //     targetNum: 1,
-    //     targetType: 'friends',
-    //     actions: `
-    //         addBlock("incomingDamageIntended");
-    //         chain(
-    //             "Generate block equal to the amount of damage target<br/>Kaiju would take this turn",
-    //             brittle(1)
-    //         )
-    //     `,
-    //     type: 'defense',
-    //     characterClass: 'cleric',
-    // },
     prayerOfGoodHealth: {
         name: 'Prayer of Good Health',
         energy: 0,
@@ -1517,23 +1415,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'friends',
         actions: `
           modifyStats("damageTakeMultiplicand", "0", "turn");
-          "Target character can only lose a maximum of one health this turn."
+          "Target character can only lose a maximum of one health this turn"
         `,
         type: 'utility',
         characterClass: 'cleric',
     },
-    // napTime: {
-    //     id: 'napTime',
-    //     name: 'Nap Time',
-    //     energy: 0,
-    //     targetNum: 1,
-    //     targetType: 'friends',
-    //     actions: `
-    //             cost N where N is remaining energy?
-    //         `,
-    //     type: 'utility',
-    //     characterClass: 'cleric',
-    // },
     wishingWell: {
         id: 'wishingWell',
         name: 'Wishing Well',
@@ -1541,7 +1427,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            chain(block(1.25*magic), modifyDraw(1), draw(1))
+            magicy = 1.25 * magic;
+            chain(addBlock(magicy), draw(2))
         `,
         type: 'defense',
         characterClass: 'cleric',
@@ -1553,7 +1440,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            on("beforeDamageTaken", heal(magicy))
+            on("beforeDamageTaken", magicy = magic * .75; heal(magicy), "turn");
+            draw(1);
+            momentary();
+            magicy = magic * .75;
+            join("Every time target Kaiju takes unblocked damage this turn, heal them for", magicy)
         `,
         type: 'utility',
         characterClass: 'cleric',
@@ -1563,9 +1454,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Shield of Duplicity',
         energy: 1,
         targetNum: 1,
-        targetType: 'friends',
+        targetType: 'enemies',
         actions: `
-            addBlock(block)
+            addBlock(targetBlock);
+            "Gain block equal to target block"
         `,
         type: 'defense',
         characterClass: 'cleric',
@@ -1577,7 +1469,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            on("playCardOfTypeAttack", block(defense))
+            on("playAttackCard", addBlock(defense), "turn");
+            join("Every time you play an attack card this turn, target character gains", defense, "block")
         `,
         type: 'utility',
         characterClass: 'cleric',
@@ -1589,27 +1482,16 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'friends',
         actions: `
-            magicy = magic * .25;
             chain(
-                on("playCard", heal(magicy)),
+                on("playCard", magicy = magic * .25; heal(magicy)),
                 momentary()
-            )
+            );
+            magicy = magic * .25;
+            join("Every time you play a card this turn, heal target character for", magicy, "<b>Momentary</b>")
         `,
         type: 'utility',
         characterClass: 'cleric',
     },
-    // orbofCrossedFingers: {
-    //     id: 'orbofCrossedFingers',
-    //     name: 'Orb of Crossed Fingers',
-    //     energy: 1,
-    //     targetNum: 0,
-    //     targetType: 'self',
-    //     actions: `
-    //             chain(orb("crossedFingers", 2), momentary())
-    //         `,
-    //     type: 'enchantment',
-    //     characterClass: 'cleric',
-    // },
     cowardlyTactics: {
         id: 'cowardlyTactics',
         name: 'Cowardly Tactics',
@@ -1618,23 +1500,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         actions: `
                 effect("cowardlyTactics", 1);
-                "If this character is in Avoidant Stance, until the end of the turn they do not suffer the 25% less damage penalty for doing so."
+                "If this character is in Avoidant Stance, until the end of the turn they do not suffer the 25% less damage penalty for doing so"
             `,
         type: 'utility',
         characterClass: 'rogue',
     },
-    // distract: {
-    //     id: 'distract',
-    //     name: 'Distract',
-    //     energy: 0,
-    //     targetNum: 0,
-    //     targetType: 'self',
-    //     actions: `
-
-    //         `,
-    //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
     dodge: {
         id: 'dodge',
         name: 'Dodge',
@@ -1643,9 +1513,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetType: 'self',
         actions: `
                 chain(
-    modifyStats("damageTakeModifier", "-999", "turn"),
-    brittle(2)
-    )
+                    modifyStats("damageTakeAddend", "-999", "turn"),
+                    brittle(2)
+                );
+                "Prevent all damage that would be done to this character until the end of the turn"
             `,
         type: 'defense',
         characterClass: 'rogue',
@@ -1657,10 +1528,8 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-                deal(
-    targetPoison * 3
-    )
-            `,
+            dealCounterTimes("poisoned", 3)
+        `,
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -1689,8 +1558,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 0,
         targetType: 'self',
         actions: `
-                effect("doubleReflect", 99)
-            `,
+            effect("mutuallyAssuredDestruction", 1);
+            "For every unblocked point of damage this character takes this turn, deal 2 damage to the enemy that targeted them"
+        `,
         type: 'utility',
         characterClass: 'rogue',
     },
@@ -1710,24 +1580,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                     "once"
                 )
             );
-            join("deal", strengthy, "damage to enemy target<br/>If target dies, then return this card to your hand.")
+            join("deal", strengthy, "damage to enemy target<br/>If target dies, then return this card to your hand")
         `,
         type: 'attack',
         characterClass: 'rogue',
     },
-    //todo
-    // identifyWeakSpot: {
-    //     id: 'identifyWeakSpot',
-    //     name: 'Identify Weak Spot',
-    //     energy: 0,
-    //     targetNum: -1,
-    //     targetType: 'allFriends',
-    //     actions: `
-    //             nextAttackCardPiercing(1)
-    //         `,
-    //     type: 'utility',
-    //     characterClass: 'rogue',
-    // },
     surpriseAllergy: {
         id: 'surpriseAllergy',
         name: 'Surprise Allergy',
@@ -1747,13 +1604,14 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-                chain(
-    effect("debilitated", 1),
-    deal(strengthy, null, "allEnemies"),
-    draw(1),
-    discard(1)
-    )
-            `,
+            strengthy = strength * .33;
+            chain(
+                effect("debilitated", 1),
+                deal(strengthy, null, "allEnemies"),
+                draw(1),
+                discard(1)
+            )
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1764,13 +1622,12 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-                const strengthymagicy = strength * .5 + magic * .5;
-
-    chain(
-    effect("poison", strengthymagicy),
-    effect("bleed", 5)
-    )
-            `,
+            strengthymagicy = strength * .5 + magic * .5;
+            chain(
+                effect("poison", strengthymagicy),
+                effect("bleed", 5)
+            )
+        `,
         type: 'attack',
         characterClass: 'rogue',
     },
@@ -1832,10 +1689,13 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 0,
         targetType: 'self',
         actions: `
-                strenthy = strength * 1.5;
-    modifyStats("strength", ""+strengthy, "turn");
-    effect("berserk", 1); draw(1);
-            `,
+            strengthy = strength * 1.5;
+            chain(
+                modifyStats("strength", ""+strengthy, "turn"),
+                effect("berserk", 1),
+                draw(1)
+            )
+        `,
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1901,7 +1761,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             strengthIncrease = strength * .5;
             ifKilled(
                 deal(strengthy),
-                modifyStats("strength", ""+strengthIncrease, "room")
+                modifyStats("strength", ""+strengthIncrease, "room", "self")
             )
         `,
         type: 'attack',
@@ -1914,12 +1774,29 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions: `
+            defensey = defense;
+            strength1 = strength * .2;
+            strength2 = strength * .4;
+            magic1 = magic * .2;
+            magic2 = magic * .4;
             if(allStancesDifferent, chain(
-                ifTargetStance("aggressive", addBlock(defense)),
-                ifTargetStance("neutral", modifyStats("strength|magic", ""+strength * .2 + "|" + magic * .2, "turn"),
-                ifTargetStance("avoidant", modifyStats("strength|magic", ""+strength * .2 + "|" + magic * .2, "turn")
+                ifTargetStance("aggressive", addBlock(defensey)),
+                ifTargetStance("neutral", modifyStats("strength|magic", "" + strength1 + "|" + magic1, "turn")),
+                ifTargetStance("avoidant", modifyStats("strength|magic", "" + strength2 + "|" + magic2, "turn"))
             ));
-            join("This card can only be played if every character in your party is in a different stance. Lock the stances of all party members. Characters in Aggressive Stance gain", defensey, "block. Characters in Neutral Stance gain", strengthy, "Strength and ", magicy, "Magic until the end of the turn Characters in Avoidant Stance gain +40% Strength and +40% Magic until the end of the turn.")
+            join(
+                "<div style='font-size: .7em'>This card can only be played if every character in your party is in a different stance. Lock the stances of all party members.<br>Character in Aggressive Stance gains",
+                defensey,
+                "block.<br>Characters in Neutral Stance gain",
+                strength1,
+                "<b>Strength</b> and ",
+                magic1,
+                "<b>Magic</b> until the end of the turn.<br>Characters in Avoidant Stance gain",
+                strength2,
+                "<b>Strength</b> and",
+                magic2,
+                "<b>Magic</b> until the end of the turn</div>"
+            )
         `,
         type: 'utility',
         characterClass: 'knight',
@@ -1959,23 +1836,6 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         type: 'utility',
         characterClass: 'knight',
     },
-    honorDuel: {
-        id: 'honorDuel',
-        name: 'Honor Duel',
-        energy: 1,
-        targetNum: 1,
-        targetType: 'enemies',
-        actions: `
-                ifStance(
-    "neutral|aggressive",
-    deal(strength),
-    forceTargetSelf(),
-    addBlock(.75 * defense)
-    )
-            `,
-        type: 'utility',
-        characterClass: 'knight',
-    },
     violenceHour: {
         id: 'violenceHour',
         name: 'Violence Hour',
@@ -1983,10 +1843,10 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: -1,
         targetType: 'allFriends',
         actions: `
-                effect("vulnerable", 1, "allFriends");
-    effect("vulnerable", 1, "allEnemies");
-    "ALL characters gain <b>Vulnerable (1).</b>"
-            `,
+            effect("vulnerable", 1, "allFriends");
+            effect("vulnerable", 1, "allEnemies");
+            "ALL characters gain <b>Vulnerable (1).</b>"
+        `,
         type: 'utility',
         characterClass: 'knight',
     },
@@ -1997,9 +1857,9 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'allFriends',
         actions: `
-                defensey = .4;
-    addBlock(defensey, "allFriends")
-            `,
+            defensey = .4;
+            addBlock(defensey, "allFriends")
+        `,
         type: 'defense',
         characterClass: 'knight',
     },
@@ -2016,3 +1876,128 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
 //     type: '',
 //     characterClass: '',
 // },
+
+//begin not working yet
+/*
+    arcanePower: {
+        name: 'Arcane Power',
+        energy: 1,
+        id: 'arcanePower',
+        targetNum: 1,
+        targetType: ['orb', 'cardAttack', 'cardEnchantment'],
+        actions: 'doubleEnchantmentOrToken()',
+        type: 'utility',
+        characterClass: 'wizard',
+    },
+    exponentialIllness: {
+        name: 'Exponential Illness',
+        energy: 1,
+        id: 'exponentialIllness',
+        targetNum: 1,
+        targetType: 'self',
+        actions: 'exponentialIllness(3)', //todo
+        type: 'utility',
+        characterClass: 'rogue',
+    },
+    songOfCourage: {
+        name: 'Song Of Courage',
+        energy: 2,
+        id: 'songOfCourage',
+        targetNum: 1,
+        targetType: 'self',
+        actions: 'effect("melody", 2)', //todo
+        type: 'enchantment',
+        characterClass: 'bard',
+    },
+
+    prayerOfGoodFortune: {
+        name: 'Prayer of Good Fortune',
+        energy: 0,
+        id: 'prayerOfGoodFortune',
+        targetNum: 1,
+        targetType: [
+            { type: 'friends' },
+            {
+                type: 'enemies',
+                constraint: { key: 'health', comparator: '<=', value: 3 },
+            },
+        ],
+        actions:
+            'chain(targetSwitch(["friend", addBlock(3)], ["enemy", killIf(targetHealth < 4)]), momentary())',
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+
+
+    napTime: {
+        id: 'napTime',
+        name: 'Nap Time',
+        energy: 0,
+        targetNum: 1,
+        targetType: 'friends',
+        actions: `
+                cost N where N is remaining energy?
+            `,
+        type: 'utility',
+        characterClass: 'cleric',
+    },
+
+    orbofCrossedFingers: {
+        id: 'orbofCrossedFingers',
+        name: 'Orb of Crossed Fingers',
+        energy: 1,
+        targetNum: 0,
+        targetType: 'self',
+        actions: `
+                chain(orb("crossedFingers", 2), momentary())
+            `,
+        type: 'enchantment',
+        characterClass: 'cleric',
+    },
+
+    distract: {
+        id: 'distract',
+        name: 'Distract',
+        energy: 0,
+        targetNum: 0,
+        targetType: 'self',
+        actions: `
+
+            `,
+        type: 'utility',
+        characterClass: 'rogue',
+    },
+
+    identifyWeakSpot: {
+        id: 'identifyWeakSpot',
+        name: 'Identify Weak Spot',
+        energy: 0,
+        targetNum: -1,
+        targetType: 'allFriends',
+        actions: `
+                nextAttackCardPiercing(1)
+            `,
+        type: 'utility',
+        characterClass: 'rogue',
+    },
+
+
+    honorDuel: {
+        id: 'honorDuel',
+        name: 'Honor Duel',
+        energy: 1,
+        targetNum: 1,
+        targetType: 'enemies',
+        actions: `
+                ifStance(
+                    "neutral or aggressive",
+                    deal(strength),
+                    forceTargetSelf(),
+                    addBlock(.75 * defense)
+                )
+            `,
+        type: 'utility',
+        characterClass: 'knight',
+    },
+*/
+//end not working yet

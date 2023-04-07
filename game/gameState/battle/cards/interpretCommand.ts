@@ -73,6 +73,10 @@ function localsFromCommand(
             targetUids.length === 1
                 ? sceneData.allCharacters[targetUids[0]]?.health
                 : undefined,
+        targetBlock:
+            targetUids.length === 1
+                ? sceneData.allCharacters[targetUids[0]]?.block
+                : undefined,
         incomingDamageIntended:
             sceneData.nextNpcCommands?.reduce(
                 (sum, command) => sum + command.outcome.damages[targetUids[0]],

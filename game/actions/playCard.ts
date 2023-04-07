@@ -1,6 +1,5 @@
-import type { Card, BattleCursor, GameActions, CharacterUid } from 'shared'
+import type { BattleCursor, Card, CharacterUid, GameActions } from 'shared'
 
-import { throwNull } from 'shared/code'
 import {
     discard,
     getEnergy,
@@ -8,11 +7,11 @@ import {
     updateHand,
     updateNpcMoves,
 } from '@/gameState'
-import { getBattleSceneIn } from '@/util'
-import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
 import { getTargetUids } from '@/gameState/battle/cards/getTargetUids'
+import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
+import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
-import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { throwNull } from 'shared/code'
 import { triggerOnHook } from '@/gameState/battle/commandHookUtil'
 
 const TIME_FOR_CARD_TO_PLAY = 1000

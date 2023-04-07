@@ -12,6 +12,8 @@ export const invisibleEffects_ = [
     'damageTakeSubtractorBuff',
     'damageTakeAddendDebuff',
     'lockStanceDebuff',
+    'counterAttackBuff',
+    'mutuallyAssuredDestructionBuff',
 ] as const
 
 export const invisibleEffects: readonly EffectId[] = invisibleEffects_

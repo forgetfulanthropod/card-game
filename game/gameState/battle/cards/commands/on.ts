@@ -17,6 +17,7 @@ export const execute: Executors['on'] = ({
 }) => {
     const commandHookId = dslArgs[0].eval()
     const onceOnly = dslArgs[2].eval() === 'once'
+    const thisTurnOnly = dslArgs[2].eval() === 'turn'
 
     scene.apply(
         'on',
@@ -36,7 +37,11 @@ export const execute: Executors['on'] = ({
                     characterUid: command.characterUid,
                 },
                 targetUids,
-                turnsAway: onceOnly ? 0 : 1,
+                turnsAway: onceOnly
+                    ? 0
+                    : thisTurnOnly
+                    ? 1
+                    : Number.POSITIVE_INFINITY,
                 side: 'pc',
             })
 

@@ -47,7 +47,9 @@ export const keyTermsMap = {
         'This character receives unblockable damage equal to the number of poison stacks it has at the start of its turn.',
     piercing: 'ignores block',
     reflect:
-        'Deals damage equal to the number of reflect stacks back to the attacker when taking a hit',
+        'Deals damage up to the number of reflect stacks back to the attacker when taking a hit',
+    mutuallyAssuredDestruction:
+        'For every unblocked point of damage this character takes, deal 2 damage to the enemy that targeted them.',
     strongblock: 'Block this character gains is increased by 50%',
     stunned: 'This character cannot take an action this turn',
     targeted: 'receives 5 extra damage from every attack',

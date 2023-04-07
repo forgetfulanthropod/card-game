@@ -46,7 +46,7 @@ export interface ActionArgs {
     explain: any[]
     join: any[]
     killIf: [condition: boolean]
-    on: [cardHoookId: CommandHookId, move: any, once?: 'once']
+    on: [cardHoookId: CommandHookId, move: any, expiration?: 'once' | 'turn']
     queue: [numTurns: number, move: any]
 
     addBlock: [block: number, targetType?: BasicTargetType]
@@ -60,6 +60,11 @@ export interface ActionArgs {
     ]
 
     deal: [damage: number, modifier?: 'piercing', targetType?: BasicTargetType]
+    dealCounterTimes: [
+        effectId: EffectId,
+        multiplicand: number,
+        targetType?: BasicTargetType
+    ]
     dealFromStance: [stance: StanceId, damage: number, times?: number]
     drawSizeChange: [amount: number]
     effect: [
@@ -80,7 +85,7 @@ export interface ActionArgs {
     ifHealthUnder: [health: StanceId, isUnderMove: any, defaultMove: any]
     ifKilled: [mainMove: any, conditionalMove: any]
     ifFirstPlay: any[]
-    ifStance: [stanceId: StanceId, conditionalTrueMove: any]
+    ifStance: [stanceId: StanceId | string, conditionalTrueMove: any]
     ifStanceElse: [
         stanceId: StanceId,
         conditionalTrueMove: any,
@@ -124,6 +129,7 @@ export type Locals = CalculatedCharacterStats & {
     /** only defined when there is exactly 1 target and it is a character */
     targetConstitution: number | undefined
     targetHealth: number | undefined
+    targetBlock: number | undefined
     incomingDamageIntended: number
     handSize: number
     drawPileSize: number

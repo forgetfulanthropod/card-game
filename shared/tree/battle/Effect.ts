@@ -37,6 +37,8 @@ export const effectIds = [
 
     'passiveBlockBuff',
     'reflectBuff',
+    'counterAttackBuff',
+    'mutuallyAssuredDestructionBuff',
     'strongblockBuff',
 
     'braveBuff',
