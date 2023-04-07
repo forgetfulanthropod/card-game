@@ -83,6 +83,7 @@ export function CardEl({
     explanationsAdjustX,
     explanationsAdjustY,
     dynamicHitbox,
+    omitStances,
 }: {
     rotation?: number
     width: number
@@ -95,6 +96,7 @@ export function CardEl({
     explanationsAdjustX?: number
     explanationsAdjustY?: number
     dynamicHitbox?: boolean
+    omitStances?: boolean
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -175,8 +177,9 @@ export function CardEl({
                         if (getScene().get('id') !== 'battle') return false
 
                         return (
-                            hoveredCardUid === card.uid ||
-                            selectedForTargetingCardUid === card.uid
+                            !omitStances &&
+                            (hoveredCardUid === card.uid ||
+                                selectedForTargetingCardUid === card.uid)
                         )
                     },
                     selectedForTargetingCardUid,
@@ -184,7 +187,7 @@ export function CardEl({
                 ),
                 () =>
                     Adjust(HoverableStances(card, hoveredStanceDatum), {
-                        y: -root.width * 0.58,
+                        y: -width,
                     }),
                 undefined,
                 {
