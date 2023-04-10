@@ -119,7 +119,7 @@ function Options(
                         cardEl.filters = null
                     },
                 },
-                // omitPointerAreaExtender: true,
+                omitStances: true,
             }),
             {
                 y: BASE_HEIGHT - CARD_WIDTH,

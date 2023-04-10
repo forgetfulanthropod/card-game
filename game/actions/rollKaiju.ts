@@ -9,7 +9,7 @@ import type {
 import { getEntrySceneIn } from '@/util'
 import { getFullDeckForCharacter } from '@/gameState'
 import { rollCharacter } from '@/characterGeneration/roll'
-import { StatName } from '@/characterGeneration/data/stats'
+import type { StatName } from '@/characterGeneration/data/stats'
 
 export const rollKaiju: GameActions['rollKaiju'] = args => {
     const scene = getEntrySceneIn(args.game)
