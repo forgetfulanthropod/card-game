@@ -1,0 +1,507 @@
+Penguin_Gen01.webp
+size:4942,2137
+filter:Linear,Linear
+scale:0.4
+Arm_R
+bounds:1721,2,283,145
+Beak
+bounds:4810,1033,207,126
+rotate:90
+Body/Cape (Blue)
+bounds:471,50,488,168
+Body/Cape (Purple)
+bounds:3761,1100,488,168
+rotate:90
+Body/Cape Back (Blue)
+bounds:2,1397,738,275
+rotate:90
+Body/Cape Back (Purple)
+bounds:2,657,738,275
+rotate:90
+Body/Gentleman's Vampire Cloak
+bounds:1943,984,573,346
+rotate:90
+Body/Humble Cloak (Brown)
+bounds:1139,17,580,342
+Body/Iron Plate Armor
+bounds:3645,550,491,296
+rotate:90
+Body/Metropolitan Riding Shawl (Red, Black Bow)
+bounds:1437,395,576,244
+rotate:90
+Body/Metropolitan Riding Shawl (Red, White Bow)
+bounds:1683,395,576,244
+rotate:90
+Body/Metropolitan Riding Shawl Black, Red Bow)
+bounds:1697,976,576,244
+rotate:90
+Body/Metropolitan Riding Shawl Black, White Bow)
+bounds:1778,1559,576,244
+rotate:90
+Body/Metropolitan Riding Shawl Purple, Black Bow)
+bounds:1721,149,576,244
+Body/Metropolitan Riding Shawl Purple, Yellow Bow)
+bounds:1929,398,576,244
+rotate:90
+Body/Ragged Scarf (Blue)
+bounds:841,293,590,296
+offsets:0,0,594,296
+rotate:90
+Body/Ragged Scarf (Red)
+bounds:1022,1545,590,296
+offsets:0,0,594,296
+rotate:90
+Body/Ragged Scarf Black
+bounds:1139,361,590,296
+offsets:0,0,594,296
+rotate:90
+Body/Ragged Scarf Black Skull
+bounds:1022,953,590,296
+offsets:0,0,594,296
+rotate:90
+Class/Apprentice Wizard Hat (Blue)
+bounds:279,1498,637,368
+rotate:90
+Class/Apprentice Wizard Hat (Brown)
+bounds:649,1511,624,371
+rotate:90
+Class/Apprentice Wizard Hat (Dark Gray)
+bounds:649,885,624,371
+rotate:90
+Class/Apprentice Wizard Hat (Light Gray)
+bounds:279,859,637,368
+rotate:90
+Class/Apprentice Wizard Hat (Purple)
+bounds:471,220,637,368
+rotate:90
+Class/Battered Ranger Hood
+bounds:1320,973,579,375
+rotate:90
+Class/Crystal Wand (Fire)
+bounds:4143,402,180,260
+Class/Crystal Wand (Ice)
+bounds:4256,685,180,260
+Class/Curved Dagger
+bounds:3627,6,136,316
+rotate:90
+Class/Pirate Hats
+bounds:1320,1554,581,456
+rotate:90
+Class/Pocket Dagger
+bounds:4821,1605,116,219
+offsets:0,1,116,220
+Class/Pointed Moon Hats
+bounds:3931,1128,460,309
+offsets:0,0,598,309
+rotate:90
+Class/Pointed Woodland Hood
+bounds:2,9,646,467
+rotate:90
+Class/Riding Hood Back (Red)
+bounds:3984,1600,93,222
+rotate:90
+Class/Riding Hoods
+bounds:3212,144,493,350
+Class/Rogue Backpack
+bounds:4253,1829,277,306
+Class/Rogue Sack
+bounds:4537,1826,309,313
+rotate:90
+Class/Rogue Treasure Chest
+bounds:3881,177,371,260
+rotate:90
+Class/Snake Staff
+bounds:3212,11,131,413
+rotate:90
+Class/Spellbook
+bounds:3943,810,311,316
+Class/Star Wand
+bounds:3984,1695,267,440
+Color/Arm_R
+bounds:3943,664,282,144
+Color/Arm_R-1
+bounds:2006,3,282,144
+Color/Arm_R-2
+bounds:961,9,282,144
+rotate:90
+Color/Arm_R-3
+bounds:3945,31,282,144
+Color/Arm_R-4
+bounds:4242,1231,282,144
+Color/Body
+bounds:3494,1590,488,545
+Color/Body-01
+bounds:2024,1590,488,545
+Color/Body-02
+bounds:2175,437,488,545
+Color/Body-03
+bounds:2291,1043,488,545
+Color/Body-04
+bounds:2514,1590,488,545
+Color/Body-05
+bounds:2665,496,488,545
+Color/Body-07
+bounds:2781,1043,488,545
+Color/Body-08
+bounds:3004,1590,488,545
+Color/Body-09
+bounds:2665,6,488,545
+rotate:90
+Color/Body-10
+bounds:3155,496,488,545
+Color/Body-11
+bounds:3271,1043,488,545
+Color/Eggplant Red Arm_R
+bounds:4537,1680,282,144
+Color/Eggplant Red Hand_R
+bounds:4745,722,93,118
+rotate:90
+Color/Gween Arm_R
+bounds:4537,1534,282,144
+Color/Gween Hand_R
+bounds:4624,677,93,118
+rotate:90
+Color/Hand_R
+bounds:4744,532,93,118
+rotate:90
+Color/Hand_R-1
+bounds:4505,627,93,118
+Color/Hand_R-2
+bounds:4452,507,93,118
+Color/Hand_R-3
+bounds:4744,627,93,118
+rotate:90
+Color/Hand_R-4
+bounds:4624,582,93,118
+rotate:90
+Color/Red Arm_R
+bounds:4537,1388,282,144
+Color/Red Hand_R
+bounds:4624,487,93,118
+rotate:90
+Color/Seafoam Arm_R
+bounds:4526,1096,282,144
+Color/Seafoam Arm_R-1
+bounds:4537,1242,282,144
+Color/Seafoam Hand_R
+bounds:4505,292,93,118
+rotate:90
+Color/Seafoam Hand_R-1
+bounds:4505,387,93,118
+Color/Twilight Arm_R
+bounds:4256,947,282,144
+rotate:90
+Color/Twilight Hand_R
+bounds:4600,392,93,118
+rotate:90
+Eye_L
+bounds:4607,17,123,113
+rotate:90
+Eye_R
+bounds:4519,997,97,100
+rotate:90
+Eyeball_L
+bounds:4547,545,80,75
+rotate:90
+Eyeball_R
+bounds:4826,210,58,63
+rotate:90
+Eyes/Eye_L
+bounds:4552,779,90,70
+offsets:0,1,90,71
+rotate:90
+Eyes/Eye_L-01
+bounds:4624,982,122,112
+Eyes/Eye_L-07
+bounds:4624,982,122,112
+Eyes/Eye_L-08
+bounds:4624,982,122,112
+Eyes/Eye_L-09
+bounds:4624,982,122,112
+Eyes/Eye_L-10
+bounds:4624,982,122,112
+Eyes/Eye_L-11
+bounds:4624,982,122,112
+Eyes/Eye_L-12
+bounds:4624,982,122,112
+Eyes/Eye_L-15
+bounds:4624,982,122,112
+Eyes/Eye_L-16
+bounds:4624,982,122,112
+Eyes/Eye_L-17
+bounds:4624,982,122,112
+Eyes/Eye_L-18
+bounds:4624,982,122,112
+Eyes/Eye_L-19
+bounds:4624,982,122,112
+Eyes/Eye_L-23
+bounds:4624,982,122,112
+Eyes/Eye_L-24
+bounds:4624,982,122,112
+Eyes/Eye_L-25
+bounds:4624,982,122,112
+Eyes/Eye_L-26
+bounds:4624,982,122,112
+Eyes/Eye_L-02
+bounds:4505,871,122,112
+rotate:90
+Eyes/Eye_L-03
+bounds:841,220,110,71
+offsets:0,0,110,72
+Eyes/Eye_L-13
+bounds:4438,747,122,112
+rotate:90
+Eyes/Eye_L-14
+bounds:4748,919,122,112
+Eyes/Eye_L-20
+bounds:4624,868,122,112
+Eyes/Eye_L-21
+bounds:4624,868,122,112
+Eyes/Eye_L-22
+bounds:4483,7,122,133
+Eyes/Eye_R
+bounds:4864,482,75,63
+Eyes/Eye_R-01
+bounds:4624,191,96,99
+Eyes/Eye_R-07
+bounds:4624,191,96,99
+Eyes/Eye_R-08
+bounds:4624,191,96,99
+Eyes/Eye_R-09
+bounds:4624,191,96,99
+Eyes/Eye_R-10
+bounds:4624,191,96,99
+Eyes/Eye_R-11
+bounds:4624,191,96,99
+Eyes/Eye_R-12
+bounds:4624,191,96,99
+Eyes/Eye_R-15
+bounds:4624,191,96,99
+Eyes/Eye_R-16
+bounds:4624,191,96,99
+Eyes/Eye_R-17
+bounds:4624,191,96,99
+Eyes/Eye_R-18
+bounds:4624,191,96,99
+Eyes/Eye_R-19
+bounds:4624,191,96,99
+Eyes/Eye_R-23
+bounds:4624,191,96,99
+Eyes/Eye_R-24
+bounds:4624,191,96,99
+Eyes/Eye_R-25
+bounds:4624,191,96,99
+Eyes/Eye_R-26
+bounds:4624,191,96,99
+Eyes/Eye_R-02
+bounds:4625,294,96,99
+rotate:90
+Eyes/Eye_R-03
+bounds:4872,957,74,61
+rotate:90
+Eyes/Eye_R-13
+bounds:4744,434,96,99
+rotate:90
+Eyes/Eye_R-14
+bounds:4726,336,96,99
+rotate:90
+Eyes/Eye_R-20
+bounds:4827,335,97,99
+rotate:90
+Eyes/Eye_R-21
+bounds:4827,335,97,99
+rotate:90
+Eyes/Eye_R-22
+bounds:4748,817,100,120
+rotate:90
+Eyes/Eyeball_L
+bounds:4227,664,48,19
+Eyes/Eyeball_L-01
+bounds:4600,701,22,76
+Eyes/Eyeball_L-02
+bounds:1022,891,79,60
+Eyes/Eyeball_L-03
+bounds:4720,142,17,21
+Eyes/Eyeball_L-04
+bounds:4600,643,56,22
+rotate:90
+Eyes/Eyeball_L-16
+bounds:4600,643,56,22
+rotate:90
+Eyes/Eyeball_L-05
+bounds:4696,165,24,24
+Eyes/Eyeball_L-06
+bounds:4452,627,41,42
+Eyes/Eyeball_L-07
+bounds:4826,270,64,63
+Eyes/Eyeball_L-08
+bounds:4600,487,19,19
+Eyes/Eyeball_L-09
+bounds:4852,1826,78,69
+Eyes/Eyeball_L-10
+bounds:4105,583,79,36
+rotate:90
+Eyes/Eyeball_L-11
+bounds:4229,3,74,48
+Eyes/Eyeball_L-12
+bounds:2291,984,94,57
+Eyes/Eyeball_L-13
+bounds:4624,142,70,47
+offsets:8,0,78,47
+Eyes/Eyeball_L-14
+bounds:2592,169,72,62
+rotate:90
+Eyes/Eyeball_L-15
+bounds:4726,248,98,86
+Eyes/Eyeball_L-17
+bounds:3761,1047,51,51
+Eyes/Eyeball_L-18
+bounds:2175,395,40,77
+rotate:90
+Eyes/Eyeball_L-19
+bounds:4720,441,22,44
+Eyes/Eyeball_L-20
+bounds:4438,901,92,64
+rotate:90
+Eyes/Eyeball_L-21
+bounds:349,658,80,58
+Eyes/Eyeball_L-22
+bounds:4864,628,92,76
+rotate:90
+Eyes/Eyeball_L-23
+bounds:2592,4,66,61
+Eyes/Eyeball_L-24
+bounds:4452,671,74,51
+rotate:90
+Eyes/Eyeball_L-25
+bounds:4852,1897,90,85
+rotate:90
+Eyes/Eyeball_L-26
+bounds:4864,547,79,74
+rotate:90
+Eyes/Eyeball_R
+bounds:4845,490,40,17
+rotate:90
+Eyes/Eyeball_R-01
+bounds:4870,820,19,70
+rotate:90
+Eyes/Eyeball_R-02
+bounds:4748,1033,57,61
+Eyes/Eyeball_R-03
+bounds:649,859,15,24
+Eyes/Eyeball_R-04
+bounds:4325,456,48,19
+Eyes/Eyeball_R-16
+bounds:4325,456,48,19
+Eyes/Eyeball_R-05
+bounds:4696,142,22,21
+Eyes/Eyeball_R-06
+bounds:431,678,38,38
+Eyes/Eyeball_R-07
+bounds:2518,984,57,57
+Eyes/Eyeball_R-08
+bounds:431,657,19,19
+Eyes/Eyeball_R-09
+bounds:2387,984,65,57
+Eyes/Eyeball_R-10
+bounds:4845,438,65,42
+Eyes/Eyeball_R-11
+bounds:4547,508,69,35
+Eyes/Eyeball_R-12
+bounds:471,6,77,42
+Eyes/Eyeball_R-13
+bounds:4438,871,55,28
+Eyes/Eyeball_R-14
+bounds:3645,498,59,50
+Eyes/Eyeball_R-15
+bounds:4143,179,78,80
+Eyes/Eyeball_R-17
+bounds:4325,407,47,47
+Eyes/Eyeball_R-18
+bounds:2592,128,39,69
+rotate:90
+Eyes/Eyeball_R-19
+bounds:4783,224,22,40
+rotate:90
+Eyes/Eyeball_R-20
+bounds:4722,187,59,59
+Eyes/Eyeball_R-21
+bounds:2254,397,43,38
+Eyes/Eyeball_R-22
+bounds:2454,984,57,62
+rotate:90
+Eyes/Eyeball_R-26
+bounds:2454,984,57,62
+rotate:90
+Eyes/Eyeball_R-23
+bounds:4783,150,59,58
+Eyes/Eyeball_R-24
+bounds:550,9,62,39
+Eyes/Eyeball_R-25
+bounds:4870,841,70,76
+Foot_L
+bounds:4375,291,184,128
+rotate:90
+Foot_R
+bounds:4821,1281,148,91
+rotate:90
+Hand_R
+bounds:4624,772,94,119
+rotate:90
+Helmet_Back
+bounds:4483,142,147,139
+rotate:90
+Helmet_Front
+bounds:2299,12,423,291
+offsets:0,0,424,291
+rotate:90
+Mouth/Baby Beak
+bounds:2592,67,69,59
+Mouth/Beak
+bounds:4253,1702,206,125
+Mouth/Regular Beak
+bounds:4253,1702,206,125
+Mouth/Big Smooth Beak
+bounds:4143,261,230,139
+Mouth/Dark
+bounds:4229,53,206,125
+rotate:90
+Mouth/King
+bounds:4356,53,206,125
+rotate:90
+Mouth/Neutral Beak
+bounds:4852,1989,146,72
+rotate:90
+Mouth/Regular
+bounds:4325,477,206,125
+rotate:90
+Mouth/Short
+bounds:4325,477,206,125
+rotate:90
+Mouth/Short Beak
+bounds:2592,243,192,69
+rotate:90
+Mouth/Short Wide Beak
+bounds:4438,995,234,79
+rotate:90
+Mouth/Slim Beak
+bounds:279,657,200,68
+rotate:90
+Mouth/Small Beak
+bounds:3943,566,160,96
+Mouth/Small Smooth Beak
+bounds:349,718,139,95
+rotate:90
+Mouth/Smooth Beak
+bounds:4821,1431,172,115
+rotate:90
+Mouth/Tiny Beak
+bounds:4461,1702,125,72
+rotate:90
+Mouth/Tiny Tiny Beak
+bounds:4865,725,90,74
+rotate:90
+Shield
+bounds:4242,1377,293,316
+Sword
+bounds:3707,156,172,392

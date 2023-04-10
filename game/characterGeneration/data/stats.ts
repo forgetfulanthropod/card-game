@@ -3,11 +3,11 @@ import { randomInteger, rollWeights, randomValue } from './util'
 
 export type Stat = 'primary' | 'secondary' | 'tertiary1' | 'tertiary2'
 export type StatName = 'strength' | 'magic' | 'defense' | 'constitution'
-export type Species = 'frog' | 'warhog' | 'penguin'
+export type Species = 'frogKnight' | 'warhog' | 'penguinKnight'
 export type CharacterClass = 'knight' | 'cleric' | 'bard' | 'rogue' | 'wizard'
 
 const speciesStatBonus: Record<Species, Record<StatName, number>> = {
-    frog: {
+    frogKnight: {
         strength: 100,
         magic: 100,
         defense: 0,
@@ -19,7 +19,7 @@ const speciesStatBonus: Record<Species, Record<StatName, number>> = {
         defense: 100,
         constitution: 100,
     },
-    penguin: {
+    penguinKnight: {
         strength: 50,
         magic: 50,
         defense: 100,
@@ -32,8 +32,20 @@ export const speciesClassCDF: Record<
     Record<CharacterClass, number>
 > = {
     warhog: { bard: -1, rogue: -1, cleric: 4500, wizard: 7250, knight: 10000 },
-    frog: { wizard: -1, bard: -1, cleric: 4500, knight: 7250, rogue: 10000 },
-    penguin: { bard: -1, cleric: -1, knight: 3333, rogue: 6666, wizard: 10000 },
+    frogKnight: {
+        wizard: -1,
+        bard: -1,
+        cleric: 4500,
+        knight: 7250,
+        rogue: 10000,
+    },
+    penguinKnight: {
+        bard: -1,
+        cleric: -1,
+        knight: 3333,
+        rogue: 6666,
+        wizard: 10000,
+    },
 }
 
 export const rollClass = (species: Species): CharacterClass => {

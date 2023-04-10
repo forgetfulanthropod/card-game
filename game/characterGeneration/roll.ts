@@ -1,20 +1,21 @@
-import { warhog } from './data'
-import { rollTalents, rollComponents, rollMasterRarity } from './data/rarities'
+import { kaijus } from './data'
+import { Rarity, rollTalents } from './data/rarities'
+import { rollComponents, rollMasterRarity } from './data/rarities'
 import { randomValue, rollWeights } from './data/util'
 import { calculateStats, rollStats, speciesClassCDF } from './data/stats'
-// import { Spine, Skin } from '@pixi-spine/all-4.1'
 
 import type { Species } from './data/stats'
-import type { Rarity } from './data/rarities'
-
-export const kaijus = [warhog]
 
 export const kaijuSpineMap: Record<string, string> = {
+    frogKnight: 'frogKnightGenOne',
+    penguinKnight: 'penguinKnightGenOne',
     warhog: 'warhogGenOne',
 }
 
 export const rollCharacter = (kaijuOverride?: any, rarityOverride?: Rarity) => {
-    const kaiju = kaijuOverride ? kaijuOverride : randomValue(kaijus)
+    const kaiju = kaijuOverride
+        ? kaijuOverride
+        : randomValue(Object.values(kaijus))
     let character: Record<string, any> = {}
     character['level'] = 1
     character['species'] = kaiju.species
@@ -30,6 +31,7 @@ export const rollCharacter = (kaijuOverride?: any, rarityOverride?: Rarity) => {
     const components: Record<string, Record<Rarity, Array<string>>> = {
         ...skinBase.extra,
         ...kaiju.attachmentMap,
+        ...(kaiju.classOverrides?.[character.class] ?? {}),
     }
     const skin = {
         spine: kaijuSpineMap[kaiju.species],
@@ -49,22 +51,3 @@ export const rollCharacter = (kaijuOverride?: any, rarityOverride?: Rarity) => {
     character = { ...character, skin, stats, calculatedStats, talents }
     return character
 }
-
-// export const makeSkin = (character: Spine, skinInfo: any): Skin => {
-//     const newSkin = new Skin('combined-skin')
-//     const skinName = skinInfo.base.name
-//     newSkin.addSkin(character.spineData.findSkin(skinName))
-//     const components = Object.entries(skinInfo).filter(
-//         ([k, v]: [any, any]) => k !== 'path' && k !== 'base'
-//     )
-//     for (const [key, data] of components) {
-//         const componentName = (data as Item).name
-//         try {
-//             newSkin.addSkin(character.spineData.findSkin(componentName))
-//         } catch (e) {
-//             const err = e as unknown as Error
-//             console.error(`error: couldn't find skin ${componentName}`)
-//         }
-//     }
-//     return newSkin
-// }
