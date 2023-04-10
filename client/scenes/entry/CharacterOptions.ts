@@ -62,7 +62,8 @@ export function CharacterOptions() {
         ]
         const isValidOption = validOptions.includes(c.id)
 
-        const isNewCharacter = ['notoriousBean'].includes(c.id)
+        // const isNewCharacter = ['notoriousBean'].includes(c.id)
+        const isNewCharacter = false
 
         return Container(
             {
