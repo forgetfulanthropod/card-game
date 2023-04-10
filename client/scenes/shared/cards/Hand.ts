@@ -285,7 +285,9 @@ export function Hand(
         let destructibleRoot = getDestructibleRoot()
         destructibleRoot.destroy({ children: true })
         hoveredCardUid.set(null)
-        selectedForTargetingCardUid.set(null)
+        // let targetingCardUid = selectedForTargetingCardUid.val
+        console.log({ position })
+        if (position !== 'final') selectedForTargetingCardUid.set(null)
 
         destructibleRoot = getDestructibleRoot()
         const NewCardsInHand = renderCardsInHand(
@@ -306,6 +308,8 @@ export function Hand(
             newHand
         )
         initialDisplayVals = getInitialDisplayVals(destructibleRoot, newHand)
+
+        // selectedForTargetingCardUid.set(targetingCardUid)
         if (selectedForTargetingCardUid.val) {
             centerCardEl(
                 getDestructibleRoot(),
@@ -601,7 +605,6 @@ function getInitialDisplayVals(
     pile: Pile
 ): InitialDisplayVals {
     const initialDisplayVals: InitialDisplayVals = {}
-
 
     rootEl.children.forEach((Card, idx) => {
         const CardEl = Card as TweenablePixiContainer

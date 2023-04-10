@@ -264,9 +264,9 @@ function changeHitboxOnHover(
         if (newCardUid && newCardUid === card.uid) {
             const hoveredHitArea = new Rectangle(
                 unhoveredHitArea.x - 45,
-                unhoveredHitArea.y - 60,
+                unhoveredHitArea.y - 90,
                 unhoveredHitArea.width + 88,
-                unhoveredHitArea.height + 120
+                unhoveredHitArea.height + 150
             )
             root.hitArea = hoveredHitArea
         }
