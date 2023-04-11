@@ -22,6 +22,10 @@ function BaseEndTurnButton(): PixiContainer {
         energy => energy
     )
 
+    setTimeout(() => {
+        RenderedButton.interactive = true
+    }, 1500)
+
     const unsub = energyDatum.onChange(energy => {
         let interval: NodeJS.Timer | null = null
         if (energy === 0) {
@@ -49,6 +53,8 @@ function BaseEndTurnButton(): PixiContainer {
         x: BASE_WIDTH * 0.9,
         y: BASE_HEIGHT * 0.78,
     })
+
+    RenderedButton.interactive = false
 
     return onDestroyed(RenderedButton, unsub)
 }

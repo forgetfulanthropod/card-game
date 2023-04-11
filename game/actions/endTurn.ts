@@ -9,7 +9,7 @@ import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
-const TIME_AFTER_PLAYER_MOVE = 1000
+const TIME_AFTER_PLAYER_MOVE = 1500
 
 export const endTurn: GameActions['endTurn'] = args => {
     const scene = getBattleSceneIn(args.game)
