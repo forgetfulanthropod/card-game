@@ -28,7 +28,7 @@ export const rollKaiju: GameActions['rollKaiju'] = args => {
             logger.debug(`rolled Character: ${JSON.stringify(rolledCharacter)}`)
             const characterStats: PlayerCharacterStats = {
                 id: rolledCharacter.species,
-                displayName: `${rolledCharacter.species} Gen One`,
+                displayName: rolledCharacter.name,
                 isPc: true,
                 class: rolledCharacter.class,
                 ...stats,

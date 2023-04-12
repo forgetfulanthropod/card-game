@@ -39,6 +39,12 @@ export const rollCharacter = (kaijuOverride?: any, rarityOverride?: Rarity) => {
         ...rollComponents(components, masterRarity),
     }
 
+    const name = kaiju.names
+        ? `${randomValue(kaiju.names.firstName)} ${randomValue(
+              kaiju.names.lastName1
+          )}${randomValue(kaiju.names.lastName2)}`
+        : `Gen One ${kaiju.species}`
+
     const stats = rollStats(character.species, masterRarity)
     const calculatedStats = calculateStats(stats)
 
@@ -48,6 +54,6 @@ export const rollCharacter = (kaijuOverride?: any, rarityOverride?: Rarity) => {
         masterRarity
     )
 
-    character = { ...character, skin, stats, calculatedStats, talents }
+    character = { name, ...character, skin, stats, calculatedStats, talents }
     return character
 }
