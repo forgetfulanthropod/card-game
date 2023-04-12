@@ -211,6 +211,9 @@ export function CardEl({
         })
     )
 
+    if (selectedForTargetingCardUid.val === card.uid)
+        clearLastTargetSelection = beginTargetSelection(root, card)
+
     if (hoveredCardUid && dynamicHitbox) {
         changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
     }
