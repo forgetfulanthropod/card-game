@@ -26,11 +26,12 @@ import { upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
 import { Tweener } from 'pixi-tweener'
 import { Texture } from 'pixi.js'
-import type {
+import {
     Card,
     CharacterClass,
     CharacterMeta,
     CharacterStats,
+    getFullTitle,
     SwordParts,
 } from 'shared'
 import { sleep, vals } from 'shared/code'
@@ -341,11 +342,13 @@ export function Sword(parts: SwordParts) {
         }),
         TermExplanationsIf({
             areShown: isHovered,
+            yOffset: 170,
             terms: [
-                `swordBlade${upperFirst(parts.blade.kind)}` as KeyTerm,
-                `swordGuard${upperFirst(parts.guard.kind)}` as KeyTerm,
-                `swordHandle${upperFirst(parts.handle.kind)}` as KeyTerm,
-                `swordPommel${upperFirst(parts.pommel.kind)}` as KeyTerm,
+                getFullTitle(parts) as KeyTerm,
+                `blade${upperFirst(parts.blade.kind)}` as KeyTerm,
+                `guard${upperFirst(parts.guard.kind)}` as KeyTerm,
+                `handle${upperFirst(parts.handle.kind)}` as KeyTerm,
+                `pommel${upperFirst(parts.pommel.kind)}` as KeyTerm,
             ],
         })
     )

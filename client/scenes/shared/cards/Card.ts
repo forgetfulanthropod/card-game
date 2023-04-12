@@ -46,8 +46,10 @@ import {
     Card,
     CardType,
     CardUid,
+    CharacterStats,
     CharacterUid,
     OwnedCharacterStats,
+    PlayerCharacterStats,
     StanceId,
     TargetType,
 } from 'shared'
@@ -408,7 +410,7 @@ function getEnergyContainer(card: Card): PixiContainer {
 }
 
 function getCardOwnerToken(card: Card): PixiContainer {
-    let cm: OwnedCharacterStats
+    let cm: CharacterStats
     try {
         cm = getBattleScene().get('allCharacters', card.characterUid)
     } catch {
