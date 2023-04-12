@@ -31,10 +31,12 @@ import type {
     CharacterClass,
     CharacterMeta,
     CharacterStats,
+    SwordParts,
 } from 'shared'
 import { sleep, vals } from 'shared/code'
 import { AbilityButtons } from './AbilityButtons'
 import { CardsTiltedInLine } from './cards'
+import { ExplanationIf, KeyTerm, TermExplanationsIf } from './Explanation'
 import { InfoBox } from './InfoBox'
 
 const stats = [
@@ -273,6 +275,14 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
                     })
                 )
             })
+            // Sprite({
+            //     src: `${props.cm.class}ClassIcon`,
+            //     anchor: [1, 0.8],
+            //     x: -CONTENT_WIDTH * 0.5,
+            //     scale:
+            //         100 /
+            //         (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
+            // })
         ),
         {
             filters: [classOutlineFilter],
@@ -286,14 +296,21 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             padding: mainPadding,
         }
     ).addChild(
-        Sprite({
-            src: `${props.cm.class}ClassIcon`,
-            anchor: [0.5, 0.8],
-            x: CONTENT_WIDTH * 0.5,
-            scale:
-                150 / (getTexture(`${props.cm.class}ClassIcon`)?.height ?? 1),
-        }),
         // ...AbilityButtons(props.abilities),
+        Sprite({
+            src: Texture.EMPTY,
+            anchor: [0, 1],
+            x: CONTENT_WIDTH * 0.5,
+            width: 1,
+            height: 200,
+        }), //
+        ...(props.cm.sword
+            ? [
+                  Adjust(Sword(props.cm.sword), {
+                      filters: [whiteOutlineFilter],
+                  }),
+              ]
+            : []),
         ...AbilityButtons([]),
         Adjust(allCharCards, {
             y: 200,
@@ -301,4 +318,35 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             filters: [classOutlineFilter2],
         })
     ).parent
+}
+
+export function Sword(parts: SwordParts) {
+    const isHovered = datum(false)
+
+    return Container(
+        {},
+        Sprite({
+            //@ts-ignore
+            src: `https://media.kaijucards.io/cdn-cgi/image/width=250,quality=75/webp/swords-plain/${parts.guard.kind}-${parts.handle.kind}-${parts.pommel.kind}-${parts.blade.kind}.webp`,
+            anchor: [0.5, 0.5],
+            x: CONTENT_WIDTH * 0.59,
+            events: {
+                pointerenter() {
+                    isHovered.set(true)
+                },
+                pointerout() {
+                    isHovered.set(false)
+                },
+            },
+        }),
+        TermExplanationsIf({
+            areShown: isHovered,
+            terms: [
+                `swordBlade${upperFirst(parts.blade.kind)}` as KeyTerm,
+                `swordGuard${upperFirst(parts.guard.kind)}` as KeyTerm,
+                `swordHandle${upperFirst(parts.handle.kind)}` as KeyTerm,
+                `swordPommel${upperFirst(parts.pommel.kind)}` as KeyTerm,
+            ],
+        })
+    )
 }

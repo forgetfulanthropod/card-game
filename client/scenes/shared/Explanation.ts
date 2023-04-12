@@ -14,6 +14,7 @@ import { Datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
 import { DisplayObject, Texture } from 'pixi.js'
+import { sworPartExplanations } from 'shared'
 import { keys } from 'shared/code'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -60,6 +61,8 @@ export const keyTermsMap = {
     yodel: 'Enemies gain Brave(1) at the start of the next turn.',
     stamp: 'This characters strength is increased by 25',
     chargedBomb: 'Gnome Big Bomber has charged his bomb!',
+
+    ...sworPartExplanations,
 }
 
 export type KeyTerm = keyof typeof keyTermsMap

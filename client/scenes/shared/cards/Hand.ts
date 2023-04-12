@@ -295,7 +295,8 @@ export function Hand(
             hoveredCardUid,
             position
         )
-        destructibleRoot.addChild(...NewCardsInHand)
+        if (NewCardsInHand.length) destructibleRoot.addChild(...NewCardsInHand)
+
         if (position === 'initial')
             await animateCardsIntoHand(NewCardsInHand, newHand)
 
