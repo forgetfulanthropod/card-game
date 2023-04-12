@@ -4,6 +4,7 @@ import {
     CharacterUid,
     GameActions,
     Pile,
+    PlayerCharacterStats,
     SelectedCharacter,
     swordPartDefinitionsMap,
     SwordParts,
@@ -52,8 +53,8 @@ export const placeSelectedCharacters: GameActions['placeSelectedCharacters'] =
         scene.set('fullSelectedCharacterDecks', fullSelectedCharacterDecks)
     }
 
-function equipSword(cm: SelectedCharacter): SelectedCharacter {
-    if (!cm) return cm
+export function equipSword(cm: SelectedCharacter): SelectedCharacter {
+    if (!cm) throw new Error('null character in equipsword')
 
     const newCm = { ...cm }
 

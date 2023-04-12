@@ -95,7 +95,7 @@ export interface CalculatedCharacterStats {
     stance: StanceId
 }
 
-export type OwnedCharacterStats = CharacterStats &
+export type OwnedCharacterStats = PlayerCharacterStats &
     Readonly<{
         uid: string
         // tokenId: string

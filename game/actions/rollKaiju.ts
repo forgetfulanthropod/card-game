@@ -10,6 +10,7 @@ import { getEntrySceneIn } from '@/util'
 import { getFullDeckForCharacter } from '@/gameState'
 import { rollCharacter } from '@/characterGeneration/roll'
 import type { StatName } from '@/characterGeneration/data/stats'
+import { equipSword } from './placeSelectedCharacters'
 
 export const rollKaiju: GameActions['rollKaiju'] = args => {
     const scene = getEntrySceneIn(args.game)
@@ -35,11 +36,11 @@ export const rollKaiju: GameActions['rollKaiju'] = args => {
                 skin: rolledCharacter.skin,
             }
             logger.debug(characterStats)
-            selected[args.placeIndex] = {
+            selected[args.placeIndex] = equipSword({
                 ...characterStats,
                 uid: `pc-${characterStats.id}-${(Math.random() * 10000) | 0}`,
                 isPc: true,
-            }
+            })
         })
     )
 
