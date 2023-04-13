@@ -14,7 +14,10 @@
         "@pixi/text": "^7.1.4",
         "@pixi/text-html": "^7.2.0-beta.2",
         "@pixi/utils": "^7.1.4",
+        "@web3modal/ethereum": "^2.3.0",
+        "@web3modal/react": "^2.3.0",
         "ahooks": "^3.3.12",
+        "ethers": "^5",
         "gsap": "^3.10.4",
         "mobile-device-detect": "^0.4.3",
         "pixi-filters": "^5.2.0",
@@ -26,7 +29,8 @@
         "react-loading-icons": "^1.1.0",
         "shared": "1.0.0",
         "socket.io-client": "^4.5.1",
-        "styled-components": "^5.3.5"
+        "styled-components": "^5.3.5",
+        "wagmi": "^0.12.10"
     },
     "devDependencies": {
         "@types/gtag.js": "^0.0.12",

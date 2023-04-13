@@ -18,6 +18,8 @@ import { UsernameModal } from './StartScreen/UsernameModal'
 import { getClientEnv } from '@/util/getClientEnv'
 require('@solana/wallet-adapter-react-ui/styles.css')
 
+import { Web3Modal, Web3Button } from '@web3modal/react'
+
 export type UserDoc = {
     walletAddress: string
     numKaijusOwned: number
@@ -187,6 +189,7 @@ export function NewStartScreen(props: {
                     </div>
                     <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont WalletMultiButton'
                     />
+                    <Web3Button/>
                 </div>
             </div>
 

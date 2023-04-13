@@ -34,7 +34,8 @@ const REQUIRED_CLIENT_ENV_KEYS =
      'RPC_URL',
      'GAME_IS_LIVE',
      'IS_PRODUCTION',
-     'CLIENT_PASSWORD'
+     'CLIENT_PASSWORD',
+     'WALLET_CONNECT_ID'
     ]
 
 /**

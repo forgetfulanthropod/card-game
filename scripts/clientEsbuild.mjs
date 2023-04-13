@@ -26,12 +26,14 @@ function makeSubstitutions() {
     const gameIsLive = process.env.GAME_IS_LIVE === 'true'
     const isProduction = process.env.IS_PRODUCTION === 'true'
     const rpcUrl = `"${process.env.RPC_URL}"`
+    const walletConnectId = `"${process.env.WALLET_CONNECT_ID}"`
     return {
         ...makeBuildInfo('CLIENT_'),
         ['process.env.WALLET_GATED']: walletGated, // true in prod
         ['process.env.GAME_IS_LIVE']: gameIsLive,
         ['process.env.IS_PRODUCTION']: isProduction,
         ['process.env.RPC_URL']: rpcUrl,
+        ['process.env.WALLET_CONNECT_ID']: walletConnectId,
         global: 'window',
     }
 }
