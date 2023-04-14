@@ -11,6 +11,7 @@ export * from './EventScene'
 export * from './Gamestate'
 export * from './Rulebook'
 export * from './Souvenir'
+export * from './Sword'
 export * from './User'
 // @endindex
 export * from './battle/Loot'

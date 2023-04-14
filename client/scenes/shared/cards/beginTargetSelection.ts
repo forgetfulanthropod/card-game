@@ -22,6 +22,7 @@ export function beginTargetSelection(
     root: PixiContainer,
     cardMeta: Card
 ): () => void {
+    console.log('beginning target selection')
     selectedForTargetingCardUid.set(cardMeta.uid)
     localTree.set('selectedTargets', [])
 
@@ -31,16 +32,19 @@ export function beginTargetSelection(
     const hiddenCursor = renderer.events.cursorStyles.hidden
 
     const cleanup = onCancelTargeting(() => {
+        console.log('cleanup was called')
+
         unsubFromSelectedTargets()
         unsubFromTargetingType()
         currTargetingType.set(null)
         arrow?.destroy()
         if (localTree.get('selectedTargets').length === 0)
             selectedForTargetingCardUid.set(null)
-        renderer.events.setCursor('defaultFallback')
-        renderer.events.cursorStyles.default = defaultCursor
-        renderer.events.cursorStyles.hover = hoverCursor
+
+        restoreCursor(defaultCursor, hoverCursor)
     })
+
+    let arrow: DisplayObject
 
     const unsubFromTargetingType = currTargetingType.onChange(targetingType => {
         if (targetingType === 'arrow') {
@@ -54,13 +58,22 @@ export function beginTargetSelection(
                 })
             )
         }
-    })
-
-    let arrow: DisplayObject
+    }, true)
 
     const unsubFromSelectedTargets = listenToSelectedTargets(cardMeta, cleanup)
 
+    root.on('destroyed', () => {
+        restoreCursor(defaultCursor, hoverCursor)
+    })
+
     return cleanup
+}
+
+function restoreCursor(defaultCursor: any, hoverCursor: any) {
+    const renderer = getRenderer()
+    renderer.events.setCursor('defaultFallback')
+    renderer.events.cursorStyles.default = defaultCursor
+    renderer.events.cursorStyles.hover = hoverCursor
 }
 
 function listenToSelectedTargets(cardMeta: Card, cleanup: () => void) {

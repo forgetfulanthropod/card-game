@@ -14,6 +14,7 @@ import { Datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
 import { DisplayObject, Texture } from 'pixi.js'
+import { swordPartExplanations } from 'shared'
 import { keys } from 'shared/code'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -60,17 +61,19 @@ export const keyTermsMap = {
     yodel: 'Enemies gain Brave(1) at the start of the next turn.',
     stamp: 'This characters strength is increased by 25',
     chargedBomb: 'Gnome Big Bomber has charged his bomb!',
+
+    ...swordPartExplanations,
 }
 
 export type KeyTerm = keyof typeof keyTermsMap
 
-export const TEXT_WIDTH = BASE_WIDTH * 0.18
+export const TEXT_WIDTH = BASE_WIDTH * 0.2
 
 export function getTermIndex(term: string, explanation: string): number {
     const lowerCaseTerm = startCase(term).toLowerCase()
     var re = new RegExp(`>${lowerCaseTerm}`, 'g')
 
-    return explanation.toLowerCase().search(re)
+    return explanation?.toLowerCase().search(re) ?? -1
 }
 
 export function TermExplanationsIf({
@@ -215,7 +218,7 @@ export function TermExplanation({
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [topText, `${keyTermsMap[term]}`],
+        texts: [topText, ...[keyTermsMap[term] ?? []]],
         displayObjectArgs: {
             borderThickness: 2,
             padding: 10,

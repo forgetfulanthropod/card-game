@@ -40,7 +40,9 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         return PixiSprite.from(PixiTexture.WHITE)
     }
     const s = PixiSprite.from(
-        typeof args.src === 'string' ? getTexture(args.src) : args.src
+        typeof args.src === 'string' && args.src.indexOf('http') !== 0
+            ? getTexture(args.src)
+            : args.src
     )
 
     applyShownArgs(s, args)

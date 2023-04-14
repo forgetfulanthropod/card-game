@@ -46,8 +46,10 @@ import {
     Card,
     CardType,
     CardUid,
+    CharacterStats,
     CharacterUid,
     OwnedCharacterStats,
+    PlayerCharacterStats,
     StanceId,
     TargetType,
 } from 'shared'
@@ -209,6 +211,9 @@ export function CardEl({
         })
     )
 
+    if (selectedForTargetingCardUid.val === card.uid)
+        clearLastTargetSelection = beginTargetSelection(root, card)
+
     if (hoveredCardUid && dynamicHitbox) {
         changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
     }
@@ -264,9 +269,9 @@ function changeHitboxOnHover(
         if (newCardUid && newCardUid === card.uid) {
             const hoveredHitArea = new Rectangle(
                 unhoveredHitArea.x - 45,
-                unhoveredHitArea.y - 60,
+                unhoveredHitArea.y - 90,
                 unhoveredHitArea.width + 88,
-                unhoveredHitArea.height + 120
+                unhoveredHitArea.height + 150
             )
             root.hitArea = hoveredHitArea
         }
@@ -408,7 +413,7 @@ function getEnergyContainer(card: Card): PixiContainer {
 }
 
 function getCardOwnerToken(card: Card): PixiContainer {
-    let cm: OwnedCharacterStats
+    let cm: CharacterStats
     try {
         cm = getBattleScene().get('allCharacters', card.characterUid)
     } catch {

@@ -1,13 +1,15 @@
 import type { SceneHas } from '@misc'
 import type {
-    CharacterStats,
     CharacterUid,
     OwnedCharacterStats,
     Pile,
     PlayerCharacterStats,
 } from './battle'
+import { SwordParts } from './Sword'
 
-export type SelectedCharacter = OwnedCharacterStats | null
+export type SelectedCharacter =
+    | (OwnedCharacterStats & { sword?: SwordParts })
+    | null
 export type SelectedCharacters = [
     SelectedCharacter,
     SelectedCharacter,
