@@ -3,6 +3,7 @@ import { EventId, EventScene } from 'shared/tree/EventScene'
 export const eventSceneMap: Record<EventId, EventScene> = {
     cursedStatue: {
         id: 'cursedStatue',
+        title: 'The Cursed Statue',
         prompts: [
             'A large statue of a demon with gems for eyes stands before you.\nYou hear a faint whisper echo as you lock eyes with the demon. The whisper feels like it coming within your own head.',
             '"Closer", says the demon.\n"Choose a hand,"\n"Gifts, Closer."',
@@ -37,6 +38,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
     },
     frogCarriage: {
         id: 'frogCarriage',
+        title: 'No Carriage For Old Frogs',
         prompts: [
             'Your party sees a carriage with a broken wheel.\n Driving the carriage is an elderly frog with a very big beard.',
             '"Hello Travelers. I am an elderly frog with a very big beard. I am bad at driving and as a result i have broken my carriage wheel while attempting to do donuts in the fields. ',
@@ -72,6 +74,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
     },
     gnomeStory: {
         id: 'gnomeStory',
+        title: '"It is my bedtime."',
         prompts: [
             'A gnome wearing striped pajamas with matching nightcap approaches you.\nHe smacks his lips three times. "Ho hum, memememe", exclaims the gnome.',
             '"It is my bed time", the gnome tells you.',
@@ -97,6 +100,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
     },
     gnomeTooth: {
         id: 'gnomeTooth',
+        title: 'Are You a Dentist?',
         prompts: [
             'A gnome with a gigantic tooth stands before you. He looks like he is in terrible pain.\n"I am in terrible pain", says the gnome.',
             '"Owie ouch ouch ouch, I do not like having a gigantic tooth no sir wow this sucks".',
@@ -108,7 +112,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
                 text: '"No, I am not a dentist".',
                 postPrompts: [
                     'You tell the gnome that you aren"t a dentist and cannot help him.',
-                    '"Oh, Ok.I think I have a book on removing teeth, but I cannot read it because \nmy very large tooth is blocking my good reading eye."',
+                    '"Oh, Ok. I think I have a book on removing teeth, but I cannot read it because \nmy very large tooth is blocking my good reading eye."',
                     '"If you encounter another Gnome with a big stinky tooth,\nhopefully you can help them with this book.Owww Owwwie."',
                 ],
             },
@@ -117,7 +121,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
                 text: '"Yes, I am a licensed medical professional."',
                 postPrompts: [
                     'You attempt to remove the tooth despite not actually being a dentist.\nAfter a slight struggle and some painful cries, the tooth slides right out.',
-                    '"Hooray!  You were a dentist after all!  Thank you for not lying about that.\nI will remember that all dentists look like you from now on."',
+                    '"Hooray! You were a dentist after all!  Thank you for not lying about that.\nI will remember that all dentists look like you from now on."',
                     '"This is my first time ever meeting a licensed medical professional.\nPlease, keep the tooth as a reward, I do not want it."',
                 ],
             },
@@ -125,6 +129,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
     },
     hogClown: {
         id: 'hogClown',
+        title: '“Ack!  I am covered in small clowns!”',
         prompts: [
             'A Warhog covered in gnome Hooligans that are dressed as clowns stands nearby.\nHe is desperately trying to swat them off.',
             '"There are too many dang clowns on my back. Can you please help me decrease the number of clowns that are on my back?" ',
@@ -157,9 +162,10 @@ export const eventSceneMap: Record<EventId, EventScene> = {
     },
     tooManyHats: {
         id: 'tooManyHats',
+        title: 'Too Many Hats',
         prompts: [
             `"Hats!  Hats for sale!  I am selling hats oh god is there anyone here please please help me sell these hats I am desperate to sell my hats".`,
-            '“Through a series of events I am legally not allowed to disclose, I have been cursed with the burden of 1000 hats. I must sell them all or go to jail.  Buy a hat please?”',
+            '“Through a series of events I am legally not allowed to disclose, I have been cursed with the burden of 1000 hats. I must sell them all or go to jail. Buy a hat please?”',
         ],
         choices: [
             {
@@ -169,7 +175,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
             },
             {
                 souvenirId: null,
-                text: 'This man and his terrible hats must suffer for their unspoken crimes.  Leave without purchasing one.',
+                text: 'This man and his terrible hats must suffer for their unspoken crimes. Leave without purchasing one.',
                 postPrompts: [],
             },
         ],

@@ -6,6 +6,7 @@ export type EventSceneMap = Record<EventId, EventScene>
 
 export type EventScene = {
     id: EventId
+    title: string
     prompts: string[]
     choices: EventChoice[]
 }

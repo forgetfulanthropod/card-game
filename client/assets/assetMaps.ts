@@ -616,7 +616,13 @@ export const mapTileAssets = {
 export type EventAssetKey = keyof typeof eventAssets
 
 export const eventAssets = {
-    eventGradient: 'events/Event Overlay.webp',
+    // eventGradient: 'events/Event Overlay.webp',
+    eventFrame: 'events/event frame.svg',
+    eventBanner: 'events/banner.svg',
+    eventGraphicBackdrop: 'events/event graphic backdrop.svg',
+    eventChoiceButton1: 'events/event button 1.svg',
+    eventChoiceButton2: 'events/event button 2.svg',
+    eventChoiceButton3: 'events/event button 3.svg',
 
     eventFrogCarriageMainGraphic:
         'events/main graphics/FrogCarriage Image.webp',
