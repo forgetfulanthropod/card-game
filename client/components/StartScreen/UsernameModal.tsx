@@ -37,7 +37,7 @@ export const UsernameModal = ({
             setUserDoc({
                 walletAddress: userDoc.walletAddress,
                 userId: userDoc.userId,
-                numKaijusOwned: userDoc.numKaijusOwned,
+                kaijusOwned: userDoc.kaijusOwned,
                 username: typedUsername,
             })
             onSuccess(userDoc.userId)
@@ -110,7 +110,7 @@ export const UsernameModal = ({
                                     <p className='text-gray-400 font-light font-sans text-sm mt-1'>
                                         Your username can be between{' '}
                                         {MIN_USERNAME_LENGTH} and{' '}
-                                        {MAX_USERNAME_LENGTH}{' '}characters long.
+                                        {MAX_USERNAME_LENGTH} characters long.
                                     </p>
                                 </div>
                             </div>

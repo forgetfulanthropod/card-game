@@ -3,6 +3,7 @@ import React, { useRef } from 'react'
 import { openNewTab } from '../util'
 import { PrimaryButton } from './PrimaryButton'
 
+/** Change this to a connect your wallet modal (or just dont have anything at all) */
 export const WalletGateModal = ({
     setShowGateModal,
     publicKey,
