@@ -168,6 +168,11 @@ export const cardAssets = {
 // }
 
 export const characterStatusAssets = {
+    statAttack: 'core-ui/stats/Attack.webp',
+    statMagic: 'core-ui/stats/Magic.webp',
+    statDefense: 'core-ui/stats/Defense.webp',
+    statConstitution: 'core-ui/stats/Constitution.webp',
+
     stanceNeutral: 'stance/neutral stance.webp',
     stanceAvoidant: 'stance/defensive stance.webp',
     stanceAggressive: 'stance/aggressive stance.webp',

@@ -1622,7 +1622,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthymagicy = strength * .5 + magic * .5;
+            strengthymagicy = strength * .30 + magic * .25;
             chain(
                 effect("poison", strengthymagicy),
                 effect("bleed", 5)
