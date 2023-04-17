@@ -134,8 +134,11 @@ function TextAndButtons(event: EventScene) {
         { x, y },
         If(
             showPostResponsePrompts,
-            () =>
-                Container(
+            () => {
+                const souvenirId =
+                    event.choices[selectedChoice.val!.index].souvenirId
+
+                return Container(
                     {},
                     Text({
                         text: event.choices[
@@ -165,18 +168,23 @@ function TextAndButtons(event: EventScene) {
                         }),
                         { y: BASE_HEIGHT * 0.62 }
                     ),
-                    Sprite({
-                        src: `souvenir${upperFirst(
-                            event.choices[selectedChoice.val!.index].souvenirId!
-                        )}` as SouvenirAssetKey,
-                        width: 150,
-                        height: 150,
-                        anchor: 0.5,
-                        x: -BASE_WIDTH * 0.5,
-                        y: -BASE_HEIGHT * 0.07,
-                        filters: [glowFilter],
-                    })
-                ),
+                    ...(souvenirId
+                        ? [
+                              Sprite({
+                                  src: `souvenir${upperFirst(
+                                      souvenirId
+                                  )}` as SouvenirAssetKey,
+                                  width: 150,
+                                  height: 150,
+                                  anchor: 0.5,
+                                  x: -BASE_WIDTH * 0.5,
+                                  y: -BASE_HEIGHT * 0.07,
+                                  filters: [glowFilter],
+                              }),
+                          ]
+                        : [])
+                )
+            },
             () =>
                 Container(
                     {},
