@@ -11,4 +11,5 @@ export { getSchema } from './getSchema'
 export { getLeaderboard } from './getLeaderboard'
 export { getLeaderboardEntryCount } from './getLeaderboardEntryCount'
 export { setUsername } from './setUsername'
+export { getNonce } from './getNonce'
 // @endindex

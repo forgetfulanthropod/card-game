@@ -54,6 +54,7 @@ export function NewStartScreen(props: {
     const { isOpen, open, close, setDefaultChain } = useWeb3Modal()
 
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
+    const [nonce, setNonce] = useState('')
 
     const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
@@ -62,13 +63,25 @@ export function NewStartScreen(props: {
 
     const { address, isConnected, status } = useWeb3Wallet()
 
-    const initUserDoc = async (walletAddress: WalletAddress) => {
-        const { userId, username } = await callServerApi('login', {
+    const getNonce = async ()  => {
+        const { nonce } = await callServerApi('getNonce', {})
+        setNonce(nonce)
+        return nonce
+    }
+
+    const handleLogin = async (walletAddress: WalletAddress) => {
+        const { userId, username, accessToken } = await callServerApi('login', {
             walletAddress,
         })
+        console.log({userId, username, accessToken})
         const kaijusOwned = getKaijusOwned(walletAddress)
         setUserDoc({ walletAddress, kaijusOwned, userId, username })
-        console.log('Set User Doc', { walletAddress, kaijusOwned, userId, username })
+        console.log('Set User Doc', {
+            walletAddress,
+            kaijusOwned,
+            userId,
+            username,
+        })
         initAnalytics(userId)
         collectData('login', {
             method: 'connect_wallet',
@@ -137,9 +150,7 @@ export function NewStartScreen(props: {
 
     useEffect(() => {
         if (isConnected && address) {
-            initUserDoc(address)
-            // switch network
-            // check auth
+            handleLogin(address)
         }
     }, [isConnected])
 
