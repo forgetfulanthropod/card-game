@@ -102,7 +102,8 @@ export function NewStartScreen(props: {
         if (!userDoc) {
             if (!WALLET_GATED) {
                 // F2P USER FLOW --- TO COMPLETE
-                const walletAddress = Math.random().toString().slice(2)
+                const walletAddress = localStorage.getItem('walletAddress') ?? Math.random().toString().slice(2)
+                localStorage.setItem('walletAddress', walletAddress) // tmp
                 const { userId, username } = await callServerApi('login', {
                     walletAddress,
                 })
@@ -143,6 +144,11 @@ export function NewStartScreen(props: {
     }
 
     useEffect(() => {
+
+        /** TODO: change this to actual F2P flow */
+        const tmpWalletAddress = localStorage.getItem('walletAddress') as WalletAddress
+        if (tmpWalletAddress) handleLogin(tmpWalletAddress)
+
         collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })

@@ -17,6 +17,7 @@ import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
 import { enableMotionFX } from '@/scenes/shared'
 import { AppContext } from './App'
+import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
 
 const Root = styled.button`
     position: absolute;
@@ -75,7 +76,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         await callApi('setInitialGameState', {
             username: props.username,
         })
-        localStorage.removeItem('username')
+        composeDefaultParty()
         setInPixi(false)
         setShowMenu(false)
     }
