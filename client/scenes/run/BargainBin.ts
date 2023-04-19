@@ -18,7 +18,8 @@ import { Souvenir, souvenirMap } from 'shared'
 import { vals } from 'shared/code'
 import { MainCharacterAnimation, PlainButton } from '../shared'
 import { CardsTiltedInLineForCharacter } from '../shared/cards/CardsTiltedInLine'
-import { EquipSouvenirInterface, EventResponse } from './EventScene'
+import { EventResponse } from './EventScene'
+import { EquipSouvenirInterface } from './EquipSouvenirInterface'
 import { SouvenirEl } from './Souvenirs'
 
 export function BargainBin() {

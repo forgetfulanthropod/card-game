@@ -5,14 +5,16 @@ import type {
     BattleScene,
     Command,
     EnemyCharacterMeta,
+    NetworkEvent,
 } from 'shared'
 
-import { vals } from 'shared/code'
+import { vals, weightsToCDF, calculateTaunt } from 'shared/code'
 import { SCursor } from 'sbaobab'
-import { range } from 'lodash'
 import { getRulebook } from '@/rulebook'
-import type { EntryCursor } from '@/util'
+import { EntryCursor, isProduction } from '@/util'
 import { weightedRandom } from '@/util'
+
+import { emit } from '@/util'
 
 export function getAllPcs(scene: BattleCursor | BattleScene): CharacterMeta[] {
     return vals(
@@ -135,21 +137,74 @@ function getPCTarget(
     return allLivingPlayerCharacters[targetIndex]
 }
 
+const targetEnemies = (
+    scene: BattleScene,
+    command: Command
+): CharacterUid[] => {
+    for (const v of scene['nextNpcCommands']) {
+        if (v.command.characterUid == command.characterUid) {
+            return v.targetUids
+        }
+    }
+    const targets: CharacterUid[] = []
+    const taunts: Record<CharacterUid, number> = Object.fromEntries(
+        getLivingPcs(scene).map(c => {
+            const t = calculateTaunt(c)
+            return [c.uid, t]
+        })
+    )
+    let userMessage = `acquiring targets for ${command.characterUid} ${
+        scene.allCharacters[command.characterUid].id ?? ''
+    } attack ${command.id}`
+    logger.debug(
+        `acquiring targets for ${command.characterUid}  ${
+            scene.allCharacters[command.characterUid].id ?? ''
+        } attack ${command.id}`
+    )
+    let weightCdf = weightsToCDF(taunts)
+    logger.debug(weightCdf)
+    logger.debug(taunts)
+    userMessage += `\ntaunts:\t${JSON.stringify(
+        taunts
+    )}\nCDF:\t${JSON.stringify(weightCdf)}`
+    for (let i = 0; i < command.targetNum; i++) {
+        // let weightCdf = weightsToCDF(taunts)
+        const roll = Math.random()
+        logger.debug(`rolled ${roll}`)
+        userMessage += `\nrolled ${roll}`
+        for (const [id, w] of Object.entries(weightCdf)) {
+            if (roll <= w) {
+                targets.push(id)
+                // delete taunts[id]
+                break
+            }
+        }
+    }
+    userMessage += `\ntargets: ${JSON.stringify(targets)}`
+    logger.debug(`targets: ${JSON.stringify(targets)}`)
+    if (isProduction) {
+        const networkEventData = {
+            type: 'message',
+            data: userMessage,
+        } as NetworkEvent<string, unknown>
+        emit({ username: scene.username, event: networkEventData })
+    }
+    return targets
+}
+
 export function getCommandTargets(
     scene: BattleScene,
     command: Command
 ): CharacterUid[] {
     if (command.targetType === 'enemies') {
-        return range(command.targetNum)
-            .map(
-                (_, i) =>
-                    getPCTarget(
-                        vals(scene.allCharacters),
-                        command.characterUid,
-                        i
-                    )?.uid
+        const targets = targetEnemies(scene, command)
+        if (targets.length != command.targetNum) {
+            logger.warn(
+                `did not target correct number of enemies: ${targets.length} instead of ${command.targetNum}`
             )
-            .filter(uid => uid != null)
+            console.log(`targets: ${JSON.stringify(targets)}`)
+        }
+        return targets
     } else if (command.targetType === 'allEnemies') {
         return getLivingPcs(scene).map(c => c.uid)
     } else if (command.targetType === 'allFriends') {

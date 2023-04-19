@@ -217,6 +217,8 @@ export function calculateStats(
         damageTakeAddend: getStatModifierAddend(cm, 'damageTakeAddend'),
         health: Math.min(cm.health, constitution),
         stance,
+        taunt: cm.taunt,
+        lastTaunt: cm.lastTaunt,
     }
 
     cm.effects?.forEach(effect => {
@@ -258,9 +260,13 @@ export function applyTurnStartEffects(
                 if (character.isPc && whichSide === 'npc') continue
                 if (!character.isPc && whichSide === 'pc') continue
                 if (character.health <= 0) continue
-                character.effects.forEach(effect => {
-                    activateTurnStartEffect(effect, character, scene)
-                })
+                if (!character.effects)
+                    logger.debug(`no effects for ${character.id}`)
+                else {
+                    character.effects.forEach(effect => {
+                        activateTurnStartEffect(effect, character, scene)
+                    })
+                }
             }
         })
     )

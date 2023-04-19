@@ -1,5 +1,9 @@
 import { getServerEnv } from '@/../shared/code'
-import { InfluxDB, Point } from '@influxdata/influxdb-client'
+import {
+    InfluxDB,
+    Point,
+    DEFAULT_WriteOptions,
+} from '@influxdata/influxdb-client'
 
 import { getLogger } from 'game'
 
@@ -72,6 +76,11 @@ export function metricField(
     else return { ...defaultMetricField, ...t }
 }
 
+const writeOptions = {
+    batchSize: DEFAULT_WriteOptions.batchSize,
+    flushInterval: DEFAULT_WriteOptions.flushInterval,
+}
+
 // TODO: allow for data points with multiple values
 export const writeMetric = (
     name: string,
@@ -107,25 +116,17 @@ export const writeMetric = (
             logger.error('could not get influxDB connection')
             return
         }
-        // TODO: use a single/shared writeApi and make all writes async
-        // right now writeApi closes (flushes) on every point; will probably not scale
-        const writeApi = db.getWriteApi(influxOrg, influxBucket)
+        const writeApi = db.getWriteApi(
+            influxOrg,
+            influxBucket,
+            'ns',
+            writeOptions
+        )
         writeApi.writePoint(point)
-        writeApi
-            .close()
-            .then(() => {
-                // TODO: just use point.toString()?
-                const fieldMsg = JSON.stringify(point.fields)
-                // @ts-expect-error
-                const tagMsg = JSON.stringify(point.tags)
-                logger.debug(`metric written ${name}: ${fieldMsg}, ${tagMsg}`)
-            })
-            .catch(e => {
-                const err = e as Error
-                logger.error(
-                    `writeApi writing metric failed ${name}: ${err.message}: ${err.stack}`
-                )
-            })
+        const fieldMsg = JSON.stringify(point.fields)
+        // @ts-expect-error
+        const tagMsg = JSON.stringify(point.tags)
+        logger.debug(`metric sent for writing ${name}: ${fieldMsg}, ${tagMsg}`)
     } catch (e) {
         const err = e as Error
         logger.error(

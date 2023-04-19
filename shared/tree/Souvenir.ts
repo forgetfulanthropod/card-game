@@ -90,8 +90,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'bigStinkyTooth',
         name: 'Big Stinky Tooth',
         equippable: true,
-        description:
-            'Equipped Kaiju gains +6 defense,<br/>-2 strength, and -2 magic.',
+        description: 'Equipped Kaiju gains +6 DEF,-2 STR, and -2 MAG.',
         on: {
             acquire: 'modifyStats("defense|strength|magic", "6|-2|-2", "run")',
         },
@@ -100,8 +99,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'dentistryForDummies',
         name: 'Dentistry for Dummies',
         equippable: true,
-        description:
-            'Equipped Kaiju receives +1 Magic after completing each room.',
+        description: 'Equipped Kaiju gains +1 MAG after completing each room.',
         on: {
             battleEnd: 'modifyStats("magic", "1", "run")',
         },
@@ -110,7 +108,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'frogWine',
         name: 'Frog Wine',
         equippable: false,
-        description: 'All Kaiju gain +1 Strength, +1 Magic, and +1 Defense.',
+        description: 'All Kaiju gain +1 STR, +1 MAG, and +1 DEF.',
         on: {
             acquire: 'modifyStats("strength|magic|defense", "1|1|1", "run")',
         },
@@ -120,7 +118,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Broken Carriage Wheel',
         equippable: true,
         description:
-            'Equipped Kaiju takes 2 damage and gains 2 Strength on equip.<br/>At the start of each room, apply Berserk (5) to equpped Kaiju.',
+            'Equipped Kaiju takes 2 damage and gains 2 STR on equip.<br/>At the start of each room, apply Berserk (5) to equpped Kaiju.',
         on: {
             acquire: 'deal(2); modifyStats("strength", "2", "run")',
             battleStart: 'effect("berserk", 5)',
@@ -131,7 +129,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Bundle of Frog Wine',
         equippable: false,
         description:
-            'All Kaiju take 10 Damage.<br/>All Kaiju gain +2 Strength, +2 Magic, and +2 Defense.',
+            'All Kaiju take 10 Damage.All Kaiju gain +2 STR, +2 MAG, and +2 DEF.',
         on: {
             acquire: `deal(10); modifyStats("strength|magic|defense", "2|2|2", "run")`,
         },
@@ -171,8 +169,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'demonsLeftHand',
         name: "Demon's Left Hand",
         equippable: true,
-        description:
-            'Equipped Kaiju gets<br/>+2 Strength, +2 Magic, and<br/>-12 max Health',
+        description: 'Equipped Kaiju gets+2 STR, +2 MAG, and-12 max Health',
         on: {
             acquire:
                 'modifyStats("strength|magic|constitution", "2|2|-12", "run")',
@@ -182,8 +179,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'demonsRightHand',
         name: "Demon's Right Hand",
         equippable: true,
-        description:
-            'Equipped Kaiju gets<br/>+35 max Health, -1 Strength,<br/>and -1 Magic',
+        description: 'Equipped Kaiju gets+35 max Health, -1 STR,and -1 MAG',
         on: {
             acquire: `chain(
                     modifyStats("strength|magic|constitution", "-1|-1|35", "run"),
@@ -196,7 +192,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         name: 'Nightmare Biscuit',
         equippable: true,
         description:
-            'Equipped Kaiju receives +3 Strength, +3 Magic, and a permanent stack of Unguarded.',
+            'Equipped Kaiju gains +3 STR, +3 MAG, and a permanent stack of Unguarded.',
         on: {
             acquire: 'modifyStats("strength|magic", "3|3", "run")',
             turnStart: 'effect("unguarded", 1)',
@@ -216,7 +212,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         id: 'yummyRice',
         name: 'Yummy Rice',
         description:
-            'Heal all party members for 8.\n In addition, characters heal for an additional 8 HP whenever you enter a rest site.',
+            'Heal all party members for 8. In addition, characters heal for an additional 8 HP whenever you enter a rest site.',
         equippable: false,
         on: {
             acquire: 'heal(8)',
@@ -261,7 +257,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     filledDiaper: {
         id: 'filledDiaper',
         name: `Filled Diaper`,
-        description: `Equipped Kaiju Has -20 Constitution, -2 Strength, and -2 Magic.`,
+        description: `Equipped Kaiju Has -20 Constitution, -2 STR, and -2 MAG.`,
         equippable: true,
         on: {
             acquire:
@@ -297,7 +293,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     pulledRug: {
         id: 'pulledRug',
         name: `Pulled Rug`,
-        description: `Upon obtaining Pulled Rug, deal 7 damage to the character it's equipped to.  That character gains +3 Defense and starts every encounter with 7 block.
+        description: `Upon obtaining Pulled Rug, deal 7 damage to the character it's equipped to.  That character gains +3 DEF and starts every encounter with 7 block.
         If a character equipped with this souvenir ends their turn in Neutral Stance, they take 2 damage and gain Brave (1)`,
         equippable: true,
         on: {
@@ -356,7 +352,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     strangeHat: {
         id: 'strangeHat',
         name: `Strange Hat`,
-        description: `Equipped Kaiju gains +3 Defense.`,
+        description: `Equipped Kaiju gains +3 DEF.`,
         equippable: true,
         on: {
             acquire: 'modifyStats("defense", "3", "run")',
@@ -470,7 +466,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     silkGloves: {
         id: 'silkGloves',
         name: `Silk Gloves`,
-        description: `Equipped Kaiju gains +2 magic until end of turn whenever you play a card.`,
+        description: `Equipped Kaiju gains +2 MAG until end of turn whenever you play a card.`,
         equippable: true,
         on: {
             playCard: 'modifyStats("magic", "2", "turn")',
@@ -479,7 +475,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     allPurposeKnob: {
         id: 'allPurposeKnob',
         name: `All Purpose Knob.`,
-        description: `Activate this object to finish a room without gaining room rewards, and go to next room. (clickable!) <br/>Remove after use.`,
+        description: `Activate this object to finish a room without gaining room rewards, and go to next room. (clickable!) Remove after use.`,
         equippable: false,
         on: {
             activate: `openMap(); removeSouvenir("allPurposeKnob")`,
@@ -497,7 +493,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     gamerBathwater: {
         id: 'gamerBathwater',
         name: `Gamer Bathwater`,
-        description: `Activate to deal 25 damage to all enemies. (clickable!)\nThis souvenir is destroyed after use. `,
+        description: `Activate to deal 25 damage to all enemies. (clickable!)This souvenir is destroyed after use. `,
         equippable: false,
         on: {
             activate: `deal(25, null, "allEnemies"); removeSouvenir("gamerBathwater")`,
@@ -506,7 +502,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     demonCookie: {
         id: 'demonCookie',
         name: `Demon Cookie`,
-        description: `Equipped Kaiju gains +5 strength and -5 Defense`,
+        description: `Equipped Kaiju gains +5 STR and -5 DEF`,
         equippable: true,
         on: {
             acquire: `modifyStats("strength|defense", "5|-5", "run")`,
@@ -524,7 +520,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     stinkySandwich: {
         id: 'stinkySandwich',
         name: `Stinky Sandwich`,
-        description: `Whenever equipped Kaiju takes damage from an attack, they get +2 defense until the end of the room.`,
+        description: `Whenever equipped Kaiju takes damage from an attack, they get +2 DEF until the end of the room.`,
         equippable: true,
         on: {
             takeDamage: `modifyStats("defense", "1", "room")`,
@@ -564,7 +560,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     concreteShoes: {
         id: 'concreteShoes',
         name: `Concrete Shoes`,
-        description: `Equipped Kaiju gets +8 defense and +35 max health but can't change stances outside of cards and abilities that force them to do so.`,
+        description: `Equipped Kaiju gets +8 DEF and +35 max health but can't change stances outside of cards and abilities that force them to do so.`,
         equippable: true,
         on: {
             acquire: `modifyStats("defense", "5", "run"); modifyStats("constitution", "35", "run")`,

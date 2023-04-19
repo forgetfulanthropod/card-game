@@ -178,3 +178,212 @@ export const classOverrides = {
         },
     },
 }
+
+export const names = {
+    firstName: [
+        'Flotsam',
+        'Flipper',
+        'Bobo',
+        'Bing Bong',
+        'Flóki',
+        'Helgi',
+        'Halberd',
+        'Arnkatla',
+        'Harold',
+        'Noodle',
+        'Bjørn',
+        'Toki',
+        'Gudrun',
+        'Inga',
+        'Frida',
+        'Hilda',
+        'Sneezes',
+        'Pittsburgh',
+        'Sushi',
+        'Boba',
+        'Buddy',
+        'Jimbo',
+        'Gumdrop',
+        'Junior',
+        'Skipper',
+        'Captain',
+        'Scooter',
+        'Poseidon',
+        'Gumbo',
+        'Rudolph',
+    ],
+    lastName1: [
+        {
+            name: 'Penguin',
+            complete: false,
+        },
+        {
+            name: 'Tiny',
+            complete: false,
+        },
+        {
+            name: 'Fish',
+            complete: false,
+        },
+        {
+            name: 'Sniffle',
+            complete: false,
+        },
+        {
+            name: 'Aqua',
+            complete: false,
+        },
+        {
+            name: 'Artic',
+            complete: false,
+        },
+        {
+            name: 'Frost',
+            complete: false,
+        },
+        {
+            name: 'Wet',
+            complete: false,
+        },
+        {
+            name: 'Frigid',
+            complete: false,
+        },
+        {
+            name: 'Fish',
+            complete: false,
+        },
+        {
+            name: 'Ice',
+            complete: false,
+        },
+        {
+            name: 'Damp',
+            complete: false,
+        },
+        {
+            name: 'Cold',
+            complete: false,
+        },
+        {
+            name: 'Loud',
+            complete: false,
+        },
+        {
+            name: 'Honk',
+            complete: false,
+        },
+        {
+            name: 'Feather',
+            complete: false,
+        },
+        {
+            name: 'Frozen',
+            complete: false,
+        },
+        {
+            name: 'Glacier',
+            complete: false,
+        },
+        {
+            name: 'Plumage',
+            complete: false,
+        },
+        {
+            name: 'Little',
+            complete: false,
+        },
+        {
+            name: 'Baby',
+            complete: false,
+        },
+        {
+            name: 'Water',
+            complete: false,
+        },
+        {
+            name: 'Happy',
+            complete: false,
+        },
+        {
+            name: 'Tuxedo',
+            complete: false,
+        },
+        {
+            name: 'Cruise',
+            complete: false,
+        },
+        {
+            name: 'Freezer',
+            complete: false,
+        },
+        {
+            name: 'Herring',
+            complete: false,
+        },
+        {
+            name: 'Rock',
+            complete: false,
+        },
+        {
+            name: 'Tuna',
+            complete: false,
+        },
+        {
+            name: 'Pool',
+            complete: false,
+        },
+        {
+            name: 'Sleepy',
+            complete: false,
+        },
+        {
+            name: 'Nice',
+            complete: false,
+        },
+        {
+            name: 'Oyster',
+            complete: false,
+        },
+        {
+            name: 'Baby',
+            complete: false,
+        },
+    ],
+    lastName2: [
+        'flipper',
+        'fin',
+        'toe',
+        'waddle',
+        'water',
+        'honker',
+        'boat',
+        'beach',
+        'snow',
+        'feet',
+        'dancer',
+        'fisher',
+        'sniffer',
+        'beak',
+        'dive',
+        'bill',
+        'flopper',
+        'skate',
+        'slip',
+        'frost',
+        'honk',
+        'bottle',
+        'nap',
+        'friend',
+        'coolant',
+        'slapper',
+        'egg',
+        'flight',
+        'hopper',
+        'bubbles ',
+        'clam',
+        'shrimp',
+        'snack',
+        'nugget',
+    ],
+}

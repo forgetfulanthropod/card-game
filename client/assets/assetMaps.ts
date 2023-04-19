@@ -168,6 +168,11 @@ export const cardAssets = {
 // }
 
 export const characterStatusAssets = {
+    statAttack: 'core-ui/stats/Attack.webp',
+    statMagic: 'core-ui/stats/Magic.webp',
+    statDefense: 'core-ui/stats/Defense.webp',
+    statConstitution: 'core-ui/stats/Constitution.webp',
+
     stanceNeutral: 'stance/neutral stance.webp',
     stanceAvoidant: 'stance/defensive stance.webp',
     stanceAggressive: 'stance/aggressive stance.webp',
@@ -616,7 +621,13 @@ export const mapTileAssets = {
 export type EventAssetKey = keyof typeof eventAssets
 
 export const eventAssets = {
-    eventGradient: 'events/Event Overlay.webp',
+    // eventGradient: 'events/Event Overlay.webp',
+    eventFrame: 'events/event frame.svg',
+    eventBanner: 'events/banner.svg',
+    eventGraphicBackdrop: 'events/event graphic backdrop.svg',
+    eventChoiceButton1: 'events/event button 1.svg',
+    eventChoiceButton2: 'events/event button 2.svg',
+    eventChoiceButton3: 'events/event button 3.svg',
 
     eventFrogCarriageMainGraphic:
         'events/main graphics/FrogCarriage Image.webp',

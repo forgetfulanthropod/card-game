@@ -116,7 +116,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Orb of Lightning',
         energy: 1,
         id: 'orbOfLightning',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(orb("lightning", 3), momentary())',
         type: 'enchantment',
@@ -126,7 +126,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Orb of Protection',
         energy: 1,
         id: 'orbOfProtection',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(orb("protection", 3), momentary())',
         type: 'enchantment',
@@ -146,7 +146,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Magic Ritual',
         energy: 0,
         id: 'magicRitual',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(addEnergy(2), momentary())',
         type: 'utility',
@@ -166,7 +166,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Spell Book',
         energy: 2,
         id: 'spellBook',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(addEnergyPerRound(1), momentary())',
         type: 'enchantment',
@@ -216,7 +216,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Orb of Frost',
         energy: 1,
         id: 'orbOfFrost',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(orb("frost", 3), momentary())',
         type: 'enchantment',
@@ -302,7 +302,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Berserk',
         energy: 1,
         id: 'berserk',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(effect("berserk",3), momentary())',
         type: 'enchantment',
@@ -460,7 +460,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Orb of Holy Light',
         energy: 2,
         id: 'orbOfHolyLight',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'chain(orb("holyLight", 3), momentary())',
         type: 'enchantment',
@@ -470,7 +470,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Mantra of Patience',
         energy: 1,
         id: 'mantraOfPatience',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `chain(
             draw(1),
@@ -697,7 +697,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Swiss Army Wand',
         energy: 1,
         id: 'swissArmyWand',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             defenseymagicy = 0.25 * defense + 0.5 * magic;
@@ -839,7 +839,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Compulsive Gambler',
         energy: 0,
         id: 'compulsiveGambler',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             chain(
@@ -872,7 +872,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Jerry Is Eternal',
         energy: 1,
         id: 'jerryIsEternal',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             chain(
@@ -921,7 +921,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Small But Stoic',
         energy: 0,
         id: 'smallButStoic',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             defensey = 0.5 * defense;
@@ -937,7 +937,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
     //     name: 'Be Very Small',
     //     energy: 0,
     //     id: 'beVerySmall',
-    //     targetNum: 1,
+    //     targetNum: 0,
     //     targetType: 'self',
     //     actions: `
     //         setStance("avoidant")
@@ -1091,7 +1091,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Retreat to the Shadows',
         energy: 0,
         id: 'retreatToTheShadows',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             chain(
@@ -1169,7 +1169,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Hypnotized',
         energy: -1,
         id: 'hypnotized',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `"You have been hypnotized!\nThis card cannot be played"`,
         type: 'utility',
@@ -1179,7 +1179,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Burn Incense',
         energy: -1,
         id: 'burnIncense',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         on: {
             discard: 'addEnergy(1)',
@@ -1273,7 +1273,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Whirling Blades of Death',
         energy: 1,
         id: 'whirlingBladesOfDeath',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: `
             strengthy = 0.4 * strength;
@@ -1622,7 +1622,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'enemies',
         actions: `
-            strengthymagicy = strength * .5 + magic * .5;
+            strengthymagicy = strength * .30 + magic * .25;
             chain(
                 effect("poison", strengthymagicy),
                 effect("bleed", 5)
@@ -1893,7 +1893,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Exponential Illness',
         energy: 1,
         id: 'exponentialIllness',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'exponentialIllness(3)', //todo
         type: 'utility',
@@ -1903,7 +1903,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         name: 'Song Of Courage',
         energy: 2,
         id: 'songOfCourage',
-        targetNum: 1,
+        targetNum: 0,
         targetType: 'self',
         actions: 'effect("melody", 2)', //todo
         type: 'enchantment',

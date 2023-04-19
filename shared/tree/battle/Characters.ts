@@ -1,3 +1,4 @@
+import { Sword, SwordParts } from '../Sword'
 import type {
     CalculatedCharacterStats,
     CharacterStats,
@@ -41,8 +42,12 @@ export interface CharacterMeta extends CharacterStats {
     statModifiersMap: StatModifiersMap
     calculatedStats: CalculatedCharacterStats
     skin?: any
+    sword?: SwordParts
+    lastTaunt: number
+    taunt: number
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
+export type Species = 'frogKnight' | 'warhog' | 'penguinKnight'
 
 export type PlayerCharacterId =
     | 'bloatDemon'

@@ -9,6 +9,8 @@ import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
+import { produce } from 'immer'
+
 const TIME_AFTER_PLAYER_MOVE = 1500
 
 export const endTurn: GameActions['endTurn'] = args => {
@@ -35,6 +37,16 @@ export const endTurn: GameActions['endTurn'] = args => {
 
     trackStateChanges(scene)
 
+    scene.apply(
+        'allCharacters',
+        produce(ac => {
+            for (const [uid, cm] of Object.entries(ac)) {
+                if (!cm.isPc) continue
+                cm.lastTaunt = cm.taunt
+            }
+            return ac
+        })
+    )
     popAndRunQueue(scene, 'npc')
 
     args.game.set('nextAction', {

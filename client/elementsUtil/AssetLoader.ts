@@ -162,6 +162,7 @@ export function hasSound(assetId: SoundAssetKey): boolean {
 export function getTexture(assetId: AssetKey): PixiTexture {
     return Assets.get(assetId) ?? throwNull(`texture '${assetId}'`)
 }
+
 export function hasTexture(assetId: AssetKey): boolean {
     return Assets.cache.has(assetId)
 }

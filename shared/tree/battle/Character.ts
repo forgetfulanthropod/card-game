@@ -92,10 +92,12 @@ export interface CalculatedCharacterStats {
     damageTakeAddend: number
     blockMultiplier: number
     health: number
+    lastTaunt: number
+    taunt: number
     stance: StanceId
 }
 
-export type OwnedCharacterStats = CharacterStats &
+export type OwnedCharacterStats = PlayerCharacterStats &
     Readonly<{
         uid: string
         // tokenId: string

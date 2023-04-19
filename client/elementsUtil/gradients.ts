@@ -57,7 +57,7 @@ export function RoundedBordered(
         borderThickness: number
         borderColor: number
     }
-): PixiGraphics {
+) {
     const g = new PixiGraphics()
     const scale = el.scale.x
     g.scale.set(scale)
@@ -80,7 +80,20 @@ export function RoundedBordered(
 
     g.endFill()
 
-    return g
+    const src = getRenderer().generateTexture(g)
+
+    const root = Sprite({
+        src,
+        x: el.x,
+        y: el.y,
+        scale: el.scale.x,
+        anchor: [el.anchor.x, el.anchor.y],
+    })
+
+    g.destroy()
+    el.destroy()
+
+    return root
 }
 
 // a gradient inside of a rounded corner rectangle

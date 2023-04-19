@@ -1,22 +1,20 @@
+import { getRulebook } from '@/rulebook'
 import type {
+    BaseHealth,
     CharacterMeta,
-    CharacterId,
     Characters,
     EnemyCharacterMeta,
-    NonPlayerCharacterId,
     EnemyCharacters,
-    OwnedCharacterStats,
-    StanceId,
-    PlayerCharacterId,
-    BaseHealth,
     EnemyDefinition,
+    NonPlayerCharacterId,
+    OwnedCharacterStats,
+    PlayerCharacterId,
+    StanceId,
 } from 'shared'
 import { keys, vals } from 'shared/code'
-import { getRulebook } from '@/rulebook'
 // import type { BaseHealth, EnemyDefinition } from '@/rulebook'
-import { playerCharacterStatsMap } from '@/rulebook/battle'
-import { calculateStats } from '../characters/effects'
 import { startCase } from 'lodash'
+import { calculateStats } from '../characters/effects'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
@@ -185,6 +183,8 @@ export function newNPCMeta(args: {
             room: {},
             run: {},
         },
+        lastTaunt: 0,
+        taunt: 0,
     }
 
     return { ...cm, calculatedStats: calculateStats(cm) }
