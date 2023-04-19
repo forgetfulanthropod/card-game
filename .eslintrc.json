@@ -152,7 +152,6 @@
                 //     "error",
                 //     {
                 //         "allow": [
-                //             "preact/*",
                 //             "lodash/*",
                 //             "gsap/PixiPlugin",
                 //             "shared/code"

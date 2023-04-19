@@ -1,5 +1,4 @@
 export {}
-// import { useState, useEffect } from 'preact/hooks'
 
 // import styles from './UsernameEntry.module.css'
 // import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'

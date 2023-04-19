@@ -40,15 +40,7 @@ export function App(): JSXElement {
     const [username, setUsername] = useState(
         localStorage.getItem('username') ?? ''
     )
-    const [ready, setReady] = useState(false)
-    const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
-
-    useEffect(() => {
-        if (username.length > 0) {
-            emitUsername(username)
-            setReady(true)
-        }
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const [inPixi, setInPixi] = useState(false)
 
     const endpoint =
         getClientEnv('RPC_URL') ?? 'https://api.metaplex.solana.com/'
@@ -65,7 +57,7 @@ export function App(): JSXElement {
         localStorage.setItem('username', userId)
         setUsername(userId)
         emitUsername(userId)
-        setReady(true)
+        setInPixi(true)
     }
 
     return <>
@@ -73,13 +65,11 @@ export function App(): JSXElement {
             <ConnectionProvider endpoint={endpoint}>
                 <WalletProvider wallets={wallets} autoConnect>
                     <WalletModalProvider>
-                        {GAME_IS_LIVE && username && !ready ? (
-                            <>loading</>
-                        ) : GAME_IS_LIVE && ready ? (
-                            <GameManager username={username} />
-                        ) : (
-                            <NewStartScreen onEnter={handleStartGame} />
-                        )}
+                        <GameManager username={username}>
+                            {!inPixi && <NewStartScreen
+                                onEnter={handleStartGame}
+                            />}
+                        </GameManager>
                     </WalletModalProvider>
                 </WalletProvider>
             </ConnectionProvider>

@@ -15,10 +15,7 @@ import {
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
-import {
-    enableMotionFX,
-    shakeScreen,
-} from '@/scenes/shared'
+import { enableMotionFX } from '@/scenes/shared'
 
 const Root = styled.button`
     position: absolute;
@@ -32,17 +29,18 @@ const Root = styled.button`
     cursor: pointer;
 `
 
+// todo: change name to SettingsMenu
 export function ResetButton(props: { username: string }): JSXElement {
-    const [showActions, setShowActions] = useState(false)
+    const [showMenu, setShowMenu] = useState(false)
     const actionsRef = useRef(null)
-    useOutsideClickDismisser(actionsRef, setShowActions)
+    useOutsideClickDismisser(actionsRef, setShowMenu)
     const [sfxIsMuted, setSfxIsMuted] = useState(muteSFX)
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
     const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
 
     const handleClick = () => {
-        setShowActions(actions => !actions)
+        setShowMenu(actions => !actions)
     }
 
     const handleMuteSFX = () => {
@@ -67,8 +65,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         await callApi('makeNewUser', {
             username: props.username,
         })
-        window.location.reload()
-        setShowActions(false)
+        setShowMenu(false)
     }
 
     const handleBackToMenu = async () => {
@@ -97,7 +94,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         <Root onClick={() => handleClick()}>⚙</Root>
         <div
             className={`pointer-events-auto absolute top-14 right-6 flex flex-col text-white mt-2 rounded-xl bg-stone-700 font-sans p-1 w-auto font-medium z-50 text-sm shadow-3xl transition-all ${
-                showActions ? 'opacity-100 visible' : 'opacity-0 invisible'
+                showMenu ? 'opacity-100 visible' : 'opacity-0 invisible'
             }`}
         >
             <MenuButton

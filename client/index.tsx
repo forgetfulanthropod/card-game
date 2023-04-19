@@ -1,5 +1,3 @@
-// import 'preact/debug'
-
 import './config/nullUtil' // eslint-disable-line import/no-internal-modules
 import './util/misc' // eslint-disable-line import/no-internal-modules
 import { createRoot } from 'react-dom/client'
@@ -13,32 +11,25 @@ import { getClientEnv } from './util/getClientEnv'
 // @ts-expect-error
 window.loadedJs = true // for the password logic in index.html
 
-const preactRoot = document.getElementById('preact-root') as HTMLDivElement
+const reactRoot = document.getElementById('react-root') as HTMLDivElement
 const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
 const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
 
 function main() {
-    if (IS_PRODUCTION) {
-        // disable right clicks
-        window.addEventListener('contextmenu', e => {
-            e.preventDefault()
-        })
-    }
+    if (IS_PRODUCTION)
+        window.addEventListener('contextmenu', e => e.preventDefault())
 
-    if (GAME_IS_LIVE) {
-        startLoadingAssets().then(() => {
-            document.title = `Kaiju Cards ${BUILD_VER}`
-            prepareSocket()
-            const root = createRoot(preactRoot)
-            preactRoot.innerHTML = '' // remove the default warning
-            root.render(<App />)
-        })
-    } else {
-        document.title = `Kaiju Cards ${BUILD_VER}`
-        prepareSocket()
-        const root = createRoot(preactRoot)
-        preactRoot.innerHTML = '' // remove the default warning
-        root.render(<App />)
-    }
+    if (GAME_IS_LIVE)
+        startLoadingAssets().then(() => connectToServerAndRenderUI())
+    else connectToServerAndRenderUI()
 }
+
+const connectToServerAndRenderUI = () => {
+    document.title = `Kaiju Cards ${BUILD_VER}`
+    prepareSocket()
+    const root = createRoot(reactRoot)
+    reactRoot.innerHTML = '' // remove the default warning
+    root.render(<App />)
+}
+
 void main()
