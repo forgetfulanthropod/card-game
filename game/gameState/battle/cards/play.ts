@@ -1,4 +1,5 @@
 import type { Card, CharacterUid, BattleCursor } from 'shared'
+import { miscTauntValues } from 'shared/code'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { getTargetUids } from './getTargetUids'
 
@@ -24,6 +25,13 @@ export function play({
         }),
         scene,
     })
+    if (card.type == 'attack') {
+        scene.apply(
+            ['allCharacters', card.characterUid, 'taunt'],
+            t => t + miscTauntValues['playAttack']
+        )
+    }
+
     scene.apply('cardsPlayedThisRoom', cards => [
         ...cards,
         { ...card, timestamp: new Date().toISOString() },

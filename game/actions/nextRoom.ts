@@ -8,13 +8,10 @@ import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
-import {
-    BattleCursor,
-    disableEventScene,
-    DungeonRoom,
-    GameActions,
-} from 'shared'
-import { objFilter } from 'shared/code'
+import { BattleCursor, CharacterClass, DungeonRoom, GameActions } from 'shared'
+import { produce } from 'immer'
+import { calculateBaseTaunt, objFilter } from 'shared/code'
+import type { Species } from 'shared'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -70,6 +67,7 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
         ...newNpcs,
     }))
 
+    setBaseTaunt(scene)
     setRoundEnergy(scene)
     activateSouvenirs('battleStart', scene)
     activateSouvenirs('turnStart', scene)
@@ -85,6 +83,21 @@ function getChosenRoom(scene: BattleCursor, choice: 0 | 1 | 2 | 3) {
     const chosenRoomKey = scene.get('currentRoom').edges[choice]
     const chosenRoom = scene.get('rooms', chosenRoomKey)
     return chosenRoom
+}
+
+const setBaseTaunt = (scene: BattleCursor) => {
+    scene.apply(
+        'allCharacters',
+        produce(ac => {
+            for (const [id, cm] of Object.entries(ac)) {
+                if (!cm.isPc) continue
+                const taunt = calculateBaseTaunt(cm)
+                cm.taunt = taunt
+                cm.lastTaunt = taunt
+            }
+            return ac
+        })
+    )
 }
 
 // function getNextRoom(scene: BattleCursor) {

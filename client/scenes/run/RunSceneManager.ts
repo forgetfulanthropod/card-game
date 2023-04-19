@@ -4,7 +4,7 @@ import { onUpdate, toDatum } from '@/util'
 import { compose, datum } from 'datums'
 import type { CardUid } from 'shared'
 import { BattleScene, immediatelyTakeRequiredAction } from './BattleScene'
-import { EventScene } from './EventScene'
+import { EventSceneEl } from './EventScene'
 import { HexMapOverlay } from './HexMapOverlay'
 import { RestSiteOverlay } from './RestSiteOverlayPicnic'
 
@@ -42,7 +42,7 @@ export function RunSceneManager(): PixiContainer {
             ({ isInRestSite, isInMap, isInEventScene }) => {
                 if (isInMap) return HexMapOverlay()
                 if (isInRestSite) return RestSiteOverlay()
-                if (isInEventScene) return EventScene()
+                if (isInEventScene) return EventSceneEl()
 
                 throw new Error('unclear scene choice')
             },

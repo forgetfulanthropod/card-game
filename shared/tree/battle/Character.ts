@@ -92,6 +92,8 @@ export interface CalculatedCharacterStats {
     damageTakeAddend: number
     blockMultiplier: number
     health: number
+    lastTaunt: number
+    taunt: number
     stance: StanceId
 }
 

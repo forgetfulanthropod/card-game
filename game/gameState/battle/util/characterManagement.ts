@@ -183,6 +183,8 @@ export function newNPCMeta(args: {
             room: {},
             run: {},
         },
+        lastTaunt: 0,
+        taunt: 0,
     }
 
     return { ...cm, calculatedStats: calculateStats(cm) }

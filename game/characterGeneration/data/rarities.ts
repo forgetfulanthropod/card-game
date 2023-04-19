@@ -1,4 +1,5 @@
-import { CharacterClass, Species } from './stats'
+import type { CharacterClass, Species } from 'shared'
+
 import { numTalents, talentRarities } from './talents'
 import { randomInteger, randomValue, rollNumber } from './util'
 

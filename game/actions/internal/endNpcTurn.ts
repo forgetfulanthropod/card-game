@@ -54,6 +54,6 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     scene.set('damagesUnblockedThisTurn', [])
     scene.set('damagesDealtThisTurn', [])
     scene.set('blocksAppliedThisTurn', [])
-
+    scene.set('nextNpcCommands', [])
     updateNpcMoves(scene)
 }

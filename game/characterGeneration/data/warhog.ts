@@ -304,35 +304,122 @@ export const names = {
         'Denver',
     ],
     lastName1: [
-        'Hair',
-        'Hobble',
-        'Oyster',
-        'Axe',
-        'Stomp',
-        'Rock',
-        'Stomp',
-        'Big',
-        'Gentle',
-        'Anger',
-        'Tough',
-        'River',
-        'Large',
-        'Hoof',
-        'Iron',
-        'Mountain',
-        'Hog',
-        'Storm',
-        'Thunder',
-        'War',
-        'Danger',
-        'Tundra',
-        'Boulder',
-        'Wind',
-        'Sumo',
-        'Dust',
-        'Snort',
-        'Pig',
-        'Pork',
+        {
+            name: 'Hair',
+            complete: false,
+        },
+        {
+            name: 'Hobble',
+            complete: false,
+        },
+        {
+            name: 'Oyster',
+            complete: false,
+        },
+        {
+            name: 'Axe',
+            complete: false,
+        },
+        {
+            name: 'Stomp',
+            complete: false,
+        },
+        {
+            name: 'Rock',
+            complete: false,
+        },
+        {
+            name: 'Stomp',
+            complete: false,
+        },
+        {
+            name: 'Big',
+            complete: false,
+        },
+        {
+            name: 'Gentle',
+            complete: false,
+        },
+        {
+            name: 'Anger',
+            complete: false,
+        },
+        {
+            name: 'Tough',
+            complete: false,
+        },
+        {
+            name: 'River',
+            complete: false,
+        },
+        {
+            name: 'Large',
+            complete: false,
+        },
+        {
+            name: 'Hoof',
+            complete: false,
+        },
+        {
+            name: 'Iron',
+            complete: false,
+        },
+        {
+            name: 'Mountain',
+            complete: false,
+        },
+        {
+            name: 'Hog',
+            complete: false,
+        },
+        {
+            name: 'Storm',
+            complete: false,
+        },
+        {
+            name: 'Thunder',
+            complete: false,
+        },
+        {
+            name: 'War',
+            complete: false,
+        },
+        {
+            name: 'Danger',
+            complete: false,
+        },
+        {
+            name: 'Tundra',
+            complete: false,
+        },
+        {
+            name: 'Boulder',
+            complete: false,
+        },
+        {
+            name: 'Wind',
+            complete: false,
+        },
+        {
+            name: 'Sumo',
+            complete: false,
+        },
+        {
+            name: 'Dust',
+            complete: false,
+        },
+        {
+            name: 'Snort',
+            complete: false,
+        },
+        {
+            name: 'Pig',
+            complete: false,
+        },
+        {
+            name: 'Pork',
+            complete: false,
+        },
     ],
     lastName2: [
         'lumps',

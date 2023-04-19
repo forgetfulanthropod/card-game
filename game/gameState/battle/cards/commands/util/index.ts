@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Value as VAngu } from 'angu'
+import { upperFirst } from 'lodash'
 
 import type {
     BasicTargetType,
@@ -192,6 +193,7 @@ export function evalAllAsHtml<T extends any[]>(angus: Anguify<T>): string[] {
 
 export function applyStatHtml(statName: string, value: string) {
     let color = ''
+    // const statIds: string[] = []
     Object.keys(statsToColorsMap).map(stat => {
         const statColor = statsToColorsMap[
             stat as keyof CharacterStats
@@ -199,12 +201,23 @@ export function applyStatHtml(statName: string, value: string) {
         if (statName.includes(stat)) {
             if (!color.length) color = statColor
             else color = blend(color, statColor)
+
+            // statIds.push(stat)
         }
     })
 
     return color
         ? `<span style="color: ${color}; font-weight: bold;">${value}</span>`
         : `${value}`
+    // ${statIds
+    //       .map(
+    //           id =>
+    //               `<img width="10" height="10" src="assets/core-ui/stats/${upperFirst(
+    //                   id
+    //               )}.webp">`
+    //       )
+    //       .join('')
+    // }`
 }
 
 function blend(color1Hex: string, color2Hex: string) {
