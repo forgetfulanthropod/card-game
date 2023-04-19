@@ -1,6 +1,6 @@
 import './global.css'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, createContext } from 'react'
 
 import { GameManager } from './GameManager'
 // import { UsernameEntry } from './UsernameEntry'
@@ -36,6 +36,16 @@ const wagmiClient = createClient({
 })
 const ethereumClient = new EthereumClient(wagmiClient, chains)
 
+interface IAppContext {
+    inPixi: boolean
+    setInPixi: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const AppContext = createContext<IAppContext>({
+    inPixi: false,
+    setInPixi: () => {},
+})
+
 export function App(): JSXElement {
     const [username, setUsername] = useState(
         localStorage.getItem('username') ?? ''
@@ -60,21 +70,39 @@ export function App(): JSXElement {
         setInPixi(true)
     }
 
-    return <>
-        <WagmiConfig client={wagmiClient}>
-            <ConnectionProvider endpoint={endpoint}>
-                <WalletProvider wallets={wallets} autoConnect>
-                    <WalletModalProvider>
-                        <GameManager username={username}>
-                            {!inPixi && <NewStartScreen
-                                onEnter={handleStartGame}
-                            />}
-                        </GameManager>
-                    </WalletModalProvider>
-                </WalletProvider>
-            </ConnectionProvider>
-        </WagmiConfig>
+    const appContext = {
+        inPixi,
+        setInPixi,
+    }
 
-        <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+    useEffect(() => {
+        // start game at last saved state on refresh for local development
+        const isLocalEnv = getClientEnv('IS_LOCAL')
+        if (!isLocalEnv) return
+        const username = localStorage.getItem('username')
+        if (username) setInPixi(true)
+    }, [])
+
+    return <>
+        <AppContext.Provider value={appContext}>
+            <WagmiConfig client={wagmiClient}>
+                <ConnectionProvider endpoint={endpoint}>
+                    <WalletProvider wallets={wallets} autoConnect>
+                        <WalletModalProvider>
+                            <GameManager
+                                username={username}
+                                setInPixi={setInPixi}
+                            >
+                                {!inPixi && <NewStartScreen
+                                    onEnter={handleStartGame}
+                                />}
+                            </GameManager>
+                        </WalletModalProvider>
+                    </WalletProvider>
+                </ConnectionProvider>
+            </WagmiConfig>
+
+            <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        </AppContext.Provider>
     </>
 }

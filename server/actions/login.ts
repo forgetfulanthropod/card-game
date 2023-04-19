@@ -3,7 +3,7 @@ import { getDbClient, sql as sqlTag } from '@/db/client'
 import { getLogger } from 'game'
 import { getUserId } from './internal'
 import { sign } from 'jsonwebtoken'
-import { getServerEnv } from '@/../shared/code'
+import { getServerEnv } from 'shared/code'
 
 export const login: ServerActions['login'] = async ({ walletAddress }) => {
     logger.info(`Handling login for: ${walletAddress}`)

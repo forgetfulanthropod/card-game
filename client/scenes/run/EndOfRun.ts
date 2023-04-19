@@ -742,7 +742,7 @@ export function EndOfRun(): PixiContainer {
 
     /** Takes you to character select screen */
     function handleTryAgain() {
-        void callApi('makeNewUser', {
+        void callApi('setInitialGameState', {
             username: localStorage.getItem('username') as string,
         })
         window.location.reload()

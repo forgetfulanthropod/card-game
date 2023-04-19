@@ -162,7 +162,7 @@ function getJSON(scene: BattleScene): string {
 //         return
 //     }
 //     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-//     await callApi('makeNewUser', { username })
+//     await callApi('setInitialGameState', { username })
 //     toast('added')
 // }
 
@@ -197,7 +197,7 @@ function getJSON(scene: BattleScene): string {
 //     }
 //     await callApi('rulebookAction', { do: 'delete', name })
 //     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-//     await callApi('makeNewUser', { username })
+//     await callApi('setInitialGameState', { username })
 //     toast('overwritten')
 // }
 

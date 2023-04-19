@@ -3,8 +3,10 @@ import type { Server } from 'http'
 import { has } from 'lodash'
 import type { GameState, NetworkEvent } from 'shared'
 import { Server as SocketServer } from 'socket.io'
-import { maybeMakeUser } from './actions'
+import { loadGameState } from './actions'
 import { api } from './api'
+import * as jwt from 'jsonwebtoken'
+import { getServerEnv } from 'shared/code'
 
 const usernameToSocketId: Record<string, string> = {}
 const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
@@ -17,7 +19,7 @@ export function getSocketId(username: string): string {
 }
 let io: null | SocketServer = null
 
-export function emitNewGamestate(username: string, gamestate: GameState) {
+export function emitUpdatedGameState(username: string, gamestate: GameState) {
     if (io == null) throw Error('io is null')
     const socketId = getSocketId(username)
     io.to(socketId).emit('update', { data: gamestate })
@@ -43,6 +45,21 @@ export function mountIo(
     refreshOnChange(io)
     io.on('connection', socket => {
         // logger.info(`socket connected: ${socket.id}`)
+
+        // WIP
+        socket.on(
+            'authenticate',
+            (token: string, callback: (success: boolean) => void) => {
+                jwt.verify(
+                    token,
+                    getServerEnv('JWT_TOKEN_SECRET'),
+                    (err, decoded) => {
+                        if (err) return callback(false)
+                        callback(true)
+                    }
+                )
+            }
+        )
         socket.on(
             'username',
             ({
@@ -54,7 +71,7 @@ export function mountIo(
             }) => {
                 // logger.info(['username associated:', { username, socketId }])
                 usernameToSocketId[username] = socketId
-                void maybeMakeUser({ username })
+                void loadGameState({ username })
             }
         )
         socket.on(

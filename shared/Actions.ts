@@ -27,11 +27,11 @@ export interface BareServerActionsMeta {
         args: Empty
         res: Promise<void>
     }
-    makeNewUser: {
+    setInitialGameState: {
         args: { username: string }
         res: void
     }
-    maybeMakeUser: {
+    loadGameState: {
         args: { username: string }
         res: Promise<void>
     }

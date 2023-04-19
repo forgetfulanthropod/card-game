@@ -8,6 +8,7 @@ import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
+import { getClientEnv } from './util/getClientEnv'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -36,6 +37,15 @@ export function prepareSocket(): void {
         // emit authentication or login event to server
         // server will then either say this JWT is still valid, or it needs to be reauthenticated (eg. another message signed)
         // we render start screen regardless, but if it needs authentication, trigger sign a message.
+
+        const isLocalEnv = getClientEnv('IS_LOCAL')
+        if (isLocalEnv) {
+            // start game at last saved state on refresh
+            const username = localStorage.getItem('username')
+            if (username != null) {
+                socket.emit('username', { username, socketId: socket.id })
+            }
+        }
     })
 
     socket.on('refresh', () => window.location.reload())

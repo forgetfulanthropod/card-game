@@ -4,6 +4,7 @@ const CLIENT_ENV_KEYS = {
     RPC_URL: process.env.RPC_URL,
     GAME_IS_LIVE: process.env.GAME_IS_LIVE,
     IS_PRODUCTION: process.env.IS_PRODUCTION,
+    IS_LOCAL: process.env.IS_LOCAL,
     CLIENT_GIT_BRANCH: process.env.CLIENT_GIT_BRANCH,
     CLIENT_GIT_COMMIT: process.env.CLIENT_GIT_COMMIT,
     CLIENT_BUILD_TIME: process.env.CLIENT_BUILD_TIME,

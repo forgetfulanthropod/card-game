@@ -36,7 +36,8 @@ const REQUIRED_CLIENT_ENV_KEYS =
      'GAME_IS_LIVE',
      'IS_PRODUCTION',
      'CLIENT_PASSWORD',
-     'WALLET_CONNECT_ID'
+     'WALLET_CONNECT_ID',
+     'IS_LOCAL' // tmp, should just have a "environment" key in future
     ]
 
 /**

@@ -1,6 +1,6 @@
 import { callApi } from '@/callApi'
 import { styled } from '@/config'
-import { useState, useRef, MouseEvent, useEffect } from 'react'
+import { useState, useRef, useContext } from 'react'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import {
     muteMusic,
@@ -16,6 +16,7 @@ import {
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
 import { enableMotionFX } from '@/scenes/shared'
+import { AppContext } from './App'
 
 const Root = styled.button`
     position: absolute;
@@ -38,6 +39,7 @@ export function ResetButton(props: { username: string }): JSXElement {
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
     const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
+    const { setInPixi } = useContext(AppContext);
 
     const handleClick = () => {
         setShowMenu(actions => !actions)
@@ -62,7 +64,7 @@ export function ResetButton(props: { username: string }): JSXElement {
                 restart: true,
             })
         }
-        await callApi('makeNewUser', {
+        await callApi('setInitialGameState', {
             username: props.username,
         })
         setShowMenu(false)
@@ -70,10 +72,11 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleBackToMenu = async () => {
         localStorage.removeItem('username')
-        await callApi('makeNewUser', {
+        await callApi('setInitialGameState', {
             username: props.username,
         })
-        window.location.reload()
+        setInPixi(false)
+        setShowMenu(false)
     }
 
     const handleHighRes = async () => {

@@ -88,7 +88,7 @@ export function RulebookEditor(props: { username: string }): JSXElement {
                         do: 'choose',
                         name: newName,
                     })
-                    await callApi('makeNewUser', { username })
+                    await callApi('setInitialGameState', { username })
                 }}
             />
             {shown && <>
@@ -131,7 +131,7 @@ async function addNewRulebook(
         return
     }
     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('makeNewUser', { username })
+    await callApi('setInitialGameState', { username })
     toast('added')
 }
 
@@ -166,7 +166,7 @@ async function overwriteRulebook(
     }
     await callApi('rulebookAction', { do: 'delete', name })
     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('makeNewUser', { username })
+    await callApi('setInitialGameState', { username })
     toast('overwritten')
 }
 

@@ -2,7 +2,7 @@ import { clearHappened, getHappened, step, doGameAction } from 'game'
 import type { GameActionCall, Gamecursor } from 'shared'
 import { sleep } from 'shared/code'
 import { setGamestate } from './db'
-import { emitNetworkEvent, emitNewGamestate } from './IO'
+import { emitNetworkEvent, emitUpdatedGameState } from './IO'
 import { SBaobab } from 'sbaobab'
 import { getGamestate } from './db'
 
@@ -55,6 +55,6 @@ function updateClient(username: string, game: Gamecursor) {
     }
     clearHappened(username)
 
-    emitNewGamestate(username, game.get())
+    emitUpdatedGameState(username, game.get())
     setGamestate(username, game.get())
 }
