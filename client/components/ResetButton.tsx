@@ -71,10 +71,11 @@ export function ResetButton(props: { username: string }): JSXElement {
     }
 
     const handleBackToMenu = async () => {
-        localStorage.removeItem('username')
+        console.log('handleBackToMenu...')
         await callApi('setInitialGameState', {
             username: props.username,
         })
+        localStorage.removeItem('username')
         setInPixi(false)
         setShowMenu(false)
     }
