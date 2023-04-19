@@ -1,6 +1,12 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type { CharacterMeta, CharacterUid, Pile } from 'shared'
+import type {
+    EffectId,
+    CharacterMeta,
+    CharacterUid,
+    Pile,
+    BattleScene,
+} from 'shared'
 
 import { getBattleScene } from '@/data'
 import {
@@ -29,6 +35,8 @@ import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { EffectIndicators } from './EffectIndicators'
 import { StanceControls } from './StanceControls'
+import { getClientEnv } from '@/util/getClientEnv'
+import { calculateTaunt } from 'shared/code'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -39,6 +47,7 @@ export const HEALTH_BAR_WIDTH = 300
 export function HealthBar(characterUid: CharacterUid): PixiContainer {
     const characterCursor = getCharacterCursor(characterUid)
     const handCursor = getBattleScene().select('cards', 'hand')
+    const sceneCursor = getBattleScene()
     // Can't currently trust Character to destroy its healthbar when it should, so this is a temporary fix
     const unsub = onUpdate(characterCursor, char => {
         if (char == null) {
@@ -56,13 +65,58 @@ export function HealthBar(characterUid: CharacterUid): PixiContainer {
         BlockIndicator(characterCursor),
         HealthIndicator(characterCursor),
         EffectIndicators(characterCursor),
-        DamageIndicator(characterCursor, handCursor)
+        DamageIndicator(characterCursor, handCursor),
+        getClientEnv('IS_PRODUCTION') === 'true'
+            ? null
+            : TauntIndicator(sceneCursor, characterCursor)
     )
     return root
 }
 
 function getCharacterCursor(characterUid: string) {
     return getBattleScene().select('allCharacters').select(characterUid)
+}
+
+function TauntIndicator(
+    sceneCursor: ROCursor<BattleScene>,
+    characterCursor: ROCursor<CharacterMeta>
+) {
+    const currentUid = characterCursor.get('uid')
+    const data = toDatum(sceneCursor, sc => {
+        let t = -1
+        const allTaunt = Object.values(sc.allCharacters)
+            .filter(cm => cm.isPc && cm.health > 0)
+            .map(cm => {
+                const x = calculateTaunt(cm, 'current')
+                if (cm.uid === currentUid) t = x
+                return x
+            })
+            .reduce((prev, cur) => prev + cur, 0)
+        return t != -1 ? `${t} (${((t / allTaunt) * 100).toFixed(2)}%)` : ''
+    })
+    return If(data, taunt =>
+        Container(
+            {
+                y: -300,
+                x: -100,
+            },
+            ...(taunt === ''
+                ? []
+                : [
+                      Text({
+                          text: `${taunt}`,
+                          anchor: [0.5, 0.5],
+                          style: {
+                              fontFamily: fontMap['sansFont'],
+                              fontSize: 30,
+                              fill: 'white',
+                              stroke: 'black',
+                              strokeThickness: 5,
+                          },
+                      }),
+                  ])
+        )
+    )
 }
 
 function BlockIndicator(characterCursor: ROCursor<CharacterMeta>) {

@@ -4,6 +4,7 @@ import { evalAll, evalAllAsHtml } from './util'
 import { calculateStats } from '@/gameState'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 import { getTargetText } from './util/getTargetText'
+import { miscTauntValues } from 'shared/code'
 
 export const explain: Explainers['setStance'] = (dslArgs, context) => {
     const [stance, targetTypeOverride] = evalAll(dslArgs)
@@ -39,6 +40,12 @@ export const execute: Executors['setStance'] = ({
             scene.select('allCharacters', uid).apply(cm => ({
                 ...cm,
                 stance,
+                taunt:
+                    cm.taunt + stance === 'aggressive'
+                        ? miscTauntValues['aggressive']
+                        : stance === 'avoidant'
+                        ? miscTauntValues['avoidant']
+                        : 0,
             }))
         )
 }

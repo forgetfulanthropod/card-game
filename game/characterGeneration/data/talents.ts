@@ -1,5 +1,6 @@
+import type { Species, CharacterClass } from 'shared'
+
 import { Rarity } from './rarities'
-import { Species, CharacterClass } from './stats'
 
 export const numTalents: Record<Rarity, number> = {
     common: 1,

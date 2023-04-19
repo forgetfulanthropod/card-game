@@ -9,4 +9,6 @@ export * from './objectHelpers'
 export * from './rulebookVersion'
 export * from './timezones'
 export * from './getServerEnv'
+export * from './weight'
+export * from './taunt'
 // @endindex

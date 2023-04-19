@@ -81,14 +81,5 @@ function isPlayable({
         if (!livingTargets.length) return false
     }
 
-    const requiredStance = card.actions.match(/ifStance\([^"]*"([^"]+)/)?.[1]
-
-    if (
-        requiredStance &&
-        scene.get('allCharacters', card.characterUid, 'stance') !==
-            requiredStance
-    )
-        return false
-
     return true
 }

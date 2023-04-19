@@ -6,6 +6,7 @@ import { applyDamage } from '@/gameState'
 import { upperFirst } from 'lodash'
 import { getTargetText } from './util/getTargetText'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
+import { miscTauntValues } from 'shared/code'
 
 export const explain: Explainers['deal'] = (dslArgs, context) => {
     const [damageHtml] = evalAllAsHtml(dslArgs)
@@ -46,18 +47,26 @@ export const execute: Executors['deal'] = ({
         return
     }
 
+    let totalDamage = 0
     getTargetUidsOverride({
         targetTypeOverride: targetType,
         scene,
         command,
         givenUids: targetUids,
-    }).forEach(targetUid =>
-        applyDamage({
-            damage,
-            targetUid,
-            attackerUid: command.characterUid,
-            scene,
-            piercing: modifier === 'piercing',
-        })
+    }).forEach(
+        targetUid =>
+            (totalDamage += applyDamage({
+                damage,
+                targetUid,
+                attackerUid: command.characterUid,
+                scene,
+                piercing: modifier === 'piercing',
+            }))
     )
+    if (totalDamage > 20) {
+        scene.apply(
+            ['allCharacters', command.characterUid, 'taunt'],
+            t => t + miscTauntValues['over20dmg']
+        )
+    }
 }

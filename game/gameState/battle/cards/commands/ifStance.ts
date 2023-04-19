@@ -1,3 +1,4 @@
+import { miscTauntValues } from 'shared/code'
 import type { Executors, Explainers } from './util'
 import { evalAllAsHtml } from './util'
 
@@ -16,7 +17,16 @@ export const execute: Executors['ifStance'] = ({ dslArgs, scene, command }) => {
 
     const characterMeta = scene.get('allCharacters', command.characterUid)
 
-    stances.forEach(s => {
-        if (characterMeta.stance === s) dslArgs[1].eval()
-    })
+    dslArgs[1].eval()
+    if (stances.includes('aggressive')) {
+        scene.apply(
+            ['allCharacters', command.characterUid, 'taunt'],
+            t => t + miscTauntValues['aggresive']
+        )
+    } else if (stances.includes('avoidant')) {
+        scene.apply(
+            ['allCharacters', command.characterUid, 'taunt'],
+            t => t + miscTauntValues['avoidant']
+        )
+    }
 }

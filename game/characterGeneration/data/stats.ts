@@ -1,10 +1,12 @@
+import type { CharacterClass, Species } from 'shared'
+
 import type { Rarity } from './rarities'
 import { randomInteger, rollWeights, randomValue } from './util'
-
 export type Stat = 'primary' | 'secondary' | 'tertiary1' | 'tertiary2'
 export type StatName = 'strength' | 'magic' | 'defense' | 'constitution'
-export type Species = 'frogKnight' | 'warhog' | 'penguinKnight'
-export type CharacterClass = 'knight' | 'cleric' | 'bard' | 'rogue' | 'wizard'
+
+// export type Species = 'frogKnight' | 'warhog' | 'penguinKnight'
+// export type CharacterClass = 'knight' | 'cleric' | 'bard' | 'rogue' | 'wizard'
 
 const speciesStatBonus: Record<Species, Record<StatName, number>> = {
     frogKnight: {

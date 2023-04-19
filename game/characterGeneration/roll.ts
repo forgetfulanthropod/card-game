@@ -1,10 +1,10 @@
+import type { Species } from 'shared'
+
 import { kaijus } from './data'
 import { Rarity, rollTalents } from './data/rarities'
 import { rollComponents, rollMasterRarity } from './data/rarities'
 import { randomValue, rollWeights } from './data/util'
 import { calculateStats, rollStats, speciesClassCDF } from './data/stats'
-
-import type { Species } from './data/stats'
 
 export const kaijuSpineMap: Record<string, string> = {
     frogKnight: 'frogKnightGenOne',

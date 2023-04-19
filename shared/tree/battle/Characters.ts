@@ -43,8 +43,11 @@ export interface CharacterMeta extends CharacterStats {
     calculatedStats: CalculatedCharacterStats
     skin?: any
     sword?: SwordParts
+    lastTaunt: number
+    taunt: number
 }
 export type CharacterClass = 'cleric' | 'knight' | 'wizard' | 'bard' | 'rogue'
+export type Species = 'frogKnight' | 'warhog' | 'penguinKnight'
 
 export type PlayerCharacterId =
     | 'bloatDemon'
