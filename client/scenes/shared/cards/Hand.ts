@@ -420,6 +420,7 @@ function renderCardsInHand(
 
         const Card = CardEl({
             width: CARD_WIDTH,
+            explanationsAdjustX: (CARD_WIDTH_FULL - CARD_WIDTH) / 2,
             card,
             hoveredCardUid,
             // omitPointerAreaExtender: true,
