@@ -1,6 +1,7 @@
 import { getBattleScene } from '@/data'
 import {
     Adjust,
+    BASE_WIDTH,
     Container,
     getStage,
     If,
@@ -53,10 +54,12 @@ export function CardsTiltedInLineForCharacter(
     return root
 }
 
+export const DEFAULT_TILTED_CARDS_WIDTH = 500
+
 export function CardsTiltedInLine({
     cards,
     cardWidth = 65,
-    parentWidth = 500,
+    parentWidth = DEFAULT_TILTED_CARDS_WIDTH,
     onClick,
 }: {
     cards: Card[]
@@ -93,7 +96,6 @@ export function CardsTiltedInLine({
     })
 
     let fullSizeCard: TweenablePixiContainer | null
-    let hoveringCardDetails = false
 
     const cardEls = cardsSorted.map((cardMeta, index) => {
         const sprite = CardSprite({ card: cardMeta, width: cardWidth })
@@ -102,8 +104,6 @@ export function CardsTiltedInLine({
         sprite.scale.x = -tiltFactor
 
         const clearOldFullSizeCard = () => {
-            hoveringCardDetails = false
-
             fullSizeCard && getStage().removeChild(fullSizeCard)
 
             fullSizeCard?.destroy()
@@ -126,11 +126,8 @@ export function CardsTiltedInLine({
                                 card: cardMeta,
                                 width: cardWidth,
                                 showTermExplanations: true,
-                                explanationsOnLeft: true,
-                                explanationsAdjustX:
-                                    root.getGlobalPosition().x > 420
-                                        ? -420
-                                        : 300,
+                                explanationsOnLeft:
+                                    root.getGlobalPosition().x > BASE_WIDTH / 2,
                                 explanationsAdjustY: 200,
                             }),
                             {

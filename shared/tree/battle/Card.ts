@@ -6,7 +6,15 @@ import { CommandQueue } from './CommandQueue'
 
 export type CardUid = string & Brandify
 
-export type PileId = 'draw' | 'hand' | 'discard' | 'removedRoom' | 'removedRun'
+export const emptyPiles = {
+    draw: {},
+    hand: {},
+    discard: {},
+    removedRoom: {},
+    removedRun: {},
+    removedDead: {},
+}
+export type PileId = keyof typeof emptyPiles
 
 export type DSLString = string & Brandify
 

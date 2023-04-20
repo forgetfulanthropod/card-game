@@ -33,7 +33,7 @@ export function NpcIntentArrow(uid: CharacterUid, isHovered: RODatum<boolean>) {
         from: root,
         content: IntentArrows(uid, nextCmd, isHovered),
         nextFrame: true,
-        to: () => getStage().getChildByName('NpcIntentArrowContainer', true),
+        to: () => getStage().getChildByName('NpcIntentArrowContainer', true)!,
     })
 
     return root

@@ -11,6 +11,7 @@ import {
     onDestroyed,
     PixiContainer,
     PixiContainerWithTweenableChildren,
+    TweenableContainer,
     TweenablePixiContainer,
 } from '@/elementsUtil'
 import { toDiscardUids } from '@/scenes/run/BattleScene'
@@ -33,7 +34,7 @@ import { cardUsesArrowTargeting } from './helpers'
 
 // const CARD_HEIGHT_IN_HAND = CARD_WIDTH_IN_HAND * CARD_H_TO_W_RATIO
 const CARD_WIDTH = 260
-const CARD_WIDTH_FULL = 400
+export const CARD_WIDTH_FULL = 400
 const CARD_H_TO_W_RATIO = 630 / 450
 const CARD_HEIGHT_FULL = CARD_WIDTH_FULL * CARD_H_TO_W_RATIO
 const INITIAL_CARDS_X = -900
@@ -197,7 +198,9 @@ export function Hand(
     }
 
     function getCardElFromUid(cardUid: CardUid): TweenablePixiContainer {
-        return getDestructibleRoot().getChildByName(cardUid)
+        const card = getDestructibleRoot().getChildByName(cardUid)
+        if (!card) console.error(`CARD MISSING FROM HAND: ${cardUid}`)
+        return card as TweenablePixiContainer
     }
 
     function getSelectedCardMeta(cardUid: CardUid): Card {
@@ -285,8 +288,7 @@ export function Hand(
         let destructibleRoot = getDestructibleRoot()
         destructibleRoot.destroy({ children: true })
         hoveredCardUid.set(null)
-        // let targetingCardUid = selectedForTargetingCardUid.val
-        console.log({ position })
+
         if (position !== 'final') selectedForTargetingCardUid.set(null)
 
         destructibleRoot = getDestructibleRoot()
@@ -321,7 +323,7 @@ export function Hand(
         }
 
         destructibleRoot.children.forEach(
-            CardEl => (CardEl.zIndex = initialDisplayVals[CardEl.name].zIndex)
+            CardEl => (CardEl.zIndex = initialDisplayVals[CardEl.name!].zIndex)
         )
 
         return NewCardsInHand
@@ -629,11 +631,11 @@ function getUnfocus(
         rootEl.children.forEach((cardEl: TweenablePixiContainer, i) => {
             if (
                 selectedForTargetingCardUid.val === cardEl.name ||
-                selectedCardUids.includes(cardEl.name)
+                selectedCardUids.includes(cardEl.name!)
             )
                 return
 
-            const initialDisplayVal = initialDisplayVals[cardEl.name]
+            const initialDisplayVal = initialDisplayVals[cardEl.name!]
 
             cardEl.zIndex = initialDisplayVal.zIndex
             cardEl.parent.sortChildren()
@@ -708,14 +710,14 @@ const ADJUST_HOVERED_CARD_DISTANCE = 0
 
 function spreadOthers(
     RootEl: PixiContainerWithTweenableChildren,
-    CardEl: TweenablePixiContainer,
+    cardEl: TweenablePixiContainer,
     initialDisplayVals: InitialDisplayVals
 ) {
     RootEl.sortChildren()
     const scene = getBattleScene()
     const hand = scene.get('cards').hand
-    const hoveredCardIdx = initialDisplayVals[CardEl.name]?.zIndex
-    const hoveredCardMeta = hand[CardEl.name]
+    const hoveredCardIdx = initialDisplayVals[cardEl.name!]?.zIndex
+    const hoveredCardMeta = hand[cardEl.name!]
     const [leftEdgeIdx, rightEdgeIdx] = [RootEl.children.length - 1, 0]
 
     for (
@@ -724,13 +726,13 @@ function spreadOthers(
         cardIdx++, i++
     ) {
         const LeftCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
-        const cardMeta = hand[LeftCardEl.name]
+        const cardMeta = hand[LeftCardEl.name!]
         if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
 
         const xShift = Math.min(0, -HAND_SPREAD_DISTANCE + 40 * i)
         runKeyframeAnimations(LeftCardEl, 0.35, {
             keyframes: 1,
-            x: initialDisplayVals[LeftCardEl.name].x + xShift,
+            x: initialDisplayVals[LeftCardEl.name!].x + xShift,
             ease: Easing.easeTo,
         })
     }
@@ -740,17 +742,17 @@ function spreadOthers(
         cardIdx >= 0;
         cardIdx--, i++
     ) {
-        const RightCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
-        const cardMeta = hand[RightCardEl.name]
+        const rightCardEl = RootEl.getChildAt(cardIdx) as TweenablePixiContainer
+        const cardMeta = hand[rightCardEl.name!]
         if (hoveredCardMeta.characterUid !== cardMeta.characterUid) break
         const xShift = Math.max(0, HAND_SPREAD_DISTANCE - 40 * i)
 
         // ideal (but not implemented) gaps below
         // 3 chars, 2 chars = 90px between cards when hovered
         // 1 char = 80px
-        runKeyframeAnimations(RightCardEl, 0.35, {
+        runKeyframeAnimations(rightCardEl, 0.35, {
             keyframes: 1,
-            x: initialDisplayVals[RightCardEl.name].x + xShift,
+            x: initialDisplayVals[rightCardEl.name!].x + xShift,
             ease: Easing.easeTo,
         })
     }

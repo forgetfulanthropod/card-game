@@ -289,7 +289,7 @@ export function EndOfRoom(): PixiContainer {
                 fontSize: 50,
                 xPadding: 85,
                 yPadding: 20,
-                outlineColor: 0x002717
+                outlineColor: 0x002717,
             })
             ConfirmButton.scale.set(1.5)
 
@@ -304,7 +304,7 @@ export function EndOfRoom(): PixiContainer {
                 onClick: () => {},
             })
 
-            const lootItemContainerChildren: PixiSprite|PixiContainer[] = [
+            const lootItemContainerChildren: PixiSprite | PixiContainer[] = [
                 RoundedBlackRectBackground,
                 LootItemSprite,
                 LootItemText,
@@ -368,7 +368,7 @@ export function EndOfRoom(): PixiContainer {
         const newScale = getScale({ idx: 0 })
         el.height = ITEM_BOX_HEIGHT * newScale
         el.width = ITEM_BOX_WIDTH * newScale
-        el.getChildByName('InactiveLootItemOverlay').destroy()
+        el.getChildByName('InactiveLootItemOverlay')?.destroy()
         applyOnClick(el, () => handleButtonPress())
         currLootItem = el
     }

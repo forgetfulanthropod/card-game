@@ -81,24 +81,37 @@ export function TermExplanationsIf({
     terms,
     xOffset = 0,
     yOffset = 0,
+    noPortalize,
 }: {
     areShown: Datum<boolean>
     terms: KeyTerm[]
     xOffset?: number
     yOffset?: number
+    noPortalize?: boolean
 }) {
     return If(areShown, () =>
-        portalizeExplanations(
-            Container({}),
-            TermExplanations({
-                terms,
-                displayObjectArgs: {
-                    x: xOffset,
-                    y: yOffset,
-                },
-            }),
-            xOffset
-        )
+        noPortalize
+            ? Container(
+                  {},
+                  ...TermExplanations({
+                      terms,
+                      displayObjectArgs: {
+                          x: xOffset,
+                          y: yOffset,
+                      },
+                  })
+              )
+            : portalizeExplanations(
+                  Container({}),
+                  TermExplanations({
+                      terms,
+                      displayObjectArgs: {
+                          x: xOffset,
+                          y: yOffset,
+                      },
+                  }),
+                  xOffset
+              )
     )
 }
 

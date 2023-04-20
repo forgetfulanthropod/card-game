@@ -219,7 +219,7 @@ function isKeyedArray(
 export function portalize(args: {
     from: DisplayObject
     content: DisplayObject
-    to?: () => PixiContainer | PixiContainer
+    to?: () => PixiContainer
     /** Name of child of `to` to insert child before */
     before?: string
     nextFrame?: boolean
