@@ -53,10 +53,12 @@ export function CardsTiltedInLineForCharacter(
     return root
 }
 
+export const DEFAULT_TILTED_CARDS_WIDTH = 500
+
 export function CardsTiltedInLine({
     cards,
     cardWidth = 65,
-    parentWidth = 500,
+    parentWidth = DEFAULT_TILTED_CARDS_WIDTH,
     onClick,
 }: {
     cards: Card[]

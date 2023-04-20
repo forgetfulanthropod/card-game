@@ -1,4 +1,3 @@
-import { getBattleScene } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -13,10 +12,10 @@ import {
 import { Datum } from 'datums'
 import { Texture } from 'pixi.js'
 import { Souvenir } from 'shared'
-import { vals } from 'shared/code'
-import { BattleSceneCharacterInfo, MainCharacterAnimation } from '../shared'
+import { BattleSceneCharacterInfo } from '../shared'
 import { SouvenirEl } from './Souvenirs'
 import { EventResponse, explanationScale } from './EventScene'
+import { CharacterChoices } from './CharacterChoices'
 
 export function EquipSouvenirInterface(
     souvenir: Souvenir,
@@ -63,34 +62,7 @@ export function EquipSouvenirInterface(
                 y: BASE_HEIGHT * 0.2,
             }
         ),
-        ...CharacterChoices(choiceDatum, doneChoosing),
+        ...CharacterChoices({ choice: choiceDatum, doneChoosing }),
         BattleSceneCharacterInfo()
     )
-}
-function CharacterChoices(
-    choice: Datum<null | EventResponse>,
-    doneChoosing?: Datum<boolean>
-) {
-    return vals(getBattleScene().get('allCharacters'))
-        .filter(cm => cm.isPc && cm.health > 0)
-        .map((characterMeta, index) => {
-            return Adjust(
-                MainCharacterAnimation({
-                    characterMeta,
-                    events: {
-                        pointerup() {
-                            choice.set({
-                                index: choice.val?.index!,
-                                characterUid: characterMeta.uid,
-                            })
-                            doneChoosing && doneChoosing.set(true)
-                        },
-                    },
-                })!,
-                {
-                    x: BASE_WIDTH * 0.2 + index * BASE_WIDTH * 0.6 * 0.5,
-                    y: BASE_HEIGHT * 0.8,
-                }
-            )
-        })
 }

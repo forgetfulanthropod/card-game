@@ -21,7 +21,7 @@ import {
     Text,
 } from '@/elementsUtil'
 import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
-import { toDatum } from '@/util'
+import { selectedForTargetingCardUid, toDatum } from '@/util'
 import { callApi } from '@/callApi'
 
 export const CARD_WIDTH = 240
@@ -42,6 +42,8 @@ export function CardAdder(): PixiContainer {
 }
 
 function NewCardOptions(): PixiContainer {
+    selectedForTargetingCardUid.set(null)
+
     const selectedCardUid = datum<CardUid | null>(null)
     const CardOptions = Options(selectedCardUid)
     CardOptions.forEach(card => {
@@ -119,7 +121,6 @@ function Options(
                         cardEl.filters = null
                     },
                 },
-                omitStances: true,
             }),
             {
                 y: BASE_HEIGHT - CARD_WIDTH,

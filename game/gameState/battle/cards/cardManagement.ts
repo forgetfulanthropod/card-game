@@ -1,24 +1,25 @@
 import { upperFirst } from 'lodash'
-import type {
+import {
+    BattleCursor,
     Card,
     CardId,
-    Piles,
-    CharacterUid,
-    BattleCursor,
     CharacterClass,
-    Pile,
-    OwnedCharacterStats,
     CharacterId,
     CharacterMeta,
+    CharacterUid,
     CommandOutcome,
+    OwnedCharacterStats,
+    Pile,
+    Piles,
+    emptyPiles,
 } from 'shared'
 
-import { keys, mapToObj, vals } from 'shared/code'
-import { explainCommand, simulateCommand } from './interpretCommand'
 import { cardDefinitionsMap } from '@/rulebook'
 import { EntryCursor, srandInt } from '@/util'
-import { shufflePile } from './shufflePile'
+import { keys, vals } from 'shared/code'
 import { getTargetUids } from './getTargetUids'
+import { explainCommand, simulateCommand } from './interpretCommand'
+import { shufflePile } from './shufflePile'
 
 function getCardOutcomes(
     scene: BattleCursor,
@@ -91,7 +92,7 @@ export function setCards(scene: BattleCursor) {
 }
 
 export function getNullCards(): Piles {
-    return { draw: {}, hand: {}, discard: {}, removedRoom: {}, removedRun: {} }
+    return emptyPiles
 }
 
 export function makeCards(scene: BattleCursor): Piles {
@@ -107,23 +108,6 @@ export function makeCards(scene: BattleCursor): Piles {
             //@ts-expect-error
             `basicAttack${ccuf}`,
             `block${ccuf}`
-            // 'leadRazor'
-            // `block${ccuf}`,
-            // `block${ccuf}`,
-            // 'helpingHand',
-            // 'smite'
-            // 'leadRazor'
-            // 'magicalStorm',
-            // 'parry',
-            // 'smite'
-            // 'catchTheKnife',
-            // 'cowardlyTactics',
-            // 'throwingKnife',
-            // 'retreatToTheShadows',
-            // 'poisonedBlade',
-            // 'exponentialIllness',
-            // 'twistTheKnife',
-            // 'flashbang'
         )
 
         // DEBUG: give them all cards at once
@@ -164,22 +148,8 @@ export function makeCards(scene: BattleCursor): Piles {
     })
 
     return {
+        ...emptyPiles,
         draw: shufflePile(draw),
-        // draw: cardIds.reduce((acc, id, i) => {
-        //     // logger.info(JSON.stringify(allCharacters, null, '\n'))
-        //     const owningCharUid =
-        //         allCharacters[Math.floor((i * 3) / cardIds.length)].uid
-
-        //     const card = updateExplanation(
-        //         getCardInstance(id, owningCharUid),
-        //         scene
-        //     )
-        //     return set(acc, card.uid, card)
-        // }, {}),
-        hand: {},
-        discard: {},
-        removedRoom: {},
-        removedRun: {},
     }
 }
 

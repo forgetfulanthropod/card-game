@@ -23,10 +23,7 @@ export const explain: Explainers['effect'] = (dslArgs, context) => {
     const targetText = getTargetText(targetType, context.characterMeta)
 
     return double
-        ? `Double the amount of Poison counters on ${targetText}.  If no poison counters, it receives <b>${effectName}</b>&nbsp;(${increase}).${getTargetText(
-              targetType,
-              context.characterMeta
-          )} gains <b>${effectName}</b>&nbsp;(${increase})`
+        ? `Double the amount of Poison counters on ${targetText}.  If no poison counters, it receives <b>${effectName}</b>&nbsp;(${increase}).`
         : `${targetText} gains <b>${effectName}</b>&nbsp;(${increase})`
 }
 

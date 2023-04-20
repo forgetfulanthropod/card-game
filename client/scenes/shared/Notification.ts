@@ -48,7 +48,7 @@ class NotificationSpawner {
     private getInitialMetadata(
         el: TweenablePixiContainer
     ): NotificationMetadata {
-        return { elementName: el.name, isFadingIn: true }
+        return { elementName: el.name!, isFadingIn: true }
     }
 
     private async triggerAnimations() {
