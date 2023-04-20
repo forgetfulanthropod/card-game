@@ -1785,7 +1785,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 ifTargetStance("avoidant", modifyStats("strength|magic", "" + strength2 + "|" + magic2, "turn"))
             ));
             join(
-                "<div style='font-size: .7em'>This card can only be played if every character in your party is in a different stance. Lock the stances of all party members.<br>Character in Aggressive Stance gains",
+                "<div style='font-size: .7em'>This card can only be played if all allies are in a different stance. Lock the stances of all allies.<br>Character in Aggressive Stance gains",
                 defensey,
                 "block.<br>Characters in Neutral Stance gain",
                 strength1,
@@ -1815,7 +1815,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
                 addBlock(defensey),
                 modifyStats("strength|magic", ""+ strengthy + "|" + magicy, "turn")
             ));
-            join("This card can only be played if every character in your party is the same stance. Lock the stances of all party members. All characters gain", defensey, "block,", strengthy, "Strength and", magicy, "Magic until the end of the turn.")
+            join("This card can only be played if all allies are the same stance. Lock the stances of all allies. All characters gain", defensey, "block,", strengthy, "Strength and", magicy, "Magic until the end of the turn.")
             `,
         type: 'utility',
         characterClass: 'knight',
@@ -1857,8 +1857,11 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         targetNum: 1,
         targetType: 'allFriends',
         actions: `
-            defensey = .4;
-            addBlock(defensey, "allFriends")
+            defensey = defense * 0.4;
+            defensey2 = defense * 0.2;
+            addBlock(defensey, "allFriends");
+            on("playCard", addBlock(defensey2, "allFriends"), "turn");
+            join("All allies gain",defensey,"block.  Whenever a character plays a card this turn, allies gain", defensey2, "block.")
         `,
         type: 'defense',
         characterClass: 'knight',
