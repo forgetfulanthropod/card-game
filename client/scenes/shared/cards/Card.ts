@@ -1,6 +1,6 @@
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { callApi } from '@/callApi'
-import { getBattleScene, getEntryScene, getScene } from '@/data'
+import { getBattleScene, getEntryScene } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -28,12 +28,11 @@ import { toDiscardUids } from '@/scenes/run/BattleScene'
 import {
     currAnimatingCardUid,
     currTargetingType,
-    hoveredCharacterUid,
     nextTick,
     selectedForTargetingCardUid,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { compose, Datum, datum } from 'datums'
+import { Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import {
@@ -48,23 +47,18 @@ import {
     CardUid,
     CharacterStats,
     CharacterUid,
-    OwnedCharacterStats,
-    PlayerCharacterStats,
     StanceId,
-    TargetType,
 } from 'shared'
 import { keys } from 'shared/code'
 import {
     Explanation,
     getTermIndex,
     keyTermsMap,
-    TermExplanationsIf,
+    TermExplanations,
 } from '../Explanation'
 import { beginTargetSelection } from './beginTargetSelection'
 import { CARD_WIDTH } from './CardAdder'
 import { getCardTypeTexture } from './getCardTypeSrc'
-import { cardUsesArrowTargeting } from './helpers'
-import { HoverableStances } from './HoverableStances'
 
 const cardTypeToColorMap: Record<CardTypeAssetId, number[]> = {
     cardTypeAttack: [0xfff4d8, 0xfff0d2, 0xffbe79, 0xf36919, 0xdf0100],
@@ -85,7 +79,6 @@ export function CardEl({
     explanationsAdjustX,
     explanationsAdjustY,
     dynamicHitbox,
-    omitStances,
 }: {
     rotation?: number
     width: number
@@ -98,7 +91,6 @@ export function CardEl({
     explanationsAdjustX?: number
     explanationsAdjustY?: number
     dynamicHitbox?: boolean
-    omitStances?: boolean
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -133,11 +125,11 @@ export function CardEl({
         card,
     })
 
-    const termExplanationsForCard = TermExplanationsForCard(
-        card.explanation,
+    const termExplanationsForCard = TermExplanationsForCard({
+        explanation: card.explanation,
         width,
-        isLongHovered
-    )
+        isLongHovered,
+    })
     const hoveredStanceDatum = datum<StanceId | null>(null)
 
     const unsubs: Callback[] = []
@@ -153,7 +145,7 @@ export function CardEl({
                               if (uid !== card.uid) isLongHovered.set(false)
                           }),
                       ]),
-                () => termExplanationsForCard?.destroy(true),
+                () => termExplanationsForCard.forEach(e => e?.destroy(true)),
             ],
             // cache: true, // doesn't update...
         },
@@ -173,42 +165,55 @@ export function CardEl({
                           cardFrameTexture.height
                       ),
                   ]),
-            If(
-                compose(
-                    ([selectedForTargetingCardUid, hoveredCardUid]) => {
-                        if (getScene().get('id') !== 'battle') return false
+            // If(
+            //     compose(
+            //         ([selectedForTargetingCardUid, hoveredCardUid]) => {
+            //             if (getScene().get('id') !== 'battle') return false
 
-                        return (
-                            !omitStances &&
-                            (hoveredCardUid === card.uid ||
-                                selectedForTargetingCardUid === card.uid)
-                        )
-                    },
-                    selectedForTargetingCardUid,
-                    ...(hoveredCardUid ? [hoveredCardUid] : [])
-                ),
-                () =>
-                    Adjust(HoverableStances(card, hoveredStanceDatum), {
-                        y: -width,
-                    }),
-                undefined,
-                {
-                    displayArgs: { events: {} },
-                }
-            ),
+            //             return (
+            //                 !omitStances &&
+            //                 (hoveredCardUid === card.uid ||
+            //                     selectedForTargetingCardUid === card.uid)
+            //             )
+            //         },
+            //         selectedForTargetingCardUid,
+            //         ...(hoveredCardUid ? [hoveredCardUid] : [])
+            //     ),
+            //     () =>
+            //         Adjust(HoverableStances(card, hoveredStanceDatum), {
+            //             y: -width,
+            //         }),
+            //     undefined,
+            //     {
+            //         displayArgs: { events: {} },
+            //     }
+            // ),
 
             // getGradientBackground(cardFrameTexture, colorStops),
             NonInteractiveElements(cardArtTexture, cardFrameTexture, card),
 
             ...getTexts(card, cardFrameTexture, colorStops, hoveredStanceDatum)
         ),
-        Adjust(termExplanationsForCard, {
-            x:
-                (explanationsOnLeft
-                    ? -termExplanationsForCard.width - width
-                    : 0) + (explanationsAdjustX ?? 0),
-            y: explanationsAdjustY ?? 0,
-        })
+        If(
+            isLongHovered,
+            () =>
+                Container(
+                    {
+                        x:
+                            (explanationsOnLeft
+                                ? -Math.max(
+                                      ...termExplanationsForCard.map(
+                                          e => e.width
+                                      )
+                                  ) - width
+                                : 20) + (explanationsAdjustX ?? 0),
+                        y: explanationsAdjustY ?? 0,
+                    },
+                    ...termExplanationsForCard
+                ),
+            () => Container({}),
+            { destroyOptions: { children: false } }
+        )
     )
 
     if (selectedForTargetingCardUid.val === card.uid)
@@ -216,6 +221,9 @@ export function CardEl({
 
     if (hoveredCardUid && dynamicHitbox) {
         changeHitboxOnHover(root, card, hoveredCardUid, unsubs)
+    } else if (hoveredCardUid) {
+        root.children[0].on('pointerenter', () => hoveredCardUid.set(card.uid))
+        root.children[0].on('pointerleave', () => hoveredCardUid.set(null))
     }
 
     onDestroyed(root, ...unsubs)
@@ -329,11 +337,15 @@ function getDecoratedEvents({
     return decoratedEvents
 }
 
-function TermExplanationsForCard(
-    explanation: string,
-    width: number,
+function TermExplanationsForCard({
+    explanation,
+    width,
+    isLongHovered,
+}: {
+    explanation: string
+    width: number
     isLongHovered: Datum<boolean>
-): PixiContainer {
+}) {
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
         .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
@@ -343,11 +355,18 @@ function TermExplanationsForCard(
                 getTermIndex(keyTermB, explanation)
         )
 
-    return TermExplanationsIf({
-        areShown: isLongHovered,
+    return TermExplanations({
         terms,
-        xOffset: width * 0.77,
+        displayObjectArgs: {
+            x: width * 0.5,
+        },
     })
+    //     {
+    //     areShown: isLongHovered,
+    //     terms,
+    //     xOffset: width * 0.5,
+    //     noPortalize: true,
+    // })
 }
 
 export function CardSprite({

@@ -19,7 +19,7 @@ export const shakeScreen = (intensity: 1 | 2 | 3 | 4 | 5, isPc: boolean) => {
     const runSceneManager = pixi.getChildAt(0) as PixiContainer
     const ifContainer = runSceneManager.getChildAt(0) as PixiContainer
     const battleScene = ifContainer.getChildAt(0) as PixiContainer
-    const mainContainer = battleScene.getChildByName('CharactersAndBg')
+    const mainContainer = battleScene.getChildByName('CharactersAndBg')!
 
     let x1: number,
         y1: number,

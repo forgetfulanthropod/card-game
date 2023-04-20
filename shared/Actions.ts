@@ -90,7 +90,7 @@ interface BareGameActionArgs {
     openEndOfRoom: Empty
     openEndOfRun: Empty
     nextRoom: { choice: 0 | 1 | 2 | 3 }
-    choosePlushy: { index: number }
+    choosePlushy: { index: number; specifics?: CardUid[] | CharacterUid }
     chooseEventResponse: { index: number; characterUid?: CharacterUid }
 
     activateSouvenir: { souvenirId: SouvenirId }

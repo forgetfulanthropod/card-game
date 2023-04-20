@@ -384,8 +384,8 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             src: 'healthBarShadow',
             anchor: spriteAnchor,
         }),
-        StanceBarIndicator(characterCursor),
-        StanceControls(characterCursor),
+        // StanceBarIndicator(characterCursor),
+        // StanceControls(characterCursor),
 
         Text({
             text: compose(

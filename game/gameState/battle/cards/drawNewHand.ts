@@ -20,6 +20,7 @@ function discardAndDrawAndGetPiles(
         discard: discardPile,
         removedRoom,
         removedRun,
+        removedDead,
     }: Piles,
     handSize: number
 ): Piles {
@@ -52,6 +53,7 @@ function discardAndDrawAndGetPiles(
         discard: newDiscardPile,
         removedRoom,
         removedRun,
+        removedDead,
     }
 }
 function drawUpToNCards({

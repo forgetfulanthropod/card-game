@@ -32,8 +32,6 @@ export function beginTargetSelection(
     const hiddenCursor = renderer.events.cursorStyles.hidden
 
     const cleanup = onCancelTargeting(() => {
-        console.log('cleanup was called')
-
         unsubFromSelectedTargets()
         unsubFromTargetingType()
         currTargetingType.set(null)
