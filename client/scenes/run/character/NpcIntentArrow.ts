@@ -132,7 +132,7 @@ function bottomRightCornerOf(uid: CharacterUid) {
     return toDatum(
         getBattleScene().select('allCharacters').select(uid),
         cm => ({
-            x: cm.screenX + HEALTH_BAR_WIDTH * 1.1,
+            x: cm.screenX + HEALTH_BAR_WIDTH * 1.2,
             y: cm.screenY,
         })
     )

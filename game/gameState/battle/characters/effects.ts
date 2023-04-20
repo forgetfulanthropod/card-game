@@ -76,9 +76,9 @@ const staticEffectFuncs: Record<
         stats.damageDealMultiplicand -=
             getDamageDealMulitplicandForStance('aggressive') - 1
     },
-    reflectBuff(_) {}, // handled in applyDamage
-    counterAttackBuff(_) {}, // handled in applyDamage
-    mutuallyAssuredDestructionBuff(_) {}, // handled in applyDamage
+    reflectBuff() {}, // handled in applyDamage
+    counterAttackBuff() {}, // handled in applyDamage
+    mutuallyAssuredDestructionBuff() {}, // handled in applyDamage
     smallDamageIncreaseBuff(stats) {
         stats.damageTakeAddend += 4
     },
@@ -103,7 +103,7 @@ const staticEffectFuncs: Record<
     vulnerableDebuff(stats) {
         stats.damageTakeMultiplicand += 0.5
     },
-    immuneToPoisonBuff(_) {
+    immuneToPoisonBuff() {
         // in poison implementation
     },
     damageTakeSubtractorBuff(stats, counter) {
@@ -112,8 +112,11 @@ const staticEffectFuncs: Record<
     damageTakeAddendDebuff(stats, counter) {
         stats.damageTakeAddend += counter
     },
-    lockStanceDebuff(_) {
+    lockStanceDebuff() {
         // in stance implementation
+    },
+    valiantBuff() {
+        // triggered from card
     },
 }
 
