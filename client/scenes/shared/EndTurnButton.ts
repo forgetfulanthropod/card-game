@@ -31,7 +31,7 @@ function BaseEndTurnButton(): PixiContainer {
         if (energy === 0) {
             interval = setInterval(() => {
                 if (RenderedButton) {
-                    flashGlowTo(RenderedButton, 0.8)
+                    if (document.hasFocus()) flashGlowTo(RenderedButton, 0.8)
                 } else if (interval) clearInterval(interval)
             }, 1000)
         } else {
