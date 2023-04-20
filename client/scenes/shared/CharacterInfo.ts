@@ -195,7 +195,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
 
     const classOutlineFilter = new OutlineFilter(5, 0)
     const classOutlineFilter2 = new OutlineFilter(3, 0)
-    const whiteOutlineFilter = new OutlineFilter(5, 0xbbbbbb)
+    const whiteOutlineFilter = new OutlineFilter(5, 0xffffff)
     const mainPadding = 40
 
     return InfoBox(

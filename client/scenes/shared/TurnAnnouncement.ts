@@ -18,18 +18,21 @@ import { toDatum } from '@/util'
 import { ColorOverlayFilter } from 'pixi-filters'
 import { Easing, Tweener } from 'pixi-tweener'
 import { sleep } from 'shared/code'
-import { runKeyframeAnimations, waitForAnimationsToFinish } from './tweenerAnimations'
+import {
+    runKeyframeAnimations,
+    waitForAnimationsToFinish,
+} from './tweenerAnimations'
 
 type TurnType = 'user' | 'enemy' | 'regularBattleStart' | 'bossBattleStart'
 
 export function TurnAnnouncement() {
     const MainContainer = TweenableContainer({
-        events: {
-            pointerenter: () => void 0,
-        },
+        // events: {
+        //     pointerenter: () => void 0,
+        // },
     })
-    MainContainer.interactive = true
-    MainContainer.cursor = 'default'
+    // MainContainer.interactive = true
+    // MainContainer.cursor = 'default'
 
     const scene = getBattleScene()
     const isPlayerTurnDatum = toDatum(
@@ -92,7 +95,7 @@ export function TurnAnnouncement() {
                 x: baseX,
                 y: baseY + 20,
                 alpha: 0,
-                scale: 1.25
+                scale: 1.25,
             },
             Sprite({
                 src: getTexture('crossedSwords'),
@@ -220,11 +223,12 @@ export function TurnAnnouncement() {
             keyframes: 1,
             alpha: 0,
         })
-        TurnCountText && runKeyframeAnimations(TurnCountText, 0.45, {
-            ease: Easing.easeFrom,
-            keyframes: 1,
-            alpha: 0,
-        })
+        TurnCountText &&
+            runKeyframeAnimations(TurnCountText, 0.45, {
+                ease: Easing.easeFrom,
+                keyframes: 1,
+                alpha: 0,
+            })
 
         await Tweener.add(
             {
