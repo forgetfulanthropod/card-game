@@ -8,6 +8,7 @@ import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
+import { getClientEnv } from './util/getClientEnv'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -20,6 +21,7 @@ const urlPrefix = window.location.href.split('/')[3]
 
 let socket = null as unknown as Socket
 export function prepareSocket(): void {
+    // console.log('preparing socket...')
     if (socket != null) throw Error('socket is already prepared')
     socket = io({
         path:
@@ -28,16 +30,28 @@ export function prepareSocket(): void {
                 : '/server/socket',
     })
     socket.on('connect', () => {
-        const username = localStorage.getItem('username')
-        if (username != null) {
-            socket.emit('username', { username, socketId: socket.id })
+        // console.log('connected to socket!')
+
+        // todo:
+        // check local storage for JWT
+        // emit authentication or login event to server
+        // server will then either say this JWT is still valid, or it needs to be reauthenticated (eg. another message signed)
+        // we render start screen regardless, but if it needs authentication, trigger sign a message.
+
+        const isLocalEnv = getClientEnv('IS_LOCAL')
+        if (isLocalEnv) {
+            // start game at last saved state on refresh
+            const username = localStorage.getItem('username')
+            if (username != null) {
+                socket.emit('username', { username, socketId: socket.id })
+            }
         }
     })
 
     socket.on('refresh', () => window.location.reload())
 
     socket.on('update', ({ data }: { data: GameState }) => {
-        log('received server data', data)
+        // console.log('received server data', data)
         // getTree().set(data)
         updateBoabab(data)
     })
@@ -80,8 +94,10 @@ export function socketOn(
 }
 
 function updateBoabab(fromServer: GameState): void {
+    // console.log('updating baobab...')
     if (!isTreeInitialized()) {
         initializeBoababTree(fromServer)
+        console.log('starting pixi...')
         void startPixi(
             document.getElementById('pixi-root') as HTMLCanvasElement
         )

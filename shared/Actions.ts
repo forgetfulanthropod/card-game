@@ -27,17 +27,17 @@ export interface BareServerActionsMeta {
         args: Empty
         res: Promise<void>
     }
-    makeNewUser: {
+    setInitialGameState: {
         args: { username: string }
         res: void
     }
-    maybeMakeUser: {
+    loadGameState: {
         args: { username: string }
         res: Promise<void>
     }
     login: {
         args: { walletAddress: string }
-        res: Promise<UserInfo>
+        res: Promise<UserInfo & { accessToken: string }>
     }
     startRun: {
         args: { userId: UserID }
@@ -66,6 +66,10 @@ export interface BareServerActionsMeta {
     setUsername: {
         args: { userId: UserID; username: Username }
         res: Promise<{ result: 'success' | 'failure' }>
+    }
+    getNonce: {
+        args: Empty
+        res: Promise<{nonce: string}>
     }
 }
 

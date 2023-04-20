@@ -6,9 +6,7 @@ export async function callApi<K extends ActionName>(
 ): Promise<void> {
     try {
         const username = localStorage.getItem('username')
-        if (username == null) {
-            return
-        }
+        if (username === null) return
         const res = await emitCallApi({ method, data: args, username })
     } catch (e) {
         const err = e as Error

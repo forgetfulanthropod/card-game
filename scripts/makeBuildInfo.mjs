@@ -26,7 +26,8 @@ const REQUIRED_SERVER_ENV_KEYS =
      'INFLUX_URL',
      'INFLUX_ORG',
      'INFLUX_BUCKET',
-     'INFLUX_TOKEN'
+     'INFLUX_TOKEN',
+     'JWT_TOKEN_SECRET'
     ]
 
 const REQUIRED_CLIENT_ENV_KEYS =
@@ -34,7 +35,9 @@ const REQUIRED_CLIENT_ENV_KEYS =
      'RPC_URL',
      'GAME_IS_LIVE',
      'IS_PRODUCTION',
-     'CLIENT_PASSWORD'
+     'CLIENT_PASSWORD',
+     'WALLET_CONNECT_ID',
+     'IS_LOCAL' // tmp, should just have a "environment" key in future
     ]
 
 /**

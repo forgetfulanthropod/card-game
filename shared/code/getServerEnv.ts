@@ -1,7 +1,7 @@
 import { config as loadDotEnv } from 'dotenv'
 
 loadDotEnv()
-
+// if you add a key here, also add it to the check on makeBuildInfo.mjs!!
 const SERVER_ENV_KEYS = {
     PGUSER: process.env.PGUSER,
     PGPASSWORD: process.env.PGPASSWORD,
@@ -14,6 +14,7 @@ const SERVER_ENV_KEYS = {
     INFLUX_TOKEN: process.env.INFLUX_TOKEN,
     INFLUX_ORG: process.env.INFLUX_ORG,
     INFLUX_BUCKET: process.env.INFLUX_BUCKET,
+    JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET
 }
 
 type ServerEnvKey = keyof typeof SERVER_ENV_KEYS

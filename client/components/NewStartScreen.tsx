@@ -17,67 +17,80 @@ import { ClosedGameModal } from './StartScreen/ClosedGameModal'
 import { UsernameModal } from './StartScreen/UsernameModal'
 import { getClientEnv } from '@/util/getClientEnv'
 require('@solana/wallet-adapter-react-ui/styles.css')
+import { useWeb3Modal } from '@web3modal/react'
+
+import { Web3Modal, Web3Button } from '@web3modal/react'
+import { useSignMessage, useAccount as useWeb3Wallet } from 'wagmi'
 
 export type UserDoc = {
     walletAddress: string
-    numKaijusOwned: number
+    kaijusOwned: number
     userId: UserID
     username: string | null
 } | null
 
+type WalletAddress = `0x${string}`
+
 export function NewStartScreen(props: {
     onEnter: (userId: string) => void
 }): JSXElement {
-    const { connection } = useConnection()
-    const wallet = useWallet();
-    const encodedPublicKey = wallet.publicKey
-    const [publicKey, setPublicKey] = useState('')
+    // const wallet = useWallet()
+    // const { connection } = useConnection()
+    // const encodedPublicKey = wallet.publicKey
+    // useEffect(() => {
+    //     if (connection && encodedPublicKey) {
+    //         const publicKey = encodedPublicKey?.toBase58()
+    //         setPublicKey(publicKey)
+    //         const solana = new SolanaRPC(connection, publicKey)
+    //         console.log({ connection, publicKey })
+    //         initUserDoc(solana).then(() => {
+    //             console.log('UserDoc initialized')
+    //         })
+    //     }
+    // }, [connection, encodedPublicKey])
     const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
     const WALLET_GATED = getClientEnv('WALLET_GATED')
-    useEffect(() => {
-        if (connection && encodedPublicKey) {
-            const publicKey = encodedPublicKey?.toBase58()
-            setPublicKey(publicKey)
-            const solana = new SolanaRPC(connection, publicKey)
-            console.log({ connection, publicKey })
-            initUserDoc(solana).then(() => {
-                console.log('UserDoc initialized')
-            })
-        }
-    }, [connection, encodedPublicKey])
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const { isOpen, open, close, setDefaultChain } = useWeb3Modal()
+
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
+    const [nonce, setNonce] = useState('')
 
     const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
     const [showClosedGameModal, setShowClosedGameModal] = useState(false)
     const [showUsernameModal, setShowUsernameModal] = useState(false)
 
-    useEffect(() => {
-        collectData('ui_ux_view', {
-            page_title: 'Start Screen',
+    const { address, isConnected, status } = useWeb3Wallet()
+
+    const getNonce = async ()  => {
+        const { nonce } = await callServerApi('getNonce', {})
+        setNonce(nonce)
+        return nonce
+    }
+
+    const handleLogin = async (walletAddress: WalletAddress) => {
+        const { userId, username, accessToken } = await callServerApi('login', {
+            walletAddress,
         })
-    }, [])
-
-    const initUserDoc = async (solanaRPC: SolanaRPC) => {
-        const walletAddress = solanaRPC.publicKey
-        const { userId, username } = await callServerApi('login', { walletAddress })
-        if (!userId) {
-            return window.alert(
-                'Something went wrong. Please logging in try again.'
-            )
-        }
-        console.log({userId, username})
-        const numKaijusOwned = await solanaRPC.getKaijusOwnedByUser()
-        setUserDoc({ walletAddress, numKaijusOwned, userId, username })
-        setIsLoggedIn(true)
-        console.log('Set User Doc', { walletAddress, numKaijusOwned, userId })
-
+        console.log({userId, username, accessToken})
+        const kaijusOwned = getKaijusOwned(walletAddress)
+        setUserDoc({ walletAddress, kaijusOwned, userId, username })
+        console.log('Set User Doc', {
+            walletAddress,
+            kaijusOwned,
+            userId,
+            username,
+        })
         initAnalytics(userId)
         collectData('login', {
             method: 'connect_wallet',
         })
+    }
+
+    const getKaijusOwned = (walletAddress: WalletAddress) => {
+        //TODO
+        return 0
     }
 
     const handlePlayButtonClick = async () => {
@@ -87,34 +100,39 @@ export function NewStartScreen(props: {
         }
         console.log('Game is live')
         if (!userDoc) {
-            console.warn('No User Doc')
-
             if (!WALLET_GATED) {
-                const walletAddress = Math.random().toString().slice(2)
-                const {userId, username} = await callServerApi('login', { walletAddress })
+                // F2P USER FLOW --- TO COMPLETE
+                const walletAddress = localStorage.getItem('walletAddress') ?? Math.random().toString().slice(2)
+                localStorage.setItem('walletAddress', walletAddress) // tmp
+                const { userId, username } = await callServerApi('login', {
+                    walletAddress,
+                })
 
                 setUserDoc({
                     walletAddress,
-                    numKaijusOwned: 1,
+                    kaijusOwned: 1,
                     userId,
-                    username
+                    username,
                 })
+                return setShowUsernameModal(true)
+            } else {
+                // const connectWalletButton =
+                //     document.getElementsByClassName('WalletMultiButton')
+                // //@ts-expect-error
+                // connectWalletButton[0].click() // opens wallet modal
+
+                return
             }
-            const connectWalletButton = document.getElementsByClassName('WalletMultiButton')
-            //@ts-expect-error
-            connectWalletButton[0].click() // opens wallet modal
-
-
-            return
         }
-        console.log({userDoc})
+        console.log({ userDoc })
         if (WALLET_GATED) {
-            if (userDoc.numKaijusOwned === 0) return setShowGateModal(true)
+            if (userDoc.kaijusOwned === 0) return setShowGateModal(true)
         }
         if (userDoc.username === null && userDoc.userId) {
+            // Likely 1st time player - wallet is connected but no username has been set
             return setShowUsernameModal(true)
         }
-        console.log({username: userDoc.username})
+        console.log({ username: userDoc.username })
 
         props.onEnter(userDoc.userId)
         collectData('enter_game', {})
@@ -125,12 +143,25 @@ export function NewStartScreen(props: {
         collectData('tutorial_begin', {})
     }
 
+    useEffect(() => {
+
+        /** TODO: change this to actual F2P flow */
+        const tmpWalletAddress = localStorage.getItem('walletAddress') as WalletAddress
+        if (tmpWalletAddress) handleLogin(tmpWalletAddress)
+
+        collectData('ui_ux_view', {
+            page_title: 'Start Screen',
+        })
+    }, [])
+
+    useEffect(() => {
+        if (isConnected && address) {
+            handleLogin(address)
+        }
+    }, [isConnected])
+
     // TODO: refactor modals into HOC
     return <>
-        {showGateModal && <WalletGateModal
-            setShowGateModal={setShowGateModal}
-            publicKey={publicKey}
-        />}
         {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
         {showClosedGameModal && <ClosedGameModal
             setShowModal={setShowClosedGameModal}
@@ -185,8 +216,12 @@ export function NewStartScreen(props: {
                             />
                         </NavIconWrapper>
                     </div>
-                    <WalletMultiButton className='z-50 text-sm lg:text-2xl from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg p-1 md:p-2 rounded-2xl flex items-center shadow-3xl transition-all hover:bg-black font-bigFont WalletMultiButton'
-                    />
+                    {/* <button className='z-50 text-md font-bold from-[#272756] to-[#603a71] bg-gradient-to-r backdrop-blur-lg rounded-md flex items-center shadow-3xl transition-all hover:bg-black font-sans text-white px-6 py-3'
+                        onClick={async () => await open()}
+                    >
+                        <p>Connect Wallet</p>
+                    </button> */}
+                    <Web3Button icon={'hide'} />
                 </div>
             </div>
 
@@ -202,7 +237,7 @@ export function NewStartScreen(props: {
                         />
                         <PrimaryButton
                             text='play now'
-                            onClick={   handlePlayButtonClick}
+                            onClick={handlePlayButtonClick}
                             type='primary'
                             size='large'
                         />

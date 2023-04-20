@@ -76,7 +76,7 @@ async function loadAssetMaps(assetMaps: AssetMaps, showBar: boolean) {
             'width:100%; height:20px; position:absolute; bottom:0; background-color: grey'
         progressBarWrap.appendChild(progressBar)
         //@ts-expect-error
-        progressBar.style = 'width: 0%; height:100%; background-color: green'
+        progressBar.style = 'width: 0%; height:100%; background-color: white'
         document.body.appendChild(progressBarWrap)
     }
 

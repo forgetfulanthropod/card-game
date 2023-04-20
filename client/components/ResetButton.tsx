@@ -1,6 +1,6 @@
 import { callApi } from '@/callApi'
 import { styled } from '@/config'
-import { useState, useRef, MouseEvent, useEffect } from 'react'
+import { useState, useRef, useContext } from 'react'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import {
     muteMusic,
@@ -15,10 +15,9 @@ import {
 } from '@/elementsUtil'
 import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
-import {
-    enableMotionFX,
-    shakeScreen,
-} from '@/scenes/shared'
+import { enableMotionFX } from '@/scenes/shared'
+import { AppContext } from './App'
+import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
 
 const Root = styled.button`
     position: absolute;
@@ -32,17 +31,19 @@ const Root = styled.button`
     cursor: pointer;
 `
 
+// todo: change name to SettingsMenu
 export function ResetButton(props: { username: string }): JSXElement {
-    const [showActions, setShowActions] = useState(false)
+    const [showMenu, setShowMenu] = useState(false)
     const actionsRef = useRef(null)
-    useOutsideClickDismisser(actionsRef, setShowActions)
+    useOutsideClickDismisser(actionsRef, setShowMenu)
     const [sfxIsMuted, setSfxIsMuted] = useState(muteSFX)
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
     const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
+    const { setInPixi } = useContext(AppContext);
 
     const handleClick = () => {
-        setShowActions(actions => !actions)
+        setShowMenu(actions => !actions)
     }
 
     const handleMuteSFX = () => {
@@ -64,19 +65,20 @@ export function ResetButton(props: { username: string }): JSXElement {
                 restart: true,
             })
         }
-        await callApi('makeNewUser', {
+        await callApi('setInitialGameState', {
             username: props.username,
         })
-        window.location.reload()
-        setShowActions(false)
+        setShowMenu(false)
     }
 
     const handleBackToMenu = async () => {
-        localStorage.removeItem('username')
-        await callApi('makeNewUser', {
+        console.log('handleBackToMenu...')
+        await callApi('setInitialGameState', {
             username: props.username,
         })
-        window.location.reload()
+        composeDefaultParty()
+        setInPixi(false)
+        setShowMenu(false)
     }
 
     const handleHighRes = async () => {
@@ -97,7 +99,7 @@ export function ResetButton(props: { username: string }): JSXElement {
         <Root onClick={() => handleClick()}>⚙</Root>
         <div
             className={`pointer-events-auto absolute top-14 right-6 flex flex-col text-white mt-2 rounded-xl bg-stone-700 font-sans p-1 w-auto font-medium z-50 text-sm shadow-3xl transition-all ${
-                showActions ? 'opacity-100 visible' : 'opacity-0 invisible'
+                showMenu ? 'opacity-100 visible' : 'opacity-0 invisible'
             }`}
         >
             <MenuButton
