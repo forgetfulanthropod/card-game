@@ -9,7 +9,7 @@ import { GameModeContainer } from './StartScreen'
 import { NavIconWrapper } from './StartScreen'
 import SolanaRPC from '@/chain/solanaRPC'
 import { UserProfileIcon } from './StartScreen/UserProfileIcon'
-import { WalletGateModal } from './StartScreen/WalletGateModal'
+import { ConnectWalletModal } from './StartScreen/ConnectWalletModal'
 import { openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
 import { BUILD_VER, UserID } from 'shared'
@@ -37,7 +37,7 @@ export type UserDoc = {
     userType?: UserType
 } | null
 
-type UserType = 'anon' | 'web3NonKaiju' | 'web3WithKaiju'
+type UserType = 'freeToPlay' | 'web3NonKaiju' | 'web3WithKaiju'
 
 export function NewStartScreen(): JSXElement {
     // const wallet = useWallet()
@@ -57,13 +57,15 @@ export function NewStartScreen(): JSXElement {
 
     const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
     const WALLET_GATED = getClientEnv('WALLET_GATED')
+    const IS_PRODUCTION = getClientEnv('IS_PRODUCTION') === 'true'
 
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
     const [nonce, setNonce] = useState('')
     const [showTutorial, setShowTutorial] = useState(false)
-    const [showGateModal, setShowGateModal] = useState(false)
+    const [showConnectWalletModal, setShowConnectWalletModal] = useState(false)
     const [showClosedGameModal, setShowClosedGameModal] = useState(false)
     const [showUsernameModal, setShowUsernameModal] = useState(false)
+    const [clickedPlay, setClickedPlay] = useState(false)
 
     const { setUsername, setInPixi } = useContext(AppContext)
 
@@ -75,6 +77,7 @@ export function NewStartScreen(): JSXElement {
         setUsername(userId)
         emitUsername(userId)
         setInPixi(true)
+        collectData('enter_game', {})
     }
 
     const getNonce = async () => {
@@ -90,7 +93,13 @@ export function NewStartScreen(): JSXElement {
         })
         console.log({ userId, username, accessToken })
         const kaijusOwned = getKaijusOwned(walletAddress)
-        setUserDoc({ walletAddress, kaijusOwned, userId, username })
+        setUserDoc({
+            walletAddress,
+            kaijusOwned,
+            userId,
+            username,
+            userType: 'freeToPlay',
+        })
         console.log('Set User Doc', {
             walletAddress,
             kaijusOwned,
@@ -110,7 +119,13 @@ export function NewStartScreen(): JSXElement {
         })
         console.log({ userId, username, accessToken })
         const kaijusOwned = getKaijusOwned(walletAddress)
-        setUserDoc({ walletAddress, kaijusOwned, userId, username })
+        setUserDoc({
+            walletAddress,
+            kaijusOwned,
+            userId,
+            username,
+            userType: 'web3NonKaiju',
+        })
         console.log('Set User Doc', {
             walletAddress,
             kaijusOwned,
@@ -121,6 +136,7 @@ export function NewStartScreen(): JSXElement {
         collectData('login', {
             method: 'connect_wallet',
         })
+        return { userId, username }
     }
 
     const getKaijusOwned = (walletAddress: WalletAddress) => {
@@ -128,43 +144,40 @@ export function NewStartScreen(): JSXElement {
         return 0
     }
 
+    const getNewFreeToPlayUser = async () => {
+        const walletAddress =
+            getStringFromLocalStorage('walletAddress') ??
+            Math.random().toString().slice(2)
+        localStorage.setItem('walletAddress', walletAddress) // tmp
+        const { userId, username } = await callServerApi('login', {
+            walletAddress,
+        })
+
+        setUserDoc({
+            walletAddress,
+            kaijusOwned: 1,
+            userId,
+            username,
+            userType: 'freeToPlay',
+        })
+        setShowUsernameModal(true)
+        return { walletAddress, userId, username }
+    }
+
     const handlePlayButtonClick = async () => {
         console.log('Handling Play button click')
+        setClickedPlay(true)
+        console.log('setting clickedPlay to true')
         if (!GAME_IS_LIVE) {
             return setShowClosedGameModal(true)
         }
         console.log('Game is live')
-        if (!userDoc) {
-            if (!WALLET_GATED) {
-                // F2P USER FLOW --- TO COMPLETE
-                const walletAddress =
-                    getStringFromLocalStorage('walletAddress') ??
-                    Math.random().toString().slice(2)
-                localStorage.setItem('walletAddress', walletAddress) // tmp
-                const { userId, username } = await callServerApi('login', {
-                    walletAddress,
-                })
+        if (!userDoc || !userDoc.userId) return setShowConnectWalletModal(true)
 
-                setUserDoc({
-                    walletAddress,
-                    kaijusOwned: 1,
-                    userId,
-                    username,
-                })
-                return setShowUsernameModal(true)
-            } else {
-                // const connectWalletButton =
-                //     document.getElementsByClassName('WalletMultiButton')
-                // //@ts-expect-error
-                // connectWalletButton[0].click() // opens wallet modal
-
-                return
-            }
-        }
         console.log({ userDoc })
-        if (WALLET_GATED) {
-            if (userDoc.kaijusOwned === 0) return setShowGateModal(true)
-        }
+        // if (WALLET_GATED) {
+        //     if (userDoc.kaijusOwned === 0) return setShowGateModal(true)
+        // }
         if (userDoc.username === null && userDoc.userId) {
             // Likely 1st time player - wallet is connected but no username has been set
             return setShowUsernameModal(true)
@@ -172,7 +185,6 @@ export function NewStartScreen(): JSXElement {
         console.log({ username: userDoc.username })
 
         handleStartGame(userDoc.userId)
-        collectData('enter_game', {})
     }
 
     const handleTutorialClick = () => {
@@ -230,7 +242,13 @@ export function NewStartScreen(): JSXElement {
     /** Listen to Connect Wallet events, handle web3 login */
     useEffect(() => {
         if (isConnected && address) {
-            handleWeb3Login(address)
+            handleWeb3Login(address).then(({ userId, username }) => {
+                if (!username) return setShowUsernameModal(true)
+                if (clickedPlay) return handleStartGame(userId)
+            })
+        }
+        if (!isConnected) {
+            setUserDoc(null)
         }
     }, [isConnected])
 
@@ -246,10 +264,12 @@ export function NewStartScreen(): JSXElement {
             setUserDoc={setUserDoc}
             onSuccess={handleStartGame}
         />}
+        {showConnectWalletModal && !userDoc?.userId && <ConnectWalletModal
+            setShowModal={setShowConnectWalletModal}
+            getNewFreeToPlayUser={getNewFreeToPlayUser}
+        />}
         <div
-            className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 ${
-                showGateModal ? 'pointer-events-none' : 'pointer-events-auto'
-            }`}
+            className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 pointer-events-auto`}
         >
             <video
                 src='./assets/backgrounds/main_menu_shed_bg.mp4'
@@ -295,7 +315,58 @@ export function NewStartScreen(): JSXElement {
                     >
                         <p>Connect Wallet</p>
                     </button> */}
-                    <Web3Button icon={'hide'} />
+                    <div className='text-white'>
+                        <Web3Button icon={'hide'} />
+                        {!IS_PRODUCTION && <>
+                            <div className='flex flex-col justify-center text-center items-center'>
+                                <p className='font-normal'>
+                                    {userDoc &&
+                                        (userDoc.username ||
+                                            userDoc.walletAddress) &&
+                                        `logged in as ${userDoc?.userType}`}
+                                </p>
+                                <p className='text-[10px] font-mono'>
+                                    {userDoc?.userId}
+                                </p>
+                            </div>
+                            {userDoc &&
+                            (userDoc.username || userDoc.walletAddress) &&
+                            userDoc?.userType === 'freeToPlay' ? (
+                                <button
+                                    className='text-red-400'
+                                    onClick={() => {
+                                        if (userDoc.userType !== 'freeToPlay')
+                                            return
+                                        localStorage.removeItem('walletAddress')
+                                        setUserDoc({
+                                            userId: '',
+                                            walletAddress: '',
+                                            kaijusOwned: 0,
+                                            userType: 'freeToPlay',
+                                            username: '',
+                                        })
+                                    }}
+                                >
+                                    {' '}
+                                    log out of guest{' '}
+                                </button>
+                            ) : (
+                                (userDoc?.userType === 'freeToPlay' ||
+                                    !userDoc) && <button
+                                    className='text-red-400'
+                                    onClick={async () => {
+                                        const { walletAddress } =
+                                            await getNewFreeToPlayUser()
+                                        await handleFreeToPlayLogin(
+                                            walletAddress
+                                        )
+                                    }}
+                                >
+                                    log in as guest
+                                </button>
+                            )}
+                        </>}
+                    </div>
                 </div>
             </div>
 
