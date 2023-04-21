@@ -16,9 +16,6 @@ const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
 const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
 
 function main() {
-    if (IS_PRODUCTION)
-        window.addEventListener('contextmenu', e => e.preventDefault())
-
     if (GAME_IS_LIVE)
         startLoadingAssets().then(() => connectToServerAndRenderUI())
     else connectToServerAndRenderUI()

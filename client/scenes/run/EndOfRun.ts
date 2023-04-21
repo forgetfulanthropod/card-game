@@ -743,9 +743,8 @@ export function EndOfRun(): PixiContainer {
     /** Takes you to character select screen */
     function handleTryAgain() {
         void callApi('setInitialGameState', {
-            username: localStorage.getItem('username') as string,
+            username: scene.get('username'),
         })
-        window.location.reload()
     }
 
     const EndOfRunContainer = Container(

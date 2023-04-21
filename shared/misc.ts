@@ -19,3 +19,5 @@ export type Scene = BattleScene | EntryScene
 export type NestedKeys<T> = T extends object
     ? { [K in keyof T]-?: K | NestedKeys<T[K]> }[keyof T]
     : never
+
+export type WalletAddress = `0x${string}`

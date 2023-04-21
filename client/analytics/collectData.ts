@@ -1,3 +1,4 @@
+import { getStringFromLocalStorage } from '@/elementsUtil'
 import { UserID } from 'shared'
 
 let currUserId: string | null = null
@@ -8,7 +9,7 @@ export const collectData = <T extends keyof AnalyticsEventMeta>(
 ) => {
     if (!currUserId) {
         console.log('Init analytics with no currUserId')
-        const localUserId = localStorage.getItem('username')
+        const localUserId = getStringFromLocalStorage('username')
         if (localUserId === null) {
             console.warn(
                 'No username in localstorage or initialized. UserID analytics disabled.'
