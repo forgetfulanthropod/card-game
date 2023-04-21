@@ -1,5 +1,5 @@
 import { random, toString } from 'lodash'
-import { WalletAddress } from 'shared'
+import { RequireAllKeys, WalletAddress } from 'shared'
 
 type BooleanKeyInLocalStorage =
     | 'muteSFX'
@@ -12,11 +12,14 @@ type BooleanValueInLocalStorage = { [k in BooleanKeyInLocalStorage]: boolean }
 
 type StringKeyInLocalStorage = 'authToken' | 'username' | 'walletAddress'
 
-type StringValueInLocalStorage = {
-    'authToken': string;
-    'username': string;
-    'walletAddress': WalletAddress
-}
+type StringValueInLocalStorage = RequireAllKeys<
+    {
+        authToken: string
+        username: string
+        walletAddress: WalletAddress
+    },
+    StringKeyInLocalStorage
+>
 
 type ValueInLocalStorage = BooleanKeyInLocalStorage | StringKeyInLocalStorage
 
@@ -34,7 +37,11 @@ export const toggleBooleanInLocalStorage = (key: BooleanKeyInLocalStorage) => {
     localStorage.setItem(key, toString(newValue))
 }
 
-export const getStringFromLocalStorage = <K extends StringKeyInLocalStorage> (key: K): StringValueInLocalStorage[K] => {
-    const valueInLocalStorage = localStorage.getItem(key) as StringValueInLocalStorage[K]
+export const getStringFromLocalStorage = <K extends StringKeyInLocalStorage>(
+    key: K
+): StringValueInLocalStorage[K] => {
+    const valueInLocalStorage = localStorage.getItem(
+        key
+    ) as StringValueInLocalStorage[K]
     return valueInLocalStorage
 }

@@ -60,8 +60,8 @@ export function NewStartScreen(): JSXElement {
 
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
     const [nonce, setNonce] = useState('')
-    const [showGateModal, setShowGateModal] = useState(false)
     const [showTutorial, setShowTutorial] = useState(false)
+    const [showGateModal, setShowGateModal] = useState(false)
     const [showClosedGameModal, setShowClosedGameModal] = useState(false)
     const [showUsernameModal, setShowUsernameModal] = useState(false)
 
