@@ -9,10 +9,10 @@ export const collectData = <T extends keyof AnalyticsEventMeta>(
 ) => {
     if (!currUserId) {
         console.log('Init analytics with no currUserId')
-        const localUserId = getStringFromLocalStorage('username')
+        const localUserId = getStringFromLocalStorage('userId')
         if (localUserId === null) {
             console.warn(
-                'No username in localstorage or initialized. UserID analytics disabled.'
+                'No userId in localstorage or initialized. UserID analytics disabled.'
             )
             return
         } else {
@@ -28,7 +28,6 @@ export const initAnalytics = (userId: UserID) => {
     gtag('set', {
         user_id: userId,
     })
-    localStorage.setItem('username', userId)
 }
 
 type AnalyticsEventMeta = {

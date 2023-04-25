@@ -1,7 +1,7 @@
 {
     "scene": {
         "id": "battle",
-        "username": "anonymous-0.42219146365670146",
+        "userId": "34f2b3c1-6e4c-460c-9fd4-60446674634a",
         "dungeonName": "Skelepit Dungeon",
         "turnCount": 1,
         "state": "in battle",
@@ -686,5 +686,5 @@
         "move$": [],
         "DOT$": []
     },
-    "username": "\"bob\""
+    "userId": "34f2b3c1-6e4c-460c-9fd4-60446674634a"
 }

@@ -6,9 +6,9 @@ export async function callApi<K extends ActionName>(
     args: AllActionArgs[K]
 ): Promise<void> {
     try {
-        const username = getStringFromLocalStorage('username')
-        if (username === null) return
-        const res = await emitCallApi({ method, data: args, username })
+        const userId = getStringFromLocalStorage('userId')
+        if (userId === null) return
+        const res = await emitCallApi({ method, data: args, userId })
     } catch (e) {
         const err = e as Error
         console.error(`api error: ${err.message}`)

@@ -12,11 +12,11 @@ import { processingQueue } from './sleepLoop'
 satisfies<ServerActions>(serverActions)
 
 export async function api(args: {
-    username?: string | undefined
+    userId?: string | undefined
     method: string
     data: any
 }) {
-    const { username, method, data } = args
+    const { userId, method, data } = args
     try {
         if (method in serverActions) {
             const m = method as keyof typeof serverActions
@@ -27,15 +27,15 @@ export async function api(args: {
             logger.debug(`server api response: ${JSON.stringify(response)}`)
             return response
         } else if (isGameAction(method)) {
-            if (typeof username !== 'string') return err('no username')
-            const gamestate = await getGamestate(username)
+            if (typeof userId !== 'string') return err('no userId')
+            const gamestate = await getGamestate(userId)
             if (gamestate == null) return err('no gamestate for this user')
-            const actionArgs = { username, method, ...data }
+            const actionArgs = { userId, method, ...data }
             logger.debug(`api call: ${JSON.stringify(actionArgs)}`)
 
-            if (!processingQueue[username]) processingQueue[username] = []
-            processingQueue[username].push(actionArgs)
-            await processActionQueue(username)
+            if (!processingQueue[userId]) processingQueue[userId] = []
+            processingQueue[userId].push(actionArgs)
+            await processActionQueue(userId)
             return { status: 'success' }
         } else {
             return err('invalid method')

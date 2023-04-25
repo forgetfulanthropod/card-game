@@ -350,7 +350,7 @@ export function EndOfRun(): PixiContainer {
     const battleState = scene.get('state')
     const showLeaderboard = datum(false)
     const mainContainerIsAnimating = datum(false)
-    const userId = scene.get('username')
+    const userId = scene.get('userId')
     const runId = scene.get('runId')
 
     battleState === 'won'
@@ -743,7 +743,7 @@ export function EndOfRun(): PixiContainer {
     /** Takes you to character select screen */
     function handleTryAgain() {
         void callApi('setInitialGameState', {
-            username: scene.get('username'),
+            userId: scene.get('userId'),
         })
     }
 

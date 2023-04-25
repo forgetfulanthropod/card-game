@@ -1,38 +1,37 @@
-import type { GameState, Gamecursor } from 'shared'
+import type { GameState, Gamecursor, UserID } from 'shared'
 import { Level } from 'level'
 
 import { SBaobab } from 'sbaobab'
-import type { Username } from './types'
 
-const db = new Level<Username, GameState>(__dirname + '/leveldb', {
+const db = new Level<UserID, GameState>(__dirname + '/leveldb', {
     valueEncoding: 'json',
 })
 const userPrefix = 'user-'
 
-const cache: Record<Username, GameState> = {}
+const cache: Record<UserID, GameState> = {}
 
 export async function getGamestate(
-    username: string
+    userId: UserID
 ): Promise<GameState | null> {
-    if (cache[username]) return cache[username]
+    if (cache[userId]) return cache[userId]
     try {
-        return await db.get(userPrefix + username)
+        return await db.get(userPrefix + userId)
     } catch (e) {
         return null
     }
 }
 
-export function setGamestate(username: string, gamestate: GameState) {
-    cache[username] = gamestate
-    void db.put(userPrefix + username, gamestate)
+export function setGamestate(userId: UserID, gamestate: GameState) {
+    cache[userId] = gamestate
+    void db.put(userPrefix + userId, gamestate)
 }
 
 export async function getGameStateCursor(
-    username: string
+    userId: UserID
 ): Promise<Gamecursor> {
-    const gamestate = await getGamestate(username)
+    const gamestate = await getGamestate(userId)
     if (gamestate == null) {
-        throw Error(`no gamestate for user ${username}`)
+        throw Error(`no gamestate for user ${userId}`)
     }
     return new SBaobab(gamestate).select()
 }

@@ -11,7 +11,7 @@ import type {
 } from '.'
 import { EventScene } from '../EventScene'
 import { Souvenir } from '../Souvenir'
-import { RunID } from '../User'
+import { RunID, UserID } from '../User'
 import type {
     Card,
     Command,
@@ -26,7 +26,7 @@ import type { Characters, StanceId } from './Characters'
 import type { CommandQueue, QueuedCommand } from './CommandQueue'
 
 export interface BattleScene extends SceneHas {
-    username: string
+    userId: UserID
     id: 'battle'
     dungeonName: DungeonName
     state: BattleWinState

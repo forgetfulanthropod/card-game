@@ -1,37 +1,38 @@
 import { watchFile } from 'fs'
 import type { Server } from 'http'
 import { has } from 'lodash'
-import type { GameState, NetworkEvent } from 'shared'
+import type { GameState, NetworkEvent, UserID } from 'shared'
 import { Server as SocketServer } from 'socket.io'
 import { loadGameState } from './actions'
 import { api } from './api'
 import * as jwt from 'jsonwebtoken'
 import { getServerEnv } from 'shared/code'
 
-const usernameToSocketId: Record<string, string> = {}
+const userToSocketId: Record<UserID, string> = {}
 const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
 
-export function getSocketId(username: string): string {
-    if (has(usernameToSocketId, username)) {
-        return usernameToSocketId[username]
+export function getSocketId(userId: UserID): string {
+    if (has(userToSocketId, userId)) {
+        return userToSocketId[userId]
     }
-    throw Error(`no socket for user ${username}`)
+    throw Error(`no socket for user ${userId}`)
 }
 let io: null | SocketServer = null
 
-export function emitUpdatedGameState(username: string, gamestate: GameState) {
+export function emitUpdatedGameState(userId: UserID, gamestate: GameState) {
     if (io == null) throw Error('io is null')
-    const socketId = getSocketId(username)
+    const socketId = getSocketId(userId)
     io.to(socketId).emit('update', { data: gamestate })
 }
 
 export function emitNetworkEvent<_A extends string, _B>(args: {
-    username: string
+    userId: UserID
     event: NetworkEvent<_A, _B>
 }): void {
     if (io == null) throw Error('io is null')
-    const socketId = getSocketId(args.username)
-    io.to(socketId).emit(args.event.type, args.event)
+    const { userId, event } = args
+    const socketId = getSocketId(userId)
+    io.to(socketId).emit(event.type, event)
 }
 
 export function mountIo(
@@ -61,41 +62,40 @@ export function mountIo(
             }
         )
         socket.on(
-            'username',
+            'userId',
             ({
-                username,
+                userId,
                 socketId,
             }: {
-                username: string
+                userId: UserID
                 socketId: string
             }) => {
-                // logger.info(['username associated:', { username, socketId }])
-                usernameToSocketId[username] = socketId
-                void loadGameState({ username })
+                userToSocketId[userId] = socketId
+                void loadGameState({ userId })
             }
         )
         socket.on(
             'api',
             async (
                 {
-                    username,
+                    userId,
                     method,
                     data,
                 }: {
-                    username: string
+                    userId: UserID
                     method: string
                     data: any
                 },
                 callback
             ) => {
                 /*logger.debug(
-                    `api called from ${username} for ${method}: ${JSON.stringify(
+                    `api called from ${userId} for ${method}: ${JSON.stringify(
                         data
                     )}`
                 )*/
                 // calling the api incorrectly shouldn't crash the server
                 try {
-                    const response = await api({ username, method, data })
+                    const response = await api({ userId, method, data })
                     callback(response)
                 } catch (e) {
                     const err = e as unknown as Error

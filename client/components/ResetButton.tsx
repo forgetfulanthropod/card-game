@@ -19,6 +19,7 @@ import { enableMotionFX } from '@/scenes/shared'
 import { AppContext } from './App'
 import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
 import { getClientEnv } from '@/util/getClientEnv'
+import { UserID } from 'shared'
 
 const Root = styled.button`
     position: absolute;
@@ -33,7 +34,8 @@ const Root = styled.button`
 `
 
 // todo: change name to SettingsMenu
-export function ResetButton(props: { username: string }): JSXElement {
+export function ResetButton(props: { userId: UserID }): JSXElement {
+    const { userId } = props
     const [showMenu, setShowMenu] = useState(false)
     const actionsRef = useRef(null)
     useOutsideClickDismisser(actionsRef, setShowMenu)
@@ -41,7 +43,7 @@ export function ResetButton(props: { username: string }): JSXElement {
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
     const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
-    const { setInPixi } = useContext(AppContext);
+    const { setInPixi } = useContext(AppContext)
 
     const handleClick = () => {
         setShowMenu(actions => !actions)
@@ -62,12 +64,12 @@ export function ResetButton(props: { username: string }): JSXElement {
         const runState = getBattleScene().get('state')
         if (runState !== 'lost' && runState !== 'won') {
             await callServerApi('endRun', {
-                userId: props.username,
+                userId: userId,
                 restart: true,
             })
         }
         await callApi('setInitialGameState', {
-            username: props.username,
+            userId,
         })
         setShowMenu(false)
     }
@@ -76,10 +78,10 @@ export function ResetButton(props: { username: string }): JSXElement {
         console.log('handleBackToMenu...')
         const IS_LOCAL = getClientEnv('IS_LOCAL')
         if (IS_LOCAL) {
-            localStorage.removeItem('username')
+            localStorage.removeItem('userId')
         }
         await callApi('setInitialGameState', {
-            username: props.username,
+            userId,
         })
         composeDefaultParty()
         setInPixi(false)

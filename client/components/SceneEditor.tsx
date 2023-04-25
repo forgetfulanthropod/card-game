@@ -149,7 +149,7 @@ function getJSON(scene: BattleScene): string {
 // async function addNewRulebook(
 //     ref: MonacoRef,
 //     rulebooks: string[],
-//     username: string
+//     userId: string
 // ): Promise<void> {
 //     const newRulebook = parseRulebook(ref)
 //     if (newRulebook == null) return
@@ -162,7 +162,7 @@ function getJSON(scene: BattleScene): string {
 //         return
 //     }
 //     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-//     await callApi('setInitialGameState', { username })
+//     await callApi('setInitialGameState', { userId })
 //     toast('added')
 // }
 
@@ -183,7 +183,7 @@ function getJSON(scene: BattleScene): string {
 // async function overwriteRulebook(
 //     ref: MonacoRef,
 //     name: string,
-//     username: string
+//     userId: string
 // ): Promise<void> {
 //     const newRulebook = parseRulebook(ref)
 //     if (newRulebook == null) return
@@ -197,7 +197,7 @@ function getJSON(scene: BattleScene): string {
 //     }
 //     await callApi('rulebookAction', { do: 'delete', name })
 //     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-//     await callApi('setInitialGameState', { username })
+//     await callApi('setInitialGameState', { userId })
 //     toast('overwritten')
 // }
 

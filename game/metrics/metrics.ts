@@ -69,7 +69,7 @@ export const playCard: GameMetrics['playCard'] = args => {
         play_order: scene.get('cardsPlayedThisTurn').length,
         target_type: card.targetType,
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     })
     if (targetUids.length == 1) {
         let target = scene.get('allCharacters', targetUids[0])
@@ -92,7 +92,7 @@ export const chooseStance: GameMetrics['chooseStance'] = args => {
         turn_count: scene.get('turnCount'),
         stance_name: stanceId,
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     writeMetric('choose_stance', tags)
 }
@@ -103,7 +103,7 @@ export const nextRoom: GameMetrics['nextRoom'] = args => {
         room_choice: chosenRoom.uid,
         room_category: chosenRoom.category,
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     const fields = [metricField({ value: choice })]
     writeMetric('next_room', tags, fields)
@@ -117,7 +117,7 @@ export const addCardToDeck: GameMetrics['addCardToDeck'] = args => {
         card_energy: card.energy,
         character_class: card.characterClass,
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     writeMetric('card_draft', tags)
 }
@@ -136,7 +136,7 @@ export const endTurn: GameMetrics['endTurn'] = args => {
         turn_damage_dealt: damages.reduce((n, { amount }) => n + amount, 0),
         turn_block_added: blocks.reduce((n, { amount }) => n + amount, 0),
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     writeMetric('turn_end', tags)
 }
@@ -151,7 +151,7 @@ export const discardCard: GameMetrics['discardCard'] = args => {
         card_class: card.characterClass,
         turn_count: scene.get('turnCount'),
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     writeMetric('card_discard', tags)
 }
@@ -166,7 +166,7 @@ export const activateOrb: GameMetrics['activateOrb'] = args => {
         character_block: character.block,
         turn_count: scene.get('turnCount'),
         run_id: scene.get('runId'),
-        user_id: scene.get('username'),
+        user_id: scene.get('userId'),
     }
     writeMetric('orb_activate', tags)
 }

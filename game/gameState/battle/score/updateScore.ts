@@ -51,7 +51,7 @@ export const updateScore = ({
             data,
         }
         emit({
-            username: scene.get('username'),
+            userId: scene.get('userId'),
             event: {
                 type: 'notifyScore',
                 data: eventData,

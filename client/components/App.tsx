@@ -3,7 +3,7 @@ import './global.css'
 import { useEffect, useState, createContext } from 'react'
 
 import { GameManager } from './GameManager'
-import { emitUsername } from '@/socket'
+import { emitUserId } from '@/socket'
 import {
     ConnectionProvider,
     WalletProvider,
@@ -40,21 +40,21 @@ const ethereumClient = new EthereumClient(wagmiClient, chains)
 interface IAppContext {
     inPixi: boolean
     setInPixi: React.Dispatch<React.SetStateAction<boolean>>
-    username: UserID
-    setUsername: React.Dispatch<React.SetStateAction<UserID>>
+    userId: UserID
+    setUserId: React.Dispatch<React.SetStateAction<UserID>>
 }
 
 export const AppContext = createContext<IAppContext>({
     inPixi: false,
     setInPixi: () => {},
-    username: '',
-    setUsername: () => {},
+    userId: '',
+    setUserId: () => {},
 })
 
 export function App(): JSXElement {
     const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
-    const [username, setUsername] = useState(
-        getStringFromLocalStorage('username') ?? ''
+    const [userId, setUserId] = useState(
+        getStringFromLocalStorage('userId') ?? ''
     )
     const [inPixi, setInPixi] = useState(false)
 
@@ -72,8 +72,8 @@ export function App(): JSXElement {
     const appContext = {
         inPixi,
         setInPixi,
-        username,
-        setUsername,
+        userId,
+        setUserId,
     }
 
     const preventRightClick = (e: MouseEvent) => {
@@ -94,7 +94,7 @@ export function App(): JSXElement {
                     <WalletProvider wallets={wallets} autoConnect>
                         <WalletModalProvider>
                             <GameManager
-                                username={username}
+                                userId={userId}
                                 setInPixi={setInPixi}
                             >
                                 {!inPixi && <NewStartScreen />}

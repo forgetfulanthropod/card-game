@@ -23,7 +23,7 @@ export function emitMove({
     }
 
     emit({
-        username: scene.get('username'),
+        userId: scene.get('userId'),
         event: {
             type: 'move$',
             data,

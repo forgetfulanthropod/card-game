@@ -4,9 +4,9 @@ import { setGamestate } from '@/db'
 import { emitUpdatedGameState } from '@/IO'
 
 export const setInitialGameState: ServerActions['setInitialGameState'] = ({
-    username,
+    userId,
 }) => {
-    const initialGameState = getInitialGameState(username)
-    setGamestate(username, initialGameState)
-    emitUpdatedGameState(username, initialGameState)
+    const initialGameState = getInitialGameState(userId)
+    setGamestate(userId, initialGameState)
+    emitUpdatedGameState(userId, initialGameState)
 }

@@ -18,7 +18,7 @@ export const rulebookAction: GameActions['rulebookAction'] = args => {
             logger.info(`choosing rulebook ${args.name}`)
             if (args.name === 'default') {
                 resetRulebook()
-                // updateClientRulebookData(args.username)
+                // updateClientRulebookData(args.userId)
                 return
             }
             const p = toPath(args.name)
@@ -26,7 +26,7 @@ export const rulebookAction: GameActions['rulebookAction'] = args => {
                 throw Error('chosen rulebook does not exist')
             }
             setRulebook(JSON.parse(readFileSync(p, 'utf-8')))
-            // updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.userId)
             return
         }
         case 'delete': {
@@ -40,7 +40,7 @@ export const rulebookAction: GameActions['rulebookAction'] = args => {
             }
             rmSync(p)
             resetRulebook()
-            // updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.userId)
             return
         }
         case 'new': {
@@ -58,7 +58,7 @@ export const rulebookAction: GameActions['rulebookAction'] = args => {
             writeFileSync(p, s, { encoding: 'utf-8' })
             // json-parsing ensures good key order:
             setRulebook(JSON.parse(s))
-            // updateClientRulebookData(args.username)
+            // updateClientRulebookData(args.userId)
             return
         }
         default: {

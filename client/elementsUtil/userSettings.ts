@@ -10,12 +10,12 @@ type BooleanKeyInLocalStorage =
 
 type BooleanValueInLocalStorage = { [k in BooleanKeyInLocalStorage]: boolean }
 
-type StringKeyInLocalStorage = 'authToken' | 'username' | 'walletAddress'
+type StringKeyInLocalStorage = 'authToken' | 'userId' | 'walletAddress'
 
 type StringValueInLocalStorage = RequireAllKeys<
     {
         authToken: AuthToken
-        username: string
+        userId: string
         walletAddress: WalletAddress
     },
     StringKeyInLocalStorage

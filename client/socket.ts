@@ -4,7 +4,7 @@ import type { ROCursor } from 'sbaobab'
 import type { Socket } from 'socket.io-client'
 import { io } from 'socket.io-client'
 
-import type { GameState, RunScoreUpdate } from 'shared'
+import type { GameState, RunScoreUpdate, UserID } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
 import { getStringFromLocalStorage, startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
@@ -41,9 +41,9 @@ export function prepareSocket(): void {
         const isLocalEnv = getClientEnv('IS_LOCAL')
         if (isLocalEnv) {
             // start game at last saved state on refresh
-            const username = getStringFromLocalStorage('username')
-            if (username != null) {
-                socket.emit('username', { username, socketId: socket.id })
+            const userId = getStringFromLocalStorage('userId')
+            if (userId !== null) {
+                socket.emit('userId', { userId, socketId: socket.id })
             }
         }
     })
@@ -61,15 +61,15 @@ export function prepareSocket(): void {
     })
 }
 
-export function emitUsername(username: string): void {
+export function emitUserId(userId: string): void {
     if (socket == null) throw Error('socket is null')
-    socket.emit('username', { username, socketId: socket.id })
+    socket.emit('userId', { userId, socketId: socket.id })
 }
 
 export async function emitCallApi(args: {
     method: string
     data: any
-    username?: string
+    userId?: UserID
 }) {
     if (socket == null) throw Error('socket is null')
     console.log('api call:', args)

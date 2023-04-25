@@ -9,7 +9,7 @@ import { useWeb3Modal } from '@web3modal/react'
 import { Web3Modal, Web3Button } from '@web3modal/react'
 import { useSignMessage, useAccount as useWeb3Wallet } from 'wagmi'
 import { AppContext } from './App'
-import { emitUsername } from '@/socket'
+import { emitUserId } from '@/socket'
 import {
     AuthToken,
     BUILD_VER,
@@ -49,7 +49,7 @@ export function NewStartScreen(): JSXElement {
     const [clickedPlay, setClickedPlay] = useState(false)
     const [siweMessage, setSiweMessage] = useState('')
 
-    const { setUsername, setInPixi } = useContext(AppContext)
+    const { setUserId, setInPixi } = useContext(AppContext)
 
     const { address, isConnected, status } = useWeb3Wallet()
     const { isOpen, open, close, setDefaultChain } = useWeb3Modal()
@@ -58,12 +58,12 @@ export function NewStartScreen(): JSXElement {
     })
 
     const handleStartGame = async (userId: string) => {
-        localStorage.setItem('username', userId)
+        localStorage.setItem('userId', userId)
         await callApi('setInitialGameState', {
-            username: userId,
+            userId,
         })
-        setUsername(userId)
-        emitUsername(userId)
+        setUserId(userId)
+        emitUserId(userId)
         setInPixi(true)
         collectData('enter_game', {})
         await composeDefaultParty()
@@ -243,16 +243,16 @@ export function NewStartScreen(): JSXElement {
         console.log('INITIAL USEEFFECT')
         console.log({ userDoc })
 
-        const userId = getStringFromLocalStorage('username')
+        const userId = getStringFromLocalStorage('userId')
         const IS_LOCAL = getClientEnv('IS_LOCAL')
         if (!userId) return console.log('no saved userId')
         else console.log('found saved userId')
 
         setUserDoc({ userId, userType: 'guest', username: null })
-        setUsername(userId)
+        setUserId(userId)
 
         if (IS_LOCAL) {
-            emitUsername(userId)
+            emitUserId(userId)
             setInPixi(true)
         }
     }, [])

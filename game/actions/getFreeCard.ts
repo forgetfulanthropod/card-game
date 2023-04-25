@@ -1,6 +1,6 @@
 import { getBattleSceneIn, isProduction } from '@/util'
 import { omit } from 'lodash'
-import { BattleCursor, Card, GameActions } from 'shared'
+import { BattleCursor, Card, GameActions, UserID } from 'shared'
 import { addCardToDeckPostValidation } from './addCardToDeck'
 
 export const getFreeCard: GameActions['getFreeCard'] = args => {
@@ -17,7 +17,7 @@ export const getFreeCard: GameActions['getFreeCard'] = args => {
 function updateUidInFullDecks(
     args: { card: Card } & {
         game: Gamecursor
-        username?: string | undefined
+        userId?: UserID | undefined
     },
     scene: BattleCursor
 ) {

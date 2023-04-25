@@ -11,7 +11,7 @@ import { GradientButton } from '@/scenes/shared/'
 
 export function GoButton() {
     const onClick = async () => {
-        const userId = getTree().get('username')
+        const userId = getTree().get('userId')
         const { runId } = await callServerApi('startRun', {
             userId,
         })

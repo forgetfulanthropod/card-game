@@ -32,7 +32,7 @@ export function makeBattleState(args: {
     const rooms = getDungeonRooms()['Hooligans Bluff']
 
     const bs: BattleScene = {
-        username: args.game.get('username'),
+        userId: args.game.get('userId'),
         id: 'battle',
         dungeonName: args?.dungeonName ?? 'The Matcha Caves',
         turnCount: 1,

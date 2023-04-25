@@ -12,7 +12,7 @@ export const startRun: ServerActions['startRun'] = async ({ userId }) => {
     await cleanUpPreviousRuns({ connection, userId })
     const runId = await createNewRun({ connection, userId })
 
-    trackMetric('startRun', { runId, username: userId })
+    trackMetric('startRun', { runId, userId })
     logger.info(`Started run for ${userId}: ${runId}`)
     return { runId }
 }

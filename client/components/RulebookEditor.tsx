@@ -1,7 +1,7 @@
 import { Fragment, Ref, RefObject } from 'react' // eslint-disable-line
 
 import { useEffect, useRef, useState } from 'react'
-import type { Rulebook } from 'shared'
+import type { Rulebook, UserID } from 'shared'
 import toast from 'react-hot-toast'
 import { useCursor } from './util'
 import type { MonacoRef } from './Monaco'
@@ -49,8 +49,8 @@ const ButtonGroup = styled.div`
 // TODO: edit the name outside of the rulebook
 // TODO: add a "saved at" field programatically
 
-export function RulebookEditor(props: { username: string }): JSXElement {
-    const { username } = props
+export function RulebookEditor(props: { userId: UserID }): JSXElement {
+    const { userId } = props
     const ref: MonacoRef = useRef(null)
     const [shown, setShown] = useState(false)
 
@@ -88,16 +88,16 @@ export function RulebookEditor(props: { username: string }): JSXElement {
                         do: 'choose',
                         name: newName,
                     })
-                    await callApi('setInitialGameState', { username })
+                    await callApi('setInitialGameState', { userId })
                 }}
             />
             {shown && <>
                 <button
-                    onClick={() => addNewRulebook(ref, rulebooks, username)}
+                    onClick={() => addNewRulebook(ref, rulebooks, userId)}
                 >
                     save new
                 </button>
-                <button onClick={() => overwriteRulebook(ref, name, username)}>
+                <button onClick={() => overwriteRulebook(ref, name, userId)}>
                     overwrite
                 </button>
                 <button onClick={() => deleteRulebook(name)}>delete</button>
@@ -118,7 +118,7 @@ async function deleteRulebook(name: string): Promise<void> {
 async function addNewRulebook(
     ref: MonacoRef,
     rulebooks: string[],
-    username: string
+    userId: UserID
 ): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
@@ -131,7 +131,7 @@ async function addNewRulebook(
         return
     }
     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('setInitialGameState', { username })
+    await callApi('setInitialGameState', { userId })
     toast('added')
 }
 
@@ -152,7 +152,7 @@ function parseRulebook(ref: MonacoRef): Mb<Rulebook> {
 async function overwriteRulebook(
     ref: MonacoRef,
     name: string,
-    username: string
+    userId: UserID
 ): Promise<void> {
     const newRulebook = parseRulebook(ref)
     if (newRulebook == null) return
@@ -166,7 +166,7 @@ async function overwriteRulebook(
     }
     await callApi('rulebookAction', { do: 'delete', name })
     await callApi('rulebookAction', { do: 'new', rulebook: newRulebook })
-    await callApi('setInitialGameState', { username })
+    await callApi('setInitialGameState', { userId })
     toast('overwritten')
 }
 

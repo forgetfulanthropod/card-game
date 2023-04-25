@@ -32,7 +32,7 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
     return oc as OwnedCharacterStatsMap
 }
 
-export function getInitialGameState(username: string): GameState {
+export function getInitialGameState(userId: string): GameState {
     return {
         scene: getInitialEntryState(),
         ownedCharacters: initialOwnedCharacters(),
@@ -41,7 +41,7 @@ export function getInitialGameState(username: string): GameState {
         curRulebook: config.includeRulebook
             ? stringifyRulebook(getRulebook())
             : undefined,
-        username,
+        userId,
         nextAction: null,
     }
 }

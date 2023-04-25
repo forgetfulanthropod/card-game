@@ -22,7 +22,7 @@ export const endTurn: GameActions['endTurn'] = args => {
         scene.get('isInMap') === true
     ) {
         logger.warn(
-            `${scene.get('username')} tried to end turn when not allowed`
+            `${scene.get('userId')} tried to end turn when not allowed`
         )
         return
     }

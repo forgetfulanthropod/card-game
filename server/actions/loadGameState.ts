@@ -5,9 +5,9 @@ import { getGamestate } from '@/db'
 import { emitUpdatedGameState } from '@/IO'
 
 export const loadGameState: ServerActions['loadGameState'] = async ({
-    username,
+    userId,
 }) => {
-    const existingGameState = await getGamestate(username)
-    if (existingGameState) return emitUpdatedGameState(username, existingGameState)
-    else setInitialGameState({ username })
+    const existingGameState = await getGamestate(userId)
+    if (existingGameState) return emitUpdatedGameState(userId, existingGameState)
+    else setInitialGameState({ userId })
 }

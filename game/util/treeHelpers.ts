@@ -1,6 +1,6 @@
 import type { SCursor } from 'sbaobab'
 import { SBaobab } from 'sbaobab'
-import type { BattleCursor, EntryScene, NetworkEvent } from 'shared'
+import type { BattleCursor, EntryScene, NetworkEvent, UserID } from 'shared'
 
 export function getBattleSceneIn(game: Gamecursor): BattleCursor {
     const scene = game.select('scene')
@@ -23,22 +23,19 @@ export function getEntrySceneIn(game: Gamecursor): EntryCursor {
     return scene as EntryCursor
 }
 
-type Username = string
 //todo: move this to a data store, redis, postgres whathaveyou
-const happenedThisTurn: Record<Username, NetworkEvent<string, unknown>[]> = {}
+const happenedThisTurn: Record<UserID, NetworkEvent<string, unknown>[]> = {}
 export function emit(args: {
-    username: string
+    userId: string
     event: NetworkEvent<string, unknown>
 }) {
-    happenedThisTurn[args.username] = [
-        ...(happenedThisTurn[args.username] ?? []),
-        args.event,
-    ]
+    const { userId, event } = args
+    happenedThisTurn[userId] = [...(happenedThisTurn[userId] ?? []), event]
 }
 
-export function getHappened(username: Username) {
-    return happenedThisTurn[username] ?? []
+export function getHappened(userId: UserID) {
+    return happenedThisTurn[userId] ?? []
 }
-export function clearHappened(username: Username) {
-    happenedThisTurn[username] = []
+export function clearHappened(userId: UserID) {
+    happenedThisTurn[userId] = []
 }

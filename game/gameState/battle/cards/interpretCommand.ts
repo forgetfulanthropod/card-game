@@ -160,12 +160,12 @@ export function simulateCommand(
     if (locals.isSkipped)
         return [{ damages: {}, blocks: {}, effects: {} }, args.scene]
     const sceneCopy = new SBaobab(args.scene.deepClone()).select()
-    const username = args.scene.get('username')
-    const happened = getHappened(username)
+    const userId = args.scene.get('userId')
+    const happened = getHappened(userId)
     executeCommand({ ...args, locals, scene: sceneCopy })
-    clearHappened(username)
+    clearHappened(userId)
     for (const event of happened) {
-        emit({ username, event })
+        emit({ userId, event })
     }
     const damages = extractDamages(args.scene.get(), sceneCopy.get())
     const blocks = extractBlocks(args.scene.get(), sceneCopy.get())

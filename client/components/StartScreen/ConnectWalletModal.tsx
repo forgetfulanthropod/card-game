@@ -4,6 +4,7 @@ import { openNewTab } from '../util'
 import { PrimaryButton } from './PrimaryButton'
 import { InfoModal } from './InfoModal'
 import { Web3Button } from '@web3modal/react'
+import { UserID, Username } from 'shared'
 
 export const ConnectWalletModal = ({
     setShowModal,
@@ -11,8 +12,8 @@ export const ConnectWalletModal = ({
 }: {
     setShowModal: (value: React.SetStateAction<boolean>) => void
     getNewGuestUser: () => Promise<{
-        userId: string
-        username: string | null
+        userId: UserID
+        username: Username | null
     }>
 }) => {
     const header = 'Wallet not Connected'

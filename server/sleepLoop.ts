@@ -1,23 +1,23 @@
 import { clearHappened, getHappened, step, doGameAction } from 'game'
-import type { GameActionCall, Gamecursor } from 'shared'
+import type { GameActionCall, Gamecursor, UserID } from 'shared'
 import { sleep } from 'shared/code'
 import { setGamestate } from './db'
 import { emitNetworkEvent, emitUpdatedGameState } from './IO'
 import { SBaobab } from 'sbaobab'
 import { getGamestate } from './db'
 
-export type ApiCall = GameActionCall & { username: string }
+export type ApiCall = GameActionCall & { userId: UserID }
 export const processingQueue: Record<string, ApiCall[]> = {}
 export const isProcessing = new Set<string>()
 
-export const processActionQueue = async (username: string) => {
-    let actionQueue = processingQueue[username]
-    if (!actionQueue || isProcessing.has(username)) return
-    isProcessing.add(username)
+export const processActionQueue = async (userId: UserID) => {
+    let actionQueue = processingQueue[userId]
+    if (!actionQueue || isProcessing.has(userId)) return
+    isProcessing.add(userId)
     let action
-    while ((action = processingQueue[username].shift())) {
+    while ((action = processingQueue[userId].shift())) {
         try {
-            const gamestate = await getGamestate(username)
+            const gamestate = await getGamestate(userId)
             if (gamestate == null) throw Error('no gamestate for this user')
             const game = new SBaobab(gamestate).select()
             await doActionAndTakeSteps({ ...action, game })
@@ -28,33 +28,33 @@ export const processActionQueue = async (username: string) => {
             )
         }
     }
-    isProcessing.delete(username)
+    isProcessing.delete(userId)
     // TODO: discuss: should delete empty queues?
-    if (!processingQueue[username].length) delete processingQueue[username]
+    if (!processingQueue[userId].length) delete processingQueue[userId]
     return
 }
 
 export async function doActionAndTakeSteps(
-    args: GameActionCall & { username: string }
+    args: ApiCall
 ) {
-    const { game, username } = args
+    const { game, userId } = args
     doGameAction(args)
     let maybeNextAction = game.get('nextAction')
     while (maybeNextAction != null) {
-        updateClient(args.username, game)
+        updateClient(args.userId, game)
         await sleep(maybeNextAction.delay)
         game.set('nextAction', null)
         step(game, maybeNextAction)
         maybeNextAction = game.get('nextAction')
     }
-    updateClient(username, game)
+    updateClient(userId, game)
 }
-function updateClient(username: string, game: Gamecursor) {
-    for (const event of getHappened(username)) {
-        emitNetworkEvent({ username, event })
+function updateClient(userId: UserID, game: Gamecursor) {
+    for (const event of getHappened(userId)) {
+        emitNetworkEvent({ userId, event })
     }
-    clearHappened(username)
+    clearHappened(userId)
 
-    emitUpdatedGameState(username, game.get())
-    setGamestate(username, game.get())
+    emitUpdatedGameState(userId, game.get())
+    setGamestate(userId, game.get())
 }

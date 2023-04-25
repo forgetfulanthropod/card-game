@@ -187,7 +187,7 @@ const targetEnemies = (
             type: 'message',
             data: userMessage,
         } as NetworkEvent<string, unknown>
-        emit({ username: scene.username, event: networkEventData })
+        emit({ userId: scene.userId, event: networkEventData })
     }
     return targets
 }

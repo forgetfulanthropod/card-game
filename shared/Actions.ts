@@ -28,11 +28,11 @@ import type {
 
 export interface BareServerActionsMeta {
     setInitialGameState: {
-        args: { username: string }
+        args: { userId: UserID }
         res: void
     }
     loadGameState: {
-        args: { username: string }
+        args: { userId: UserID }
         res: Promise<void>
     }
     login: {
@@ -133,7 +133,7 @@ interface BareGameActionArgs {
 /** Map from game action name to function signature */
 export type GameActions = {
     [K in keyof BareGameActionArgs]: (
-        args: BareGameActionArgs[K] & { game: Gamecursor; username?: string }
+        args: BareGameActionArgs[K] & { game: Gamecursor; userId?: UserID }
     ) => void
 }
 /** Map from server action name to function signature */

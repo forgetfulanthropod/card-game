@@ -8,19 +8,19 @@ export const toPath = (id: string): string => prefix + id + '.json'
 const removeExtension = (filename: string): string =>
     filename.replace(/\.[^/.]+$/, '')
 
-export function updateClientRulebookData(_username: string): void {
+export function updateClientRulebookData(userId: string): void {
     // Q: Update all users or just one?
     /*
     const rulebookNames = getRulebookNames()
     const curRulebook = stringifyRulebook(getRulebook())
     const users = getRootCursor().select('users')
-    const usernames = Object.keys(users.get())
-    for (const username of usernames) {
-        const user = users.select(username)
+    const userIds = Object.keys(users.get())
+    for (const userIds of userIds) {
+        const user = users.select(userId)
         user.select('rulebooks').set(rulebookNames)
         user.select('curRulebook').set(curRulebook)
     }
-    commit(getGameStateCursor(username), username)
+    commit(getGameStateCursor(userId), userId)
     */
 }
 

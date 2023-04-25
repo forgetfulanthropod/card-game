@@ -10,7 +10,7 @@ export const setBattleScene: GameActions['setBattleScene'] = ({
     if (isProduction)
         return logger.info('tried to update battle scene in production!')
 
-    scene.username = game.get('username')
+    scene.userId = game.get('userId')
 
     game.set('scene', scene)
     // @ts-expect-error
