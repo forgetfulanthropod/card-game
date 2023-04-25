@@ -297,7 +297,7 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
             padding: mainPadding,
         }
     ).addChild(
-        // ...AbilityButtons(props.abilities),
+        ...AbilityButtons(props.abilities),
         Sprite({
             src: Texture.EMPTY,
             anchor: [0, 1],
