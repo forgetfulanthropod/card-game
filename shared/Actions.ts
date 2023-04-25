@@ -6,12 +6,15 @@ import type { SCursor } from 'sbaobab'
 import type { SceneId } from './misc'
 
 import type {
+    AuthToken,
     BattleScene,
     Card,
     CardUid,
     CharacterUid,
     GameState,
+    GuestUserInfo,
     MappedLeaderboards,
+    Nonce,
     Orb,
     Rulebook,
     RunID,
@@ -20,13 +23,10 @@ import type {
     UserID,
     UserInfo,
     Username,
+    Web3UserInfo,
 } from './tree'
 
 export interface BareServerActionsMeta {
-    incrementTestCounter: {
-        args: Empty
-        res: Promise<void>
-    }
     setInitialGameState: {
         args: { username: string }
         res: void
@@ -36,8 +36,8 @@ export interface BareServerActionsMeta {
         res: Promise<void>
     }
     login: {
-        args: { walletAddress: string }
-        res: Promise<UserInfo & { accessToken: string }>
+        args: { walletAddress?: string }
+        res: Promise<UserInfo & { nonce: Nonce }>
     }
     startRun: {
         args: { userId: UserID }
@@ -67,9 +67,17 @@ export interface BareServerActionsMeta {
         args: { userId: UserID; username: Username }
         res: Promise<{ result: 'success' | 'failure' }>
     }
-    getNonce: {
-        args: Empty
-        res: Promise<{nonce: string}>
+    authenticateWeb3User: {
+        args: { userId: UserID; message: string; signature: string }
+        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
+    }
+    authenticateGuestUser: {
+        args: { userId: UserID; signature: string }
+        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
+    }
+    verifyAuthToken: {
+        args: { authToken: AuthToken, userId: UserID }
+        res: Promise<{ result: 'success' | 'failure', error?: string }>
     }
 }
 

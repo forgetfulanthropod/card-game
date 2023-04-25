@@ -18,6 +18,7 @@ import { getBattleScene } from '@/data'
 import { enableMotionFX } from '@/scenes/shared'
 import { AppContext } from './App'
 import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
+import { getClientEnv } from '@/util/getClientEnv'
 
 const Root = styled.button`
     position: absolute;
@@ -73,6 +74,10 @@ export function ResetButton(props: { username: string }): JSXElement {
 
     const handleBackToMenu = async () => {
         console.log('handleBackToMenu...')
+        const IS_LOCAL = getClientEnv('IS_LOCAL')
+        if (IS_LOCAL) {
+            localStorage.removeItem('username')
+        }
         await callApi('setInitialGameState', {
             username: props.username,
         })

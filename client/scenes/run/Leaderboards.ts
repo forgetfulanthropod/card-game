@@ -64,7 +64,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
     }
 
     const LeaderboardEntry = (
-        walletAddress: string,
+        // walletAddress: string,
         username: Username | null,
         highScore: number,
         endTime: number,
@@ -178,9 +178,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                       style,
                   }),
             Text({
-                text:
-                    (username ?? getShortWalletAddress(walletAddress)) +
-                    (isSelf ? ' (YOU)' : ''),
+                text: (username ?? 'Guest') + (isSelf ? ' (YOU)' : ''),
                 y: y - 8,
                 x: x - 450,
                 style: { ...style, fontSize: 20 },
@@ -243,7 +241,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
                 inScreenIdx++
                 LeaderboardEntries.addChild(
                     LeaderboardEntry(
-                        entry.wallet_address,
+                        // entry.wallet_address,
                         entry.username,
                         entry.max_score,
                         entry.end_ts,
@@ -261,7 +259,7 @@ export const LeaderboardContainer = (allLeaderboards: MappedLeaderboards) => {
             ) {
                 LeaderboardSelfEntry.addChild(
                     LeaderboardEntry(
-                        entry.wallet_address,
+                        // entry.wallet_address,
                         entry.username,
                         entry.max_score,
                         entry.end_ts,

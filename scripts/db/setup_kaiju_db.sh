@@ -39,7 +39,7 @@ CREATE SCHEMA kaiju;
 SET search_path = kaiju;
 CREATE TABLE user_info (
   user_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  wallet_address TEXT NOT NULL UNIQUE,
+  wallet_address TEXT UNIQUE,
   username TEXT UNIQUE,
   email TEXT UNIQUE,
   created_ts TIMESTAMP WITH TIME ZONE DEFAULT NOW(),

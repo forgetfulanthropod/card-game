@@ -7,11 +7,10 @@ import { Web3Button } from '@web3modal/react'
 
 export const ConnectWalletModal = ({
     setShowModal,
-    getNewFreeToPlayUser,
+    getNewGuestUser,
 }: {
     setShowModal: (value: React.SetStateAction<boolean>) => void
-    getNewFreeToPlayUser: () => Promise<{
-        walletAddress: `0x${string}`
+    getNewGuestUser: () => Promise<{
         userId: string
         username: string | null
     }>
@@ -32,7 +31,7 @@ export const ConnectWalletModal = ({
                     sm:text-2xl sm:py-2
                     md:text-3xl
                     lg:text-4xl lg:py-3
-                    xl:text-5xl xl:py-6'
+                    xl:text-5xl xl:py-6 text-center'
         >
             {header}
         </h1>
@@ -50,7 +49,7 @@ export const ConnectWalletModal = ({
                 md:gap-4
                 xl:gap-8'
         >
-            <Web3Button icon={'hide'}/>
+            <Web3Button icon={'hide'} />
         </div>
         <div className='w-full flex items-center my-4'>
             <div className='h-1 w-full border-stone-700/50 border-t'></div>
@@ -59,7 +58,7 @@ export const ConnectWalletModal = ({
         </div>
         <button
             className='font-mono text-sm text-gray-400 underline'
-            onClick={getNewFreeToPlayUser}
+            onClick={getNewGuestUser}
         >
             Continue as guest
         </button>

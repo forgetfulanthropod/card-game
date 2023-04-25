@@ -389,7 +389,7 @@ export type Leaderboard = readonly LeaderboardEntry[]
 
 export type LeaderboardEntry = {
     user_id: UserID
-    wallet_address: string
+    // wallet_address: string
     username: Username | null
     max_score: number
     start_ts: number // unix ts

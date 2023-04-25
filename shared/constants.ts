@@ -7,3 +7,5 @@ export const TOP_PERCENTILE_CUTOFF = 0.20
 export const NUM_KAIJUS_IN_PARTY = 3
 export const MAX_USERNAME_LENGTH = 20
 export const MIN_USERNAME_LENGTH = 3
+export const ARBITRUM_CHAIN_ID = 42161
+export const AUTH_EXPIRATION_TIME = '1d'

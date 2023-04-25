@@ -33,9 +33,9 @@ export const UsernameModal = ({
             window.alert('Please try a different username.')
         } else {
             setUserDoc({
+                ...userDoc,
                 walletAddress: userDoc.walletAddress,
                 userId: userDoc.userId,
-                kaijusOwned: userDoc.kaijusOwned,
                 username: typedUsername,
             })
             onSuccess(userDoc.userId)

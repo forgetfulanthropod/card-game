@@ -59,7 +59,7 @@ for _ in range(50):
     wallet_address = f"0x{uuid.uuid4().hex}"
     username = f"user_{random.randint(1, 1000000)}"
     email = f"{username}@example.com"
-    initial_auth_method = "password"
+    initial_auth_method = "connect_wallet"
 
     cur.execute("""
         INSERT INTO kaiju.user_info (user_id, wallet_address, username, email, initial_auth_method)

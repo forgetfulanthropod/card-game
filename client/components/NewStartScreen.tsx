@@ -1,137 +1,159 @@
-import {
-    BASE_HEIGHT,
-    BASE_WIDTH,
-    getStringFromLocalStorage,
-} from '@/elementsUtil'
 import { useState, useEffect, useContext } from 'react'
-import { PrimaryButton } from './StartScreen'
-import { GameModeContainer } from './StartScreen'
-import { NavIconWrapper } from './StartScreen'
-import SolanaRPC from '@/chain/solanaRPC'
-import { UserProfileIcon } from './StartScreen/UserProfileIcon'
-import { ConnectWalletModal } from './StartScreen/ConnectWalletModal'
-import { openNewTab } from './util'
+import { getStringFromLocalStorage } from '@/elementsUtil'
+import { createSiweMessage, openNewTab } from './util'
 import { callServerApi } from '@/callServerApi'
-import { BUILD_VER, UserID } from 'shared'
-import { TutorialModal } from './StartScreen/TutorialModal'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { collectData, initAnalytics } from '@/analytics/collectData'
-import { ClosedGameModal } from './StartScreen/ClosedGameModal'
-import { UsernameModal } from './StartScreen/UsernameModal'
 import { getClientEnv } from '@/util/getClientEnv'
 require('@solana/wallet-adapter-react-ui/styles.css')
 import { useWeb3Modal } from '@web3modal/react'
-
 import { Web3Modal, Web3Button } from '@web3modal/react'
 import { useSignMessage, useAccount as useWeb3Wallet } from 'wagmi'
-import { WalletAddress } from 'shared'
 import { AppContext } from './App'
 import { emitUsername } from '@/socket'
+import {
+    AuthToken,
+    BUILD_VER,
+    Nonce,
+    UserID,
+    UserType,
+    WalletAddress,
+} from 'shared'
+import {
+    UsernameModal,
+    ClosedGameModal,
+    TutorialModal,
+    ConnectWalletModal,
+    NavIconWrapper,
+    PrimaryButton,
+} from './StartScreen/'
+import { callApi } from '@/callApi'
+import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
 
 export type UserDoc = {
-    walletAddress: string
-    kaijusOwned: number
     userId: UserID
+    userType: UserType
     username: string | null
-    userType?: UserType
+    nonce?: Nonce
+    walletAddress?: WalletAddress
 } | null
 
-type UserType = 'freeToPlay' | 'web3NonKaiju' | 'web3WithKaiju'
-
 export function NewStartScreen(): JSXElement {
-    // const wallet = useWallet()
-    // const { connection } = useConnection()
-    // const encodedPublicKey = wallet.publicKey
-    // useEffect(() => {
-    //     if (connection && encodedPublicKey) {
-    //         const publicKey = encodedPublicKey?.toBase58()
-    //         setPublicKey(publicKey)
-    //         const solana = new SolanaRPC(connection, publicKey)
-    //         console.log({ connection, publicKey })
-    //         initUserDoc(solana).then(() => {
-    //             console.log('UserDoc initialized')
-    //         })
-    //     }
-    // }, [connection, encodedPublicKey])
-
     const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
-    const WALLET_GATED = getClientEnv('WALLET_GATED')
     const IS_PRODUCTION = getClientEnv('IS_PRODUCTION') === 'true'
 
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
-    const [nonce, setNonce] = useState('')
     const [showTutorial, setShowTutorial] = useState(false)
     const [showConnectWalletModal, setShowConnectWalletModal] = useState(false)
     const [showClosedGameModal, setShowClosedGameModal] = useState(false)
     const [showUsernameModal, setShowUsernameModal] = useState(false)
     const [clickedPlay, setClickedPlay] = useState(false)
+    const [siweMessage, setSiweMessage] = useState('')
 
     const { setUsername, setInPixi } = useContext(AppContext)
 
     const { address, isConnected, status } = useWeb3Wallet()
     const { isOpen, open, close, setDefaultChain } = useWeb3Modal()
+    const { signMessageAsync } = useSignMessage({
+        message: siweMessage,
+    })
 
     const handleStartGame = async (userId: string) => {
         localStorage.setItem('username', userId)
+        await callApi('setInitialGameState', {
+            username: userId,
+        })
         setUsername(userId)
         emitUsername(userId)
         setInPixi(true)
         collectData('enter_game', {})
+        await composeDefaultParty()
     }
 
-    const getNonce = async () => {
-        const { nonce } = await callServerApi('getNonce', {})
-        setNonce(nonce)
-        return nonce
-    }
-
-    const handleFreeToPlayLogin = async (walletAddress: WalletAddress) => {
-        console.log('Handling F2P Login')
-        const { userId, username, accessToken } = await callServerApi('login', {
-            walletAddress,
-        })
-        console.log({ userId, username, accessToken })
-        const kaijusOwned = getKaijusOwned(walletAddress)
+    // TODO
+    const handleGuestLogin = async () => {
+        console.log('Handling Guest User Login')
+        const { userId, username, nonce } = await callServerApi('login', {}) // get new guest user
+        console.log({ userId, username, nonce })
         setUserDoc({
-            walletAddress,
-            kaijusOwned,
             userId,
             username,
-            userType: 'freeToPlay',
-        })
-        console.log('Set User Doc', {
-            walletAddress,
-            kaijusOwned,
-            userId,
-            username,
+            userType: 'guest',
         })
         initAnalytics(userId)
         collectData('login', {
-            method: 'connect_wallet',
+            method: 'guest_user',
         })
+        return {
+            userId,
+            username,
+        }
     }
 
+    const verifyAuthToken = async (
+        userId: UserID,
+        walletAddress: WalletAddress,
+        nonce: Nonce
+    ) => {
+        const existingAuthToken = getStringFromLocalStorage('authToken')
+        let authIsValid = false
+
+        if (existingAuthToken) {
+            console.log('AuthToken exists in localStorage.')
+            const { result } = await callServerApi('verifyAuthToken', {
+                userId,
+                authToken: existingAuthToken,
+            })
+            if (result === 'failure') {
+                console.log('Token is invalid!')
+                localStorage.removeItem('authToken')
+                const newAuthRes = await signMessageAndAuthenticate(
+                    walletAddress,
+                    nonce,
+                    userId
+                )
+                authIsValid = newAuthRes.result === 'success'
+            } else {
+                console.log(
+                    'Existing authToken is valid! Continue setting up userDoc.'
+                )
+                authIsValid = true
+            }
+        } else {
+            console.log('No Existing AuthToken in local storage!')
+            const { result } = await signMessageAndAuthenticate(
+                walletAddress,
+                nonce,
+                userId
+            )
+            authIsValid = result === 'success'
+        }
+
+        return { authIsValid }
+    }
+
+    /** Triggered whenever the user connects wallet */
     const handleWeb3Login = async (walletAddress: WalletAddress) => {
-        console.log('Handling Web3 Login')
-        const { userId, username, accessToken } = await callServerApi('login', {
+        console.log('Handling Web3 User Login')
+        const { userId, username, nonce } = await callServerApi('login', {
             walletAddress,
         })
-        console.log({ userId, username, accessToken })
-        const kaijusOwned = getKaijusOwned(walletAddress)
+        const { authIsValid } = await verifyAuthToken(
+            userId,
+            walletAddress,
+            nonce
+        )
+
+        if (!authIsValid)
+            return console.log('Auth is invalid! Returning early.')
+
         setUserDoc({
             walletAddress,
-            kaijusOwned,
             userId,
             username,
-            userType: 'web3NonKaiju',
+            userType: 'web3',
+            nonce
         })
-        console.log('Set User Doc', {
-            walletAddress,
-            kaijusOwned,
-            userId,
-            username,
-        })
+        console.log('Set User Doc!')
         initAnalytics(userId)
         collectData('login', {
             method: 'connect_wallet',
@@ -139,50 +161,70 @@ export function NewStartScreen(): JSXElement {
         return { userId, username }
     }
 
-    const getKaijusOwned = (walletAddress: WalletAddress) => {
-        //TODO
-        return 0
-    }
-
-    const getNewFreeToPlayUser = async () => {
-        const walletAddress =
-            getStringFromLocalStorage('walletAddress') ??
-            Math.random().toString().slice(2)
-        localStorage.setItem('walletAddress', walletAddress) // tmp
-        const { userId, username } = await callServerApi('login', {
-            walletAddress,
+    const signMessageAndAuthenticate = async (
+        walletAddress: WalletAddress,
+        nonce: Nonce,
+        userId: UserID
+    ) => {
+        console.log('Triggering new message signing...')
+        const message = createSiweMessage(walletAddress, nonce)
+        setSiweMessage(message)
+        const signature = await signMessageAsync({
+            message,
         })
-
-        setUserDoc({
-            walletAddress,
-            kaijusOwned: 1,
+        const { authToken, error } = await callServerApi(
+            'authenticateWeb3User',
+            {
+                userId,
+                message,
+                signature,
+            }
+        )
+        console.log({ authToken })
+        if (!authToken) return { result: 'failure', error }
+        const verifyRes = await callServerApi('verifyAuthToken', {
             userId,
-            username,
-            userType: 'freeToPlay',
+            authToken,
         })
-        setShowUsernameModal(true)
-        return { walletAddress, userId, username }
+        if (verifyRes.result === 'failure')
+            return { result: verifyRes.result, error: verifyRes.error }
+        else console.log('Verified Auth Token!')
+        localStorage.setItem('authToken', authToken)
+        return { result: verifyRes.result }
     }
 
     const handlePlayButtonClick = async () => {
         console.log('Handling Play button click')
         setClickedPlay(true)
-        console.log('setting clickedPlay to true')
-        if (!GAME_IS_LIVE) {
-            return setShowClosedGameModal(true)
-        }
+        if (!GAME_IS_LIVE) return setShowClosedGameModal(true)
+
         console.log('Game is live')
-        if (!userDoc || !userDoc.userId) return setShowConnectWalletModal(true)
+        if (!userDoc) return setShowConnectWalletModal(true)
+        const { userId, username, nonce, walletAddress, userType } = userDoc
 
         console.log({ userDoc })
-        // if (WALLET_GATED) {
-        //     if (userDoc.kaijusOwned === 0) return setShowGateModal(true)
-        // }
-        if (userDoc.username === null && userDoc.userId) {
-            // Likely 1st time player - wallet is connected but no username has been set
+        if (username === null && userId) {
+            console.log('Wallet is connected but no username is set')
+            // Wallet is connected but no username has been set
             return setShowUsernameModal(true)
         }
-        console.log({ username: userDoc.username })
+
+        if (userType === 'web3') {
+            if (!nonce) return console.error('No nonce in state.')
+            if (!walletAddress)
+                return console.error('No walletAddress in state.')
+            const { authIsValid } = await verifyAuthToken(
+                userId,
+                walletAddress,
+                nonce
+            )
+            if (!authIsValid)
+                return await signMessageAndAuthenticate(
+                    walletAddress,
+                    nonce,
+                    userId
+                )
+        }
 
         handleStartGame(userDoc.userId)
     }
@@ -192,57 +234,35 @@ export function NewStartScreen(): JSXElement {
         collectData('tutorial_begin', {})
     }
 
-    const getExistingAuthToken = () => {
-        return 'token'
-    }
-
-    const checkTokenIsValid = (authToken: any) => {
-        return { tokenIsValid: true, walletAddress: `0x123` as WalletAddress }
-    }
-
-    const getNewAuthToken = async (walletAddress: WalletAddress) => {
-        // should persist on localStorage as well
-    }
-
-    const getAuthFromLocalStorage = async () => {
-        const existingAuthToken = getExistingAuthToken()
-        if (existingAuthToken) {
-            const { tokenIsValid, walletAddress } =
-                checkTokenIsValid(existingAuthToken)
-            if (tokenIsValid) {
-                return
-            }
-            const newAuthToken = getNewAuthToken(walletAddress) // wallet address would be dummy uid placeholder walletAddress for anonymous users
-        }
-        return '123'
-    }
-
     useEffect(() => {
-        /** TODO: change this to actual F2P flow */
-        const tmpWalletAddress = getStringFromLocalStorage('walletAddress')
-        if (tmpWalletAddress) handleFreeToPlayLogin(tmpWalletAddress)
-
-        const existingUserAuth = getAuthFromLocalStorage().then(userAuth => {
-            if (userAuth) {
-                // update userDoc
-            }
-        })
-
-        // start game at last saved state on refresh for local development
-        const isLocalEnv = getClientEnv('IS_LOCAL')
-        if (!isLocalEnv) return
-        const username = getStringFromLocalStorage('username')
-        if (username) setInPixi(true)
-
         collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })
+
+        // begin game at prev state on refresh for local development
+        console.log('INITIAL USEEFFECT')
+        console.log({ userDoc })
+
+        const userId = getStringFromLocalStorage('username')
+        const IS_LOCAL = getClientEnv('IS_LOCAL')
+        if (!userId) return console.log('no saved userId')
+        else console.log('found saved userId')
+
+        setUserDoc({ userId, userType: 'guest', username: null })
+        setUsername(userId)
+
+        if (IS_LOCAL) {
+            emitUsername(userId)
+            setInPixi(true)
+        }
     }, [])
 
     /** Listen to Connect Wallet events, handle web3 login */
     useEffect(() => {
         if (isConnected && address) {
-            handleWeb3Login(address).then(({ userId, username }) => {
+            handleWeb3Login(address).then(res => {
+                if (!res) return
+                const { userId, username } = res
                 if (!username) return setShowUsernameModal(true)
                 if (clickedPlay) return handleStartGame(userId)
             })
@@ -251,6 +271,11 @@ export function NewStartScreen(): JSXElement {
             setUserDoc(null)
         }
     }, [isConnected])
+
+    useEffect(() => {
+        if (clickedPlay && userDoc && !userDoc.username)
+            return setShowUsernameModal(true)
+    }, [userDoc])
 
     // TODO: refactor modals into HOC
     return <>
@@ -266,7 +291,7 @@ export function NewStartScreen(): JSXElement {
         />}
         {showConnectWalletModal && !userDoc?.userId && <ConnectWalletModal
             setShowModal={setShowConnectWalletModal}
-            getNewFreeToPlayUser={getNewFreeToPlayUser}
+            getNewGuestUser={handleGuestLogin}
         />}
         <div
             className={`font-bigFont grid grid-rows-4 absolute left-0 w-full h-full z-0 pointer-events-auto`}
@@ -331,35 +356,26 @@ export function NewStartScreen(): JSXElement {
                             </div>
                             {userDoc &&
                             (userDoc.username || userDoc.walletAddress) &&
-                            userDoc?.userType === 'freeToPlay' ? (
+                            userDoc?.userType === 'guest' ? (
                                 <button
                                     className='text-red-400'
                                     onClick={() => {
-                                        if (userDoc.userType !== 'freeToPlay')
-                                            return
+                                        if (userDoc.userType !== 'guest') return
                                         localStorage.removeItem('walletAddress')
-                                        setUserDoc({
-                                            userId: '',
-                                            walletAddress: '',
-                                            kaijusOwned: 0,
-                                            userType: 'freeToPlay',
-                                            username: '',
-                                        })
+                                        setUserDoc(null)
                                     }}
                                 >
                                     {' '}
                                     log out of guest{' '}
                                 </button>
                             ) : (
-                                (userDoc?.userType === 'freeToPlay' ||
+                                (userDoc?.userType === 'guest' ||
                                     !userDoc) && <button
                                     className='text-red-400'
                                     onClick={async () => {
-                                        const { walletAddress } =
-                                            await getNewFreeToPlayUser()
-                                        await handleFreeToPlayLogin(
-                                            walletAddress
-                                        )
+                                        // const { walletAddress } =
+                                        //     await getNewGuestUser()
+                                        // await handleGuestLogin(walletAddress)
                                     }}
                                 >
                                     log in as guest
