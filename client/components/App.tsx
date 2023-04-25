@@ -3,7 +3,6 @@ import './global.css'
 import { useEffect, useState, createContext } from 'react'
 
 import { GameManager } from './GameManager'
-// import { UsernameEntry } from './UsernameEntry'
 import { emitUsername } from '@/socket'
 import {
     ConnectionProvider,
@@ -24,6 +23,8 @@ import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
 import { Web3Modal, Web3Button } from '@web3modal/react'
 import { configureChains, createClient, WagmiConfig } from 'wagmi'
 import { arbitrum } from 'wagmi/chains'
+import { getStringFromLocalStorage } from '@/elementsUtil'
+import { UserID } from 'shared'
 
 const chains = [arbitrum]
 const projectId = getClientEnv('WALLET_CONNECT_ID')
@@ -39,16 +40,21 @@ const ethereumClient = new EthereumClient(wagmiClient, chains)
 interface IAppContext {
     inPixi: boolean
     setInPixi: React.Dispatch<React.SetStateAction<boolean>>
+    username: UserID
+    setUsername: React.Dispatch<React.SetStateAction<UserID>>
 }
 
 export const AppContext = createContext<IAppContext>({
     inPixi: false,
     setInPixi: () => {},
+    username: '',
+    setUsername: () => {},
 })
 
 export function App(): JSXElement {
+    const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
     const [username, setUsername] = useState(
-        localStorage.getItem('username') ?? ''
+        getStringFromLocalStorage('username') ?? ''
     )
     const [inPixi, setInPixi] = useState(false)
 
@@ -63,25 +69,23 @@ export function App(): JSXElement {
         new LedgerWalletAdapter(),
     ]
 
-    const handleStartGame = async (userId: string) => {
-        localStorage.setItem('username', userId)
-        setUsername(userId)
-        emitUsername(userId)
-        setInPixi(true)
-    }
-
     const appContext = {
         inPixi,
         setInPixi,
+        username,
+        setUsername,
+    }
+
+    const preventRightClick = (e: MouseEvent) => {
+        e.preventDefault()
     }
 
     useEffect(() => {
-        // start game at last saved state on refresh for local development
-        const isLocalEnv = getClientEnv('IS_LOCAL')
-        if (!isLocalEnv) return
-        const username = localStorage.getItem('username')
-        if (username) setInPixi(true)
-    }, [])
+        if (IS_PRODUCTION) window.addEventListener('contextmenu', preventRightClick)
+        return () => {
+            window.removeEventListener('contextmenu', preventRightClick)
+        }
+    })
 
     return <>
         <AppContext.Provider value={appContext}>
@@ -93,9 +97,7 @@ export function App(): JSXElement {
                                 username={username}
                                 setInPixi={setInPixi}
                             >
-                                {!inPixi && <NewStartScreen
-                                    onEnter={handleStartGame}
-                                />}
+                                {!inPixi && <NewStartScreen />}
                             </GameManager>
                         </WalletModalProvider>
                     </WalletProvider>

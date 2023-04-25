@@ -1,5 +1,4 @@
 // @index('./*', f => `export { ${f.name} } from '${f.path}'`)
-export { incrementTestCounter } from './incrementTestCounter'
 export { setInitialGameState } from './setInitialGameState'
 export { loadGameState } from './loadGameState'
 export { login } from './login'
@@ -11,5 +10,7 @@ export { getSchema } from './getSchema'
 export { getLeaderboard } from './getLeaderboard'
 export { getLeaderboardEntryCount } from './getLeaderboardEntryCount'
 export { setUsername } from './setUsername'
-export { getNonce } from './getNonce'
+export { authenticateWeb3User } from './authenticateWeb3User'
+export { authenticateGuestUser } from './authenticateGuestUser'
+export { verifyAuthToken } from './verifyAuthToken'
 // @endindex

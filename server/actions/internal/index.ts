@@ -1,1 +1,2 @@
-export * from './getUserId'
+export * from './getUserInfo'
+export * from './getNonce'

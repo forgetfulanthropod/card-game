@@ -44,7 +44,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                             THEN true
                             ELSE false
                         END AS is_self,
-                        i.wallet_address,
+                        -- i.wallet_address,
                         i.username,
                         u.run_score as max_score,
                         u.start_ts,
@@ -63,7 +63,7 @@ export const getLeaderboard: ServerActions['getLeaderboard'] = async args => {
                         u.user_id,
                         u.end_ts,
                         u.run_id,
-                        i.wallet_address,
+                        -- i.wallet_address,
                         i.username
                 )
             SELECT

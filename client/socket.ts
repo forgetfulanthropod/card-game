@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 import type { GameState, RunScoreUpdate } from 'shared'
 import { getTree, initializeBoababTree, isTreeInitialized } from '@/data'
-import { startPixi } from '@/elementsUtil'
+import { getStringFromLocalStorage, startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
 import { getClientEnv } from './util/getClientEnv'
 
@@ -41,7 +41,7 @@ export function prepareSocket(): void {
         const isLocalEnv = getClientEnv('IS_LOCAL')
         if (isLocalEnv) {
             // start game at last saved state on refresh
-            const username = localStorage.getItem('username')
+            const username = getStringFromLocalStorage('username')
             if (username != null) {
                 socket.emit('username', { username, socketId: socket.id })
             }

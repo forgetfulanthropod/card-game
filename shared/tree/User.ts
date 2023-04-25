@@ -8,9 +8,15 @@ export type UserInfo = {
     username: Username | null
 }
 
+export type Web3UserInfo = UserInfo
+export type GuestUserInfo = Omit<UserInfo, 'username'>
+export type UserType = 'guest' | 'web3'
+export type Nonce = string
+export type AuthToken = string
+
 export type UserDBActionProps = {
-    connection: DatabasePool,
-    walletAddress: string
+    connection: DatabasePool
+    walletAddress?: string
 }
 
 export type AuthUserDBActionProps = {
