@@ -529,9 +529,9 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
         Container(
             {},
             Sprite({
-                scale:
-                    INTENT_ICON_WIDTH /
-                    getTexture(commandMeta?.src ?? 'intentAttack').width,
+                // scale:
+                //     INTENT_ICON_WIDTH /
+                //     getTexture(commandMeta?.src ?? 'intentAttack').width,
                 src: getTexture(commandMeta?.src ?? 'intentAttack'),
                 anchor: commandMeta?.src ? [0.1, 0.4] : 0.4,
                 events,
@@ -568,7 +568,7 @@ function DebuffIntended(command: NextCommand) {
                 x: 30,
             },
             Sprite({
-                scale: INTENT_ICON_WIDTH / getTexture('intentDebuff').width,
+                // scale: INTENT_ICON_WIDTH / getTexture('intentDebuff').width,
                 src: 'intentDebuff',
                 anchor: 0.4,
                 events,
@@ -588,7 +588,7 @@ function BuffIntended(command: NextCommand) {
                 x: -40,
             },
             Sprite({
-                scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
+                // scale: INTENT_ICON_WIDTH / getTexture('intentBuff').width,
                 src: 'intentBuff',
                 anchor: 0.2,
                 events,
@@ -608,7 +608,7 @@ function BlockIntended(amount: number, command: NextCommand) {
                 x: -80,
             },
             Sprite({
-                scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
+                // scale: INTENT_ICON_WIDTH / getTexture('intentBlock').width,
                 src: 'intentBlock',
                 anchor: 0.2,
                 events: {
@@ -648,7 +648,8 @@ function getCommandObjects(command: NextCommand) {
         commandIdToMetaMap[commandId as NpcCommandId] ??
         ({} as { id: NpcCommandId; src?: IntentAssetKey; explanation?: string })
 
-    const xOffset = 65
+    const xOffset = 80
+    const yOffset = 80
 
     const isHoveringIntent = datum(false)
     let infoBox = commandMeta.explanation
@@ -659,6 +660,7 @@ function getCommandObjects(command: NextCommand) {
                   ...commandMeta.explanation,
               ],
               xOffset,
+              yOffset,
               isHtml: true,
           })
         : Object.hasOwn(keyTermsMap, commandId)
@@ -666,11 +668,13 @@ function getCommandObjects(command: NextCommand) {
               isShown: isHoveringIntent,
               term: commandId as KeyTerm,
               xOffset,
+              yOffset,
           })
         : ExplanationIf({
               isShown: isHoveringIntent,
               texts: [startCase(commandId)],
               xOffset,
+              yOffset,
               isHtml: true,
           })
 
