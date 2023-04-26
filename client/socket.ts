@@ -30,7 +30,7 @@ export function prepareSocket(): void {
                 : '/server/socket',
     })
     socket.on('connect', () => {
-        // console.log('connected to socket!')
+        console.log('CLIENT connected to socket!')
 
         // todo:
         // check local storage for JWT
@@ -41,9 +41,7 @@ export function prepareSocket(): void {
         if (true) {
             // start game at last saved state on refresh
             const userId = getStringFromLocalStorage('userId')
-            if (userId !== null) {
-                socket.emit('userId', { userId, socketId: socket.id })
-            }
+            if (userId) emitUserId(userId)
         }
     })
 
@@ -62,6 +60,8 @@ export function prepareSocket(): void {
 
 /** Loads gamestate on the server, and then is passed back to the client */
 export function emitUserId(userId: string): void {
+    if (!socket.connected)
+        return console.error('tried to emit user when socket is not connected')
     if (socket == null) throw Error('socket is null')
     socket.emit('userId', { userId, socketId: socket.id })
 }

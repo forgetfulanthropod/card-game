@@ -26,19 +26,13 @@ import {
 type TurnType = 'user' | 'enemy' | 'regularBattleStart' | 'bossBattleStart'
 
 export function TurnAnnouncement() {
-    const MainContainer = TweenableContainer({
-        // events: {
-        //     pointerenter: () => void 0,
-        // },
-    })
-    MainContainer.interactive = false
-    // MainContainer.cursor = 'default'
-
+    const MainContainer = TweenableContainer({})
     const scene = getBattleScene()
     const isPlayerTurnDatum = toDatum(
         scene.select('isPlayerTurn'),
         isPlayerTurn => isPlayerTurn
-    )
+        )
+    const [baseX, baseY] = [BASE_WIDTH / 2, BASE_HEIGHT / 2 - 130]
     const playerTurnUnsub = isPlayerTurnDatum.onChange(async isPlayerTurn => {
         const battleState = scene.get('state')
         const currTurnCount = scene.get('turnCount')
@@ -55,118 +49,119 @@ export function TurnAnnouncement() {
         else await flashTurnAnnouncement('enemy')
     }, true)
 
-    const [baseX, baseY] = [BASE_WIDTH / 2, BASE_HEIGHT / 2 - 130]
+    const MainText = Text({
+        text: '',
+        style: {
+            fontFamily: fontMap['bigFont'],
+            fill: '#FFFFFF',
+            fillGradientType: 1,
+            fontSize: 80,
+        },
+        anchor: [0.5, 0.5],
+    });
+    addFilterTo(MainText, textOutlineFilter)
 
-    function getMainText(turnType: TurnType) {
-        const text = Text({
-            text:
-                turnType === 'regularBattleStart'
-                    ? 'BATTLE START'
-                    : turnType === 'bossBattleStart'
-                    ? 'BOSS BATTLE START'
-                    : turnType === 'user'
-                    ? 'YOUR TURN'
-                    : 'ENEMY TURN',
-            style: {
-                fontFamily: fontMap['bigFont'],
-                fill: '#FFFFFF',
-                fillGradientType: 1,
-                fontSize: turnType === 'user' ? 80 : 96,
-            },
+    const TurnCountText = Text({
+        text: '',
+        style: {
+            fontFamily: fontMap['sansFont'],
+            fill: 0xfbda9d,
+            fontSize: 28,
+        },
+        anchor: [0.5, 0.5],
+    });
+
+    const MainTextContainer = TweenableContainer(
+        {
+            x: baseX,
+            y: baseY,
+            scale: 1,
+            alpha: 0,
+        },
+        MainText
+    );
+
+    const TurnCountTextContainer = TweenableContainer(
+        {
+            x: baseX,
+            y: baseY + 65,
+            alpha: 0,
+        },
+        TurnCountText
+    );
+
+    const CrossedSwords = TweenableContainer(
+        {
+            x: baseX,
+            y: baseY + 20,
+            alpha: 0,
+            scale: 1.25,
+        },
+        Sprite({
+            src: getTexture('crossedSwords'),
+            alpha: 1,
             anchor: [0.5, 0.5],
+            tint: 0x42444d,
         })
-        const textContainer = TweenableContainer(
-            {
-                x: baseX,
-                y: turnType === 'user' ? baseY : baseY + 25,
-                scale: 1,
-                alpha: 0,
-            },
-            text
-        )
-        addFilterTo(text, textOutlineFilter)
-        return textContainer
-    }
+    );
+    const overlayFilter = new ColorOverlayFilter(0x868998);
+    addFilterTo(CrossedSwords, overlayFilter);
+    onDestroyed(CrossedSwords, () => {
+        removeFilterFrom(CrossedSwords, overlayFilter);
+        overlayFilter.destroy();
+    });
 
-    function getCrossedSwordsSprite() {
-        const overlayFilter = new ColorOverlayFilter(0x868998)
-        const crossedSwords = TweenableContainer(
-            {
-                x: baseX,
-                y: baseY + 20,
-                alpha: 0,
-                scale: 1.25,
-            },
-            Sprite({
-                src: getTexture('crossedSwords'),
-                alpha: 1,
-                anchor: [0.5, 0.5],
-                tint: 0x42444d,
-            })
-        )
-        addFilterTo(crossedSwords, overlayFilter)
-        return onDestroyed(crossedSwords, () => {
-            removeFilterFrom(crossedSwords, overlayFilter)
-            overlayFilter.destroy()
-        })
-    }
-
-    function getBannerBg(turnType: TurnType) {
-        const colorFrom = 0x1c1d21
-        const colorTo = 0x42444d
-
-        return RoundedRectangleGradientSprite({
-            spriteArgs: {
-                width: BASE_WIDTH,
-                height: 190,
-                x: -BASE_WIDTH,
-                y: BASE_HEIGHT / 2 - 200,
-                name: 'TurnAnnouncementBg',
-                alpha: 0.3,
-            },
-            radius: 0,
-            gradientArgs: {
-                x0: 0,
-                x1: BASE_WIDTH,
-                y0: 0,
-                y1: 700,
-                colorStops: [
-                    { color: colorFrom, offset: 0 },
-                    { color: colorTo, offset: 1 },
-                ],
-            },
-        })
-    }
-
-    function getTurnCountText(turnCount: number) {
-        return TweenableContainer(
-            {
-                x: baseX,
-                y: baseY + 65,
-                alpha: 0,
-            },
-            Text({
-                text: `Turn #${turnCount}`,
-                style: {
-                    fontFamily: fontMap['sansFont'],
-                    fill: 0xfbda9d,
-                    fontSize: 28,
-                },
-                anchor: [0.5, 0.5],
-            })
-        )
-    }
+    const BannerBg = RoundedRectangleGradientSprite({
+        spriteArgs: {
+            width: BASE_WIDTH,
+            height: 190,
+            x: -BASE_WIDTH,
+            y: BASE_HEIGHT / 2 - 200,
+            name: 'TurnAnnouncementBg',
+            alpha: 0.3,
+        },
+        radius: 0,
+        gradientArgs: {
+            x0: 0,
+            x1: BASE_WIDTH,
+            y0: 0,
+            y1: 700,
+            colorStops: [
+                { color: 0x1c1d21, offset: 0 },
+                { color: 0x42444d, offset: 1 },
+            ],
+        },
+    });
 
     async function flashTurnAnnouncement(
         turnType: TurnType,
         turnCount?: number
     ) {
         MainContainer.alpha = 1
-        const MainText = getMainText(turnType)
-        const BannerBg = getBannerBg(turnType)
-        const CrossedSwords = getCrossedSwordsSprite()
-        let TurnCountText: TweenablePixiContainer | null = null
-        MainContainer.addChild(BannerBg, CrossedSwords, MainText)
+
+        MainText.text =
+        turnType === 'regularBattleStart'
+            ? 'BATTLE START'
+            : turnType === 'bossBattleStart'
+            ? 'BOSS BATTLE START'
+            : turnType === 'user'
+            ? 'YOUR TURN'
+            : 'ENEMY TURN';
+        MainText.style.fontSize = turnType === 'user' ? 80 : 96;
+        MainTextContainer.y = turnType === 'user' ? baseY : baseY + 25;
+
+        console.log("WHATABURGER")
+        console.log('I LOVE WHATABURGER')
+        console.log({turnType, turnCount})
+
+
+        if (turnType === 'user' && turnCount) {
+            console.log('dafuq bro')
+            TurnCountText.text = `Turn #${turnCount}`;
+        }
+
+
+        MainContainer.addChild(BannerBg, CrossedSwords, MainTextContainer)
 
         Tweener.add(
             {
@@ -177,16 +172,16 @@ export function TurnAnnouncement() {
             { x: 0, alpha: 0.85 }
         )
         await sleep(200)
-        runKeyframeAnimations(MainText, 0.65, {
+        runKeyframeAnimations(MainTextContainer, 0.65, {
             keyframes: 1,
             alpha: 1,
             ease: Easing.bouncePast,
         })
 
         if (turnType === 'user' && turnCount) {
-            TurnCountText = getTurnCountText(turnCount)
-            MainContainer.addChild(TurnCountText)
-            await runKeyframeAnimations(TurnCountText, 0.3, {
+            MainContainer.addChild(TurnCountTextContainer);
+
+            await runKeyframeAnimations(TurnCountTextContainer, 0.3, {
                 keyframes: 1,
                 alpha: 1,
                 ease: Easing.bouncePast,
@@ -218,13 +213,13 @@ export function TurnAnnouncement() {
             keyframes: 1,
             alpha: 0,
         })
-        runKeyframeAnimations(MainText, 0.45, {
+        runKeyframeAnimations(MainTextContainer, 0.45, {
             ease: Easing.easeFrom,
             keyframes: 1,
             alpha: 0,
         })
         TurnCountText &&
-            runKeyframeAnimations(TurnCountText, 0.45, {
+            runKeyframeAnimations(TurnCountTextContainer, 0.45, {
                 ease: Easing.easeFrom,
                 keyframes: 1,
                 alpha: 0,
@@ -238,11 +233,8 @@ export function TurnAnnouncement() {
             },
             { x: BannerBg.width, alpha: 0.3 }
         )
-        for (let element of MainContainer.children) {
-            await waitForAnimationsToFinish()
-            element.destroy()
-        }
         MainContainer.removeChildren()
+        CrossedSwords.scale.set(1.25)
     }
 
     return onDestroyed(MainContainer, () => playerTurnUnsub())
