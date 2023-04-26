@@ -150,13 +150,10 @@ export function TurnAnnouncement() {
         MainText.style.fontSize = turnType === 'user' ? 80 : 96;
         MainTextContainer.y = turnType === 'user' ? baseY : baseY + 25;
 
-        console.log("WHATABURGER")
-        console.log('I LOVE WHATABURGER')
         console.log({turnType, turnCount})
 
 
         if (turnType === 'user' && turnCount) {
-            console.log('dafuq bro')
             TurnCountText.text = `Turn #${turnCount}`;
         }
 
