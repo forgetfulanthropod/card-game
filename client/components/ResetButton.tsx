@@ -76,10 +76,9 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
 
     const handleBackToMenu = async () => {
         console.log('handleBackToMenu...')
-        const IS_LOCAL = getClientEnv('IS_LOCAL')
-        if (IS_LOCAL) {
+        // if (IS_LOCAL) {
             localStorage.removeItem('userId')
-        }
+        // }
         await callApi('setInitialGameState', {
             userId,
         })

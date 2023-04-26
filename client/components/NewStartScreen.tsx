@@ -249,8 +249,6 @@ export function NewStartScreen(): JSXElement {
 
         setUserDoc({ userId, userType: 'guest', username: null })
         setUserId(userId)
-
-        emitUserId(userId)
         setInPixi(true)
     }, [])
 
