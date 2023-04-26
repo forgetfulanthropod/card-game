@@ -92,6 +92,9 @@ export function Character(props: CharacterProps): PixiContainer {
             : []),
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, props.onClick),
+
+        Adjust(HealthBar(characterMeta.uid), { y: 11 }),
+
         If(
             toDatum(getBattleScene().select('isPlayerTurn'), is => is),
             () =>
@@ -102,19 +105,19 @@ export function Character(props: CharacterProps): PixiContainer {
         )
     )
 
-    nextFrame().then(() => {
-        let { x, y } = mainContainer.getGlobalPosition()
+    // nextFrame().then(() => {
+    //     let { x, y } = mainContainer.getGlobalPosition()
 
-        portalize({
-            from: mainContainer,
-            to: () => mainContainer.parent.parent,
-            content: Adjust(
-                HealthBar(characterMeta.uid),
-                { x, y: y + 11 }
-                // { y: 11 }
-            ),
-        })
-    })
+    //     portalize({
+    //         from: mainContainer,
+    //         to: () => mainContainer.parent.parent,
+    //         content: Adjust(
+    //             HealthBar(characterMeta.uid),
+    //             { x, y: y + 11 }
+    //             // { y: 11 }
+    //         ),
+    //     })
+    // })
 
     setTimeout(
         () => {

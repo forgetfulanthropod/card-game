@@ -66,7 +66,7 @@ export const keyTermsMap = {
     valiant:
         'Incremented each time THIS_CHARACTER blocks for an ally. At 5 stacks, next attack is a critical hit.',
     arcaneConnection:
-        'If all three allies play a card in one turn, get +1 energy and draw X, where X is the number of ally Wizards',
+        'If all three allies play a card in one turn, get +1 energy and draw X, where X is the number of ally Wizards.',
     anHonestLiving: 'Killing with THIS_CHARACTER yields +1 energy.',
 
     ...swordPartExplanations,

@@ -77,10 +77,11 @@ function InteractiveEffectCounter(
         ),
         Text({
             text: `${effect.counter}`,
-            anchor: [1, 1],
+            anchor: [1, 0.7],
             style: {
                 fontFamily: fontMap['bigFont'],
-                fontSize: 36,
+                //@ts-expect-error
+                fontSize: effect.counter === '∞' ? 50 : 36,
                 fill: 'white',
                 stroke: 'black',
                 strokeThickness: 5,
