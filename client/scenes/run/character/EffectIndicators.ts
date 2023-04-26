@@ -39,13 +39,14 @@ export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
         //@ts-expect-error
         data,
         //@ts-expect-error
-        effect => InteractiveEffectCounter(effect),
+        effect => InteractiveEffectCounter(effect, characterCursor.get()),
         idx => ({ y: 50, x: idx * 50 })
     )
 }
 
 function InteractiveEffectCounter(
-    effect: Effect & { id: VisibleEffectId }
+    effect: Effect & { id: VisibleEffectId },
+    characterMeta: CharacterMeta
 ): PixiContainer {
     const isHovered = datum(false)
     const pointerenter = () => isHovered.set(true)
@@ -91,6 +92,7 @@ function InteractiveEffectCounter(
                 .replace('Debuff', '')
                 .replace('Buff', '') as KeyTerm,
             xOffset: width,
+            characterMeta,
         })
     )
 

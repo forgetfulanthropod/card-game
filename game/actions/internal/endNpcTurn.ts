@@ -19,6 +19,7 @@ import {
     clearCommandHooks,
     clearCommandHooksForTurn,
 } from '@/gameState/battle/commandHookUtil'
+import { updateWizardAbility } from '@/gameState/battle/characters/activateClassAbility'
 
 // const DEFAULT_WAIT = 1000
 const DEBUG = false
@@ -36,6 +37,8 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     clearBlock(scene, 'pc')
     decrementEffects(scene, 'pc')
     decrementEffects(scene, 'npc')
+
+    updateWizardAbility(scene)
 
     activateSouvenirs('turnStart', scene) // buffs/debuffs for calcs
     applyTurnStartEffects(scene, 'pc')

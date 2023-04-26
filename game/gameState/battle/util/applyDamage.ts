@@ -1,20 +1,22 @@
+import { updateNpcMoves, updateScore } from '@/gameState'
 import type {
-    CharacterUid,
     BattleCursor,
-    CharacterMeta,
-    EnemyCharacterMeta,
-    CommandId,
-    Effect,
     CharacterId,
+    CharacterMeta,
+    CharacterUid,
+    Effect,
+    EnemyCharacterMeta,
 } from 'shared'
+import { activateSouvenirs } from '../activateSouvenirs'
+import { applyEffect } from '../cards/commands/effect'
+import {
+    maybeActivateRogueAbility,
+    maybeResetKnightAbilityCounter,
+} from '../characters/activateClassAbility'
 import { calculateStats } from '../characters/effects'
-import { updateNpcMoves } from '@/gameState'
+import { triggerOnHook } from '../commandHookUtil'
 import { checkServerScoringEvent } from '../score/checkServerScoringEvent'
 import { clearDead } from './clearDead'
-import { applyEffect } from '../cards/commands/effect'
-import { updateScore } from '@/gameState'
-import { activateSouvenirs } from '../activateSouvenirs'
-import { triggerOnHook } from '../commandHookUtil'
 
 export function applyDamage(args: {
     damage: number
@@ -34,6 +36,7 @@ export function applyDamage(args: {
         attacker: attackerMeta,
         target: scene.get('allCharacters', targetUid),
         damage,
+        isCritical: maybeResetKnightAbilityCounter(scene, attacker),
     })
 
     if (attackerUid?.includes('pc')) {
@@ -88,7 +91,12 @@ export function applyDamage(args: {
         }
     }
 
-    manageSideEffectsOfUnblockedDamage(scene, targetUid, unblockedDamage)
+    manageSideEffectsOfUnblockedDamage({
+        scene,
+        targetUid,
+        attacker,
+        unblockedDamage,
+    })
 
     if (unblockedDamage === Number.NEGATIVE_INFINITY)
         throw new Error("unblocked damage wasn't calculated")
@@ -246,17 +254,25 @@ function manageMutuallyAssuredDestruction(
     })
 }
 
-export function manageSideEffectsOfUnblockedDamage(
-    scene: BattleCursor,
-    targetUid: CharacterUid,
+export function manageSideEffectsOfUnblockedDamage({
+    scene,
+    targetUid,
+    unblockedDamage,
+    attacker,
+}: {
+    scene: BattleCursor
+    targetUid: CharacterUid
     unblockedDamage: number
-) {
+    attacker?: CharacterMeta
+}) {
     recordDamage(scene, unblockedDamage, targetUid, 'unblocked')
     checkServerScoringEvent('ROOM_TAKE_100_DAMAGE', scene)
     if (didTargetDie(scene, targetUid)) {
         clearDead(scene)
 
         applyKillScores(scene, targetUid)
+
+        maybeActivateRogueAbility(scene, attacker)
     }
 
     maybeApplyDamageThresholdDebuffs(scene, targetUid, unblockedDamage)
@@ -306,10 +322,12 @@ export function getDamage({
     attacker,
     target,
     damage,
+    isCritical,
 }: {
     attacker: CharacterMeta | null
     target: CharacterMeta | null
     damage: number
+    isCritical?: boolean
 }) {
     const damageDealMultiplicand = attacker
         ? calculateStats(attacker).damageDealMultiplicand
@@ -329,9 +347,12 @@ export function getDamage({
     // )
 
     const multiplicand = damageDealMultiplicand * damageTakeMultiplicand
-    const calcedDamage = Math.ceil(
+    let calcedDamage = Math.ceil(
         damage * multiplicand + damageTakeAddend + damageDealAddend
     )
+
+    if (isCritical || Math.random() < 0.05)
+        calcedDamage = Math.ceil(calcedDamage * 1.5)
 
     return Math.max(calcedDamage, 1) // damage minimum is 1
 }

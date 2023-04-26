@@ -1854,7 +1854,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
         id: 'barricade',
         name: 'Barricade',
         energy: 1,
-        targetNum: 1,
+        targetNum: -1,
         targetType: 'allFriends',
         actions: `
             defensey = defense * 0.4;

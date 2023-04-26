@@ -1,6 +1,7 @@
 import { getRulebook } from '@/rulebook'
 import type {
     BaseHealth,
+    CharacterClass,
     CharacterMeta,
     Characters,
     EnemyCharacterMeta,
@@ -18,8 +19,6 @@ import { calculateStats } from '../characters/effects'
 
 const BASE_WIDTH = 1920
 const BASE_HEIGHT = 1080
-const X_AGGRESSIVE_THRESH = 11
-const X_NEUTRAL_THRESH = 9
 
 const CENTERING_X_OFFSET = 5 // out of 100
 
@@ -138,7 +137,7 @@ function newPCMeta(
         hasMoved: false,
         health: stats.constitution,
         block: 0,
-        effects: [],
+        effects: getStartingClassPassiveEffects(stats.class),
         orbs: [],
         statModifiersMap: {
             turn: {},
@@ -199,4 +198,16 @@ function positionBetween(
     arg1: [number, number]
 ): [number, number] {
     return [(arg0[0] + arg1[0]) / 2, (arg0[1] + arg1[1]) / 2]
+}
+
+export function getStartingClassPassiveEffects(characterClass: CharacterClass) {
+    const classToPassiveEffectMap = {
+        wizard: { id: 'arcaneConnection', counter: 0 },
+        knight: { id: 'valiant', counter: 0 },
+        rogue: { id: 'anHonestLiving', counter: '∞' as unknown as number }, // classPassiveEffects not touched by increment code
+        bard: null,
+        cleric: null,
+    } as const
+    const effect = classToPassiveEffectMap[characterClass]
+    return effect ? [effect] : []
 }

@@ -25,7 +25,7 @@ import { HitInfo } from './HitInfo'
 import { NpcIntentArrow } from './NpcIntentArrow'
 
 import { getCharTexture, SoundEffectAssetKey } from '@/assets'
-import { getStage, PixiContainer, PixiSpine } from '@/elementsUtil'
+import { getStage, PixiContainer, PixiSpine, portalize } from '@/elementsUtil'
 import {
     Adjust,
     Container,
@@ -37,6 +37,7 @@ import {
 } from '@/elementsUtil'
 import {
     hoveredCharacterUid,
+    nextFrame,
     nextTick,
     playDamageAnimation,
     statChangesDatum,
@@ -91,7 +92,6 @@ export function Character(props: CharacterProps): PixiContainer {
             : []),
         mainAnimation == null &&
             FallBackCharacterSprite(characterMeta, props.onClick),
-        Adjust(HealthBar(characterMeta.uid), { y: 11 }),
         If(
             toDatum(getBattleScene().select('isPlayerTurn'), is => is),
             () =>
@@ -101,6 +101,20 @@ export function Character(props: CharacterProps): PixiContainer {
                 })
         )
     )
+
+    nextFrame().then(() => {
+        let { x, y } = mainContainer.getGlobalPosition()
+
+        portalize({
+            from: mainContainer,
+            to: () => mainContainer.parent.parent,
+            content: Adjust(
+                HealthBar(characterMeta.uid),
+                { x, y: y + 11 }
+                // { y: 11 }
+            ),
+        })
+    })
 
     setTimeout(
         () => {
