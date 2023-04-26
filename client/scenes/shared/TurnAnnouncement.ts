@@ -31,7 +31,7 @@ export function TurnAnnouncement() {
         //     pointerenter: () => void 0,
         // },
     })
-    // MainContainer.interactive = true
+    MainContainer.interactive = false
     // MainContainer.cursor = 'default'
 
     const scene = getBattleScene()

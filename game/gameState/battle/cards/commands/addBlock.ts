@@ -1,7 +1,8 @@
+import { calculateStats } from '@/gameState'
 import type { BattleCursor, CharacterUid } from 'shared'
+import { maybeIncrementKnightAbility } from '../../characters/activateClassAbility'
 import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
-import { calculateStats } from '@/gameState'
 import { getTargetText } from './util/getTargetText'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
@@ -28,6 +29,8 @@ export const execute: Executors['addBlock'] = ({
         command,
         givenUids,
     })
+
+    maybeIncrementKnightAbility(scene, command, targetUids)
 
     applyBlocks({ targetUids, scene, block })
 }

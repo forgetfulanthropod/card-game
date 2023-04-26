@@ -62,7 +62,9 @@ export const effectIds = [
     'damageTakeSubtractorBuff',
     'damageTakeAddendDebuff',
     'lockStanceDebuff',
-    'valiantBuff',
+    'valiant',
+    'arcaneConnection',
+    'anHonestLiving',
 ] as const
 
 /** Effects which are cleared on turn end */

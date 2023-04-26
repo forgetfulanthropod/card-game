@@ -14,7 +14,7 @@ import { Datum } from 'datums'
 import { startCase, upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
 import { DisplayObject, Texture } from 'pixi.js'
-import { swordPartExplanations } from 'shared'
+import { CharacterMeta, swordPartExplanations } from 'shared'
 import { keys } from 'shared/code'
 import type { InfoBoxDisplayArgs } from '.'
 import { InfoBox } from '.'
@@ -29,40 +29,45 @@ export const keyTermsMap = {
 
     orbsOfProtection: 'blocks for 50% of Magic.',
     orbsOfLightning: 'deal 35% of Magic to all enemies.',
-    orbsOfFrost: '+1 Strongblock to party\n+1 Tired to enemies.',
+    orbsOfFrost: '+1 Strongblock to allies\n+1 Tired to enemies.',
     orbsOfHolyLight:
         'Heals for 15% of Magic\nBlocks for 100% of Defense and 50% of Magic.',
 
     berserk:
         '(aggressive stance only) deals 50% more damage, takes 100% more damage.',
-    bleed: 'This character takes unblockable damage equal to 5% of their maximum health at the start of its turn.',
-    brave: 'This character deals 15% more damage.',
-    courageous: 'This character deals 25% more damage.',
-    debilitated: 'This character deals 50% less damage.',
+    bleed: 'THIS_CHARACTER takes unblockable damage equal to 5% of their maximum health at the start of its turn.',
+    brave: 'THIS_CHARACTER deals 15% more damage.',
+    courageous: 'THIS_CHARACTER deals 25% more damage.',
+    debilitated: 'THIS_CHARACTER deals 50% less damage.',
     entranced: 'increases Magic by the number of entranced stacks.',
-    fatigued: 'This character deals 25% less damage.',
-    fire: 'This character receives Vulnerable (2) at start of its turn.',
-    fortified: 'This character receives 50% more block.',
-    guarded: 'This character receives 25% less damage.',
+    fatigued: 'THIS_CHARACTER deals 25% less damage.',
+    fire: 'THIS_CHARACTER receives Vulnerable (2) at start of its turn.',
+    fortified: 'THIS_CHARACTER receives 50% more block.',
+    guarded: 'THIS_CHARACTER receives 25% less damage.',
     poisoned:
-        'This character receives unblockable damage equal to the number of poison stacks it has at the start of its turn..',
+        'THIS_CHARACTER receives unblockable damage equal to the number of poison stacks it has at the start of its turn..',
     piercing: 'ignores block.',
     reflect:
         'Deals damage up to the number of reflect stacks back to the attacker when taking a hit.',
     mutuallyAssuredDestruction:
-        'For every unblocked point of damage this character takes, deal 2 damage to the enemy that targeted them.',
-    strongblock: 'Block this character gains is increased by 50%.',
-    stunned: 'This character cannot take an action this turn.',
+        'For every unblocked point of damage THIS_CHARACTER takes, deal 2 damage to the enemy that targeted them.',
+    strongblock: 'Block THIS_CHARACTER gains is increased by 50%.',
+    stunned: 'THIS_CHARACTER cannot take an action this turn.',
     targeted: 'receives 5 extra damage from every attack.',
-    tired: 'This character deals 12% less damage.',
-    unguarded: 'This character receives 25% more damage.',
-    unready: 'This character receives 12% more damage.',
-    valiant: 'When Valiant reaches 5 stacks, next attack is a critical hit.',
-    vulnerable: 'This character receives 50% more damage.',
+    tired: 'THIS_CHARACTER deals 12% less damage.',
+    unguarded: 'THIS_CHARACTER receives 25% more damage.',
+    unready: 'THIS_CHARACTER receives 12% more damage.',
+    vulnerable: 'THIS_CHARACTER receives 50% more damage.',
 
     yodel: 'Enemies gain Brave(1) at the start of the next turn.',
-    stamp: 'This characters strength is increased by 25',
+    stamp: "THIS_CHARACTER's strength is increased by 25",
     chargedBomb: 'Gnome Big Bomber has charged his bomb!',
+
+    valiant:
+        'Incremented each time THIS_CHARACTER blocks for an ally. At 5 stacks, next attack is a critical hit.',
+    arcaneConnection:
+        'If all three allies play a card in one turn, get +1 energy and draw X, where X is the number of ally Wizards.',
+    anHonestLiving: 'Killing with THIS_CHARACTER yields +1 energy.',
 
     ...swordPartExplanations,
 }
@@ -156,11 +161,13 @@ export function TermExplanationIf({
     term,
     xOffset = 0,
     yOffset = 0,
+    characterMeta,
 }: {
     isShown: Datum<boolean>
     term: KeyTerm
     xOffset?: number
     yOffset?: number
+    characterMeta?: CharacterMeta
 }): PixiContainer {
     return If(isShown, () => {
         return portalizeExplanations(
@@ -169,6 +176,7 @@ export function TermExplanationIf({
                 TermExplanation({
                     term,
                     displayObjectArgs: { x: xOffset, y: yOffset },
+                    characterMeta,
                 }),
             ],
             xOffset
@@ -217,9 +225,11 @@ function portalizeExplanations(
 export function TermExplanation({
     term,
     displayObjectArgs,
+    characterMeta,
 }: {
     term: KeyTerm
     displayObjectArgs?: DisplayObjectArgs
+    characterMeta?: CharacterMeta
 }): PixiContainer {
     let topText = startCase(term).replace('Orbs', 'Orb')
 
@@ -233,7 +243,15 @@ export function TermExplanation({
         //     <br/>
         //     ${keyTermsMap[term]}
         // </div>`,
-        texts: [topText, ...[keyTermsMap[term] ?? []]],
+        texts: [
+            topText,
+            ...[
+                keyTermsMap[term].replace(
+                    'THIS_CHARACTER',
+                    characterMeta ? characterMeta.displayName : 'This Character'
+                ) ?? [],
+            ],
+        ],
         displayObjectArgs: {
             borderThickness: 2,
             padding: 10,

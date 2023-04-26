@@ -16,6 +16,7 @@ import produce from 'immer'
 import { applyBlocks } from '../cards/commands/addBlock'
 import { applyEffect } from '../cards/commands/effect'
 import { getLivingNpcUids, getLivingPcUids } from './characterGetters'
+import { getStartingClassPassiveEffects } from '../util/characterManagement'
 
 const turnStartEffectIds = [
     'bleedDebuff',
@@ -25,7 +26,18 @@ const turnStartEffectIds = [
     'yodelBuff',
 ] as const
 type TurnStartEffectId = typeof turnStartEffectIds[number]
-type StaticEffectId = Exclude<EffectId, TurnStartEffectId>
+
+const passiveClassEffectIds = [
+    'valiant',
+    'arcaneConnection',
+    'anHonestLiving',
+] as const
+type PassiveClassEffectId = typeof passiveClassEffectIds[number]
+
+type StaticEffectId = Exclude<
+    EffectId,
+    TurnStartEffectId | PassiveClassEffectId
+>
 
 const staticEffectFuncs: Record<
     StaticEffectId,
@@ -114,9 +126,6 @@ const staticEffectFuncs: Record<
     },
     lockStanceDebuff() {
         // in stance implementation
-    },
-    valiantBuff() {
-        // triggered from card
     },
 }
 
@@ -295,11 +304,17 @@ export function decrementEffects(
                 if (!cm.isPc && whichSide === 'pc') continue
                 cm.effects.forEach(e => {
                     //@ts-expect-error
+                    if (passiveClassEffectIds.includes(e.id)) return
+                    //@ts-expect-error
                     if (turnStart === turnStartEffectIds.includes(e.id))
                         e.counter -= 1
                 })
                 cm.effects = cm.effects.filter(
-                    e => e.counter > 0 && !turnEndClearEffects.includes(e.id)
+                    e =>
+                        (e.counter > 0 ||
+                            //@ts-expect-error
+                            passiveClassEffectIds.includes(e.id)) &&
+                        !turnEndClearEffects.includes(e.id)
                 )
             }
         })
@@ -312,7 +327,7 @@ export function clearAllEffects(scene: BattleCursor): void {
         produce(ac => {
             Object.values(ac).forEach(cm => {
                 cm.block = 0
-                cm.effects = []
+                cm.effects = getStartingClassPassiveEffects(cm.class)
                 // test all
                 // cm.effects = [
                 //     { id: 'berserk', counter: 2 },

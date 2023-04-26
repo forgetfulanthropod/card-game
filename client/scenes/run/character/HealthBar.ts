@@ -1,12 +1,6 @@
 import { Rectangle, Texture } from 'pixi.js'
 import type { ROCursor } from 'sbaobab'
-import type {
-    EffectId,
-    CharacterMeta,
-    CharacterUid,
-    Pile,
-    BattleScene,
-} from 'shared'
+import type { BattleScene, CharacterMeta, CharacterUid, Pile } from 'shared'
 
 import { getBattleScene } from '@/data'
 import {
@@ -26,17 +20,16 @@ import {
 import {
     globalShowSims,
     hoveredCharacterUid,
-    selectedForTargetingCardUid,
     onUpdate,
+    selectedForTargetingCardUid,
     statChangesDatum,
     toDatum,
 } from '@/util'
+import { getClientEnv } from '@/util/getClientEnv'
 import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
-import { EffectIndicators } from './EffectIndicators'
-import { StanceControls } from './StanceControls'
-import { getClientEnv } from '@/util/getClientEnv'
 import { calculateTaunt } from 'shared/code'
+import { EffectIndicators } from './EffectIndicators'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841

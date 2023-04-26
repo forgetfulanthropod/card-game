@@ -1,5 +1,6 @@
 import produce from 'immer'
 import { range, size } from 'lodash'
+import { BattleCursor } from 'shared'
 import { objShuffle } from 'shared/code'
 import type { Executors, Explainers } from './util'
 import { evalAllAsHtml, evalAll } from './util'
@@ -11,6 +12,10 @@ export const explain: Explainers['draw'] = dslArgs => {
 
 export const execute: Executors['draw'] = ({ dslArgs, scene }) => {
     const [numCards] = evalAll(dslArgs)
+    draw(scene, numCards)
+}
+
+export function draw(scene: BattleCursor, numCards: number) {
     scene.apply(
         'cards',
         produce(cards => {
