@@ -208,6 +208,7 @@ function duplicated<T>(arr: T[]): T[] {
 function isKeyedArray(
     arr: { key: string | number }[] | (string | number)[]
 ): arr is { key: string | number }[] {
+    if (!arr) return false
     return typeof arr[0] === 'object'
 }
 /**
