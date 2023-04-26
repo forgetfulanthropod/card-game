@@ -38,8 +38,7 @@ export function prepareSocket(): void {
         // server will then either say this JWT is still valid, or it needs to be reauthenticated (eg. another message signed)
         // we render start screen regardless, but if it needs authentication, trigger sign a message.
 
-        const isLocalEnv = getClientEnv('IS_LOCAL')
-        if (isLocalEnv) {
+        if (true) {
             // start game at last saved state on refresh
             const userId = getStringFromLocalStorage('userId')
             if (userId !== null) {
