@@ -1,19 +1,23 @@
-import { ROCursor } from 'sbaobab'
-import { CharacterMeta, Effect } from 'shared'
-import { compose, datum } from 'datums'
-import { VisibleEffect as VisibleEffectId } from '@/assets'
-import { getEffectIconSrc, invisibleEffects } from '@/assets'
-import { glowFilter, If, PixiContainer } from '@/elementsUtil'
 import {
-    For,
-    fontMap,
-    SCALE_UNIVERSAL,
+    getEffectIconSrc,
+    invisibleEffects,
+    VisibleEffect as VisibleEffectId,
+} from '@/assets'
+import {
     Container,
+    fontMap,
+    For,
+    glowFilter,
+    If,
+    PixiContainer,
     Sprite,
     Text,
 } from '@/elementsUtil'
 import { statChangesDatum, toDatum } from '@/util'
-import { TermExplanationIf, Explanation, KeyTerm } from '@sharedElements'
+import { KeyTerm, TermExplanationIf } from '@sharedElements'
+import { compose, datum } from 'datums'
+import { ROCursor } from 'sbaobab'
+import { CharacterMeta, Effect, passiveClassEffectIds } from 'shared'
 
 export function EffectIndicators(characterCursor: ROCursor<CharacterMeta>) {
     const effectsCursor = characterCursor.select('effects')
@@ -53,6 +57,9 @@ function InteractiveEffectCounter(
     const pointerleave = () => isHovered.set(false)
     const width = 60
 
+    //@ts-expect-error
+    const isClassPassiveEffect = passiveClassEffectIds.includes(effect.id)
+
     const root = Container(
         {
             name: `Effect-${effect.id}`,
@@ -62,6 +69,8 @@ function InteractiveEffectCounter(
                 pointerleave,
                 pointerup: pointerleave,
             },
+            x: isClassPassiveEffect ? -20 : 0,
+            y: isClassPassiveEffect ? 20 : 0,
             onDestroy: [
                 isHovered.onChange(
                     is => (root.filters = is ? [glowFilter] : [])
@@ -71,20 +80,22 @@ function InteractiveEffectCounter(
         If(datum(true), () =>
             Sprite({
                 src: getEffectIconSrc(effect.id),
-                scale: width / getEffectIconSrc(effect.id).width,
-                anchor: [0.5, 0.4],
+                scale: isClassPassiveEffect
+                    ? 1
+                    : width / getEffectIconSrc(effect.id).width,
+                anchor: isClassPassiveEffect ? [0.765, 0.425] : [0.5, 0.4],
             })
         ),
         Text({
             text: `${effect.counter}`,
-            anchor: [1, 0.7],
+            anchor: isClassPassiveEffect ? 0.5 : [1, 0.7],
             style: {
                 fontFamily: fontMap['bigFont'],
                 //@ts-expect-error
-                fontSize: effect.counter === '∞' ? 50 : 36,
-                fill: 'white',
+                fontSize: effect.counter === '∞' ? 60 : 36,
+                fill: isClassPassiveEffect ? 0 : 'white',
                 stroke: 'black',
-                strokeThickness: 5,
+                strokeThickness: isClassPassiveEffect ? 0 : 5,
             },
         }),
         TermExplanationIf({

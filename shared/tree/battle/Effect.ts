@@ -67,6 +67,27 @@ export const effectIds = [
     'anHonestLiving',
 ] as const
 
+export const turnStartEffectIds = [
+    'bleedDebuff',
+    'poisonedDebuff',
+    'passiveBlockBuff',
+    'fireDebuff',
+    'yodelBuff',
+] as const
+export type TurnStartEffectId = typeof turnStartEffectIds[number]
+
+export const passiveClassEffectIds = [
+    'valiant',
+    'arcaneConnection',
+    'anHonestLiving',
+] as const
+export type PassiveClassEffectId = typeof passiveClassEffectIds[number]
+
+export type StaticEffectId = Exclude<
+    EffectId,
+    TurnStartEffectId | PassiveClassEffectId
+>
+
 /** Effects which are cleared on turn end */
 export const turnEndClearEffects: EffectId[] = ['smallDamageIncreaseBuff']
 

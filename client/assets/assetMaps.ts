@@ -205,10 +205,10 @@ export const effectAssets: {
     effectUnguardedDebuff: 'effects/unguarded.webp',
     effectUnreadyDebuff: 'effects/unready.webp',
     effectVulnerableDebuff: 'effects/vulnerable.webp',
-    effectFireDebuff: 'intents/fire.webp',
-    effectValiant: 'effects/brave.webp',
-    effectArcaneConnection: 'effects/brave.webp',
-    effectAnHonestLiving: 'effects/brave.webp',
+    effectFireDebuff: 'intents/fire_.webp',
+    effectValiant: 'char status/valiant.webp',
+    effectArcaneConnection: 'char status/arcaneConnection.webp',
+    effectAnHonestLiving: 'char status/anHonestLiving.webp',
 }
 
 export const healthBarAssets = {

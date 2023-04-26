@@ -1,12 +1,14 @@
-import type {
+import {
     BattleCursor,
     CalculatedCharacterStats,
     CharacterMeta,
     Effect,
-    EffectId,
     EnemyCharacterMeta,
     ModifiableStatName,
     StanceId,
+    StaticEffectId,
+    TurnStartEffectId,
+    turnStartEffectIds,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
 import { applyDamage } from '../util/applyDamage'
@@ -17,27 +19,6 @@ import { applyBlocks } from '../cards/commands/addBlock'
 import { applyEffect } from '../cards/commands/effect'
 import { getLivingNpcUids, getLivingPcUids } from './characterGetters'
 import { getStartingClassPassiveEffects } from '../util/characterManagement'
-
-const turnStartEffectIds = [
-    'bleedDebuff',
-    'poisonedDebuff',
-    'passiveBlockBuff',
-    'fireDebuff',
-    'yodelBuff',
-] as const
-type TurnStartEffectId = typeof turnStartEffectIds[number]
-
-const passiveClassEffectIds = [
-    'valiant',
-    'arcaneConnection',
-    'anHonestLiving',
-] as const
-type PassiveClassEffectId = typeof passiveClassEffectIds[number]
-
-type StaticEffectId = Exclude<
-    EffectId,
-    TurnStartEffectId | PassiveClassEffectId
->
 
 const staticEffectFuncs: Record<
     StaticEffectId,
