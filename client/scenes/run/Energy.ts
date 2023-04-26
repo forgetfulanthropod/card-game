@@ -60,7 +60,7 @@ function EnergyEl(scene: ROBattleScene): PixiContainer {
         {
             name: 'Energy',
             x: BASE_WIDTH * 0.06,
-            y: BASE_HEIGHT * 0.78,
+            y: BASE_HEIGHT * 0.8,
             onDestroy: [
                 onUpdate(
                     energy,

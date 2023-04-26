@@ -5,6 +5,8 @@ import {
     Effect,
     EnemyCharacterMeta,
     ModifiableStatName,
+    PassiveClassEffectId,
+    passiveClassEffectIds,
     StanceId,
     StaticEffectId,
     TurnStartEffectId,
@@ -284,8 +286,12 @@ export function decrementEffects(
                 if (cm.isPc && whichSide === 'npc') continue
                 if (!cm.isPc && whichSide === 'pc') continue
                 cm.effects.forEach(e => {
-                    //@ts-expect-error
-                    if (passiveClassEffectIds.includes(e.id)) return
+                    if (
+                        passiveClassEffectIds.includes(
+                            e.id as PassiveClassEffectId
+                        )
+                    )
+                        return
                     //@ts-expect-error
                     if (turnStart === turnStartEffectIds.includes(e.id))
                         e.counter -= 1
