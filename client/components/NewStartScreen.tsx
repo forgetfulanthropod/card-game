@@ -59,14 +59,14 @@ export function NewStartScreen(): JSXElement {
 
     const handleStartGame = async (userId: string) => {
         localStorage.setItem('userId', userId)
-        await callApi('setInitialGameState', {
-            userId,
-        })
+        // await callApi('setInitialGameState', {
+        //     userId,
+        // })
         setUserId(userId)
         emitUserId(userId)
         setInPixi(true)
         collectData('enter_game', {})
-        await composeDefaultParty()
+        // await composeDefaultParty()
     }
 
     // TODO
@@ -244,17 +244,14 @@ export function NewStartScreen(): JSXElement {
         console.log({ userDoc })
 
         const userId = getStringFromLocalStorage('userId')
-        const IS_LOCAL = getClientEnv('IS_LOCAL')
         if (!userId) return console.log('no saved userId')
         else console.log('found saved userId')
 
         setUserDoc({ userId, userType: 'guest', username: null })
         setUserId(userId)
 
-        if (IS_LOCAL) {
-            emitUserId(userId)
-            setInPixi(true)
-        }
+        emitUserId(userId)
+        setInPixi(true)
     }, [])
 
     /** Listen to Connect Wallet events, handle web3 login */

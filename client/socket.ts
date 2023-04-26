@@ -61,6 +61,7 @@ export function prepareSocket(): void {
     })
 }
 
+/** Loads gamestate on the server, and then is passed back to the client */
 export function emitUserId(userId: string): void {
     if (socket == null) throw Error('socket is null')
     socket.emit('userId', { userId, socketId: socket.id })

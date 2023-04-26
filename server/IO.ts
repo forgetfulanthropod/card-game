@@ -2,11 +2,12 @@ import { watchFile } from 'fs'
 import type { Server } from 'http'
 import { has } from 'lodash'
 import type { GameState, NetworkEvent, UserID } from 'shared'
-import { Server as SocketServer } from 'socket.io'
+import { Server as SocketServer, Socket } from 'socket.io'
 import { loadGameState } from './actions'
 import { api } from './api'
 import * as jwt from 'jsonwebtoken'
 import { getServerEnv } from 'shared/code'
+import { AuthTokenPayload } from './actions/verifyAuthToken'
 
 const userToSocketId: Record<UserID, string> = {}
 const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
@@ -45,31 +46,35 @@ export function mountIo(
     })
     refreshOnChange(io)
     io.on('connection', socket => {
-        // logger.info(`socket connected: ${socket.id}`)
-
-        // WIP
         socket.on(
             'authenticate',
-            (token: string, callback: (success: boolean) => void) => {
+            ({
+                token,
+                callback,
+            }: {
+                token: string
+                callback: (success: boolean) => void
+            }) => {
                 jwt.verify(
                     token,
                     getServerEnv('JWT_TOKEN_SECRET'),
                     (err, decoded) => {
                         if (err) return callback(false)
+                        if (!decoded) return callback(false)
+                        console.log('SOCKETIO AUTHENTICATED PAYLOAD')
+                        const payload = decoded as AuthTokenPayload
+                        socket.data.userId = payload.userId
+                        socket.data.isAuthenticated = true
                         callback(true)
                     }
                 )
             }
         )
+
         socket.on(
             'userId',
-            ({
-                userId,
-                socketId,
-            }: {
-                userId: UserID
-                socketId: string
-            }) => {
+            ({ userId, socketId }: { userId: UserID; socketId: string }) => {
+                if (!socketIsAuthenticated(socket)) logger.debug('[todo] socket is not authenticated')
                 userToSocketId[userId] = socketId
                 void loadGameState({ userId })
             }
@@ -112,4 +117,8 @@ function refreshOnChange(io: SocketServer) {
     watchFile(__dirname + '../../public/dailyship.js', () => {
         io.emit('refresh')
     })
+}
+
+const socketIsAuthenticated = (socket: Socket) => {
+    return socket.data?.isAuthenticated === true
 }

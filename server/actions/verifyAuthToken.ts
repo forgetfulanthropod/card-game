@@ -4,7 +4,7 @@ import * as jwt from 'jsonwebtoken'
 import { getServerEnv } from '@/../shared/code'
 import { isObject } from 'lodash'
 
-type JwtPayload = {
+export type AuthTokenPayload = {
     userId: UserID
     nonce: Nonce
     iat: number
@@ -20,7 +20,7 @@ export const verifyAuthToken: ServerActions['verifyAuthToken'] = async ({
         const payload = jwt.verify(
             authToken,
             getServerEnv('JWT_TOKEN_SECRET')
-        ) as JwtPayload
+        ) as AuthTokenPayload
 
         if (!isObject(payload))
             return { result: 'failure', error: 'Decoding JWT went wrong...' }
