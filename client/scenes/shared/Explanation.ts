@@ -45,7 +45,7 @@ export const keyTermsMap = {
     fortified: 'THIS_CHARACTER receives 50% more block.',
     guarded: 'THIS_CHARACTER receives 25% less damage.',
     poisoned:
-        'THIS_CHARACTER receives unblockable damage equal to the number of poison stacks it has at the start of its turn..',
+        'THIS_CHARACTER receives unblockable damage equal to the number of poison stacks it has at the start of its turn.',
     piercing: 'ignores block.',
     reflect:
         'When THIS_CHARACTER is attacked, mirrors up to up to X damage to attacker.',
