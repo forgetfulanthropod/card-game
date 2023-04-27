@@ -479,7 +479,7 @@ function getTexts(
                 hoveredStanceDatum.onChange(id => {
                     explanationText.addChild(
                         ExplanationText(
-                            id ? card.stanceExplanations[id] : card.explanation,
+                            card.explanation,
                             cardFrameTexture,
                             marginH,
                             explanationFontSize

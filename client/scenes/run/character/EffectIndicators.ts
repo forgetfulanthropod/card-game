@@ -81,7 +81,7 @@ function InteractiveEffectCounter(
             Sprite({
                 src: getEffectIconSrc(effect.id),
                 scale: isClassPassiveEffect
-                    ? 1
+                    ? 0.9
                     : width / getEffectIconSrc(effect.id).width,
                 anchor: isClassPassiveEffect ? [0.765, 0.425] : [0.5, 0.4],
             })

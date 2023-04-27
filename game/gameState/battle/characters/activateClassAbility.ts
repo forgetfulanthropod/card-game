@@ -75,21 +75,22 @@ export function maybeIncrementKnightAbility(
     }
 }
 
+const NUM_VALIANT_STACKS_AT_RESET = 3
 export function maybeResetKnightAbilityCounter(
     scene: BattleCursor,
-    attacker: CharacterMeta | undefined
+    attacker: CharacterMeta | null
 ) {
     const shouldClear =
         attacker?.class === 'knight' &&
-        (attacker.effects.find(e => e.id === 'valiant')?.counter ?? 0) >= 5
+        (attacker.effects.find(e => e.id === 'valiant')?.counter ?? 0) >=
+            NUM_VALIANT_STACKS_AT_RESET
 
     if (shouldClear)
         scene.select('allCharacters', attacker.uid).apply(
             'effects',
             produce(effects => {
-                effects.forEach(e => {
-                    if (e.id === 'valiant') e.counter = 0
-                })
+                const index = effects.findIndex(e => e.id === 'valiant')
+                if (~index) effects[index] = { id: 'valiant', counter: 0 }
             })
         )
 

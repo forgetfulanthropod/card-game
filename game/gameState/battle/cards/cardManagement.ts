@@ -232,11 +232,11 @@ export function updateExplanations(
     return {
         ...card,
         explanation: explainCommand(card, scene),
-        stanceExplanations: {
-            avoidant: explainCommand(card, scene, 'avoidant'),
-            neutral: explainCommand(card, scene, 'neutral'),
-            aggressive: explainCommand(card, scene, 'aggressive'),
-        },
+        // stanceExplanations: {
+        //     avoidant: explainCommand(card, scene, 'avoidant'),
+        //     neutral: explainCommand(card, scene, 'neutral'),
+        //     aggressive: explainCommand(card, scene, 'aggressive'),
+        // },
     }
 }
 
@@ -246,11 +246,11 @@ export function getCardInstance(id: CardId, characterUid: CharacterUid): Card {
         uid: `${id}-${makeRandId()}`,
         characterUid,
         explanation: 'error!',
-        stanceExplanations: {
-            avoidant: 'error!',
-            neutral: 'error!',
-            aggressive: 'error!',
-        },
+        // stanceExplanations: {
+        //     avoidant: 'error!',
+        //     neutral: 'error!',
+        //     aggressive: 'error!',
+        // },
     }
 }
 

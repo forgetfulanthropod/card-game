@@ -36,7 +36,7 @@ export function applyDamage(args: {
         attacker: attackerMeta,
         target: scene.get('allCharacters', targetUid),
         damage,
-        isCritical: maybeResetKnightAbilityCounter(scene, attacker),
+        isCritical: maybeResetKnightAbilityCounter(scene, attackerMeta),
     })
 
     if (attackerUid?.includes('pc')) {
