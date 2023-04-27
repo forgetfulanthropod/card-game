@@ -78,23 +78,34 @@ export function maybeIncrementKnightAbility(
 const NUM_VALIANT_STACKS_AT_RESET = 3
 export function maybeResetKnightAbilityCounter(
     scene: BattleCursor,
-    attacker: CharacterMeta | null
+    cm: CharacterMeta
 ) {
     const shouldClear =
-        attacker?.class === 'knight' &&
-        (attacker.effects.find(e => e.id === 'valiant')?.counter ?? 0) >=
+        cm?.class === 'knight' &&
+        (cm.effects.find(e => e.id === 'valiant')?.counter ?? 0) >=
             NUM_VALIANT_STACKS_AT_RESET
 
-    if (shouldClear)
-        scene.select('allCharacters', attacker.uid).apply(
+    if (shouldClear) resetKnightAbilityCounter(scene, cm)
+
+    return shouldClear
+}
+
+export function resetKnightAbilityCounter(
+    scene: BattleCursor,
+    cm?: CharacterMeta
+) {
+    ;(cm
+        ? [cm]
+        : vals(scene.get('allCharacters')).filter(cm => cm.class === 'knight')
+    ).forEach(cm => {
+        scene.select('allCharacters', cm.uid).apply(
             'effects',
             produce(effects => {
                 const index = effects.findIndex(e => e.id === 'valiant')
                 if (~index) effects[index] = { id: 'valiant', counter: 0 }
             })
         )
-
-    return shouldClear
+    })
 }
 
 export function maybeActivateRogueAbility(
