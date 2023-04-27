@@ -48,7 +48,7 @@ export const keyTermsMap = {
         'THIS_CHARACTER receives unblockable damage equal to the number of poison stacks it has at the start of its turn..',
     piercing: 'ignores block.',
     reflect:
-        'Deals damage up to the number of reflect stacks back to the attacker when taking a hit.',
+        'When THIS_CHARACTER is attacked, mirrors up to up to X damage to attacker.',
     mutuallyAssuredDestruction:
         'For every unblocked point of damage THIS_CHARACTER takes, deal 2 damage to the enemy that targeted them.',
     strongblock: 'Block THIS_CHARACTER gains is increased by 50%.',
@@ -125,9 +125,11 @@ export function TermExplanationsIf({
 export function TermExplanations({
     terms,
     displayObjectArgs,
+    characterMeta,
 }: {
     terms: KeyTerm[]
     displayObjectArgs?: DisplayObjectArgs
+    characterMeta?: CharacterMeta
 }): PixiContainer[] {
     const termBoxes = terms.map(term =>
         TermExplanation({ term, displayObjectArgs })
@@ -140,7 +142,9 @@ export function TermExplanations({
                     mainTerm => ~getTermIndex(term, keyTermsMap[mainTerm])
                 )
         )
-        .map(term => TermExplanation({ term, displayObjectArgs }))
+        .map(term =>
+            TermExplanation({ term, displayObjectArgs, characterMeta })
+        )
 
     const boxes = [...termBoxes, ...subTermBoxes]
 
