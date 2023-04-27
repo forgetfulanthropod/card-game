@@ -202,7 +202,7 @@ function positionBetween(
 
 export function getStartingClassPassiveEffects(characterClass: CharacterClass) {
     const classToPassiveEffectMap = {
-        wizard: { id: 'arcaneConnection', counter: 0 },
+        wizard: { id: 'arcaneFriendship', counter: 0 },
         knight: { id: 'valiant', counter: 0 },
         rogue: { id: 'anHonestLiving', counter: '∞' as unknown as number }, // classPassiveEffects not touched by increment code
         bard: null,

@@ -207,7 +207,7 @@ export const effectAssets: {
     effectVulnerableDebuff: 'effects/vulnerable.webp',
     effectFireDebuff: 'intents/fire_.webp',
     effectValiant: 'char status/valiant.webp',
-    effectArcaneConnection: 'char status/arcaneConnection.webp',
+    effectArcaneFriendship: 'char status/arcaneConnection.webp',
     effectAnHonestLiving: 'char status/anHonestLiving.webp',
 }
 

@@ -63,7 +63,7 @@ export const effectIds = [
     'damageTakeAddendDebuff',
     'lockStanceDebuff',
     'valiant',
-    'arcaneConnection',
+    'arcaneFriendship',
     'anHonestLiving',
 ] as const
 
@@ -78,7 +78,7 @@ export type TurnStartEffectId = typeof turnStartEffectIds[number]
 
 export const passiveClassEffectIds = [
     'valiant',
-    'arcaneConnection',
+    'arcaneFriendship',
     'anHonestLiving',
 ] as const
 export type PassiveClassEffectId = typeof passiveClassEffectIds[number]

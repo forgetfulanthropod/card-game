@@ -10,6 +10,7 @@ import { trackMetric } from 'server/metrics'
 import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
 import { produce } from 'immer'
+import { updateWizardAbility } from '@/gameState/battle/characters/activateClassAbility'
 
 const TIME_AFTER_PLAYER_MOVE = 1500
 
@@ -21,9 +22,7 @@ export const endTurn: GameActions['endTurn'] = args => {
         scene.get('state') !== 'in battle' ||
         scene.get('isInMap') === true
     ) {
-        logger.warn(
-            `${scene.get('userId')} tried to end turn when not allowed`
-        )
+        logger.warn(`${scene.get('userId')} tried to end turn when not allowed`)
         return
     }
 
@@ -67,6 +66,7 @@ function setDefaultEndPlayerTurnState(scene: BattleCursor) {
     clearBlock(scene, 'npc')
 
     scene.set('cardsPlayedThisTurn', [])
+    updateWizardAbility(scene)
     scene.set('numAllowedToKeep', 0)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)
