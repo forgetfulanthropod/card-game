@@ -20,13 +20,7 @@ import {
 } from '@/elementsUtil'
 import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
-import {
-    CharacterUid,
-    EventChoice,
-    EventScene,
-    SouvenirActivationKey,
-    souvenirMap,
-} from 'shared'
+import { CharacterUid, EventChoice, EventScene, souvenirMap } from 'shared'
 import { EquipSouvenirInterface } from './EquipSouvenirInterface'
 import { SouvenirsEls } from './Souvenirs'
 
@@ -141,11 +135,12 @@ function TextAndButtons(event: EventScene) {
                 return Container(
                     {},
                     Text({
-                        text: event.choices[
-                            selectedChoice.val!.index
-                        ].postPrompts
-                            .map(prompt => prompt)
-                            .join('\n\n'),
+                        text:
+                            event.choices[selectedChoice.val!.index].text +
+                            '\n\n' +
+                            event.choices[selectedChoice.val!.index].postPrompts
+                                .map(prompt => prompt)
+                                .join('\n\n'),
                         style: {
                             wordWrap: true,
                             wordWrapWidth: BASE_WIDTH * 0.35,
