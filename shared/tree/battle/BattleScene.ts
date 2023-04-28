@@ -40,6 +40,7 @@ export interface BattleScene extends SceneHas {
     baseHandSize: number
     energy: number
     roundEnergy: number
+    isSimulation: boolean
     isBasicLoaded: boolean
     isDeluxeLoaded: boolean
     turnCount: number

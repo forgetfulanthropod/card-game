@@ -37,7 +37,8 @@ export function applyDamage(args: {
         target: scene.get('allCharacters', targetUid),
         damage,
         isCritical: attackerMeta
-            ? maybeResetKnightAbilityCounter(scene, attackerMeta)
+            ? maybeResetKnightAbilityCounter(scene, attackerMeta) ||
+              (!scene.get('isSimulation') && Math.random() < 0.05)
             : false,
     })
 
@@ -353,8 +354,7 @@ export function getDamage({
         damage * multiplicand + damageTakeAddend + damageDealAddend
     )
 
-    if (isCritical || Math.random() < 0.05)
-        calcedDamage = Math.ceil(calcedDamage * 1.5)
+    if (isCritical) calcedDamage = Math.ceil(calcedDamage * 1.5)
 
     return Math.max(calcedDamage, 1) // damage minimum is 1
 }

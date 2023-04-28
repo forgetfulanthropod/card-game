@@ -50,6 +50,7 @@ export function makeBattleState(args: {
         baseHandSize: 5,
         energy: 3,
         roundEnergy: 3,
+        isSimulation: false,
         isBasicLoaded: false,
         isDeluxeLoaded: false,
         rooms,
