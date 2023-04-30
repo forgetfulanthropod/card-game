@@ -25,6 +25,7 @@ export function applyDamage(args: {
     scene: BattleCursor
     attacker?: CharacterMeta
     piercing?: boolean
+    ignoreModifiers?: boolean
 }): number {
     const { damage, targetUid, scene, attackerUid, attacker, piercing } = args
 
@@ -32,15 +33,17 @@ export function applyDamage(args: {
     if (attacker) attackerMeta = attacker
     else if (attackerUid) attackerMeta = scene.get('allCharacters', attackerUid)
 
-    const calcedDamage = getDamage({
-        attacker: attackerMeta,
-        target: scene.get('allCharacters', targetUid),
-        damage,
-        isCritical: attackerMeta
-            ? maybeResetKnightAbilityCounter(scene, attackerMeta) ||
-              (!scene.get('isSimulation') && Math.random() < 0.05)
-            : false,
-    })
+    const calcedDamage = args.ignoreModifiers
+        ? damage
+        : getDamage({
+              attacker: attackerMeta,
+              target: scene.get('allCharacters', targetUid),
+              damage,
+              isCritical: attackerMeta
+                  ? maybeResetKnightAbilityCounter(scene, attackerMeta) ||
+                    (!scene.get('isSimulation') && Math.random() < 0.05)
+                  : false,
+          })
 
     if (attackerUid?.includes('pc')) {
         checkServerScoringEvent('HIGHEST_DAMAGE', scene, {
