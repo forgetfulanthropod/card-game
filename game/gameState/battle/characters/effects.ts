@@ -13,7 +13,7 @@ import {
     turnStartEffectIds,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
-import { applyDamage } from '../util/applyDamage'
+import { applyCalcedDamage, applyDamage } from '../util/applyDamage'
 
 import { getRulebook } from '@/rulebook'
 import produce from 'immer'
@@ -132,8 +132,10 @@ const turnStartEffectFuncs: Record<
         applyBlocks({ targetUids: [character.uid], block, scene })
     },
     bleedDebuff({ character, scene }) {
-        applyDamage({
-            damage: Math.ceil(character.calculatedStats.constitution * 0.05),
+        applyCalcedDamage({
+            calcedDamage: Math.ceil(
+                character.calculatedStats.constitution * 0.05
+            ),
             targetUid: character.uid,
             scene,
             piercing: true,
@@ -142,8 +144,8 @@ const turnStartEffectFuncs: Record<
     poisonedDebuff({ effect, character, scene }) {
         if (character.effects.find(e => e.id === 'immuneToPoisonBuff')) return
 
-        applyDamage({
-            damage: effect.counter,
+        applyCalcedDamage({
+            calcedDamage: effect.counter,
             targetUid: character.uid,
             scene,
             piercing: true,
