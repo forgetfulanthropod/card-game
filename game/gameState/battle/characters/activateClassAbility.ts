@@ -75,7 +75,7 @@ export function maybeIncrementKnightAbility(
     }
 }
 
-const NUM_VALIANT_STACKS_AT_RESET = 3
+const NUM_VALIANT_STACKS_AT_RESET = 2
 export function maybeResetKnightAbilityCounter(
     scene: BattleCursor,
     cm: CharacterMeta
