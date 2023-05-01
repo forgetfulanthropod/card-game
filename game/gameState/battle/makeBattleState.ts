@@ -29,7 +29,7 @@ export function makeBattleState(args: {
 
     // const playerStarts = srandom() < 0.5
     const playerStarts = true
-    const rooms = getDungeonRooms()['Hooligans Bluff']
+    const rooms = getDungeonRooms()[args.dungeonName ?? 'Hooligans Bluff']
 
     const bs: BattleScene = {
         userId: args.game.get('userId'),

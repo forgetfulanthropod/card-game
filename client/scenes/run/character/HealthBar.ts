@@ -80,7 +80,7 @@ function TauntIndicator(
         const allTaunt = Object.values(sc.allCharacters)
             .filter(cm => cm.isPc && cm.health > 0)
             .map(cm => {
-                const x = calculateTaunt(cm, 'current')
+                const x = Math.max(calculateTaunt(cm, 'current'), 0)
                 if (cm.uid === currentUid) t = x
                 return x
             })

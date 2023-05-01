@@ -50,6 +50,8 @@ import {explain as explainReturnThisCardToHand, execute as executeReturnThisCard
 import {explain as explainSetStance, execute as executeSetStance} from './setStance'
 import {explain as explainSmite, execute as executeSmite} from './smite'
 import {explain as explainText, execute as executeText} from './text'
+import {explain as explainChance, execute as executeChance} from './chance'
+import {explain as explainIncrementSouvenir, execute as executeIncrementSouvenir} from './incrementSouvenir'
 // @endindex
 export type { Locals } from './util'
 
@@ -62,6 +64,7 @@ export const explainers: Explainers = {
     bellyFlop: explainBellyFlop,
     brittle: explainBrittle,
     chain: explainChain,
+    chance: explainChance,
     choice: explainChoice,
     deal: explainDeal,
     dealCounterTimes: explainDealCounterTimes,
@@ -85,6 +88,7 @@ export const explainers: Explainers = {
     ifStance: explainIfStance,
     ifStanceElse: explainIfStanceElse,
     ifTargetStance: explainIfTargetStance,
+    incrementSouvenir: explainIncrementSouvenir,
     infectiousBite: explainInfectiousBite,
     join: explainJoin,
     keep: explainKeep,
@@ -117,6 +121,7 @@ export const executors: Executors = {
     bellyFlop: executeBellyFlop,
     brittle: executeBrittle,
     chain: executeChain,
+    chance: executeChance,
     choice: executeChoice,
     deal: executeDeal,
     dealCounterTimes: executeDealCounterTimes,
@@ -140,6 +145,7 @@ export const executors: Executors = {
     ifStance: executeIfStance,
     ifStanceElse: executeIfStanceElse,
     ifTargetStance: executeIfTargetStance,
+    incrementSouvenir: executeIncrementSouvenir,
     infectiousBite: executeInfectiousBite,
     join: executeJoin,
     keep: executeKeep,

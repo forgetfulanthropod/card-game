@@ -2,6 +2,7 @@ import produce from 'immer'
 import type { BattleCursor, Card, CardUid } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
+import { activateSouvenirs } from '../activateSouvenirs'
 
 export function discardAllCards(scene: BattleCursor) {
     scene.apply('cards', cards => {
@@ -54,6 +55,7 @@ export function discardBeforeTurnEnd({
     for (const uid of cardUids) {
         activeOnDiscardActions(discardPile[uid], scene)
     }
+    activateSouvenirs('discardEnd', scene)
 }
 
 export function activeOnDiscardActions(card: Card, scene: BattleCursor) {

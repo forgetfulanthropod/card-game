@@ -5,6 +5,7 @@ import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 import { getTargetText } from './util/getTargetText'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
+import { activateTalentsGenericNumber } from '../../Talents'
 
 export const explain: Explainers['addBlock'] = (dslArgs, context) => {
     const [block] = evalAllAsHtml(dslArgs)
@@ -32,26 +33,68 @@ export const execute: Executors['addBlock'] = ({
 
     maybeIncrementKnightAbility(scene, command, targetUids)
 
-    applyBlocks({ targetUids, scene, block })
+    applyBlocks({ targetUids, fromUid: command.characterUid, scene, block })
 }
 
 export function applyBlocks({
+    fromUid,
     targetUids,
     scene,
     block,
 }: {
+    fromUid: CharacterUid | null
     targetUids: CharacterUid[]
     scene: BattleCursor
     block: number
 }) {
+    const fromCm = fromUid ? scene.get('allCharacters', fromUid) : null
     targetUids.forEach(targetUid => {
+        let target = scene.get('allCharacters', targetUid)
+
+        let blockAddend = fromCm
+            ? activateTalentsGenericNumber({
+                  scene,
+                  key: 'blockGiveAdd',
+                  data: 0,
+                  cm: fromCm,
+                  extra: { target },
+              })
+            : 0
+        blockAddend = activateTalentsGenericNumber({
+            scene,
+            key: 'blockReceiveAdd',
+            data: blockAddend,
+            cm: target,
+            extra: { target: fromCm },
+        })
+
+        let blockMultiplier = getBlockMultiplier(targetUids[0], scene)
+        blockMultiplier = fromCm
+            ? activateTalentsGenericNumber({
+                  scene,
+                  key: 'blockGiveMultiply',
+                  data: blockMultiplier,
+                  cm: fromCm,
+                  extra: { target },
+              })
+            : 1
+        blockMultiplier = activateTalentsGenericNumber({
+            scene,
+            key: 'blockReceiveMultiply',
+            data: blockMultiplier,
+            cm: target,
+            extra: { target: fromCm },
+        })
+
+        const finalBlock = (block + blockAddend) * blockMultiplier
+
         scene.apply(['allCharacters', targetUid, 'block'], b =>
-            Math.ceil(b + block * getBlockMultiplier(targetUids[0], scene))
+            Math.ceil(b + finalBlock)
         )
 
         scene.apply('blocksAppliedThisTurn', blocks => [
             ...blocks,
-            { amount: block, targetUid },
+            { amount: finalBlock, targetUid },
         ])
     })
 }

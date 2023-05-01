@@ -42,6 +42,7 @@ export interface CharacterMeta extends CharacterStats {
     statModifiersMap: StatModifiersMap
     calculatedStats: CalculatedCharacterStats
     skin?: any
+    talents?: any
     sword?: SwordParts
     lastTaunt: number
     taunt: number

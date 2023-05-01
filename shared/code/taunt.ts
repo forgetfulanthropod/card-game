@@ -46,5 +46,5 @@ export const calculateTaunt = (
     for (const { id } of cm.effects) {
         t += effectTauntMap[id] ?? 0
     }
-    return Math.max(t, 0)
+    return t
 }

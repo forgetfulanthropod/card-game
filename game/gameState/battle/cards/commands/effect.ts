@@ -6,6 +6,8 @@ import {
     Command,
     EffectId,
     effectIds,
+    procEffectIds,
+    ProcEffectId,
 } from 'shared'
 import { setAt } from 'shared/code'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
@@ -13,6 +15,7 @@ import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 import type { Executors, Explainers, VAngu } from './util'
 import { evalAllAsHtml, evalAll } from './util'
 import { getTargetText } from './util/getTargetText'
+import { activateSouvenir, activateSouvenirs } from '../../activateSouvenirs'
 
 export const explain: Explainers['effect'] = (dslArgs, context) => {
     const [id, increase, _] = evalAllAsHtml(dslArgs)
@@ -71,14 +74,38 @@ export function applyEffect(
     for (const uid of targetUids) {
         ac.select(uid, 'effects').apply(effects => {
             const i = effects.findIndex(e => e.id === id)
-            if (i === -1) return [...effects, { id, counter: increaseInt }]
-            return setAt(effects, i, {
-                ...effects[i],
-                counter:
-                    effects[i].counter > 0 && double
-                        ? effects[i].counter * 2
-                        : effects[i].counter + increaseInt,
-            })
+            let effect
+            let countType = procEffectIds.includes(id as ProcEffectId)
+                ? 'proc'
+                : 'turn'
+            if (id.endsWith('Debuff')) {
+                const h = effects.findIndex(e => e.id === 'hypochondriac')
+                if (h !== -1 && effects[h].counter > 0) {
+                    effect = {
+                        ...effects[h],
+                        counter: effects[h].counter - 1,
+                    }
+                    return setAt(effects, h, effect)
+                }
+            }
+            if (i === -1) {
+                effect = {
+                    id,
+                    counter: increaseInt,
+                    countType: countType as 'proc' | 'turn',
+                }
+            } else {
+                effect = {
+                    ...effects[i],
+                    counter:
+                        effects[i].counter > 0 && double
+                            ? effects[i].counter * 2
+                            : effects[i].counter + increaseInt,
+                }
+            }
+            // activateTalents('effect',
+            if (i === -1) return [...effects, effect]
+            return setAt(effects, i, effect)
         })
     }
 }
