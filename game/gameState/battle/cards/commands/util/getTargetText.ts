@@ -17,7 +17,7 @@ export function getTargetText(
             : targetType === 'friends'
             ? 'target Kaiju'
             : targetType === 'self'
-            ? `${cm.displayName.split(' ').join('&nbsp;')}`
+            ? `${cm.displayName.split(' ')[0]}`
             : ''
     }`
 }
