@@ -1,17 +1,52 @@
 import produce from 'immer'
-import type { BattleCursor, Card, CardUid } from 'shared'
+import type { BattleCursor, Pile, Card, CardUid } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
 import { activateSouvenirs } from '../activateSouvenirs'
+import { activateTalentsGenericData } from '../Talents'
+import { cardDefinitionsMap } from '@/rulebook'
 
 export function discardAllCards(scene: BattleCursor) {
+    let keep: CardUid[] = []
+    keep = activateTalentsGenericData({
+        scene,
+        key: 'preDiscardAtTurnEnd',
+        data: keep,
+        extra: { piles: scene.get('cards') },
+    })
+
     scene.apply('cards', cards => {
         const newCards = { ...cards }
-
         newCards.discard = { ...newCards.discard, ...newCards.hand }
-
         newCards.hand = {}
+        return newCards
+    })
 
+    putInHandFromDiscard(scene, keep)
+}
+
+export const putInHandFromDiscard = (
+    scene: BattleCursor,
+    selected: CardUid[]
+) => {
+    // TODO: improve implementation
+    scene.apply('cards', cards => {
+        const newCards = { ...cards }
+        selected.forEach(carduid => {
+            try {
+                newCards.hand = {
+                    ...newCards.hand,
+                    [carduid]: newCards.discard[carduid],
+                }
+                newCards.discard = Object.fromEntries(
+                    Object.entries(newCards.discard).filter(
+                        ([uid, card]) => uid != carduid
+                    )
+                )
+            } catch (e) {
+                logger.error(e)
+            }
+        })
         return newCards
     })
 }

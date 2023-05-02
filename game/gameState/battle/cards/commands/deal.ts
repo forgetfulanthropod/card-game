@@ -62,6 +62,7 @@ export const execute: Executors['deal'] = ({
                 targetUid,
                 attackerUid: command.characterUid,
                 piercing: modifier === 'piercing',
+                cardId: command.id,
             }))
     )
     if (totalDamage > 20) {

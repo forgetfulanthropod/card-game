@@ -1,5 +1,4 @@
-import { BattleCursor, Scene } from '..'
-import { baseTauntClass } from '../code'
+import { BattleCursor, Piles, Card, CardUid } from '..'
 import {
     BasicTargetType,
     CardAction,
@@ -168,9 +167,11 @@ export type SouvenirActivationKey =
     | 'shuffleDiscard'
     | 'postDrawHand'
     | 'damageGive'
-    | 'damageGiveFinal'
+    | 'damageGiveAdd'
+    | 'damageGiveMultiply'
     | 'damageReceive'
-    | 'damageReceiveFinal'
+    | 'damageReceiveAdd'
+    | 'damageReceiveMultiply'
     | 'preEffectDamage'
     | 'postDie'
     | 'postKill'
@@ -185,6 +186,7 @@ export type SouvenirActivationKey =
     | 'blockGiveMultiply'
     | 'blockReceiveAdd'
     | 'blockReceiveMultiply'
+    | 'preDiscardAtTurnEnd'
 
 type defaultArgs = {
     scene: BattleCursor
@@ -218,6 +220,7 @@ export interface on2FunctionTypes {
             critChance: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
     critChanceGeneral: (
@@ -225,6 +228,7 @@ export interface on2FunctionTypes {
             critChance: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
     critDamageAdd: (
@@ -247,8 +251,11 @@ export interface on2FunctionTypes {
     postKillGeneral: (args: defaultArgs & { target: CharacterMeta }) => void
     activate: () => void
     discardEnd: () => void
-    drawCard: () => void
+    drawCard: (args: defaultArgs & { card: Card }) => void
     shuffleDiscard: () => void
+    preDiscardAtTurnEnd: (
+        args: defaultArgs & { data: CardUid[]; piles: Piles }
+    ) => CardUid[]
     preEffectDamage: (
         args: defaultArgs & { data: number; target: CharacterMeta }
     ) => number
@@ -258,13 +265,23 @@ export interface on2FunctionTypes {
             data: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
-    damageGiveFinal: (
+    damageGiveAdd: (
         args: defaultArgs & {
             data: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
+        }
+    ) => number
+    damageGiveMultiply: (
+        args: defaultArgs & {
+            data: number
+            target: CharacterMeta
+            attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
     damageReceive: (
@@ -272,13 +289,23 @@ export interface on2FunctionTypes {
             data: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
-    damageReceiveFinal: (
+    damageReceiveAdd: (
         args: defaultArgs & {
             data: number
             target: CharacterMeta
             attacker: CharacterMeta
+            cardId?: CardUid
+        }
+    ) => number
+    damageReceiveMultiply: (
+        args: defaultArgs & {
+            data: number
+            target: CharacterMeta
+            attacker: CharacterMeta
+            cardId?: CardUid
         }
     ) => number
 }
@@ -928,9 +955,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         unique: true,
         equippable: true,
         // implemented in talent map
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     pressurePointSpecialist: {
         id: 'pressurePointSpecialist',
@@ -939,72 +964,56 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
             'The Critical Hit chance of this character is increased by 5%.',
         equippable: true,
         // implemented in talent map
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     nativeOfHooligansBluff: {
         id: 'nativeOfHooligansBluff',
         name: `Native Of Hooligan's Bluff`,
         description: `Increase this character's stats by 5% in Hooligan's Bluff.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     excellentCook: {
         id: 'excellentCook',
         name: `Excellent Cook`,
         description: `Rest sites heal your party for 8% more health.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     fisherman: {
         id: 'fisherman',
         name: `Fisherman`,
         description: `Draw an additional card and heal all party members for 2% of their maximum health at the start of your third turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     alwaysPackSnacks: {
         id: 'alwaysPackSnacks',
         name: `Always Pack Snacks`,
         description: `Event rooms heal your party for 3% of their maximum health`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     goodImmuneSystem: {
         id: 'goodImmuneSystem',
         name: `Good Immune System`,
         description: '',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     mildlyLucky: {
         id: 'mildlyLucky',
         name: `Mildly Lucky`,
         description: `+2% chance of Critical Hit.  +1% chance of Dodge.  If this character would die, 33% they are reduced to 1 Health instead (can only successfully trigger once per run)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     experiencedForager: {
         id: 'experiencedForager',
         name: `Experienced Forager`,
         description: `All party members heal for 2% of their maximum health after every combat.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bornSurvivor: {
         id: 'bornSurvivor',
@@ -1012,9 +1021,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'The first time this character would die, reduce their health to 1 instead.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     secretVampire: {
         id: 'secretVampire',
@@ -1022,9 +1029,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'Whenever this character plays an attack card that destroys an enemy, they heal for 10% of their maximum health.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     marathonRunner: {
         id: 'marathonRunner',
@@ -1032,9 +1037,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'After the first 5 combats in a dungeon, increase this characters stats by 10%.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bully: {
         id: 'bully',
@@ -1042,9 +1045,7 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description:
             'Attack cards played by this character deal 5%+1 more damage against enemies with less health than them.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bigGameHunter: {
         id: 'bigGameHunter',
@@ -1052,126 +1053,98 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: 'This character deals 10% more damage against Bosses.',
         equippable: true,
         // implemented in talent map
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     stealthy: {
         id: 'stealthy',
         name: `stealthy`,
         description: `Increase this character's Dodge chance by 4%.  Slightly decrease this character's Taunt (decrease it by -5, hidden)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     frontLineFighter: {
         id: 'frontLineFighter',
         name: `frontLineFighter`,
         description: `Increase this character's Defense and Strength by +4%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     levelHeaded: {
         id: 'levelHeaded',
         name: `levelHeaded`,
         description: `Increase this character's Health by +6%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     greatGuy: {
         id: 'greatGuy',
         name: `greatGuy`,
         description: `Everyone agrees that this Kaiju is extremely nice.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     ADHD: {
         id: 'ADHD',
         name: `ADHD`,
         description: `Draw an additional card at the beginning of every other turn. If you don't play any cards from this character in a turn, this character gains Fatigue (1) at the start of their next turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veryLoyal: {
         id: 'veryLoyal',
         name: `Very Loyal`,
         description: `The first time this character plays a defense card that targets an ally each turn, their target gains an extra +20% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     pillager: {
         id: 'pillager',
         name: `Pillager`,
         description: `Whenever a character in your party destroys an enemy, all friendly characters gain +15% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     giantSlayer: {
         id: 'giantSlayer',
         name: `Giant Slayer`,
         description: `+15% Critical Hit chance vs Bosses.  The first attack card this character targets a boss with per combat automatically crits.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     eternalOptimist: {
         id: 'eternalOptimist',
         name: `Eternal Optimist`,
         description: `This character starts all Boss Fights and Elite encounters with Courageous (3).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     emotionallySensitive: {
         id: 'emotionallySensitive',
         name: `Emotionally Sensitive`,
         description: `This character's Magic and Strength are increased by 8%+1.  Their Defense and Health are decreased by 4%.  Critical hits by this character deal an additional +25% damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     distinctiveRibbit: {
         id: 'distinctiveRibbit',
         name: `Distinctive Ribbit`,
         description: `Increase the critical hit chance of allies by 3%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     slipperyWhenWet: {
         id: 'slipperyWhenWet',
         name: `slipperyWhenWet`,
         description: `If this character ends their turn with 0 block, they gain +20% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     poisonousBlood: {
         id: 'poisonousBlood',
         name: `Poisonous Blood`,
         description: `If this character is attacked by an enemy while they have Bleed, apply Poison (20%) to the attacker.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     stickyHands: {
         id: 'stickyHands',
@@ -1179,430 +1152,321 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
         description: `Randomly keep one card in your hand at the end of your turn. (Unqiue)`,
         unique: true,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     wiseCroaker: {
         id: 'wiseCroaker',
         name: `Wise Croaker`,
         description: `If you don't play any cards from this Kaiju in a turn, draw an additional card and this Kaiju gains Strongblock (1) at the beginning of your next turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     excellentStompDancer: {
         id: 'excellentStompDancer',
         name: `Excellent Stomp Dancer`,
         description: `This Warhog's War Stomp card deals an additional 25% damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     thickBoned: {
         id: 'thickBoned',
         name: `Thick Boned`,
         description: `Whenever you draw a card for this character, they gain +6% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     shortTempered: {
         id: 'shortTempered',
         name: `Short Tempered`,
         description: `This character starts every room with Berserk (1) and Resistant (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     ironSkinned: {
         id: 'ironSkinned',
         name: `Iron Skinned`,
         description: `This character is immune to Poison damage and Bleed.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bigYawn: {
         id: 'bigYawn',
         name: `Big Yarn`,
         description: `The first Defense card this character plays per room applies Tired (1) to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     apexOmnivore: {
         id: 'apexOmnivore',
         name: `Apex Omnivore`,
         description: `Critical Hits from this character have Piercing.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veryLarge: {
         id: 'veryLarge',
         name: `Very Large`,
         description: `The Health of this character is increased by 7.5%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veryVeryLarge: {
         id: 'veryVeryLarge',
         name: `Very, Very, Large`,
         description: `The Health of this character is increased by 15%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     reinforcedHooves: {
         id: 'reinforcedHooves',
         name: `Reinforced Hooves`,
         description: `The Strength of this character is increased by 10%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bigNapper: {
         id: 'bigNapper',
         name: `Big Napper`,
         description: `If you don't play any cards from this Kaiju in a turn, this Kaiju heals for 6% of their maximum health.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     disarminglyCute: {
         id: 'disarminglyCute',
         name: `Disarmingly Cute`,
         description: `Every time this character plays an Attack Card, 20% chance of applying Fatigue (1) to enemies targeted.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     anxietyRiddled: {
         id: 'anxietyRiddled',
         name: `Anxiety Riddled`,
         description: `The first time this character discards a card per room, draw 1.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     extraBlubbery: {
         id: 'extraBlubbery',
         name: `Extra Blubbery`,
         description: `Whenever this character plays a card, they gain 10% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     headEmpty: {
         id: 'headEmpty',
         name: `Head Empty`,
         description: `If you don't play any cards from this character in a turn, they gain +100% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     doingTheirBest: {
         id: 'doingTheirBest',
         name: `Doing Their Best`,
         description: `If you play 3 cards owned by this character in one turn, remove all debuffs from this Kaiju.  They gain +50% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     accidentProne: {
         id: 'accidentProne',
         name: `AccidentProne`,
         description: `Whenever a card from this character with Brittle breaks, apply Bleed (1) to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     peppy: {
         id: 'peppy',
         name: `Peppy`,
         description: `The first time per room this character plays 3 cards in 1 turn, gain 1 energy.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     partyBouncer: {
         id: 'partyBouncer',
         name: `Party Bouncer`,
         description: `Whenever this character plays a card with Redirect, they gain +15% block and Courageous (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     townMilitiaMember: {
         id: 'townMilitiaMember',
         name: `Town Militia Member`,
         description: `This character's Basic Attack deals an additional +25%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     barbarian: {
         id: 'barbarian',
         name: `Barbarian`,
         description: `Increase this character's Strength by 8%. Increase the damage bonus Berserk gives this character by 10%`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veteranPitFighter: {
         id: 'veteranPitFighter',
         name: `Veternal Pit Fighter`,
         description: `The first attack card this character plays per room costs 1 less energy.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     royalGuard: {
         id: 'royalGuard',
         name: `Royal Guard`,
         description: `Increase the amount of block generated by Defense cards this character plays that target allies by 15%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     shieldProficiency: {
         id: 'shieldProficiency',
         name: `Shield Proficiency`,
         description: `Increase the amount of block generated by Defense cards this character plays by 10%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     intimidating: {
         id: 'intimidating',
         name: `Intimidating`,
         description: `Whenever this character plays a card that destroys an enemy, all other enemies gain Tired (2).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     terrifying: {
         id: 'terrifying',
         name: `Terrifying`,
         description: `Whenever this character plays a card that destroys an enemy, all other enemies gain Fatigue (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     attritionFighter: {
         id: 'attritionFighter',
         name: `Attrition Fighter`,
         description: `After your third turn, increase this character's Strength, Defense and Magic by 18% until the end of the room.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     nobleGuardian: {
         id: 'nobleGuardian',
         name: `Noble Guardian`,
         description: `This character gives all other characters +15% block during the first turn of every room.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     conduitOfChaosMagic: {
         id: 'conduitOfChaosMagic',
         name: `Conduit Of Chaos Magic`,
         description: `15% chance to gain +1 energy at the start of each turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     privyToAnAncientandTerribleSecret: {
         id: 'privyToAnAncientandTerribleSecret',
         name: `Privy To Ancient and Terrible Secret`,
         description: `Every time you draw a card, there is a 10% chance that cards cost will be reduced by 1 (triggers a maximum of once per room).  The Magic of this character is increased by 10%.  The Health of this character is decreased by 10%.  This character starts each room with Tired (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     legendaryFireMage: {
         id: 'legendaryFireMage',
         name: `Legendary Fire Mage`,
         description: `All Attack Cards this character plays have Fire Damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     masterOracle: {
         id: 'masterOracle',
         name: `Master Oracle`,
         description: `Draw an additional card at the start of each turn. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     aspiringSeer: {
         id: 'aspiringSeer',
         name: `Aspiring Seer`,
         description: `Draw an additional card at the start of your first turn.  (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     forgetfulGenius: {
         id: 'forgetfulGenius',
         name: `Forgetful Genius`,
         description: `Every time you draw a card, 20% chance to draw an additional card.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     starChartExpert: {
         id: 'starChartExpert',
         name: `Star Chart Expert`,
         description: `Whenever an Attack, Defense, Utility, and Enchantment card are played in the same turn, deal 50% to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     tormentedByWhispers: {
         id: 'tormentedByWhispers',
         name: `Tormented by Whispers`,
         description: `When a card with Momentary is played, deal 10% damage to a random enemy. `,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     photographicMemory: {
         id: 'photographicMemory',
         name: `Photographic Memory`,
         description: `Whenever a card with Momentary is played, it has a 20% chance to be added to the discard pile instead of being removed for the room. `,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     dirtyDealer: {
         id: 'dirtyDealer',
         name: `Dirty Dealer`,
         description: `After the first combat of a run, draft an additional card. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     masterLooter: {
         id: 'masterLooter',
         name: `Master Looter`,
         description: `Every time a character destroys an enemy, draw a card.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     thrifty: {
         id: 'thrifty',
         name: `Thrifty`,
         description: `The first time you discard a card per room, draw a card.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     invigoratedbyBloodshed: {
         id: 'invigoratedbyBloodshed',
         name: `Invigorated by Bloodshed`,
         description: `Whenever an enemy is destroyed, this character gains Courageous (1) and Guarded (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     scrappyandVicious: {
         id: 'scrappyandVicious',
         name: `Scrappy and Vicious`,
         description: `If you play 3 or more attack cards in a single turn, increase this character's strength by 33% until the end of the turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     collectorOfContraband: {
         id: 'collectorOfContraband',
         name: `Collector of Contraband`,
         description: `At the start of your second turn, decrease the cost of a random card in your hand to 0.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     arterialArtisan: {
         id: 'arterialArtisan',
         name: `Arterial Artisan`,
         description: `As long as this character is alive, enemies lose an addtional 5% max health from bleed stacks. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     oneWithTheShadows: {
         id: 'oneWithTheShadows',
         name: `One with The Shadowd`,
         description: `Slightly decrease this character's Taunt at the start of each turn. (Decrease it by 3).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
 }
-
-// export type TalentMap = Record<TalentId, Souvenir>
-
-// export type TalentId = 'hypochondriac'
-
-// export const TalentMap: Record<TalentId, Souvenir> = {
-//     hypochondriac: {
-//         id: 'hypochondriac',
-//         name: 'Hypochondriac',
-//         description:
-//             'This character ignores the first debuff applied to them per room.',
-//         equippable: true,
-//         on: {
-//             battleStart: `effect("hypochondriac", 1)`,
-//         },
-//     },
-// }

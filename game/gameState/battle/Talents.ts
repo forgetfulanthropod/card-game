@@ -1,4 +1,4 @@
-import type { BattleCursor, CharacterMeta } from 'shared'
+import type { BattleCursor, CharacterMeta, CharacterUid } from 'shared'
 import type {
     Souvenir,
     SouvenirId,
@@ -12,6 +12,21 @@ import { healCharacter } from './cards/commands/heal'
 import { applyEffect } from './cards/commands/effect'
 import { applyBlocks } from './cards/commands/addBlock'
 import { getTargetText } from './cards/commands/util/getTargetText'
+import { randomValue } from '@/characterGeneration/data/util'
+
+//TODO: put these util functions somewhere else like commands
+const getTurnCards = (
+    scene: BattleCursor,
+    characterUid: CharacterUid,
+    turnCount: number
+) => {
+    return scene
+        .get('cardsPlayedThisRoom')
+        .filter(
+            card =>
+                card.turnCount == turnCount && card.characterUid == characterUid
+        )
+}
 
 export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
     quickToPickAFight: {
@@ -21,18 +36,16 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
             'At the start of your turn, if your hand has no attack cards, draw cards until you draw an attack card. (Unique)',
         unique: true,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             postDrawHand: ({ scene }) => {
-                logger.info('no attack')
                 while (
                     Object.keys(scene.get('cards', 'draw')) &&
                     !Object.values(scene.get('cards', 'hand')).some(
                         card => card.type === 'attack'
                     )
                 ) {
+                    logger.info('no attack')
                     drawCard(scene)
                 }
             },
@@ -44,9 +57,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'The Critical Hit chance of this character is increased by 5%.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             // acquire: ({ scene, souvenir }) => {
             //     if (!souvenir.characterUid) return
@@ -68,9 +79,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Native of Hooligan's Bluff`,
         description: `Increase this character's stats by 5% in Hooligan's Bluff.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir }) => {
                 if (!(scene.get('dungeonName') === 'Hooligans Bluff')) return
@@ -103,9 +112,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Excellent Cook`,
         description: `Rest sites heal your party for 8% more health.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             enterRestSite: ({ scene }) => {
                 for (const cm of getLivingPcs(scene.get())) {
@@ -119,9 +126,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Fisherman`,
         description: `Draw an additional card and heal all party members for 2% of their maximum health at the start of your third turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             turnStart: ({ scene }) => {
                 if (scene.get('turnCount') != 3) return
@@ -137,9 +142,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `alwaysPackSnacks`,
         description: `Event rooms heal your party for 3% of their maximum health`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             enterEventSite: ({ scene }) => {
                 const healAmount = 0.03
@@ -154,9 +157,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Good Immune System`,
         description: `This character reduces all Poison and Bleed damage by 50%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             preEffectDamage: ({ data }) => data * 0.5,
         },
@@ -167,9 +168,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             '+2% chance of Critical Hit.  +1% chance of Dodge.  If this character would die, 33% they are reduced to 1 Health instead (can only successfully trigger once per run)',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -206,9 +205,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'All party members heal for 2% of their maximum health after every combat.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             battleEnd: ({ scene }) => {
                 for (const cm of getLivingPcs(scene.get())) {
@@ -223,9 +220,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'The first time this character would die, reduce their health to 1 instead.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             postDie: ({ scene, souvenir, idx, target }) => {
                 if ((souvenir.counter ?? 0) > 0) return
@@ -240,9 +235,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'Whenever this character plays an attack card that destroys an enemy, they heal for 10% of their maximum health.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             postKill: ({ scene, souvenir, target }) => {
                 if (!souvenir.characterUid) return
@@ -257,9 +250,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'After the first 5 combats in a dungeon, increase this characters stats by 10%.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             battleEnd: ({ scene, souvenir, idx }) => {
                 souvenir = incrementCounter(scene, idx)
@@ -299,14 +290,12 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Big Game Hunter`,
         description: 'This character deals 10% more damage against Bosses.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             // TODO: only 10% bonus dmg vs bosses
-            damageGiveFinal: ({ data, scene }) => {
+            damageGiveMultiply: ({ data, scene }) => {
                 if (scene.get('currentRoom', 'category') === 'bosses')
-                    return data * 1.1
+                    return data + 0.1
                 return data
             },
         },
@@ -317,12 +306,17 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description:
             'Attack cards played by this character deal 5%+1 more damage against enemies with less health than them.',
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
-            damageGive: ({ souvenir, target, attacker, data }) => {
-                return attacker.health > target.health ? data * 1.05 + 1 : data
+            damageGiveAdd: ({ souvenir, target, attacker, data }) => {
+                if (souvenir.characterUid != attacker.uid) return data
+                if (!attacker || !target) return data
+                return attacker.health > target.health ? data + 1 : data
+            },
+            damageGiveMultiply: ({ souvenir, target, attacker, data }) => {
+                if (souvenir.characterUid != attacker.uid) return data
+                if (!attacker || !target) return data
+                return attacker.health > target.health ? data + 0.05 : data
             },
         },
     },
@@ -331,9 +325,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `stealthy`,
         description: `Increase this character's Dodge chance by 4%.  Slightly decrease this character's Taunt (decrease it by -5, hidden)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -357,9 +349,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `frontLineFighter`,
         description: `Increase this character's Defense and Strength by +4%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -381,9 +371,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `levelHeaded`,
         description: `Increase this character's Health by +6%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -412,31 +400,25 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `greatGuy`,
         description: `Everyone agrees that this Kaiju is extremely nice.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     ADHD: {
         id: 'ADHD',
         name: `ADHD`,
         description: `Draw an additional card at the beginning of every other turn. If you don't play any cards from this character in a turn, this character gains Fatigue (1) at the start of their next turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             turnStart: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
                 const turnCount = scene.get('turnCount')
                 if (turnCount == 1) return
                 if (turnCount % 2 == 0) drawCard(scene)
-                const lastTurnCards = scene
-                    .get('cardsPlayedThisRoom')
-                    .filter(
-                        card =>
-                            card.turnCount == turnCount - 1 &&
-                            card.characterUid == souvenir.characterUid
-                    )
+                const lastTurnCards = getTurnCards(
+                    scene,
+                    souvenir.characterUid,
+                    turnCount - 1
+                )
                 if (lastTurnCards.length == 0) {
                     applyEffect(
                         scene,
@@ -473,9 +455,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Pillager`,
         description: `Whenever a character in your party destroys an enemy, all friendly characters gain +15% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             postKillGeneral: ({ scene, souvenir, target }) => {
                 if (!souvenir.characterUid) return
@@ -492,9 +472,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Giant Slayer`,
         description: `+15% Critical Hit chance vs Bosses.  The first attack card this character targets a boss with per combat automatically crits.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             battleStart: ({ scene, idx }) => {
                 setCounter(scene, idx, 0)
@@ -513,9 +491,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Eternal Optimist`,
         description: `This character starts all Boss Fights and Elite encounters with Courageous (3).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             battleStart: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -534,9 +510,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Emotionally Sensitive`,
         description: `This character's Magic and Strength are increased by 8%+1.  Their Defense and Health are decreased by 4%.  Critical hits by this character deal an additional +25% damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             acquire: ({ scene, souvenir, idx }) => {
                 souvenir = incrementCounter(scene, idx)
@@ -564,9 +538,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Distinctive Ribbit`,
         description: `Increase the critical hit chance of allies by 3%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             critChanceGeneral: ({ souvenir, critChance, attacker }) => {
                 if (attacker.uid == souvenir.characterUid) return critChance
@@ -579,9 +551,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `slipperyWhenWet`,
         description: `If this character ends their turn with 0 block, they gain +20% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             turnEnd: ({ scene, souvenir }) => {
                 if (!souvenir.characterUid) return
@@ -603,9 +573,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Poisonous Blood`,
         description: `If this character is attacked by an enemy while they have Bleed, apply Poison (20%) to the attacker.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
         on2: {
             damageReceive: ({ scene, cm, target, attacker, data: damage }) => {
                 if (
@@ -632,8 +600,14 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         description: `Randomly keep one card in your hand at the end of your turn. (Unqiue)`,
         unique: true,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            preDiscardAtTurnEnd({ scene, data: keep, piles }) {
+                const hand = Object.values(piles.hand)
+                const card = randomValue(hand)
+                if (card) keep.push(card.uid)
+                return keep
+            },
         },
     },
     wiseCroaker: {
@@ -641,8 +615,27 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Wise Croaker`,
         description: `If you don't play any cards from this Kaiju in a turn, draw an additional card and this Kaiju gains Strongblock (1) at the beginning of your next turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            turnStart({ scene, souvenir }) {
+                if (!souvenir.characterUid) return
+                const turnCount = scene.get('turnCount')
+                if (turnCount == 1) return
+                const lastTurnCards = getTurnCards(
+                    scene,
+                    souvenir.characterUid,
+                    turnCount - 1
+                )
+                if (lastTurnCards.length == 0) {
+                    drawCard(scene)
+                    applyEffect(
+                        scene,
+                        [souvenir.characterUid],
+                        'strongblockBuff',
+                        1
+                    )
+                }
+            },
         },
     },
     excellentStompDancer: {
@@ -650,8 +643,13 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Excellent Stomp Dancer`,
         description: `This Warhog's War Stomp card deals an additional 25% damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            damageGiveMultiply: ({ souvenir, data, attacker, cardId }) => {
+                if (souvenir.characterUid != attacker.uid) return data
+                if (cardId != 'warStomp') return data
+                return data + 0.25
+            },
         },
     },
     thickBoned: {
@@ -659,8 +657,24 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Thick Boned`,
         description: `Whenever you draw a card for this character, they gain +6% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            drawCard: ({ scene, souvenir, card }) => {
+                if (souvenir.characterUid == card.characterUid) {
+                    const block =
+                        scene.get(
+                            'allCharacters',
+                            souvenir.characterUid,
+                            'calculatedStats'
+                        ).defense * 0.06
+                    applyBlocks({
+                        scene,
+                        block,
+                        fromUid: null,
+                        targetUids: [souvenir.characterUid],
+                    })
+                }
+            },
         },
     },
     shortTempered: {
@@ -668,260 +682,207 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Short Tempered`,
         description: `This character starts every room with Berserk (1) and Resistant (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     ironSkinned: {
         id: 'ironSkinned',
         name: `Iron Skinned`,
         description: `This character is immune to Poison damage and Bleed.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bigYawn: {
         id: 'bigYawn',
         name: `Big Yarn`,
         description: `The first Defense card this character plays per room applies Tired (1) to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     apexOmnivore: {
         id: 'apexOmnivore',
         name: `Apex Omnivore`,
         description: `Critical Hits from this character have Piercing.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veryLarge: {
         id: 'veryLarge',
         name: `Very Large`,
         description: `The Health of this character is increased by 7.5%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veryVeryLarge: {
         id: 'veryVeryLarge',
         name: `Very, Very, Large`,
         description: `The Health of this character is increased by 15%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     reinforcedHooves: {
         id: 'reinforcedHooves',
         name: `Reinforced Hooves`,
         description: `The Strength of this character is increased by 10%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     bigNapper: {
         id: 'bigNapper',
         name: `Big Napper`,
         description: `If you don't play any cards from this Kaiju in a turn, this Kaiju heals for 6% of their maximum health.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     disarminglyCute: {
         id: 'disarminglyCute',
         name: `Disarmingly Cute`,
         description: `Every time this character plays an Attack Card, 20% chance of applying Fatigue (1) to enemies targeted.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     anxietyRiddled: {
         id: 'anxietyRiddled',
         name: `Anxiety Riddled`,
         description: `The first time this character discards a card per room, draw 1.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     extraBlubbery: {
         id: 'extraBlubbery',
         name: `Extra Blubbery`,
         description: `Whenever this character plays a card, they gain 10% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     headEmpty: {
         id: 'headEmpty',
         name: `Head Empty`,
         description: `If you don't play any cards from this character in a turn, they gain +100% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     doingTheirBest: {
         id: 'doingTheirBest',
         name: `Doing Their Best`,
         description: `If you play 3 cards owned by this character in one turn, remove all debuffs from this Kaiju.  They gain +50% block.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     accidentProne: {
         id: 'accidentProne',
         name: `AccidentProne`,
         description: `Whenever a card from this character with Brittle breaks, apply Bleed (1) to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     peppy: {
         id: 'peppy',
         name: `Peppy`,
         description: `The first time per room this character plays 3 cards in 1 turn, gain 1 energy.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     partyBouncer: {
         id: 'partyBouncer',
         name: `Party Bouncer`,
         description: `Whenever this character plays a card with Redirect, they gain +15% block and Courageous (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     townMilitiaMember: {
         id: 'townMilitiaMember',
         name: `Town Militia Member`,
         description: `This character's Basic Attack deals an additional +25%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     barbarian: {
         id: 'barbarian',
         name: `Barbarian`,
         description: `Increase this character's Strength by 8%. Increase the damage bonus Berserk gives this character by 10%`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     veteranPitFighter: {
         id: 'veteranPitFighter',
         name: `Veternal Pit Fighter`,
         description: `The first attack card this character plays per room costs 1 less energy.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     royalGuard: {
         id: 'royalGuard',
         name: `Royal Guard`,
         description: `Increase the amount of block generated by Defense cards this character plays that target allies by 15%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     shieldProficiency: {
         id: 'shieldProficiency',
         name: `Shield Proficiency`,
         description: `Increase the amount of block generated by Defense cards this character plays by 10%.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     intimidating: {
         id: 'intimidating',
         name: `Intimidating`,
         description: `Whenever this character plays a card that destroys an enemy, all other enemies gain Tired (2).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     terrifying: {
         id: 'terrifying',
         name: `Terrifying`,
         description: `Whenever this character plays a card that destroys an enemy, all other enemies gain Fatigue (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     attritionFighter: {
         id: 'attritionFighter',
         name: `Attrition Fighter`,
         description: `After your third turn, increase this character's Strength, Defense and Magic by 18% until the end of the room.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     nobleGuardian: {
         id: 'nobleGuardian',
         name: `Noble Guardian`,
         description: `This character gives all other characters +15% block during the first turn of every room.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     conduitOfChaosMagic: {
         id: 'conduitOfChaosMagic',
         name: `Conduit Of Chaos Magic`,
         description: `15% chance to gain +1 energy at the start of each turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     privyToAnAncientandTerribleSecret: {
         id: 'privyToAnAncientandTerribleSecret',
         name: `Privy To Ancient and Terrible Secret`,
         description: `Every time you draw a card, there is a 10% chance that cards cost will be reduced by 1 (triggers a maximum of once per room).  The Magic of this character is increased by 10%.  The Health of this character is decreased by 10%.  This character starts each room with Tired (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     legendaryFireMage: {
         id: 'legendaryFireMage',
         name: `Legendary Fire Mage`,
         description: `All Attack Cards this character plays have Fire Damage.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     masterOracle: {
         id: 'masterOracle',
         name: `Master Oracle`,
         description: `Draw an additional card at the start of each turn. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            turnStart: ({ scene }) => {
+                drawCard(scene)
+            },
         },
     },
     aspiringSeer: {
@@ -929,8 +890,11 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Aspiring Seer`,
         description: `Draw an additional card at the start of your first turn.  (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            battleStart: ({ scene }) => {
+                drawCard(scene)
+            },
         },
     },
     forgetfulGenius: {
@@ -938,8 +902,12 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Forgetful Genius`,
         description: `Every time you draw a card, 20% chance to draw an additional card.`,
         equippable: true,
-        on: {
-            battleStart: '',
+        on: {},
+        on2: {
+            drawCard: ({ scene }) => {
+                const roll = Math.random()
+                if (roll < 0.2) drawCard(scene)
+            },
         },
     },
     starChartExpert: {
@@ -947,99 +915,77 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         name: `Star Chart Expert`,
         description: `Whenever an Attack, Defense, Utility, and Enchantment card are played in the same turn, deal 50% to all enemies.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     tormentedByWhispers: {
         id: 'tormentedByWhispers',
         name: `Tormented by Whispers`,
         description: `When a card with Momentary is played, deal 10% damage to a random enemy. `,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     photographicMemory: {
         id: 'photographicMemory',
         name: `Photographic Memory`,
         description: `Whenever a card with Momentary is played, it has a 20% chance to be added to the discard pile instead of being removed for the room. `,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     dirtyDealer: {
         id: 'dirtyDealer',
         name: `Dirty Dealer`,
         description: `After the first combat of a run, draft an additional card. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     masterLooter: {
         id: 'masterLooter',
         name: `Master Looter`,
         description: `Every time a character destroys an enemy, draw a card.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     thrifty: {
         id: 'thrifty',
         name: `Thrifty`,
         description: `The first time you discard a card per room, draw a card.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     invigoratedbyBloodshed: {
         id: 'invigoratedbyBloodshed',
         name: `Invigorated by Bloodshed`,
         description: `Whenever an enemy is destroyed, this character gains Courageous (1) and Guarded (1).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     scrappyandVicious: {
         id: 'scrappyandVicious',
         name: `Scrappy and Vicious`,
         description: `If you play 3 or more attack cards in a single turn, increase this character's strength by 33% until the end of the turn.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     collectorOfContraband: {
         id: 'collectorOfContraband',
         name: `Collector of Contraband`,
         description: `At the start of your second turn, decrease the cost of a random card in your hand to 0.`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     arterialArtisan: {
         id: 'arterialArtisan',
         name: `Arterial Artisan`,
         description: `As long as this character is alive, enemies lose an addtional 5% max health from bleed stacks. (Unique)`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
     oneWithTheShadows: {
         id: 'oneWithTheShadows',
         name: `One with The Shadowd`,
         description: `Slightly decrease this character's Taunt at the start of each turn. (Decrease it by 3).`,
         equippable: true,
-        on: {
-            battleStart: '',
-        },
+        on: {},
     },
 }
 
@@ -1049,6 +995,7 @@ export const filterTalents = (
     cm?: CharacterMeta,
     notLiving?: boolean
 ) => {
+    if (scene.get('id') != 'battle') return []
     const livingPcs = getLivingPcs(scene.get()).map(cm => cm.uid)
     const talents = scene
         .get('souvenirs')
@@ -1090,26 +1037,32 @@ export const activateTalent = (
     return undefined
 }
 
-export const activateTalentsGeneric = (
-    scene: BattleCursor,
-    key: SouvenirActivationKey,
-    cm?: CharacterMeta,
-    notLiving?: boolean,
+export const activateTalentsGeneric = ({
+    scene,
+    key,
+    cm,
+    notLiving,
+    extra,
+}: {
+    scene: BattleCursor
+    key: SouvenirActivationKey
+    cm?: CharacterMeta
+    notLiving?: boolean
     extra?: any
-) => {
+}) => {
     filterTalents(scene, key, cm, notLiving).forEach(([souvenir, idx]) => {
         activateTalent(souvenir, key, scene, idx, extra)
     })
 }
 
-export const activateTalentsGenericNumber = (args: {
+export const activateTalentsGenericData = <Type>(args: {
     scene: BattleCursor
     key: SouvenirActivationKey
-    data: number
+    data: Type
     cm?: CharacterMeta
     notLiving?: boolean
     extra?: any
-}): number => {
+}): Type => {
     let { scene, key, data, cm, notLiving, extra } = args
     if (!extra) extra = {}
     filterTalents(scene, key, cm, notLiving).forEach(([souvenir, idx]) => {
@@ -1118,92 +1071,26 @@ export const activateTalentsGenericNumber = (args: {
             cm,
             ...extra,
         })
+        //@ts-expect-error
         if (tmp !== undefined) data = tmp
     })
     return data
 }
 
-export const activateTalentsPreEffectDamge = (
-    scene: BattleCursor,
-    data: number,
-    target: CharacterMeta
-): number => {
-    const souvenirs = filterTalents(scene, 'preEffectDamage', target)
-    souvenirs.map(([souvenir, idx]) => {
-        let func
-        if ((func = talentMap[souvenir.id]?.on2?.preEffectDamage))
-            data = func({ scene, souvenir, idx, data, target })
-    })
-    return data
-}
-
-export const activateTalentsOnCritChance = (
-    scene: BattleCursor,
-    critChance: number,
-    target: CharacterMeta,
-    attacker: CharacterMeta
-): number => {
-    const souvenirs = filterTalents(scene, 'critChance', attacker)
-    let ret
-    for (const [souvenir, idx] of souvenirs) {
-        ret = activateTalent(souvenir, 'critChance', scene, idx, {
-            critChance,
-            target,
-            attacker,
-        })
-        critChance = ret != undefined ? ret : critChance
-    }
-    return critChance
-}
-
-export const activateTalentsOnDamageGive = (
-    scene: BattleCursor,
-    data: number,
-    target: CharacterMeta,
-    attacker: CharacterMeta
-): number => {
-    filterTalents(scene, 'damageGive', attacker).forEach(([souvenir, idx]) => {
-        let func
-        if ((func = talentMap[souvenir.id]?.on2?.damageGive))
-            data = func({ scene, souvenir, idx, data, target, attacker })
-    })
-    return data
-    // const livingPcs = getLivingPcs(scene.get()).map(cm => cm.uid)
-    // const souvenirs = scene
-    //     .get('souvenirs')
-    //     .map((souvenir, idx) => [souvenir, idx])
-    //     .filter(([souvenir, idx]) => {
-    //         souvenir = souvenir as Souvenir
-    //         return (
-    //             scene.get('isPlayerTurn') &&
-    //             (!souvenir.equippable ||
-    //                 (attacker &&
-    //                     livingPcs.includes(attacker.uid) &&
-    //                     souvenir.characterUid == attacker.uid)) &&
-    //             talentMap[souvenir.id]?.on2?.damageGive
-    //         )
-    //     }) as [Souvenir, number][]
-    // for (let [souvenir, idx] of souvenirs) {
-    //     // damage = activateTalent(souvenir, 'damageGive', scene, idx, {damage, target, attacker})
-    //     let func
-    //     if ((func = talentMap[souvenir.id]?.on2?.damageGive))
-    //         data = func({ scene, souvenir, idx, data, target, attacker })
-    // }
-    // return data
-}
-
 export const activateTalents: Partial<Record<SouvenirActivationKey, any>> = {
     battleStart: activateTalentsGeneric,
     battleEnd: activateTalentsGeneric,
-    critChance: activateTalentsOnDamageGive,
+    critChance: activateTalentsGenericData,
     turnStart: activateTalentsGeneric,
     enterRestSite: activateTalentsGeneric,
-    damageGive: activateTalentsOnDamageGive,
-    damageGiveFinal: activateTalentsOnDamageGive,
+    damageGiveAdd: activateTalentsGenericData,
+    damageGiveMultiply: activateTalentsGenericData,
+    damageReceiveAdd: activateTalentsGenericData,
+    damageReceiveMultiply: activateTalentsGenericData,
     lethalDamageInterrupt: activateTalentsGeneric,
     postDie: activateTalentsGeneric,
     postKill: activateTalentsGeneric,
     postDrawHand: activateTalentsGeneric,
-    preEffectDamage: activateTalentsPreEffectDamge,
-    taunt: activateTalentsGenericNumber,
+    preEffectDamage: activateTalentsGenericData,
+    taunt: activateTalentsGenericData,
 }

@@ -34,7 +34,7 @@ export const endTurn: GameActions['endTurn'] = args => {
     applyTurnStartEffects(scene, 'npc')
 
     activateSouvenirs('turnEnd', scene)
-    activateTalentsGeneric(scene, 'turnEnd')
+    activateTalentsGeneric({ scene, key: 'turnEnd' })
 
     trackStateChanges(scene)
 

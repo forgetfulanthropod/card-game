@@ -8,7 +8,7 @@ import { activateTalents, activateTalentsGeneric } from '../Talents'
 export function drawNewHand(scene: BattleCursor): void {
     drawCards(scene, scene.get('handSize'))
     activateSouvenirs('postDrawHand', scene)
-    activateTalentsGeneric(scene, 'postDrawHand')
+    activateTalentsGeneric({ scene, key: 'postDrawHand' })
     updateHand(scene)
     scene.set('handSize', scene.get('baseHandSize'))
 }
@@ -37,6 +37,11 @@ export const drawCard = (
     scene.set(['cards', 'draw'], draw)
     // TODO activate any on draw card actions here
     activateSouvenirs('drawCard', scene)
+    activateTalentsGeneric({
+        scene,
+        key: 'drawCard',
+        extra: { card: nextCard },
+    })
     // TODO DISCUSSION: should scene be mutable
     ;({ hand, draw, discard } = scene.get('cards'))
     if (Object.keys(draw).length === 0) {
@@ -45,6 +50,7 @@ export const drawCard = (
         scene.set(['cards', 'draw'], draw)
         scene.set(['cards', 'discard'], discard)
         activateSouvenirs('shuffleDiscard', scene)
+        activateTalentsGeneric({ scene, key: 'shuffleDiscard' })
         ;({ hand, draw, discard } = scene.get('cards'))
     }
     return nextCard

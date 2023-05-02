@@ -5,7 +5,7 @@ import type { Executors, Explainers } from './util'
 import { evalAll, evalAllAsHtml } from './util'
 import { getTargetText } from './util/getTargetText'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
-import { activateTalentsGenericNumber } from '../../Talents'
+import { activateTalentsGenericData } from '../../Talents'
 
 export const explain: Explainers['addBlock'] = (dslArgs, context) => {
     const [block] = evalAllAsHtml(dslArgs)
@@ -52,7 +52,7 @@ export function applyBlocks({
         let target = scene.get('allCharacters', targetUid)
 
         let blockAddend = fromCm
-            ? activateTalentsGenericNumber({
+            ? activateTalentsGenericData({
                   scene,
                   key: 'blockGiveAdd',
                   data: 0,
@@ -60,7 +60,7 @@ export function applyBlocks({
                   extra: { target },
               })
             : 0
-        blockAddend = activateTalentsGenericNumber({
+        blockAddend = activateTalentsGenericData({
             scene,
             key: 'blockReceiveAdd',
             data: blockAddend,
@@ -70,7 +70,7 @@ export function applyBlocks({
 
         let blockMultiplier = getBlockMultiplier(targetUids[0], scene)
         blockMultiplier = fromCm
-            ? activateTalentsGenericNumber({
+            ? activateTalentsGenericData({
                   scene,
                   key: 'blockGiveMultiply',
                   data: blockMultiplier,
@@ -78,7 +78,7 @@ export function applyBlocks({
                   extra: { target },
               })
             : 1
-        blockMultiplier = activateTalentsGenericNumber({
+        blockMultiplier = activateTalentsGenericData({
             scene,
             key: 'blockReceiveMultiply',
             data: blockMultiplier,

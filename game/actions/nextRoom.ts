@@ -5,10 +5,7 @@ import {
     updateNpcMoves,
 } from '@/gameState'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
-import {
-    activateTalents,
-    activateTalentsGeneric,
-} from '@/gameState/battle/Talents'
+import { activateTalentsGeneric } from '@/gameState/battle/Talents'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
@@ -28,10 +25,10 @@ export const nextRoom: GameActions['nextRoom'] = args => {
 
     if (chosenRoom.category === 'restSite') {
         activateSouvenirs('enterRestSite', scene)
-        activateTalentsGeneric(scene, 'enterRestSite')
+        activateTalentsGeneric({ scene, key: 'enterRestSite' })
     } else if (chosenRoom.category === 'events') {
         activateSouvenirs('enterEventSite', scene)
-        activateTalentsGeneric(scene, 'enterEventSite')
+        activateTalentsGeneric({ scene, key: 'enterEventSite' })
     }
 
     trackMetric('nextRoom', { choice: args.choice, chosenRoom, scene })
@@ -78,9 +75,9 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
     setBaseTaunt(scene)
     setRoundEnergy(scene)
     activateSouvenirs('battleStart', scene)
-    activateTalentsGeneric(scene, 'battleStart')
+    activateTalentsGeneric({ scene, key: 'battleStart' })
     activateSouvenirs('turnStart', scene)
-    activateTalentsGeneric(scene, 'turnStart')
+    activateTalentsGeneric({ scene, key: 'turnStart' })
 
     scene.set('state', 'in battle')
     scene.set('lootScreenHasOpened', false)

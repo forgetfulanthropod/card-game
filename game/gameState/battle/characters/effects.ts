@@ -15,7 +15,7 @@ import {
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
 import { applyDamage } from '../util/applyDamage'
-import { activateTalents } from '../Talents'
+import { activateTalentsGenericData } from '../Talents'
 import { getRulebook } from '@/rulebook'
 import produce from 'immer'
 import { applyBlocks } from '../cards/commands/addBlock'
@@ -139,7 +139,12 @@ const turnStartEffectFuncs: Record<
     },
     bleedDebuff({ character, scene }) {
         let damage = Math.ceil(character.calculatedStats.constitution * 0.05)
-        damage = activateTalents['preEffectDamage'](scene, damage, character)
+        damage = activateTalentsGenericData({
+            scene,
+            key: 'preEffectDamage',
+            data: damage,
+            cm: character,
+        })
         applyDamage({
             damage,
             targetUid: character.uid,
@@ -150,7 +155,12 @@ const turnStartEffectFuncs: Record<
     poisonedDebuff({ effect, character, scene }) {
         if (character.effects.find(e => e.id === 'immuneToPoisonBuff')) return
         let damage = effect.counter
-        damage = activateTalents['preEffectDamage'](scene, damage, character)
+        damage = activateTalentsGenericData({
+            scene,
+            key: 'preEffectDamage',
+            data: damage,
+            cm: character,
+        })
         applyDamage({
             damage,
             targetUid: character.uid,

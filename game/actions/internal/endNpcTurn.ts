@@ -42,7 +42,7 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     updateWizardAbility(scene)
 
     activateSouvenirs('turnStart', scene) // buffs/debuffs for calcs
-    activateTalentsGeneric(scene, 'turnStart')
+    activateTalentsGeneric({ scene, key: 'turnStart' })
     applyTurnStartEffects(scene, 'pc')
 
     clearCharacterStatModifiers(scene, 'turn')

@@ -42,7 +42,7 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
             activateSouvenirs('battleEnd', scene)
-            activateTalentsGeneric(scene, 'battleEnd')
+            activateTalentsGeneric({ scene, key: 'battleEnd' })
         }
         return true
     } else if (winner === 'NPC') {
