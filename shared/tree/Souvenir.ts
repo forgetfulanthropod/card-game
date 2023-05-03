@@ -1,4 +1,4 @@
-import { BattleCursor, Piles, Card, CardUid } from '..'
+import { BattleCursor, Piles, Card, CardUid, DamageType, LootItem } from '..'
 import {
     BasicTargetType,
     CardAction,
@@ -153,17 +153,26 @@ export type SouvenirActivationKey =
     | 'acquire'
     | 'battleStart'
     | 'battleEnd'
+    | 'brittleBreak'
+    | 'bleedMultiply'
     | 'turnStart'
     | 'turnEnd'
     | 'enterEventSite'
     | 'enterRestSite'
+    | 'lootItems'
     | 'lethalDamageInterrupt'
+    | 'momentaryInterrupt'
+    | 'momentaryAfter'
     | 'takeDamage'
     | 'dealDamage'
     | 'playCard'
+    | 'playCardPre'
+    | 'piercingCheck'
     | 'activate'
+    | 'discardCard'
     | 'discardEnd'
     | 'drawCard'
+    | 'drawCardPreAdd'
     | 'shuffleDiscard'
     | 'postDrawHand'
     | 'damageGive'
@@ -182,6 +191,7 @@ export type SouvenirActivationKey =
     | 'critDamageAdd'
     | 'critDamageMultiply'
     | 'taunt'
+    | 'tauntBase'
     | 'blockGiveAdd'
     | 'blockGiveMultiply'
     | 'blockReceiveAdd'
@@ -203,6 +213,9 @@ export interface on2FunctionTypes {
     acquire: (args: defaultArgs) => void
     battleStart: (args: defaultArgs) => void
     battleEnd: (args: defaultArgs) => void
+    bleedMultiply: (
+        args: defaultArgsNumber & { target: CharacterMeta }
+    ) => number
     blockGiveAdd: (
         args: defaultArgsNumber & { target: CharacterMeta }
     ) => number
@@ -215,17 +228,16 @@ export interface on2FunctionTypes {
     blockReceiveMultiply: (
         args: defaultArgsNumber & { target: CharacterMeta }
     ) => number
+    brittleBreak: (args: defaultArgs & { card: Card }) => void
     critChance: (
-        args: defaultArgs & {
-            critChance: number
+        args: defaultArgsNumber & {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
         }
     ) => number
     critChanceGeneral: (
-        args: defaultArgs & {
-            critChance: number
+        args: defaultArgsNumber & {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
@@ -237,7 +249,13 @@ export interface on2FunctionTypes {
     critDamageMultiply: (
         args: defaultArgsNumber & { target: CharacterMeta }
     ) => number
+    lootItems: (args: defaultArgs & { data: LootItem[] }) => LootItem[]
+    momentaryInterrupt: (
+        args: defaultArgs & { data: boolean; card: Card }
+    ) => boolean
+    momentaryAfter: (args: defaultArgs & { card: Card }) => void
     taunt: (args: defaultArgsNumber) => number
+    tauntBase: (args: defaultArgsNumber) => number
     turnStart: (args: defaultArgs) => void
     turnEnd: (args: defaultArgs) => void
     enterEventSite: (args: defaultArgs) => void
@@ -245,19 +263,38 @@ export interface on2FunctionTypes {
     lethalDamageInterrupt: () => void
     takeDamage: () => void
     dealDamage: () => void
-    playCard: () => void
+    playCard: (
+        args: defaultArgs & { card: Card; targetUids: CharacterUid[] }
+    ) => void
+    playCardPre: (
+        args: defaultArgs & { data: Card; targetUids: CharacterUid[] }
+    ) => Card
     postDie: (args: defaultArgs & { target: CharacterMeta }) => void
     postKill: (args: defaultArgs & { target: CharacterMeta }) => void
     postKillGeneral: (args: defaultArgs & { target: CharacterMeta }) => void
+    piercingCheck: (
+        args: defaultArgs & {
+            data: boolean
+            target: CharacterMeta
+            attacker: CharacterMeta
+            isCritical: boolean
+        }
+    ) => boolean
     activate: () => void
-    discardEnd: () => void
+    discardCard: (args: defaultArgs & { card: Card }) => void
+    discardEnd: (args: defaultArgs) => void
     drawCard: (args: defaultArgs & { card: Card }) => void
+    drawCardPreAdd: (args: defaultArgs & { data: Card }) => Card
     shuffleDiscard: () => void
     preDiscardAtTurnEnd: (
         args: defaultArgs & { data: CardUid[]; piles: Piles }
     ) => CardUid[]
     preEffectDamage: (
-        args: defaultArgs & { data: number; target: CharacterMeta }
+        args: defaultArgs & {
+            data: number
+            target: CharacterMeta
+            damageType: DamageType
+        }
     ) => number
     postDrawHand: (args: defaultArgs) => void
     damageGive: (
@@ -266,6 +303,7 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
     damageGiveAdd: (
@@ -274,6 +312,7 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
     damageGiveMultiply: (
@@ -282,6 +321,7 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
     damageReceive: (
@@ -290,6 +330,16 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
+        }
+    ) => number
+    damageReceiveMultiplyFinal: (
+        args: defaultArgs & {
+            data: number
+            target: CharacterMeta
+            attacker: CharacterMeta
+            cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
     damageReceiveAdd: (
@@ -298,6 +348,7 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
     damageReceiveMultiply: (
@@ -306,6 +357,7 @@ export interface on2FunctionTypes {
             target: CharacterMeta
             attacker: CharacterMeta
             cardId?: CardUid
+            damageType?: DamageType
         }
     ) => number
 }
@@ -1416,14 +1468,15 @@ export const souvenirMap: Record<SouvenirId, Souvenir> = {
     dirtyDealer: {
         id: 'dirtyDealer',
         name: `Dirty Dealer`,
-        description: `After the first combat of a run, draft an additional card. (Unique)`,
+        description: `Every time a character destroys an enemy, draw a card.`,
         equippable: true,
         on: {},
     },
     masterLooter: {
         id: 'masterLooter',
         name: `Master Looter`,
-        description: `Every time a character destroys an enemy, draw a card.`,
+        description: `After the first combat of a run, draft an additional card. (Unique)`,
+        unique: true,
         equippable: true,
         on: {},
     },

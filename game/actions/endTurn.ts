@@ -11,7 +11,7 @@ import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
 import { produce } from 'immer'
 import { updateWizardAbility } from '@/gameState/battle/characters/activateClassAbility'
-import { activateTalentsGeneric } from '@/gameState/battle/Talents'
+import { activateTalents } from '@/gameState/battle/Talents'
 
 const TIME_AFTER_PLAYER_MOVE = 1500
 
@@ -34,7 +34,7 @@ export const endTurn: GameActions['endTurn'] = args => {
     applyTurnStartEffects(scene, 'npc')
 
     activateSouvenirs('turnEnd', scene)
-    activateTalentsGeneric({ scene, key: 'turnEnd' })
+    activateTalents({ scene, key: 'turnEnd' })
 
     trackStateChanges(scene)
 

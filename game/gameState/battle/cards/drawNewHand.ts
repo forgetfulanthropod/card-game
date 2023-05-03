@@ -3,12 +3,12 @@ import { updateHand } from './cardManagement'
 import { shufflePile } from './shufflePile'
 import { activateSouvenirs } from '../activateSouvenirs'
 import { omit } from 'lodash'
-import { activateTalents, activateTalentsGeneric } from '../Talents'
+import { activateTalents, activateTalentsData } from '../Talents'
 
 export function drawNewHand(scene: BattleCursor): void {
     drawCards(scene, scene.get('handSize'))
     activateSouvenirs('postDrawHand', scene)
-    activateTalentsGeneric({ scene, key: 'postDrawHand' })
+    activateTalents({ scene, key: 'postDrawHand' })
     updateHand(scene)
     scene.set('handSize', scene.get('baseHandSize'))
 }
@@ -30,6 +30,11 @@ export const drawCard = (
     let drawKey = Object.keys(draw)[0]
     if (!drawKey) return false
     let nextCard = draw[drawKey]
+    nextCard = activateTalentsData({
+        scene,
+        key: 'drawCardPreAdd',
+        data: nextCard,
+    })
     hand = { ...hand, [drawKey]: nextCard }
     // delete cards.draw[drawKey]
     draw = omit(draw, drawKey)
@@ -37,7 +42,7 @@ export const drawCard = (
     scene.set(['cards', 'draw'], draw)
     // TODO activate any on draw card actions here
     activateSouvenirs('drawCard', scene)
-    activateTalentsGeneric({
+    activateTalents({
         scene,
         key: 'drawCard',
         extra: { card: nextCard },
@@ -50,7 +55,7 @@ export const drawCard = (
         scene.set(['cards', 'draw'], draw)
         scene.set(['cards', 'discard'], discard)
         activateSouvenirs('shuffleDiscard', scene)
-        activateTalentsGeneric({ scene, key: 'shuffleDiscard' })
+        activateTalents({ scene, key: 'shuffleDiscard' })
         ;({ hand, draw, discard } = scene.get('cards'))
     }
     return nextCard

@@ -7,9 +7,10 @@ import type {
     CharacterUid,
     Effect,
     EnemyCharacterMeta,
+    DamageType,
 } from 'shared'
 import { activateSouvenirs } from '../activateSouvenirs'
-import { activateTalentsGeneric, activateTalentsGenericData } from '../Talents'
+import { activateTalents, activateTalentsData } from '../Talents'
 import { applyEffect } from '../cards/commands/effect'
 import {
     maybeActivateRogueAbility,
@@ -29,8 +30,9 @@ export function applyDamage(args: {
     piercing?: boolean
     ignoreModifiers?: boolean
     cardId?: CardUid
+    damageType?: DamageType
 }): number {
-    const {
+    let {
         damage,
         targetUid,
         scene,
@@ -38,6 +40,7 @@ export function applyDamage(args: {
         attacker,
         piercing,
         cardId,
+        damageType,
     } = args
 
     const target = scene.get('allCharacters', targetUid)
@@ -50,14 +53,14 @@ export function applyDamage(args: {
     if (attackerMeta)
         critChance = calculateStats(attackerMeta).critChance ?? critChance
     if (target && attackerMeta) {
-        critChance = activateTalentsGenericData({
+        critChance = activateTalentsData({
             scene,
             key: 'critChance',
             cm: attackerMeta,
             data: critChance,
             extra: { target, attacker: attackerMeta, cardId },
         })
-        critChance = activateTalentsGenericData({
+        critChance = activateTalentsData({
             scene,
             key: 'critChanceGeneral',
             data: critChance,
@@ -70,6 +73,13 @@ export function applyDamage(args: {
               (!scene.get('isSimulation') && Math.random() < critChance)
             : false
 
+    piercing = activateTalentsData({
+        scene,
+        key: 'piercingCheck',
+        cm: attacker,
+        data: piercing,
+        extra: { target, attacker, isCritical },
+    })
     const calcedDamage = args.ignoreModifiers
         ? damage
         : getDamage({
@@ -144,7 +154,7 @@ export function applyDamage(args: {
         throw new Error("unblocked damage wasn't calculated")
 
     if (target.isPc && target.health <= 0) {
-        activateTalentsGeneric({
+        activateTalents({
             scene,
             key: 'postDie',
             cm: target,
@@ -153,13 +163,13 @@ export function applyDamage(args: {
         })
     }
     if (!target.isPc && target.health <= 0) {
-        activateTalentsGeneric({
+        activateTalents({
             scene,
             key: 'postKill',
             cm: attacker,
             extra: { target },
         })
-        activateTalentsGeneric({
+        activateTalents({
             scene,
             key: 'postKillGeneral',
             extra: { target },
@@ -390,6 +400,7 @@ export function getDamage({
     attacker,
     target,
     damage,
+    damageType,
     isCritical,
     cardId,
 }: {
@@ -397,6 +408,7 @@ export function getDamage({
     attacker: CharacterMeta | null
     target: CharacterMeta | null
     damage: number
+    damageType?: DamageType
     isCritical?: boolean
     cardId?: CardUid
 }) {
@@ -412,43 +424,43 @@ export function getDamage({
     let damageTakeAddend = target ? calculateStats(target).damageTakeAddend : 0
 
     if (attacker) {
-        damageDealAddend = activateTalentsGenericData({
+        damageDealAddend = activateTalentsData({
             scene,
             key: 'damageGiveAdd',
             data: damageDealAddend,
             cm: attacker,
-            extra: { target, attacker, cardId },
+            extra: { target, attacker, cardId, damageType },
         })
-        damageDealMultiplicand = activateTalentsGenericData({
+        damageDealMultiplicand = activateTalentsData({
             scene,
             key: 'damageGiveMultiply',
             data: damageDealMultiplicand,
             cm: attacker,
-            extra: { target, attacker, cardId },
+            extra: { target, attacker, cardId, damageType },
         })
     }
     if (target) {
-        damageTakeAddend = activateTalentsGenericData({
+        damageTakeAddend = activateTalentsData({
             scene,
             key: 'damageReceiveAdd',
             data: damageTakeAddend,
             cm: target,
-            extra: { target, attacker, cardId },
+            extra: { target, attacker, cardId, damageType },
         })
-        damageTakeMultiplicand = activateTalentsGenericData({
+        damageTakeMultiplicand = activateTalentsData({
             scene,
             key: 'damageReceiveMultiply',
             data: damageTakeMultiplicand,
             cm: target,
-            extra: { target, attacker, cardId },
+            extra: { target, attacker, cardId, damageType },
         })
     }
-    damageTakeMultiplicand = activateTalentsGenericData({
+    damageTakeMultiplicand = activateTalentsData({
         scene,
         key: 'damageReceive',
         data: damageTakeMultiplicand,
         cm: target || undefined,
-        extra: { target, attacker, cardId },
+        extra: { target, attacker, cardId, damageType },
     })
     // logger.info(
     //     JSON.stringify({ damageDealMultiplicand, damageTakeMultiplicand })
@@ -462,7 +474,7 @@ export function getDamage({
     if (isCritical) {
         let critMultiply = 1.5
         if (attacker)
-            critMultiply = activateTalentsGenericData({
+            critMultiply = activateTalentsData({
                 scene,
                 key: 'critDamageMultiply',
                 data: critMultiply,

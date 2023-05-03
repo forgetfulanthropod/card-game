@@ -15,7 +15,7 @@ import {
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
 import { applyDamage } from '../util/applyDamage'
-import { activateTalentsGenericData } from '../Talents'
+import { activateTalentsData } from '../Talents'
 import { getRulebook } from '@/rulebook'
 import produce from 'immer'
 import { applyBlocks } from '../cards/commands/addBlock'
@@ -138,35 +138,52 @@ const turnStartEffectFuncs: Record<
         })
     },
     bleedDebuff({ character, scene }) {
-        let damage = Math.ceil(character.calculatedStats.constitution * 0.05)
-        damage = activateTalentsGenericData({
+        let bleedMultiplicand = 0.05
+        bleedMultiplicand = activateTalentsData({
+            scene,
+            key: 'bleedMultiply',
+            data: bleedMultiplicand,
+            extra: { target: character },
+        })
+        let damage = Math.ceil(
+            character.calculatedStats.constitution * bleedMultiplicand
+        )
+        damage = activateTalentsData({
             scene,
             key: 'preEffectDamage',
             data: damage,
             cm: character,
+            extra: { damageType: 'bleed' },
         })
-        applyDamage({
-            damage,
-            targetUid: character.uid,
-            scene,
-            piercing: true,
-        })
+        if (damage != 0) {
+            applyDamage({
+                damage,
+                targetUid: character.uid,
+                scene,
+                piercing: true,
+                damageType: 'bleed',
+            })
+        }
     },
     poisonedDebuff({ effect, character, scene }) {
         if (character.effects.find(e => e.id === 'immuneToPoisonBuff')) return
         let damage = effect.counter
-        damage = activateTalentsGenericData({
+        damage = activateTalentsData({
             scene,
             key: 'preEffectDamage',
             data: damage,
             cm: character,
+            extra: { damageType: 'poison' },
         })
-        applyDamage({
-            damage,
-            targetUid: character.uid,
-            scene,
-            piercing: true,
-        })
+        if (damage != 0) {
+            applyDamage({
+                damage,
+                targetUid: character.uid,
+                scene,
+                piercing: true,
+                damageType: 'poison',
+            })
+        }
     },
     fireDebuff({ character, scene }) {
         applyEffect(scene, [character.uid], 'vulnerableDebuff', 2)

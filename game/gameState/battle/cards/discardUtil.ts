@@ -3,12 +3,12 @@ import type { BattleCursor, Pile, Card, CardUid } from 'shared'
 import { getTargetUids } from './getTargetUids'
 import { interpretCommand } from './interpretCommand'
 import { activateSouvenirs } from '../activateSouvenirs'
-import { activateTalentsGenericData } from '../Talents'
+import { activateTalents, activateTalentsData } from '../Talents'
 import { cardDefinitionsMap } from '@/rulebook'
 
 export function discardAllCards(scene: BattleCursor) {
     let keep: CardUid[] = []
-    keep = activateTalentsGenericData({
+    keep = activateTalentsData({
         scene,
         key: 'preDiscardAtTurnEnd',
         data: keep,
@@ -29,7 +29,7 @@ export const putInHandFromDiscard = (
     scene: BattleCursor,
     selected: CardUid[]
 ) => {
-    // TODO: improve implementation
+    // TODO: improve implementation; maybe use produce
     scene.apply('cards', cards => {
         const newCards = { ...cards }
         selected.forEach(carduid => {
@@ -88,9 +88,12 @@ export function discardBeforeTurnEnd({
     const discardPile = scene.get('cards', 'discard')
 
     for (const uid of cardUids) {
-        activeOnDiscardActions(discardPile[uid], scene)
+        const card = discardPile[uid]
+        activeOnDiscardActions(card, scene)
+        activateTalents({ scene, key: 'discardCard', extra: { card } })
     }
     activateSouvenirs('discardEnd', scene)
+    activateTalents({ scene, key: 'discardEnd' })
 }
 
 export function activeOnDiscardActions(card: Card, scene: BattleCursor) {

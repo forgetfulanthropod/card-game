@@ -1,6 +1,8 @@
-import produce from 'immer'
+import { produce, current } from 'immer'
+import { Card } from 'shared'
 
 import { evalAll, Executors, Explainers } from './util'
+import { activateTalents } from '../../Talents'
 
 export const explain: Explainers['brittle'] = dslArgs => {
     const [count] = evalAll(dslArgs)
@@ -13,7 +15,7 @@ export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {
     if (cardUid == null) throw Error('brittle did not receive a cardUid')
 
     // TODO: count
-
+    let cardOut = null
     scene.apply(
         'cards',
         produce(piles => {
@@ -35,7 +37,14 @@ export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {
                 delete piles.discard[cardUid]
                 delete piles.draw[cardUid]
                 piles.removedRun[cardUid] = card
+                cardOut = current(card)
             }
         })
     )
+    if (cardOut)
+        activateTalents({
+            scene,
+            key: 'brittleBreak',
+            extra: { card: cardOut },
+        })
 }

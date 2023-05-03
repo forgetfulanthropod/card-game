@@ -15,7 +15,7 @@ import { EntryCursor, isProduction } from '@/util'
 import { weightedRandom } from '@/util'
 
 import { emit } from '@/util'
-import { activateTalentsGenericData } from '../Talents'
+import { activateTalentsData } from '../Talents'
 
 export function getAllPcs(scene: BattleCursor | BattleScene): CharacterMeta[] {
     return vals(
@@ -151,7 +151,7 @@ const targetEnemies = (
     const taunts: Record<CharacterUid, number> = Object.fromEntries(
         getLivingPcs(scene.get()).map(cm => {
             let t = calculateTaunt(cm)
-            t = activateTalentsGenericData({
+            t = activateTalentsData({
                 scene,
                 key: 'taunt',
                 data: t,

@@ -5,7 +5,10 @@ import {
     updateNpcMoves,
 } from '@/gameState'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
-import { activateTalentsGeneric } from '@/gameState/battle/Talents'
+import {
+    activateTalents,
+    activateTalentsData,
+} from '@/gameState/battle/Talents'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
@@ -25,10 +28,10 @@ export const nextRoom: GameActions['nextRoom'] = args => {
 
     if (chosenRoom.category === 'restSite') {
         activateSouvenirs('enterRestSite', scene)
-        activateTalentsGeneric({ scene, key: 'enterRestSite' })
+        activateTalents({ scene, key: 'enterRestSite' })
     } else if (chosenRoom.category === 'events') {
         activateSouvenirs('enterEventSite', scene)
-        activateTalentsGeneric({ scene, key: 'enterEventSite' })
+        activateTalents({ scene, key: 'enterEventSite' })
     }
 
     trackMetric('nextRoom', { choice: args.choice, chosenRoom, scene })
@@ -75,9 +78,9 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
     setBaseTaunt(scene)
     setRoundEnergy(scene)
     activateSouvenirs('battleStart', scene)
-    activateTalentsGeneric({ scene, key: 'battleStart' })
+    activateTalents({ scene, key: 'battleStart' })
     activateSouvenirs('turnStart', scene)
-    activateTalentsGeneric({ scene, key: 'turnStart' })
+    activateTalents({ scene, key: 'turnStart' })
 
     scene.set('state', 'in battle')
     scene.set('lootScreenHasOpened', false)
@@ -98,7 +101,13 @@ const setBaseTaunt = (scene: BattleCursor) => {
         produce(ac => {
             for (const [id, cm] of Object.entries(ac)) {
                 if (!cm.isPc) continue
-                const taunt = calculateBaseTaunt(cm)
+                let taunt = calculateBaseTaunt(cm)
+                taunt = activateTalentsData({
+                    scene,
+                    key: 'tauntBase',
+                    data: taunt,
+                    cm,
+                })
                 cm.taunt = taunt
                 cm.lastTaunt = taunt
             }
