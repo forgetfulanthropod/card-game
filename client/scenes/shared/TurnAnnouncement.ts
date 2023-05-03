@@ -33,21 +33,6 @@ export function TurnAnnouncement() {
         isPlayerTurn => isPlayerTurn
         )
     const [baseX, baseY] = [BASE_WIDTH / 2, BASE_HEIGHT / 2 - 130]
-    const playerTurnUnsub = isPlayerTurnDatum.onChange(async isPlayerTurn => {
-        const battleState = scene.get('state')
-        const currTurnCount = scene.get('turnCount')
-        const isBossFight =
-            scene.get('currentRoom').enemies.filter(enemy => enemy?.boss)
-                .length > 0
-        if (battleState !== 'in battle') return
-        if (currTurnCount === 1 && isPlayerTurn) {
-            await sleep(250) // wasnt working without this on first turn
-            if (isBossFight) await flashTurnAnnouncement('bossBattleStart')
-            else await flashTurnAnnouncement('regularBattleStart')
-        }
-        if (isPlayerTurn) await flashTurnAnnouncement('user', currTurnCount)
-        else await flashTurnAnnouncement('enemy')
-    }, true)
 
     const MainText = Text({
         text: '',
@@ -133,6 +118,22 @@ export function TurnAnnouncement() {
         },
     });
 
+    const playerTurnUnsub = isPlayerTurnDatum.onChange(async isPlayerTurn => {
+        const battleState = scene.get('state')
+        const currTurnCount = scene.get('turnCount')
+        const isBossFight =
+            scene.get('currentRoom').enemies.filter(enemy => enemy?.boss)
+                .length > 0
+        if (battleState !== 'in battle') return
+        if (currTurnCount === 1 && isPlayerTurn) {
+            await sleep(250) // wasnt working without this on first turn
+            if (isBossFight) await flashTurnAnnouncement('bossBattleStart')
+            else await flashTurnAnnouncement('regularBattleStart')
+        }
+        if (isPlayerTurn) await flashTurnAnnouncement('user', currTurnCount)
+        else await flashTurnAnnouncement('enemy')
+    }, true)
+
     async function flashTurnAnnouncement(
         turnType: TurnType,
         turnCount?: number
@@ -149,9 +150,6 @@ export function TurnAnnouncement() {
             : 'ENEMY TURN';
         MainText.style.fontSize = turnType === 'user' ? 80 : 96;
         MainTextContainer.y = turnType === 'user' ? baseY : baseY + 25;
-
-        console.log({turnType, turnCount})
-
 
         if (turnType === 'user' && turnCount) {
             TurnCountText.text = `Turn #${turnCount}`;
