@@ -29,6 +29,9 @@ export function prepareSocket(): void {
                 ? `/${urlPrefix}/server/socket`
                 : '/server/socket',
     })
+    if (!getClientEnv('IS_PRODUCTION'))
+        // @ts-expect-error
+        window.socket = socket
     socket.on('connect', () => {
         console.log('CLIENT connected to socket!')
 
@@ -48,8 +51,6 @@ export function prepareSocket(): void {
     socket.on('refresh', () => window.location.reload())
 
     socket.on('update', ({ data }: { data: GameState }) => {
-        // console.log('received server data', data)
-        // getTree().set(data)
         updateBoabab(data)
     })
 

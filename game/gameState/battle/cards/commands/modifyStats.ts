@@ -20,6 +20,7 @@ import {
 } from './util'
 import { getTargetText } from './util/getTargetText'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
+import { updateCharacters } from '../../characters/updateCharacters'
 
 export const explain: Explainers['modifyStats'] = (dslArgs, context) => {
     const [statNames, addends, expiration, targetType] = getLocals(dslArgs)
@@ -78,12 +79,12 @@ function getLocals(
     const statNames = String(statNamesString).split('|') as ModifiableStatName[]
     const addends = String(addendsString)
         .split('|')
-        .map(a => parseInt(a))
+        .map(a => parseFloat(a))
 
     return [statNames, addends, expiration, targetType]
 }
 
-function applyStatModifiers({
+export function applyStatModifiers({
     scene,
     uids,
     stats,
@@ -99,6 +100,7 @@ function applyStatModifiers({
             return getUpdatedModifiers(modifiers, stats, expiration)
         })
     )
+    updateCharacters(scene)
 }
 
 function getUpdatedModifiers(
@@ -120,7 +122,8 @@ function getUpdatedModifiers(
             throw new Error('junk in the stat modifier')
 
         updatedModifiers[expiration][statKey] =
-            (updatedModifiers[expiration][statKey] || 0) + statModifier
+            ((updatedModifiers[expiration][statKey] as number) || 0) +
+            statModifier
     })
 
     return updatedModifiers

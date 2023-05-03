@@ -3,6 +3,7 @@ import type { GameActions, OwnedCharacterStats } from 'shared'
 import { clearAllEffects, makeBattleState, setCards } from '@/gameState'
 import { getRulebook } from '@/rulebook'
 import { getBattleSceneIn, getEntrySceneIn } from '@/util'
+import { acquireTalents } from './chooseEventResponse'
 
 export const changeScene: GameActions['changeScene'] = args => {
     const { game } = args
@@ -25,5 +26,6 @@ export const changeScene: GameActions['changeScene'] = args => {
         )
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
+        acquireTalents(scene)
     }
 }

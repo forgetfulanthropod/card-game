@@ -62,6 +62,7 @@ function localsFromCommand(
         sceneData.id === 'battle'
             ? getLivingPcs(sceneData).map(c => c.stance)
             : []
+    const extra = args.extra ? args.extra : {}
 
     return {
         ...calculateStats(cardOwner),
@@ -92,6 +93,8 @@ function localsFromCommand(
         turnStartStance: cardOwner.stanceInPrevTurn ?? 'neutral',
         allStancesDifferent: uniq(stanceIds).length === stanceIds.length,
         allStancesSame: uniq(stanceIds).length === 1,
+        turnCount: sceneData.turnCount,
+        ...extra,
     }
 }
 
@@ -101,10 +104,7 @@ export function explainCommand(
     stance?: StanceId
 ): string {
     const context: ExplainerContext = {
-        scene:
-            (scene as BattleCursor).get('turnCount') != null
-                ? (scene as BattleCursor)
-                : undefined,
+        scene: scene as BattleCursor,
         command,
         characterMeta: {
             ...getCharacterMeta(scene, command.characterUid),
@@ -150,6 +150,7 @@ interface CommandDetail {
     command: Command | Card
     targetUids: CharacterUid[]
     scene: BattleCursor
+    extra?: Record<any, any>
 }
 
 /** Does not modify game state (or shouldn't) */

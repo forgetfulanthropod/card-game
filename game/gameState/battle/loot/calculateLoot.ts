@@ -1,5 +1,6 @@
 import { entries, shuffle } from 'lodash'
 import type { BattleCursor, ClaimableLoot, LootItem } from 'shared'
+import { activateTalentsData } from '../Talents'
 
 /**
  *
@@ -31,10 +32,16 @@ export function calculateLoot(
     //         return { name, count } as LootItem
     //     })
 
-    const shuffledLootItems = [] as LootItem[]
+    let shuffledLootItems = [] as LootItem[]
 
     // shuffledLootItems.unshift({ name: 'gems', count: gems })
     shuffledLootItems.unshift({ name: 'draftCard', count: 1 })
+
+    shuffledLootItems = activateTalentsData({
+        scene,
+        key: 'lootItems',
+        data: shuffledLootItems,
+    })
 
     return shuffledLootItems
 }

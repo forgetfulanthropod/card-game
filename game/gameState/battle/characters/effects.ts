@@ -5,6 +5,7 @@ import {
     Effect,
     EnemyCharacterMeta,
     ModifiableStatName,
+    EffectId,
     PassiveClassEffectId,
     passiveClassEffectIds,
     StanceId,
@@ -13,8 +14,8 @@ import {
     turnStartEffectIds,
 } from 'shared'
 import { turnEndClearEffects } from 'shared'
-import { applyCalcedDamage, applyDamage } from '../util/applyDamage'
-
+import { applyDamage } from '../util/applyDamage'
+import { activateTalentsData } from '../Talents'
 import { getRulebook } from '@/rulebook'
 import produce from 'immer'
 import { applyBlocks } from '../cards/commands/addBlock'
@@ -129,25 +130,60 @@ const turnStartEffectFuncs: Record<
             effect.counter * character.calculatedStats.blockMultiplier
         )
 
-        applyBlocks({ targetUids: [character.uid], block, scene })
+        applyBlocks({
+            targetUids: [character.uid],
+            block,
+            scene,
+            fromUid: null,
+        })
     },
     bleedDebuff({ character, scene }) {
-        applyDamage({
-            damage: Math.ceil(character.calculatedStats.constitution * 0.05),
-            targetUid: character.uid,
+        let bleedMultiplicand = 0.05
+        bleedMultiplicand = activateTalentsData({
             scene,
-            piercing: true,
+            key: 'bleedMultiply',
+            data: bleedMultiplicand,
+            extra: { target: character },
         })
+        let damage = Math.ceil(
+            character.calculatedStats.constitution * bleedMultiplicand
+        )
+        damage = activateTalentsData({
+            scene,
+            key: 'preEffectDamage',
+            data: damage,
+            cm: character,
+            extra: { damageType: 'bleed' },
+        })
+        if (damage != 0) {
+            applyDamage({
+                damage,
+                targetUid: character.uid,
+                scene,
+                piercing: true,
+                damageType: 'bleed',
+            })
+        }
     },
     poisonedDebuff({ effect, character, scene }) {
         if (character.effects.find(e => e.id === 'immuneToPoisonBuff')) return
-
-        applyDamage({
-            damage: effect.counter,
-            targetUid: character.uid,
+        let damage = effect.counter
+        damage = activateTalentsData({
             scene,
-            piercing: true,
+            key: 'preEffectDamage',
+            data: damage,
+            cm: character,
+            extra: { damageType: 'poison' },
         })
+        if (damage != 0) {
+            applyDamage({
+                damage,
+                targetUid: character.uid,
+                scene,
+                piercing: true,
+                damageType: 'poison',
+            })
+        }
     },
     fireDebuff({ character, scene }) {
         applyEffect(scene, [character.uid], 'vulnerableDebuff', 2)
@@ -191,16 +227,32 @@ export function calculateStats(
     //@ts-expect-error
     const stance = cm.stance ?? 'neutral'
 
-    const constitution =
-        cm.constitution + getStatModifierAddend(cm, 'constitution')
+    const constitution = Math.ceil(
+        cm.constitution +
+            getStatModifierAddend(cm, 'constitution') +
+            cm.constitution *
+                getStatModifierAddend(cm, 'constitutionMultiplicand')
+    )
 
     const stats: CalculatedCharacterStats = {
         block: cm.block ?? 0,
         blockMultiplier: 1,
         constitution,
-        defense: cm.defense + getStatModifierAddend(cm, 'defense'),
-        magic: cm.magic + getStatModifierAddend(cm, 'magic'),
-        strength: cm.strength + getStatModifierAddend(cm, 'strength'),
+        defense: Math.ceil(
+            cm.defense +
+                getStatModifierAddend(cm, 'defense') +
+                cm.defense * getStatModifierAddend(cm, 'defenseMultiplicand')
+        ),
+        magic: Math.ceil(
+            cm.magic +
+                getStatModifierAddend(cm, 'magic') +
+                cm.magic * getStatModifierAddend(cm, 'magicMultiplicand')
+        ),
+        strength: Math.ceil(
+            cm.strength +
+                getStatModifierAddend(cm, 'strength') +
+                cm.strength * getStatModifierAddend(cm, 'strengthMultiplicand')
+        ),
         isSkipped: false,
         damageDealMultiplicand:
             getDamageDealMulitplicandForStance(stance) +
@@ -214,6 +266,14 @@ export function calculateStats(
         stance,
         taunt: cm.taunt,
         lastTaunt: cm.lastTaunt,
+        critChance: cm.isPc
+            ? (0.05 + getStatModifierAddend(cm, 'critChanceAddend')) *
+              (getStatModifierAddend(cm, 'critChanceMultiplicand') + 1)
+            : 0,
+        dodgeChance: cm.isPc
+            ? (0.01 + getStatModifierAddend(cm, 'dodgeChanceAddend')) *
+              (getStatModifierAddend(cm, 'dodgeChanceMultiplicand') + 1)
+            : 0,
     }
 
     cm.effects?.forEach(effect => {
@@ -286,6 +346,7 @@ export function decrementEffects(
                 if (cm.isPc && whichSide === 'npc') continue
                 if (!cm.isPc && whichSide === 'pc') continue
                 cm.effects.forEach(e => {
+                    if (e.countType === 'proc') return
                     if (
                         passiveClassEffectIds.includes(
                             e.id as PassiveClassEffectId

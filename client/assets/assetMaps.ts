@@ -209,6 +209,7 @@ export const effectAssets: {
     effectValiant: 'char status/valiant.webp',
     effectArcaneFriendship: 'char status/arcaneConnection.webp',
     effectAnHonestLiving: 'char status/anHonestLiving.webp',
+    effectHypochondriac: 'effects/brave.webp',
 }
 
 export const healthBarAssets = {
@@ -697,6 +698,8 @@ export const souvenirAssets: {
     souvenirStinkySandwich: 'souvenirs/Stinky Sandwich.webp',
     souvenirStrangeHat: 'souvenirs/Strange hat.webp',
     souvenirWoolBandana: 'souvenirs/Wool Bandana.webp',
+
+    souvenirHypochondriac: 'souvenirs/souvenirPlaceholder.webp',
 }
 
 export const userAvatarAssets = {

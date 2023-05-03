@@ -60,6 +60,7 @@ export interface ActionArgs {
         targetType?: BasicTargetType
     ]
 
+    chance: [chance: number, success: any, fail: any]
     deal: [damage: number, modifier?: 'piercing', targetType?: BasicTargetType]
     dealCounterTimes: [
         effectId: EffectId,
@@ -93,6 +94,8 @@ export interface ActionArgs {
         conditionalFalseMove: any
     ]
     ifTargetStance: [stanceId: StanceId, conditionalTrueMove: any]
+
+    incrementSouvenir: [idx: number]
 
     acquireSouvenir: [souvenirId: SouvenirId]
     removeSouvenir: [souvenirId: SouvenirId]
@@ -141,6 +144,7 @@ export type Locals = CalculatedCharacterStats & {
     turnStartStance: StanceId
     allStancesDifferent: boolean
     allStancesSame: boolean
+    turnCount: number
 }
 
 export type Anguify<T extends any[]> = { [K in keyof T]: VAngu<T[K]> }
@@ -152,7 +156,7 @@ export type Executors = {
 export type ExplainerContext = {
     command: Command | Card
     characterMeta: CharacterMeta
-    scene?: BattleCursor
+    scene: BattleCursor
 }
 
 export type Explainers = {

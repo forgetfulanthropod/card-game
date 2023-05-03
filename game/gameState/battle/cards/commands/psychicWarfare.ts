@@ -59,10 +59,11 @@ function getDamageWithAdditional({
     attacker: CharacterMeta
     sameTargetAddend: number
     cardUid: CardUid
-    scene?: BattleCursor
+    scene: BattleCursor
 }): number {
     return (
         getDamage({
+            scene,
             damage,
             attacker,
             target: null,

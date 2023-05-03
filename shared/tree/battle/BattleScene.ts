@@ -50,8 +50,9 @@ export interface BattleScene extends SceneHas {
     currentRoom: DungeonRoom
     currentEvent?: EventScene
     nextNpcCommands: NextCommand[]
-    cardsPlayedThisRoom: (Card & { timestamp: string })[]
+    cardsPlayedThisRoom: (Card & { turnCount: number; timestamp: string })[]
     cardsPlayedThisTurn: (Pick<Card, 'characterUid' | 'uid'> & {
+        turnCount: number
         timestamp: string
     })[]
     blocksAppliedThisTurn: { amount: number; targetUid: CharacterUid }[]

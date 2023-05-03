@@ -12,6 +12,8 @@ export function putAllCardsInDrawPile(scene: BattleCursor): void {
                 ...cards.hand,
                 ...cards.discard,
             })
+            cards.hand = {}
+            cards.discard = {}
         })
     )
 }

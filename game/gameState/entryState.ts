@@ -17,14 +17,16 @@ const allCharacterOptionsIds: PlayerCharacterId[] = [
 ]
 
 export function getInitialEntryState(): EntryScene {
-    const { playerCharacterStatsMap: statsMap } = getRulebook()
-
+    const { playerCharacterStatsMap: statsMap, dungeonLevels } = getRulebook()
+    const selectedLevel =
+        dungeonLevels.find(v => v.name === 'Hooligans Bluff') ??
+        dungeonLevels[0]
     return {
         id: 'entry',
         selectedCharacters: [null, null, null],
         fullSelectedCharacterDecks: {},
         allCharacterOptions: allCharacterOptionsIds.map(id => statsMap[id]),
-        selectedLevel: getRulebook().dungeonLevels[0],
+        selectedLevel,
         runId: -1,
     }
 }

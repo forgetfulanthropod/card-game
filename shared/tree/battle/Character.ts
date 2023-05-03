@@ -21,14 +21,24 @@ export type ModifiableStatName =
     | 'magic'
     | 'defense'
     | 'constitution'
+    | 'strengthMultiplicand'
+    | 'magicMultiplicand'
+    | 'defenseMultiplicand'
+    | 'constitutionMultiplicand'
     | 'damageDealMultiplicand'
     | 'damageDealAddend'
     | 'damageTakeMultiplicand'
     | 'damageTakeAddend'
+    | 'critChanceAddend'
+    | 'critChanceMultiplicand'
+    | 'dodgeChanceAddend'
+    | 'dodgeChanceMultiplicand'
 
-export type StatModifiers = Partial<
-    Pick<CalculatedCharacterStats, ModifiableStatName>
->
+// export type StatModifiers = Partial<
+//     Pick<CalculatedCharacterStats, ModifiableStatName>
+// >
+
+export type StatModifiers = Partial<Record<ModifiableStatName, number>>
 
 export type StatModifierExpiration = 'turn' | 'room' | 'run'
 export type StatModifiersMap = Record<StatModifierExpiration, StatModifiers>
@@ -52,7 +62,7 @@ export type CharacterStats = Readonly<{
     Brandify
 
 export type PlayerCharacterStats = Readonly<
-    CharacterStats & { id: PlayerCharacterId; skin?: any }
+    CharacterStats & { id: PlayerCharacterId; skin?: any; talents?: any }
 >
 
 export type NonPlayerCharacterStats = Readonly<
@@ -95,6 +105,8 @@ export interface CalculatedCharacterStats {
     lastTaunt: number
     taunt: number
     stance: StanceId
+    critChance: number
+    dodgeChance: number
 }
 
 export type OwnedCharacterStats = PlayerCharacterStats &
