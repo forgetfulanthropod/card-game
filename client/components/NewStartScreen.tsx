@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react'
-import { getStringFromLocalStorage } from '@/elementsUtil'
+import { getStage, getStringFromLocalStorage } from '@/elementsUtil'
 import { createSiweMessage, openNewTab } from './util'
-import { callServerApi } from '@/callServerApi'
+import { callApi } from '@/callApi'
 import { collectData, initAnalytics } from '@/analytics/collectData'
 import { getClientEnv } from '@/util/getClientEnv'
 require('@solana/wallet-adapter-react-ui/styles.css')
@@ -9,7 +9,6 @@ import { useWeb3Modal } from '@web3modal/react'
 import { Web3Modal, Web3Button } from '@web3modal/react'
 import { useSignMessage, useAccount as useWeb3Wallet } from 'wagmi'
 import { AppContext } from './App'
-import { emitUserId } from '@/socket'
 import {
     AuthToken,
     BUILD_VER,
@@ -26,8 +25,7 @@ import {
     NavIconWrapper,
     PrimaryButton,
 } from './StartScreen/'
-import { callApi } from '@/callApi'
-import { composeDefaultParty } from '@/scenes/entry/CharacterOptions'
+import { socket } from '@/socket'
 
 export type UserDoc = {
     userId: UserID
@@ -39,7 +37,6 @@ export type UserDoc = {
 
 export function NewStartScreen(): JSXElement {
     const GAME_IS_LIVE = getClientEnv('GAME_IS_LIVE')
-    const IS_PRODUCTION = getClientEnv('IS_PRODUCTION') === 'true'
 
     const [userDoc, setUserDoc] = useState<UserDoc>(null)
     const [showTutorial, setShowTutorial] = useState(false)
@@ -48,8 +45,10 @@ export function NewStartScreen(): JSXElement {
     const [showUsernameModal, setShowUsernameModal] = useState(false)
     const [clickedPlay, setClickedPlay] = useState(false)
     const [siweMessage, setSiweMessage] = useState('')
+    // const [loading, setLoading] = useState(false)
 
-    const { setUserId, setInPixi } = useContext(AppContext)
+    const { setUserId, setInPixi, IS_PRODUCTION } =
+        useContext(AppContext)
 
     const { address, isConnected, status } = useWeb3Wallet()
     const { isOpen, open, close, setDefaultChain } = useWeb3Modal()
@@ -58,21 +57,28 @@ export function NewStartScreen(): JSXElement {
     })
 
     const handleStartGame = async (userId: string) => {
-        localStorage.setItem('userId', userId)
-        // await callApi('setInitialGameState', {
-        //     userId,
-        // })
+        console.log('STARTING GAME')
+        callApi('loadGameState', { userId }).then(() => {
+            console.log('gamestate loaded')
+        })
         setUserId(userId)
-        emitUserId(userId)
         setInPixi(true)
+        if (getStage()) {
+            getStage().visible = true
+        }
         collectData('enter_game', {})
-        // await composeDefaultParty()
     }
 
     // TODO
     const handleGuestLogin = async () => {
         console.log('Handling Guest User Login')
-        const { userId, username, nonce } = await callServerApi('login', {}) // get new guest user
+        const { userId, username, nonce } = await callApi('loginGuest', {
+            socketId: socket.id,
+            existingUserId: null,
+        }) // get new guest user
+        localStorage.setItem('userId', userId)
+        localStorage.setItem('nonce', nonce)
+        localStorage.removeItem('walletAddress')
         console.log({ userId, username, nonce })
         setUserDoc({
             userId,
@@ -94,14 +100,14 @@ export function NewStartScreen(): JSXElement {
         walletAddress: WalletAddress,
         nonce: Nonce
     ) => {
-        const existingAuthToken = getStringFromLocalStorage('authToken')
+        const { authToken } = getStringFromLocalStorage('authToken')
         let authIsValid = false
 
-        if (existingAuthToken) {
+        if (authToken) {
             console.log('AuthToken exists in localStorage.')
-            const { result } = await callServerApi('verifyAuthToken', {
+            const { result } = await callApi('verifyAuthToken', {
                 userId,
-                authToken: existingAuthToken,
+                authToken,
             })
             if (result === 'failure') {
                 console.log('Token is invalid!')
@@ -134,14 +140,19 @@ export function NewStartScreen(): JSXElement {
     /** Triggered whenever the user connects wallet */
     const handleWeb3Login = async (walletAddress: WalletAddress) => {
         console.log('Handling Web3 User Login')
-        const { userId, username, nonce } = await callServerApi('login', {
+        const { userId, username, nonce } = await callApi('login', {
             walletAddress,
+            socketId: socket.id,
         })
         const { authIsValid } = await verifyAuthToken(
             userId,
             walletAddress,
             nonce
         )
+
+        localStorage.setItem('userId', userId)
+        localStorage.setItem('nonce', nonce)
+        localStorage.setItem('walletAddress', walletAddress)
 
         if (!authIsValid)
             return console.log('Auth is invalid! Returning early.')
@@ -151,7 +162,7 @@ export function NewStartScreen(): JSXElement {
             userId,
             username,
             userType: 'web3',
-            nonce
+            nonce,
         })
         console.log('Set User Doc!')
         initAnalytics(userId)
@@ -172,17 +183,14 @@ export function NewStartScreen(): JSXElement {
         const signature = await signMessageAsync({
             message,
         })
-        const { authToken, error } = await callServerApi(
-            'authenticateWeb3User',
-            {
-                userId,
-                message,
-                signature,
-            }
-        )
+        const { authToken, error } = await callApi('authenticateWeb3User', {
+            userId,
+            message,
+            signature,
+        })
         console.log({ authToken })
         if (!authToken) return { result: 'failure', error }
-        const verifyRes = await callServerApi('verifyAuthToken', {
+        const verifyRes = await callApi('verifyAuthToken', {
             userId,
             authToken,
         })
@@ -190,6 +198,8 @@ export function NewStartScreen(): JSXElement {
             return { result: verifyRes.result, error: verifyRes.error }
         else console.log('Verified Auth Token!')
         localStorage.setItem('authToken', authToken)
+        localStorage.setItem('nonce', nonce)
+        localStorage.setItem('userId', userId)
         return { result: verifyRes.result }
     }
 
@@ -235,26 +245,49 @@ export function NewStartScreen(): JSXElement {
     }
 
     useEffect(() => {
+        console.debug('*** INITIAL USEEFFECT START***')
         collectData('ui_ux_view', {
             page_title: 'Start Screen',
         })
 
-        // begin game at prev state on refresh for local development
-        console.log('INITIAL USEEFFECT')
-        console.log({ userDoc })
+        // existing wallet users are handled in a different useEffect
+        const loadGameIfExistingGuestUser = async () => {
+            const { userId, walletAddress } = getStringFromLocalStorage(
+                'userId',
+                'walletAddress'
+            )
 
-        const userId = getStringFromLocalStorage('userId')
-        if (!userId) return console.log('no saved userId')
-        else console.log('found saved userId')
+            if (!userId) return console.log('no saved userId')
+            if (walletAddress)
+                return console.log(
+                    'user is web3, exiting guestLogin useEffect handler'
+                )
+            else console.log(`found existing guest userId in localstorage`)
 
-        setUserDoc({ userId, userType: 'guest', username: null })
-        setUserId(userId)
-        setInPixi(true)
+            await callApi('loginGuest', {
+                existingUserId: userId,
+                socketId: socket.id,
+            })
+            await callApi('loadGameState', { userId })
+            setUserDoc({ userId, userType: 'guest', username: null })
+            setUserId(userId)
+            setInPixi(true)
+        }
+
+        loadGameIfExistingGuestUser().then(() => {
+            console.log('Loaded game if existing user')
+        })
+
+        // setLoading(false)
+        console.log('*** INITIAL USEEFFECT END***')
     }, [])
 
     /** Listen to Connect Wallet events, handle web3 login */
     useEffect(() => {
-        if (isConnected && address) {
+        // setLoading(true)
+        console.log('*** ISCONNECTED USEEFFECT START***')
+
+        if (isConnected && address && socket) {
             handleWeb3Login(address).then(res => {
                 if (!res) return
                 const { userId, username } = res
@@ -265,6 +298,8 @@ export function NewStartScreen(): JSXElement {
         if (!isConnected) {
             setUserDoc(null)
         }
+        // setLoading(false)
+        console.log('*** ISCONNECTED USEEFFECT END***')
     }, [isConnected])
 
     useEffect(() => {
@@ -272,7 +307,6 @@ export function NewStartScreen(): JSXElement {
             return setShowUsernameModal(true)
     }, [userDoc])
 
-    // TODO: refactor modals into HOC
     return <>
         {showTutorial && <TutorialModal setShowTutorial={setShowTutorial} />}
         {showClosedGameModal && <ClosedGameModal

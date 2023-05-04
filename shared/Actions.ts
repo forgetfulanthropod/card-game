@@ -3,7 +3,7 @@
  */
 
 import type { SCursor } from 'sbaobab'
-import type { SceneId } from './misc'
+import type { SceneId, WalletAddress } from './misc'
 
 import type {
     AuthToken,
@@ -25,31 +25,33 @@ import type {
     Username,
     Web3UserInfo,
 } from './tree'
+import { AuthRes } from './auth'
+
+// type AuthenticatedServerActions = Partial<BareServerActionsMeta>
+type AuthenticatedServerActions = Pick<BareServerActionsMeta,
+    'endRun' | 'getCurrentRun' | 'getLeaderboard' | 'loadGameState' | 'setInitialGameState' | 'startRun' | 'setUsername'
+>
+
+type AuthenticatedGameActions = BareGameActionArgs
+
+export type AuthenticatedActions = {[K in keyof AuthenticatedServerActions | keyof AuthenticatedGameActions]: boolean}
 
 export interface BareServerActionsMeta {
-    setInitialGameState: {
-        args: { userId: UserID }
-        res: void
+    authenticateGuestUser: {
+        args: { userId: UserID; signature: string }
+        res: AuthRes
     }
-    loadGameState: {
-        args: { userId: UserID }
-        res: Promise<void>
-    }
-    login: {
-        args: { walletAddress?: string }
-        res: Promise<UserInfo & { nonce: Nonce }>
-    }
-    startRun: {
-        args: { userId: UserID }
-        res: Promise<{ runId: RunID }>
-    }
-    getCurrentRun: {
-        args: { userId: UserID }
-        res: Promise<{ runId: RunID } | null>
+    authenticateWeb3User: {
+        args: { userId: UserID; message: string; signature: string }
+        res: AuthRes
     }
     endRun: {
         args: { userId: UserID; restart?: true }
         res: Promise<{ runId: RunID | null }>
+    }
+    getCurrentRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID } | null>
     }
     getNumKaijuInGoodEarth: {
         args: { walletAddress: string }
@@ -59,21 +61,34 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<MappedLeaderboards>
     }
+    // TODO: add unauthenticated get leaderboards action
     getLeaderboardEntryCount: {
         args: Empty
         res: Promise<{ count: number }>
     }
+    loadGameState: {
+        args: { userId: UserID }
+        res: Promise<void>
+    }
+    login: {
+        args: { walletAddress: WalletAddress, socketId: string }
+        res: Promise<UserInfo & { nonce: Nonce }>
+    }
+    loginGuest: {
+        args: { existingUserId: UserID | null, socketId: string }
+        res: Promise<UserInfo & { nonce: Nonce }>
+    }
+    setInitialGameState: {
+        args: { userId: UserID }
+        res: Promise<void>
+    }
+    startRun: {
+        args: { userId: UserID }
+        res: Promise<{ runId: RunID }>
+    }
     setUsername: {
         args: { userId: UserID; username: Username }
         res: Promise<{ result: 'success' | 'failure' }>
-    }
-    authenticateWeb3User: {
-        args: { userId: UserID; message: string; signature: string }
-        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
-    }
-    authenticateGuestUser: {
-        args: { userId: UserID; signature: string }
-        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
     }
     verifyAuthToken: {
         args: { authToken: AuthToken, userId: UserID }
@@ -85,7 +100,7 @@ export type BareServerActionArgs = {
     [K in keyof BareServerActionsMeta]: BareServerActionsMeta[K]['args']
 }
 
-interface BareGameActionArgs {
+export interface BareGameActionArgs {
     activateOrb: { characterUid: CharacterUid; orb: Orb }
     addCardToDeck: { cardUid: CardUid }
     collectLoot: Empty
@@ -158,8 +173,16 @@ export type GameActionCall = ToGameActionCall[keyof ToGameActionCall]
 
 export type AllActionArgs = BareServerActionArgs & BareGameActionArgs
 
+export type AllActions = ServerActions & GameActions
+
+export type AllActionRes = {
+    [K in keyof AllActions]: ReturnType<AllActions[K]>
+}
+
 /** Name of any action */
-export type ActionName = keyof BareGameActionArgs | keyof BareServerActionArgs
+export type GameActionName = keyof BareGameActionArgs
+export type ServerActionName = keyof BareServerActionArgs
+export type ActionName = GameActionName | ServerActionName
 
 /** A no-input game action */
 interface BareInternalActionArgs {

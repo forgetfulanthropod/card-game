@@ -1,6 +1,7 @@
 import type { ServerActions, AuthUserDBActionProps } from 'shared'
 import { getDbClient, sql as sqlTag } from '@/db/client'
 
+/** probably deprecated; "Good Earth" in Arbitrum will essentially just be the smart contract */
 export const getNumKaijuInGoodEarth: ServerActions['getNumKaijuInGoodEarth'] = async ({ walletAddress }) => {
     logger.info(`Checking Kaiju in Good Earth for: ${walletAddress}`)
     let sql = sqlTag.typeAlias('number')

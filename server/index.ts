@@ -1,87 +1,62 @@
-import type { Server } from 'http'
 import type { Application } from 'express'
 import express from 'express'
-import { getLogger, setGlobalRandomSeed } from 'game'
-import type { Logger } from 'winston'
+import { setGlobalRandomSeed } from 'game'
 import { config as loadDotEnv } from 'dotenv'
 import cors from 'cors'
+import { mountSocketServer } from './IO'
+import { getServerEnv } from '@/../builds/tsc/shared/code'
+import { buildInfo } from './build'
 
-import { mountIo as fullMountIo } from './IO'
-
-/** Required for kaiju-router */
-export function mountIo(server: Server, prefix: string): void {
-    fullMountIo(server, buildInfo, prefix)
-}
-
-loadDotEnv()
-
-declare global {
-    // eslint-disable-next-line no-var
-    var logger: Logger
-}
-global.logger = getLogger()
-
-if (process.env.LOG_LEVEL) {
-    logger.transports.forEach(transport => {
-        transport.level = process.env.LOG_LEVEL
-    })
-    console.log(`log level is ${process.env.LOG_LEVEL}`)
-}
-
-if (process.env.FIXED_SEED === 'yes') {
-    logger.info('NOTE: USING FIXED SEED')
-    setGlobalRandomSeed('seedThree')
-}
-
-if (process.env.FORCE_NEW_DB === 'yes') {
-    // TODO
-}
-
-const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes'
-
-const port = process.env.PORT ?? 3000
-
-export const buildInfo = {
-    port,
-    gitBranch: process.env.SERVER_GIT_BRANCH ?? '',
-    gitCommit: process.env.SERVER_GIT_COMMIT ?? '',
-    buildTime: process.env.SERVER_BUILD_TIME ?? '',
-}
-logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
-
-const app: Application = express()
-
-app.use(cors())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-
-// express static server, ovverides maxAge for png files:
-if (isStagingServer) {
-    // if (true) {
-    app.use(
-        '/assets',
-        express.static(__dirname + '../../public/assets', {
-            extensions: ['.atlas', '.txt'],
-            maxAge: '1d',
-        })
-    )
-    app.use(
-        '/',
-        express.static(__dirname + '../../public/', {
-            extensions: ['.atlas', '.txt'],
-        })
-    )
-}
-
-if (process.env.USE_ROUTER !== 'yes') {
+const main = () => {
     loadDotEnv()
+
+    const app: Application = express()
+    const port = getServerEnv('PORT')
+
+    // setup express
+    app.use(cors())
+    app.use(express.json())
+    app.use(express.urlencoded({ extended: true }))
+
+    // set static server to ovveride maxAge for png files:
+    const isStagingServer = getServerEnv('DEV_STATIC_ASSETS') === 'yes'
+    if (isStagingServer) {
+        app.use(
+            '/assets',
+            express.static(__dirname + '../../public/assets', {
+                extensions: ['.atlas', '.txt'],
+                maxAge: '1d',
+            })
+        )
+        app.use(
+            '/',
+            express.static(__dirname + '../../public/', {
+                extensions: ['.atlas', '.txt'],
+            })
+        )
+    }
+
+    // logger setup
+    const LOG_LEVEL = getServerEnv('LOG_LEVEL')
+    logger.transports.forEach(transport => {
+        transport.level = LOG_LEVEL
+    })
+    logger.info(`LOG LEVEL: ${LOG_LEVEL}`)
+
+    // set global seed
+    if (getServerEnv('FIXED_SEED') === 'true') {
+        logger.info('NOTE: USING FIXED SEED')
+        setGlobalRandomSeed('seedThree')
+    }
+
     const server = app.listen(port, function () {
         logger.info(`Serving on http://localhost:${port}`)
     })
-    fullMountIo(server, buildInfo, '')
+
+    // everything handled from socketio
+    mountSocketServer(server, '')
+
+    logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 }
 
-/** Required for kaiju-router */
-export function getApp(): typeof app {
-    return app
-}
+main()

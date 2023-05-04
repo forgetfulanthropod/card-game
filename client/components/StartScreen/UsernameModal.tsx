@@ -1,4 +1,4 @@
-import { callServerApi } from '@/callServerApi'
+import { callApi } from '@/callApi'
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import React, { useRef, useState } from 'react'
 import { MAX_USERNAME_LENGTH, MIN_USERNAME_LENGTH, UserID } from 'shared'
@@ -24,7 +24,7 @@ export const UsernameModal = ({
         if (!userDoc) return
         setIsLoading(true)
         const { userId } = userDoc
-        const result = await callServerApi('setUsername', {
+        const result = await callApi('setUsername', {
             userId,
             username: typedUsername,
         })

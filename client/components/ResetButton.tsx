@@ -12,8 +12,8 @@ import {
     toggleBooleanInLocalStorage,
     toggleIsFrameRateCapped,
     isFrameRateCapped,
+    getStage,
 } from '@/elementsUtil'
-import { callServerApi } from '@/callServerApi'
 import { getBattleScene } from '@/data'
 import { enableMotionFX } from '@/scenes/shared'
 import { AppContext } from './App'
@@ -63,7 +63,7 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
     const handleRestartRun = async () => {
         const runState = getBattleScene().get('state')
         if (runState !== 'lost' && runState !== 'won') {
-            await callServerApi('endRun', {
+            await callApi('endRun', {
                 userId: userId,
                 restart: true,
             })
@@ -76,13 +76,8 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
 
     const handleBackToMenu = async () => {
         console.log('handleBackToMenu...')
-        // if (IS_LOCAL) {
-            localStorage.removeItem('userId')
-        // }
-        await callApi('setInitialGameState', {
-            userId,
-        })
-        composeDefaultParty()
+        localStorage.removeItem('userId')
+        getStage().visible = false
         setInPixi(false)
         setShowMenu(false)
     }

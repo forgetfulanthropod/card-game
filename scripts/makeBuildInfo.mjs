@@ -27,7 +27,11 @@ const REQUIRED_SERVER_ENV_KEYS =
      'INFLUX_ORG',
      'INFLUX_BUCKET',
      'INFLUX_TOKEN',
-     'JWT_TOKEN_SECRET'
+     'JWT_TOKEN_SECRET',
+     'LOG_LEVEL',
+     'FIXED_SEED',
+     'PORT',
+     'DEV_STATIC_ASSETS'
     ]
 
 const REQUIRED_CLIENT_ENV_KEYS =

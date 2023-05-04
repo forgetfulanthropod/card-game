@@ -6,6 +6,7 @@ export type Username = string
 export type UserInfo = {
     userId: UserID
     username: Username | null
+    userType: UserType
 }
 
 export type Web3UserInfo = UserInfo

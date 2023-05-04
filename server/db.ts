@@ -1,3 +1,4 @@
+// todo change file name to gamestateDB.ts
 import type { GameState, Gamecursor, UserID } from 'shared'
 import { Level } from 'level'
 
