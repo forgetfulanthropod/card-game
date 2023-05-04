@@ -4,7 +4,7 @@ import { setGlobalRandomSeed } from 'game'
 import { config as loadDotEnv } from 'dotenv'
 import cors from 'cors'
 import { mountSocketServer } from './IO'
-import { getServerEnv } from '@/../builds/tsc/shared/code'
+import { getServerEnv } from 'shared'
 import { buildInfo } from './build'
 
 const main = () => {
