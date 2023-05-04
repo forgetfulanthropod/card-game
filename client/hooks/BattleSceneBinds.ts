@@ -72,24 +72,24 @@ const otherKeys = ['Escape', ' ']
 
 const characterIndices = [0, 1, 2, 3, 4, 5]
 
-const chooseStance = (scene: ROCursor<BattleScene>, key: string) => {
-    const characters = Object.entries(scene.get('allCharacters')).filter(
-        ([k, _]) => k.startsWith('pc')
-    )
-    const action = stanceKeybindMap[key]
-    for (let idx of action.characterIndex) {
-        const character = characters[idx][1]
-        if (character.health <= 0) continue
-        callApi('chooseStance', {
-            characterUid: character.uid,
-            stanceId: action.stanceId,
-        })
-    }
-    if (globalShowSims.val === true) {
-        globalShowSims.set(false)
-        globalShowSims.set(true)
-    }
-}
+// const chooseStance = (scene: ROCursor<BattleScene>, key: string) => {
+// const characters = Object.entries(scene.get('allCharacters')).filter(
+//     ([k, _]) => k.startsWith('pc')
+// )
+// const action = stanceKeybindMap[key]
+// for (let idx of action.characterIndex) {
+//     const character = characters[idx][1]
+//     if (character.health <= 0) continue
+//     callApi('chooseStance', {
+//         characterUid: character.uid,
+//         stanceId: action.stanceId,
+//     })
+// }
+// if (globalShowSims.val === true) {
+//     globalShowSims.set(false)
+//     globalShowSims.set(true)
+// }
+// }
 
 const selectCard = (
     scene: ROCursor<BattleScene>,
@@ -161,7 +161,7 @@ export const battleKeybinds = (
             return
         e.preventDefault()
         if (Object.keys(stanceKeybindMap).includes(e.key)) {
-            chooseStance(scene, e.key)
+            // chooseStance(scene, e.key)
         } else if (numbersArray.includes(e.key)) {
             const num = Number(e.key)
             const idx = num == 0 ? 9 : num - 1

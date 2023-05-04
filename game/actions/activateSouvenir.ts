@@ -4,9 +4,11 @@ import { GameActions } from 'shared'
 
 export const activateSouvenir: GameActions['activateSouvenir'] = args => {
     const scene = getBattleSceneIn(args.game)
-    const souvenir = scene.get('souvenirs').find(s => s.id === args.souvenirId)
+    const souvenirs = scene.get('souvenirs')
+    const idx = souvenirs.findIndex(s => s.id === args.souvenirId)
+    const souvenir = souvenirs[idx]
 
     if (!souvenir || !souvenir.on.activate) return
 
-    activateSouvenirImplementation(souvenir, 'activate', scene)
+    activateSouvenirImplementation(souvenir, 'activate', scene, idx)
 }

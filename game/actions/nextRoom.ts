@@ -5,13 +5,16 @@ import {
     updateNpcMoves,
 } from '@/gameState'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import {
+    activateTalents,
+    activateTalentsData,
+} from '@/gameState/battle/Talents'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import { BattleCursor, CharacterClass, DungeonRoom, GameActions } from 'shared'
 import { produce } from 'immer'
 import { calculateBaseTaunt, objFilter } from 'shared/code'
-import type { Species } from 'shared'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -23,8 +26,13 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     scene.apply('roomUidsVisited', uids => [...uids, chosenRoom.uid])
     scene.set('currentRoom', chosenRoom)
 
-    if (chosenRoom.category === 'restSite')
+    if (chosenRoom.category === 'restSite') {
         activateSouvenirs('enterRestSite', scene)
+        activateTalents({ scene, key: 'enterRestSite' })
+    } else if (chosenRoom.category === 'events') {
+        activateSouvenirs('enterEventSite', scene)
+        activateTalents({ scene, key: 'enterEventSite' })
+    }
 
     trackMetric('nextRoom', { choice: args.choice, chosenRoom, scene })
 
@@ -70,7 +78,9 @@ function prepareBattleScene(scene: BattleCursor, chosenRoom: DungeonRoom) {
     setBaseTaunt(scene)
     setRoundEnergy(scene)
     activateSouvenirs('battleStart', scene)
+    activateTalents({ scene, key: 'battleStart' })
     activateSouvenirs('turnStart', scene)
+    activateTalents({ scene, key: 'turnStart' })
 
     scene.set('state', 'in battle')
     scene.set('lootScreenHasOpened', false)
@@ -91,7 +101,13 @@ const setBaseTaunt = (scene: BattleCursor) => {
         produce(ac => {
             for (const [id, cm] of Object.entries(ac)) {
                 if (!cm.isPc) continue
-                const taunt = calculateBaseTaunt(cm)
+                let taunt = calculateBaseTaunt(cm)
+                taunt = activateTalentsData({
+                    scene,
+                    key: 'tauntBase',
+                    data: taunt,
+                    cm,
+                })
                 cm.taunt = taunt
                 cm.lastTaunt = taunt
             }

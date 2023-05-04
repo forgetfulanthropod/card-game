@@ -63,9 +63,34 @@ export const effectIds = [
     'damageTakeAddendDebuff',
     'lockStanceDebuff',
     'valiant',
-    'arcaneConnection',
+    'arcaneFriendship',
+    'anHonestLiving',
+    'hypochondriac',
+] as const
+
+export const turnStartEffectIds = [
+    'bleedDebuff',
+    'poisonedDebuff',
+    'passiveBlockBuff',
+    'fireDebuff',
+    'yodelBuff',
+] as const
+export type TurnStartEffectId = typeof turnStartEffectIds[number]
+
+export const passiveClassEffectIds = [
+    'valiant',
+    'arcaneFriendship',
     'anHonestLiving',
 ] as const
+export type PassiveClassEffectId = typeof passiveClassEffectIds[number]
+
+export const procEffectIds = ['hypochondriac'] as const
+export type ProcEffectId = typeof procEffectIds[number]
+
+export type StaticEffectId = Exclude<
+    EffectId,
+    TurnStartEffectId | PassiveClassEffectId | ProcEffectId
+>
 
 /** Effects which are cleared on turn end */
 export const turnEndClearEffects: EffectId[] = ['smallDamageIncreaseBuff']
@@ -75,4 +100,6 @@ export type EffectId = typeof effectIds[number]
 export interface Effect {
     counter: number
     id: EffectId
+    type?: 'buff' | 'debuff'
+    countType?: 'turn' | 'proc'
 }

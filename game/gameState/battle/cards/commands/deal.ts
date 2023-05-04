@@ -15,6 +15,7 @@ export const explain: Explainers['deal'] = (dslArgs, context) => {
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
     let explication = `deal ${damageHtmlArr[0]}${getDamage({
+        scene: context.scene,
         damage: damage,
         attacker: context.characterMeta,
         target: null,
@@ -56,11 +57,12 @@ export const execute: Executors['deal'] = ({
     }).forEach(
         targetUid =>
             (totalDamage += applyDamage({
+                scene,
                 damage,
                 targetUid,
                 attackerUid: command.characterUid,
-                scene,
                 piercing: modifier === 'piercing',
+                cardId: command.id,
             }))
     )
     if (totalDamage > 20) {

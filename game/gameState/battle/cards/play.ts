@@ -34,7 +34,11 @@ export function play({
 
     scene.apply('cardsPlayedThisRoom', cards => [
         ...cards,
-        { ...card, timestamp: new Date().toISOString() },
+        {
+            ...card,
+            turnCount: scene.get('turnCount'),
+            timestamp: new Date().toISOString(),
+        },
     ])
 
     scene.apply('cardsPlayedThisTurn', cards => [
@@ -42,6 +46,7 @@ export function play({
         {
             uid: card.uid,
             characterUid: card.characterUid,
+            turnCount: scene.get('turnCount'),
             timestamp: new Date().toISOString(),
         },
     ])

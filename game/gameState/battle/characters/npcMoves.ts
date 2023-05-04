@@ -16,7 +16,7 @@ export function getNpcMoves(scene: BattleCursor): NextCommand[] {
     let simulatedScene = new SBaobab(scene.deepClone()).select()
 
     return cmds.map(command => {
-        const targetUids = getCommandTargets(scene.get(), command)
+        const targetUids = getCommandTargets(scene, command)
         let outcome: CommandOutcome
         ;[outcome, simulatedScene] = simulateCommand({
             command,

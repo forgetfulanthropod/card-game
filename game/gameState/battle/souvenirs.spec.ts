@@ -21,6 +21,7 @@ export const suites = {
                         k =>
                             k &&
                             k != 'acquire' &&
+                            //@ts-expect-error
                             activateSouvenir(souvenir, k, scene)
                     )
             })

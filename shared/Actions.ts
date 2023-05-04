@@ -69,15 +69,23 @@ export interface BareServerActionsMeta {
     }
     authenticateWeb3User: {
         args: { userId: UserID; message: string; signature: string }
-        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
+        res: Promise<{
+            result: 'success' | 'failure'
+            authToken?: AuthToken
+            error?: string
+        }>
     }
     authenticateGuestUser: {
         args: { userId: UserID; signature: string }
-        res: Promise<{ result: 'success' | 'failure', authToken?: AuthToken, error?: string }>
+        res: Promise<{
+            result: 'success' | 'failure'
+            authToken?: AuthToken
+            error?: string
+        }>
     }
     verifyAuthToken: {
-        args: { authToken: AuthToken, userId: UserID }
-        res: Promise<{ result: 'success' | 'failure', error?: string }>
+        args: { authToken: AuthToken; userId: UserID }
+        res: Promise<{ result: 'success' | 'failure'; error?: string }>
     }
 }
 
@@ -113,7 +121,7 @@ interface BareGameActionArgs {
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
-    chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
+    // chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
     setRunId: { userId: UserID; runId: RunID }
 
     //test only start

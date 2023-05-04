@@ -1,36 +1,38 @@
-import type { StanceId, GameActions } from 'shared'
+export {}
 
-import { getBattleSceneIn } from '@/util'
-import { updateNpcMoves, updateHand } from '@/gameState'
-import { trackMetric } from 'server/metrics'
+// import type { StanceId, GameActions } from 'shared'
 
-export const chooseStance: GameActions['chooseStance'] = args => {
-    const { characterUid, stanceId } = args
-    const scene = getBattleSceneIn(args.game)
+// import { getBattleSceneIn } from '@/util'
+// import { updateNpcMoves, updateHand } from '@/gameState'
+// import { trackMetric } from 'server/metrics'
 
-    const characterCursor = scene.select('allCharacters').select(characterUid)
-    const character = characterCursor.get()
+// export const chooseStance: GameActions['chooseStance'] = args => {
+//     const { characterUid, stanceId } = args
+//     const scene = getBattleSceneIn(args.game)
 
-    if (
-        !character.isPc ||
-        character.hasMoved ||
-        !scene.get().isPlayerTurn
-        //  || scene.get().selectedCharacter !== character.uid
-    )
-        return
+//     const characterCursor = scene.select('allCharacters').select(characterUid)
+//     const character = characterCursor.get()
 
-    logger.debug(`${character.id} setting stance to ${stanceId}`)
+//     if (
+//         !character.isPc ||
+//         character.hasMoved ||
+//         !scene.get().isPlayerTurn
+//         //  || scene.get().selectedCharacter !== character.uid
+//     )
+//         return
 
-    characterCursor.select('stance').set(stanceId)
+//     logger.debug(`${character.id} setting stance to ${stanceId}`)
 
-	// TODO: disable until all metrics write are async;
-	// otherwise delay in changing stance doesn't feel good
-	// discussion: possibly don't even need this since stance is included
-	// with play card
+//     characterCursor.select('stance').set(stanceId)
 
-    // trackMetric('chooseStance', { character, stanceId, scene })
+// 	// TODO: disable until all metrics write are async;
+// 	// otherwise delay in changing stance doesn't feel good
+// 	// discussion: possibly don't even need this since stance is included
+// 	// with play card
 
-    updateNpcMoves(scene)
+//     // trackMetric('chooseStance', { character, stanceId, scene })
 
-    updateHand(scene)
-}
+//     updateNpcMoves(scene)
+
+//     updateHand(scene)
+// }

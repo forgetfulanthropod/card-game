@@ -1,13 +1,6 @@
-import { vals } from 'shared/code'
-import type { Datum } from 'datums'
-import { datum } from 'datums'
-import type { CardUid } from 'shared'
-import { NUM_DRAFT_CARD_OPTIONS } from 'shared'
-import { ConfirmButton, ModalBackdrop } from '@sharedElements'
-import { AdjustmentFilter } from 'pixi-filters'
-import { CardEl } from './Card'
-import { animateTo } from './Hand'
+import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
+import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -16,15 +9,20 @@ import {
     getTexture,
     glowFilter,
     If,
-    RoundedRectangleGradientSprite,
     Sprite,
-    Text,
 } from '@/elementsUtil'
-import type { PixiContainer, TweenablePixiContainer } from '@/elementsUtil'
 import { selectedForTargetingCardUid, toDatum } from '@/util'
-import { callApi } from '@/callApi'
+import { ConfirmButton, ModalBackdrop } from '@sharedElements'
+import type { Datum } from 'datums'
+import { datum } from 'datums'
+import { AdjustmentFilter } from 'pixi-filters'
+import type { CardUid } from 'shared'
+import { NUM_DRAFT_CARD_OPTIONS } from 'shared'
+import { vals } from 'shared/code'
+import { CardEl } from './Card'
+import { animateTo } from './Hand'
 
-export const CARD_WIDTH = 240
+export const CARD_WIDTH = 220
 
 export function CardAdder(): PixiContainer {
     // const w = 400
@@ -101,6 +99,8 @@ function Options(
             CardEl({
                 card,
                 width: CARD_WIDTH,
+                explanationsAdjustX: i !== 2 ? 100 : 0,
+                // explanationsOnLeft: i === 2,
                 events: {
                     pointerup() {
                         cardEls.forEach(el => {

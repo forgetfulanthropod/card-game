@@ -26,20 +26,20 @@ export function updateWizardAbility(scene: BattleCursor) {
     ).length
 
     if (
-        numPlayersOfCardsThisTurn >
-        (wizardsInParty[0].effects.find(e => e.id === 'arcaneConnection')
-            ?.counter ?? 0)
+        numPlayersOfCardsThisTurn !==
+        (wizardsInParty[0].effects.find(e => e.id === 'arcaneFriendship')
+            ?.counter ?? -1)
     ) {
         scene.apply(
             'allCharacters',
             produce(allCharacters => {
                 const effect: Effect = {
-                    id: 'arcaneConnection',
+                    id: 'arcaneFriendship',
                     counter: numPlayersOfCardsThisTurn,
                 }
                 wizardsInParty.forEach(wiz => {
                     const eIndex = allCharacters[wiz.uid].effects.findIndex(
-                        e => e.id === 'arcaneConnection'
+                        e => e.id === 'arcaneFriendship'
                     )
                     if (~eIndex) allCharacters[wiz.uid].effects[eIndex] = effect
                     else allCharacters[wiz.uid].effects.unshift(effect)
@@ -75,25 +75,37 @@ export function maybeIncrementKnightAbility(
     }
 }
 
+const NUM_VALIANT_STACKS_AT_RESET = 2
 export function maybeResetKnightAbilityCounter(
     scene: BattleCursor,
-    attacker: CharacterMeta | undefined
+    cm: CharacterMeta
 ) {
     const shouldClear =
-        attacker?.class === 'knight' &&
-        (attacker.effects.find(e => e.id === 'valiant')?.counter ?? 0) >= 5
+        cm?.class === 'knight' &&
+        (cm.effects.find(e => e.id === 'valiant')?.counter ?? 0) >=
+            NUM_VALIANT_STACKS_AT_RESET
 
-    if (shouldClear)
-        scene.select('allCharacters', attacker.uid).apply(
-            'effects',
-            produce(effects => {
-                effects.forEach(e => {
-                    if (e.id === 'valiant') e.counter = 0
-                })
-            })
-        )
+    if (shouldClear) resetKnightAbilityCounter(scene, cm)
 
     return shouldClear
+}
+
+export function resetKnightAbilityCounter(
+    scene: BattleCursor,
+    cm?: CharacterMeta
+) {
+    ;(cm
+        ? [cm]
+        : vals(scene.get('allCharacters')).filter(cm => cm.class === 'knight')
+    ).forEach(cm => {
+        scene.select('allCharacters', cm.uid).apply(
+            'effects',
+            produce(effects => {
+                const index = effects.findIndex(e => e.id === 'valiant')
+                if (~index) effects[index] = { id: 'valiant', counter: 0 }
+            })
+        )
+    })
 }
 
 export function maybeActivateRogueAbility(

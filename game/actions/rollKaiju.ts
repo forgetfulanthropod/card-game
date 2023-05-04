@@ -34,6 +34,7 @@ export const rollKaiju: GameActions['rollKaiju'] = args => {
                 class: rolledCharacter.class,
                 ...stats,
                 skin: rolledCharacter.skin,
+                talents: rolledCharacter.talents,
             }
             logger.debug(characterStats)
             selected[args.placeIndex] = equipSword({

@@ -18,13 +18,13 @@ import {
     Sprite,
     Text,
 } from '@/elementsUtil'
-import { compose, datum } from 'datums'
+import { compose, Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import {
     CharacterUid,
     EventChoice,
     EventScene,
-    SouvenirActivationKey,
+    Souvenir,
     souvenirMap,
 } from 'shared'
 import { EquipSouvenirInterface } from './EquipSouvenirInterface'
@@ -44,6 +44,8 @@ export function EventSceneEl(): PixiContainer {
     if (event == null)
         throw new Error('trying to render event scene without event ID')
 
+    const newSouvenirsDatum = datum<Souvenir[]>([])
+
     return Container(
         {},
         // Adjust(
@@ -57,8 +59,8 @@ export function EventSceneEl(): PixiContainer {
         Frame(),
         Graphic(event),
         Banner(event),
-        SouvenirsEls(),
-        TextAndButtons(event)
+        SouvenirsEls(newSouvenirsDatum),
+        TextAndButtons(event, newSouvenirsDatum)
     )
 }
 
@@ -121,7 +123,10 @@ function Graphic(event: EventScene) {
     )
 }
 
-function TextAndButtons(event: EventScene) {
+function TextAndButtons(
+    event: EventScene,
+    newSouvenirsDatum: Datum<Souvenir[]>
+) {
     let cumulativeButtonHeight = 0
 
     const selectedChoice = datum<null | EventResponse>(null)
@@ -135,17 +140,21 @@ function TextAndButtons(event: EventScene) {
         If(
             showPostResponsePrompts,
             () => {
-                const souvenirId =
-                    event.choices[selectedChoice.val!.index].souvenirId
+                const souvenir =
+                    souvenirMap[
+                        event.choices[selectedChoice.val!.index]?.souvenirId!
+                    ]
+                if (souvenir) newSouvenirsDatum.set([souvenir])
 
                 return Container(
                     {},
                     Text({
-                        text: event.choices[
-                            selectedChoice.val!.index
-                        ].postPrompts
-                            .map(prompt => prompt)
-                            .join('\n\n'),
+                        text:
+                            event.choices[selectedChoice.val!.index].text +
+                            '\n\n' +
+                            event.choices[selectedChoice.val!.index].postPrompts
+                                .map(prompt => prompt)
+                                .join('\n\n'),
                         style: {
                             wordWrap: true,
                             wordWrapWidth: BASE_WIDTH * 0.35,
@@ -162,27 +171,27 @@ function TextAndButtons(event: EventScene) {
                                     callApi(
                                         'chooseEventResponse',
                                         selectedChoice.val!
-                                    )
+                                    ).then(() => newSouvenirsDatum.set([]))
                                 },
                             },
                         }),
                         { y: BASE_HEIGHT * 0.62 }
-                    ),
-                    ...(souvenirId
-                        ? [
-                              Sprite({
-                                  src: `souvenir${upperFirst(
-                                      souvenirId
-                                  )}` as SouvenirAssetKey,
-                                  width: 150,
-                                  height: 150,
-                                  anchor: 0.5,
-                                  x: -BASE_WIDTH * 0.5,
-                                  y: -BASE_HEIGHT * 0.07,
-                                  filters: [glowFilter],
-                              }),
-                          ]
-                        : [])
+                    )
+                    // ...(souvenirId
+                    //     ? [
+                    //           Sprite({
+                    //               src: `souvenir${upperFirst(
+                    //                   souvenirId
+                    //               )}` as SouvenirAssetKey,
+                    //               width: 150,
+                    //               height: 150,
+                    //               anchor: 0.5,
+                    //               x: -BASE_WIDTH * 0.5,
+                    //               y: -BASE_HEIGHT * 0.07,
+                    //               filters: [glowFilter],
+                    //           }),
+                    //       ]
+                    //     : [])
                 )
             },
             () =>

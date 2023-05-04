@@ -15,6 +15,7 @@ import { EntryCursor, isProduction } from '@/util'
 import { weightedRandom } from '@/util'
 
 import { emit } from '@/util'
+import { activateTalentsData } from '../Talents'
 
 export function getAllPcs(scene: BattleCursor | BattleScene): CharacterMeta[] {
     return vals(
@@ -138,28 +139,32 @@ function getPCTarget(
 }
 
 const targetEnemies = (
-    scene: BattleScene,
+    scene: BattleCursor,
     command: Command
 ): CharacterUid[] => {
-    for (const v of scene['nextNpcCommands']) {
+    for (const v of scene.get('nextNpcCommands')) {
         if (v.command.characterUid == command.characterUid) {
             return v.targetUids
         }
     }
     const targets: CharacterUid[] = []
     const taunts: Record<CharacterUid, number> = Object.fromEntries(
-        getLivingPcs(scene).map(c => {
-            const t = calculateTaunt(c)
-            return [c.uid, t]
+        getLivingPcs(scene.get()).map(cm => {
+            let t = calculateTaunt(cm)
+            t = activateTalentsData({
+                scene,
+                key: 'taunt',
+                data: t,
+                cm,
+            })
+            return [cm.uid, Math.max(t, 0)]
         })
     )
-    let userMessage = `acquiring targets for ${command.characterUid} ${
-        scene.allCharacters[command.characterUid].id ?? ''
-    } attack ${command.id}`
+    const characterName =
+        scene.get('allCharacters', command.characterUid, 'id') ?? ''
+    let userMessage = `acquiring targets for ${command.characterUid} ${characterName} attack ${command.id}`
     logger.debug(
-        `acquiring targets for ${command.characterUid}  ${
-            scene.allCharacters[command.characterUid].id ?? ''
-        } attack ${command.id}`
+        `acquiring targets for ${command.characterUid}  ${characterName} attack ${command.id}`
     )
     let weightCdf = weightsToCDF(taunts)
     logger.debug(weightCdf)
@@ -187,13 +192,13 @@ const targetEnemies = (
             type: 'message',
             data: userMessage,
         } as NetworkEvent<string, unknown>
-        emit({ userId: scene.userId, event: networkEventData })
+        emit({ userId: scene.get('userId'), event: networkEventData })
     }
     return targets
 }
 
 export function getCommandTargets(
-    scene: BattleScene,
+    scene: BattleCursor,
     command: Command
 ): CharacterUid[] {
     if (command.targetType === 'enemies') {
@@ -206,9 +211,9 @@ export function getCommandTargets(
         }
         return targets
     } else if (command.targetType === 'allEnemies') {
-        return getLivingPcs(scene).map(c => c.uid)
+        return getLivingPcs(scene.get()).map(c => c.uid)
     } else if (command.targetType === 'allFriends') {
-        return getLivingNpcs(scene).map(c => c.uid)
+        return getLivingNpcs(scene.get()).map(c => c.uid)
     } else if (command.targetType === 'self') {
         return [command.characterUid]
     }

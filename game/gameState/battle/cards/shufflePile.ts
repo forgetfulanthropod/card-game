@@ -9,6 +9,5 @@ export function shufflePile(pile: Pile): Pile {
     shuffle(keys(pile)).forEach(
         pileKey => (newPile = { ...newPile, [pileKey]: pile[pileKey] })
     )
-
     return newPile
 }

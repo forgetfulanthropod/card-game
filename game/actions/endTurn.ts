@@ -10,6 +10,8 @@ import { trackMetric } from 'server/metrics'
 import { discardAllCards } from '@/gameState/battle/cards/discardUtil'
 
 import { produce } from 'immer'
+import { updateWizardAbility } from '@/gameState/battle/characters/activateClassAbility'
+import { activateTalents } from '@/gameState/battle/Talents'
 
 const TIME_AFTER_PLAYER_MOVE = 1500
 
@@ -21,9 +23,7 @@ export const endTurn: GameActions['endTurn'] = args => {
         scene.get('state') !== 'in battle' ||
         scene.get('isInMap') === true
     ) {
-        logger.warn(
-            `${scene.get('userId')} tried to end turn when not allowed`
-        )
+        logger.warn(`${scene.get('userId')} tried to end turn when not allowed`)
         return
     }
 
@@ -34,6 +34,7 @@ export const endTurn: GameActions['endTurn'] = args => {
     applyTurnStartEffects(scene, 'npc')
 
     activateSouvenirs('turnEnd', scene)
+    activateTalents({ scene, key: 'turnEnd' })
 
     trackStateChanges(scene)
 
@@ -67,6 +68,7 @@ function setDefaultEndPlayerTurnState(scene: BattleCursor) {
     clearBlock(scene, 'npc')
 
     scene.set('cardsPlayedThisTurn', [])
+    updateWizardAbility(scene)
     scene.set('numAllowedToKeep', 0)
     setAllCharactersToUnmoved(scene)
     discardAllCards(scene)

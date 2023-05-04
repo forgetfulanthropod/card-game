@@ -13,6 +13,7 @@ import {
 import { getBattleSceneIn } from '@/util'
 import { checkServerScoringEvent } from '@/gameState/battle/score/checkServerScoringEvent'
 import { activateSouvenirs } from '@/gameState/battle/activateSouvenirs'
+import { activateTalents } from '@/gameState/battle/Talents'
 import { getRoomScoreCounter } from '@/gameState/battle/score'
 import { clearCharacterStatModifiers } from '@/gameState/battle/characters/clearCharacterStatModifiers'
 import {
@@ -41,6 +42,7 @@ export const endNpcTurn: InternalActions['endNpcTurn'] = ({ game }): void => {
     updateWizardAbility(scene)
 
     activateSouvenirs('turnStart', scene) // buffs/debuffs for calcs
+    activateTalents({ scene, key: 'turnStart' })
     applyTurnStartEffects(scene, 'pc')
 
     clearCharacterStatModifiers(scene, 'turn')

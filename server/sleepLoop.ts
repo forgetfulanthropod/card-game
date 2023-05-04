@@ -34,9 +34,7 @@ export const processActionQueue = async (userId: UserID) => {
     return
 }
 
-export async function doActionAndTakeSteps(
-    args: ApiCall
-) {
+export async function doActionAndTakeSteps(args: ApiCall) {
     const { game, userId } = args
     doGameAction(args)
     let maybeNextAction = game.get('nextAction')

@@ -168,7 +168,7 @@ function Notification(
                 src: textureSrc ?? getTexture('cardArtPlaceholder'),
                 height: 50,
                 width: 50,
-                x: -300,
+                x: 0,
                 y: 0, // TODO: adjust based on unique item attr
                 name: 'NotificationIcon',
             }),

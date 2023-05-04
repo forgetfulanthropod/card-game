@@ -1,6 +1,6 @@
 export { step } from './internal'
 
-// @index('./*.ts', f => `export { ${(f.name)} } from '${f.path}'`)
+// @index(['./*.ts', '!chooseStance.ts'], f => `export { ${(f.name)} } from '${f.path}'`)
 export { activateOrb } from './activateOrb'
 export { activateSouvenir } from './activateSouvenir'
 export { addCardToDeck } from './addCardToDeck'
@@ -8,7 +8,6 @@ export { changeDungeon } from './changeDungeon'
 export { changeScene } from './changeScene'
 export { chooseEventResponse } from './chooseEventResponse'
 export { choosePlushy } from './choosePlushy'
-export { chooseStance } from './chooseStance'
 export { collectLoot } from './collectLoot'
 export { discard } from './discard'
 export { endTurn } from './endTurn'
@@ -24,8 +23,8 @@ export { placeSelectedCharacters } from './placeSelectedCharacters'
 export { playCard } from './playCard'
 export { removeCardForFree } from './removeCardForFree'
 export { resetRandomSeed } from './resetRandomSeed'
+export { rollKaiju } from './rollKaiju'
 export { rulebookAction } from './rulebookAction'
 export { setBattleScene } from './setBattleScene'
 export { setRunId } from './setRunId'
-export { rollKaiju } from './rollKaiju'
 // @endindex

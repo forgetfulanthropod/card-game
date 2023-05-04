@@ -59,10 +59,11 @@ function getDamageWithAdditional({
     attacker: CharacterMeta
     sameTargetAddend: number
     cardUid: CardUid
-    scene?: BattleCursor
+    scene: BattleCursor
 }): number {
     return (
         getDamage({
+            scene,
             damage,
             attacker,
             target: null,
@@ -77,7 +78,7 @@ function getAdditionalDamage(
 ) {
     if (scene == null) return 0
 
-    const cardsPlayed = scene.get('cardsPlayedThisRoom')
+    const cardsPlayed = scene.get('cardsPlayedThisRoom') ?? []
 
     return (
         Math.ceil(sameTargetAddend) *
