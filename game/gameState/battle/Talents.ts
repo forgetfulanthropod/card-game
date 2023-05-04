@@ -41,7 +41,7 @@ export const talentMap: Partial<Record<SouvenirId, Souvenir>> = {
         on2: {
             postDrawHand: ({ scene }) => {
                 while (
-                    Object.keys(scene.get('cards', 'draw')) &&
+                    Object.keys(scene.get('cards', 'draw')).length &&
                     !Object.values(scene.get('cards', 'hand')).some(
                         card => card.type === 'attack'
                     )

@@ -3,6 +3,7 @@ import { Card } from 'shared'
 
 import { evalAll, Executors, Explainers } from './util'
 import { activateTalents } from '../../Talents'
+import { updateHand } from '../cardManagement'
 
 export const explain: Explainers['brittle'] = dslArgs => {
     const [count] = evalAll(dslArgs)
@@ -39,6 +40,7 @@ export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {
                 piles.removedRun[cardUid] = card
                 cardOut = current(card)
             }
+            return piles
         })
     )
     if (cardOut)
@@ -47,4 +49,5 @@ export const execute: Executors['brittle'] = ({ dslArgs, cardUid, scene }) => {
             key: 'brittleBreak',
             extra: { card: cardOut },
         })
+    updateHand(scene)
 }

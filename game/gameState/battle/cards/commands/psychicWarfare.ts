@@ -78,7 +78,7 @@ function getAdditionalDamage(
 ) {
     if (scene == null) return 0
 
-    const cardsPlayed = scene.get('cardsPlayedThisRoom')
+    const cardsPlayed = scene.get('cardsPlayedThisRoom') ?? []
 
     return (
         Math.ceil(sameTargetAddend) *

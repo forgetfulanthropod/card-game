@@ -28,7 +28,12 @@ export const drawCard = (
     if (!hand || !draw || !discard)
         ({ hand, draw, discard } = scene.get('cards'))
     let drawKey = Object.keys(draw)[0]
-    if (!drawKey) return false
+    if (!drawKey) {
+        shuffleDiscard(scene)
+        ;({ hand, draw, discard } = scene.get('cards'))
+        drawKey = Object.keys(draw)[0]
+        if (!drawKey) return false
+    }
     let nextCard = draw[drawKey]
     nextCard = activateTalentsData({
         scene,
@@ -47,16 +52,15 @@ export const drawCard = (
         key: 'drawCard',
         extra: { card: nextCard },
     })
-    // TODO DISCUSSION: should scene be mutable
-    ;({ hand, draw, discard } = scene.get('cards'))
-    if (Object.keys(draw).length === 0) {
-        draw = shufflePile(discard)
-        discard = {}
-        scene.set(['cards', 'draw'], draw)
-        scene.set(['cards', 'discard'], discard)
-        activateSouvenirs('shuffleDiscard', scene)
-        activateTalents({ scene, key: 'shuffleDiscard' })
-        ;({ hand, draw, discard } = scene.get('cards'))
-    }
     return nextCard
+}
+
+export const shuffleDiscard = (scene: BattleCursor) => {
+    let { hand, draw, discard } = scene.get('cards')
+    draw = shufflePile(discard)
+    discard = {}
+    scene.set(['cards', 'draw'], draw)
+    scene.set(['cards', 'discard'], discard)
+    activateSouvenirs('shuffleDiscard', scene)
+    activateTalents({ scene, key: 'shuffleDiscard' })
 }
