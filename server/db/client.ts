@@ -52,6 +52,7 @@ export const sql = createSqlTag({
         userInfo: z.object({
             user_id: z.string(),
             username: z.nullable(z.string()),
+            wallet_address: z.nullable(z.string()),
         }),
         id: z.object({
             id: z.number(),

@@ -14,3 +14,7 @@ export const generateDummyWalletAddress = (): string => {
 
     return address
 }
+
+export const getShortWalletAddress = (walletAddress: string) => {
+    return `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`
+}

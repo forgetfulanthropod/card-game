@@ -29,7 +29,6 @@ import {
     TOP_PERCENTILE_CUTOFF,
 } from 'shared'
 import { DisplayObject, ITextStyle, Texture } from 'pixi.js'
-import { callServerApi } from '@/callServerApi'
 import { random, round } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { datum } from 'datums'
@@ -191,6 +190,7 @@ export const transitionToScreen = async (
     return
 }
 
+/** this should be in the server */
 const getScoreTags = async ({
     runId,
     allTimeLeaderboards,
@@ -201,10 +201,7 @@ const getScoreTags = async ({
     /** 0.01 === top 1% */
     let topPercentile: number = 1
     let isNewHighScore: boolean = false
-    const leaderboardEntryCount = await callServerApi(
-        'getLeaderboardEntryCount',
-        {}
-    )
+    const leaderboardEntryCount = await callApi('getLeaderboardEntryCount', {})
 
     for (let entry of allTimeLeaderboards) {
         if (!entry.is_self) {
@@ -662,7 +659,7 @@ export function EndOfRun(): PixiContainer {
                 callApi('openEndOfRun', {})
             }
 
-            const { runId } = await callServerApi('endRun', {
+            const { runId } = await callApi('endRun', {
                 userId,
             })
 
@@ -685,7 +682,7 @@ export function EndOfRun(): PixiContainer {
 
         // All initial addChild are done manually instead of auto-run on datum change, as otherwise score explanations appear on hover while Defeat Banner is animating
         TogglableMainContainer.addChild(TotalScoreContainer)
-        const mappedLeaderboard = await callServerApi('getLeaderboard', {
+        const mappedLeaderboard = await callApi('getLeaderboard', {
             userId,
         })
         Leaderboard = LeaderboardContainer(mappedLeaderboard)

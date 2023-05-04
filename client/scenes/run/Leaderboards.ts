@@ -28,7 +28,6 @@ import {
 import { ColorMatrixFilter } from 'pixi.js'
 import { keys, sortBy } from 'lodash'
 import { datum } from 'datums'
-import { getShortWalletAddress } from '@/components/util'
 import { transitionToScreen } from './EndOfRun'
 
 const style = {

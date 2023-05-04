@@ -14,7 +14,11 @@ const SERVER_ENV_KEYS = {
     INFLUX_TOKEN: process.env.INFLUX_TOKEN,
     INFLUX_ORG: process.env.INFLUX_ORG,
     INFLUX_BUCKET: process.env.INFLUX_BUCKET,
-    JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET
+    JWT_TOKEN_SECRET: process.env.JWT_TOKEN_SECRET,
+    LOG_LEVEL: process.env.LOG_LEVEL,
+    FIXED_SEED: process.env.FIXED_SEED,
+    PORT: process.env.PORT,
+    DEV_STATIC_ASSETS: process.env.DEV_STATIC_ASSETS
 }
 
 type ServerEnvKey = keyof typeof SERVER_ENV_KEYS

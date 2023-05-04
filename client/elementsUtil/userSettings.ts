@@ -1,5 +1,5 @@
 import { random, toString } from 'lodash'
-import { AuthToken, RequireAllKeys, WalletAddress } from 'shared'
+import { AuthToken, Nonce, RequireAllKeys, UserID, WalletAddress } from 'shared'
 
 type BooleanKeyInLocalStorage =
     | 'muteSFX'
@@ -10,13 +10,18 @@ type BooleanKeyInLocalStorage =
 
 type BooleanValueInLocalStorage = { [k in BooleanKeyInLocalStorage]: boolean }
 
-type StringKeyInLocalStorage = 'authToken' | 'userId' | 'walletAddress'
+type StringKeyInLocalStorage =
+    | 'authToken'
+    | 'userId'
+    | 'walletAddress'
+    | 'nonce'
 
 type StringValueInLocalStorage = RequireAllKeys<
     {
         authToken: AuthToken
-        userId: string
+        userId: UserID | null
         walletAddress: WalletAddress
+        nonce: Nonce
     },
     StringKeyInLocalStorage
 >
@@ -37,11 +42,18 @@ export const toggleBooleanInLocalStorage = (key: BooleanKeyInLocalStorage) => {
     localStorage.setItem(key, toString(newValue))
 }
 
-export const getStringFromLocalStorage = <K extends StringKeyInLocalStorage>(
-    key: K
-): StringValueInLocalStorage[K] => {
-    const valueInLocalStorage = localStorage.getItem(
-        key
-    ) as StringValueInLocalStorage[K]
-    return valueInLocalStorage
+export const getStringFromLocalStorage = <K extends StringKeyInLocalStorage[]>(
+    ...keys: K
+): { [P in K[number]]: StringValueInLocalStorage[P] } => {
+    const valuesInLocalStorage = keys.reduce(
+        (acc, key) => ({
+            ...acc,
+            [key]: localStorage.getItem(
+                key
+            ) as StringValueInLocalStorage[typeof key],
+        }),
+        {} as { [P in K[number]]: StringValueInLocalStorage[P] }
+    )
+
+    return valuesInLocalStorage
 }

@@ -1,4 +1,4 @@
-import { callServerApi } from '@/callServerApi'
+import { callApi } from '@/callApi'
 import {
     Connection,
     LAMPORTS_PER_SOL,
@@ -148,7 +148,7 @@ export default class SolanaRPC {
                 console.warn('No Solana RPC Connection!')
                 return 0
             }
-            const walletAddress = await this.publicKey as string
+            const walletAddress = (await this.publicKey) as string
             const tokenAccounts = await this.getTokenAccounts(
                 this.connection,
                 walletAddress
@@ -157,10 +157,12 @@ export default class SolanaRPC {
                 const data = account.account.data as ParsedAccountData
                 const nftPublicKey = data?.parsed?.info?.mint // the particular nft's public key, not its mint authority
                 const amountOwned = data?.parsed?.info?.tokenAmount?.amount // will be === 1 if user still owns the kaiju
-                return (kaijuNFTIds.includes(nftPublicKey) && amountOwned > 0)
+                return kaijuNFTIds.includes(nftPublicKey) && amountOwned > 0
             }).length
 
-            const numKaijuInGoodEarth = await this.getKaijuInGoodEarth(walletAddress)
+            const numKaijuInGoodEarth = await this.getKaijuInGoodEarth(
+                walletAddress
+            )
             console.log({ numKaijuInWallet })
             console.log({ numKaijuInGoodEarth })
 
@@ -171,7 +173,6 @@ export default class SolanaRPC {
         } finally {
             return 0
         }
-
     }
 
     userOwnsKaijus = async () => {
@@ -179,12 +180,9 @@ export default class SolanaRPC {
     }
 
     private getKaijuInGoodEarth = async (walletAddress: string) => {
-        const { numKaijuOwned } = await callServerApi(
-            'getNumKaijuInGoodEarth',
-            {
-                walletAddress,
-            }
-        )
+        const { numKaijuOwned } = await callApi('getNumKaijuInGoodEarth', {
+            walletAddress,
+        })
         return numKaijuOwned
     }
 }

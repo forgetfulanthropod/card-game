@@ -3,13 +3,8 @@ import { getCurrentNonce } from './internal'
 import * as jwt from 'jsonwebtoken'
 import { getServerEnv } from '@/../shared/code'
 import { isObject } from 'lodash'
-
-export type AuthTokenPayload = {
-    userId: UserID
-    nonce: Nonce
-    iat: number
-    exp: number
-}
+import { AuthTokenPayload } from 'shared'
+import { activeUserSockets, activeUsers, getSocketId } from '@/IO'
 
 export const verifyAuthToken: ServerActions['verifyAuthToken'] = async ({
     userId,
@@ -25,7 +20,7 @@ export const verifyAuthToken: ServerActions['verifyAuthToken'] = async ({
         if (!isObject(payload))
             return { result: 'failure', error: 'Decoding JWT went wrong...' }
 
-        const [issuedAt, expires] = [payload.iat * 1000, payload.exp * 1000]
+        const [issuedAt, authExpires] = [payload.iat * 1000, payload.exp * 1000]
         const payloadUserId = payload.userId as UserID
         const nonce = payload.nonce as Nonce
 
@@ -38,14 +33,22 @@ export const verifyAuthToken: ServerActions['verifyAuthToken'] = async ({
             return { result: 'failure', error: 'Nonce mismatch.' }
         if (issuedAt > Date.now())
             return { result: 'failure', error: 'Token issued in the future.' }
-        if (expires < Date.now())
+        if (authExpires < Date.now())
             return { result: 'failure', error: 'Token expired.' }
 
         logger.info(`Auth token verified successfully!`)
+        markUserAsAuthenticated(userId, authExpires)
         return { result: 'success' }
     } catch (e: unknown) {
         let error = e as Error
         console.error(error)
         return { result: 'failure', error: error?.message }
     }
+}
+
+const markUserAsAuthenticated = (userId: UserID, authExpires: number) => {
+    const socketId = getSocketId(userId)
+    if (!socketId) return logger.error(`No socket ID for ${userId}`)
+    const activeUser = activeUsers.get(socketId)
+    if (activeUser) activeUsers.set(socketId, { ...activeUser, authExpires })
 }

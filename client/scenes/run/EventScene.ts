@@ -171,7 +171,8 @@ function TextAndButtons(
                                     callApi(
                                         'chooseEventResponse',
                                         selectedChoice.val!
-                                    ).then(() => newSouvenirsDatum.set([]))
+                                    )
+                                    newSouvenirsDatum.set([])
                                 },
                             },
                         }),

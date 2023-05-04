@@ -1,7 +1,7 @@
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import { useState, useRef, MouseEvent, useEffect } from 'react'
 import type { UserDoc } from '../NewStartScreen'
-import { getShortWalletAddress } from '../util'
+import { getShortWalletAddress } from 'shared'
 
 export const UserProfileIcon = ({
     login,

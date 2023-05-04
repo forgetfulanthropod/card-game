@@ -13,10 +13,6 @@ export function useCursor<T>(cursor: ROCursor<T>): T {
     return v
 }
 
-export const getShortWalletAddress = (walletAddress: string) => {
-    return `${walletAddress.slice(0, 4)}...${walletAddress.slice(-4)}`
-}
-
 export const openNewTab = (link: string) => {
     return () => window.open(link, '_blank')
 }

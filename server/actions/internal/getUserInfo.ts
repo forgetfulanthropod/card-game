@@ -19,7 +19,8 @@ export const getUserInfo = async (
         const { userId, username } = existingUser
         logger.info(`Wallet ${walletAddress} had userId: ${userId}`)
         const nonce = getCurrentNonce(userId)
-        return { userId, username, nonce }
+        const userType: UserType = walletAddress ? 'web3' : 'guest'
+        return { userId, username, nonce, userType }
     } else {
         const userId = await createNewUser({ connection, walletAddress })
         logger.info(
@@ -28,9 +29,8 @@ export const getUserInfo = async (
             } created new userId: ${userId}.`
         )
         const userType: UserType = walletAddress ? 'web3' : 'guest'
-        await trackNewLogin({ connection, userId, userType })
         const nonce = getNewNonce(userId)
-        return { userId, username: null, nonce }
+        return { userId, username: null, nonce, userType }
     }
 }
 
@@ -44,18 +44,18 @@ const getExistingUser = async (
 
     const res = await connection.maybeOne(sql`
         SELECT
-            user_id, username
+            user_id, username, wallet_address
         FROM
             kaiju.user_info
         WHERE
             wallet_address = ${walletAddress}
     `)
 
-    if (res) return { userId: res.user_id, username: res.username }
+    if (res) return { userId: res.user_id, username: res.username, userType: walletAddress ? 'web3' : 'guest' }
     else return null
 }
 
-const createNewUser = async (props: UserDBActionProps): Promise<UserID> => {
+export const createNewUser = async (props: UserDBActionProps): Promise<UserID> => {
     const { connection, walletAddress } = props
 
     let sql = sqlTag.typeAlias('userId')
@@ -80,24 +80,4 @@ const createNewUser = async (props: UserDBActionProps): Promise<UserID> => {
         RETURNING
             user_id
     `)
-}
-
-const trackNewLogin = async (
-    props: AuthUserDBActionProps & { userType: UserType }
-): Promise<void> => {
-    const { connection, userId, userType } = props
-    let sql = sqlTag.typeAlias('void')
-    const authMethod = userType === 'web3' ? 'connect_wallet' : 'guest'
-
-    await connection.any(sql`
-        UPDATE
-          kaiju.user_info
-        SET
-          last_login_ts = now(),
-          last_auth_method = ${authMethod}
-        WHERE
-          user_id = ${userId}
-    `)
-
-    return
 }
