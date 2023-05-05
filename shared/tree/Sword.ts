@@ -25,10 +25,10 @@ export const swordPartIds = [
     'soap',
     'spooky',
     'water',
-    'cup',
+    // 'cup',
     'great',
     'lava',
-    'oni',
+    // 'oni',
 ]
 
 export type SwordPartId = typeof swordPartIds[number]
@@ -110,10 +110,10 @@ export const swordPartExplanations: Record<string, string> = {
     handleWater: 'in progress...',
     pommelWater: 'in progress...',
 
-    bladeCup: 'in progress...',
-    guardCup: 'in progress...',
-    handleCup: 'in progress...',
-    pommelCup: 'in progress...',
+    // bladeCup: 'in progress...',
+    // guardCup: 'in progress...',
+    // handleCup: 'in progress...',
+    // pommelCup: 'in progress...',
 
     bladeGreat: 'in progress...',
     guardGreat: 'in progress...',
@@ -125,10 +125,10 @@ export const swordPartExplanations: Record<string, string> = {
     handleLava: 'in progress...',
     pommelLava: 'in progress...',
 
-    bladeOni: 'in progress...',
-    guardOni: 'in progress...',
-    handleOni: 'in progress...',
-    pommelOni: 'in progress...',
+    // bladeOni: 'in progress...',
+    // guardOni: 'in progress...',
+    // handleOni: 'in progress...',
+    // pommelOni: 'in progress...',
 }
 
 // type StatModifier = number | { addend?: number; multiplicand?: number }
@@ -387,20 +387,20 @@ export const swordPartDefinitionsMap: Record<
             defense: 2,
         },
     },
-    cup: {
-        pommel: {
-            strength: 1,
-        },
-        handle: {
-            strength: 1,
-        },
-        guard: {
-            strength: 1,
-        },
-        blade: {
-            strength: 1,
-        },
-    },
+    // cup: {
+    //     pommel: {
+    //         strength: 1,
+    //     },
+    //     handle: {
+    //         strength: 1,
+    //     },
+    //     guard: {
+    //         strength: 1,
+    //     },
+    //     blade: {
+    //         strength: 1,
+    //     },
+    // },
     great: {
         pommel: {
             strength: 1,
@@ -534,8 +534,8 @@ export function getFullTitle(swordParts: SwordParts) {
             guard: 'Spicy',
             blade: 'Lava',
         },
-        oni: { pommel: 'Oni', handle: '---', guard: '---', blade: '---' },
-        cup: { pommel: '---', handle: '---', guard: '---', blade: 'Cup' },
+        // oni: { pommel: 'Oni', handle: '---', guard: '---', blade: '---' },
+        // cup: { pommel: '---', handle: '---', guard: '---', blade: 'Cup' },
         great: {
             pommel: 'Big',
             handle: 'Good',
