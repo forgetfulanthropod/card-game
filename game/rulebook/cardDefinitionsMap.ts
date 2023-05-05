@@ -1860,7 +1860,7 @@ export const cardDefinitionsMap: CardDefinitionsMap = {
             defensey = defense * 0.4;
             defensey2 = defense * 0.2;
             addBlock(defensey, "allFriends");
-            on("playCard", addBlock(defensey2, "allFriends"), "turn");
+            on("playCard", defensey2 = defense * 0.2; addBlock(defensey2, "allFriends"), "turn");
             join("All allies gain",defensey,"block.  Whenever a character plays a card this turn, allies gain", defensey2, "block.")
         `,
         type: 'defense',

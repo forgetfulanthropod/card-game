@@ -103,27 +103,25 @@ export function applyStatModifiers({
     updateCharacters(scene)
 }
 
-function getUpdatedModifiers(
-    modifiers: StatModifiersMap,
+export function getUpdatedModifiers(
+    modifiers: StatModifiersMap | null,
     stats: StatModifiers,
     expiration: StatModifierExpiration
 ) {
     const updatedModifiers = {
-        turn: { ...modifiers.turn },
-        room: { ...modifiers.room },
-        run: { ...modifiers.run },
+        turn: { ...modifiers?.turn },
+        room: { ...modifiers?.room },
+        run: { ...modifiers?.run },
     }
 
     //@ts-expect-error
-    keys(stats).map(statKey => {
-        const statModifier = stats[statKey]
-
-        if (typeof statModifier != 'number')
-            throw new Error('junk in the stat modifier')
-
-        updatedModifiers[expiration][statKey] =
-            ((updatedModifiers[expiration][statKey] as number) || 0) +
-            statModifier
+    keys(stats).forEach(statKey => {
+        // const statModifier = stats[statKey]
+        // if (typeof statModifier != 'number')
+        //     throw new Error('junk in the stat modifier')
+        // updatedModifiers[expiration][statKey] =
+        //     ((updatedModifiers[expiration][statKey] as number) || 0) +
+        //     statModifier
     })
 
     return updatedModifiers

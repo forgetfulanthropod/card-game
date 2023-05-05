@@ -102,7 +102,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
         id: 'gnomeTooth',
         title: 'Are You a Dentist?',
         prompts: [
-            'A gnome with a gigantic tooth stands before you. He looks like he is in terrible pain.\n"I am in terrible pain", says the gnome.',
+            'A gnome with a gigantic tooth stands before you. He looks like he is in terrible pain. "I am in terrible pain", says the gnome.',
             '"Owie ouch ouch ouch, I do not like having a gigantic tooth no sir wow this sucks".',
             '"If you are a dentist, would you mind removing it for me?\nI have never seen a dentist before so I do not know how to identify one."',
         ],
@@ -113,7 +113,7 @@ export const eventSceneMap: Record<EventId, EventScene> = {
                 postPrompts: [
                     'You tell the gnome that you aren"t a dentist and cannot help him.',
                     '"Oh, Ok. I think I have a book on removing teeth, but I cannot read it because \nmy very large tooth is blocking my good reading eye."',
-                    '"If you encounter another Gnome with a big stinky tooth,\nhopefully you can help them with this book.Owww Owwwie."',
+                    '"If you encounter another Gnome with a big stinky tooth,hopefully you can help them with this book. Owww Owwwie."',
                 ],
             },
             {

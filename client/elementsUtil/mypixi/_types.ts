@@ -63,6 +63,7 @@ export interface TextArgs extends ShownArgs {
         | RODatum<number>
     style?: Partial<ITextStyle>
     isHtml?: boolean
+    animateInS?: number
 }
 export interface GraphicsArgs extends DisplayObjectArgs {
     tint?: number

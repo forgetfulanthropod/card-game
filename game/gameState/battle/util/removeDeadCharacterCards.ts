@@ -13,6 +13,7 @@ export function removeDeadCharacterCards(scene: BattleCursor) {
                         if (card.characterUid === uid) {
                             cards.removedDead[card.uid] = card
                         }
+                        delete cards[pileId][card.uid]
                     })
                 })
             })
