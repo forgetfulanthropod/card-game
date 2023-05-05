@@ -33,3 +33,6 @@ server/temp
 public/*.css
 public/*.map
 dep-graph*.svg
+
+artifacts
+cache
