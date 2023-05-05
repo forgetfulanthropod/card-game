@@ -2,6 +2,7 @@ import type { BattleCursor, Card, CardUid, GameActions } from 'shared'
 import { getBattleSceneIn } from '@/util'
 import { trackMetric } from 'server/metrics'
 import { checkServerScoringEvent } from '@/gameState/battle/score'
+import { getNewCardOptions } from '@/gameState/battle/cards/getNewCardOptions'
 
 export const addCardToDeck: GameActions['addCardToDeck'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -18,8 +19,10 @@ export const addCardToDeck: GameActions['addCardToDeck'] = args => {
 
     scene.set('lootEarned', scene.get('lootEarned').slice(1))
     if (scene.get('lootEarned').length > 0) {
+        scene.set('newCardOptions', getNewCardOptions(scene.get()))
         scene.set('state', 'collecting loot')
     } else {
+        scene.set('newCardOptions', {})
         scene.set('state', 'map')
         scene.set('isInMap', true)
     }

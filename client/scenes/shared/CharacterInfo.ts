@@ -25,7 +25,7 @@ import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
 import { Tweener } from 'pixi-tweener'
-import { Texture } from 'pixi.js'
+import { Assets, Texture } from 'pixi.js'
 import {
     Card,
     CharacterClass,
@@ -324,22 +324,8 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
 export function Sword(parts: SwordParts) {
     const isHovered = datum(false)
 
-    return Container(
+    const root = Container(
         {},
-        Sprite({
-            //@ts-ignore
-            src: `https://media.kaijucards.io/cdn-cgi/image/width=250,quality=75/webp/swords-plain/${parts.guard.kind}-${parts.handle.kind}-${parts.pommel.kind}-${parts.blade.kind}.webp`,
-            anchor: [0.5, 0.5],
-            x: CONTENT_WIDTH * 0.59,
-            events: {
-                pointerenter() {
-                    isHovered.set(true)
-                },
-                pointerout() {
-                    isHovered.set(false)
-                },
-            },
-        }),
         TermExplanationsIf({
             areShown: isHovered,
             yOffset: 170,
@@ -352,4 +338,28 @@ export function Sword(parts: SwordParts) {
             ],
         })
     )
+
+    Assets.load(
+        `https://media.kaijucards.io/cdn-cgi/image/width=250,quality=75/webp/swords-plain/${parts.guard.kind}-${parts.handle.kind}-${parts.pommel.kind}-${parts.blade.kind}.webp`
+    ).then(src => {
+        root.addChildAt(
+            Sprite({
+                //@ts-ignore
+                src,
+                anchor: [0.5, 0.5],
+                x: CONTENT_WIDTH * 0.59,
+                events: {
+                    pointerenter() {
+                        isHovered.set(true)
+                    },
+                    pointerout() {
+                        isHovered.set(false)
+                    },
+                },
+            }),
+            0
+        )
+    })
+
+    return root
 }

@@ -39,10 +39,10 @@ export function Sprite(args: SpriteArgs): PixiSprite {
         console.trace()
         return PixiSprite.from(PixiTexture.WHITE)
     }
-    const s = PixiSprite.from(
+    const s = new PixiSprite(
         typeof args.src === 'string' && args.src.indexOf('http') !== 0
             ? getTexture(args.src)
-            : args.src
+            : (args.src as PixiTexture)
     )
 
     applyShownArgs(s, args)
@@ -116,8 +116,28 @@ export function Text(args: TextArgs): PixiText {
             return textEl as PixiText
         }
     }
-    const textEl = new TextInstantiator(String(text), args.style)
+    const textEl = new TextInstantiator(
+        args.animateInS ? '' : String(text),
+        args.style
+    )
     textEl.resolution = isHighResolution ? 2 : 1
+
+    if (args.animateInS) {
+        const startTime = new Date().getTime()
+        const intervalId = setInterval(() => {
+            const currentTime = new Date().getTime()
+            textEl.text = String(text).slice(
+                0,
+                (String(text).length * (currentTime - startTime)) /
+                    (args.animateInS! * 1000)
+            )
+
+            if (currentTime - startTime > args.animateInS! * 1000) {
+                clearInterval(intervalId)
+            }
+        }, 30)
+    }
+
     applyShownArgs(textEl, args)
     startChecking(textEl)
     return textEl as PixiText

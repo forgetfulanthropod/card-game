@@ -11,6 +11,7 @@ import { clearCommandHooks } from './commandHookUtil'
 import { calculateChestProgress, calculateLoot } from './loot'
 import { calculateNewRunScore } from './score'
 import { checkServerScoringEvent } from './score/checkServerScoringEvent'
+import { activateTalents } from './Talents'
 
 export function maybeTransitionBattleState(scene: BattleCursor): boolean {
     if (scene.get('state') !== 'in battle') return false
@@ -37,10 +38,11 @@ export function maybeTransitionBattleState(scene: BattleCursor): boolean {
             clearCharacterModifiersForRoom(scene)
             clearRoomCardModifiers(scene)
             clearCommandHooks(scene)
+            activateSouvenirs('battleEnd', scene)
+            activateTalents({ scene, key: 'battleEnd' })
             scene.set('state', 'collecting loot')
             scene.set('lootEarned', calculateLoot(scene, 'room'))
             scene.set('newCardOptions', getNewCardOptions(scene.get()))
-            activateSouvenirs('battleEnd', scene)
         }
         return true
     } else if (winner === 'NPC') {

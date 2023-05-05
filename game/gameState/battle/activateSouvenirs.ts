@@ -7,6 +7,7 @@ import {
     CommandId,
     Souvenir,
     SouvenirActivationKey,
+    souvenirMap,
 } from 'shared'
 import { interpretCommand } from './cards'
 import {
@@ -15,6 +16,7 @@ import {
     isPc,
 } from './characters/characterGetters'
 import { updateCharacters } from './characters/updateCharacters'
+import { talentMap } from './Talents'
 
 export function activateSouvenirs(
     activationKey: SouvenirActivationKey,
@@ -23,7 +25,7 @@ export function activateSouvenirs(
 ) {
     let wasSouvenirActivated = false
 
-    ;(scene.get('souvenirs') ?? []).forEach(souvenir => {
+    ;(scene.get('souvenirs') ?? []).forEach((souvenir, idx) => {
         if (
             !characterUid ||
             (!souvenir.equippable &&
@@ -34,7 +36,7 @@ export function activateSouvenirs(
             characterUid === souvenir.characterUid
         )
             wasSouvenirActivated =
-                activateSouvenir(souvenir, activationKey, scene) ||
+                activateSouvenir(souvenir, activationKey, scene, idx) ||
                 wasSouvenirActivated
     })
 
@@ -44,13 +46,13 @@ export function activateSouvenirs(
 export function activateSouvenir(
     souvenir: Souvenir,
     activationKey: SouvenirActivationKey,
-    scene: BattleCursor
+    scene: BattleCursor,
+    idx?: number
 ) {
     const livingPcs = getLivingPcs(scene.get())
     const livingNpcs = getLivingNpcs(scene.get())
     const commandDSLString = souvenir.on[activationKey]
     if (!commandDSLString) return false
-
     let characterUid = souvenir.characterUid
     if (!characterUid && souvenir.equippable)
         throw new Error(
@@ -84,6 +86,7 @@ export function activateSouvenir(
         },
         targetUids,
         scene,
+        extra: { idx: idx, counter: souvenir.counter },
     })
 
     updateCharacters(scene)

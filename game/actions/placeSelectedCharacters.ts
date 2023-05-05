@@ -1,18 +1,20 @@
 import produce from 'immer'
 import {
     CharacterMeta,
+    CharacterStats,
     CharacterUid,
     GameActions,
     Pile,
-    PlayerCharacterStats,
     SelectedCharacter,
     swordPartDefinitionsMap,
+    swordPartIds,
     SwordParts,
 } from 'shared'
 
-import { getEntrySceneIn } from '@/util'
 import { getFullDeckForCharacter } from '@/gameState'
-import { keys, vals } from 'shared/code'
+import { getEntrySceneIn } from '@/util'
+import { keys } from 'shared/code'
+import { getUpdatedModifiers } from '@/gameState/battle/cards/commands/modifyStats'
 
 export const placeSelectedCharacters: GameActions['placeSelectedCharacters'] =
     args => {
@@ -58,32 +60,56 @@ export function equipSword(cm: SelectedCharacter): SelectedCharacter {
 
     const newCm = { ...cm }
 
+    const kind = getRandomPartKind()
+
     const sword = {
         pommel: {
-            kind: ['dirt', 'normal', 'junk'][(Math.random() * 3) | 0],
+            kind,
+            // kind: getRandomPartKind(),
         },
         handle: {
-            kind: ['dirt', 'normal', 'junk'][(Math.random() * 3) | 0],
+            kind,
+            // kind: getRandomPartKind(),
         },
         guard: {
-            kind: ['dirt', 'normal', 'junk'][(Math.random() * 3) | 0],
+            kind,
+            // kind: getRandomPartKind(),
         },
         blade: {
-            kind: ['dirt', 'normal', 'junk'][(Math.random() * 3) | 0],
+            kind,
+            // kind: getRandomPartKind(),
         },
     } as SwordParts
+
+    let runModifiers = {}
 
     keys(sword).forEach(swordPartKey => {
         const swordStats =
             swordPartDefinitionsMap[sword[swordPartKey].kind][swordPartKey]
 
-        //@ts-expect-error
-        keys(swordStats).forEach(stat => {
-            newCm[stat] = newCm[stat] + swordStats[stat]!
-        })
+        runModifiers = getUpdatedModifiers(
+            { turn: {}, room: {}, run: swordStats },
+            runModifiers,
+            'run'
+        )
+
+        // //@ts-expect-error
+        // keys(swordStats).forEach(statKey => {
+        //     //@ts-expect-error
+        //     if (keys(cm).includes(statKey)) {
+        //         const stat = swordStats[statKey]!
+
+        //         const modifiers =
+        //     }
+        // })
     })
+    newCm.statModifiersMap = { turn: {}, room: {}, run: runModifiers }
 
     newCm.sword = sword
 
     return newCm
+
+    function getRandomPartKind() {
+        return swordPartIds[(Math.random() * swordPartIds.length) | 0]
+    }
 }

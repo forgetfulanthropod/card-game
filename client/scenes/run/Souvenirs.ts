@@ -2,11 +2,11 @@ import { callApi } from '@/callApi'
 import { getBattleScene } from '@/data'
 import {
     Adjust,
-    AssetKey,
     BASE_WIDTH,
     Container,
     For,
     getTexture,
+    glowFilter,
     If,
     PixiTexture,
     SouvenirAssetKey,
@@ -21,15 +21,23 @@ import { omit, upperFirst } from 'lodash'
 import { Assets } from 'pixi.js'
 import { Souvenir } from 'shared'
 
-export function SouvenirsEls(): ContainerChild {
+export function SouvenirsEls(
+    newSouvenirsDatum = datum<Souvenir[]>([])
+): ContainerChild {
     const scene = getBattleScene()
     return For(
-        toDatum(scene.select('souvenirs'), souvenirs =>
-            souvenirs.map((s, index) => ({
-                ...s,
-                key: `${s.id}-${index}`,
-                index,
-            }))
+        compose(
+            ([newSouvenirs, souvenirs]) => {
+                return [...newSouvenirs, ...souvenirs]
+                    .reverse()
+                    .map((s, index) => ({
+                        ...s,
+                        key: `${s.id}-${index}`,
+                        index,
+                    }))
+            },
+            newSouvenirsDatum,
+            toDatum(scene.select('souvenirs'), souvenirs => souvenirs)
         ),
         souvenir => {
             const souvenirWidth = 90
@@ -37,6 +45,11 @@ export function SouvenirsEls(): ContainerChild {
             return Adjust(SouvenirEl({ souvenir, width: souvenirWidth }), {
                 x: BASE_WIDTH - 140 - souvenir.index * souvenirWidth,
                 y: 60,
+                filters: ~newSouvenirsDatum.val.findIndex(
+                    s => s.id === souvenir.id
+                )
+                    ? [glowFilter]
+                    : [],
             })
         }
     )

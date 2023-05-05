@@ -26,6 +26,7 @@ export const explain: Explainers['dealFromStance'] = (dslArgs, context) => {
     // logger.info(`damageHtmlArr: ${damageHtmlArr}`)
 
     let explication = `deal ${damageHtmlArr[0]}${getDamage({
+        scene: context.scene,
         damage: damage,
         attacker,
         target: null,

@@ -2,7 +2,7 @@
     "scene": {
         "id": "battle",
         "userId": "34f2b3c1-6e4c-460c-9fd4-60446674634a",
-        "dungeonName": "Skelepit Dungeon",
+        "dungeonName": "Hooligans Bluff",
         "turnCount": 1,
         "state": "in battle",
         "playerStarts": true,

@@ -1,6 +1,6 @@
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { callApi } from '@/callApi'
-import { getBattleScene, getEntryScene } from '@/data'
+import { getBattleScene, getEntryScene, getTree } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -45,6 +45,7 @@ import {
     Card,
     CardType,
     CardUid,
+    CharacterMeta,
     CharacterStats,
     CharacterUid,
     StanceId,
@@ -126,9 +127,8 @@ export function CardEl({
     })
 
     const termExplanationsForCard = TermExplanationsForCard({
-        explanation: card.explanation,
+        card,
         width,
-        isLongHovered,
     })
     const hoveredStanceDatum = datum<StanceId | null>(null)
 
@@ -202,6 +202,7 @@ export function CardEl({
                         x:
                             (explanationsOnLeft
                                 ? -Math.max(
+                                      0,
                                       ...termExplanationsForCard.map(
                                           e => e.width
                                       )
@@ -338,14 +339,20 @@ function getDecoratedEvents({
 }
 
 function TermExplanationsForCard({
-    explanation,
+    card,
     width,
-    isLongHovered,
 }: {
-    explanation: string
+    card: Card
     width: number
-    isLongHovered: Datum<boolean>
 }) {
+    const explanation = card.explanation
+    const tree = getTree()
+    const characterMeta =
+        tree.select('scene').get('id') === 'battle'
+            ? getBattleScene().get('allCharacters', card.characterUid)
+            : (getEntryScene()
+                  .get('selectedCharacters')
+                  .find(c => c?.uid === card.characterUid)! as CharacterMeta)
     const allKeyTerms = keys(keyTermsMap)
     const terms = allKeyTerms
         .filter(keyTerm => ~getTermIndex(keyTerm, explanation))
@@ -357,6 +364,7 @@ function TermExplanationsForCard({
 
     return TermExplanations({
         terms,
+        characterMeta,
         displayObjectArgs: {
             x: width * 0.5,
         },
@@ -479,7 +487,7 @@ function getTexts(
                 hoveredStanceDatum.onChange(id => {
                     explanationText.addChild(
                         ExplanationText(
-                            id ? card.stanceExplanations[id] : card.explanation,
+                            card.explanation,
                             cardFrameTexture,
                             marginH,
                             explanationFontSize

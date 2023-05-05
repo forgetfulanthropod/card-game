@@ -1,4 +1,4 @@
-import { getServerEnv } from '@/../shared'
+import { getServerEnv } from 'shared'
 
 const port = getServerEnv('PORT') ?? 3000
 export const buildInfo = {

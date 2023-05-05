@@ -7,7 +7,7 @@ export { getEnergy, setRoundEnergy } from './energy'
 export { maybeTransitionBattleState } from './transition'
 export { makeBattleState } from './makeBattleState'
 export { getNpcMoves, updateNpcMoves } from './characters/npcMoves'
-export { resetStances } from './characters/resetStances'
+export { resetClassPassives as resetStances } from './characters/resetClassPassives'
 export {
     calculateLoot,
     getInitialLoot,

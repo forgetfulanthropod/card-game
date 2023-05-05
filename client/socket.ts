@@ -8,6 +8,7 @@ import type { AllActionArgs, AllActionRes, AllActions, GameState, RunScoreUpdate
 import { getTree, initializeBaobabTree, isTreeInitialized } from '@/data'
 import { getStringFromLocalStorage, startPixi } from '@/elementsUtil'
 import { showScoreUpdateNotification } from '@/scenes/shared'
+import { getClientEnv } from './util/getClientEnv'
 
 const config = {
     enableExpensiveUpdateValidation: false,
@@ -28,6 +29,12 @@ export const socket = io({
 export function prepareSocket() {
     console.log('preparing socket...')
     console.log({socket, socketId: socket.id})
+
+    if (!getClientEnv('IS_PRODUCTION')) {
+        // @ts-expect-error
+        window.socket = socket
+    }
+
     socket.on('connect', () => {
         console.log(`CONNECTED TO SOCKET ${socket.id}`)
     })

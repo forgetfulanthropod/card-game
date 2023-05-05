@@ -1,4 +1,4 @@
-import type { BattleCursor, CharacterUid, Command } from 'shared'
+import type { BattleCursor, CharacterMeta, CharacterUid, Command } from 'shared'
 import { getTargetUidsOverride } from './util/getTargetUidsOverride'
 
 import type { Executors, Explainers, VAngu } from './util'
@@ -24,15 +24,24 @@ export const execute: Executors['heal'] = ({
         command,
         givenUids,
     }).forEach(uid => {
-        const characterCursor = scene.select('allCharacters', uid)
-
-        characterCursor
-            .select('health')
-            .apply(h =>
-                Math.min(
-                    h + Math.ceil(amount),
-                    calculateStats(characterCursor.get()).constitution
-                )
-            )
+        healCharacter(scene, uid, amount)
     })
+}
+
+export const healCharacter = (
+    scene: BattleCursor,
+    characterUid: CharacterUid,
+    amount: number,
+    percent?: boolean
+) => {
+    const characterCursor = scene.select('allCharacters', characterUid)
+    const constitution = characterCursor.get('calculatedStats', 'constitution')
+    characterCursor
+        .select('health')
+        .apply(h =>
+            Math.min(
+                h + Math.ceil(percent ? amount * constitution : amount),
+                constitution
+            )
+        )
 }

@@ -546,7 +546,7 @@ function DamageIntended(amount: number, command: NextCommand): DisplayObject[] {
                               fill: 'white',
                               strokeThickness: 5,
                               stroke: 'black',
-                              fontFamily: fontMap['sansFont'],
+                              fontFamily: fontMap['bigFont'],
                               fontSize: 24,
                           },
                       }),
@@ -630,7 +630,7 @@ function BlockIntended(amount: number, command: NextCommand) {
                     fill: 'white',
                     strokeThickness: 5,
                     stroke: 0,
-                    fontFamily: fontMap['sansFont'],
+                    fontFamily: fontMap['bigFont'],
                 },
             }),
             ExplanationIf({

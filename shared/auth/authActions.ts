@@ -8,7 +8,7 @@ const authenticatedActions: AuthenticatedActions = {
     changeScene: true,
     chooseEventResponse: true,
     choosePlushy: true,
-    chooseStance: true,
+    // chooseStance: true,
     collectLoot: true,
     discard: true,
     endRun: true,

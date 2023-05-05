@@ -25,3 +25,5 @@ export type RequireAllKeys<T, K extends keyof T> = { [P in K]-?: T[P] } & {
 }
 
 export type WalletAddress = `0x${string}`
+
+export type DamageType = 'normal' | 'poison' | 'bleed'

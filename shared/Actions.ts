@@ -91,8 +91,8 @@ export interface BareServerActionsMeta {
         res: Promise<{ result: 'success' | 'failure' }>
     }
     verifyAuthToken: {
-        args: { authToken: AuthToken, userId: UserID }
-        res: Promise<{ result: 'success' | 'failure', error?: string }>
+        args: { authToken: AuthToken; userId: UserID }
+        res: Promise<{ result: 'success' | 'failure'; error?: string }>
     }
 }
 
@@ -128,7 +128,7 @@ export interface BareGameActionArgs {
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
-    chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
+    // chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
     setRunId: { userId: UserID; runId: RunID }
 
     //test only start

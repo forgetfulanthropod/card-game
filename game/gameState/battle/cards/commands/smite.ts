@@ -11,6 +11,7 @@ export const explain: Explainers['smite'] = (dslArgs, context) => {
     const damageHtmlArr = getOuterHtmlArr(damageHtml)
 
     return `deal ${damageHtmlArr[0]}${getDamage({
+        scene: context.scene,
         damage,
         attacker: context.characterMeta,
         target: null,

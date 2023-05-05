@@ -52,7 +52,7 @@ export interface Card extends CardDefinition {
     characterUid: CharacterUid
     uid: CardUid
     explanation: string
-    stanceExplanations: Record<StanceId, string>
+    // stanceExplanations: Record<StanceId, string>
     outcomes?: Record<string, CommandOutcome>
 }
 
