@@ -14,7 +14,6 @@ import {
     InteractionEvents,
     loopSong,
     PixiContainer,
-    SouvenirAssetKey,
     Sprite,
     Text,
 } from '@/elementsUtil'
@@ -149,6 +148,7 @@ function TextAndButtons(
                 return Container(
                     {},
                     Text({
+                        animateInS: 2,
                         text:
                             event.choices[selectedChoice.val!.index].text +
                             '\n\n' +
@@ -199,6 +199,7 @@ function TextAndButtons(
                 Container(
                     {},
                     Text({
+                        animateInS: 2,
                         text: event.prompts.map(prompt => prompt).join('\n\n'),
                         style: {
                             wordWrap: true,

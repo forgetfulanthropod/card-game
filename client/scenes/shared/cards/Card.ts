@@ -202,6 +202,7 @@ export function CardEl({
                         x:
                             (explanationsOnLeft
                                 ? -Math.max(
+                                      0,
                                       ...termExplanationsForCard.map(
                                           e => e.width
                                       )
