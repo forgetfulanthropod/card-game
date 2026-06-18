@@ -2,10 +2,12 @@
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm run build",
+  "regions": ["iad1"],
   "functions": {
     "builds/server.js": {
-      "includeFiles": ["public/**", "builds/**"],
-      "memory": 1024
+      "includeFiles": ["public/**"],
+      "memory": 1024,
+      "maxDuration": 60
     }
   },
   "routes": [
@@ -13,6 +15,12 @@
   ],
   "env": {
     "IS_PRODUCTION": "true",
-    "DEV_STATIC_ASSETS": "true"
+    "DEV_STATIC_ASSETS": "true",
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "IS_PRODUCTION": "true"
+    }
   }
 }
