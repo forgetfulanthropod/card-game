@@ -1,15 +1,17 @@
 {
+  "version": 2,
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm run build",
-  "regions": ["iad1"],
-  "functions": {
-    "builds/server.js": {
-      "includeFiles": "public/**",
-      "memory": 1024,
-      "maxDuration": 60
+  "builds": [
+    {
+      "src": "builds/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": ["public/**"]
+      }
     }
-  },
+  ],
   "routes": [
     { "src": "/(.*)", "dest": "builds/server.js" }
   ],
