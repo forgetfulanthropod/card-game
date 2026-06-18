@@ -27,5 +27,7 @@ export const changeScene: GameActions['changeScene'] = args => {
         const scene = getBattleSceneIn(args.game)
         setCards(scene)
         acquireTalents(scene)
+    } else if (args.newSceneName === 'showcase') {
+        game.set('scene', { id: 'showcase' })
     }
 }

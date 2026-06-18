@@ -36,7 +36,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Jockey+One&display=swap" rel="stylesheet">
 
-    <!-- <link rel="stylesheet" href="out.css" /> -->
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="dailyship.css" />
     <style>
         .wrap {
             width: 100vw;
@@ -99,53 +100,10 @@
         <div class="relwrap">
             <img src="loading.gif" style="position: absolute; right: 0; bottom: 0;"/>
             <canvas id="pixi-root"></canvas>
-            <div id="react-root" onmouseover="this.style.pointerEvents = 'none'">
-                <h1 style="color: white">
-                    Waiting for socket connection with server
-                </h1>
-            </div>
+            <div id="react-root" onmouseover="this.style.pointerEvents = 'none'"></div>
         </div>
     </div>
-    <script>
-        (async () => {
-            const pwd = localStorage.getItem('pwd') ?? prompt('enter the password:')
-            await new Promise(resolve => setTimeout(resolve, 100))
-
-            try {
-                const head = document.getElementsByTagName("head")[0]
-
-                const href = window.location.href
-                const hrefSlash = href.endsWith('/') ? href : href + '/'
-
-                var script = document.createElement('script')
-                script.src = hrefSlash + pwd + '.js'
-                script.type = "text/javascript"
-
-                const fileExists = await fetch( script.src).then(response => response.status === 200)
-                if (! fileExists) throw new Error('bad password')
-
-                head.appendChild(script)
-
-                var link = document.createElement("link")
-                link.href = hrefSlash + pwd + '.css'
-                link.type = "text/css"
-                link.rel = "stylesheet"
-                link.media = "screen,print"
-                head.appendChild(link)
-
-                setTimeout(() => {
-                    if (window.loadedJs) {
-                        localStorage.setItem('pwd', pwd)
-                    } else {
-                        localStorage.removeItem('pwd')
-                    }
-                }, 10_000)
-            } catch (e) {
-                console.error(e)
-                localStorage.removeItem('pwd')
-            }
-        })()
-    </script>
+    <script src="dailyship.js"></script>
 
     <!-- <script src="out.js"></script> -->
 </body>

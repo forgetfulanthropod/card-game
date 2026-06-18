@@ -18,13 +18,34 @@ const config = {
 const log = (...args: unknown[]) => config.shouldLog && console.log(...args)
 
 const urlPrefix = window.location.href.split('/')[3]
+const socketPath = urlPrefix?.length > 0
+    ? `/${urlPrefix}/server/socket`
+    : '/server/socket'
 
-export const socket = io({
-    path:
-        urlPrefix?.length > 0
-            ? `/${urlPrefix}/server/socket`
-            : '/server/socket',
+// Support overriding the server for mobile testing (e.g. phone talking to dev laptop)
+// Set via localStorage.setItem('serverHost', 'http://192.168.x.x:3456') before launch
+// or ?server=http://... in URL
+const overrideHost = (() => {
+    try {
+        const params = new URLSearchParams(window.location.search)
+        if (params.get('server')) return params.get('server')
+        const stored = localStorage.getItem('serverHost')
+        if (stored) return stored
+    } catch {}
+    return null
+})()
+
+const serverOrigin = overrideHost || window.location.origin
+
+export const socket = io(serverOrigin, {
+    path: socketPath,
+    // ensure it tries ws then poll
+    transports: ['websocket', 'polling'],
 })
+
+if (overrideHost) {
+    console.log('[socket] Using overridden server host:', overrideHost)
+}
 
 export function prepareSocket() {
     console.log('preparing socket...')
@@ -38,10 +59,50 @@ export function prepareSocket() {
     socket.on('connect', () => {
         console.log(`CONNECTED TO SOCKET ${socket.id}`)
     })
+    socket.on('connect_error', (err) => {
+        console.error('SOCKET CONNECT ERROR:', err?.message || err)
+    })
+    socket.on('disconnect', (reason) => {
+        console.warn('SOCKET DISCONNECTED:', reason)
+    })
     socket.on('refresh', () => window.location.reload())
     socket.on('update', updateBaobab)
     socket.on('notifyScore', ({ data }: { data: RunScoreUpdate }) => {
         showScoreUpdateNotification(data)
+    })
+}
+
+export async function waitForSocket(): Promise<typeof socket> {
+    return new Promise(resolve => {
+        if (socket.connected) {
+            resolve(socket)
+            return
+        }
+        const cleanup = () => {
+            socket.off('connect', onConnect)
+            socket.off('connect_error', onErr)
+            clearTimeout(to)
+        }
+        const onConnect = () => {
+            cleanup()
+            resolve(socket)
+        }
+        const onErr = (e: any) => {
+            cleanup()
+            console.error('waitForSocket connect_error', e?.message || e)
+            resolve(socket)
+        }
+        const to = setTimeout(() => {
+            cleanup()
+            console.warn('waitForSocket timeout (5s), connected=', socket.connected)
+            resolve(socket)
+        }, 5000)
+        socket.on('connect', onConnect)
+        socket.on('connect_error', onErr)
+        if (socket.connected) {
+            cleanup()
+            resolve(socket)
+        }
     })
 }
 
@@ -51,6 +112,9 @@ export async function emitApiCall<K extends keyof AllActions>(
 ) {
     const { userId } = getStringFromLocalStorage('userId')
     if (socket == null) throw Error('socket is null')
+    if (!socket.connected) {
+        await waitForSocket()
+    }
     const response = (await new Promise(resolve => {
         const handler = (response: AllActionRes[K]) => resolve(response)
         socket.emit('api', { method, userId, ...args }, handler)

@@ -18,7 +18,9 @@ export const rollKaiju: GameActions['rollKaiju'] = args => {
         'selectedCharacters',
         produce(selected => {
             // TODO integrate hog roller
-            const rolledCharacter = rollCharacter()
+            const plain = (args as any).plain !== false // default to plain body parts
+            const enhanced = !!(args as any).enhanced
+            const rolledCharacter = rollCharacter(undefined, undefined, plain, enhanced)
             const stats = Object.fromEntries(
                 Object.entries(rolledCharacter.calculatedStats).map(
                     ([k, v]) => {

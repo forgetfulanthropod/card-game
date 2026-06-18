@@ -5,6 +5,16 @@ set -euo pipefail # strict mode
 # Add npm binaries to path
 export PATH=./node_modules/.bin:$PATH
 
+# === LOCAL DEV BUILD HACKS / NOTES ===
+# - `bash run dev` (or `npm run dev`): one-line clean local dev. Does full client+server build then serves at :3456.
+#   No crypto/wallet, uses simple username accounts (4 max) in server/data/simple-db.json .
+# - Styles: tailwind CLI build (client:styles / styles:build) to public/styles.css because esbuild css plugins crash in env.
+#   See scripts/clientEsbuild.mjs header for details. global.css import commented out.
+# - Watch: limited; client:build-watch exists but stripped in esbuild for compat. Re-run dev or builds to iterate.
+# - Server runs with DEV_STATIC_ASSETS to serve public/ directly from built server.
+# - To clean rebuild: rm -rf builds public/dailyship.js public/styles.css ; npm run dev
+# - Account limit + username + overwrite/delete supported in storage + UI.
+
 # declare -a validCommands
 
 ## ROOT
@@ -145,7 +155,30 @@ function npm-clean() {
 ## CLIENT
 
 function client:build() {
+    client:styles
     node scripts/clientEsbuild.mjs
+}
+
+function client:styles() {
+    # Build Tailwind to standalone CSS (bypasses broken esbuild style plugins in this env)
+    # Uses the local bin if available
+    ./node_modules/.bin/tailwindcss \
+      -i ./client/components/global.css \
+      -o ./public/styles.css \
+      --content "./client/**/*.{ts,tsx,js,jsx}" \
+      --config ./tailwind.config.js \
+      --minify 2>/dev/null || \
+    npx tailwindcss \
+      -i ./client/components/global.css \
+      -o ./public/styles.css \
+      --content "./client/**/*.{ts,tsx,js,jsx}" \
+      --config ./tailwind.config.js \
+      --minify || echo "styles build skipped or failed (will use unstyled)"
+}
+
+# alias for clean npm script access
+function styles:build() {
+    client:styles
 }
 function client:build-watch() {
     node scripts/clientEsbuild.mjs watch
@@ -187,6 +220,88 @@ function server:build-watch() {
 }
 function server:tsc() {
     tsc -b server
+}
+
+## ONE LINE LOCAL DEV (no crypto, simple accounts)
+function dev() {
+    set +x
+    echo '=== kaiju local dev ==='
+    echo 'Building client + server...'
+    client:build
+    server:build
+    echo 'Starting server (serves UI at http://localhost:3456) ...'
+    echo 'Use Ctrl-C to stop. (For rebuilds: re-run npm run dev, or use client:build / server:build + restart)'
+    server:server
+}
+
+function dev:watch() {
+    set +x
+    echo '=== kaiju local dev:watch (limited) ==='
+    echo 'Building client + server...'
+    client:build
+    server:build
+    echo 'Starting server with nodemon (auto-restart if builds/server.js changes).'
+    echo 'After editing client, manually run: npm run client:build  (or bash run client:build)'
+    echo 'Server will restart on its build change. Ctrl-C to stop.'
+    server:server-watch
+}
+
+## MOBILE APP WRAPPER (Capacitor - from grok code)
+function mobile:build() {
+    echo 'Building web assets for mobile (Capacitor Android wrapper)'
+    client:build
+    npx cap sync android
+}
+
+function mobile:apk() {
+    mobile:build
+    echo 'Building Android debug APK (requires Java/Gradle/Android SDK on your machine)...'
+    (cd android && ./gradlew assembleDebug)
+    echo 'APK ready at: android/app/build/outputs/apk/debug/app-debug.apk'
+}
+
+function mobile:install() {
+    mobile:apk
+    echo 'Flashing to Android phone (adb required, USB debug enabled on phone)...'
+    adb install -r android/app/build/outputs/apk/debug/app-debug.apk || echo 'Run this on a machine with adb + phone connected: adb install -r ...apk'
+}
+
+# Mobile troubleshooting (black "LOADING..." screen)
+# The black screen with LOADING... means the React/Pixi client did not mount (usually because dailyship.js failed to run or socket to localhost failed in the WebView).
+# Steps:
+#   1. Always do a fresh: npm run mobile:build   (this does client:build + cap sync)
+#   2. npm run mobile:apk
+#   3. adb install ...
+#   4. To play on phone against your dev server (recommended):
+#      - Run "npm run dev" on your laptop (note the IP, e.g. 192.168.1.105)
+#      - Phone must be on same WiFi
+#      - Before or after first launch, inject the server:
+#        adb shell "am start -a android.intent.action.VIEW -d 'capacitor://localhost/index.html?server=http://192.168.1.105:3456'"
+#        OR set localStorage manually via a debug bridge / WebView inspector.
+#   The client now supports ?server=... and localStorage.getItem('serverHost')
+#   If you still see black screen, run: adb logcat | grep -i "chromium\|console\|error" to see JS errors.
+
+function mobile:open() {
+    npx cap open android
+}
+
+## ASSET GENERATION (Grok Imagine roadmap)
+function asset:roadmap() {
+    echo 'Opening asset generation roadmap (uses Grok Imagine visuals)'
+    echo 'See ROADMAP-asset-generation.md + public/assets/roadmap/'
+    # Future: node scripts/generate-with-imagine.mjs
+}
+function asset:generate() {
+    echo 'Placeholder for Grok Imagine asset generation script.'
+    echo 'Will prompt for type (card/kaiju/sword) + description, generate via Imagine, process to assets/, update compendium.'
+    # TODO in roadmap: integrate X auth check, call image gen, post-process
+}
+
+## TESTING
+function test:poor() {
+    # Bad play bot: dies fast, discovers items for compendium testing
+    echo 'Running poor-play test bot (dies quickly, populates compendium)...'
+    npx tsx scripts/play-poorly.ts "${1:-test-poor-user}"
 }
 
 set -x # print commands as executed

@@ -34,7 +34,6 @@ export const UsernameModal = ({
         } else {
             setUserDoc({
                 ...userDoc,
-                walletAddress: userDoc.walletAddress,
                 userId: userDoc.userId,
                 username: typedUsername,
             })

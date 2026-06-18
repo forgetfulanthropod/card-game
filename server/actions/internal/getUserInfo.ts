@@ -2,82 +2,40 @@ import type {
     UserID,
     UserDBActionProps,
     UserInfo,
-    AuthUserDBActionProps,
     UserType,
     Nonce,
 } from 'shared'
-import { sql as sqlTag } from '@/db/client'
-import { getCurrentNonce, getNewNonce, } from '.'
+import { getCurrentNonce, getNewNonce } from '.'
+import { getUserByAccountId, createUser, getUserById } from '@/storage'
 
 export const getUserInfo = async (
     props: UserDBActionProps
 ): Promise<UserInfo & { nonce: Nonce }> => {
-    const { connection, walletAddress } = props
-    const existingUser = await getExistingUser({ connection, walletAddress })
+    const { accountId, walletAddress } = props as any
+    const acct = accountId || walletAddress
+    let userId: UserID
+    let username: string | null = null
 
-    if (existingUser) {
-        const { userId, username } = existingUser
-        logger.info(`Wallet ${walletAddress} had userId: ${userId}`)
-        const nonce = getCurrentNonce(userId)
-        const userType: UserType = walletAddress ? 'web3' : 'guest'
-        return { userId, username, nonce, userType }
+    if (acct) {
+        const existing = getUserByAccountId(acct)
+        if (existing) {
+            userId = existing.user_id
+            username = existing.username
+            logger.info(`Account ${acct} had userId: ${userId}`)
+        } else {
+            userId = createUser(acct)
+            logger.info(`Account ${acct} created userId: ${userId}`)
+        }
     } else {
-        const userId = await createNewUser({ connection, walletAddress })
-        logger.info(
-            `Wallet ${
-                walletAddress ?? 'Guest Kaiju'
-            } created new userId: ${userId}.`
-        )
-        const userType: UserType = walletAddress ? 'web3' : 'guest'
-        const nonce = getNewNonce(userId)
-        return { userId, username: null, nonce, userType }
+        userId = createUser()
+        logger.info(`New player userId: ${userId}`)
     }
+
+    const nonce = getCurrentNonce(userId) || getNewNonce(userId)
+    const userType: UserType = 'player' as UserType
+    return { userId, username: username || null, nonce, userType }
 }
 
-const getExistingUser = async (
-    props: UserDBActionProps
-): Promise<UserInfo | null> => {
-    const { connection, walletAddress } = props
-    let sql = sqlTag.typeAlias('userInfo')
-
-    if (!walletAddress) return null
-
-    const res = await connection.maybeOne(sql`
-        SELECT
-            user_id, username, wallet_address
-        FROM
-            kaiju.user_info
-        WHERE
-            wallet_address = ${walletAddress}
-    `)
-
-    if (res) return { userId: res.user_id, username: res.username, userType: walletAddress ? 'web3' : 'guest' }
-    else return null
-}
-
-export const createNewUser = async (props: UserDBActionProps): Promise<UserID> => {
-    const { connection, walletAddress } = props
-
-    let sql = sqlTag.typeAlias('userId')
-
-    if (!walletAddress)
-        return await connection.oneFirst(sql`
-            INSERT INTO kaiju.user_info (
-                initial_auth_method
-            )
-            VALUES
-                ('guest')
-            RETURNING
-                user_id
-        `)
-
-    return await connection.oneFirst(sql`
-        INSERT INTO kaiju.user_info (
-            wallet_address, initial_auth_method
-        )
-        VALUES
-            (${walletAddress}, 'connect_wallet')
-        RETURNING
-            user_id
-    `)
+export const createNewUser = (accountId?: string): UserID => {
+    return createUser(accountId)
 }

@@ -2,7 +2,5 @@
     "name": "shared",
     "version": "1.0.0",
     "main": "index.ts",
-    "dependencies": {
-        "siwe": "^1.1.6"
-    }
+    "dependencies": {}
 }

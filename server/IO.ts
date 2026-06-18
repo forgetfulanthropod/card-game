@@ -7,7 +7,6 @@ import {
     GameState,
     NetworkEvent,
     UserID,
-    getServerEnv,
     getShortWalletAddress,
 } from 'shared'
 import { Server as SocketServer, Socket } from 'socket.io'
@@ -29,7 +28,7 @@ export const activeUsers: Map<
 export const activeUserSockets: Map<UserID, SocketID> = new Map()
 
 export function mountSocketServer(server: Server, prefix: string): void {
-    const isStagingServer = getServerEnv('DEV_STATIC_ASSETS') === 'yes'
+    const isStagingServer = process.env.DEV_STATIC_ASSETS === 'yes' || true // simplified, default serve static in dev mode now
 
     try {
         socketServer = new SocketServer(server, {

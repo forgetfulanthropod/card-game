@@ -133,6 +133,18 @@ bash run server:build
 bash run server:server
 ```
 
+## Asset Generation Roadmap (Grok Imagine + X Login)
+
+See [ROADMAP-asset-generation.md](ROADMAP-asset-generation.md) for the full plan.
+
+**Quick start for the feature**:
+- Users will log in with X (Twitter) to unlock Grok Imagine-powered asset generation for cards, Kaiju, swords, souvenirs, etc.
+- Generated assets integrate with the existing Compendium (undiscovered items grayed out).
+- Visual roadmap generated with Grok Imagine: ![Roadmap](public/assets/roadmap/grok-imagine-roadmap.jpg)
+- Dev commands: `bash run test:poor` (test with generated assets), mobile wrapper already supports custom assets.
+
+Current accounts are local (4 max via username). X login planned as extension for generation access.
+
 ## Technologies/Tooling
 
 We're using a decent number of libraries and tools but the big ones are

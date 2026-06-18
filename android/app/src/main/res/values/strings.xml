@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Kaiju Cards</string>
+    <string name="title_activity_main">Kaiju Cards</string>
+    <string name="package_name">com.kaijucards.game</string>
+    <string name="custom_url_scheme">com.kaijucards.game</string>
+</resources>

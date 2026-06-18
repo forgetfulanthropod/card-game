@@ -1,7 +1,7 @@
 import { useOutsideClickDismisser } from '@/hooks/useClickDismisser'
 import { useState, useRef, MouseEvent, useEffect } from 'react'
 import type { UserDoc } from '../NewStartScreen'
-import { getShortWalletAddress } from 'shared'
+import { getShortAccountId } from 'shared'
 
 export const UserProfileIcon = ({
     login,
@@ -16,7 +16,7 @@ export const UserProfileIcon = ({
     userDoc: UserDoc
     ownsKaijus: boolean
 }) => {
-    const walletAddress = userDoc?.walletAddress
+    const accountId = userDoc?.userId
 
     const [showActions, setShowActions] = useState(false)
     const [shortAddress, setShortAddress] = useState('')
@@ -34,9 +34,9 @@ export const UserProfileIcon = ({
     }
 
     useEffect(() => {
-        if (walletAddress)
-            setShortAddress(getShortWalletAddress(walletAddress ?? '0x000000'))
-    }, [walletAddress])
+        if (accountId)
+            setShortAddress(getShortAccountId(accountId))
+    }, [accountId])
 
     return <div className='flex flex-col items-end text-white'>
         <button

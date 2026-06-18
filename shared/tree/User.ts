@@ -1,5 +1,3 @@
-import { DatabasePool } from 'slonik'
-
 export type UserID = string
 export type RunID = number
 export type Username = string
@@ -9,18 +7,17 @@ export type UserInfo = {
     userType: UserType
 }
 
-export type Web3UserInfo = UserInfo
-export type GuestUserInfo = Omit<UserInfo, 'username'>
-export type UserType = 'guest' | 'web3'
+export type UserType = 'player' | 'guest' // simplified no web3, support old strings for compat
 export type Nonce = string
 export type AuthToken = string
 
+// for adapter use
 export type UserDBActionProps = {
-    connection: DatabasePool
+    connection?: any
     walletAddress?: string
+    accountId?: string
 }
 
 export type AuthUserDBActionProps = {
-    connection: DatabasePool
     userId: UserID
 }

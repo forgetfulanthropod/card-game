@@ -44,22 +44,20 @@ export function CharacterOptions() {
         const margin = width * 0.2
         const src = getTexture(`${c.id}Profile` as AssetKey)
 
+        // All plain characters from entryState / playerCharacterStatsMap (for viewing the full selection)
         const validOptions: CharacterId[] = [
-            'warhog',
             'frogKnight',
             'gnomeHooligan',
+            'warhog',
+            'notoriousBean',
             'penguinKnight',
-            ...(process.env.IS_PRODUCTION
-                ? []
-                : ([
-                      'notoriousBean',
-                      'skeletonWarrior',
-                      'matchaGelatinCube',
-                      'mushroomFarmer',
-                      'snacky',
-                      'jerry',
-                  ] as const)),
-        ]
+            'skeletonWarrior',
+            'matchaGelatinCube',
+            'mushroomFarmer',
+            'snacky',
+            'jerry',
+            // add any others from full list if more become available
+        ] as const
         const isValidOption = validOptions.includes(c.id)
 
         // const isNewCharacter = ['notoriousBean'].includes(c.id)

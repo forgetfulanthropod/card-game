@@ -13,7 +13,7 @@ export type SceneHas = Readonly<{
 }> &
     Brandify
 
-export type SceneId = 'entry' | 'battle'
+export type SceneId = 'entry' | 'battle' | 'showcase'
 export type Scene = BattleScene | EntryScene
 
 export type NestedKeys<T> = T extends object
@@ -24,6 +24,6 @@ export type RequireAllKeys<T, K extends keyof T> = { [P in K]-?: T[P] } & {
     [P in Exclude<keyof T, K>]: T[P]
 }
 
-export type WalletAddress = `0x${string}`
+export type AccountId = string  // simple account identifier (no crypto/wallets)
 
 export type DamageType = 'normal' | 'poison' | 'bleed'

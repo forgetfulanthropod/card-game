@@ -15,49 +15,23 @@ export function makeBuildInfo(prefix) {
     }
 }
 
-const REQUIRED_SERVER_ENV_KEYS =
-    ['PGUSER',
-     'PGPASSWORD',
-     'PGHOST',
-     'PGPORT',
-     'PGDATABASE',
-     'MAX_POOL_SIZE',
-     'IS_PRODUCTION',
-     'INFLUX_URL',
-     'INFLUX_ORG',
-     'INFLUX_BUCKET',
-     'INFLUX_TOKEN',
-     'JWT_TOKEN_SECRET',
-     'LOG_LEVEL',
-     'FIXED_SEED',
-     'PORT',
-     'DEV_STATIC_ASSETS'
-    ]
+const REQUIRED_SERVER_ENV_KEYS = [
+    'IS_PRODUCTION',
+    'LOG_LEVEL',
+    'FIXED_SEED',
+    'PORT',
+    'DEV_STATIC_ASSETS'
+]
 
-const REQUIRED_CLIENT_ENV_KEYS =
-    ['WALLET_GATED',
-     'RPC_URL',
-     'GAME_IS_LIVE',
-     'IS_PRODUCTION',
-     'CLIENT_PASSWORD',
-     'WALLET_CONNECT_ID',
-     'IS_LOCAL' // tmp, should just have a "environment" key in future
-    ]
+const REQUIRED_CLIENT_ENV_KEYS = [
+    'GAME_IS_LIVE',
+    'IS_PRODUCTION',
+    'IS_LOCAL'
+]
 
 /**
- *
- * @param {'client' | 'server'} env 'client'
+ * env checks removed (no .env files)
  */
 export const checkEnv = (env) => {
-    console.log(`Checking ENV for ${env}...`)
-    let envKeys = env === 'client' ? REQUIRED_CLIENT_ENV_KEYS : REQUIRED_SERVER_ENV_KEYS
-
-    for (let key of envKeys) {
-        const value = process.env[key]
-        if (value === undefined) {
-            console.error(key, `IS MISSING IN ${env} .ENV`)
-            process.exit(1)
-        }
-    }
-    console.log(`✅ ${env} .env contains all keys: `, envKeys)
+    console.log(`(env check skipped - no .env) for ${env}`)
 }

@@ -15,6 +15,7 @@ import { trackMetric } from 'server/metrics'
 import { BattleCursor, CharacterClass, DungeonRoom, GameActions } from 'shared'
 import { produce } from 'immer'
 import { calculateBaseTaunt, objFilter } from 'shared/code'
+import { upgradeCharacterSkin } from '@/characterGeneration/roll'
 
 export const nextRoom: GameActions['nextRoom'] = args => {
     const scene = getBattleSceneIn(args.game)
@@ -22,6 +23,15 @@ export const nextRoom: GameActions['nextRoom'] = args => {
     if (!scene.get('isInMap')) return
 
     scene.set('numRoomsPassed', scene.get('numRoomsPassed') + 1)
+    // change appearance as you do the run: upgrade a body part visually for each PC
+    scene.apply('allCharacters', produce((ac: any) => {
+        for (const c of Object.values(ac) as any[]) {
+            if (c && c.isPc && c.skin) {
+                c.skin = upgradeCharacterSkin(c.skin, c.id || c.species)
+            }
+        }
+        return ac
+    }))
     const chosenRoom = getChosenRoom(scene, args.choice)
     scene.apply('roomUidsVisited', uids => [...uids, chosenRoom.uid])
     scene.set('currentRoom', chosenRoom)

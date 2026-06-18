@@ -2,21 +2,15 @@
     "name": "server",
     "version": "1.0.0",
     "dependencies": {
-        "@influxdata/influxdb-client": "^1.33.0",
         "bad-words": "^3.0.4",
         "classic-level": "^1.2.0",
         "cors": "^2.8.5",
-        "dotenv": "^16.0.3",
-        "game": "1.0.0",
-        "jsonwebtoken": "^9.0.0",
+        "game": "workspace:*",
         "level": "^8.0.0",
-        "pg-native": "^3.0.1",
-        "shared": "1.0.0",
-        "slonik": "33",
+        "shared": "workspace:*",
         "socket.io": "^4.5.1"
     },
     "devDependencies": {
-        "@types/bad-words": "^3.0.1",
-        "@types/jsonwebtoken": "^9.0.1"
+        "@types/bad-words": "^3.0.1"
     }
 }

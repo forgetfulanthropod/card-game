@@ -43,7 +43,7 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
     const [musicIsMuted, setMusicIsMuted] = useState(muteMusic)
     const [highResEnabled, setHighResEnabled] = useState(isHighResolution)
     const [motionFXEnabled, setMotionFXEnabled] = useState(enableMotionFX)
-    const { setInPixi } = useContext(AppContext)
+    const { setInPixi, setUserId } = useContext(AppContext)
 
     const handleClick = () => {
         setShowMenu(actions => !actions)
@@ -76,7 +76,22 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
 
     const handleBackToMenu = async () => {
         console.log('handleBackToMenu...')
+        // Clear local user immediately to prevent auto-restore from starting the game again
         localStorage.removeItem('userId')
+        setUserId('')
+        try {
+            const runState = getBattleScene().get('state')
+            if (runState !== 'lost' && runState !== 'won') {
+                await callApi('endRun', {
+                    userId: userId,
+                })
+            }
+            await callApi('setInitialGameState', {
+                userId,
+            })
+        } catch (e) {
+            console.warn('error cleaning up run for back to menu', e)
+        }
         getStage().visible = false
         setInPixi(false)
         setShowMenu(false)

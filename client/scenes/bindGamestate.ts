@@ -2,6 +2,7 @@ import type { SceneId } from 'shared'
 
 import { RunSceneManager } from './run'
 import { DungeonEntryScene } from './entry'
+import { CharacterShowcaseScene } from './CharacterShowcaseScene'
 import { getScene } from '@/data'
 import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { nextFrame, onUpdate } from '@/util'
@@ -48,6 +49,8 @@ function bindScene(app: PixiApplication): Unbind {
             // bindBattleState(app)
         } else if (sceneType === 'entry') {
             lastScene = DungeonEntryScene()
+        } else if (sceneType === 'showcase') {
+            lastScene = CharacterShowcaseScene()
         } else {
             throw new Error('what!')
         }

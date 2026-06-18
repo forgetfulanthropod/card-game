@@ -31,13 +31,12 @@
         // "builds": true,
         "ignore": true,
         "pnpm-lock.yaml": true,
-        "pnpm-workspace.yaml": true,
+        "pnpm-workspace.yaml": true
         // "README.md": true,
         // "server.log": true
     },
     "editor.codeActionsOnSave": {
-        // "source.organizeImports": true,
-        "source.fixAll.eslint": true
+        "source.fixAll.eslint": "explicit"
     },
     "eslint.packageManager": "pnpm",
     "workbench.colorCustomizations": {

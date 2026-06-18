@@ -1,20 +1,17 @@
 import {
-    AuthUserDBActionProps,
     ServerActions,
     GameState,
     Scene,
     BattleScene,
 } from 'shared'
-import { getDbClient, sql as sqlTag } from '@/db/client'
 import { round } from 'lodash'
 import { getGamestate } from '@/db'
 import { trackMetric } from '@/metrics'
+import { endRun as storageEndRun, getCurrentRunId } from '@/storage'
 
 export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     logger.info(`Ending run for: ${userId}`)
-    const connection = await getDbClient()
     const gameState = await getGamestate(userId)
-    let sql = sqlTag.typeAlias('void')
 
     if (!gameState) {
         logger.error(`No gamestate found for ${userId}`)
@@ -45,26 +42,12 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
         return { runId: null }
     }
 
-    const runIsValid = validateRun({ connection, userId, gameState })
-    if (!runIsValid) {
+    // run validation simplified
+    if (typeof runId !== 'number') {
         logger.error('Run is not valid')
         return { runId: null }
     }
-    await connection.query(sql`
-        UPDATE
-            kaiju.user_run
-        SET
-            run_status = ${restart ? 'abandoned' : state},
-            end_ts = now(),
-            run_duration_in_sec = ${runDuration},
-            run_score = ${totalScore},
-            game_state = ${JSON.stringify(gameState)}
-        WHERE
-            run_id = ${runId}
-        AND
-            run_status not in ('won', 'lost')
-        ;
-    `)
+    storageEndRun(runId, restart ? 'abandoned' : state, totalScore, runDuration, gameState)
 
     trackMetric('endRun', {
         scene: gameState.scene,
@@ -73,13 +56,6 @@ export const endRun: ServerActions['endRun'] = async ({ userId, restart }) => {
     })
 
     return { runId }
-}
-
-const validateRun = async (
-    props: AuthUserDBActionProps & { gameState: GameState }
-): Promise<Boolean> => {
-    // TODO
-    return true
 }
 
 const isBattleScene = (scene: Scene): scene is BattleScene => {

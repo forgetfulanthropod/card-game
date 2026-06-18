@@ -1,59 +1,15 @@
-import { AuthUserDBActionProps, BUILD_VER, RunID, ServerActions } from 'shared'
+import { ServerActions } from 'shared'
 import { trackMetric } from '@/metrics'
-import { getDbClient, sql as sqlTag } from '@/db/client'
-import { getGamestate, setGamestate } from '@/db'
-
-import { produce } from 'immer'
+import { getGamestate } from '@/db'
+import { createRun } from '@/storage'
 
 export const startRun: ServerActions['startRun'] = async ({ userId }) => {
     logger.info(`Starting run for: ${userId}`)
 
-    const connection = await getDbClient()
-    await cleanUpPreviousRuns({ connection, userId })
-    const runId = await createNewRun({ connection, userId })
+    const gameState = await getGamestate(userId)
+    const runId = createRun(userId, gameState)
 
     trackMetric('startRun', { runId, userId })
     logger.info(`Started run for ${userId}: ${runId}`)
     return { runId }
-}
-
-const createNewRun = async (props: AuthUserDBActionProps): Promise<RunID> => {
-    const { connection, userId } = props
-    let sql = sqlTag.typeAlias('id')
-
-    let gameState = await getGamestate(userId)
-    const runStatus = gameState ? 'in_progress' : 'initializing'
-
-    const runId = await connection.oneFirst(sql`
-        INSERT INTO kaiju.user_run (
-            user_id, run_status, build_version, game_state
-        )
-        VALUES
-            (${userId}, ${runStatus}, ${BUILD_VER}, ${JSON.stringify(
-        gameState
-    )})
-        RETURNING
-        run_id
-        `)
-    return runId
-}
-
-const cleanUpPreviousRuns = async (
-    props: AuthUserDBActionProps
-): Promise<void> => {
-    const { connection, userId } = props
-    let sql = sqlTag.typeAlias('id')
-
-    await connection.query(sql`
-        UPDATE
-            kaiju.user_run
-        SET
-            run_status = 'abandoned'
-        WHERE
-            user_id = ${userId}
-        AND
-            (
-                run_status = 'initializing'
-            OR  run_status = 'in_progress');
-    `)
 }

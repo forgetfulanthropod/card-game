@@ -58,7 +58,7 @@ type AnalyticsRunEventParams = {
     run_id: number | null
 }
 
-type AnalyticsLoginMethods = 'connect_wallet' | 'guest_user'
+type AnalyticsLoginMethods = 'pick_account' | 'guest_user' | 'account'
 
 type AnalyticsPageTitle =
     | 'Battle Scene'

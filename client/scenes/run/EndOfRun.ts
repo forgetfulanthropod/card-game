@@ -33,6 +33,39 @@ import { random, round } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
+import { callApi } from '@/callApi'  // for compendium if needed
+
+// Simple DOM-based Compendium overlay (grayed undiscovered) - works from pixi run menu
+function showCompendiumOverlay(comp: { cards?: string[]; souvenirs?: string[]; swords?: string[] }, userId: string) {
+  // remove any old
+  const old = document.getElementById('compendium-overlay')
+  if (old) old.remove()
+
+  const overlay = document.createElement('div')
+  overlay.id = 'compendium-overlay'
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:9999;display:flex;align-items:center;justify-content:center;font-family:monospace'
+  overlay.innerHTML = `
+    <div style="background:#1f1e3a;color:#fff;padding:24px;border-radius:12px;max-width:520px;width:92%;max-height:80vh;overflow:auto">
+      <h2 style="text-align:center;margin:0 0 12px;font-size:22px">COMPENDIUM</h2>
+      <p style="text-align:center;opacity:0.6;font-size:12px;margin-bottom:16px">User: ${userId} — undiscovered are grayed</p>
+      ${section('Cards', comp.cards || [], ['leadRazor','shieldOfHolyLight','attack','magicAttack','chainLightning'])}
+      ${section('Souvenirs / Equippables', comp.souvenirs || [], ['bigStinkyTooth','dentistryForDummies','frogWine'])}
+      ${section('Swords / Parts', comp.swords || [], ['normal','dirt','wood','iron','jade','fire','great'])}
+      <button id="close-comp" style="margin-top:16px;width:100%;padding:10px;background:#5a4a8a;border:none;color:#fff;border-radius:6px">Close</button>
+    </div>
+  `
+  document.body.appendChild(overlay)
+  ;(document.getElementById('close-comp') as any).onclick = () => overlay.remove()
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove() }
+
+  function section(title: string, discovered: string[], all: string[]) {
+    const items = all.map(id => {
+      const found = discovered.includes(id)
+      return `<div style="padding:6px 8px;margin:2px 0;border-radius:4px;${found ? 'background:#2a2744;color:#fff' : 'background:#222;color:#666;font-style:italic'}">${found ? id : '??? ' + id}</div>`
+    }).join('')
+    return `<div style="margin:10px 0"><div style="font-weight:600;margin-bottom:4px">${title}</div>${items || '<i>none</i>'}</div>`
+  }
+}
 import { Easing, Tweener } from 'pixi-tweener'
 import { OutlineFilter } from 'pixi-filters'
 
@@ -546,6 +579,21 @@ export function EndOfRun(): PixiContainer {
         outlineColor: 0x330004,
     })
 
+    // Compendium entry in the run menu (for each saved game)
+    const ShowCompendiumButton = GradientButton({
+        onClick: async () => {
+            if (!userId) return
+            const comp: any = await callApi('getCompendium', { userId })
+            showCompendiumOverlay(comp || { cards: [], souvenirs: [], swords: [] }, userId)
+        },
+        text: 'Compendium',
+        x: BASE_WIDTH / 2 + 455,
+        y: buttonsY,
+        fontSize: 28,
+        xPadding: 18,
+        yPadding: 7,
+    })
+
     const CloseModalButton = Sprite({
         src: getTexture('closeButton'),
         scale: 0.75,
@@ -613,6 +661,7 @@ export function EndOfRun(): PixiContainer {
         } else {
             TogglableButtonsContainer.addChild(TryAgainButton)
             TogglableButtonsContainer.addChild(ShowLeaderboardButton)
+            TogglableButtonsContainer.addChild(ShowCompendiumButton)
             TogglableMainContainer.addChild(ScoreElementsBackground)
             TogglableMainContainer.addChild(ScoreElements)
             TogglableMainContainer.addChild(TotalScoreContainer)
@@ -704,6 +753,7 @@ export function EndOfRun(): PixiContainer {
         await transitionFadeChildren(TotalScoreContainer, 'async', 'slow', 'in')
         TogglableButtonsContainer.addChild(TryAgainButton)
         TogglableButtonsContainer.addChild(ShowLeaderboardButton)
+        TogglableButtonsContainer.addChild(ShowCompendiumButton)
         await transitionFadeChildren(
             TogglableButtonsContainer,
             'async',

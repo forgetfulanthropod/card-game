@@ -3,7 +3,7 @@
  */
 
 import type { SCursor } from 'sbaobab'
-import type { SceneId, WalletAddress } from './misc'
+import type { SceneId, AccountId } from './misc'
 
 import type {
     AuthToken,
@@ -29,7 +29,7 @@ import { AuthRes } from './auth'
 
 // type AuthenticatedServerActions = Partial<BareServerActionsMeta>
 type AuthenticatedServerActions = Pick<BareServerActionsMeta,
-    'endRun' | 'getCurrentRun' | 'getLeaderboard' | 'loadGameState' | 'setInitialGameState' | 'startRun' | 'setUsername'
+    'endRun' | 'getCurrentRun' | 'getLeaderboard' | 'loadGameState' | 'setInitialGameState' | 'startRun' | 'setUsername' | 'prepareRun'
 >
 
 type AuthenticatedGameActions = BareGameActionArgs
@@ -38,13 +38,10 @@ export type AuthenticatedActions = {[K in keyof AuthenticatedServerActions | key
 
 export interface BareServerActionsMeta {
     authenticateGuestUser: {
-        args: { userId: UserID; signature: string }
+        args: { userId: UserID; signature?: string }
         res: AuthRes
     }
-    authenticateWeb3User: {
-        args: { userId: UserID; message: string; signature: string }
-        res: AuthRes
-    }
+    // authenticateWeb3User removed (no crypto)
     endRun: {
         args: { userId: UserID; restart?: true }
         res: Promise<{ runId: RunID | null }>
@@ -53,10 +50,7 @@ export interface BareServerActionsMeta {
         args: { userId: UserID }
         res: Promise<{ runId: RunID } | null>
     }
-    getNumKaijuInGoodEarth: {
-        args: { walletAddress: string }
-        res: Promise<{ numKaijuOwned: number }>
-    }
+    // getNumKaijuInGoodEarth removed (was crypto/NFT gating)
     getLeaderboard: {
         args: { userId: UserID }
         res: Promise<MappedLeaderboards>
@@ -71,12 +65,40 @@ export interface BareServerActionsMeta {
         res: Promise<void>
     }
     login: {
-        args: { walletAddress: WalletAddress, socketId: string }
+        args: { accountId: AccountId, socketId: string }
         res: Promise<UserInfo & { nonce: Nonce }>
     }
     loginGuest: {
         args: { existingUserId: UserID | null, socketId: string }
         res: Promise<UserInfo & { nonce: Nonce }>
+    }
+    listAccounts: {
+        args: {}
+        res: Promise<{ accounts: Array<{ userId: UserID; username: string | null }> }>
+    }
+    createAccount: {
+        args: { username: string; overwrite?: boolean }
+        res: Promise<{ result: 'success' | 'failure'; userId?: UserID; username?: string; error?: string }>
+    }
+    deleteAccount: {
+        args: { userId: UserID }
+        res: Promise<{ result: 'success' | 'failure'; error?: string }>
+    }
+    getCompendium: {
+        args: { userId: UserID }
+        res: Promise<{ cards: string[]; souvenirs: string[]; swords: string[] }>
+    }
+    discover: {
+        args: { userId: UserID; category: 'cards' | 'souvenirs' | 'swords'; id: string }
+        res: Promise<void>
+    }
+    generateGame: {
+        args: { userId: UserID; worldPrompt: string; stylePrompt: string }
+        res: Promise<{ name: string; desc: string; cards: any[]; image: string }>
+    }
+    generateGame: {
+        args: { userId: UserID; worldPrompt: string; stylePrompt: string }
+        res: Promise<{ name: string; desc: string; cards: any[]; image: string }>
     }
     setInitialGameState: {
         args: { userId: UserID }
@@ -85,6 +107,10 @@ export interface BareServerActionsMeta {
     startRun: {
         args: { userId: UserID }
         res: Promise<{ runId: RunID }>
+    }
+    prepareRun: {
+        args: { userId: UserID; daily?: boolean }
+        res: Promise<void>
     }
     setUsername: {
         args: { userId: UserID; username: Username }
@@ -125,10 +151,12 @@ export interface BareGameActionArgs {
     }
     rollKaiju: {
         placeIndex: CharacterPlaceIndex
+        plain?: boolean
+        enhanced?: boolean
     }
     playCard: { cardUid: string; targetUids: CharacterUid[] }
     resetRandomSeed: Empty
-    // chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
+    chooseStance: { characterUid: CharacterUid; stanceId: StanceId }
     setRunId: { userId: UserID; runId: RunID }
 
     //test only start

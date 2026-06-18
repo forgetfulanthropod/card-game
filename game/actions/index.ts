@@ -1,6 +1,6 @@
 export { step } from './internal'
 
-// @index(['./*.ts', '!chooseStance.ts'], f => `export { ${(f.name)} } from '${f.path}'`)
+// @index(['./*.ts'], f => `export { ${(f.name)} } from '${f.path}'`)
 export { activateOrb } from './activateOrb'
 export { activateSouvenir } from './activateSouvenir'
 export { addCardToDeck } from './addCardToDeck'
@@ -27,4 +27,5 @@ export { rollKaiju } from './rollKaiju'
 export { rulebookAction } from './rulebookAction'
 export { setBattleScene } from './setBattleScene'
 export { setRunId } from './setRunId'
+export { chooseStance } from './chooseStance'
 // @endindex

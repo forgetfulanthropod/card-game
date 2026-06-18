@@ -30,6 +30,7 @@ import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { calculateTaunt } from 'shared/code'
 import { EffectIndicators } from './EffectIndicators'
+import { StanceControls } from './StanceControls'
 
 export const HEALTH_BAR_WIDTH = 300
 // const rawWidth = 1841
@@ -377,8 +378,8 @@ function HealthIndicator(characterCursor: ROCursor<CharacterMeta>) {
             src: 'healthBarShadow',
             anchor: spriteAnchor,
         }),
-        // StanceBarIndicator(characterCursor),
-        // StanceControls(characterCursor),
+        StanceBarIndicator(characterCursor),
+        StanceControls(characterCursor),
 
         Text({
             text: compose(

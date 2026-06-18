@@ -1,5 +1,7 @@
+const getRand = () => (typeof global !== 'undefined' && (global as any).srandom ? (global as any).srandom() : Math.random())
+
 export const randomInteger = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1)) + min
+  return Math.floor(getRand() * (max - min + 1)) + min
 }
 
 export const rollNumber = (): number => {

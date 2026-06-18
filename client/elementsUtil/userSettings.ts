@@ -1,5 +1,5 @@
 import { random, toString } from 'lodash'
-import { AuthToken, Nonce, RequireAllKeys, UserID, WalletAddress } from 'shared'
+import { AuthToken, Nonce, RequireAllKeys, UserID } from 'shared'
 
 type BooleanKeyInLocalStorage =
     | 'muteSFX'
@@ -13,14 +13,12 @@ type BooleanValueInLocalStorage = { [k in BooleanKeyInLocalStorage]: boolean }
 type StringKeyInLocalStorage =
     | 'authToken'
     | 'userId'
-    | 'walletAddress'
     | 'nonce'
 
 type StringValueInLocalStorage = RequireAllKeys<
     {
         authToken: AuthToken
         userId: UserID | null
-        walletAddress: WalletAddress
         nonce: Nonce
     },
     StringKeyInLocalStorage

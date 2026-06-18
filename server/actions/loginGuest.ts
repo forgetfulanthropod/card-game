@@ -1,21 +1,15 @@
-import type { ServerActions, AuthUserDBActionProps, UserType } from 'shared'
-import { getDbClient, sql as sqlTag } from '@/db/client'
-import { getLogger } from 'game'
-import { getUserInfo } from './internal'
-import { sign } from 'jsonwebtoken'
-import { getServerEnv } from 'shared/code'
+import type { ServerActions } from 'shared'
 import { activeUserSockets, activeUsers } from '@/IO'
 import { getGuestUserInfo } from './internal/getGuestUserInfo'
+import { touchLogin } from '@/storage'
 
 export const loginGuest: ServerActions['loginGuest'] = async ({
     existingUserId,
     socketId,
 }) => {
-    logger.info(`Handling login for: ${existingUserId ?? 'New Guest User'}`)
+    logger.info(`Handling login for: ${existingUserId ?? 'New Player'}`)
 
-    const connection = await getDbClient()
     const { userId, username, nonce, userType } = await getGuestUserInfo({
-        connection,
         userId: existingUserId,
     })
     activeUserSockets.set(userId, socketId)
@@ -24,26 +18,6 @@ export const loginGuest: ServerActions['loginGuest'] = async ({
     if (activeUser) activeUsers.set(socketId, { ...activeUser, userId })
 
     console.log({ userId, socketId })
-    await trackNewLogin({ connection, userId, userType })
+    touchLogin(userId)
     return { userId, username, nonce, userType }
-}
-
-const trackNewLogin = async (
-    props: AuthUserDBActionProps & { userType: UserType }
-): Promise<void> => {
-    const { connection, userId, userType } = props
-    let sql = sqlTag.typeAlias('void')
-    const authMethod = userType === 'web3' ? 'connect_wallet' : 'guest'
-
-    await connection.any(sql`
-        UPDATE
-          kaiju.user_info
-        SET
-          last_login_ts = now(),
-          last_auth_method = ${authMethod}
-        WHERE
-          user_id = ${userId}
-    `)
-
-    return
 }

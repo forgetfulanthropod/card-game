@@ -1,4 +1,4 @@
-import './global.css'
+// import './global.css'   // styles pre-built via tailwind cli to public/styles.css and linked in index.html (plugin compat workaround)
 
 import { useEffect, useState, createContext } from 'react'
 
@@ -6,22 +6,7 @@ import { GameManager } from './GameManager'
 import { getClientEnv } from '@/util/getClientEnv'
 import { NewStartScreen } from './NewStartScreen'
 
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { Web3Modal, Web3Button } from '@web3modal/react'
-import { configureChains, createClient, WagmiConfig } from 'wagmi'
-import { arbitrum } from 'wagmi/chains'
 import { UserID } from 'shared'
-
-const chains = [arbitrum]
-const projectId = getClientEnv('WALLET_CONNECT_ID')
-
-const { provider } = configureChains(chains, [w3mProvider({ projectId })])
-const wagmiClient = createClient({
-    autoConnect: true,
-    connectors: w3mConnectors({ projectId, version: 1, chains }),
-    provider,
-})
-const ethereumClient = new EthereumClient(wagmiClient, chains)
 
 interface IAppContext {
     inPixi: boolean
@@ -29,8 +14,6 @@ interface IAppContext {
     userId: UserID
     setUserId: React.Dispatch<React.SetStateAction<UserID>>
     IS_PRODUCTION: boolean
-    // loading: boolean
-    // setLoading: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const AppContext = createContext<IAppContext>({
@@ -39,15 +22,12 @@ export const AppContext = createContext<IAppContext>({
     userId: '',
     setUserId: () => {},
     IS_PRODUCTION: false,
-    // loading: false,
-    // setLoading: () => {},
 })
 
 export function App(): JSXElement {
     const IS_PRODUCTION = getClientEnv('IS_PRODUCTION') === 'true'
     const [userId, setUserId] = useState('')
     const [inPixi, setInPixi] = useState(false)
-    // const [loading, setLoading] = useState(true)
 
     const appContext = {
         inPixi,
@@ -55,8 +35,6 @@ export function App(): JSXElement {
         userId,
         setUserId,
         IS_PRODUCTION,
-        // loading,
-        // setLoading
     }
 
     const preventRightClick = (e: MouseEvent) => {
@@ -70,14 +48,11 @@ export function App(): JSXElement {
             window.removeEventListener('contextmenu', preventRightClick)
     }, [])
 
-    return <>
+    return (
         <AppContext.Provider value={appContext}>
-            <WagmiConfig client={wagmiClient}>
-                <GameManager userId={userId} setInPixi={setInPixi}>
-                    {!inPixi && <NewStartScreen />}
-                </GameManager>
-            </WagmiConfig>
-            <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+            <GameManager userId={userId} setInPixi={setInPixi}>
+                {!inPixi && <NewStartScreen />}
+            </GameManager>
         </AppContext.Provider>
-    </>
+    )
 }
