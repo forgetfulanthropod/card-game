@@ -5,7 +5,7 @@
   "regions": ["iad1"],
   "functions": {
     "builds/server.js": {
-      "includeFiles": ["public/**"],
+      "includeFiles": "public/**",
       "memory": 1024,
       "maxDuration": 60
     }
@@ -17,10 +17,5 @@
     "IS_PRODUCTION": "true",
     "DEV_STATIC_ASSETS": "true",
     "NODE_ENV": "production"
-  },
-  "build": {
-    "env": {
-      "IS_PRODUCTION": "true"
-    }
   }
 }
