@@ -5,7 +5,7 @@
   "buildCommand": "pnpm run build",
   "builds": [
     {
-      "src": "builds/server.js",
+      "src": "server/index.ts",
       "use": "@vercel/node",
       "config": {
         "includeFiles": ["public/**"],
