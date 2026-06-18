@@ -1,0 +1,18 @@
+{
+  "framework": null,
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm run build",
+  "functions": {
+    "builds/server.js": {
+      "includeFiles": ["public/**", "builds/**"],
+      "memory": 1024
+    }
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "builds/server.js" }
+  ],
+  "env": {
+    "IS_PRODUCTION": "true",
+    "DEV_STATIC_ASSETS": "true"
+  }
+}

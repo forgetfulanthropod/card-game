@@ -8,8 +8,7 @@
         "server"
     ],
     "engines": {
-        "yarn": "1.22.17",
-        "node": "16.13.0"
+        "node": ">=20"
     },
     "scripts": {
         "CI": "bash run CI",
@@ -24,7 +23,8 @@
         "styles:build": "bash run styles:build",
         "client:build": "bash run client:build",
         "server:build": "bash run server:build",
-        "dev:watch": "bash run dev:watch"
+        "dev:watch": "bash run dev:watch",
+        "build": "IS_PRODUCTION=true pnpm run client:build && IS_PRODUCTION=true pnpm run server:build"
     },
     "dependencies": {
         "@capacitor/android": "^8.4.0",
