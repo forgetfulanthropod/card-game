@@ -14,7 +14,7 @@
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "builds/server.js" }
+    { "src": "/(.*)", "dest": "server/index.ts" }
   ],
   "env": {
     "IS_PRODUCTION": "true",
