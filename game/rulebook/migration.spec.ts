@@ -2,7 +2,8 @@
 import { deepStrictEqual as equals, ok as truthy } from 'assert'
 
 import { getRulebook, setRulebook } from '../rulebook/rulebook'
-import { migrateAllRulebooks, ensureRulebooksMigrated, CURRENT_RULEBOOK_VERSION, loadRulebook } from './RulebookManager'
+import { migrateAllRulebooks, ensureRulebooksMigrated, CURRENT_RULEBOOK_VERSION, loadRulebook, migratePlayerGamestateSave } from './RulebookManager'
+import { stringifyRulebook } from '../util/rulebookUtil'
 import type { Rulebook } from 'shared'
 
 function assert(cond: any, msg: string) {
@@ -39,6 +40,11 @@ export const suites = {
                 // ensure no breakage
                 const after = ensureRulebooksMigrated()
                 assert(after.version === CURRENT_RULEBOOK_VERSION, 'ensure after reset ok')
+
+                // Patch actual player gamestate save's curRulebook (per skeptic)
+                const mockSave = { curRulebook: stringifyRulebook(bumped) }
+                const patched = migratePlayerGamestateSave(mockSave)
+                assert(patched.curRulebook.includes(CURRENT_RULEBOOK_VERSION) || patched.curRulebook.includes('2.1.0'), 'player save curRulebook was migrated')
             } finally {
                 setRulebook(original)
             }

@@ -130,4 +130,17 @@ export function ensureRulebooksMigrated(): Rulebook {
 // Migration is invoked explicitly on loads / inits / getRulebook / initial state (enforces "on every load")
 // Top level auto-call removed to avoid circulars with rulebook.ts; callers ensure it.
 
-export { migrateRulebookIfNeeded } // for tests
+export { migrateRulebookIfNeeded }
+
+/** Migrate a player gamestate's curRulebook snapshot (the stringified version) */
+export function migratePlayerGamestateSave(gamestate: any): any {
+    if (!gamestate || !gamestate.curRulebook) return gamestate
+    try {
+        const parsed = JSON.parse(gamestate.curRulebook)
+        if (parsed.version !== CURRENT_RULEBOOK_VERSION) {
+            const migrated = migrateRulebookIfNeeded(parsed)
+            gamestate.curRulebook = stringifyRulebook(migrated)
+        }
+    } catch {}
+    return gamestate
+}

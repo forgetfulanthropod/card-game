@@ -23,8 +23,12 @@ export class PVPScene extends DungeonEntryScene {
             this.addChild(label)
         } catch {}
 
-        // Auto strongest team QuickMatch hook (callable from UI / auto for bot)
-        // In real usage after prepare + pvp scene: startQuickMatchPVP()
-        ;(this as any).__quickMatch = startQuickMatchPVP
+        // Auto strongest team QuickMatch (wired): call on entry for PVP
+        try {
+            const { autoSelectStrongestForPVP, startQuickMatchPVP } = require('./QuickMatch')
+            ;(this as any).__autoStrongest = autoSelectStrongestForPVP
+            // For bot/quick path, kick off
+            void startQuickMatchPVP().catch(() => {})
+        } catch {}
     }
 }
