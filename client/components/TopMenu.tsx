@@ -1,12 +1,18 @@
 import { PrimaryButton } from './StartScreen/'
 import { callApi } from '@/callApi'
 import { collectData } from '@/analytics/collectData'
+import { getPromiseForTreeInitialized } from '@/data'
+import { getStage, assetsLoadedPromise } from '@/elementsUtil'
+import { useContext } from 'react'
+import { AppContext } from './App'
 
 /**
  * TopMenu: Daily | Worlds | PVP | Shop | Creator Hub
  * Daily ONLY mode with NO CHARACTER SELECTION.
  */
 export function TopMenu(props: { onStart?: (mode: string) => void }) {
+    const { setUserId, setInPixi } = useContext(AppContext)
+
     const startMode = async (mode: 'daily' | 'worlds' | 'pvp' | 'shop' | 'creator') => {
         collectData('main_menu_click', { mode })
         const docRes = await callApi('listAccounts', {}) as any
@@ -18,24 +24,48 @@ export function TopMenu(props: { onStart?: (mode: string) => void }) {
         }
         if (!userId) return
 
+        // ensure account/login similar to NewStartScreen
+        try {
+            await callApi('login', { accountId: userId, socketId: (window as any).socket?.id } as any)
+        } catch {}
+
         if (mode === 'daily') {
             // NO CHARACTER SELECTION – ONLY MODE
             await callApi('prepareRun', { userId, daily: true, enhanced: true, autoStart: true } as any)
-            // already in battle
+            // activate pixi (critical - was missing)
+            await assetsLoadedPromise().catch(() => {})
+            await getPromiseForTreeInitialized().catch(() => {})
+            setUserId(userId)
+            setInPixi(true)
+            try { getStage().visible = true } catch {}
             return
         }
         if (mode === 'worlds') {
             await callApi('prepareRun', { userId, daily: false, plain: true } as any)
-            // force worlds selection entry (uses DungeonEntry base)
+            await assetsLoadedPromise().catch(() => {})
+            await getPromiseForTreeInitialized().catch(() => {})
+            setUserId(userId)
+            setInPixi(true)
+            try { getStage().visible = true } catch {}
             await callApi('changeScene', { newSceneName: 'worlds' } as any)
             return
         }
         if (mode === 'pvp') {
             await callApi('prepareRun', { userId, daily: false, plain: true } as any)
+            await assetsLoadedPromise().catch(() => {})
+            await getPromiseForTreeInitialized().catch(() => {})
+            setUserId(userId)
+            setInPixi(true)
+            try { getStage().visible = true } catch {}
             await callApi('changeScene', { newSceneName: 'pvp' } as any)
             return
         }
         if (mode === 'shop' || mode === 'creator') {
+            await assetsLoadedPromise().catch(() => {})
+            await getPromiseForTreeInitialized().catch(() => {})
+            setUserId(userId)
+            setInPixi(true)
+            try { getStage().visible = true } catch {}
             await callApi('changeScene', { newSceneName: mode } as any)
             return
         }

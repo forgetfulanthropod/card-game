@@ -23,12 +23,19 @@ export class DungeonEntryScene extends PixiContainer {
     constructor() {
         super()
         collectData('ui_ux_view', { page_title: 'Character Select' })
-        const selectedCharactersCursor =
-            getEntryScene().select('selectedCharacters')
+
+        let selectedCharactersCursor: any = null
+        try {
+            // Only for real selection flows (entry/worlds/pvp). shop/creator etc are stubs.
+            const entry = getEntryScene()
+            selectedCharactersCursor = entry.select('selectedCharacters')
+        } catch {
+            // non-selection stub path - minimal UI
+        }
 
         const startButton = GoButton()
 
-        loopSong('entrySceneMusicHooligansBluff')
+        try { loopSong('entrySceneMusicHooligansBluff') } catch {}
 
         // Build default content (subclasses can customize by overriding or post-super add)
         const children = [
@@ -46,19 +53,21 @@ export class DungeonEntryScene extends PixiContainer {
 
         this.name = 'DungeonEntryScene'
 
-        const unbind = onUpdate(
-            selectedCharactersCursor,
-            (selected) => {
-                if (selected == null) return
-                startButton.visible =
-                    selected.filter((s) => s).length ===
-                    NUM_CHARACTERS_REQUIRED
-            },
-            true
-        )
-        this.on('destroyed', () => {
-            try { unbind && unbind() } catch {}
-        })
+        if (selectedCharactersCursor) {
+            const unbind = onUpdate(
+                selectedCharactersCursor,
+                (selected) => {
+                    if (selected == null) return
+                    startButton.visible =
+                        selected.filter((s) => s).length ===
+                        NUM_CHARACTERS_REQUIRED
+                },
+                true
+            )
+            this.on('destroyed', () => {
+                try { unbind && unbind() } catch {}
+            })
+        }
     }
 }
 

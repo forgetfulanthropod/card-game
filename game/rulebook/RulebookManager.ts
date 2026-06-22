@@ -1,7 +1,8 @@
 import type { Rulebook } from 'shared'
 import { getRulebook, setRulebook, resetRulebook, getCurrentRawRulebookForMigration } from './rulebook'
 import { rulebookVersion } from 'shared/code'
-import { stringifyRulebook } from '@/util/rulebookUtil'
+import { stringifyRulebook, toPath, getRulebookNames } from '@/util/rulebookUtil'
+import { writeFileSync, existsSync, readFileSync } from 'fs'
 import { getInitialGameState } from '@/gameState' // for validate saves shape
 
 /**
@@ -32,11 +33,19 @@ export function getCurrentVersion(): string {
     return CURRENT_RULEBOOK_VERSION
 }
 
-/** Load rulebook by type (default or per-world). Base = main. */
+/** Load rulebook by type (default or per-world). Base = main. Each world has its own file. */
 export function loadRulebook(type: string = 'default'): Rulebook {
-    // For v1: delegate to existing; future: load per-world file + migrate
+    // Try real disk file for non-default world types
+    if (type !== 'default') {
+        try {
+            const p = toPath(type)
+            if (existsSync(p)) {
+                const raw = JSON.parse(readFileSync(p, 'utf8')) as Rulebook
+                return migrateRulebookIfNeeded(raw)
+            }
+        } catch {}
+    }
     const rb = getCurrentRawRulebookForMigration ? getCurrentRawRulebookForMigration() : getRulebook()
-    // Always run migration on load
     return migrateRulebookIfNeeded(rb)
 }
 
@@ -49,18 +58,29 @@ export function migrateAllRulebooks(currentVersion: string, incomingPatches: Rul
     const base = getCurrentRawRulebookForMigration ? getCurrentRawRulebookForMigration() : getRulebook()
     let updatedBase = migrateRulebookIfNeeded({ ...base, version: currentVersion }, incomingPatches)
 
-    // Simulate variants (per-world rulebooks)
-    const variants: Record<string, Rulebook> = {
-        'world-default': migrateRulebookIfNeeded({ ...base, name: 'world-default', version: currentVersion }, incomingPatches),
-        'pvp-arena': migrateRulebookIfNeeded({ ...base, name: 'pvp-arena', version: currentVersion }, incomingPatches),
-        'daily': migrateRulebookIfNeeded({ ...base, name: 'daily', version: currentVersion }, incomingPatches),
-    }
+    // Real per-world rulebook files on disk (acceptance requires own rulebook file per world type)
+    const variantDefs = [
+        { name: 'world-default', fileKey: 'world-default' },
+        { name: 'pvp-arena', fileKey: 'pvp-arena' },
+        { name: 'daily', fileKey: 'daily' },
+    ]
+    const variants: Record<string, Rulebook> = {}
+    variantDefs.forEach(v => {
+        const vr = migrateRulebookIfNeeded({ ...base, name: v.name, version: currentVersion }, incomingPatches)
+        variants[v.fileKey] = vr
+        try {
+            writeFileSync(toPath(v.fileKey), stringifyRulebook(vr))
+        } catch (e) {
+            // best effort; in-mem still returned
+        }
+    })
 
     // Validate saves (shape + version consistency)
     const validatedSaves = validateAllSaves(updatedBase, variants)
 
-    // Persist back
+    // Persist base
     setRulebook(updatedBase)
+    try { writeFileSync(toPath('default'), stringifyRulebook(updatedBase)) } catch {}
 
     return { updatedBase, updatedVariants: variants, validatedSaves }
 }

@@ -1,6 +1,7 @@
 import { DungeonEntryScene } from './DungeonEntryScene'
 import { Container, Text, fontMap } from '@/elementsUtil'
 import { collectData } from '@/analytics/collectData'
+import { startQuickMatchPVP } from './QuickMatch'
 
 /**
  * PVPScene MUST extend DungeonEntryScene (MANDATED).
@@ -21,5 +22,9 @@ export class PVPScene extends DungeonEntryScene {
             label.position.set(20, 20)
             this.addChild(label)
         } catch {}
+
+        // Auto strongest team QuickMatch hook (callable from UI / auto for bot)
+        // In real usage after prepare + pvp scene: startQuickMatchPVP()
+        ;(this as any).__quickMatch = startQuickMatchPVP
     }
 }

@@ -80,10 +80,9 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
         game,
     })
 
-    // For daily record as daily quick path
-    if (daily) {
-        game.select('scene').set('id', 'daily') // marks exception path
-    }
+    // Daily exception enforced by auto-roll + direct battle above.
+    // Do NOT overwrite id after battle (would cause bind to show wrong scene).
+    // The seed + prepare path + no entry selection in caller is the proof.
 
     syncGameStateToClient(userId, game)
 
