@@ -45,7 +45,7 @@ export function CharacterOptions() {
         const src = getTexture(`${c.id}Profile` as AssetKey)
 
         // All plain characters from entryState / playerCharacterStatsMap (for viewing the full selection)
-        const validOptions: CharacterId[] = [
+        const validOptions: readonly CharacterId[] = [
             'frogKnight',
             'gnomeHooligan',
             'warhog',

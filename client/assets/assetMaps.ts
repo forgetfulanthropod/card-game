@@ -1,5 +1,8 @@
+import { upperFirst } from 'lodash'
 import { SouvenirId } from 'shared'
 import type { VisibleEffect } from './assetTypes'
+
+export const souvenirPlaceholderPath = 'souvenirs/souvenirPlaceholder.webp'
 
 export const rootAssets = {
     fishStick: 'misc-png/INVENTORY_FISHSTICK.webp',
@@ -700,6 +703,12 @@ export const souvenirAssets: {
     souvenirWoolBandana: 'souvenirs/Wool Bandana.webp',
 
     souvenirHypochondriac: 'souvenirs/souvenirPlaceholder.webp',
+}
+
+export function isTraitSouvenir(id: SouvenirId): boolean {
+    const key = `souvenir${upperFirst(id)}` as SouvenirAssetKey
+    const path = (souvenirAssets as Record<string, string>)[key]
+    return !path || path === souvenirPlaceholderPath
 }
 
 export const userAvatarAssets = {

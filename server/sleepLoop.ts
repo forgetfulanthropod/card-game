@@ -10,6 +10,15 @@ export type ApiCall = GameActionCall & { userId: UserID }
 export const processingQueue: Record<string, ApiCall[]> = {}
 export const isProcessing = new Set<string>()
 
+export function clearActionQueue(userId: UserID) {
+    delete processingQueue[userId]
+    isProcessing.delete(userId)
+}
+
+export function syncGameStateToClient(userId: UserID, game: Gamecursor) {
+    updateClient(userId, game)
+}
+
 export const processActionQueue = async (userId: UserID) => {
     let actionQueue = processingQueue[userId]
     if (!actionQueue || isProcessing.has(userId)) return

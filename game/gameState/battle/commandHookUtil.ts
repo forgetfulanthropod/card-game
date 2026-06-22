@@ -22,7 +22,7 @@ export function triggerOnHook(
 
     scene.set(
         'on',
-        produce<CommandHooks>(on => {
+        produce(scene.get('on') ?? {}, (on: CommandHooks) => {
             const remainingCommands = (on[id] ?? [])
                 .map(commandDetail => {
                     const { command, targetUids } = commandDetail
@@ -39,7 +39,7 @@ export function triggerOnHook(
 
             if (remainingCommands.length > 0) on[id] = remainingCommands
             else delete on[id]
-        })(scene.get('on'))
+        })
     )
 }
 

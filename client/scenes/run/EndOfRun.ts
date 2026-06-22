@@ -33,7 +33,6 @@ import { random, round } from 'lodash'
 import { collectData } from '@/analytics/collectData'
 import { datum } from 'datums'
 import { LeaderboardContainer } from './Leaderboards'
-import { callApi } from '@/callApi'  // for compendium if needed
 
 // Simple DOM-based Compendium overlay (grayed undiscovered) - works from pixi run menu
 function showCompendiumOverlay(comp: { cards?: string[]; souvenirs?: string[]; swords?: string[] }, userId: string) {

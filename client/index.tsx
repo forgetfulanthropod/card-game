@@ -14,6 +14,30 @@ window.loadedJs = true
 const reactRoot = document.getElementById('react-root') as HTMLDivElement
 const IS_PRODUCTION = getClientEnv('IS_PRODUCTION')
 
+// Make sure we can see the React content (main menu) even if pixi or other things interfere
+document.body.style.background = '#000'
+if (reactRoot) {
+    reactRoot.style.position = 'absolute'
+    reactRoot.style.top = '0'
+    reactRoot.style.left = '0'
+    reactRoot.style.width = '100%'
+    reactRoot.style.height = '100%'
+    reactRoot.style.zIndex = '10'
+}
+
+// Do NOT remove the loading gif at top-level before we know render succeeded.
+// Removing it early + render failure = blank screen ("no loading modal").
+function removeLoadingPlaceholder() {
+    const loadingImg = document.querySelector('img[src*="loading.gif"]') as HTMLElement | null
+    if (loadingImg && loadingImg.parentNode) {
+        loadingImg.parentNode.removeChild(loadingImg)
+    }
+    const staticLabel = document.getElementById('static-loading')
+    if (staticLabel && staticLabel.parentNode) {
+        staticLabel.parentNode.removeChild(staticLabel)
+    }
+}
+
 function main() {
     // render UI immediately; kick off asset preload in background (needed for pixi later)
     try {
@@ -28,19 +52,55 @@ function main() {
     startLoadingAssets().catch(err => console.error('asset preload failed', err))
 }
 
+// Global error hooks so we at least show *something* instead of silent blank when broken.
+function installErrorHandlers(rootEl: HTMLElement | null) {
+    let bootComplete = false
+    const showErr = (msg: string) => {
+        if (bootComplete) {
+            console.error('Runtime error:', msg)
+            return
+        }
+        console.error('BOOT ERROR:', msg)
+        if (rootEl) {
+            rootEl.innerHTML = `<div style="color:#ffdddd;background:#300;padding:16px;font:14px/1.4 sans-serif;position:absolute;inset:0;z-index:9999"><b>Kaiju Cards failed to start.</b><br/>${msg}<br/><br/>Hard refresh (Ctrl+Shift+R). Check console. Try ?server= override if remote.</div>`
+        }
+    }
+    window.addEventListener('error', (e) => showErr(e.message || String(e.error || e)))
+    window.addEventListener('unhandledrejection', (e) => showErr('unhandled: ' + (e.reason?.message || e.reason)))
+    return { showErr, markBootComplete: () => { bootComplete = true } }
+}
+
 const connectToServerAndRenderUI = () => {
     document.title = `Kaiju Cards ${BUILD_VER}`
     prepareSocket()
     const rootEl = document.getElementById('react-root')
+    const { showErr, markBootComplete } = installErrorHandlers(rootEl)
     if (!rootEl) {
         console.error('react-root element not found! HTML structure issue in WebView/Capacitor?')
         document.body.style.background = 'black'
         document.body.innerHTML += '<div style="color:white;padding:20px">react-root missing. Bundle may have loaded wrong HTML.</div>'
         return
     }
-    rootEl.innerHTML = '' // remove the default "Loading..." placeholder before mounting React
+    rootEl.innerHTML = '' // clear before mount
     const root = createRoot(rootEl)
-    root.render(<App />)
+    try {
+        root.render(<App />)
+        // Remove placeholder only after we attempted to mount the UI
+        // Use rAF so first paint can happen; menu content should cover or replace.
+        requestAnimationFrame(() => {
+            removeLoadingPlaceholder()
+            markBootComplete()
+        })
+        // Extra safety: if still empty after a tick, show hint (no crash case)
+        setTimeout(() => {
+            if (rootEl && rootEl.children.length === 0 && !rootEl.textContent?.trim()) {
+                rootEl.innerHTML = '<div style="color:#aaa;padding:12px;font-family:sans-serif;opacity:0.7">Loading Kaiju Cards menu...</div>'
+            }
+        }, 1200)
+    } catch (e: any) {
+        showErr(String(e))
+        removeLoadingPlaceholder()
+    }
 }
 
 void main()

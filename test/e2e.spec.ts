@@ -3,26 +3,20 @@ import { test, expect } from '@playwright/test'
 test('loads start screen and can pick an account', async ({ page }) => {
   await page.goto('/')
 
-  // basic load
-  await expect(page.locator('text=play now')).toBeVisible({ timeout: 15000 })
+  // New start screen: daily / completionist modes, auto-created username
+  await expect(page.getByRole('button', { name: /^daily$/i })).toBeVisible({ timeout: 15000 })
+  await expect(page.getByRole('button', { name: /^completionist$/i })).toBeVisible()
 
-  // click play -> should show account picker (three accounts)
-  await page.getByRole('button', { name: /play now/i }).click()
+  // Account is created automatically on load (player-xxxx username)
+  await expect(page.locator('button.font-mono')).toBeVisible({ timeout: 15000 })
+  const username = await page.locator('button.font-mono').textContent()
+  expect(username?.trim().length || 0).toBeGreaterThan(0)
+  expect(username).not.toBe('...')
 
-  // three accounts are offered (by label)
-  await expect(page.locator('text=AlphaKaiju')).toBeVisible()
-  await expect(page.locator('text=BetaDeck')).toBeVisible()
-  await expect(page.locator('text=GammaFury')).toBeVisible()
+  // Click completionist — should start a run without crashing
+  await page.getByRole('button', { name: /^completionist$/i }).click()
 
-  // pick one
-  await page.locator('text=AlphaKaiju').click()
-
-  // after pick, user id-ish or start should enable
-  // may require username set first time (modal), or load
-  // just assert no crash and UI progressed
-  await page.waitForTimeout(800)
-  // if username modal appears we can cancel/close or accept default flow
-  // for now simple assertion that game UI or menu reacted
+  await page.waitForTimeout(2000)
   const bodyText = await page.textContent('body')
   expect(bodyText?.length || 0).toBeGreaterThan(100)
 })

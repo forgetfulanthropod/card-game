@@ -12,7 +12,6 @@ import type {
     CardUid,
     CharacterUid,
     GameState,
-    GuestUserInfo,
     MappedLeaderboards,
     Nonce,
     Orb,
@@ -23,7 +22,6 @@ import type {
     UserID,
     UserInfo,
     Username,
-    Web3UserInfo,
 } from './tree'
 import { AuthRes } from './auth'
 
@@ -96,10 +94,6 @@ export interface BareServerActionsMeta {
         args: { userId: UserID; worldPrompt: string; stylePrompt: string }
         res: Promise<{ name: string; desc: string; cards: any[]; image: string }>
     }
-    generateGame: {
-        args: { userId: UserID; worldPrompt: string; stylePrompt: string }
-        res: Promise<{ name: string; desc: string; cards: any[]; image: string }>
-    }
     setInitialGameState: {
         args: { userId: UserID }
         res: Promise<void>
@@ -109,8 +103,14 @@ export interface BareServerActionsMeta {
         res: Promise<{ runId: RunID }>
     }
     prepareRun: {
-        args: { userId: UserID; daily?: boolean }
-        res: Promise<void>
+        args: {
+            userId: UserID
+            daily?: boolean
+            plain?: boolean
+            enhanced?: boolean
+            autoStart?: boolean
+        }
+        res: Promise<void | { runId: RunID }>
     }
     setUsername: {
         args: { userId: UserID; username: Username }

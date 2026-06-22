@@ -302,7 +302,7 @@ const interpretCommandSuite = {
 
         truthy(
             JSON.stringify(scene.get('allCharacters', pc1).effects) ===
-                '[{"id":"vulnerableDebuff","counter":11},{"id":"poisonedDebuff","counter":11},{"id":"braveBuff","counter":11}]'
+                '[{"id":"vulnerableDebuff","counter":11,"countType":"turn"},{"id":"poisonedDebuff","counter":11,"countType":"turn"},{"id":"braveBuff","counter":11,"countType":"turn"}]'
         )
 
         interpretCommand({
@@ -313,7 +313,7 @@ const interpretCommandSuite = {
 
         equals(
             JSON.stringify(scene.get('allCharacters', pc1).effects),
-            '[{"id":"braveBuff","counter":11}]'
+            '[{"id":"braveBuff","counter":11,"countType":"turn"}]'
         )
     },
     // orb() {},
@@ -390,7 +390,7 @@ function addCardToHand(card: Card, scene: BattleCursor) {
 }
 
 function freshGame() {
-    return new SBaobab(exampleBattleScene).select()
+    return new SBaobab(structuredClone(exampleBattleScene)).select()
 }
 
 function freshBattleScene(game?: SCursor<GameState>) {

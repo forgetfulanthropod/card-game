@@ -1,4 +1,3 @@
-export * from './ClosedGameModal'
 export * from './GameModeContainer'
 export * from './InfoModal'
 export * from './NavIconWrapper'

@@ -8,6 +8,7 @@ export const PrimaryButton = (props: {
     size: buttonSize
     onClick?: (...args: any) => unknown
     isLoading?: boolean
+    disabled?: boolean
 }) => {
     const colorClass =
         props.type === 'primary'
@@ -31,7 +32,8 @@ export const PrimaryButton = (props: {
 
     return <button
         onClick={props.onClick}
-        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl whitespace-nowrap ${colorClass} ${sizeClass} filter hover:brightness-95 flex justify-center`}
+        disabled={props.disabled || props.isLoading}
+        className={`w-full text-white shadow-3xl hover:scale-105 transition rounded-3xl whitespace-nowrap ${colorClass} ${sizeClass} filter hover:brightness-95 flex justify-center disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed`}
     >
         {props.isLoading ? (
             <TailSpin speed={2} strokeWidth={2.5} />

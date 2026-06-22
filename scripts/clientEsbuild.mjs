@@ -33,12 +33,10 @@ const args = process.argv.slice(2)
 const shouldWatchArgv = args[0] === 'watch'
 
 function makeSubstitutions() {
-    const gameIsLive = (process.env.GAME_IS_LIVE ?? 'false') === 'true'
     const isProduction = (process.env.IS_PRODUCTION ?? 'false') === 'true'
     const isLocal = (process.env.IS_LOCAL ?? 'true') === 'true'
     return {
         ...makeBuildInfo('CLIENT_'),
-        ['process.env.GAME_IS_LIVE']: JSON.stringify(gameIsLive),
         ['process.env.IS_PRODUCTION']: JSON.stringify(isProduction),
         ['process.env.IS_LOCAL']: JSON.stringify(isLocal),
         global: 'window',

@@ -6,6 +6,9 @@ import cors from 'cors'
 import { mountSocketServer } from './IO'
 import { buildInfo } from './build'
 
+// Ensure logger is initialized (sets global.logger)
+import './types'
+
 // No .env, no dotenv. All config hardcoded for simplicity (json storage, no external db server)
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3456
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info'
@@ -19,9 +22,33 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Proxy CDN assets for local dev (browser CORS blocks direct media.kaijucards.io fetches)
+app.use('/media-proxy', async (req, res) => {
+    const remotePath = req.url.replace(/^\//, '')
+    if (!remotePath) {
+        res.status(400).end('missing path')
+        return
+    }
+    const url = `https://media.kaijucards.io/${remotePath}`
+    try {
+        const response = await fetch(url)
+        if (!response.ok) {
+            res.status(response.status).end()
+            return
+        }
+        const contentType = response.headers.get('content-type')
+        if (contentType) res.setHeader('Content-Type', contentType)
+        res.setHeader('Cache-Control', 'public, max-age=86400')
+        res.send(Buffer.from(await response.arrayBuffer()))
+    } catch (e) {
+        logger.warn(`media proxy failed for ${url}`, e)
+        res.status(502).end()
+    }
+})
+
 // serve static (dev + production on Vercel)
 if (DEV_STATIC_ASSETS) {
-    const publicDir = path.join(__dirname, '..', 'public')
+    const publicDir = path.join(process.cwd(), 'public')
     const assetsDir = path.join(publicDir, 'assets')
     app.use(
         '/assets',

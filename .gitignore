@@ -36,3 +36,6 @@ dep-graph*.svg
 
 artifacts
 cache
+.vercel
+yarn.lock
+yarn-error.log

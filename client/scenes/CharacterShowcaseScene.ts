@@ -2,7 +2,6 @@ import { Container, PixiText, BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 import { MainCharacterAnimation, PlainButton } from './shared'
 import { callApi } from '@/callApi'
 import type { CharacterId } from 'shared'
-import { BASE_HEIGHT, BASE_WIDTH } from '@/elementsUtil'
 
 // Main playable / showcase characters (those with spine support)
 const SHOWCASE_CHAR_IDS: CharacterId[] = [

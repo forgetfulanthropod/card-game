@@ -21,6 +21,7 @@ import {
     hoveredCharacterUid,
     toDatum,
 } from '@/util'
+import { getClientEnv } from '@/util/getClientEnv'
 import { compose, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { OutlineFilter } from 'pixi-filters'
@@ -321,6 +322,15 @@ function FullInfoBox(props: { cm: CharacterMeta; abilities: Ability[] }) {
     ).parent
 }
 
+function swordImageUrl(parts: SwordParts): string {
+    const filename = `${parts.guard.kind}-${parts.handle.kind}-${parts.pommel.kind}-${parts.blade.kind}.webp`
+    const remotePath = `cdn-cgi/image/width=250,quality=75/webp/swords-plain/${filename}`
+    if (getClientEnv('IS_LOCAL') === 'true') {
+        return `/media-proxy/${remotePath}`
+    }
+    return `https://media.kaijucards.io/${remotePath}`
+}
+
 export function Sword(parts: SwordParts) {
     const isHovered = datum(false)
 
@@ -339,27 +349,29 @@ export function Sword(parts: SwordParts) {
         })
     )
 
-    Assets.load(
-        `https://media.kaijucards.io/cdn-cgi/image/width=250,quality=75/webp/swords-plain/${parts.guard.kind}-${parts.handle.kind}-${parts.pommel.kind}-${parts.blade.kind}.webp`
-    ).then(src => {
-        root.addChildAt(
-            Sprite({
-                //@ts-ignore
-                src,
-                anchor: [0.5, 0.5],
-                x: CONTENT_WIDTH * 0.59,
-                events: {
-                    pointerenter() {
-                        isHovered.set(true)
+    Assets.load(swordImageUrl(parts))
+        .then(src => {
+            root.addChildAt(
+                Sprite({
+                    //@ts-ignore
+                    src,
+                    anchor: [0.5, 0.5],
+                    x: CONTENT_WIDTH * 0.59,
+                    events: {
+                        pointerenter() {
+                            isHovered.set(true)
+                        },
+                        pointerout() {
+                            isHovered.set(false)
+                        },
                     },
-                    pointerout() {
-                        isHovered.set(false)
-                    },
-                },
-            }),
-            0
-        )
-    })
+                }),
+                0
+            )
+        })
+        .catch(err => {
+            console.warn('sword asset failed to load', swordImageUrl(parts), err)
+        })
 
     return root
 }

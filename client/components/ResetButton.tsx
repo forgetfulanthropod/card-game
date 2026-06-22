@@ -76,8 +76,8 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
 
     const handleBackToMenu = async () => {
         console.log('handleBackToMenu...')
-        // Clear local user immediately to prevent auto-restore from starting the game again
-        localStorage.removeItem('userId')
+        // Leave userId in LS so menu header can restore "playing as ..." display.
+        // The menu restore logic + !inPixi effect only set display (no auto-start).
         setUserId('')
         try {
             const runState = getBattleScene().get('state')
@@ -86,13 +86,10 @@ export function ResetButton(props: { userId: UserID }): JSXElement {
                     userId: userId,
                 })
             }
-            await callApi('setInitialGameState', {
-                userId,
-            })
         } catch (e) {
-            console.warn('error cleaning up run for back to menu', e)
+            console.warn('error ending run for back to menu', e)
         }
-        getStage().visible = false
+        try { getStage().visible = false } catch {}
         setInPixi(false)
         setShowMenu(false)
     }

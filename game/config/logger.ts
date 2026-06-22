@@ -12,6 +12,12 @@ declare global {
     // eslint-disable-next-line no-var
     var logger: Logger
 }
+const transports = [new winston.transports.Console()];
+
+if (process.env.NODE_ENV !== 'production' && process.env.VERCEL !== '1') {
+    transports.push(new winston.transports.File({ filename: __dirname + '/../server.log' }));
+}
+
 global.logger = winston.createLogger({
     format: winston.format.combine(
         winston.format.colorize(),
@@ -25,10 +31,7 @@ global.logger = winston.createLogger({
                 }`
         )
     ),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: __dirname + '/../server.log' }),
-    ],
+    transports,
 })
 export function getLogger() {
     return logger

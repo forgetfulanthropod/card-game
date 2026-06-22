@@ -4,9 +4,9 @@ import {
     discard,
     getEnergy,
     play,
-    updateHand,
     updateNpcMoves,
 } from '@/gameState'
+import { updateHand } from '@/gameState/battle/cards/cardManagement'
 import { getTargetUids } from '@/gameState/battle/cards/getTargetUids'
 import { updateCharacters } from '@/gameState/battle/characters/updateCharacters'
 import { getBattleSceneIn } from '@/util'

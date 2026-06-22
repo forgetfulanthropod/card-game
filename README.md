@@ -121,8 +121,8 @@ For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4
 ## Install and run
 
 ```
-git clone git@github.com:kaijucards/kaiju.git
-cd kaiju
+git clone git@github.com:forgetfulanthropod/card-game.git
+cd card-game
 
 # install yarn
 

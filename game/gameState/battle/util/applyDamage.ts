@@ -484,7 +484,7 @@ export function getDamage({
         calcedDamage = Math.ceil(calcedDamage * critMultiply)
     }
 
-    return Math.max(calcedDamage, 1) // damage minimum is 1
+    return damage > 0 ? Math.max(calcedDamage, 1) : calcedDamage // damage minimum is 1 (when dealing damage)
 }
 
 function maybeApplyDamageThresholdDebuffs(

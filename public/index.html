@@ -98,7 +98,8 @@
     <noscript>JS is disabled</noscript>
     <div class="wrap">
         <div class="relwrap">
-            <img src="loading.gif" style="position: absolute; right: 0; bottom: 0;"/>
+            <img src="loading.gif" style="position: absolute; right: 4px; bottom: 4px; opacity:0.85;" alt="loading"/>
+            <div id="static-loading" style="position:absolute;left:12px;bottom:8px;color:#888;font:12px/1 sans-serif;pointer-events:none;">Loading Kaiju Cards…</div>
             <canvas id="pixi-root"></canvas>
             <div id="react-root" onmouseover="this.style.pointerEvents = 'none'"></div>
         </div>

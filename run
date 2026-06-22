@@ -222,6 +222,22 @@ function server:tsc() {
     tsc -b server
 }
 
+## VERCEL DEPLOY (via CLI)
+function vercel:deploy() {
+    echo '=== Vercel deploy (preview) ==='
+    echo 'Requires: npx vercel (or npm i -g vercel), then login.'
+    echo 'This project is configured for serverless via vercel.json (express app + public assets).'
+    echo 'Caveats: sockets realtime limited on Vercel serverless; file-based storage is ephemeral (no persistence across invocations).'
+    echo 'Run from project dir (the one with package.json + vercel.json):'
+    echo '  npx vercel login'
+    echo '  npm run deploy     # or: bash run vercel:deploy'
+    echo '  npm run deploy:prod'
+    npx vercel
+}
+function vercel:prod() {
+    npx vercel --prod
+}
+
 ## ONE LINE LOCAL DEV (no crypto, simple accounts)
 function dev() {
     set +x

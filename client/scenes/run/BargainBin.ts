@@ -8,7 +8,9 @@ import {
     For,
     glowFilter,
     If,
+    isTraitSouvenir,
     Sprite,
+    Text,
 } from '@/elementsUtil'
 import { toDatum } from '@/util'
 import { compose, Datum, datum } from 'datums'
@@ -144,32 +146,33 @@ export function BargainBin() {
     )
 }
 
-function BargainSouvenirs(
-    souvenirNeedingCharacterSelect: Datum<Souvenir | null>
-) {
-    const souvenirsCursor = getBattleScene().select('souvenirs')
-    const allSouvenirs = vals(souvenirMap)
+const BARGAIN_BIN_COLS = 12
+const BARGAIN_BIN_ITEM_SIZE = 140
 
+function layoutBargainBinSouvenirs(
+    souvenirs: Souvenir[],
+    startY: number
+): Array<Souvenir & { key: string; index: number; x: number; y: number }> {
+    return souvenirs.map((s, index) => ({
+        key: s.id,
+        index,
+        ...s,
+        x: BASE_HEIGHT * 0.2 + BARGAIN_BIN_ITEM_SIZE * (index % BARGAIN_BIN_COLS),
+        y: startY + BARGAIN_BIN_ITEM_SIZE * Math.floor(index / BARGAIN_BIN_COLS),
+    }))
+}
+
+function BargainSouvenirGrid(
+    souvenirNeedingCharacterSelect: Datum<Souvenir | null>,
+    souvenirsDatum: ReturnType<typeof compose>
+) {
     return For(
-        toDatum(souvenirsCursor, collectedSouvenirs =>
-            allSouvenirs
-                .filter(
-                    s =>
-                        !(collectedSouvenirs ?? [])
-                            .map(s => s.id)
-                            .includes(s.id)
-                )
-                .map((s, index) => ({
-                    key: s.id,
-                    index,
-                    ...s,
-                }))
-        ),
+        souvenirsDatum,
         souvenir =>
             Adjust(
                 SouvenirEl({
                     souvenir,
-                    width: 140,
+                    width: BARGAIN_BIN_ITEM_SIZE,
                     displayArgs: {
                         events: {
                             pointerup() {
@@ -184,12 +187,90 @@ function BargainSouvenirs(
                     },
                 }),
                 {
-                    x: BASE_HEIGHT * 0.2 + 140 * (souvenir.index % 12),
-                    y:
-                        BASE_HEIGHT * 0.3 +
-                        140 * Math.floor(souvenir.index / 12),
+                    x: souvenir.x,
+                    y: souvenir.y,
                 }
             )
+    )
+}
+
+function BargainSouvenirs(
+    souvenirNeedingCharacterSelect: Datum<Souvenir | null>
+) {
+    const souvenirsCursor = getBattleScene().select('souvenirs')
+    const allSouvenirs = vals(souvenirMap)
+    const uncollectedDatum = toDatum(souvenirsCursor, collectedSouvenirs =>
+        allSouvenirs.filter(
+            s =>
+                !(collectedSouvenirs ?? [])
+                    .map(s => s.id)
+                    .includes(s.id)
+        )
+    )
+    const regularSouvenirsDatum = compose(
+        uncollected =>
+            layoutBargainBinSouvenirs(
+                uncollected.filter(s => !isTraitSouvenir(s.id)),
+                BASE_HEIGHT * 0.22
+            ),
+        uncollectedDatum
+    )
+    const traitsSouvenirsDatum = compose((uncollected: Souvenir[]) => {
+        const regular = uncollected.filter(s => !isTraitSouvenir(s.id))
+        const traits = uncollected.filter(s => isTraitSouvenir(s.id))
+        const regularRows = Math.max(1, Math.ceil(regular.length / BARGAIN_BIN_COLS))
+        const traitsStartY =
+            BASE_HEIGHT * 0.22 + regularRows * BARGAIN_BIN_ITEM_SIZE + 50
+
+        return layoutBargainBinSouvenirs(traits, traitsStartY)
+    }, uncollectedDatum)
+    const traitsLabelYDatum = compose((uncollected: Souvenir[]) => {
+        const regular = uncollected.filter(s => !isTraitSouvenir(s.id))
+        const regularRows = Math.max(1, Math.ceil(regular.length / BARGAIN_BIN_COLS))
+
+        return (
+            BASE_HEIGHT * 0.22 +
+            regularRows * BARGAIN_BIN_ITEM_SIZE +
+            20
+        )
+    }, uncollectedDatum)
+
+    return Container(
+        {},
+        Text({
+            text: 'Souvenirs',
+            x: BASE_HEIGHT * 0.2,
+            y: BASE_HEIGHT * 0.18,
+            style: { fontSize: 24, fill: 'white' },
+        }),
+        BargainSouvenirGrid(
+            souvenirNeedingCharacterSelect,
+            regularSouvenirsDatum
+        ),
+        If(
+            compose(
+                ([uncollected]) =>
+                    uncollected.some(s => isTraitSouvenir(s.id)),
+                uncollectedDatum
+            ),
+            () =>
+                Container(
+                    {},
+                    If(traitsLabelYDatum, traitsLabelY =>
+                        Text({
+                            text: 'Traits',
+                            x: BASE_HEIGHT * 0.2,
+                            y: traitsLabelY,
+                            style: { fontSize: 24, fill: 'white' },
+                        })
+                    ),
+                    BargainSouvenirGrid(
+                        souvenirNeedingCharacterSelect,
+                        traitsSouvenirsDatum
+                    )
+                ),
+            undefined
+        )
     )
 }
 

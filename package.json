@@ -24,7 +24,11 @@
         "client:build": "bash run client:build",
         "server:build": "bash run server:build",
         "dev:watch": "bash run dev:watch",
-        "build": "IS_PRODUCTION=true pnpm run client:build && IS_PRODUCTION=true pnpm run server:build"
+        "build": "IS_PRODUCTION=true pnpm run client:build && IS_PRODUCTION=true pnpm run server:build",
+        "deploy": "npx vercel",
+        "deploy:prod": "npx vercel --prod",
+        "vercel:deploy": "bash run vercel:deploy",
+        "vercel:prod": "bash run vercel:prod"
     },
     "dependencies": {
         "@capacitor/android": "^8.4.0",

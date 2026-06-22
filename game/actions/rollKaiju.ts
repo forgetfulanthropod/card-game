@@ -14,12 +14,21 @@ import { equipSword } from './placeSelectedCharacters'
 
 export const rollKaiju: GameActions['rollKaiju'] = args => {
     const scene = getEntrySceneIn(args.game)
+    const entryData = scene.get()
+    const plain =
+        args.plain !== undefined
+            ? args.plain !== false
+            : entryData.rollPlain !== undefined
+              ? entryData.rollPlain
+              : true
+    const enhanced =
+        args.enhanced !== undefined
+            ? !!args.enhanced
+            : entryData.rollEnhanced ?? false
     scene.apply(
         'selectedCharacters',
         produce(selected => {
             // TODO integrate hog roller
-            const plain = (args as any).plain !== false // default to plain body parts
-            const enhanced = !!(args as any).enhanced
             const rolledCharacter = rollCharacter(undefined, undefined, plain, enhanced)
             const stats = Object.fromEntries(
                 Object.entries(rolledCharacter.calculatedStats).map(

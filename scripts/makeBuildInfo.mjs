@@ -24,7 +24,6 @@ const REQUIRED_SERVER_ENV_KEYS = [
 ]
 
 const REQUIRED_CLIENT_ENV_KEYS = [
-    'GAME_IS_LIVE',
     'IS_PRODUCTION',
     'IS_LOCAL'
 ]

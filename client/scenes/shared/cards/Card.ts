@@ -1,6 +1,6 @@
 import type { AssetKey, CardTypeAssetId } from '@/assets'
 import { callApi } from '@/callApi'
-import { getBattleScene, getEntryScene, getTree } from '@/data'
+import { getBattleScene, getEntryScene, getScene, getTree } from '@/data'
 import {
     Adjust,
     BASE_HEIGHT,
@@ -32,7 +32,7 @@ import {
     selectedForTargetingCardUid,
 } from '@/util'
 import type { ColorStop } from '@pixi-essentials/gradients'
-import { Datum, datum } from 'datums'
+import { compose, Datum, datum } from 'datums'
 import { upperFirst } from 'lodash'
 import { Tweener } from 'pixi-tweener'
 import {
@@ -57,6 +57,7 @@ import {
     keyTermsMap,
     TermExplanations,
 } from '../Explanation'
+import { HoverableStances } from './HoverableStances'
 import { beginTargetSelection } from './beginTargetSelection'
 import { CARD_WIDTH } from './CardAdder'
 import { getCardTypeTexture } from './getCardTypeSrc'
@@ -80,6 +81,7 @@ export function CardEl({
     explanationsAdjustX,
     explanationsAdjustY,
     dynamicHitbox,
+    omitStances,
 }: {
     rotation?: number
     width: number
@@ -92,6 +94,7 @@ export function CardEl({
     explanationsAdjustX?: number
     explanationsAdjustY?: number
     dynamicHitbox?: boolean
+    omitStances?: boolean
 }): TweenablePixiContainer {
     const cardFrameTexture = getCardTypeTexture(card.type)
 
@@ -165,29 +168,29 @@ export function CardEl({
                           cardFrameTexture.height
                       ),
                   ]),
-            // If(
-            //     compose(
-            //         ([selectedForTargetingCardUid, hoveredCardUid]) => {
-            //             if (getScene().get('id') !== 'battle') return false
+            If(
+                compose(
+                    ([selectedForTargetingCardUid, hoveredCardUid]) => {
+                        if (getScene().get('id') !== 'battle') return false
 
-            //             return (
-            //                 !omitStances &&
-            //                 (hoveredCardUid === card.uid ||
-            //                     selectedForTargetingCardUid === card.uid)
-            //             )
-            //         },
-            //         selectedForTargetingCardUid,
-            //         ...(hoveredCardUid ? [hoveredCardUid] : [])
-            //     ),
-            //     () =>
-            //         Adjust(HoverableStances(card, hoveredStanceDatum), {
-            //             y: -width,
-            //         }),
-            //     undefined,
-            //     {
-            //         displayArgs: { events: {} },
-            //     }
-            // ),
+                        return (
+                            !omitStances &&
+                            (hoveredCardUid === card.uid ||
+                                selectedForTargetingCardUid === card.uid)
+                        )
+                    },
+                    selectedForTargetingCardUid,
+                    ...(hoveredCardUid ? [hoveredCardUid] : [])
+                ),
+                () =>
+                    Adjust(HoverableStances(card, hoveredStanceDatum), {
+                        y: -width,
+                    }),
+                undefined,
+                {
+                    displayArgs: { events: {} },
+                }
+            ),
 
             // getGradientBackground(cardFrameTexture, colorStops),
             NonInteractiveElements(cardArtTexture, cardFrameTexture, card),
@@ -618,8 +621,7 @@ function getMargins(cardFrameTexture: PixiTexture) {
 
 function getColorStopsFromCardType(cardType: CardType): ColorStop[] {
     const bgGradientColors =
-        //@ts-expect-error
-        cardTypeToColorMap[`cardType${upperFirst(cardType)}`] as number[]
+        cardTypeToColorMap[`cardType${upperFirst(cardType)}` as keyof typeof cardTypeToColorMap] as number[]
 
     return bgGradientColors.map(
         (color, i): ColorStop => ({

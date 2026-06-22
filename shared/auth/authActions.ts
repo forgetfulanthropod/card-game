@@ -32,6 +32,7 @@ const authenticatedActions: AuthenticatedActions = {
     setBattleScene: true,
     setInitialGameState: true,
     setRunId: true,
+    prepareRun: true,
     startRun: true,
     setUsername: true,
 };

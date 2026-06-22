@@ -1525,8 +1525,7 @@ export const filterTalents = (
 ) => {
     if (scene.get('id') != 'battle') return []
     const livingPcs = getLivingPcs(scene.get()).map(cm => cm.uid)
-    const talents = scene
-        .get('souvenirs')
+    const talents = (scene.get('souvenirs') ?? [])
         .map((souvenir, idx) => [souvenir, idx])
         .filter(([souvenir, idx]) => {
             souvenir = souvenir as Souvenir

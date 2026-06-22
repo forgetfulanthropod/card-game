@@ -26,4 +26,7 @@ export interface EntryScene extends SceneHas {
         num: number
     }
     runId: number
+    /** Roll mode chosen from main menu (daily vs completionist). */
+    rollPlain?: boolean
+    rollEnhanced?: boolean
 }
