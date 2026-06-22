@@ -18,7 +18,7 @@ export type EntryCursor = SCursor<EntryScene>
 export function getEntrySceneIn(game: Gamecursor): EntryCursor {
     const scene = game.select('scene')
     const id = scene.get('id')
-    const selectionIds = ['entry', 'worlds', 'pvp']
+    const selectionIds = ['entry', 'worlds', 'pvp', 'daily']
     if (!selectionIds.includes(id as any)) {
         throw Error('getEntryScene called when not in entry/selection scene: ' + id)
     }

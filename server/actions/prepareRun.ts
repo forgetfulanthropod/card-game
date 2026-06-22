@@ -12,12 +12,15 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
     plain,
     enhanced,
     autoStart,
-}) => {
+    sceneId,
+}: any) => {
     logger.info(
-        `prepareRun for ${userId}, daily=${!!daily}, autoStart=${!!autoStart}`
+        `prepareRun for ${userId}, daily=${!!daily}, autoStart=${!!autoStart}, sceneId=${sceneId || (daily ? 'daily' : 'entry')}`
     )
 
     clearActionQueue(userId)
+
+    const effectiveScene = sceneId || (daily ? 'daily' : 'entry')
 
     if (daily) {
         const today = new Date().toISOString().slice(0, 10)
@@ -26,7 +29,7 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
         setGlobalRandomSeed(`adv-${Date.now()}`)
     }
 
-    await setInitialGameState({ userId })
+    await setInitialGameState({ userId, sceneId: effectiveScene })
 
     // Rulebook migration already run in setInitial; ensure here too for daily bypass path
     try { require('game/rulebook').ensureRulebooksMigrated() } catch {}

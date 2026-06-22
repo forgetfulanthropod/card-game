@@ -3,6 +3,7 @@ import { keys, vals } from 'shared/code'
 import { getInitialEntryState } from './entryState'
 import { getRulebook, ensureRulebooksMigrated, loadRulebook } from '@/rulebook'
 import { getRulebookNames, stringifyRulebook } from '@/util'
+import { buildInitialGameState, rulebookTypeForScene } from '../entryBootstrap'
 
 const NUM_OF_EACH_CHAR = 5
 const config = {
@@ -32,19 +33,9 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
     return oc as OwnedCharacterStatsMap
 }
 
-export function getInitialGameState(userId: string): GameState {
-    // MANDATORY: run migration on core init
-    ensureRulebooksMigrated()
-    const rb = loadRulebook('default')
-    return {
-        scene: getInitialEntryState(),
-        ownedCharacters: initialOwnedCharacters(),
-        events: { world$: [], move$: [], DOT$: [] },
-        rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
-        curRulebook: config.includeRulebook
-            ? stringifyRulebook(rb)
-            : undefined,
-        userId,
-        nextAction: null,
-    }
+import { buildInitialGameState } from '../entryBootstrap'
+
+export function getInitialGameState(userId: string, sceneId: string = 'entry'): GameState {
+    // Delegate to bootstrap for scene-specific rulebook load + save migration + curRulebook
+    return buildInitialGameState({ userId, sceneId })
 }
