@@ -8,6 +8,11 @@ import type { PixiApplication, PixiContainer } from '@/elementsUtil'
 import { nextFrame, onUpdate } from '@/util'
 import { transitionScene } from './shared/transitionScene'
 
+// Worlds and PVP MUST extend DungeonEntryScene (enforced in source + tests)
+import { WorldsScene } from './entry/WorldsScene'
+import { PVPScene } from './entry/PVPScene'
+import { DailyScene } from './entry/DailyScene'
+
 const defaultPointerFullPath = 'assets/root/mouse.webp'
 const hoverPointerFullPath = 'assets/root/hand.webp'
 let lastScene: PixiContainer
@@ -48,11 +53,20 @@ function bindScene(app: PixiApplication): Unbind {
             lastScene = RunSceneManager()
             // bindBattleState(app)
         } else if (sceneType === 'entry') {
-            lastScene = DungeonEntryScene()
+            lastScene = new DungeonEntryScene()
+        } else if (sceneType === 'worlds') {
+            lastScene = new WorldsScene()
+        } else if (sceneType === 'pvp') {
+            lastScene = new PVPScene()
+        } else if (sceneType === 'daily') {
+            lastScene = new DailyScene()
         } else if (sceneType === 'showcase') {
             lastScene = CharacterShowcaseScene()
+        } else if (sceneType === 'shop' || sceneType === 'creator') {
+            // stub scenes reuse base entry for now (or dedicated later)
+            lastScene = new DungeonEntryScene()
         } else {
-            throw new Error('what!')
+            throw new Error('what! unknown scene: ' + sceneType)
         }
         app.stage.addChild(lastScene)
 

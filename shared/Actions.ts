@@ -166,6 +166,7 @@ export interface BareGameActionArgs {
 
     rulebookAction: RulebookArgs
     setBattleScene: { scene: BattleScene }
+    buyFromMarket: { itemId: string; cost?: number }
     //test only end
 }
 

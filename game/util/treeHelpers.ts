@@ -17,8 +17,10 @@ export function toCursor<T>(tree: T): SCursor<T> {
 export type EntryCursor = SCursor<EntryScene>
 export function getEntrySceneIn(game: Gamecursor): EntryCursor {
     const scene = game.select('scene')
-    if (scene.get('id') !== 'entry') {
-        throw Error('getEntryScene called when not in entry scene')
+    const id = scene.get('id')
+    const selectionIds = ['entry', 'worlds', 'pvp']
+    if (!selectionIds.includes(id as any)) {
+        throw Error('getEntryScene called when not in entry/selection scene: ' + id)
     }
     return scene as EntryCursor
 }

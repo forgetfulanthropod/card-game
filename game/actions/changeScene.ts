@@ -29,5 +29,9 @@ export const changeScene: GameActions['changeScene'] = args => {
         acquireTalents(scene)
     } else if (args.newSceneName === 'showcase') {
         game.set('scene', { id: 'showcase' })
+    } else if (['worlds', 'pvp', 'daily', 'shop', 'creator', 'entry'].includes(args.newSceneName)) {
+        // Entry variants + menu stubs - keep or set entry data shape for selection scenes
+        const cur = game.select('scene').get()
+        game.set('scene', { ...cur, id: args.newSceneName as any })
     }
 }

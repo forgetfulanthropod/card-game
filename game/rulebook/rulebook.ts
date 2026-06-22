@@ -9,6 +9,7 @@ import {
     roomOptions,
 } from './battle'
 import { npcStatsMapByLevel } from './npcStatsMapByLevel'
+import { ensureRulebooksMigrated } from './RulebookManager'
 
 const dungeonLevels: DungeonLevel[] = [
     { name: 'Skelepit Dungeon', num: 0, modifier: 1 },
@@ -38,9 +39,16 @@ let rulebook = defaultRulebook
 
 export function setRulebook(r: Rulebook): void {
     rulebook = r
+    // ensure handled by manager callers (avoid reentrancy); migration called explicitly on paths
 }
 
 export function getRulebook(): Rulebook {
+    // MANDATORY: callers or init ensure migration. get itself returns current (side effects in set/init)
+    return rulebook
+}
+
+/** Internal for manager to peek without recursion */
+export function getCurrentRawRulebookForMigration(): Rulebook {
     return rulebook
 }
 

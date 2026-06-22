@@ -15,6 +15,7 @@ import {
     NavIconWrapper,
     PrimaryButton,
 } from './StartScreen/'
+import { TopMenu } from './TopMenu'
 import { socket, waitForSocket } from '@/socket'
 
 export type UserDoc = {
@@ -90,6 +91,7 @@ export function NewStartScreen(): JSXElement {
                 daily: isDaily,
                 plain: usePlain,
                 enhanced: useEnhanced,
+                autoStart: isDaily || !!opts?.autoStart,  // Daily forces bypass of selection UI
             } as any)
 
             await assetsLoadedPromise()
@@ -169,7 +171,8 @@ export function NewStartScreen(): JSXElement {
 
     const startDaily = async () => {
         const doc = await ensureAccount()
-        await handleStartGame(doc!.userId, { daily: true, enhanced: true })
+        // NO CHARACTER SELECTION – ONLY MODE
+        await handleStartGame(doc!.userId, { daily: true, enhanced: true, autoStart: true })
     }
 
     const startCompletionist = async () => {
@@ -305,22 +308,8 @@ export function NewStartScreen(): JSXElement {
                 <div className='left-buttons h-full col-span-2' />
                 <div className='mid-buttons h-full col-span-8 flex items-end justify-center gap-4 sm:gap-8 p-1 sm:p-2 xl:p-10'>
                     <div className='h-auto w-full max-w-3xl flex xl:pt-4 gap-4 md:gap-8 xl:gap-12'>
-                        <PrimaryButton
-                            text='daily'
-                            onClick={() => void startDaily()}
-                            type='primary'
-                            size='large'
-                            isLoading={isStarting}
-                            disabled={!ready || !assetsReady}
-                        />
-                        <PrimaryButton
-                            text='completionist'
-                            onClick={() => void startCompletionist()}
-                            type='primary'
-                            size='large'
-                            isLoading={isStarting}
-                            disabled={!ready || !assetsReady}
-                        />
+                        <TopMenu />
+                        {/* legacy buttons kept for compat in some flows; main is TopMenu Daily | Worlds | PVP | Shop | Creator Hub */}
                     </div>
                 </div>
                 <div className='right-buttons h-full col-span-2' />

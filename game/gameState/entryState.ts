@@ -1,6 +1,6 @@
 import type { CharacterId, EntryScene, PlayerCharacterId } from 'shared'
 
-import { getRulebook } from '@/rulebook'
+import { getRulebook, loadRulebook, ensureRulebooksMigrated } from '@/rulebook'
 import { getCharacterMeta } from './battle'
 
 const allCharacterOptionsIds: PlayerCharacterId[] = [
@@ -17,7 +17,9 @@ const allCharacterOptionsIds: PlayerCharacterId[] = [
 ]
 
 export function getInitialEntryState(): EntryScene {
-    const { playerCharacterStatsMap: statsMap, dungeonLevels } = getRulebook()
+    ensureRulebooksMigrated()
+    const rb = loadRulebook('default')
+    const { playerCharacterStatsMap: statsMap, dungeonLevels } = rb
     const selectedLevel =
         dungeonLevels.find(v => v.name === 'Hooligans Bluff') ??
         dungeonLevels[0]

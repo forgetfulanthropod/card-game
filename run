@@ -320,5 +320,15 @@ function test:poor() {
     npx tsx scripts/play-poorly.ts "${1:-test-poor-user}"
 }
 
+function test:core() {
+    echo '=== Core Loop Validation (DungeonEntryScene + rulebook + full playthrough) ==='
+    RUN_TESTS=yes npx esbuild-runner game/testCoreLoop.ts "$@"
+}
+
+function test:full() {
+    echo '=== Full regression (incl. DungeonEntryScene compliance + migration) ==='
+    RUN_TESTS=yes npx esbuild-runner game/runTests.ts "$@"
+}
+
 set -x # print commands as executed
 eval "$@"

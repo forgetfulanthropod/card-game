@@ -28,4 +28,5 @@ export { rulebookAction } from './rulebookAction'
 export { setBattleScene } from './setBattleScene'
 export { setRunId } from './setRunId'
 export { chooseStance } from './chooseStance'
+export { buyFromMarket } from './buyFromMarket'
 // @endindex

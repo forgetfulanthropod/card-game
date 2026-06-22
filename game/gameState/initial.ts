@@ -1,7 +1,7 @@
 import type { CharacterUid, GameState, OwnedCharacterStatsMap } from 'shared'
 import { keys, vals } from 'shared/code'
 import { getInitialEntryState } from './entryState'
-import { getRulebook } from '@/rulebook'
+import { getRulebook, ensureRulebooksMigrated, loadRulebook } from '@/rulebook'
 import { getRulebookNames, stringifyRulebook } from '@/util'
 
 const NUM_OF_EACH_CHAR = 5
@@ -33,13 +33,16 @@ function initialOwnedCharacters(): OwnedCharacterStatsMap {
 }
 
 export function getInitialGameState(userId: string): GameState {
+    // MANDATORY: run migration on core init
+    ensureRulebooksMigrated()
+    const rb = loadRulebook('default')
     return {
         scene: getInitialEntryState(),
         ownedCharacters: initialOwnedCharacters(),
         events: { world$: [], move$: [], DOT$: [] },
         rulebooks: config.includeRulebook ? getRulebookNames() : undefined,
         curRulebook: config.includeRulebook
-            ? stringifyRulebook(getRulebook())
+            ? stringifyRulebook(rb)
             : undefined,
         userId,
         nextAction: null,

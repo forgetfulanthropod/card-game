@@ -13,6 +13,8 @@
     "scripts": {
         "CI": "bash run CI",
         "test:e2e": "playwright test",
+        "test:core": "RUN_TESTS=yes npx esbuild-runner game/testCoreLoop.ts",
+        "test:full": "RUN_TESTS=yes npx esbuild-runner game/runTests.ts",
         "dev": "bash run dev",
         "mobile:build": "bash run mobile:build",
         "mobile:apk": "bash run mobile:apk",

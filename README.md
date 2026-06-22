@@ -206,3 +206,19 @@ We're using a decent number of libraries and tools but the big ones are
         // event emission is implicit
     }
     ```
+
+## Testing & Core Loop Validation
+Run core protected loop + regression:
+- `npm run test:core -- --seed=42 --includePvP --verbose`
+- `npm run test:full -- --scene=DungeonEntryScene --rulebook=migration`
+- Always re-run full playthrough + DungeonEntryScene_compliance_check + rulebook_migration_validation on changes.
+- 100% pass + explicit source asserts on "extends DungeonEntryScene", Daily no-select, rulebook sync required.
+
+## Architecture Rules
+- DungeonEntryScene (client/scenes/entry/DungeonEntryScene.ts) is the SINGLE REQUIRED FOUNDATION for ALL Worlds + PVP entry, character/team selection and setup flow. WorldsScene.ts and PVPScene.ts MUST extend it. Every Worlds/PVP file MUST contain "extends DungeonEntryScene" + import.
+- Base World = exact main rulebook game. Every world type has own rulebook file.
+- Centralized RulebookManager + migration (version check → applyPatchesToAll → validateAllSaves) runs on EVERY load and core change.
+- Daily is the ONLY exception: NO CHARACTER SELECTION – ONLY MODE (DailyScene / prepareRun path auto-loads pre-determined team).
+- Main menu: Daily | Worlds | PVP | Shop | Creator Hub
+- Core loop MANDATORY and protected: Acquire → Deck-Build → Battle (PvE/PvP) → Reward → Spend/Trade → Repeat.
+- See architecture.md and testCoreLoop.ts / migration.spec.ts for enforcement.

@@ -28,6 +28,9 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
 
     await setInitialGameState({ userId })
 
+    // Rulebook migration already run in setInitial; ensure here too for daily bypass path
+    try { require('game/rulebook').ensureRulebooksMigrated() } catch {}
+
     const usePlain = plain !== false && !enhanced
     const useEnhanced = !!enhanced
 
@@ -42,7 +45,8 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
     })
     syncGameStateToClient(userId, game)
 
-    if (!autoStart) return
+    const effectiveAutoStart = autoStart || daily  // Daily ALWAYS auto (NO CHARACTER SELECTION – ONLY MODE)
+    if (!effectiveAutoStart) return
 
     for (let i = 0; i < 3; i++) {
         doGameAction({
@@ -75,6 +79,11 @@ export const prepareRun: ServerActions['prepareRun'] = async ({
         runId,
         game,
     })
+
+    // For daily record as daily quick path
+    if (daily) {
+        game.select('scene').set('id', 'daily') // marks exception path
+    }
 
     syncGameStateToClient(userId, game)
 
