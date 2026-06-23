@@ -137,6 +137,28 @@ bash run server:server
 
 See [ROADMAP-asset-generation.md](ROADMAP-asset-generation.md) for the full plan.
 
+## Deploy to Vercel (easy one-command)
+
+The project is set up for simple Vercel deploys:
+
+1. `npx vercel login`
+2. `npm run deploy`   (or `npm run deploy:prod`)
+3. Or just `npx vercel` / `npx vercel --prod`
+
+What makes it easy:
+- `vercel.json` uses modern `functions` + `rewrites` pointing at `server/index.ts`.
+- `pnpm run build` (client first) populates `public/` (index.html + dailyship.js + styles + assets).
+- `server/index.ts` does `export default app` (Express) — @vercel/node runs it as a serverless function.
+- Static assets served from inside the function (via `DEV_STATIC_ASSETS` + express.static).
+- Full gameplay supported via `POST /api` (HTTP fallback in client). Socket.io (realtime push) only used locally.
+- pnpm workspaces respected via install + frozen lockfile.
+
+Caveats on serverless:
+- No persistent sockets (live state updates come back directly in the action HTTP response).
+- Storage (accounts, gamestates) is per-invocation / ephemeral. Fine for testing/previews. For real prod use a DB.
+
+Everything needed is in the repo root (vercel.json + package.json scripts). Just push to the linked Vercel project or run the CLI command.
+
 **Quick start for the feature**:
 - Users will log in with X (Twitter) to unlock Grok Imagine-powered asset generation for cards, Kaiju, swords, souvenirs, etc.
 - Generated assets integrate with the existing Compendium (undiscovered items grayed out).

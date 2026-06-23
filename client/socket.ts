@@ -43,6 +43,10 @@ export const socket = io(serverOrigin, {
     transports: ['websocket', 'polling'],
 })
 
+let socketAvailable = true
+socket.on('connect_error', () => { socketAvailable = false })
+socket.on('connect', () => { socketAvailable = true })
+
 if (overrideHost) {
     console.log('[socket] Using overridden server host:', overrideHost)
 }
@@ -111,6 +115,29 @@ export async function emitApiCall<K extends keyof AllActions>(
     args: AllActionArgs[K]
 ) {
     const { userId } = getStringFromLocalStorage('userId')
+    const useHttpFallback = !socket || (!socket.connected && !socketAvailable)
+
+    if (useHttpFallback) {
+        try {
+            const res = await fetch(`${serverOrigin}/api`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ method, userId, ...args }),
+            })
+            const data: any = await res.json()
+            if (data && data.gamestate) {
+                // HTTP mode (e.g. Vercel serverless): apply state immediately since no 'update' events
+                try { updateBaobab(data.gamestate) } catch {}
+                const { gamestate, ...rest } = data
+                return rest as AllActionRes[K]
+            }
+            return data as AllActionRes[K]
+        } catch (e) {
+            console.error('HTTP /api fallback failed', e)
+            return { status: 'error', message: 'network' } as any
+        }
+    }
+
     if (socket == null) throw Error('socket is null')
     if (!socket.connected) {
         await waitForSocket()

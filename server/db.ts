@@ -4,9 +4,17 @@ import { Level } from 'level'
 
 import { SBaobab } from 'sbaobab'
 
-const db = new Level<UserID, GameState>(__dirname + '/leveldb', {
-    valueEncoding: 'json',
-})
+const isVercel = !!process.env.VERCEL
+let db: Level<UserID, GameState> | null = null
+if (!isVercel) {
+  try {
+    db = new Level<UserID, GameState>(__dirname + '/leveldb', {
+      valueEncoding: 'json',
+    })
+  } catch {
+    db = null
+  }
+}
 const userPrefix = 'user-'
 
 const cache: Record<UserID, GameState> = {}
@@ -15,6 +23,7 @@ export async function getGamestate(
     userId: UserID
 ): Promise<GameState | null> {
     if (cache[userId]) return cache[userId]
+    if (!db) return null
     try {
         return await db.get(userPrefix + userId)
     } catch (e) {
@@ -24,7 +33,12 @@ export async function getGamestate(
 
 export function setGamestate(userId: UserID, gamestate: GameState) {
     cache[userId] = gamestate
-    void db.put(userPrefix + userId, gamestate)
+    if (!db) return
+    try {
+      void db.put(userPrefix + userId, gamestate)
+    } catch {
+      // ignore on ephemeral FS
+    }
 }
 
 export async function getGameStateCursor(

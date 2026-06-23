@@ -3,7 +3,7 @@ node_modules
 .git
 *.log
 yarn-error.log
-pnpm-lock.yaml  # keep if using pnpm, but sometimes large
+# pnpm-lock.yaml  # DO NOT ignore for reproducible installs (commented: was ignored before)
 builds
 android
 .DS_Store

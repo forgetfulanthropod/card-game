@@ -225,12 +225,15 @@ function server:tsc() {
 ## VERCEL DEPLOY (via CLI)
 function vercel:deploy() {
     echo '=== Vercel deploy (preview) ==='
+    echo 'One-command friendly: vercel.json + export default app + HTTP /api fallback.'
     echo 'Requires: npx vercel (or npm i -g vercel), then login.'
-    echo 'This project is configured for serverless via vercel.json (express app + public assets).'
-    echo 'Caveats: sockets realtime limited on Vercel serverless; file-based storage is ephemeral (no persistence across invocations).'
+    echo 'Build: pnpm run build (client assets to public/ + server TS processed by @vercel/node).'
+    echo 'Static (index.html, dailyship.js, assets/) served via Express inside the serverless fn.'
+    echo 'Gameplay works over POST /api (socket.io only for local realtime push).'
+    echo 'Caveats: realtime sockets + file DB are ephemeral (no cross-invocation persistence). Good for demos.'
     echo 'Run from project dir (the one with package.json + vercel.json):'
     echo '  npx vercel login'
-    echo '  npm run deploy     # or: bash run vercel:deploy'
+    echo '  npm run deploy     # preview deploy'
     echo '  npm run deploy:prod'
     npx vercel
 }

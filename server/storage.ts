@@ -77,8 +77,16 @@ export function loadDb() {
 }
 
 export function saveDb() {
-  ensureDir()
-  fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2))
+  if (process.env.VERCEL) {
+    // On Vercel: FS is ephemeral/read-only after deploy; keep state in-memory only for this invocation.
+    return
+  }
+  try {
+    ensureDir()
+    fs.writeFileSync(DB_PATH, JSON.stringify(db, null, 2))
+  } catch (e) {
+    logger.warn && logger.warn('saveDb: FS write skipped (serverless/ephemeral FS?)')
+  }
 }
 
 loadDb()

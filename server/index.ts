@@ -5,6 +5,8 @@ import { setGlobalRandomSeed } from 'game'
 import cors from 'cors'
 import { mountSocketServer } from './IO'
 import { buildInfo } from './build'
+import { api } from './api'
+import { getGamestate } from './db'
 
 // Ensure logger is initialized (sets global.logger)
 import './types'
@@ -21,6 +23,27 @@ const app: Application = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+// HTTP API endpoint for serverless environments (Vercel) where socket.io is unavailable.
+// Client falls back to POST /api when sockets are not connected.
+// Returns action result + gamestate (when userId present) so UI can sync without 'update' events.
+app.post('/api', async (req, res) => {
+  try {
+    const { method, userId, ...args } = req.body ?? {}
+    const result = await api(method, args, userId)
+    if (userId) {
+      try {
+        const gs = await getGamestate(userId)
+        if (gs) {
+          ;(result as any).gamestate = gs
+        }
+      } catch {}
+    }
+    res.json(result)
+  } catch (e: any) {
+    res.status(500).json({ status: 'error', message: e?.message || 'api error' })
+  }
+})
 
 // Proxy CDN assets for local dev (browser CORS blocks direct media.kaijucards.io fetches)
 app.use('/media-proxy', async (req, res) => {
