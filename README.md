@@ -146,9 +146,9 @@ The project is set up for simple Vercel deploys:
 3. Or just `npx vercel` / `npx vercel --prod`
 
 What makes it easy:
-- `vercel.json` uses modern `functions` + `rewrites` pointing at `server/index.ts`.
-- `pnpm run build` (client first) populates `public/` (index.html + dailyship.js + styles + assets).
-- `server/index.ts` does `export default app` (Express) — @vercel/node runs it as a serverless function.
+- `vercel.json` uses builds (or functions) + routes/rewrites targeting `api/index.ts` (thin re-export of server app) for serverless.
+- `pnpm run build` (client first) populates `public/` (index.html + dailyship.js + styles + assets) included via includeFiles.
+- `api/index.ts` does `export default app` from `../server/index`; `server/index.ts` has POST /api + static public + export default + VERCEL guard.
 - Static assets served from inside the function (via `DEV_STATIC_ASSETS` + express.static).
 - Full gameplay supported via `POST /api` (HTTP fallback in client). Socket.io (realtime push) only used locally.
 - pnpm workspaces respected via install + frozen lockfile.

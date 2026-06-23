@@ -3,14 +3,18 @@
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
   "buildCommand": "pnpm run build",
-  "functions": {
-    "server/index.ts": {
-      "includeFiles": "public/**",
-      "maxDuration": 60
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "public/**",
+        "maxDuration": 60
+      }
     }
-  },
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/server/index.ts" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "api/index.ts" }
   ],
   "env": {
     "IS_PRODUCTION": "true",
