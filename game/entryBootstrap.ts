@@ -50,6 +50,7 @@ export function buildInitialGameState(args: BuildInitialArgs): GameState {
   const owned = initialOwnedCharacters(rb.playerCharacterStatsMap)
 
   const result: GameState = {
+    ...base,
     scene: entry,
     ownedCharacters: owned,
     events: { world$: [], move$: [], DOT$: [] },
@@ -57,7 +58,6 @@ export function buildInitialGameState(args: BuildInitialArgs): GameState {
     curRulebook: stringifyRulebook(rb),
     userId: args.userId,
     nextAction: null,
-    ...base,
   }
 
   return result

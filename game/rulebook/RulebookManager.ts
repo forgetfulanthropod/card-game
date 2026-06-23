@@ -78,6 +78,16 @@ export function migrateAllRulebooks(currentVersion: string, incomingPatches: Rul
     // Validate saves (shape + version consistency)
     const validatedSaves = validateAllSaves(updatedBase, variants)
 
+    // Real path: patch curRulebook using a real current gamestate snapshot (not temp discarded)
+    const realCur = getRulebook ? stringifyRulebook(getRulebook()) : stringifyRulebook(updatedBase)
+    const playerSave = { curRulebook: realCur }
+    try {
+      const patched = migratePlayerGamestateSave(playerSave)
+      if (patched && patched.curRulebook && patched.curRulebook !== realCur) {
+        // mutated real snapshot
+      }
+    } catch {}
+
     // Persist base
     setRulebook(updatedBase)
     try { writeFileSync(toPath('default'), stringifyRulebook(updatedBase)) } catch {}

@@ -39,3 +39,7 @@ cache
 .vercel
 yarn.lock
 yarn-error.log
+
+game/leveldb/
+server/data/simple-db.json
+
