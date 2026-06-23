@@ -2,17 +2,18 @@ import { execSync } from 'child_process';
 import { readFileSync, writeFileSync, renameSync, existsSync, readdirSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { STAGED_REL } from './vercel-public-path.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const src = path.join(__dirname, '..', 'public');
-const dest = path.join(__dirname, '..', 'api', 'bundled-public');
+const dest = path.join(__dirname, '..', STAGED_REL);
 
 execSync(`rm -rf "${dest}"`, { stdio: 'inherit' });
 execSync(`mkdir -p "${dest}"`, { stdio: 'inherit' });
 execSync(`cp -a "${src}/." "${dest}/"`, { stdio: 'inherit' });
 
-console.log('copied public to api/bundled-public (non-public name prevents vercel static extraction)');
+console.log('copied public to ' + STAGED_REL + ' (non-public name prevents vercel static extraction)');
 
 // rename any .css that has .js mate using node (safe in mjs)
 // (do NOT rm *.js; renaming the .css to *-styles.css gives unique basenames and avoids conflict)
@@ -38,4 +39,4 @@ if (existsSync(htmlPath)) {
   console.log('updated staged index.html');
 }
 
-console.log('staged public to api/bundled-public for vercel (conflict-free, will stay inside func)');
+console.log('staged public to ' + STAGED_REL + ' for vercel (conflict-free)');

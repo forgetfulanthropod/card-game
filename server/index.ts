@@ -75,7 +75,8 @@ app.use('/media-proxy', async (req, res) => {
 // Use resolvePublicDir so that in Vercel the staged colocated public/ is used.
 if (DEV_STATIC_ASSETS) {
     const publicDir = resolvePublicDir()
-    if (fs.existsSync(publicDir)) {
+    const mount = fs.existsSync(publicDir) || !!process.env.VERCEL
+    if (mount) {
       const assetsDir = path.join(publicDir, 'assets')
       app.use(
           '/assets',

@@ -12,6 +12,8 @@ export function rulebookTypeForScene(sceneId: string): string {
   if (sceneId === 'worlds') return 'world-default'
   if (sceneId === 'pvp') return 'pvp-arena'
   if (sceneId === 'daily') return 'daily'
+  // marketplace uses default rulebook (no special dungeon)
+  if (sceneId === 'marketplace') return 'default'
   return 'default'
 }
 

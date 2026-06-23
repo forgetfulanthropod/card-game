@@ -26,7 +26,7 @@ export function getInitialEntryState(sceneId: string = 'entry'): EntryScene {
         dungeonLevels.find(v => v.name === 'Hooligans Bluff') ??
         dungeonLevels[0]
     return {
-        id: (sceneId === 'worlds' || sceneId === 'pvp' || sceneId === 'daily') ? sceneId as any : 'entry',
+        id: (sceneId === 'worlds' || sceneId === 'pvp' || sceneId === 'daily' || sceneId === 'marketplace') ? sceneId as any : 'entry',
         selectedCharacters: [null, null, null],
         fullSelectedCharacterDecks: {},
         allCharacterOptions: allCharacterOptionsIds.map(id => statsMap[id]),

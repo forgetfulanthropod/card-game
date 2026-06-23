@@ -29,8 +29,8 @@ export const changeScene: GameActions['changeScene'] = args => {
         acquireTalents(scene)
     } else if (args.newSceneName === 'showcase') {
         game.set('scene', { id: 'showcase' })
-    } else if (['worlds', 'pvp', 'daily', 'shop', 'creator', 'entry'].includes(args.newSceneName)) {
-        // Entry variants + menu stubs - keep or set entry data shape for selection scenes
+    } else if (['worlds', 'pvp', 'daily', 'marketplace', 'entry'].includes(args.newSceneName)) {
+        // Entry variants + menu scenes (marketplace is buy-only non-selection)
         const cur = game.select('scene').get()
         game.set('scene', { ...cur, id: args.newSceneName as any })
     }

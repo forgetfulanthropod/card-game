@@ -309,7 +309,7 @@ export function NewStartScreen(): JSXElement {
                 <div className='mid-buttons h-full col-span-8 flex items-end justify-center gap-4 sm:gap-8 p-1 sm:p-2 xl:p-10'>
                     <div className='h-auto w-full max-w-3xl flex xl:pt-4 gap-4 md:gap-8 xl:gap-12'>
                         <TopMenu />
-                        {/* legacy buttons kept for compat in some flows; main is TopMenu Daily | Worlds | PVP | Shop | Creator Hub */}
+                        {/* legacy buttons kept for compat in some flows; main is TopMenu Daily | Worlds | PVP | Marketplace */}
                     </div>
                 </div>
                 <div className='right-buttons h-full col-span-2' />

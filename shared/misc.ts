@@ -13,8 +13,8 @@ export type SceneHas = Readonly<{
 }> &
     Brandify
 
-export type SceneId = 'entry' | 'battle' | 'showcase' | 'worlds' | 'pvp' | 'daily' | 'shop' | 'creator'
-export type Scene = BattleScene | EntryScene | { id: 'worlds' | 'pvp' | 'daily' | 'shop' | 'creator' } & Record<string, unknown>
+export type SceneId = 'entry' | 'battle' | 'showcase' | 'worlds' | 'pvp' | 'daily' | 'marketplace'
+export type Scene = BattleScene | EntryScene | { id: 'worlds' | 'pvp' | 'daily' | 'marketplace' } & Record<string, unknown>
 
 export type NestedKeys<T> = T extends object
     ? { [K in keyof T]-?: K | NestedKeys<T[K]> }[keyof T]

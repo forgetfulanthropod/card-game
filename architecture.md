@@ -16,7 +16,7 @@
 - Daily auto-loads pre-determined team (via seed + prepare/auto-roll) and goes directly to battle.
 
 ## Scene Hierarchy & Binding
-- SceneId extended to support: 'entry' | 'battle' | 'showcase' | 'worlds' | 'pvp' (and future 'shop' etc)
+- SceneId extended to support: 'entry' | 'battle' | 'showcase' | 'worlds' | 'pvp' | 'marketplace' (marketplace replaces shop/creator)
 - `bindGamestate.ts` dispatches based on scene id:
   - 'entry' (and legacy): DungeonEntryScene (base)
   - 'worlds': WorldsScene extends DungeonEntryScene
@@ -43,11 +43,11 @@
 - `getInitialGameState`, `getInitialEntryState`, `changeScene`, `placeSelectedCharacters` are real entry points used by tests.
 
 ## Menu
-- Main menu (via NewStartScreen + new TopMenu.tsx): Daily | Worlds | PVP | Shop | Creator Hub
+- Main menu (via NewStartScreen + new TopMenu.tsx): Daily | Worlds | PVP | Marketplace
 - Daily button → auto team + battle (no selection UI)
 - Worlds → WorldsScene (extends DungeonEntry)
 - PVP → PVPScene (extends DungeonEntry) + QuickMatch
-- Shop / Creator Hub stubs + economy hooks
+- Marketplace scene (buy characters + items from different players via seller labels) + economy hooks (buyFromMarket)
 
 ## Mobile
 - Capacitor already wired (capacitor.config.ts, android/, deps in package.json)

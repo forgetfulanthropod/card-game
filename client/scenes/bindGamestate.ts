@@ -12,6 +12,7 @@ import { transitionScene } from './shared/transitionScene'
 import { WorldsScene } from './entry/WorldsScene'
 import { PVPScene } from './entry/PVPScene'
 import { DailyScene } from './entry/DailyScene'
+import { MarketplaceScene } from './MarketplaceScene'
 
 const defaultPointerFullPath = 'assets/root/mouse.webp'
 const hoverPointerFullPath = 'assets/root/hand.webp'
@@ -36,7 +37,6 @@ function setBodyStyles(app: PixiApplication) {
 }
 
 function bindScene(app: PixiApplication): Unbind {
-    return onUpdate(getScene().select('id'), setScene, true)
     async function setScene(sceneType: SceneId): Promise<void> {
         if (lastScene != null) {
             await nextFrame()
@@ -64,10 +64,8 @@ function bindScene(app: PixiApplication): Unbind {
             lastScene = RunSceneManager()
         } else if (sceneType === 'showcase') {
             lastScene = CharacterShowcaseScene()
-        } else if (sceneType === 'shop' || sceneType === 'creator') {
-            // Stub scenes - minimal container to avoid selection state assumptions
-            const { Container, Text, fontMap } = require('@/elementsUtil')
-            lastScene = Container({ name: sceneType }, Text({ text: sceneType.toUpperCase() + ' (stub)', style: { fontFamily: fontMap.sansFont?.[0], fontSize: 32, fill: 0xcccccc } }))
+        } else if (sceneType === 'marketplace') {
+            lastScene = MarketplaceScene()
         } else {
             throw new Error('what! unknown scene: ' + sceneType)
         }
@@ -75,4 +73,5 @@ function bindScene(app: PixiApplication): Unbind {
 
         await transitionScene(lastScene, 'in')
     }
+    return onUpdate(getScene().select('id'), setScene, true)
 }

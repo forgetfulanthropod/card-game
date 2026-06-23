@@ -26,7 +26,7 @@ export class DungeonEntryScene extends PixiContainer {
 
         let selectedCharactersCursor: any = null
         try {
-            // Only for real selection flows (entry/worlds/pvp). shop/creator etc are stubs.
+            // Only for real selection flows (entry/worlds/pvp). marketplace is handled separately (no selection).
             const entry = getEntryScene()
             selectedCharactersCursor = entry.select('selectedCharacters')
         } catch {

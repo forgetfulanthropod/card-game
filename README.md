@@ -241,6 +241,6 @@ Run core protected loop + regression:
 - Base World = exact main rulebook game. Every world type has own rulebook file.
 - Centralized RulebookManager + migration (version check → applyPatchesToAll → validateAllSaves) runs on EVERY load and core change.
 - Daily is the ONLY exception: NO CHARACTER SELECTION – ONLY MODE (DailyScene / prepareRun path auto-loads pre-determined team).
-- Main menu: Daily | Worlds | PVP | Shop | Creator Hub
+- Main menu: Daily | Worlds | PVP | Marketplace (characters and items for sale from different players)
 - Core loop MANDATORY and protected: Acquire → Deck-Build → Battle (PvE/PvP) → Reward → Spend/Trade → Repeat.
 - See architecture.md and testCoreLoop.ts / migration.spec.ts for enforcement.
