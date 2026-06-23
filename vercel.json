@@ -5,7 +5,7 @@
   "buildCommand": "pnpm run build && cp -f builds/server.js vercel-server.js",
   "functions": {
     "api/index.ts": {
-      "includeFiles": "public/**",
+      "includeFiles": "public/**/*",
       "excludeFiles": "builds/**",
       "maxDuration": 60
     }
