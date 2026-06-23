@@ -42,4 +42,6 @@ yarn-error.log
 
 game/leveldb/
 server/data/simple-db.json
+api/public/
+api/bundled-public/
 

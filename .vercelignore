@@ -22,3 +22,5 @@ builds/leveldb/
 server.log
 *.log
 builds/
+api/public/
+api/bundled-public/

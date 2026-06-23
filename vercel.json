@@ -2,10 +2,10 @@
   "version": 2,
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run build && cp -f builds/server.js vercel-server.js && node scripts/rename-for-vercel.mjs rename && node scripts/stage-vercel-public.mjs && node scripts/rename-for-vercel.mjs restore",
+  "buildCommand": "pnpm run build && cp -f builds/server.js vercel-server.js && node scripts/rename-for-vercel.mjs rename && node scripts/stage-vercel-public.mjs",
   "functions": {
     "api/index.ts": {
-      "includeFiles": "public/**/*",
+      "includeFiles": "api/bundled-public/**/*",
       "excludeFiles": "builds/**",
       "maxDuration": 60
     }

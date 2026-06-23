@@ -73,7 +73,6 @@ app.use('/media-proxy', async (req, res) => {
 
 // serve static (dev + production on Vercel)
 // Use resolvePublicDir so that in Vercel the staged colocated public/ is used.
-import { resolvePublicDir } from './resolvePublicDir'
 if (DEV_STATIC_ASSETS) {
     const publicDir = resolvePublicDir()
     if (fs.existsSync(publicDir)) {
