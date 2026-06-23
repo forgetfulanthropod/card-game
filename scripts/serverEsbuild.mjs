@@ -27,6 +27,7 @@ export function buildServer(shouldWatch = shouldWatchArgv) {
         entryPoints: ['server/index.ts'],
         bundle: true,
         platform: 'node',
+        format: 'cjs',           // force CommonJS output (we run with plain node)
         keepNames: true,
         outfile: 'builds/server.js',
         sourcemap: true,

@@ -98,6 +98,7 @@ if (require.main === module && !process.env.VERCEL) {
     logger.info(`the server started with ${JSON.stringify(buildInfo)}`)
 }
 
-// Export for Vercel / serverless environments
+// Export for Vercel / serverless environments.
+// (We only use `export default` to avoid esbuild's "commonjs-variable-in-esm" warning.
+//  The local dev path uses `require.main === module` and does not need module.exports.)
 export default app
-module.exports = app
