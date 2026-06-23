@@ -16,3 +16,9 @@ capacitor.config.ts
 hardhat.config.js
 contracts/
 # Keep public/ and server source for build, but since build runs on Vercel, can ignore some generated
+builds/leveldb/
+**/*.ldb
+**/leveldb/
+server.log
+*.log
+builds/

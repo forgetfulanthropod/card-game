@@ -11,6 +11,17 @@ import { getGamestate } from './db'
 // Ensure logger is initialized (sets global.logger)
 import './types'
 
+// Force nft (used by @vercel/node) to include the entire public/ tree (all assets, fonts, html, css, images, 1000+ files) into the serverless function.
+// This makes express.static(public) work with the full set at runtime inside the lambda, in addition to includeFiles in vercel.json.
+import fs from 'fs'
+import p from 'path'
+try {
+  const pub = p.join(__dirname, '..', 'public')
+  if (fs.existsSync(pub)) {
+    fs.readdirSync(pub, { recursive: true } as any)
+  }
+} catch {}
+
 // No .env, no dotenv. All config hardcoded for simplicity (json storage, no external db server)
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3456
 const LOG_LEVEL = process.env.LOG_LEVEL || 'info'
