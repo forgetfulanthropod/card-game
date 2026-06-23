@@ -2,10 +2,10 @@
   "version": 2,
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "pnpm run build && cp -f builds/server.js vercel-server.js && cp -f public/index.html public/index.html.bak && cp -f public/dailyship.css public/dailyship.css.bak 2>/dev/null || true && if [ -f public/dailyship.css ]; then mv public/dailyship.css public/dailyship-styles.css; fi && sed -i 's/dailyship\\.css/dailyship-styles.css/g' public/index.html && node scripts/stage-vercel-public.mjs && cp -f public/index.html.bak public/index.html && cp -f public/dailyship.css.bak public/dailyship.css 2>/dev/null || true && rm -f public/index.html.bak public/dailyship.css.bak",
+  "buildCommand": "pnpm run build && cp -f builds/server.js vercel-server.js && node scripts/rename-for-vercel.mjs rename && node scripts/stage-vercel-public.mjs && node scripts/rename-for-vercel.mjs restore",
   "functions": {
     "api/index.ts": {
-      "includeFiles": "api/public",
+      "includeFiles": "public/**/*",
       "excludeFiles": "builds/**",
       "maxDuration": 60
     }

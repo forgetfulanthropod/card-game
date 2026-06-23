@@ -1,10 +1,12 @@
 import path from 'path';
 
 /**
- * Resolve the directory Express should serve as static public assets.
- * In Vercel (lambda), we stage public contents to api/public before packaging,
- * so at runtime __dirname (next to handler) + /public gives the colocated tree.
- * Locally, use process.cwd()/public.
+ * Resolve public dir for express.static.
+ * When running under Vercel (the packaged function), use __dirname + '/public'
+ * because we stage public contents to api/public before packaging and
+ * includeFiles "api/public/**" + vercel layout results in public/ sibling
+ * to the handler.
+ * Locally: process.cwd()/public .
  */
 export function resolvePublicDir(): string {
   if (process.env.VERCEL) {
