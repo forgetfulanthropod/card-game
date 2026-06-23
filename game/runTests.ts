@@ -14,10 +14,12 @@ import { suites as effects } from './gameState/battle/effects.spec'
 import { suites as interpretCommand } from './gameState/battle/interpretCommand.spec'
 import { suites as souvenirs } from './gameState/battle/souvenirs.spec'
 import { suites as migration } from './rulebook/migration.spec'
+import { suites as economy } from './economyIntegration.spec'
 Object.assign(allSuites, effects)
 Object.assign(allSuites, interpretCommand)
 Object.assign(allSuites, souvenirs)
 Object.assign(allSuites, migration)
+Object.assign(allSuites, economy)
 // @endindex
 
 function main() {
