@@ -3,6 +3,29 @@
 This is the primary repository for Kaiju Cards.
 It is a monorepo with a local build delineated in `.vscode/tasks.json` or `cmd+shift+b` in vscode.
 
+## Recent Updates
+
+- 2026-06-23T11:53:14-07:00: feat(deploy+ui): marketplace masonry e-commerce grid + major vercel/serverless packaging and deployment fixes (full 5-col masonry, animated Spine previews in cards, seller username tags, ScrollBox, pinned footer)
+- 2026-06-23T11:51:16-07:00: refactor(client): marketplace as modern e-commerce with masonry grid, animated previews and seller tags (extracted pure marketplaceLayout.ts, replaced list UI, direct test imports)
+- 2026-06-22T19:28:22-07:00: fix(vercel): stage to api/bundled-public + include + nft force reads in shim + rename for no conflict + map-driven package test + robust resolve; build succeeds, assets in filePathMap+phys for func, tests pass
+- 2026-06-22T19:11:53-07:00: fix(vercel): resolvePublicDir, stage (with rename), thin shim, manifest test, conditional mount, functions+rewrites+api/index.ts+include, clean package, accurate evidence
+- 2026-06-22T18:56:49-07:00: fix(vercel): follow strategy - resolvePublicDir, stage to api/public, thin shim, manifest inspect test, conditional static; build clean, package clean, static full, tests pass
+- 2026-06-22T18:38:51-07:00: fix(vercel): hybrid + package inspect test + fs in entry + config to functions+rewrites+api/index.ts + exclude; clean package, full static, assets via include+trace in func
+- 2026-06-22T18:23:35-07:00: fix(vercel): functions+rewrites+api/index.ts + prebuilt via cp in build + fs force + hybrid rewrite + exclude for clean full-assets package
+- 2026-06-22T18:01:41-07:00: fix(vercel): api/index.js shim + prebuilt for successful packaging; update config and add real shim test
+- 2026-06-22T17:45:25-07:00: fix(vercel): use api/index.ts shim + builds config so npx vercel build succeeds targeting serverless entry under api/
+- 2026-06-22T17:36:39-07:00: fix(vercel): includeFiles must be string not array per schema
+- 2026-06-22T17:31:11-07:00: feat(deploy): make Vercel one-command friendly for Monster Worlds v1.0 goal
+- 2026-06-22T17:22:00-07:00: feat(pvp): wire real auto strongest team selection through QuickMatch pipeline
+- 2026-06-22T17:21:55-07:00: fix(server): eliminate commonjs-variable-in-esm warning and harden runtime
+- 2026-06-22T17:21:51-07:00: test: drive real prepareRun + getGamestate paths and add economy integration tests
+- 2026-06-22T17:21:47-07:00: feat(core): introduce entryPipelines for pure PVP quick match logic
+- 2026-06-22T15:56:52-07:00: structural: entryBootstrap for rulebook per scene + migrate on real paths; clean testCoreLoop; fix skeptic gaps
+- 2026-06-22T15:48:50-07:00: fix(skeptic): clean prepareRun drive in testCoreLoop (no crash logs), loadRulebook(world) exercised, QuickMatch auto strongest wired + called in test, migration patches player curRulebook saves, runtime extends reliable, ver plan clean traces
+- 2026-06-22T15:41:31-07:00: fix: address skeptic gaps - DailyScene class, no post-battle daily id, TopMenu pixi activation, safe DungeonEntry ctor, real disk per-world rulebooks, testCore via setInitial + runtime extends, QuickMatch, ver plan re-runs
+- 2026-06-22T15:35:25-07:00: feat(monster-worlds): DungeonEntryScene base + extends for Worlds/PVP; RulebookManager + migration; testCoreLoop + migration.spec; TopMenu Daily|Worlds|PVP|Shop|CreatorHub; Daily no-select; gems + buyFromMarket; mobile verified; README+arch docs; scripts
+- 2026-06-17T17:53:32-07:00: feat: remove password gate, fix socket wait, implement plain body parts evolving during runs, daily enhanced starts with faster power, new daily seed + collection adventure buttons, character animation showcase screen
+
 ## Pattern language
 
 For more info, see Robert Nystrom's _Game Programming Patterns_ or the Gang of 4's _Design Patterns_.
