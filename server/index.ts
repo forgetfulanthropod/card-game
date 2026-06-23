@@ -1,6 +1,8 @@
 import type { Application } from 'express'
 import express from 'express'
 import path from 'path'
+import fs from 'fs'
+import { resolvePublicDir } from './resolvePublicDir'
 import { setGlobalRandomSeed } from 'game'
 import cors from 'cors'
 import { mountSocketServer } from './IO'
@@ -70,29 +72,33 @@ app.use('/media-proxy', async (req, res) => {
 })
 
 // serve static (dev + production on Vercel)
+// Use resolvePublicDir so that in Vercel the staged colocated public/ is used.
+import { resolvePublicDir } from './resolvePublicDir'
 if (DEV_STATIC_ASSETS) {
-    const publicDir = path.join(process.cwd(), 'public')
-    const assetsDir = path.join(publicDir, 'assets')
-    app.use(
-        '/assets',
-        express.static(assetsDir, {
-            extensions: ['.atlas', '.txt'],
-            maxAge: '1d',
-        })
-    )
-    app.use(
-        '/',
-        express.static(publicDir, {
-            extensions: ['.atlas', '.txt'],
-            setHeaders: (res, filePath) => {
-                if (filePath.endsWith('.js') || filePath.endsWith('.css') || filePath.endsWith('.html')) {
-                    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
-                    res.setHeader('Pragma', 'no-cache')
-                    res.setHeader('Expires', '0')
-                }
-            },
-        })
-    )
+    const publicDir = resolvePublicDir()
+    if (fs.existsSync(publicDir)) {
+      const assetsDir = path.join(publicDir, 'assets')
+      app.use(
+          '/assets',
+          express.static(assetsDir, {
+              extensions: ['.atlas', '.txt'],
+              maxAge: '1d',
+          })
+      )
+      app.use(
+          '/',
+          express.static(publicDir, {
+              extensions: ['.atlas', '.txt'],
+              setHeaders: (res, filePath) => {
+                  if (filePath.endsWith('.js') || filePath.endsWith('.css') || filePath.endsWith('.html')) {
+                      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+                      res.setHeader('Pragma', 'no-cache')
+                      res.setHeader('Expires', '0')
+                  }
+              },
+          })
+      )
+    }
 }
 
 // logger setup
