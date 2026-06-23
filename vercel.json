@@ -5,7 +5,7 @@
   "buildCommand": "pnpm run build",
   "functions": {
     "server/index.ts": {
-      "includeFiles": ["public/**"],
+      "includeFiles": "public/**",
       "maxDuration": 60
     }
   },
