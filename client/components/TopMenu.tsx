@@ -31,7 +31,7 @@ export function TopMenu(props: { onStart?: (mode: string) => void }) {
 
         if (mode === 'daily') {
             // NO CHARACTER SELECTION – ONLY MODE
-            await callApi('prepareRun', { userId, daily: true, enhanced: true, autoStart: true } as any)
+            await callApi('prepareRun', { userId, daily: true, enhanced: true, autoStart: true, sceneId: 'daily' } as any)
             // activate pixi (critical - was missing)
             await assetsLoadedPromise().catch(() => {})
             await getPromiseForTreeInitialized().catch(() => {})
@@ -41,7 +41,7 @@ export function TopMenu(props: { onStart?: (mode: string) => void }) {
             return
         }
         if (mode === 'worlds') {
-            await callApi('prepareRun', { userId, daily: false, plain: true } as any)
+            await callApi('prepareRun', { userId, daily: false, plain: true, sceneId: 'worlds' } as any)
             await assetsLoadedPromise().catch(() => {})
             await getPromiseForTreeInitialized().catch(() => {})
             setUserId(userId)
@@ -51,13 +51,16 @@ export function TopMenu(props: { onStart?: (mode: string) => void }) {
             return
         }
         if (mode === 'pvp') {
-            await callApi('prepareRun', { userId, daily: false, plain: true } as any)
+            await callApi('prepareRun', { userId, daily: false, plain: true, sceneId: 'pvp' } as any)
             await assetsLoadedPromise().catch(() => {})
             await getPromiseForTreeInitialized().catch(() => {})
             setUserId(userId)
             setInPixi(true)
             try { getStage().visible = true } catch {}
-            await callApi('changeScene', { newSceneName: 'pvp' } as any)
+            // auto load strongest via pipeline-wired startQuick (exercises place + battle)
+            const qm = await import('@/scenes/entry/QuickMatch')
+            if (qm && qm.startQuickMatchPVP) await qm.startQuickMatchPVP().catch(() => {})
+            // change to pvp scene if needed for UI, but quick goes to battle
             return
         }
         if (mode === 'shop' || mode === 'creator') {

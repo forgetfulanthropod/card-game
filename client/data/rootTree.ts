@@ -59,7 +59,7 @@ export const getBattleScene = (): ROCursor<BattleScene> => {
 }
 export const getEntryScene = (): ROCursor<EntryScene> => {
     const curType = getTree().select('scene').select('id').get()
-    const selectionIds = ['entry', 'worlds', 'pvp'] as const
+    const selectionIds = ['entry', 'worlds', 'pvp', 'daily'] as const
     if (!selectionIds.includes(curType as any)) {
         throw new Error(`tried to get entry scene when you're in ${curType}`)
     }

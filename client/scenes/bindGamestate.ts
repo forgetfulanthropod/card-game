@@ -59,12 +59,15 @@ function bindScene(app: PixiApplication): Unbind {
         } else if (sceneType === 'pvp') {
             lastScene = new PVPScene()
         } else if (sceneType === 'daily') {
-            lastScene = new DailyScene()
+            // Daily must never reach here for UI (autoStart + prepare bypasses selection).
+            // Treat as battle or fallthrough to avoid wrong container.
+            lastScene = RunSceneManager()
         } else if (sceneType === 'showcase') {
             lastScene = CharacterShowcaseScene()
         } else if (sceneType === 'shop' || sceneType === 'creator') {
-            // stub scenes reuse base entry for now (or dedicated later)
-            lastScene = new DungeonEntryScene()
+            // Stub scenes - minimal container to avoid selection state assumptions
+            const { Container, Text, fontMap } = require('@/elementsUtil')
+            lastScene = Container({ name: sceneType }, Text({ text: sceneType.toUpperCase() + ' (stub)', style: { fontFamily: fontMap.sansFont?.[0], fontSize: 32, fill: 0xcccccc } }))
         } else {
             throw new Error('what! unknown scene: ' + sceneType)
         }

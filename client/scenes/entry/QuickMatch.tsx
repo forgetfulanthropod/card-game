@@ -1,4 +1,4 @@
-import { getTree, getOwnedCharacters } from '@/data'
+import { getTree, getEntryScene } from '@/data'
 import { callApi } from '@/callApi'
 import { collectData } from '@/analytics/collectData'
 import type { OwnedCharacterStats } from 'shared'
@@ -9,13 +9,23 @@ import type { OwnedCharacterStats } from 'shared'
  */
 export async function startQuickMatchPVP(): Promise<void> {
     collectData('pvp_quickmatch', {})
-    const userId = getTree ? getTree().get('userId') : 'test'
-    if (!userId) return
-
-    await callApi('prepareRun', { userId, daily: false, plain: true } as any).catch(() => {})
-    await callApi('changeScene', { newSceneName: 'pvp' } as any).catch(() => {})
-    // auto battle after strongest (simulated)
-    setTimeout(() => { callApi('changeScene', { newSceneName: 'battle' } as any).catch(()=>{}) }, 50)
+    const userId = getTree ? getTree().get('userId') : null
+    if (!userId) {
+      await callApi('changeScene', { newSceneName: 'battle' } as any).catch(() => {})
+      return
+    }
+    // Fetch real allCharacterOptions from prepared entry state (post-prepare, pvp scene)
+    let opts: any[] = []
+    try {
+      const entry = getEntryScene()
+      opts = entry.get('allCharacterOptions') || []
+    } catch (e) {
+      // fallback if not in entry context yet
+    }
+    const strong = autoSelectStrongestForPVP(opts)
+    const payload = strong.length ? strong : [{allCharacterOptionsIndex:0, placeIndex:0},{allCharacterOptionsIndex:1,placeIndex:1},{allCharacterOptionsIndex:2,placeIndex:2}]
+    await callApi('placeSelectedCharacters', { characters: payload } as any).catch(()=>{})
+    await callApi('changeScene', { newSceneName: 'battle' } as any).catch(() => {})
 }
 
 /** Pure helper for tests / auto strongest selection from options (shipped data) */
